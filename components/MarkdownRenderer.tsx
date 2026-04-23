@@ -8,27 +8,34 @@
 
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import Image from 'next/image'
+import remarkBreaks from 'remark-breaks'
+import rehypeRaw from 'rehype-raw'
 
 export default function MarkdownRenderer({ content }: { content: string }) {
     return (
-        <div className="prose prose-slate max-w-none prose-headings:font-heading prose-a:text-amber-500 prose-a:no-underline hover:prose-a:underline prose-code:bg-slate-100 prose-code:px-1 prose-code:rounded">
+        <div className="prose prose-slate max-w-none prose-headings:font-heading prose-a:text-amber-500 prose-a:no-underline hover:prose-a:underline prose-code:bg-slate-100 prose-code:px-1 prose-code:rounded prose-img:max-w-full prose-img:h-auto prose-img:rounded-lg prose-img:mx-auto prose-img:block">
             <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
+                remarkPlugins={[remarkGfm, remarkBreaks]}
+                rehypePlugins={[rehypeRaw]}
                 components={{
-                    img: ({ node, ...props }) => {
-                        if (!props.src) return null
-                        return (
-                            <span className="block relative w-full h-80 my-8">
-                                <Image
-                                    src={props.src}
-                                    alt={props.alt || ''}
-                                    fill
-                                    className="rounded-lg object-cover"
-                                />
-                            </span>
-                        )
-                    }
+                    p: ({ children }) => (
+                        <p style={{ marginBottom: '1rem', marginTop: '0.5rem' }}>
+                            {children}
+                        </p>
+                    ),
+                    img: ({ src, alt }) => (
+                        <img
+                            src={src}
+                            alt={alt || ''}
+                            style={{
+                                maxWidth: '100%',
+                                height: 'auto',
+                                display: 'block',
+                                margin: '1.5rem auto',
+                                borderRadius: '0.5rem'
+                            }}
+                        />
+                    )
                 }}
             >
                 {content}

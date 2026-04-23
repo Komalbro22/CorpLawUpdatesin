@@ -25,3 +25,11 @@ body {
     text-wrap: balance;
   }
 }
+
+.prose img {
+  max-width: 100% !important;
+  height: auto !important;
+  display: block;
+  margin: 1.5rem auto;
+  border-radius: 0.5rem;
+}

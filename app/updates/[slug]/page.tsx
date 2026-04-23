@@ -139,7 +139,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
             </header>
 
             {/* 4. ARTICLE CONTENT */}
-            <div className="mb-12">
+            <div className="mb-12 max-w-3xl mx-auto px-4">
                 <ErrorBoundary>
                     <MarkdownRenderer content={update.content || ''} />
                 </ErrorBoundary>

@@ -24,16 +24,16 @@ export default function EditArticle({ params }: { params: { id: string } }) {
     const [summary, setSummary] = useState('')
     const [content, setContent] = useState('')
     const [category, setCategory] = useState<string>('')
-    
+
     const [tags, setTags] = useState<string[]>([])
     const [tagInput, setTagInput] = useState('')
-    
+
     const [sourceName, setSourceName] = useState('')
     const [sourceUrl, setSourceUrl] = useState('')
-    
+
     const [publishedAt, setPublishedAt] = useState('')
     const [isFeatured, setIsFeatured] = useState(false)
-    
+
     const [saving, setSaving] = useState(false)
     const [pageLoading, setPageLoading] = useState(true)
     const [error, setError] = useState('')
@@ -63,7 +63,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                 setSourceName(data.source_name || '')
                 setSourceUrl(data.source_url || '')
                 setIsFeatured(data.is_featured || false)
-                
+
                 if (data.published_at) {
                     // Convert to datetime-local format
                     const date = new Date(data.published_at)
@@ -80,7 +80,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                 setPageLoading(false)
             }
         }
-        
+
         fetchArticle()
     }, [id])
 
@@ -199,16 +199,16 @@ export default function EditArticle({ params }: { params: { id: string } }) {
         <div className="pb-24">
             <div className="flex justify-between items-center mb-6">
                 <h1 className="font-heading font-bold text-2xl text-navy">Edit Article</h1>
-                
+
                 {/* Mobile Tabs */}
                 <div className="flex lg:hidden bg-slate-200 rounded-lg p-1">
-                    <button 
+                    <button
                         onClick={() => setActiveTab('write')}
                         className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${activeTab === 'write' ? 'bg-white text-navy shadow' : 'text-slate-600'}`}
                     >
                         Edit
                     </button>
-                    <button 
+                    <button
                         onClick={() => setActiveTab('preview')}
                         className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${activeTab === 'preview' ? 'bg-white text-navy shadow' : 'text-slate-600'}`}
                     >
@@ -222,8 +222,8 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                 <div className={`w-full lg:w-[60%] space-y-6 ${activeTab === 'preview' ? 'hidden lg:block' : 'block'}`}>
                     {/* Title */}
                     <div>
-                        <input 
-                            type="text" 
+                        <input
+                            type="text"
                             placeholder="Article title..."
                             value={title}
                             onChange={(e) => handleTitleChange(e.target.value)}
@@ -237,8 +237,8 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                         <div>
                             <label className="block text-sm font-bold text-navy mb-1">URL Slug</label>
                             <div className="flex gap-2 items-start">
-                                <input 
-                                    type="text" 
+                                <input
+                                    type="text"
                                     value={slug}
                                     onChange={(e) => {
                                         setSlugEdited(true)
@@ -247,7 +247,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                                     className="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-none font-mono"
                                 />
                                 {slugEdited && (
-                                    <button 
+                                    <button
                                         type="button"
                                         onClick={() => {
                                             setSlugEdited(false)
@@ -267,7 +267,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                         {/* Category */}
                         <div>
                             <label className="block text-sm font-bold text-navy mb-1">Regulator / Category <span className="text-red-500">*</span></label>
-                            <select 
+                            <select
                                 value={category}
                                 onChange={(e) => setCategory(e.target.value)}
                                 className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-none"
@@ -281,7 +281,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                     {/* Summary */}
                     <div className="border border-slate-200 rounded-xl p-5 bg-white shadow-sm">
                         <label className="block text-sm font-bold text-navy mb-1">Summary <span className="text-red-500">*</span></label>
-                        <textarea 
+                        <textarea
                             value={summary}
                             onChange={(e) => setSummary(e.target.value)}
                             maxLength={300}
@@ -299,15 +299,15 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                         <div className="flex justify-between items-end mb-3">
                             <label className="block text-sm font-bold text-navy">Article Content (Markdown)</label>
                             <div className="relative">
-                                <input 
-                                    type="file" 
-                                    accept="image/*" 
+                                <input
+                                    type="file"
+                                    accept="image/*"
                                     ref={fileInputRef}
                                     onChange={handleImageUpload}
                                     className="hidden"
                                 />
-                                <button 
-                                    type="button" 
+                                <button
+                                    type="button"
                                     onClick={() => fileInputRef.current?.click()}
                                     disabled={uploadingImage}
                                     className="text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded disabled:opacity-50 flex items-center gap-1 transition-colors"
@@ -316,23 +316,29 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                                 </button>
                             </div>
                         </div>
-                        
+
                         <div className="border border-slate-200 rounded-lg overflow-hidden">
-                            <MDEditor 
-                                value={content} 
-                                onChange={(val) => setContent(val || '')} 
-                                height={450} 
+                            <MDEditor
+                                value={content}
+                                onChange={(val) => setContent(val || '')}
+                                height={450}
                                 preview="edit"
                                 hideToolbar={false}
+                                previewOptions={{
+                                    rehypePlugins: [[require('rehype-raw')]]
+                                }}
                             />
                         </div>
+                        <p className="text-sm font-medium text-slate-500 mt-3 pt-2">
+                            Tip: Use two blank lines after images for spacing, or manually add &lt;br/&gt;.
+                        </p>
                     </div>
 
                     {/* Tags */}
                     <div className="border border-slate-200 rounded-xl p-5 bg-white shadow-sm">
                         <label className="block text-sm font-bold text-navy mb-1">Tags (press Enter to add)</label>
-                        <input 
-                            type="text" 
+                        <input
+                            type="text"
                             value={tagInput}
                             onChange={(e) => setTagInput(e.target.value)}
                             onKeyDown={handleTagKeyDown}
@@ -355,7 +361,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                     <div className="border border-slate-200 rounded-xl p-5 bg-white shadow-sm grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
                             <label className="block text-sm font-bold text-navy mb-1">Source Name</label>
-                            <input 
+                            <input
                                 type="text"
                                 value={sourceName}
                                 onChange={(e) => setSourceName(e.target.value)}
@@ -365,7 +371,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                         </div>
                         <div>
                             <label className="block text-sm font-bold text-navy mb-1">Source URL</label>
-                            <input 
+                            <input
                                 type="url"
                                 value={sourceUrl}
                                 onChange={(e) => setSourceUrl(e.target.value)}
@@ -375,7 +381,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                         </div>
                         <div>
                             <label className="block text-sm font-bold text-navy mb-1">Publish Date & Time</label>
-                            <input 
+                            <input
                                 type="datetime-local"
                                 value={publishedAt}
                                 onChange={(e) => setPublishedAt(e.target.value)}
@@ -385,9 +391,9 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                         <div className="flex flex-col justify-center">
                             <label className="flex items-center gap-3 cursor-pointer mt-4 md:mt-6">
                                 <div className="relative">
-                                    <input 
-                                        type="checkbox" 
-                                        className="sr-only" 
+                                    <input
+                                        type="checkbox"
+                                        className="sr-only"
                                         checked={isFeatured}
                                         onChange={(e) => setIsFeatured(e.target.checked)}
                                     />
@@ -407,7 +413,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                 <div className={`w-full lg:w-[40%] ${activeTab === 'write' ? 'hidden lg:block' : 'block'}`}>
                     <div className="sticky top-24 border border-slate-200 rounded-xl p-6 bg-white shadow-sm min-h-[600px]">
                         <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-6 pb-4 border-b border-slate-100">Live Preview</h3>
-                        
+
                         {!title && !content ? (
                             <div className="text-center text-slate-400 mt-20 italic">Preview will appear here...</div>
                         ) : (
@@ -417,21 +423,21 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                                         <CategoryBadge category={category as Category} />
                                     </div>
                                 )}
-                                
+
                                 {title && (
                                     <h1 className="font-heading font-bold text-3xl text-navy mb-4 leading-tight">{title}</h1>
                                 )}
-                                
+
                                 {content && (
                                     <div className="mb-8 text-sm text-slate-500 font-medium">
                                         {calculateReadingTime(content)} min read
                                     </div>
                                 )}
-                                
+
                                 {summary && !content && (
                                     <p className="text-lg text-slate-600 mb-8">{summary}</p>
                                 )}
-                                
+
                                 {content && (
                                     <div className="mt-8 pt-8 border-t border-slate-100">
                                         <MarkdownRenderer content={content} />
@@ -449,7 +455,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                     {error && <span className="text-red-500 text-sm font-medium">⚠ {error}</span>}
                     {success && <span className="text-emerald-600 text-sm font-medium">✨ Article saved! Redirecting...</span>}
                     {!error && !success && publishedAt && (
-                        <button 
+                        <button
                             onClick={handleUnpublish}
                             disabled={saving}
                             className="px-4 py-2 border border-red-600 text-red-600 font-semibold rounded-lg hover:bg-red-50 transition-colors disabled:opacity-50 text-sm"
@@ -458,23 +464,23 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                         </button>
                     )}
                 </div>
-                
+
                 <div className="flex gap-3 w-full sm:w-auto justify-end">
-                    <button 
+                    <button
                         onClick={() => handleSave(null)}
                         disabled={saving || success}
                         className="px-5 py-2 border border-navy text-navy font-semibold rounded-lg hover:bg-slate-50 transition-colors disabled:opacity-50 text-sm"
                     >
                         Save Draft
                     </button>
-                    <button 
+                    <button
                         onClick={() => handleSave(publishedAt)}
                         disabled={saving || success}
                         className="px-5 py-2 border border-gold text-gold font-semibold rounded-lg hover:bg-gold/10 transition-colors disabled:opacity-50 text-sm hidden lg:block"
                     >
                         Schedule Update
                     </button>
-                    <button 
+                    <button
                         onClick={() => handleSave(new Date().toISOString())}
                         disabled={saving || success}
                         className="px-5 py-2 bg-navy text-gold font-semibold rounded-lg hover:bg-navy/90 transition-colors disabled:opacity-50 text-sm"
