@@ -1,10 +1,9 @@
 'use client'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 
 export default function Sidebar() {
     const pathname = usePathname()
-    const router = useRouter()
 
     const links = [
         { href: '/admin/dashboard', icon: '📊', label: 'Dashboard' },
@@ -35,8 +34,8 @@ export default function Sidebar() {
                         return (
                             <Link href={link.href} key={link.href}
                                 className={`flex items-center px-4 py-3 mx-2 rounded-lg transition-colors ${active
-                                        ? 'bg-white/10 text-gold border-l-2 border-gold font-medium'
-                                        : 'text-slate-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent'
+                                    ? 'bg-white/10 text-gold border-l-2 border-gold font-medium'
+                                    : 'text-slate-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent'
                                     }`}
                             >
                                 <span className="mr-3">{link.icon}</span>
