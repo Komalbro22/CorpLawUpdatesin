@@ -17,7 +17,7 @@ export default function Sidebar() {
 
     const handleLogout = async () => {
         await fetch('/api/admin/logout', { method: 'POST' })
-        router.push('/admin/login')
+        window.location.href = '/admin/login'
     }
 
     return (
@@ -33,12 +33,11 @@ export default function Sidebar() {
                     {links.map((link) => {
                         const active = pathname === link.href
                         return (
-                            <Link href={link.href} key={link.href} 
-                                className={`flex items-center px-4 py-3 mx-2 rounded-lg transition-colors ${
-                                    active 
-                                        ? 'bg-white/10 text-gold border-l-2 border-gold font-medium' 
+                            <Link href={link.href} key={link.href}
+                                className={`flex items-center px-4 py-3 mx-2 rounded-lg transition-colors ${active
+                                        ? 'bg-white/10 text-gold border-l-2 border-gold font-medium'
                                         : 'text-slate-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent'
-                                }`}
+                                    }`}
                             >
                                 <span className="mr-3">{link.icon}</span>
                                 <span>{link.label}</span>
@@ -47,9 +46,9 @@ export default function Sidebar() {
                     })}
                 </nav>
             </div>
-            
+
             <div className="mb-6 px-2">
-                <button 
+                <button
                     onClick={handleLogout}
                     className="w-full flex items-center px-4 py-3 text-slate-400 hover:text-red-400 hover:bg-white/5 rounded-lg transition-colors"
                 >
