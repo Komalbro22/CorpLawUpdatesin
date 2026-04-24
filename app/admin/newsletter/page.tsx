@@ -1,190 +1,437 @@
-/* eslint-disable */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/no-unescaped-entities */
 'use client'
 
-import { useState } from 'react'
+import dynamic from 'next/dynamic'
+import { useState, useEffect } from 'react'
 
-export default function AdminNewsletter() {
+const MDEditor = dynamic(
+    () => import('@uiw/react-md-editor'),
+    { ssr: false }
+)
+
+interface SendResult {
+    sent: number
+    failed: number
+    total: number
+    testOnly?: boolean
+}
+
+export default function NewsletterPage() {
     const [subject, setSubject] = useState('')
-    const [content, setContent] = useState('')
-    const [testEmail, setTestEmail] = useState('')
-    
-    const [loading, setLoading] = useState(false)
+    const [previewText, setPreviewText] = useState('')
+    const [body, setBody] = useState('')
+    const [sending, setSending] = useState(false)
+    const [testSending, setTestSending] = useState(false)
+    const [showConfirm, setShowConfirm] = useState(false)
+    const [subscriberCount, setSubscriberCount] = useState(0)
+    const [result, setResult] = useState<SendResult | null>(null)
     const [error, setError] = useState('')
-    const [success, setSuccess] = useState('')
-    const [confirmModal, setConfirmModal] = useState(false)
+    const [showPreview, setShowPreview] = useState(false)
 
-    const handleSendTest = async () => {
-        if (!testEmail || !testEmail.includes('@')) {
-            setError('Please enter a valid test email address.')
-            return
-        }
-        if (!subject || !content) {
-            setError('Subject and content are required.')
-            return
-        }
-        
-        setLoading(true)
+    useEffect(() => {
+        fetch('/api/admin/subscribers?status=active')
+            .then(r => r.json())
+            .then(data => {
+                setSubscriberCount(data.stats?.totalActive || data.total || 0)
+            })
+            .catch(err => console.error('Failed to fetch subscriber count:', err))
+    }, [])
+
+    async function handleSend(testOnly: boolean) {
         setError('')
-        setSuccess('')
+
+        if (!subject.trim()) {
+            setError('Subject line is required')
+            return
+        }
+        if (!body.trim()) {
+            setError('Email body is required')
+            return
+        }
+
+        if (testOnly) {
+            setTestSending(true)
+        } else {
+            setSending(true)
+            setShowConfirm(false)
+        }
 
         try {
-            const res = await fetch('/api/admin/newsletter', {
+            const res = await fetch('/api/admin/newsletter/send', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ subject, content, testEmail })
+                body: JSON.stringify({
+                    subject: subject.trim(),
+                    previewText: previewText.trim(),
+                    body: body.trim(),
+                    testOnly,
+                }),
             })
+
             const data = await res.json()
-            if (res.ok) {
-                setSuccess('Test email sent successfully to ' + testEmail)
-            } else {
-                setError(data.error || 'Failed to send test email')
+
+            if (!res.ok) {
+                throw new Error(data.error || 'Failed to send newsletter')
             }
-        } catch (err) {
-            setError('Network error sending test email.')
+
+            setResult(data)
+
+        } catch (err: any) {
+            setError(err.message || 'Something went wrong')
         } finally {
-            setLoading(false)
+            setTestSending(false)
+            setSending(false)
         }
     }
 
-    const handleSendNow = async () => {
-        setLoading(true)
-        setError('')
-        setSuccess('')
-        setConfirmModal(false)
-
-        try {
-            const res = await fetch('/api/admin/newsletter', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ subject, content })
-            })
-            const data = await res.json()
-            if (res.ok) {
-                setSuccess(`Newsletter successfully sent to ${data.sent} subscribers!`)
-                setSubject('')
-                setContent('')
-            } else {
-                setError(data.error || 'Failed to send newsletter')
-            }
-        } catch (err) {
-            setError('Network error sending newsletter.')
-        } finally {
-            setLoading(false)
-        }
+    // SUCCESS STATE
+    if (result) {
+        return (
+            <div className="max-w-2xl mx-auto">
+                <div className="bg-white rounded-2xl shadow-sm border 
+                        border-slate-100 p-10 text-center">
+                    <div className="text-6xl mb-4">
+                        {result.testOnly ? '🧪' : '🎉'}
+                    </div>
+                    <h2 className="text-2xl font-heading font-bold text-navy mb-2">
+                        {result.testOnly
+                            ? 'Test Email Sent!'
+                            : 'Newsletter Sent Successfully!'}
+                    </h2>
+                    {!result.testOnly && (
+                        <div className="bg-slate-50 rounded-xl p-4 my-4 
+                            flex justify-around">
+                            <div>
+                                <div className="text-3xl font-bold text-green-600">
+                                    {result.sent}
+                                </div>
+                                <div className="text-sm text-slate-500">Sent</div>
+                            </div>
+                            <div>
+                                <div className="text-3xl font-bold text-red-500">
+                                    {result.failed}
+                                </div>
+                                <div className="text-sm text-slate-500">Failed</div>
+                            </div>
+                            <div>
+                                <div className="text-3xl font-bold text-navy">
+                                    {result.total}
+                                </div>
+                                <div className="text-sm text-slate-500">Total</div>
+                            </div>
+                        </div>
+                    )}
+                    <button
+                        onClick={() => {
+                            setResult(null)
+                            setSubject('')
+                            setPreviewText('')
+                            setBody('')
+                            setError('')
+                        }}
+                        className="mt-4 px-6 py-3 bg-amber-400 text-navy 
+                       font-semibold rounded-xl hover:bg-amber-500 
+                       transition-colors"
+                    >
+                        Send Another Newsletter
+                    </button>
+                </div>
+            </div>
+        )
     }
 
     return (
-        <div className="max-w-4xl space-y-6">
-            <h1 className="font-heading text-2xl font-bold text-navy">Distribute Newsletter</h1>
-            <p className="text-slate-500 text-sm">Send updates or major announcements to all active subscribers.</p>
+        <div className="max-w-4xl mx-auto space-y-6">
 
+            {/* Header */}
+            <div>
+                <h1 className="text-2xl font-heading font-bold text-navy">
+                    Send Newsletter
+                </h1>
+                <p className="text-slate-500 mt-1">
+                    {subscriberCount > 0
+                        ? `${subscriberCount} active subscribers will receive this`
+                        : 'No active subscribers yet'}
+                </p>
+            </div>
+
+            {/* Error Banner */}
             {error && (
-                <div className="bg-red-50 text-red-600 px-4 py-3 rounded-lg border border-red-100 font-medium text-sm">
-                    ⚠ {error}
-                </div>
-            )}
-            {success && (
-                <div className="bg-emerald-50 text-emerald-700 px-4 py-3 rounded-lg border border-emerald-100 font-medium text-sm">
-                    ✨ {success}
+                <div className="bg-red-50 border border-red-200 rounded-xl 
+                        p-4 text-red-700 flex items-center gap-2">
+                    <span>⚠️</span>
+                    <span>{error}</span>
+                    <button
+                        onClick={() => setError('')}
+                        className="ml-auto text-red-400 hover:text-red-600"
+                    >
+                        ✕
+                    </button>
                 </div>
             )}
 
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 space-y-6">
+            {/* Main Form */}
+            <div className="bg-white rounded-xl shadow-sm border 
+                      border-slate-100 p-6 space-y-6">
+
+                {/* Subject */}
                 <div>
-                    <label className="block text-sm font-bold text-navy mb-2">Subject Line</label>
-                    <input 
-                        type="text" 
+                    <label className="block text-sm font-semibold 
+                            text-navy mb-2">
+                        Subject Line <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                        type="text"
                         value={subject}
-                        onChange={(e) => setSubject(e.target.value)}
-                        placeholder="e.g. Major MCA Update: New Format for Director KYC..."
-                        className="w-full border border-slate-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-gold focus:outline-none"
+                        onChange={e => setSubject(e.target.value)}
+                        placeholder="Weekly Corporate Law Update — April 2026"
+                        className="w-full border border-slate-300 rounded-lg 
+                       px-4 py-3 text-navy focus:outline-none 
+                       focus:ring-2 focus:ring-amber-400 
+                       focus:border-transparent"
                     />
                 </div>
 
+                {/* Preview Text */}
                 <div>
-                    <div className="flex justify-between items-end mb-2">
-                        <label className="block text-sm font-bold text-navy">Email Content</label>
-                        <span className="text-xs text-slate-400">Plain text (Line breaks preserved)</span>
-                    </div>
-                    <textarea 
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                        rows={12}
-                        placeholder="Write your email here..."
-                        className="w-full border border-slate-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-gold focus:outline-none resize-y font-mono"
+                    <label className="block text-sm font-semibold 
+                            text-navy mb-2">
+                        Preview Text
+                        <span className="text-slate-400 font-normal ml-2 text-xs">
+                            (shown below subject in inbox)
+                        </span>
+                    </label>
+                    <input
+                        type="text"
+                        value={previewText}
+                        onChange={e => setPreviewText(e.target.value)}
+                        placeholder="This week: MCA updates, SEBI circulars..."
+                        maxLength={100}
+                        className="w-full border border-slate-300 rounded-lg 
+                       px-4 py-3 text-navy focus:outline-none 
+                       focus:ring-2 focus:ring-amber-400 
+                       focus:border-transparent"
                     />
+                    <p className="text-xs text-slate-400 mt-1 text-right">
+                        {previewText.length}/100
+                    </p>
                 </div>
 
-                <div className="pt-6 border-t border-slate-100 grid md:grid-cols-2 gap-6">
-                    {/* TEST EMAIL SECTION */}
-                    <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                        <h3 className="text-sm font-bold text-navy mb-3">Send a Test Email</h3>
-                        <div className="flex flex-col gap-3">
-                            <input 
-                                type="email" 
-                                value={testEmail}
-                                onChange={(e) => setTestEmail(e.target.value)}
-                                placeholder="test@email.com"
-                                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-navy focus:outline-none"
-                            />
-                            <button 
-                                onClick={handleSendTest}
-                                disabled={loading || !subject || !content}
-                                className="bg-white text-navy border border-slate-300 font-semibold px-4 py-2 rounded-lg hover:bg-slate-100 transition-colors text-sm disabled:opacity-50"
-                            >
-                                Send Test
-                            </button>
+                {/* Markdown Editor */}
+                <div>
+                    <label className="block text-sm font-semibold 
+                            text-navy mb-2">
+                        Email Body (Markdown)
+                        <span className="text-red-500 ml-1">*</span>
+                    </label>
+                    <div data-color-mode="light">
+                        <MDEditor
+                            value={body}
+                            onChange={val => setBody(val || '')}
+                            height={350}
+                            preview="edit"
+                        />
+                    </div>
+                    <p className="text-xs text-slate-400 mt-2">
+                        Supports **bold**, *italic*, ## headings,
+                        [links](url), - bullet lists
+                    </p>
+                </div>
+
+            </div>
+
+            {/* Email Preview Toggle */}
+            <div>
+                <button
+                    onClick={() => setShowPreview(!showPreview)}
+                    className="text-sm text-amber-600 underline 
+                     hover:text-amber-700"
+                >
+                    {showPreview ? '▲ Hide Email Preview'
+                        : '▼ Show Email Preview'}
+                </button>
+
+                {showPreview && (
+                    <div className="mt-3 border border-slate-200 rounded-xl 
+                          overflow-hidden shadow-sm">
+                        <div className="bg-slate-100 px-4 py-2 text-xs 
+                            text-slate-500 border-b font-medium">
+                            📧 Email Preview (approximate)
+                        </div>
+                        <div style={{ fontFamily: 'Georgia, serif' }}>
+                            <div style={{
+                                background: '#0F172A',
+                                padding: '20px 28px'
+                            }}>
+                                <div style={{
+                                    color: '#F59E0B', fontSize: '18px',
+                                    fontWeight: 'bold'
+                                }}>
+                                    CorpLawUpdates.in
+                                </div>
+                                <div style={{
+                                    color: '#94A3B8', fontSize: '12px',
+                                    marginTop: '4px'
+                                }}>
+                                    India's Free Corporate Law Intelligence Platform
+                                </div>
+                            </div>
+                            <div style={{
+                                padding: '24px 28px',
+                                background: '#ffffff'
+                            }}>
+                                <div style={{
+                                    fontSize: '20px', fontWeight: 'bold',
+                                    color: '#0F172A'
+                                }}>
+                                    {subject || '(No subject yet)'}
+                                </div>
+                                {previewText && (
+                                    <div style={{
+                                        color: '#64748B', fontSize: '13px',
+                                        marginTop: '4px'
+                                    }}>
+                                        {previewText}
+                                    </div>
+                                )}
+                                <hr style={{
+                                    margin: '16px 0',
+                                    borderColor: '#E2E8F0', border: 'none',
+                                    borderTop: '1px solid #E2E8F0'
+                                }} />
+                                <div style={{
+                                    color: '#334155', fontSize: '15px',
+                                    lineHeight: '1.7', whiteSpace: 'pre-wrap'
+                                }}>
+                                    {body
+                                        ? body.substring(0, 400) +
+                                        (body.length > 400 ? '\n\n...' : '')
+                                        : '(Email body will appear here)'}
+                                </div>
+                            </div>
+                            <div style={{
+                                background: '#F8FAFC',
+                                padding: '16px 28px',
+                                borderTop: '1px solid #E2E8F0'
+                            }}>
+                                <div style={{ color: '#94A3B8', fontSize: '12px' }}>
+                                    You're subscribed to CorpLawUpdates.in ·
+                                    <span style={{ color: '#F59E0B' }}>
+                                        Unsubscribe
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                )}
+            </div>
 
-                    {/* SEND TO ALL SECTION */}
-                    <div className="bg-amber-50 p-4 rounded-lg border border-amber-200 flex flex-col justify-center text-center">
-                        <h3 className="text-sm font-bold text-amber-900 mb-2">Ready to Send?</h3>
-                        <p className="text-xs text-amber-700 mb-4">This will be sent to ALL active subscribers on the platform. Please verify everything using a test email first.</p>
-                        <button 
-                            onClick={() => setConfirmModal(true)}
-                            disabled={loading || !subject || !content}
-                            className="bg-navy text-gold font-bold px-4 py-3 rounded-lg hover:bg-slate-800 transition-colors text-sm disabled:opacity-50 w-full"
-                        >
-                            Review & Send to All
-                        </button>
-                    </div>
+            {/* Action Buttons */}
+            <div className="bg-white rounded-xl border border-slate-100 
+                      shadow-sm p-4 flex items-center 
+                      justify-between gap-4 flex-wrap">
+
+                {/* Test Send */}
+                <button
+                    onClick={() => handleSend(true)}
+                    disabled={testSending || sending || !subject || !body}
+                    className="flex items-center gap-2 px-5 py-2.5 
+                     border-2 border-navy text-navy rounded-lg 
+                     font-semibold hover:bg-navy hover:text-white 
+                     transition-colors disabled:opacity-40 
+                     disabled:cursor-not-allowed"
+                >
+                    {testSending ? '⟳ Sending Test...' : '🧪 Send Test Email'}
+                </button>
+
+                {/* Send to All */}
+                <div className="flex items-center gap-3">
+                    <span className="text-sm text-slate-400 hidden md:block">
+                        {subscriberCount} subscribers
+                    </span>
+                    <button
+                        onClick={() => {
+                            if (!subject.trim() || !body.trim()) {
+                                setError('Subject and body are required before sending')
+                                return
+                            }
+                            setShowConfirm(true)
+                        }}
+                        disabled={sending || testSending}
+                        className="px-6 py-2.5 bg-amber-400 text-navy rounded-lg 
+                       font-semibold hover:bg-amber-500 
+                       transition-colors disabled:opacity-40 
+                       disabled:cursor-not-allowed"
+                    >
+                        {sending ? '⟳ Sending...' : '🚀 Send to All Subscribers'}
+                    </button>
                 </div>
             </div>
 
-            {/* CONFIRMATION MODAL */}
-            {confirmModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in">
-                    <div className="bg-white rounded-xl shadow-xl max-w-sm w-full p-6 text-center">
-                        <div className="w-16 h-16 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4 text-3xl">
-                            📫
-                        </div>
-                        <h3 className="font-heading font-bold text-xl text-navy mb-2">Send Newsletter</h3>
-                        <p className="text-slate-600 mb-6 text-sm">
-                            Are you absolutely sure you want to broadcast this message? It will be sent to all active subscribers immediately.
+            {/* Confirmation Modal */}
+            {showConfirm && (
+                <div className="fixed inset-0 bg-black/60 flex items-center 
+                        justify-center z-50 p-4">
+                    <div className="bg-white rounded-2xl shadow-2xl p-8 
+                          max-w-md w-full">
+                        <div className="text-5xl text-center mb-4">⚠️</div>
+                        <h2 className="text-xl font-heading font-bold text-navy 
+                           text-center mb-2">
+                            Confirm Newsletter Send
+                        </h2>
+                        <p className="text-slate-500 text-center mb-4">
+                            This will send an email to
                         </p>
-                        <div className="bg-slate-50 text-left p-3 rounded text-sm text-slate-700 mb-6 border border-slate-200">
-                            <strong>Subject:</strong> {subject}
+                        <div className="text-4xl font-bold text-navy 
+                            text-center mb-4">
+                            {subscriberCount}
+                            <span className="text-lg font-normal 
+                               text-slate-500 ml-2">
+                                subscribers
+                            </span>
                         </div>
-                        <div className="flex justify-center gap-3">
-                            <button 
-                                onClick={() => setConfirmModal(false)} 
-                                disabled={loading}
-                                className="px-4 py-2 border border-slate-300 rounded-lg text-slate-700 font-medium hover:bg-slate-50 transition-colors"
+                        <div className="bg-slate-50 rounded-xl p-4 mb-4 
+                            space-y-2">
+                            <p className="text-sm text-slate-700">
+                                <span className="font-semibold">Subject:</span>{' '}
+                                {subject}
+                            </p>
+                            {previewText && (
+                                <p className="text-sm text-slate-500">
+                                    <span className="font-semibold">Preview:</span>{' '}
+                                    {previewText}
+                                </p>
+                            )}
+                        </div>
+                        <p className="text-red-500 text-sm text-center mb-6 
+                          font-medium">
+                            ⚠️ This cannot be undone
+                        </p>
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => setShowConfirm(false)}
+                                className="flex-1 px-4 py-3 border-2 
+                           border-slate-300 text-slate-600 
+                           rounded-xl font-semibold 
+                           hover:border-slate-400 
+                           transition-colors"
                             >
                                 Cancel
                             </button>
-                            <button 
-                                onClick={handleSendNow} 
-                                disabled={loading}
-                                className="px-5 py-2 bg-navy text-gold rounded-lg font-bold hover:bg-slate-800 transition-colors shadow-md"
+                            <button
+                                onClick={() => handleSend(false)}
+                                className="flex-1 px-4 py-3 bg-amber-400 
+                           text-navy rounded-xl font-semibold 
+                           hover:bg-amber-500 transition-colors"
                             >
-                                {loading ? 'Sending...' : 'Yes, Send Now'}
+                                Yes, Send Now
                             </button>
                         </div>
                     </div>
                 </div>
             )}
+
         </div>
     )
 }

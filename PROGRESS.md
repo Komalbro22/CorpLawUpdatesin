@@ -61,7 +61,7 @@ Overall status: IN PROGRESS
 - [x] 40. app/api/admin/articles/[id]/route.ts (GET, PUT, DELETE with revalidatePath)
 - [x] 41. app/api/admin/articles/[id]/image/route.ts (upload to Supabase Storage, return public URL)
 - [x] 42. app/api/admin/subscribers/route.ts (GET list, GET ?export=csv)
-- [x] 43. app/api/admin/newsletter/send/route.ts (batch 10 + 500ms delay, HTML email template)
+- ✅ 43. app/api/admin/newsletter/send/route.ts (batch 10 + 500ms delay, HTML email template)
 
 ## PHASE 8 — ADMIN PAGES
 - [x] 44. app/admin/login/page.tsx (dark card, password show/hide, error state)
@@ -71,7 +71,7 @@ Overall status: IN PROGRESS
 - [x] 48. app/admin/articles/new/page.tsx (editor + live preview, image upload, draft/publish)
 - [x] 49. app/admin/articles/[id]/edit/page.tsx (pre-filled form, unpublish option)
 - [x] 50. app/admin/subscribers/page.tsx (table, stats bar, CSV export)
-- [x] 51. app/admin/newsletter/page.tsx (editor, test send, send to all with confirm)
+- ✅ 51. app/admin/newsletter/page.tsx (editor, test send, send to all with confirm)
 - [x] 52. app/admin/settings/page.tsx (site info, password instructions, danger zone)
 
 ## PHASE 9 — SEO & FINAL
