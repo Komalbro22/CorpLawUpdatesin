@@ -3,18 +3,41 @@ import { Update } from '@/types'
 import { formatDate, calculateReadingTime } from '@/lib/utils'
 import CategoryBadge from '@/components/CategoryBadge'
 
+function extractFirstImage(content: string): string | null {
+    if (!content) return null
+    const mdMatch = content.match(/!\[.*?\]\((.*?)\)/)
+    if (mdMatch && mdMatch[1]) return mdMatch[1]
+    const htmlMatch = content.match(/<img.*?src=["'](.*?)["']/)
+    if (htmlMatch && htmlMatch[1]) return htmlMatch[1]
+    return null
+}
+
 interface UpdateCardProps {
     update: Update
     showExcerpt?: boolean
 }
 
 export default function UpdateCard({ update, showExcerpt = true }: UpdateCardProps) {
+    const imageUrl = extractFirstImage(update.content || '')
+
     return (
         <Link
             href={`/updates/${update.slug}`}
-            className="block group bg-white rounded-xl shadow-sm border border-slate-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 overflow-hidden"
+            className="block group bg-white flex flex-col h-full rounded-xl shadow-sm border border-slate-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 overflow-hidden"
         >
-            <div className="p-6">
+            {imageUrl && (
+                <div className="w-full aspect-[16/9] bg-slate-50 overflow-hidden border-b border-slate-100 flex-shrink-0">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                        src={imageUrl}
+                        alt={update.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
+                        loading="lazy"
+                    />
+                </div>
+            )}
+            
+            <div className="p-6 flex flex-col flex-1">
                 <div className="mb-3">
                     <CategoryBadge category={update.category} />
                 </div>
