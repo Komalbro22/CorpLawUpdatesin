@@ -1,24 +1,25 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Suspense } from 'react'
 import { supabase } from '@/lib/supabase'
 import UpdatesClient from './UpdatesClient'
 import { SkeletonGrid } from '@/components/LoadingSkeleton'
 import { Metadata } from 'next'
+import { BASE_URL } from '@/lib/utils'
 
 export const revalidate = 3600
 
 export const metadata: Metadata = {
     title: 'All Updates',
-    description: 'Browse all corporate law updates covering MCA, SEBI, RBI, NCLT, IBC and FEMA'
+    description: 'Browse all Indian corporate law updates covering MCA, SEBI, RBI, NCLT, IBC and FEMA regulations.',
+    alternates: { canonical: BASE_URL + '/updates' },
+    openGraph: {
+        title: 'All Updates | CorpLawUpdates.in',
+        url: BASE_URL + '/updates',
+        type: 'website',
+    }
 }
 
 export default async function UpdatesPage() {
-    const { data, error } = await supabase
+    const { data } = await supabase
         .from('updates')
         .select('*')
         .not('published_at', 'is', null)

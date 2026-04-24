@@ -84,15 +84,25 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
     const tagsList = update.tags ? (typeof update.tags === 'string' ? update.tags.split(',') : update.tags) : []
 
     const jsonLd = {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": update.title,
-        "description": update.summary || '',
-        "datePublished": update.published_at,
-        "publisher": {
-            "@type": "Organization",
-            "name": "CorpLawUpdates.in",
-            "url": BASE_URL
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        'headline': update.title,
+        'description': update.summary,
+        'datePublished': update.published_at,
+        'dateModified': update.updated_at,
+        'url': BASE_URL + '/updates/' + update.slug,
+        'publisher': {
+            '@type': 'Organization',
+            'name': 'CorpLawUpdates.in',
+            'url': BASE_URL,
+            'logo': {
+                '@type': 'ImageObject',
+                'url': BASE_URL + '/icon.png'
+            }
+        },
+        'mainEntityOfPage': {
+            '@type': 'WebPage',
+            '@id': BASE_URL + '/updates/' + update.slug
         }
     }
 

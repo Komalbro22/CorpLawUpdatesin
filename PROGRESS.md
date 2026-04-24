@@ -75,14 +75,14 @@ Overall status: IN PROGRESS
 - [x] 52. app/admin/settings/page.tsx (site info, password instructions, danger zone)
 
 ## PHASE 9 — SEO & FINAL
-- [x] 53. app/sitemap.ts (static + dynamic article URLs)
-- [x] 54. app/robots.ts (allow all except /admin/)
-- [x] 55. generateMetadata on all public pages (title, description, OG, canonical)
-- [x] 56. JSON-LD Article schema on /updates/[slug]
-- [x] 57. npm run build — fix ALL TypeScript + lint errors
-- [x] 58. Final check: no hardcoded URLs (use BASE_URL everywhere)
-- [x] 59. Final check: no NEXT_PUBLIC_ prefix on secret keys
-- [x] 60. Final check: all admin API routes verify cookie before any DB operation
+- ✅ 53. app/sitemap.ts (static + dynamic article URLs)
+- ✅ 54. app/robots.ts (allow all except /admin/)
+- ✅ 55. generateMetadata on all public pages (title, description, OG, canonical)
+- ✅ 56. JSON-LD Article schema on /updates/[slug]
+- ✅ 57. npm run build — fix ALL TypeScript + lint errors
+- ✅ 58. Final check: no hardcoded URLs (use BASE_URL everywhere)
+- ✅ 59. Final check: no NEXT_PUBLIC_ prefix on secret keys
+- ✅ 60. Final check: all admin API routes verify cookie before any DB operation
 
 ---
 

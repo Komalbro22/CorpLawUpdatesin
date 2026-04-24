@@ -2,11 +2,20 @@ import { cookies } from 'next/headers'
 import Sidebar from '@/components/admin/Sidebar'
 import TopBar from '@/components/admin/TopBar'
 
-export const metadata = { robots: { index: false, follow: false } }
+export const metadata = {
+    robots: {
+        index: false,
+        follow: false,
+        googleBot: {
+            index: false,
+            follow: false,
+        }
+    }
+}
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const session = cookies().get('admin_session')
-    
+
     if (!session) {
         return <>{children}</>
     }

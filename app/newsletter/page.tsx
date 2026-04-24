@@ -1,9 +1,12 @@
 import NewsletterWidget from '@/components/NewsletterWidget'
-import { Metadata } from 'next'
+import { BASE_URL } from '@/lib/utils'
 
-export const metadata: Metadata = {
+export const revalidate = false
+
+export const metadata = {
     title: 'Newsletter',
-    description: 'Subscribe to weekly corporate law updates from CorpLawUpdates.in'
+    description: 'Subscribe to free weekly corporate law updates from CorpLawUpdates.in covering MCA, SEBI, RBI, NCLT, IBC and FEMA.',
+    alternates: { canonical: BASE_URL + '/newsletter' },
 }
 
 export default function NewsletterPage() {

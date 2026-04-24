@@ -7,6 +7,7 @@ import CategoryBadge from '@/components/CategoryBadge'
 import UpdateCard from '@/components/UpdateCard'
 import Pagination from '@/components/Pagination'
 import { Metadata } from 'next'
+import { BASE_URL } from '@/lib/utils'
 
 export const revalidate = 3600
 
@@ -27,12 +28,30 @@ export async function generateStaticParams() {
     }))
 }
 
-export async function generateMetadata({ params }: { params: { category: string } }): Promise<Metadata> {
-    const cat = params.category.toLowerCase()
-    if (!CATEGORIES.includes(cat)) return {}
+export async function generateMetadata({ params }: { params: { category: string } }) {
+    const category = params.category.toUpperCase()
+    const descriptions: Record<string, string> = {
+        MCA: 'Ministry of Corporate Affairs updates...',
+        SEBI: 'SEBI capital markets updates...',
+        RBI: 'RBI banking and monetary policy updates...',
+        NCLT: 'NCLT insolvency and corporate law updates...',
+        IBC: 'Insolvency and Bankruptcy Code updates...',
+        FEMA: 'FEMA foreign exchange updates...',
+    }
     return {
-        title: `${cat.toUpperCase()} Updates`,
-        description: CATEGORY_DESC[cat]
+        title: category + ' Updates',
+        description: descriptions[category] || category + ' regulatory updates',
+        alternates: { canonical: BASE_URL + '/category/' + params.category },
+        openGraph: {
+            title: category + ' Updates | CorpLawUpdates.in',
+            url: BASE_URL + '/category/' + params.category,
+            type: 'website',
+            images: [{
+                url: BASE_URL + '/api/og?title=' + category + '+Updates&category=' + category,
+                width: 1200,
+                height: 630,
+            }]
+        }
     }
 }
 
