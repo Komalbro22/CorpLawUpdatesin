@@ -27,6 +27,8 @@ export async function POST(request: NextRequest) {
         })
 
         const { subject, previewText, body: emailBody, testOnly } = body
+        const fromEmail = (process.env.RESEND_FROM_EMAIL || 'updates@mail.corplawupdates.in').trim().replace(/['"]/g, '')
+        const adminEmail = (process.env.ADMIN_EMAIL || 'corplawupdates@gmail.com').trim().replace(/['"]/g, '')
 
         // 3. Validate
         if (!subject?.trim()) {
@@ -64,8 +66,8 @@ export async function POST(request: NextRequest) {
             })
 
             const result = await resend.emails.send({
-                from: process.env.RESEND_FROM_EMAIL!,
-                to: process.env.ADMIN_EMAIL!,
+                from: fromEmail,
+                to: adminEmail,
                 subject: `[TEST] ${subject}`,
                 html: testHtml,
             })
