@@ -135,7 +135,7 @@ export async function POST(request: NextRequest) {
                     })
 
                     const r = await resend.emails.send({
-                        from: process.env.RESEND_FROM_EMAIL!,
+                        from: fromEmail,
                         to: sub.email,
                         subject,
                         html,
