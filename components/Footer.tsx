@@ -72,7 +72,7 @@ export default function Footer() {
                 </div>
 
                 <div className="mt-12 pt-8 border-t border-slate-700/50 text-center text-slate-500 text-sm">
-                    <p>© 2024 CorpLawUpdates.in · Not legal advice · For informational purposes only</p>
+                    <p>© 2026 CorpLawUpdates.in · Not legal advice · For informational purposes only</p>
                 </div>
             </div>
         </footer>

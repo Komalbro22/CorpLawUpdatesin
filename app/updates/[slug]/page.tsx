@@ -185,7 +185,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
             {related.length > 0 && (
                 <section className="pt-10 border-t border-slate-200">
                     <h2 className="text-2xl font-heading font-bold text-navy mb-6">Related Updates</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {related.map((rel: any) => (
                             <UpdateCard key={rel.id} update={rel} />
                         ))}

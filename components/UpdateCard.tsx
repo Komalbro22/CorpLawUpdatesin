@@ -19,6 +19,7 @@ interface UpdateCardProps {
 
 export default function UpdateCard({ update, showExcerpt = true }: UpdateCardProps) {
     const imageUrl = extractFirstImage(update.content || '')
+    const isNew = update.published_at && (Date.now() - new Date(update.published_at).getTime()) < 3 * 24 * 60 * 60 * 1000
 
     return (
         <Link
@@ -26,7 +27,7 @@ export default function UpdateCard({ update, showExcerpt = true }: UpdateCardPro
             className="block group bg-white flex flex-col h-full rounded-xl shadow-sm border border-slate-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 overflow-hidden"
         >
             {imageUrl && (
-                <div className="w-full aspect-[16/9] bg-slate-50 overflow-hidden border-b border-slate-100 flex-shrink-0">
+                <div className="relative w-full h-40 overflow-hidden bg-slate-50 border-b border-slate-100 flex-shrink-0">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                         src={imageUrl}
@@ -38,8 +39,13 @@ export default function UpdateCard({ update, showExcerpt = true }: UpdateCardPro
             )}
             
             <div className="p-6 flex flex-col flex-1">
-                <div className="mb-3">
+                <div className="mb-3 flex items-center gap-2">
                     <CategoryBadge category={update.category} />
+                    {isNew && (
+                        <span className="bg-amber-400 text-navy text-xs font-bold px-2 py-0.5 rounded-full">
+                            NEW
+                        </span>
+                    )}
                 </div>
 
                 <h3 className="font-heading text-xl font-bold text-navy mb-2 line-clamp-2 group-hover:text-gold transition-colors">
@@ -55,7 +61,9 @@ export default function UpdateCard({ update, showExcerpt = true }: UpdateCardPro
                 <div className="flex items-center justify-between text-xs text-slate-400 mt-auto pt-4 border-t border-slate-50">
                     <div className="flex flex-col gap-1">
                         {update.source_name && (
-                            <span className="font-medium text-slate-500">{update.source_name}</span>
+                            <p className="text-sm text-slate-400 truncate max-w-[150px] md:max-w-[200px]">
+                                {update.source_name}
+                            </p>
                         )}
                         {update.published_at && (
                             <span>{formatDate(update.published_at)}</span>

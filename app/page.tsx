@@ -63,9 +63,9 @@ export default async function HomePage() {
   return (
     <div>
       {/* 1. HERO SECTION */}
-      <section className="w-full bg-navy relative py-20 px-4 md:py-32 flex flex-col items-center text-center overflow-hidden">
+      <section className="w-full bg-navy relative min-h-[60vh] md:min-h-[70vh] py-20 px-4 flex flex-col items-center justify-center text-center overflow-hidden">
         <div className="absolute inset-0 opacity-5 bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:100px_100px]"></div>
-        <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
+        <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center justify-center h-full">
           <h1 className="font-heading text-white text-4xl md:text-6xl font-bold mb-6 leading-tight">
             India's Free Corporate Law Intelligence Platform
           </h1>
@@ -159,15 +159,16 @@ export default async function HomePage() {
       )}
 
       {/* 5. NEWSLETTER SECTION */}
-      <section className="bg-slate-100 py-20 px-4 w-full border-t border-slate-200">
-        <div className="max-w-3xl mx-auto text-center flex flex-col items-center">
-          <h2 className="text-3xl font-bold text-navy mb-4 font-heading">
-            Get Updates in Your Inbox
+      <section className="w-full bg-navy py-16 px-4 text-center">
+        <div className="max-w-3xl mx-auto flex flex-col items-center">
+          <h2 className="text-3xl font-heading font-bold text-white mb-3">
+            Get Weekly Corporate Law Updates
           </h2>
-          <p className="text-slate-600 mb-8 max-w-lg">
-            Weekly digest of top corporate law updates. Free forever.
+          <p className="text-slate-300 mb-8 max-w-xl mx-auto">
+            Free digest every Monday. MCA, SEBI, RBI, NCLT, IBC & FEMA.
+            No spam. Unsubscribe anytime.
           </p>
-          <div className="w-full max-w-md text-left">
+          <div className="w-full max-w-md mx-auto text-left">
             <NewsletterWidget />
           </div>
         </div>
