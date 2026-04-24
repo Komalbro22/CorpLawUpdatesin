@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
             bodyLength: body.body?.length
         })
 
-        const { subject, previewText, body: emailBody, testOnly } = body
+        const { subject, previewText, body: emailBody, testOnly, targetEmails } = body
         const fromEmail = (process.env.RESEND_FROM_EMAIL || 'updates@mail.corplawupdates.in').trim().replace(/['"]/g, '')
         const adminEmail = (process.env.ADMIN_EMAIL || 'corplawupdates@gmail.com').trim().replace(/['"]/g, '')
 
@@ -92,10 +92,11 @@ export async function POST(request: NextRequest) {
 
         // 8. Fetch subscribers
         console.log('Fetching subscribers...')
-        const { data: subscribers, error: subError } = await supabaseAdmin
-            .from('subscribers')
-            .select('id, email')
-            .eq('is_active', true)
+        let query = supabaseAdmin.from('subscribers').select('id, email').eq('is_active', true)
+        if (targetEmails && Array.isArray(targetEmails) && targetEmails.length > 0) {
+            query = query.in('email', targetEmails)
+        }
+        const { data: subscribers, error: subError } = await query
 
         console.log('Subscribers fetched:', subscribers?.length, 'error:', subError)
 
@@ -113,6 +114,8 @@ export async function POST(request: NextRequest) {
         // 9. Send in batches
         let sent = 0
         let failed = 0
+        const successList: string[] = []
+        const failedList: string[] = []
         const chunks = []
         for (let i = 0; i < subscribers.length; i += 10) {
             chunks.push(subscribers.slice(i, i + 10))
@@ -149,10 +152,13 @@ export async function POST(request: NextRequest) {
             )
 
             results.forEach((r, idx) => {
+                const subEmail = chunk[idx].email
                 if (r.status === 'fulfilled') {
                     sent++
+                    successList.push(subEmail)
                 } else {
                     failed++
+                    failedList.push(subEmail)
                     console.error(`Failed for chunk ${ci} item ${idx}:`, r.reason)
                 }
             })
@@ -163,7 +169,7 @@ export async function POST(request: NextRequest) {
         }
 
         console.log(`=== DONE: sent=${sent} failed=${failed} ===`)
-        return NextResponse.json({ sent, failed, total: subscribers.length })
+        return NextResponse.json({ sent, failed, total: subscribers.length, successList, failedList })
 
     } catch (err: any) {
         console.error('=== NEWSLETTER FATAL ERROR ===')

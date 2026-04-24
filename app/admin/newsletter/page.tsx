@@ -15,6 +15,8 @@ interface SendResult {
     failed: number
     total: number
     testOnly?: boolean
+    successList?: string[]
+    failedList?: string[]
 }
 
 export default function NewsletterPage() {
@@ -28,6 +30,7 @@ export default function NewsletterPage() {
     const [result, setResult] = useState<SendResult | null>(null)
     const [error, setError] = useState('')
     const [showPreview, setShowPreview] = useState(false)
+    const [failedList, setFailedList] = useState<string[]>([])
 
     useEffect(() => {
         fetch('/api/admin/subscribers?status=active')
@@ -38,7 +41,7 @@ export default function NewsletterPage() {
             .catch(err => console.error('Failed to fetch subscriber count:', err))
     }, [])
 
-    async function handleSend(testOnly: boolean) {
+    async function handleSend(testOnly: boolean, retryList?: string[]) {
         setError('')
 
         if (!subject.trim()) {
@@ -58,15 +61,20 @@ export default function NewsletterPage() {
         }
 
         try {
+            const payload: any = {
+                subject: subject.trim(),
+                previewText: previewText.trim(),
+                body: body.trim(),
+                testOnly,
+            }
+            if (retryList && retryList.length > 0) {
+                payload.targetEmails = retryList
+            }
+
             const res = await fetch('/api/admin/newsletter/send', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    subject: subject.trim(),
-                    previewText: previewText.trim(),
-                    body: body.trim(),
-                    testOnly,
-                }),
+                body: JSON.stringify(payload),
             })
 
             const data = await res.json()
@@ -76,6 +84,11 @@ export default function NewsletterPage() {
             }
 
             setResult(data)
+            if (!testOnly && data.failedList) {
+                setFailedList(data.failedList)
+            } else {
+                setFailedList([])
+            }
 
         } catch (err: any) {
             setError(err.message || 'Something went wrong')
@@ -122,20 +135,40 @@ export default function NewsletterPage() {
                             </div>
                         </div>
                     )}
-                    <button
-                        onClick={() => {
-                            setResult(null)
-                            setSubject('')
-                            setPreviewText('')
-                            setBody('')
-                            setError('')
-                        }}
-                        className="mt-4 px-6 py-3 bg-amber-400 text-navy 
-                       font-semibold rounded-xl hover:bg-amber-500 
-                       transition-colors"
-                    >
-                        Send Another Newsletter
-                    </button>
+                    {failedList.length > 0 && (
+                        <div className="mt-8 text-left bg-red-50 border border-red-200 rounded-xl p-6 w-full mx-auto">
+                            <h3 className="text-red-800 font-semibold mb-2 text-lg">Failed Deliveries ({failedList.length})</h3>
+                            <p className="text-red-600 text-sm mb-4">The following emails experienced provider rejections or bounces. You can attempt to retry them directly.</p>
+                            <ul className="list-disc ml-5 text-sm text-red-700 mb-6 max-h-40 overflow-y-auto w-full border border-red-200/50 bg-white p-3 rounded shadow-inner disabled:opacity-50">
+                                {failedList.map((email, i) => <li key={i} className="py-0.5">{email}</li>)}
+                            </ul>
+                            <div className="flex justify-end gap-3">
+                                <button
+                                    onClick={() => handleSend(false, failedList)}
+                                    disabled={sending}
+                                    className="px-5 py-2.5 font-bold bg-red-600 text-white rounded-lg shadow-lg hover:bg-red-700 disabled:opacity-50 transition-colors"
+                                >
+                                    {sending ? 'Retrying...' : 'Retry Failed Mails'}
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="mt-8">
+                        <button
+                            onClick={() => {
+                                setResult(null)
+                                setSubject('')
+                                setPreviewText('')
+                                setBody('')
+                                setError('')
+                                setFailedList([])
+                            }}
+                            className="px-6 py-3 bg-amber-400 text-navy font-semibold rounded-xl hover:bg-amber-500 transition-colors"
+                        >
+                            Send Another Newsletter
+                        </button>
+                    </div>
                 </div>
             </div>
         )
