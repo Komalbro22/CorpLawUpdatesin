@@ -1,6 +1,6 @@
 import { supabase } from '@/lib/supabase'
 
-export const revalidate = 3600
+export const revalidate = 0
 
 export async function GET() {
   const { data } = await supabase

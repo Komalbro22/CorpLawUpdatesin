@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 
-export const revalidate = 3600
+export const revalidate = 0
 
 export default async function AnnouncementBar() {
   const { data } = await supabase
