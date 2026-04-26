@@ -88,12 +88,49 @@ export default function Footer() {
                                     RSS Feed
                                 </a>
                             </li>
+                            <li>
+                                <Link href="/contact"
+                                    className="text-slate-400 hover:text-gold transition-colors duration-200">
+                                    Contact Us
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/privacy-policy"
+                                    className="text-slate-400 hover:text-gold transition-colors duration-200">
+                                    Privacy Policy
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/terms"
+                                    className="text-slate-400 hover:text-gold transition-colors duration-200">
+                                    Terms of Service
+                                </Link>
+                            </li>
                         </ul>
                     </div>
                 </div>
 
-                <div className="mt-12 pt-8 border-t border-slate-700/50 text-center text-slate-500 text-sm">
-                    <p>© 2026 CorpLawUpdates.in · Not legal advice · For informational purposes only</p>
+                <div className="mt-12 pt-8 border-t border-slate-700/50">
+                    <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-slate-500 text-xs">
+                        <span>© 2026 CorpLawUpdates.in</span>
+                        <span className="text-slate-600">·</span>
+                        <Link href="/privacy-policy"
+                            className="hover:text-gold transition-colors">
+                            Privacy Policy
+                        </Link>
+                        <span className="text-slate-600">·</span>
+                        <Link href="/terms"
+                            className="hover:text-gold transition-colors">
+                            Terms of Service
+                        </Link>
+                        <span className="text-slate-600">·</span>
+                        <Link href="/contact"
+                            className="hover:text-gold transition-colors">
+                            Contact
+                        </Link>
+                        <span className="text-slate-600">·</span>
+                        <span>Not legal advice</span>
+                    </div>
                 </div>
             </div>
         </footer>
