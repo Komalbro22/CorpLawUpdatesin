@@ -7,6 +7,9 @@ import { ToastProvider } from '@/components/Toast'
 import BackToTop from '@/components/BackToTop'
 import WhatsAppButton from '@/components/WhatsAppButton'
 import HideOnAdmin from '@/components/HideOnAdmin'
+import AnnouncementBar from '@/components/AnnouncementBar'
+import Script from 'next/script'
+import { getSetting } from '@/lib/settings'
 import { BASE_URL } from '@/lib/utils'
 import './globals.css'
 
@@ -31,11 +34,12 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const gaId = await getSetting('google_analytics_id')
   const orgJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
@@ -65,9 +69,26 @@ export default function RootLayout({
       <head>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
+        {gaId && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga4-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${gaId}');
+              `}
+            </Script>
+          </>
+        )}
       </head>
       <body className="font-body bg-slate-50 text-navy antialiased min-h-screen flex flex-col">
         <ToastProvider>
+          <HideOnAdmin><AnnouncementBar /></HideOnAdmin>
           <HideOnAdmin><Navbar /></HideOnAdmin>
           <main className="flex-grow">
             {children}

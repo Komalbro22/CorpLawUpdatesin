@@ -32,3 +32,11 @@ export interface CategoryCount {
     category: Category
     count: number
 }
+
+export interface SiteSetting {
+  key: string
+  value: string | null
+  label: string
+  description: string
+  updated_at: string
+}
