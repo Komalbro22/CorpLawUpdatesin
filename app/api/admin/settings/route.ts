@@ -6,7 +6,7 @@ import { supabaseAdmin } from '@/lib/supabase-server'
 export async function GET() {
   if (!verifyAdminSession()) {
     return NextResponse.json(
-      { error: 'Unauthorized' }, 
+      { error: 'Unauthorized' },
       { status: 401 }
     )
   }
@@ -18,7 +18,7 @@ export async function GET() {
 
   if (error) {
     return NextResponse.json(
-      { error: 'Failed to fetch settings' }, 
+      { error: 'Failed to fetch settings' },
       { status: 500 }
     )
   }
@@ -26,11 +26,11 @@ export async function GET() {
   return NextResponse.json({ settings: data })
 }
 
-// POST — update a setting
+// POST — update a single setting
 export async function POST(request: Request) {
   if (!verifyAdminSession()) {
     return NextResponse.json(
-      { error: 'Unauthorized' }, 
+      { error: 'Unauthorized' },
       { status: 401 }
     )
   }
@@ -40,22 +40,22 @@ export async function POST(request: Request) {
 
   if (!key) {
     return NextResponse.json(
-      { error: 'Key required' }, 
+      { error: 'Key required' },
       { status: 400 }
     )
   }
 
   const { error } = await supabaseAdmin
     .from('site_settings')
-    .update({ 
-      value: value || '', 
-      updated_at: new Date().toISOString() 
+    .update({
+      value: value || '',
+      updated_at: new Date().toISOString()
     })
     .eq('key', key)
 
   if (error) {
     return NextResponse.json(
-      { error: 'Failed to update setting' }, 
+      { error: 'Failed to update setting' },
       { status: 500 }
     )
   }

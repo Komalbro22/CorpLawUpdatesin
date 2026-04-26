@@ -9,20 +9,13 @@ export default async function AnnouncementBar() {
     .select('key, value')
     .in('key', ['announcement_bar', 'announcement_bar_url'])
 
-  const text = data?.find(
-    d => d.key === 'announcement_bar'
-  )?.value || ''
-  
-  const url = data?.find(
-    d => d.key === 'announcement_bar_url'
-  )?.value || ''
+  const text = data?.find(d => d.key === 'announcement_bar')?.value || ''
+  const url = data?.find(d => d.key === 'announcement_bar_url')?.value || ''
 
   if (!text.trim()) return null
 
   return (
-    <div className="bg-amber-400 text-navy text-sm 
-                    font-medium text-center py-2 px-4
-                    print:hidden">
+    <div className="bg-amber-400 text-navy text-sm font-medium text-center py-2 px-4 print:hidden">
       {url ? (
         <Link
           href={url}

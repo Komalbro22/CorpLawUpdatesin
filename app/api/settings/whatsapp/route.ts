@@ -9,7 +9,5 @@ export async function GET() {
     .eq('key', 'whatsapp_channel')
     .single()
 
-  return Response.json({ 
-    url: data?.value || '' 
-  })
+  return Response.json({ url: data?.value || '' })
 }

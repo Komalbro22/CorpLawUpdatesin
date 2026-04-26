@@ -5,7 +5,7 @@ import { supabaseAdmin } from '@/lib/supabase-server'
 export async function GET() {
   if (!verifyAdminSession()) {
     return NextResponse.json(
-      { error: 'Unauthorized' }, 
+      { error: 'Unauthorized' },
       { status: 401 }
     )
   }
@@ -19,6 +19,7 @@ export async function GET() {
     recentResult,
     viewsTotalResult,
   ] = await Promise.all([
+
     // Total articles
     supabaseAdmin
       .from('updates')
@@ -38,13 +39,13 @@ export async function GET() {
       .order('views', { ascending: false })
       .limit(5),
 
-    // Articles by category
+    // All categories from published articles
     supabaseAdmin
       .from('updates')
       .select('category')
       .not('published_at', 'is', null),
 
-    // Recent 5 subscribers
+    // Recent 5 active subscribers
     supabaseAdmin
       .from('subscribers')
       .select('email, subscribed_at')
@@ -52,7 +53,7 @@ export async function GET() {
       .order('subscribed_at', { ascending: false })
       .limit(5),
 
-    // Total views across all articles
+    // All views from published articles
     supabaseAdmin
       .from('updates')
       .select('views')
@@ -62,7 +63,7 @@ export async function GET() {
   // Calculate category breakdown
   const categoryCount: Record<string, number> = {}
   categoryResult.data?.forEach((row) => {
-    categoryCount[row.category] = 
+    categoryCount[row.category] =
       (categoryCount[row.category] || 0) + 1
   })
 
@@ -71,11 +72,11 @@ export async function GET() {
     (sum, row) => sum + (row.views || 0), 0
   ) || 0
 
-  // Articles published this week
+  // Articles published in last 7 days
   const oneWeekAgo = new Date()
   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
 
-  const { data: weekData } = await supabaseAdmin
+  const { count: weekCount } = await supabaseAdmin
     .from('updates')
     .select('*', { count: 'exact', head: true })
     .not('published_at', 'is', null)
@@ -86,7 +87,7 @@ export async function GET() {
       totalArticles: articlesResult.count || 0,
       totalSubscribers: subscribersResult.count || 0,
       totalViews,
-      articlesThisWeek: weekData?.length || 0,
+      articlesThisWeek: weekCount || 0,
     },
     topArticles: topArticlesResult.data || [],
     categoryBreakdown: categoryCount,
