@@ -1,32 +1,39 @@
-import { supabase } from '@/lib/supabase'
+'use client'
+
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
-export const revalidate = 0
+export default function AnnouncementBar() {
+  const [data, setData] = useState<{ text: string; url: string } | null>(null)
+  const [loading, setLoading] = useState(true)
 
-export default async function AnnouncementBar() {
-  const { data } = await supabase
-    .from('site_settings')
-    .select('key, value')
-    .in('key', ['announcement_bar', 'announcement_bar_url'])
+  useEffect(() => {
+    fetch('/api/settings/announcement')
+      .then(r => r.json())
+      .then(d => {
+        setData(d)
+        setLoading(false)
+      })
+      .catch(() => {
+        setLoading(false)
+      })
+  }, [])
 
-  const text = data?.find(d => d.key === 'announcement_bar')?.value || ''
-  const url = data?.find(d => d.key === 'announcement_bar_url')?.value || ''
-
-  if (!text.trim()) return null
+  if (loading || !data?.text?.trim()) return null
 
   return (
     <div className="bg-amber-400 text-navy text-sm font-medium text-center py-2 px-4 print:hidden">
-      {url ? (
+      {data.url ? (
         <Link
-          href={url}
-          target={url.startsWith('http') ? '_blank' : '_self'}
+          href={data.url}
+          target={data.url.startsWith('http') ? '_blank' : '_self'}
           rel="noopener noreferrer"
           className="hover:underline"
         >
-          📢 {text} →
+          📢 {data.text} →
         </Link>
       ) : (
-        <span>📢 {text}</span>
+        <span>📢 {data.text}</span>
       )}
     </div>
   )
