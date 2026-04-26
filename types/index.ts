@@ -12,6 +12,10 @@ export interface Update {
     source_name: string | null
     published_at: string | null
     is_featured: boolean
+    views: number
+    key_change: string | null
+    effective_date: string | null
+    impact_level: 'high' | 'medium' | 'low' | null
     created_at: string
     updated_at: string
 }

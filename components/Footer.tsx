@@ -67,6 +67,27 @@ export default function Footer() {
                                     Newsletter
                                 </Link>
                             </li>
+                            <li>
+                                <Link
+                                    href="/calendar"
+                                    className="text-slate-400 hover:text-gold transition-colors duration-200 text-sm"
+                                >
+                                    📅 Compliance Calendar
+                                </Link>
+                            </li>
+                            <li>
+                                <a
+                                    href="/api/feed.xml"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-slate-400 hover:text-gold transition-colors duration-200 flex items-center gap-1.5 text-sm"
+                                >
+                                    <span className="text-orange-400 text-base leading-none">
+                                        ◉
+                                    </span>
+                                    RSS Feed
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>

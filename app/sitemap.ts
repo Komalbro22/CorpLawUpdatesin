@@ -15,6 +15,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { url: BASE_URL + '/updates', lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
         { url: BASE_URL + '/about', changeFrequency: 'monthly', priority: 0.5 },
         { url: BASE_URL + '/newsletter', changeFrequency: 'monthly', priority: 0.5 },
+        {
+            url: `${BASE_URL}/calendar`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly' as const,
+            priority: 0.8,
+        },
     ]
 
     const categoryPages: MetadataRoute.Sitemap = ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema'].map(cat => ({

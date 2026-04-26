@@ -61,6 +61,12 @@ export default function Navbar() {
                                         {category}
                                     </Link>
                                 ))}
+                                <Link
+                                    href="/calendar"
+                                    className="block px-4 py-2.5 text-sm text-navy hover:bg-slate-50 hover:text-amber-600 transition-colors border-t border-slate-100"
+                                >
+                                    📅 Compliance Calendar
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -95,8 +101,8 @@ export default function Navbar() {
                                 key={link.href}
                                 href={link.href}
                                 className={`block pl-3 pr-4 py-2 text-base font-medium ${isActive(link.href)
-                                        ? 'bg-amber-50 border-l-4 border-gold text-gold'
-                                        : 'border-l-4 border-transparent text-slate-600 hover:bg-slate-50 hover:border-slate-300 hover:text-navy'
+                                    ? 'bg-amber-50 border-l-4 border-gold text-gold'
+                                    : 'border-l-4 border-transparent text-slate-600 hover:bg-slate-50 hover:border-slate-300 hover:text-navy'
                                     }`}
                                 onClick={() => setIsOpen(false)}
                             >
@@ -116,6 +122,13 @@ export default function Navbar() {
                                         {category}
                                     </Link>
                                 ))}
+                                <Link
+                                    href="/calendar"
+                                    onClick={() => setIsOpen(false)}
+                                    className="block px-4 py-3 text-navy font-medium hover:text-amber-600 border-b border-slate-100"
+                                >
+                                    📅 Compliance Calendar
+                                </Link>
                             </div>
                         </div>
                     </div>

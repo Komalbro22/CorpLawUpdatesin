@@ -19,7 +19,23 @@ interface UpdateCardProps {
 
 export default function UpdateCard({ update, showExcerpt = true }: UpdateCardProps) {
     const imageUrl = extractFirstImage(update.content || '')
-    const isNew = update.published_at && (Date.now() - new Date(update.published_at).getTime()) < 3 * 24 * 60 * 60 * 1000
+    const isNew = Boolean(
+        update.published_at &&
+        (Date.now() - new Date(update.published_at).getTime()) <
+        3 * 24 * 60 * 60 * 1000
+    )
+
+    const impactStyles: Record<string, string> = {
+        high: 'bg-red-100 text-red-700',
+        medium: 'bg-amber-100 text-amber-700',
+        low: 'bg-green-100 text-green-700',
+    }
+
+    const impactLabels: Record<string, string> = {
+        high: '🔴 High Impact',
+        medium: '🟡 Medium Impact',
+        low: '🟢 Low Impact',
+    }
 
     return (
         <Link
@@ -37,13 +53,18 @@ export default function UpdateCard({ update, showExcerpt = true }: UpdateCardPro
                     />
                 </div>
             )}
-            
+
             <div className="p-6 flex flex-col flex-1">
                 <div className="mb-3 flex items-center gap-2">
                     <CategoryBadge category={update.category} />
                     {isNew && (
                         <span className="bg-amber-400 text-navy text-xs font-bold px-2 py-0.5 rounded-full">
                             NEW
+                        </span>
+                    )}
+                    {update.impact_level && (
+                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${impactStyles[update.impact_level]}`}>
+                            {impactLabels[update.impact_level]}
                         </span>
                     )}
                 </div>
@@ -61,13 +82,25 @@ export default function UpdateCard({ update, showExcerpt = true }: UpdateCardPro
                 <div className="flex items-center justify-between text-xs text-slate-400 mt-auto pt-4 border-t border-slate-50">
                     <div className="flex flex-col gap-1">
                         {update.source_name && (
-                            <p className="text-sm text-slate-400 truncate max-w-[150px] md:max-w-[200px]">
+                            <p className="text-sm text-slate-400 truncate max-w-[220px]">
                                 {update.source_name}
                             </p>
                         )}
-                        {update.published_at && (
-                            <span>{formatDate(update.published_at)}</span>
-                        )}
+                        <div className="flex items-center gap-2 flex-wrap">
+                            {update.published_at && (
+                                <span>{formatDate(update.published_at)}</span>
+                            )}
+                            {update.effective_date && (
+                                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium whitespace-nowrap">
+                                    📅 Effective: {formatDate(update.effective_date)}
+                                </span>
+                            )}
+                            {(update.views || 0) > 0 && (
+                                <span className="text-xs text-slate-400 whitespace-nowrap">
+                                    · {update.views!.toLocaleString('en-IN')} views
+                                </span>
+                            )}
+                        </div>
                     </div>
                     <div className="flex items-center font-medium bg-slate-50 px-2 py-1 rounded-md">
                         {calculateReadingTime(update.content || update.summary || '')} min read

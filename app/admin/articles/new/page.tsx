@@ -37,6 +37,10 @@ export default function NewArticle() {
 
     const [isFeatured, setIsFeatured] = useState(false)
 
+    const [keyChange, setKeyChange] = useState('')
+    const [effectiveDate, setEffectiveDate] = useState('')
+    const [impactLevel, setImpactLevel] = useState<'high' | 'medium' | 'low' | ''>('')
+
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [success, setSuccess] = useState(false)
@@ -118,7 +122,10 @@ export default function NewArticle() {
                     source_url: sourceUrl || null,
                     source_name: sourceName || null,
                     published_at: publishedAtValue,
-                    is_featured: isFeatured
+                    is_featured: isFeatured,
+                    key_change: keyChange.trim() || null,
+                    effective_date: effectiveDate || null,
+                    impact_level: impactLevel || null,
                 })
             })
 
@@ -235,6 +242,72 @@ export default function NewArticle() {
                         />
                         <div className="text-right text-xs text-slate-400 mt-1">
                             {summary.length}/300
+                        </div>
+                    </div>
+
+                    {/* Key Change, Effective Date, Impact Level */}
+                    <div className="border border-slate-200 rounded-xl p-5 bg-white shadow-sm space-y-5">
+                        <div>
+                            <label htmlFor="keyChange" className="block text-sm font-semibold text-navy mb-2">
+                                Key Change Summary
+                                <span className="text-slate-400 font-normal ml-2 text-xs">
+                                    (optional — shown as highlighted box on article)
+                                </span>
+                            </label>
+                            <input
+                                id="keyChange"
+                                type="text"
+                                value={keyChange}
+                                onChange={(e) => setKeyChange(e.target.value)}
+                                placeholder="e.g. DIR-3 KYC filing fee increased to ₹5,000 for late filing"
+                                className="w-full border border-slate-300 rounded-lg px-4 py-3 text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+                                maxLength={200}
+                            />
+                            <p className="text-xs text-slate-400 mt-1">
+                                {keyChange.length}/200 characters
+                            </p>
+                        </div>
+
+                        <div>
+                            <label htmlFor="effectiveDate" className="block text-sm font-semibold text-navy mb-2">
+                                Effective Date
+                                <span className="text-slate-400 font-normal ml-2 text-xs">
+                                    (optional — when does this change take effect?)
+                                </span>
+                            </label>
+                            <input
+                                id="effectiveDate"
+                                type="date"
+                                value={effectiveDate}
+                                onChange={(e) => setEffectiveDate(e.target.value)}
+                                className="border border-slate-300 rounded-lg px-4 py-3 text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent w-full"
+                            />
+                            <p className="text-xs text-slate-400 mt-1">
+                                Shown on article card and page for quick reference
+                            </p>
+                        </div>
+
+                        <div>
+                            <label htmlFor="impactLevel" className="block text-sm font-semibold text-navy mb-2">
+                                Impact Level
+                                <span className="text-slate-400 font-normal ml-2 text-xs">
+                                    (optional)
+                                </span>
+                            </label>
+                            <select
+                                id="impactLevel"
+                                value={impactLevel}
+                                onChange={(e) => setImpactLevel(e.target.value as 'high' | 'medium' | 'low' | '')}
+                                className="w-full border border-slate-300 rounded-lg px-4 py-3 text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent bg-white"
+                            >
+                                <option value="">Select impact level...</option>
+                                <option value="high">🔴 High Impact — Major regulatory change</option>
+                                <option value="medium">🟡 Medium Impact — Amendment to existing rule</option>
+                                <option value="low">🟢 Low Impact — Clarification or minor circular</option>
+                            </select>
+                            <p className="text-xs text-slate-400 mt-1">
+                                Shown as badge on article card and page
+                            </p>
                         </div>
                     </div>
 

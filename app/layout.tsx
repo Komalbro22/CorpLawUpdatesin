@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { ToastProvider } from '@/components/Toast'
 import BackToTop from '@/components/BackToTop'
+import WhatsAppButton from '@/components/WhatsAppButton'
 import HideOnAdmin from '@/components/HideOnAdmin'
 import { BASE_URL } from '@/lib/utils'
 import './globals.css'
@@ -16,6 +17,11 @@ export const metadata: Metadata = {
   title: { default: 'CorpLawUpdates.in', template: '%s | CorpLawUpdates.in' },
   description: "India's free corporate law intelligence platform covering MCA, SEBI, RBI, NCLT, IBC and FEMA updates",
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  alternates: {
+    types: {
+      'application/rss+xml': `${BASE_URL}/api/feed.xml`,
+    },
+  },
   openGraph: {
     siteName: 'CorpLawUpdates.in',
     type: 'website',
@@ -68,6 +74,7 @@ export default function RootLayout({
           </main>
           <HideOnAdmin><Footer /></HideOnAdmin>
           <HideOnAdmin><BackToTop /></HideOnAdmin>
+          <WhatsAppButton />
         </ToastProvider>
         <Analytics />
       </body>

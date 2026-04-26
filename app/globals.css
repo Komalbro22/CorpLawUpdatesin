@@ -33,3 +33,53 @@ body {
   margin: 1.5rem auto;
   border-radius: 0.5rem;
 }
+
+@media print {
+
+  nav,
+  footer,
+  .share-buttons,
+  .back-to-top,
+  .print\:hidden,
+  button {
+    display: none !important;
+  }
+
+  body {
+    font-size: 12pt;
+    color: #000;
+    background: #fff;
+  }
+
+  h1,
+  h2,
+  h3 {
+    page-break-after: avoid;
+    color: #000;
+  }
+
+  img {
+    max-width: 100%;
+    page-break-inside: avoid;
+  }
+
+  a {
+    color: #000;
+    text-decoration: none;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td,
+  th {
+    border: 1px solid #ccc;
+    padding: 6px 8px;
+  }
+
+  @page {
+    margin: 2cm;
+  }
+}

@@ -9,7 +9,8 @@ import MarkdownRenderer from '@/components/MarkdownRenderer'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import UpdateCard from '@/components/UpdateCard'
 import { calculateReadingTime, formatDate, BASE_URL } from '@/lib/utils'
-import ShareButtons from './ShareButtons'
+import ViewsTracker from '@/components/ViewsTracker'
+import ArticleActions from '@/components/ArticleActions'
 
 export const revalidate = 86400
 
@@ -108,10 +109,11 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
     return (
         <article className="max-w-4xl mx-auto py-12 px-4">
+            <ViewsTracker slug={update.slug} />
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
             {/* 1. BREADCRUMB */}
-            <nav className="text-sm text-slate-500 mb-8 border-b border-slate-100 pb-4">
+            <nav className="text-sm text-slate-500 mb-8 border-b border-slate-100 pb-4 print:hidden">
                 <Link href="/" className="hover:text-gold transition-colors">Home</Link>
                 <span className="mx-2">&gt;</span>
                 <Link href="/updates" className="hover:text-gold transition-colors">Updates</Link>
@@ -126,6 +128,22 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                 <div className="mb-4">
                     <CategoryBadge category={update.category as "MCA" | "SEBI" | "RBI" | "NCLT" | "IBC" | "FEMA"} />
                 </div>
+                {update.key_change && (
+                    <div className="bg-amber-50 border-l-4 border-amber-400 
+                                  rounded-r-xl p-4 mb-6 
+                                  flex items-start gap-3">
+                        <span className="text-xl flex-shrink-0">📋</span>
+                        <div>
+                            <p className="text-xs font-bold text-amber-900 
+                                    uppercase tracking-widest mb-1">
+                                Key Change
+                            </p>
+                            <p className="text-amber-800 text-sm leading-relaxed">
+                                {update.key_change}
+                            </p>
+                        </div>
+                    </div>
+                )}
                 <h1 className="font-heading text-3xl md:text-4xl text-navy font-bold mb-4 leading-snug">
                     {update.title}
                 </h1>
@@ -139,10 +157,37 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                             <span>{update.source_name}</span>
                         </>
                     )}
+                    {update.effective_date && (
+                        <span className="inline-flex items-center gap-1
+                                       bg-green-100 text-green-700 text-xs 
+                                       px-2 py-1 rounded-full font-medium">
+                            📅 Effective: {formatDate(update.effective_date)}
+                        </span>
+                    )}
+
+                    {update.impact_level && (
+                        <span className={`inline-flex items-center text-xs 
+                                        px-2 py-1 rounded-full font-medium ${update.impact_level === 'high'
+                                ? 'bg-red-100 text-red-700'
+                                : update.impact_level === 'medium'
+                                    ? 'bg-amber-100 text-amber-700'
+                                    : 'bg-green-100 text-green-700'
+                            }`}>
+                            {update.impact_level === 'high' && '🔴 High Impact'}
+                            {update.impact_level === 'medium' && '🟡 Medium Impact'}
+                            {update.impact_level === 'low' && '🟢 Low Impact'}
+                        </span>
+                    )}
+
+                    {(update.views || 0) > 0 && (
+                        <span className="text-slate-400 text-sm">
+                            · {update.views!.toLocaleString('en-IN')} views
+                        </span>
+                    )}
                 </div>
 
                 {/* 3. SHARE BUTTONS */}
-                <ShareButtons
+                <ArticleActions
                     title={update.title}
                     url={`${BASE_URL}/updates/${update.slug}`}
                 />
@@ -172,7 +217,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
             {/* 6. TAGS */}
             {tagsList && tagsList.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-16">
+                <div className="flex flex-wrap gap-2 mb-16 print:hidden">
                     {tagsList.map((tag: string) => (
                         <span key={tag} className="bg-slate-100 text-slate-600 px-4 py-1.5 rounded-full text-sm font-medium border border-slate-200">
                             #{tag.trim()}
@@ -183,9 +228,9 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
             {/* 7. RELATED UPDATES */}
             {related.length > 0 && (
-                <section className="pt-10 border-t border-slate-200">
+                <section className="pt-10 border-t border-slate-200 print:hidden">
                     <h2 className="text-2xl font-heading font-bold text-navy mb-6">Related Updates</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
                         {related.map((rel: any) => (
                             <UpdateCard key={rel.id} update={rel} />
                         ))}
