@@ -103,19 +103,29 @@ export default function ArticleActions({
             </a>
 
             {/* Copy Link */}
-            <button
-                onClick={copyLink}
-                className="flex items-center gap-1.5 px-3 py-1.5
-                   border border-slate-300 text-slate-600
-                   text-sm rounded-lg hover:bg-slate-50
-                   transition-colors"
-            >
-                {copied ? (
-                    <>✓ Copied!</>
-                ) : (
-                    <>🔗 Copy Link</>
+            <div className="relative">
+                <button
+                    onClick={copyLink}
+                    className="flex items-center gap-1.5 px-3 py-1.5
+                       border border-slate-300 text-slate-600
+                       text-sm rounded-lg hover:bg-slate-50
+                       transition-colors"
+                >
+                    {copied ? (
+                        <>✓ Copied!</>
+                    ) : (
+                        <>🔗 Copy Link</>
+                    )}
+                </button>
+                {copied && (
+                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 
+                                  bg-navy text-white text-xs px-3 py-1.5 
+                                  rounded shadow-lg whitespace-nowrap
+                                  animate-fade-in-up z-50">
+                        Link copied!
+                    </div>
                 )}
-            </button>
+            </div>
 
             {/* PDF Download */}
             <button

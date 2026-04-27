@@ -11,6 +11,7 @@ import UpdateCard from '@/components/UpdateCard'
 import { calculateReadingTime, formatDate, BASE_URL } from '@/lib/utils'
 import ViewsTracker from '@/components/ViewsTracker'
 import ArticleActions from '@/components/ArticleActions'
+import ReadingProgress from '@/components/ReadingProgress'
 
 export const revalidate = 86400
 
@@ -82,6 +83,11 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
     const readTime = calculateReadingTime(update.content || '')
     const formattedDate = formatDate(update.published_at)
 
+    const wordCount = update.content
+        ? update.content.replace(/<[^>]*>/g, '')
+            .split(/\s+/).length
+        : 0
+
     const tagsList = update.tags ? (typeof update.tags === 'string' ? update.tags.split(',') : update.tags) : []
 
     const jsonLd = {
@@ -109,6 +115,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
     return (
         <article className="max-w-4xl mx-auto py-12 px-4">
+            <ReadingProgress />
             <ViewsTracker slug={update.slug} />
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
@@ -151,6 +158,12 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                     <span>{formattedDate}</span>
                     <span className="text-slate-300">•</span>
                     <span>{readTime} min read</span>
+                    {wordCount > 0 && (
+                        <>
+                            <span className="text-slate-300">•</span>
+                            <span className="text-slate-400">{wordCount.toLocaleString('en-IN')} words</span>
+                        </>
+                    )}
                     {update.source_name && (
                         <>
                             <span className="text-slate-300">•</span>
@@ -217,11 +230,24 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
             {/* 6. TAGS */}
             {tagsList && tagsList.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-16 print:hidden">
+                <div className="flex flex-wrap gap-2 mt-6 mb-2 print:hidden">
+                    <span className="text-sm text-slate-400 self-center mr-1">
+                        Tags:
+                    </span>
                     {tagsList.map((tag: string) => (
-                        <span key={tag} className="bg-slate-100 text-slate-600 px-4 py-1.5 rounded-full text-sm font-medium border border-slate-200">
+                        <Link
+                            key={tag}
+                            href={`/updates?search=${encodeURIComponent(tag.trim())}`}
+                            className="bg-slate-100 hover:bg-amber-50
+                                       text-slate-600 hover:text-amber-700
+                                       text-sm px-3 py-1 rounded-full
+                                       transition-all duration-200
+                                       border border-slate-200
+                                       hover:border-amber-300
+                                       hover:shadow-sm"
+                        >
                             #{tag.trim()}
-                        </span>
+                        </Link>
                     ))}
                 </div>
             )}

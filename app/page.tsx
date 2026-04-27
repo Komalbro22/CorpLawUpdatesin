@@ -63,7 +63,7 @@ export default async function HomePage() {
   return (
     <div>
       {/* 1. HERO SECTION */}
-      <section className="w-full bg-navy relative min-h-[60vh] md:min-h-[70vh] py-20 px-4 flex flex-col items-center justify-center text-center overflow-hidden">
+      <section className="w-full bg-navy relative min-h-[60vh] py-16 px-4 flex flex-col items-center justify-center text-center overflow-hidden">
         <div className="absolute inset-0 opacity-5 bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:100px_100px]"></div>
         <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center justify-center h-full">
           <h1 className="font-heading text-white text-4xl md:text-6xl font-bold mb-6 leading-tight">
@@ -85,6 +85,42 @@ export default async function HomePage() {
             >
               Subscribe Free
             </Link>
+          </div>
+
+          <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-8 
+                          border-t border-white/20 pt-12 w-full">
+            <div className="text-center">
+              <div className="text-3xl text-white font-bold mb-1 tracking-tight">
+                5,000+
+              </div>
+              <div className="text-amber-100 text-sm font-medium">
+                Updates
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl text-white font-bold mb-1 tracking-tight">
+                10,000+
+              </div>
+              <div className="text-amber-100 text-sm font-medium">
+                Monthly Readers
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl text-white font-bold mb-1 tracking-tight">
+                Daily
+              </div>
+              <div className="text-amber-100 text-sm font-medium">
+                New Articles
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl text-white font-bold mb-1 tracking-tight">
+                100%
+              </div>
+              <div className="text-amber-100 text-sm font-medium">
+                Free Access
+              </div>
+            </div>
           </div>
         </div>
       </section>

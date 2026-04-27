@@ -56,13 +56,34 @@ export default function NewArticle() {
         }
     }
 
-    const handleTagKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    function handleTagKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
         if (e.key === 'Enter' || e.key === ',') {
             e.preventDefault()
-            const newTag = tagInput.trim()
-            if (newTag && !tags.includes(newTag) && tags.length < 10) {
-                setTags([...tags, newTag])
+            const val = tagInput.trim()
+            if (!val) return
+            const newTags = val
+                .split(',')
+                .map(t => t.trim())
+                .filter(t => t.length > 0 && !tags.includes(t))
+            if (newTags.length) {
+                setTags(prev => [...prev, ...newTags])
+                setTagInput('')
             }
+        }
+        if (e.key === 'Backspace' && !tagInput && tags.length > 0) {
+            setTags(prev => prev.slice(0, -1))
+        }
+    }
+
+    function handleTagPaste(e: React.ClipboardEvent<HTMLInputElement>) {
+        e.preventDefault()
+        const pasted = e.clipboardData.getData('text')
+        const newTags = pasted
+            .split(/[,\n\t]+/)
+            .map(t => t.trim())
+            .filter(t => t.length > 0 && !tags.includes(t))
+        if (newTags.length) {
+            setTags(prev => [...prev, ...newTags])
             setTagInput('')
         }
     }
@@ -359,7 +380,8 @@ export default function NewArticle() {
                             value={tagInput}
                             onChange={(e) => setTagInput(e.target.value)}
                             onKeyDown={handleTagKeyDown}
-                            placeholder="e.g. Compliance, Circular..."
+                            onPaste={handleTagPaste}
+                            placeholder="Type tag and press Enter or comma, or paste multiple tags separated by commas"
                             className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-none mb-3"
                             disabled={tags.length >= 10}
                         />
@@ -370,8 +392,10 @@ export default function NewArticle() {
                                     <button onClick={() => removeTag(tag)} className="text-navy hover:text-red-500 ml-1">×</button>
                                 </span>
                             ))}
-                            {tags.length > 0 && <div className="text-xs text-slate-400 mt-1.5 ml-2 w-full">{tags.length}/10 tags added</div>}
                         </div>
+                        <p className="text-xs text-slate-400 mt-2">
+                            Press Enter or comma to add. Paste multiple tags separated by commas. {tags.length}/10 tags added.
+                        </p>
                     </div>
 
                     {/* Source and Advanced */}

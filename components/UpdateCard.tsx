@@ -43,12 +43,12 @@ export default function UpdateCard({ update, showExcerpt = true }: UpdateCardPro
             className="block group bg-white flex flex-col h-full rounded-xl shadow-sm border border-slate-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 overflow-hidden"
         >
             {imageUrl && (
-                <div className="relative w-full h-40 overflow-hidden bg-slate-50 border-b border-slate-100 flex-shrink-0">
+                <div className="relative w-full h-48 overflow-hidden rounded-t-xl bg-slate-100 flex-shrink-0">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                         src={imageUrl}
                         alt={update.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
+                        className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
                         loading="lazy"
                     />
                 </div>

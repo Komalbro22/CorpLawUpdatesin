@@ -75,8 +75,26 @@ export default function UpdatesClient({ updates, counts }: UpdatesClientProps) {
                             placeholder="Search updates..."
                             value={search}
                             onChange={(e) => handleSearch(e.target.value)}
-                            className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent text-sm"
+                            className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent text-sm mb-4"
                         />
+                        <div className="flex flex-wrap gap-2 mb-6">
+                            <span className="text-sm text-slate-500 self-center font-medium">
+                                Popular:
+                            </span>
+                            {[
+                                'MCA', 'SEBI', 'RBI', 'IBC', 'FEMA', 'NCLT',
+                                'Repo Rate', 'Compliance', 'Companies Act',
+                                'Director KYC', 'Annual Filing'
+                            ].map(tag => (
+                                <button
+                                    key={tag}
+                                    onClick={() => handleSearch(tag)}
+                                    className="text-xs bg-slate-100 hover:bg-amber-100 text-slate-600 hover:text-amber-700 px-3 py-1.5 rounded-full border border-slate-200 hover:border-amber-300 transition-all duration-200"
+                                >
+                                    #{tag}
+                                </button>
+                            ))}
+                        </div>
                     </div>
                     <div>
                         <h3 className="block text-sm font-bold text-navy mb-3">Categories</h3>
@@ -89,8 +107,8 @@ export default function UpdatesClient({ updates, counts }: UpdatesClientProps) {
                                         <button
                                             onClick={() => handleCategoryClick(cat)}
                                             className={`text-left whitespace-nowrap md:whitespace-normal px-3 py-2 rounded-lg text-sm w-full flex justify-between items-center transition-colors ${isActive
-                                                    ? 'bg-amber-50 text-navy font-bold border-l-4 border-gold'
-                                                    : 'text-slate-600 hover:bg-slate-50'
+                                                ? 'bg-amber-50 text-navy font-bold border-l-4 border-gold'
+                                                : 'text-slate-600 hover:bg-slate-50'
                                                 }`}
                                         >
                                             <span className={isActive ? 'border-b-2 md:border-b-0 border-gold' : ''}>{cat}</span>
