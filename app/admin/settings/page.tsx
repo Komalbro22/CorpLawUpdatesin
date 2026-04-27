@@ -192,7 +192,7 @@ export default function SettingsPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="font-semibold text-navy text-sm">Admin Email</p>
-              <p className="text-xs text-slate-400">corplawupdates@gmail.com</p>
+              <p className="text-xs text-slate-400">corplawupdatesin@gmail.com</p>
             </div>
             <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">
               Active

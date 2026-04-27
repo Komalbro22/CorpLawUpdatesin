@@ -9,8 +9,8 @@ const contactCards = [
         title: 'General Enquiries',
         desc: 'For questions about the site, content, or partnerships.',
         action: {
-            label: 'corplawupdates@gmail.com',
-            href: 'mailto:corplawupdates@gmail.com',
+            label: 'corplawupdatesin@gmail.com',
+            href: 'mailto:corplawupdatesin@gmail.com',
         },
     },
     {
@@ -19,7 +19,7 @@ const contactCards = [
         desc: 'Spotted a new MCA circular or SEBI notification? Send us the link and we will cover it.',
         action: {
             label: 'Send tip →',
-            href: 'mailto:corplawupdates@gmail.com?subject=Article%20Tip',
+            href: 'mailto:corplawupdatesin@gmail.com?subject=Article%20Tip',
         },
     },
     {
@@ -66,7 +66,7 @@ export default function ContactPage() {
             `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
         )
         window.location.href =
-            `mailto:corplawupdates@gmail.com` +
+            `mailto:corplawupdatesin@gmail.com` +
             `?subject=${sub}&body=${body}`
         setSubmitted(true)
     }

@@ -90,7 +90,7 @@ export default function PrivacyPolicyPage() {
                     <ul className="list-disc list-inside space-y-1 text-slate-600">
                         <li>Newsletter subscriber emails are retained until you unsubscribe</li>
                         <li>After unsubscribe, your email is marked inactive and deleted within 30 days on request</li>
-                        <li>To request deletion: corplawupdates@gmail.com</li>
+                        <li>To request deletion: corplawupdatesin@gmail.com</li>
                     </ul>
                 </section>
 
@@ -104,7 +104,7 @@ export default function PrivacyPolicyPage() {
                         <li>Right to delete your data</li>
                         <li>Right to unsubscribe at any time</li>
                     </ul>
-                    <p className="text-slate-600 leading-relaxed mt-2">Contact us at corplawupdates@gmail.com for any data requests.</p>
+                    <p className="text-slate-600 leading-relaxed mt-2">Contact us at corplawupdatesin@gmail.com for any data requests.</p>
                 </section>
 
                 <div className="border-t border-slate-100 my-8"></div>
@@ -131,7 +131,7 @@ export default function PrivacyPolicyPage() {
                     <h2 className="text-xl font-bold text-navy mb-3 mt-8">11. Contact</h2>
                     <p className="text-slate-600 leading-relaxed">
                         For privacy-related queries:<br />
-                        Email: corplawupdates@gmail.com<br />
+                        Email: corplawupdatesin@gmail.com<br />
                         Website: https://www.corplawupdates.in
                     </p>
                 </section>
