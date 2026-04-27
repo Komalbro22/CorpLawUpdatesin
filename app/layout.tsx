@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Lora, Source_Sans_3 } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { ToastProvider } from '@/components/Toast'
@@ -98,6 +99,7 @@ export default async function RootLayout({
           <WhatsAppButton />
         </ToastProvider>
         <Analytics />
+        <SpeedInsights />
         {/* Google Reader Revenue Manager - SWG */}
         <Script
           src="https://news.google.com/swg/js/v1/swg-basic.js"
