@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { verifyAdminSession } from '@/lib/admin-auth'
+import { TwitterApi } from 'twitter-api-v2'
 
 export async function POST(request: Request) {
     if (!verifyAdminSession()) {
@@ -31,27 +32,21 @@ export async function POST(request: Request) {
 
     const results: Record<string, string> = {}
 
-    // Post to X via Twitter API v2
+    // Post to X via Twitter API v2 with OAuth 1.0a
     if (platforms.includes('twitter')) {
         try {
-            const twitterRes = await fetch(
-                'https://api.twitter.com/2/tweets',
-                {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${process.env.TWITTER_BEARER_TOKEN}`,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ text: tweetText }),
-                }
-            )
-            if (twitterRes.ok) {
-                results.twitter = 'posted'
-            } else {
-                results.twitter = 'failed'
-            }
-        } catch {
-            results.twitter = 'error'
+            const twitterClient = new TwitterApi({
+                appKey: process.env.TWITTER_API_KEY!,
+                appSecret: process.env.TWITTER_API_SECRET!,
+                accessToken: process.env.TWITTER_ACCESS_TOKEN!,
+                accessSecret: process.env.TWITTER_ACCESS_SECRET!,
+            })
+
+            await twitterClient.v2.tweet(tweetText)
+            results.twitter = 'posted'
+        } catch (err) {
+            console.error('Twitter error:', err)
+            results.twitter = 'failed'
         }
     }
 
