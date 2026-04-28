@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import DownloadPDFButton from '@/components/DownloadPDFButton'
 
 interface ArticleActionsProps {
     title: string
@@ -43,9 +44,6 @@ export default function ArticleActions({
         }
     }
 
-    function downloadPDF() {
-        window.print()
-    }
 
     return (
         <div className="flex items-center gap-2 flex-wrap my-4 
@@ -128,15 +126,7 @@ export default function ArticleActions({
             </div>
 
             {/* PDF Download */}
-            <button
-                onClick={downloadPDF}
-                className="flex items-center gap-1.5 px-3 py-1.5
-                   border border-slate-300 text-slate-600
-                   text-sm rounded-lg hover:bg-slate-50
-                   transition-colors"
-            >
-                📄 Download PDF
-            </button>
+            <DownloadPDFButton />
         </div>
     )
 }
