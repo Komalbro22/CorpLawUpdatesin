@@ -8,6 +8,7 @@ import { slugify, calculateReadingTime } from '@/lib/utils'
 import CategoryBadge from '@/components/CategoryBadge'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import { Category } from '@/types'
+import SocialPostModal from '@/components/admin/SocialPostModal'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 
@@ -46,6 +47,14 @@ export default function NewArticle() {
     const [success, setSuccess] = useState(false)
     const [activeTab, setActiveTab] = useState<'write' | 'preview'>('write')
     const [uploadingImage, setUploadingImage] = useState(false)
+
+    const [showSocialModal, setShowSocialModal] = useState(false)
+    const [publishedArticle, setPublishedArticle] = useState<{
+        title: string
+        summary: string
+        slug: string
+        category: string
+    } | null>(null)
 
     const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -153,10 +162,17 @@ export default function NewArticle() {
             const data = await res.json()
 
             if (res.ok) {
-                setSuccess(true)
-                setTimeout(() => {
-                    router.push('/admin/articles')
-                }, 2000)
+                // Only show social modal when publishing (not drafts)
+                if (publishedAtValue !== null) {
+                    const currentSlug = slug || slugify(title)
+                    setPublishedArticle({ title, summary, slug: currentSlug, category })
+                    setShowSocialModal(true)
+                } else {
+                    setSuccess(true)
+                    setTimeout(() => {
+                        router.push('/admin/articles')
+                    }, 2000)
+                }
             } else {
                 setError(data.error || 'Failed to save article')
                 setLoading(false)
@@ -169,6 +185,15 @@ export default function NewArticle() {
 
     return (
         <div className="pb-24">
+            {showSocialModal && publishedArticle && (
+                <SocialPostModal
+                    article={publishedArticle}
+                    onClose={() => {
+                        setShowSocialModal(false)
+                        router.push('/admin/articles')
+                    }}
+                />
+            )}
             <div className="flex justify-between items-center mb-6">
                 <h1 className="font-heading font-bold text-2xl text-navy">New Article</h1>
 
