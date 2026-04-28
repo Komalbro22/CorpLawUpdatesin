@@ -110,10 +110,11 @@ body {
     display: block;
     text-align: center;
     font-size: 10px;
-    color: #666666;
+    color: #444444;
     border-top: 1px solid #cccccc;
-    padding-top: 8px;
+    padding-top: 10px;
     margin-top: 20px;
+    font-style: italic;
   }
 
   /* Preserve background colors in print */
@@ -121,6 +122,40 @@ body {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     color-adjust: exact !important;
+  }
+
+  /* Force table backgrounds */
+  tr:nth-child(even) {
+    background-color: #f8fafc !important;
+  }
+
+  /* Force coloured box backgrounds */
+  [style*="background:#fff3cd"] {
+    background-color: #fff3cd !important;
+  }
+
+  [style*="background:#fef2f2"] {
+    background-color: #fef2f2 !important;
+  }
+
+  [style*="background:#f0fdf4"] {
+    background-color: #f0fdf4 !important;
+  }
+
+  [style*="background:#eff6ff"] {
+    background-color: #eff6ff !important;
+  }
+
+  [style*="background:#fef9c3"] {
+    background-color: #fef9c3 !important;
+  }
+
+  [style*="background:#f8fafc"] {
+    background-color: #f8fafc !important;
+  }
+
+  [style*="background:#1e3a5f"] {
+    background-color: #1e3a5f !important;
   }
 
   /* Images — fit page width, no overflow */
@@ -183,6 +218,63 @@ body {
     font-size: 10px !important;
     border-top: 1px solid #cccccc !important;
     padding-top: 10px !important;
+  }
+
+  /* Fix large white space gaps */
+  .prose>*+* {
+    margin-top: 8px !important;
+  }
+
+  /* Remove hero section padding */
+  section {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Tighten paragraph spacing */
+  p {
+    margin-top: 4px !important;
+    margin-bottom: 6px !important;
+    line-height: 1.5 !important;
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* Prevent large gaps from flex/grid containers */
+  .flex,
+  .grid {
+    display: block !important;
+  }
+
+  /* Remove all min-height that creates white space */
+  * {
+    min-height: 0 !important;
+  }
+
+  /* Tighten heading spacing */
+  h1,
+  h2,
+  h3 {
+    margin-top: 12px !important;
+    margin-bottom: 6px !important;
+    page-break-after: avoid !important;
+  }
+
+  /* Keep coloured boxes together and avoid breaks */
+  div[style*="background"] {
+    page-break-inside: avoid !important;
+    margin-top: 8px !important;
+    margin-bottom: 8px !important;
+  }
+
+  /* Fix page break — never break inside info boxes */
+  div[style*="border-left"] {
+    page-break-inside: avoid !important;
+  }
+
+  /* Remove bottom padding of last page */
+  body {
+    padding-bottom: 0 !important;
   }
 
 }

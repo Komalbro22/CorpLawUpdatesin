@@ -213,20 +213,22 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                 </ErrorBoundary>
             </div>
 
-            {/* 5. SOURCE ATTRIBUTION */}
-            {update.source_url && update.source_name && (
-                <div className="bg-slate-50 p-4 rounded-lg border border-slate-100 mb-8 flex items-center">
-                    <span className="text-slate-600 font-medium mr-2">Source:</span>
-                    <a
-                        href={update.source_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gold font-bold hover:text-amber-600 transition-colors underline"
-                    >
-                        {update.source_name}
-                    </a>
-                </div>
-            )}
+            {/* 5. SOURCE ATTRIBUTION — hidden in print (source already in article HTML) */}
+            <div className="print:hidden">
+                {update.source_url && update.source_name && (
+                    <div className="bg-slate-50 p-4 rounded-lg border border-slate-100 mb-8 flex items-center">
+                        <span className="text-slate-600 font-medium mr-2">Source:</span>
+                        <a
+                            href={update.source_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-gold font-bold hover:text-amber-600 transition-colors underline"
+                        >
+                            {update.source_name}
+                        </a>
+                    </div>
+                )}
+            </div>
 
             {/* 6. TAGS */}
             {tagsList && tagsList.length > 0 && (
