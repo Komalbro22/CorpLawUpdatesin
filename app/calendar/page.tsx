@@ -26,6 +26,7 @@ const mcaData: React.ReactNode[][] = [
     ['INC-20A', 'Declaration of Commencement of Business', '180 days of incorporation', 'Companies incorporated after Nov 2019', '₹50,000+'],
     ['PAS-6', 'Reconciliation of Share Capital Audit', '60 days from half year end', 'Unlisted public companies', '₹1,000/day'],
     ['DIR-12', 'Intimation of Change in Directors/KMP', '30 days of change', 'All companies', '₹500/day'],
+    ['MGT-14', 'Filing of Board/Special Resolutions with RoC', '30 days of passing resolution', 'Public companies for specified resolutions', '₹500/day'],
 ]
 
 const sebiData: React.ReactNode[][] = [
@@ -56,6 +57,8 @@ const incomeTaxData: React.ReactNode[][] = [
   ['Advance Tax Q4', '100% of annual tax liability', '15 March 2027', 'All companies', '1% interest/month'],
   ['TDS Return Q1 (26Q)', 'TDS on non-salary payments', '31 July 2026', 'All deductors', '₹200/day'],
   ['TDS Return Q2 (26Q)', 'TDS on non-salary payments', '31 October 2026', 'All deductors', '₹200/day'],
+  ['TDS Return Q3 (26Q)', 'TDS on non-salary payments Oct-Dec', '31 January 2027', 'All deductors', '₹200/day'],
+  ['TDS Return Q4 (26Q)', 'TDS on non-salary payments Jan-Mar', '31 May 2027', 'All deductors', '₹200/day'],
   ['ITR Filing', 'Income Tax Return for companies', '31 October 2026', 'All companies', '₹5,000 + interest'],
   ['Tax Audit Report (3CD)', 'Form 3CA/3CB + 3CD', '30 September 2026', 'Companies with turnover >₹1 Cr', '₹1.5 lakh or 0.5% of turnover'],
 ]
@@ -189,6 +192,7 @@ export default function CalendarPage() {
                         { label: 'SEBI Deadlines', href: '#sebi', color: 'bg-green-50 border-green-200 text-green-700', icon: '📈' },
                         { label: 'RBI / FEMA', href: '#rbi', color: 'bg-purple-50 border-purple-200 text-purple-700', icon: '🏦' },
                         { label: 'Latest Updates', href: '/updates', color: 'bg-amber-50 border-amber-200 text-amber-700', icon: '📋' },
+                        { label: 'Income Tax', href: '#incometax', color: 'bg-orange-50 border-orange-200 text-orange-700', icon: '📊' },
                     ].map((item) => (
                         <Link
                             key={item.label}
