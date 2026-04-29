@@ -101,8 +101,11 @@ function TableSection({
                             let dateStr = '';
                             if (typeof dateCell === 'string') {
                                 dateStr = dateCell;
-                            } else if (React.isValidElement(dateCell) && typeof (dateCell.props as any).children === 'string') {
-                                dateStr = (dateCell.props as any).children;
+                            } else if (React.isValidElement(dateCell)) {
+                                const element = dateCell as React.ReactElement<{ children?: unknown }>;
+                                if (typeof element.props.children === 'string') {
+                                    dateStr = element.props.children;
+                                }
                             }
                             
                             if (dateStr.includes('May 2026') || dateStr.includes('June 2026')) {
