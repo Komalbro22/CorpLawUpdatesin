@@ -2,6 +2,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { notFound } from 'next/navigation'
+import JsonLd from '@/components/JsonLd'
+import type { Metadata } from 'next'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 import CategoryBadge from '@/components/CategoryBadge'
@@ -22,37 +24,63 @@ export async function generateStaticParams() {
     }))
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-    const { data: update } = await supabase
-        .from('updates')
-        .select('*')
-        .eq('slug', params.slug)
-        .single()
+export async function generateMetadata(
+  { params }: { params: { slug: string } }
+): Promise<Metadata> {
+  const { data: update } = await supabase
+    .from('updates')
+    .select('title, summary, category, published_at, tags, slug')
+    .eq('slug', params.slug)
+    .single()
 
-    if (!update) return {}
-
-    const title = update.title
-    const summary = update.summary || ''
-    const canonical = `${BASE_URL}/updates/${params.slug}`
-
+  if (!update) {
     return {
-        title,
-        description: summary,
-        alternates: { canonical },
-        openGraph: {
-            title,
-            description: summary,
-            type: 'article',
-            publishedTime: update.published_at,
-            images: [
-                {
-                    url: `${BASE_URL}/api/og?title=${encodeURIComponent(title)}&category=${update.category}`,
-                    width: 1200,
-                    height: 630,
-                },
-            ],
-        },
+      title: 'Article Not Found',
+      description: 'The article you are looking for does not exist.',
     }
+  }
+
+  const url = `https://www.corplawupdates.in/updates/${update.slug}`
+
+  return {
+    title: update.title,
+    description: update.summary,
+    keywords: [
+      update.category,
+      ...(update.tags || []),
+      'corporate law India',
+      'CS professional',
+      'compliance India',
+      update.category + ' circular 2026',
+    ],
+    authors: [{ name: 'CorpLawUpdates.in' }],
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title: update.title,
+      description: update.summary,
+      url,
+      type: 'article',
+      publishedTime: update.published_at || undefined,
+      section: update.category,
+      tags: update.tags || [],
+      images: [
+        {
+          url: '/og-image.jpg',
+          width: 1200,
+          height: 630,
+          alt: update.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: update.title,
+      description: update.summary,
+      images: ['/og-image.jpg'],
+    },
+  }
 }
 
 export default async function SingleUpdatePage({ params }: { params: { slug: string } }) {
@@ -90,34 +118,13 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
     const tagsList = update.tags ? (typeof update.tags === 'string' ? update.tags.split(',') : update.tags) : []
 
-    const jsonLd = {
-        '@context': 'https://schema.org',
-        '@type': 'Article',
-        'headline': update.title,
-        'description': update.summary,
-        'datePublished': update.published_at,
-        'dateModified': update.updated_at,
-        'url': BASE_URL + '/updates/' + update.slug,
-        'publisher': {
-            '@type': 'Organization',
-            'name': 'CorpLawUpdates.in',
-            'url': BASE_URL,
-            'logo': {
-                '@type': 'ImageObject',
-                'url': BASE_URL + '/icon.png'
-            }
-        },
-        'mainEntityOfPage': {
-            '@type': 'WebPage',
-            '@id': BASE_URL + '/updates/' + update.slug
-        }
-    }
+
 
     return (
         <article className="max-w-4xl mx-auto py-12 px-4">
             <ReadingProgress />
             <ViewsTracker slug={update.slug} />
-            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
 
             {/* 1. BREADCRUMB */}
             <nav className="text-sm text-slate-500 mb-8 border-b border-slate-100 pb-4 print:hidden">
@@ -254,6 +261,44 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                 </div>
             )}
 
+            {/* Internal Links — SEO */}
+            <div className="mt-8 p-5 bg-slate-50 rounded-xl border border-slate-200 print:hidden">
+              <h3 className="font-bold text-navy text-sm mb-3">
+                Browse More {update.category.toUpperCase()} Updates
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  {
+                    label: `All ${update.category.toUpperCase()} Updates`,
+                    href: `/category/${update.category}`
+                  },
+                  {
+                    label: 'All Updates',
+                    href: '/updates'
+                  },
+                  {
+                    label: 'Compliance Calendar',
+                    href: '/calendar'
+                  },
+                  {
+                    label: 'Subscribe Newsletter',
+                    href: '/newsletter'
+                  },
+                ].map(link => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="text-sm bg-white border border-slate-200
+                               text-navy px-3 py-1.5 rounded-lg
+                               hover:border-amber-400 hover:text-amber-600
+                               transition-colors"
+                  >
+                    {link.label} →
+                  </Link>
+                ))}
+              </div>
+            </div>
+
             {/* 7. RELATED UPDATES */}
             {related.length > 0 && (
                 <section className="pt-10 border-t border-slate-200 print:hidden">
@@ -265,6 +310,37 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                     </div>
                 </section>
             )}
+            <JsonLd data={{
+              '@context': 'https://schema.org',
+              '@type': 'NewsArticle',
+              headline: update.title,
+              description: update.summary,
+              url: `https://www.corplawupdates.in/updates/${update.slug}`,
+              datePublished: update.published_at,
+              dateModified: update.updated_at || update.published_at,
+              author: {
+                '@type': 'Organization',
+                name: 'CorpLawUpdates.in',
+                url: 'https://www.corplawupdates.in',
+              },
+              publisher: {
+                '@type': 'Organization',
+                name: 'CorpLawUpdates.in',
+                url: 'https://www.corplawupdates.in',
+                logo: {
+                  '@type': 'ImageObject',
+                  url: 'https://www.corplawupdates.in/icon.png',
+                },
+              },
+              mainEntityOfPage: {
+                '@type': 'WebPage',
+                '@id': `https://www.corplawupdates.in/updates/${update.slug}`,
+              },
+              articleSection: update.category,
+              keywords: update.tags?.join(', ') || '',
+              inLanguage: 'en-IN',
+              isAccessibleForFree: true,
+            }} />
         </article>
     )
 }

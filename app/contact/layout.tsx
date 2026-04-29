@@ -1,8 +1,11 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-    title: 'Contact Us',
-    description: 'Get in touch with CorpLawUpdates.in — questions, suggestions, article tips or partnerships.',
+  title: 'Contact — CorpLawUpdates.in',
+  description: 'Contact CorpLawUpdates.in for queries, article tips, partnerships or feedback.',
+  alternates: {
+    canonical: 'https://www.corplawupdates.in/contact',
+  },
 }
 
 export default function ContactLayout({

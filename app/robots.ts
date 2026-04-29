@@ -1,21 +1,25 @@
 import { MetadataRoute } from 'next'
-import { BASE_URL } from '@/lib/utils'
 
 export default function robots(): MetadataRoute.Robots {
-    return {
-        rules: [
-            {
-                userAgent: '*',
-                allow: '/',
-                disallow: ['/admin/', '/api/'],
-            },
-            {
-                userAgent: 'Googlebot',
-                allow: '/',
-                disallow: ['/admin/', '/api/'],
-            }
+  return {
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: [
+          '/admin/',
+          '/api/admin/',
+          '/_next/',
+          '/api/auth/',
         ],
-        sitemap: BASE_URL + '/sitemap.xml',
-        host: BASE_URL,
-    }
+      },
+      {
+        userAgent: 'Googlebot',
+        allow: '/',
+        disallow: ['/admin/', '/api/admin/'],
+      },
+    ],
+    sitemap: 'https://www.corplawupdates.in/sitemap.xml',
+    host: 'https://www.corplawupdates.in',
+  }
 }

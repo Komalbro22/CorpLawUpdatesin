@@ -1,59 +1,90 @@
-import { MetadataRoute } from 'next'
 import { supabase } from '@/lib/supabase'
-import { BASE_URL } from '@/lib/utils'
+import { MetadataRoute } from 'next'
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const { data: updates } = await supabase
-        .from('updates')
-        .select('slug, updated_at, category')
-        .not('published_at', 'is', null)
-        .lte('published_at', new Date().toISOString())
-        .order('published_at', { ascending: false })
+const BASE_URL = 'https://www.corplawupdates.in'
 
-    const staticPages: MetadataRoute.Sitemap = [
-        { url: BASE_URL, lastModified: new Date(), changeFrequency: 'daily', priority: 1.0 },
-        { url: BASE_URL + '/updates', lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
-        { url: BASE_URL + '/about', changeFrequency: 'monthly', priority: 0.5 },
-        { url: BASE_URL + '/newsletter', changeFrequency: 'monthly', priority: 0.5 },
-        {
-            url: `${BASE_URL}/calendar`,
-            lastModified: new Date(),
-            changeFrequency: 'weekly' as const,
-            priority: 0.8,
-        },
-        {
-            url: `${BASE_URL}/contact`,
-            lastModified: new Date(),
-            changeFrequency: 'monthly' as const,
-            priority: 0.6,
-        },
-        {
-            url: `${BASE_URL}/privacy-policy`,
-            lastModified: new Date(),
-            changeFrequency: 'yearly' as const,
-            priority: 0.3,
-        },
-        {
-            url: `${BASE_URL}/terms`,
-            lastModified: new Date(),
-            changeFrequency: 'yearly' as const,
-            priority: 0.3,
-        },
-    ]
+export default async function sitemap():
+  Promise<MetadataRoute.Sitemap> {
 
-    const categoryPages: MetadataRoute.Sitemap = ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema'].map(cat => ({
-        url: BASE_URL + '/category/' + cat,
-        lastModified: new Date(),
-        changeFrequency: 'daily',
-        priority: 0.8
-    }))
+  const { data: articles } = await supabase
+    .from('updates')
+    .select('slug, published_at, updated_at, category')
+    .not('published_at', 'is', null)
+    .lte('published_at', new Date().toISOString())
+    .order('published_at', { ascending: false })
 
-    const articlePages: MetadataRoute.Sitemap = (updates || []).map(u => ({
-        url: BASE_URL + '/updates/' + u.slug,
-        lastModified: new Date(u.updated_at),
-        changeFrequency: 'weekly',
-        priority: 0.7
-    }))
+  const articleUrls = (articles || []).map(article => ({
+    url: `${BASE_URL}/updates/${article.slug}`,
+    lastModified: new Date(
+      article.updated_at || article.published_at!
+    ),
+    changeFrequency: 'weekly' as const,
+    priority: 0.9,
+  }))
 
-    return [...staticPages, ...categoryPages, ...articlePages]
+  const categoryUrls = [
+    'mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema'
+  ].map(cat => ({
+    url: `${BASE_URL}/category/${cat}`,
+    lastModified: new Date(),
+    changeFrequency: 'daily' as const,
+    priority: 0.8,
+  }))
+
+  const staticUrls = [
+    {
+      url: BASE_URL,
+      lastModified: new Date(),
+      changeFrequency: 'daily' as const,
+      priority: 1.0,
+    },
+    {
+      url: `${BASE_URL}/updates`,
+      lastModified: new Date(),
+      changeFrequency: 'daily' as const,
+      priority: 0.9,
+    },
+    {
+      url: `${BASE_URL}/calendar`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/newsletter`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+    },
+    {
+      url: `${BASE_URL}/about`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
+    },
+    {
+      url: `${BASE_URL}/contact`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
+    },
+    {
+      url: `${BASE_URL}/privacy-policy`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly' as const,
+      priority: 0.3,
+    },
+    {
+      url: `${BASE_URL}/terms`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly' as const,
+      priority: 0.3,
+    },
+  ]
+
+  return [
+    ...staticUrls,
+    ...categoryUrls,
+    ...articleUrls,
+  ]
 }

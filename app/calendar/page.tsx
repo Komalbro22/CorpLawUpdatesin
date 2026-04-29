@@ -4,12 +4,21 @@ import React from 'react'
 import NewsletterWidget from '@/components/NewsletterWidget'
 
 export const metadata: Metadata = {
-    title: 'Compliance Calendar 2026 | CorpLawUpdates.in',
-    description: 'Key Indian corporate law compliance deadlines for MCA, SEBI, RBI and FEMA. Free compliance calendar for CS professionals, corporate lawyers and compliance officers.',
-    openGraph: {
-        title: 'Compliance Calendar 2026 | CorpLawUpdates.in',
-        description: 'Key compliance deadlines under Companies Act, SEBI LODR, FEMA and RBI regulations.',
-    },
+  title: 'Compliance Calendar 2026 — MCA SEBI RBI Deadlines',
+  description: 'Complete compliance deadline calendar for FY 2026-27. MCA filing dates, SEBI LODR deadlines, RBI FEMA due dates and Income Tax dates for companies.',
+  alternates: {
+    canonical: 'https://www.corplawupdates.in/calendar',
+  },
+  keywords: [
+    'compliance calendar 2026',
+    'MCA filing deadlines 2026',
+    'SEBI compliance dates 2026',
+    'DIR-3 KYC due date 2026',
+    'MGT-7 filing date',
+    'AOC-4 due date',
+    'income tax due dates companies 2026',
+    'FLA return due date 2026',
+  ],
 }
 
 const mcaData: React.ReactNode[][] = [

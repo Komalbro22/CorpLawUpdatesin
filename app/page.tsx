@@ -15,25 +15,17 @@ import { BASE_URL } from '@/lib/utils'
 export const revalidate = 1800
 
 export const metadata: Metadata = {
-  title: 'CorpLawUpdates.in — India\'s Free Corporate Law Intelligence Platform',
-  description: 'Free corporate law updates covering MCA, SEBI, RBI, NCLT, IBC and FEMA. For corporate lawyers, compliance officers and CS professionals.',
-  alternates: { canonical: BASE_URL },
-  openGraph: {
-    title: 'CorpLawUpdates.in',
-    description: 'India\'s Free Corporate Law Intelligence Platform',
-    url: BASE_URL,
-    type: 'website',
-    images: [{
-      url: BASE_URL + '/api/og?title=CorpLawUpdates.in&category=MCA',
-      width: 1200,
-      height: 630,
-    }]
+  title: 'India\'s Free Corporate Law Intelligence Platform',
+  description: 'Free MCA, SEBI, RBI, NCLT, IBC and FEMA regulatory updates for Company Secretaries, corporate lawyers and compliance officers in India. No login required.',
+  alternates: {
+    canonical: 'https://www.corplawupdates.in',
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'CorpLawUpdates.in',
-    description: 'India\'s Free Corporate Law Intelligence Platform',
-  }
+  openGraph: {
+    title: 'CorpLawUpdates.in — Free Corporate Law Updates India',
+    description: 'Free MCA, SEBI, RBI regulatory updates for CS professionals. Updated daily.',
+    url: 'https://www.corplawupdates.in',
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630 }],
+  },
 }
 
 export default async function HomePage() {

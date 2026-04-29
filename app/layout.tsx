@@ -10,29 +10,83 @@ import WhatsAppButton from '@/components/WhatsAppButton'
 import HideOnAdmin from '@/components/HideOnAdmin'
 import AnnouncementBar from '@/components/AnnouncementBar'
 import Script from 'next/script'
+import JsonLd from '@/components/JsonLd'
 import { getSetting } from '@/lib/settings'
-import { BASE_URL } from '@/lib/utils'
 import './globals.css'
 
 const lora = Lora({ subsets: ['latin'], variable: '--font-heading', display: 'swap' })
 const sourceSans = Source_Sans_3({ subsets: ['latin'], variable: '--font-body', display: 'swap' })
 
 export const metadata: Metadata = {
-  title: { default: 'CorpLawUpdates.in', template: '%s | CorpLawUpdates.in' },
-  description: "India's free corporate law intelligence platform covering MCA, SEBI, RBI, NCLT, IBC and FEMA updates",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
-  alternates: {
-    types: {
-      'application/rss+xml': `${BASE_URL}/api/feed.xml`,
+  metadataBase: new URL('https://www.corplawupdates.in'),
+  title: {
+    default: 'CorpLawUpdates.in — India\'s Free Corporate Law Intelligence Platform',
+    template: '%s | CorpLawUpdates.in',
+  },
+  description: 'Free Indian corporate law updates — MCA, SEBI, RBI, NCLT, IBC and FEMA regulatory updates for CS professionals, corporate lawyers and compliance officers.',
+  keywords: [
+    'MCA circular 2026',
+    'SEBI notification 2026', 
+    'RBI circular 2026',
+    'corporate law India',
+    'company secretary updates',
+    'compliance calendar 2026',
+    'Companies Act 2013 amendments',
+    'SEBI LODR compliance',
+    'IBC insolvency updates',
+    'FEMA regulations India',
+    'CS professional updates',
+    'corporate compliance India',
+    'MCA filing deadlines',
+    'NCLT orders 2026',
+  ],
+  authors: [{ name: 'CorpLawUpdates.in' }],
+  creator: 'CorpLawUpdates.in',
+  publisher: 'CorpLawUpdates.in',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
     },
   },
   openGraph: {
-    siteName: 'CorpLawUpdates.in',
     type: 'website',
     locale: 'en_IN',
+    url: 'https://www.corplawupdates.in',
+    siteName: 'CorpLawUpdates.in',
+    title: 'CorpLawUpdates.in — India\'s Free Corporate Law Intelligence Platform',
+    description: 'Free Indian corporate law updates — MCA, SEBI, RBI, NCLT, IBC and FEMA regulatory updates for CS professionals.',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'CorpLawUpdates.in — India\'s Free Corporate Law Intelligence Platform',
+      },
+    ],
   },
-  twitter: { card: 'summary_large_image' },
-  robots: { index: true, follow: true },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@corplawupdates',
+    creator: '@corplawupdates',
+    title: 'CorpLawUpdates.in — India\'s Free Corporate Law Intelligence Platform',
+    description: 'Free MCA, SEBI, RBI, NCLT, IBC and FEMA updates for CS professionals.',
+    images: ['/og-image.jpg'],
+  },
+  alternates: {
+    canonical: 'https://www.corplawupdates.in',
+    types: {
+      'application/rss+xml': 'https://www.corplawupdates.in/api/feed.xml',
+    },
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GSC_VERIFICATION || '',
+  },
 }
 
 export default async function RootLayout({
@@ -41,35 +95,44 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   const gaId = await getSetting('google_analytics_id')
-  const orgJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    'name': 'CorpLawUpdates.in',
-    'url': BASE_URL,
-    'description': 'India\'s free corporate law intelligence platform',
-    'logo': BASE_URL + '/icon.png',
-  }
-
-  const websiteJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    'name': 'CorpLawUpdates.in',
-    'url': BASE_URL,
-    'potentialAction': {
-      '@type': 'SearchAction',
-      'target': {
-        '@type': 'EntryPoint',
-        'urlTemplate': BASE_URL + '/updates?search={search_term_string}'
-      },
-      'query-input': 'required name=search_term_string'
-    }
-  }
 
   return (
     <html lang="en" className={`${lora.variable} ${sourceSans.variable}`}>
       <head>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
+        <JsonLd data={{
+          '@context': 'https://schema.org',
+          '@type': 'Organization',
+          name: 'CorpLawUpdates.in',
+          url: 'https://www.corplawupdates.in',
+          logo: 'https://www.corplawupdates.in/icon.png',
+          description: 'India\'s Free Corporate Law Intelligence Platform',
+          sameAs: [
+            'https://twitter.com/corplawupdates',
+          ],
+          contactPoint: {
+            '@type': 'ContactPoint',
+            email: 'corplawupdatesin@gmail.com',
+            contactType: 'customer service',
+            areaServed: 'IN',
+            availableLanguage: 'English',
+          },
+        }} />
+        <JsonLd data={{
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          name: 'CorpLawUpdates.in',
+          url: 'https://www.corplawupdates.in',
+          description: 'Free Indian corporate law updates',
+          inLanguage: 'en-IN',
+          potentialAction: {
+            '@type': 'SearchAction',
+            target: {
+              '@type': 'EntryPoint',
+              urlTemplate: 'https://www.corplawupdates.in/updates?search={search_term_string}',
+            },
+            'query-input': 'required name=search_term_string',
+          },
+        }} />
         {gaId && (
           <>
             <Script

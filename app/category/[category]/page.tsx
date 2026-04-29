@@ -28,31 +28,44 @@ export async function generateStaticParams() {
     }))
 }
 
-export async function generateMetadata({ params }: { params: { category: string } }) {
-    const category = params.category.toUpperCase()
-    const descriptions: Record<string, string> = {
-        MCA: 'Ministry of Corporate Affairs updates...',
-        SEBI: 'SEBI capital markets updates...',
-        RBI: 'RBI banking and monetary policy updates...',
-        NCLT: 'NCLT insolvency and corporate law updates...',
-        IBC: 'Insolvency and Bankruptcy Code updates...',
-        FEMA: 'FEMA foreign exchange updates...',
-    }
-    return {
-        title: category + ' Updates',
-        description: descriptions[category] || category + ' regulatory updates',
-        alternates: { canonical: BASE_URL + '/category/' + params.category },
-        openGraph: {
-            title: category + ' Updates | CorpLawUpdates.in',
-            url: BASE_URL + '/category/' + params.category,
-            type: 'website',
-            images: [{
-                url: BASE_URL + '/api/og?title=' + category + '+Updates&category=' + category,
-                width: 1200,
-                height: 630,
-            }]
-        }
-    }
+const categoryDescriptions: Record<string, string> = {
+  mca: 'Ministry of Corporate Affairs circulars, notifications and amendments under Companies Act 2013.',
+  sebi: 'SEBI circulars, notifications and regulations for listed companies and securities market.',
+  rbi: 'Reserve Bank of India guidelines, circulars and monetary policy updates.',
+  nclt: 'National Company Law Tribunal orders, judgments and insolvency proceedings.',
+  ibc: 'Insolvency and Bankruptcy Code updates, IBBI regulations and NCLT insolvency orders.',
+  fema: 'Foreign Exchange Management Act updates, RBI FEMA regulations and FDI notifications.',
+}
+
+const categoryTitles: Record<string, string> = {
+  mca: 'MCA Updates 2026 — Ministry of Corporate Affairs Circulars',
+  sebi: 'SEBI Updates 2026 — Securities and Exchange Board Notifications',
+  rbi: 'RBI Updates 2026 — Reserve Bank of India Circulars',
+  nclt: 'NCLT Updates 2026 — National Company Law Tribunal Orders',
+  ibc: 'IBC Updates 2026 — Insolvency and Bankruptcy Code',
+  fema: 'FEMA Updates 2026 — Foreign Exchange Management Act',
+}
+
+export async function generateMetadata(
+  { params }: { params: { category: string } }
+): Promise<Metadata> {
+  const cat = params.category.toLowerCase()
+  const title = categoryTitles[cat] ||
+    `${cat.toUpperCase()} Updates 2026`
+  const description = categoryDescriptions[cat] ||
+    `Latest ${cat.toUpperCase()} regulatory updates for CS professionals.`
+  const url = `https://www.corplawupdates.in/category/${cat}`
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      url,
+    },
+  }
 }
 
 export default async function CategoryPage({

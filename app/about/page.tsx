@@ -1,11 +1,14 @@
-import { BASE_URL } from '@/lib/utils'
+
+import type { Metadata } from 'next'
 
 export const revalidate = false
 
-export const metadata = {
-    title: 'About',
-    description: 'Learn about CorpLawUpdates.in — India\'s free corporate law intelligence platform for lawyers, compliance officers and CS professionals.',
-    alternates: { canonical: BASE_URL + '/about' },
+export const metadata: Metadata = {
+  title: 'About — India\'s Free Corporate Law Platform',
+  description: 'Learn about CorpLawUpdates.in — India\'s free corporate law intelligence platform providing MCA, SEBI, RBI updates for CS professionals.',
+  alternates: {
+    canonical: 'https://www.corplawupdates.in/about',
+  },
 }
 
 export default function AboutPage() {
