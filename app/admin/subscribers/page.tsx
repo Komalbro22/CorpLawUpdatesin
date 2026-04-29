@@ -36,6 +36,7 @@ export default function AdminSubscribers() {
     const [totalCount, setTotalCount] = useState(0)
     const [stats, setStats] = useState<Stats>({ totalActive: 0, totalInactive: 0, newThisMonth: 0, newThisWeek: 0 })
     const [loading, setLoading] = useState(true)
+    const [selected, setSelected] = useState<string[]>([])
 
     const fetchSubscribers = useCallback(async () => {
         setLoading(true)
@@ -87,18 +88,49 @@ export default function AdminSubscribers() {
         router.push('/admin/subscribers')
     }
 
-    const handleAction = async (id: string, action: 'unsubscribe' | 'delete') => {
-        if (action === 'delete' && !confirm('Delete this subscriber permanently?')) return
-        if (action === 'unsubscribe' && !confirm('Force unsubscribe this user?')) return
-
+    async function handleUnsubscribe(id: string) {
+        if (!confirm('Unsubscribe this email? They will stop receiving newsletters.')) return
+        
         try {
-            const res = await fetch(`/api/admin/subscribers/${id}`, {
-                method: action === 'delete' ? 'DELETE' : 'PUT'
-            })
-            if (res.ok) fetchSubscribers()
+            const res = await fetch(`/api/admin/subscribers/${id}`, { method: 'PATCH' })
+            if (res.ok) {
+                setSubscribers(prev => prev.map(s => s.id === id ? { ...s, is_active: false } : s))
+                alert('Subscriber unsubscribed successfully')
+            } else {
+                const data = await res.json()
+                alert('Error: ' + (data.error || 'Failed'))
+            }
         } catch (err) {
-            console.error(err)
+            alert('Network error — please try again')
         }
+    }
+
+    async function handleDelete(id: string, email: string) {
+        if (!confirm(`Permanently delete ${email}? This cannot be undone.`)) return
+        
+        try {
+            const res = await fetch(`/api/admin/subscribers/${id}`, { method: 'DELETE' })
+            if (res.ok) {
+                setSubscribers(prev => prev.filter(s => s.id !== id))
+                alert('Subscriber deleted successfully')
+            } else {
+                const data = await res.json()
+                alert('Error: ' + (data.error || 'Failed'))
+            }
+        } catch (err) {
+            alert('Network error — please try again')
+        }
+    }
+
+    async function handleBulkDelete() {
+        if (!selected.length) return
+        if (!confirm(`Delete ${selected.length} subscribers?`)) return
+        
+        for (const id of selected) {
+            await fetch(`/api/admin/subscribers/${id}`, { method: 'DELETE' })
+        }
+        setSubscribers(prev => prev.filter(s => !selected.includes(s.id)))
+        setSelected([])
     }
 
     const totalPages = Math.ceil(totalCount / 50)
@@ -113,12 +145,22 @@ export default function AdminSubscribers() {
         <div className="space-y-6 pb-12">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <h1 className="font-heading text-2xl font-bold text-navy">Subscribers</h1>
-                <a 
-                    href="/api/admin/subscribers?export=csv"
-                    className="bg-navy text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-slate-800 transition-colors flex items-center gap-2"
-                >
-                    ⬇ Export Active as CSV
-                </a>
+                <div className="flex gap-3">
+                    {selected.length > 0 && (
+                        <button
+                            onClick={handleBulkDelete}
+                            className="bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
+                        >
+                            Delete Selected ({selected.length})
+                        </button>
+                    )}
+                    <a 
+                        href="/api/admin/subscribers?export=csv"
+                        className="bg-navy text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-slate-800 transition-colors flex items-center gap-2"
+                    >
+                        ⬇ Export Active as CSV
+                    </a>
+                </div>
             </div>
 
             {/* STATS BAR */}
@@ -173,6 +215,17 @@ export default function AdminSubscribers() {
                     <table className="w-full text-left text-sm whitespace-nowrap">
                         <thead className="bg-slate-50 text-slate-500">
                             <tr>
+                                <th className="px-6 py-4 font-medium w-12">
+                                    <input 
+                                        type="checkbox" 
+                                        checked={subscribers.length > 0 && selected.length === subscribers.length}
+                                        onChange={e => {
+                                            if (e.target.checked) setSelected(subscribers.map(s => s.id))
+                                            else setSelected([])
+                                        }}
+                                        className="rounded border-slate-300"
+                                    />
+                                </th>
                                 <th className="px-6 py-4 font-medium w-[40%]">Email Address</th>
                                 <th className="px-6 py-4 font-medium">Status</th>
                                 <th className="px-6 py-4 font-medium">Subscribed Date</th>
@@ -182,16 +235,32 @@ export default function AdminSubscribers() {
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {loading ? (
-                                <tr><td colSpan={5} className="px-6 py-12 text-center text-slate-400">Loading subscribers...</td></tr>
+                                <tr><td colSpan={6} className="px-6 py-12 text-center text-slate-400">Loading subscribers...</td></tr>
                             ) : subscribers.length === 0 ? (
                                 <tr>
-                                    <td colSpan={5} className="px-6 py-12 text-center text-slate-500">
+                                    <td colSpan={6} className="px-6 py-12 text-center text-slate-500">
                                         No subscribers found matching your criteria.
                                     </td>
                                 </tr>
                             ) : (
                                 subscribers.map(sub => (
                                     <tr key={sub.id} className="hover:bg-slate-50 transition-colors">
+                                        <td className="px-6 py-4">
+                                            <input
+                                                type="checkbox"
+                                                checked={selected.includes(sub.id)}
+                                                onChange={e => {
+                                                    if (e.target.checked) {
+                                                        setSelected(prev => [...prev, sub.id])
+                                                    } else {
+                                                        setSelected(prev => 
+                                                            prev.filter(id => id !== sub.id)
+                                                        )
+                                                    }
+                                                }}
+                                                className="rounded border-slate-300"
+                                            />
+                                        </td>
                                         <td className="px-6 py-4 font-medium text-navy">
                                             {sub.email}
                                         </td>
@@ -212,22 +281,22 @@ export default function AdminSubscribers() {
                                         <td className="px-6 py-4 text-slate-500">
                                             {sub.unsubscribed_at ? formatDate(sub.unsubscribed_at) : '-'}
                                         </td>
-                                        <td className="px-6 py-4 text-right space-x-3">
-                                            {sub.is_active && (
-                                                <button 
-                                                    onClick={() => handleAction(sub.id, 'unsubscribe')} 
-                                                    className="text-amber-600 hover:text-amber-800 transition-colors text-xs font-medium"
+                                            <td className="px-6 py-4 text-right space-x-3">
+                                                {sub.is_active && (
+                                                    <button
+                                                        onClick={() => handleUnsubscribe(sub.id)}
+                                                        className="text-amber-600 hover:text-amber-700 text-sm font-medium"
+                                                    >
+                                                        Unsubscribe
+                                                    </button>
+                                                )}
+                                                <button
+                                                    onClick={() => handleDelete(sub.id, sub.email)}
+                                                    className="text-red-500 hover:text-red-600 text-sm font-medium ml-3"
                                                 >
-                                                    Unsubscribe
+                                                    Delete
                                                 </button>
-                                            )}
-                                            <button 
-                                                onClick={() => handleAction(sub.id, 'delete')} 
-                                                className="text-slate-400 hover:text-red-600 transition-colors text-xs font-medium"
-                                            >
-                                                Delete
-                                            </button>
-                                        </td>
+                                            </td>
                                     </tr>
                                 ))
                             )}
