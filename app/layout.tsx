@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     description: 'Free Indian corporate law updates — MCA, SEBI, RBI, NCLT, IBC and FEMA regulatory updates for CS professionals.',
     images: [
       {
-        url: '/og-image.jpg',
+        url: 'https://www.corplawupdates.in/api/og?title=India%27s+Free+Corporate+Law+Intelligence+Platform&category=',
         width: 1200,
         height: 630,
         alt: 'CorpLawUpdates.in — India\'s Free Corporate Law Intelligence Platform',
@@ -76,7 +76,7 @@ export const metadata: Metadata = {
     creator: '@corplawupdates',
     title: 'CorpLawUpdates.in — India\'s Free Corporate Law Intelligence Platform',
     description: 'Free MCA, SEBI, RBI, NCLT, IBC and FEMA updates for CS professionals.',
-    images: ['/og-image.jpg'],
+    images: ['https://www.corplawupdates.in/api/og?title=India%27s+Free+Corporate+Law+Intelligence+Platform&category='],
   },
   alternates: {
     canonical: 'https://www.corplawupdates.in',

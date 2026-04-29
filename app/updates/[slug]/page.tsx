@@ -41,6 +41,7 @@ export async function generateMetadata(
   }
 
   const url = `https://www.corplawupdates.in/updates/${update.slug}`
+  const imageUrl = `https://www.corplawupdates.in/api/og?title=${encodeURIComponent(update.title)}&category=${encodeURIComponent(update.category)}`
 
   return {
     title: update.title,
@@ -67,7 +68,7 @@ export async function generateMetadata(
       tags: update.tags || [],
       images: [
         {
-          url: '/og-image.jpg',
+          url: imageUrl,
           width: 1200,
           height: 630,
           alt: update.title,
@@ -78,7 +79,7 @@ export async function generateMetadata(
       card: 'summary_large_image',
       title: update.title,
       description: update.summary,
-      images: ['/og-image.jpg'],
+      images: [imageUrl],
     },
   }
 }

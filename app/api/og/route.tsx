@@ -1,132 +1,218 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ImageResponse } from 'next/og'
 import { NextRequest } from 'next/server'
 
 export const runtime = 'edge'
-export const revalidate = 86400
-
-const colorMap: Record<string, string> = {
-    MCA: '#3B82F6',
-    SEBI: '#10B981',
-    RBI: '#8B5CF6',
-    NCLT: '#F97316',
-    IBC: '#EF4444',
-    FEMA: '#14B8A6',
-}
 
 export async function GET(request: NextRequest) {
-    try {
-        const { searchParams } = new URL(request.url)
+  const { searchParams } = new URL(request.url)
+  const title = searchParams.get('title') || 'CorpLawUpdates.in'
+  const category = searchParams.get('category') || ''
 
-        const hasTitle = searchParams.has('title')
-        const title = hasTitle
-            ? searchParams.get('title')?.slice(0, 100)
-            : 'CorpLawUpdates.in — Corporate Law Intelligence'
+  const categoryColors: Record<string, string> = {
+    mca: '#3b82f6',
+    sebi: '#22c55e',
+    rbi: '#a855f7',
+    nclt: '#f97316',
+    ibc: '#ef4444',
+    fema: '#14b8a6',
+  }
 
-        const category = searchParams.get('category')
-        const badgeColor = category ? (colorMap[category.toUpperCase()] || '#3B82F6') : null
+  const categoryColor = categoryColors[category.toLowerCase()] || '#f59e0b'
 
-        return new ImageResponse(
-            (
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        backgroundColor: '#0F172A',
-                        width: '100%',
-                        height: '100%',
-                        padding: '60px',
-                        position: 'relative',
-                    }}
-                >
-                    {/* Top Left Logo */}
-                    <div
-                        style={{
-                            display: 'flex',
-                            fontSize: 28,
-                            fontFamily: 'serif',
-                            color: '#F59E0B',
-                            fontWeight: 'bold',
-                            marginBottom: 'auto',
-                        }}
-                    >
-                        CorpLawUpdates.in
-                    </div>
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          width: '1200px',
+          height: '630px',
+          display: 'flex',
+          flexDirection: 'column',
+          backgroundColor: '#1e3a5f',
+          padding: '60px',
+          fontFamily: 'serif',
+          position: 'relative',
+        }}
+      >
+        {/* TOP BAR — amber accent line */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '8px',
+          backgroundColor: '#f59e0b',
+          display: 'flex',
+        }} />
 
-                    {/* Main Content */}
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            marginTop: '40px',
-                        }}
-                    >
-                        {category && (
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    backgroundColor: badgeColor || '#3B82F6',
-                                    color: 'white',
-                                    borderRadius: 999,
-                                    padding: '8px 20px',
-                                    fontSize: 18,
-                                    fontWeight: 'bold',
-                                    marginBottom: '24px',
-                                    width: 'auto',
-                                }}
-                            >
-                                {category.toUpperCase()}
-                            </div>
-                        )}
+        {/* LOGO ROW */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '16px',
+          marginBottom: '40px',
+          marginTop: '8px',
+        }}>
+          {/* C circle with scales icon — text based */}
+          <div style={{
+            width: '64px',
+            height: '64px',
+            borderRadius: '50%',
+            border: '4px solid #f59e0b',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'transparent',
+          }}>
+            <span style={{
+              fontSize: '28px',
+              color: '#f59e0b',
+              fontWeight: 'bold',
+            }}>⚖</span>
+          </div>
 
-                        <div
-                            style={{
-                                display: 'flex',
-                                fontSize: 56,
-                                fontWeight: 'bold',
-                                color: 'white',
-                                lineHeight: 1.2,
-                                maxHeight: '134px',
-                                overflow: 'hidden',
-                            }}
-                        >
-                            {title}
-                        </div>
-                    </div>
+          {/* Site name */}
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '0px' }}>
+            <span style={{
+              fontSize: '28px',
+              fontWeight: 'bold',
+              color: '#ffffff',
+              letterSpacing: '-0.5px',
+            }}>Corp</span>
+            <span style={{
+              fontSize: '28px',
+              fontWeight: 'bold',
+              color: '#f59e0b',
+              letterSpacing: '-0.5px',
+            }}>Law</span>
+            <span style={{
+              fontSize: '28px',
+              fontWeight: 'bold',
+              color: '#ffffff',
+              letterSpacing: '-0.5px',
+            }}>Updates</span>
+            <span style={{
+              fontSize: '28px',
+              fontWeight: 'bold',
+              color: '#f59e0b',
+              letterSpacing: '-0.5px',
+            }}>.in</span>
+          </div>
+        </div>
 
-                    {/* Bottom Bar */}
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            width: '100%',
-                            marginTop: 'auto',
-                        }}
-                    >
-                        <div style={{ display: 'flex', color: '#94A3B8', fontSize: 20 }}>
-                            India's Free Corporate Law Intelligence Platform
-                        </div>
-                        <div style={{ display: 'flex', color: '#F59E0B', fontSize: 20, fontWeight: 'bold' }}>
-                            corplawupdates.in
-                        </div>
-                    </div>
-                </div>
-            ),
-            {
-                width: 1200,
-                height: 630,
-            }
-        )
-    } catch (e: any) {
-        return new Response(`Failed to generate the image`, {
-            status: 500,
-        })
+        {/* CATEGORY BADGE */}
+        {category && (
+          <div style={{
+            display: 'flex',
+            marginBottom: '24px',
+          }}>
+            <div style={{
+              backgroundColor: categoryColor,
+              color: '#ffffff',
+              fontSize: '18px',
+              fontWeight: 'bold',
+              padding: '6px 20px',
+              borderRadius: '100px',
+              letterSpacing: '2px',
+              textTransform: 'uppercase',
+              display: 'flex',
+            }}>
+              {category.toUpperCase()}
+            </div>
+          </div>
+        )}
+
+        {/* ARTICLE TITLE */}
+        <div style={{
+          flex: 1,
+          display: 'flex',
+          alignItems: 'center',
+        }}>
+          <h1 style={{
+            fontSize: title.length > 80 ? '36px' : title.length > 60 ? '42px' : '48px',
+            fontWeight: 'bold',
+            color: '#ffffff',
+            lineHeight: 1.3,
+            margin: 0,
+            letterSpacing: '-0.5px',
+            display: 'flex',
+            maxWidth: '1000px',
+          }}>
+            {title}
+          </h1>
+        </div>
+
+        {/* BOTTOM ROW */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          borderTop: '1px solid rgba(255,255,255,0.2)',
+          paddingTop: '24px',
+          marginTop: '24px',
+        }}>
+          {/* Left — regulators */}
+          <div style={{
+            display: 'flex',
+            gap: '8px',
+          }}>
+            {['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA'].map((reg) => (
+              <div
+                key={reg}
+                style={{
+                  backgroundColor: 'rgba(255,255,255,0.1)',
+                  color: 'rgba(255,255,255,0.7)',
+                  fontSize: '13px',
+                  fontWeight: 'bold',
+                  padding: '4px 10px',
+                  borderRadius: '6px',
+                  display: 'flex',
+                }}
+              >
+                {reg}
+              </div>
+            ))}
+          </div>
+
+          {/* Right — tagline */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-end',
+            gap: '2px',
+          }}>
+            <span style={{
+              color: '#f59e0b',
+              fontSize: '14px',
+              fontWeight: 'bold',
+              display: 'flex',
+            }}>
+              India&apos;s Free Corporate Law Intelligence Platform
+            </span>
+            <span style={{
+              color: 'rgba(255,255,255,0.5)',
+              fontSize: '13px',
+              display: 'flex',
+            }}>
+              corplawupdates.in · Free Forever · No Login Required
+            </span>
+          </div>
+        </div>
+
+        {/* BOTTOM BAR — amber accent line */}
+        <div style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: '8px',
+          backgroundColor: '#f59e0b',
+          display: 'flex',
+        }} />
+      </div>
+    ),
+    {
+      width: 1200,
+      height: 630,
     }
+  )
 }

@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     title: 'CorpLawUpdates.in — Free Corporate Law Updates India',
     description: 'Free MCA, SEBI, RBI regulatory updates for CS professionals. Updated daily.',
     url: 'https://www.corplawupdates.in',
-    images: [{ url: '/og-image.jpg', width: 1200, height: 630 }],
+    images: [{ url: 'https://www.corplawupdates.in/api/og?title=India%27s+Free+Corporate+Law+Intelligence+Platform&category=', width: 1200, height: 630 }],
   },
 }
 
