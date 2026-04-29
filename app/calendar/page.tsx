@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
+import React from 'react'
 import NewsletterWidget from '@/components/NewsletterWidget'
 
 export const metadata: Metadata = {
@@ -11,35 +12,52 @@ export const metadata: Metadata = {
     },
 }
 
-const mcaData = [
+const mcaData: React.ReactNode[][] = [
     ['DIR-3 KYC Web', 'Annual KYC for all directors with DIN', '30 Sep 2026', 'All directors with DIN', '₹5,000'],
     ['MGT-7 / MGT-7A', 'Annual Return filing', '60 days from AGM', 'All companies', '₹100/day'],
     ['AOC-4', 'Filing of Financial Statements', '30 days from AGM', 'All companies', '₹100/day'],
     ['ADT-1', 'Auditor Appointment intimation', '15 days from AGM', 'All companies', '₹300/day'],
-    ['MSME-1', 'Outstanding payments to MSME vendors', '30 Apr & 31 Oct', 'Companies with MSME dues', '₹25,000'],
+    ['MSME-1', 'Outstanding payments to MSME vendors', <span key="msme" className="text-amber-600 font-medium">31 October 2026 (April deadline passed)</span>, 'Companies with MSME dues', '₹25,000'],
     ['BEN-2', 'Beneficial Ownership Return', '30 days of change', 'Companies with SBO', '₹1 lakh+'],
     ['DPT-3', 'Return of Deposits', '30 June 2026', 'Companies with deposits', '₹5,000/day'],
     ['Form 11', 'LLP Annual Return', '30 May 2026', 'All LLPs', '₹100/day'],
     ['Form 8', 'LLP Statement of Accounts & Solvency', '30 Oct 2026', 'All LLPs', '₹100/day'],
-    ['CRA-4', 'Cost Audit Report filing', '30 days from Cost Audit Report', 'Applicable companies', '₹25,000'],
+    ['CRA-4', 'Cost Audit Report filing', '30 days from Cost Audit Report', 'Turnover >₹35 Cr or net worth >₹5 Cr in specified industries', '₹25,000'],
+    ['INC-20A', 'Declaration of Commencement of Business', '180 days of incorporation', 'Companies incorporated after Nov 2019', '₹50,000+'],
+    ['PAS-6', 'Reconciliation of Share Capital Audit', '60 days from half year end', 'Unlisted public companies', '₹1,000/day'],
+    ['DIR-12', 'Intimation of Change in Directors/KMP', '30 days of change', 'All companies', '₹500/day'],
 ]
 
-const sebiData = [
+const sebiData: React.ReactNode[][] = [
     ['Quarterly Financial Results', 'LODR Regulation 33', '45 days from quarter end', 'Listed companies'],
     ['Shareholding Pattern', 'LODR Regulation 31', '21 days from quarter end', 'Listed companies'],
-    ['Corporate Governance Report', 'LODR Regulation 27', '15 days from quarter end', 'Listed companies'],
+    ['Corporate Governance Report', 'LODR Regulation 27', '21 days from quarter end', 'Listed companies'],
     ['Annual Report', 'LODR Regulation 34', '21 days from AGM', 'Listed companies'],
     ['Related Party Transactions', 'LODR Regulation 23', '30 days from quarter end', 'Listed companies'],
-    ['Business Responsibility Report', 'LODR Regulation 34(2)(f)', 'With Annual Report', 'Top 1000 listed cos'],
+    ['Business Responsibility Report', 'LODR Regulation 34(2)(f)', 'With Annual Report', 'Top 1000 listed cos by market cap (BRSR); Top 250 for BRSR Core'],
+    ['Secretarial Compliance Report', 'LODR Regulation 24A', '60 days from financial year end', 'Listed companies'],
+    ['Statement of Investor Complaints', 'LODR Regulation 13(3)', '21 days from quarter end', 'Listed companies'],
+    ['Reconciliation of Share Capital', 'SEBI Regulation 76', '60 days from quarter end', 'Listed companies'],
 ]
 
-const rbiData = [
+const rbiData: React.ReactNode[][] = [
     ['FLA Return', 'Foreign Liabilities & Assets Annual Return', '15 July 2026', 'Companies with FDI or ODI'],
     ['FC-GPR', 'FDI Reporting — Issue of Shares to non-resident', '30 days of allotment', 'Companies receiving FDI'],
     ['FC-TRS', 'Transfer of shares between resident and non-resident', '60 days of transfer', 'Buyer / Seller in FDI deal'],
     ['ODI-2', 'Overseas Direct Investment Annual Report', 'Annual', 'Indian companies with ODI'],
     ['ECB-2', 'External Commercial Borrowing Monthly Return', 'Monthly — 7th of next month', 'All ECB borrowers'],
     ['FIRMS Portal', 'All FEMA filings now through FIRMS', 'As applicable', 'All entities with FDI/ODI/ECB'],
+]
+
+const incomeTaxData: React.ReactNode[][] = [
+  ['Advance Tax Q1', '15% of annual tax liability', '15 June 2026', 'All companies', '1% interest/month'],
+  ['Advance Tax Q2', '45% of annual tax liability', '15 September 2026', 'All companies', '1% interest/month'],
+  ['Advance Tax Q3', '75% of annual tax liability', '15 December 2026', 'All companies', '1% interest/month'],
+  ['Advance Tax Q4', '100% of annual tax liability', '15 March 2027', 'All companies', '1% interest/month'],
+  ['TDS Return Q1 (26Q)', 'TDS on non-salary payments', '31 July 2026', 'All deductors', '₹200/day'],
+  ['TDS Return Q2 (26Q)', 'TDS on non-salary payments', '31 October 2026', 'All deductors', '₹200/day'],
+  ['ITR Filing', 'Income Tax Return for companies', '31 October 2026', 'All companies', '₹5,000 + interest'],
+  ['Tax Audit Report (3CD)', 'Form 3CA/3CB + 3CD', '30 September 2026', 'Companies with turnover >₹1 Cr', '₹1.5 lakh or 0.5% of turnover'],
 ]
 
 function TableSection({
@@ -53,7 +71,7 @@ function TableSection({
     color: string
     dot: string
     headers: string[]
-    rows: string[][]
+    rows: React.ReactNode[][]
 }) {
     return (
         <section>
@@ -76,21 +94,38 @@ function TableSection({
                         </tr>
                     </thead>
                     <tbody>
-                        {rows.map((row, i) => (
-                            <tr key={i}
-                                className={i % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
-                                {row.map((cell, j) => (
-                                    <td key={j} className={`px-4 py-3 ${j === 0
-                                            ? 'font-semibold text-blue-700 whitespace-nowrap'
-                                            : j === row.length - 1 && headers.includes('Penalty')
-                                                ? 'text-red-600 font-medium whitespace-nowrap'
-                                                : 'text-slate-700'
-                                        }`}>
-                                        {cell}
-                                    </td>
-                                ))}
-                            </tr>
-                        ))}
+                        {rows.map((row, i) => {
+                            let rowBg = i % 2 === 0 ? 'bg-white' : 'bg-slate-50';
+                            const dateCell = row[2];
+                            
+                            let dateStr = '';
+                            if (typeof dateCell === 'string') {
+                                dateStr = dateCell;
+                            } else if (React.isValidElement(dateCell) && typeof (dateCell.props as any).children === 'string') {
+                                dateStr = (dateCell.props as any).children;
+                            }
+                            
+                            if (dateStr.includes('May 2026') || dateStr.includes('June 2026')) {
+                                rowBg = 'bg-amber-100';
+                            } else if (dateStr.includes('July 2026')) {
+                                rowBg = 'bg-yellow-50';
+                            }
+
+                            return (
+                                <tr key={i} className={rowBg}>
+                                    {row.map((cell, j) => (
+                                        <td key={j} className={`px-4 py-3 ${j === 0
+                                                ? 'font-semibold text-blue-700 whitespace-nowrap'
+                                                : j === row.length - 1 && headers.includes('Penalty')
+                                                    ? 'text-red-600 font-medium whitespace-nowrap'
+                                                    : 'text-slate-700'
+                                            }`}>
+                                            {cell}
+                                        </td>
+                                    ))}
+                                </tr>
+                            )
+                        })}
                     </tbody>
                 </table>
             </div>
@@ -114,7 +149,7 @@ export default function CalendarPage() {
                 <div className="flex items-center justify-center 
                         gap-4 mt-6 flex-wrap">
                     <span className="text-sm text-amber-400 font-medium">
-                        📅 Updated for FY 2025-26
+                        📅 Updated for FY 2026-27
                     </span>
                     <span className="text-slate-500">·</span>
                     <span className="text-sm text-slate-300">
@@ -126,15 +161,21 @@ export default function CalendarPage() {
             <div className="max-w-6xl mx-auto px-4 py-10 space-y-10">
 
                 {/* DISCLAIMER */}
-                <div className="bg-amber-50 border border-amber-200 
-                        rounded-xl p-4 flex gap-3 items-start">
-                    <span className="text-xl flex-shrink-0">⚠️</span>
-                    <p className="text-amber-800 text-sm leading-relaxed">
-                        <strong>Disclaimer:</strong> All dates are indicative
-                        and subject to regulatory extensions, amendments or
-                        circulars issued by MCA, SEBI or RBI from time to time.
-                        Always verify with official government portals before
-                        acting on any deadline. This is not legal advice.
+                <div className="space-y-2">
+                    <div className="bg-amber-50 border border-amber-200 
+                            rounded-xl p-4 flex gap-3 items-start">
+                        <span className="text-xl flex-shrink-0">⚠️</span>
+                        <p className="text-amber-800 text-sm leading-relaxed">
+                            <strong>Disclaimer:</strong> All dates are indicative
+                            and subject to regulatory extensions, amendments or
+                            circulars issued by MCA, SEBI or RBI from time to time.
+                            Always verify with official government portals before
+                            acting on any deadline. This is not legal advice.
+                        </p>
+                    </div>
+                    <p className="text-xs text-slate-400 text-right">
+                        Last verified: April 2026 | 
+                        Source: MCA, SEBI, RBI official portals
                     </p>
                 </div>
 
@@ -190,6 +231,17 @@ export default function CalendarPage() {
                         dot="bg-purple-500"
                         headers={['Form', 'Compliance', 'Due Date', 'Applicable To']}
                         rows={rbiData}
+                    />
+                </div>
+
+                {/* INCOME TAX TABLE */}
+                <div id="incometax">
+                    <TableSection
+                        title="📊 Income Tax Compliance"
+                        color="bg-orange-600"
+                        dot="bg-orange-500"
+                        headers={['Compliance', 'Description', 'Due Date', 'Applicable To', 'Penalty']}
+                        rows={incomeTaxData}
                     />
                 </div>
 
