@@ -186,6 +186,22 @@ export default async function RootLayout({
             `,
           }}
         />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-VV0MXSWV55"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-VV0MXSWV55', {
+              page_title: document.title,
+              page_location: window.location.href,
+              send_page_view: true,
+            });
+          `}
+        </Script>
       </body>
     </html>
   )
