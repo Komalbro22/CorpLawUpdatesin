@@ -6,6 +6,7 @@ import JsonLd from '@/components/JsonLd'
 import type { Metadata } from 'next'
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
+import Image from 'next/image'
 import CategoryBadge from '@/components/CategoryBadge'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import ErrorBoundary from '@/components/ErrorBoundary'
@@ -143,6 +144,21 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                 <div className="mb-4">
                     <CategoryBadge category={update.category as "MCA" | "SEBI" | "RBI" | "NCLT" | "IBC" | "FEMA"} />
                 </div>
+                {update.image_url && (
+                    <div className="relative w-full h-64 md:h-96 
+                                  mb-8 rounded-2xl overflow-hidden">
+                    <Image
+                      src={update.image_url}
+                      alt={update.title}
+                      fill
+                      className="object-cover"
+                      priority={true}
+                      sizes="(max-width: 768px) 100vw, 
+                             (max-width: 1200px) 800px, 
+                             1200px"
+                    />
+                  </div>
+                )}
                 {update.key_change && (
                     <div className="bg-amber-50 border-l-4 border-amber-400 
                                   rounded-r-xl p-4 mb-6 

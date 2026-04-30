@@ -8,19 +8,26 @@ export default async function sitemap():
 
   const { data: articles } = await supabase
     .from('updates')
-    .select('slug, published_at, updated_at, category')
+    .select('slug, published_at, updated_at, category, title, image_url')
     .not('published_at', 'is', null)
     .lte('published_at', new Date().toISOString())
     .order('published_at', { ascending: false })
 
-  const articleUrls = (articles || []).map(article => ({
-    url: `${BASE_URL}/updates/${article.slug}`,
-    lastModified: new Date(
-      article.updated_at || article.published_at!
-    ),
-    changeFrequency: 'weekly' as const,
-    priority: 0.9,
-  }))
+  const articleUrls = (articles || []).map(article => {
+    const images = article.image_url 
+      ? [article.image_url] 
+      : [`${BASE_URL}/api/og?title=${encodeURIComponent(article.title || '')}&category=${encodeURIComponent(article.category || '')}`];
+      
+    return {
+      url: `${BASE_URL}/updates/${article.slug}`,
+      lastModified: new Date(
+        article.updated_at || article.published_at!
+      ),
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
+      images,
+    }
+  })
 
   const categoryUrls = [
     'mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema'

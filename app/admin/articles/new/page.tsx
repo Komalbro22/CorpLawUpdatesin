@@ -334,6 +334,12 @@ export default function NewArticle() {
 
                     {/* Content Markdown */}
                     <div className="border border-slate-200 rounded-xl p-5 bg-white shadow-sm" data-color-mode="light">
+                        {content.includes('ibb.co') && (
+                            <div className="mb-4 p-3 bg-amber-50 border border-amber-200 text-amber-800 rounded-lg text-sm flex items-center gap-2">
+                                <span>⚠️</span>
+                                <span><strong>SEO Warning:</strong> Re-upload image to Supabase for better SEO. (Found 'ibb.co' in content)</span>
+                            </div>
+                        )}
                         <div className="flex justify-between items-end mb-3">
                             <label className="block text-sm font-bold text-navy">Article Content (Markdown)</label>
                             <div className="relative">

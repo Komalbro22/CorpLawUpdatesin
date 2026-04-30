@@ -5,18 +5,20 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: '*',
-        allow: '/',
+        allow: [
+          '/',
+          '/_next/static/',
+          '/_next/image/',
+          '/api/og',
+        ],
         disallow: [
           '/admin/',
           '/api/admin/',
-          '/_next/',
-          '/api/auth/',
         ],
       },
       {
-        userAgent: 'Googlebot',
+        userAgent: 'Googlebot-Image',
         allow: '/',
-        disallow: ['/admin/', '/api/admin/'],
       },
     ],
     sitemap: 'https://www.corplawupdates.in/sitemap.xml',

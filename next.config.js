@@ -7,19 +7,23 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '*.supabase.co',
-      },
-      {
-        protocol: 'https',
         hostname: 'i.ibb.co',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https', 
+        hostname: 'fcosrsznbxedischtbwe.supabase.co',
+        pathname: '/storage/v1/object/public/**',
       },
       {
         protocol: 'https',
-        hostname: 'fcosrsznbxedischtbwe.supabase.co',
+        hostname: 'images.unsplash.com',
       },
     ],
     formats: ['image/webp', 'image/avif'],
     minimumCacheTTL: 86400,
+    dangerouslyAllowSVG: false,
+    unoptimized: false,
   },
   async headers() {
     return [
