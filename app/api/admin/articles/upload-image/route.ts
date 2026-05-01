@@ -20,9 +20,14 @@ export async function POST(request: NextRequest) {
         const bytes = await file.arrayBuffer()
         const buffer = Buffer.from(bytes)
 
-        const uniqueId = Date.now().toString() + '-' + Math.random().toString(36).substring(2, 9)
-        const fileExt = file.name.split('.').pop()
-        const fileName = `temp/${uniqueId}.${fileExt}`
+        const timestamp = Date.now().toString()
+        const cleanName = file.name
+          .toLowerCase()
+          .replace(/[^a-z0-9.]/g, '-')
+          .replace(/-+/g, '-')
+          .replace(/^-|-$/g, '')
+
+        const fileName = `${timestamp}-${cleanName}`
 
         const { data, error } = await supabaseAdmin
             .storage
