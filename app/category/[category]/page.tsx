@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { supabase } from '@/lib/supabase'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import CategoryBadge from '@/components/CategoryBadge'
 import UpdateCard from '@/components/UpdateCard'
 import Pagination from '@/components/Pagination'
@@ -75,7 +75,11 @@ export default async function CategoryPage({
     params: { category: string },
     searchParams?: { [key: string]: string | string[] | undefined }
 }) {
-    const cat = params.category.toLowerCase()
+    const originalCat = params.category
+    if (originalCat !== originalCat.toLowerCase()) {
+        redirect(`/category/${originalCat.toLowerCase()}`)
+    }
+    const cat = originalCat.toLowerCase()
 
     if (!CATEGORIES.includes(cat)) {
         notFound()

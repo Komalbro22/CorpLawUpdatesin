@@ -78,36 +78,6 @@ const nextConfig = {
         destination: 'https://www.corplawupdates.in/:path*',
         permanent: true,
       },
-      {
-        source: '/category/MCA',
-        destination: '/category/mca',
-        permanent: true,
-      },
-      {
-        source: '/category/SEBI',
-        destination: '/category/sebi',
-        permanent: true,
-      },
-      {
-        source: '/category/RBI',
-        destination: '/category/rbi',
-        permanent: true,
-      },
-      {
-        source: '/category/NCLT',
-        destination: '/category/nclt',
-        permanent: true,
-      },
-      {
-        source: '/category/IBC',
-        destination: '/category/ibc',
-        permanent: true,
-      },
-      {
-        source: '/category/FEMA',
-        destination: '/category/fema',
-        permanent: true,
-      },
     ]
   },
 }
