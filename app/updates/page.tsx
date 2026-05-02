@@ -6,12 +6,19 @@ import { Metadata } from 'next'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'All Updates — MCA, SEBI, RBI Regulatory News',
-  description: 'Browse all Indian corporate law updates — MCA circulars, SEBI notifications, RBI guidelines, NCLT orders and FEMA regulations. Free for CS professionals.',
-  alternates: {
-    canonical: 'https://www.corplawupdates.in/updates',
-  },
+export async function generateMetadata(
+  { searchParams }: { searchParams: { search?: string, category?: string } }
+): Promise<Metadata> {
+  return {
+    title: 'All Updates — MCA, SEBI, RBI Regulatory News',
+    description: 'Browse all Indian corporate law updates — MCA circulars, SEBI notifications, RBI guidelines, NCLT orders and FEMA regulations. Free for CS professionals.',
+    alternates: {
+      canonical: 'https://www.corplawupdates.in/updates',
+    },
+    robots: searchParams.search || searchParams.category
+      ? { index: false, follow: true }
+      : { index: true, follow: true },
+  }
 }
 
 export default async function UpdatesPage() {

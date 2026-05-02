@@ -20,7 +20,7 @@ const sourceSans = Source_Sans_3({ subsets: ['latin'], variable: '--font-body', 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.corplawupdates.in'),
   title: {
-    default: 'CorpLawUpdates.in — India\'s Free Corporate Law Intelligence Platform',
+    default: 'CorpLawUpdates.in — Free Corporate Law Updates',
     template: '%s | CorpLawUpdates.in',
   },
   description: 'Free Indian corporate law updates — MCA, SEBI, RBI, NCLT, IBC and FEMA regulatory updates for CS professionals, corporate lawyers and compliance officers.',

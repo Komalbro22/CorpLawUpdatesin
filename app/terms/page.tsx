@@ -6,6 +6,9 @@ export const metadata: Metadata = {
     title: 'Terms of Service',
     description: 'Terms of Service for CorpLawUpdates.in — ' +
         'Informational platform for Indian corporate law updates.',
+    alternates: {
+        canonical: 'https://www.corplawupdates.in/terms',
+    },
 }
 
 export default function TermsPage() {

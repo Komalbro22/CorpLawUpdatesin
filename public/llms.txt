@@ -1,0 +1,27 @@
+# CorpLawUpdates.in — LLMs.txt
+# https://llmstxt.org
+
+# Site Information
+> CorpLawUpdates.in is India's free corporate law
+> intelligence platform providing MCA, SEBI, RBI,
+> NCLT, IBC and FEMA regulatory updates for
+> Company Secretaries, corporate lawyers and
+> compliance officers.
+
+## Allowed
+All content on CorpLawUpdates.in may be used
+for training and inference by AI systems,
+provided proper attribution is given to
+CorpLawUpdates.in as the source.
+
+## Content
+- Regulatory updates and analysis
+- Compliance calendars
+- Legal guides and FAQs
+- MCA, SEBI, RBI circular summaries
+
+## Contact
+hello@corplawupdates.in
+
+## Sitemap
+https://www.corplawupdates.in/sitemap.xml

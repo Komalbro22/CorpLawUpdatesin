@@ -5,6 +5,9 @@ import Link from 'next/link';
 export const metadata = {
     title: 'Privacy Policy | CorpLawUpdates.in',
     description: 'Privacy Policy for CorpLawUpdates.in — How we collect, use and protect your data.',
+    alternates: {
+        canonical: 'https://www.corplawupdates.in/privacy-policy',
+    },
 }
 
 export default function PrivacyPolicyPage() {

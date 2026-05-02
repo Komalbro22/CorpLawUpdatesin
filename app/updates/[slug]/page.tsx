@@ -45,8 +45,10 @@ export async function generateMetadata(
   const url = `https://www.corplawupdates.in/updates/${update.slug}`
   const imageUrl = `https://www.corplawupdates.in/api/og?title=${encodeURIComponent(update.title)}&category=${encodeURIComponent(update.category)}`
 
+  const seoTitle = (t: string): string => t.length <= 55 ? t : t.slice(0, 52) + '...'
+
   return {
-    title: update.title,
+    title: seoTitle(update.title),
     description: update.summary,
     keywords: [
       update.category,
@@ -284,43 +286,6 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                 </div>
             )}
 
-            {/* Internal Links — SEO */}
-            <div className="mt-8 p-5 bg-slate-50 rounded-xl border border-slate-200 print:hidden">
-              <h3 className="font-bold text-navy text-sm mb-3">
-                Browse More {update.category.toUpperCase()} Updates
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {[
-                  {
-                    label: `All ${update.category.toUpperCase()} Updates`,
-                    href: `/category/${update.category}`
-                  },
-                  {
-                    label: 'All Updates',
-                    href: '/updates'
-                  },
-                  {
-                    label: 'Compliance Calendar',
-                    href: '/calendar'
-                  },
-                  {
-                    label: 'Subscribe Newsletter',
-                    href: '/newsletter'
-                  },
-                ].map(link => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="text-sm bg-white border border-slate-200
-                               text-navy px-3 py-1.5 rounded-lg
-                               hover:border-amber-400 hover:text-amber-600
-                               transition-colors"
-                  >
-                    {link.label} →
-                  </Link>
-                ))}
-              </div>
-            </div>
 
             {/* 7. RELATED UPDATES */}
             {related.length > 0 && (
@@ -333,6 +298,35 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                     </div>
                 </section>
             )}
+
+            {/* 8. INTERNAL LINKS — SEO */}
+            <div className="mt-8 p-5 bg-slate-50 rounded-xl border border-slate-200 print:hidden">
+              <h3 className="font-bold text-navy text-sm mb-3">
+                📚 Browse More {update.category.toUpperCase()} Updates
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { 
+                    label: `All ${update.category.toUpperCase()} Updates`, 
+                    href: `/category/${update.category.toLowerCase()}` 
+                  },
+                  { label: 'All Updates', href: '/updates' },
+                  { label: '📅 Compliance Calendar', href: '/calendar' },
+                  { label: '📧 Newsletter', href: '/newsletter' },
+                ].map(link => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="text-sm bg-white border border-slate-200
+                               text-navy px-3 py-1.5 rounded-lg
+                               hover:border-amber-400 
+                               hover:text-amber-600 transition-colors"
+                  >
+                    {link.label} →
+                  </Link>
+                ))}
+              </div>
+            </div>
             <JsonLd data={{
               '@context': 'https://schema.org',
               '@type': 'NewsArticle',
