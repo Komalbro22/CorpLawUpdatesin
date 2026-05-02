@@ -17,9 +17,9 @@ export default function TableOfContents({
 }: TableOfContentsProps) {
   const [headings, setHeadings] = useState<Heading[]>([])
   const [activeId, setActiveId] = useState<string>('')
+  const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    // Extract headings from rendered DOM
     const article = document.querySelector('.article-content')
     if (!article) return
 
@@ -30,7 +30,6 @@ export default function TableOfContents({
       const text = el.textContent?.trim() || ''
       if (!text) return
 
-      // Generate ID from text
       const id = text
         .toLowerCase()
         .replace(/[^a-z0-9\s]/g, '')
@@ -38,7 +37,6 @@ export default function TableOfContents({
         .replace(/-+/g, '-')
         .slice(0, 50)
 
-      // Add ID to the heading element
       el.id = id
 
       extracted.push({
@@ -52,7 +50,7 @@ export default function TableOfContents({
   }, [content])
 
   useEffect(() => {
-    if (headings.length === 0) return
+    if (!isOpen || headings.length === 0) return
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -62,10 +60,7 @@ export default function TableOfContents({
           }
         })
       },
-      { 
-        rootMargin: '-20% 0px -70% 0px',
-        threshold: 0 
-      }
+      { rootMargin: '-20% 0px -70% 0px', threshold: 0 }
     )
 
     headings.forEach(({ id }) => {
@@ -74,56 +69,91 @@ export default function TableOfContents({
     })
 
     return () => observer.disconnect()
-  }, [headings])
+  }, [headings, isOpen])
 
   function scrollToSection(id: string) {
     const el = document.getElementById(id)
     if (!el) return
-
-    const offset = 80 // navbar height
     const top = el.getBoundingClientRect().top + 
-                window.scrollY - offset
-
+                window.scrollY - 80
     window.scrollTo({ top, behavior: 'smooth' })
     setActiveId(id)
   }
 
-  // Don't show if less than 3 headings
   if (headings.length < 3) return null
 
   return (
-    <div className="bg-slate-50 border border-slate-200 
-                    rounded-2xl p-5 my-8 print:hidden">
-      <div className="flex items-center gap-2 mb-4">
-        <span className="text-lg">📋</span>
-        <h3 className="font-bold text-navy text-sm 
-                       uppercase tracking-wide">
-          Jump to Section
-        </h3>
-      </div>
-      <div className="flex flex-wrap gap-2">
-        {headings.map((heading) => (
+    <div className="my-6 print:hidden">
+      {/* Toggle Button */}
+      <button
+        onClick={() => setIsOpen(prev => !prev)}
+        className="flex items-center gap-2 text-sm 
+                   text-slate-500 hover:text-amber-600
+                   border border-slate-200 
+                   hover:border-amber-300
+                   bg-white hover:bg-amber-50
+                   px-4 py-2 rounded-full
+                   transition-all duration-200
+                   group"
+      >
+        <span className="text-base">📋</span>
+        <span className="font-medium">
+          {isOpen ? 'Hide' : 'Show'} Table of Contents
+        </span>
+        <span className={`ml-1 transition-transform 
+                         duration-200 text-xs
+                         ${isOpen ? 'rotate-180' : ''}`}>
+          ▼
+        </span>
+        <span className="text-xs text-slate-400 
+                         group-hover:text-slate-500">
+          ({headings.length} sections)
+        </span>
+      </button>
+
+      {/* Collapsible Content */}
+      {isOpen && (
+        <div className="mt-3 bg-slate-50 border 
+                        border-slate-200 rounded-2xl 
+                        p-5 animate-in fade-in 
+                        duration-200">
+          <div className="flex flex-wrap gap-2">
+            {headings.map((heading) => (
+              <button
+                key={heading.id}
+                onClick={() => scrollToSection(heading.id)}
+                className={`text-sm px-3 py-1.5 
+                           rounded-full border 
+                           transition-all duration-200
+                           text-left
+                           ${heading.level === 3 
+                             ? 'text-xs' : ''}
+                           ${activeId === heading.id
+                             ? 'bg-amber-400 border-amber-400 text-navy font-semibold shadow-sm'
+                             : 'bg-white border-slate-200 text-slate-600 hover:border-amber-300 hover:text-amber-700 hover:bg-amber-50'
+                           }`}
+              >
+                {heading.level === 3 && (
+                  <span className="text-slate-400 mr-1">
+                    ↳
+                  </span>
+                )}
+                {heading.text}
+              </button>
+            ))}
+          </div>
+
+          {/* Close button at bottom */}
           <button
-            key={heading.id}
-            onClick={() => scrollToSection(heading.id)}
-            className={`text-sm px-4 py-1.5 rounded-full 
-                       border transition-all duration-200
-                       cursor-pointer text-left
-                       ${heading.level === 3 
-                         ? 'text-xs' 
-                         : ''}
-                       ${activeId === heading.id
-                         ? 'bg-amber-400 border-amber-400 text-navy font-semibold'
-                         : 'bg-white border-slate-200 text-slate-600 hover:border-amber-300 hover:text-amber-700 hover:bg-amber-50'
-                       }`}
+            onClick={() => setIsOpen(false)}
+            className="mt-4 text-xs text-slate-400 
+                       hover:text-slate-600 
+                       transition-colors"
           >
-            {heading.level === 3 && (
-              <span className="text-slate-400 mr-1">↳</span>
-            )}
-            {heading.text}
+            ✕ Close
           </button>
-        ))}
-      </div>
+        </div>
+      )}
     </div>
   )
 }
