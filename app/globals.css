@@ -34,6 +34,14 @@ body {
   border-radius: 0.5rem;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+h2, h3, h4 {
+  scroll-margin-top: 80px;
+}
+
 /* ============================================
    PRINT / PDF STYLES — CorpLawUpdates.in
    ============================================ */

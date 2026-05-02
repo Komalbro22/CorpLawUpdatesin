@@ -10,6 +10,7 @@ import Image from 'next/image'
 import CategoryBadge from '@/components/CategoryBadge'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import ErrorBoundary from '@/components/ErrorBoundary'
+import TableOfContents from '@/components/TableOfContents'
 import UpdateCard from '@/components/UpdateCard'
 import { calculateReadingTime, formatDate, BASE_URL } from '@/lib/utils'
 import ViewsTracker from '@/components/ViewsTracker'
@@ -232,8 +233,13 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
             {/* 4. ARTICLE CONTENT */}
             <div className="mb-12 max-w-3xl mx-auto px-4">
+                {update.content && (
+                  <TableOfContents content={update.content} />
+                )}
                 <ErrorBoundary>
-                    <MarkdownRenderer content={update.content || ''} />
+                    <div className="article-content">
+                        <MarkdownRenderer content={update.content || ''} />
+                    </div>
                 </ErrorBoundary>
             </div>
 
