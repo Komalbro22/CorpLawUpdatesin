@@ -4,6 +4,9 @@ import React from 'react'
 import NewsletterWidget from '@/components/NewsletterWidget'
 
 import JsonLd from '@/components/JsonLd'
+import { supabase } from '@/lib/supabase'
+
+export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Compliance Calendar 2026-27 — MCA SEBI RBI Income Tax Due Dates',
@@ -28,56 +31,13 @@ export const metadata: Metadata = {
   },
 }
 
-const mcaData: React.ReactNode[][] = [
-    ['DIR-3 KYC Web', 'Annual KYC for all directors with DIN', '30 Sep 2026', 'All directors with DIN', '₹5,000'],
-    ['MGT-7 / MGT-7A', 'Annual Return filing', '60 days from AGM', 'All companies', '₹100/day'],
-    ['AOC-4', 'Filing of Financial Statements', '30 days from AGM', 'All companies', '₹100/day'],
-    ['ADT-1', 'Auditor Appointment intimation', '15 days from AGM', 'All companies', '₹300/day'],
-    ['MSME-1', 'Outstanding payments to MSME vendors', <span key="msme" className="text-amber-600 font-medium">31 October 2026 (April deadline passed)</span>, 'Companies with MSME dues', '₹25,000'],
-    ['BEN-2', 'Beneficial Ownership Return', '30 days of change', 'Companies with SBO', '₹1 lakh+'],
-    ['DPT-3', 'Return of Deposits', '30 June 2026', 'Companies with deposits', '₹5,000/day'],
-    ['Form 11', 'LLP Annual Return', '30 May 2026', 'All LLPs', '₹100/day'],
-    ['Form 8', 'LLP Statement of Accounts & Solvency', '30 Oct 2026', 'All LLPs', '₹100/day'],
-    ['CRA-4', 'Cost Audit Report filing', '30 days from Cost Audit Report', 'Turnover >₹35 Cr or net worth >₹5 Cr in specified industries', '₹25,000'],
-    ['INC-20A', 'Declaration of Commencement of Business', '180 days of incorporation', 'Companies incorporated after Nov 2019', '₹50,000+'],
-    ['PAS-6', 'Reconciliation of Share Capital Audit', '60 days from half year end', 'Unlisted public companies', '₹1,000/day'],
-    ['DIR-12', 'Intimation of Change in Directors/KMP', '30 days of change', 'All companies', '₹500/day'],
-    ['MGT-14', 'Filing of Board/Special Resolutions with RoC', '30 days of passing resolution', 'Public companies for specified resolutions', '₹500/day'],
-]
-
-const sebiData: React.ReactNode[][] = [
-    ['Quarterly Financial Results', 'LODR Regulation 33', '45 days from quarter end', 'Listed companies'],
-    ['Shareholding Pattern', 'LODR Regulation 31', '21 days from quarter end', 'Listed companies'],
-    ['Corporate Governance Report', 'LODR Regulation 27', '21 days from quarter end', 'Listed companies'],
-    ['Annual Report', 'LODR Regulation 34', '21 days from AGM', 'Listed companies'],
-    ['Related Party Transactions', 'LODR Regulation 23', '30 days from quarter end', 'Listed companies'],
-    ['Business Responsibility Report', 'LODR Regulation 34(2)(f)', 'With Annual Report', 'Top 1000 listed cos by market cap (BRSR); Top 250 for BRSR Core'],
-    ['Secretarial Compliance Report', 'LODR Regulation 24A', '60 days from financial year end', 'Listed companies'],
-    ['Statement of Investor Complaints', 'LODR Regulation 13(3)', '21 days from quarter end', 'Listed companies'],
-    ['Reconciliation of Share Capital', 'SEBI Regulation 76', '60 days from quarter end', 'Listed companies'],
-]
-
-const rbiData: React.ReactNode[][] = [
-    ['FLA Return', 'Foreign Liabilities & Assets Annual Return', '15 July 2026', 'Companies with FDI or ODI'],
-    ['FC-GPR', 'FDI Reporting — Issue of Shares to non-resident', '30 days of allotment', 'Companies receiving FDI'],
-    ['FC-TRS', 'Transfer of shares between resident and non-resident', '60 days of transfer', 'Buyer / Seller in FDI deal'],
-    ['ODI-2', 'Overseas Direct Investment Annual Report', 'Annual', 'Indian companies with ODI'],
-    ['ECB-2', 'External Commercial Borrowing Monthly Return', 'Monthly — 7th of next month', 'All ECB borrowers'],
-    ['FIRMS Portal', 'All FEMA filings now through FIRMS', 'As applicable', 'All entities with FDI/ODI/ECB'],
-]
-
-const incomeTaxData: React.ReactNode[][] = [
-  ['Advance Tax Q1', '15% of annual tax liability', '15 June 2026', 'All companies', '1% interest/month'],
-  ['Advance Tax Q2', '45% of annual tax liability', '15 September 2026', 'All companies', '1% interest/month'],
-  ['Advance Tax Q3', '75% of annual tax liability', '15 December 2026', 'All companies', '1% interest/month'],
-  ['Advance Tax Q4', '100% of annual tax liability', '15 March 2027', 'All companies', '1% interest/month'],
-  ['TDS Return Q1 (26Q)', 'TDS on non-salary payments', '31 July 2026', 'All deductors', '₹200/day'],
-  ['TDS Return Q2 (26Q)', 'TDS on non-salary payments', '31 October 2026', 'All deductors', '₹200/day'],
-  ['TDS Return Q3 (26Q)', 'TDS on non-salary payments Oct-Dec', '31 January 2027', 'All deductors', '₹200/day'],
-  ['TDS Return Q4 (26Q)', 'TDS on non-salary payments Jan-Mar', '31 May 2027', 'All deductors', '₹200/day'],
-  ['ITR Filing', 'Income Tax Return for companies', '31 October 2026', 'All companies', '₹5,000 + interest'],
-  ['Tax Audit Report (3CD)', 'Form 3CA/3CB + 3CD', '30 September 2026', 'Companies with turnover >₹1 Cr', '₹1.5 lakh or 0.5% of turnover'],
-]
+async function getCalendarEntries() {
+  const { data } = await supabase
+    .from('compliance_calendar')
+    .select('*')
+    .order('due_date_sort', { ascending: true, nullsFirst: false })
+  return data || []
+}
 
 function TableSection({
     title,
@@ -155,7 +115,60 @@ function TableSection({
     )
 }
 
-export default function CalendarPage() {
+interface CalendarEntry {
+    category: string
+    form_name: string
+    compliance: string
+    regulation: string
+    due_date: string
+    applicable_to: string
+    penalty: string
+    is_active: boolean
+    notes: string
+}
+
+export default async function CalendarPage() {
+    const entries = await getCalendarEntries()
+    const activeEntries = entries.filter((e: CalendarEntry) => e.is_active !== false)
+
+    const mcaData = activeEntries
+        .filter((e: CalendarEntry) => e.category === 'MCA')
+        .map((e: CalendarEntry) => [
+            e.form_name || e.compliance,
+            e.compliance,
+            e.due_date,
+            e.applicable_to || '—',
+            e.penalty || '—'
+        ])
+
+    const sebiData = activeEntries
+        .filter((e: CalendarEntry) => e.category === 'SEBI')
+        .map((e: CalendarEntry) => [
+            e.compliance,
+            e.regulation || e.compliance,
+            e.due_date,
+            e.applicable_to || '—'
+        ])
+
+    const rbiData = activeEntries
+        .filter((e: CalendarEntry) => e.category === 'RBI-FEMA')
+        .map((e: CalendarEntry) => [
+            e.form_name || e.compliance,
+            e.compliance,
+            e.due_date,
+            e.applicable_to || '—'
+        ])
+
+    const incomeTaxData = activeEntries
+        .filter((e: CalendarEntry) => e.category === 'Income Tax')
+        .map((e: CalendarEntry) => [
+            e.form_name || e.compliance,
+            e.compliance,
+            e.due_date,
+            e.applicable_to || '—',
+            e.penalty || '—'
+        ])
+
     return (
         <div>
             {/* HERO */}
