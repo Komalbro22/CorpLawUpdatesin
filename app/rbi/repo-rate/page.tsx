@@ -4,26 +4,29 @@ import { supabase } from '@/lib/supabase'
 
 export const revalidate = 3600
 
-export const metadata: Metadata = {
-  title: 'Current RBI Repo Rate 2026 — 5.25% (May 2026)',
-  description: 'Current RBI repo rate is 5.25% as of April 2026 MPC meeting. Complete rate history, next MPC meeting date June 3-5 2026, and impact on home loans and EMIs.',
-  keywords: [
-    'current repo rate',
-    'rbi repo rate 2026',
-    'current rbi repo rate',
-    'repo rate today india',
-    'rbi monetary policy rate',
-    'repo rate april 2026',
-    'current repo rate india',
-  ],
-  alternates: {
-    canonical: 'https://www.corplawupdates.in/rbi/repo-rate',
-  },
-  openGraph: {
-    title: 'Current RBI Repo Rate 2026 — 5.25%',
-    description: 'RBI repo rate is 5.25% (unchanged). Next MPC meeting: June 3-5, 2026.',
-    url: 'https://www.corplawupdates.in/rbi/repo-rate',
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getRateSettings()
+  const rate = settings.current_repo_rate || '5.25%'
+  const date = settings.current_repo_rate_date || 'April 2026'
+  return {
+    title: `Current RBI Repo Rate ${new Date().getFullYear()} — ${rate} (${date})`,
+    description: `Current RBI repo rate is ${rate} as of ${date} MPC meeting. Complete rate history, next MPC meeting date, and impact on home loans and EMIs.`,
+    keywords: [
+      'current repo rate',
+      `rbi repo rate ${new Date().getFullYear()}`,
+      'current rbi repo rate',
+      'repo rate today india',
+      'rbi monetary policy rate',
+      `repo rate ${date.toLowerCase()}`,
+      'current repo rate india',
+    ],
+    alternates: { canonical: 'https://www.corplawupdates.in/rbi/repo-rate' },
+    openGraph: {
+      title: `Current RBI Repo Rate ${new Date().getFullYear()} — ${rate}`,
+      description: `RBI repo rate is ${rate} (${date}). Next MPC meeting details inside.`,
+      url: 'https://www.corplawupdates.in/rbi/repo-rate',
+    },
+  }
 }
 
 async function getRateSettings() {
@@ -46,8 +49,20 @@ async function getRateSettings() {
   return settings
 }
 
+async function getRateHistory() {
+  const { data } = await supabase
+    .from('repo_rate_history')
+    .select('*')
+    .order('meeting_date', { ascending: false })
+    .limit(20)
+  return data || []
+}
+
 export default async function RepoRatePage() {
-  const settings = await getRateSettings()
+  const [settings, history] = await Promise.all([
+    getRateSettings(),
+    getRateHistory(),
+  ])
 
   const repoRate = settings.current_repo_rate || '5.25%'
   const rateDate = settings.current_repo_rate_date || 'April 2026'
@@ -120,25 +135,15 @@ export default async function RepoRatePage() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['April 2026 (60th MPC)', '5.25%', '⏸ No Change', 'Neutral'],
-                  ['February 2026 (59th MPC)', '5.25%', '⬇️ -0.25%', 'Neutral'],
-                  ['December 2025 (58th MPC)', '5.50%', '⬇️ -0.25%', 'Neutral'],
-                  ['October 2025 (57th MPC)', '5.75%', '⏸ No Change', 'Neutral'],
-                  ['August 2025 (56th MPC)', '5.75%', '⬇️ -0.25%', 'Accommodative'],
-                  ['June 2025 (55th MPC)', '6.00%', '⬇️ -0.25%', 'Accommodative'],
-                  ['April 2025 (54th MPC)', '6.25%', '⬇️ -0.25%', 'Neutral'],
-                  ['February 2025 (53rd MPC)', '6.50%', '⬇️ -0.25%', 'Neutral'],
-                  ['December 2024 (52nd MPC)', '6.75%', '⬇️ -0.25%', 'Neutral'],
-                  ['October 2024 (51st MPC)', '6.75%', '⏸ No Change', 'Withdrawal'],
-                  ['August 2024 (50th MPC)', '6.50%', '⏸ No Change', 'Withdrawal'],
-                  ['June 2024', '6.50%', '⏸ No Change', 'Withdrawal'],
-                ].map(([meeting, rate, change, mpcStance], i) => (
-                  <tr key={meeting} className={i % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
-                    <td className="px-4 py-3 font-medium text-navy">{meeting}</td>
-                    <td className="px-4 py-3 text-center font-bold text-blue-700">{rate}</td>
-                    <td className="px-4 py-3 text-center text-slate-700">{change}</td>
-                    <td className="px-4 py-3 text-slate-600">{mpcStance}</td>
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                {history.map((entry: any, i: number) => (
+                  <tr key={entry.id} className={i % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
+                    <td className="px-4 py-3 font-medium text-navy">{entry.meeting_name}</td>
+                    <td className="px-4 py-3 text-center font-bold text-blue-700">{entry.repo_rate}</td>
+                    <td className="px-4 py-3 text-center text-slate-700">
+                      {entry.change_direction === 'cut' ? '⬇️' : entry.change_direction === 'hike' ? '⬆️' : '⏸'} {entry.change_amount}
+                    </td>
+                    <td className="px-4 py-3 text-slate-600">{entry.stance}</td>
                   </tr>
                 ))}
               </tbody>

@@ -3,22 +3,29 @@ import Link from 'next/link'
 import React from 'react'
 import NewsletterWidget from '@/components/NewsletterWidget'
 
+import JsonLd from '@/components/JsonLd'
+
 export const metadata: Metadata = {
-  title: 'Compliance Calendar 2026 — MCA SEBI RBI Deadlines',
-  description: 'Complete compliance deadline calendar for FY 2026-27. MCA filing dates, SEBI LODR deadlines, RBI FEMA due dates and Income Tax dates for companies.',
-  alternates: {
-    canonical: 'https://www.corplawupdates.in/calendar',
-  },
+  title: 'Compliance Calendar 2026-27 — MCA SEBI RBI Income Tax Due Dates',
+  description: 'Complete compliance deadline calendar for FY 2026-27. MCA filing dates, SEBI LODR deadlines, RBI FEMA due dates, Income Tax due dates for Indian companies and CS professionals.',
   keywords: [
     'compliance calendar 2026',
-    'MCA filing deadlines 2026',
-    'SEBI compliance dates 2026',
+    'MCA filing due dates 2026',
+    'SEBI compliance calendar 2026',
+    'company compliance deadlines India',
+    'CS professional compliance dates',
+    'MGT-7 due date 2026',
+    'AOC-4 due date 2026',
     'DIR-3 KYC due date 2026',
-    'MGT-7 filing date',
-    'AOC-4 due date',
     'income tax due dates companies 2026',
-    'FLA return due date 2026',
+    'FEMA compliance dates 2026',
   ],
+  alternates: { canonical: 'https://www.corplawupdates.in/calendar' },
+  openGraph: {
+    title: 'Compliance Calendar 2026-27 — All MCA SEBI RBI Due Dates',
+    description: 'Complete compliance deadline calendar for Indian companies. MCA, SEBI, RBI, Income Tax due dates in one place.',
+    url: 'https://www.corplawupdates.in/calendar',
+  },
 }
 
 const mcaData: React.ReactNode[][] = [
@@ -308,6 +315,22 @@ export default function CalendarPage() {
                         <NewsletterWidget />
                     </div>
                 </section>
+
+                <JsonLd data={{
+                  '@context': 'https://schema.org',
+                  '@type': 'Dataset',
+                  name: 'India Corporate Compliance Calendar 2026-27',
+                  description: 'Complete compliance deadline calendar for Indian companies covering MCA, SEBI, RBI and Income Tax',
+                  url: 'https://www.corplawupdates.in/calendar',
+                  creator: {
+                    '@type': 'Organization',
+                    name: 'CorpLawUpdates.in',
+                    url: 'https://www.corplawupdates.in',
+                  },
+                  inLanguage: 'en-IN',
+                  isAccessibleForFree: true,
+                  keywords: 'compliance calendar, MCA deadlines, SEBI compliance, RBI due dates, India',
+                }} />
 
             </div>
         </div>
