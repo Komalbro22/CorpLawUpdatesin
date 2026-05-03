@@ -73,6 +73,9 @@ export default function AdminCalendarPage() {
       setEditingId(null)
       setForm(emptyForm)
       loadEntries()
+    } else {
+      const err = await res.json()
+      alert('Error: ' + (err.error || 'Failed to save'))
     }
     setSaving(false)
   }

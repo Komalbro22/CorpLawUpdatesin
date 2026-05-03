@@ -26,10 +26,13 @@ export async function POST(request: Request) {
     const { category, form_name, compliance, regulation, due_date, due_date_sort, applicable_to, penalty, priority, notes } = body
     const { data, error } = await supabaseAdmin
       .from('compliance_calendar')
-      .insert({ category, form_name, compliance, regulation, due_date, due_date_sort, applicable_to, penalty, priority: priority || 'medium', notes })
+      .insert({ category, form_name, compliance, regulation, due_date, due_date_sort: due_date_sort || null, applicable_to, penalty, priority: priority || 'medium', notes })
       .select()
       .single()
-    if (error) return NextResponse.json({ error: 'Failed to create' }, { status: 500 })
+    if (error) {
+      console.error('Create error:', error)
+      return NextResponse.json({ error: error.message || 'Failed to create' }, { status: 500 })
+    }
     return NextResponse.json({ success: true, entry: data })
   }
 
@@ -37,9 +40,12 @@ export async function POST(request: Request) {
     const { id, category, form_name, compliance, regulation, due_date, due_date_sort, applicable_to, penalty, priority, notes, is_active } = body
     const { error } = await supabaseAdmin
       .from('compliance_calendar')
-      .update({ category, form_name, compliance, regulation, due_date, due_date_sort, applicable_to, penalty, priority, notes, is_active, updated_at: new Date().toISOString() })
+      .update({ category, form_name, compliance, regulation, due_date, due_date_sort: due_date_sort || null, applicable_to, penalty, priority, notes, is_active, updated_at: new Date().toISOString() })
       .eq('id', id)
-    if (error) return NextResponse.json({ error: 'Failed to update' }, { status: 500 })
+    if (error) {
+      console.error('Update error:', error)
+      return NextResponse.json({ error: error.message || 'Failed to update' }, { status: 500 })
+    }
     return NextResponse.json({ success: true })
   }
 
