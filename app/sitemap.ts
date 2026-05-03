@@ -61,6 +61,12 @@ export default async function sitemap():
       priority: 1.0,
     },
     {
+      url: 'https://www.corplawupdates.in/rbi/repo-rate',
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
+    },
+    {
       url: `${BASE_URL}/updates`,
       lastModified: new Date(),
       changeFrequency: 'daily' as const,

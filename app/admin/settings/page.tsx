@@ -23,6 +23,17 @@ const settingGroups = [
     keys: ['announcement_bar', 'announcement_bar_url'],
   },
   {
+    title: '🏦 RBI Policy Rates',
+    keys: [
+      'current_repo_rate',
+      'current_repo_rate_date',
+      'next_mpc_date',
+      'mpc_stance',
+      'sdf_rate',
+      'msf_rate',
+    ],
+  },
+  {
     title: '📊 Analytics & SEO',
     keys: ['google_analytics_id', 'google_search_console'],
   },

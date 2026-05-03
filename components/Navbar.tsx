@@ -62,6 +62,12 @@ export default function Navbar() {
                                     </Link>
                                 ))}
                                 <Link
+                                    href="/rbi/repo-rate"
+                                    className="block px-4 py-2.5 text-sm text-navy hover:bg-slate-50 hover:text-amber-600 transition-colors border-t border-slate-100"
+                                >
+                                    🏦 Current Repo Rate
+                                </Link>
+                                <Link
                                     href="/calendar"
                                     className="block px-4 py-2.5 text-sm text-navy hover:bg-slate-50 hover:text-amber-600 transition-colors border-t border-slate-100"
                                 >
@@ -123,9 +129,16 @@ export default function Navbar() {
                                     </Link>
                                 ))}
                                 <Link
+                                    href="/rbi/repo-rate"
+                                    onClick={() => setIsOpen(false)}
+                                    className="block px-4 py-3 text-navy font-medium hover:text-amber-600 border-t border-slate-100"
+                                >
+                                    🏦 Current Repo Rate
+                                </Link>
+                                <Link
                                     href="/calendar"
                                     onClick={() => setIsOpen(false)}
-                                    className="block px-4 py-3 text-navy font-medium hover:text-amber-600 border-b border-slate-100"
+                                    className="block px-4 py-3 text-navy font-medium hover:text-amber-600 border-b border-t border-slate-100"
                                 >
                                     📅 Compliance Calendar
                                 </Link>

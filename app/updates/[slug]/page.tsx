@@ -226,6 +226,17 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                     )}
                 </div>
 
+                {update.summary && (
+                    <div className="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4 mb-6">
+                        <p className="text-xs font-bold text-blue-800 uppercase tracking-widest mb-2">
+                            📌 Summary
+                        </p>
+                        <p className="text-blue-900 text-sm leading-relaxed font-medium">
+                            {update.summary}
+                        </p>
+                    </div>
+                )}
+
                 {/* 3. SHARE BUTTONS */}
                 <ArticleActions
                     title={update.title}
