@@ -332,17 +332,77 @@ export default async function CalendarPage() {
                 <JsonLd data={{
                   '@context': 'https://schema.org',
                   '@type': 'Dataset',
-                  name: 'India Corporate Compliance Calendar 2026-27',
-                  description: 'Complete compliance deadline calendar for Indian companies covering MCA, SEBI, RBI and Income Tax',
+                  name: 'India Corporate Law Compliance Calendar 2026',
+                  description: 'Complete compliance deadline calendar for FY 2026-27 covering MCA, SEBI, RBI, FEMA and Income Tax filings.',
                   url: 'https://www.corplawupdates.in/calendar',
+                  license: 'https://creativecommons.org/licenses/by/4.0/',
+                  isAccessibleForFree: true,
+                  keywords: [
+                    'compliance calendar 2026',
+                    'MCA filing deadlines',
+                    'SEBI compliance dates',
+                    'RBI FEMA deadlines',
+                    'income tax due dates India',
+                  ],
                   creator: {
                     '@type': 'Organization',
                     name: 'CorpLawUpdates.in',
                     url: 'https://www.corplawupdates.in',
                   },
+                  temporalCoverage: '2026',
+                  spatialCoverage: {
+                    '@type': 'Place',
+                    name: 'India',
+                  },
                   inLanguage: 'en-IN',
-                  isAccessibleForFree: true,
-                  keywords: 'compliance calendar, MCA deadlines, SEBI compliance, RBI due dates, India',
+                  dateModified: new Date().toISOString().split('T')[0],
+                }} />
+
+                <JsonLd data={{
+                  '@context': 'https://schema.org',
+                  '@type': 'FAQPage',
+                  mainEntity: [
+                    {
+                      '@type': 'Question',
+                      name: 'What is the due date for DIR-3 KYC in 2026?',
+                      acceptedAnswer: {
+                        '@type': 'Answer',
+                        text: 'The due date for DIR-3 KYC Web filing in 2026 is 30 September 2026. Late filing attracts a fee of ₹5,000.',
+                      },
+                    },
+                    {
+                      '@type': 'Question',
+                      name: 'What is the due date for MGT-7 annual return?',
+                      acceptedAnswer: {
+                        '@type': 'Answer',
+                        text: 'MGT-7 annual return must be filed within 60 days from the date of Annual General Meeting (AGM). Penalty for late filing is ₹100 per day.',
+                      },
+                    },
+                    {
+                      '@type': 'Question',
+                      name: 'What is the due date for FLA return 2026?',
+                      acceptedAnswer: {
+                        '@type': 'Answer',
+                        text: 'The FLA (Foreign Liabilities and Assets) Return for FY 2025-26 must be filed by 15 July 2026 on the RBI FIRMS portal.',
+                      },
+                    },
+                    {
+                      '@type': 'Question',
+                      name: 'What is the MSME-1 due date 2026?',
+                      acceptedAnswer: {
+                        '@type': 'Answer',
+                        text: 'MSME-1 is filed half-yearly. The October 2026 deadline is 31 October 2026. The April 2026 deadline has passed.',
+                      },
+                    },
+                    {
+                      '@type': 'Question',
+                      name: 'When is the income tax return due date for companies 2026?',
+                      acceptedAnswer: {
+                        '@type': 'Answer',
+                        text: 'The Income Tax Return (ITR) filing due date for companies for FY 2025-26 is 31 October 2026.',
+                      },
+                    },
+                  ],
                 }} />
 
             </div>
