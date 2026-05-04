@@ -3,6 +3,15 @@ export const revalidate = 3600
 import { supabase } from '@/lib/supabase'
 import { BASE_URL } from '@/lib/utils'
 
+function escapeXml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
+}
+
 export async function GET() {
   const { data: articles } = await supabase
     .from('updates')
@@ -14,12 +23,19 @@ export async function GET() {
 
   const items = (articles || []).map(a => `
     <item>
-      <title><![CDATA[${a.title}]]></title>
+      <title><![CDATA[${a.title || 'Untitled'}]]></title>
       <link>${BASE_URL}/updates/${a.slug}</link>
-      <description><![CDATA[${a.summary}]]></description>
-      <pubDate>${new Date(a.published_at!).toUTCString()}</pubDate>
+      <description><![CDATA[${
+        a.summary?.trim() || 
+        `${a.category?.toUpperCase() || 'Update'} from CorpLawUpdates.in`
+      }]]></description>
+      <pubDate>${
+        a.published_at 
+          ? new Date(a.published_at).toUTCString()
+          : new Date().toUTCString()
+      }</pubDate>
       <guid isPermaLink="true">${BASE_URL}/updates/${a.slug}</guid>
-      <category>${a.category}</category>
+      <category>${a.category ? escapeXml(a.category) : 'Update'}</category>
     </item>`).join('')
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

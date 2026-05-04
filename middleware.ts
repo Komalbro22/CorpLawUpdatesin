@@ -19,8 +19,18 @@ export async function middleware(request: NextRequest) {
         if (!session) {
             return NextResponse.redirect(new URL('/admin/login', request.url))
         }
-        
-        const expected = await hashSHA256(process.env.ADMIN_PASSWORD! + process.env.ADMIN_SECRET_SALT!)
+
+        const adminPassword = process.env.ADMIN_PASSWORD
+        const adminSalt = process.env.ADMIN_SECRET_SALT
+
+        if (!adminPassword || !adminSalt) {
+            console.error(
+                'CRITICAL: ADMIN_PASSWORD or ADMIN_SECRET_SALT missing from environment variables'
+            )
+            return NextResponse.redirect(new URL('/admin/login', request.url))
+        }
+
+        const expected = await hashSHA256(adminPassword + adminSalt)
         if (session.value !== expected) {
             return NextResponse.redirect(new URL('/admin/login', request.url))
         }

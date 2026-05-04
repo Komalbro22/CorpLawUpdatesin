@@ -1,48 +1,12 @@
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { MetadataRoute } from 'next'
 
-export const revalidate = 0
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600
 
 const BASE_URL = 'https://www.corplawupdates.in'
 
 export default async function sitemap():
   Promise<MetadataRoute.Sitemap> {
-
-  // Fetch all published articles using admin client
-  let articles: {
-    slug: string
-    published_at: string | null
-    updated_at: string | null
-    category: string
-  }[] = []
-
-  try {
-    const { data, error } = await supabaseAdmin
-      .from('updates')
-      .select('slug, published_at, updated_at, category')
-      .not('published_at', 'is', null)
-      .lte('published_at', new Date().toISOString())
-      .order('published_at', { ascending: false })
-
-    if (error) {
-      console.error('Sitemap Supabase error:', error)
-    } else {
-      articles = data || []
-      console.log('Sitemap: fetched', articles.length, 'articles')
-    }
-  } catch (err) {
-    console.error('Sitemap fetch failed:', err)
-  }
-
-  const articleUrls = articles.map(article => ({
-    url: `${BASE_URL}/updates/${article.slug}`,
-    lastModified: new Date(
-      article.updated_at || article.published_at!
-    ),
-    changeFrequency: 'weekly' as const,
-    priority: 0.9,
-  }))
 
   const categoryUrls = [
     'mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema'
@@ -110,11 +74,35 @@ export default async function sitemap():
     },
   ]
 
-  console.log('Sitemap total URLs:', staticUrls.length + categoryUrls.length + articleUrls.length)
+  try {
+    const { data: articles, error } = await supabaseAdmin
+      .from('updates')
+      .select('slug, published_at, updated_at, category')
+      .not('published_at', 'is', null)
+      .lte('published_at', new Date().toISOString())
+      .order('published_at', { ascending: false })
 
-  return [
-    ...staticUrls,
-    ...categoryUrls,
-    ...articleUrls,
-  ]
+    if (error) {
+      console.error('Sitemap Supabase error:', error)
+      return [...staticUrls, ...categoryUrls]
+    }
+
+    const articleUrls = (articles || []).map(article => ({
+      url: `${BASE_URL}/updates/${article.slug}`,
+      lastModified: new Date(
+        article.updated_at || article.published_at!
+      ),
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
+    }))
+
+    return [
+      ...staticUrls,
+      ...categoryUrls,
+      ...articleUrls,
+    ]
+  } catch (err) {
+    console.error('Sitemap fetch failed:', err)
+    return [...staticUrls, ...categoryUrls]
+  }
 }

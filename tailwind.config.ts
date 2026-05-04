@@ -27,8 +27,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        heading: ['Lora', 'Georgia', 'serif'],
-        body: ['Source Sans 3', 'sans-serif'],
+        heading: ['var(--font-lora)', 'Georgia', 'serif'],
+        body: ['var(--font-source-sans)', 'Arial', 'sans-serif'],
+        sans: ['var(--font-source-sans)', 'Arial', 'sans-serif'],
       },
     },
   },

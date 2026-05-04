@@ -15,9 +15,10 @@
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  /* REMOVED: font-family: Arial, Helvetica, sans-serif; */
+  /* Font is set via next/font CSS variables in layout */
+  color: #0F172A;
+  background: #F8FAFC;
 }
 
 @layer utilities {

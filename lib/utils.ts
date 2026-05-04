@@ -25,13 +25,16 @@ export function formatDate(dateString: string): string {
 }
 
 export function generateUnsubscribeToken(email: string): string {
+    const adminSalt = process.env.ADMIN_SECRET_SALT || ''
     return createHash('sha256')
-        .update(email + process.env.ADMIN_SECRET_SALT!)
+        .update(email + adminSalt)
         .digest('hex')
 }
 
 export function generateAdminSessionHash(): string {
+    const adminPassword = process.env.ADMIN_PASSWORD || ''
+    const adminSalt = process.env.ADMIN_SECRET_SALT || ''
     return createHash('sha256')
-        .update(process.env.ADMIN_PASSWORD! + process.env.ADMIN_SECRET_SALT!)
+        .update(adminPassword + adminSalt)
         .digest('hex')
 }

@@ -14,8 +14,8 @@ import JsonLd from '@/components/JsonLd'
 import { getSetting } from '@/lib/settings'
 import './globals.css'
 
-const lora = Lora({ subsets: ['latin'], variable: '--font-heading', display: 'swap' })
-const sourceSans = Source_Sans_3({ subsets: ['latin'], variable: '--font-body', display: 'swap' })
+const lora = Lora({ subsets: ['latin'], variable: '--font-lora', display: 'swap' })
+const sourceSans = Source_Sans_3({ subsets: ['latin'], variable: '--font-source-sans', display: 'swap' })
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.corplawupdates.in'),
@@ -97,7 +97,7 @@ export default async function RootLayout({
   const gaId = await getSetting('google_analytics_id')
 
   return (
-    <html lang="en" className={`${lora.variable} ${sourceSans.variable}`}>
+    <html lang="en">
       <head>
         <JsonLd data={{
           '@context': 'https://schema.org',
@@ -133,7 +133,7 @@ export default async function RootLayout({
             'query-input': 'required name=search_term_string',
           },
         }} />
-        {gaId && (
+        {gaId && gaId.startsWith('G-') && (
           <>
             <Script
               src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
@@ -150,7 +150,7 @@ export default async function RootLayout({
           </>
         )}
       </head>
-      <body className="font-body bg-slate-50 text-navy antialiased min-h-screen flex flex-col">
+      <body className={`${lora.variable} ${sourceSans.variable} font-body bg-slate-50 text-navy antialiased min-h-screen flex flex-col`}>
         <ToastProvider>
           <HideOnAdmin><AnnouncementBar /></HideOnAdmin>
           <HideOnAdmin><Navbar /></HideOnAdmin>
@@ -186,22 +186,7 @@ export default async function RootLayout({
             `,
           }}
         />
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-VV0MXSWV55"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-VV0MXSWV55', {
-              page_title: document.title,
-              page_location: window.location.href,
-              send_page_view: true,
-            });
-          `}
-        </Script>
+
       </body>
     </html>
   )

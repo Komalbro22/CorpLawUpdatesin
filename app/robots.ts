@@ -5,17 +5,17 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: '*',
-        allow: [
-          '/',
-          '/_next/static/',
-          '/_next/image/',
-          '/api/og',
-        ],
+        allow: '/',
         disallow: [
           '/admin/',
           '/api/admin/',
-          '/updates?*',
         ],
+        // REMOVED: '/updates?*' 
+        // Reason: Allow Googlebot to crawl search pages
+        // to follow internal links. Pages already have
+        // meta robots noindex via generateMetadata.
+        // meta noindex is better than robots disallow
+        // because Google can still follow links.
       },
       {
         userAgent: 'Googlebot-Image',
@@ -23,6 +23,6 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
     sitemap: 'https://www.corplawupdates.in/sitemap.xml',
-    host: 'https://www.corplawupdates.in',
+    // REMOVED: host field (wrong format, Google ignores it)
   }
 }
