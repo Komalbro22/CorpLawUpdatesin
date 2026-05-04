@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
             query = query.is('published_at', null)
         }
 
-        const limit = 50
+        const limit = 20
         const from = (page - 1) * limit
         const to = from + limit - 1
 

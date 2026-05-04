@@ -193,7 +193,7 @@ export default function AdminArticles() {
                     >
                         <option value="All">All Status</option>
                         <option value="Published">Published</option>
-                        <option value="Drafts">Drafts</option>
+                        <option value="Draft">Draft</option>
                     </select>
                 </div>
             </div>
