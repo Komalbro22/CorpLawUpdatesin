@@ -126,7 +126,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
 
     return (
-        <article className="max-w-4xl mx-auto py-12 px-4">
+        <article className="max-w-4xl mx-auto py-12 px-4 overflow-x-hidden w-full">
             <ReadingProgress />
             <ViewsTracker slug={update.slug} />
 
@@ -137,7 +137,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                 <span className="mx-2">&gt;</span>
                 <Link href="/updates" className="hover:text-gold transition-colors">Updates</Link>
                 <span className="mx-2">&gt;</span>
-                <span className="text-navy font-bold">
+                <span className="text-navy font-bold truncate max-w-[200px] inline-block align-bottom">
                     {update.title.length > 40 ? update.title.substring(0, 40) + '...' : update.title}
                 </span>
             </nav>
@@ -178,7 +178,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                         </div>
                     </div>
                 )}
-                <h1 className="font-heading text-3xl md:text-4xl text-navy font-bold mb-4 leading-snug">
+                <h1 className="font-heading text-3xl md:text-4xl text-navy font-bold mb-4 leading-snug break-words overflow-wrap-anywhere">
                     {update.title}
                 </h1>
                 <div className="flex flex-wrap items-center text-sm text-slate-500 gap-2 mb-6">

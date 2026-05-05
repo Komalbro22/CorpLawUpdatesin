@@ -79,24 +79,8 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-8 
-                          border-t border-white/20 pt-12 w-full">
-            <div className="text-center">
-              <div className="text-3xl text-white font-bold mb-1 tracking-tight">
-                5,000+
-              </div>
-              <div className="text-amber-100 text-sm font-medium">
-                Updates
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl text-white font-bold mb-1 tracking-tight">
-                10,000+
-              </div>
-              <div className="text-amber-100 text-sm font-medium">
-                Monthly Readers
-              </div>
-            </div>
+          <div className="mt-12 grid grid-cols-2 gap-8 
+                          border-t border-white/20 pt-12 w-full max-w-sm mx-auto">
             <div className="text-center">
               <div className="text-3xl text-white font-bold mb-1 tracking-tight">
                 Daily
