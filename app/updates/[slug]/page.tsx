@@ -126,7 +126,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
 
     return (
-        <article className="max-w-4xl mx-auto py-12 px-4 overflow-x-hidden w-full">
+        <article className="max-w-4xl mx-auto py-12 px-4 w-full">
             <ReadingProgress />
             <ViewsTracker slug={update.slug} />
 
