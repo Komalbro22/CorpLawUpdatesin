@@ -182,13 +182,13 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                     {update.title}
                 </h1>
                 <div className="flex flex-wrap items-center text-sm text-slate-500 gap-2 mb-6">
-                    <span className="print:hidden">{formattedDate}</span>
-                    <span className="text-slate-300 print:hidden">•</span>
-                    <span className="print:hidden">{readTime} min read</span>
+                    <span className="publish-date">{formattedDate}</span>
+                    <span className="text-slate-300 publish-date">•</span>
+                    <span className="read-count">{readTime} min read</span>
                     {wordCount > 0 && (
                         <>
-                            <span className="text-slate-300 print:hidden">•</span>
-                            <span className="text-slate-400 print:hidden">{wordCount.toLocaleString('en-IN')} words</span>
+                            <span className="text-slate-300 read-count">•</span>
+                            <span className="text-slate-400 read-count">{wordCount.toLocaleString('en-IN')} words</span>
                         </>
                     )}
                     {update.source_name && (
@@ -220,7 +220,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                     )}
 
                     {(update.views || 0) > 0 && (
-                        <span className="text-slate-400 text-sm">
+                        <span className="text-slate-400 text-sm views-count">
                             · {update.views!.toLocaleString('en-IN')} views
                         </span>
                     )}
@@ -275,7 +275,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
             {/* 6. TAGS */}
             {tagsList && tagsList.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-6 mb-2 print:hidden">
+                <div className="flex flex-wrap gap-2 mt-6 mb-2">
                     <span className="text-sm text-slate-400 self-center mr-1">
                         Tags:
                     </span>

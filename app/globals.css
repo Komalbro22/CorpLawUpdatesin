@@ -90,6 +90,44 @@ h2, h3, h4 {
   [class*="print:hidden"] { 
     display: none !important; 
   }
+
+  /* Hide social share buttons (Twitter, LinkedIn, WhatsApp) */
+  [class*="share"],
+  [class*="Share"],
+  [class*="social"],
+  [class*="Social"],
+  a[href*="twitter.com"],
+  a[href*="x.com"],
+  a[href*="linkedin.com"],
+  a[href*="whatsapp.com"],
+  button[aria-label*="share"],
+  button[aria-label*="Share"],
+  div:has(> a[href*="twitter"]),
+  div:has(> a[href*="linkedin"]),
+  div:has(> a[href*="whatsapp"]) {
+    display: none !important;
+  }
+
+  /* Hide the views count (e.g. "20 views") */
+  [class*="view"],
+  [class*="View"],
+  span:has(svg + *):has([class*="eye"]),
+  [class*="views-count"],
+  [class*="viewCount"],
+  [class*="read-count"] {
+    display: none !important;
+  }
+
+  /* Hide the publish date / "5 May 2026" metadata line */
+  [class*="publish"],
+  [class*="Publish"],
+  [class*="date"],
+  [class*="Date"],
+  [class*="meta"],
+  [class*="Meta"],
+  time {
+    display: none !important;
+  }
   
   /* Only hide nav buttons not content buttons */
   nav button,
