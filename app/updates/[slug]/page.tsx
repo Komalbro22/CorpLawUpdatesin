@@ -182,19 +182,19 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                     {update.title}
                 </h1>
                 <div className="flex flex-wrap items-center text-sm text-slate-500 gap-2 mb-6">
-                    <span>{formattedDate}</span>
-                    <span className="text-slate-300">•</span>
-                    <span>{readTime} min read</span>
+                    <span className="print:hidden">{formattedDate}</span>
+                    <span className="text-slate-300 print:hidden">•</span>
+                    <span className="print:hidden">{readTime} min read</span>
                     {wordCount > 0 && (
                         <>
-                            <span className="text-slate-300">•</span>
-                            <span className="text-slate-400">{wordCount.toLocaleString('en-IN')} words</span>
+                            <span className="text-slate-300 print:hidden">•</span>
+                            <span className="text-slate-400 print:hidden">{wordCount.toLocaleString('en-IN')} words</span>
                         </>
                     )}
                     {update.source_name && (
                         <>
-                            <span className="text-slate-300">•</span>
-                            <span>{update.source_name}</span>
+                            <span className="text-slate-300 print:hidden">•</span>
+                            <span className="print:hidden">{update.source_name}</span>
                         </>
                     )}
                     {update.effective_date && (
