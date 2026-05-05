@@ -83,27 +83,23 @@ h2, h3, h4 {
   /* Hide everything that should not appear in PDF */
   nav,
   footer,
-  header,
-  .print\:hidden,
-  [class*="whatsapp"],
-  [class*="WhatsApp"],
-  [class*="newsletter"],
-  [class*="Newsletter"],
-  [class*="subscribe"],
-  [class*="Subscribe"],
-  [class*="share"],
-  [class*="Share"],
-  [class*="sidebar"],
-  [class*="Sidebar"],
-  [class*="related"],
-  [class*="Related"],
-  [class*="comment"],
-  [class*="back-to"],
-  [class*="breadcrumb"],
-  button,
-  .fixed,
-  .sticky {
+  .share-buttons,
+  .back-to-top,
+  .whatsapp-button,
+  [class*="print:hidden"] { 
+    display: none !important; 
+  }
+  
+  /* Only hide nav buttons not content buttons */
+  nav button,
+  footer button,
+  .share-buttons button {
     display: none !important;
+  }
+  
+  /* Keep article content buttons if any */
+  .article-content button {
+    display: block !important;
   }
 
   /* Page background white */
