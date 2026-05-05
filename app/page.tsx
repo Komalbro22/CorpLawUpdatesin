@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 }
 
 export default async function HomePage() {
-  const [featuredRes, latestRes] = await Promise.all([
+  const [featuredRes, latestRes, updatesCountRes, viewsRes] = await Promise.all([
     supabase
       .from('updates')
       .select('*')
@@ -44,13 +44,29 @@ export default async function HomePage() {
       .not('published_at', 'is', null)
       .lte('published_at', new Date().toISOString())
       .order('published_at', { ascending: false })
-      .limit(9)
+      .limit(9),
+    supabase
+      .from('updates')
+      .select('*', { count: 'exact', head: true })
+      .not('published_at', 'is', null)
+      .lte('published_at', new Date().toISOString()),
+    supabase
+      .from('updates')
+      .select('views')
   ])
 
   const featuredUpdates = featuredRes.data || []
   const latestUpdates = latestRes.data || []
+  const updatesCount = updatesCountRes.count || 0
+  const totalViews = viewsRes.data?.reduce((acc, curr) => acc + (curr.views || 0), 0) || 0
 
   const hasUpdates = featuredUpdates.length > 0 || latestUpdates.length > 0
+
+  const formatNumber = (num: number) => {
+    if (num >= 1000000) return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M+'
+    if (num >= 1000) return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K+'
+    return num.toString()
+  }
 
   return (
     <div>
@@ -83,18 +99,18 @@ export default async function HomePage() {
                           border-t border-white/20 pt-12 w-full max-w-sm mx-auto">
             <div className="text-center">
               <div className="text-3xl text-white font-bold mb-1 tracking-tight">
-                Daily
+                {formatNumber(updatesCount)}
               </div>
               <div className="text-amber-100 text-sm font-medium">
-                New Articles
+                Total Updates
               </div>
             </div>
             <div className="text-center">
               <div className="text-3xl text-white font-bold mb-1 tracking-tight">
-                100%
+                {formatNumber(totalViews)}
               </div>
               <div className="text-amber-100 text-sm font-medium">
-                Free Access
+                Monthly Readers
               </div>
             </div>
           </div>
