@@ -2,11 +2,11 @@ import { Metadata } from 'next'
 import { supabase } from '@/lib/supabase'
 import CalendarPageClient, { type ComplianceEntry } from '@/components/CalendarPageClient'
 
-export const revalidate = 3600
+export const revalidate = 1800
 
 export const metadata: Metadata = {
   title: 'Compliance Calendar 2026-27 — MCA SEBI RBI Income Tax Due Dates',
-  description: 'Complete compliance deadline calendar for FY 2026-27. MCA filing dates, SEBI LODR deadlines, RBI FEMA due dates, Income Tax due dates for Indian companies and CS professionals.',
+  description: 'Comprehensive compliance deadline calendar for FY 2026-27. Daily updated directory of MCA filing dates, SEBI LODR deadlines, RBI FEMA due dates, and Income Tax due dates for Indian companies.',
   keywords: [
     'compliance calendar 2026',
     'MCA filing due dates 2026',
@@ -18,6 +18,9 @@ export const metadata: Metadata = {
     'DIR-3 KYC due date 2026',
     'income tax due dates companies 2026',
     'FEMA compliance dates 2026',
+    'MSME-1 due date 2026',
+    'PAS-3 filing deadline',
+    'DPT-3 due date 2026',
   ],
   alternates: { canonical: 'https://www.corplawupdates.in/calendar' },
   openGraph: {

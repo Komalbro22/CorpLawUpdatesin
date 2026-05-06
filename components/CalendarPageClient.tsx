@@ -29,6 +29,7 @@ export interface ComplianceEntry {
   correction_count: number
   frequency: string
   display_order: number
+  updated_at?: string
 }
 
 interface CalendarPageClientProps {
@@ -196,6 +197,7 @@ function TableSection({
   entryIds?: string[]
   entryNames?: string[]
   rowDates?: string[]
+  rowIds?: string[]
   onReport?: (id: string, name: string) => void
   onRowClick?: (id: string) => void
 }) {
@@ -232,6 +234,7 @@ function TableSection({
               return (
                 <tr
                   key={entryId || i}
+                  id={rowIds?.[i]}
                   data-entry-id={entryId}
                   className={`${rowBg}${onRowClick ? ' cursor-pointer hover:bg-amber-50 transition-colors' : ''}`}
                   onClick={onRowClick && entryId ? () => onRowClick(entryId) : undefined}
@@ -321,30 +324,35 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
   const mcaIds    = mcaEntries.map(e => e.id)
   const mcaNames  = mcaEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
   const mcaDates  = mcaEntries.map(e => e.due_date)
+  const mcaRowIds = mcaEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
 
   // SEBI — Form | Compliance | Regulation | Due Date | Applicable To
   const sebiRows  = sebiEntries.map(e => [makeFormCell(e), e.compliance_title, e.regulation_reference || '—', e.due_date, e.applicable_to || '—'])
   const sebiIds   = sebiEntries.map(e => e.id)
   const sebiNames = sebiEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
   const sebiDates = sebiEntries.map(e => e.due_date)
+  const sebiRowIds = sebiEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
 
   // FEMA — Form | Compliance | Due Date | Applicable To
   const femaRows  = femaEntries.map(e => [makeFormCell(e), e.compliance_title, e.due_date, e.applicable_to || '—'])
   const femaIds   = femaEntries.map(e => e.id)
   const femaNames = femaEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
   const femaDates = femaEntries.map(e => e.due_date)
+  const femaRowIds = femaEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
 
   // RBI — Form | Compliance | Due Date | Applicable To
   const rbiRows   = rbiEntries.map(e => [makeFormCell(e), e.compliance_title, e.due_date, e.applicable_to || '—'])
   const rbiIds    = rbiEntries.map(e => e.id)
   const rbiNames  = rbiEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
   const rbiDates  = rbiEntries.map(e => e.due_date)
+  const rbiRowIds = rbiEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
 
   // Income Tax — Form | Compliance | Due Date | Applicable To | Penalty
   const taxRows   = taxEntries.map(e => [makeFormCell(e), e.compliance_title, e.due_date, e.applicable_to || '—', e.penalty || '—'])
   const taxIds    = taxEntries.map(e => e.id)
   const taxNames  = taxEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
   const taxDates  = taxEntries.map(e => e.due_date)
+  const taxRowIds = taxEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
 
   return (
     <div>
@@ -433,7 +441,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
               <div id="incometax">
                 <TableSection title="📊 Income Tax Compliance" color="bg-orange-600" dot="bg-orange-500"
                   headers={['Form', 'Compliance', 'Due Date', 'Applicable To', 'Penalty']}
-                  rows={taxRows} entryIds={taxIds} entryNames={taxNames} rowDates={taxDates}
+                  rows={taxRows} entryIds={taxIds} entryNames={taxNames} rowDates={taxDates} rowIds={taxRowIds}
                   onReport={openReportError} onRowClick={handleRowClick} />
               </div>
             )}
@@ -441,7 +449,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
               <div id="mca">
                 <TableSection title="🏛️ MCA — Companies Act Compliance" color="bg-navy" dot="bg-blue-500"
                   headers={['Form', 'Compliance', 'Due Date', 'Applicable To', 'Penalty']}
-                  rows={mcaRows} entryIds={mcaIds} entryNames={mcaNames} rowDates={mcaDates}
+                  rows={mcaRows} entryIds={mcaIds} entryNames={mcaNames} rowDates={mcaDates} rowIds={mcaRowIds}
                   onReport={openReportError} onRowClick={handleRowClick} />
               </div>
             )}
@@ -449,7 +457,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
               <div id="sebi">
                 <TableSection title="📈 SEBI — Listed Company Compliance" color="bg-green-700" dot="bg-green-500"
                   headers={['Form', 'Compliance', 'Regulation', 'Due Date', 'Applicable To']}
-                  rows={sebiRows} entryIds={sebiIds} entryNames={sebiNames} rowDates={sebiDates}
+                  rows={sebiRows} entryIds={sebiIds} entryNames={sebiNames} rowDates={sebiDates} rowIds={sebiRowIds}
                   onReport={openReportError} onRowClick={handleRowClick} />
               </div>
             )}
@@ -457,7 +465,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
               <div id="rbi">
                 <TableSection title="🏦 RBI Compliance" color="bg-purple-800" dot="bg-purple-500"
                   headers={['Form', 'Compliance', 'Due Date', 'Applicable To']}
-                  rows={rbiRows} entryIds={rbiIds} entryNames={rbiNames} rowDates={rbiDates}
+                  rows={rbiRows} entryIds={rbiIds} entryNames={rbiNames} rowDates={rbiDates} rowIds={rbiRowIds}
                   onReport={openReportError} onRowClick={handleRowClick} />
               </div>
             )}
@@ -465,7 +473,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
               <div id="fema">
                 <TableSection title="🌐 FEMA Compliance" color="bg-cyan-700" dot="bg-cyan-500"
                   headers={['Form', 'Compliance', 'Due Date', 'Applicable To']}
-                  rows={femaRows} entryIds={femaIds} entryNames={femaNames} rowDates={femaDates}
+                  rows={femaRows} entryIds={femaIds} entryNames={femaNames} rowDates={femaDates} rowIds={femaRowIds}
                   onReport={openReportError} onRowClick={handleRowClick} />
               </div>
             )}
@@ -544,18 +552,34 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
           temporalCoverage: '2026',
           spatialCoverage: { '@type': 'Place', name: 'India' },
           inLanguage: 'en-IN',
-          dateModified: new Date().toISOString().split('T')[0],
+          dateModified: entries[0]?.updated_at ? new Date(entries[0].updated_at).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+        }} />
+
+        <JsonLd data={{
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: 'Compliance Deadlines 2026',
+          numberOfItems: entries.length,
+          itemListElement: entries.map((e, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: `${e.form_name} - ${e.compliance_title}`,
+            description: `Due date: ${e.due_date}. Applicable to: ${e.applicable_to}`,
+            url: `https://www.corplawupdates.in/calendar#${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`
+          }))
         }} />
 
         <JsonLd data={{
           '@context': 'https://schema.org',
           '@type': 'FAQPage',
-          mainEntity: [
-            { '@type': 'Question', name: 'What is the due date for DIR-3 KYC in 2026?', acceptedAnswer: { '@type': 'Answer', text: 'The due date for DIR-3 KYC Web filing in 2026 is 30 September 2026. Late filing attracts a fee of ₹5,000.' } },
-            { '@type': 'Question', name: 'What is the due date for MGT-7 annual return?', acceptedAnswer: { '@type': 'Answer', text: 'MGT-7 annual return must be filed within 60 days from the date of Annual General Meeting (AGM). Penalty for late filing is ₹100 per day.' } },
-            { '@type': 'Question', name: 'What is the due date for FLA return 2026?', acceptedAnswer: { '@type': 'Answer', text: 'The FLA Return for FY 2025-26 must be filed by 15 July 2026 on the RBI FIRMS portal.' } },
-            { '@type': 'Question', name: 'When is the income tax return due date for companies 2026?', acceptedAnswer: { '@type': 'Answer', text: 'The Income Tax Return (ITR) filing due date for companies for FY 2025-26 is 31 October 2026.' } },
-          ],
+          mainEntity: entries.slice(0, 20).map(e => ({
+            '@type': 'Question',
+            name: `What is the due date for ${e.form_name} in 2026?`,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: `The due date for ${e.compliance_title} (${e.form_name}) in 2026 is ${e.due_date}. This compliance is applicable to ${e.applicable_to}. ${e.penalty ? `Non-compliance may attract a penalty of ${e.penalty}.` : ''}`
+            }
+          })),
         }} />
 
       </div>
@@ -609,7 +633,9 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
               </div>
               <div className="bg-slate-50 rounded-xl p-3">
                 <div className="text-xs text-slate-400 mb-1">Frequency</div>
-                <div className="font-semibold text-slate-700 capitalize">{selectedEntry.frequency}</div>
+                <div className="font-semibold text-slate-700 capitalize">
+                  {selectedEntry.frequency.replace(/_/g, ' ')}
+                </div>
               </div>
               <div className="bg-slate-50 rounded-xl p-3 col-span-2">
                 <div className="text-xs text-slate-400 mb-1">Applicable To</div>
