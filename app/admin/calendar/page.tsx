@@ -1,42 +1,52 @@
 'use client'
 import { useEffect, useState } from 'react'
 
-// Types
-interface CalendarEntry {
+interface ComplianceEntry {
   id: string
-  category: string
+  regulator: string
   form_name: string
-  compliance: string
-  regulation: string
+  compliance_title: string
+  regulation_reference: string | null
   due_date: string
-  due_date_sort: string
   applicable_to: string
-  penalty: string
-  priority: string
+  penalty: string | null
+  frequency: string
   is_active: boolean
-  notes: string
+  is_verified: boolean
+  contributor_name: string | null
+  display_order: number
 }
 
-const CATEGORIES = ['Income Tax', 'GST', 'ROC/MCA', 'LLP', 'SEBI LODR', 'RBI/FEMA']
+const CATEGORIES = [
+  { value: 'mca',        label: 'MCA' },
+  { value: 'sebi',       label: 'SEBI' },
+  { value: 'rbi',        label: 'RBI' },
+  { value: 'income_tax', label: 'Income Tax' },
+  { value: 'fema',       label: 'FEMA' },
+  { value: 'nclt',       label: 'NCLT' },
+  { value: 'ibc',        label: 'IBC' },
+  { value: 'other',      label: 'Other' },
+]
 
-const emptyForm: Omit<CalendarEntry, 'id'> = {
-  category: 'Income Tax',
+const FREQUENCIES = ['monthly', 'quarterly', 'half_yearly', 'annual', 'event_based', 'one_time']
+
+const emptyForm = {
+  regulator: 'mca',
   form_name: '',
-  compliance: '',
-  regulation: '',
+  compliance_title: '',
+  regulation_reference: '',
   due_date: '',
-  due_date_sort: '',
   applicable_to: '',
   penalty: '',
-  priority: 'medium',
+  frequency: 'annual',
+  display_order: 0,
   is_active: true,
-  notes: '',
 }
 
 export default function AdminCalendarPage() {
-  const [entries, setEntries] = useState<CalendarEntry[]>([])
+  const [entries, setEntries] = useState<ComplianceEntry[]>([])
   const [loading, setLoading] = useState(true)
-  const [filter, setFilter] = useState('All')
+  const [filter, setFilter] = useState('all')
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [form, setForm] = useState(emptyForm)
@@ -48,23 +58,25 @@ export default function AdminCalendarPage() {
   }, [])
 
   async function loadEntries() {
-    const d = await fetch('/api/admin/calendar').then(r => r.json())
-    setEntries(d.entries || [])
+    setLoading(true)
+    const res = await fetch('/api/admin/compliance')
+    const data = await res.json()
+    setEntries(data.entries || [])
     setLoading(false)
   }
 
   async function handleSave() {
-    if (!form.compliance || !form.due_date || !form.category) {
-      alert('Category, Compliance and Due Date are required')
+    if (!form.compliance_title || !form.due_date || !form.regulator) {
+      alert('Regulator, Compliance Title and Due Date are required')
       return
     }
     setSaving(true)
-    const action = editingId ? 'update' : 'create'
-    const body = editingId ? { action, id: editingId, ...form } : { action, ...form }
-    const res = await fetch('/api/admin/calendar', {
-      method: 'POST',
+    const url = editingId ? `/api/admin/compliance/${editingId}` : '/api/admin/compliance'
+    const method = editingId ? 'PATCH' : 'POST'
+    const res = await fetch(url, {
+      method,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
+      body: JSON.stringify(form),
     })
     if (res.ok) {
       setSaved(true)
@@ -72,7 +84,7 @@ export default function AdminCalendarPage() {
       setShowForm(false)
       setEditingId(null)
       setForm(emptyForm)
-      loadEntries()
+      await loadEntries()
     } else {
       const err = await res.json()
       alert('Error: ' + (err.error || 'Failed to save'))
@@ -81,43 +93,37 @@ export default function AdminCalendarPage() {
   }
 
   async function handleDelete(id: string) {
-    if (!confirm('Delete this compliance entry? This cannot be undone.')) return
-    await fetch('/api/admin/calendar', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'delete', id }),
-    })
+    if (!confirm('Soft-delete this entry? It will be hidden from public view.')) return
+    await fetch(`/api/admin/compliance/${id}`, { method: 'DELETE' })
     setEntries(prev => prev.filter(e => e.id !== id))
   }
 
-  function handleEdit(entry: CalendarEntry) {
+  function handleEdit(entry: ComplianceEntry) {
     setForm({
-      category: entry.category,
+      regulator: entry.regulator,
       form_name: entry.form_name || '',
-      compliance: entry.compliance,
-      regulation: entry.regulation || '',
+      compliance_title: entry.compliance_title,
+      regulation_reference: entry.regulation_reference || '',
       due_date: entry.due_date,
-      due_date_sort: entry.due_date_sort || '',
       applicable_to: entry.applicable_to || '',
       penalty: entry.penalty || '',
-      priority: entry.priority || 'medium',
+      frequency: entry.frequency || 'annual',
+      display_order: entry.display_order || 0,
       is_active: entry.is_active,
-      notes: entry.notes || '',
     })
     setEditingId(entry.id)
     setShowForm(true)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const filtered = filter === 'All' ? entries : entries.filter(e => e.category === filter)
-  const counts: Record<string, number> = {}
-  CATEGORIES.forEach(cat => { counts[cat] = entries.filter(e => e.category === cat).length })
+  const filtered = filter === 'all' ? entries : entries.filter(e => e.regulator === filter)
 
-  const priorityColors: Record<string, string> = {
-    high: 'bg-red-100 text-red-700',
-    medium: 'bg-amber-100 text-amber-700',
-    low: 'bg-green-100 text-green-700',
-  }
+  const stats = CATEGORIES.map(cat => ({
+    label: cat.label,
+    count: entries.filter(e => e.regulator === cat.value).length,
+  }))
+
+  const inputCls = 'w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400'
 
   if (loading) return (
     <div className="flex items-center justify-center min-h-[400px]">
@@ -127,6 +133,7 @@ export default function AdminCalendarPage() {
 
   return (
     <div className="space-y-6 max-w-6xl">
+      {/* HEADER */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-navy">📅 Compliance Calendar Manager</h1>
@@ -144,109 +151,80 @@ export default function AdminCalendarPage() {
 
       {/* STATS */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {CATEGORIES.map(cat => (
-          <div key={cat} className="bg-white border border-slate-200 rounded-xl p-4 text-center">
-            <div className="text-2xl font-bold text-navy">{counts[cat] || 0}</div>
-            <div className="text-xs text-slate-500 mt-1">{cat}</div>
+        {stats.map(s => (
+          <div key={s.label} className="bg-white border border-slate-200 rounded-xl p-4 text-center">
+            <div className="text-2xl font-bold text-navy">{s.count}</div>
+            <div className="text-xs text-slate-500 mt-1">{s.label}</div>
           </div>
         ))}
       </div>
 
-      {/* ADD/EDIT FORM */}
+      {/* ADD / EDIT FORM */}
       {showForm && (
         <div className="bg-white rounded-xl border border-amber-200 overflow-hidden">
           <div className="bg-amber-50 border-b border-amber-200 px-6 py-4 flex justify-between items-center">
             <h2 className="font-bold text-navy">
               {editingId ? '✏️ Edit Entry' : '➕ Add New Compliance Entry'}
             </h2>
-            <button onClick={() => { setShowForm(false); setEditingId(null); setForm(emptyForm) }}
-              className="text-slate-400 hover:text-slate-600 text-xl">✕</button>
+            <button
+              onClick={() => { setShowForm(false); setEditingId(null); setForm(emptyForm) }}
+              className="text-slate-400 hover:text-slate-600 text-xl"
+            >✕</button>
           </div>
           <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-navy mb-1">Category *</label>
-              <select value={form.category}
-                onChange={e => setForm(p => ({ ...p, category: e.target.value }))}
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
-                {CATEGORIES.map(c => <option key={c}>{c}</option>)}
+              <label className="block text-sm font-semibold text-navy mb-1">Regulator *</label>
+              <select value={form.regulator} onChange={e => setForm(p => ({ ...p, regulator: e.target.value }))} className={inputCls}>
+                {CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
               </select>
             </div>
             <div>
               <label className="block text-sm font-semibold text-navy mb-1">Form Name</label>
-              <input type="text" value={form.form_name}
-                onChange={e => setForm(p => ({ ...p, form_name: e.target.value }))}
-                placeholder="e.g. MGT-7, AOC-4, DIR-3"
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400" />
+              <input type="text" value={form.form_name} onChange={e => setForm(p => ({ ...p, form_name: e.target.value }))} placeholder="e.g. MGT-7, AOC-4" className={inputCls} />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-navy mb-1">Compliance Description *</label>
-              <input type="text" value={form.compliance}
-                onChange={e => setForm(p => ({ ...p, compliance: e.target.value }))}
-                placeholder="e.g. Annual Return Filing"
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400" />
+              <label className="block text-sm font-semibold text-navy mb-1">Compliance Title *</label>
+              <input type="text" value={form.compliance_title} onChange={e => setForm(p => ({ ...p, compliance_title: e.target.value }))} placeholder="e.g. Annual Return Filing" className={inputCls} />
             </div>
             <div>
               <label className="block text-sm font-semibold text-navy mb-1">Regulation / Section</label>
-              <input type="text" value={form.regulation}
-                onChange={e => setForm(p => ({ ...p, regulation: e.target.value }))}
-                placeholder="e.g. Section 92, Companies Act"
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400" />
+              <input type="text" value={form.regulation_reference} onChange={e => setForm(p => ({ ...p, regulation_reference: e.target.value }))} placeholder="e.g. Section 92, Companies Act" className={inputCls} />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-navy mb-1">Due Date (Display) *</label>
-              <input type="text" value={form.due_date}
-                onChange={e => setForm(p => ({ ...p, due_date: e.target.value }))}
-                placeholder="e.g. 60 days from AGM, 30 June 2026"
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400" />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-navy mb-1">Due Date (For Sorting)</label>
-              <input type="date" value={form.due_date_sort}
-                onChange={e => setForm(p => ({ ...p, due_date_sort: e.target.value }))}
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400" />
+              <label className="block text-sm font-semibold text-navy mb-1">Due Date *</label>
+              <input type="text" value={form.due_date} onChange={e => setForm(p => ({ ...p, due_date: e.target.value }))} placeholder="e.g. 30 September 2026" className={inputCls} />
             </div>
             <div>
               <label className="block text-sm font-semibold text-navy mb-1">Applicable To</label>
-              <input type="text" value={form.applicable_to}
-                onChange={e => setForm(p => ({ ...p, applicable_to: e.target.value }))}
-                placeholder="e.g. All companies, Listed companies"
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400" />
+              <input type="text" value={form.applicable_to} onChange={e => setForm(p => ({ ...p, applicable_to: e.target.value }))} placeholder="e.g. All companies" className={inputCls} />
             </div>
             <div>
               <label className="block text-sm font-semibold text-navy mb-1">Penalty</label>
-              <input type="text" value={form.penalty}
-                onChange={e => setForm(p => ({ ...p, penalty: e.target.value }))}
-                placeholder="e.g. ₹100/day, ₹50,000"
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400" />
+              <input type="text" value={form.penalty} onChange={e => setForm(p => ({ ...p, penalty: e.target.value }))} placeholder="e.g. ₹100/day" className={inputCls} />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-navy mb-1">Priority</label>
-              <select value={form.priority}
-                onChange={e => setForm(p => ({ ...p, priority: e.target.value }))}
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
-                <option value="high">🔴 High</option>
-                <option value="medium">🟡 Medium</option>
-                <option value="low">🟢 Low</option>
+              <label className="block text-sm font-semibold text-navy mb-1">Frequency</label>
+              <select value={form.frequency} onChange={e => setForm(p => ({ ...p, frequency: e.target.value }))} className={inputCls}>
+                {FREQUENCIES.map(f => <option key={f} value={f}>{f}</option>)}
               </select>
             </div>
-            <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-navy mb-1">Notes</label>
-              <textarea value={form.notes}
-                onChange={e => setForm(p => ({ ...p, notes: e.target.value }))}
-                rows={2}
-                placeholder="Additional notes or clarifications..."
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400" />
+            <div>
+              <label className="block text-sm font-semibold text-navy mb-1">Display Order</label>
+              <input type="number" value={form.display_order} onChange={e => setForm(p => ({ ...p, display_order: Number(e.target.value) }))} className={inputCls} />
             </div>
           </div>
           <div className="px-6 pb-6 flex gap-3">
-            <button onClick={handleSave} disabled={saving}
-              className={`px-6 py-2 rounded-lg font-semibold text-sm transition-colors ${
-                saved ? 'bg-green-500 text-white' : 'bg-amber-400 hover:bg-amber-500 text-navy'
-              }`}>
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className={`px-6 py-2 rounded-lg font-semibold text-sm transition-colors ${saved ? 'bg-green-500 text-white' : 'bg-amber-400 hover:bg-amber-500 text-navy'}`}
+            >
               {saving ? 'Saving...' : saved ? '✓ Saved!' : editingId ? 'Update Entry' : 'Add Entry'}
             </button>
-            <button onClick={() => { setShowForm(false); setEditingId(null); setForm(emptyForm) }}
-              className="px-6 py-2 rounded-lg font-semibold text-sm bg-slate-100 hover:bg-slate-200 text-slate-700">
+            <button
+              onClick={() => { setShowForm(false); setEditingId(null); setForm(emptyForm) }}
+              className="px-6 py-2 rounded-lg font-semibold text-sm bg-slate-100 hover:bg-slate-200 text-slate-700"
+            >
               Cancel
             </button>
           </div>
@@ -255,15 +233,20 @@ export default function AdminCalendarPage() {
 
       {/* FILTER TABS */}
       <div className="flex gap-2 flex-wrap">
-        {['All', ...CATEGORIES].map(cat => (
-          <button key={cat}
-            onClick={() => setFilter(cat)}
+        {[{ value: 'all', label: 'All' }, ...CATEGORIES].map(cat => (
+          <button
+            key={cat.value}
+            onClick={() => setFilter(cat.value)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              filter === cat
+              filter === cat.value
                 ? 'bg-navy text-white'
                 : 'bg-white border border-slate-200 text-slate-600 hover:border-navy'
-            }`}>
-            {cat} {cat !== 'All' ? `(${counts[cat] || 0})` : `(${entries.length})`}
+            }`}
+          >
+            {cat.label}{' '}
+            {cat.value === 'all'
+              ? `(${entries.length})`
+              : `(${entries.filter(e => e.regulator === cat.value).length})`}
           </button>
         ))}
       </div>
@@ -274,11 +257,11 @@ export default function AdminCalendarPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-slate-100 border-b border-slate-200">
-                <th className="text-left px-4 py-3 font-semibold text-navy">Category</th>
+                <th className="text-left px-4 py-3 font-semibold text-navy">Regulator</th>
                 <th className="text-left px-4 py-3 font-semibold text-navy">Form</th>
-                <th className="text-left px-4 py-3 font-semibold text-navy">Compliance</th>
+                <th className="text-left px-4 py-3 font-semibold text-navy">Compliance Title</th>
                 <th className="text-left px-4 py-3 font-semibold text-navy">Due Date</th>
-                <th className="text-left px-4 py-3 font-semibold text-navy">Priority</th>
+                <th className="text-left px-4 py-3 font-semibold text-navy">Status</th>
                 <th className="text-center px-4 py-3 font-semibold text-navy">Actions</th>
               </tr>
             </thead>
@@ -293,24 +276,39 @@ export default function AdminCalendarPage() {
                 filtered.map((entry, i) => (
                   <tr key={entry.id} className={i % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
                     <td className="px-4 py-3">
-                      <span className="text-xs font-bold uppercase text-blue-600">{entry.category}</span>
+                      <span className="text-xs font-bold uppercase bg-slate-100 text-slate-700 px-2 py-1 rounded">
+                        {entry.regulator.toUpperCase()}
+                      </span>
                     </td>
-                    <td className="px-4 py-3 font-medium text-navy">{entry.form_name || '—'}</td>
-                    <td className="px-4 py-3 text-slate-700 max-w-xs">{entry.compliance}</td>
+                    <td className="px-4 py-3 font-medium text-navy font-mono text-xs">
+                      {entry.form_name || '—'}
+                    </td>
+                    <td className="px-4 py-3 text-slate-700 max-w-xs">
+                      <div className="truncate">{entry.compliance_title}</div>
+                      {entry.contributor_name && (
+                        <div className="text-xs text-green-600 mt-0.5">✓ {entry.contributor_name}</div>
+                      )}
+                    </td>
                     <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{entry.due_date}</td>
                     <td className="px-4 py-3">
-                      <span className={`text-xs px-2 py-1 rounded-full font-medium ${priorityColors[entry.priority] || priorityColors.medium}`}>
-                        {entry.priority}
+                      <span className={`text-xs px-2 py-1 rounded-full font-semibold ${
+                        entry.is_active ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'
+                      }`}>
+                        {entry.is_active ? 'Active' : 'Hidden'}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-center">
                       <div className="flex items-center justify-center gap-3">
-                        <button onClick={() => handleEdit(entry)}
-                          className="text-amber-600 hover:text-amber-800 text-xs font-medium">
+                        <button
+                          onClick={() => handleEdit(entry)}
+                          className="text-amber-600 hover:text-amber-800 text-xs font-medium"
+                        >
                           Edit
                         </button>
-                        <button onClick={() => handleDelete(entry.id)}
-                          className="text-red-500 hover:text-red-700 text-xs font-medium">
+                        <button
+                          onClick={() => handleDelete(entry.id)}
+                          className="text-red-500 hover:text-red-700 text-xs font-medium"
+                        >
                           Delete
                         </button>
                       </div>
@@ -322,7 +320,6 @@ export default function AdminCalendarPage() {
           </table>
         </div>
       </div>
-
     </div>
   )
 }
