@@ -253,11 +253,11 @@ export default function AdminCalendarPage() {
             </div>
             <div>
               <label className="block text-xs font-semibold text-slate-600 mb-1">Contributor Name</label>
-              <input type="text" value={(form as any).contributor_name || ''} onChange={e => setForm(p => ({ ...p, contributor_name: e.target.value }))} placeholder="e.g. John Doe" className={inputCls} />
+              <input type="text" value={form.contributor_name || ''} onChange={e => setForm(p => ({ ...p, contributor_name: e.target.value }))} placeholder="e.g. John Doe" className={inputCls} />
             </div>
             <div>
               <label className="block text-xs font-semibold text-slate-600 mb-1">Contributor Profession</label>
-              <input type="text" value={(form as any).contributor_profession || ''} onChange={e => setForm(p => ({ ...p, contributor_profession: e.target.value }))} placeholder="e.g. CS, Lawyer" className={inputCls} />
+              <input type="text" value={form.contributor_profession || ''} onChange={e => setForm(p => ({ ...p, contributor_profession: e.target.value }))} placeholder="e.g. CS, Lawyer" className={inputCls} />
             </div>
           </div>
           <div className="flex gap-3 mt-5">

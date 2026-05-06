@@ -186,6 +186,7 @@ function TableSection({
   entryIds,
   entryNames,
   rowDates,
+  rowIds,
   onReport,
   onRowClick,
 }: {
