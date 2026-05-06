@@ -28,19 +28,32 @@ const CATEGORIES = [
   { value: 'other',      label: 'Other' },
 ]
 
-const FREQUENCIES = ['monthly', 'quarterly', 'half_yearly', 'annual', 'event_based', 'one_time']
+const FREQUENCIES = [
+  { value: 'monthly',       label: 'Monthly' },
+  { value: 'quarterly',     label: 'Quarterly' },
+  { value: 'half_yearly',   label: 'Half Yearly' },
+  { value: 'annual',        label: 'Annual' },
+  { value: 'every_2_years', label: 'Every 2 Years' },
+  { value: 'every_3_years', label: 'Every 3 Years' },
+  { value: 'every_5_years', label: 'Every 5 Years' },
+  { value: 'event_based',   label: 'Event Based' },
+  { value: 'one_time',      label: 'One Time' },
+]
 
 const emptyForm = {
   regulator: 'mca',
   form_name: '',
   compliance_title: '',
-  regulation_reference: '',
   due_date: '',
   applicable_to: '',
   penalty: '',
+  regulation_reference: '',
+  official_link: '',
+  description: '',
   frequency: 'annual',
   display_order: 0,
   is_active: true,
+  is_verified: true,
 }
 
 export default function AdminCalendarPage() {
@@ -51,7 +64,6 @@ export default function AdminCalendarPage() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [form, setForm] = useState(emptyForm)
   const [saving, setSaving] = useState(false)
-  const [saved, setSaved] = useState(false)
 
   useEffect(() => {
     loadEntries()
@@ -79,8 +91,6 @@ export default function AdminCalendarPage() {
       body: JSON.stringify(form),
     })
     if (res.ok) {
-      setSaved(true)
-      setTimeout(() => setSaved(false), 2500)
       setShowForm(false)
       setEditingId(null)
       setForm(emptyForm)
@@ -103,13 +113,16 @@ export default function AdminCalendarPage() {
       regulator: entry.regulator,
       form_name: entry.form_name || '',
       compliance_title: entry.compliance_title,
-      regulation_reference: entry.regulation_reference || '',
       due_date: entry.due_date,
       applicable_to: entry.applicable_to || '',
       penalty: entry.penalty || '',
+      regulation_reference: entry.regulation_reference || '',
+      official_link: (entry as unknown as Record<string,string>)['official_link'] || '',
+      description: (entry as unknown as Record<string,string>)['description'] || '',
       frequency: entry.frequency || 'annual',
       display_order: entry.display_order || 0,
       is_active: entry.is_active,
+      is_verified: entry.is_verified,
     })
     setEditingId(entry.id)
     setShowForm(true)
@@ -161,76 +174,91 @@ export default function AdminCalendarPage() {
 
       {/* ADD / EDIT FORM */}
       {showForm && (
-        <div className="bg-white rounded-xl border border-amber-200 overflow-hidden">
-          <div className="bg-amber-50 border-b border-amber-200 px-6 py-4 flex justify-between items-center">
-            <h2 className="font-bold text-navy">
+        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-bold text-navy text-lg">
               {editingId ? '✏️ Edit Entry' : '➕ Add New Compliance Entry'}
             </h2>
-            <button
-              onClick={() => { setShowForm(false); setEditingId(null); setForm(emptyForm) }}
-              className="text-slate-400 hover:text-slate-600 text-xl"
-            >✕</button>
+            <button onClick={() => { setShowForm(false); setEditingId(null); setForm(emptyForm) }}
+              className="text-slate-400 hover:text-slate-600 text-2xl">×</button>
           </div>
-          <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-navy mb-1">Regulator *</label>
+              <label className="block text-xs font-semibold text-slate-600 mb-1">Regulator *</label>
               <select value={form.regulator} onChange={e => setForm(p => ({ ...p, regulator: e.target.value }))} className={inputCls}>
                 {CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-navy mb-1">Form Name</label>
+              <label className="block text-xs font-semibold text-slate-600 mb-1">Form Name</label>
               <input type="text" value={form.form_name} onChange={e => setForm(p => ({ ...p, form_name: e.target.value }))} placeholder="e.g. MGT-7, AOC-4" className={inputCls} />
             </div>
-            <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-navy mb-1">Compliance Title *</label>
+            <div className="col-span-2">
+              <label className="block text-xs font-semibold text-slate-600 mb-1">Compliance Title *</label>
               <input type="text" value={form.compliance_title} onChange={e => setForm(p => ({ ...p, compliance_title: e.target.value }))} placeholder="e.g. Annual Return Filing" className={inputCls} />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-navy mb-1">Regulation / Section</label>
-              <input type="text" value={form.regulation_reference} onChange={e => setForm(p => ({ ...p, regulation_reference: e.target.value }))} placeholder="e.g. Section 92, Companies Act" className={inputCls} />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-navy mb-1">Due Date *</label>
+              <label className="block text-xs font-semibold text-slate-600 mb-1">Due Date *</label>
               <input type="text" value={form.due_date} onChange={e => setForm(p => ({ ...p, due_date: e.target.value }))} placeholder="e.g. 30 September 2026" className={inputCls} />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-navy mb-1">Applicable To</label>
-              <input type="text" value={form.applicable_to} onChange={e => setForm(p => ({ ...p, applicable_to: e.target.value }))} placeholder="e.g. All companies" className={inputCls} />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-navy mb-1">Penalty</label>
-              <input type="text" value={form.penalty} onChange={e => setForm(p => ({ ...p, penalty: e.target.value }))} placeholder="e.g. ₹100/day" className={inputCls} />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-navy mb-1">Frequency</label>
+              <label className="block text-xs font-semibold text-slate-600 mb-1">Frequency</label>
               <select value={form.frequency} onChange={e => setForm(p => ({ ...p, frequency: e.target.value }))} className={inputCls}>
-                {FREQUENCIES.map(f => <option key={f} value={f}>{f}</option>)}
+                {FREQUENCIES.map(f => <option key={f.value} value={f.value}>{f.label}</option>)}
               </select>
             </div>
+            <div className="col-span-2">
+              <label className="block text-xs font-semibold text-slate-600 mb-1">Applicable To *</label>
+              <input type="text" value={form.applicable_to} onChange={e => setForm(p => ({ ...p, applicable_to: e.target.value }))} placeholder="e.g. All companies / Listed entities / LLPs" className={inputCls} />
+            </div>
             <div>
-              <label className="block text-sm font-semibold text-navy mb-1">Display Order</label>
+              <label className="block text-xs font-semibold text-slate-600 mb-1">Penalty</label>
+              <input type="text" value={form.penalty} onChange={e => setForm(p => ({ ...p, penalty: e.target.value }))} placeholder="e.g. ₹100/day or ₹5,000 flat" className={inputCls} />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-600 mb-1">Regulation Reference</label>
+              <input type="text" value={form.regulation_reference} onChange={e => setForm(p => ({ ...p, regulation_reference: e.target.value }))} placeholder="e.g. Section 92, Companies Act 2013" className={inputCls} />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-600 mb-1">Official Link</label>
+              <input type="url" value={(form as Record<string,unknown>)['official_link'] as string || ''} onChange={e => setForm(p => ({ ...p, official_link: e.target.value }))} placeholder="https://mca.gov.in/..." className={inputCls} />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-600 mb-1">Display Order</label>
               <input type="number" value={form.display_order} onChange={e => setForm(p => ({ ...p, display_order: Number(e.target.value) }))} className={inputCls} />
             </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-600 mb-1">Description</label>
+              <textarea rows={2} value={(form as Record<string,unknown>)['description'] as string || ''} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} placeholder="Optional longer description..." className={inputCls} />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-600 mb-1">Status</label>
+              <div className="flex gap-4 mt-2">
+                <label className="flex items-center gap-2 text-sm cursor-pointer">
+                  <input type="checkbox" checked={form.is_active !== false} onChange={e => setForm(p => ({ ...p, is_active: e.target.checked }))} className="w-4 h-4 accent-amber-400" />
+                  Active (visible on public calendar)
+                </label>
+              </div>
+              <div className="flex gap-4 mt-2">
+                <label className="flex items-center gap-2 text-sm cursor-pointer">
+                  <input type="checkbox" checked={(form as Record<string,unknown>)['is_verified'] !== false} onChange={e => setForm(p => ({ ...p, is_verified: e.target.checked }))} className="w-4 h-4 accent-amber-400" />
+                  Verified (removes pending badge)
+                </label>
+              </div>
+            </div>
           </div>
-          <div className="px-6 pb-6 flex gap-3">
-            <button
-              onClick={handleSave}
-              disabled={saving}
-              className={`px-6 py-2 rounded-lg font-semibold text-sm transition-colors ${saved ? 'bg-green-500 text-white' : 'bg-amber-400 hover:bg-amber-500 text-navy'}`}
-            >
-              {saving ? 'Saving...' : saved ? '✓ Saved!' : editingId ? 'Update Entry' : 'Add Entry'}
-            </button>
-            <button
-              onClick={() => { setShowForm(false); setEditingId(null); setForm(emptyForm) }}
-              className="px-6 py-2 rounded-lg font-semibold text-sm bg-slate-100 hover:bg-slate-200 text-slate-700"
-            >
+          <div className="flex gap-3 mt-5">
+            <button onClick={() => { setShowForm(false); setEditingId(null); setForm(emptyForm) }}
+              className="border border-slate-300 text-slate-600 px-5 py-2.5 rounded-lg text-sm font-semibold">
               Cancel
+            </button>
+            <button onClick={handleSave} disabled={saving}
+              className="bg-amber-400 hover:bg-amber-500 text-navy font-bold px-8 py-2.5 rounded-lg text-sm disabled:opacity-50">
+              {saving ? 'Saving...' : editingId ? 'Update Entry' : 'Add Entry'}
             </button>
           </div>
         </div>
       )}
-
       {/* FILTER TABS */}
       <div className="flex gap-2 flex-wrap">
         {[{ value: 'all', label: 'All' }, ...CATEGORIES].map(cat => (

@@ -3,6 +3,18 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
+const FREQUENCIES = [
+  { value: 'monthly',       label: 'Monthly' },
+  { value: 'quarterly',     label: 'Quarterly' },
+  { value: 'half_yearly',   label: 'Half Yearly' },
+  { value: 'annual',        label: 'Annual' },
+  { value: 'every_2_years', label: 'Every 2 Years' },
+  { value: 'every_3_years', label: 'Every 3 Years' },
+  { value: 'every_5_years', label: 'Every 5 Years' },
+  { value: 'event_based',   label: 'Event Based' },
+  { value: 'one_time',      label: 'One Time' },
+]
+
 interface Suggestion {
   id: string
   suggestion_type: 'new_entry' | 'error_report' | 'update_request'
@@ -22,6 +34,7 @@ interface Suggestion {
   error_field: string | null
   error_description: string | null
   suggested_correction: string | null
+  frequency: string | null
   admin_note: string | null
   reviewed_at: string | null
   created_at: string
@@ -41,6 +54,19 @@ export default function AdminSuggestionsPage() {
   const [expanded, setExpanded] = useState<string | null>(null)
   const [adminNote, setAdminNote] = useState('')
   const [processing, setProcessing] = useState<string | null>(null)
+  const [editingApproval, setEditingApproval] = useState<string | null>(null)
+  const [approvalForm, setApprovalForm] = useState({
+    regulator: 'mca',
+    form_name: '',
+    compliance_title: '',
+    due_date: '',
+    applicable_to: '',
+    penalty: '',
+    regulation_reference: '',
+    frequency: 'annual',
+    official_link: '',
+    description: '',
+  })
 
   async function loadSuggestions() {
     setLoading(true)
@@ -69,7 +95,7 @@ export default function AdminSuggestionsPage() {
     return true
   })
 
-  async function handleAction(id: string, action: 'approve' | 'reject') {
+  async function handleAction(id: string, action: 'approve' | 'reject', override_data?: Record<string, unknown> | null) {
     if (action === 'reject' && !adminNote.trim()) {
       alert('Please provide a reason for rejection.')
       return
@@ -79,16 +105,37 @@ export default function AdminSuggestionsPage() {
       const res = await fetch(`/api/admin/compliance/suggestions/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action, admin_note: adminNote || null }),
+        body: JSON.stringify({
+          action,
+          admin_note: adminNote || null,
+          override_data: override_data || null
+        }),
       })
       if (res.ok) {
         setExpanded(null)
+        setEditingApproval(null)
         setAdminNote('')
         await loadSuggestions()
       }
     } finally {
       setProcessing(null)
     }
+  }
+
+  function startApproval(s: Suggestion) {
+    setEditingApproval(s.id)
+    setApprovalForm({
+      regulator: s.regulator || 'mca',
+      form_name: s.form_name || '',
+      compliance_title: s.compliance_title || '',
+      due_date: s.due_date || '',
+      applicable_to: s.applicable_to || '',
+      penalty: s.penalty || '',
+      regulation_reference: s.regulation_reference || '',
+      frequency: s.frequency || 'annual',
+      official_link: '',
+      description: '',
+    })
   }
 
   const tabClass = (t: TabFilter) =>
@@ -294,6 +341,87 @@ export default function AdminSuggestionsPage() {
                   {/* Admin actions — pending only */}
                   {s.status === 'pending' && (
                     <div className="space-y-3">
+                      {s.suggestion_type === 'new_entry' && editingApproval === s.id && (
+                        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-3">
+                          <h4 className="font-bold text-navy text-sm">Preview & Edit before adding to Calendar</h4>
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <label className="text-xs text-slate-500">Regulator</label>
+                              <select value={approvalForm.regulator}
+                                onChange={e => setApprovalForm(p => ({ ...p, regulator: e.target.value }))}
+                                className="w-full border border-slate-200 rounded px-2 py-1.5 text-sm mt-0.5">
+                                <option value="mca">MCA</option>
+                                <option value="sebi">SEBI</option>
+                                <option value="rbi">RBI</option>
+                                <option value="fema">FEMA</option>
+                                <option value="income_tax">Income Tax</option>
+                                <option value="nclt">NCLT</option>
+                                <option value="other">Other</option>
+                              </select>
+                            </div>
+                            <div>
+                              <label className="text-xs text-slate-500">Form Name</label>
+                              <input value={approvalForm.form_name}
+                                onChange={e => setApprovalForm(p => ({ ...p, form_name: e.target.value }))}
+                                className="w-full border border-slate-200 rounded px-2 py-1.5 text-sm mt-0.5" />
+                            </div>
+                            <div className="col-span-2">
+                              <label className="text-xs text-slate-500">Title</label>
+                              <input value={approvalForm.compliance_title}
+                                onChange={e => setApprovalForm(p => ({ ...p, compliance_title: e.target.value }))}
+                                className="w-full border border-slate-200 rounded px-2 py-1.5 text-sm mt-0.5" />
+                            </div>
+                            <div>
+                              <label className="text-xs text-slate-500">Due Date</label>
+                              <input value={approvalForm.due_date}
+                                onChange={e => setApprovalForm(p => ({ ...p, due_date: e.target.value }))}
+                                className="w-full border border-slate-200 rounded px-2 py-1.5 text-sm mt-0.5" />
+                            </div>
+                            <div>
+                              <label className="text-xs text-slate-500">Frequency</label>
+                              <select value={approvalForm.frequency || 'annual'}
+                                onChange={e => setApprovalForm(p => ({ ...p, frequency: e.target.value }))}
+                                className="w-full border border-slate-200 rounded px-2 py-1.5 text-sm mt-0.5">
+                                {FREQUENCIES.map(f => (
+                                  <option key={f.value} value={f.value}>{f.label}</option>
+                                ))}
+                              </select>
+                            </div>
+                            <div className="col-span-2">
+                              <label className="text-xs text-slate-500">Applicable To</label>
+                              <input value={approvalForm.applicable_to}
+                                onChange={e => setApprovalForm(p => ({ ...p, applicable_to: e.target.value }))}
+                                className="w-full border border-slate-200 rounded px-2 py-1.5 text-sm mt-0.5" />
+                            </div>
+                            <div>
+                              <label className="text-xs text-slate-500">Penalty</label>
+                              <input value={approvalForm.penalty}
+                                onChange={e => setApprovalForm(p => ({ ...p, penalty: e.target.value }))}
+                                className="w-full border border-slate-200 rounded px-2 py-1.5 text-sm mt-0.5" />
+                            </div>
+                            <div>
+                              <label className="text-xs text-slate-500">Regulation Reference</label>
+                              <input value={approvalForm.regulation_reference}
+                                onChange={e => setApprovalForm(p => ({ ...p, regulation_reference: e.target.value }))}
+                                className="w-full border border-slate-200 rounded px-2 py-1.5 text-sm mt-0.5" />
+                            </div>
+                            <div>
+                              <label className="text-xs text-slate-500">Official Link</label>
+                              <input value={approvalForm.official_link || ''}
+                                onChange={e => setApprovalForm(p => ({ ...p, official_link: e.target.value }))}
+                                placeholder="https://mca.gov.in/..."
+                                className="w-full border border-slate-200 rounded px-2 py-1.5 text-sm mt-0.5" />
+                            </div>
+                            <div className="col-span-2">
+                              <label className="text-xs text-slate-500">Description (optional)</label>
+                              <textarea rows={2} value={approvalForm.description || ''}
+                                onChange={e => setApprovalForm(p => ({ ...p, description: e.target.value }))}
+                                className="w-full border border-slate-200 rounded px-2 py-1.5 text-sm mt-0.5" />
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
                       <div>
                         <label className="block text-xs font-semibold text-slate-600 mb-1">
                           Admin Note
@@ -308,13 +436,22 @@ export default function AdminSuggestionsPage() {
                         />
                       </div>
                       <div className="flex gap-3">
-                        <button
-                          onClick={() => handleAction(s.id, 'approve')}
-                          disabled={processing === s.id}
-                          className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold py-2.5 rounded-lg text-sm disabled:opacity-50"
-                        >
-                          {processing === s.id ? 'Processing...' : '✅ Approve'}
-                        </button>
+                        {s.suggestion_type === 'new_entry' && editingApproval !== s.id ? (
+                          <button
+                            onClick={() => startApproval(s)}
+                            className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold py-2.5 rounded-lg text-sm"
+                          >
+                            ✅ Approve
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => handleAction(s.id, 'approve', s.suggestion_type === 'new_entry' ? approvalForm : null)}
+                            disabled={processing === s.id}
+                            className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold py-2.5 rounded-lg text-sm disabled:opacity-50"
+                          >
+                            {processing === s.id ? 'Adding to Calendar...' : editingApproval === s.id ? '✅ Confirm — Add to Live Calendar' : '✅ Approve'}
+                          </button>
+                        )}
                         <button
                           onClick={() => handleAction(s.id, 'reject')}
                           disabled={processing === s.id}

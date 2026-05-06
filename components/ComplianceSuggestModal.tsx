@@ -35,6 +35,8 @@ export default function ComplianceSuggestModal({
     user_profession: '',
     user_city: '',
     user_linkedin: '',
+    frequency: 'annual',
+    display_order: 0,
   })
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -285,6 +287,30 @@ export default function ComplianceSuggestModal({
                     placeholder="Section 92, Companies Act"
                     className={inputClass}
                   />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">Frequency</label>
+                    <select value={form.frequency || 'annual'}
+                      onChange={e => setForm(p => ({ ...p, frequency: e.target.value }))}
+                      className={inputClass}>
+                      <option value="monthly">Monthly</option>
+                      <option value="quarterly">Quarterly</option>
+                      <option value="half_yearly">Half Yearly</option>
+                      <option value="annual">Annual</option>
+                      <option value="every_2_years">Every 2 Years</option>
+                      <option value="every_3_years">Every 3 Years</option>
+                      <option value="every_5_years">Every 5 Years</option>
+                      <option value="event_based">Event Based</option>
+                      <option value="one_time">One Time</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">Display Order</label>
+                    <input type="number" value={form.display_order || 0}
+                      onChange={e => setForm(p => ({ ...p, display_order: Number(e.target.value) }))}
+                      className={inputClass} />
+                  </div>
                 </div>
               </>
             )}

@@ -28,21 +28,26 @@ export async function PATCH(
 
     // New entry — insert into compliance_entries
     if (suggestion.suggestion_type === 'new_entry') {
+      const entryData = body.override_data || {}
       await supabaseAdmin
         .from('compliance_entries')
         .insert({
-          regulator: suggestion.regulator,
-          form_name: suggestion.form_name,
-          compliance_title: suggestion.compliance_title,
-          due_date: suggestion.due_date,
-          applicable_to: suggestion.applicable_to,
-          penalty: suggestion.penalty,
-          regulation_reference: suggestion.regulation_reference,
+          regulator: entryData.regulator || suggestion.regulator,
+          form_name: entryData.form_name || suggestion.form_name,
+          compliance_title: entryData.compliance_title || suggestion.compliance_title,
+          due_date: entryData.due_date || suggestion.due_date,
+          applicable_to: entryData.applicable_to || suggestion.applicable_to,
+          penalty: entryData.penalty || suggestion.penalty,
+          regulation_reference: entryData.regulation_reference || suggestion.regulation_reference,
+          frequency: entryData.frequency || 'annual',
+          official_link: entryData.official_link || null,
+          description: entryData.description || null,
           created_by: `community:${suggestion.user_email}`,
           contributor_name: suggestion.user_name,
           contributor_profession: suggestion.user_profession,
           contributor_email: suggestion.user_email,
           is_verified: false,
+          is_active: true,
         })
     }
 
