@@ -14,6 +14,8 @@ export default function Sidebar() {
         { href: '/admin/analytics', icon: '📊', label: 'Analytics' },
         { href: '/admin/repo-rate', icon: '🏦', label: 'Repo Rate' },
         { href: '/admin/calendar', icon: '📅', label: 'Calendar' },
+        { href: '/admin/compliance', icon: '📋', label: 'Compliance' },
+        { href: '/admin/compliance/suggestions', icon: '💡', label: 'Suggestions' },
         { href: '/admin/settings', icon: '⚙️', label: 'Settings' }
     ]
 

@@ -17,10 +17,10 @@ interface CalendarEntry {
   notes: string
 }
 
-const CATEGORIES = ['MCA', 'SEBI', 'RBI-FEMA', 'Income Tax']
+const CATEGORIES = ['Income Tax', 'GST', 'ROC/MCA', 'LLP', 'SEBI LODR', 'RBI/FEMA']
 
 const emptyForm: Omit<CalendarEntry, 'id'> = {
-  category: 'MCA',
+  category: 'Income Tax',
   form_name: '',
   compliance: '',
   regulation: '',
