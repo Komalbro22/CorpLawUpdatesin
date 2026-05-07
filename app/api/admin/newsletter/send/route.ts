@@ -6,6 +6,7 @@ import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { Resend } from 'resend'
 import { generateUnsubscribeToken, BASE_URL } from '@/lib/utils'
+import sanitizeHtml from 'sanitize-html'
 
 export async function POST(request: NextRequest) {
     try {
@@ -26,7 +27,7 @@ export async function POST(request: NextRequest) {
             bodyLength: body.body?.length
         })
 
-        const { subject, previewText, body: emailBody, testOnly, targetEmails } = body
+        const { subject, previewText, body: emailBody, testOnly, targetEmails, mode = 'markdown', testEmail } = body
         const fromEmail = (process.env.RESEND_FROM_EMAIL || 'updates@mail.corplawupdates.in').trim().replace(/['"]/g, '')
         const adminEmail = (process.env.ADMIN_EMAIL || 'corplawupdatesin@gmail.com').trim().replace(/['"]/g, '')
 
@@ -50,13 +51,47 @@ export async function POST(request: NextRequest) {
         const resend = new Resend(process.env.RESEND_API_KEY)
         console.log('Resend initialized')
 
-        // 6. Convert markdown to HTML
-        const bodyHtml = markdownToHtml(emailBody)
+        // 6. Convert markdown to HTML or use provided HTML
+        let rawHtml = emailBody
+        if (mode === 'markdown') {
+            rawHtml = markdownToHtml(emailBody)
+        }
+        
+        // Ensure scripts and dangerous tags are removed, but allow styles and structural tags
+        const bodyHtml = sanitizeHtml(rawHtml, {
+            allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'h1', 'h2', 'h3', 'span', 'div', 'p', 'br', 'hr', 'a', 'b', 'i', 'strong', 'em', 'u', 'table', 'thead', 'tbody', 'tr', 'th', 'td']),
+            allowedAttributes: {
+                '*': ['style', 'class', 'id'],
+                'a': ['href', 'target', 'rel'],
+                'img': ['src', 'alt', 'width', 'height']
+            },
+            allowedStyles: {
+                '*': {
+                    'color': [/^.*$/],
+                    'text-align': [/^.*$/],
+                    'background-color': [/^.*$/],
+                    'font-size': [/^.*$/],
+                    'font-family': [/^.*$/],
+                    'font-weight': [/^.*$/],
+                    'padding': [/^.*$/],
+                    'margin': [/^.*$/],
+                    'border': [/^.*$/],
+                    'border-radius': [/^.*$/],
+                    'line-height': [/^.*$/],
+                    'text-decoration': [/^.*$/],
+                    'max-width': [/^.*$/],
+                    'width': [/^.*$/],
+                    'height': [/^.*$/],
+                    'display': [/^.*$/]
+                }
+            }
+        })
         console.log('HTML conversion done, length:', bodyHtml.length)
 
         // 7. If test only
         if (testOnly) {
-            console.log('Sending test email to:', process.env.ADMIN_EMAIL)
+            const sendTo = testEmail && testEmail.trim() ? testEmail.trim() : adminEmail
+            console.log('Sending test email to:', sendTo)
 
             const testHtml = buildEmailHtml({
                 subject,
@@ -67,7 +102,7 @@ export async function POST(request: NextRequest) {
 
             const result = await resend.emails.send({
                 from: fromEmail,
-                to: adminEmail,
+                to: sendTo,
                 subject: `[TEST] ${subject}`,
                 html: testHtml,
             })

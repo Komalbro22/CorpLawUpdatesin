@@ -4,6 +4,7 @@
 
 import dynamic from 'next/dynamic'
 import { useState, useEffect } from 'react'
+import sanitizeHtml from 'sanitize-html'
 
 const MDEditor = dynamic(
     () => import('@uiw/react-md-editor'),
@@ -31,6 +32,11 @@ export default function NewsletterPage() {
     const [error, setError] = useState('')
     const [showPreview, setShowPreview] = useState(false)
     const [failedList, setFailedList] = useState<string[]>([])
+    
+    const [editorMode, setEditorMode] = useState<'markdown' | 'html'>('markdown')
+    const [targetType, setTargetType] = useState<'all' | 'specific'>('all')
+    const [specificEmail, setSpecificEmail] = useState('')
+    const [testEmail, setTestEmail] = useState('')
 
     useEffect(() => {
         fetch('/api/admin/subscribers?status=active')
@@ -66,9 +72,18 @@ export default function NewsletterPage() {
                 previewText: previewText.trim(),
                 body: body.trim(),
                 testOnly,
+                mode: editorMode,
+                testEmail: testOnly ? testEmail.trim() : undefined,
             }
             if (retryList && retryList.length > 0) {
                 payload.targetEmails = retryList
+            } else if (!testOnly && targetType === 'specific') {
+                if (!specificEmail.trim()) {
+                    setError('Specific subscriber email is required')
+                    setSending(false)
+                    return
+                }
+                payload.targetEmails = [specificEmail.trim()]
             }
 
             const res = await fetch('/api/admin/newsletter/send', {
@@ -251,25 +266,54 @@ export default function NewsletterPage() {
                     </p>
                 </div>
 
-                {/* Markdown Editor */}
+                {/* Markdown / HTML Editor */}
                 <div>
-                    <label className="block text-sm font-semibold 
-                            text-navy mb-2">
-                        Email Body (Markdown)
-                        <span className="text-red-500 ml-1">*</span>
-                    </label>
-                    <div data-color-mode="light">
-                        <MDEditor
-                            value={body}
-                            onChange={val => setBody(val || '')}
-                            height={350}
-                            preview="edit"
-                        />
+                    <div className="flex items-center justify-between mb-2">
+                        <label className="block text-sm font-semibold text-navy">
+                            Email Body <span className="text-red-500">*</span>
+                        </label>
+                        <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-lg">
+                            <button
+                                onClick={() => setEditorMode('markdown')}
+                                className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors ${editorMode === 'markdown' ? 'bg-white shadow-sm text-navy' : 'text-slate-500 hover:text-navy'}`}
+                            >
+                                Markdown
+                            </button>
+                            <button
+                                onClick={() => setEditorMode('html')}
+                                className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors ${editorMode === 'html' ? 'bg-white shadow-sm text-navy' : 'text-slate-500 hover:text-navy'}`}
+                            >
+                                HTML
+                            </button>
+                        </div>
                     </div>
-                    <p className="text-xs text-slate-400 mt-2">
-                        Supports **bold**, *italic*, ## headings,
-                        [links](url), - bullet lists
-                    </p>
+                    {editorMode === 'markdown' ? (
+                        <div data-color-mode="light">
+                            <MDEditor
+                                value={body}
+                                onChange={val => setBody(val || '')}
+                                height={350}
+                                preview="edit"
+                            />
+                            <p className="text-xs text-slate-400 mt-2">
+                                Supports **bold**, *italic*, ## headings,
+                                [links](url), - bullet lists
+                            </p>
+                        </div>
+                    ) : (
+                        <div>
+                            <textarea
+                                value={body}
+                                onChange={e => setBody(e.target.value)}
+                                rows={15}
+                                placeholder="<h1>Your HTML here</h1>..."
+                                className="w-full border border-slate-300 rounded-lg px-4 py-3 text-navy font-mono text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+                            />
+                            <p className="text-xs text-slate-400 mt-2">
+                                Enter valid HTML. You can use inline styles (e.g. style="color: red;").
+                            </p>
+                        </div>
+                    )}
                 </div>
 
             </div>
@@ -335,13 +379,38 @@ export default function NewsletterPage() {
                                 }} />
                                 <div style={{
                                     color: '#334155', fontSize: '15px',
-                                    lineHeight: '1.7', whiteSpace: 'pre-wrap'
-                                }}>
-                                    {body
-                                        ? body.substring(0, 400) +
-                                        (body.length > 400 ? '\n\n...' : '')
-                                        : '(Email body will appear here)'}
-                                </div>
+                                    lineHeight: '1.7'
+                                }}
+                                dangerouslySetInnerHTML={{
+                                    __html: body ? sanitizeHtml(editorMode === 'markdown' ? markdownToHtml(body) : body, {
+                                        allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'h1', 'h2', 'h3', 'span', 'div', 'p', 'br', 'hr', 'a', 'b', 'i', 'strong', 'em', 'u', 'table', 'thead', 'tbody', 'tr', 'th', 'td']),
+                                        allowedAttributes: {
+                                            '*': ['style', 'class', 'id'],
+                                            'a': ['href', 'target', 'rel'],
+                                            'img': ['src', 'alt', 'width', 'height']
+                                        },
+                                        allowedStyles: {
+                                            '*': {
+                                                'color': [/^.*$/],
+                                                'text-align': [/^.*$/],
+                                                'background-color': [/^.*$/],
+                                                'font-size': [/^.*$/],
+                                                'font-family': [/^.*$/],
+                                                'font-weight': [/^.*$/],
+                                                'padding': [/^.*$/],
+                                                'margin': [/^.*$/],
+                                                'border': [/^.*$/],
+                                                'border-radius': [/^.*$/],
+                                                'line-height': [/^.*$/],
+                                                'text-decoration': [/^.*$/],
+                                                'max-width': [/^.*$/],
+                                                'width': [/^.*$/],
+                                                'height': [/^.*$/],
+                                                'display': [/^.*$/]
+                                            }
+                                        }
+                                    }) : '(Email body will appear here)'
+                                }} />
                             </div>
                             <div style={{
                                 background: '#F8FAFC',
@@ -361,43 +430,80 @@ export default function NewsletterPage() {
             </div>
 
             {/* Action Buttons */}
-            <div className="bg-white rounded-xl border border-slate-100 
-                      shadow-sm p-4 flex items-center 
-                      justify-between gap-4 flex-wrap">
+            <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-6">
+                
+                {/* Targeting Options */}
+                <div className="flex flex-col md:flex-row gap-6 md:items-start pb-6 border-b border-slate-100">
+                    <div className="flex-1 space-y-4">
+                        <label className="block text-sm font-semibold text-navy">Send To:</label>
+                        <div className="flex gap-4">
+                            <label className="flex items-center gap-2 cursor-pointer">
+                                <input 
+                                    type="radio" 
+                                    checked={targetType === 'all'} 
+                                    onChange={() => setTargetType('all')}
+                                    className="text-amber-500 focus:ring-amber-500 h-4 w-4"
+                                />
+                                <span className="text-sm font-medium text-slate-700">All Subscribers ({subscriberCount})</span>
+                            </label>
+                            <label className="flex items-center gap-2 cursor-pointer">
+                                <input 
+                                    type="radio" 
+                                    checked={targetType === 'specific'} 
+                                    onChange={() => setTargetType('specific')}
+                                    className="text-amber-500 focus:ring-amber-500 h-4 w-4"
+                                />
+                                <span className="text-sm font-medium text-slate-700">Specific Subscriber</span>
+                            </label>
+                        </div>
+                        {targetType === 'specific' && (
+                            <input
+                                type="email"
+                                value={specificEmail}
+                                onChange={e => setSpecificEmail(e.target.value)}
+                                placeholder="subscriber@example.com"
+                                className="w-full border border-slate-300 rounded-lg px-4 py-2 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-amber-400"
+                            />
+                        )}
+                    </div>
+                </div>
 
-                {/* Test Send */}
-                <button
-                    onClick={() => handleSend(true)}
-                    disabled={testSending || sending || !subject || !body}
-                    className="flex items-center gap-2 px-5 py-2.5 
-                     border-2 border-navy text-navy rounded-lg 
-                     font-semibold hover:bg-navy hover:text-white 
-                     transition-colors disabled:opacity-40 
-                     disabled:cursor-not-allowed"
-                >
-                    {testSending ? '⟳ Sending Test...' : '🧪 Send Test Email'}
-                </button>
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                    {/* Test Send */}
+                    <div className="flex flex-col md:flex-row items-center gap-3 w-full md:w-auto">
+                        <input
+                            type="email"
+                            value={testEmail}
+                            onChange={e => setTestEmail(e.target.value)}
+                            placeholder="Test email address..."
+                            className="w-full md:w-64 border border-slate-300 rounded-lg px-4 py-2.5 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-amber-400"
+                        />
+                        <button
+                            onClick={() => handleSend(true)}
+                            disabled={testSending || sending || !subject || !body}
+                            className="w-full md:w-auto flex items-center justify-center gap-2 px-5 py-2.5 border-2 border-navy text-navy rounded-lg font-semibold hover:bg-navy hover:text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap"
+                        >
+                            {testSending ? '⟳ Sending Test...' : '🧪 Send Test Email'}
+                        </button>
+                    </div>
 
-                {/* Send to All */}
-                <div className="flex items-center gap-3">
-                    <span className="text-sm text-slate-400 hidden md:block">
-                        {subscriberCount} subscribers
-                    </span>
+                    {/* Send Actual */}
                     <button
                         onClick={() => {
                             if (!subject.trim() || !body.trim()) {
                                 setError('Subject and body are required before sending')
                                 return
                             }
+                            if (targetType === 'specific' && !specificEmail.trim()) {
+                                setError('Specific subscriber email is required')
+                                return
+                            }
                             setShowConfirm(true)
                         }}
                         disabled={sending || testSending}
-                        className="px-6 py-2.5 bg-amber-400 text-navy rounded-lg 
-                       font-semibold hover:bg-amber-500 
-                       transition-colors disabled:opacity-40 
-                       disabled:cursor-not-allowed"
+                        className="w-full md:w-auto px-8 py-2.5 bg-amber-400 text-navy rounded-lg font-bold hover:bg-amber-500 transition-colors disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap shadow-sm"
                     >
-                        {sending ? '⟳ Sending...' : '🚀 Send to All Subscribers'}
+                        {sending ? '⟳ Sending...' : targetType === 'all' ? '🚀 Send to All Subscribers' : '🚀 Send to Subscriber'}
                     </button>
                 </div>
             </div>
@@ -418,11 +524,21 @@ export default function NewsletterPage() {
                         </p>
                         <div className="text-4xl font-bold text-navy 
                             text-center mb-4">
-                            {subscriberCount}
-                            <span className="text-lg font-normal 
-                               text-slate-500 ml-2">
-                                subscribers
-                            </span>
+                            {targetType === 'all' ? (
+                                <>
+                                    {subscriberCount}
+                                    <span className="text-lg font-normal text-slate-500 ml-2">
+                                        subscribers
+                                    </span>
+                                </>
+                            ) : (
+                                <>
+                                    <span className="text-xl">1</span>
+                                    <span className="text-lg font-normal text-slate-500 ml-2">
+                                        subscriber ({specificEmail})
+                                    </span>
+                                </>
+                            )}
                         </div>
                         <div className="bg-slate-50 rounded-xl p-4 mb-4 
                             space-y-2">
@@ -467,4 +583,23 @@ export default function NewsletterPage() {
 
         </div>
     )
+}
+
+const markdownToHtml = (markdown: string): string => {
+    let html = markdown
+    html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>')
+    html = html.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    html = html.replace(/\*(.+?)\*/g, '<em>$1</em>')
+    html = html.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" style="color:#F59E0B">$1</a>')
+    html = html.replace(/^- (.+)$/gm, '<li>$1</li>')
+    html = html.replace(/(<li>[\s\S]*?<\/li>)/, '<ul>$1</ul>')
+    html = html.replace(/\n\n/g, '</p><p>')
+    html = '<p>' + html + '</p>'
+    html = html.replace(/<p><\/p>/g, '')
+    html = html.replace(/<p>(<h[123]>)/g, '$1')
+    html = html.replace(/(<\/h[123]>)<\/p>/g, '$1')
+    return html
 }
