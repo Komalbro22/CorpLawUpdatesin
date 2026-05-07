@@ -146,11 +146,30 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ sent: 0, failed: 0, total: 0 })
         }
 
+        // 8.5 Create Campaign Record
+        let campaignId: string | undefined;
+        const { data: campaign, error: campaignError } = await supabaseAdmin.from('newsletter_campaigns').insert({
+            subject,
+            preview_text: previewText || null,
+            content: emailBody,
+            content_type: mode,
+            rendered_html: bodyHtml,
+            sent_by: adminEmail,
+            total_recipients: subscribers.length,
+        }).select('id').single()
+
+        if (campaignError) {
+            console.error('Failed to create campaign record:', campaignError)
+        } else {
+            campaignId = campaign.id
+        }
+
         // 9. Send in batches
         let sent = 0
         let failed = 0
         const successList: string[] = []
         const failedList: string[] = []
+        const recipientsToInsert: any[] = []
         const chunks = []
         for (let i = 0; i < subscribers.length; i += 10) {
             chunks.push(subscribers.slice(i, i + 10))
@@ -191,16 +210,47 @@ export async function POST(request: NextRequest) {
                 if (r.status === 'fulfilled') {
                     sent++
                     successList.push(subEmail)
+                    if (campaignId) {
+                        recipientsToInsert.push({
+                            campaign_id: campaignId,
+                            email: subEmail,
+                            status: 'delivered', // Optimistic initial status
+                            resend_email_id: r.value.data?.id || null,
+                            sent_at: new Date().toISOString()
+                        })
+                    }
                 } else {
                     failed++
                     failedList.push(subEmail)
                     console.error(`Failed for chunk ${ci} item ${idx}:`, r.reason)
+                    if (campaignId) {
+                        recipientsToInsert.push({
+                            campaign_id: campaignId,
+                            email: subEmail,
+                            status: 'failed',
+                            error_message: r.reason?.message || 'Failed to send'
+                        })
+                    }
                 }
             })
 
             if (ci < chunks.length - 1) {
                 await new Promise(resolve => setTimeout(resolve, 500))
             }
+        }
+
+        if (campaignId && recipientsToInsert.length > 0) {
+            // Bulk insert recipients into the database
+            const { error: insertError } = await supabaseAdmin.from('newsletter_recipients').insert(recipientsToInsert)
+            if (insertError) {
+                console.error('Failed to bulk insert recipients history:', insertError)
+            }
+            
+            // Update campaign totals
+            await supabaseAdmin.from('newsletter_campaigns').update({
+                sent_count: sent,
+                failed_count: failed
+            }).eq('id', campaignId)
         }
 
         console.log(`=== DONE: sent=${sent} failed=${failed} ===`)

@@ -11,6 +11,7 @@ export default function Sidebar() {
         { href: '/admin/articles', icon: '📋', label: 'All Articles' },
         { href: '/admin/subscribers', icon: '👥', label: 'Subscribers' },
         { href: '/admin/newsletter', icon: '📧', label: 'Newsletter' },
+        { href: '/admin/newsletter/history', icon: '📈', label: 'Email History' },
         { href: '/admin/analytics', icon: '📊', label: 'Analytics' },
         { href: '/admin/repo-rate', icon: '🏦', label: 'Repo Rate' },
         { href: '/admin/calendar', icon: '📅', label: 'Calendar' },
