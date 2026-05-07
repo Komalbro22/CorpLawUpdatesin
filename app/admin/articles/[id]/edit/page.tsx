@@ -5,6 +5,7 @@ import { useState, useRef, KeyboardEvent, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { slugify, calculateReadingTime, formatDate } from '@/lib/utils'
+import { smartCleanContent } from '@/lib/html-to-markdown'
 import CategoryBadge from '@/components/CategoryBadge'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import LoadingSkeleton from '@/components/LoadingSkeleton'
@@ -44,6 +45,14 @@ export default function EditArticle({ params }: { params: { id: string } }) {
     const [success, setSuccess] = useState(false)
     const [activeTab, setActiveTab] = useState<'write' | 'preview'>('write')
     const [uploadingImage, setUploadingImage] = useState(false)
+
+    const [showCleanConfirm, setShowCleanConfirm] = useState(false)
+    const [cleanPreview, setCleanPreview] = useState('')
+    const [cleanStats, setCleanStats] = useState<{
+        tagsRemoved: number
+        tablesKept: number
+        styledDivsKept: number
+    } | null>(null)
 
     const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -96,6 +105,22 @@ export default function EditArticle({ params }: { params: { id: string } }) {
         if (!slugEdited) {
             setSlug(slugify(val))
         }
+    }
+
+    function handleClean() {
+        if (!content.trim()) return
+
+        const { cleaned, stats } = smartCleanContent(content)
+        setCleanPreview(cleaned)
+        setCleanStats(stats)
+        setShowCleanConfirm(true)
+    }
+
+    function confirmClean() {
+        setContent(cleanPreview)
+        setShowCleanConfirm(false)
+        setCleanPreview('')
+        setCleanStats(null)
     }
 
     function handleTagKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -401,7 +426,15 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                         )}
                         <div className="flex justify-between items-end mb-3">
                             <label className="block text-sm font-bold text-navy">Article Content (Markdown)</label>
-                            <div className="relative">
+                            <div className="flex items-center gap-2 relative">
+                                <button
+                                    type="button"
+                                    onClick={handleClean}
+                                    title="Convert HTML to clean Markdown (keeps styled boxes and tables)"
+                                    className="flex items-center gap-1.5 px-3 py-1.5 text-sm border border-slate-300 text-slate-600 rounded-lg hover:bg-slate-50 hover:border-amber-400 hover:text-amber-700 transition-colors"
+                                >
+                                    🧹 Clean HTML
+                                </button>
                                 <input
                                     type="file"
                                     accept="image/*"
@@ -595,6 +628,77 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                     </button>
                 </div>
             </div>
+
+            {/* Clean HTML Modal */}
+            {showCleanConfirm && cleanStats && (
+                <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 space-y-4">
+                        <div className="flex items-center gap-3">
+                            <span className="text-3xl">🧹</span>
+                            <div>
+                                <h3 className="font-bold text-navy text-lg">Clean HTML Preview</h3>
+                                <p className="text-slate-500 text-sm">Review changes before applying</p>
+                            </div>
+                        </div>
+
+                        {/* Stats */}
+                        <div className="grid grid-cols-3 gap-3">
+                            <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-center">
+                                <div className="text-2xl font-bold text-green-700">{cleanStats.tagsRemoved}</div>
+                                <div className="text-xs text-green-600">HTML tags removed</div>
+                            </div>
+                            <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-center">
+                                <div className="text-2xl font-bold text-blue-700">{cleanStats.tablesKept}</div>
+                                <div className="text-xs text-blue-600">Tables preserved</div>
+                            </div>
+                            <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-center">
+                                <div className="text-2xl font-bold text-amber-700">{cleanStats.styledDivsKept}</div>
+                                <div className="text-xs text-amber-600">Styled boxes kept</div>
+                            </div>
+                        </div>
+
+                        {/* Warning */}
+                        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3">
+                            <span className="text-xl flex-shrink-0">⚠️</span>
+                            <div>
+                                <p className="font-semibold text-amber-900 text-sm">This will modify your content</p>
+                                <p className="text-amber-700 text-sm mt-1">
+                                    Tables and styled boxes (info panels, warning boxes) are preserved as HTML. Simple text formatting is converted to Markdown. Visual output will look the same.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Preview */}
+                        <div>
+                            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Preview (first 500 chars):</p>
+                            <div className="bg-slate-50 rounded-xl p-4 text-sm font-mono text-slate-700 max-h-40 overflow-y-auto whitespace-pre-wrap break-words">
+                                {cleanPreview.slice(0, 500)}
+                                {cleanPreview.length > 500 && '...'}
+                            </div>
+                        </div>
+
+                        {/* Buttons */}
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => {
+                                    setShowCleanConfirm(false)
+                                    setCleanPreview('')
+                                    setCleanStats(null)
+                                }}
+                                className="flex-1 border border-slate-300 text-slate-600 py-3 rounded-xl font-semibold text-sm hover:bg-slate-50"
+                            >
+                                Cancel — Keep Original
+                            </button>
+                            <button
+                                onClick={confirmClean}
+                                className="flex-1 bg-amber-400 hover:bg-amber-500 text-navy py-3 rounded-xl font-bold text-sm"
+                            >
+                                ✅ Apply Clean Version
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
