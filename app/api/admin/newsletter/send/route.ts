@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
 
         const { subject, previewText, body: emailBody, testOnly, targetEmails, mode = 'markdown', testEmail } = body
         const fromEmail = (process.env.RESEND_FROM_EMAIL || 'updates@mail.corplawupdates.in').trim().replace(/['"]/g, '')
-        const adminEmail = (process.env.ADMIN_EMAIL || 'corplawupdatesin@gmail.com').trim().replace(/['"]/g, '')
+        const adminEmail = (process.env.ADMIN_EMAIL || 'mail@corplawupdates.in').trim().replace(/['"]/g, '')
 
         // 3. Validate
         if (!subject?.trim()) {

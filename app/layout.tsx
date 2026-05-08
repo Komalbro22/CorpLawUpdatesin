@@ -111,7 +111,7 @@ export default async function RootLayout({
           ],
           contactPoint: {
             '@type': 'ContactPoint',
-            email: 'corplawupdatesin@gmail.com',
+            email: 'mail@corplawupdates.in',
             contactType: 'customer service',
             areaServed: 'IN',
             availableLanguage: 'English',

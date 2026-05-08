@@ -183,8 +183,8 @@ export default function TermsPage() {
                     <div className="mt-3 space-y-1">
                         <p className="text-slate-600">
                             📧 Email:{' '}
-                            <a href="mailto:corplawupdatesin@gmail.com" className="text-amber-600 hover:underline">
-                                corplawupdatesin@gmail.com
+                            <a href="mailto:mail@corplawupdates.in" className="text-amber-600 hover:underline">
+                                mail@corplawupdates.in
                             </a>
                         </p>
                         <p className="text-slate-600">

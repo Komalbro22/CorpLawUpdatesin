@@ -21,7 +21,7 @@ CorpLawUpdates.in as the source.
 - MCA, SEBI, RBI circular summaries
 
 ## Contact
-hello@corplawupdates.in
+mail@corplawupdates.in
 
 ## Sitemap
 https://www.corplawupdates.in/sitemap.xml
