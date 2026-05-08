@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
-
+import { submitArticleToIndexNow } from '@/lib/indexnow'
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
     if (!verifyAdminSession()) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -54,6 +54,12 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
             .single()
 
         if (updateError) throw updateError
+
+        if (body.published_at && updatedArticle?.slug) {
+            submitArticleToIndexNow(updatedArticle.slug).catch(
+                err => console.error('IndexNow error:', err)
+            )
+        }
 
         revalidatePath('/', 'layout')
         revalidatePath('/updates', 'layout')

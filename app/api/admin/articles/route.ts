@@ -6,6 +6,7 @@ import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
 import { slugify } from '@/lib/utils'
+import { submitArticleToIndexNow } from '@/lib/indexnow'
 
 export async function GET(request: NextRequest) {
     if (!verifyAdminSession()) {
@@ -111,6 +112,12 @@ export async function POST(request: NextRequest) {
             .single()
 
         if (error) throw error
+
+        if (createdArticle?.slug && createdArticle?.published_at) {
+            submitArticleToIndexNow(createdArticle.slug).catch(
+                err => console.error('IndexNow submit failed:', err)
+            )
+        }
 
         revalidatePath('/', 'layout')
         revalidatePath('/updates', 'layout')

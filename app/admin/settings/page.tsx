@@ -60,7 +60,27 @@ export default function SettingsPage() {
   const [saved, setSaved] = useState<Record<string, boolean>>({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [indexNowLoading, setIndexNowLoading] = useState(false)
+  const [indexNowResult, setIndexNowResult] = useState('')
 
+  async function handleIndexNowSubmit() {
+    setIndexNowLoading(true)
+    setIndexNowResult('')
+    try {
+      const res = await fetch(
+        '/api/admin/indexnow',
+        { method: 'POST' }
+      )
+      const data = await res.json()
+      setIndexNowResult(
+        `Submitted ${data.count} URLs successfully!`
+      )
+    } catch {
+      setIndexNowResult('Failed — check console')
+    } finally {
+      setIndexNowLoading(false)
+    }
+  }
   useEffect(() => {
     fetch('/api/admin/settings')
       .then(r => r.json())
@@ -193,6 +213,43 @@ export default function SettingsPage() {
           </div>
         </div>
       ))}
+
+      {/* IndexNow Section */}
+      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+        <div className="bg-slate-50 border-b border-slate-200 px-6 py-4">
+          <h2 className="font-bold text-navy">
+            🔍 IndexNow — Instant Bing Indexing
+          </h2>
+        </div>
+        <div className="px-6 py-5 space-y-4">
+          <p className="text-sm text-slate-500">
+            Submit all published articles to Bing, 
+            Yandex and other IndexNow search engines 
+            for instant indexing.
+          </p>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleIndexNowSubmit}
+              disabled={indexNowLoading}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold disabled:opacity-50 transition-colors"
+            >
+              {indexNowLoading 
+                ? '⏳ Submitting...' 
+                : '🔍 Submit All Articles to Bing'}
+            </button>
+            {indexNowResult && (
+              <span className="text-sm text-green-600 font-medium">
+                ✅ {indexNowResult}
+              </span>
+            )}
+          </div>
+          <p className="text-xs text-slate-400">
+            New articles are submitted automatically 
+            when published. Use this button to 
+            resubmit all articles at once.
+          </p>
+        </div>
+      </div>
 
       {/* ACCOUNT & SECURITY */}
       <div className="bg-white rounded-xl border border-red-200 overflow-hidden">
