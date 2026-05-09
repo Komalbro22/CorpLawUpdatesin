@@ -38,7 +38,7 @@ export async function GET() {
   const articles = data || []
 
   // 2. Fetch GA Data
-  let gaArticleViews: Record<string, number> = {}
+  const gaArticleViews: Record<string, number> = {}
   if (analyticsDataClient && propertyId) {
     try {
       const [articlesReport] = await analyticsDataClient.runReport({

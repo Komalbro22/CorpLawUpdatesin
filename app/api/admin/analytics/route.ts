@@ -29,7 +29,7 @@ export async function GET() {
   // 1. Fetch Google Analytics Data (if configured)
   let gaTotalViews = 0
   let gaActiveUsers = 0
-  let gaArticleViews: Record<string, number> = {}
+  const gaArticleViews: Record<string, number> = {}
 
   if (analyticsDataClient && propertyId) {
     try {
