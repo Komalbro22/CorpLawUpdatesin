@@ -9,6 +9,8 @@ interface AnalyticsData {
     totalSubscribers: number
     totalViews: number
     articlesThisWeek: number
+    activeUsers?: number
+    source?: string
   }
   topArticles: {
     title: string
@@ -94,16 +96,16 @@ export default function AnalyticsPage() {
             text: 'text-green-700'
           },
           {
-            label: 'Total Views',
+            label: `Total Views (${overview.source || 'DB'})`,
             value: overview.totalViews.toLocaleString('en-IN'),
             icon: '👁️',
             color: 'bg-purple-50 border-purple-200',
             text: 'text-purple-700'
           },
           {
-            label: 'Published This Week',
-            value: overview.articlesThisWeek,
-            icon: '🗓️',
+            label: 'Active Users (30d)',
+            value: (overview.activeUsers || 0).toLocaleString('en-IN'),
+            icon: '👥',
             color: 'bg-amber-50 border-amber-200',
             text: 'text-amber-700'
           },
