@@ -27,33 +27,35 @@ export default function Sidebar() {
     }
 
     return (
-        <div className="w-[240px] h-screen bg-[#0F172A] flex flex-col justify-between shrink-0">
-            <div>
-                <div className="px-6 py-5">
-                    <h2 className="font-heading text-lg font-bold">
-                        <span className="text-white">CorpLawUpdates</span>
-                        <span className="text-gold">.in</span>
-                    </h2>
-                </div>
-                <nav className="mt-4 flex flex-col space-y-1">
-                    {links.map((link) => {
-                        const active = pathname === link.href
-                        return (
-                            <Link href={link.href} key={link.href}
-                                className={`flex items-center px-4 py-3 mx-2 rounded-lg transition-colors ${active
-                                    ? 'bg-white/10 text-gold border-l-2 border-gold font-medium'
-                                    : 'text-slate-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent'
-                                    }`}
-                            >
-                                <span className="mr-3">{link.icon}</span>
-                                <span>{link.label}</span>
-                            </Link>
-                        )
-                    })}
-                </nav>
+        <div className="w-[240px] h-screen bg-[#0F172A] flex flex-col shrink-0 border-r border-slate-800">
+            {/* Logo Area (Fixed) */}
+            <div className="px-6 py-5 shrink-0">
+                <h2 className="font-heading text-lg font-bold">
+                    <span className="text-white">CorpLawUpdates</span>
+                    <span className="text-gold">.in</span>
+                </h2>
             </div>
 
-            <div className="mb-6 px-2">
+            {/* Navigation Links (Scrollable) */}
+            <nav className="flex-1 overflow-y-auto flex flex-col space-y-1 pb-4">
+                {links.map((link) => {
+                    const active = pathname === link.href
+                    return (
+                        <Link href={link.href} key={link.href}
+                            className={`flex items-center px-4 py-3 mx-2 rounded-lg transition-colors ${active
+                                ? 'bg-white/10 text-gold border-l-2 border-gold font-medium'
+                                : 'text-slate-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent'
+                                }`}
+                        >
+                            <span className="mr-3">{link.icon}</span>
+                            <span>{link.label}</span>
+                        </Link>
+                    )
+                })}
+            </nav>
+
+            {/* Logout Area (Fixed Bottom) */}
+            <div className="shrink-0 p-2 border-t border-white/5">
                 <button
                     onClick={handleLogout}
                     className="w-full flex items-center px-4 py-3 text-slate-400 hover:text-red-400 hover:bg-white/5 rounded-lg transition-colors"
