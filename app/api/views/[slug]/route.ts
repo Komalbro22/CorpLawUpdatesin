@@ -1,67 +1,36 @@
+import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
 
 export async function POST(
-    request: Request,
-    { params }: { params: { slug: string } }
+  request: Request,
+  { params }: { params: { slug: string } }
 ) {
-    try {
-        const { slug } = params
+  try {
+    const { slug } = params
 
-        if (!slug) {
-            return Response.json(
-                { error: 'Slug required' },
-                { status: 400 }
-            )
-        }
+    // Increment view count using Postgres function to avoid race conditions
+    const { error } = await supabaseAdmin.rpc('increment_views', {
+      article_slug: slug,
+    })
 
-        // Get current views
-        const { data, error } = await supabaseAdmin
-            .from('updates')
-            .select('views')
-            .eq('slug', slug)
-            .single()
+    if (error) {
+      // Fallback: manual increment
+      const { data: article } = await supabaseAdmin
+        .from('updates')
+        .select('id, views')
+        .eq('slug', slug)
+        .single()
 
-        if (error || !data) {
-            return Response.json(
-                { error: 'Article not found' },
-                { status: 404 }
-            )
-        }
-
-        // Increment views
-        const { data: updated, error: updateError } =
-            await supabaseAdmin
-                .from('updates')
-                .update({ views: (data.views || 0) + 1 })
-                .eq('slug', slug)
-                .select('views')
-                .single()
-
-        if (updateError) {
-            return Response.json(
-                { error: 'Update failed' },
-                { status: 500 }
-            )
-        }
-
-        return Response.json({
-            views: updated?.views || 0,
-            slug
-        })
-
-    } catch (err) {
-        console.error('Views update error:', err)
-        return Response.json(
-            { error: 'Internal error' },
-            { status: 500 }
-        )
+      if (article) {
+        await supabaseAdmin
+          .from('updates')
+          .update({ views: (article.views || 0) + 1 })
+          .eq('id', article.id)
+      }
     }
-}
 
-// Only POST allowed — no GET
-export async function GET() {
-    return Response.json(
-        { error: 'Method not allowed' },
-        { status: 405 }
-    )
+    return NextResponse.json({ success: true })
+  } catch {
+    return NextResponse.json({ success: false })
+  }
 }

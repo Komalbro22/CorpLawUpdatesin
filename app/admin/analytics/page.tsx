@@ -65,9 +65,15 @@ export default function AnalyticsPage() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold text-navy">Analytics & Performance</h1>
-        <p className="text-slate-500 text-sm mt-1">Site performance overview</p>
+      <div className="flex justify-between items-start">
+        <div>
+          <h1 className="text-2xl font-bold text-navy">Analytics & Performance</h1>
+          <p className="text-slate-500 text-sm mt-1">Site performance overview</p>
+        </div>
+        <Link href="/admin/analytics/articles"
+          className="inline-flex items-center gap-2 bg-amber-400 hover:bg-amber-500 text-navy px-4 py-2 rounded-lg font-semibold text-sm">
+          📊 View All Article Performance →
+        </Link>
       </div>
 
       {/* OVERVIEW CARDS */}

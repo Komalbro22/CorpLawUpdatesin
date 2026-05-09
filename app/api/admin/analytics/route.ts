@@ -53,11 +53,10 @@ export async function GET() {
       .order('subscribed_at', { ascending: false })
       .limit(5),
 
-    // All views from published articles
+    // All views from all articles
     supabaseAdmin
       .from('updates')
-      .select('views')
-      .not('published_at', 'is', null),
+      .select('views'),
   ])
 
   // Calculate category breakdown

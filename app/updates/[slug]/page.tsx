@@ -13,7 +13,7 @@ import ErrorBoundary from '@/components/ErrorBoundary'
 import TableOfContents from '@/components/TableOfContents'
 import UpdateCard from '@/components/UpdateCard'
 import { calculateReadingTime, formatDate, BASE_URL } from '@/lib/utils'
-import ViewsTracker from '@/components/ViewsTracker'
+import ViewCounter from '@/components/ViewCounter'
 import ArticleActions from '@/components/ArticleActions'
 import ReadingProgress from '@/components/ReadingProgress'
 
@@ -128,7 +128,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
     return (
         <article className="max-w-4xl mx-auto py-12 px-4 w-full">
             <ReadingProgress />
-            <ViewsTracker slug={update.slug} />
+            <ViewCounter slug={update.slug} />
 
 
             {/* 1. BREADCRUMB */}

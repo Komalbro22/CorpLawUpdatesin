@@ -13,6 +13,7 @@ export default function Sidebar() {
         { href: '/admin/newsletter', icon: '📧', label: 'Newsletter' },
         { href: '/admin/newsletter/history', icon: '📈', label: 'Email History' },
         { href: '/admin/analytics', icon: '📊', label: 'Analytics' },
+        { href: '/admin/analytics/articles', icon: '📈', label: 'Article Stats' },
         { href: '/admin/repo-rate', icon: '🏦', label: 'Repo Rate' },
         { href: '/admin/calendar', icon: '📅', label: 'Calendar' },
         { href: '/admin/compliance', icon: '📋', label: 'Compliance' },
