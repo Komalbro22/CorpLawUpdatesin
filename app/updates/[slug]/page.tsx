@@ -46,11 +46,13 @@ export async function generateMetadata(
   const imageUrl = `https://www.corplawupdates.in/api/og?title=${encodeURIComponent(update.title)}&category=${encodeURIComponent(update.category)}`
 
   const titleStr = update.seo_title || update.title
-  const seoTitle = (t: string): string => t.length <= 60 ? t : t.slice(0, 57) + '...'
+  const seoTitle = (t: string): string => t.length <= 100 ? t : t.slice(0, 97) + '...'
+  const descStr = update.seo_description || update.summary
+  const seoDesc = (d: string): string => d.length <= 300 ? d : d.slice(0, 297) + '...'
 
   return {
     title: seoTitle(titleStr),
-    description: update.seo_description || update.summary,
+    description: seoDesc(descStr),
     keywords: [
       update.category,
       ...(update.tags || []),

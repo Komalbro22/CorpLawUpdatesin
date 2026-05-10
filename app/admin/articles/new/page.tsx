@@ -470,28 +470,28 @@ export default function NewArticle() {
                     <div className="border border-slate-200 rounded-xl p-5 bg-white shadow-sm space-y-4">
                         <h3 className="font-bold text-navy text-sm border-b border-slate-100 pb-2 mb-3">Search Engine Optimization (SEO)</h3>
                         <div>
-                            <label className="block text-sm font-semibold text-navy mb-1">SEO Title (max 60 chars)</label>
+                            <label className="block text-sm font-semibold text-navy mb-1">SEO Title (max 80 chars)</label>
                             <input
                                 type="text"
                                 value={seoTitle}
                                 onChange={(e) => setSeoTitle(e.target.value)}
                                 placeholder="Optimized title for search engines..."
                                 className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-none"
-                                maxLength={60}
+                                maxLength={80}
                             />
-                            <p className="text-xs text-slate-400 mt-1 text-right">{seoTitle.length}/60</p>
+                            <p className="text-xs text-slate-400 mt-1 text-right">{seoTitle.length}/80</p>
                         </div>
                         <div>
-                            <label className="block text-sm font-semibold text-navy mb-1">SEO Meta Description (max 160 chars)</label>
+                            <label className="block text-sm font-semibold text-navy mb-1">SEO Meta Description (max 250 chars)</label>
                             <textarea
                                 value={seoDescription}
                                 onChange={(e) => setSeoDescription(e.target.value)}
                                 placeholder="Brief description to appear in search results..."
                                 className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-none resize-none"
-                                rows={2}
-                                maxLength={160}
+                                rows={3}
+                                maxLength={250}
                             />
-                            <p className="text-xs text-slate-400 mt-1 text-right">{seoDescription.length}/160</p>
+                            <p className="text-xs text-slate-400 mt-1 text-right">{seoDescription.length}/250</p>
                         </div>
                     </div>
 
