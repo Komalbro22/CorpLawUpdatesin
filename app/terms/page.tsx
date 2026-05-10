@@ -20,7 +20,7 @@ export default function TermsPage() {
                     Terms of Service
                 </h1>
                 <p className="text-slate-300 mt-2 text-sm">
-                    Last updated: 26 April 2026
+                    Last updated: 10 May 2026
                 </p>
             </div>
 
@@ -110,7 +110,8 @@ export default function TermsPage() {
                     <ul className="list-disc list-inside space-y-2 text-slate-600">
                         <li>Newsletter subscription is completely free and voluntary</li>
                         <li>You can unsubscribe at any time via the unsubscribe link in every email</li>
-                        <li>We send a maximum of 1-2 emails per week</li>
+                        <li>We send a maximum of 1–2 emails per week</li>
+                        <li>Our newsletters contain standard open and click tracking (provided by Resend) to measure delivery and engagement. By subscribing, you consent to this tracking.</li>
                         <li>We may discontinue the newsletter at any time with reasonable notice to subscribers</li>
                     </ul>
                 </section>
@@ -130,6 +131,24 @@ export default function TermsPage() {
                         <li>Impersonate CorpLawUpdates.in or its operators</li>
                         <li>Attempt to gain unauthorised access to the admin system</li>
                     </ul>
+                </section>
+
+                {/* SECTION 6A */}
+                <section className="border-t border-slate-100 pt-8">
+                    <h2 className="text-xl font-bold text-navy mb-3">
+                        6A. Analytics & Tracking Technologies
+                    </h2>
+                    <p className="text-slate-600 leading-relaxed mb-3">
+                        We use the following analytics tools on this Site:
+                    </p>
+                    <ul className="list-disc list-inside space-y-2 text-slate-600">
+                        <li>Vercel Analytics and Vercel Speed Insights — anonymous visitor and performance data</li>
+                        <li>Google Analytics (GA4) — visitor sessions and interaction data via cookies (if configured)</li>
+                        <li>Google Reader Revenue Manager — Google News compatibility signals</li>
+                    </ul>
+                    <p className="text-slate-600 leading-relaxed mt-3">
+                        By using this Site, you consent to the use of these analytics tools. You may opt out of Google Analytics via the Google Analytics Opt-out Browser Add-on.
+                    </p>
                 </section>
 
                 {/* SECTION 7 */}
@@ -183,8 +202,8 @@ export default function TermsPage() {
                     <div className="mt-3 space-y-1">
                         <p className="text-slate-600">
                             📧 Email:{' '}
-                            <a href="mailto:mail@corplawupdates.in" className="text-amber-600 hover:underline">
-                                mail@corplawupdates.in
+                            <a href="mailto:legal@corplawupdates.in" className="text-amber-600 hover:underline">
+                                legal@corplawupdates.in
                             </a>
                         </p>
                         <p className="text-slate-600">

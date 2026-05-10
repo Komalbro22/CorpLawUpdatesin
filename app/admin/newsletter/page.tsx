@@ -49,6 +49,10 @@ export default function NewsletterPage() {
     const [targetType, setTargetType] = useState<'all' | 'specific'>('all')
     const [specificEmail, setSpecificEmail] = useState('')
     const [testEmail, setTestEmail] = useState('')
+    
+    // Schedule states
+    const [isScheduled, setIsScheduled] = useState(false)
+    const [scheduledAt, setScheduledAt] = useState('')
 
     useEffect(() => {
         fetch('/api/admin/subscribers?status=active')
@@ -86,6 +90,7 @@ export default function NewsletterPage() {
                 testOnly,
                 mode: editorMode,
                 testEmail: testOnly ? testEmail.trim() : undefined,
+                scheduledAt: (!testOnly && isScheduled) ? scheduledAt : undefined,
             }
             if (retryList && retryList.length > 0) {
                 payload.targetEmails = retryList
@@ -144,8 +149,15 @@ export default function NewsletterPage() {
                     <h2 className="text-2xl font-heading font-bold text-navy mb-2">
                         {result.testOnly
                             ? 'Test Email Sent!'
-                            : 'Newsletter Sent Successfully!'}
+                            : (result as any).scheduled 
+                                ? 'Newsletter Scheduled!' 
+                                : 'Newsletter Sent Successfully!'}
                     </h2>
+                    {(result as any).scheduled && (
+                        <p className="text-slate-600 mb-6">
+                            Your newsletter is queued for <span className="font-bold">{new Date((result as any).scheduledAt).toLocaleString()}</span>
+                        </p>
+                    )}
                     {!result.testOnly && (
                         <div className="bg-slate-50 rounded-xl p-4 my-4 
                             flex justify-around">
@@ -206,6 +218,8 @@ export default function NewsletterPage() {
                                 setBody('')
                                 setError('')
                                 setFailedList([])
+                                setIsScheduled(false)
+                                setScheduledAt('')
                             }}
                             className="px-6 py-3 bg-gold text-navy font-semibold rounded-xl hover:bg-amber-400 transition-colors shadow-sm"
                         >
@@ -500,6 +514,41 @@ export default function NewsletterPage() {
                             />
                         )}
                     </div>
+
+                    <div className="flex-1 space-y-4">
+                        <label className="block text-sm font-semibold text-navy">Delivery Timing:</label>
+                        <div className="flex gap-4">
+                            <label className="flex items-center gap-2 cursor-pointer">
+                                <input 
+                                    type="radio" 
+                                    checked={!isScheduled} 
+                                    onChange={() => setIsScheduled(false)}
+                                    className="text-amber-500 focus:ring-amber-500 h-4 w-4"
+                                />
+                                <span className="text-sm font-medium text-slate-700">Send Now</span>
+                            </label>
+                            <label className="flex items-center gap-2 cursor-pointer">
+                                <input 
+                                    type="radio" 
+                                    checked={isScheduled} 
+                                    onChange={() => setIsScheduled(true)}
+                                    className="text-amber-500 focus:ring-amber-500 h-4 w-4"
+                                />
+                                <span className="text-sm font-medium text-slate-700">Schedule for Later</span>
+                            </label>
+                        </div>
+                        {isScheduled && (
+                            <div className="space-y-2">
+                                <input
+                                    type="datetime-local"
+                                    value={scheduledAt}
+                                    onChange={e => setScheduledAt(e.target.value)}
+                                    className="w-full border border-slate-300 rounded-lg px-4 py-2 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-amber-400"
+                                />
+                                <p className="text-[10px] text-slate-400">All times are processed in IST. Please select a future date and time.</p>
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 <div className="flex flex-col md:flex-row items-center justify-between gap-6">
@@ -533,34 +582,38 @@ export default function NewsletterPage() {
                     </div>
 
                     {/* Send Actual */}
-                    <button
-                        type="button"
-                        onClick={() => {
-                            if (!subject.trim() || !body.trim()) {
-                                setError('Subject and body are required before sending')
-                                return
-                            }
-                            if (targetType === 'specific' && !specificEmail.trim()) {
-                                setError('Specific subscriber email is required')
-                                return
-                            }
-                            setShowConfirm(true)
-                        }}
-                        disabled={sending || testSending}
-                        className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 py-2.5 bg-gold text-navy rounded-lg font-bold hover:bg-amber-400 transition-colors duration-200 disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap shadow-sm"
-                    >
-                        {sending ? (
-                            <>
-                                <Loader2 className="w-4 h-4 animate-spin" aria-hidden />
-                                Sending…
-                            </>
-                        ) : (
-                            <>
-                                <Rocket className="w-4 h-4" aria-hidden />
-                                {targetType === 'all' ? 'Send to all subscribers' : 'Send to subscriber'}
-                            </>
-                        )}
-                    </button>
+                        <button
+                            type="button"
+                            onClick={() => {
+                                if (!subject.trim() || !body.trim()) {
+                                    setError('Subject and body are required before sending')
+                                    return
+                                }
+                                if (targetType === 'specific' && !specificEmail.trim()) {
+                                    setError('Specific subscriber email is required')
+                                    return
+                                }
+                                if (isScheduled && !scheduledAt) {
+                                    setError('Please select a schedule date and time')
+                                    return
+                                }
+                                setShowConfirm(true)
+                            }}
+                            disabled={sending || testSending}
+                            className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 py-2.5 bg-gold text-navy rounded-lg font-bold hover:bg-amber-400 transition-colors duration-200 disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap shadow-sm"
+                        >
+                            {sending ? (
+                                <>
+                                    <Loader2 className="w-4 h-4 animate-spin" aria-hidden />
+                                    {isScheduled ? 'Scheduling…' : 'Sending…'}
+                                </>
+                            ) : (
+                                <>
+                                    <Rocket className="w-4 h-4" aria-hidden />
+                                    {isScheduled ? 'Schedule newsletter' : (targetType === 'all' ? 'Send to all subscribers' : 'Send to subscriber')}
+                                </>
+                            )}
+                        </button>
                 </div>
             </div>
 
@@ -587,10 +640,10 @@ export default function NewsletterPage() {
                             id="newsletter-confirm-title"
                             className="text-xl font-heading font-bold text-navy text-center mb-2"
                         >
-                            Confirm send
+                            {isScheduled ? 'Confirm schedule' : 'Confirm send'}
                         </h2>
                         <p className="text-slate-500 text-center mb-4">
-                            This will send an email to
+                            {isScheduled ? 'This will queue an email to' : 'This will send an email to'}
                         </p>
                         <div className="text-4xl font-bold text-navy 
                             text-center mb-4">
@@ -622,6 +675,12 @@ export default function NewsletterPage() {
                                     {previewText}
                                 </p>
                             )}
+                            {isScheduled && (
+                                <p className="text-sm text-amber-700">
+                                    <span className="font-semibold">Scheduled for:</span>{' '}
+                                    {new Date(scheduledAt).toLocaleString()}
+                                </p>
+                            )}
                         </div>
                         <p className="text-red-600 text-sm text-center mb-6 font-semibold inline-flex items-center justify-center gap-2 w-full">
                             <XCircle className="w-4 h-4 shrink-0" aria-hidden />
@@ -641,7 +700,7 @@ export default function NewsletterPage() {
                                 className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 bg-gold text-navy rounded-xl font-semibold hover:bg-amber-400 transition-colors"
                             >
                                 <Rocket className="w-4 h-4" aria-hidden />
-                                Send now
+                                {isScheduled ? 'Schedule' : 'Send now'}
                             </button>
                         </div>
                     </div>

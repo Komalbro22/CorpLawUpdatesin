@@ -6,7 +6,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-import { BarChart3, Users, Mail, MousePointerClick, RefreshCw, Eye } from 'lucide-react'
+import { BarChart3, Users, Mail, MousePointerClick, RefreshCw, Eye, Trash2, Calendar, Clock } from 'lucide-react'
 
 export default function HistoryDashboard({ searchParams }: { searchParams: { page?: string } }) {
     const page = parseInt(searchParams.page || '1')
@@ -28,6 +28,28 @@ export default function HistoryDashboard({ searchParams }: { searchParams: { pag
                 setLoading(false)
             })
     }, [page])
+
+    const handleCancel = async (id: string) => {
+        if (!confirm('Are you sure you want to cancel this scheduled newsletter?')) return
+        
+        try {
+            const res = await fetch(`/api/admin/newsletter/history?id=${id}`, {
+                method: 'DELETE'
+            })
+            if (res.ok) {
+                // Refresh data
+                setData((prev: any) => ({
+                    ...prev,
+                    scheduled: prev.scheduled.filter((s: any) => s.id !== id)
+                }))
+            } else {
+                alert('Failed to cancel')
+            }
+        } catch (err) {
+            console.error(err)
+            alert('Error canceling')
+        }
+    }
 
     if (loading) {
         return <div className="flex justify-center py-20 text-slate-500"><RefreshCw className="animate-spin h-8 w-8 text-amber-500" /></div>
@@ -112,6 +134,47 @@ export default function HistoryDashboard({ searchParams }: { searchParams: { pag
                     )}
                 </div>
             </div>
+
+            {/* Scheduled Newsletters */}
+            {data.scheduled && data.scheduled.length > 0 && (
+                <div className="bg-white rounded-xl shadow-card border border-slate-200/80 overflow-hidden ring-1 ring-slate-900/[0.02]">
+                    <div className="p-6 border-b border-slate-100 flex items-center gap-2">
+                        <Calendar className="text-amber-600 w-5 h-5" />
+                        <h3 className="font-semibold text-navy">Scheduled Newsletters</h3>
+                    </div>
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse">
+                            <thead>
+                                <tr className="bg-slate-50 border-b border-slate-100 text-xs text-slate-500 uppercase tracking-wider">
+                                    <th className="p-4 font-semibold">Subject</th>
+                                    <th className="p-4 font-semibold">Scheduled For</th>
+                                    <th className="p-4 font-semibold text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody className="text-sm">
+                                {data.scheduled.map((newsletter: any) => (
+                                    <tr key={newsletter.id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
+                                        <td className="p-4 font-medium text-navy">{newsletter.subject}</td>
+                                        <td className="p-4 text-slate-500 flex items-center gap-2">
+                                            <Clock size={14} className="text-slate-400" />
+                                            {new Date(newsletter.scheduled_at).toLocaleString()}
+                                        </td>
+                                        <td className="p-4 text-right">
+                                            <button
+                                                onClick={() => handleCancel(newsletter.id)}
+                                                className="inline-flex items-center justify-center px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-100"
+                                            >
+                                                <Trash2 size={14} className="mr-1.5" />
+                                                Cancel
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            )}
 
             {/* Campaigns Table */}
             <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">

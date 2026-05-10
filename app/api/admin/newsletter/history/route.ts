@@ -26,6 +26,15 @@ export async function GET(request: NextRequest) {
 
         if (error) throw error
 
+        // Fetch pending scheduled newsletters
+        const { data: scheduled, error: schedError } = await supabaseAdmin
+            .from('scheduled_newsletters')
+            .select('*')
+            .eq('status', 'pending')
+            .order('scheduled_at', { ascending: true })
+
+        if (schedError) throw schedError
+
         // Fetch aggregate stats
         const { data: aggregateData, error: aggError } = await supabaseAdmin
             .from('newsletter_campaigns')
@@ -40,9 +49,6 @@ export async function GET(request: NextRequest) {
             totalFailed += c.failed_count || 0
         })
 
-        // For Open Rate, we'd query recipients, but for simplicity we can estimate 
-        // or just return 0 if we don't have an opened_count in campaigns.
-        // The user mentioned Open Rate % in summary cards. Let's count opened recipients.
         const { count: openedCount, error: openedError } = await supabaseAdmin
             .from('newsletter_recipients')
             .select('id', { count: 'exact', head: true })
@@ -53,8 +59,6 @@ export async function GET(request: NextRequest) {
         const deliveryRate = totalSent > 0 ? ((totalSent - totalFailed) / totalSent * 100).toFixed(1) : 0
         const openRate = totalSent > 0 ? (((openedCount || 0) / totalSent) * 100).toFixed(1) : 0
 
-        // Chart Data: Last 7 days or campaigns over time
-        // Just send recent campaigns for the chart
         const { data: chartData } = await supabaseAdmin
             .from('newsletter_campaigns')
             .select('created_at, sent_count')
@@ -68,6 +72,7 @@ export async function GET(request: NextRequest) {
 
         return NextResponse.json({
             campaigns,
+            scheduled,
             total: count || 0,
             stats: {
                 totalSent,
@@ -79,6 +84,34 @@ export async function GET(request: NextRequest) {
         })
     } catch (err: any) {
         console.error('Failed to fetch history:', err)
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    }
+}
+
+export async function DELETE(request: NextRequest) {
+    if (!verifyAdminSession()) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get('id')
+
+    if (!id) {
+        return NextResponse.json({ error: 'ID is required' }, { status: 400 })
+    }
+
+    try {
+        const { error } = await supabaseAdmin
+            .from('scheduled_newsletters')
+            .delete()
+            .eq('id', id)
+            .eq('status', 'pending')
+
+        if (error) throw error
+
+        return NextResponse.json({ success: true })
+    } catch (err: any) {
+        console.error('Failed to delete scheduled newsletter:', err)
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
     }
 }
