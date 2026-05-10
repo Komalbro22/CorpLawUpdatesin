@@ -90,7 +90,7 @@ export default function NewsletterPage() {
                 testOnly,
                 mode: editorMode,
                 testEmail: testOnly ? testEmail.trim() : undefined,
-                scheduledAt: (!testOnly && isScheduled) ? scheduledAt : undefined,
+                scheduledAt: (!testOnly && isScheduled && scheduledAt) ? new Date(scheduledAt).toISOString() : undefined,
             }
             if (retryList && retryList.length > 0) {
                 payload.targetEmails = retryList
