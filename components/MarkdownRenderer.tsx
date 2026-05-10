@@ -22,7 +22,9 @@ export default function MarkdownRenderer({ content }: { content: string }) {
             'div[style*="background:#0f172a"], ' +
             'div[style*="background:#0F2342"], ' +
             'div[style*="background:#0f2342"], ' +
-            'div[style*="background:#1e3a5f"]'
+            'div[style*="background:#1e3a5f"], ' +
+            'div[style*="background:#0b1121"], ' +
+            'div[style*="background:#0B1121"]'
         )
 
         darkDivs.forEach(div => {
@@ -73,6 +75,11 @@ export default function MarkdownRenderer({ content }: { content: string }) {
           [&_[style*='background:#0F172A']_strong]:!text-amber-400
           [&_[style*='background:#0f2342']_p]:!text-slate-100
           [&_[style*='background:#0f2342']_h3]:!text-amber-400
+          [&_[style*='background:#0b1121']_p]:!text-slate-100
+          [&_[style*='background:#0b1121']_h3]:!text-amber-400
+          [&_[style*='background:#0b1121']_div]:!text-slate-100
+          [&_[style*='background:#0b1121']_strong]:!text-amber-400
+          [&_[style*='background:#0b1121']_li]:!text-slate-100
           prose-headings:font-heading prose-a:no-underline hover:prose-a:underline prose-code:bg-slate-100 prose-code:px-1 prose-code:rounded prose-img:max-w-full prose-img:h-auto prose-img:rounded-lg prose-img:mx-auto prose-img:block
         `}>
             <ReactMarkdown

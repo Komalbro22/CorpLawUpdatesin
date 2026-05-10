@@ -68,19 +68,25 @@ h2, h3, h4 {
 .article-content div[style*="background:#0F172A"],
 .article-content div[style*="background:#0f172a"],
 .article-content div[style*="background:#0f2342"],
-.article-content div[style*="background:#0F2342"] {
+.article-content div[style*="background:#0F2342"],
+.article-content div[style*="background:#0b1121"],
+.article-content div[style*="background:#0B1121"] {
   color: #F1F5F9 !important;
 }
 
 .article-content div[style*="background:#0F172A"] p,
 .article-content div[style*="background:#0f2342"] p,
-.article-content div[style*="background:#0F2342"] p {
+.article-content div[style*="background:#0F2342"] p,
+.article-content div[style*="background:#0b1121"] p,
+.article-content div[style*="background:#0B1121"] p {
   color: #F1F5F9 !important;
 }
 
 .article-content div[style*="background:#0F172A"] h3,
 .article-content div[style*="background:#0f2342"] h3,
-.article-content div[style*="background:#0F2342"] h3 {
+.article-content div[style*="background:#0F2342"] h3,
+.article-content div[style*="background:#0b1121"] h3,
+.article-content div[style*="background:#0B1121"] h3 {
   color: #F59E0B !important;
 }
 
@@ -377,8 +383,12 @@ h2, h3, h4 {
 .article-content [style*="background:#0F2342"] p,
 .article-content [style*="background:#0f2342"] p,
 .article-content [style*="background:#1e3a5f"] p,
+.article-content [style*="background:#0b1121"] p,
+.article-content [style*="background:#0B1121"] p,
 .article-content [style*="background:#0F172A"] li,
-.article-content [style*="background:#0f2342"] li {
+.article-content [style*="background:#0f2342"] li,
+.article-content [style*="background:#0b1121"] li,
+.article-content [style*="background:#0B1121"] li {
   color: #F1F5F9 !important;
   opacity: 1 !important;
 }
@@ -387,7 +397,9 @@ h2, h3, h4 {
 .article-content [style*="background:#0F172A"] h3,
 .article-content [style*="background:#0f172a"] h3,
 .article-content [style*="background:#0F2342"] h3,
-.article-content [style*="background:#0f2342"] h3 {
+.article-content [style*="background:#0f2342"] h3,
+.article-content [style*="background:#0b1121"] h3,
+.article-content [style*="background:#0B1121"] h3 {
   color: #F59E0B !important;
   opacity: 1 !important;
 }
@@ -396,7 +408,9 @@ h2, h3, h4 {
 .article-content [style*="background:#0F172A"] strong,
 .article-content [style*="background:#0f172a"] strong,
 .article-content [style*="background:#0F2342"] strong,
-.article-content [style*="background:#0f2342"] strong {
+.article-content [style*="background:#0f2342"] strong,
+.article-content [style*="background:#0b1121"] strong,
+.article-content [style*="background:#0B1121"] strong {
   color: #F59E0B !important;
   opacity: 1 !important;
 }
