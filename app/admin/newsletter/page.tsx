@@ -5,6 +5,18 @@
 import dynamic from 'next/dynamic'
 import { useState, useEffect } from 'react'
 import sanitizeHtml from 'sanitize-html'
+import {
+    AlertTriangle,
+    ChevronDown,
+    ChevronUp,
+    FlaskConical,
+    Loader2,
+    Mail,
+    PartyPopper,
+    Rocket,
+    X,
+    XCircle,
+} from 'lucide-react'
 
 const MDEditor = dynamic(
     () => import('@uiw/react-md-editor'),
@@ -116,11 +128,18 @@ export default function NewsletterPage() {
     // SUCCESS STATE
     if (result) {
         return (
-            <div className="max-w-2xl mx-auto">
-                <div className="bg-white rounded-2xl shadow-sm border 
-                        border-slate-100 p-10 text-center">
-                    <div className="text-6xl mb-4">
-                        {result.testOnly ? '🧪' : '🎉'}
+            <div className="max-w-2xl mx-auto content-fade-in">
+                <div className="bg-white rounded-2xl shadow-card border border-slate-200/80 p-10 text-center ring-1 ring-slate-900/[0.02]">
+                    <div className="flex justify-center mb-5">
+                        {result.testOnly ? (
+                            <span className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-100 text-violet-700">
+                                <FlaskConical className="w-8 h-8" aria-hidden />
+                            </span>
+                        ) : (
+                            <span className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
+                                <PartyPopper className="w-8 h-8" aria-hidden />
+                            </span>
+                        )}
                     </div>
                     <h2 className="text-2xl font-heading font-bold text-navy mb-2">
                         {result.testOnly
@@ -159,11 +178,19 @@ export default function NewsletterPage() {
                             </ul>
                             <div className="flex justify-end gap-3">
                                 <button
+                                    type="button"
                                     onClick={() => handleSend(false, failedList)}
                                     disabled={sending}
-                                    className="px-5 py-2.5 font-bold bg-red-600 text-white rounded-lg shadow-lg hover:bg-red-700 disabled:opacity-50 transition-colors"
+                                    className="inline-flex items-center justify-center gap-2 px-5 py-2.5 font-semibold bg-red-600 text-white rounded-lg shadow-md hover:bg-red-700 disabled:opacity-50 transition-colors"
                                 >
-                                    {sending ? 'Retrying...' : 'Retry Failed Mails'}
+                                    {sending ? (
+                                        <>
+                                            <Loader2 className="w-4 h-4 animate-spin" aria-hidden />
+                                            Retrying…
+                                        </>
+                                    ) : (
+                                        'Retry failed deliveries'
+                                    )}
                                 </button>
                             </div>
                         </div>
@@ -171,6 +198,7 @@ export default function NewsletterPage() {
 
                     <div className="mt-8">
                         <button
+                            type="button"
                             onClick={() => {
                                 setResult(null)
                                 setSubject('')
@@ -179,9 +207,9 @@ export default function NewsletterPage() {
                                 setError('')
                                 setFailedList([])
                             }}
-                            className="px-6 py-3 bg-amber-400 text-navy font-semibold rounded-xl hover:bg-amber-500 transition-colors"
+                            className="px-6 py-3 bg-gold text-navy font-semibold rounded-xl hover:bg-amber-400 transition-colors shadow-sm"
                         >
-                            Send Another Newsletter
+                            Compose another send
                         </button>
                     </div>
                 </div>
@@ -190,12 +218,13 @@ export default function NewsletterPage() {
     }
 
     return (
-        <div className="max-w-4xl mx-auto space-y-6">
+        <div className="max-w-4xl mx-auto space-y-6 content-fade-in">
 
             {/* Header */}
             <div>
-                <h1 className="text-2xl font-heading font-bold text-navy">
-                    Send Newsletter
+                <h1 className="text-2xl font-heading font-bold text-navy flex items-center gap-2">
+                    <Mail className="w-7 h-7 text-amber-600" aria-hidden />
+                    Send newsletter
                 </h1>
                 <p className="text-slate-500 mt-1">
                     {subscriberCount > 0
@@ -206,22 +235,25 @@ export default function NewsletterPage() {
 
             {/* Error Banner */}
             {error && (
-                <div className="bg-red-50 border border-red-200 rounded-xl 
-                        p-4 text-red-700 flex items-center gap-2">
-                    <span>⚠️</span>
-                    <span>{error}</span>
+                <div
+                    role="alert"
+                    className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-800 flex items-start gap-3"
+                >
+                    <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" aria-hidden />
+                    <span className="flex-1 text-sm font-medium leading-relaxed">{error}</span>
                     <button
+                        type="button"
                         onClick={() => setError('')}
-                        className="ml-auto text-red-400 hover:text-red-600"
+                        className="text-red-500 hover:text-red-700 p-1 rounded-md hover:bg-red-100 transition-colors"
+                        aria-label="Dismiss error"
                     >
-                        ✕
+                        <X className="w-4 h-4" />
                     </button>
                 </div>
             )}
 
             {/* Main Form */}
-            <div className="bg-white rounded-xl shadow-sm border 
-                      border-slate-100 p-6 space-y-6">
+            <div className="bg-white rounded-xl shadow-card border border-slate-200/80 p-6 space-y-6 ring-1 ring-slate-900/[0.02]">
 
                 {/* Subject */}
                 <div>
@@ -234,10 +266,7 @@ export default function NewsletterPage() {
                         value={subject}
                         onChange={e => setSubject(e.target.value)}
                         placeholder="Weekly Corporate Law Update — April 2026"
-                        className="w-full border border-slate-300 rounded-lg 
-                       px-4 py-3 text-navy focus:outline-none 
-                       focus:ring-2 focus:ring-amber-400 
-                       focus:border-transparent"
+                        className="w-full border border-slate-200 rounded-lg px-4 py-3 text-navy focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/30 transition-shadow"
                     />
                 </div>
 
@@ -256,10 +285,7 @@ export default function NewsletterPage() {
                         onChange={e => setPreviewText(e.target.value)}
                         placeholder="This week: MCA updates, SEBI circulars..."
                         maxLength={100}
-                        className="w-full border border-slate-300 rounded-lg 
-                       px-4 py-3 text-navy focus:outline-none 
-                       focus:ring-2 focus:ring-amber-400 
-                       focus:border-transparent"
+                        className="w-full border border-slate-200 rounded-lg px-4 py-3 text-navy focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/30 transition-shadow"
                     />
                     <p className="text-xs text-slate-400 mt-1 text-right">
                         {previewText.length}/100
@@ -321,20 +347,28 @@ export default function NewsletterPage() {
             {/* Email Preview Toggle */}
             <div>
                 <button
+                    type="button"
                     onClick={() => setShowPreview(!showPreview)}
-                    className="text-sm text-amber-600 underline 
-                     hover:text-amber-700"
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-amber-800 hover:text-amber-950"
                 >
-                    {showPreview ? '▲ Hide Email Preview'
-                        : '▼ Show Email Preview'}
+                    {showPreview ? (
+                        <>
+                            <ChevronUp className="w-4 h-4" aria-hidden />
+                            Hide email preview
+                        </>
+                    ) : (
+                        <>
+                            <ChevronDown className="w-4 h-4" aria-hidden />
+                            Show email preview
+                        </>
+                    )}
                 </button>
 
                 {showPreview && (
-                    <div className="mt-3 border border-slate-200 rounded-xl 
-                          overflow-hidden shadow-sm">
-                        <div className="bg-slate-100 px-4 py-2 text-xs 
-                            text-slate-500 border-b font-medium">
-                            📧 Email Preview (approximate)
+                    <div className="mt-3 border border-slate-200 rounded-xl overflow-hidden shadow-card">
+                        <div className="bg-slate-100 px-4 py-2 text-xs text-slate-600 border-b font-semibold flex items-center gap-2">
+                            <Mail className="w-3.5 h-3.5" aria-hidden />
+                            Approximate inbox preview
                         </div>
                         <div style={{ fontFamily: 'Georgia, serif' }}>
                             <div style={{
@@ -430,7 +464,7 @@ export default function NewsletterPage() {
             </div>
 
             {/* Action Buttons */}
-            <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-6 space-y-6">
+            <div className="bg-white rounded-xl border border-slate-200/80 shadow-card p-6 space-y-6 ring-1 ring-slate-900/[0.02]">
                 
                 {/* Targeting Options */}
                 <div className="flex flex-col md:flex-row gap-6 md:items-start pb-6 border-b border-slate-100">
@@ -479,16 +513,28 @@ export default function NewsletterPage() {
                             className="w-full md:w-64 border border-slate-300 rounded-lg px-4 py-2.5 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-amber-400"
                         />
                         <button
+                            type="button"
                             onClick={() => handleSend(true)}
                             disabled={testSending || sending || !subject || !body}
-                            className="w-full md:w-auto flex items-center justify-center gap-2 px-5 py-2.5 border-2 border-navy text-navy rounded-lg font-semibold hover:bg-navy hover:text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap"
+                            className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 border-2 border-navy text-navy rounded-lg font-semibold hover:bg-navy hover:text-white transition-colors duration-200 disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap"
                         >
-                            {testSending ? '⟳ Sending Test...' : '🧪 Send Test Email'}
+                            {testSending ? (
+                                <>
+                                    <Loader2 className="w-4 h-4 animate-spin" aria-hidden />
+                                    Sending test…
+                                </>
+                            ) : (
+                                <>
+                                    <FlaskConical className="w-4 h-4" aria-hidden />
+                                    Send test email
+                                </>
+                            )}
                         </button>
                     </div>
 
                     {/* Send Actual */}
                     <button
+                        type="button"
                         onClick={() => {
                             if (!subject.trim() || !body.trim()) {
                                 setError('Subject and body are required before sending')
@@ -501,23 +547,47 @@ export default function NewsletterPage() {
                             setShowConfirm(true)
                         }}
                         disabled={sending || testSending}
-                        className="w-full md:w-auto px-8 py-2.5 bg-amber-400 text-navy rounded-lg font-bold hover:bg-amber-500 transition-colors disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap shadow-sm"
+                        className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 py-2.5 bg-gold text-navy rounded-lg font-bold hover:bg-amber-400 transition-colors duration-200 disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap shadow-sm"
                     >
-                        {sending ? '⟳ Sending...' : targetType === 'all' ? '🚀 Send to All Subscribers' : '🚀 Send to Subscriber'}
+                        {sending ? (
+                            <>
+                                <Loader2 className="w-4 h-4 animate-spin" aria-hidden />
+                                Sending…
+                            </>
+                        ) : (
+                            <>
+                                <Rocket className="w-4 h-4" aria-hidden />
+                                {targetType === 'all' ? 'Send to all subscribers' : 'Send to subscriber'}
+                            </>
+                        )}
                     </button>
                 </div>
             </div>
 
             {/* Confirmation Modal */}
             {showConfirm && (
-                <div className="fixed inset-0 bg-black/60 flex items-center 
-                        justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl shadow-2xl p-8 
-                          max-w-md w-full">
-                        <div className="text-5xl text-center mb-4">⚠️</div>
-                        <h2 className="text-xl font-heading font-bold text-navy 
-                           text-center mb-2">
-                            Confirm Newsletter Send
+                <div
+                    className="fixed inset-0 bg-slate-900/55 backdrop-blur-[2px] flex items-center justify-center z-50 p-4 content-fade-in"
+                    role="presentation"
+                    onClick={() => setShowConfirm(false)}
+                >
+                    <div
+                        className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full border border-slate-200/80 ring-1 ring-slate-900/5"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="newsletter-confirm-title"
+                        onClick={e => e.stopPropagation()}
+                    >
+                        <div className="flex justify-center mb-4">
+                            <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-amber-100 text-amber-800">
+                                <AlertTriangle className="w-7 h-7" aria-hidden />
+                            </span>
+                        </div>
+                        <h2
+                            id="newsletter-confirm-title"
+                            className="text-xl font-heading font-bold text-navy text-center mb-2"
+                        >
+                            Confirm send
                         </h2>
                         <p className="text-slate-500 text-center mb-4">
                             This will send an email to
@@ -553,28 +623,25 @@ export default function NewsletterPage() {
                                 </p>
                             )}
                         </div>
-                        <p className="text-red-500 text-sm text-center mb-6 
-                          font-medium">
-                            ⚠️ This cannot be undone
+                        <p className="text-red-600 text-sm text-center mb-6 font-semibold inline-flex items-center justify-center gap-2 w-full">
+                            <XCircle className="w-4 h-4 shrink-0" aria-hidden />
+                            This cannot be undone
                         </p>
                         <div className="flex gap-3">
                             <button
+                                type="button"
                                 onClick={() => setShowConfirm(false)}
-                                className="flex-1 px-4 py-3 border-2 
-                           border-slate-300 text-slate-600 
-                           rounded-xl font-semibold 
-                           hover:border-slate-400 
-                           transition-colors"
+                                className="flex-1 px-4 py-3 border border-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-50 transition-colors"
                             >
                                 Cancel
                             </button>
                             <button
+                                type="button"
                                 onClick={() => handleSend(false)}
-                                className="flex-1 px-4 py-3 bg-amber-400 
-                           text-navy rounded-xl font-semibold 
-                           hover:bg-amber-500 transition-colors"
+                                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 bg-gold text-navy rounded-xl font-semibold hover:bg-amber-400 transition-colors"
                             >
-                                Yes, Send Now
+                                <Rocket className="w-4 h-4" aria-hidden />
+                                Send now
                             </button>
                         </div>
                     </div>

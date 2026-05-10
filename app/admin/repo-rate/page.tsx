@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { ArrowDown, ArrowUp, Landmark, Loader2, Minus, Save } from 'lucide-react'
 
 interface RateEntry {
   id: string
@@ -81,18 +82,24 @@ export default function AdminRepoRatePage() {
     setHistory(prev => prev.filter(e => e.id !== id))
   }
 
-  if (loading) return (
-    <div className="flex items-center justify-center min-h-[400px]">
-      <div className="text-slate-400 animate-pulse">Loading repo rate data...</div>
-    </div>
-  )
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-3 text-slate-500">
+        <Loader2 className="w-8 h-8 animate-spin text-gold" aria-hidden />
+        <p className="text-sm font-medium">Loading repo rate data…</p>
+      </div>
+    )
+  }
 
   return (
-    <div className="space-y-8 max-w-5xl">
+    <div className="space-y-8 max-w-5xl content-fade-in">
       <div>
-        <h1 className="text-2xl font-bold text-navy">🏦 RBI Repo Rate Manager</h1>
-        <p className="text-slate-500 text-sm mt-1">
-          Update current repo rate after each MPC meeting. Old rate automatically saves to history.
+        <h1 className="text-2xl font-heading font-bold text-navy flex items-center gap-2">
+          <Landmark className="w-7 h-7 text-blue-700" aria-hidden />
+          RBI repo rate
+        </h1>
+        <p className="text-slate-500 text-sm mt-2 leading-relaxed">
+          Record each MPC outcome. The public repo-rate page and history update together.
         </p>
       </div>
 
@@ -104,18 +111,23 @@ export default function AdminRepoRatePage() {
           { label: 'MSF / Bank Rate', value: currentRate.msf_rate || '—', color: 'bg-purple-50 border-purple-200 text-purple-700' },
           { label: 'Stance', value: currentRate.mpc_stance || '—', color: 'bg-amber-50 border-amber-200 text-amber-700' },
         ].map(stat => (
-          <div key={stat.label} className={`rounded-xl border p-4 text-center ${stat.color}`}>
-            <div className="text-2xl font-bold">{stat.value}</div>
-            <div className="text-xs font-medium mt-1 opacity-80">{stat.label}</div>
+          <div
+            key={stat.label}
+            className={`rounded-xl border p-4 text-center shadow-card ring-1 ring-slate-900/[0.02] ${stat.color}`}
+          >
+            <div className="text-2xl font-heading font-bold">{stat.value}</div>
+            <div className="text-xs font-semibold mt-1 opacity-85">{stat.label}</div>
           </div>
         ))}
       </div>
 
       {/* UPDATE RATE FORM */}
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-        <div className="bg-amber-50 border-b border-amber-200 px-6 py-4">
-          <h2 className="font-bold text-navy">📥 Record New MPC Decision</h2>
-          <p className="text-xs text-amber-700 mt-1">Fill this after every RBI MPC meeting. This will update the live page AND save to history automatically.</p>
+      <div className="bg-white rounded-xl border border-slate-200/90 overflow-hidden shadow-card ring-1 ring-slate-900/[0.02]">
+        <div className="bg-amber-50/90 border-b border-amber-200/80 px-6 py-4">
+          <h2 className="font-heading font-bold text-navy">Record MPC decision</h2>
+          <p className="text-xs text-amber-900/80 mt-1 leading-relaxed">
+            Saves current settings to the live page and appends this meeting to history.
+          </p>
         </div>
         <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
@@ -187,19 +199,35 @@ export default function AdminRepoRatePage() {
           </div>
         </div>
         <div className="px-6 pb-6">
-          <button onClick={handleSaveNewRate} disabled={saving}
-            className={`px-6 py-3 rounded-lg font-semibold text-sm transition-colors ${
-              saved ? 'bg-green-500 text-white' : 'bg-amber-400 hover:bg-amber-500 text-navy'
-            }`}>
-            {saving ? 'Saving...' : saved ? '✓ Saved! Live page updated + history recorded' : '💾 Save New MPC Decision'}
+          <button
+            type="button"
+            onClick={handleSaveNewRate}
+            disabled={saving}
+            className={`inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm transition-colors shadow-sm ${
+              saved ? 'bg-emerald-600 text-white' : 'bg-gold hover:bg-amber-400 text-navy'
+            }`}
+          >
+            {saving ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" aria-hidden />
+                Saving…
+              </>
+            ) : saved ? (
+              'Saved — live page updated'
+            ) : (
+              <>
+                <Save className="w-4 h-4" aria-hidden />
+                Save MPC decision
+              </>
+            )}
           </button>
         </div>
       </div>
 
       {/* HISTORY TABLE */}
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-        <div className="bg-slate-50 border-b border-slate-200 px-6 py-4">
-          <h2 className="font-bold text-navy">📋 Rate History ({history.length} entries)</h2>
+      <div className="bg-white rounded-xl border border-slate-200/90 overflow-hidden shadow-card ring-1 ring-slate-900/[0.02]">
+        <div className="bg-slate-50/95 border-b border-slate-200 px-6 py-4">
+          <h2 className="font-heading font-bold text-navy">Rate history ({history.length})</h2>
           <p className="text-xs text-slate-500 mt-1">All entries are shown on the public /rbi/repo-rate page</p>
         </div>
         <div className="overflow-x-auto">
@@ -219,12 +247,24 @@ export default function AdminRepoRatePage() {
                   <td className="px-4 py-3 font-medium text-navy">{entry.meeting_name}</td>
                   <td className="px-4 py-3 text-center font-bold text-blue-700">{entry.repo_rate}</td>
                   <td className="px-4 py-3 text-center text-slate-600">
-                    {entry.change_direction === 'cut' ? '⬇️' : entry.change_direction === 'hike' ? '⬆️' : '⏸'} {entry.change_amount}
+                    <span className="inline-flex items-center justify-center gap-1">
+                      {entry.change_direction === 'cut' ? (
+                        <ArrowDown className="w-4 h-4 text-emerald-600" aria-hidden />
+                      ) : entry.change_direction === 'hike' ? (
+                        <ArrowUp className="w-4 h-4 text-red-600" aria-hidden />
+                      ) : (
+                        <Minus className="w-4 h-4 text-slate-400" aria-hidden />
+                      )}
+                      <span>{entry.change_amount}</span>
+                    </span>
                   </td>
                   <td className="px-4 py-3 text-slate-600">{entry.stance}</td>
                   <td className="px-4 py-3 text-center">
-                    <button onClick={() => handleDeleteEntry(entry.id)}
-                      className="text-red-500 hover:text-red-700 text-xs font-medium">
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteEntry(entry.id)}
+                      className="text-red-600 hover:text-red-800 text-xs font-semibold"
+                    >
                       Delete
                     </button>
                   </td>

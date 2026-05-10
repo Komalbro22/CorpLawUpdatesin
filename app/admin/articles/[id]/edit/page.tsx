@@ -4,6 +4,7 @@
 import { useState, useRef, KeyboardEvent, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
+import { FilePenLine } from 'lucide-react'
 import { slugify, calculateReadingTime, formatDate } from '@/lib/utils'
 import { smartCleanContent } from '@/lib/html-to-markdown'
 import CategoryBadge from '@/components/CategoryBadge'
@@ -285,9 +286,12 @@ export default function EditArticle({ params }: { params: { id: string } }) {
     }
 
     return (
-        <div className="pb-24">
+        <div className="pb-24 content-fade-in">
             <div className="flex justify-between items-center mb-6">
-                <h1 className="font-heading font-bold text-2xl text-navy">Edit Article</h1>
+                <h1 className="font-heading font-bold text-2xl text-navy flex items-center gap-2">
+                    <FilePenLine className="w-7 h-7 text-amber-600 shrink-0" aria-hidden />
+                    Edit article
+                </h1>
 
                 {/* Mobile Tabs */}
                 <div className="flex lg:hidden bg-slate-200 rounded-lg p-1">
@@ -322,7 +326,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                     </div>
 
                     {/* Slug */}
-                    <div className="border border-slate-200 rounded-xl p-5 bg-white shadow-sm space-y-4">
+                    <div className="border border-slate-200/80 rounded-xl p-5 bg-white shadow-card ring-1 ring-slate-900/[0.02] space-y-4">
                         <div>
                             <label className="block text-sm font-bold text-navy mb-1">URL Slug</label>
                             <div className="flex gap-2 items-start">
@@ -368,7 +372,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                     </div>
 
                     {/* Summary */}
-                    <div className="border border-slate-200 rounded-xl p-5 bg-white shadow-sm">
+                    <div className="border border-slate-200/80 rounded-xl p-5 bg-white shadow-card ring-1 ring-slate-900/[0.02]">
                         <label className="block text-sm font-bold text-navy mb-1">Summary <span className="text-red-500">*</span></label>
                         <textarea
                             value={summary}
@@ -384,7 +388,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                     </div>
 
                     {/* Key Change, Effective Date, Impact Level */}
-                    <div className="border border-slate-200 rounded-xl p-5 bg-white shadow-sm space-y-5">
+                    <div className="border border-slate-200/80 rounded-xl p-5 bg-white shadow-card ring-1 ring-slate-900/[0.02] space-y-5">
                         <div>
                             <label htmlFor="keyChange" className="block text-sm font-semibold text-navy mb-2">
                                 Key Change Pill
@@ -476,7 +480,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                     </div>
 
                     {/* Content Markdown */}
-                    <div className="border border-slate-200 rounded-xl p-5 bg-white shadow-sm" data-color-mode="light">
+                    <div className="border border-slate-200/80 rounded-xl p-5 bg-white shadow-card ring-1 ring-slate-900/[0.02]" data-color-mode="light">
                         {content.includes('ibb.co') && (
                             <div className="mb-4 p-3 bg-amber-50 border border-amber-200 text-amber-800 rounded-lg text-sm flex items-center gap-2">
                                 <span>⚠️</span>
@@ -530,7 +534,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                     </div>
 
                     {/* SEO Fields */}
-                    <div className="border border-slate-200 rounded-xl p-5 bg-white shadow-sm space-y-4">
+                    <div className="border border-slate-200/80 rounded-xl p-5 bg-white shadow-card ring-1 ring-slate-900/[0.02] space-y-4">
                         <h3 className="font-bold text-navy text-sm border-b border-slate-100 pb-2 mb-3">Search Engine Optimization (SEO)</h3>
                         <div>
                             <label className="block text-sm font-semibold text-navy mb-1">SEO Title (max 80 chars)</label>
@@ -559,7 +563,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                     </div>
 
                     {/* Tags */}
-                    <div className="border border-slate-200 rounded-xl p-5 bg-white shadow-sm">
+                    <div className="border border-slate-200/80 rounded-xl p-5 bg-white shadow-card ring-1 ring-slate-900/[0.02]">
                         <label className="block text-sm font-bold text-navy mb-1">Tags (press Enter to add)</label>
                         <input
                             type="text"
@@ -585,7 +589,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                     </div>
 
                     {/* Source and Advanced */}
-                    <div className="border border-slate-200 rounded-xl p-5 bg-white shadow-sm grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div className="border border-slate-200/80 rounded-xl p-5 bg-white shadow-card ring-1 ring-slate-900/[0.02] grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div className="md:col-span-2">
                             <h3 className="font-bold text-navy text-sm border-b border-slate-100 pb-2 mb-4">Sources & Publishing</h3>
                         </div>
@@ -674,7 +678,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
 
                 {/* RIGHT COLUMN - PREVIEW */}
                 <div className={`w-full lg:w-[40%] ${activeTab === 'write' ? 'hidden lg:block' : 'block'}`}>
-                    <div className="sticky top-24 border border-slate-200 rounded-xl p-6 bg-white shadow-sm min-h-[600px]">
+                    <div className="sticky top-24 border border-slate-200/80 rounded-xl p-6 bg-white shadow-card ring-1 ring-slate-900/[0.02] min-h-[600px]">
                         <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-6 pb-4 border-b border-slate-100">Live Preview</h3>
 
                         {!title && !content ? (

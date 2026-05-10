@@ -8,6 +8,7 @@ import CategoryBadge from '@/components/CategoryBadge'
 import Pagination from '@/components/Pagination'
 import { formatDate } from '@/lib/utils'
 import { Update } from '@/types'
+import { AlertTriangle, Plus, Search } from 'lucide-react'
 
 type ArticleWithCounts = Update & { updated_at: string }
 
@@ -149,32 +150,39 @@ export default function AdminArticles() {
     const paginationBasePath = `/admin/articles${basePathParams ? '?' + basePathParams : ''}`
 
     return (
-        <div className="space-y-6">
-            <div className="flex justify-between items-center">
-                <h1 className="font-heading text-2xl font-bold text-navy">All Articles</h1>
-                <Link href="/admin/articles/new" className="bg-gold text-navy font-semibold px-4 py-2 rounded-lg hover:bg-[#E5B54E] transition-colors">
-                    Write New Article
+        <div className="space-y-6 content-fade-in">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+                <h1 className="font-heading text-2xl font-bold text-navy">All articles</h1>
+                <Link
+                    href="/admin/articles/new"
+                    className="inline-flex items-center justify-center gap-2 bg-gold text-navy font-semibold px-4 py-2.5 rounded-lg hover:bg-amber-400 transition-colors duration-200 shadow-sm"
+                >
+                    <Plus className="w-4 h-4" aria-hidden />
+                    New article
                 </Link>
             </div>
 
             {/* FILTER BAR */}
-            <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex flex-col md:flex-row gap-4 items-center">
+            <div className="bg-white p-4 md:p-5 rounded-xl shadow-card border border-slate-200/80 flex flex-col md:flex-row gap-4 items-stretch md:items-center ring-1 ring-slate-900/[0.02]">
                 <div className="flex-1 w-full relative">
+                    <Search
+                        className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none"
+                        aria-hidden
+                    />
                     <input
-                        type="text"
-                        placeholder="Search articles..."
+                        type="search"
+                        placeholder="Search titles…"
                         value={search}
                         onChange={handleSearchChange}
-                        className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-gold focus:outline-none text-navy"
+                        className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-gold/45 focus:outline-none text-navy transition-shadow"
                     />
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
                 </div>
-                
-                <div className="flex gap-4 w-full md:w-auto">
+
+                <div className="flex gap-3 w-full md:w-auto">
                     <select
                         value={categoryFilter}
                         onChange={handleCategoryChange}
-                        className="flex-1 md:w-48 appearance-none bg-white border border-slate-300 text-slate-700 text-sm rounded-lg px-4 py-2 focus:ring-2 focus:ring-gold focus:outline-none"
+                        className="flex-1 md:w-48 appearance-none bg-white border border-slate-200 text-slate-700 text-sm rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-gold/45 focus:outline-none transition-shadow"
                     >
                         <option value="All">All Categories</option>
                         {Object.entries(categoryCounts).map(([cat, count]) => (
@@ -189,7 +197,7 @@ export default function AdminArticles() {
                     <select
                         value={statusFilter}
                         onChange={handleStatusChange}
-                        className="flex-1 md:w-40 appearance-none bg-white border border-slate-300 text-slate-700 text-sm rounded-lg px-4 py-2 focus:ring-2 focus:ring-gold focus:outline-none"
+                        className="flex-1 md:w-40 appearance-none bg-white border border-slate-200 text-slate-700 text-sm rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-gold/45 focus:outline-none transition-shadow"
                     >
                         <option value="All">All Status</option>
                         <option value="Published">Published</option>
@@ -220,10 +228,10 @@ export default function AdminArticles() {
             )}
 
             {/* ARTICLES TABLE */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+            <div className="bg-white rounded-xl shadow-card border border-slate-200/80 overflow-hidden ring-1 ring-slate-900/[0.02]">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm whitespace-nowrap">
-                        <thead className="bg-slate-50 text-slate-500">
+                        <thead className="bg-slate-50/95 text-slate-600 border-b border-slate-100">
                             <tr>
                                 <th className="px-6 py-4 w-12">
                                     <input 
@@ -243,7 +251,15 @@ export default function AdminArticles() {
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {loading ? (
-                                <tr><td colSpan={7} className="px-6 py-12 text-center text-slate-400">Loading articles...</td></tr>
+                                <>
+                                    {Array.from({ length: 6 }).map((_, i) => (
+                                        <tr key={i} className="animate-pulse">
+                                            <td colSpan={7} className="px-6 py-4">
+                                                <div className="h-4 bg-slate-100 rounded w-2/3 max-w-md" />
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </>
                             ) : articles.length === 0 ? (
                                 <tr>
                                     <td colSpan={7} className="px-6 py-12 text-center">
@@ -260,7 +276,7 @@ export default function AdminArticles() {
                                     const isPublished = !!article.published_at
                                     const dateStr = article.published_at || article.created_at
                                     return (
-                                        <tr key={article.id} className={`transition-colors ${selectedIds.has(article.id) ? 'bg-slate-50' : 'hover:bg-slate-50'}`}>
+                                        <tr key={article.id} className={`transition-colors duration-150 ${selectedIds.has(article.id) ? 'bg-amber-50/40' : 'hover:bg-slate-50/80'}`}>
                                             <td className="px-6 py-4">
                                                 <input 
                                                     type="checkbox" 
@@ -323,23 +339,43 @@ export default function AdminArticles() {
 
             {/* DELETE MODAL */}
             {deleteConfirm && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 animate-in fade-in">
-                    <div className="bg-white rounded-xl shadow-xl max-w-sm w-full p-6 text-center">
-                        <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4 text-red-600 text-2xl">
-                            ⚠
+                <div
+                    className="fixed inset-0 bg-slate-900/50 backdrop-blur-[2px] flex items-center justify-center p-4 z-50 content-fade-in"
+                    role="presentation"
+                    onClick={() => setDeleteConfirm(null)}
+                >
+                    <div
+                        className="bg-white rounded-xl shadow-2xl max-w-sm w-full p-6 text-center border border-slate-200/80 ring-1 ring-slate-900/5"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="delete-dialog-title"
+                        onClick={e => e.stopPropagation()}
+                    >
+                        <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4 text-red-600">
+                            <AlertTriangle className="w-6 h-6" aria-hidden />
                         </div>
-                        <h3 className="font-heading font-bold text-xl text-navy mb-2">Delete Article{deleteConfirm === 'bulk' ? 's' : ''}?</h3>
+                        <h3 id="delete-dialog-title" className="font-heading font-bold text-xl text-navy mb-2">
+                            Delete article{deleteConfirm === 'bulk' ? 's' : ''}?
+                        </h3>
                         <p className="text-slate-500 mb-6 font-medium">
                             {deleteConfirm === 'bulk' 
                                 ? `Are you sure you want to delete ${selectedIds.size} articles? This cannot be undone.`
                                 : `Are you sure you want to delete this article? This cannot be undone.`
                             }
                         </p>
-                        <div className="flex justify-center gap-3">
-                            <button onClick={() => setDeleteConfirm(null)} className="px-4 py-2 border border-slate-300 rounded-lg text-slate-700 font-medium hover:bg-slate-50 transition-colors">
+                        <div className="flex justify-center gap-3 pt-1">
+                            <button
+                                type="button"
+                                onClick={() => setDeleteConfirm(null)}
+                                className="px-4 py-2.5 border border-slate-200 rounded-lg text-slate-700 font-medium hover:bg-slate-50 transition-colors duration-200"
+                            >
                                 Cancel
                             </button>
-                            <button onClick={performDelete} className="px-4 py-2 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors">
+                            <button
+                                type="button"
+                                onClick={performDelete}
+                                className="px-4 py-2.5 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors duration-200 shadow-sm"
+                            >
                                 Delete
                             </button>
                         </div>

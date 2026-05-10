@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { ChevronUp } from 'lucide-react'
 
 export default function BackToTop() {
     const [visible, setVisible] = useState(false)
@@ -10,7 +11,8 @@ export default function BackToTop() {
             setVisible(window.scrollY > 400)
         }
 
-        window.addEventListener('scroll', handleScroll)
+        handleScroll()
+        window.addEventListener('scroll', handleScroll, { passive: true })
         return () => window.removeEventListener('scroll', handleScroll)
     }, [])
 
@@ -20,14 +22,16 @@ export default function BackToTop() {
 
     return (
         <button
+            type="button"
             onClick={scrollToTop}
-            className={`fixed bottom-6 left-6 z-40 bg-navy text-gold p-3 rounded-full shadow-lg transition-all duration-300 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
-                } hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2`}
+            className={`fixed bottom-6 left-6 z-40 bg-navy text-gold p-3 rounded-full shadow-lg shadow-slate-900/20 transition-all duration-300 ease-out motion-safe:transition-transform ${
+                visible
+                    ? 'opacity-100 translate-y-0 pointer-events-auto'
+                    : 'opacity-0 translate-y-3 pointer-events-none'
+            } hover:bg-slate-800 hover:shadow-xl motion-safe:hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2`}
             aria-label="Back to top"
         >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
-            </svg>
+            <ChevronUp className="w-6 h-6" strokeWidth={2.25} aria-hidden />
         </button>
     )
 }

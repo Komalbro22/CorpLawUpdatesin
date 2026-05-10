@@ -8,6 +8,79 @@
   --surface: #ffffff;
   --surface-muted: #f1f5f9;
   --border-subtle: #e2e8f0;
+  --ring-focus: rgba(245, 158, 11, 0.45);
+}
+
+/* Subtle route transition for admin main pane */
+@keyframes admin-main-fade {
+  from {
+    opacity: 0.88;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.admin-main-fade {
+  animation: admin-main-fade 0.22s ease-out;
+}
+
+/* Skeleton shimmer */
+@keyframes skeleton-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.55),
+    transparent
+  );
+  animation: skeleton-shimmer 1.1s ease-in-out infinite;
+}
+
+@keyframes content-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.content-fade-in {
+  animation: content-fade-in 0.28s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .admin-main-fade {
+    animation: none;
+  }
+  .content-fade-in {
+    animation: none;
+  }
+  .skeleton-shimmer::after {
+    animation: none;
+  }
 }
 
 /* Prevent page-level horizontal scroll without clipping article table content */
@@ -54,6 +127,14 @@ body {
 
 html {
   scroll-behavior: smooth;
+}
+
+@layer base {
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid var(--ring-focus);
+    outline-offset: 2px;
+  }
 }
 
 h2, h3, h4 {

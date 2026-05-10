@@ -1,6 +1,18 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import type { LucideIcon } from 'lucide-react'
+import {
+  BarChart2,
+  ExternalLink,
+  Globe,
+  Landmark,
+  Loader2,
+  Megaphone,
+  Search,
+  Share2,
+  Shield,
+} from 'lucide-react'
 
 interface Setting {
   key: string
@@ -9,21 +21,29 @@ interface Setting {
   description: string
 }
 
-const settingGroups = [
+const settingGroups: { id: string; title: string; Icon: LucideIcon; keys: string[] }[] = [
   {
-    title: '📱 Social Media & Channels',
+    id: 'social',
+    title: 'Social media & channels',
+    Icon: Share2,
     keys: ['whatsapp_channel', 'linkedin_url', 'twitter_url', 'instagram_url'],
   },
   {
-    title: '🌐 Site Content',
+    id: 'site',
+    title: 'Site content',
+    Icon: Globe,
     keys: ['site_tagline', 'contact_email', 'newsletter_footer'],
   },
   {
-    title: '📢 Announcement Bar',
+    id: 'announcement',
+    title: 'Announcement bar',
+    Icon: Megaphone,
     keys: ['announcement_bar', 'announcement_bar_url'],
   },
   {
-    title: '🏦 RBI Policy Rates',
+    id: 'rbi',
+    title: 'RBI policy rates',
+    Icon: Landmark,
     keys: [
       'current_repo_rate',
       'current_repo_rate_date',
@@ -34,7 +54,9 @@ const settingGroups = [
     ],
   },
   {
-    title: '📊 Analytics & SEO',
+    id: 'analytics',
+    title: 'Analytics & SEO',
+    Icon: BarChart2,
     keys: ['google_analytics_id', 'google_search_console'],
   },
 ]
@@ -122,8 +144,9 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-slate-400 animate-pulse">Loading settings...</div>
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4 text-slate-500">
+        <Loader2 className="w-8 h-8 animate-spin text-gold" aria-hidden />
+        <p className="text-sm font-medium">Loading settings…</p>
       </div>
     )
   }
@@ -133,19 +156,24 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="space-y-8 max-w-3xl">
+    <div className="space-y-8 max-w-3xl content-fade-in">
       <div>
-        <h1 className="text-2xl font-bold text-navy">Site Settings</h1>
-        <p className="text-slate-500 text-sm mt-1">
-          Update social links, WhatsApp channel, SEO settings and more.
-          Changes apply instantly — no deployment needed.
+        <h1 className="text-2xl font-heading font-bold text-navy">Site settings</h1>
+        <p className="text-slate-500 text-sm mt-2 leading-relaxed">
+          Social links, announcements, RBI rates, and SEO identifiers. Changes apply on save — no
+          deployment required.
         </p>
       </div>
 
-      {settingGroups.map((group) => (
-        <div key={group.title} className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-          <div className="bg-slate-50 border-b border-slate-200 px-6 py-4">
-            <h2 className="font-bold text-navy">{group.title}</h2>
+      {settingGroups.map((group) => {
+        const GroupIcon = group.Icon
+        return (
+        <div key={group.id} className="bg-white rounded-xl border border-slate-200/90 shadow-card overflow-hidden ring-1 ring-slate-900/[0.02]">
+          <div className="bg-slate-50/90 border-b border-slate-200 px-6 py-4 flex items-center gap-3">
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-600 shrink-0">
+              <GroupIcon className="w-4 h-4" aria-hidden />
+            </span>
+            <h2 className="font-heading font-bold text-navy">{group.title}</h2>
           </div>
           <div className="divide-y divide-slate-100">
             {group.keys.map((key) => {
@@ -171,7 +199,7 @@ export default function SettingsPage() {
                             setValues(prev => ({ ...prev, [key]: e.target.value }))
                           }
                           rows={2}
-                          className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-amber-400"
+                          className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-gold/40 transition-shadow"
                           placeholder={`Enter ${setting.label}...`}
                         />
                       ) : (
@@ -181,7 +209,7 @@ export default function SettingsPage() {
                           onChange={e =>
                             setValues(prev => ({ ...prev, [key]: e.target.value }))
                           }
-                          className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-amber-400"
+                          className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-gold/40 transition-shadow"
                           placeholder={isUrl ? 'https://' : `Enter ${setting.label}...`}
                         />
                       )}
@@ -190,21 +218,32 @@ export default function SettingsPage() {
                           href={values[key]}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-xs text-blue-500 hover:underline mt-2"
+                          className="inline-flex items-center gap-1 text-xs text-blue-600 hover:underline mt-2 font-medium"
                         >
-                          ↗ Preview link
+                          <ExternalLink className="w-3 h-3" aria-hidden />
+                          Preview link
                         </a>
                       )}
                     </div>
                     <button
+                      type="button"
                       onClick={() => saveSetting(key)}
                       disabled={saving[key]}
-                      className={`flex-shrink-0 px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${saved[key]
-                          ? 'bg-green-500 text-white'
-                          : 'bg-amber-400 hover:bg-amber-500 text-navy'
-                        }`}
+                      className={`flex-shrink-0 px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200 min-w-[5.5rem] inline-flex items-center justify-center gap-1.5 ${saved[key]
+                          ? 'bg-emerald-600 text-white'
+                          : 'bg-gold hover:bg-amber-400 text-navy shadow-sm'
+                        } disabled:opacity-60`}
                     >
-                      {saving[key] ? '...' : saved[key] ? '✓ Saved!' : 'Save'}
+                      {saving[key] ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" aria-hidden />
+                          Save
+                        </>
+                      ) : saved[key] ? (
+                        'Saved'
+                      ) : (
+                        'Save'
+                      )}
                     </button>
                   </div>
                 </div>
@@ -212,34 +251,43 @@ export default function SettingsPage() {
             })}
           </div>
         </div>
-      ))}
+        )
+      })}
 
       {/* IndexNow Section */}
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-        <div className="bg-slate-50 border-b border-slate-200 px-6 py-4">
-          <h2 className="font-bold text-navy">
-            🔍 IndexNow — Instant Bing Indexing
-          </h2>
+      <div className="bg-white rounded-xl border border-slate-200/90 shadow-card overflow-hidden ring-1 ring-slate-900/[0.02]">
+        <div className="bg-slate-50/90 border-b border-slate-200 px-6 py-4 flex items-center gap-3">
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-600 shrink-0">
+            <Search className="w-4 h-4" aria-hidden />
+          </span>
+          <h2 className="font-heading font-bold text-navy">IndexNow (Bing & partners)</h2>
         </div>
         <div className="px-6 py-5 space-y-4">
-          <p className="text-sm text-slate-500">
-            Submit all published articles to Bing, 
-            Yandex and other IndexNow search engines 
-            for instant indexing.
+          <p className="text-sm text-slate-600 leading-relaxed">
+            Submit published article URLs to Bing, Yandex, and other IndexNow participants for faster discovery.
           </p>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <button
+              type="button"
               onClick={handleIndexNowSubmit}
               disabled={indexNowLoading}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold disabled:opacity-50 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold disabled:opacity-50 transition-colors shadow-sm"
             >
-              {indexNowLoading 
-                ? '⏳ Submitting...' 
-                : '🔍 Submit All Articles to Bing'}
+              {indexNowLoading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" aria-hidden />
+                  Submitting…
+                </>
+              ) : (
+                <>
+                  <Search className="w-4 h-4 opacity-90" aria-hidden />
+                  Submit all URLs
+                </>
+              )}
             </button>
             {indexNowResult && (
-              <span className="text-sm text-green-600 font-medium">
-                ✅ {indexNowResult}
+              <span className="text-sm text-emerald-700 font-medium">
+                {indexNowResult}
               </span>
             )}
           </div>
@@ -252,9 +300,12 @@ export default function SettingsPage() {
       </div>
 
       {/* ACCOUNT & SECURITY */}
-      <div className="bg-white rounded-xl border border-red-200 overflow-hidden">
-        <div className="bg-red-50 border-b border-red-200 px-6 py-4">
-          <h2 className="font-bold text-red-700">🔴 Account & Security</h2>
+      <div className="bg-white rounded-xl border border-red-200/90 overflow-hidden shadow-sm">
+        <div className="bg-red-50/80 border-b border-red-200 px-6 py-4 flex items-center gap-3">
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white border border-red-200 text-red-700 shrink-0">
+            <Shield className="w-4 h-4" aria-hidden />
+          </span>
+          <h2 className="font-heading font-bold text-red-800">Account & security</h2>
         </div>
         <div className="px-6 py-5 space-y-4">
           <div className="flex items-center justify-between">
@@ -277,9 +328,10 @@ export default function SettingsPage() {
               href="https://vercel.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition-colors"
+              className="inline-flex items-center gap-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition-colors"
             >
-              Open Vercel →
+              Open Vercel
+              <ExternalLink className="w-3 h-3 opacity-70" aria-hidden />
             </a>
           </div>
         </div>

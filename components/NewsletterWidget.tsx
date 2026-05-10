@@ -1,12 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import { useState } from 'react'
+import { CheckCircle2, Loader2, Mail } from 'lucide-react'
 
 export default function NewsletterWidget() {
     const [email, setEmail] = useState('')
@@ -18,7 +16,6 @@ export default function NewsletterWidget() {
         e.preventDefault()
         setError('')
 
-        // Basic email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
         if (!emailRegex.test(email)) {
             setError('Please enter a valid email address.')
@@ -48,50 +45,63 @@ export default function NewsletterWidget() {
     }
 
     return (
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-            <h3 className="font-heading text-xl font-bold text-navy mb-2">Subscribe to Corporate Law Updates</h3>
-            <p className="text-slate-600 text-sm mb-4">
-                Get the latest MCA, SEBI, and RBI notifications delivered straight to your inbox.
-            </p>
+        <div className="bg-white p-6 md:p-7 rounded-xl shadow-card border border-slate-200/80 ring-1 ring-slate-900/[0.02] transition-shadow duration-300 hover:shadow-card-hover">
+            <div className="flex items-start gap-3 mb-3">
+                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-navy/5 text-navy">
+                    <Mail className="h-5 w-5" aria-hidden />
+                </span>
+                <div>
+                    <h3 className="font-heading text-lg md:text-xl font-bold text-navy leading-snug">
+                        Subscribe to corporate law updates
+                    </h3>
+                    <p className="text-slate-600 text-sm mt-1 leading-relaxed">
+                        MCA, SEBI, and RBI highlights in one place — no clutter.
+                    </p>
+                </div>
+            </div>
 
             {success ? (
-                <div className="bg-green-50 text-green-700 p-4 rounded-lg flex items-center gap-2">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                    <span className="font-medium">✓ Subscribed! Check your inbox.</span>
+                <div className="mt-4 bg-emerald-50 text-emerald-800 border border-emerald-100 p-4 rounded-xl flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5" aria-hidden />
+                    <span className="font-medium text-sm leading-relaxed">
+                        You are subscribed. Check your inbox for a confirmation message.
+                    </span>
                 </div>
             ) : (
-                <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-3 mt-4">
                     <div>
-                        <label htmlFor="email" className="sr-only">Email address</label>
+                        <label htmlFor="email" className="sr-only">
+                            Email address
+                        </label>
                         <input
                             id="email"
                             type="email"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="Enter your email address"
-                            className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent"
+                            onChange={e => setEmail(e.target.value)}
+                            placeholder="you@company.com"
+                            className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/45 focus:border-gold/35 text-navy text-sm transition-shadow duration-200 placeholder:text-slate-400"
                             required
                             disabled={loading}
+                            autoComplete="email"
                         />
                     </div>
-                    {error && <p className="text-red-500 text-sm">{error}</p>}
+                    {error && (
+                        <p className="text-red-600 text-sm font-medium" role="alert">
+                            {error}
+                        </p>
+                    )}
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-navy text-white font-medium py-2 px-4 rounded-lg hover:bg-slate-800 transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        className="w-full bg-navy text-white font-semibold py-3 px-4 rounded-lg hover:bg-slate-800 transition-colors duration-200 disabled:opacity-65 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-md shadow-slate-900/10"
                     >
                         {loading ? (
                             <>
-                                <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                                </svg>
-                                Subscribing...
+                                <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
+                                Subscribing…
                             </>
                         ) : (
-                            'Subscribe'
+                            'Subscribe free'
                         )}
                     </button>
                 </form>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { Lightbulb, Loader2, Plus } from 'lucide-react'
 
 interface ComplianceEntry {
   id: string
@@ -139,56 +140,74 @@ export default function AdminCompliancePage() {
   const inputClass =
     'w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400'
 
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[320px] gap-3 text-slate-500">
+        <Loader2 className="w-8 h-8 animate-spin text-gold" aria-hidden />
+        <p className="text-sm font-medium">Loading compliance entries…</p>
+      </div>
+    )
+  }
+
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto space-y-6 content-fade-in">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-navy">Compliance Entries</h1>
-          <p className="text-slate-500 text-sm mt-1">Manage all compliance calendar entries</p>
+          <h1 className="text-2xl font-heading font-bold text-navy">Compliance entries</h1>
+          <p className="text-slate-500 text-sm mt-1 leading-relaxed">
+            Manage deadlines shown on the public compliance calendar.
+          </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           <Link
             href="/admin/compliance/suggestions"
-            className="relative border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-50"
+            className="relative inline-flex items-center gap-2 border border-slate-200 text-slate-700 px-4 py-2.5 rounded-lg text-sm font-semibold hover:bg-slate-50 transition-colors bg-white shadow-sm"
           >
-            💡 Suggestions
+            <Lightbulb className="w-4 h-4 text-amber-600" aria-hidden />
+            Suggestions
             {pendingCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-bold rounded-full min-w-[1.25rem] h-5 px-1 flex items-center justify-center">
                 {pendingCount}
               </span>
             )}
           </Link>
           <button
-            onClick={() => { setShowForm(true); setEditingId(null); setForm(emptyForm) }}
-            className="bg-amber-400 hover:bg-amber-500 text-navy font-bold px-4 py-2 rounded-lg text-sm"
+            type="button"
+            onClick={() => {
+              setShowForm(true)
+              setEditingId(null)
+              setForm(emptyForm)
+            }}
+            className="inline-flex items-center gap-2 bg-gold hover:bg-amber-400 text-navy font-semibold px-4 py-2.5 rounded-lg text-sm shadow-sm transition-colors"
           >
-            ➕ Add Entry
+            <Plus className="w-4 h-4" aria-hidden />
+            Add entry
           </button>
         </div>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        <div className="bg-white border border-slate-200 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-navy">{total}</div>
-          <div className="text-xs text-slate-500 mt-1">Total Entries</div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="bg-white border border-slate-200/80 rounded-xl p-5 text-center shadow-card ring-1 ring-slate-900/[0.02]">
+          <div className="text-2xl font-heading font-bold text-navy tabular-nums">{total}</div>
+          <div className="text-xs text-slate-500 mt-1 font-semibold uppercase tracking-wide">Total</div>
         </div>
-        <div className="bg-white border border-slate-200 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-amber-500">{pendingCount}</div>
-          <div className="text-xs text-slate-500 mt-1">Pending Suggestions</div>
+        <div className="bg-white border border-slate-200/80 rounded-xl p-5 text-center shadow-card ring-1 ring-slate-900/[0.02]">
+          <div className="text-2xl font-heading font-bold text-amber-700 tabular-nums">{pendingCount}</div>
+          <div className="text-xs text-slate-500 mt-1 font-semibold uppercase tracking-wide">Pending suggestions</div>
         </div>
-        <div className="bg-white border border-slate-200 rounded-xl p-4 text-center">
-          <div className="text-2xl font-bold text-green-600">{community}</div>
-          <div className="text-xs text-slate-500 mt-1">Community Entries</div>
+        <div className="bg-white border border-slate-200/80 rounded-xl p-5 text-center shadow-card ring-1 ring-slate-900/[0.02]">
+          <div className="text-2xl font-heading font-bold text-emerald-700 tabular-nums">{community}</div>
+          <div className="text-xs text-slate-500 mt-1 font-semibold uppercase tracking-wide">Community</div>
         </div>
       </div>
 
       {/* Add / Edit Form */}
       {showForm && (
-        <div className="bg-white border border-amber-200 rounded-2xl p-6 mb-6 shadow-sm">
-          <h2 className="font-bold text-navy mb-4">
-            {editingId ? '✏️ Edit Entry' : '➕ New Compliance Entry'}
+        <div className="bg-white border border-amber-200/80 rounded-2xl p-6 mb-2 shadow-card ring-1 ring-amber-900/5">
+          <h2 className="font-heading font-bold text-navy mb-4">
+            {editingId ? 'Edit entry' : 'New compliance entry'}
           </h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -264,11 +283,8 @@ export default function AdminCompliancePage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
-        {loading ? (
-          <div className="p-12 text-center text-slate-400">Loading entries...</div>
-        ) : (
-          <div className="overflow-x-auto">
+      <div className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-card ring-1 ring-slate-900/[0.02]">
+        <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-slate-50 border-b border-slate-200">
                 <tr>
@@ -298,7 +314,7 @@ export default function AdminCompliancePage() {
                       <td className="px-4 py-3 font-mono text-xs text-navy font-bold">
                         {entry.form_name}
                         {entry.created_by?.startsWith('community:') && (
-                          <span className="ml-1 text-green-600">👥</span>
+                          <span className="ml-1 text-[10px] font-bold uppercase text-emerald-600">community</span>
                         )}
                       </td>
                       <td className="px-4 py-3 text-slate-700 max-w-xs">
@@ -315,11 +331,11 @@ export default function AdminCompliancePage() {
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex gap-2 flex-wrap">
-                          <button onClick={() => handleEdit(entry)} className="text-xs border border-slate-300 px-2 py-1 rounded hover:bg-slate-50">✏️ Edit</button>
-                          <button onClick={() => handleToggle(entry.id, entry.is_active)} className="text-xs border border-slate-300 px-2 py-1 rounded hover:bg-slate-50">
-                            {entry.is_active ? '🙈 Hide' : '👁 Show'}
+                          <button type="button" onClick={() => handleEdit(entry)} className="text-xs font-semibold border border-slate-200 px-2 py-1 rounded-md hover:bg-slate-50 transition-colors">Edit</button>
+                          <button type="button" onClick={() => handleToggle(entry.id, entry.is_active)} className="text-xs font-semibold border border-slate-200 px-2 py-1 rounded-md hover:bg-slate-50 transition-colors">
+                            {entry.is_active ? 'Hide' : 'Show'}
                           </button>
-                          <button onClick={() => handleDelete(entry.id)} className="text-xs border border-red-200 text-red-500 px-2 py-1 rounded hover:bg-red-50">🗑 Delete</button>
+                          <button type="button" onClick={() => handleDelete(entry.id)} className="text-xs font-semibold border border-red-200 text-red-600 px-2 py-1 rounded-md hover:bg-red-50 transition-colors">Delete</button>
                         </div>
                       </td>
                     </tr>
@@ -328,7 +344,6 @@ export default function AdminCompliancePage() {
               </tbody>
             </table>
           </div>
-        )}
       </div>
     </div>
   )

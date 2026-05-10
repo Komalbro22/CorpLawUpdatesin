@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers'
 import Sidebar from '@/components/admin/Sidebar'
 import TopBar from '@/components/admin/TopBar'
+import AdminMain from '@/components/admin/AdminMain'
 
 export const metadata = {
     robots: {
@@ -25,9 +26,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <Sidebar />
             <div className="flex-1 flex flex-col overflow-hidden min-w-0">
                 <TopBar />
-                <main className="flex-1 overflow-y-auto p-6 lg:p-8 bg-slate-50/90">
-                    {children}
-                </main>
+                <AdminMain>{children}</AdminMain>
             </div>
         </div>
     )

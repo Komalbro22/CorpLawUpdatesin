@@ -41,7 +41,7 @@ export default function HistoryDashboard({ searchParams }: { searchParams: { pag
     const totalPages = Math.ceil(total / limit)
 
     return (
-        <div className="max-w-6xl mx-auto space-y-8 pb-10">
+        <div className="max-w-6xl mx-auto space-y-8 pb-10 content-fade-in">
             {/* Header */}
             <div>
                 <h1 className="text-3xl font-heading font-bold text-navy flex items-center gap-3">
@@ -53,36 +53,36 @@ export default function HistoryDashboard({ searchParams }: { searchParams: { pag
 
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
+                <div className="bg-white rounded-xl shadow-card border border-slate-200/80 p-6 ring-1 ring-slate-900/[0.02]">
                     <div className="flex items-center justify-between mb-4">
-                        <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-500">
+                        <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 ring-1 ring-blue-100">
                             <Mail size={20} />
                         </div>
                     </div>
                     <div className="text-slate-500 text-sm font-medium">Total Sent</div>
                     <div className="text-2xl font-bold text-navy mt-1">{stats.totalSent.toLocaleString()}</div>
                 </div>
-                <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
+                <div className="bg-white rounded-xl shadow-card border border-slate-200/80 p-6 ring-1 ring-slate-900/[0.02]">
                     <div className="flex items-center justify-between mb-4">
-                        <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-500">
+                        <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 ring-1 ring-emerald-100">
                             <Users size={20} />
                         </div>
                     </div>
                     <div className="text-slate-500 text-sm font-medium">Delivered</div>
                     <div className="text-2xl font-bold text-navy mt-1">{stats.totalDelivered.toLocaleString()}</div>
                 </div>
-                <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
+                <div className="bg-white rounded-xl shadow-card border border-slate-200/80 p-6 ring-1 ring-slate-900/[0.02]">
                     <div className="flex items-center justify-between mb-4">
-                        <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-500">
+                        <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-700 ring-1 ring-amber-100">
                             <BarChart3 size={20} />
                         </div>
                     </div>
                     <div className="text-slate-500 text-sm font-medium">Delivery Rate</div>
                     <div className="text-2xl font-bold text-navy mt-1">{stats.deliveryRate}%</div>
                 </div>
-                <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
+                <div className="bg-white rounded-xl shadow-card border border-slate-200/80 p-6 ring-1 ring-slate-900/[0.02]">
                     <div className="flex items-center justify-between mb-4">
-                        <div className="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-purple-500">
+                        <div className="w-10 h-10 rounded-xl bg-violet-50 flex items-center justify-center text-violet-600 ring-1 ring-violet-100">
                             <MousePointerClick size={20} />
                         </div>
                     </div>
@@ -92,7 +92,7 @@ export default function HistoryDashboard({ searchParams }: { searchParams: { pag
             </div>
 
             {/* Chart */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
+            <div className="bg-white rounded-xl shadow-card border border-slate-200/80 p-6 ring-1 ring-slate-900/[0.02]">
                 <h3 className="font-semibold text-navy mb-6">Emails Sent Over Time</h3>
                 <div className="h-72 w-full">
                     {chartData && chartData.length > 0 ? (

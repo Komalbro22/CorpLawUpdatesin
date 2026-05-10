@@ -2,40 +2,47 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import type { LucideIcon } from 'lucide-react'
+import { Calendar, CheckCircle2, Clock, Lightbulb, Mail, Newspaper, Rss } from 'lucide-react'
 
-const contactCards = [
+const contactCards: {
+    Icon: LucideIcon
+    title: string
+    desc: string
+    action: { label: string; href: string; internal?: boolean } | null
+}[] = [
     {
-        icon: '📧',
-        title: 'General Enquiries',
-        desc: 'For questions about the site, content, or partnerships.',
+        Icon: Mail,
+        title: 'General enquiries',
+        desc: 'Questions about the site, content, or partnerships.',
         action: {
             label: 'mail@corplawupdates.in',
             href: 'mailto:mail@corplawupdates.in',
         },
     },
     {
-        icon: '💡',
-        title: 'Submit a Regulatory Tip',
+        Icon: Lightbulb,
+        title: 'Submit a regulatory tip',
         desc: 'Spotted a new MCA circular or SEBI notification? Send us the link and we will cover it.',
         action: {
-            label: 'Send tip →',
+            label: 'Send tip',
             href: 'mailto:mail@corplawupdates.in?subject=Article%20Tip',
         },
     },
     {
-        icon: '📰',
+        Icon: Newspaper,
         title: 'Newsletter',
-        desc: 'To subscribe, unsubscribe, or report a newsletter issue.',
+        desc: 'Subscribe, unsubscribe, or report a newsletter issue.',
         action: {
-            label: 'Manage subscription →',
+            label: 'Manage subscription',
             href: '/newsletter',
             internal: true,
         },
     },
     {
-        icon: '⏱️',
-        title: 'Response Time',
-        desc: 'We typically respond within 24-48 hours on working days.',
+        Icon: Clock,
+        title: 'Response time',
+        desc: 'We typically respond within 24–48 hours on working days.',
         action: null,
     },
 ]
@@ -75,13 +82,17 @@ export default function ContactPage() {
         <div>
 
             {/* HERO */}
-            <div className="bg-navy py-12 px-4 text-center">
-                <h1 className="text-3xl md:text-4xl font-heading font-bold text-white mb-3">
-                    Get in Touch
+            <div className="relative bg-navy py-12 md:py-14 px-4 text-center overflow-hidden">
+                <div
+                    className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] bg-[size:64px_64px]"
+                    aria-hidden
+                />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(245,158,11,0.1),transparent_55%)]" aria-hidden />
+                <h1 className="relative text-3xl md:text-4xl font-heading font-bold text-white mb-3">
+                    Contact
                 </h1>
-                <p className="text-slate-300 max-w-xl mx-auto text-lg">
-                    Questions, suggestions, article tips
-                    or just want to say hello?
+                <p className="relative text-slate-300 max-w-xl mx-auto text-base md:text-lg leading-relaxed">
+                    Questions, suggestions, regulatory tips, or feedback — we read every message.
                 </p>
             </div>
 
@@ -91,13 +102,15 @@ export default function ContactPage() {
                     {/* ── LEFT COLUMN ── */}
                     <div className="space-y-4">
 
-                        {contactCards.map((card) => (
+                        {contactCards.map((card) => {
+                            const CardIcon = card.Icon
+                            return (
                             <div
                                 key={card.title}
-                                className="bg-white rounded-xl border border-slate-200 p-5 flex gap-4 items-start hover:border-amber-300 hover:shadow-sm transition-all duration-200"
+                                className="bg-white rounded-xl border border-slate-200/90 p-5 flex gap-4 items-start hover:border-amber-200/80 hover:shadow-card transition-all duration-200 ring-1 ring-transparent hover:ring-slate-900/[0.03]"
                             >
-                                <span className="text-2xl flex-shrink-0">
-                                    {card.icon}
+                                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-navy border border-slate-100">
+                                    <CardIcon className="h-5 w-5" aria-hidden />
                                 </span>
                                 <div>
                                     <h3 className="font-bold text-navy text-sm mb-1">
@@ -110,48 +123,54 @@ export default function ContactPage() {
                                         card.action.internal ? (
                                             <Link
                                                 href={card.action.href}
-                                                className="text-amber-600 hover:underline font-medium text-sm"
+                                                className="text-amber-700 hover:text-amber-800 font-semibold text-sm inline-flex items-center gap-1 transition-colors"
                                             >
                                                 {card.action.label}
+                                                <span aria-hidden>→</span>
                                             </Link>
                                         ) : (
                                             <a
                                                 href={card.action.href}
-                                                className="text-amber-600 hover:underline font-medium text-sm"
+                                                className="text-amber-700 hover:text-amber-800 font-semibold text-sm inline-flex items-center gap-1 transition-colors"
                                             >
                                                 {card.action.label}
+                                                <span aria-hidden>→</span>
                                             </a>
                                         )
                                     )}
                                 </div>
                             </div>
-                        ))}
+                            )
+                        })}
 
                         {/* FOLLOW US */}
                         <div className="bg-slate-50 rounded-xl border border-slate-200 p-5">
                             <h3 className="font-bold text-navy text-sm mb-3">
-                                📲 Follow for Daily Updates
+                                Stay in the loop
                             </h3>
                             <div className="flex flex-wrap gap-3">
                                 <Link
                                     href="/newsletter"
-                                    className="flex items-center gap-2 px-3 py-2 bg-navy text-white text-xs font-semibold rounded-lg hover:bg-slate-800 transition-colors"
+                                    className="inline-flex items-center gap-2 px-3 py-2 bg-navy text-white text-xs font-semibold rounded-lg hover:bg-slate-800 transition-colors duration-200 shadow-sm"
                                 >
-                                    📧 Newsletter
+                                    <Mail className="w-3.5 h-3.5 opacity-90" aria-hidden />
+                                    Newsletter
                                 </Link>
                                 <a
                                     href="/api/feed.xml"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center gap-2 px-3 py-2 bg-orange-500 text-white text-xs font-semibold rounded-lg hover:bg-orange-600 transition-colors"
+                                    className="inline-flex items-center gap-2 px-3 py-2 bg-orange-500 text-white text-xs font-semibold rounded-lg hover:bg-orange-600 transition-colors duration-200 shadow-sm"
                                 >
-                                    ◉ RSS Feed
+                                    <Rss className="w-3.5 h-3.5 opacity-90" aria-hidden />
+                                    RSS
                                 </a>
                                 <Link
                                     href="/calendar"
-                                    className="flex items-center gap-2 px-3 py-2 bg-amber-400 text-navy text-xs font-semibold rounded-lg hover:bg-amber-500 transition-colors"
+                                    className="inline-flex items-center gap-2 px-3 py-2 bg-amber-400 text-navy text-xs font-semibold rounded-lg hover:bg-amber-500 transition-colors duration-200 shadow-sm"
                                 >
-                                    📅 Calendar
+                                    <Calendar className="w-3.5 h-3.5 opacity-90" aria-hidden />
+                                    Calendar
                                 </Link>
                             </div>
                         </div>
@@ -172,17 +191,18 @@ export default function ContactPage() {
                     {/* ── RIGHT COLUMN — FORM ── */}
                     <div>
                         {submitted ? (
-                            <div className="bg-green-50 border border-green-200 rounded-2xl p-10 text-center flex flex-col items-center justify-center gap-4 min-h-[400px]">
-                                <span className="text-6xl">✅</span>
-                                <h3 className="text-xl font-bold text-green-800">
-                                    Email app opened!
+                            <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-10 text-center flex flex-col items-center justify-center gap-4 min-h-[400px] content-fade-in">
+                                <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-emerald-600 shadow-sm border border-emerald-100">
+                                    <CheckCircle2 className="w-9 h-9" aria-hidden />
+                                </span>
+                                <h3 className="text-xl font-heading font-bold text-emerald-900">
+                                    Email app opened
                                 </h3>
-                                <p className="text-green-700 text-sm max-w-xs leading-relaxed">
-                                    Your default email app should have
-                                    opened with your message pre-filled.
-                                    Just hit send!
+                                <p className="text-emerald-800/90 text-sm max-w-xs leading-relaxed">
+                                    Your default email app should have opened with your message pre-filled. Send when you are ready.
                                 </p>
                                 <button
+                                    type="button"
                                     onClick={() => {
                                         setSubmitted(false)
                                         setName('')
@@ -190,15 +210,15 @@ export default function ContactPage() {
                                         setSubject('')
                                         setMessage('')
                                     }}
-                                    className="text-sm text-green-600 hover:underline mt-2 font-medium"
+                                    className="text-sm text-emerald-800 hover:text-emerald-950 mt-2 font-semibold underline-offset-2 hover:underline"
                                 >
-                                    ← Send another message
+                                    Send another message
                                 </button>
                             </div>
                         ) : (
                             <form
                                 onSubmit={handleSubmit}
-                                className="bg-white rounded-2xl border border-slate-200 p-6 space-y-5 shadow-sm"
+                                className="bg-white rounded-2xl border border-slate-200/90 p-6 space-y-5 shadow-card ring-1 ring-slate-900/[0.02]"
                             >
                                 <div>
                                     <h2 className="text-xl font-bold text-navy">
@@ -280,9 +300,9 @@ export default function ContactPage() {
 
                                 <button
                                     type="submit"
-                                    className="w-full bg-amber-400 hover:bg-amber-500 text-navy font-bold py-3.5 rounded-lg transition-colors text-sm"
+                                    className="w-full bg-gold hover:bg-amber-400 text-navy font-bold py-3.5 rounded-lg transition-colors duration-200 text-sm shadow-sm"
                                 >
-                                    Open Email App to Send →
+                                    Open email app to send
                                 </button>
 
                                 <p className="text-xs text-slate-400 text-center leading-relaxed">

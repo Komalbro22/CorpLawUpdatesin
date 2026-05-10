@@ -3,6 +3,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { CalendarDays, Download, Search, Trash2, UserMinus, Users } from 'lucide-react'
 import Pagination from '@/components/Pagination'
 import { formatDate } from '@/lib/utils'
 
@@ -142,65 +143,80 @@ export default function AdminSubscribers() {
     const paginationBasePath = `/admin/subscribers${basePathParams ? '?' + basePathParams : ''}`
 
     return (
-        <div className="space-y-6 pb-12">
+        <div className="space-y-6 pb-12 content-fade-in">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <h1 className="font-heading text-2xl font-bold text-navy">Subscribers</h1>
-                <div className="flex gap-3">
+                <div className="flex flex-wrap gap-3">
                     {selected.length > 0 && (
                         <button
+                            type="button"
                             onClick={handleBulkDelete}
-                            className="bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
+                            className="inline-flex items-center gap-2 bg-red-600 text-white text-sm font-semibold px-4 py-2.5 rounded-lg hover:bg-red-700 transition-colors duration-200 shadow-sm"
                         >
-                            Delete Selected ({selected.length})
+                            <Trash2 className="w-4 h-4" aria-hidden />
+                            Delete ({selected.length})
                         </button>
                     )}
-                    <a 
+                    <a
                         href="/api/admin/subscribers?export=csv"
-                        className="bg-navy text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-slate-800 transition-colors flex items-center gap-2"
+                        className="inline-flex items-center gap-2 bg-navy text-white text-sm font-semibold px-4 py-2.5 rounded-lg hover:bg-slate-800 transition-colors duration-200 shadow-sm"
                     >
-                        ⬇ Export Active as CSV
+                        <Download className="w-4 h-4 opacity-90" aria-hidden />
+                        Export CSV
                     </a>
                 </div>
             </div>
 
             {/* STATS BAR */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex flex-col">
-                    <span className="text-slate-500 text-sm font-medium mb-1">Total Active</span>
-                    <span className="text-2xl font-bold text-navy">{stats.totalActive}</span>
+                <div className="bg-white p-5 rounded-xl border border-slate-200/80 shadow-card ring-1 ring-slate-900/[0.02] flex flex-col gap-2">
+                    <span className="inline-flex items-center gap-2 text-slate-500 text-sm font-semibold">
+                        <Users className="w-4 h-4 text-emerald-600" aria-hidden />
+                        Active
+                    </span>
+                    <span className="text-2xl font-heading font-bold text-navy tabular-nums">{stats.totalActive}</span>
                 </div>
-                <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex flex-col">
-                    <span className="text-slate-500 text-sm font-medium mb-1">Total Inactive</span>
-                    <span className="text-2xl font-bold text-slate-400">{stats.totalInactive}</span>
+                <div className="bg-white p-5 rounded-xl border border-slate-200/80 shadow-card ring-1 ring-slate-900/[0.02] flex flex-col gap-2">
+                    <span className="inline-flex items-center gap-2 text-slate-500 text-sm font-semibold">
+                        <UserMinus className="w-4 h-4 text-slate-400" aria-hidden />
+                        Inactive
+                    </span>
+                    <span className="text-2xl font-heading font-bold text-slate-500 tabular-nums">{stats.totalInactive}</span>
                 </div>
-                <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex flex-col">
-                    <span className="text-emerald-600 text-sm font-medium mb-1">New This Month</span>
-                    <span className="text-2xl font-bold text-emerald-700">{stats.newThisMonth}</span>
+                <div className="bg-white p-5 rounded-xl border border-slate-200/80 shadow-card ring-1 ring-slate-900/[0.02] flex flex-col gap-2">
+                    <span className="text-emerald-700 text-sm font-semibold">New this month</span>
+                    <span className="text-2xl font-heading font-bold text-emerald-800 tabular-nums">{stats.newThisMonth}</span>
                 </div>
-                <div className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex flex-col">
-                    <span className="text-gold text-sm font-medium mb-1">New This Week</span>
-                    <span className="text-2xl font-bold text-navy">{stats.newThisWeek}</span>
+                <div className="bg-white p-5 rounded-xl border border-slate-200/80 shadow-card ring-1 ring-slate-900/[0.02] flex flex-col gap-2">
+                    <span className="inline-flex items-center gap-2 text-amber-800 text-sm font-semibold">
+                        <CalendarDays className="w-4 h-4" aria-hidden />
+                        This week
+                    </span>
+                    <span className="text-2xl font-heading font-bold text-navy tabular-nums">{stats.newThisWeek}</span>
                 </div>
             </div>
 
             {/* FILTER BAR */}
-            <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex flex-col md:flex-row gap-4 items-center">
+            <div className="bg-white p-4 md:p-5 rounded-xl shadow-card border border-slate-200/80 flex flex-col md:flex-row gap-4 items-stretch md:items-center ring-1 ring-slate-900/[0.02]">
                 <div className="flex-1 w-full relative">
+                    <Search
+                        className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none"
+                        aria-hidden
+                    />
                     <input
-                        type="text"
-                        placeholder="Search by email..."
+                        type="search"
+                        placeholder="Search by email…"
                         value={search}
                         onChange={handleSearchChange}
-                        className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-gold focus:outline-none text-navy"
+                        className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-gold/45 focus:outline-none text-navy transition-shadow"
                     />
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
                 </div>
-                
+
                 <div className="flex gap-4 w-full md:w-auto">
                     <select
                         value={statusFilter}
                         onChange={handleStatusChange}
-                        className="flex-1 md:w-48 appearance-none bg-white border border-slate-300 text-slate-700 text-sm rounded-lg px-4 py-2 focus:ring-2 focus:ring-gold focus:outline-none"
+                        className="flex-1 md:w-48 appearance-none bg-white border border-slate-200 text-slate-700 text-sm rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-gold/45 focus:outline-none"
                     >
                         <option value="all">All Status</option>
                         <option value="active">Active</option>
@@ -210,10 +226,10 @@ export default function AdminSubscribers() {
             </div>
 
             {/* SUBSCRIBERS TABLE */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+            <div className="bg-white rounded-xl shadow-card border border-slate-200/80 overflow-hidden ring-1 ring-slate-900/[0.02]">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm whitespace-nowrap">
-                        <thead className="bg-slate-50 text-slate-500">
+                        <thead className="bg-slate-50/95 text-slate-600 border-b border-slate-100">
                             <tr>
                                 <th className="px-6 py-4 font-medium w-12">
                                     <input 
@@ -235,7 +251,15 @@ export default function AdminSubscribers() {
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {loading ? (
-                                <tr><td colSpan={6} className="px-6 py-12 text-center text-slate-400">Loading subscribers...</td></tr>
+                                <>
+                                    {Array.from({ length: 5 }).map((_, i) => (
+                                        <tr key={i} className="animate-pulse">
+                                            <td colSpan={6} className="px-6 py-4">
+                                                <div className="h-4 bg-slate-100 rounded w-1/2 max-w-sm" />
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </>
                             ) : subscribers.length === 0 ? (
                                 <tr>
                                     <td colSpan={6} className="px-6 py-12 text-center text-slate-500">
@@ -244,7 +268,7 @@ export default function AdminSubscribers() {
                                 </tr>
                             ) : (
                                 subscribers.map(sub => (
-                                    <tr key={sub.id} className="hover:bg-slate-50 transition-colors">
+                                    <tr key={sub.id} className="hover:bg-slate-50/80 transition-colors duration-150">
                                         <td className="px-6 py-4">
                                             <input
                                                 type="checkbox"

@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { Calendar as CalendarIcon, Loader2, Plus } from 'lucide-react'
 
 interface ComplianceEntry {
   id: string
@@ -143,36 +144,51 @@ export default function AdminCalendarPage() {
 
   const inputCls = 'w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400'
 
-  if (loading) return (
-    <div className="flex items-center justify-center min-h-[400px]">
-      <div className="text-slate-400 animate-pulse">Loading compliance calendar...</div>
-    </div>
-  )
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-3 text-slate-500">
+        <Loader2 className="w-8 h-8 animate-spin text-gold" aria-hidden />
+        <p className="text-sm font-medium">Loading calendar…</p>
+      </div>
+    )
+  }
 
   return (
-    <div className="space-y-6 max-w-6xl">
+    <div className="space-y-6 max-w-6xl content-fade-in">
       {/* HEADER */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-navy">📅 Compliance Calendar Manager</h1>
-          <p className="text-slate-500 text-sm mt-1">
-            Add, edit or remove compliance deadlines. Changes reflect on live calendar immediately.
+          <h1 className="text-2xl font-heading font-bold text-navy flex items-center gap-2">
+            <CalendarIcon className="w-7 h-7 text-amber-600" aria-hidden />
+            Compliance calendar
+          </h1>
+          <p className="text-slate-500 text-sm mt-1 leading-relaxed">
+            Add, edit, or remove deadlines. Changes appear on the live calendar immediately.
           </p>
         </div>
         <button
-          onClick={() => { setShowForm(true); setEditingId(null); setForm(emptyForm) }}
-          className="bg-amber-400 hover:bg-amber-500 text-navy px-4 py-2 rounded-lg font-semibold text-sm"
+          type="button"
+          onClick={() => {
+            setShowForm(true)
+            setEditingId(null)
+            setForm(emptyForm)
+          }}
+          className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-amber-400 text-navy px-4 py-2.5 rounded-lg font-semibold text-sm shadow-sm transition-colors"
         >
-          + Add New Entry
+          <Plus className="w-4 h-4" aria-hidden />
+          New entry
         </button>
       </div>
 
       {/* STATS */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {stats.map(s => (
-          <div key={s.label} className="bg-white border border-slate-200 rounded-xl p-4 text-center">
-            <div className="text-2xl font-bold text-navy">{s.count}</div>
-            <div className="text-xs text-slate-500 mt-1">{s.label}</div>
+          <div
+            key={s.label}
+            className="bg-white border border-slate-200/80 rounded-xl p-4 text-center shadow-card ring-1 ring-slate-900/[0.02]"
+          >
+            <div className="text-2xl font-heading font-bold text-navy tabular-nums">{s.count}</div>
+            <div className="text-xs text-slate-500 mt-1 font-semibold">{s.label}</div>
           </div>
         ))}
       </div>
