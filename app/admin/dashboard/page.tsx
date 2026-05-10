@@ -1,6 +1,7 @@
 import { supabaseAdmin } from '@/lib/supabase-server'
 import Link from 'next/link'
 import { formatDate } from '@/lib/utils'
+import { CalendarDays, Download, ExternalLink, FileText, PenLine, Users } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -27,33 +28,41 @@ export default async function AdminDashboard() {
     return (
         <div className="space-y-8">
             {/* STATS ROW */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 flex items-center">
-                    <div className="w-12 h-12 rounded-lg bg-amber-50 flex items-center justify-center text-2xl mr-4 shrink-0">📄</div>
-                    <div>
-                        <p className="text-sm font-medium text-slate-500">Published Articles</p>
-                        <p className="text-2xl font-heading font-bold text-navy">{publishedCount || 0}</p>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                <div className="bg-white rounded-xl p-5 md:p-6 shadow-card border border-slate-200/80 flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-700 shrink-0 ring-1 ring-amber-100">
+                        <FileText className="w-6 h-6" aria-hidden />
+                    </div>
+                    <div className="min-w-0">
+                        <p className="text-sm font-medium text-slate-500">Published articles</p>
+                        <p className="text-2xl font-heading font-bold text-navy tabular-nums">{publishedCount || 0}</p>
                     </div>
                 </div>
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 flex items-center">
-                    <div className="w-12 h-12 rounded-lg bg-slate-50 flex items-center justify-center text-2xl mr-4 shrink-0">✏️</div>
-                    <div>
-                        <p className="text-sm font-medium text-slate-500">Draft Articles</p>
-                        <p className="text-2xl font-heading font-bold text-navy">{draftCount || 0}</p>
+                <div className="bg-white rounded-xl p-5 md:p-6 shadow-card border border-slate-200/80 flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700 shrink-0 ring-1 ring-slate-200/80">
+                        <PenLine className="w-6 h-6" aria-hidden />
+                    </div>
+                    <div className="min-w-0">
+                        <p className="text-sm font-medium text-slate-500">Draft articles</p>
+                        <p className="text-2xl font-heading font-bold text-navy tabular-nums">{draftCount || 0}</p>
                     </div>
                 </div>
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 flex items-center">
-                    <div className="w-12 h-12 rounded-lg bg-emerald-50 flex items-center justify-center text-2xl mr-4 shrink-0">👥</div>
-                    <div>
-                        <p className="text-sm font-medium text-slate-500">Active Subscribers</p>
-                        <p className="text-2xl font-heading font-bold text-navy">{activeSubscribers || 0}</p>
+                <div className="bg-white rounded-xl p-5 md:p-6 shadow-card border border-slate-200/80 flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-700 shrink-0 ring-1 ring-emerald-100">
+                        <Users className="w-6 h-6" aria-hidden />
+                    </div>
+                    <div className="min-w-0">
+                        <p className="text-sm font-medium text-slate-500">Active subscribers</p>
+                        <p className="text-2xl font-heading font-bold text-navy tabular-nums">{activeSubscribers || 0}</p>
                     </div>
                 </div>
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 flex items-center">
-                    <div className="w-12 h-12 rounded-lg bg-blue-50 flex items-center justify-center text-2xl mr-4 shrink-0">📅</div>
-                    <div>
-                        <p className="text-sm font-medium text-slate-500">This Month</p>
-                        <p className="text-2xl font-heading font-bold text-navy">{thisMonthCount || 0}</p>
+                <div className="bg-white rounded-xl p-5 md:p-6 shadow-card border border-slate-200/80 flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-700 shrink-0 ring-1 ring-blue-100">
+                        <CalendarDays className="w-6 h-6" aria-hidden />
+                    </div>
+                    <div className="min-w-0">
+                        <p className="text-sm font-medium text-slate-500">New this month</p>
+                        <p className="text-2xl font-heading font-bold text-navy tabular-nums">{thisMonthCount || 0}</p>
                     </div>
                 </div>
             </div>
@@ -62,7 +71,7 @@ export default async function AdminDashboard() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2">
                     <h2 className="text-lg font-heading font-bold text-navy mb-4">Recent Articles</h2>
-                    <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div className="bg-white rounded-xl shadow-card border border-slate-200/80 overflow-hidden">
                         <table className="w-full text-left text-sm">
                             <thead className="bg-slate-50 text-slate-500">
                                 <tr>
@@ -116,7 +125,7 @@ export default async function AdminDashboard() {
 
                 <div>
                     <h2 className="text-lg font-heading font-bold text-navy mb-4">Recent Subscribers</h2>
-                    <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-2">
+                    <div className="bg-white rounded-xl shadow-card border border-slate-200/80 p-2">
                         {(!recentSubscribers || recentSubscribers.length === 0) && (
                             <div className="p-4 text-center text-sm text-slate-500">No subscribers yet.</div>
                         )}
@@ -135,15 +144,28 @@ export default async function AdminDashboard() {
             {/* QUICK ACTIONS */}
             <div className="pt-6">
                 <h2 className="text-lg font-heading font-bold text-navy mb-4">Quick Actions</h2>
-                <div className="flex flex-wrap gap-4">
-                    <Link href="/admin/articles/new" className="inline-flex items-center justify-center px-5 py-2.5 border border-transparent text-sm font-semibold rounded-lg text-navy bg-gold hover:bg-[#E5B54E] transition-colors shadow-sm">
-                        Write New Article
+                <div className="flex flex-wrap gap-3">
+                    <Link
+                        href="/admin/articles/new"
+                        className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-transparent text-sm font-semibold rounded-lg text-navy bg-gold hover:bg-amber-400 transition-colors shadow-sm shadow-slate-900/5"
+                    >
+                        New article
                     </Link>
-                    <a href="/updates" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center px-5 py-2.5 border-2 border-slate-200 text-sm font-semibold rounded-lg text-navy hover:border-navy hover:bg-slate-50 transition-colors">
-                        View All Updates ↗
+                    <a
+                        href="/updates"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-slate-200 text-sm font-semibold rounded-lg text-navy hover:border-slate-300 hover:bg-white bg-slate-50/80 transition-colors"
+                    >
+                        View public updates
+                        <ExternalLink className="w-4 h-4 opacity-70" aria-hidden />
                     </a>
-                    <a href="/api/admin/subscribers?export=csv" className="inline-flex items-center justify-center px-5 py-2.5 border-2 border-slate-200 text-sm font-semibold rounded-lg text-navy hover:border-navy hover:bg-slate-50 transition-colors">
-                        Export Subscribers 📥
+                    <a
+                        href="/api/admin/subscribers?export=csv"
+                        className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-slate-200 text-sm font-semibold rounded-lg text-navy hover:border-slate-300 hover:bg-white bg-slate-50/80 transition-colors"
+                    >
+                        Export subscribers (CSV)
+                        <Download className="w-4 h-4 opacity-70" aria-hidden />
                     </a>
                 </div>
             </div>

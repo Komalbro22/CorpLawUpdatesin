@@ -3,6 +3,18 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import {
+    Building2,
+    Calendar,
+    ChevronDown,
+    Gavel,
+    Globe2,
+    Landmark,
+    Menu,
+    Scale,
+    TrendingUp,
+    X,
+} from 'lucide-react'
 
 const links = [
     { href: '/', label: 'Home' },
@@ -44,14 +56,28 @@ export default function Navbar() {
 
     const isActive = (path: string) => pathname === path
 
+    const categoryItems = [
+        { href: '/category/mca', label: 'MCA', Icon: Building2, color: 'text-blue-600' },
+        { href: '/category/sebi', label: 'SEBI', Icon: TrendingUp, color: 'text-emerald-600' },
+        { href: '/category/rbi', label: 'RBI', Icon: Landmark, color: 'text-violet-600' },
+        { href: '/category/nclt', label: 'NCLT', Icon: Scale, color: 'text-orange-600' },
+        { href: '/category/ibc', label: 'IBC', Icon: Gavel, color: 'text-red-600' },
+        { href: '/category/fema', label: 'FEMA', Icon: Globe2, color: 'text-teal-600' },
+        { href: '/rbi/repo-rate', label: 'Current Repo Rate', Icon: Landmark, color: 'text-navy' },
+        { href: '/calendar', label: 'Compliance Calendar', Icon: Calendar, color: 'text-navy' },
+    ] as const
+
     return (
-        <nav className="sticky top-0 z-50 w-full backdrop-blur-md bg-white/90 border-b border-slate-200">
+        <nav className="sticky top-0 z-50 w-full backdrop-blur-md bg-white/95 border-b border-slate-200/80 shadow-nav">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16">
-                    <div className="flex items-center">
-                        <Link href="/" className="flex-shrink-0 flex items-center">
-                            <span className="font-heading text-xl font-bold text-navy">
+                    <div className="flex items-center gap-3">
+                        <Link href="/" className="flex-shrink-0 flex flex-col justify-center">
+                            <span className="font-heading text-xl font-bold text-navy leading-tight">
                                 CorpLawUpdates.in<span className="text-gold">.</span>
+                            </span>
+                            <span className="hidden sm:block text-[11px] font-medium text-slate-500 tracking-wide uppercase">
+                                Corporate law intelligence
                             </span>
                         </Link>
                     </div>
@@ -81,42 +107,31 @@ export default function Navbar() {
                                 aria-expanded={categoriesOpen}
                                 aria-haspopup="true"
                                 aria-label="Browse categories"
-                                className="flex items-center gap-1 text-navy hover:text-amber-600 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 rounded-md px-2 py-1"
+                                className="flex items-center gap-1 text-navy hover:text-amber-700 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400/80 focus:ring-offset-2 rounded-md px-2 py-1"
                             >
                                 Categories
-                                <svg
+                                <ChevronDown
                                     className={`w-4 h-4 transition-transform duration-200 ${categoriesOpen ? 'rotate-180' : ''}`}
-                                    fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                </svg>
+                                    aria-hidden
+                                />
                             </button>
 
                             {categoriesOpen && (
                                 <div
                                     role="menu"
                                     aria-label="Category navigation"
-                                    className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50"
+                                    className="absolute top-full left-0 mt-2 w-60 bg-white rounded-xl shadow-card-hover border border-slate-200/90 py-1.5 z-50"
                                 >
-                                    {[
-                                        { href: '/category/mca', label: '🏛️ MCA', color: 'text-blue-600' },
-                                        { href: '/category/sebi', label: '📈 SEBI', color: 'text-green-600' },
-                                        { href: '/category/rbi', label: '🏦 RBI', color: 'text-purple-600' },
-                                        { href: '/category/nclt', label: '⚖️ NCLT', color: 'text-orange-600' },
-                                        { href: '/category/ibc', label: '📋 IBC', color: 'text-red-600' },
-                                        { href: '/category/fema', label: '💱 FEMA', color: 'text-teal-600' },
-                                        { href: '/rbi/repo-rate', label: '🏦 Current Repo Rate', color: 'text-navy' },
-                                        { href: '/calendar', label: '📅 Compliance Calendar', color: 'text-navy' },
-                                    ].map((item) => (
+                                    {categoryItems.map(({ href, label, Icon, color }) => (
                                         <Link
-                                            key={item.href}
-                                            href={item.href}
+                                            key={href}
+                                            href={href}
                                             role="menuitem"
                                             onClick={() => setCategoriesOpen(false)}
-                                            className={`block px-4 py-2.5 text-sm font-medium hover:bg-slate-50 transition-colors focus:outline-none focus:bg-amber-50 ${item.color}`}
+                                            className={`flex items-center gap-3 px-4 py-2.5 text-sm font-medium hover:bg-slate-50 transition-colors focus:outline-none focus:bg-amber-50/80 ${color}`}
                                         >
-                                            {item.label}
+                                            <Icon className="w-4 h-4 shrink-0 opacity-80" aria-hidden />
+                                            {label}
                                         </Link>
                                     ))}
                                 </div>
@@ -128,18 +143,11 @@ export default function Navbar() {
                     <div className="flex items-center md:hidden">
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="inline-flex items-center justify-center p-2 rounded-md text-slate-400 hover:text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gold"
+                            className="inline-flex items-center justify-center p-2 rounded-md text-slate-500 hover:text-navy hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gold/80"
+                            aria-expanded={isOpen}
                         >
-                            <span className="sr-only">Open main menu</span>
-                            {isOpen ? (
-                                <svg className="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            ) : (
-                                <svg className="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                                </svg>
-                            )}
+                            <span className="sr-only">{isOpen ? 'Close menu' : 'Open main menu'}</span>
+                            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                         </button>
                     </div>
                 </div>
@@ -164,38 +172,18 @@ export default function Navbar() {
                         ))}
                         <div className="pl-3 pr-4 py-2 border-l-4 border-transparent">
                             <span className="text-base font-medium text-slate-600">Categories</span>
-                            <div className="mt-2 space-y-1 pl-4">
-                                {[
-                                    { href: '/category/mca', label: '🏛️ MCA' },
-                                    { href: '/category/sebi', label: '📈 SEBI' },
-                                    { href: '/category/rbi', label: '🏦 RBI' },
-                                    { href: '/category/nclt', label: '⚖️ NCLT' },
-                                    { href: '/category/ibc', label: '📋 IBC' },
-                                    { href: '/category/fema', label: '💱 FEMA' },
-                                ].map((item) => (
+                            <div className="mt-2 space-y-0.5 pl-2">
+                                {categoryItems.map(({ href, label, Icon, color }) => (
                                     <Link
-                                        key={item.href}
-                                        href={item.href}
-                                        className="block py-2 text-base font-medium text-slate-500 hover:text-gold"
+                                        key={href}
+                                        href={href}
+                                        className={`flex items-center gap-2 py-2.5 px-2 text-base font-medium text-slate-600 hover:bg-slate-50 rounded-lg ${color}`}
                                         onClick={() => setIsOpen(false)}
                                     >
-                                        {item.label}
+                                        <Icon className="w-4 h-4 shrink-0 opacity-80" aria-hidden />
+                                        {label}
                                     </Link>
                                 ))}
-                                <Link
-                                    href="/rbi/repo-rate"
-                                    onClick={() => setIsOpen(false)}
-                                    className="block px-4 py-3 text-navy font-medium hover:text-amber-600 border-t border-slate-100"
-                                >
-                                    🏦 Current Repo Rate
-                                </Link>
-                                <Link
-                                    href="/calendar"
-                                    onClick={() => setIsOpen(false)}
-                                    className="block px-4 py-3 text-navy font-medium hover:text-amber-600 border-b border-t border-slate-100"
-                                >
-                                    📅 Compliance Calendar
-                                </Link>
                             </div>
                         </div>
                     </div>

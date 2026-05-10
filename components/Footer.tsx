@@ -2,6 +2,7 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Link from 'next/link'
+import { Calendar, Rss } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
 export const revalidate = 3600
@@ -30,9 +31,9 @@ export default async function Footer() {
     const whatsappUrl = social.whatsapp_channel || ''
 
     return (
-        <footer className="bg-navy text-white pt-12 pb-8">
+        <footer className="bg-navy text-white pt-14 pb-10 border-t border-white/5">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
                     {/* Column 1 */}
                     <div>
                         <h3 className="font-heading text-xl font-bold mb-4">
@@ -90,9 +91,10 @@ export default async function Footer() {
                             <li>
                                 <Link
                                     href="/calendar"
-                                    className="text-slate-400 hover:text-gold transition-colors duration-200 text-sm"
+                                    className="inline-flex items-center gap-2 text-slate-400 hover:text-gold transition-colors duration-200 text-sm"
                                 >
-                                    📅 Compliance Calendar
+                                    <Calendar className="w-3.5 h-3.5 opacity-80" aria-hidden />
+                                    Compliance Calendar
                                 </Link>
                             </li>
                             <li>
@@ -100,11 +102,9 @@ export default async function Footer() {
                                     href="/api/feed.xml"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-slate-400 hover:text-gold transition-colors duration-200 flex items-center gap-1.5 text-sm"
+                                    className="text-slate-400 hover:text-gold transition-colors duration-200 inline-flex items-center gap-2 text-sm"
                                 >
-                                    <span className="text-orange-400 text-base leading-none">
-                                        ◉
-                                    </span>
+                                    <Rss className="w-3.5 h-3.5 text-orange-400/90" aria-hidden />
                                     RSS Feed
                                 </a>
                             </li>

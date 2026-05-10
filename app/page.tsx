@@ -71,46 +71,49 @@ export default async function HomePage() {
   return (
     <div>
       {/* 1. HERO SECTION */}
-      <section className="w-full bg-navy relative min-h-[60vh] py-16 px-4 flex flex-col items-center justify-center text-center overflow-hidden">
-        <div className="absolute inset-0 opacity-5 bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:100px_100px]"></div>
+      <section className="w-full bg-navy relative min-h-[62vh] py-20 px-4 flex flex-col items-center justify-center text-center overflow-hidden">
+        <div className="absolute inset-0 opacity-[0.07] bg-[linear-gradient(rgba(255,255,255,.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.06)_1px,transparent_1px)] bg-[size:100px_100px]" aria-hidden />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(245,158,11,0.18),transparent_55%)]" aria-hidden />
         <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center justify-center h-full">
-          <h1 className="font-heading text-white text-4xl md:text-6xl font-bold mb-6 leading-tight">
+          <p className="text-gold/90 text-xs md:text-sm font-semibold tracking-[0.2em] uppercase mb-5">
+            MCA · SEBI · RBI · NCLT · IBC · FEMA
+          </p>
+          <h1 className="font-heading text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-[1.1] text-balance">
             India's Free Corporate Law Intelligence Platform
           </h1>
-          <p className="text-slate-300 text-lg md:text-xl mb-10 max-w-2xl">
-            Stay updated on MCA, SEBI, RBI, NCLT, IBC and FEMA regulations. Free forever. No login required.
+          <p className="text-slate-300 text-lg md:text-xl mb-10 max-w-2xl leading-relaxed">
+            Stay updated on Indian corporate regulations with clear, sourced briefs. Free to read. No account required.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
             <Link
               href="/updates"
-              className="bg-gold text-navy font-bold py-3 px-8 rounded-lg hover:bg-yellow-400 transition-colors shadow-lg text-center"
+              className="bg-gold text-navy font-semibold py-3.5 px-8 rounded-lg hover:bg-amber-400 transition-colors shadow-lg shadow-gold/20 text-center ring-1 ring-white/10"
             >
-              Browse Updates
+              Browse updates
             </Link>
             <Link
               href="/newsletter"
-              className="border-2 border-white text-white font-bold py-3 px-8 rounded-lg hover:bg-white/10 transition-colors text-center"
+              className="border border-white/40 text-white font-semibold py-3.5 px-8 rounded-lg hover:bg-white/10 transition-colors text-center backdrop-blur-sm"
             >
-              Subscribe Free
+              Weekly newsletter
             </Link>
           </div>
 
-          <div className="mt-12 grid grid-cols-2 gap-8 
-                          border-t border-white/20 pt-12 w-full max-w-sm mx-auto">
+          <div className="mt-14 grid grid-cols-2 gap-8 border-t border-white/15 pt-10 w-full max-w-md mx-auto">
             <div className="text-center">
               <div className="text-3xl text-white font-bold mb-1 tracking-tight">
                 {formatNumber(updatesCount)}
               </div>
-              <div className="text-amber-100 text-sm font-medium">
-                Total Updates
+              <div className="text-slate-400 text-sm font-medium">
+                Articles published
               </div>
             </div>
             <div className="text-center">
               <div className="text-3xl text-white font-bold mb-1 tracking-tight">
                 {formatNumber(totalViews)}
               </div>
-              <div className="text-amber-100 text-sm font-medium">
-                Monthly Readers
+              <div className="text-slate-400 text-sm font-medium">
+                All-time reads
               </div>
             </div>
           </div>
@@ -126,11 +129,14 @@ export default async function HomePage() {
 
       {/* 2. FEATURED UPDATES */}
       {featuredUpdates.length > 0 && (
-        <section className="py-16 px-4 max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold text-navy mb-8 font-heading border-l-4 border-gold pl-4">
-            Featured Updates
+        <section className="py-16 md:py-20 px-4 max-w-7xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold text-navy mb-2 font-heading border-l-4 border-gold pl-4">
+            Featured updates
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <p className="text-slate-600 mb-8 md:mb-10 max-w-2xl pl-4 md:pl-5 text-sm md:text-base">
+            Hand-picked regulatory highlights worth reading first.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {featuredUpdates.map((update: any) => (
               <UpdateCard key={update.id} update={update} />
             ))}
@@ -139,22 +145,29 @@ export default async function HomePage() {
       )}
 
       {/* 3. CATEGORY PILLS */}
-      <section className="py-12 px-4 w-full border-y border-slate-200 mb-16 bg-white">
+      <section className="py-14 px-4 w-full border-y border-slate-200/90 mb-16 bg-white shadow-sm shadow-slate-200/40">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-2xl font-bold text-navy mb-8 font-heading text-center">
-            Browse by Regulator
+          <h2 className="text-xl md:text-2xl font-bold text-navy mb-2 font-heading text-center">
+            Browse by regulator
           </h2>
-          <div className="flex flex-wrap justify-center gap-4">
+          <p className="text-slate-600 text-center text-sm md:text-base mb-8 max-w-xl mx-auto">
+            Jump straight to updates from the authority you follow.
+          </p>
+          <div className="flex flex-wrap justify-center gap-3 md:gap-4">
             {['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA'].map((cat) => {
-              const bgColors: Record<string, string> = {
-                MCA: 'bg-[#3B82F6]', SEBI: 'bg-[#10B981]', RBI: 'bg-[#8B5CF6]',
-                NCLT: 'bg-[#F97316]', IBC: 'bg-[#EF4444]', FEMA: 'bg-[#14B8A6]'
-              };
+              const styles: Record<string, string> = {
+                MCA: 'bg-blue-600 hover:bg-blue-700 ring-blue-700/20',
+                SEBI: 'bg-emerald-600 hover:bg-emerald-700 ring-emerald-700/20',
+                RBI: 'bg-violet-600 hover:bg-violet-700 ring-violet-700/20',
+                NCLT: 'bg-orange-600 hover:bg-orange-700 ring-orange-700/20',
+                IBC: 'bg-red-600 hover:bg-red-700 ring-red-700/20',
+                FEMA: 'bg-teal-600 hover:bg-teal-700 ring-teal-700/20',
+              }
               return (
                 <Link
                   key={cat}
                   href={`/category/${cat.toLowerCase()}`}
-                  className={`${bgColors[cat]} text-white px-6 py-2 rounded-full font-bold hover:scale-105 transition-transform shadow-sm`}
+                  className={`${styles[cat]} text-white px-5 py-2.5 rounded-lg font-semibold text-sm md:text-base shadow-md shadow-slate-900/10 ring-1 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2`}
                 >
                   {cat}
                 </Link>
@@ -166,11 +179,14 @@ export default async function HomePage() {
 
       {/* 4. LATEST UPDATES */}
       {latestUpdates.length > 0 && (
-        <section className="pb-16 px-4 max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold text-navy mb-8 font-heading border-l-4 border-gold pl-4">
-            Latest Updates
+        <section className="pb-16 md:pb-20 px-4 max-w-7xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold text-navy mb-2 font-heading border-l-4 border-gold pl-4">
+            Latest updates
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+          <p className="text-slate-600 mb-8 md:mb-10 max-w-2xl pl-4 md:pl-5 text-sm md:text-base">
+            New and recent briefs, newest first.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-10">
             {latestUpdates.map((update: any) => (
               <UpdateCard key={update.id} update={update} />
             ))}
@@ -178,23 +194,23 @@ export default async function HomePage() {
           <div className="text-center">
             <Link
               href="/updates"
-              className="inline-flex items-center text-navy font-bold hover:text-gold transition-colors text-lg group"
+              className="inline-flex items-center gap-2 text-navy font-semibold hover:text-amber-700 transition-colors text-base md:text-lg border-b border-navy/20 hover:border-amber-700/40 pb-0.5"
             >
-              View All Updates →
+              View all updates
             </Link>
           </div>
         </section>
       )}
 
       {/* 5. NEWSLETTER SECTION */}
-      <section className="w-full bg-navy py-16 px-4 text-center">
-        <div className="max-w-3xl mx-auto flex flex-col items-center">
-          <h2 className="text-3xl font-heading font-bold text-white mb-3">
-            Get Weekly Corporate Law Updates
+      <section className="w-full bg-navy py-16 md:py-20 px-4 text-center relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_100%,rgba(245,158,11,0.12),transparent_50%)]" aria-hidden />
+        <div className="max-w-3xl mx-auto flex flex-col items-center relative z-10">
+          <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-3">
+            Weekly corporate law digest
           </h2>
-          <p className="text-slate-300 mb-8 max-w-xl mx-auto">
-            Free digest every Monday. MCA, SEBI, RBI, NCLT, IBC & FEMA.
-            No spam. Unsubscribe anytime.
+          <p className="text-slate-300 mb-8 max-w-xl mx-auto leading-relaxed">
+            One email on Mondays: MCA, SEBI, RBI, NCLT, IBC and FEMA. No spam. Unsubscribe anytime.
           </p>
           <div className="w-full max-w-md mx-auto text-left">
             <NewsletterWidget />

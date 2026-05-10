@@ -32,15 +32,15 @@ export default function UpdateCard({ update, showExcerpt = true }: UpdateCardPro
     }
 
     const impactLabels: Record<string, string> = {
-        high: '🔴 High Impact',
-        medium: '🟡 Medium Impact',
-        low: '🟢 Low Impact',
+        high: 'High impact',
+        medium: 'Medium impact',
+        low: 'Lower impact',
     }
 
     return (
         <Link
             href={`/updates/${update.slug}`}
-            className="block group bg-white flex flex-col h-full rounded-xl shadow-sm border border-slate-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 overflow-hidden"
+            className="block group bg-white flex flex-col h-full rounded-xl shadow-card border border-slate-200/80 hover:shadow-card-hover hover:-translate-y-0.5 transition-all duration-200 overflow-hidden"
         >
             {imageUrl && (
                 <div className="relative w-full h-48 overflow-hidden rounded-t-xl bg-slate-100 flex-shrink-0">
@@ -91,8 +91,8 @@ export default function UpdateCard({ update, showExcerpt = true }: UpdateCardPro
                                 <span>{formatDate(update.published_at)}</span>
                             )}
                             {update.effective_date && (
-                                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium whitespace-nowrap">
-                                    📅 Effective: {formatDate(update.effective_date)}
+                                <span className="text-xs bg-emerald-50 text-emerald-800 px-2 py-0.5 rounded-md font-medium whitespace-nowrap border border-emerald-100">
+                                    Effective {formatDate(update.effective_date)}
                                 </span>
                             )}
                             {(update.views || 0) > 0 && (
