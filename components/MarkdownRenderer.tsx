@@ -86,12 +86,12 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                 remarkPlugins={[remarkGfm, remarkBreaks]}
                 rehypePlugins={[rehypeRaw]}
                 components={{
-                    p: ({ children }) => (
-                        <p style={{ marginBottom: '1rem', marginTop: '0.5rem' }}>
+                    p: ({ node, style, children, ...props }: any) => (
+                        <p style={{ marginBottom: '1rem', marginTop: '0.5rem', ...style }} {...props}>
                             {children}
                         </p>
                     ),
-                    img: ({ src, alt }) => (
+                    img: ({ node, style, src, alt, ...props }: any) => (
                         <img
                             src={src}
                             alt={alt || ''}
@@ -100,8 +100,10 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                                 height: 'auto',
                                 display: 'block',
                                 margin: '1.5rem auto',
-                                borderRadius: '0.5rem'
+                                borderRadius: '0.5rem',
+                                ...style
                             }}
+                            {...props}
                         />
                     )
                 }}
