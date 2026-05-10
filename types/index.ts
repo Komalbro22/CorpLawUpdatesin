@@ -10,10 +10,14 @@ export interface Update {
     tags: string[]
     source_url: string | null
     source_name: string | null
+    sources: { name: string; url: string }[] | null
+    seo_title: string | null
+    seo_description: string | null
     published_at: string | null
     is_featured: boolean
     views: number
     key_change: string | null
+    key_changes: string[] | null
     effective_date: string | null
     impact_level: 'high' | 'medium' | 'low' | null
     created_at: string

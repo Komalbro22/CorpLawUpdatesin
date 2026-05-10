@@ -31,7 +31,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { data: update } = await supabase
     .from('updates')
-    .select('title, summary, category, published_at, tags, slug')
+    .select('title, summary, category, published_at, tags, slug, seo_title, seo_description')
     .eq('slug', params.slug)
     .single()
 
@@ -45,11 +45,12 @@ export async function generateMetadata(
   const url = `https://www.corplawupdates.in/updates/${update.slug}`
   const imageUrl = `https://www.corplawupdates.in/api/og?title=${encodeURIComponent(update.title)}&category=${encodeURIComponent(update.category)}`
 
-  const seoTitle = (t: string): string => t.length <= 55 ? t : t.slice(0, 52) + '...'
+  const titleStr = update.seo_title || update.title
+  const seoTitle = (t: string): string => t.length <= 60 ? t : t.slice(0, 57) + '...'
 
   return {
-    title: seoTitle(update.title),
-    description: update.summary,
+    title: seoTitle(titleStr),
+    description: update.seo_description || update.summary,
     keywords: [
       update.category,
       ...(update.tags || []),
@@ -178,6 +179,24 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                         </div>
                     </div>
                 )}
+                {update.key_changes && Array.isArray(update.key_changes) && update.key_changes.length > 0 && (
+                    <details className="group bg-slate-50 border border-slate-200 rounded-xl mb-6 overflow-hidden print:hidden">
+                        <summary className="cursor-pointer p-4 font-bold text-navy flex justify-between items-center bg-white hover:bg-slate-50 transition-colors list-none [&::-webkit-details-marker]:hidden">
+                            <div className="flex items-center gap-2">
+                                <span className="text-xl">💡</span>
+                                All Key Changes
+                            </div>
+                            <span className="text-slate-400 group-open:rotate-180 transition-transform duration-300">▼</span>
+                        </summary>
+                        <div className="p-5 border-t border-slate-100">
+                            <ul className="list-disc pl-5 space-y-2 text-sm text-slate-700">
+                                {update.key_changes.map((kc: string, i: number) => (
+                                    <li key={i}>{kc}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    </details>
+                )}
                 <h1 className="font-heading text-3xl md:text-4xl text-navy font-bold mb-4 leading-snug break-words overflow-wrap-anywhere">
                     {update.title}
                 </h1>
@@ -258,17 +277,35 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
             {/* 5. SOURCE ATTRIBUTION — hidden in print (source already in article HTML) */}
             <div className="print:hidden">
-                {update.source_url && update.source_name && (
-                    <div className="bg-slate-50 p-4 rounded-lg border border-slate-100 mb-8 flex items-center">
-                        <span className="text-slate-600 font-medium mr-2">Source:</span>
-                        <a
-                            href={update.source_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-gold font-bold hover:text-amber-600 transition-colors underline"
-                        >
-                            {update.source_name}
-                        </a>
+                {(update.source_url || (update.sources && update.sources.length > 0)) && (
+                    <div className="bg-slate-50 p-4 rounded-lg border border-slate-100 mb-8 flex flex-col gap-2">
+                        <span className="text-slate-600 font-medium mr-2">Sources:</span>
+                        <ul className="space-y-1">
+                            {update.source_name && update.source_url && (
+                                <li>
+                                    <a
+                                        href={update.source_url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-gold font-bold hover:text-amber-600 transition-colors underline break-all"
+                                    >
+                                        {update.source_name}
+                                    </a>
+                                </li>
+                            )}
+                            {update.sources && update.sources.map((src: any, i: number) => (
+                                <li key={i}>
+                                    <a
+                                        href={src.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-gold font-bold hover:text-amber-600 transition-colors underline break-all"
+                                    >
+                                        {src.name || src.url}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 )}
             </div>

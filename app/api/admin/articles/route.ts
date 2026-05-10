@@ -69,7 +69,13 @@ export async function POST(request: NextRequest) {
 
     try {
         const body = await request.json()
-        const { title, slug, summary, content, category, tags, source_url, source_name, published_at, is_featured } = body
+        const { 
+            title, slug, summary, content, category, tags, 
+            source_url, source_name, sources,
+            seo_title, seo_description,
+            published_at, is_featured, 
+            key_change, key_changes, effective_date, impact_level
+        } = body
 
         if (!title || !summary || !category) {
             return NextResponse.json({ error: 'Missing required fields: title, summary, category' }, { status: 400 })
@@ -105,8 +111,15 @@ export async function POST(request: NextRequest) {
                 tags: tags || [],
                 source_url,
                 source_name,
+                sources: sources || null,
+                seo_title: seo_title || null,
+                seo_description: seo_description || null,
                 published_at,
-                is_featured: is_featured || false
+                is_featured: is_featured || false,
+                key_change: key_change || null,
+                key_changes: key_changes || null,
+                effective_date: effective_date || null,
+                impact_level: impact_level || null
             })
             .select()
             .single()
