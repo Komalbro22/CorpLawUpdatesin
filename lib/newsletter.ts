@@ -146,7 +146,7 @@ export async function sendNewsletterEmails({
     let failed = 0
     const successList: string[] = []
     const failedList: string[] = []
-    const recipientsToInsert: any[] = []
+    const recipientsToInsert: any[] = [] // eslint-disable-line @typescript-eslint/no-explicit-any
     
     const chunks = []
     for (let i = 0; i < subscribers.length; i += 10) {
@@ -189,7 +189,7 @@ export async function sendNewsletterEmails({
                         campaign_id: campaignId,
                         email: subEmail,
                         status: 'delivered',
-                        resend_email_id: (r.value as any).data?.id || null,
+                        resend_email_id: (r.value as any).data?.id || null, // eslint-disable-line @typescript-eslint/no-explicit-any
                         sent_at: new Date().toISOString()
                     })
                 }
@@ -201,7 +201,7 @@ export async function sendNewsletterEmails({
                         campaign_id: campaignId,
                         email: subEmail,
                         status: 'failed',
-                        error_message: (r.reason as any)?.message || 'Failed to send'
+                        error_message: (r.reason as any)?.message || 'Failed to send' // eslint-disable-line @typescript-eslint/no-explicit-any
                     })
                 }
             }
