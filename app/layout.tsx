@@ -99,6 +99,13 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head>
+        <meta name="theme-color" content="#0F172A" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="format-detection" content="telephone=no" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <JsonLd data={{
           '@context': 'https://schema.org',
           '@type': 'Organization',

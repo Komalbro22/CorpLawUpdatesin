@@ -76,9 +76,9 @@ export default function Pagination({ currentPage, totalPages, basePath }: Pagina
                         key={page}
                         href={getHref(page)}
                         scroll={false}
-                        className={`w-10 h-10 flex text-sm font-semibold items-center justify-center rounded-lg transition-all duration-200 ${
+                        className={`w-10 h-10 flex text-sm font-bold items-center justify-center rounded-lg transition-all duration-200 ${
                             currentPage === page
-                                ? 'bg-navy text-white shadow-md shadow-navy/15 ring-1 ring-navy/10 scale-[1.02]'
+                                ? 'bg-amber-400 text-navy shadow-md shadow-amber-200/40 ring-1 ring-amber-400/30 scale-[1.05]'
                                 : 'text-navy hover:bg-white border border-transparent hover:border-slate-200 hover:shadow-sm'
                         }`}
                         aria-current={currentPage === page ? 'page' : undefined}

@@ -160,8 +160,12 @@ export default function UpdatesClient({ updates, counts }: UpdatesClientProps) {
                 {paginatedUpdates.length > 0 ? (
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-8 content-fade-in">
-                            {paginatedUpdates.map((update: any) => (
-                                <UpdateCard key={update.id} update={update} />
+                            {paginatedUpdates.map((update: any, i: number) => (
+                                <UpdateCard
+                                    key={update.id}
+                                    update={update}
+                                    animationDelay={i * 50}
+                                />
                             ))}
                         </div>
 
@@ -190,7 +194,7 @@ export default function UpdatesClient({ updates, counts }: UpdatesClientProps) {
                                 setActiveCategory('All')
                                 router.push(`${pathname}?page=1`, { scroll: false })
                             }}
-                            className="mt-8 inline-flex items-center justify-center rounded-lg bg-navy text-gold font-semibold px-5 py-2.5 text-sm hover:bg-slate-800 transition-colors duration-200"
+                            className="mt-8 inline-flex items-center justify-center rounded-lg bg-navy text-gold font-bold px-6 py-2.5 text-sm hover:bg-slate-800 transition-all duration-200 shadow-md active:scale-95"
                         >
                             Clear all filters
                         </button>

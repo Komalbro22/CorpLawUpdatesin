@@ -87,7 +87,7 @@ export default async function CategoryPage({
 
     const page = searchParams?.page && typeof searchParams.page === 'string' ? parseInt(searchParams.page, 10) : 1
     const currentPage = Math.max(1, page)
-    const ITEMS_PER_PAGE = 10
+    const ITEMS_PER_PAGE = 12
 
     const { data: updates } = await supabase
         .from('updates')
@@ -103,47 +103,66 @@ export default async function CategoryPage({
     const paginatedUpdates = allUpdates.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
 
     const bgColors: Record<string, string> = {
-        mca: 'bg-[#3B82F6]', sebi: 'bg-[#10B981]', rbi: 'bg-[#8B5CF6]',
-        nclt: 'bg-[#F97316]', ibc: 'bg-[#EF4444]', fema: 'bg-[#14B8A6]'
+        mca: 'from-blue-600 to-blue-800', sebi: 'from-emerald-600 to-emerald-800', rbi: 'from-violet-600 to-violet-800',
+        nclt: 'from-orange-500 to-orange-700', ibc: 'from-red-600 to-red-800', fema: 'from-teal-600 to-teal-800'
     };
 
     return (
-        <div className="max-w-7xl mx-auto py-12 px-4">
-            <div className={`${bgColors[cat]} text-white p-8 md:p-12 rounded-2xl shadow-md mb-12`}>
-                <h1 className="font-heading text-4xl md:text-5xl font-bold mb-4">{cat.toUpperCase()} Updates</h1>
-                <p className="text-lg md:text-xl opacity-90 max-w-2xl">{CATEGORY_DESC[cat]}</p>
-            </div>
-
-            <div className="flex items-center justify-between mb-8">
-                <div>
-                    <CategoryBadge category={cat.toUpperCase() as "MCA" | "SEBI" | "RBI" | "NCLT" | "IBC" | "FEMA"} />
-                </div>
-                <span className="text-slate-500 font-medium">
-                    {allUpdates.length} updates
-                </span>
-            </div>
-
-            {paginatedUpdates.length > 0 ? (
-                <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-                        {paginatedUpdates.map((update: any) => (
-                            <UpdateCard key={update.id} update={update} />
-                        ))}
+        <div>
+            {/* Category Hero */}
+            <div className={`relative bg-gradient-to-br ${bgColors[cat]} text-white overflow-hidden`}>
+                 <div
+                    className="absolute inset-0 opacity-[0.05] bg-[linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] bg-[size:72px_72px]"
+                    aria-hidden
+                />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_80%_at_100%_0%,rgba(255,255,255,0.05),transparent_60%)]" aria-hidden />
+                
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 relative">
+                    <div className="flex items-center gap-3 mb-4">
+                         <span className="bg-white/20 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase backdrop-blur-sm ring-1 ring-white/30">
+                            Regulator
+                         </span>
+                         <span className="text-white/60 text-sm">·</span>
+                         <span className="text-white/80 text-sm font-medium">{allUpdates.length} articles</span>
                     </div>
-                    {totalPages > 1 && (
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={totalPages}
-                            basePath={`/category/${cat}`}
-                        />
-                    )}
-                </>
-            ) : (
-                <div className="bg-white p-12 rounded-xl border border-slate-100 text-center shadow-sm">
-                    <h3 className="text-xl font-bold text-navy mb-2">No updates yet</h3>
-                    <p className="text-slate-500">We don't have any updates for {cat.toUpperCase()} yet.</p>
+                    <h1 className="font-heading text-4xl md:text-6xl font-bold mb-4 animate-fade-up">
+                        {cat.toUpperCase()} Updates
+                    </h1>
+                    <p className="text-lg md:text-xl text-white/90 max-w-3xl leading-relaxed animate-fade-up" style={{ '--delay': '100ms' } as any}>
+                        {CATEGORY_DESC[cat]}
+                    </p>
                 </div>
-            )}
+            </div>
+
+            {/* Content Area */}
+            <div className="max-w-7xl mx-auto py-10 px-4">
+                {paginatedUpdates.length > 0 ? (
+                    <>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12">
+                            {paginatedUpdates.map((update: any, i: number) => (
+                                <UpdateCard 
+                                    key={update.id} 
+                                    update={update} 
+                                    animationDelay={i * 60}
+                                />
+                            ))}
+                        </div>
+                        {totalPages > 1 && (
+                            <Pagination
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                basePath={`/category/${cat}`}
+                            />
+                        )}
+                    </>
+                ) : (
+                    <div className="bg-white p-16 md:p-20 rounded-2xl border border-slate-200/80 text-center shadow-card ring-1 ring-slate-900/[0.02] content-fade-in">
+                        <div className="text-5xl mb-4">🔍</div>
+                        <h3 className="text-2xl font-heading font-bold text-navy mb-2">No updates yet</h3>
+                        <p className="text-slate-500 max-w-md mx-auto">We haven't published any {cat.toUpperCase()} specific updates recently. Please check back later.</p>
+                    </div>
+                )}
+            </div>
         </div>
     )
 }

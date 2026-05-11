@@ -1,0 +1,27 @@
+- `[x]` Foundation (CSS/Tailwind)
+    - `[x]` globals.css: Added animations, drop-cap, reading experience CSS
+    - `[x]` tailwind.config.ts: Extended shadows, easing, and keyframes
+- `[x]` New Components
+    - `[x]` FontSizeToggle: Client component for persistent text scaling
+    - `[x]` BreadcrumbJsonLd: SEO schema generator
+    - `[x]` HomeStats: Animated count-up client island
+- `[x]` Core Upgrades
+    - `[x]` Navbar: Glassmorphism, scroll-compact, improved dropdowns
+    - `[x]` UpdateCard: Category stripes, staggered animations, better hover
+    - `[x]` ReadingProgress: Smooth scroll, glowing tip, ARIA support
+    - `[x]` TableOfContents: Sticky sidebar (desktop), collapsible (mobile), IntersectionObserver
+    - `[x]` Pagination: Theme-consistent gold/amber active states
+- `[x]` Page Enhancements
+    - `[x]` Homepage: Hero orbs, staggered cards, improved regulator grid
+    - `[x]` Article Page: Integrated FontSizeToggle, ReadingProgress, Breadcrumb SEO, fixed sticky layout
+    - `[x]` Category Page: regulator-themed hero gradients, staggered cards
+    - `[x]` Footer: Premium multi-column layout, social icon buttons, newsletter callout
+- `[x]` Admin Refresh
+    - `[x]` Sidebar: Grouped sections (Content/Subscribers/Analytics/Tools/System), gold glow active
+    - `[x]` TopBar: Breadcrumbs, today's date badge, quick-action buttons
+    - `[x]` AdminMain: Smooth fade-in transitions between routes
+- `[x]` SEO & Performance
+    - `[x]` root layout: Preconnect Google Fonts, theme-color, PWA meta tags
+    - `[x]` metadata: Improved SEO titles, descriptions, and modifiedTime coverage
+- `[x]` Verification
+    - `[x]` Build Check: Validated types and linting (fixed unused import)
