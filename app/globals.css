@@ -12,8 +12,8 @@
   --surface-muted: #f1f5f9;
   --border-subtle: #e2e8f0;
   --ring-focus: rgba(245, 158, 11, 0.45);
-  --article-font-size: 16.5px;
-  --article-line-height: 1.88;
+  --article-font-size: 18px;
+  --article-line-height: 1.85;
 }
 
 /* ============================================================
@@ -172,9 +172,9 @@ h2, h3, h4 {
 }
 
 /* Article font size variants (toggled via FontSizeToggle) */
-.article-font-sm .article-content { --article-font-size: 15px; --article-line-height: 1.78; }
-.article-font-md .article-content { --article-font-size: 17px; --article-line-height: 1.88; }
-.article-font-lg .article-content { --article-font-size: 19px; --article-line-height: 1.95; }
+.article-font-sm .article-content { --article-font-size: 15px; --article-line-height: 1.75; }
+.article-font-md .article-content { --article-font-size: 18.5px; --article-line-height: 1.85; }
+.article-font-lg .article-content { --article-font-size: 23px; --article-line-height: 1.9; }
 
 /* Drop-cap first letter for articles */
 .article-content > p:first-of-type::first-letter {
@@ -369,16 +369,21 @@ h2, h3, h4 {
   .back-to-top,
   .whatsapp-button,
   .print\:hidden,
-  [class*="print:hidden"] { display: none !important; }
+  [class*="print:hidden"],
+  [class*="print:!hidden"],
+  div[class*="share"],
+  div[class*="Share"],
+  section[class*="related"],
+  nav[aria-label="Breadcrumb"],
+  .FontSizeToggle,
+  [class*="FontSizeToggle"] { display: none !important; }
 
-  [class*="share"],
-  [class*="Share"],
-  a[href*="twitter.com"],
-  a[href*="x.com"],
-  a[href*="linkedin.com"],
+  [class*="share"] a,
+  [class*="share"] button,
   a[href*="whatsapp.com"],
-  button[aria-label*="share"],
-  button[aria-label*="Share"] { display: none !important; }
+  a[href*="wa.me"],
+  a[href*="twitter.com"],
+  a[href*="linkedin.com"] { display: none !important; }
 
   [class*="view"],
   [class*="View"],

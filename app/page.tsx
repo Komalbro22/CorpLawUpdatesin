@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import UpdateCard from '@/components/UpdateCard'
 import Link from 'next/link'
 import { Metadata } from 'next'
-import HomeStats from '@/components/HomeStats'
+
 import {
   Building2, TrendingUp, Landmark, Scale, Gavel, Globe2, ArrowRight
 } from 'lucide-react'
@@ -33,7 +33,7 @@ const categoryMeta = [
 ]
 
 export default async function HomePage() {
-  const [featuredRes, latestRes, updatesCountRes, viewsRes] = await Promise.all([
+  const [featuredRes, latestRes] = await Promise.all([
     supabase
       .from('updates')
       .select('*')
@@ -49,18 +49,10 @@ export default async function HomePage() {
       .lte('published_at', new Date().toISOString())
       .order('published_at', { ascending: false })
       .limit(9),
-    supabase
-      .from('updates')
-      .select('*', { count: 'exact', head: true })
-      .not('published_at', 'is', null)
-      .lte('published_at', new Date().toISOString()),
-    supabase.from('updates').select('views'),
   ])
 
   const featuredUpdates = featuredRes.data || []
   const latestUpdates   = latestRes.data || []
-  const updatesCount    = updatesCountRes.count || 0
-  const totalViews      = viewsRes.data?.reduce((acc, curr) => acc + (curr.views || 0), 0) || 0
   const hasUpdates      = featuredUpdates.length > 0 || latestUpdates.length > 0
 
   return (
@@ -103,18 +95,9 @@ export default async function HomePage() {
               Browse Updates
               <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" aria-hidden />
             </Link>
-            <Link
-              href="/newsletter"
-              className="border border-white/30 text-white font-semibold py-3.5 px-8 rounded-xl hover:bg-white/10 hover:border-white/50 transition-all duration-200 text-center backdrop-blur-sm"
-            >
-              Weekly Newsletter
-            </Link>
           </div>
 
-          {/* Stats — client-side count-up island */}
-          <div className="mt-14 w-full max-w-xs mx-auto animate-fade-up" style={{ '--delay': '240ms' } as any}>
-            <HomeStats updatesCount={updatesCount} totalViews={totalViews} />
-          </div>
+
         </div>
       </section>
 

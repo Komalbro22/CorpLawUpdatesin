@@ -28,21 +28,23 @@ export default function FontSizeToggle() {
     const saved = (localStorage.getItem(STORAGE_KEY) as FontSize) || 'md'
     if (sizes.includes(saved)) {
       setSize(saved)
-      applyClass(saved)
     }
   }, [])
 
-  function applyClass(s: FontSize) {
-    const article = document.getElementById('article-root')
-    if (!article) return
-    sizes.forEach(sz => article.classList.remove(classMap[sz]))
-    article.classList.add(classMap[s])
-  }
+  /* Apply class whenever size changes */
+  useEffect(() => {
+    const applyClass = (s: FontSize) => {
+      const article = document.getElementById('article-root')
+      if (!article) return
+      sizes.forEach(sz => article.classList.remove(classMap[sz]))
+      article.classList.add(classMap[s])
+    }
+    applyClass(size)
+  }, [size])
 
   function changeSize(s: FontSize) {
     setSize(s)
     localStorage.setItem(STORAGE_KEY, s)
-    applyClass(s)
   }
 
   return (

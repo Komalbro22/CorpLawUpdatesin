@@ -302,7 +302,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
             {/* 5. TAGS */}
             {tagsList && tagsList.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-4 mb-6">
+                <div className="flex flex-wrap gap-2 mt-4 mb-6 print:hidden">
                     <span className="text-xs text-slate-400 self-center mr-1 font-medium">Tags:</span>
                     {tagsList.map((tag: string) => (
                         <Link

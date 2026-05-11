@@ -47,7 +47,7 @@ export default function ArticleActions({
 
     return (
         <div className="flex items-center gap-2 flex-wrap my-4 
-                    print:hidden share-buttons">
+                    print:!hidden share-buttons">
             <span className="text-sm text-slate-500 font-medium mr-1">
                 Share:
             </span>
