@@ -316,6 +316,8 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                 </div>
             )}
 
+            <div id="article-end" className="h-4" aria-hidden />
+
             {/* 6. RELATED UPDATES */}
             {related.length > 0 && (
                 <section className="pt-10 border-t border-slate-200 print:hidden">

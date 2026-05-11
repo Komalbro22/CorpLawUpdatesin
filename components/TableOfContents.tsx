@@ -17,6 +17,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
   const [headings, setHeadings] = useState<Heading[]>([])
   const [activeId, setActiveId] = useState<string>('')
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [atFooter, setAtFooter] = useState(false)
 
   /* Extract headings from DOM after render */
   useEffect(() => {
@@ -69,6 +70,29 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
     return () => observer.disconnect()
   }, [headings])
 
+  /* Detect if end of article is reached to hide fixed sidebar */
+  useEffect(() => {
+    const sentinel = document.getElementById('article-end')
+    const footer = document.querySelector('footer')
+    if (!sentinel && !footer) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // If the footer is visible OR if the sentinel is in the upper part of viewport
+        const footerVisible = entries.find(e => e.target.tagName === 'FOOTER')?.isIntersecting
+        const sentinelVisible = entries.find(e => e.target.id === 'article-end')?.isIntersecting
+        
+        // We hide if footer is visible OR if we've scrolled well past the sentinel
+        setAtFooter(!!footerVisible || (!!sentinelVisible && entries.find(e => e.target.id === 'article-end')!.boundingClientRect.top < 200))
+      },
+      { threshold: 0 }
+    )
+
+    if (sentinel) observer.observe(sentinel)
+    if (footer) observer.observe(footer)
+    return () => observer.disconnect()
+  }, [])
+
   function scrollToSection(id: string) {
     const el = document.getElementById(id)
     if (!el) return
@@ -84,7 +108,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
   const Sidebar = (
     <nav
       aria-label="Table of contents"
-      className="hidden xl:block fixed right-6 top-24 w-60 max-h-[calc(100vh-7rem)] overflow-y-auto print:hidden z-30"
+      className={`hidden xl:block fixed right-6 top-24 w-60 max-h-[calc(100vh-7rem)] overflow-y-auto print:hidden z-30 transition-opacity duration-300 ${atFooter ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
     >
       <div className="bg-white/95 backdrop-blur-sm rounded-2xl border border-slate-200/80 shadow-card p-4">
         <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
