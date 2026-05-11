@@ -142,74 +142,73 @@ export async function sendNewsletterEmails({
         campaignId = campaign.id
     }
 
+    // --- Resend free-tier guard ---
+    const RESEND_DAILY_LIMIT = 100
+    if (subscribers.length >= RESEND_DAILY_LIMIT * 0.9) {
+        console.warn(
+            `[Newsletter] WARNING: Sending to ${subscribers.length} subscribers. ` +
+            `Resend free tier allows only ${RESEND_DAILY_LIMIT} emails/day. ` +
+            `You may hit the daily cap before all emails are delivered.`
+        )
+    }
+    console.log(`[Newsletter] Sending to ${subscribers.length} subscriber(s) sequentially (500ms delay between each).`)
+
     let sent = 0
     let failed = 0
     const successList: string[] = []
     const failedList: string[] = []
     const recipientsToInsert: any[] = [] // eslint-disable-line @typescript-eslint/no-explicit-any
-    
-    const chunks = []
-    for (let i = 0; i < subscribers.length; i += 10) {
-        chunks.push(subscribers.slice(i, i + 10))
-    }
 
-    for (let ci = 0; ci < chunks.length; ci++) {
-        const chunk = chunks[ci]
-        const results = await Promise.allSettled(
-            chunk.map(async (sub: { id: string, email: string }) => {
-                const token = generateUnsubscribeToken(sub.email)
-                const unsubUrl = `${BASE_URL}/api/unsubscribe?email=${encodeURIComponent(sub.email)}&token=${token}`
+    // Sequential send — one email at a time, 500ms apart to stay under Resend's
+    // 2 req/sec free-tier rate limit (5 req/sec overall cap).
+    for (const sub of subscribers) {
+        try {
+            const token = generateUnsubscribeToken(sub.email)
+            const unsubUrl = `${BASE_URL}/api/unsubscribe?email=${encodeURIComponent(sub.email)}&token=${token}`
 
-                const html = buildEmailHtml({
-                    subject,
-                    previewText: previewText || '',
-                    bodyHtml,
-                    unsubscribeUrl: unsubUrl
-                })
-
-                const r = await resend.emails.send({
-                    from: fromEmail,
-                    to: sub.email,
-                    subject,
-                    html,
-                })
-
-                if (r.error) throw new Error(r.error.message)
-                return r
+            const html = buildEmailHtml({
+                subject,
+                previewText: previewText || '',
+                bodyHtml,
+                unsubscribeUrl: unsubUrl
             })
-        )
 
-        results.forEach((r, idx) => {
-            const subEmail = chunk[idx].email
-            if (r.status === 'fulfilled') {
-                sent++
-                successList.push(subEmail)
-                if (campaignId) {
-                    recipientsToInsert.push({
-                        campaign_id: campaignId,
-                        email: subEmail,
-                        status: 'delivered',
-                        resend_email_id: (r.value as any).data?.id || null, // eslint-disable-line @typescript-eslint/no-explicit-any
-                        sent_at: new Date().toISOString()
-                    })
-                }
-            } else {
-                failed++
-                failedList.push(subEmail)
-                if (campaignId) {
-                    recipientsToInsert.push({
-                        campaign_id: campaignId,
-                        email: subEmail,
-                        status: 'failed',
-                        error_message: (r.reason as any)?.message || 'Failed to send' // eslint-disable-line @typescript-eslint/no-explicit-any
-                    })
-                }
+            const r = await resend.emails.send({
+                from: fromEmail,
+                to: sub.email,
+                subject,
+                html,
+            })
+
+            if (r.error) throw new Error(r.error.message)
+
+            sent++
+            successList.push(sub.email)
+            if (campaignId) {
+                recipientsToInsert.push({
+                    campaign_id: campaignId,
+                    email: sub.email,
+                    status: 'delivered',
+                    resend_email_id: (r.data as any)?.id || null, // eslint-disable-line @typescript-eslint/no-explicit-any
+                    sent_at: new Date().toISOString()
+                })
             }
-        })
-
-        if (ci < chunks.length - 1) {
-            await new Promise(resolve => setTimeout(resolve, 500))
+        } catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
+            console.error(`[Newsletter] Failed to send to ${sub.email}:`, err)
+            failed++
+            failedList.push(sub.email)
+            if (campaignId) {
+                recipientsToInsert.push({
+                    campaign_id: campaignId,
+                    email: sub.email,
+                    status: 'failed',
+                    error_message: err?.message || 'Failed to send'
+                })
+            }
         }
+
+        // 500ms delay → max 2 emails/sec, safely within Resend free-tier limit
+        await new Promise(resolve => setTimeout(resolve, 500))
     }
 
     if (campaignId && recipientsToInsert.length > 0) {
