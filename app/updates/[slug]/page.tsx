@@ -18,6 +18,7 @@ import ViewCounter from '@/components/ViewCounter'
 import ArticleActions from '@/components/ArticleActions'
 import ReadingProgress from '@/components/ReadingProgress'
 import FontSizeToggle from '@/components/FontSizeToggle'
+import { AlertCircle, BookOpen, CalendarDays, ChevronDown, Clock3, Eye, FileText, Lightbulb } from 'lucide-react'
 
 export const revalidate = 3600
 
@@ -117,7 +118,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
     return (
         <article
           id="article-root"
-          className="article-font-md max-w-4xl mx-auto py-10 px-4 w-full"
+          className="article-font-md mx-auto w-full max-w-4xl px-4 py-8 sm:py-10"
         >
             <ReadingProgress />
             <ViewCounter slug={update.slug} />
@@ -130,13 +131,13 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
             ]} />
 
             {/* 1. BREADCRUMB NAV */}
-            <nav className="text-sm text-slate-400 mb-7 flex items-center gap-1.5 flex-wrap print:hidden" aria-label="Breadcrumb">
+            <nav className="mb-7 flex flex-wrap items-center gap-1.5 text-sm text-slate-400 print:hidden" aria-label="Breadcrumb">
                 <Link href="/" className="hover:text-gold transition-colors">Home</Link>
                 <span className="text-slate-300">/</span>
                 <Link href="/updates" className="hover:text-gold transition-colors">Updates</Link>
                 <span className="text-slate-300">/</span>
                 <span className="text-navy font-medium truncate max-w-[220px]">
-                    {update.title.length > 45 ? update.title.substring(0, 45) + '…' : update.title}
+                    {update.title.length > 45 ? update.title.substring(0, 45) + '...' : update.title}
                 </span>
             </nav>
 
@@ -144,13 +145,13 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
             <header className="mb-8">
                 <div className="mb-4 flex items-center justify-between flex-wrap gap-3">
                     <CategoryBadge category={update.category as any} />
-                    {/* Font size toggle — client island */}
+                    {/* Font size toggle - client island */}
                     <FontSizeToggle />
                 </div>
 
                 {/* Hero image */}
                 {update.image_url && (
-                    <div className="relative w-full h-64 md:h-[400px] mb-8 rounded-2xl overflow-hidden shadow-md">
+                    <div className="relative mb-8 h-64 w-full overflow-hidden rounded-lg shadow-md md:h-[400px]">
                         <Image
                             src={update.image_url}
                             alt={update.title}
@@ -164,8 +165,8 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
                 {/* Key change banner */}
                 {update.key_change && (
-                    <div className="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-4 mb-6 flex items-start gap-3">
-                        <span className="text-xl flex-shrink-0">📋</span>
+                    <div className="mb-6 flex items-start gap-3 rounded-r-lg border-l-4 border-amber-400 bg-amber-50 p-4">
+                        <FileText className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-600" aria-hidden />
                         <div>
                             <p className="text-xs font-bold text-amber-900 uppercase tracking-widest mb-1">Key Change</p>
                             <p className="text-amber-800 text-sm leading-relaxed">{update.key_change}</p>
@@ -175,13 +176,13 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
                 {/* Key changes accordion */}
                 {update.key_changes && Array.isArray(update.key_changes) && update.key_changes.length > 0 && (
-                    <details className="group bg-slate-50 border border-slate-200 rounded-xl mb-6 overflow-hidden print:hidden">
+                    <details className="group mb-6 overflow-hidden rounded-lg border border-slate-200 bg-slate-50 print:hidden">
                         <summary className="cursor-pointer p-4 font-bold text-navy flex justify-between items-center bg-white hover:bg-slate-50 transition-colors list-none [&::-webkit-details-marker]:hidden">
                             <div className="flex items-center gap-2">
-                                <span className="text-xl">💡</span>
+                                <Lightbulb className="h-5 w-5 text-amber-500" aria-hidden />
                                 All Key Changes
                             </div>
-                            <span className="text-slate-400 group-open:rotate-180 transition-transform duration-300">▼</span>
+                            <ChevronDown className="h-4 w-4 text-slate-400 transition-transform duration-300 group-open:rotate-180" aria-hidden />
                         </summary>
                         <div className="p-5 border-t border-slate-100">
                             <ul className="list-disc pl-5 space-y-2 text-sm text-slate-700">
@@ -199,51 +200,57 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                 </h1>
 
                 {/* Meta row */}
-                <div className="flex flex-wrap items-center text-sm text-slate-400 gap-2 mb-5">
-                    <time className="publish-date" dateTime={update.published_at}>{formattedDate}</time>
-                    <span className="text-slate-300">•</span>
-                    <span className="read-count flex items-center gap-1">
-                        🕐 {readTime} min read
+                <div className="mb-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-500">
+                    <time className="publish-date inline-flex items-center gap-1.5" dateTime={update.published_at}>
+                        <CalendarDays className="h-4 w-4 text-slate-400" aria-hidden />
+                        {formattedDate}
+                    </time>
+                    <span className="read-count inline-flex items-center gap-1.5">
+                        <Clock3 className="h-4 w-4 text-slate-400" aria-hidden />
+                        {readTime} min read
                     </span>
                     {wordCount > 0 && (
-                        <>
-                            <span className="text-slate-300">•</span>
-                            <span className="text-slate-400 read-count">{wordCount.toLocaleString('en-IN')} words</span>
-                        </>
+                        <span className="read-count inline-flex items-center gap-1.5">
+                            <BookOpen className="h-4 w-4 text-slate-400" aria-hidden />
+                            {wordCount.toLocaleString('en-IN')} words
+                        </span>
                     )}
                     {update.source_name && (
-                        <>
-                            <span className="text-slate-300 print:hidden">•</span>
-                            <span className="print:hidden text-slate-400">{update.source_name}</span>
-                        </>
+                        <span className="print:hidden text-slate-500">{update.source_name}</span>
                     )}
                     {update.effective_date && (
-                        <span className="inline-flex items-center gap-1 bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-medium">
-                            📅 Effective: {formatDate(update.effective_date)}
+                        <span className="inline-flex items-center gap-1 rounded-md border border-green-100 bg-green-50 px-2 py-1 text-xs font-medium text-green-700">
+                            <CalendarDays className="h-3.5 w-3.5" aria-hidden />
+                            Effective: {formatDate(update.effective_date)}
                         </span>
                     )}
                     {update.impact_level && (
-                        <span className={`inline-flex items-center text-xs px-2 py-0.5 rounded-full font-medium ${
+                        <span className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium ${
                             update.impact_level === 'high'   ? 'bg-red-100 text-red-700'   :
                             update.impact_level === 'medium' ? 'bg-amber-100 text-amber-700' :
                                                                'bg-green-100 text-green-700'
                         }`}>
-                            {update.impact_level === 'high'   && '🔴 High Impact'}
-                            {update.impact_level === 'medium' && '🟡 Medium Impact'}
-                            {update.impact_level === 'low'    && '🟢 Low Impact'}
+                            <AlertCircle className="h-3.5 w-3.5" aria-hidden />
+                            {update.impact_level === 'high'   && 'High impact'}
+                            {update.impact_level === 'medium' && 'Medium impact'}
+                            {update.impact_level === 'low'    && 'Low impact'}
                         </span>
                     )}
                     {(update.views || 0) > 0 && (
-                        <span className="text-slate-400 text-xs views-count">
-                            · {update.views!.toLocaleString('en-IN')} views
+                        <span className="views-count inline-flex items-center gap-1.5 text-xs text-slate-400">
+                            <Eye className="h-3.5 w-3.5" aria-hidden />
+                            {update.views!.toLocaleString('en-IN')} views
                         </span>
                     )}
                 </div>
 
                 {/* Summary box */}
                 {update.summary && (
-                    <div className="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-4 mb-6">
-                        <p className="text-xs font-bold text-blue-800 uppercase tracking-widest mb-2">📌 Summary</p>
+                    <div className="mb-6 rounded-r-lg border-l-4 border-blue-400 bg-blue-50 p-4">
+                        <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-blue-800">
+                            <FileText className="h-4 w-4" aria-hidden />
+                            Summary
+                        </p>
                         <p className="text-blue-900 text-sm leading-relaxed font-medium">{update.summary}</p>
                     </div>
                 )}
@@ -268,7 +275,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
             {/* 4. SOURCE ATTRIBUTION */}
             <div className="print:hidden">
                 {(update.source_url || (update.sources && update.sources.length > 0)) && (
-                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-8 flex flex-col gap-2">
+                    <div className="mb-8 flex flex-col gap-2 rounded-lg border border-slate-100 bg-slate-50 p-4">
                         <span className="text-slate-600 font-semibold text-sm">Sources</span>
                         <ul className="space-y-1">
                             {update.source_name && update.source_url && (
@@ -308,7 +315,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                         <Link
                             key={tag}
                             href={`/updates?search=${encodeURIComponent(tag.trim())}`}
-                            className="bg-slate-100 hover:bg-amber-50 text-slate-600 hover:text-amber-700 text-xs px-3 py-1 rounded-full transition-all duration-200 border border-slate-200 hover:border-amber-300 hover:shadow-sm"
+                            className="rounded-md border border-slate-200 bg-slate-100 px-3 py-1 text-xs text-slate-600 transition-all duration-200 hover:border-amber-300 hover:bg-amber-50 hover:text-amber-700 hover:shadow-sm"
                         >
                             #{tag.trim()}
                         </Link>
@@ -330,24 +337,25 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                 </section>
             )}
 
-            {/* 7. INTERNAL LINKS — SEO */}
-            <div className="mt-8 p-5 bg-slate-50 rounded-xl border border-slate-200 print:hidden">
-                <h3 className="font-bold text-navy text-sm mb-3">
-                    📚 Browse More {update.category.toUpperCase()} Updates
+            {/* 7. INTERNAL LINKS - SEO */}
+            <div className="mt-8 rounded-lg border border-slate-200 bg-slate-50 p-5 print:hidden">
+                <h3 className="mb-3 flex items-center gap-2 text-sm font-bold text-navy">
+                    <BookOpen className="h-4 w-4 text-amber-600" aria-hidden />
+                    Browse More {update.category.toUpperCase()} Updates
                 </h3>
                 <div className="flex flex-wrap gap-2">
                     {[
                         { label: `All ${update.category.toUpperCase()} Updates`, href: `/category/${update.category.toLowerCase()}` },
                         { label: 'All Updates', href: '/updates' },
-                        { label: '📅 Compliance Calendar', href: '/calendar' },
-                        { label: '📧 Newsletter', href: '/newsletter' },
+                        { label: 'Compliance Calendar', href: '/calendar' },
+                        { label: 'Newsletter', href: '/newsletter' },
                     ].map(link => (
                         <Link
                             key={link.href}
                             href={link.href}
                             className="text-sm bg-white border border-slate-200 text-navy px-3 py-1.5 rounded-lg hover:border-amber-400 hover:text-amber-700 transition-colors"
                         >
-                            {link.label} →
+                            {link.label} <span aria-hidden>{'->'}</span>
                         </Link>
                     ))}
                 </div>

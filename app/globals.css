@@ -163,33 +163,20 @@ h2, h3, h4 {
 }
 
 /* ============================================================
-   ARTICLE CONTENT — READING EXPERIENCE
+   ARTICLE CONTENT - READING EXPERIENCE
    ============================================================ */
 .article-content {
-  font-size: var(--article-font-size, 16.5px);
-  line-height: var(--article-line-height, 1.88);
+  font-size: var(--article-font-size, 17px);
+  line-height: var(--article-line-height, 1.82);
   color: #1e293b;
 }
 
 /* Article font size variants (toggled via FontSizeToggle) */
-.article-font-sm .article-content { --article-font-size: 15px; --article-line-height: 1.75; }
-.article-font-md .article-content { --article-font-size: 18.5px; --article-line-height: 1.85; }
-.article-font-lg .article-content { --article-font-size: 23px; --article-line-height: 1.9; }
+.article-font-sm .article-content { --article-font-size: 15px; --article-line-height: 1.72; }
+.article-font-md .article-content { --article-font-size: 18px; --article-line-height: 1.82; }
+.article-font-lg .article-content { --article-font-size: 21px; --article-line-height: 1.88; }
 
-/* Drop-cap first letter for articles */
-.article-content > p:first-of-type::first-letter {
-  font-family: var(--font-lora), Georgia, serif;
-  font-size: 3.6em;
-  font-weight: 700;
-  float: left;
-  line-height: 0.8;
-  margin: 0.07em 0.1em 0 0;
-  color: #F59E0B;
-  text-shadow: 1px 1px 0 rgba(245,158,11,0.15);
-  shape-outside: margin-box;
-}
-
-/* Article headings — gold accent borders */
+/* Article headings - gold accent borders */
 .article-content h2 {
   font-family: var(--font-lora), Georgia, serif;
   font-size: 1.45em;
@@ -219,7 +206,7 @@ h2, h3, h4 {
 
 /* Article paragraph spacing */
 .article-content p {
-  margin-bottom: 1.4em;
+  margin-bottom: 1.25em;
 }
 
 /* Article links */
@@ -240,6 +227,21 @@ h2, h3, h4 {
   margin: 1.8em 0;
   font-style: italic;
   color: #78350f;
+}
+
+@media (max-width: 640px) {
+  .article-font-sm .article-content { --article-font-size: 14.5px; --article-line-height: 1.72; }
+  .article-font-md .article-content { --article-font-size: 16.5px; --article-line-height: 1.78; }
+  .article-font-lg .article-content { --article-font-size: 18px; --article-line-height: 1.82; }
+
+  .article-content h2 {
+    font-size: 1.28em;
+    margin-top: 1.8em;
+  }
+
+  .article-content h3 {
+    font-size: 1.12em;
+  }
 }
 
 /* Article code */

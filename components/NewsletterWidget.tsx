@@ -45,9 +45,9 @@ export default function NewsletterWidget() {
     }
 
     return (
-        <div className="bg-white p-6 md:p-7 rounded-xl shadow-card border border-slate-200/80 ring-1 ring-slate-900/[0.02] transition-shadow duration-300 hover:shadow-card-hover">
+        <div className="rounded-lg border border-slate-200/80 bg-white p-6 shadow-card ring-1 ring-slate-900/[0.02] transition-shadow duration-300 hover:shadow-card-hover md:p-7">
             <div className="flex items-start gap-3 mb-3">
-                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-navy/5 text-navy">
+                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-navy/5 text-navy">
                     <Mail className="h-5 w-5" aria-hidden />
                 </span>
                 <div>
@@ -55,13 +55,13 @@ export default function NewsletterWidget() {
                         Subscribe to corporate law updates
                     </h3>
                     <p className="text-slate-600 text-sm mt-1 leading-relaxed">
-                        MCA, SEBI, and RBI highlights in one place — no clutter.
+                        MCA, SEBI, and RBI highlights in one place, without the clutter.
                     </p>
                 </div>
             </div>
 
             {success ? (
-                <div className="mt-4 bg-emerald-50 text-emerald-800 border border-emerald-100 p-4 rounded-xl flex items-start gap-3">
+                <div className="mt-4 flex items-start gap-3 rounded-lg border border-emerald-100 bg-emerald-50 p-4 text-emerald-800">
                     <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5" aria-hidden />
                     <span className="font-medium text-sm leading-relaxed">
                         You are subscribed. Check your inbox for a confirmation message.
@@ -98,7 +98,7 @@ export default function NewsletterWidget() {
                         {loading ? (
                             <>
                                 <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
-                                Subscribing…
+                                Subscribing...
                             </>
                         ) : (
                             'Subscribe free'

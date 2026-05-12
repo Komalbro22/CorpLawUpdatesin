@@ -63,9 +63,18 @@ export default async function UpdatesPage() {
             </div>
 
             <div className="max-w-7xl mx-auto px-4 pb-16 pt-8 md:pt-10">
-                <Suspense fallback={<SkeletonGrid />}>
-                    <UpdatesClient updates={updates} counts={counts} />
-                </Suspense>
+                {updates.length === 0 ? (
+                    <div className="rounded-lg border border-slate-200 bg-white px-6 py-12 text-center shadow-card">
+                        <h2 className="font-heading text-xl font-bold text-navy">No updates published yet</h2>
+                        <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-slate-500">
+                            Published regulatory updates will appear here once they are available.
+                        </p>
+                    </div>
+                ) : (
+                    <Suspense fallback={<SkeletonGrid />}>
+                        <UpdatesClient updates={updates} counts={counts} />
+                    </Suspense>
+                )}
             </div>
         </div>
     )

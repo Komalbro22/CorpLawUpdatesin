@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Check, Copy } from 'lucide-react'
 import DownloadPDFButton from '@/components/DownloadPDFButton'
 
 interface ArticleActionsProps {
@@ -46,9 +47,8 @@ export default function ArticleActions({
 
 
     return (
-        <div className="flex items-center gap-2 flex-wrap my-4 
-                    print:!hidden share-buttons">
-            <span className="text-sm text-slate-500 font-medium mr-1">
+        <div className="my-5 flex flex-wrap items-center gap-2 border-y border-slate-100 py-4 print:!hidden share-buttons">
+            <span className="mr-1 text-sm font-semibold text-slate-600">
                 Share:
             </span>
 
@@ -57,7 +57,7 @@ export default function ArticleActions({
                 href={shareLinks.twitter}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 px-3 py-1.5
+                className="flex items-center gap-1.5 px-3 py-2
                    bg-black text-white text-sm rounded-lg
                    hover:bg-slate-800 transition-colors"
             >
@@ -65,7 +65,7 @@ export default function ArticleActions({
                     fill="currentColor" aria-hidden="true">
                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.735-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                 </svg>
-                Twitter
+                X
             </a>
 
             {/* LinkedIn */}
@@ -73,7 +73,7 @@ export default function ArticleActions({
                 href={shareLinks.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 px-3 py-1.5
+                className="flex items-center gap-1.5 px-3 py-2
                    bg-blue-600 text-white text-sm rounded-lg
                    hover:bg-blue-700 transition-colors"
             >
@@ -89,7 +89,7 @@ export default function ArticleActions({
                 href={shareLinks.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 px-3 py-1.5
+                className="flex items-center gap-1.5 px-3 py-2
                    bg-green-500 text-white text-sm rounded-lg
                    hover:bg-green-600 transition-colors"
             >
@@ -104,15 +104,21 @@ export default function ArticleActions({
             <div className="relative">
                 <button
                     onClick={copyLink}
-                    className="flex items-center gap-1.5 px-3 py-1.5
+                    className="flex items-center gap-1.5 px-3 py-2
                        border border-slate-300 text-slate-600
                        text-sm rounded-lg hover:bg-slate-50
                        transition-colors"
                 >
                     {copied ? (
-                        <>✓ Copied!</>
+                        <>
+                            <Check className="h-4 w-4" aria-hidden />
+                            Copied
+                        </>
                     ) : (
-                        <>🔗 Copy Link</>
+                        <>
+                            <Copy className="h-4 w-4" aria-hidden />
+                            Copy link
+                        </>
                     )}
                 </button>
                 {copied && (

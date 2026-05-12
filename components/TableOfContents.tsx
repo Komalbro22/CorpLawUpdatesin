@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { List, X } from 'lucide-react'
+import { ChevronDown, CornerDownRight, List, X } from 'lucide-react'
 
 interface Heading {
   id: string
@@ -49,7 +49,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
     setHeadings(extracted)
   }, [content])
 
-  /* IntersectionObserver — always active */
+  /* Track the currently visible section. */
   useEffect(() => {
     if (headings.length === 0) return
 
@@ -104,13 +104,13 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
 
   if (headings.length < 3) return null
 
-  /* ─── Desktop sticky sidebar ─── */
+  /* Desktop sticky sidebar */
   const Sidebar = (
     <nav
       aria-label="Table of contents"
       className={`hidden xl:block fixed right-6 top-24 w-60 max-h-[calc(100vh-7rem)] overflow-y-auto print:hidden z-30 transition-opacity duration-300 ${atFooter ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
     >
-      <div className="bg-white/95 backdrop-blur-sm rounded-2xl border border-slate-200/80 shadow-card p-4">
+      <div className="bg-white/95 backdrop-blur-sm rounded-lg border border-slate-200/80 shadow-card p-4">
         <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
           <List className="w-3.5 h-3.5" aria-hidden />
           Contents
@@ -136,7 +136,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
     </nav>
   )
 
-  /* ─── Mobile collapsible ─── */
+  /* Mobile collapsible contents */
   const MobilePanel = (
     <div className="xl:hidden my-6 print:hidden">
       <button
@@ -144,18 +144,18 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
         className="flex items-center gap-2 text-sm text-slate-500 hover:text-amber-600
                    border border-slate-200 hover:border-amber-300
                    bg-white hover:bg-amber-50
-                   px-4 py-2 rounded-full transition-all duration-200 group w-full sm:w-auto"
+                   px-4 py-2 rounded-lg transition-all duration-200 group w-full sm:w-auto"
       >
         <List className="w-4 h-4" aria-hidden />
         <span className="font-medium">
           {mobileOpen ? 'Hide' : 'Show'} Contents
         </span>
-        <span className={`ml-auto transition-transform duration-200 text-xs ${mobileOpen ? 'rotate-180' : ''}`}>▼</span>
+        <ChevronDown className={`ml-auto h-4 w-4 transition-transform duration-200 ${mobileOpen ? 'rotate-180' : ''}`} aria-hidden />
         <span className="text-xs text-slate-400">({headings.length} sections)</span>
       </button>
 
       {mobileOpen && (
-        <div className="mt-3 bg-slate-50 border border-slate-200 rounded-2xl p-4 animate-fade-in">
+        <div className="mt-3 bg-slate-50 border border-slate-200 rounded-lg p-4 animate-fade-in">
           <div className="flex flex-wrap gap-2">
             {headings.map((heading) => (
               <button
@@ -168,7 +168,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
                     : 'bg-white border-slate-200 text-slate-600 hover:border-amber-300 hover:text-amber-700 hover:bg-amber-50'
                   }`}
               >
-                {heading.level === 3 && <span className="text-slate-400 mr-1">↳</span>}
+                {heading.level === 3 && <CornerDownRight className="mr-1 inline h-3 w-3 text-slate-400" aria-hidden />}
                 {heading.text}
               </button>
             ))}

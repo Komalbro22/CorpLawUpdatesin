@@ -54,7 +54,7 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
         <Link
             href={`/updates/${update.slug}`}
             style={{ '--delay': `${animationDelay}ms` } as React.CSSProperties}
-            className={`animate-fade-up block group bg-white flex flex-col h-full rounded-xl shadow-card border border-slate-200/80 border-t-[3px] ${borderColor} hover:shadow-card-hover hover:-translate-y-1 hover:shadow-glow-gold/5 transition-all duration-300 ease-spring overflow-hidden`}
+            className={`animate-fade-up block group bg-white flex flex-col h-full rounded-lg shadow-card border border-slate-200/80 border-t-[3px] ${borderColor} hover:shadow-card-hover hover:-translate-y-1 hover:shadow-glow-gold/5 transition-all duration-300 ease-spring overflow-hidden`}
         >
             {imageUrl && (
                 <div className="relative w-full aspect-video overflow-hidden bg-slate-100 flex-shrink-0">
@@ -112,7 +112,7 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
                             )}
                             {(update.views || 0) > 0 && (
                                 <span className="text-[10px] text-slate-400 whitespace-nowrap">
-                                    · {update.views!.toLocaleString('en-IN')} views
+                                    {update.views!.toLocaleString('en-IN')} views
                                 </span>
                             )}
                         </div>
