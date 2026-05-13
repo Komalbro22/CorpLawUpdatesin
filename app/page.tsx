@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+// Triggering new build fix
 /* eslint-disable react/no-unescaped-entities */
 import { supabase } from '@/lib/supabase'
 import UpdateCard from '@/components/UpdateCard'
