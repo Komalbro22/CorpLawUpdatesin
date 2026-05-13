@@ -21,14 +21,14 @@ import {
 export const revalidate = 1800
 
 export const metadata: Metadata = {
-  title: 'India\'s Free Corporate Law Intelligence Platform',
-  description: 'Free MCA, SEBI, RBI, NCLT, IBC and FEMA regulatory updates for Company Secretaries, corporate lawyers and compliance officers in India. No login required.',
+  title: 'Corporate Law Updates India (2026) – SEBI, RBI, MCA Notifications & Circulars',
+  description: 'Get the latest corporate law updates in India including SEBI, RBI, MCA, NCLT, IBC and FEMA. Simplified for Company Secretaries, lawyers and students.',
   alternates: { canonical: 'https://www.corplawupdates.in' },
   openGraph: {
-    title: 'CorpLawUpdates.in - Free Corporate Law Updates India',
-    description: 'Free MCA, SEBI, RBI regulatory updates for CS professionals. Updated daily.',
+    title: 'Corporate Law Updates India (2026) – SEBI, RBI, MCA Notifications & Circulars',
+    description: 'Get the latest corporate law updates in India including SEBI, RBI, MCA, NCLT, IBC and FEMA. Updated daily.',
     url: 'https://www.corplawupdates.in',
-    images: [{ url: 'https://www.corplawupdates.in/api/og?title=India%27s+Free+Corporate+Law+Intelligence+Platform&category=', width: 1200, height: 630 }],
+    images: [{ url: 'https://www.corplawupdates.in/api/og?title=Corporate+Law+Updates+India+2026&category=', width: 1200, height: 630 }],
   },
 }
 
@@ -86,10 +86,13 @@ export default async function HomePage() {
               MCA - SEBI - RBI - NCLT - IBC - FEMA
             </p>
             <h1 className="font-heading text-4xl font-bold leading-[1.1] text-white text-balance md:text-5xl lg:text-6xl">
-              India's free corporate law intelligence platform
+              Corporate Law Updates in India (SEBI, RBI, MCA, NCLT, IBC)
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-slate-300 md:text-lg">
-              Clear, sourced regulatory briefs for Company Secretaries, corporate lawyers, finance teams, and compliance officers.
+              Stay updated with the latest corporate law updates in India including SEBI regulations, RBI notifications, MCA circulars, and NCLT judgments. Built for Company Secretaries, lawyers, and compliance professionals.
+            </p>
+            <p className="mt-4 text-sm text-slate-400 font-medium italic">
+              Updated daily with the latest corporate law updates in India.
             </p>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row justify-center">
               <Link
@@ -114,6 +117,32 @@ export default async function HomePage() {
                 </span>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SEO Content Section */}
+      <section className="bg-white py-12 border-b border-slate-100">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="prose prose-slate max-w-none text-center">
+            <h2 className="text-2xl font-bold text-navy mb-4 font-heading">Latest Corporate Law Updates in India</h2>
+            <p className="text-slate-600 leading-relaxed mb-6">
+              CorpLawUpdates.in provides the <strong>latest corporate law updates in India</strong> covering 
+              <Link href="/category/sebi" className="text-gold hover:underline font-medium mx-1">SEBI updates India</Link>, 
+              <Link href="/category/rbi" className="text-gold hover:underline font-medium mx-1">RBI circular updates India</Link>, 
+              <Link href="/category/mca" className="text-gold hover:underline font-medium mx-1">MCA updates India</Link>, 
+              NCLT, IBC and FEMA regulations.
+            </p>
+            <p className="text-slate-600 leading-relaxed mb-8">
+              We simplify complex legal updates into easy-to-understand summaries with key insights and practical implications 
+              to help you stay ahead with <strong>corporate law updates India</strong>.
+            </p>
+            <Link 
+              href="/updates" 
+              className="inline-flex items-center gap-2 text-gold font-bold hover:text-amber-700 transition-colors underline decoration-gold/30 underline-offset-4"
+            >
+              Browse all corporate law updates <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>
@@ -227,6 +256,28 @@ export default async function HomePage() {
           </Link>
         </div>
       </section>
+
+      {/* Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "CorpLawUpdates.in",
+            "url": "https://www.corplawupdates.in",
+            "description": "Latest corporate law updates in India (SEBI, RBI, MCA, NCLT, IBC)",
+            "publisher": {
+              "@type": "Organization",
+              "name": "CorpLawUpdates.in",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.corplawupdates.in/icon.png"
+              }
+            }
+          })
+        }}
+      />
     </div>
   )
 }
