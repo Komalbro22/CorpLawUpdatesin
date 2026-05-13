@@ -128,43 +128,6 @@ export default async function CategoryPage({
                 </div>
             </div>
 
-            {/* SEO Content Section */}
-            <section className="bg-slate-50 border-b border-slate-200">
-                <div className="max-w-7xl mx-auto py-12 px-4">
-                    <div className="prose prose-slate max-w-none">
-                        <h2 className="text-2xl font-bold text-navy mb-4">Latest {cat.toUpperCase()} Updates in India</h2>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-slate-600">
-                            <div className="space-y-4">
-                                <p>
-                                    Stay updated with the <strong>latest {cat.toUpperCase()} updates today</strong>,
-                                    including <strong>{cat.toUpperCase()} notifications India</strong>, circulars, compliance rules and
-                                    regulatory changes issued by {CATEGORY_FULL_NAMES[cat]}.
-                                </p>
-
-                                <p>
-                                    These updates are important for Company Secretaries (CS),
-                                    CA students, lawyers, and compliance professionals who need to track 
-                                    <strong>{cat.toUpperCase()} circular updates</strong> and regulatory shifts.
-                                </p>
-                            </div>
-                            
-                            <div className="space-y-4">
-                                <p>
-                                    We provide simplified summaries of all <strong>{cat.toUpperCase()} updates in India</strong> to 
-                                    help you stay compliant and informed about the latest regulatory landscape.
-                                </p>
-
-                                <p className="font-medium text-navy">
-                                    👉 <Link href="/corporate-law-updates-india" className="text-gold hover:text-amber-600 underline decoration-gold/30 underline-offset-4">
-                                      latest corporate law updates in India
-                                    </Link>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
             {/* Content Area */}
             <div className="max-w-7xl mx-auto py-10 px-4">
@@ -195,6 +158,37 @@ export default async function CategoryPage({
                     </div>
                 )}
             </div>
+
+            {/* Subtle SEO Context at Bottom */}
+            <section className="max-w-7xl mx-auto px-4 py-16 border-t border-slate-100 mt-10">
+                <div className="bg-slate-50/50 rounded-2xl border border-slate-200/60 p-8 shadow-sm">
+                    <h2 className="text-xl font-bold text-navy mb-4 font-heading">Regulatory Information: {cat.toUpperCase()} Updates</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 text-sm text-slate-500 leading-relaxed">
+                        <div className="space-y-4">
+                            <p>
+                                Stay updated with the <strong>latest {cat.toUpperCase()} updates today</strong>,
+                                including <strong>{cat.toUpperCase()} notifications India</strong>, circulars, compliance rules and
+                                regulatory changes issued by {CATEGORY_FULL_NAMES[cat]}.
+                            </p>
+                            <p>
+                                These updates are crucial for Company Secretaries (CS), CA students, and legal professionals 
+                                tracking <strong>{cat.toUpperCase()} circular updates</strong>.
+                            </p>
+                        </div>
+                        <div className="space-y-4">
+                            <p>
+                                Our platform provides simplified, sourced summaries of all <strong>{cat.toUpperCase()} updates in India</strong> 
+                                to help compliance teams and practitioners stay informed about the latest changes.
+                            </p>
+                            <p className="pt-2">
+                                👉 <Link href="/corporate-law-updates-india" className="text-gold font-bold hover:text-amber-700 transition-colors underline decoration-gold/30 underline-offset-4">
+                                  latest corporate law updates in India
+                                </Link>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             {/* JSON-LD Structured Data */}
             <script
