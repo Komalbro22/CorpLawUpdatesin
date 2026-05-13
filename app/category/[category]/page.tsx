@@ -7,6 +7,7 @@ import CategoryBadge from '@/components/CategoryBadge'
 import UpdateCard from '@/components/UpdateCard'
 import Pagination from '@/components/Pagination'
 import { Metadata } from 'next'
+import Link from 'next/link'
 import { BASE_URL } from '@/lib/utils'
 
 export const revalidate = 3600
