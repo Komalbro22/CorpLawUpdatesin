@@ -18,7 +18,18 @@ import {
     Users,
 } from 'lucide-react'
 
-const sections = [
+interface SidebarLink {
+    href: string
+    icon: any
+    label: string
+}
+
+interface SidebarSection {
+    label: string
+    links: SidebarLink[]
+}
+
+const sections: SidebarSection[] = [
     {
         label: 'Content',
         links: [
@@ -57,7 +68,7 @@ const sections = [
             { href: '/admin/settings', icon: Settings, label: 'Settings' },
         ],
     },
-] as const
+]
 
 export default function Sidebar() {
     const pathname = usePathname()
