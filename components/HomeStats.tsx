@@ -63,13 +63,13 @@ export default function HomeStats({ updatesCount, totalViews }: HomeStatsProps) 
     >
       <div className="text-center">
         <div className="text-3xl md:text-4xl text-white font-bold mb-1 tracking-tight tabular-nums animate-count-up">
-          {visible ? formatNumber(count1) : '—'}
+          {visible ? formatNumber(count1) : '-'}
         </div>
         <div className="text-slate-400 text-sm font-medium">Articles published</div>
       </div>
       <div className="text-center">
         <div className="text-3xl md:text-4xl text-white font-bold mb-1 tracking-tight tabular-nums animate-count-up">
-          {visible ? formatNumber(count2) : '—'}
+          {visible ? formatNumber(count2) : '-'}
         </div>
         <div className="text-slate-400 text-sm font-medium">All-time reads</div>
       </div>

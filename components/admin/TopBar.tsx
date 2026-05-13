@@ -45,8 +45,8 @@ export default function TopBar() {
     const segments = segmentsForPath(pathname)
 
     return (
-        <header className="h-16 bg-white border-b border-slate-200/80 flex justify-between items-center px-6 shrink-0 shadow-sm shadow-slate-900/[0.03]">
-            <div className="flex flex-col justify-center">
+        <header className="min-h-16 bg-white border-b border-slate-200/80 flex justify-between items-center gap-3 px-4 py-3 sm:px-6 shrink-0 shadow-sm shadow-slate-900/[0.03]">
+            <div className="flex min-w-0 flex-col justify-center">
                 {/* Breadcrumb */}
                 <nav aria-label="Breadcrumb" className="flex items-center gap-1 text-[11px] text-slate-400 mb-0.5">
                     {segments.map((seg, i) => (
@@ -65,11 +65,11 @@ export default function TopBar() {
                     ))}
                 </nav>
                 {/* Page title */}
-                <h1 className="font-heading font-bold text-[17px] text-navy leading-tight">{title}</h1>
+                <h1 className="font-heading font-bold text-[17px] text-navy leading-tight truncate">{title}</h1>
             </div>
 
             {/* Right actions */}
-            <div className="flex items-center gap-2">
+            <div className="flex shrink-0 items-center gap-2">
                 <span className="hidden sm:inline text-[11px] text-slate-400 font-medium px-2.5 py-1 bg-slate-50 rounded-md border border-slate-200/80">
                     {todayLabel()}
                 </span>
@@ -88,7 +88,7 @@ export default function TopBar() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-[13px] font-medium text-slate-600 hover:text-navy bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-lg px-3 py-2 transition-colors"
                 >
-                    Live Site
+                    <span className="hidden sm:inline">Live Site</span>
                     <ExternalLink className="w-3.5 h-3.5 opacity-70" aria-hidden />
                 </a>
             </div>

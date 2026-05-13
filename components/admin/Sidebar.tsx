@@ -67,8 +67,53 @@ export default function Sidebar() {
         window.location.href = '/admin/login'
     }
 
+    const allLinks = sections.flatMap(section => section.links)
+
     return (
-        <aside className="w-[240px] h-screen bg-[#080f1e] flex flex-col shrink-0 border-r border-white/[0.06]">
+        <>
+        <div className="shrink-0 border-b border-white/[0.06] bg-[#080f1e] lg:hidden">
+            <div className="flex items-center justify-between gap-4 px-4 py-3">
+                <Link href="/admin/dashboard" className="block group min-w-0">
+                    <h2 className="truncate font-heading text-base font-bold leading-tight">
+                        <span className="text-white group-hover:text-white/90 transition-colors">CorpLawUpdates</span>
+                        <span className="text-gold">.in</span>
+                    </h2>
+                    <p className="text-[9px] font-semibold text-slate-500 mt-0.5 tracking-[0.18em] uppercase">
+                        Admin Console
+                    </p>
+                </Link>
+                <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="inline-flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold text-slate-300 transition-colors hover:bg-red-950/40 hover:text-red-300"
+                >
+                    <LogOut className="h-3.5 w-3.5" aria-hidden />
+                    Sign out
+                </button>
+            </div>
+            <nav className="no-scrollbar flex gap-2 overflow-x-auto px-3 pb-3" aria-label="Admin navigation">
+                {allLinks.map((link) => {
+                    const active = pathname === link.href
+                    const Icon = link.icon
+                    return (
+                        <Link
+                            href={link.href}
+                            key={link.href}
+                            className={`inline-flex shrink-0 items-center gap-2 rounded-lg border px-3 py-2 text-xs font-semibold transition-colors ${
+                                active
+                                    ? 'border-amber-400/40 bg-amber-400/10 text-amber-300'
+                                    : 'border-white/10 bg-white/[0.03] text-slate-300 hover:bg-white/[0.08] hover:text-white'
+                            }`}
+                        >
+                            <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                            {link.label}
+                        </Link>
+                    )
+                })}
+            </nav>
+        </div>
+
+        <aside className="hidden w-[240px] h-screen bg-[#080f1e] flex-col shrink-0 border-r border-white/[0.06] lg:flex">
             {/* Logo */}
             <div className="px-5 py-5 shrink-0 border-b border-white/[0.06]">
                 <Link href="/admin/dashboard" className="block group">
@@ -133,5 +178,6 @@ export default function Sidebar() {
                 </button>
             </div>
         </aside>
+        </>
     )
 }

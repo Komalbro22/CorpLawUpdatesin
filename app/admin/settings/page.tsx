@@ -98,7 +98,7 @@ export default function SettingsPage() {
         `Submitted ${data.count} URLs successfully!`
       )
     } catch {
-      setIndexNowResult('Failed — check console')
+      setIndexNowResult('Failed - check console')
     } finally {
       setIndexNowLoading(false)
     }
@@ -146,7 +146,7 @@ export default function SettingsPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-4 text-slate-500">
         <Loader2 className="w-8 h-8 animate-spin text-gold" aria-hidden />
-        <p className="text-sm font-medium">Loading settings…</p>
+        <p className="text-sm font-medium">Loading settings...</p>
       </div>
     )
   }
@@ -160,7 +160,7 @@ export default function SettingsPage() {
       <div>
         <h1 className="text-2xl font-heading font-bold text-navy">Site settings</h1>
         <p className="text-slate-500 text-sm mt-2 leading-relaxed">
-          Social links, announcements, RBI rates, and SEO identifiers. Changes apply on save — no
+          Social links, announcements, RBI rates, and SEO identifiers. Changes apply on save - no
           deployment required.
         </p>
       </div>
@@ -276,7 +276,7 @@ export default function SettingsPage() {
               {indexNowLoading ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" aria-hidden />
-                  Submitting…
+                  Submitting...
                 </>
               ) : (
                 <>

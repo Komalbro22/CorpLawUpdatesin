@@ -23,21 +23,21 @@ export default function AnnouncementBar() {
   if (loading || !data?.text?.trim()) return null
 
   return (
-    <div className="bg-amber-400 text-navy text-sm font-medium text-center py-2.5 px-4 print:hidden border-b border-amber-500/30">
+    <div className="border-b border-amber-500/30 bg-amber-400 px-4 py-2.5 text-center text-sm font-semibold text-navy print:hidden">
       {data.url ? (
         <Link
           href={data.url}
           target={data.url.startsWith('http') ? '_blank' : '_self'}
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-2 hover:underline underline-offset-2"
+          className="inline-flex items-center justify-center gap-2 underline-offset-2 transition-colors hover:text-slate-800 hover:underline"
         >
-          <Megaphone className="w-4 h-4 shrink-0 opacity-90" aria-hidden />
+          <Megaphone className="h-4 w-4 shrink-0 opacity-90" aria-hidden />
           <span>{data.text}</span>
-          <span className="opacity-80" aria-hidden>→</span>
+          <span className="opacity-80" aria-hidden>-&gt;</span>
         </Link>
       ) : (
         <span className="inline-flex items-center justify-center gap-2">
-          <Megaphone className="w-4 h-4 shrink-0 opacity-90" aria-hidden />
+          <Megaphone className="h-4 w-4 shrink-0 opacity-90" aria-hidden />
           {data.text}
         </span>
       )}

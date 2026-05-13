@@ -4,9 +4,17 @@ import { supabase } from '@/lib/supabase'
 import UpdateCard from '@/components/UpdateCard'
 import Link from 'next/link'
 import { Metadata } from 'next'
-
+import type { CSSProperties } from 'react'
 import {
-  Building2, TrendingUp, Landmark, Scale, Gavel, Globe2, ArrowRight
+  ArrowRight,
+  Building2,
+  CheckCircle2,
+  Gavel,
+  Globe2,
+  Landmark,
+  Newspaper,
+  Scale,
+  TrendingUp,
 } from 'lucide-react'
 
 export const revalidate = 1800
@@ -16,7 +24,7 @@ export const metadata: Metadata = {
   description: 'Free MCA, SEBI, RBI, NCLT, IBC and FEMA regulatory updates for Company Secretaries, corporate lawyers and compliance officers in India. No login required.',
   alternates: { canonical: 'https://www.corplawupdates.in' },
   openGraph: {
-    title: 'CorpLawUpdates.in — Free Corporate Law Updates India',
+    title: 'CorpLawUpdates.in - Free Corporate Law Updates India',
     description: 'Free MCA, SEBI, RBI regulatory updates for CS professionals. Updated daily.',
     url: 'https://www.corplawupdates.in',
     images: [{ url: 'https://www.corplawupdates.in/api/og?title=India%27s+Free+Corporate+Law+Intelligence+Platform&category=', width: 1200, height: 630 }],
@@ -24,12 +32,12 @@ export const metadata: Metadata = {
 }
 
 const categoryMeta = [
-  { id: 'MCA',  label: 'MCA',  Icon: Building2, bg: 'from-blue-600 to-blue-700',    ring: 'ring-blue-500/20',    desc: 'Ministry of Corporate Affairs'  },
-  { id: 'SEBI', label: 'SEBI', Icon: TrendingUp, bg: 'from-emerald-600 to-emerald-700', ring: 'ring-emerald-500/20', desc: 'Securities & Exchange Board'    },
-  { id: 'RBI',  label: 'RBI',  Icon: Landmark,  bg: 'from-violet-600 to-violet-700', ring: 'ring-violet-500/20',  desc: 'Reserve Bank of India'          },
-  { id: 'NCLT', label: 'NCLT', Icon: Scale,     bg: 'from-orange-600 to-orange-700', ring: 'ring-orange-500/20',  desc: 'National Company Law Tribunal'  },
-  { id: 'IBC',  label: 'IBC',  Icon: Gavel,     bg: 'from-red-600 to-red-700',       ring: 'ring-red-500/20',     desc: 'Insolvency & Bankruptcy Code'   },
-  { id: 'FEMA', label: 'FEMA', Icon: Globe2,    bg: 'from-teal-600 to-teal-700',     ring: 'ring-teal-500/20',    desc: 'Foreign Exchange Management'    },
+  { id: 'MCA', label: 'MCA', Icon: Building2, bg: 'from-blue-600 to-blue-700', ring: 'ring-blue-500/20', desc: 'Ministry of Corporate Affairs' },
+  { id: 'SEBI', label: 'SEBI', Icon: TrendingUp, bg: 'from-emerald-600 to-emerald-700', ring: 'ring-emerald-500/20', desc: 'Securities & Exchange Board' },
+  { id: 'RBI', label: 'RBI', Icon: Landmark, bg: 'from-violet-600 to-violet-700', ring: 'ring-violet-500/20', desc: 'Reserve Bank of India' },
+  { id: 'NCLT', label: 'NCLT', Icon: Scale, bg: 'from-orange-600 to-orange-700', ring: 'ring-orange-500/20', desc: 'National Company Law Tribunal' },
+  { id: 'IBC', label: 'IBC', Icon: Gavel, bg: 'from-red-600 to-red-700', ring: 'ring-red-500/20', desc: 'Insolvency & Bankruptcy Code' },
+  { id: 'FEMA', label: 'FEMA', Icon: Globe2, bg: 'from-teal-600 to-teal-700', ring: 'ring-teal-500/20', desc: 'Foreign Exchange Management' },
 ]
 
 export default async function HomePage() {
@@ -52,52 +60,61 @@ export default async function HomePage() {
   ])
 
   const featuredUpdates = featuredRes.data || []
-  const latestUpdates   = latestRes.data || []
-  const hasUpdates      = featuredUpdates.length > 0 || latestUpdates.length > 0
+  const latestUpdates = latestRes.data || []
+  const hasUpdates = featuredUpdates.length > 0 || latestUpdates.length > 0
+  const totalViews = latestUpdates.reduce((sum: number, update: any) => sum + (update.views || 0), 0)
 
   return (
     <div>
-      {/* ─── 1. HERO ─── */}
-      <section className="w-full bg-navy relative min-h-[64vh] py-20 px-4 flex flex-col items-center justify-center text-center overflow-hidden">
-        {/* Grid overlay */}
+      <section className="relative w-full overflow-hidden bg-navy">
         <div
-          className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(rgba(255,255,255,.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.06)_1px,transparent_1px)] bg-[size:80px_80px]"
-          aria-hidden
-        />
-        {/* Animated gradient orbs */}
-        <div
-          className="animate-orb-1 absolute -top-32 -left-24 w-[420px] h-[420px] rounded-full opacity-[0.12] blur-[80px] pointer-events-none"
-          style={{ background: 'radial-gradient(circle, #F59E0B, transparent 70%)' }}
+          className="absolute inset-0 bg-[url('/og-image.jpg')] bg-cover bg-center opacity-[0.08]"
           aria-hidden
         />
         <div
-          className="animate-orb-2 absolute -bottom-32 -right-24 w-[360px] h-[360px] rounded-full opacity-[0.10] blur-[80px] pointer-events-none"
-          style={{ background: 'radial-gradient(circle, #8B5CF6, transparent 70%)' }}
+          className="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,23,42,0.98)_0%,rgba(15,23,42,0.92)_56%,rgba(15,23,42,0.76)_100%)]"
           aria-hidden
         />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(245,158,11,0.15),transparent_55%)]" aria-hidden />
+        <div
+          className="absolute inset-0 opacity-[0.08] bg-[linear-gradient(rgba(255,255,255,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.12)_1px,transparent_1px)] bg-[size:72px_72px]"
+          aria-hidden
+        />
 
-        <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
-          <p className="text-gold/80 text-xs md:text-sm font-bold tracking-[0.25em] uppercase mb-5 animate-fade-in">
-            MCA · SEBI · RBI · NCLT · IBC · FEMA
-          </p>
-          <h1 className="font-heading text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-[1.1] text-balance animate-fade-up">
-            India's Free Corporate Law Intelligence Platform
-          </h1>
-          <p className="text-slate-300/90 text-lg md:text-xl mb-10 max-w-2xl leading-relaxed animate-fade-up" style={{ '--delay': '80ms' } as any}>
-            Stay updated on Indian corporate regulations with clear, sourced briefs. Free to read. No account required.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto animate-fade-up" style={{ '--delay': '160ms' } as any}>
-            <Link
-              href="/updates"
-              className="group bg-gold text-navy font-bold py-3.5 px-8 rounded-xl hover:bg-amber-400 transition-all duration-200 shadow-lg shadow-gold/20 text-center ring-1 ring-white/10 hover:shadow-glow-gold flex items-center justify-center gap-2"
-            >
-              Browse Updates
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" aria-hidden />
-            </Link>
+        <div className="relative z-10 mx-auto flex min-h-[60vh] max-w-4xl flex-col items-center justify-center px-4 py-16 text-center sm:px-6 md:py-24 lg:px-8">
+          <div className="flex flex-col items-center">
+            <p className="mb-6 inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.06] px-3 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-gold">
+              MCA - SEBI - RBI - NCLT - IBC - FEMA
+            </p>
+            <h1 className="font-heading text-4xl font-bold leading-[1.1] text-white text-balance md:text-5xl lg:text-6xl">
+              India's free corporate law intelligence platform
+            </h1>
+            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-300 md:text-lg">
+              Clear, sourced regulatory briefs for Company Secretaries, corporate lawyers, finance teams, and compliance officers.
+            </p>
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row justify-center">
+              <Link
+                href="/updates"
+                className="group inline-flex items-center justify-center gap-2 rounded-lg bg-gold px-8 py-4 text-sm font-bold text-navy shadow-lg shadow-amber-900/20 transition-all hover:bg-amber-400 hover:scale-105"
+              >
+                Browse updates
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden />
+              </Link>
+              <Link
+                href="/newsletter"
+                className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/15 bg-white/[0.06] px-8 py-4 text-sm font-bold text-white transition-all hover:bg-white/[0.10] hover:scale-105"
+              >
+                Subscribe free
+              </Link>
+            </div>
+            <div className="mt-12 flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm text-slate-300">
+              {['No login required', 'Updated regularly', 'Built for Indian compliance'].map(item => (
+                <span key={item} className="inline-flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-gold" aria-hidden />
+                  {item}
+                </span>
+              ))}
+            </div>
           </div>
-
-
         </div>
       </section>
 
@@ -108,15 +125,19 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ─── 2. FEATURED UPDATES ─── */}
       {featuredUpdates.length > 0 && (
         <section className="py-16 md:py-20 px-4 max-w-7xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold text-navy mb-2 font-heading border-l-4 border-gold pl-4">
-            Featured Updates
-          </h2>
-          <p className="text-slate-500 mb-8 md:mb-10 pl-5 text-sm md:text-base">
-            Hand-picked regulatory highlights worth reading first.
-          </p>
+          <div className="mb-8 md:mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-600">Editor's desk</p>
+              <h2 className="mt-2 text-2xl md:text-3xl font-bold text-navy font-heading">
+                Featured updates
+              </h2>
+              <p className="mt-2 text-slate-500 text-sm md:text-base">
+                Hand-picked regulatory highlights worth reading first.
+              </p>
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {featuredUpdates.map((update: any, i: number) => (
               <UpdateCard key={update.id} update={update} animationDelay={i * 80} />
@@ -125,11 +146,10 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ─── 3. CATEGORY CARDS ─── */}
       <section className="py-14 px-4 w-full border-y border-slate-200/80 bg-gradient-to-b from-white to-slate-50/60">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-xl md:text-2xl font-bold text-navy mb-2 font-heading text-center">
-            Browse by Regulator
+            Browse by regulator
           </h2>
           <p className="text-slate-500 text-center text-sm md:text-base mb-10 max-w-xl mx-auto">
             Jump straight to updates from the authority you follow.
@@ -139,36 +159,47 @@ export default async function HomePage() {
               <Link
                 key={id}
                 href={`/category/${id.toLowerCase()}`}
-                style={{ '--delay': `${i * 50}ms` } as any}
-                className={`animate-fade-up group flex flex-col items-center justify-center gap-2 p-4 rounded-2xl bg-gradient-to-br ${bg} text-white shadow-md ${ring} ring-1 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 ease-spring text-center`}
+                style={{ '--delay': `${i * 50}ms` } as CSSProperties}
+                className={`animate-fade-up group flex min-h-28 flex-col items-center justify-center gap-2 rounded-lg bg-gradient-to-br ${bg} p-4 text-center text-white shadow-md ${ring} ring-1 transition-all duration-300 ease-spring hover:-translate-y-1 hover:shadow-lg`}
               >
                 <Icon className="w-6 h-6 opacity-90 group-hover:scale-110 transition-transform duration-200" aria-hidden />
                 <span className="font-bold text-base">{label}</span>
-                <span className="text-[10px] text-white/70 leading-tight hidden sm:block">{desc}</span>
+                <span className="text-[10px] text-white/75 leading-tight hidden sm:block">{desc}</span>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ─── 4. LATEST UPDATES ─── */}
       {latestUpdates.length > 0 && (
         <section className="py-16 md:py-20 px-4 max-w-7xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold text-navy mb-2 font-heading border-l-4 border-gold pl-4">
-            Latest Updates
-          </h2>
-          <p className="text-slate-500 mb-8 md:mb-10 pl-5 text-sm md:text-base">
-            New and recent briefs, newest first.
-          </p>
+          <div className="mb-8 md:mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-600">Newest first</p>
+              <h2 className="mt-2 text-2xl md:text-3xl font-bold text-navy font-heading">
+                Latest updates
+              </h2>
+              <p className="mt-2 text-slate-500 text-sm md:text-base">
+                New and recent briefs from Indian regulators.
+              </p>
+            </div>
+            <Link
+              href="/updates"
+              className="hidden sm:inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-navy shadow-sm transition-colors hover:bg-slate-50"
+            >
+              View all
+              <ArrowRight className="w-4 h-4" aria-hidden />
+            </Link>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-10">
             {latestUpdates.map((update: any, i: number) => (
               <UpdateCard key={update.id} update={update} animationDelay={i * 60} />
             ))}
           </div>
-          <div className="text-center">
+          <div className="text-center sm:hidden">
             <Link
               href="/updates"
-              className="inline-flex items-center gap-2 text-navy font-semibold hover:text-amber-700 transition-colors text-base md:text-lg group"
+              className="inline-flex items-center gap-2 text-navy font-semibold hover:text-amber-700 transition-colors text-base group"
             >
               View all updates
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden />
@@ -177,18 +208,10 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ─── 5. NEWSLETTER ─── */}
       <section className="w-full bg-navy py-16 md:py-20 px-4 text-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_100%,rgba(245,158,11,0.10),transparent_50%)]" aria-hidden />
-        {/* Decorative envelope SVG */}
-        <div className="absolute left-8 bottom-8 opacity-5 pointer-events-none hidden lg:block" aria-hidden>
-          <svg width="120" height="90" viewBox="0 0 120 90" fill="none">
-            <rect x="2" y="2" width="116" height="86" rx="6" stroke="white" strokeWidth="4"/>
-            <path d="M2 20L60 54L118 20" stroke="white" strokeWidth="4"/>
-          </svg>
-        </div>
+        <div className="absolute inset-0 opacity-[0.08] bg-[linear-gradient(rgba(255,255,255,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.12)_1px,transparent_1px)] bg-[size:72px_72px]" aria-hidden />
         <div className="max-w-3xl mx-auto flex flex-col items-center relative z-10">
-          <div className="text-3xl mb-3" aria-hidden>📬</div>
+          <Newspaper className="mb-4 h-8 w-8 text-gold" aria-hidden />
           <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-3">
             Weekly Corporate Law Digest
           </h2>
@@ -197,7 +220,7 @@ export default async function HomePage() {
           </p>
           <Link
             href="/newsletter"
-            className="inline-flex items-center gap-2 bg-gold text-navy font-bold py-3.5 px-8 rounded-xl hover:bg-amber-400 transition-all hover:shadow-glow-gold"
+            className="inline-flex items-center gap-2 rounded-lg bg-gold px-8 py-3.5 font-bold text-navy transition-colors hover:bg-amber-400"
           >
             Subscribe free
             <ArrowRight className="w-4 h-4" aria-hidden />

@@ -52,7 +52,13 @@ export async function POST(request: NextRequest) {
         await supabaseAdmin.from('login_attempts').delete().eq('ip', clientIp)
 
         const response = NextResponse.json({ success: true })
-        response.headers.set('Set-Cookie', `admin_session=${generateAdminSessionHash()}; HttpOnly; Secure; SameSite=Strict; Max-Age=86400; Path=/`)
+        response.cookies.set('admin_session', generateAdminSessionHash(), {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 60 * 60 * 24,
+            path: '/'
+        })
         return response
 
     } catch (err: unknown) {

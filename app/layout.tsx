@@ -20,10 +20,10 @@ const sourceSans = Source_Sans_3({ subsets: ['latin'], variable: '--font-source-
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.corplawupdates.in'),
   title: {
-    default: 'CorpLawUpdates.in — Free Corporate Law Updates',
+    default: 'CorpLawUpdates.in - Free Corporate Law Updates',
     template: '%s | CorpLawUpdates.in',
   },
-  description: 'Free Indian corporate law updates — MCA, SEBI, RBI, NCLT, IBC and FEMA regulatory updates for CS professionals, corporate lawyers and compliance officers.',
+  description: 'Free Indian corporate law updates - MCA, SEBI, RBI, NCLT, IBC and FEMA regulatory updates for CS professionals, corporate lawyers and compliance officers.',
   keywords: [
     'MCA circular 2026',
     'SEBI notification 2026', 
@@ -59,14 +59,14 @@ export const metadata: Metadata = {
     locale: 'en_IN',
     url: 'https://www.corplawupdates.in',
     siteName: 'CorpLawUpdates.in',
-    title: 'CorpLawUpdates.in — India\'s Free Corporate Law Intelligence Platform',
-    description: 'Free Indian corporate law updates — MCA, SEBI, RBI, NCLT, IBC and FEMA regulatory updates for CS professionals.',
+    title: 'CorpLawUpdates.in - India\'s Free Corporate Law Intelligence Platform',
+    description: 'Free Indian corporate law updates - MCA, SEBI, RBI, NCLT, IBC and FEMA regulatory updates for CS professionals.',
     images: [
       {
         url: 'https://www.corplawupdates.in/api/og?title=India%27s+Free+Corporate+Law+Intelligence+Platform&category=',
         width: 1200,
         height: 630,
-        alt: 'CorpLawUpdates.in — India\'s Free Corporate Law Intelligence Platform',
+        alt: 'CorpLawUpdates.in - India\'s Free Corporate Law Intelligence Platform',
       },
     ],
   },
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@corplawupdates',
     creator: '@corplawupdates',
-    title: 'CorpLawUpdates.in — India\'s Free Corporate Law Intelligence Platform',
+    title: 'CorpLawUpdates.in - India\'s Free Corporate Law Intelligence Platform',
     description: 'Free MCA, SEBI, RBI, NCLT, IBC and FEMA updates for CS professionals.',
     images: ['https://www.corplawupdates.in/api/og?title=India%27s+Free+Corporate+Law+Intelligence+Platform&category='],
   },

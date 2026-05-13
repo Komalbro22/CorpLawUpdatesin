@@ -10,12 +10,12 @@ export default async function AdminDashboard() {
     const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
 
     const [
-        { count: publishedCount },
-        { count: draftCount },
-        { count: activeSubscribers },
-        { count: thisMonthCount },
-        { data: recentArticles },
-        { data: recentSubscribers }
+        publishedRes,
+        draftRes,
+        subscribersCountRes,
+        thisMonthRes,
+        articlesListRes,
+        subscribersListRes
     ] = await Promise.all([
         supabaseAdmin.from('updates').select('*', { count: 'exact', head: true }).not('published_at', 'is', null),
         supabaseAdmin.from('updates').select('*', { count: 'exact', head: true }).is('published_at', null),
@@ -25,11 +25,44 @@ export default async function AdminDashboard() {
         supabaseAdmin.from('subscribers').select('id, email, subscribed_at').order('subscribed_at', { ascending: false }).limit(5)
     ])
 
+    const publishedCount = publishedRes.count
+    const draftCount = draftRes.count
+    const activeSubscribers = subscribersCountRes.count
+    const thisMonthCount = thisMonthRes.count
+    const recentArticles = articlesListRes.data
+    const recentSubscribers = subscribersListRes.data
+
+    const firstDbError =
+        publishedRes.error ||
+        draftRes.error ||
+        subscribersCountRes.error ||
+        thisMonthRes.error ||
+        articlesListRes.error ||
+        subscribersListRes.error
+
     return (
         <div className="space-y-8">
+            {firstDbError && (
+                <div
+                    role="alert"
+                    className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950"
+                >
+                    <p className="font-semibold text-navy">Could not load dashboard data</p>
+                    <p className="mt-1 text-amber-900/90">
+                        {firstDbError.message}
+                        {firstDbError.hint ? ` — ${firstDbError.hint}` : ''}
+                    </p>
+                    <p className="mt-2 text-amber-900/80">
+                        Check <code className="rounded bg-white/80 px-1 py-0.5 text-xs">NEXT_PUBLIC_SUPABASE_URL</code>,{' '}
+                        <code className="rounded bg-white/80 px-1 py-0.5 text-xs">NEXT_PUBLIC_SUPABASE_ANON_KEY</code>, and{' '}
+                        <code className="rounded bg-white/80 px-1 py-0.5 text-xs">SUPABASE_SERVICE_ROLE_KEY</code> in{' '}
+                        <code className="rounded bg-white/80 px-1 py-0.5 text-xs">.env.local</code> (copy from Vercel → Environment Variables if unsure).
+                    </p>
+                </div>
+            )}
             {/* STATS ROW */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                <div className="bg-white rounded-xl p-5 md:p-6 shadow-card border border-slate-200/80 flex items-center gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6">
+                <div className="bg-white rounded-xl p-5 md:p-6 shadow-card border border-slate-200/80 flex items-center gap-4 min-w-0">
                     <div className="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-700 shrink-0 ring-1 ring-amber-100">
                         <FileText className="w-6 h-6" aria-hidden />
                     </div>
@@ -38,7 +71,7 @@ export default async function AdminDashboard() {
                         <p className="text-2xl font-heading font-bold text-navy tabular-nums">{publishedCount || 0}</p>
                     </div>
                 </div>
-                <div className="bg-white rounded-xl p-5 md:p-6 shadow-card border border-slate-200/80 flex items-center gap-4">
+                <div className="bg-white rounded-xl p-5 md:p-6 shadow-card border border-slate-200/80 flex items-center gap-4 min-w-0">
                     <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700 shrink-0 ring-1 ring-slate-200/80">
                         <PenLine className="w-6 h-6" aria-hidden />
                     </div>
@@ -47,7 +80,7 @@ export default async function AdminDashboard() {
                         <p className="text-2xl font-heading font-bold text-navy tabular-nums">{draftCount || 0}</p>
                     </div>
                 </div>
-                <div className="bg-white rounded-xl p-5 md:p-6 shadow-card border border-slate-200/80 flex items-center gap-4">
+                <div className="bg-white rounded-xl p-5 md:p-6 shadow-card border border-slate-200/80 flex items-center gap-4 min-w-0">
                     <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-700 shrink-0 ring-1 ring-emerald-100">
                         <Users className="w-6 h-6" aria-hidden />
                     </div>
@@ -56,7 +89,7 @@ export default async function AdminDashboard() {
                         <p className="text-2xl font-heading font-bold text-navy tabular-nums">{activeSubscribers || 0}</p>
                     </div>
                 </div>
-                <div className="bg-white rounded-xl p-5 md:p-6 shadow-card border border-slate-200/80 flex items-center gap-4">
+                <div className="bg-white rounded-xl p-5 md:p-6 shadow-card border border-slate-200/80 flex items-center gap-4 min-w-0">
                     <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-700 shrink-0 ring-1 ring-blue-100">
                         <CalendarDays className="w-6 h-6" aria-hidden />
                     </div>
@@ -72,7 +105,8 @@ export default async function AdminDashboard() {
                 <div className="lg:col-span-2">
                     <h2 className="text-lg font-heading font-bold text-navy mb-4">Recent Articles</h2>
                     <div className="bg-white rounded-xl shadow-card border border-slate-200/80 overflow-hidden">
-                        <table className="w-full text-left text-sm">
+                        <div className="overflow-x-auto">
+                        <table className="w-full min-w-[520px] text-left text-sm">
                             <thead className="bg-slate-50 text-slate-500">
                                 <tr>
                                     <th className="px-6 py-4 font-medium">Title</th>
@@ -120,6 +154,7 @@ export default async function AdminDashboard() {
                                 })}
                             </tbody>
                         </table>
+                        </div>
                     </div>
                 </div>
 

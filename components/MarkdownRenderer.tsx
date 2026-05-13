@@ -51,13 +51,6 @@ export default function MarkdownRenderer({ content }: { content: string }) {
             })
         })
 
-        // Fix table headers
-        ref.current.querySelectorAll<HTMLElement>('thead tr').forEach(tr => {
-            tr.querySelectorAll<HTMLElement>('th').forEach(th => {
-                th.style.color = '#ffffff'
-            })
-        })
-
     }, [content])
 
     return (
@@ -69,7 +62,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
           prose-a:text-amber-600
           prose-table:text-slate-700
           prose-td:text-slate-700
-          prose-th:text-white
+          prose-th:text-slate-800
           [&_[style*='background:#0F172A']_p]:!text-slate-100
           [&_[style*='background:#0F172A']_h3]:!text-amber-400
           [&_[style*='background:#0F172A']_strong]:!text-amber-400

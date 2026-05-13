@@ -30,21 +30,30 @@ export async function generateStaticParams() {
 export async function generateMetadata(
   { params }: { params: { slug: string } }
 ): Promise<Metadata> {
+  const decodedSlug = decodeURIComponent(params.slug)
+  
   const { data: update } = await supabase
     .from('updates')
     .select('title, summary, category, published_at, updated_at, tags, slug, seo_title, seo_description')
-    .eq('slug', params.slug)
+    .ilike('slug', decodedSlug)
     .single()
 
-  if (!update) return { title: 'Article Not Found', description: 'The article you are looking for does not exist.' }
+  const canonicalUrl = `https://www.corplawupdates.in/updates/${params.slug.toLowerCase()}`
 
-  const url = `https://www.corplawupdates.in/updates/${update.slug}`
-  const imageUrl = `https://www.corplawupdates.in/api/og?title=${encodeURIComponent(update.title)}&category=${encodeURIComponent(update.category)}`
+  if (!update) {
+    return { 
+      title: 'Article Not Found', 
+      description: 'The article you are looking for does not exist.',
+      robots: { index: false, follow: true },
+      alternates: { canonical: canonicalUrl }
+    }
+  }
 
   const titleStr = update.seo_title || update.title
   const seoTitle = (t: string): string => t.length <= 100 ? t : t.slice(0, 97) + '...'
   const descStr = update.seo_description || update.summary
   const seoDesc = (d: string): string => d.length <= 300 ? d : d.slice(0, 297) + '...'
+  const imageUrl = `https://www.corplawupdates.in/api/og?title=${encodeURIComponent(update.title)}&category=${encodeURIComponent(update.category || '')}`
 
   return {
     title: seoTitle(titleStr),
@@ -58,11 +67,22 @@ export async function generateMetadata(
       update.category + ' circular 2026',
     ],
     authors: [{ name: 'CorpLawUpdates.in' }],
-    alternates: { canonical: url },
+    alternates: { canonical: canonicalUrl },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+        'max-video-preview': -1,
+      },
+    },
     openGraph: {
       title: update.title,
       description: update.summary,
-      url,
+      url: canonicalUrl,
       type: 'article',
       publishedTime: update.published_at || undefined,
       modifiedTime: update.updated_at || update.published_at || undefined,
@@ -83,7 +103,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
     const { data: update } = await supabase
         .from('updates')
         .select('*')
-        .eq('slug', params.slug)
+        .ilike('slug', decodeURIComponent(params.slug))
         .not('published_at', 'is', null)
         .lte('published_at', new Date().toISOString())
         .single()
