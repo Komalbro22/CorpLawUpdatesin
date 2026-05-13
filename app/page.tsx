@@ -62,7 +62,6 @@ export default async function HomePage() {
   const featuredUpdates = featuredRes.data || []
   const latestUpdates = latestRes.data || []
   const hasUpdates = featuredUpdates.length > 0 || latestUpdates.length > 0
-  const totalViews = latestUpdates.reduce((sum: number, update: any) => sum + (update.views || 0), 0)
 
   return (
     <div>
