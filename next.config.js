@@ -85,6 +85,11 @@ const nextConfig = {
         destination: 'https://www.corplawupdates.in/:path*',
         permanent: true,
       },
+      {
+        source: '/corporate-law-updates-india',
+        destination: '/updates',
+        permanent: true,
+      },
     ]
   },
 }

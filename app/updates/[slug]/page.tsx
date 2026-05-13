@@ -164,7 +164,15 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
             {/* 2. ARTICLE HEADER */}
             <header className="mb-8">
                 <div className="mb-4 flex items-center justify-between flex-wrap gap-3">
-                    <CategoryBadge category={update.category as any} />
+                    <div className="flex items-center gap-3">
+                        <CategoryBadge category={update.category as any} />
+                        <Link 
+                            href={`/category/${update.category.toLowerCase()}`}
+                            className="text-xs font-bold text-slate-400 hover:text-gold transition-colors uppercase tracking-widest"
+                        >
+                            {update.category.toUpperCase()} updates
+                        </Link>
+                    </div>
                     {/* Font size toggle - client island */}
                     <FontSizeToggle />
                 </div>

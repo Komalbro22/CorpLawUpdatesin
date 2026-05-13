@@ -28,32 +28,22 @@ export async function generateStaticParams() {
     }))
 }
 
-const categoryDescriptions: Record<string, string> = {
-  mca: 'Ministry of Corporate Affairs circulars, notifications and amendments under Companies Act 2013.',
-  sebi: 'SEBI circulars, notifications and regulations for listed companies and securities market.',
-  rbi: 'Reserve Bank of India guidelines, circulars and monetary policy updates.',
-  nclt: 'National Company Law Tribunal orders, judgments and insolvency proceedings.',
-  ibc: 'Insolvency and Bankruptcy Code updates, IBBI regulations and NCLT insolvency orders.',
-  fema: 'Foreign Exchange Management Act updates, RBI FEMA regulations and FDI notifications.',
-}
-
-const categoryTitles: Record<string, string> = {
-  mca: 'MCA Updates 2026 — Ministry of Corporate Affairs Circulars',
-  sebi: 'SEBI Updates 2026 — Securities and Exchange Board Notifications',
-  rbi: 'RBI Updates 2026 — Reserve Bank of India Circulars',
-  nclt: 'NCLT Updates 2026 — National Company Law Tribunal Orders',
-  ibc: 'IBC Updates 2026 — Insolvency and Bankruptcy Code',
-  fema: 'FEMA Updates 2026 — Foreign Exchange Management Act',
+const CATEGORY_FULL_NAMES: Record<string, string> = {
+  mca: 'Ministry of Corporate Affairs',
+  sebi: 'Securities and Exchange Board of India',
+  rbi: 'Reserve Bank of India',
+  nclt: 'National Company Law Tribunal',
+  ibc: 'Insolvency and Bankruptcy Code',
+  fema: 'Foreign Exchange Management Act',
 }
 
 export async function generateMetadata(
   { params }: { params: { category: string } }
 ): Promise<Metadata> {
   const cat = params.category.toLowerCase()
-  const title = categoryTitles[cat] ||
-    `${cat.toUpperCase()} Updates 2026`
-  const description = categoryDescriptions[cat] ||
-    `Latest ${cat.toUpperCase()} regulatory updates for CS professionals.`
+  const categoryName = cat.toUpperCase()
+  const title = `Latest ${categoryName} Updates Today (India) – CorpLawUpdates.in`
+  const description = `Get the latest ${categoryName} updates today including notifications, circulars, compliance rules and regulatory changes in India.`
   const url = `https://www.corplawupdates.in/category/${cat}`
 
   return {
@@ -125,14 +115,55 @@ export default async function CategoryPage({
                          <span className="text-white/60 text-sm">·</span>
                          <span className="text-white/80 text-sm font-medium">{allUpdates.length} articles</span>
                     </div>
-                    <h1 className="font-heading text-4xl md:text-6xl font-bold mb-4 animate-fade-up">
-                        {cat.toUpperCase()} Updates
+                    <h1 className="font-heading text-4xl md:text-5xl font-bold mb-2 animate-fade-up">
+                        Latest {cat.toUpperCase()} Updates Today ({CATEGORY_FULL_NAMES[cat]})
                     </h1>
+                    <p className="text-sm text-white/70 mb-6 animate-fade-up">
+                        Updated daily with the latest {cat.toUpperCase()} updates in India.
+                    </p>
                     <p className="text-lg md:text-xl text-white/90 max-w-3xl leading-relaxed animate-fade-up" style={{ '--delay': '100ms' } as any}>
                         {CATEGORY_DESC[cat]}
                     </p>
                 </div>
             </div>
+
+            {/* SEO Content Section */}
+            <section className="bg-slate-50 border-b border-slate-200">
+                <div className="max-w-7xl mx-auto py-12 px-4">
+                    <div className="prose prose-slate max-w-none">
+                        <h2 className="text-2xl font-bold text-navy mb-4">Latest {cat.toUpperCase()} Updates in India</h2>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-slate-600">
+                            <div className="space-y-4">
+                                <p>
+                                    Stay updated with the <strong>latest {cat.toUpperCase()} updates today</strong>,
+                                    including <strong>{cat.toUpperCase()} notifications India</strong>, circulars, compliance rules and
+                                    regulatory changes issued by {CATEGORY_FULL_NAMES[cat]}.
+                                </p>
+
+                                <p>
+                                    These updates are important for Company Secretaries (CS),
+                                    CA students, lawyers, and compliance professionals who need to track 
+                                    <strong>{cat.toUpperCase()} circular updates</strong> and regulatory shifts.
+                                </p>
+                            </div>
+                            
+                            <div className="space-y-4">
+                                <p>
+                                    We provide simplified summaries of all <strong>{cat.toUpperCase()} updates in India</strong> to 
+                                    help you stay compliant and informed about the latest regulatory landscape.
+                                </p>
+
+                                <p className="font-medium text-navy">
+                                    👉 <Link href="/corporate-law-updates-india" className="text-gold hover:text-amber-600 underline decoration-gold/30 underline-offset-4">
+                                      latest corporate law updates in India
+                                    </Link>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             {/* Content Area */}
             <div className="max-w-7xl mx-auto py-10 px-4">
@@ -163,6 +194,20 @@ export default async function CategoryPage({
                     </div>
                 )}
             </div>
+
+            {/* JSON-LD Structured Data */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "CollectionPage",
+                        "name": `Latest ${cat.toUpperCase()} Updates Today`,
+                        "description": `Stay updated with the latest ${cat.toUpperCase()} updates in India, including notifications, circulars and compliance rules from ${CATEGORY_FULL_NAMES[cat]}.`,
+                        "url": `https://www.corplawupdates.in/category/${cat}`
+                    })
+                }}
+            />
         </div>
     )
 }
