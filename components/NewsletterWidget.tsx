@@ -63,9 +63,15 @@ export default function NewsletterWidget() {
             {success ? (
                 <div className="mt-4 flex items-start gap-3 rounded-lg border border-emerald-100 bg-emerald-50 p-4 text-emerald-800">
                     <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5" aria-hidden />
-                    <span className="font-medium text-sm leading-relaxed">
-                        You are subscribed. Check your inbox for a confirmation message.
-                    </span>
+                    <div>
+                        <p className="font-bold text-emerald-900">
+                            ✅ You're subscribed!
+                        </p>
+                        <p className="text-emerald-700 text-sm mt-1">
+                            Check your inbox — we just sent you a welcome email with recent articles.
+                            (Check spam if not found in 2 minutes)
+                        </p>
+                    </div>
                 </div>
             ) : (
                 <form onSubmit={handleSubmit} className="flex flex-col gap-3 mt-4">

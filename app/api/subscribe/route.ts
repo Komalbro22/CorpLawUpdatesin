@@ -72,15 +72,57 @@ export async function POST(request: NextRequest) {
                     .from('subscribers')
                     .update({ is_active: true, unsubscribed_at: null })
                     .eq('email', email)
-                return NextResponse.json({ success: true, message: 'Subscribed successfully' }, { status: 200 })
             }
+        } else {
+            await supabaseAdmin
+                .from('subscribers')
+                .insert({ email })
         }
 
-        await supabaseAdmin
-            .from('subscribers')
-            .insert({ email })
+        // Send Welcome Email (Non-fatal)
+        try {
+            const { generateWelcomeEmail } = await import('@/lib/email-templates/welcome')
+            const { generateUnsubscribeToken } = await import('@/lib/utils')
 
-        return NextResponse.json({ success: true, message: 'Subscribed successfully' }, { status: 200 })
+            const { data: recentArticles } = await supabaseAdmin
+                .from('updates')
+                .select('title, slug, summary, category, published_at')
+                .not('published_at', 'is', null)
+                .lte('published_at', new Date().toISOString())
+                .order('published_at', { ascending: false })
+                .limit(5)
+
+            const token = generateUnsubscribeToken(email)
+            const welcomeHtml = generateWelcomeEmail({
+                unsubscribeToken: token,
+                recentArticles: recentArticles || [],
+            })
+
+            const { Resend } = await import('resend')
+            const resend = new Resend(process.env.RESEND_API_KEY)
+
+            const { error: emailError } = await resend.emails.send({
+                from: process.env.RESEND_FROM_EMAIL || 'updates@mail.corplawupdates.in',
+                to: email,
+                subject: '🎉 Welcome to CorpLawUpdates.in — Your Free Corporate Law Digest',
+                html: welcomeHtml,
+                headers: {
+                    'List-Unsubscribe': `<https://www.corplawupdates.in/unsubscribe?token=${token}>`,
+                    'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+                },
+            })
+
+            if (emailError) {
+                console.error('Welcome email failed:', emailError)
+            }
+        } catch (welcomeErr) {
+            console.error('Welcome email error (non-fatal):', welcomeErr)
+        }
+
+        return NextResponse.json({ 
+            success: true, 
+            message: 'Subscribed! Check your inbox for a welcome email.' 
+        }, { status: 200 })
 
     } catch (err: any) {
         return NextResponse.json({ error: err.message || 'Internal server error' }, { status: 500 })
