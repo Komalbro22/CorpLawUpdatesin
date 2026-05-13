@@ -86,7 +86,7 @@ export default async function HomePage() {
               MCA - SEBI - RBI - NCLT - IBC - FEMA
             </p>
             <h1 className="font-heading text-4xl font-bold leading-[1.1] text-white text-balance md:text-5xl lg:text-6xl">
-              Corporate Law Updates in India (SEBI, RBI, MCA, NCLT, IBC)
+              Corporate Law Updates
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-slate-300 md:text-lg">
               Stay updated with the latest corporate law updates in India including SEBI regulations, RBI notifications, MCA circulars, and NCLT judgments. Built for Company Secretaries, lawyers, and compliance professionals.
@@ -121,31 +121,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* SEO Content Section */}
-      <section className="bg-white py-12 border-b border-slate-100">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="prose prose-slate max-w-none text-center">
-            <h2 className="text-2xl font-bold text-navy mb-4 font-heading">Latest Corporate Law Updates in India</h2>
-            <p className="text-slate-600 leading-relaxed mb-6">
-              CorpLawUpdates.in provides the <strong>latest corporate law updates in India</strong> covering 
-              <Link href="/category/sebi" className="text-gold hover:underline font-medium mx-1">SEBI updates India</Link>, 
-              <Link href="/category/rbi" className="text-gold hover:underline font-medium mx-1">RBI circular updates India</Link>, 
-              <Link href="/category/mca" className="text-gold hover:underline font-medium mx-1">MCA updates India</Link>, 
-              NCLT, IBC and FEMA regulations.
-            </p>
-            <p className="text-slate-600 leading-relaxed mb-8">
-              We simplify complex legal updates into easy-to-understand summaries with key insights and practical implications 
-              to help you stay ahead with <strong>corporate law updates India</strong>.
-            </p>
-            <Link 
-              href="/updates" 
-              className="inline-flex items-center gap-2 text-gold font-bold hover:text-amber-700 transition-colors underline decoration-gold/30 underline-offset-4"
-            >
-              Browse all corporate law updates <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {!hasUpdates && (
         <section className="py-20 text-center px-4">
@@ -254,6 +229,31 @@ export default async function HomePage() {
             Subscribe free
             <ArrowRight className="w-4 h-4" aria-hidden />
           </Link>
+        </div>
+      </section>
+
+      {/* Subtle SEO Context at Bottom */}
+      <section className="max-w-7xl mx-auto px-4 py-16 border-t border-slate-100 mt-10">
+        <div className="bg-slate-50/50 rounded-2xl border border-slate-200/60 p-8 shadow-sm text-center">
+          <h2 className="text-xl font-bold text-navy mb-4 font-heading">Latest Corporate Law Updates</h2>
+          <div className="max-w-3xl mx-auto text-sm text-slate-500 leading-relaxed space-y-4">
+            <p>
+              CorpLawUpdates.in provides the <strong>latest corporate law updates</strong> covering 
+              <Link href="/category/sebi" className="text-gold hover:underline font-medium mx-1">SEBI updates</Link>, 
+              <Link href="/category/rbi" className="text-gold hover:underline font-medium mx-1">RBI circular updates</Link>, 
+              <Link href="/category/mca" className="text-gold hover:underline font-medium mx-1">MCA updates</Link>, 
+              NCLT, IBC and FEMA regulations.
+            </p>
+            <p>
+              We simplify complex legal updates into easy-to-understand summaries with key insights and practical implications 
+              to help you stay ahead with <strong>corporate law updates in India</strong>.
+            </p>
+            <p className="pt-2">
+              👉 <Link href="/updates" className="text-gold font-bold hover:text-amber-700 transition-colors underline decoration-gold/30 underline-offset-4">
+                Browse all corporate law updates
+              </Link>
+            </p>
+          </div>
         </div>
       </section>
 
