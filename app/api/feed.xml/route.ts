@@ -68,7 +68,9 @@ export async function GET() {
           'X-Content-Type-Options': 'nosniff',
         },
       })
-      } catch (error) {
+      } catch (error: any) {
+  if (error?.digest === 'DYNAMIC_SERVER_USAGE' || error?.message?.includes('Dynamic server usage')) throw error;
+
         console.error('[API Error]', error);
         return NextResponse.json(
           { error: 'Internal server error' },

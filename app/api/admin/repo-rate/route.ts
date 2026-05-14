@@ -23,7 +23,9 @@ export async function GET() {
       settings?.forEach(s => { currentRate[s.key] = s.value || '' })
 
       return NextResponse.json({ history: history || [], currentRate })
-      } catch (error) {
+      } catch (error: any) {
+  if (error?.digest === 'DYNAMIC_SERVER_USAGE' || error?.message?.includes('Dynamic server usage')) throw error;
+
         console.error('[API Error]', error);
         return NextResponse.json(
           { error: 'Internal server error' },
@@ -94,7 +96,9 @@ export async function POST(request: Request) {
       }
 
       return NextResponse.json({ error: 'Invalid action' }, { status: 400 })
-      } catch (error) {
+      } catch (error: any) {
+  if (error?.digest === 'DYNAMIC_SERVER_USAGE' || error?.message?.includes('Dynamic server usage')) throw error;
+
         console.error('[API Error]', error);
         return NextResponse.json(
           { error: 'Internal server error' },

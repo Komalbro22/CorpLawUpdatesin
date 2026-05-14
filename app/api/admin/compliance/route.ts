@@ -22,7 +22,9 @@ export async function GET() {
       }
 
       return NextResponse.json({ entries: data })
-      } catch (error) {
+      } catch (error: any) {
+  if (error?.digest === 'DYNAMIC_SERVER_USAGE' || error?.message?.includes('Dynamic server usage')) throw error;
+
         console.error('[API Error]', error);
         return NextResponse.json(
           { error: 'Internal server error' },
@@ -56,7 +58,9 @@ export async function POST(request: Request) {
       }
 
       return NextResponse.json({ entry: data })
-      } catch (error) {
+      } catch (error: any) {
+  if (error?.digest === 'DYNAMIC_SERVER_USAGE' || error?.message?.includes('Dynamic server usage')) throw error;
+
         console.error('[API Error]', error);
         return NextResponse.json(
           { error: 'Internal server error' },

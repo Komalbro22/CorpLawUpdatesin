@@ -14,7 +14,9 @@ export async function POST() {
         const response = NextResponse.json({ success: true })
         response.headers.set('Set-Cookie', 'admin_session=; HttpOnly; Secure; SameSite=Strict; Max-Age=0; Path=/')
         return response
-      } catch (error) {
+      } catch (error: any) {
+  if (error?.digest === 'DYNAMIC_SERVER_USAGE' || error?.message?.includes('Dynamic server usage')) throw error;
+
         console.error('[API Error]', error);
         return NextResponse.json(
           { error: 'Internal server error' },

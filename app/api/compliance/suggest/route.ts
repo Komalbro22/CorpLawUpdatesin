@@ -90,7 +90,9 @@ export async function POST(request: Request) {
       success: true,
       message: 'Thank you! Your suggestion has been submitted for review.',
     })
-  } catch {
+  } catch (error: any) {
+  if (error?.digest === 'DYNAMIC_SERVER_USAGE' || error?.message?.includes('Dynamic server usage')) throw error;
+
     return NextResponse.json(
       { error: 'Server error' },
       { status: 500 }
