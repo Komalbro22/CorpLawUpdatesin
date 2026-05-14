@@ -31,8 +31,11 @@ export async function PATCH(
       }
 
       return NextResponse.json({ entry: data })
-      } catch (error: any) {
-  if (error?.digest === 'DYNAMIC_SERVER_USAGE' || error?.message?.includes('Dynamic server usage')) throw error;
+      } catch (error) {
+  const err = error as Error & { digest?: string };
+            if (err.digest === 'DYNAMIC_SERVER_USAGE' || err.message?.includes('Dynamic server usage')) {
+              throw error;
+            }
 
         console.error('[API Error]', error);
         return NextResponse.json(
@@ -66,8 +69,11 @@ export async function DELETE(
       }
 
       return NextResponse.json({ success: true })
-      } catch (error: any) {
-  if (error?.digest === 'DYNAMIC_SERVER_USAGE' || error?.message?.includes('Dynamic server usage')) throw error;
+      } catch (error) {
+  const err = error as Error & { digest?: string };
+            if (err.digest === 'DYNAMIC_SERVER_USAGE' || err.message?.includes('Dynamic server usage')) {
+              throw error;
+            }
 
         console.error('[API Error]', error);
         return NextResponse.json(

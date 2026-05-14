@@ -15,8 +15,11 @@ export async function GET() {
         .order('due_date_sort', { ascending: true, nullsFirst: false })
       if (error) return NextResponse.json({ error: 'Failed to fetch' }, { status: 500 })
       return NextResponse.json({ entries: data || [] })
-      } catch (error: any) {
-  if (error?.digest === 'DYNAMIC_SERVER_USAGE' || error?.message?.includes('Dynamic server usage')) throw error;
+      } catch (error) {
+  const err = error as Error & { digest?: string };
+            if (err.digest === 'DYNAMIC_SERVER_USAGE' || err.message?.includes('Dynamic server usage')) {
+              throw error;
+            }
 
         console.error('[API Error]', error);
         return NextResponse.json(
@@ -73,8 +76,11 @@ export async function POST(request: Request) {
       }
 
       return NextResponse.json({ error: 'Invalid action' }, { status: 400 })
-      } catch (error: any) {
-  if (error?.digest === 'DYNAMIC_SERVER_USAGE' || error?.message?.includes('Dynamic server usage')) throw error;
+      } catch (error) {
+  const err = error as Error & { digest?: string };
+            if (err.digest === 'DYNAMIC_SERVER_USAGE' || err.message?.includes('Dynamic server usage')) {
+              throw error;
+            }
 
         console.error('[API Error]', error);
         return NextResponse.json(

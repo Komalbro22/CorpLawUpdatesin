@@ -30,8 +30,11 @@ export async function POST(
     }
 
     return NextResponse.json({ success: true })
-  } catch (error: any) {
-  if (error?.digest === 'DYNAMIC_SERVER_USAGE' || error?.message?.includes('Dynamic server usage')) throw error;
+  } catch (error) {
+  const err = error as Error & { digest?: string };
+        if (err.digest === 'DYNAMIC_SERVER_USAGE' || err.message?.includes('Dynamic server usage')) {
+          throw error;
+        }
 
     return NextResponse.json({ success: false })
   }

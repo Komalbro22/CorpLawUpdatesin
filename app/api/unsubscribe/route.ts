@@ -73,8 +73,11 @@ export async function GET(request: NextRequest) {
             status: 200,
             headers: { 'Content-Type': 'text/html' }
         })
-      } catch (error: any) {
-  if (error?.digest === 'DYNAMIC_SERVER_USAGE' || error?.message?.includes('Dynamic server usage')) throw error;
+      } catch (error) {
+  const err = error as Error & { digest?: string };
+            if (err.digest === 'DYNAMIC_SERVER_USAGE' || err.message?.includes('Dynamic server usage')) {
+              throw error;
+            }
 
         console.error('[API Error]', error);
         return NextResponse.json(
