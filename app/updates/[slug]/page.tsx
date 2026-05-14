@@ -34,7 +34,7 @@ export async function generateMetadata(
   
   const { data: update } = await supabase
     .from('updates')
-    .select('title, summary, category, published_at, updated_at, tags, slug, seo_title, seo_description')
+    .select('title, summary, category, published_at, updated_at, tags, slug, seo_title, seo_description, image_url')
     .ilike('slug', decodedSlug)
     .single()
 
@@ -53,7 +53,9 @@ export async function generateMetadata(
   const seoTitle = (t: string): string => t.length <= 100 ? t : t.slice(0, 97) + '...'
   const descStr = update.seo_description || update.summary
   const seoDesc = (d: string): string => d.length <= 300 ? d : d.slice(0, 297) + '...'
-  const imageUrl = `https://www.corplawupdates.in/api/og?title=${encodeURIComponent(update.title)}&category=${encodeURIComponent(update.category || '')}`
+  const imageUrl = update.image_url 
+    ? (update.image_url.startsWith('http') ? update.image_url : `https://www.corplawupdates.in${update.image_url}`)
+    : `https://www.corplawupdates.in/api/og?title=${encodeURIComponent(update.title)}&category=${encodeURIComponent(update.category || '')}`
 
   return {
     title: seoTitle(titleStr),

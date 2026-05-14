@@ -22,7 +22,13 @@ export async function generateMetadata(
       title: 'All Updates - MCA, SEBI, RBI Regulatory News',
       description: 'Browse all Indian corporate law updates - MCA circulars, SEBI notifications, RBI guidelines, NCLT orders and FEMA regulations. Free for CS professionals.',
       url: 'https://www.corplawupdates.in/updates',
-      images: [{ url: 'https://www.corplawupdates.in/og-image.jpg', width: 1200, height: 630 }],
+      images: [{ url: 'https://www.corplawupdates.in/api/og?title=All%20Regulatory%20Updates&category=', width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'All Updates - MCA, SEBI, RBI Regulatory News',
+      description: 'Browse all Indian corporate law updates - MCA circulars, SEBI notifications, RBI guidelines, NCLT orders and FEMA regulations. Free for CS professionals.',
+      images: ['https://www.corplawupdates.in/api/og?title=All%20Regulatory%20Updates&category='],
     },
   }
 }
