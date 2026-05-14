@@ -22,7 +22,10 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
       },
     ],
-    sitemap: 'https://www.corplawupdates.in/sitemap.xml',
+    sitemap: [
+      'https://www.corplawupdates.in/sitemap.xml',
+      'https://www.corplawupdates.in/image-sitemap.xml',
+    ],
     // REMOVED: host field (wrong format, Google ignores it)
   }
 }
