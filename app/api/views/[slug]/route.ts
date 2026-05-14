@@ -3,9 +3,12 @@ import { supabaseAdmin } from '@/lib/supabase-server'
 import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
 
-// Initialize Upstash Redis and Ratelimit only if env vars are present
-const hasUpstashConfig = process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
-const redis = hasUpstashConfig ? Redis.fromEnv() : null
+// Initialize Upstash Redis and Ratelimit only if env vars are present (supports Vercel KV or direct Upstash)
+const redisUrl = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL
+const redisToken = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN
+
+const hasUpstashConfig = redisUrl && redisToken
+const redis = hasUpstashConfig ? new Redis({ url: redisUrl, token: redisToken }) : null
 
 // Create a new ratelimiter, that allows 5 requests per minute
 const ratelimit = redis
