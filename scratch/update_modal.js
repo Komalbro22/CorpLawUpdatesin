@@ -1,4 +1,7 @@
-'use client'
+import React from 'react';
+import fs from 'fs';
+
+const modalCode = `'use client'
 
 import { useState } from 'react'
 
@@ -77,11 +80,11 @@ export default function ComplianceSuggestModal({
     'w-full border border-slate-200 bg-slate-50 focus:bg-white rounded-lg px-3 py-2.5 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition-all shadow-sm'
 
   return (
-    <div className="fixed inset-0 bg-navy/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 sm:p-6 overflow-hidden">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full flex flex-col max-h-[90vh] overflow-hidden animate-in fade-in zoom-in-95 duration-200 relative">
+    <div className="fixed inset-0 bg-navy/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full flex flex-col max-h-[90vh] overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50 flex-shrink-0">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex-shrink-0">
           <h2 className="text-xl font-heading font-bold text-navy flex items-center gap-2">
             {type === 'new_entry' ? '➕ Suggest New Compliance' : '⚠️ Report an Error'}
           </h2>
@@ -112,7 +115,7 @@ export default function ComplianceSuggestModal({
             </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden min-h-0">
+          <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
             
             {/* Scrollable Content Area */}
             <div className="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
@@ -126,7 +129,7 @@ export default function ComplianceSuggestModal({
                   <select
                     value={type}
                     onChange={e => setType(e.target.value as SuggestionType)}
-                    className="w-full border border-amber-300 bg-white rounded-lg px-3 py-2.5 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-sm font-medium"
+                    className="w-full border border-amber-300 bg-white rounded-lg px-3 py-2.5 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-sm"
                   >
                     <option value="new_entry">➕ Suggest New Compliance Entry</option>
                     <option value="error_report">⚠️ Report Error in Existing Entry</option>
@@ -336,7 +339,7 @@ export default function ComplianceSuggestModal({
               )}
 
               {/* User details */}
-              <div className="space-y-5 bg-slate-50/80 -mx-6 -mb-6 p-6 border-t border-slate-100">
+              <div className="space-y-5 bg-slate-50/50 -mx-6 -mb-6 p-6 border-t border-slate-100">
                 <div className="mb-2">
                    <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">Your Profile</h3>
                    <p className="text-xs text-slate-500 mt-1">Provide your details to get contributor credit on the calendar.</p>
@@ -421,7 +424,7 @@ export default function ComplianceSuggestModal({
             )}
 
             {/* Footer / Actions */}
-            <div className="p-6 border-t border-slate-100 bg-white flex justify-end gap-3 flex-shrink-0">
+            <div className="p-6 border-t border-slate-200 bg-white flex justify-end gap-3 flex-shrink-0">
               <button
                 type="button"
                 onClick={onClose}
@@ -451,3 +454,7 @@ export default function ComplianceSuggestModal({
     </div>
   )
 }
+`;
+
+fs.writeFileSync('../app/api/../components/ComplianceSuggestModal.tsx', modalCode);
+console.log('done');
