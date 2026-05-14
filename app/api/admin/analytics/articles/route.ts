@@ -78,7 +78,11 @@ export async function GET() {
   // 3. Merge Views and Sort
   const mergedArticles = articles.map(article => {
     const finalViews = gaArticleViews[article.slug] || article.views || 0
-    return { ...article, views: finalViews }
+    return { 
+      ...article, 
+      views: finalViews, 
+      status: article.published_at ? 'published' : 'draft' 
+    }
   })
 
   mergedArticles.sort((a, b) => b.views - a.views)
