@@ -741,18 +741,11 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                         Save Draft
                     </button>
                     <button
-                        onClick={() => handleSave(publishedAt)}
-                        disabled={saving || success}
-                        className="px-5 py-2 border border-gold text-gold font-semibold rounded-lg hover:bg-gold/10 transition-colors disabled:opacity-50 text-sm hidden lg:block"
-                    >
-                        Schedule Update
-                    </button>
-                    <button
-                        onClick={() => handleSave(new Date().toISOString())}
+                        onClick={() => handleSave(publishedAt ? new Date(publishedAt).toISOString() : new Date().toISOString())}
                         disabled={saving || success}
                         className="px-5 py-2 bg-navy text-gold font-semibold rounded-lg hover:bg-navy/90 transition-colors disabled:opacity-50 text-sm"
                     >
-                        {saving ? 'Saving...' : 'Update & Publish'}
+                        {saving ? 'Saving...' : 'Save Changes'}
                     </button>
                 </div>
             </div>
