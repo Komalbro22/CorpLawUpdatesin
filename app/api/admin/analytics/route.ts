@@ -5,25 +5,26 @@ import { supabaseAdmin } from '@/lib/supabase-server'
 
 import { BetaAnalyticsDataClient } from '@google-analytics/data'
 
-let analyticsDataClient: BetaAnalyticsDataClient | null = null
-try {
-  if (process.env.GOOGLE_CLIENT_EMAIL && process.env.GOOGLE_PRIVATE_KEY) {
-    analyticsDataClient = new BetaAnalyticsDataClient({
-      credentials: {
-        client_email: process.env.GOOGLE_CLIENT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-      },
-    })
-  }
-} catch (e) {
-  console.error('Failed to initialize GA client', e)
-}
-
-const propertyId = process.env.GA_PROPERTY_ID
-
 export async function GET() {
   if (!verifyAdminSession()) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  let analyticsDataClient: BetaAnalyticsDataClient | null = null
+  const propertyId = process.env.GA_PROPERTY_ID
+  
+  try {
+    if (process.env.GOOGLE_CLIENT_EMAIL && process.env.GOOGLE_PRIVATE_KEY) {
+      analyticsDataClient = new BetaAnalyticsDataClient({
+        fallback: true,
+        credentials: {
+          client_email: process.env.GOOGLE_CLIENT_EMAIL,
+          private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        },
+      })
+    }
+  } catch (e) {
+    console.error('Failed to initialize GA client', e)
   }
 
   // 1. Fetch Google Analytics Data (if configured)
