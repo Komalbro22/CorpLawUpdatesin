@@ -274,7 +274,7 @@ export default function AdminArticles() {
                             ) : (
                                 articles.map(article => {
                                     const isPublished = !!article.published_at
-                                    const dateStr = article.published_at || article.created_at
+                                    const dateStr = article.published_at || article.created_at || ''
                                     return (
                                         <tr key={article.id} className={`transition-colors duration-150 ${selectedIds.has(article.id) ? 'bg-amber-50/40' : 'hover:bg-slate-50/80'}`}>
                                             <td className="px-6 py-4">
@@ -311,8 +311,8 @@ export default function AdminArticles() {
                                                 <input 
                                                     type="checkbox" 
                                                     className="rounded border-slate-300 text-gold focus:ring-gold"
-                                                    checked={article.is_featured}
-                                                    onChange={() => updateFeatured(article.id, article.is_featured)}
+                                                    checked={!!article.is_featured}
+                                                    onChange={() => updateFeatured(article.id, !!article.is_featured)}
                                                 />
                                             </td>
                                             <td className="px-6 py-4 text-right space-x-3">
