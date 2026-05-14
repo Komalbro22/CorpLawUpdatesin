@@ -1,13 +1,23 @@
 import { supabase } from '@/lib/supabase'
+import { NextResponse } from "next/server";
 
 export const revalidate = 0
 
 export async function GET() {
-  const { data } = await supabase
-    .from('site_settings')
-    .select('value')
-    .eq('key', 'whatsapp_channel')
-    .single()
 
-  return Response.json({ url: data?.value || '' })
+      try {
+        const { data } = await supabase
+        .from('site_settings')
+        .select('value')
+        .eq('key', 'whatsapp_channel')
+        .single()
+
+      return Response.json({ url: data?.value || '' })
+      } catch (error) {
+        console.error('[API Error]', error);
+        return NextResponse.json(
+          { error: 'Internal server error' },
+          { status: 500 }
+        );
+      }
 }

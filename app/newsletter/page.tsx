@@ -9,6 +9,12 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://www.corplawupdates.in/newsletter',
   },
+  openGraph: {
+    title: 'Subscribe — Free Corporate Law Newsletter India',
+    description: 'Subscribe to India\'s free corporate law newsletter. Weekly MCA, SEBI, RBI updates delivered to your inbox. No spam. Unsubscribe anytime.',
+    url: 'https://www.corplawupdates.in/newsletter',
+    images: [{ url: 'https://www.corplawupdates.in/og-image.jpg', width: 1200, height: 630 }],
+  },
 }
 
 export default function NewsletterPage() {

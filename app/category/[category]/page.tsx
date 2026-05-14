@@ -55,6 +55,7 @@ export async function generateMetadata(
       title,
       description,
       url,
+      images: [{ url: 'https://www.corplawupdates.in/og-image.jpg', width: 1200, height: 630 }],
     },
   }
 }

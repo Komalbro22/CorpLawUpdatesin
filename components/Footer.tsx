@@ -132,9 +132,9 @@ export default async function Footer() {
                         <span>© 2026 CorpLawUpdates.in</span>
                         <Link href="/privacy-policy" className="hover:text-white transition-colors">Privacy</Link>
                         <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
-                        <a href="/api/feed.xml" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-white transition-colors">
+                        <Link href="/api/feed.xml" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-white transition-colors" prefetch={false}>
                             <Rss className="w-3 h-3 text-orange-500" /> RSS
-                        </a>
+                        </Link>
                     </div>
                     
                     <div className="text-[10px] text-slate-500 italic text-center md:text-right max-w-xs">

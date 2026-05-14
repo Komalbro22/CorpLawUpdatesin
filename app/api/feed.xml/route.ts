@@ -2,6 +2,7 @@ export const revalidate = 3600
 
 import { supabase } from '@/lib/supabase'
 import { BASE_URL } from '@/lib/utils'
+import { NextResponse } from "next/server";
 
 function escapeXml(str: string): string {
   return str
@@ -13,32 +14,34 @@ function escapeXml(str: string): string {
 }
 
 export async function GET() {
-  const { data: articles } = await supabase
-    .from('updates')
-    .select('title, slug, summary, category, published_at')
-    .not('published_at', 'is', null)
-    .lte('published_at', new Date().toISOString())
-    .order('published_at', { ascending: false })
-    .limit(20)
 
-  const items = (articles || []).map(a => `
+      try {
+        const { data: articles } = await supabase
+        .from('updates')
+        .select('title, slug, summary, category, published_at')
+        .not('published_at', 'is', null)
+        .lte('published_at', new Date().toISOString())
+        .order('published_at', { ascending: false })
+        .limit(20)
+
+      const items = (articles || []).map(a => `
     <item>
       <title><![CDATA[${a.title || 'Untitled'}]]></title>
       <link>${BASE_URL}/updates/${a.slug}</link>
       <description><![CDATA[${
-        a.summary?.trim() || 
-        `${a.category?.toUpperCase() || 'Update'} from CorpLawUpdates.in`
-      }]]></description>
+            a.summary?.trim() || 
+            `${a.category?.toUpperCase() || 'Update'} from CorpLawUpdates.in`
+          }]]></description>
       <pubDate>${
-        a.published_at 
-          ? new Date(a.published_at).toUTCString()
-          : new Date().toUTCString()
-      }</pubDate>
+            a.published_at 
+              ? new Date(a.published_at).toUTCString()
+              : new Date().toUTCString()
+          }</pubDate>
       <guid isPermaLink="true">${BASE_URL}/updates/${a.slug}</guid>
       <category>${a.category ? escapeXml(a.category) : 'Update'}</category>
     </item>`).join('')
 
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+      const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>CorpLawUpdates.in</title>
@@ -58,11 +61,18 @@ export async function GET() {
   </channel>
 </rss>`
 
-  return new Response(xml, {
-    headers: {
-      'Content-Type': 'application/xml; charset=utf-8',
-      'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
-      'X-Content-Type-Options': 'nosniff',
-    },
-  })
+      return new Response(xml, {
+        headers: {
+          'Content-Type': 'application/xml; charset=utf-8',
+          'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
+          'X-Content-Type-Options': 'nosniff',
+        },
+      })
+      } catch (error) {
+        console.error('[API Error]', error);
+        return NextResponse.json(
+          { error: 'Internal server error' },
+          { status: 500 }
+        );
+      }
 }

@@ -27,6 +27,7 @@ export const metadata: Metadata = {
     title: 'Compliance Calendar 2026-27 — All MCA SEBI RBI Due Dates',
     description: 'Complete compliance deadline calendar for Indian companies. MCA, SEBI, RBI, Income Tax due dates in one place.',
     url: 'https://www.corplawupdates.in/calendar',
+    images: [{ url: 'https://www.corplawupdates.in/og-image.jpg', width: 1200, height: 630 }],
   },
 }
 

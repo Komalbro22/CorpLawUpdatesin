@@ -9,6 +9,12 @@ export const metadata: Metadata = {
     alternates: {
         canonical: 'https://www.corplawupdates.in/terms',
     },
+    openGraph: {
+        title: 'Terms of Service',
+        description: 'Terms of Service for CorpLawUpdates.in — Informational platform for Indian corporate law updates.',
+        url: 'https://www.corplawupdates.in/terms',
+        images: [{ url: 'https://www.corplawupdates.in/og-image.jpg', width: 1200, height: 630 }],
+    },
 }
 
 export default function TermsPage() {

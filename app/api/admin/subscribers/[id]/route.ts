@@ -7,30 +7,39 @@ export async function PATCH(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  if (!verifyAdminSession()) {
-    return NextResponse.json(
-      { error: 'Unauthorized' }, 
-      { status: 401 }
-    )
-  }
 
-  const { error } = await supabaseAdmin
-    .from('subscribers')
-    .update({ 
-      is_active: false,
-      unsubscribed_at: new Date().toISOString()
-    })
-    .eq('id', params.id)
+      try {
+        if (!verifyAdminSession()) {
+        return NextResponse.json(
+          { error: 'Unauthorized' }, 
+          { status: 401 }
+        )
+      }
 
-  if (error) {
-    console.error('Unsubscribe error:', error)
-    return NextResponse.json(
-      { error: 'Failed to unsubscribe' }, 
-      { status: 500 }
-    )
-  }
+      const { error } = await supabaseAdmin
+        .from('subscribers')
+        .update({ 
+          is_active: false,
+          unsubscribed_at: new Date().toISOString()
+        })
+        .eq('id', params.id)
 
-  return NextResponse.json({ success: true })
+      if (error) {
+        console.error('Unsubscribe error:', error)
+        return NextResponse.json(
+          { error: 'Failed to unsubscribe' }, 
+          { status: 500 }
+        )
+      }
+
+      return NextResponse.json({ success: true })
+      } catch (error) {
+        console.error('[API Error]', error);
+        return NextResponse.json(
+          { error: 'Internal server error' },
+          { status: 500 }
+        );
+      }
 }
 
 // DELETE — permanently removes subscriber
@@ -38,25 +47,34 @@ export async function DELETE(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  if (!verifyAdminSession()) {
-    return NextResponse.json(
-      { error: 'Unauthorized' }, 
-      { status: 401 }
-    )
-  }
 
-  const { error } = await supabaseAdmin
-    .from('subscribers')
-    .delete()
-    .eq('id', params.id)
+      try {
+        if (!verifyAdminSession()) {
+        return NextResponse.json(
+          { error: 'Unauthorized' }, 
+          { status: 401 }
+        )
+      }
 
-  if (error) {
-    console.error('Delete error:', error)
-    return NextResponse.json(
-      { error: 'Failed to delete' }, 
-      { status: 500 }
-    )
-  }
+      const { error } = await supabaseAdmin
+        .from('subscribers')
+        .delete()
+        .eq('id', params.id)
 
-  return NextResponse.json({ success: true })
+      if (error) {
+        console.error('Delete error:', error)
+        return NextResponse.json(
+          { error: 'Failed to delete' }, 
+          { status: 500 }
+        )
+      }
+
+      return NextResponse.json({ success: true })
+      } catch (error) {
+        console.error('[API Error]', error);
+        return NextResponse.json(
+          { error: 'Internal server error' },
+          { status: 500 }
+        );
+      }
 }

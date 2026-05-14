@@ -4,14 +4,16 @@ import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 
 export async function GET() {
-  void cookies()
-  if (!verifyAdminSession()) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
 
-  const { data, error } = await supabaseAdmin
-    .from('compliance_suggestions')
-    .select(`
+      try {
+        void cookies()
+      if (!verifyAdminSession()) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      }
+
+      const { data, error } = await supabaseAdmin
+        .from('compliance_suggestions')
+        .select(`
       *,
       compliance_entries (
         form_name,
@@ -19,11 +21,18 @@ export async function GET() {
         regulator
       )
     `)
-    .order('created_at', { ascending: false })
+        .order('created_at', { ascending: false })
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
-  }
+      if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 })
+      }
 
-  return NextResponse.json({ suggestions: data })
+      return NextResponse.json({ suggestions: data })
+      } catch (error) {
+        console.error('[API Error]', error);
+        return NextResponse.json(
+          { error: 'Internal server error' },
+          { status: 500 }
+        );
+      }
 }

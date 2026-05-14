@@ -3,11 +3,13 @@ import { generateUnsubscribeToken } from '@/lib/utils'
 import { supabaseAdmin } from '@/lib/supabase-server'
 
 export async function GET(request: NextRequest) {
-    const { searchParams } = new URL(request.url)
-    const email = searchParams.get('email')
-    const token = searchParams.get('token')
 
-    const errorHtml = (msg: string) => `
+      try {
+        const { searchParams } = new URL(request.url)
+        const email = searchParams.get('email')
+        const token = searchParams.get('token')
+
+        const errorHtml = (msg: string) => `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -26,27 +28,27 @@ export async function GET(request: NextRequest) {
     </html>
   `
 
-    if (!email || !token) {
-        return new NextResponse(errorHtml('Invalid unsubscribe link'), {
-            status: 400,
-            headers: { 'Content-Type': 'text/html' }
-        })
-    }
+        if (!email || !token) {
+            return new NextResponse(errorHtml('Invalid unsubscribe link'), {
+                status: 400,
+                headers: { 'Content-Type': 'text/html' }
+            })
+        }
 
-    const expectedToken = generateUnsubscribeToken(email)
-    if (token !== expectedToken) {
-        return new NextResponse(errorHtml('Invalid or expired unsubscribe link'), {
-            status: 400,
-            headers: { 'Content-Type': 'text/html' }
-        })
-    }
+        const expectedToken = generateUnsubscribeToken(email)
+        if (token !== expectedToken) {
+            return new NextResponse(errorHtml('Invalid or expired unsubscribe link'), {
+                status: 400,
+                headers: { 'Content-Type': 'text/html' }
+            })
+        }
 
-    await supabaseAdmin
-        .from('subscribers')
-        .update({ is_active: false, unsubscribed_at: new Date().toISOString() })
-        .eq('email', email)
+        await supabaseAdmin
+            .from('subscribers')
+            .update({ is_active: false, unsubscribed_at: new Date().toISOString() })
+            .eq('email', email)
 
-    const successHtml = `
+        const successHtml = `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -67,8 +69,15 @@ export async function GET(request: NextRequest) {
     </html>
   `
 
-    return new NextResponse(successHtml, {
-        status: 200,
-        headers: { 'Content-Type': 'text/html' }
-    })
+        return new NextResponse(successHtml, {
+            status: 200,
+            headers: { 'Content-Type': 'text/html' }
+        })
+      } catch (error) {
+        console.error('[API Error]', error);
+        return NextResponse.json(
+          { error: 'Internal server error' },
+          { status: 500 }
+        );
+      }
 }

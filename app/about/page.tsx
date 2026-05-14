@@ -9,6 +9,12 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://www.corplawupdates.in/about',
   },
+  openGraph: {
+    title: 'About CorpLawUpdates.in — India\'s Free Corporate Law Intelligence Platform',
+    description: 'CorpLawUpdates.in publishes free, plain-English corporate law updates covering MCA, SEBI, RBI, NCLT and IBC for CS professionals, lawyers and compliance officers.',
+    url: 'https://www.corplawupdates.in/about',
+    images: [{ url: 'https://www.corplawupdates.in/og-image.jpg', width: 1200, height: 630 }],
+  },
 }
 
 export default async function AboutPage() {

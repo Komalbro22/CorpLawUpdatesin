@@ -8,6 +8,12 @@ export const metadata = {
     alternates: {
         canonical: 'https://www.corplawupdates.in/privacy-policy',
     },
+    openGraph: {
+        title: 'Privacy Policy | CorpLawUpdates.in',
+        description: 'Privacy Policy for CorpLawUpdates.in — How we collect, use and protect your data.',
+        url: 'https://www.corplawupdates.in/privacy-policy',
+        images: [{ url: 'https://www.corplawupdates.in/og-image.jpg', width: 1200, height: 630 }],
+    },
 }
 
 export default function PrivacyPolicyPage() {

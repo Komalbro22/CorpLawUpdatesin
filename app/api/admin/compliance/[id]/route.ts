@@ -7,50 +7,68 @@ export async function PATCH(
   request: Request,
   { params }: { params: { id: string } }
 ) {
-  void cookies()
-  if (!verifyAdminSession()) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
 
-  const body = await request.json()
+      try {
+        void cookies()
+      if (!verifyAdminSession()) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      }
 
-  const { data, error } = await supabaseAdmin
-    .from('compliance_entries')
-    .update({
-      ...body,
-      updated_at: new Date().toISOString(),
-    })
-    .eq('id', params.id)
-    .select()
-    .single()
+      const body = await request.json()
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
-  }
+      const { data, error } = await supabaseAdmin
+        .from('compliance_entries')
+        .update({
+          ...body,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', params.id)
+        .select()
+        .single()
 
-  return NextResponse.json({ entry: data })
+      if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 })
+      }
+
+      return NextResponse.json({ entry: data })
+      } catch (error) {
+        console.error('[API Error]', error);
+        return NextResponse.json(
+          { error: 'Internal server error' },
+          { status: 500 }
+        );
+      }
 }
 
 export async function DELETE(
   _request: Request,
   { params }: { params: { id: string } }
 ) {
-  void cookies()
-  if (!verifyAdminSession()) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
 
-  const { error } = await supabaseAdmin
-    .from('compliance_entries')
-    .update({
-      is_active: false,
-      updated_at: new Date().toISOString(),
-    })
-    .eq('id', params.id)
+      try {
+        void cookies()
+      if (!verifyAdminSession()) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      }
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
-  }
+      const { error } = await supabaseAdmin
+        .from('compliance_entries')
+        .update({
+          is_active: false,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', params.id)
 
-  return NextResponse.json({ success: true })
+      if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 })
+      }
+
+      return NextResponse.json({ success: true })
+      } catch (error) {
+        console.error('[API Error]', error);
+        return NextResponse.json(
+          { error: 'Internal server error' },
+          { status: 500 }
+        );
+      }
 }

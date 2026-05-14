@@ -4,45 +4,63 @@ import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 
 export async function GET() {
-  void cookies()
-  if (!verifyAdminSession()) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
 
-  const { data, error } = await supabaseAdmin
-    .from('compliance_entries')
-    .select('*')
-    .order('regulator')
-    .order('display_order')
+      try {
+        void cookies()
+      if (!verifyAdminSession()) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      }
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
-  }
+      const { data, error } = await supabaseAdmin
+        .from('compliance_entries')
+        .select('*')
+        .order('regulator')
+        .order('display_order')
 
-  return NextResponse.json({ entries: data })
+      if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 })
+      }
+
+      return NextResponse.json({ entries: data })
+      } catch (error) {
+        console.error('[API Error]', error);
+        return NextResponse.json(
+          { error: 'Internal server error' },
+          { status: 500 }
+        );
+      }
 }
 
 export async function POST(request: Request) {
-  void cookies()
-  if (!verifyAdminSession()) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
 
-  const body = await request.json()
+      try {
+        void cookies()
+      if (!verifyAdminSession()) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      }
 
-  const { data, error } = await supabaseAdmin
-    .from('compliance_entries')
-    .insert({
-      ...body,
-      created_by: 'admin',
-      updated_at: new Date().toISOString(),
-    })
-    .select()
-    .single()
+      const body = await request.json()
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
-  }
+      const { data, error } = await supabaseAdmin
+        .from('compliance_entries')
+        .insert({
+          ...body,
+          created_by: 'admin',
+          updated_at: new Date().toISOString(),
+        })
+        .select()
+        .single()
 
-  return NextResponse.json({ entry: data })
+      if (error) {
+        return NextResponse.json({ error: error.message }, { status: 500 })
+      }
+
+      return NextResponse.json({ entry: data })
+      } catch (error) {
+        console.error('[API Error]', error);
+        return NextResponse.json(
+          { error: 'Internal server error' },
+          { status: 500 }
+        );
+      }
 }
