@@ -1,27 +1,12 @@
+import { Database } from './supabase'
+
 export type Category = 'MCA' | 'SEBI' | 'RBI' | 'NCLT' | 'IBC' | 'FEMA'
 
-export interface Update {
-    id: string
-    title: string
-    slug: string
-    summary: string
-    content: string | null
+export interface Update extends Omit<Database['public']['Tables']['updates']['Row'], 'category' | 'key_changes' | 'sources' | 'impact_level'> {
     category: Category
-    tags: string[]
-    source_url: string | null
-    source_name: string | null
-    sources: { name: string; url: string }[] | null
-    seo_title: string | null
-    seo_description: string | null
-    published_at: string | null
-    is_featured: boolean
-    views: number
-    key_change: string | null
     key_changes: string[] | null
-    effective_date: string | null
+    sources: { name: string; url: string }[] | null
     impact_level: 'high' | 'medium' | 'low' | null
-    created_at: string
-    updated_at: string
 }
 
 export interface Subscriber {

@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
         const { 
             title, slug, summary, content, category, tags, 
             source_url, source_name, sources,
-            seo_title, seo_description,
+            seo_title, seo_description, featured_image_url,
             published_at, is_featured, 
             key_change, key_changes, effective_date, impact_level
         } = body
@@ -114,6 +114,7 @@ export async function POST(request: NextRequest) {
                 sources: sources || null,
                 seo_title: seo_title || null,
                 seo_description: seo_description || null,
+                featured_image_url: featured_image_url || null,
                 published_at,
                 is_featured: is_featured || false,
                 key_change: key_change || null,

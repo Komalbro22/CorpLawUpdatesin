@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Update } from '@/types'
 import { formatDate, calculateReadingTime } from '@/lib/utils'
 import CategoryBadge from '@/components/CategoryBadge'
@@ -29,7 +30,8 @@ interface UpdateCardProps {
 }
 
 export default function UpdateCard({ update, showExcerpt = true, animationDelay = 0 }: UpdateCardProps) {
-    const imageUrl = extractFirstImage(update.content || '')
+    // Favor the new DB column; fallback to regex for older articles during transition
+    const imageUrl = update.featured_image_url || extractFirstImage(update.content || '')
     const isNew = Boolean(
         update.published_at &&
         (Date.now() - new Date(update.published_at).getTime()) <
@@ -58,13 +60,12 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
         >
             {imageUrl && (
                 <div className="relative w-full aspect-video overflow-hidden bg-slate-100 flex-shrink-0">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    <Image
                         src={imageUrl}
                         alt={update.title}
-                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                        loading="lazy"
-                        decoding="async"
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
                     />
                 </div>
             )}

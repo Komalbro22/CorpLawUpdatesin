@@ -1,5 +1,20 @@
 import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
+import { Ratelimit } from '@upstash/ratelimit'
+import { Redis } from '@upstash/redis'
+
+// Initialize Upstash Redis and Ratelimit only if env vars are present
+const hasUpstashConfig = process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
+const redis = hasUpstashConfig ? Redis.fromEnv() : null
+
+// Create a new ratelimiter, that allows 5 requests per minute
+const ratelimit = redis
+  ? new Ratelimit({
+      redis: redis,
+      limiter: Ratelimit.slidingWindow(5, '1 m'),
+      analytics: true,
+    })
+  : null
 
 export async function POST(
   request: Request,
@@ -7,6 +22,16 @@ export async function POST(
 ) {
   try {
     const { slug } = params
+    
+    // IP-based Rate Limiting (Server-Side)
+    if (ratelimit) {
+      const ip = request.headers.get('x-forwarded-for') || '127.0.0.1'
+      const { success } = await ratelimit.limit(`views_${ip}_${slug}`)
+      
+      if (!success) {
+        return NextResponse.json({ success: false, error: 'Rate limit exceeded' }, { status: 429 })
+      }
+    }
 
     // Increment view count using Postgres function to avoid race conditions
     const { error } = await supabaseAdmin.rpc('increment_views', {
@@ -31,10 +56,10 @@ export async function POST(
 
     return NextResponse.json({ success: true })
   } catch (error) {
-  const err = error as Error & { digest?: string };
-        if (err.digest === 'DYNAMIC_SERVER_USAGE' || err.message?.includes('Dynamic server usage')) {
-          throw error;
-        }
+    const err = error as Error & { digest?: string };
+    if (err.digest === 'DYNAMIC_SERVER_USAGE' || err.message?.includes('Dynamic server usage')) {
+      throw error;
+    }
 
     return NextResponse.json({ success: false })
   }
