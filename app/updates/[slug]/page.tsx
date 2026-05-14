@@ -34,7 +34,7 @@ export async function generateMetadata(
   
   const { data: update } = await supabase
     .from('updates')
-    .select('title, summary, category, published_at, updated_at, tags, slug, seo_title, seo_description, image_url')
+    .select('title, summary, category, published_at, updated_at, tags, slug, seo_title, seo_description, content')
     .ilike('slug', decodedSlug)
     .single()
 
@@ -53,8 +53,16 @@ export async function generateMetadata(
   const seoTitle = (t: string): string => t.length <= 100 ? t : t.slice(0, 97) + '...'
   const descStr = update.seo_description || update.summary
   const seoDesc = (d: string): string => d.length <= 300 ? d : d.slice(0, 297) + '...'
-  const imageUrl = update.image_url 
-    ? (update.image_url.startsWith('http') ? update.image_url : `https://www.corplawupdates.in${update.image_url}`)
+  let extractedImageUrl = null;
+  if (update.content) {
+    const imgMatch = update.content.match(/<img[^>]+src=["']([^"']+)["']/i) || update.content.match(/!\[.*?\]\((.*?)\)/i);
+    if (imgMatch && imgMatch[1]) {
+      extractedImageUrl = imgMatch[1];
+    }
+  }
+
+  const imageUrl = extractedImageUrl 
+    ? (extractedImageUrl.startsWith('http') ? extractedImageUrl : `https://www.corplawupdates.in${extractedImageUrl}`)
     : `https://www.corplawupdates.in/api/og?title=${encodeURIComponent(update.title)}&category=${encodeURIComponent(update.category || '')}`
 
   return {
