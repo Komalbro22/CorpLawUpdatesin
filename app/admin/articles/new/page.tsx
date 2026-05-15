@@ -9,6 +9,7 @@ import { slugify, calculateReadingTime } from '@/lib/utils'
 import { smartCleanContent } from '@/lib/html-to-markdown'
 import CategoryBadge from '@/components/CategoryBadge'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
+import { useToast } from '@/components/Toast'
 import { Category } from '@/types'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
@@ -17,6 +18,7 @@ const CATEGORIES: Category[] = ['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA']
 
 export default function NewArticle() {
     const router = useRouter()
+    const { showToast } = useToast()
 
     const [title, setTitle] = useState('')
     const [slug, setSlug] = useState('')
@@ -160,11 +162,12 @@ export default function NewArticle() {
                 const data = await res.json()
                 const imageMarkdown = `\n![image](${data.url})\n`
                 setContent((prev) => prev + imageMarkdown)
+                showToast('Image inserted into article', 'success')
             } else {
-                alert('Image upload failed')
+                showToast('Image upload failed', 'error')
             }
         } catch (err) {
-            alert('Image upload error')
+            showToast('Image upload failed', 'error')
         } finally {
             setUploadingImage(false)
             if (fileInputRef.current) fileInputRef.current.value = ''
@@ -209,16 +212,20 @@ export default function NewArticle() {
 
             if (res.ok) {
                 setSuccess(true)
+                showToast('Article created', 'success')
+                setLoading(false)
                 setTimeout(() => {
                     router.push('/admin/articles')
                 }, 2000)
             } else {
                 setError(data.error || 'Failed to save article')
                 setLoading(false)
+                showToast(data.error || 'Failed to save article', 'error')
             }
         } catch (err) {
             setError('Something went wrong. Please try again.')
             setLoading(false)
+            showToast('Something went wrong. Please try again.', 'error')
         }
     }
 

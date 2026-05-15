@@ -148,7 +148,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
     return (
         <article
           id="article-root"
-          className="article-font-md mx-auto w-full max-w-4xl px-4 py-8 sm:py-10"
+          className="article-font-md mx-auto w-full max-w-4xl px-4 py-8 sm:py-12"
         >
             <ReadingProgress />
             <ViewCounter slug={update.slug} />
@@ -189,7 +189,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
                 {/* Hero image */}
                 {update.image_url && (
-                    <div className="relative mb-8 h-64 w-full overflow-hidden rounded-lg shadow-md md:h-[400px]">
+                    <div className="relative mb-8 h-64 w-full overflow-hidden rounded-xl border border-slate-200/80 shadow-card md:h-[400px]">
                         <Image
                             src={update.image_url}
                             alt={update.title}
@@ -203,7 +203,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
                 {/* Key change banner */}
                 {update.key_change && (
-                    <div className="mb-6 flex items-start gap-3 rounded-r-lg border-l-4 border-amber-400 bg-amber-50 p-4">
+                    <div className="mb-6 flex items-start gap-3 rounded-xl border border-amber-200/80 border-l-[3px] border-l-amber-500 bg-amber-50/90 p-4 shadow-sm ring-1 ring-slate-900/[0.02]">
                         <FileText className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-600" aria-hidden />
                         <div>
                             <p className="text-xs font-bold text-amber-900 uppercase tracking-widest mb-1">Key Change</p>

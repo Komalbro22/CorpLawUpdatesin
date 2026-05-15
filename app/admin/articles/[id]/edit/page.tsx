@@ -10,6 +10,7 @@ import { smartCleanContent } from '@/lib/html-to-markdown'
 import CategoryBadge from '@/components/CategoryBadge'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import LoadingSkeleton from '@/components/LoadingSkeleton'
+import { useToast } from '@/components/Toast'
 import { Category } from '@/types'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
@@ -18,6 +19,7 @@ const CATEGORIES: Category[] = ['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA']
 
 export default function EditArticle({ params }: { params: { id: string } }) {
     const router = useRouter()
+    const { showToast } = useToast()
     const { id } = params
 
     const [title, setTitle] = useState('')
@@ -207,11 +209,12 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                 const data = await res.json()
                 const imageMarkdown = `\n![image](${data.url})\n`
                 setContent((prev) => prev + imageMarkdown)
+                showToast('Image inserted into article', 'success')
             } else {
-                alert('Image upload failed')
+                showToast('Image upload failed', 'error')
             }
         } catch (err) {
-            alert('Image upload error')
+            showToast('Image upload failed', 'error')
         } finally {
             setUploadingImage(false)
             if (fileInputRef.current) fileInputRef.current.value = ''
@@ -256,16 +259,20 @@ export default function EditArticle({ params }: { params: { id: string } }) {
 
             if (res.ok) {
                 setSuccess(true)
+                showToast('Article saved', 'success')
+                setSaving(false)
                 setTimeout(() => {
                     router.push('/admin/articles')
                 }, 1500)
             } else {
                 setError(data.error || 'Failed to save article')
                 setSaving(false)
+                showToast(data.error || 'Failed to save article', 'error')
             }
         } catch (err) {
             setError('Something went wrong. Please try again.')
             setSaving(false)
+            showToast('Something went wrong. Please try again.', 'error')
         }
     }
 

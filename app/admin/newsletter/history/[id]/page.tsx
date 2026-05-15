@@ -5,12 +5,13 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { ArrowLeft, Download, RefreshCw, Mail, AlertCircle, CheckCircle2, Search, Filter } from 'lucide-react'
+import { useToast } from '@/components/Toast'
 
 export default function CampaignDetails() {
     const { id } = useParams()
-    const router = useRouter()
+    const { showToast } = useToast()
     
     const [data, setData] = useState<any>(null)
     const [loading, setLoading] = useState(true)
@@ -55,13 +56,13 @@ export default function CampaignDetails() {
             const res = await fetch(`/api/admin/newsletter/history/${id}/retry`, { method: 'POST' })
             const d = await res.json()
             if (res.ok) {
-                alert(d.message)
-                fetchDetails() // refresh table
+                showToast(d.message || 'Retry queued', 'success')
+                fetchDetails()
             } else {
-                alert(`Error: ${d.error}`)
+                showToast(d.error || 'Retry failed', 'error')
             }
         } catch (e: any) {
-            alert(`Failed to retry: ${e.message}`)
+            showToast(e.message || 'Failed to retry', 'error')
         } finally {
             setRetrying(false)
         }

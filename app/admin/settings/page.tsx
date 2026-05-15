@@ -13,6 +13,7 @@ import {
   Share2,
   Shield,
 } from 'lucide-react'
+import { useToast } from '@/components/Toast'
 
 interface Setting {
   key: string
@@ -76,6 +77,7 @@ const textareaKeys = [
 ]
 
 export default function SettingsPage() {
+  const { showToast } = useToast()
   const [settings, setSettings] = useState<Record<string, Setting>>({})
   const [values, setValues] = useState<Record<string, string>>({})
   const [saving, setSaving] = useState<Record<string, boolean>>({})
@@ -94,11 +96,18 @@ export default function SettingsPage() {
         { method: 'POST' }
       )
       const data = await res.json()
+      if (!res.ok) {
+        setIndexNowResult(data.error || 'Request failed')
+        showToast(data.error || 'IndexNow request failed', 'error')
+        return
+      }
       setIndexNowResult(
         `Submitted ${data.count} URLs successfully!`
       )
+      showToast('URLs submitted to IndexNow', 'success')
     } catch {
       setIndexNowResult('Failed - check console')
+      showToast('IndexNow submission failed', 'error')
     } finally {
       setIndexNowLoading(false)
     }
@@ -133,9 +142,12 @@ export default function SettingsPage() {
       })
       if (res.ok) {
         setSaved(prev => ({ ...prev, [key]: true }))
+        showToast('Setting saved', 'success')
         setTimeout(() => {
           setSaved(prev => ({ ...prev, [key]: false }))
         }, 2500)
+      } else {
+        showToast('Could not save setting', 'error')
       }
     } finally {
       setSaving(prev => ({ ...prev, [key]: false }))

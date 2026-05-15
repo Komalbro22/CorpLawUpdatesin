@@ -57,7 +57,9 @@ function Toast({ toast }: { toast: ToastMessage }) {
 
     return (
         <div
-            className={`transform transition-all duration-300 ease-out translate-x-0 ${bgColors[toast.type]} text-white rounded-lg shadow-lg px-4 py-3 min-w-[200px] flex items-center justify-between animate-slide-in-right`}
+            role="status"
+            aria-live="polite"
+            className={`transform transition-all duration-300 ease-out translate-x-0 ${bgColors[toast.type]} text-white rounded-lg shadow-lg px-4 py-3 min-w-[200px] flex items-center justify-between motion-safe:animate-slide-in-right`}
         >
             <p className="text-sm font-medium">{toast.message}</p>
         </div>

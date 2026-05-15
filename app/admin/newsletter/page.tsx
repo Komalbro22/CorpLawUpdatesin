@@ -17,6 +17,7 @@ import {
     X,
     XCircle,
 } from 'lucide-react'
+import { useToast } from '@/components/Toast'
 
 const MDEditor = dynamic(
     () => import('@uiw/react-md-editor'),
@@ -33,6 +34,7 @@ interface SendResult {
 }
 
 export default function NewsletterPage() {
+    const { showToast } = useToast()
     const [subject, setSubject] = useState('')
     const [previewText, setPreviewText] = useState('')
     const [body, setBody] = useState('')
@@ -68,10 +70,12 @@ export default function NewsletterPage() {
 
         if (!subject.trim()) {
             setError('Subject line is required')
+            showToast('Subject line is required', 'error')
             return
         }
         if (!body.trim()) {
             setError('Email body is required')
+            showToast('Email body is required', 'error')
             return
         }
 
@@ -98,6 +102,7 @@ export default function NewsletterPage() {
                 if (!specificEmail.trim()) {
                     setError('Specific subscriber email is required')
                     setSending(false)
+                    showToast('Specific subscriber email is required', 'error')
                     return
                 }
                 payload.targetEmails = [specificEmail.trim()]
@@ -123,7 +128,9 @@ export default function NewsletterPage() {
             }
 
         } catch (err: any) {
-            setError(err.message || 'Something went wrong')
+            const msg = err.message || 'Something went wrong'
+            setError(msg)
+            showToast(msg, 'error')
         } finally {
             setTestSending(false)
             setSending(false)

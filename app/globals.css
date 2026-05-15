@@ -139,6 +139,15 @@ h2, h3, h4 {
   animation-delay: var(--delay, 0ms);
 }
 
+/* Toasts */
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s ease-out both;
+}
+
 /* Reading progress glow tip */
 @keyframes progress-glow {
   0%,100% { box-shadow: 2px 0 12px 2px rgba(245,158,11,0.7); }
@@ -158,6 +167,7 @@ h2, h3, h4 {
   .badge-pulse,
   .animate-count-up,
   .animate-slide-in-left,
+  .animate-slide-in-right,
   .progress-tip { animation: none !important; }
   .skeleton-shimmer::after { animation: none; }
 }

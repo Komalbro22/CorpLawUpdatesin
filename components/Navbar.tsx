@@ -77,13 +77,13 @@ export default function Navbar() {
         : 'bg-white/92 backdrop-blur-md border-b border-slate-200/80'
 
     return (
-        <nav className={`sticky top-0 z-50 w-full transition-all duration-300 ${navBg} dark:bg-slate-950/95 dark:border-slate-800`}>
+        <nav className={`sticky top-0 z-50 w-full transition-all duration-300 ${navBg}`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className={`flex justify-between items-center transition-all duration-300 ${navHeight}`}>
 
                     {/* Logo */}
                     <Link href="/" className="flex-shrink-0 flex flex-col justify-center group">
-                        <span className="font-heading text-xl font-bold text-navy leading-tight group-hover:text-navy/90 transition-colors dark:text-white">
+                        <span className="font-heading text-xl font-bold text-navy leading-tight group-hover:text-navy/90 transition-colors">
                             CorpLawUpdates<span className="text-gold group-hover:text-amber-500 transition-colors">.in</span>
                         </span>
                         <span className="hidden sm:block text-[10px] font-semibold text-slate-400 tracking-[0.18em] uppercase mt-0.5">
@@ -100,7 +100,7 @@ export default function Navbar() {
                                 className={`relative inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
                                     isActive(link.href)
                                         ? 'text-amber-600'
-                                        : 'text-slate-600 hover:text-navy hover:bg-slate-50 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800'
+                                        : 'text-slate-600 hover:text-navy hover:bg-slate-50'
                                 }`}
                             >
                                 {link.label}
@@ -137,7 +137,7 @@ export default function Navbar() {
                                 <div
                                     role="menu"
                                     aria-label="Category navigation"
-                                    className="absolute top-full left-0 mt-2 w-60 bg-white/98 backdrop-blur-md rounded-xl shadow-card-hover border border-slate-200/90 py-1.5 z-50 animate-fade-in dark:bg-slate-900 dark:border-slate-800"
+                                    className="absolute top-full left-0 mt-2 w-60 bg-white/98 backdrop-blur-md rounded-xl shadow-card-hover border border-slate-200/90 py-1.5 z-50 animate-fade-in"
                                 >
                                     {categoryItems.map(({ href, label, Icon, color, bg }) => (
                                         <Link
@@ -189,13 +189,13 @@ export default function Navbar() {
 
             {/* Mobile Nav */}
             {isOpen && (
-                <div className="md:hidden border-t border-slate-200 max-h-[80vh] overflow-y-auto bg-white/98 backdrop-blur-md dark:bg-slate-900 dark:border-slate-800">
+                <div className="md:hidden border-t border-slate-200 max-h-[80vh] overflow-y-auto bg-white/98 backdrop-blur-md">
                     <div className="pt-2 pb-4 space-y-0.5 px-3">
                         {links.map((link) => (
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className={`block pl-3 pr-4 py-2.5 text-sm font-medium rounded-lg ${
+                                className={`block pl-3 pr-4 py-3 min-h-[44px] flex items-center text-sm font-medium rounded-lg ${
                                     isActive(link.href)
                                         ? 'bg-amber-50 text-amber-700 border-l-2 border-amber-400'
                                         : 'text-slate-600 hover:bg-slate-50 hover:text-navy'
@@ -212,7 +212,7 @@ export default function Navbar() {
                                     <Link
                                         key={href}
                                         href={href}
-                                        className={`flex items-center gap-2 py-2 px-2 text-sm font-medium hover:bg-slate-50 rounded-lg ${color}`}
+                                        className={`flex min-h-[44px] items-center gap-2 py-2 px-2 text-sm font-medium hover:bg-slate-50 rounded-lg ${color}`}
                                         onClick={() => setIsOpen(false)}
                                     >
                                         <Icon className="w-4 h-4 shrink-0 opacity-80" aria-hidden />

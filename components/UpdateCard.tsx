@@ -56,7 +56,7 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
         <Link
             href={`/updates/${update.slug}`}
             style={{ '--delay': `${animationDelay}ms` } as React.CSSProperties}
-            className={`animate-fade-up group flex h-full flex-col overflow-hidden rounded-lg border border-slate-200/80 border-t-[3px] bg-white shadow-card ${borderColor} transition-all duration-300 ease-spring hover:-translate-y-1 hover:border-slate-300 hover:shadow-card-hover`}
+            className={`animate-fade-up group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200/80 border-t-[3px] bg-white shadow-card ring-1 ring-slate-900/[0.03] ${borderColor} transition-all duration-300 ease-spring motion-safe:hover:-translate-y-1 hover:border-slate-300 hover:shadow-card-hover`}
         >
             {imageUrl && (
                 <div className="relative w-full aspect-video overflow-hidden bg-slate-100 flex-shrink-0">
@@ -65,7 +65,7 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
                         alt={update.title}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                        className="object-cover object-center motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105"
                     />
                 </div>
             )}

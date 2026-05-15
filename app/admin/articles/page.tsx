@@ -9,12 +9,14 @@ import Pagination from '@/components/Pagination'
 import { formatDate } from '@/lib/utils'
 import { Update } from '@/types'
 import { AlertTriangle, Plus, Search } from 'lucide-react'
+import { useToast } from '@/components/Toast'
 
 type ArticleWithCounts = Update & { updated_at: string }
 
 export default function AdminArticles() {
     const router = useRouter()
     const searchParams = useSearchParams()
+    const { showToast } = useToast()
 
     const initialPage = parseInt(searchParams.get('page') || '1', 10)
 
@@ -31,6 +33,7 @@ export default function AdminArticles() {
 
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
     const [deleteConfirm, setDeleteConfirm] = useState<null | string | 'bulk'>(null)
+    const [deleting, setDeleting] = useState(false)
 
     const fetchArticles = useCallback(async () => {
         setLoading(true)
@@ -47,13 +50,16 @@ export default function AdminArticles() {
                 setArticles(data.articles || [])
                 setTotalCount(data.total || 0)
                 setCategoryCounts(data.categoryCounts || {})
+            } else {
+                showToast('Could not load articles', 'error')
             }
         } catch (err) {
             console.error('Error fetching articles:', err)
+            showToast('Could not load articles', 'error')
         } finally {
             setLoading(false)
         }
-    }, [debouncedSearch, categoryFilter, statusFilter, currentPage])
+    }, [debouncedSearch, categoryFilter, statusFilter, currentPage, showToast])
 
     useEffect(() => {
         const timer = setTimeout(() => setDebouncedSearch(search), 300)
@@ -106,36 +112,58 @@ export default function AdminArticles() {
 
     const updateFeatured = async (id: string, currentVal: boolean) => {
         if (!currentVal) {
-            // Confirm optimistic update
             setArticles(prev => prev.map(a => a.id === id ? { ...a, is_featured: true } : a))
         } else {
             setArticles(prev => prev.map(a => a.id === id ? { ...a, is_featured: false } : a))
         }
 
-        await fetch(`/api/admin/articles/${id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ is_featured: !currentVal })
-        })
+        try {
+            const res = await fetch(`/api/admin/articles/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ is_featured: !currentVal })
+            })
+            if (!res.ok) {
+                showToast('Could not update featured flag', 'error')
+            }
+        } catch {
+            showToast('Could not update featured flag', 'error')
+        }
         fetchArticles()
     }
 
     const performDelete = async () => {
         if (!deleteConfirm) return
 
+        setDeleting(true)
         try {
             if (deleteConfirm === 'bulk') {
-                await Promise.all(Array.from(selectedIds).map(id =>
-                    fetch(`/api/admin/articles/${id}`, { method: 'DELETE' })
-                ))
+                const results = await Promise.all(
+                    Array.from(selectedIds).map(id =>
+                        fetch(`/api/admin/articles/${id}`, { method: 'DELETE' }).then(r => r.ok)
+                    )
+                )
+                if (results.some(ok => !ok)) {
+                    showToast('Some articles could not be deleted', 'error')
+                } else {
+                    showToast(`${selectedIds.size} articles deleted`, 'success')
+                }
                 setSelectedIds(new Set())
             } else {
-                await fetch(`/api/admin/articles/${deleteConfirm}`, { method: 'DELETE' })
+                const res = await fetch(`/api/admin/articles/${deleteConfirm}`, { method: 'DELETE' })
+                if (!res.ok) {
+                    showToast('Could not delete article', 'error')
+                } else {
+                    showToast('Article deleted', 'success')
+                }
             }
             setDeleteConfirm(null)
             fetchArticles()
         } catch (err) {
             console.error('Delete failed:', err)
+            showToast('Delete failed', 'error')
+        } finally {
+            setDeleting(false)
         }
     }
 
@@ -149,8 +177,15 @@ export default function AdminArticles() {
     const basePathParams = currentPathParams.toString()
     const paginationBasePath = `/admin/articles${basePathParams ? '?' + basePathParams : ''}`
 
+    const listStatusMessage = loading
+        ? 'Loading articles.'
+        : `Showing ${articles.length} of ${totalCount} articles.`
+
     return (
         <div className="space-y-6 content-fade-in">
+            <p className="sr-only" aria-live="polite" aria-atomic="true">
+                {listStatusMessage}
+            </p>
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
                 <h1 className="font-heading text-2xl font-bold text-navy">All articles</h1>
                 <Link
@@ -231,7 +266,7 @@ export default function AdminArticles() {
             <div className="bg-white rounded-xl shadow-card border border-slate-200/80 overflow-hidden ring-1 ring-slate-900/[0.02]">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm whitespace-nowrap">
-                        <thead className="bg-slate-50/95 text-slate-600 border-b border-slate-100">
+                        <thead className="sticky top-0 z-10 bg-slate-50/95 text-slate-600 border-b border-slate-100 backdrop-blur-sm shadow-sm">
                             <tr>
                                 <th className="px-6 py-4 w-12">
                                     <input 
@@ -315,13 +350,15 @@ export default function AdminArticles() {
                                                     onChange={() => updateFeatured(article.id, !!article.is_featured)}
                                                 />
                                             </td>
-                                            <td className="px-6 py-4 text-right space-x-3">
-                                                <Link href={`/admin/articles/${article.id}/edit`} className="text-slate-400 hover:text-navy transition-colors">
-                                                    Edit
-                                                </Link>
-                                                <button onClick={() => setDeleteConfirm(article.id)} className="text-slate-400 hover:text-red-600 transition-colors">
-                                                    Delete
-                                                </button>
+                                            <td className="px-6 py-4 text-right">
+                                                <div className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 min-h-[44px]">
+                                                    <Link href={`/admin/articles/${article.id}/edit`} className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center text-sm font-medium text-slate-500 hover:text-navy transition-colors px-2">
+                                                        Edit
+                                                    </Link>
+                                                    <button type="button" onClick={() => setDeleteConfirm(article.id)} className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center text-sm font-medium text-slate-500 hover:text-red-600 transition-colors px-2">
+                                                        Delete
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                     )
@@ -367,16 +404,18 @@ export default function AdminArticles() {
                             <button
                                 type="button"
                                 onClick={() => setDeleteConfirm(null)}
-                                className="px-4 py-2.5 border border-slate-200 rounded-lg text-slate-700 font-medium hover:bg-slate-50 transition-colors duration-200"
+                                disabled={deleting}
+                                className="px-4 py-2.5 border border-slate-200 rounded-lg text-slate-700 font-medium hover:bg-slate-50 transition-colors duration-200 disabled:opacity-50"
                             >
                                 Cancel
                             </button>
                             <button
                                 type="button"
                                 onClick={performDelete}
-                                className="px-4 py-2.5 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors duration-200 shadow-sm"
+                                disabled={deleting}
+                                className="px-4 py-2.5 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors duration-200 shadow-sm disabled:opacity-50 disabled:pointer-events-none"
                             >
-                                Delete
+                                {deleting ? 'Deleting…' : 'Delete'}
                             </button>
                         </div>
                     </div>

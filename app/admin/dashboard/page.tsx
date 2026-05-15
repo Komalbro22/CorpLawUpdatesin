@@ -107,7 +107,7 @@ export default async function AdminDashboard() {
                     <div className="bg-white rounded-xl shadow-card border border-slate-200/80 overflow-hidden">
                         <div className="overflow-x-auto">
                         <table className="w-full min-w-[520px] text-left text-sm">
-                            <thead className="bg-slate-50 text-slate-500">
+                            <thead className="sticky top-0 z-10 bg-slate-50 text-slate-500 shadow-sm backdrop-blur-sm">
                                 <tr>
                                     <th className="px-6 py-4 font-medium">Title</th>
                                     <th className="px-6 py-4 font-medium hidden sm:table-cell">Category</th>

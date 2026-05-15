@@ -97,14 +97,14 @@ export default async function HomePage() {
             <div className="mt-10 flex flex-col gap-4 sm:flex-row justify-center">
               <Link
                 href="/updates"
-                className="group inline-flex items-center justify-center gap-2 rounded-lg bg-gold px-8 py-4 text-sm font-bold text-navy shadow-lg shadow-amber-900/20 transition-all hover:bg-amber-400 hover:scale-105"
+                className="group inline-flex items-center justify-center gap-2 rounded-lg bg-gold px-8 py-4 text-sm font-bold text-navy shadow-lg shadow-amber-900/20 transition-colors hover:bg-amber-400 motion-safe:hover:scale-105"
               >
                 Browse updates
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden />
               </Link>
               <Link
                 href="/newsletter"
-                className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/15 bg-white/[0.06] px-8 py-4 text-sm font-bold text-white transition-all hover:bg-white/[0.10] hover:scale-105"
+                className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/15 bg-white/[0.06] px-8 py-4 text-sm font-bold text-white transition-colors hover:bg-white/[0.10] motion-safe:hover:scale-105"
               >
                 Subscribe free
               </Link>
@@ -164,9 +164,9 @@ export default async function HomePage() {
                 key={id}
                 href={`/category/${id.toLowerCase()}`}
                 style={{ '--delay': `${i * 50}ms` } as CSSProperties}
-                className={`animate-fade-up group flex min-h-28 flex-col items-center justify-center gap-2 rounded-lg bg-gradient-to-br ${bg} p-4 text-center text-white shadow-md ${ring} ring-1 transition-all duration-300 ease-spring hover:-translate-y-1 hover:shadow-lg`}
+                className={`animate-fade-up group flex min-h-28 flex-col items-center justify-center gap-2 rounded-xl bg-gradient-to-br ${bg} p-4 text-center text-white shadow-md ${ring} ring-1 transition-all duration-300 ease-spring motion-safe:hover:-translate-y-1 hover:shadow-lg`}
               >
-                <Icon className="w-6 h-6 opacity-90 group-hover:scale-110 transition-transform duration-200" aria-hidden />
+                <Icon className="w-6 h-6 opacity-90 motion-safe:transition-transform motion-safe:duration-200 motion-safe:group-hover:scale-110" aria-hidden />
                 <span className="font-bold text-base">{label}</span>
                 <span className="text-[10px] text-white/75 leading-tight hidden sm:block">{desc}</span>
               </Link>
