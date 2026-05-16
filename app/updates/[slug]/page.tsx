@@ -153,13 +153,14 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
         
         // 2. Find all markers (Q1, Q2, Question 1, etc.)
         const markerRegex = /(?:\r?\n|^)\s*(?:\*\*|)?(?:Q|Question)\s*\d+[:.\s]+/gi
-        const markers = Array.from(sanitized.matchAll(markerRegex))
+        const markers = Array.from(sanitized.matchAll(markerRegex)) as any[]
         
         const cleanText = (text: string) => text.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
 
-        for (let i = 0; i < markers.length; i++) {
-            const start = markers[i].index! + markers[i][0].length
-            const end = (i + 1 < markers.length) ? markers[i+1].index : sanitized.length
+        markers.forEach((marker, i) => {
+            const start = (marker.index || 0) + marker[0].length
+            const nextMarker = markers[i + 1]
+            const end = nextMarker ? (nextMarker.index || sanitized.length) : sanitized.length
             const block = sanitized.substring(start, end).trim()
             
             // 3. Smart split: Question ends at first '?' or double asterisk '**' or first newline
@@ -182,7 +183,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
             if (q && a) {
                 faqs.push({ question: q, answer: a })
             }
-        }
+        })
     }
 
     return (
