@@ -14,6 +14,7 @@ import ErrorBoundary from '@/components/ErrorBoundary'
 import TableOfContents from '@/components/TableOfContents'
 import UpdateCard from '@/components/UpdateCard'
 import { calculateReadingTime, formatDate, BASE_URL } from '@/lib/utils'
+import { linkGlossaryTerms } from '@/lib/glossaryLinker'
 import ViewCounter from '@/components/ViewCounter'
 import ArticleActions from '@/components/ArticleActions'
 import ReadingProgress from '@/components/ReadingProgress'
@@ -131,6 +132,31 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
         .limit(3)
 
     const related = relatedRes || []
+
+    // Fetch glossary terms for auto-linking (Cached for 24 hours)
+    let glossaryTerms = []
+    try {
+        const glossaryRes = await fetch(
+            `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/glossary?select=term,slug&is_verified=eq.true`,
+            {
+                headers: {
+                    apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+                    Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!}`
+                },
+                next: { revalidate: 86400 }
+            }
+        )
+        if (glossaryRes.ok) {
+            glossaryTerms = await glossaryRes.json()
+        }
+    } catch (e) {
+        console.error('Failed to fetch glossary terms for linking:', e)
+    }
+
+    // Apply auto-linking to the content
+    if (update.content && glossaryTerms.length > 0) {
+        update.content = linkGlossaryTerms(update.content, glossaryTerms)
+    }
 
     const readTime = calculateReadingTime(update.content || '')
     const formattedDate = formatDate(update.published_at)

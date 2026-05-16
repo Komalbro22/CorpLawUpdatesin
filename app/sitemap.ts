@@ -1,0 +1,85 @@
+import { MetadataRoute } from 'next'
+import { supabaseAdmin } from '@/lib/supabase-server'
+
+export const revalidate = 3600
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const BASE_URL = 'https://www.corplawupdates.in'
+
+  // Fetch published articles
+  const { data: articles } = await supabaseAdmin
+    .from('updates')
+    .select('slug, title, content, published_at, updated_at, category')
+    .not('published_at', 'is', null)
+    .lte('published_at', new Date().toISOString())
+    .order('published_at', { ascending: false })
+
+  // Fetch calendar events
+  const { data: compliance_entries } = await supabaseAdmin
+    .from('compliance_entries')
+    .select('updated_at')
+    .eq('is_active', true)
+    .order('updated_at', { ascending: false })
+    .limit(1)
+
+  // Fetch glossary terms
+  const { data: glossaryTerms } = await supabaseAdmin
+    .from('glossary')
+    .select('slug, created_at')
+    .eq('is_verified', true)
+
+  const latestCalendarDate = compliance_entries?.[0]?.updated_at 
+    ? new Date(compliance_entries[0].updated_at)
+    : new Date('2026-05-14')
+
+  const categoryDates: Record<string, Date> = {}
+  let latestArticleDate = new Date('2026-05-14')
+  
+  if (articles && articles.length > 0) {
+    latestArticleDate = new Date(articles[0].published_at!)
+    articles.forEach(article => {
+      const artDate = new Date(article.updated_at || article.published_at!)
+      if (article.category) {
+        const cat = article.category.toLowerCase()
+        if (!categoryDates[cat] || artDate > categoryDates[cat]) {
+          categoryDates[cat] = artDate
+        }
+      }
+    })
+  }
+
+  const staticPages = [
+    { url: BASE_URL, lastModified: latestArticleDate, changeFrequency: 'daily' as const, priority: 1.0 },
+    { url: `${BASE_URL}/updates`, lastModified: latestArticleDate, changeFrequency: 'daily' as const, priority: 0.8 },
+    { url: `${BASE_URL}/calendar`, lastModified: latestCalendarDate, changeFrequency: 'weekly' as const, priority: 0.8 },
+    { url: `${BASE_URL}/glossary`, changeFrequency: 'weekly' as const, priority: 0.7 },
+    { url: `${BASE_URL}/newsletter`, changeFrequency: 'yearly' as const, priority: 0.5 },
+    { url: `${BASE_URL}/about`, changeFrequency: 'yearly' as const, priority: 0.3 },
+    { url: `${BASE_URL}/contact`, changeFrequency: 'yearly' as const, priority: 0.3 },
+    { url: `${BASE_URL}/privacy-policy`, changeFrequency: 'yearly' as const, priority: 0.3 },
+    { url: `${BASE_URL}/terms`, changeFrequency: 'yearly' as const, priority: 0.3 },
+  ]
+
+  const categoryPages = Object.entries(categoryDates).map(([cat, date]) => ({
+    url: `${BASE_URL}/category/${cat}`,
+    lastModified: date,
+    changeFrequency: 'daily' as const,
+    priority: 0.8,
+  }))
+
+  const articlePages = (articles || []).map(article => ({
+    url: `${BASE_URL}/updates/${article.slug}`,
+    lastModified: new Date(article.updated_at || article.published_at!),
+    changeFrequency: 'weekly' as const,
+    priority: 0.6,
+  }))
+
+  const glossaryPages = (glossaryTerms || []).map(term => ({
+    url: `${BASE_URL}/glossary/${term.slug}`,
+    lastModified: new Date(term.created_at),
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }))
+
+  return [...staticPages, ...categoryPages, ...articlePages, ...glossaryPages]
+}

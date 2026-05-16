@@ -19,6 +19,7 @@ import {
     Settings,
     Users,
     X,
+    BookOpen,
 } from 'lucide-react'
 
 interface SidebarLink {
@@ -39,6 +40,7 @@ const sections: SidebarSection[] = [
             { href: '/admin/dashboard',      icon: LayoutDashboard, label: 'Dashboard'    },
             { href: '/admin/articles/new',   icon: PenSquare,       label: 'New Article'  },
             { href: '/admin/articles',       icon: FileText,        label: 'All Articles' },
+            { href: '/admin/glossary',       icon: BookOpen,        label: 'Glossary'     },
         ],
     },
     {
