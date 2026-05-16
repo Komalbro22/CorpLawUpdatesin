@@ -49,44 +49,6 @@ const breadcrumbSchema = {
   ],
 }
 
-const faqSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    {
-      '@type': 'Question',
-      name: `What are the key MCA compliance deadlines for ${CURRENT_YEAR}?`,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: `Key MCA compliance deadlines for ${CURRENT_YEAR} include: MGT-7 (Annual Return) due 60 days after AGM; AOC-4 (Financial Statements) due 30 days after AGM; DIR-3 KYC Web due 30 June; MSME-1 due 30 April and 31 October; DPT-3 due 30 June. All dates are indicative and subject to MCA extensions.`,
-      },
-    },
-    {
-      '@type': 'Question',
-      name: `What is the due date for MGT-7 annual return in ${CURRENT_YEAR}?`,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: `The MGT-7 Annual Return is due within 60 days from the date of Annual General Meeting (AGM). For most companies with AGM in September, this means the MGT-7 is due by 28 November. Late filing attracts additional fees under the Companies Act, 2013.`,
-      },
-    },
-    {
-      '@type': 'Question',
-      name: `What are the SEBI LODR compliance deadlines for listed companies ${CURRENT_YEAR}?`,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: `Key SEBI LODR compliance deadlines for listed companies include quarterly financial results (45 days from quarter end), annual report filing, corporate governance report (within 21 days of AGM), shareholding pattern (21 days from quarter end), and reconciliation of share capital audit (30 days from quarter end).`,
-      },
-    },
-    {
-      '@type': 'Question',
-      name: `What is the DIR-3 KYC due date for directors in ${CURRENT_YEAR}?`,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: `DIR-3 KYC Web is due by 30 June each year for all directors who have a DIN. From FY 2025-26, the MCA has changed the DIR-3 KYC filing cycle to triennial (every 3 years) for certain categories. Non-compliance results in deactivation of DIN and a ₹5,000 penalty for late filing.`,
-      },
-    },
-  ],
-}
 
 export default async function CalendarPage() {
   const { data: rawEntries } = await supabase
@@ -139,7 +101,6 @@ export default async function CalendarPage() {
 
       {/* JSON-LD Schemas */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
     </>
   )
 }

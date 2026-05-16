@@ -573,14 +573,21 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
         <JsonLd data={{
           '@context': 'https://schema.org',
           '@type': 'FAQPage',
-          mainEntity: entries.slice(0, 20).map(e => ({
-            '@type': 'Question',
-            name: `What is the due date for ${e.form_name} in 2026?`,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: `The due date for ${e.compliance_title} (${e.form_name}) in 2026 is ${e.due_date}. This compliance is applicable to ${e.applicable_to}. ${e.penalty ? `Non-compliance may attract a penalty of ${e.penalty}.` : ''}`
+          mainEntity: entries.slice(0, 15).map(e => {
+            let answerText = `The due date for ${e.compliance_title} (${e.form_name}) in 2026 is ${e.due_date}.`
+            if (e.regulation_reference) answerText += ` This compliance is required under ${e.regulation_reference}.`
+            if (e.applicable_to) answerText += ` It is applicable to ${e.applicable_to}.`
+            if (e.penalty) answerText += ` Failure to comply may result in a penalty of ${e.penalty}.`
+            
+            return {
+              '@type': 'Question',
+              name: `What is the due date for ${e.form_name} in 2026?`,
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: answerText
+              }
             }
-          })),
+          }),
         }} />
 
       </div>
