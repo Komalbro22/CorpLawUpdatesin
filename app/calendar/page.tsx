@@ -50,6 +50,30 @@ const breadcrumbSchema = {
 }
 
 
+// FAQ Schema for Calendar
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": `What are the key MCA filing due dates for ${CURRENT_YEAR}?`,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Key MCA due dates include MGT-7 (Annual Return), AOC-4 (Financial Statements), DIR-3 KYC (Director Identification Number), and DPT-3 (Return of Deposits). Most annual filings are due within 30-60 days of the AGM."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How to track SEBI LODR compliance deadlines?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "SEBI LODR compliance involves quarterly, half-yearly, and annual submissions including Shareholding Patterns, Corporate Governance Reports, and Financial Results, typically due within 21-45 days of the quarter end."
+      }
+    }
+  ]
+}
+
 export default async function CalendarPage() {
   const { data: rawEntries } = await supabase
     .from('compliance_entries')
@@ -101,6 +125,7 @@ export default async function CalendarPage() {
 
       {/* JSON-LD Schemas */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
     </>
   )
 }

@@ -134,6 +134,14 @@ export async function generateMetadata(
     return {
         title,
         description,
+        keywords: [
+            `${categoryName} update today`,
+            `${categoryName} circular today`,
+            `latest ${categoryName} notifications India`,
+            `${categoryName} compliance updates`,
+            `${CATEGORY_FULL_NAMES[cat]} circulars`,
+            `MCA SEBI RBI updates for CS CA`,
+        ],
         alternates: { canonical: url },
         other: {
             'revisit-after': '1 day',
