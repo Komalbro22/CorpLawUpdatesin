@@ -157,7 +157,7 @@ export default async function RootLayout({
           </>
         )}
       </head>
-      <body className={`${lora.variable} ${sourceSans.variable} font-body bg-slate-50 text-navy antialiased min-h-screen flex flex-col selection:bg-amber-200/50 selection:text-navy`}>
+      <body className={`${lora.variable} ${sourceSans.variable} font-body bg-slate-50 text-navy antialiased min-h-screen flex flex-col selection:bg-amber-200/50 selection:text-navy break-words`}>
         <ToastProvider>
           <a
             href="#main-content"
