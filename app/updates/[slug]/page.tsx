@@ -150,7 +150,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
     if (update.content) {
         // Clean non-breaking spaces and common artifacts before parsing to ensure regex matches
         const sanitized = update.content.replace(/&nbsp;/g, ' ').replace(/\u00A0/g, ' ')
-        const faqRegex = /(?:\*\*|)?Q\d+[:.]?\s*(.*?)(?:\*\*|)?(?:\r?\n)+([\s\S]*?)(?=(?:\r?\n\s*(?:\*\*|)?Q\d+)|$)/gi
+        const faqRegex = /(?:\*\*|)?(?:Q|Question)\s*\d+[:.\s]+(.*?)(?:\*\*|)?(?:\r?\n)+([\s\S]*?)(?=(?:\r?\n\s*(?:\*\*|)?(?:Q|Question)\s*\d+)|$)/gi
         let match
         const cleanText = (text: string) => text.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
         while ((match = faqRegex.exec(sanitized)) !== null) {
