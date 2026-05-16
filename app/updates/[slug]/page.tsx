@@ -148,14 +148,37 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
     // Auto-extract FAQs for Search Console Rich Results
     const faqs: { question: string; answer: string }[] = []
     if (update.content) {
-        // Clean non-breaking spaces and common artifacts before parsing to ensure regex matches
+        // 1. Sanitize common artifacts
         const sanitized = update.content.replace(/&nbsp;/g, ' ').replace(/\u00A0/g, ' ')
-        const faqRegex = /(?:\*\*|)?(?:Q|Question)\s*\d+[:.\s]+(.*?)(?:\*\*|)?(?:\r?\n)+([\s\S]*?)(?=(?:\r?\n\s*(?:\*\*|)?(?:Q|Question)\s*\d+)|$)/gi
-        let match
+        
+        // 2. Find all markers (Q1, Q2, Question 1, etc.)
+        const markerRegex = /(?:\r?\n|^)\s*(?:\*\*|)?(?:Q|Question)\s*\d+[:.\s]+/gi
+        const markers = Array.from(sanitized.matchAll(markerRegex))
+        
         const cleanText = (text: string) => text.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
-        while ((match = faqRegex.exec(sanitized)) !== null) {
-            const q = cleanText(match[1])
-            const a = cleanText(match[2])
+
+        for (let i = 0; i < markers.length; i++) {
+            const start = markers[i].index! + markers[i][0].length
+            const end = (i + 1 < markers.length) ? markers[i+1].index : sanitized.length
+            const block = sanitized.substring(start, end).trim()
+            
+            // 3. Smart split: Question ends at first '?' or double asterisk '**' or first newline
+            let qRaw = ''
+            let aRaw = ''
+            
+            const qEndMatch = block.match(/^(.*?(\?|\*\*))(?:\s+|$)([\s\S]*)$/)
+            if (qEndMatch) {
+                qRaw = qEndMatch[1]
+                aRaw = qEndMatch[3]
+            } else {
+                const lines = block.split(/\r?\n/)
+                qRaw = lines[0]
+                aRaw = lines.slice(1).join(' ')
+            }
+
+            const q = cleanText(qRaw)
+            const a = cleanText(aRaw)
+            
             if (q && a) {
                 faqs.push({ question: q, answer: a })
             }
