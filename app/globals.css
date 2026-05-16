@@ -282,6 +282,18 @@ h2, h3, h4 {
   min-width: 100px;
 }
 
+/* Allow custom flex/grid containers in articles to scroll horizontally on mobile */
+.article-content div[style*="display: flex"],
+.article-content div[style*="display:flex"],
+.article-content div[style*="display: grid"],
+.article-content div[style*="display:grid"],
+.article-content .flex,
+.article-content .grid {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* ============================================================
    DARK BOX FIXES IN ARTICLES
    ============================================================ */
