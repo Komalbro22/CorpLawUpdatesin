@@ -145,6 +145,23 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
     const articleUrl = `https://www.corplawupdates.in/updates/${update.slug}`
 
+    // Auto-extract FAQs for Search Console Rich Results
+    const faqs: { question: string; answer: string }[] = []
+    if (update.content) {
+        // Clean non-breaking spaces and common artifacts before parsing to ensure regex matches
+        const sanitized = update.content.replace(/&nbsp;/g, ' ').replace(/\u00A0/g, ' ')
+        const faqRegex = /(?:\*\*|)?Q\d+[:.]?\s*(.*?)(?:\*\*|)?(?:\r?\n)+([\s\S]*?)(?=(?:\r?\n\s*(?:\*\*|)?Q\d+)|$)/gi
+        let match
+        const cleanText = (text: string) => text.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
+        while ((match = faqRegex.exec(sanitized)) !== null) {
+            const q = cleanText(match[1])
+            const a = cleanText(match[2])
+            if (q && a) {
+                faqs.push({ question: q, answer: a })
+            }
+        }
+    }
+
     return (
         <article
           id="article-root"
@@ -431,22 +448,47 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
               ...(update.source_url ? { citation: { '@type': 'CreativeWork', name: update.source_name || 'Official Source', url: update.source_url } } : {}),
               ...(update.effective_date ? { temporal: update.effective_date } : {}),
             }} />
-            {/* Key changes as HowTo steps for AI indexing */}
-            {update.key_changes && Array.isArray(update.key_changes) && update.key_changes.length > 0 && (
+            {/* Key changes as ItemList for AI indexing */}
+            {(update.key_change || (update.key_changes && update.key_changes.length > 0)) && (
               <JsonLd data={{
                 '@context': 'https://schema.org',
                 '@type': 'ItemList',
                 name: `Key Changes — ${update.title}`,
                 description: `Key regulatory changes from: ${update.title}`,
-                numberOfItems: update.key_changes.length,
-                itemListElement: update.key_changes.map((kc: string, i: number) => ({
-                  '@type': 'ListItem',
-                  position: i + 1,
-                  name: kc,
+                numberOfItems: (update.key_change ? 1 : 0) + (update.key_changes?.length || 0),
+                itemListElement: [
+                  ...(update.key_change ? [{
+                    '@type': 'ListItem',
+                    position: 1,
+                    name: update.key_change
+                  }] : []),
+                  ...(update.key_changes?.map((kc: string, i: number) => ({
+                    '@type': 'ListItem',
+                    position: (update.key_change ? 2 : 1) + i,
+                    name: kc,
+                  })) || [])
+                ],
+              }} />
+            )}
+
+            {/* 10. FAQ SCHEMA — for Google Search Console Rich Results */}
+            {faqs.length > 0 && (
+              <JsonLd data={{
+                '@context': 'https://schema.org',
+                '@type': 'FAQPage',
+                mainEntity: faqs.map(f => ({
+                  '@type': 'Question',
+                  name: f.question,
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: f.answer,
+                  },
                 })),
               }} />
             )}
         </article>
+
+
 
     )
 }
