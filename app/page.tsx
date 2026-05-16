@@ -22,7 +22,7 @@ export const revalidate = 1800
 
 export const metadata: Metadata = {
   title: 'Corporate Law Updates India (2026) – SEBI, RBI, MCA Notifications & Circulars',
-  description: 'Get the latest corporate law updates in India including SEBI, RBI, MCA, NCLT, IBC and FEMA. Simplified for Company Secretaries, lawyers and students.',
+  description: 'Get the latest corporate law updates in India including SEBI, RBI, MCA, NCLT, IBC and FEMA. Simplified for Company Secretaries, Chartered Accountants, Cost Accountants (CMA), CS/CA/CMA students, legal enthusiasts and compliance professionals.',
   alternates: { canonical: 'https://www.corplawupdates.in' },
   openGraph: {
     title: 'Corporate Law Updates India (2026) – SEBI, RBI, MCA Notifications & Circulars',
@@ -89,7 +89,7 @@ export default async function HomePage() {
               Corporate Law Updates
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-slate-300 md:text-lg text-balance">
-              CorpLawUpdates.in provides the latest corporate law updates including SEBI regulations, RBI notifications, MCA circulars, and NCLT judgments.
+              CorpLawUpdates.in provides the latest corporate law updates including SEBI regulations, RBI notifications, MCA circulars, and NCLT judgments — simplified for Company Secretaries (CS), Chartered Accountants (CA), Cost Accountants (CMA), law students, legal enthusiasts, and compliance professionals.
             </p>
             <p className="mt-4 text-sm text-slate-400 font-medium italic">
               Updated daily with the latest corporate law updates.

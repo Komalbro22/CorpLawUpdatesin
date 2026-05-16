@@ -63,7 +63,7 @@ const config: Config = {
         },
       },
       animation: {
-        'fade-up':       'fade-up 0.45s cubic-bezier(0.22, 0.68, 0, 1.2) both',
+        'fade-up':       'fade-up 0.4s ease-out both',
         'fade-in':       'fade-in 0.3s ease-out both',
         'slide-in-left': 'slide-in-left 0.3s cubic-bezier(0.22, 0.68, 0, 1.2) both',
         'pulse-soft':    'pulse-soft 2s ease-in-out infinite',

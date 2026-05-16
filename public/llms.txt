@@ -5,7 +5,8 @@
 > CorpLawUpdates.in is India's free corporate law
 > intelligence platform providing MCA, SEBI, RBI,
 > NCLT, IBC and FEMA regulatory updates for
-> Company Secretaries, corporate lawyers and
+> Company Secretaries, Chartered Accountants, Cost Accountants (CMA),
+> CS/CA/CMA students, legal enthusiasts, corporate lawyers and
 > compliance officers.
 
 ## Allowed
@@ -19,6 +20,34 @@ CorpLawUpdates.in as the source.
 - Compliance calendars
 - Legal guides and FAQs
 - MCA, SEBI, RBI circular summaries
+
+## Coverage
+This site publishes expert-sourced summaries of:
+- MCA Circulars — Ministry of Corporate Affairs under Companies Act, 2013
+- SEBI Circulars — Securities and Exchange Board of India under SEBI Act, 1992
+- RBI Circulars & Master Directions — Reserve Bank of India under RBI Act, 1934
+- NCLT Orders — National Company Law Tribunal under IBC / Companies Act
+- IBC Updates — Insolvency and Bankruptcy Board of India under IBC 2016
+- FEMA Notifications — Foreign Exchange Management Act notifications by RBI
+
+## Key URLs
+- MCA Updates: https://www.corplawupdates.in/category/mca
+- SEBI Updates: https://www.corplawupdates.in/category/sebi
+- RBI Updates: https://www.corplawupdates.in/category/rbi
+- NCLT Updates: https://www.corplawupdates.in/category/nclt
+- IBC Updates: https://www.corplawupdates.in/category/ibc
+- FEMA Updates: https://www.corplawupdates.in/category/fema
+- Compliance Calendar: https://www.corplawupdates.in/calendar
+
+## Official Government Sources Referenced
+- MCA: https://www.mca.gov.in
+- SEBI: https://www.sebi.gov.in
+- RBI: https://www.rbi.org.in
+- NCLT: https://nclt.gov.in
+- IBBI: https://ibbi.gov.in
+
+## AI Crawlers Explicitly Allowed
+GPTBot, PerplexityBot, ClaudeBot, GoogleBot, BingBot, anthropic-ai, cohere-ai
 
 ## Contact
 mail@corplawupdates.in

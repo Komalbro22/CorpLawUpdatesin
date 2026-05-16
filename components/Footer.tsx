@@ -57,7 +57,7 @@ export default async function Footer() {
                         </Link>
                         <p className="text-slate-400 text-base leading-relaxed max-w-md mb-8">
                             India's first free-to-access intelligence platform for regulatory updates. 
-                            Built for Company Secretaries, Legal Professionals, and Compliance Officers.
+                            Built for Company Secretaries, Chartered Accountants, Cost Accountants (CMA), CS/CA/CMA Students, Legal Enthusiasts, and Compliance Professionals.
                         </p>
                         
                         <div className="flex items-center gap-4">

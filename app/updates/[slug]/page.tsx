@@ -399,12 +399,13 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                 </div>
             </div>
 
-            {/* 8. ARTICLE JSON-LD */}
+            {/* 8. ARTICLE JSON-LD — enriched with summary, key changes, source */}
             <JsonLd data={{
               '@context': 'https://schema.org',
               '@type': 'NewsArticle',
               headline: update.title,
               description: update.summary,
+              abstract: update.summary,
               url: articleUrl,
               datePublished: update.published_at,
               dateModified: update.updated_at || update.published_at,
@@ -417,10 +418,35 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
               },
               mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
               articleSection: update.category,
-              keywords: update.tags?.join(', ') || '',
+              keywords: [
+                ...(update.tags || []),
+                update.category,
+                `${update.category} circular`,
+                `${update.category} notification`,
+                'India corporate law',
+              ].join(', '),
               inLanguage: 'en-IN',
               isAccessibleForFree: true,
+              ...(update.image_url ? { image: { '@type': 'ImageObject', url: update.image_url } } : {}),
+              ...(update.source_url ? { citation: { '@type': 'CreativeWork', name: update.source_name || 'Official Source', url: update.source_url } } : {}),
+              ...(update.effective_date ? { temporal: update.effective_date } : {}),
             }} />
+            {/* Key changes as HowTo steps for AI indexing */}
+            {update.key_changes && Array.isArray(update.key_changes) && update.key_changes.length > 0 && (
+              <JsonLd data={{
+                '@context': 'https://schema.org',
+                '@type': 'ItemList',
+                name: `Key Changes — ${update.title}`,
+                description: `Key regulatory changes from: ${update.title}`,
+                numberOfItems: update.key_changes.length,
+                itemListElement: update.key_changes.map((kc: string, i: number) => ({
+                  '@type': 'ListItem',
+                  position: i + 1,
+                  name: kc,
+                })),
+              }} />
+            )}
         </article>
+
     )
 }

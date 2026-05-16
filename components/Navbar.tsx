@@ -77,9 +77,9 @@ export default function Navbar() {
         : 'bg-white/92 backdrop-blur-md border-b border-slate-200/80'
 
     return (
-        <nav className={`sticky top-0 z-50 w-full transition-all duration-300 ${navBg}`}>
+        <nav className={`sticky top-0 z-50 w-full transition-[background-color,backdrop-filter,box-shadow,border-color] duration-300 ease-in-out ${navBg}`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className={`flex justify-between items-center transition-all duration-300 ${navHeight}`}>
+                <div className={`flex justify-between items-center transition-[height] duration-300 ease-in-out ${navHeight}`}>
 
                     {/* Logo */}
                     <Link href="/" className="flex-shrink-0 flex flex-col justify-center group">
