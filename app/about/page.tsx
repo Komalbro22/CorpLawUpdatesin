@@ -188,6 +188,34 @@ export default async function AboutPage() {
                     Always consult a qualified legal professional for advice specific to your situation.
                 </p>
             </section>
+
+            {/* Authority & Organization Schema */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        '@context': 'https://schema.org',
+                        '@type': 'Organization',
+                        name: 'CorpLawUpdates.in',
+                        url: 'https://www.corplawupdates.in',
+                        logo: 'https://www.corplawupdates.in/icon.png',
+                        description: 'India\'s free corporate law intelligence platform providing MCA, SEBI, RBI and legal updates.',
+                        email: 'mail@corplawupdates.in',
+                        sameAs: [
+                            linkedinUrl,
+                            twitterUrl,
+                            instagramUrl,
+                            whatsappUrl,
+                        ].filter(Boolean),
+                        contactPoint: {
+                            '@type': 'ContactPoint',
+                            email: 'mail@corplawupdates.in',
+                            contactType: 'Customer Support',
+                            availableLanguage: 'English',
+                        },
+                    }),
+                }}
+            />
         </div>
     )
 }
