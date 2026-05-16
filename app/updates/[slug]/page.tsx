@@ -148,36 +148,42 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
     // Auto-extract FAQs for Search Console Rich Results
     const faqs: { question: string; answer: string }[] = []
     if (update.content) {
-        // 1. Sanitize common artifacts
-        const sanitized = update.content.replace(/&nbsp;/g, ' ').replace(/\u00A0/g, ' ')
-        
+        // 1. Convert HTML rich text to plain text, preserving paragraph breaks
+        const plainText = update.content
+            .replace(/<br\s*\/?>/gi, '\n')
+            .replace(/<\/p>|<\/div>|<\/li>|<\/h[1-6]>/gi, '\n')
+            .replace(/<[^>]*>/g, '') // Remove all other HTML tags
+            .replace(/&nbsp;/g, ' ')
+            .replace(/\u00A0/g, ' ');
+            
         // 2. Find all markers (Q1, Q2, Question 1, etc.)
-        const markerRegex = /(?:\r?\n|^)\s*(?:\*\*|)?(?:Q|Question)\s*\d+[:.\s]+/gi
-        const markers = Array.from(sanitized.matchAll(markerRegex)) as any[]
+        const markerRegex = /(?:\r?\n|^)\s*((?:Q|Question)\s*\d+[:.\s]+)/gi
+        const markers = Array.from(plainText.matchAll(markerRegex)) as any[]
         
-        const cleanText = (text: string) => text.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
+        const cleanText = (text: string) => text ? text.replace(/\s+/g, ' ').trim() : ''
 
         markers.forEach((marker, i) => {
             const start = (marker.index || 0) + marker[0].length
             const nextMarker = markers[i + 1]
-            const end = nextMarker ? (nextMarker.index || sanitized.length) : sanitized.length
-            const block = sanitized.substring(start, end).trim()
+            const end = nextMarker ? (nextMarker.index || plainText.length) : plainText.length
+            const block = plainText.substring(start, end).trim()
             
-            // 3. Smart split: Question ends at first '?' or double asterisk '**' or first newline
+            // 3. Smart split: Question ends at first '?' or first newline
             let qRaw = ''
             let aRaw = ''
             
-            const qEndMatch = block.match(/^(.*?(\?|\*\*))(?:\s+|$)([\s\S]*)$/)
+            const qEndMatch = block.match(/^(.*?\?)(?:\s+|$)([\s\S]*)$/)
             if (qEndMatch) {
                 qRaw = qEndMatch[1]
-                aRaw = qEndMatch[3]
+                aRaw = qEndMatch[2]
             } else {
                 const lines = block.split(/\r?\n/)
                 qRaw = lines[0]
                 aRaw = lines.slice(1).join(' ')
             }
 
-            const q = cleanText(qRaw)
+            // Include the "Q1" prefix in the question for completeness
+            const q = cleanText(marker[1].trim() + ' ' + qRaw)
             const a = cleanText(aRaw)
             
             if (q && a) {
