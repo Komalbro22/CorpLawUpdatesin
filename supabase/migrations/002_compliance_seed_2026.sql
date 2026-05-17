@@ -4,6 +4,14 @@
 -- TDS Monthly Payments, and MCA LLP Form 11 & LLP Form 8 filings.
 -- =========================================================================
 
+-- 0. Upgrade regulator check constraint to support 'gst' and 'labor_law'
+ALTER TABLE compliance_entries 
+DROP CONSTRAINT IF EXISTS compliance_entries_regulator_check;
+
+ALTER TABLE compliance_entries 
+ADD CONSTRAINT compliance_entries_regulator_check 
+CHECK (regulator IN ('mca', 'sebi', 'rbi', 'income_tax', 'fema', 'nclt', 'ibc', 'gst', 'labor_law', 'other'));
+
 -- 1. Insert LLP MCA Annual filings for FY 2025-26 (filing due in CY 2026)
 INSERT INTO compliance_entries (
   regulator, 
