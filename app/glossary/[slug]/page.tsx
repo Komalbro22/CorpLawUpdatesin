@@ -20,16 +20,22 @@ export async function generateStaticParams() {
   }))
 }
 
+// Content quality threshold — pages below this get noindex to protect domain authority
+const CONTENT_QUALITY_THRESHOLD = 200
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { data: term } = await supabase
     .from('glossary')
-    .select('term, slug, definition')
+    .select('term, slug, definition, extended_note')
     .eq('slug', params.slug)
     .single()
 
   if (!term) {
     return { title: 'Term Not Found | CorpLawUpdates' }
   }
+
+  const contentLength = (term.definition || '').length + (term.extended_note || '').length
+  const isThin = contentLength < CONTENT_QUALITY_THRESHOLD
 
   return {
     title: `${term.term} — Meaning, Definition | CorpLawUpdates Legal Glossary`,
@@ -39,6 +45,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: term.definition.slice(0, 150),
       url: `https://corplawupdates.in/glossary/${term.slug}`,
     },
+    // Thin glossary pages get noindex to prevent quality dilution — links still followed
+    ...(isThin ? { robots: { index: false, follow: true } } : {}),
   }
 }
 
@@ -82,23 +90,37 @@ export default async function GlossaryTermPage({ params }: Props) {
   const isAcronym = /^[A-Z]{2,8}$/.test(term.term) || 
                     /^[A-Z][A-Z0-9\-]{1,7}$/.test(term.term)
 
-  // Auto-generate 3 FAQs per term using term data
+  // Content quality check — only generate rich FAQs for substantial content
+  const contentLength = (term.definition || '').length + (term.extended_note || '').length
+  const isSubstantial = contentLength >= CONTENT_QUALITY_THRESHOLD
+
+  // Category-specific contextual phrases for unique FAQ answers
+  const categoryContext: Record<string, string> = {
+    'MCA': 'governed by the Ministry of Corporate Affairs under the Companies Act, 2013',
+    'SEBI': 'regulated by the Securities and Exchange Board of India under applicable SEBI regulations',
+    'RBI': 'governed by the Reserve Bank of India under applicable banking and monetary policy frameworks',
+    'NCLT': 'adjudicated by the National Company Law Tribunal under the Companies Act, 2013 or IBC',
+    'IBC': 'governed by the Insolvency and Bankruptcy Code, 2016 and regulated by IBBI',
+    'FEMA': 'governed by the Foreign Exchange Management Act, 1999 and regulated by RBI',
+  }
+  const ctx = categoryContext[term.category] || `regulated under Indian ${term.category} law`
+
+  // Auto-generate high-quality, non-repetitive FAQs
   const faqs = [
     {
-      q: `What is ${term.term}?`,
+      q: `What is ${term.term} in Indian corporate law?`,
       a: term.definition
     },
     {
-      q: `What is the significance of ${term.term} under ${term.category}?`,
-      a: `${term.term} is significant under ${term.category} because ${term.definition.toLowerCase().startsWith('a ') || term.definition.toLowerCase().startsWith('an ') || term.definition.toLowerCase().startsWith('the ') ? term.definition : 'it refers to: ' + term.definition}`
+      q: `Why is ${term.term} important for compliance?`,
+      a: `${term.term} is ${ctx}. Understanding this concept is essential for ensuring regulatory compliance, avoiding penalties, and making informed corporate decisions in India.`
     },
-    // Only show full form question if it's an acronym
     ...(isAcronym ? [{
       q: `What is the full form of ${term.term}?`,
-      a: term.definition.split('—')[0]?.trim() + ' — that is the full form of ' + term.term + '.'  
+      a: term.definition.split('—')[0]?.trim() + ' — that is the full form of ' + term.term + '.'
     }] : [{
-      q: `Who does ${term.term} apply to?`,
-      a: `${term.term} under ${term.category} applies to companies, professionals, and individuals involved in ${term.category}-related compliance and regulatory matters in India. Specifically: ${term.definition.slice(0, 150)}...`
+      q: `Who should know about ${term.term}?`,
+      a: `${term.term} is relevant for company secretaries, compliance officers, chartered accountants, corporate lawyers, board members, and all professionals dealing with ${term.category} regulatory matters in India.`
     }])
   ]
 
@@ -127,8 +149,8 @@ export default async function GlossaryTermPage({ params }: Props) {
     ]
   }
 
-  // FAQPage JSON-LD Schema
-  const faqSchema = {
+  // FAQPage JSON-LD Schema — only emit for substantial content to avoid thin-content penalties
+  const faqSchema = isSubstantial ? {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": faqs.map(faq => ({
@@ -136,7 +158,7 @@ export default async function GlossaryTermPage({ params }: Props) {
       "name": faq.q,
       "acceptedAnswer": { "@type": "Answer", "text": faq.a }
     }))
-  }
+  } : null
 
   return (
     <div className="max-w-3xl mx-auto py-12 px-4">
@@ -278,11 +300,13 @@ export default async function GlossaryTermPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      {/* FAQPage JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      {/* FAQPage JSON-LD — gated behind quality threshold */}
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
     </div>
   )
 }
