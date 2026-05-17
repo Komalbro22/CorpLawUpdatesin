@@ -25,7 +25,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch glossary terms
   const { data: glossaryTerms } = await supabaseAdmin
     .from('glossary')
-    .select('slug, created_at')
+    .select('slug, created_at, definition, extended_note')
     .eq('is_verified', true)
 
   const latestCalendarDate = compliance_entries?.[0]?.updated_at 
@@ -74,12 +74,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
-  const glossaryPages = (glossaryTerms || []).map(term => ({
-    url: `${BASE_URL}/glossary/${term.slug}`,
-    lastModified: new Date(term.created_at),
-    changeFrequency: 'yearly' as const,
-    priority: 0.4,
-  }))
+  const CONTENT_QUALITY_THRESHOLD = 200
+
+  const glossaryPages = (glossaryTerms || [])
+    .filter(term => {
+      const contentLength = (term.definition || '').length + (term.extended_note || '').length
+      return contentLength >= CONTENT_QUALITY_THRESHOLD
+    })
+    .map(term => ({
+      url: `${BASE_URL}/glossary/${term.slug}`,
+      lastModified: new Date(term.created_at),
+      changeFrequency: 'yearly' as const,
+      priority: 0.4,
+    }))
 
   return [...staticPages, ...categoryPages, ...articlePages, ...glossaryPages]
 }
