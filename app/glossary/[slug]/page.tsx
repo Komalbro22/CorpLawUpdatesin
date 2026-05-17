@@ -78,6 +78,10 @@ export default async function GlossaryTermPage({ params }: Props) {
     .order('published_at', { ascending: false })
     .limit(3)
 
+  // Check if term is an acronym (all caps or short abbreviation)
+  const isAcronym = /^[A-Z]{2,8}$/.test(term.term) || 
+                    /^[A-Z][A-Z0-9\-]{1,7}$/.test(term.term)
+
   // Auto-generate 3 FAQs per term using term data
   const faqs = [
     {
@@ -85,13 +89,17 @@ export default async function GlossaryTermPage({ params }: Props) {
       a: term.definition
     },
     {
-      q: `What does ${term.term} mean in ${term.category} law?`,
-      a: `Under ${term.category}, ${term.definition}`
+      q: `What is the significance of ${term.term} under ${term.category}?`,
+      a: `${term.term} is significant under ${term.category} because ${term.definition.toLowerCase().startsWith('a ') || term.definition.toLowerCase().startsWith('an ') || term.definition.toLowerCase().startsWith('the ') ? term.definition : 'it refers to: ' + term.definition}`
     },
-    {
+    // Only show full form question if it's an acronym
+    ...(isAcronym ? [{
       q: `What is the full form of ${term.term}?`,
-      a: `${term.term} — ${term.definition.split('—')[1]?.trim() || term.definition.slice(0, 100)}`
-    }
+      a: term.definition.split('—')[0]?.trim() + ' — that is the full form of ' + term.term + '.'  
+    }] : [{
+      q: `Who does ${term.term} apply to?`,
+      a: `${term.term} under ${term.category} applies to companies, professionals, and individuals involved in ${term.category}-related compliance and regulatory matters in India. Specifically: ${term.definition.slice(0, 150)}...`
+    }])
   ]
 
   // DefinedTerm JSON-LD Schema
