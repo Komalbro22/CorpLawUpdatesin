@@ -153,9 +153,17 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
         console.error('Failed to fetch glossary terms for linking:', e)
     }
 
-    // Apply auto-linking to the content
-    if (update.content && glossaryTerms.length > 0) {
-        update.content = linkGlossaryTerms(update.content, glossaryTerms)
+    // Apply auto-linking to the content and key changes
+    if (glossaryTerms.length > 0) {
+        if (update.content) {
+            update.content = linkGlossaryTerms(update.content, glossaryTerms)
+        }
+        if (update.key_change) {
+            update.key_change = linkGlossaryTerms(update.key_change, glossaryTerms)
+        }
+        if (update.key_changes && Array.isArray(update.key_changes)) {
+            update.key_changes = update.key_changes.map((kc: string) => linkGlossaryTerms(kc, glossaryTerms))
+        }
     }
 
     const readTime = calculateReadingTime(update.content || '')
@@ -280,29 +288,31 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                         <FileText className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-600" aria-hidden />
                         <div>
                             <p className="text-xs font-bold text-amber-900 uppercase tracking-widest mb-1">Key Change</p>
-                            <p className="text-amber-800 text-sm leading-relaxed">{update.key_change}</p>
+                            <p className="text-amber-800 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: update.key_change }} />
                         </div>
                     </div>
                 )}
 
-                {/* Key changes accordion */}
+                {/* Key changes accordion - Wrapped in semantic section for accessibility & AI crawler extraction */}
                 {update.key_changes && Array.isArray(update.key_changes) && update.key_changes.length > 0 && (
-                    <details className="group mb-6 overflow-hidden rounded-lg border border-slate-200 bg-slate-50 print:hidden">
-                        <summary className="cursor-pointer p-4 font-bold text-navy flex justify-between items-center bg-white hover:bg-slate-50 transition-colors list-none [&::-webkit-details-marker]:hidden">
-                            <div className="flex items-center gap-2">
-                                <Lightbulb className="h-5 w-5 text-amber-500" aria-hidden />
-                                All Key Changes
+                    <section aria-label="Key Takeaways" className="mb-6">
+                        <details className="group overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
+                            <summary className="cursor-pointer p-4 font-bold text-navy flex justify-between items-center bg-white hover:bg-slate-50 transition-colors list-none [&::-webkit-details-marker]:hidden">
+                                <div className="flex items-center gap-2">
+                                    <Lightbulb className="h-5 w-5 text-amber-500" aria-hidden />
+                                    All Key Changes
+                                </div>
+                                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform duration-300 group-open:rotate-180" aria-hidden />
+                            </summary>
+                            <div className="p-5 border-t border-slate-100">
+                                <ul className="list-disc pl-5 space-y-2 text-sm text-slate-700">
+                                    {update.key_changes.map((kc: string, i: number) => (
+                                        <li key={i} className="leading-relaxed" dangerouslySetInnerHTML={{ __html: kc }} />
+                                    ))}
+                                </ul>
                             </div>
-                            <ChevronDown className="h-4 w-4 text-slate-400 transition-transform duration-300 group-open:rotate-180" aria-hidden />
-                        </summary>
-                        <div className="p-5 border-t border-slate-100">
-                            <ul className="list-disc pl-5 space-y-2 text-sm text-slate-700">
-                                {update.key_changes.map((kc: string, i: number) => (
-                                    <li key={i}>{kc}</li>
-                                ))}
-                            </ul>
-                        </div>
-                    </details>
+                        </details>
+                    </section>
                 )}
 
                 {/* Title */}
