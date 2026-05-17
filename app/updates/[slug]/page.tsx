@@ -199,7 +199,26 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
         markers.forEach((marker, i) => {
             const start = (marker.index || 0) + marker[0].length
             const nextMarker = markers[i + 1]
-            const end = nextMarker ? (nextMarker.index || plainText.length) : plainText.length
+            let end = nextMarker ? (nextMarker.index || plainText.length) : plainText.length
+
+            // If it is the last FAQ, terminate the block early if we find standard post-FAQ headings
+            if (!nextMarker) {
+                const endingKeywords = [
+                    /(?:\r?\n|^)\s*(?:###?\s*)?Conclusion\b/i,
+                    /(?:\r?\n|^)\s*(?:###?\s*)?Disclaimer\b/i,
+                    /(?:\r?\n|^)\s*(?:###?\s*)?About the Author\b/i,
+                    /(?:\r?\n|^)\s*(?:###?\s*)?Note\b/i,
+                    /(?:\r?\n|^)\s*(?:###?\s*)?References?\b/i
+                ]
+                for (const pattern of endingKeywords) {
+                    const match = plainText.substring(start).match(pattern)
+                    if (match && match.index !== undefined) {
+                        end = start + match.index
+                        break
+                    }
+                }
+            }
+
             const block = plainText.substring(start, end).trim()
             
             // 3. Smart split: Question ends at first '?' or first newline
