@@ -1,22 +1,35 @@
 const { createClient } = require('@supabase/supabase-js');
 const fs = require('fs');
 
-const envFile = fs.readFileSync('.env.local', 'utf8');
-const env = {};
-envFile.split('\n').forEach(line => {
-    const match = line.match(/^([^=]+)=(.*)$/);
-    if (match) env[match[1]] = match[2].replace(/['"]/g, '').trim();
-});
+let supabaseUrl = '';
+let supabaseAnonKey = '';
 
-const supabase = createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+try {
+  const envContent = fs.readFileSync('.env.local', 'utf8');
+  envContent.split(/\r?\n/).forEach(line => {
+    const matchUrl = line.match(/^\s*NEXT_PUBLIC_SUPABASE_URL\s*=\s*(.+)$/);
+    const matchKey = line.match(/^\s*NEXT_PUBLIC_SUPABASE_ANON_KEY\s*=\s*(.+)$/);
+    if (matchUrl) supabaseUrl = matchUrl[1].replace(/['"]/g, '').trim();
+    if (matchKey) supabaseAnonKey = matchKey[1].replace(/['"]/g, '').trim();
+  });
+} catch (e) {
+  console.error('Failed to read .env.local:', e);
+}
 
-supabase.from('updates').select('content').eq('slug', 'sebi-spv-status-post-concession-invits-may-2026').single().then(res => {
-    const content = res.data.content;
-    const qIndex = content.indexOf('Q1');
-    if (qIndex > -1) {
-        console.log('Surrounding text of Q1:');
-        console.log(content.substring(qIndex - 20, qIndex + 20));
-    } else {
-        console.log('Q1 not found');
-    }
-});
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+async function run() {
+  const { data, error } = await supabase
+    .from('compliance_entries')
+    .select('id, regulator, form_name, compliance_title, due_date')
+    .order('regulator');
+
+  if (error) {
+    console.error('Error fetching compliance_entries:', error);
+  } else {
+    console.log('Total entries:', data.length);
+    console.log('Entries list:', JSON.stringify(data, null, 2));
+  }
+}
+
+run();

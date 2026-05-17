@@ -44,6 +44,8 @@ const REGULATOR_COLORS: Record<string, string> = {
   fema: 'bg-teal-100 text-teal-800 border-teal-200',
   nclt: 'bg-red-100 text-red-800 border-red-200',
   ibc: 'bg-pink-100 text-pink-800 border-pink-200',
+  gst: 'bg-cyan-100 text-cyan-800 border-cyan-200',
+  labor_law: 'bg-indigo-100 text-indigo-800 border-indigo-200',
   other: 'bg-slate-100 text-slate-700 border-slate-200',
 }
 
@@ -310,6 +312,8 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
   const femaEntries = grouped['fema']       || []
   const rbiEntries  = grouped['rbi']        || []
   const taxEntries  = grouped['income_tax'] || []
+  const gstEntries  = grouped['gst']        || []
+  const laborEntries = grouped['labor_law'] || []
 
   function makeFormCell(entry: ComplianceEntry) {
     return (
@@ -354,6 +358,20 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
   const taxNames  = taxEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
   const taxDates  = taxEntries.map(e => e.due_date)
   const taxRowIds = taxEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
+
+  // GST — Form | Compliance | Due Date | Applicable To | Penalty
+  const gstRows   = gstEntries.map(e => [makeFormCell(e), e.compliance_title, e.due_date, e.applicable_to || '—', e.penalty || '—'])
+  const gstIds    = gstEntries.map(e => e.id)
+  const gstNames  = gstEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
+  const gstDates  = gstEntries.map(e => e.due_date)
+  const gstRowIds = gstEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
+
+  // Labor Law — Form | Compliance | Due Date | Applicable To | Penalty
+  const laborRows   = laborEntries.map(e => [makeFormCell(e), e.compliance_title, e.due_date, e.applicable_to || '—', e.penalty || '—'])
+  const laborIds    = laborEntries.map(e => e.id)
+  const laborNames  = laborEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
+  const laborDates  = laborEntries.map(e => e.due_date)
+  const laborRowIds = laborEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
 
   return (
     <div>
@@ -409,23 +427,25 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
                 <span className="text-xl flex-shrink-0">⚠️</span>
                 <p className="text-amber-800 text-sm leading-relaxed">
                   <strong>Disclaimer:</strong> All dates are indicative and subject to regulatory extensions,
-                  amendments or circulars issued by MCA, SEBI or RBI from time to time. Always verify with
+                  amendments or circulars issued by MCA, SEBI, GSTN, EPFO or RBI from time to time. Always verify with
                   official government portals before acting on any deadline. This is not legal advice.
                 </p>
               </div>
               <p className="text-xs text-slate-400 text-right">
-                Last verified: April 2026 | Source: MCA, SEBI, RBI official portals
+                Last verified: May 2026 | Source: MCA, SEBI, GSTN, EPFO, RBI official portals
               </p>
             </div>
 
             {/* QUICK LINKS */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
               {[
                 { label: 'Income Tax', href: '#incometax', color: 'bg-orange-50 border-orange-200 text-orange-700', icon: '📊' },
+                { label: 'GST',        href: '#gst',       color: 'bg-cyan-50 border-cyan-200 text-cyan-700',       icon: '🧾' },
                 { label: 'ROC / MCA',  href: '#mca',       color: 'bg-blue-50 border-blue-200 text-blue-700',       icon: '🏛️' },
                 { label: 'SEBI LODR',  href: '#sebi',      color: 'bg-green-50 border-green-200 text-green-700',    icon: '📈' },
+                { label: 'Labor Laws', href: '#labor',     color: 'bg-indigo-50 border-indigo-200 text-indigo-700', icon: '👷' },
                 { label: 'RBI',        href: '#rbi',       color: 'bg-purple-50 border-purple-200 text-purple-700', icon: '🏦' },
-                { label: 'FEMA',       href: '#fema',      color: 'bg-cyan-50 border-cyan-200 text-cyan-700',       icon: '🌐' },
+                { label: 'FEMA',       href: '#fema',      color: 'bg-teal-50 border-teal-200 text-teal-700',       icon: '🌐' },
               ].map((item) => (
                 <Link
                   key={item.label}
@@ -446,9 +466,17 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
                   onReport={openReportError} onRowClick={handleRowClick} />
               </div>
             )}
+            {gstEntries.length > 0 && (
+              <div id="gst">
+                <TableSection title="🧾 GST (Goods & Services Tax) Compliance" color="bg-cyan-600" dot="bg-cyan-500"
+                  headers={['Form', 'Compliance', 'Due Date', 'Applicable To', 'Penalty']}
+                  rows={gstRows} entryIds={gstIds} entryNames={gstNames} rowDates={gstDates} rowIds={gstRowIds}
+                  onReport={openReportError} onRowClick={handleRowClick} />
+              </div>
+            )}
             {mcaEntries.length > 0 && (
               <div id="mca">
-                <TableSection title="🏛️ MCA — Companies Act Compliance" color="bg-navy" dot="bg-blue-500"
+                <TableSection title="🏛️ MCA — Companies Act & LLP Compliance" color="bg-navy" dot="bg-blue-500"
                   headers={['Form', 'Compliance', 'Due Date', 'Applicable To', 'Penalty']}
                   rows={mcaRows} entryIds={mcaIds} entryNames={mcaNames} rowDates={mcaDates} rowIds={mcaRowIds}
                   onReport={openReportError} onRowClick={handleRowClick} />
@@ -462,6 +490,14 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
                   onReport={openReportError} onRowClick={handleRowClick} />
               </div>
             )}
+            {laborEntries.length > 0 && (
+              <div id="labor">
+                <TableSection title="👷 Labor Laws (EPF, ESIC, PT) Compliance" color="bg-indigo-600" dot="bg-indigo-500"
+                  headers={['Form', 'Compliance', 'Due Date', 'Applicable To', 'Penalty']}
+                  rows={laborRows} entryIds={laborIds} entryNames={laborNames} rowDates={laborDates} rowIds={laborRowIds}
+                  onReport={openReportError} onRowClick={handleRowClick} />
+              </div>
+            )}
             {rbiEntries.length > 0 && (
               <div id="rbi">
                 <TableSection title="🏦 RBI Compliance" color="bg-purple-800" dot="bg-purple-500"
@@ -472,7 +508,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
             )}
             {femaEntries.length > 0 && (
               <div id="fema">
-                <TableSection title="🌐 FEMA Compliance" color="bg-cyan-700" dot="bg-cyan-500"
+                <TableSection title="🌐 FEMA Compliance" color="bg-teal-700" dot="bg-teal-500"
                   headers={['Form', 'Compliance', 'Due Date', 'Applicable To']}
                   rows={femaRows} entryIds={femaIds} entryNames={femaNames} rowDates={femaDates} rowIds={femaRowIds}
                   onReport={openReportError} onRowClick={handleRowClick} />

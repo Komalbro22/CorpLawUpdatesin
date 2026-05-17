@@ -8,12 +8,15 @@ const CURRENT_YEAR = new Date().getFullYear()
 const NEXT_YEAR = CURRENT_YEAR + 1
 
 export const metadata: Metadata = {
-  title: `Compliance Calendar ${CURRENT_YEAR}-${String(NEXT_YEAR).slice(2)} — MCA SEBI RBI Income Tax Due Dates India`,
-  description: `Complete corporate compliance deadline calendar for FY ${CURRENT_YEAR}-${String(NEXT_YEAR).slice(2)}. All MCA filing due dates, SEBI LODR deadlines, RBI FEMA compliance dates, Income Tax due dates for Indian companies. Free for CS & CA professionals.`,
+  title: `Compliance Calendar ${CURRENT_YEAR}-${String(NEXT_YEAR).slice(2)} — MCA, GST, SEBI, Income Tax & Labor Law Due Dates India`,
+  description: `Complete corporate compliance deadline calendar for FY ${CURRENT_YEAR}-${String(NEXT_YEAR).slice(2)}. All MCA & LLP filing due dates, GST GSTR-1 & GSTR-3B deadlines, SEBI LODR compliance, RBI FEMA dates, Income Tax due dates & Labor Laws PF/ESIC for Indian companies. Free for CS & CA professionals.`,
   keywords: [
     `compliance calendar ${CURRENT_YEAR}`,
     `compliance calendar ${CURRENT_YEAR}-${String(NEXT_YEAR).slice(2)}`,
     `MCA filing due dates ${CURRENT_YEAR}`,
+    `GST due dates ${CURRENT_YEAR}`,
+    `Labor Law deadlines ${CURRENT_YEAR}`,
+    `EPF ESIC monthly returns ${CURRENT_YEAR}`,
     `SEBI compliance calendar ${CURRENT_YEAR}`,
     `company compliance deadlines India ${CURRENT_YEAR}`,
     'CS professional compliance dates',
@@ -32,8 +35,8 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: 'https://www.corplawupdates.in/calendar' },
   openGraph: {
-    title: `Compliance Calendar ${CURRENT_YEAR}-${String(NEXT_YEAR).slice(2)} — All MCA SEBI RBI Due Dates India`,
-    description: `Complete compliance deadline calendar for Indian companies. MCA, SEBI, RBI, Income Tax due dates for FY ${CURRENT_YEAR}-${String(NEXT_YEAR).slice(2)} in one place.`,
+    title: `Compliance Calendar ${CURRENT_YEAR}-${String(NEXT_YEAR).slice(2)} — All MCA GST SEBI RBI Due Dates India`,
+    description: `Complete compliance deadline calendar for Indian companies. MCA, GST, SEBI, RBI, Income Tax and Labor Laws due dates for FY ${CURRENT_YEAR}-${String(NEXT_YEAR).slice(2)} in one place.`,
     url: 'https://www.corplawupdates.in/calendar',
     images: [{ url: 'https://www.corplawupdates.in/og-image.jpg', width: 1200, height: 630 }],
   },
@@ -74,10 +77,12 @@ export default async function CalendarPage() {
               </p>
               <ul className="space-y-1 list-none">
                 {[
-                  'MCA / ROC filings — MGT-7, AOC-4, DIR-3 KYC, DPT-3, MSME-1',
-                  'SEBI LODR deadlines — Quarterly results, governance reports',
-                  'RBI & FEMA compliance dates — ECB, FDI, ODI returns',
-                  'Income Tax due dates — ITR, TDS, advance tax',
+                  'MCA / ROC / LLP filings — MGT-7, AOC-4, DIR-3 KYC, DPT-3, LLP Form 11 & Form 8',
+                  'GST filings — GSTR-1 (Outward Supplies), GSTR-3B (Returns & Tax Payment), CMP-08',
+                  'SEBI LODR deadlines — Quarterly results, governance reports, shareholding patterns',
+                  'Income Tax due dates — Corporate ITR, Tax Audit Form 3CD, TDS returns & monthly deposits',
+                  'Labor Laws compliance — Monthly EPF (PF) & ESIC return filings and PT deposits',
+                  'RBI & FEMA compliance dates — FLA annual return, ECB, FDI, ODI return filings',
                 ].map((f, i) => (
                   <li key={i} className="flex items-start gap-2">
                     <span className="text-gold mt-0.5">✓</span>
@@ -88,10 +93,10 @@ export default async function CalendarPage() {
             </div>
             <div className="space-y-3">
               <p>
-                Designed for <strong>Company Secretaries (CS)</strong>, <strong>Chartered Accountants (CA)</strong>, <strong>Cost Accountants (CMA)</strong>, CS/CA/CMA students, legal enthusiasts, and corporate compliance teams managing multiple regulatory deadlines under the Companies Act, 2013, SEBI LODR, and RBI FEMA regulations.
+                Designed for <strong>Company Secretaries (CS)</strong>, <strong>Chartered Accountants (CA)</strong>, <strong>Cost Accountants (CMA)</strong>, CS/CA/CMA students, legal enthusiasts, and corporate compliance teams managing multiple regulatory deadlines under the Companies Act, 2013, GST, Labor Laws, SEBI LODR, and RBI FEMA regulations.
               </p>
               <p className="text-xs text-slate-400 italic">
-                All dates are indicative and subject to change by MCA, SEBI or RBI. Always verify with official government portals.
+                All dates are indicative and subject to change by MCA, GSTN, EPFO, ESIC, SEBI or RBI. Always verify with official government portals.
               </p>
             </div>
           </div>

@@ -355,6 +355,8 @@ export default function AdminSuggestionsPage() {
                                 <option value="rbi">RBI</option>
                                 <option value="fema">FEMA</option>
                                 <option value="income_tax">Income Tax</option>
+                                <option value="gst">GST</option>
+                                <option value="labor_law">Labor Law</option>
                                 <option value="nclt">NCLT</option>
                                 <option value="other">Other</option>
                               </select>

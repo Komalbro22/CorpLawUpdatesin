@@ -24,7 +24,7 @@ interface ComplianceEntry {
   created_at: string
 }
 
-const REGULATORS = ['mca', 'sebi', 'rbi', 'income_tax', 'fema', 'nclt', 'ibc', 'other']
+const REGULATORS = ['mca', 'sebi', 'rbi', 'income_tax', 'fema', 'nclt', 'ibc', 'gst', 'labor_law', 'other']
 const FREQUENCIES = ['monthly', 'quarterly', 'half_yearly', 'annual', 'event_based', 'one_time']
 
 const emptyForm = {
