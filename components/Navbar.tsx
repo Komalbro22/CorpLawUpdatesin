@@ -89,7 +89,7 @@ export default function Navbar() {
 
                     {/* Logo */}
                     <Link href="/" className="flex-shrink-0 flex flex-col justify-center group">
-                        <span className="font-heading text-xl font-bold text-navy leading-tight group-hover:text-navy/90 transition-colors">
+                        <span className="font-heading text-xl font-bold navbar-logo-text leading-tight">
                             CorpLawUpdates<span className="text-gold group-hover:text-amber-500 transition-colors">.in</span>
                         </span>
                         <span className="hidden sm:block text-[10px] font-semibold text-slate-400 tracking-[0.18em] uppercase mt-0.5">

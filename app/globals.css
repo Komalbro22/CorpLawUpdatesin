@@ -377,6 +377,37 @@ h2, h3, h4 {
   }
 }
 
+/* Ensure the brand name logo is always visible on dark backgrounds and forced dark mode */
+.navbar-logo-text {
+  color: #0F172A !important;
+  transition: color 0.2s ease;
+}
+
+.group:hover .navbar-logo-text {
+  color: rgba(15, 23, 42, 0.9) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  .navbar-logo-text {
+    color: #FFFFFF !important;
+  }
+  .group:hover .navbar-logo-text {
+    color: rgba(255, 255, 255, 0.9) !important;
+  }
+}
+
+[data-theme="dark"] .navbar-logo-text,
+.dark .navbar-logo-text,
+html[class*="dark"] .navbar-logo-text {
+  color: #FFFFFF !important;
+}
+
+[data-theme="dark"] .group:hover .navbar-logo-text,
+.dark .group:hover .navbar-logo-text,
+html[class*="dark"] .group:hover .navbar-logo-text {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
 /* ============================================================
    NAVBAR SCROLL COMPACT EFFECT
    ============================================================ */
