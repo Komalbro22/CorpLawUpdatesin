@@ -100,6 +100,31 @@ export default async function CalendarPage() {
               </p>
             </div>
           </div>
+
+          {/* SEO Compliance Keywords Directory */}
+          <div className="mt-8 pt-6 border-t border-slate-200/60">
+            <h3 className="text-xs font-bold text-navy uppercase tracking-wider mb-3 font-semibold">
+              Frequently Searched Compliances & Due Dates
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {[
+                "GST due dates 2026-27", "GSTR-1 outward supply monthly deadline", "GSTR-3B monthly tax payment return",
+                "EPF ECR monthly return filing", "ESIC monthly deposit date", "MCA company annual return dates",
+                "LLP Form 11 annual return", "LLP Form 8 account & solvency statement", "AOC-4 financial statement filing",
+                "MGT-7 annual return ROC", "DIR-3 KYC director verification date", "TDS monthly deposit challan 281",
+                "Corporate Income Tax ITR filing", "Tax Audit Form 3CD deadline", "SEBI LODR quarterly compliance Reg 33",
+                "RBI FEMA annual returns", "FLA return FDI compliance", "DPT-3 outstanding loans return",
+                "MSME-1 half yearly return filing", "Professional Tax return monthly due date"
+              ].map((kw, i) => (
+                <span 
+                  key={i} 
+                  className="inline-flex items-center text-[11px] bg-slate-100 text-slate-500 hover:text-slate-700 hover:bg-slate-200/80 px-2 py-0.5 rounded transition-colors cursor-default"
+                >
+                  {kw}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 

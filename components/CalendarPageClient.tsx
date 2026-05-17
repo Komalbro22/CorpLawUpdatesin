@@ -386,8 +386,6 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
         <div className="flex items-center justify-center gap-4 mt-6 flex-wrap">
           <span className="text-sm text-amber-400 font-medium">📅 Updated for FY 2026-27</span>
           <span className="text-slate-500">·</span>
-          <span className="text-sm text-slate-300">Free for CS Professionals &amp; Corporate Lawyers</span>
-          <span className="text-slate-500">·</span>
           <button
             onClick={openSuggestNew}
             className="text-sm text-amber-300 underline underline-offset-2 hover:text-amber-100 transition-colors"
