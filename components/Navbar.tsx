@@ -20,9 +20,14 @@ import {
 const links = [
     { href: '/', label: 'Home' },
     { href: '/updates', label: 'Updates' },
+    { href: '/glossary', label: 'Glossary' },
     { href: '/about', label: 'About' },
     { href: '/newsletter', label: 'Newsletter' },
 ]
+
+const GlossaryIcon = ({ className }: { className?: string }) => (
+    <span className={`${className} text-base flex items-center justify-center`} aria-hidden>📖</span>
+)
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false)
@@ -61,6 +66,7 @@ export default function Navbar() {
     const isActive = (path: string) => pathname === path
 
     const categoryItems = [
+        { href: '/glossary',       label: 'Legal Glossary',     Icon: GlossaryIcon, color: 'text-amber-600',  bg: 'hover:bg-amber-50'   },
         { href: '/category/mca',   label: 'MCA',                Icon: Building2, color: 'text-blue-600',    bg: 'hover:bg-blue-50'    },
         { href: '/category/sebi',  label: 'SEBI',               Icon: TrendingUp, color: 'text-emerald-600', bg: 'hover:bg-emerald-50' },
         { href: '/category/rbi',   label: 'RBI',                Icon: Landmark,  color: 'text-violet-600',  bg: 'hover:bg-violet-50'  },

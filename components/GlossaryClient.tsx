@@ -14,12 +14,17 @@ type GlossaryTerm = {
 
 export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
   const [search, setSearch] = useState('')
+  const [activeCategory, setActiveCategory] = useState('ALL')
 
-  // Filter terms based on search input
-  const filteredTerms = terms.filter(t => 
-    t.term.toLowerCase().includes(search.toLowerCase()) || 
-    t.definition.toLowerCase().includes(search.toLowerCase())
-  )
+  const categories = ['ALL', 'MCA', 'SEBI', 'IBC', 'RBI', 'FEMA', 'NCLT']
+
+  // Filter terms based on search input & category
+  const filteredTerms = terms.filter(t => {
+    const matchesSearch = t.term.toLowerCase().includes(search.toLowerCase()) || 
+                          t.definition.toLowerCase().includes(search.toLowerCase())
+    const matchesCategory = activeCategory === 'ALL' || t.category.toUpperCase() === activeCategory
+    return matchesSearch && matchesCategory
+  })
 
   // Group by first letter
   const groupedTerms = filteredTerms.reduce((acc, term) => {
@@ -40,7 +45,7 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
   return (
     <div className="max-w-4xl mx-auto py-12 px-4">
       {/* Search Bar */}
-      <div className="relative mb-8">
+      <div className="relative mb-6">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <Search className="h-5 w-5 text-slate-400" />
         </div>
@@ -51,6 +56,26 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
+      </div>
+
+      {/* Category Tabs */}
+      <div className="flex flex-wrap gap-2 mb-8 justify-center border-b border-slate-100 pb-6">
+        {categories.map((cat) => {
+          const isActive = activeCategory === cat
+          return (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+                isActive
+                  ? 'bg-amber-500 text-white shadow-md shadow-amber-500/10'
+                  : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-navy border border-slate-200/50'
+              }`}
+            >
+              {cat}
+            </button>
+          )
+        })}
       </div>
 
       {/* A-Z Navigation (only show when not searching aggressively) */}

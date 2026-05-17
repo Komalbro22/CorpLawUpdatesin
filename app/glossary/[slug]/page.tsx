@@ -5,6 +5,10 @@ import { supabase } from '@/lib/supabase'
 
 export const revalidate = 3600 // Revalidate every hour
 
+type Props = {
+  params: { slug: string }
+}
+
 export async function generateStaticParams() {
   const { data: terms } = await supabase
     .from('glossary')
@@ -16,10 +20,10 @@ export async function generateStaticParams() {
   }))
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { data: term } = await supabase
     .from('glossary')
-    .select('term, definition')
+    .select('term, slug, definition')
     .eq('slug', params.slug)
     .single()
 
@@ -28,18 +32,21 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 
   return {
-    title: `${term.term} — Legal Definition | CorpLawUpdates`,
-    description: `${term.definition.slice(0, 160)}${term.definition.length > 160 ? '...' : ''}`,
-    alternates: {
-      canonical: `https://www.corplawupdates.in/glossary/${params.slug}`,
+    title: `${term.term} — Meaning, Definition | CorpLawUpdates Legal Glossary`,
+    description: `${term.term} meaning: ${term.definition.slice(0, 150)}. Part of CorpLawUpdates Indian corporate law glossary.`,
+    openGraph: {
+      title: `${term.term} — Legal Definition`,
+      description: term.definition.slice(0, 150),
+      url: `https://corplawupdates.in/glossary/${term.slug}`,
     },
   }
 }
 
-export default async function GlossaryTermPage({ params }: { params: { slug: string } }) {
+export default async function GlossaryTermPage({ params }: Props) {
+  // Fetch detailed term fields
   const { data: term } = await supabase
     .from('glossary')
-    .select('*')
+    .select('term, slug, definition, category, keywords, extended_note, related_terms, created_at, is_verified')
     .eq('slug', params.slug)
     .single()
 
@@ -61,12 +68,66 @@ export default async function GlossaryTermPage({ params }: { params: { slug: str
     }
   }
 
+  // Fetch related updates/articles from same category
+  const { data: relatedArticles } = await supabase
+    .from('updates')
+    .select('title, slug, published_at')
+    .ilike('category', term.category)
+    .not('published_at', 'is', null)
+    .lte('published_at', new Date().toISOString())
+    .order('published_at', { ascending: false })
+    .limit(3)
+
+  // Auto-generate 3 FAQs per term using term data
+  const faqs = [
+    {
+      q: `What is ${term.term}?`,
+      a: term.definition
+    },
+    {
+      q: `What does ${term.term} mean in ${term.category} law?`,
+      a: `Under ${term.category}, ${term.definition}`
+    },
+    {
+      q: `What is the full form of ${term.term}?`,
+      a: `${term.term} — ${term.definition.split('—')[1]?.trim() || term.definition.slice(0, 100)}`
+    }
+  ]
+
+  // DefinedTerm JSON-LD Schema
   const definedTermSchema = {
     "@context": "https://schema.org",
     "@type": "DefinedTerm",
     "name": term.term,
     "description": term.definition,
-    "inDefinedTermSet": "https://www.corplawupdates.in/glossary"
+    "inDefinedTermSet": {
+      "@type": "DefinedTermSet",
+      "name": "Indian Corporate Law Glossary",
+      "url": "https://corplawupdates.in/glossary"
+    },
+    "url": `https://corplawupdates.in/glossary/${term.slug}`
+  }
+
+  // BreadcrumbList JSON-LD Schema
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://corplawupdates.in" },
+      { "@type": "ListItem", "position": 2, "name": "Glossary", "item": "https://corplawupdates.in/glossary" },
+      { "@type": "ListItem", "position": 3, "name": term.term, "item": `https://corplawupdates.in/glossary/${term.slug}` }
+    ]
+  }
+
+  // FAQPage JSON-LD Schema
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.q,
+      "acceptedAnswer": { "@type": "Answer", "text": faq.a }
+    }))
   }
 
   return (
@@ -78,13 +139,13 @@ export default async function GlossaryTermPage({ params }: { params: { slug: str
           <li><span aria-hidden="true" className="mx-1">›</span></li>
           <li><Link href="/glossary" className="hover:text-gold transition-colors">Glossary</Link></li>
           <li><span aria-hidden="true" className="mx-1">›</span></li>
-          <li className="text-navy">{term.term}</li>
+          <li className="text-navy font-semibold">{term.term}</li>
         </ol>
       </nav>
 
       {/* Main Definition Card */}
       <article className="bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm relative overflow-hidden">
-        {/* Decorative background element */}
+        {/* Decorative background letter */}
         <div className="absolute top-0 right-0 p-8 opacity-5" aria-hidden="true">
           <span className="text-9xl font-heading font-bold text-slate-900 leading-none">
             {term.term.charAt(0).toUpperCase()}
@@ -103,16 +164,48 @@ export default async function GlossaryTermPage({ params }: { params: { slug: str
           </h1>
           
           <div className="prose prose-slate prose-lg max-w-none text-slate-700">
-            <p className="leading-relaxed">
+            <p className="leading-relaxed leading-8 text-base md:text-lg">
               {term.definition}
             </p>
           </div>
+
+          <p className="text-xs text-slate-400 mt-8 text-right">
+            Last updated: {new Date(term.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+          </p>
         </div>
       </article>
 
+      {/* Extended Note Section */}
+      {term.extended_note && (
+        <section className="mt-8 bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm">
+          <h3 className="text-xl font-bold text-navy mb-4">Understanding {term.term}</h3>
+          <p className="text-slate-600 text-base leading-relaxed leading-7">
+            {term.extended_note}
+          </p>
+        </section>
+      )}
+
+      {/* Frequently Asked Questions (Accordion) */}
+      <section className="mt-8 bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm">
+        <h2 className="text-xl font-bold text-navy mb-6">Frequently Asked Questions</h2>
+        <div className="space-y-4">
+          {faqs.map((faq: { q: string; a: string }, i: number) => (
+            <details key={i} className="group border border-slate-100 rounded-xl p-4 bg-slate-50/50 hover:bg-slate-50 transition-colors cursor-pointer">
+              <summary className="font-semibold text-navy flex items-center justify-between focus:outline-none select-none list-none [&::-webkit-details-marker]:hidden">
+                <span>{faq.q}</span>
+                <span className="text-slate-400 group-open:rotate-180 transition-transform duration-200 text-[10px]">▼</span>
+              </summary>
+              <p className="mt-3 text-slate-600 text-sm leading-relaxed border-t border-slate-200/50 pt-3">
+                {faq.a}
+              </p>
+            </details>
+          ))}
+        </div>
+      </section>
+
       {/* Related Terms */}
       {relatedTermsData.length > 0 && (
-        <section className="mt-12">
+        <section className="mt-8 bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm">
           <h2 className="text-xl font-bold text-navy mb-6 flex items-center gap-2">
             <svg className="w-5 h-5 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
@@ -133,10 +226,54 @@ export default async function GlossaryTermPage({ params }: { params: { slug: str
         </section>
       )}
 
-      {/* JSON-LD Schema */}
+      {/* Related Updates */}
+      {relatedArticles && relatedArticles.length > 0 && (
+        <section className="mt-8 bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm">
+          <h3 className="text-xl font-bold text-navy mb-6">Related Updates</h3>
+          <div className="space-y-4">
+            {relatedArticles.map((article: { title: string; slug: string; published_at: string | null }) => (
+              <Link 
+                key={article.slug} 
+                href={`/updates/${article.slug}`}
+                className="block p-4 border border-slate-100 rounded-xl hover:border-amber-400 hover:bg-amber-50/20 transition-all font-medium text-navy hover:text-amber-700"
+              >
+                {article.title}
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Related Searches (Keyword Pills) */}
+      {term.keywords && term.keywords.length > 0 && (
+        <section className="mt-8 bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm">
+          <h3 className="text-lg font-bold text-navy mb-4">Related Searches</h3>
+          <div className="flex flex-wrap gap-2">
+            {term.keywords.map((kw: string, i: number) => (
+              <span key={i} className="text-sm bg-slate-100 text-slate-600 px-3 py-1.5 rounded-full font-medium">
+                {kw}
+              </span>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* DefinedTerm JSON-LD */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(definedTermSchema) }}
+      />
+
+      {/* BreadcrumbList JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
+      {/* FAQPage JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
     </div>
   )

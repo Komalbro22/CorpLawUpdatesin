@@ -13,6 +13,8 @@ type GlossaryTerm = {
   is_verified: boolean
   related_terms: string[]
   created_at: string
+  keywords: string[]
+  extended_note: string
 }
 
 const CATEGORIES = ['IBC', 'NCLT', 'MCA', 'SEBI', 'RBI', 'FEMA', 'GENERAL']
@@ -22,6 +24,7 @@ export default function AdminGlossaryPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [newKeyword, setNewKeyword] = useState('')
   
   // Form State
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -31,7 +34,9 @@ export default function AdminGlossaryPage() {
     definition: '',
     category: 'GENERAL',
     is_verified: false,
-    related_terms: ''
+    related_terms: '',
+    extended_note: '',
+    keywords: [] as string[]
   })
 
   useEffect(() => {
@@ -70,7 +75,17 @@ export default function AdminGlossaryPage() {
 
   const openNewModal = () => {
     setEditingId(null)
-    setFormData({ term: '', slug: '', definition: '', category: 'GENERAL', is_verified: false, related_terms: '' })
+    setFormData({
+      term: '',
+      slug: '',
+      definition: '',
+      category: 'GENERAL',
+      is_verified: false,
+      related_terms: '',
+      extended_note: '',
+      keywords: []
+    })
+    setNewKeyword('')
     setIsModalOpen(true)
   }
 
@@ -82,8 +97,11 @@ export default function AdminGlossaryPage() {
       definition: term.definition,
       category: term.category,
       is_verified: term.is_verified,
-      related_terms: term.related_terms ? term.related_terms.join(', ') : ''
+      related_terms: term.related_terms ? term.related_terms.join(', ') : '',
+      extended_note: term.extended_note || '',
+      keywords: term.keywords || []
     })
+    setNewKeyword('')
     setIsModalOpen(true)
   }
 
@@ -108,7 +126,9 @@ export default function AdminGlossaryPage() {
       definition: formData.definition,
       category: formData.category,
       is_verified: formData.is_verified,
-      related_terms: formData.related_terms.split(',').map(s => s.trim()).filter(Boolean)
+      related_terms: formData.related_terms.split(',').map(s => s.trim()).filter(Boolean),
+      extended_note: formData.extended_note,
+      keywords: formData.keywords
     }
 
     if (editingId) {
@@ -134,6 +154,27 @@ export default function AdminGlossaryPage() {
     if (!error) {
       setTerms(terms.map(t => t.id === id ? { ...t, is_verified: !currentStatus } : t))
     }
+  }
+
+  const handleAddKeyword = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      const val = newKeyword.trim()
+      if (val && !formData.keywords.includes(val)) {
+        setFormData(prev => ({
+          ...prev,
+          keywords: [...prev.keywords, val]
+        }))
+        setNewKeyword('')
+      }
+    }
+  }
+
+  const handleRemoveKeyword = (indexToRemove: number) => {
+    setFormData(prev => ({
+      ...prev,
+      keywords: prev.keywords.filter((_, i) => i !== indexToRemove)
+    }))
   }
 
   const filteredTerms = terms.filter(t => 
@@ -308,11 +349,22 @@ export default function AdminGlossaryPage() {
                   <label className="text-sm font-semibold text-slate-700">Definition <span className="text-red-500">*</span></label>
                   <textarea 
                     required
-                    rows={4}
+                    rows={3}
                     value={formData.definition}
                     onChange={(e) => setFormData(prev => ({ ...prev, definition: e.target.value }))}
                     className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm resize-y"
                     placeholder="Provide a clear, plain-language definition..."
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-sm font-semibold text-slate-700">Extended Note (Understanding paragraph for SEO)</label>
+                  <textarea 
+                    rows={3}
+                    value={formData.extended_note}
+                    onChange={(e) => setFormData(prev => ({ ...prev, extended_note: e.target.value }))}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm resize-y"
+                    placeholder="Detailed paragraph explaining the term, context, or real-world application..."
                   />
                 </div>
 
@@ -326,6 +378,40 @@ export default function AdminGlossaryPage() {
                     placeholder="e.g. CIRP, Insolvency, Corporate Debtor (comma separated)"
                   />
                   <p className="text-xs text-slate-400">Exact term names you want to link to at the bottom of the definition.</p>
+                </div>
+
+                {/* Keywords Tag Input */}
+                <div className="space-y-1.5">
+                  <label className="text-sm font-semibold text-slate-700">Keywords (Hit Enter to add)</label>
+                  <input 
+                    type="text" 
+                    value={newKeyword}
+                    onChange={(e) => setNewKeyword(e.target.value)}
+                    onKeyDown={handleAddKeyword}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm"
+                    placeholder="Add keywords (e.g. CIRP meaning) and press Enter"
+                  />
+                  
+                  {formData.keywords.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mt-2 p-3 bg-slate-50 border border-slate-100 rounded-lg">
+                      {formData.keywords.map((keyword, index) => (
+                        <span 
+                          key={index} 
+                          className="inline-flex items-center gap-1 bg-white border border-slate-200 text-slate-700 text-xs font-semibold px-2 py-1 rounded-md"
+                        >
+                          {keyword}
+                          <button 
+                            type="button" 
+                            onClick={() => handleRemoveKeyword(index)}
+                            className="text-slate-400 hover:text-red-500 transition-colors p-0.5 rounded-full hover:bg-slate-100"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <p className="text-xs text-slate-400">Add variations of key queries search engines use to find this term.</p>
                 </div>
               </form>
             </div>

@@ -83,7 +83,7 @@ export default async function Footer() {
                     <div className="lg:col-span-2">
                         <h4 className="font-heading text-sm font-bold text-white uppercase tracking-widest mb-6">Explore</h4>
                         <ul className="space-y-3">
-                            {['Home', 'Updates', 'About', 'Newsletter', 'Contact'].map(item => (
+                            {['Home', 'Updates', 'Glossary', 'About', 'Newsletter', 'Contact'].map(item => (
                                 <li key={item}>
                                     <Link href={item === 'Home' ? '/' : `/${item.toLowerCase()}`} className="text-slate-400 hover:text-gold transition-colors text-sm font-medium">
                                         {item}
