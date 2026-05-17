@@ -30,6 +30,8 @@ const sanitizeOptions = {
     }
 }
 
+const stripHtml = (html: string) => html ? html.replace(/<[^>]*>/g, '').trim() : ''
+
 export const revalidate = 3600
 
 export async function generateStaticParams() {
@@ -554,12 +556,12 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                   ...(update.key_change ? [{
                     '@type': 'ListItem',
                     position: 1,
-                    name: update.key_change
+                    name: stripHtml(update.key_change)
                   }] : []),
                   ...(update.key_changes?.map((kc: string, i: number) => ({
                     '@type': 'ListItem',
                     position: (update.key_change ? 2 : 1) + i,
-                    name: kc,
+                    name: stripHtml(kc),
                   })) || [])
                 ],
               }} />
