@@ -77,7 +77,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const glossaryPages = (glossaryTerms || []).map(term => ({
     url: `${BASE_URL}/glossary/${term.slug}`,
     lastModified: new Date(term.created_at),
-    changeFrequency: 'monthly' as const,
+    changeFrequency: 'yearly' as const,
     priority: 0.6,
   }))
 
