@@ -1,4 +1,4 @@
-import { createHash } from 'crypto'
+import { createHash, timingSafeEqual } from 'crypto'
 
 export const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.corplawupdates.in'
 
@@ -25,16 +25,37 @@ export function formatDate(dateString: string): string {
 }
 
 export function generateUnsubscribeToken(email: string): string {
-    const adminSalt = process.env.ADMIN_SECRET_SALT || ''
+    const adminSalt = process.env.ADMIN_SECRET_SALT
+    if (!adminSalt) {
+        throw new Error('ADMIN_SECRET_SALT is not configured')
+    }
     return createHash('sha256')
         .update(email + adminSalt)
         .digest('hex')
 }
 
-export function generateAdminSessionHash(): string {
-    const adminPassword = process.env.ADMIN_PASSWORD || ''
-    const adminSalt = process.env.ADMIN_SECRET_SALT || ''
-    return createHash('sha256')
-        .update(adminPassword + adminSalt)
+export function createAdminSessionToken(): string {
+    const adminPassword = process.env.ADMIN_PASSWORD
+    const adminSalt = process.env.ADMIN_SECRET_SALT
+    if (!adminPassword || !adminSalt) {
+        throw new Error('ADMIN_PASSWORD and ADMIN_SECRET_SALT must be configured')
+    }
+
+    const payload = JSON.stringify({
+        exp: Date.now() + 24 * 60 * 60 * 1000 // 24 hours
+    })
+
+    const payloadB64 = Buffer.from(payload).toString('base64')
+    const signature = createHash('sha256')
+        .update(payloadB64 + adminPassword + adminSalt)
         .digest('hex')
+
+    return `${payloadB64}.${signature}`
 }
+
+export function safeCompare(a: string, b: string): boolean {
+    const hashA = createHash('sha256').update(a).digest()
+    const hashB = createHash('sha256').update(b).digest()
+    return timingSafeEqual(hashA, hashB)
+}
+

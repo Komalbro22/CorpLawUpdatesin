@@ -46,11 +46,18 @@ export async function GET(request: NextRequest) {
 
         if (error) throw error
 
-        const { data: allCats } = await supabaseAdmin.from('updates').select('category')
-        const categoryCounts = allCats?.reduce((acc, row) => {
-            acc[row.category] = (acc[row.category] || 0) + 1
-            return acc
-        }, {} as Record<string, number>) || {}
+        const categories = ['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA']
+        const categoryCounts: Record<string, number> = {}
+
+        await Promise.all(
+            categories.map(async (cat) => {
+                const { count: catCount } = await supabaseAdmin
+                    .from('updates')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('category', cat)
+                categoryCounts[cat] = catCount || 0
+            })
+        )
 
         return NextResponse.json({
             articles,

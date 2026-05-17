@@ -20,6 +20,15 @@ import ArticleActions from '@/components/ArticleActions'
 import ReadingProgress from '@/components/ReadingProgress'
 import FontSizeToggle from '@/components/FontSizeToggle'
 import { AlertCircle, BookOpen, CalendarDays, ChevronDown, Clock3, Eye, FileText, Lightbulb } from 'lucide-react'
+import sanitizeHtml from 'sanitize-html'
+
+const sanitizeOptions = {
+    allowedTags: [ 'b', 'i', 'em', 'strong', 'a', 'span', 'code', 'p', 'br', 'ul', 'li', 'ol' ],
+    allowedAttributes: {
+        'a': [ 'href', 'target', 'rel' ],
+        'span': [ 'class' ]
+    }
+}
 
 export const revalidate = 3600
 
@@ -307,7 +316,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                         <FileText className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-600" aria-hidden />
                         <div>
                             <p className="text-xs font-bold text-amber-900 uppercase tracking-widest mb-1">Key Change</p>
-                            <p className="text-amber-800 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: update.key_change }} />
+                            <p className="text-amber-800 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: sanitizeHtml(update.key_change, sanitizeOptions) }} />
                         </div>
                     </div>
                 )}
@@ -326,7 +335,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                             <div className="p-5 border-t border-slate-100">
                                 <ul className="list-disc pl-5 space-y-2 text-sm text-slate-700">
                                     {update.key_changes.map((kc: string, i: number) => (
-                                        <li key={i} className="leading-relaxed" dangerouslySetInnerHTML={{ __html: kc }} />
+                                        <li key={i} className="leading-relaxed" dangerouslySetInnerHTML={{ __html: sanitizeHtml(kc, sanitizeOptions) }} />
                                     ))}
                                 </ul>
                             </div>

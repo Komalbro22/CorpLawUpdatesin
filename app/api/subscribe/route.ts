@@ -21,13 +21,15 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Invalid email' }, { status: 400 })
         }
 
-        const ip = request.headers.get('x-forwarded-for') || 'unknown'
+        const rawIp = request.headers.get('x-forwarded-for') || 'unknown'
+        const clientIp = rawIp.split(',')[0].trim()
+        const ipKey = `sub:${clientIp}`
 
         // Rate limiting logic
         const { data: attemptData } = await supabaseAdmin
             .from('login_attempts')
             .select('*')
-            .eq('ip', ip)
+            .eq('ip', ipKey)
             .single()
 
         const now = new Date()
@@ -44,17 +46,17 @@ export async function POST(request: NextRequest) {
                 await supabaseAdmin
                     .from('login_attempts')
                     .update({ attempts: attemptData.attempts + 1 })
-                    .eq('ip', ip)
+                    .eq('ip', ipKey)
             } else {
                 await supabaseAdmin
                     .from('login_attempts')
                     .update({ attempts: 1, window_start: now.toISOString() })
-                    .eq('ip', ip)
+                    .eq('ip', ipKey)
             }
         } else {
             await supabaseAdmin
                 .from('login_attempts')
-                .insert({ ip, attempts: 1, window_start: now.toISOString() })
+                .insert({ ip: ipKey, attempts: 1, window_start: now.toISOString() })
         }
 
         // Check subscribers

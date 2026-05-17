@@ -188,7 +188,7 @@ export async function sendNewsletterEmails({
                 recipientsToInsert.push({
                     campaign_id: campaignId,
                     email: sub.email,
-                    status: 'delivered',
+                    status: 'sent',
                     resend_email_id: (r.data as any)?.id || null, // eslint-disable-line @typescript-eslint/no-explicit-any
                     sent_at: new Date().toISOString()
                 })

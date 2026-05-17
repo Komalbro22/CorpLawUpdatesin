@@ -174,7 +174,7 @@ export default async function RootLayout({
           </main>
           <HideOnAdmin><Footer /></HideOnAdmin>
           <HideOnAdmin><BackToTop /></HideOnAdmin>
-          <WhatsAppButton />
+          <HideOnAdmin><WhatsAppButton /></HideOnAdmin>
         </ToastProvider>
         <Analytics />
         <SpeedInsights />

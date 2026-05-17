@@ -42,13 +42,20 @@ export async function GET(request: Request) {
                     mode: 'markdown', // Assuming markdown for scheduled
                 })
 
-                // 2. Update status to 'sent'
+                let finalStatus = 'sent'
+                if (result.sent === 0 && result.total > 0) {
+                    finalStatus = 'failed'
+                } else if (result.failed > 0) {
+                    finalStatus = 'partially_sent'
+                }
+
+                // 2. Update status
                 await supabaseAdmin
                     .from('scheduled_newsletters')
-                    .update({ status: 'sent' })
+                    .update({ status: finalStatus })
                     .eq('id', newsletter.id)
 
-                results.push({ id: newsletter.id, status: 'sent', result })
+                results.push({ id: newsletter.id, status: finalStatus, result })
 
             } catch (sendErr: any) {
                 console.error(`Failed to send newsletter ${newsletter.id}:`, sendErr)

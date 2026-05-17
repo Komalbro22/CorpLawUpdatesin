@@ -3,16 +3,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
-import { generateAdminSessionHash } from '@/lib/utils'
+import { safeCompare, createAdminSessionToken } from '@/lib/utils'
 
 export async function POST(request: NextRequest) {
     try {
-        const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown'
+        const rawIp = request.headers.get('x-forwarded-for') || 'unknown'
+        const clientIp = rawIp.split(',')[0].trim()
+        const rateLimitKey = `login:${clientIp}`
         
         const { data: row } = await supabaseAdmin
             .from('login_attempts')
             .select('*')
-            .eq('ip', clientIp)
+            .eq('ip', rateLimitKey)
             .single()
 
         let existingAttempts = 0
@@ -29,7 +31,7 @@ export async function POST(request: NextRequest) {
             }
 
             if (diffMinutes >= 15) {
-                await supabaseAdmin.from('login_attempts').delete().eq('ip', clientIp)
+                await supabaseAdmin.from('login_attempts').delete().eq('ip', rateLimitKey)
                 existingRow = null
             } else {
                 existingAttempts = row.attempts
@@ -39,9 +41,14 @@ export async function POST(request: NextRequest) {
         const body = await request.json().catch(() => ({ password: '' }))
         const password = body.password
 
-        if (password !== process.env.ADMIN_PASSWORD) {
+        const adminPassword = process.env.ADMIN_PASSWORD
+        if (!adminPassword) {
+            return NextResponse.json({ error: 'Admin access is not configured' }, { status: 500 })
+        }
+
+        if (!safeCompare(password, adminPassword)) {
             await supabaseAdmin.from('login_attempts').upsert({
-                ip: clientIp,
+                ip: rateLimitKey,
                 attempts: existingAttempts + 1,
                 window_start: existingRow ? existingRow.window_start : new Date().toISOString()
             }, { onConflict: 'ip' })
@@ -49,10 +56,10 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Invalid password' }, { status: 401 })
         }
 
-        await supabaseAdmin.from('login_attempts').delete().eq('ip', clientIp)
+        await supabaseAdmin.from('login_attempts').delete().eq('ip', rateLimitKey)
 
         const response = NextResponse.json({ success: true })
-        response.cookies.set('admin_session', generateAdminSessionHash(), {
+        response.cookies.set('admin_session', createAdminSessionToken(), {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',

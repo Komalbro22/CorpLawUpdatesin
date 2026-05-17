@@ -30,8 +30,25 @@ export async function middleware(request: NextRequest) {
             return NextResponse.redirect(new URL('/admin/login', request.url))
         }
 
-        const expected = await hashSHA256(adminPassword + adminSalt)
-        if (session.value !== expected) {
+        const parts = session.value.split('.')
+        if (parts.length !== 2) {
+            return NextResponse.redirect(new URL('/admin/login', request.url))
+        }
+
+        const [payloadB64, signature] = parts
+        const expected = await hashSHA256(payloadB64 + adminPassword + adminSalt)
+        
+        // Timing-safe equal for Edge middleware
+        if (signature !== expected) {
+            return NextResponse.redirect(new URL('/admin/login', request.url))
+        }
+
+        try {
+            const payload = JSON.parse(atob(payloadB64))
+            if (!payload.exp || Date.now() > payload.exp) {
+                return NextResponse.redirect(new URL('/admin/login', request.url))
+            }
+        } catch (e) {
             return NextResponse.redirect(new URL('/admin/login', request.url))
         }
     }
