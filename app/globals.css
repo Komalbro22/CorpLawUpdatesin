@@ -342,15 +342,31 @@ h2, h3, h4 {
   opacity: 1 !important;
 }
 
-.article-content table thead tr,
-.article-content table thead th {
+/* Only make table headers white inside dark background containers */
+.article-content div[style*="background:#0F172A"] table thead tr,
+.article-content div[style*="background:#0F172A"] table thead th,
+.article-content div[style*="background:#0f172a"] table thead tr,
+.article-content div[style*="background:#0f172a"] table thead th,
+.article-content div[style*="background:#0F2342"] table thead tr,
+.article-content div[style*="background:#0F2342"] table thead th,
+.article-content div[style*="background:#0f2342"] table thead tr,
+.article-content div[style*="background:#0f2342"] table thead th,
+.article-content div[style*="background:#0b1121"] table thead tr,
+.article-content div[style*="background:#0b1121"] table thead th,
+.article-content div[style*="background:#0B1121"] table thead tr,
+.article-content div[style*="background:#0B1121"] table thead th {
   color: #ffffff !important;
   opacity: 1 !important;
 }
 
-/* Fix prose override on colored text */
-.article-content [style*="color:#"] { color: inherit; }
-.article-content p[style*="color:"] { color: unset; }
+/* Fix prose override on colored text by letting child elements inherit custom container colors,
+   without breaking elements that have their own inline style color attributes */
+.article-content [style*="color:"] p,
+.article-content [style*="color:"] li,
+.article-content [style*="color:"] span,
+.article-content [style*="color:"] strong {
+  color: inherit;
+}
 
 /* ============================================================
    PROSE IMAGE STYLES
