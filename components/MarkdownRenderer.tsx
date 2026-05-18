@@ -53,12 +53,18 @@ export default function MarkdownRenderer({ content }: { content: string }) {
 
     }, [content])
 
+    // Preprocess content to strip leading indentation from lines starting with HTML tags or comments.
+    // This prevents standard CommonMark parser from treating indented HTML blocks as code blocks.
+    const processedContent = content
+        ? content.replace(/^\s+(?=<(?:\/)?(?:div|p|img|span|table|tr|td|th|tbody|thead|ul|ol|li|h[1-6]|a|strong|em|b|i|ins|del|iframe|svg|!--))/gim, '')
+        : ''
+
     return (
         <div ref={ref} className={`
           article-content prose prose-slate max-w-none
           prose-headings:text-navy
           prose-p:text-slate-700
-          prose-strong:text-navy
+          prose-strong:text-inherit
           prose-a:text-amber-600
           prose-table:text-slate-700
           prose-td:text-slate-700
@@ -79,29 +85,35 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                 remarkPlugins={[remarkGfm, remarkBreaks]}
                 rehypePlugins={[rehypeRaw]}
                 components={{
-                    p: ({ node, style, children, ...props }: any) => (
-                        <p style={{ marginBottom: '1rem', marginTop: '0.5rem', ...style }} {...props}>
-                            {children}
-                        </p>
-                    ),
-                    img: ({ node, style, src, alt, ...props }: any) => (
-                        <img
-                            src={src}
-                            alt={alt || ''}
-                            style={{
-                                maxWidth: '100%',
-                                height: 'auto',
-                                display: 'block',
-                                margin: '1.5rem auto',
-                                borderRadius: '0.5rem',
-                                ...style
-                            }}
-                            {...props}
-                        />
-                    )
+                    p: ({ node, style, children, ...props }: any) => {
+                        const styleObj = typeof style === 'string' ? {} : style;
+                        return (
+                            <p style={{ marginBottom: '1rem', marginTop: '0.5rem', ...styleObj }} {...props}>
+                                {children}
+                            </p>
+                        );
+                    },
+                    img: ({ node, style, src, alt, ...props }: any) => {
+                        const styleObj = typeof style === 'string' ? {} : style;
+                        return (
+                            <img
+                                src={src}
+                                alt={alt || ''}
+                                style={{
+                                    maxWidth: '100%',
+                                    height: 'auto',
+                                    display: 'block',
+                                    margin: '1.5rem auto',
+                                    borderRadius: '0.5rem',
+                                    ...styleObj
+                                }}
+                                {...props}
+                            />
+                        );
+                    }
                 }}
             >
-                {content}
+                {processedContent}
             </ReactMarkdown>
         </div>
     )
