@@ -4,8 +4,9 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
-import { ArrowLeft, Save, Sparkles, CheckCircle2, AlertTriangle, HelpCircle, Plus, Trash2, X, Loader2 } from 'lucide-react'
+import { ArrowLeft, Save, Sparkles, CheckCircle2, AlertTriangle, HelpCircle, Plus, Trash2, X, Loader2, Eye } from 'lucide-react'
 import { useToast } from '@/components/Toast'
+import MarkdownRenderer from '@/components/MarkdownRenderer'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 
@@ -21,6 +22,7 @@ export default function EditGlossaryTermPage({ params }: Props) {
 
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false)
   const [term, setTerm] = useState('')
   const [slug, setSlug] = useState('')
   const [slugEdited, setSlugEdited] = useState(false)
@@ -203,8 +205,8 @@ export default function EditGlossaryTermPage({ params }: Props) {
   }
 
   // Submit form
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async (e?: React.FormEvent | React.MouseEvent) => {
+    if (e) e.preventDefault()
     if (!term.trim()) {
       showToast('Term name is required', 'error')
       return
@@ -285,14 +287,25 @@ export default function EditGlossaryTermPage({ params }: Props) {
           </div>
         </div>
 
-        <button 
-          onClick={handleSubmit}
-          disabled={isSaving}
-          className="inline-flex items-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-600 disabled:bg-amber-300 text-white font-semibold rounded-xl shadow-md shadow-amber-500/10 transition-all hover:scale-[1.01] active:scale-[0.99]"
-        >
-          <Save className="w-4 h-4" />
-          {isSaving ? 'Updating...' : 'Update Term'}
-        </button>
+        <div className="flex gap-2.5">
+          <button 
+            type="button"
+            onClick={() => setIsPreviewOpen(true)}
+            className="inline-flex items-center gap-2 px-5 py-3 bg-white hover:bg-slate-50 text-navy font-semibold rounded-xl border border-slate-200 shadow-sm transition-all hover:scale-[1.01] active:scale-[0.99]"
+          >
+            <Eye className="w-4 h-4 text-slate-500" />
+            Live Preview
+          </button>
+
+          <button 
+            onClick={handleSubmit}
+            disabled={isSaving}
+            className="inline-flex items-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-600 disabled:bg-amber-300 text-white font-semibold rounded-xl shadow-md shadow-amber-500/10 transition-all hover:scale-[1.01] active:scale-[0.99]"
+          >
+            <Save className="w-4 h-4" />
+            {isSaving ? 'Updating...' : 'Update Term'}
+          </button>
+        </div>
       </div>
 
       {/* Main Grid */}
@@ -645,6 +658,168 @@ export default function EditGlossaryTermPage({ params }: Props) {
           </div>
         </div>
       </div>
+
+      {/* Live Preview Modal */}
+      {isPreviewOpen && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm flex justify-center p-4 sm:p-6 md:p-10">
+          <div className="relative w-full max-w-4xl bg-slate-50 rounded-3xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col my-auto max-h-[90vh]">
+            
+            {/* Modal Header */}
+            <div className="flex justify-between items-center px-8 py-5 bg-white border-b border-slate-200 shrink-0">
+              <div>
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-600 border border-amber-200">
+                  <Eye className="w-3.5 h-3.5" />
+                  Interactive Preview
+                </span>
+                <h2 className="text-lg font-bold text-navy mt-1 font-heading">Live Public View Simulation</h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsPreviewOpen(false)}
+                className="p-2 hover:bg-slate-100 rounded-xl transition-colors border border-slate-200/60"
+              >
+                <X className="w-5 h-5 text-slate-500" />
+              </button>
+            </div>
+
+            {/* Modal Content - scrollable */}
+            <div className="flex-1 overflow-y-auto px-8 py-10 bg-slate-50/50">
+              <div className="max-w-3xl mx-auto text-left">
+                
+                {/* Simulated Breadcrumb */}
+                <nav className="mb-8 text-sm text-slate-500 font-medium select-none pointer-events-none">
+                  <ol className="flex items-center space-x-2">
+                    <li>Home</li>
+                    <li><span aria-hidden="true" className="mx-1">›</span></li>
+                    <li>Glossary</li>
+                    <li><span aria-hidden="true" className="mx-1">›</span></li>
+                    <li className="text-navy font-semibold">{term || 'New Term'}</li>
+                  </ol>
+                </nav>
+
+                {/* Main Card */}
+                <article className="bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm relative overflow-hidden text-left">
+                  {/* Decorative background letter */}
+                  <div className="absolute top-0 right-0 p-8 opacity-5 select-none pointer-events-none" aria-hidden="true">
+                    <span className="text-9xl font-heading font-bold text-slate-900 leading-none">
+                      {(term || 'N').charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+
+                  <div className="relative z-10">
+                    <div className="flex flex-wrap gap-2 items-center mb-4">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 uppercase tracking-wide">
+                        {category}
+                      </span>
+                    </div>
+                    
+                    <h1 className="text-3xl md:text-4xl font-heading font-bold text-navy mb-6">
+                      {term || 'Committee of Creditors'}
+                    </h1>
+                    
+                    <div className="prose prose-slate prose-lg max-w-none text-slate-700">
+                      {definition ? (
+                        <MarkdownRenderer content={definition} />
+                      ) : (
+                        <p className="text-slate-400 italic">No definition written yet. Use the editor to write the definition.</p>
+                      )}
+                    </div>
+
+                    {synonyms.length > 0 && (
+                      <div className="mt-6 pt-4 border-t border-slate-100 flex flex-wrap gap-1.5 items-center">
+                        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider mr-1.5">Acronyms / Synonyms:</span>
+                        {synonyms.map((syn) => (
+                          <span key={syn} className="inline-flex items-center px-2 py-0.5 rounded bg-slate-50 text-slate-600 text-xs font-semibold border border-slate-100">
+                            {syn}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </article>
+
+                {/* Extended Note Section */}
+                {extendedNote && (
+                  <section className="mt-8 bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm text-left">
+                    <h3 className="text-xl font-bold text-navy mb-4 font-heading">Understanding {term || 'Term'}</h3>
+                    <div className="prose prose-slate max-w-none text-slate-600">
+                      <MarkdownRenderer content={extendedNote} />
+                    </div>
+                  </section>
+                )}
+
+                {/* FAQ Section */}
+                <section className="mt-8 bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm text-left">
+                  <h2 className="text-xl font-bold text-navy mb-6 font-heading">Frequently Asked Questions</h2>
+                  <div className="space-y-4">
+                    {(faqs.length > 0 ? faqs.map(f => ({ q: f.q, a: f.a })) : [
+                      {
+                        q: `What is ${term || 'Term'} in Indian corporate law?`,
+                        a: definition ? definition.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() : 'Definition will be displayed here...'
+                      },
+                      {
+                        q: `Why is ${term || 'Term'} important for compliance?`,
+                        a: `${term || 'Term'} is governed under Indian ${category} law. Understanding this concept is essential for ensuring regulatory compliance, avoiding penalties, and making corporate decisions in India.`
+                      }
+                    ]).map((faq, i) => (
+                      <div key={i} className="border border-slate-100 rounded-xl p-4 bg-slate-50/50">
+                        <h4 className="font-semibold text-navy flex items-center justify-between">
+                          <span>{faq.q || 'Question...'}</span>
+                          <span className="text-slate-400 text-[10px]">▼</span>
+                        </h4>
+                        <p className="mt-3 text-slate-600 text-sm leading-relaxed border-t border-slate-200/50 pt-3">
+                          {faq.a || 'Answer will be displayed here...'}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+
+                {/* Related Searches Section */}
+                {keywords.length > 0 && (
+                  <section className="mt-8 bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm text-left">
+                    <h3 className="text-lg font-bold text-navy mb-4 font-heading">Related Searches</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {keywords.map((kw, i) => (
+                        <span
+                          key={i}
+                          className="text-sm bg-slate-50 text-slate-600 border border-slate-200/60 px-4 py-2 rounded-full font-medium shadow-sm flex items-center gap-1 cursor-pointer hover:bg-slate-100"
+                        >
+                          <span>{kw}</span>
+                          <span className="text-slate-400 text-xs">↗</span>
+                        </span>
+                      ))}
+                    </div>
+                  </section>
+                )}
+
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-8 py-4 bg-white border-t border-slate-200 flex justify-end gap-3 shrink-0">
+              <button
+                type="button"
+                onClick={() => setIsPreviewOpen(false)}
+                className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-navy font-semibold rounded-xl text-sm border border-slate-200 transition-colors"
+              >
+                Close Preview
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsPreviewOpen(false)
+                  handleSubmit()
+                }}
+                className="px-6 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-xl text-sm transition-colors shadow-md shadow-amber-500/10"
+              >
+                Save & Publish
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
     </div>
   )
 }
