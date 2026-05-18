@@ -104,8 +104,6 @@ export default async function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="format-detection" content="telephone=no" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <JsonLd data={{
           '@context': 'https://schema.org',
           '@type': 'Organization',
@@ -146,9 +144,9 @@ export default async function RootLayout({
           <>
             <Script
               src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-              strategy="afterInteractive"
+              strategy="lazyOnload"
             />
-            <Script id="ga4-init" strategy="afterInteractive">
+            <Script id="ga4-init" strategy="lazyOnload">
               {`
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
@@ -181,11 +179,11 @@ export default async function RootLayout({
         {/* Google Reader Revenue Manager - SWG */}
         <Script
           src="https://news.google.com/swg/js/v1/swg-basic.js"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
         <Script
           id="swg-basic-init"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `
               (self.SWG_BASIC = self.SWG_BASIC || []).push(
