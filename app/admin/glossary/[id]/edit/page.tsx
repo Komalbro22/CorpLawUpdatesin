@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { ArrowLeft, Save, Sparkles, CheckCircle2, AlertTriangle, HelpCircle, Plus, Trash2, X, Loader2 } from 'lucide-react'
-import { supabase } from '@/lib/supabase'
 import { useToast } from '@/components/Toast'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
@@ -52,18 +51,16 @@ export default function EditGlossaryTermPage({ params }: Props) {
 
   const fetchTermDetails = async () => {
     try {
-      const { data, error } = await supabase
-        .from('glossary')
-        .select('*')
-        .eq('id', params.id)
-        .single()
+      const res = await fetch(`/api/admin/glossary/${params.id}`)
+      const json = await res.json()
 
-      if (error) {
-        showToast('Error loading term: ' + error.message, 'error')
+      if (!res.ok) {
+        showToast('Error loading term: ' + (json.error || 'Not found'), 'error')
         router.push('/admin/glossary')
         return
       }
 
+      const data = json.term
       if (data) {
         setTerm(data.term || '')
         setSlug(data.slug || '')
@@ -191,13 +188,18 @@ export default function EditGlossaryTermPage({ params }: Props) {
     }
 
     try {
-      const { error } = await supabase
-        .from('glossary')
-        .update(payload)
-        .eq('id', params.id)
+      const res = await fetch(`/api/admin/glossary/${params.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      const json = await res.json()
+      const updated = json.term
 
-      if (error) {
-        showToast('Error updating glossary term: ' + error.message, 'error')
+      if (!res.ok) {
+        showToast('Error updating glossary term: ' + (json.error || 'Update failed'), 'error')
+      } else if (!updated) {
+        showToast('Error updating glossary term: no rows updated', 'error')
       } else {
         showToast('Glossary term updated successfully!', 'success')
         router.push('/admin/glossary')

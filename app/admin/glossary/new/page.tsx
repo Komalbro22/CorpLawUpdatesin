@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { ArrowLeft, Save, Sparkles, CheckCircle2, AlertTriangle, HelpCircle, Plus, Trash2, X } from 'lucide-react'
-import { supabase } from '@/lib/supabase'
 import { useToast } from '@/components/Toast'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
@@ -138,9 +137,14 @@ export default function NewGlossaryTermPage() {
     }
 
     try {
-      const { error } = await supabase.from('glossary').insert([payload])
-      if (error) {
-        showToast('Error creating glossary term: ' + error.message, 'error')
+      const res = await fetch('/api/admin/glossary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      const json = await res.json()
+      if (!res.ok) {
+        showToast('Error creating glossary term: ' + (json.error || 'Create failed'), 'error')
       } else {
         showToast('Glossary term created successfully!', 'success')
         router.push('/admin/glossary')

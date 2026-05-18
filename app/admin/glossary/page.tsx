@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { supabase } from '@/lib/supabase'
 import { Plus, Edit2, Trash2, CheckCircle2, XCircle, Search, ExternalLink } from 'lucide-react'
 
 type GlossaryTerm = {
@@ -30,14 +29,13 @@ export default function AdminGlossaryPage() {
   const fetchTerms = async () => {
     try {
       setIsLoading(true)
-      const { data, error } = await supabase
-        .from('glossary')
-        .select('*')
-        .order('term', { ascending: true })
-      
-      if (error) {
-        console.error('Error fetching glossary:', error)
+      const res = await fetch('/api/admin/glossary')
+      const json = await res.json()
+
+      if (!res.ok) {
+        console.error('Error fetching glossary:', json.error)
       } else {
+        const data = json.terms as GlossaryTerm[]
         setTerms(data || [])
       }
     } catch (err) {
@@ -50,18 +48,22 @@ export default function AdminGlossaryPage() {
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this term?')) return
     
-    const { error } = await supabase.from('glossary').delete().eq('id', id)
-    if (error) {
-      alert('Failed to delete term.')
-      console.error(error)
+    const res = await fetch(`/api/admin/glossary/${id}`, { method: 'DELETE' })
+    if (!res.ok) {
+      const json = await res.json()
+      alert('Failed to delete term.' + (json.error ? ` ${json.error}` : ''))
     } else {
       fetchTerms()
     }
   }
 
   const toggleVerification = async (id: string, currentStatus: boolean) => {
-    const { error } = await supabase.from('glossary').update({ is_verified: !currentStatus }).eq('id', id)
-    if (!error) {
+    const res = await fetch(`/api/admin/glossary/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ is_verified: !currentStatus }),
+    })
+    if (res.ok) {
       setTerms(terms.map(t => t.id === id ? { ...t, is_verified: !currentStatus } : t))
     }
   }
