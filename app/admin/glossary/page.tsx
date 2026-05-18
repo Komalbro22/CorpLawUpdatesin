@@ -28,18 +28,23 @@ export default function AdminGlossaryPage() {
   }, [])
 
   const fetchTerms = async () => {
-    setIsLoading(true)
-    const { data, error } = await supabase
-      .from('glossary')
-      .select('*')
-      .order('term', { ascending: true })
-    
-    if (error) {
-      console.error('Error fetching glossary:', error)
-    } else {
-      setTerms(data || [])
+    try {
+      setIsLoading(true)
+      const { data, error } = await supabase
+        .from('glossary')
+        .select('*')
+        .order('term', { ascending: true })
+      
+      if (error) {
+        console.error('Error fetching glossary:', error)
+      } else {
+        setTerms(data || [])
+      }
+    } catch (err) {
+      console.error('Error loading glossary terms:', err)
+    } finally {
+      setIsLoading(false)
     }
-    setIsLoading(false)
   }
 
   const handleDelete = async (id: string) => {
@@ -62,8 +67,8 @@ export default function AdminGlossaryPage() {
   }
 
   const filteredTerms = terms.filter(t => 
-    t.term.toLowerCase().includes(search.toLowerCase()) || 
-    t.category.toLowerCase().includes(search.toLowerCase())
+    (t.term || '').toLowerCase().includes(search.toLowerCase()) || 
+    (t.category || '').toLowerCase().includes(search.toLowerCase())
   )
 
   return (
