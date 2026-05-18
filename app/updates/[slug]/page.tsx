@@ -148,7 +148,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
     let glossaryTerms = []
     try {
         const glossaryRes = await fetch(
-            `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/glossary?select=term,slug&is_verified=eq.true`,
+            `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/glossary?select=term,slug,synonyms&is_verified=eq.true`,
             {
                 headers: {
                     apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -158,7 +158,23 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
             }
         )
         if (glossaryRes.ok) {
-            glossaryTerms = await glossaryRes.json()
+            const rawTerms = await glossaryRes.json()
+            glossaryTerms = rawTerms.flatMap((item: any) => {
+                const mappings = [{ term: item.term, slug: item.slug, mainTermName: item.term }]
+                if (item.synonyms && Array.isArray(item.synonyms)) {
+                    item.synonyms.forEach((syn: string) => {
+                        const trimmed = syn.trim()
+                        if (trimmed && trimmed.toLowerCase() !== item.term.toLowerCase()) {
+                            mappings.push({
+                                term: trimmed,
+                                slug: item.slug,
+                                mainTermName: item.term
+                            })
+                        }
+                    })
+                }
+                return mappings
+            })
         }
     } catch (e) {
         console.error('Failed to fetch glossary terms for linking:', e)

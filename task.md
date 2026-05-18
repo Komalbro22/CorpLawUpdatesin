@@ -7,7 +7,7 @@
     - `[x]` HomeStats: Animated count-up client island
 - `[x]` Core Upgrades
     - `[x]` Navbar: Glassmorphism, scroll-compact, improved dropdowns
-    - `[x]` UpdateCard: Category stripes, staggered animations, better hover
+    - `[x]` Validate entire workspace compilation using `npx tsc --noEmit` and production compiler `npm run build` <!-- id: 8 -->
     - `[x]` ReadingProgress: Smooth scroll, glowing tip, ARIA support
     - `[x]` TableOfContents: Sticky sidebar (desktop), collapsible (mobile), IntersectionObserver
     - `[x]` Pagination: Theme-consistent gold/amber active states

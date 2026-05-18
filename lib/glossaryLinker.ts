@@ -1,4 +1,7 @@
-export function linkGlossaryTerms(htmlContent: string, glossaryTerms: { term: string, slug: string }[]): string {
+export function linkGlossaryTerms(
+  htmlContent: string, 
+  glossaryTerms: { term: string; slug: string; mainTermName?: string }[]
+): string {
   if (!htmlContent) return ''
   
   let linked = htmlContent
@@ -7,9 +10,12 @@ export function linkGlossaryTerms(htmlContent: string, glossaryTerms: { term: st
   // Sort terms by length descending so longer terms match first (e.g. "Corporate Debtor" before "Debtor")
   const sortedTerms = [...glossaryTerms].sort((a, b) => b.term.length - a.term.length)
 
-  sortedTerms.forEach(({ term, slug }) => {
+  sortedTerms.forEach(({ term, slug, mainTermName }) => {
     if (alreadyLinked.has(slug)) return
     
+    // Use the primary term name for hover title, fallback to matched term
+    const hoverTitle = mainTermName || term
+
     // Regex explanation:
     // (?<!href="[^"]*) : Negative lookbehind to ensure we are not already inside an href attribute
     // (\b${term}\b)   : The actual term bounded by word boundaries
@@ -22,7 +28,7 @@ export function linkGlossaryTerms(htmlContent: string, glossaryTerms: { term: st
       if (regex.test(linked)) {
         linked = linked.replace(
           regex,
-          `<a href="/glossary/${slug}" class="text-gold font-semibold hover:underline" title="${term} definition">$1</a>`
+          `<a href="/glossary/${slug}" class="text-gold font-semibold hover:underline" title="${hoverTitle} definition">$1</a>`
         )
         alreadyLinked.add(slug)
       }

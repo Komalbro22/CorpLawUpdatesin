@@ -2,11 +2,20 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
+import MarkdownRenderer from '@/components/MarkdownRenderer'
 
 export const revalidate = 3600 // Revalidate every hour
 
 type Props = {
   params: { slug: string }
+}
+
+function getWordCount(text: string): number {
+  if (!text) return 0
+  // Strip HTML tags to get pure word count
+  const clean = text.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+  if (!clean) return 0
+  return clean.split(/\s+/).length
 }
 
 export async function generateStaticParams() {
@@ -20,9 +29,6 @@ export async function generateStaticParams() {
   }))
 }
 
-// Content quality threshold — pages below this get noindex to protect domain authority
-const CONTENT_QUALITY_THRESHOLD = 200
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { data: term } = await supabase
     .from('glossary')
@@ -34,27 +40,30 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: 'Term Not Found | CorpLawUpdates' }
   }
 
-  const contentLength = (term.definition || '').length + (term.extended_note || '').length
-  const isThin = contentLength < CONTENT_QUALITY_THRESHOLD
+  const totalWords = getWordCount(term.definition || '') + getWordCount(term.extended_note || '')
+  const isThin = totalWords < 300
+
+  // Strip HTML for clean SEO description
+  const cleanDescription = (term.definition || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
 
   return {
     title: `${term.term} — Meaning, Definition | CorpLawUpdates Legal Glossary`,
-    description: `${term.term} meaning: ${term.definition.slice(0, 150)}. Part of CorpLawUpdates Indian corporate law glossary.`,
+    description: `${term.term} meaning: ${cleanDescription.slice(0, 150)}. Part of CorpLawUpdates Indian corporate law glossary.`,
     openGraph: {
       title: `${term.term} — Legal Definition`,
-      description: term.definition.slice(0, 150),
+      description: cleanDescription.slice(0, 150),
       url: `https://corplawupdates.in/glossary/${term.slug}`,
     },
-    // Thin glossary pages get noindex to prevent quality dilution — links still followed
+    // Thin glossary pages (< 300 words) get noindex to protect domain authority
     ...(isThin ? { robots: { index: false, follow: true } } : {}),
   }
 }
 
 export default async function GlossaryTermPage({ params }: Props) {
-  // Fetch detailed term fields
+  // Fetch detailed term fields including custom faqs and synonyms
   const { data: term } = await supabase
     .from('glossary')
-    .select('term, slug, definition, category, keywords, extended_note, related_terms, created_at, is_verified')
+    .select('term, slug, definition, category, keywords, extended_note, related_terms, created_at, is_verified, faqs, synonyms')
     .eq('slug', params.slug)
     .single()
 
@@ -90,9 +99,9 @@ export default async function GlossaryTermPage({ params }: Props) {
   const isAcronym = /^[A-Z]{2,8}$/.test(term.term) || 
                     /^[A-Z][A-Z0-9\-]{1,7}$/.test(term.term)
 
-  // Content quality check — only generate rich FAQs for substantial content
-  const contentLength = (term.definition || '').length + (term.extended_note || '').length
-  const isSubstantial = contentLength >= CONTENT_QUALITY_THRESHOLD
+  // Calculate HTML-stripped word count
+  const totalWords = getWordCount(term.definition || '') + getWordCount(term.extended_note || '')
+  const isSubstantial = totalWords >= 300
 
   // Category-specific contextual phrases for unique FAQ answers
   const categoryContext: Record<string, string> = {
@@ -105,31 +114,44 @@ export default async function GlossaryTermPage({ params }: Props) {
   }
   const ctx = categoryContext[term.category] || `regulated under Indian ${term.category} law`
 
-  // Auto-generate high-quality, non-repetitive FAQs
-  const faqs = [
-    {
-      q: `What is ${term.term} in Indian corporate law?`,
-      a: term.definition
-    },
-    {
-      q: `Why is ${term.term} important for compliance?`,
-      a: `${term.term} is ${ctx}. Understanding this concept is essential for ensuring regulatory compliance, avoiding penalties, and making informed corporate decisions in India.`
-    },
-    ...(isAcronym ? [{
-      q: `What is the full form of ${term.term}?`,
-      a: term.definition.split('—')[0]?.trim() + ' — that is the full form of ' + term.term + '.'
-    }] : [{
-      q: `Who should know about ${term.term}?`,
-      a: `${term.term} is relevant for company secretaries, compliance officers, chartered accountants, corporate lawyers, board members, and all professionals dealing with ${term.category} regulatory matters in India.`
-    }])
-  ]
+  // Compile FAQs: use manual admin-entered ones, fallback to auto-generated
+  let faqsList: { q: string; a: string }[] = []
+  if (term.faqs && Array.isArray(term.faqs) && term.faqs.length > 0) {
+    faqsList = term.faqs
+      .map((f: { q?: string; question?: string; a?: string; answer?: string }) => ({
+        q: f.q || f.question || '',
+        a: f.a || f.answer || ''
+      }))
+      .filter((f: { q: string; a: string }) => f.q.trim() && f.a.trim())
+  }
+
+  if (faqsList.length === 0) {
+    const cleanDef = (term.definition || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+    faqsList = [
+      {
+        q: `What is ${term.term} in Indian corporate law?`,
+        a: cleanDef
+      },
+      {
+        q: `Why is ${term.term} important for compliance?`,
+        a: `${term.term} is ${ctx}. Understanding this concept is essential for ensuring regulatory compliance, avoiding penalties, and making informed corporate decisions in India.`
+      },
+      ...(isAcronym ? [{
+        q: `What is the full form of ${term.term}?`,
+        a: cleanDef.split('—')[0]?.trim() + ' — that is the full form of ' + term.term + '.'
+      }] : [{
+        q: `Who should know about ${term.term}?`,
+        a: `${term.term} is relevant for company secretaries, compliance officers, chartered accountants, corporate lawyers, board members, and all professionals dealing with ${term.category} regulatory matters in India.`
+      }])
+    ]
+  }
 
   // DefinedTerm JSON-LD Schema
   const definedTermSchema = {
     "@context": "https://schema.org",
     "@type": "DefinedTerm",
     "name": term.term,
-    "description": term.definition,
+    "description": (term.definition || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(),
     "inDefinedTermSet": {
       "@type": "DefinedTermSet",
       "name": "Indian Corporate Law Glossary",
@@ -153,7 +175,7 @@ export default async function GlossaryTermPage({ params }: Props) {
   const faqSchema = isSubstantial ? {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": faqs.map(faq => ({
+    "mainEntity": faqsList.map(faq => ({
       "@type": "Question",
       "name": faq.q,
       "acceptedAnswer": { "@type": "Answer", "text": faq.a }
@@ -183,10 +205,19 @@ export default async function GlossaryTermPage({ params }: Props) {
         </div>
 
         <div className="relative z-10">
-          <div className="mb-4">
+          <div className="flex flex-wrap gap-2 items-center mb-4">
             <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 uppercase tracking-wide">
               {term.category}
             </span>
+            {isSubstantial ? (
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-50 text-green-700 border border-green-200">
+                Google Indexed ({totalWords} words)
+              </span>
+            ) : (
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-50 text-slate-500 border border-slate-200" title="Terms below 300 words are kept as draft/noindex to avoid thin content SEO penalty">
+                Draft (Word Count: {totalWords}/300)
+              </span>
+            )}
           </div>
           
           <h1 className="text-3xl md:text-4xl font-heading font-bold text-navy mb-6">
@@ -194,10 +225,19 @@ export default async function GlossaryTermPage({ params }: Props) {
           </h1>
           
           <div className="prose prose-slate prose-lg max-w-none text-slate-700">
-            <p className="leading-relaxed leading-8 text-base md:text-lg">
-              {term.definition}
-            </p>
+            <MarkdownRenderer content={term.definition || ''} />
           </div>
+
+          {term.synonyms && term.synonyms.length > 0 && (
+            <div className="mt-6 pt-4 border-t border-slate-100 flex flex-wrap gap-1.5 items-center">
+              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider mr-1.5">Acronyms / Synonyms:</span>
+              {term.synonyms.map((syn: string) => (
+                <span key={syn} className="inline-flex items-center px-2 py-0.5 rounded bg-slate-50 text-slate-600 text-xs font-semibold border border-slate-100">
+                  {syn}
+                </span>
+              ))}
+            </div>
+          )}
 
           <p className="text-xs text-slate-400 mt-8 text-right">
             Last updated: {new Date(term.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
@@ -209,9 +249,9 @@ export default async function GlossaryTermPage({ params }: Props) {
       {term.extended_note && (
         <section className="mt-8 bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm">
           <h3 className="text-xl font-bold text-navy mb-4">Understanding {term.term}</h3>
-          <p className="text-slate-600 text-base leading-relaxed leading-7">
-            {term.extended_note}
-          </p>
+          <div className="prose prose-slate max-w-none text-slate-600">
+            <MarkdownRenderer content={term.extended_note || ''} />
+          </div>
         </section>
       )}
 
@@ -219,7 +259,7 @@ export default async function GlossaryTermPage({ params }: Props) {
       <section className="mt-8 bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm">
         <h2 className="text-xl font-bold text-navy mb-6">Frequently Asked Questions</h2>
         <div className="space-y-4">
-          {faqs.map((faq: { q: string; a: string }, i: number) => (
+          {faqsList.map((faq: { q: string; a: string }, i: number) => (
             <details key={i} className="group border border-slate-100 rounded-xl p-4 bg-slate-50/50 hover:bg-slate-50 transition-colors cursor-pointer">
               <summary className="font-semibold text-navy flex items-center justify-between focus:outline-none select-none list-none [&::-webkit-details-marker]:hidden">
                 <span>{faq.q}</span>
@@ -256,18 +296,31 @@ export default async function GlossaryTermPage({ params }: Props) {
         </section>
       )}
 
-      {/* Related Updates */}
+      {/* Contextual Analysis & Related Updates */}
       {relatedArticles && relatedArticles.length > 0 && (
         <section className="mt-8 bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm">
-          <h3 className="text-xl font-bold text-navy mb-6">Related Updates</h3>
+          <h3 className="text-xl font-bold text-navy mb-4">Contextual Analysis & Regulatory Updates</h3>
+          <p className="text-slate-500 text-sm mb-6">
+            Read our latest analysis and critical updates on corporate circulars related to <strong>{term.category}</strong>:
+          </p>
           <div className="space-y-4">
-            {relatedArticles.map((article: { title: string; slug: string; published_at: string | null }) => (
+            {relatedArticles.map((article: { title: string; slug: string; published_at: string }) => (
               <Link 
                 key={article.slug} 
                 href={`/updates/${article.slug}`}
-                className="block p-4 border border-slate-100 rounded-xl hover:border-amber-400 hover:bg-amber-50/20 transition-all font-medium text-navy hover:text-amber-700"
+                className="group block p-5 border border-slate-100 rounded-2xl bg-slate-50/30 hover:bg-amber-50/10 hover:border-amber-400/60 transition-all duration-200"
               >
-                {article.title}
+                <div className="flex items-start gap-4">
+                  <div className="flex-1">
+                    <h4 className="font-bold text-navy group-hover:text-amber-700 transition-colors duration-150 leading-snug">
+                      {article.title}
+                    </h4>
+                    <p className="text-xs text-slate-400 mt-2 font-medium">
+                      Published: {new Date(article.published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+                    </p>
+                  </div>
+                  <span className="text-slate-300 group-hover:text-amber-500 group-hover:translate-x-1 transition-all duration-200 text-xl font-light">→</span>
+                </div>
               </Link>
             ))}
           </div>
