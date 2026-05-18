@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Resend } from 'resend'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { generateUnsubscribeToken, BASE_URL } from '@/lib/utils'

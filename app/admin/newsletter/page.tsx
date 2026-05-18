@@ -4,11 +4,8 @@
 
 import dynamic from 'next/dynamic'
 import { useState, useEffect } from 'react'
-import sanitizeHtml from 'sanitize-html'
 import {
     AlertTriangle,
-    ChevronDown,
-    ChevronUp,
     FlaskConical,
     Loader2,
     Mail,
@@ -23,7 +20,6 @@ import {
     Sparkles,
     Settings,
     History,
-    Calendar,
     CheckCircle2
 } from 'lucide-react'
 import { useToast } from '@/components/Toast'
@@ -53,7 +49,6 @@ export default function NewsletterPage() {
     const [subscriberCount, setSubscriberCount] = useState(0)
     const [result, setResult] = useState<SendResult | null>(null)
     const [error, setError] = useState('')
-    const [showPreview, setShowPreview] = useState(true) // Default to show isolated iframe preview
     const [failedList, setFailedList] = useState<string[]>([])
     
     // Editor and Mode states
@@ -209,6 +204,7 @@ export default function NewsletterPage() {
             renderLivePreview()
         }, 800)
         return () => clearTimeout(timer)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [subject, previewText, introMessage, customSelectedIds, modeTab, body, editorMode])
 
     async function handleSend(testOnly: boolean, retryList?: string[]) {
