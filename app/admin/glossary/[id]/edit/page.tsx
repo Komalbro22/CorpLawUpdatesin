@@ -201,6 +201,7 @@ export default function EditGlossaryTermPage({ params }: Props) {
       } else {
         showToast('Glossary term updated successfully!', 'success')
         router.push('/admin/glossary')
+        router.refresh()
       }
     } catch (e) {
       console.error(e)

@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 
-export const revalidate = 3600 // Revalidate every hour
+export const revalidate = 0 // Revalidate immediately (instant updates)
 
 type Props = {
   params: { slug: string }

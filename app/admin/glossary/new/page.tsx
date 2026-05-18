@@ -144,6 +144,7 @@ export default function NewGlossaryTermPage() {
       } else {
         showToast('Glossary term created successfully!', 'success')
         router.push('/admin/glossary')
+        router.refresh()
       }
     } catch (e) {
       console.error(e)

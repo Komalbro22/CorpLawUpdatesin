@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { supabase } from '@/lib/supabase'
 import GlossaryClient from '@/components/GlossaryClient'
 
-export const revalidate = 3600 // Revalidate every hour
+export const revalidate = 0 // Revalidate immediately (instant updates)
 
 export const metadata: Metadata = {
   title: 'Legal Glossary — Indian Corporate Law Terms | CorpLawUpdates',
