@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 export default async function GlossaryHubPage() {
   const { data: terms, error } = await supabase
     .from('glossary')
-    .select('id, term, slug, definition, category')
+    .select('id, term, slug, definition, category, keywords, synonyms')
     .eq('is_verified', true)
     .order('term')
 

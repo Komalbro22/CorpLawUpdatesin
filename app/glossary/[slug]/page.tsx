@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
+import { linkGlossaryTerms } from '@/lib/glossaryLinker'
 
 export const revalidate = 0 // Revalidate immediately (instant updates)
 
@@ -48,10 +49,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `${term.term} — Meaning, Definition | CorpLawUpdates Legal Glossary`,
-    description: `${term.term} meaning: ${cleanDescription.slice(0, 150)}. Part of CorpLawUpdates Indian corporate law glossary.`,
+    description: `${term.term} meaning under Indian corporate law: ${cleanDescription.slice(0, 160)}. Learn key legal provisions, statutory authorities, and compliance checklists.`,
+    alternates: {
+      canonical: `https://corplawupdates.in/glossary/${term.slug}`,
+    },
     openGraph: {
       title: `${term.term} — Legal Definition`,
-      description: cleanDescription.slice(0, 150),
+      description: cleanDescription.slice(0, 160),
       url: `https://corplawupdates.in/glossary/${term.slug}`,
     },
     // Thin glossary pages (< 300 words) get noindex to protect domain authority
@@ -60,7 +64,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function GlossaryTermPage({ params }: Props) {
-  // Fetch detailed term fields including custom faqs and synonyms
+  // Fetch detailed term fields including faqs and synonyms
   const { data: term } = await supabase
     .from('glossary')
     .select('term, slug, definition, category, keywords, extended_note, related_terms, created_at, is_verified, faqs, synonyms')
@@ -70,6 +74,17 @@ export default async function GlossaryTermPage({ params }: Props) {
   if (!term || !term.is_verified) {
     notFound()
   }
+
+  // Fetch all other verified terms for internal cross-linking (excludes this term to prevent self-linking)
+  const { data: allOtherTerms } = await supabase
+    .from('glossary')
+    .select('term, slug')
+    .eq('is_verified', true)
+    .neq('slug', params.slug)
+
+  // Pass current definitions/notes through the dynamic linker helper
+  const processedDefinition = linkGlossaryTerms(term.definition || '', allOtherTerms || [])
+  const processedExtendedNote = linkGlossaryTerms(term.extended_note || '', allOtherTerms || [])
 
   // Fetch related terms slugs based on the related_terms array (which stores term names)
   let relatedTermsData: { term: string; slug: string }[] = []
@@ -209,23 +224,15 @@ export default async function GlossaryTermPage({ params }: Props) {
             <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 uppercase tracking-wide">
               {term.category}
             </span>
-            {isSubstantial ? (
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-50 text-green-700 border border-green-200">
-                Google Indexed ({totalWords} words)
-              </span>
-            ) : (
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-50 text-slate-500 border border-slate-200" title="Terms below 300 words are kept as draft/noindex to avoid thin content SEO penalty">
-                Draft (Word Count: {totalWords}/300)
-              </span>
-            )}
           </div>
           
           <h1 className="text-3xl md:text-4xl font-heading font-bold text-navy mb-6">
             {term.term}
           </h1>
           
+          {/* Dynamically cross-linked definition */}
           <div className="prose prose-slate prose-lg max-w-none text-slate-700">
-            <MarkdownRenderer content={term.definition || ''} />
+            <MarkdownRenderer content={processedDefinition} />
           </div>
 
           {term.synonyms && term.synonyms.length > 0 && (
@@ -245,12 +252,12 @@ export default async function GlossaryTermPage({ params }: Props) {
         </div>
       </article>
 
-      {/* Extended Note Section */}
+      {/* Extended Note Section (Dynamically cross-linked) */}
       {term.extended_note && (
         <section className="mt-8 bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm">
           <h3 className="text-xl font-bold text-navy mb-4">Understanding {term.term}</h3>
           <div className="prose prose-slate max-w-none text-slate-600">
-            <MarkdownRenderer content={term.extended_note || ''} />
+            <MarkdownRenderer content={processedExtendedNote} />
           </div>
         </section>
       )}
@@ -327,33 +334,45 @@ export default async function GlossaryTermPage({ params }: Props) {
         </section>
       )}
 
-      {/* Related Searches (Keyword Pills) */}
+      {/* Related Searches (SEO smart links) */}
       {term.keywords && term.keywords.length > 0 && (
         <section className="mt-8 bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm">
           <h3 className="text-lg font-bold text-navy mb-4">Related Searches</h3>
           <div className="flex flex-wrap gap-2">
-            {term.keywords.map((kw: string, i: number) => (
-              <span key={i} className="text-sm bg-slate-100 text-slate-600 px-3 py-1.5 rounded-full font-medium">
-                {kw}
-              </span>
-            ))}
+            {term.keywords.map((kw: string, i: number) => {
+              // Find matches in verified terms to cross-link
+              const matchedTerm = allOtherTerms?.find(
+                (ot) => ot.term.toLowerCase() === kw.trim().toLowerCase()
+              )
+
+              const linkUrl = matchedTerm 
+                ? `/glossary/${matchedTerm.slug}` 
+                : `/updates?search=${encodeURIComponent(kw.trim())}`
+
+              return (
+                <Link
+                  key={i}
+                  href={linkUrl}
+                  className="text-sm bg-slate-50 text-slate-600 hover:bg-amber-50 hover:text-amber-700 hover:border-amber-300 border border-slate-200/60 px-4 py-2 rounded-full font-medium transition-all shadow-sm flex items-center gap-1 group"
+                >
+                  <span>{kw.trim()}</span>
+                  <span className="text-slate-400 group-hover:text-amber-600 transition-colors text-xs">↗</span>
+                </Link>
+              )
+            })}
           </div>
         </section>
       )}
 
-      {/* DefinedTerm JSON-LD */}
+      {/* JSON-LD Schemas */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(definedTermSchema) }}
       />
-
-      {/* BreadcrumbList JSON-LD */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-
-      {/* FAQPage JSON-LD — gated behind quality threshold */}
       {faqSchema && (
         <script
           type="application/ld+json"

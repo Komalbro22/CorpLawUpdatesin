@@ -63,16 +63,37 @@ export default function NewGlossaryTermPage() {
     }
   }
 
-  // Key tag additions
+  // Key tag additions with comma/semicolon/newline splitting
   const handleKeywordKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault()
       const val = keywordInput.trim()
-      if (val && !keywords.includes(val)) {
-        setKeywords([...keywords, val])
+      if (val) {
+        const items = val
+          .split(/[,;\n]/)
+          .map(item => item.trim())
+          .filter(item => item && !keywords.includes(item))
+        
+        if (items.length > 0) {
+          setKeywords([...keywords, ...items])
+        }
         setKeywordInput('')
       }
     }
+  }
+
+  const handleKeywordPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    const pastedData = e.clipboardData.getData('text')
+    const items = pastedData
+      .split(/[,;\n]/)
+      .map(item => item.trim())
+      .filter(item => item && !keywords.includes(item))
+    
+    if (items.length > 0) {
+      setKeywords([...keywords, ...items])
+    }
+    setKeywordInput('')
   }
 
   const handleRemoveKeyword = (index: number) => {
@@ -83,11 +104,32 @@ export default function NewGlossaryTermPage() {
     if (e.key === 'Enter') {
       e.preventDefault()
       const val = synonymInput.trim()
-      if (val && !synonyms.includes(val)) {
-        setSynonyms([...synonyms, val])
+      if (val) {
+        const items = val
+          .split(/[,;\n]/)
+          .map(item => item.trim())
+          .filter(item => item && !synonyms.includes(item))
+        
+        if (items.length > 0) {
+          setSynonyms([...synonyms, ...items])
+        }
         setSynonymInput('')
       }
     }
+  }
+
+  const handleSynonymPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    const pastedData = e.clipboardData.getData('text')
+    const items = pastedData
+      .split(/[,;\n]/)
+      .map(item => item.trim())
+      .filter(item => item && !synonyms.includes(item))
+    
+    if (items.length > 0) {
+      setSynonyms([...synonyms, ...items])
+    }
+    setSynonymInput('')
   }
 
   const handleRemoveSynonym = (index: number) => {
@@ -452,8 +494,9 @@ export default function NewGlossaryTermPage() {
               value={synonymInput}
               onChange={(e) => setSynonymInput(e.target.value)}
               onKeyDown={handleSynonymKeyDown}
+              onPaste={handleSynonymPaste}
               className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-medium"
-              placeholder="Add synonym (e.g. CoC) and press Enter"
+              placeholder="Add synonym (e.g. CoC, ADR) and press Enter"
             />
             
             {synonyms.length > 0 && (
@@ -492,8 +535,9 @@ export default function NewGlossaryTermPage() {
               value={keywordInput}
               onChange={(e) => setKeywordInput(e.target.value)}
               onKeyDown={handleKeywordKeyDown}
+              onPaste={handleKeywordPaste}
               className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-medium"
-              placeholder="Add keyword query and press Enter"
+              placeholder="Add keyword query (comma-separated also supported) and press Enter"
             />
             
             {keywords.length > 0 && (

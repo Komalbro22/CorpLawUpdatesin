@@ -10,6 +10,8 @@ type GlossaryTerm = {
   slug: string
   definition: string
   category: string
+  keywords?: string[]
+  synonyms?: string[]
 }
 
 export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
@@ -20,9 +22,22 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
 
   // Filter terms based on search input & category
   const filteredTerms = terms.filter(t => {
-    const matchesSearch = t.term.toLowerCase().includes(search.toLowerCase()) || 
-                          t.definition.toLowerCase().includes(search.toLowerCase())
+    const searchLower = search.toLowerCase()
+    
+    const matchesTerm = t.term.toLowerCase().includes(searchLower)
+    const matchesDefinition = t.definition.toLowerCase().includes(searchLower)
+    
+    const matchesKeywords = t.keywords && t.keywords.some(kw => 
+      kw.toLowerCase().includes(searchLower)
+    )
+    
+    const matchesSynonyms = t.synonyms && t.synonyms.some(syn => 
+      syn.toLowerCase().includes(searchLower)
+    )
+
+    const matchesSearch = matchesTerm || matchesDefinition || matchesKeywords || matchesSynonyms
     const matchesCategory = activeCategory === 'ALL' || t.category.toUpperCase() === activeCategory
+    
     return matchesSearch && matchesCategory
   })
 
