@@ -10,6 +10,38 @@ import remarkGfm from 'remark-gfm'
 import remarkBreaks from 'remark-breaks'
 import rehypeRaw from 'rehype-raw'
 
+function parseStyle(styleInput: any, node?: any): React.CSSProperties {
+    let styleVal = styleInput;
+    if (!styleVal && node && node.properties && node.properties.style) {
+        styleVal = node.properties.style;
+    }
+    
+    if (!styleVal) return {};
+    
+    if (typeof styleVal === 'object') {
+        return styleVal;
+    }
+    
+    if (typeof styleVal === 'string') {
+        const obj: any = {};
+        styleVal.split(';').forEach(rule => {
+            const parts = rule.split(':');
+            if (parts.length >= 2) {
+                const rawKey = parts[0].trim();
+                // Convert CSS property name to camelCase for React inline styles
+                const key = rawKey.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+                const value = parts.slice(1).join(':').trim();
+                if (key && value) {
+                    obj[key] = value;
+                }
+            }
+        });
+        return obj;
+    }
+    
+    return {};
+}
+
 export default function MarkdownRenderer({ content }: { content: string }) {
     const ref = useRef<HTMLDivElement>(null)
 
@@ -86,7 +118,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                 rehypePlugins={[rehypeRaw]}
                 components={{
                     p: ({ node, style, children, ...props }: any) => {
-                        const styleObj = typeof style === 'string' ? {} : style;
+                        const styleObj = parseStyle(style, node);
                         return (
                             <p style={{ marginBottom: '1rem', marginTop: '0.5rem', ...styleObj }} {...props}>
                                 {children}
@@ -94,7 +126,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         );
                     },
                     table: ({ node, style, children, ...props }: any) => {
-                        const styleObj = typeof style === 'string' ? {} : style;
+                        const styleObj = parseStyle(style, node);
                         return (
                             <table style={{ ...styleObj }} {...props} className="w-full my-6 border-collapse">
                                 {children}
@@ -102,7 +134,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         );
                     },
                     thead: ({ node, style, children, ...props }: any) => {
-                        const styleObj = typeof style === 'string' ? {} : style;
+                        const styleObj = parseStyle(style, node);
                         return (
                             <thead style={{ ...styleObj }} {...props}>
                                 {children}
@@ -110,7 +142,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         );
                     },
                     tbody: ({ node, style, children, ...props }: any) => {
-                        const styleObj = typeof style === 'string' ? {} : style;
+                        const styleObj = parseStyle(style, node);
                         return (
                             <tbody style={{ ...styleObj }} {...props}>
                                 {children}
@@ -118,7 +150,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         );
                     },
                     tr: ({ node, style, children, ...props }: any) => {
-                        const styleObj = typeof style === 'string' ? {} : style;
+                        const styleObj = parseStyle(style, node);
                         return (
                             <tr style={{ ...styleObj }} {...props}>
                                 {children}
@@ -126,7 +158,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         );
                     },
                     th: ({ node, style, children, ...props }: any) => {
-                        const styleObj = typeof style === 'string' ? {} : style;
+                        const styleObj = parseStyle(style, node);
                         return (
                             <th style={{ ...styleObj }} {...props} className="font-heading font-bold">
                                 {children}
@@ -134,7 +166,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         );
                     },
                     td: ({ node, style, children, ...props }: any) => {
-                        const styleObj = typeof style === 'string' ? {} : style;
+                        const styleObj = parseStyle(style, node);
                         return (
                             <td style={{ ...styleObj }} {...props}>
                                 {children}
@@ -142,7 +174,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         );
                     },
                     img: ({ node, style, src, alt, ...props }: any) => {
-                        const styleObj = typeof style === 'string' ? {} : style;
+                        const styleObj = parseStyle(style, node);
                         return (
                             <img
                                 src={src}
