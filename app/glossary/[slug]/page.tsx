@@ -139,10 +139,6 @@ export default async function GlossaryTermPage({ params }: Props) {
   const isAcronym = /^[A-Z]{2,8}$/.test(term.term) || 
                     /^[A-Z][A-Z0-9\-]{1,7}$/.test(term.term)
 
-  // Calculate HTML-stripped word count
-  const totalWords = getWordCount(term.definition || '') + getWordCount(term.extended_note || '')
-  const isSubstantial = totalWords >= 300
-
   // Category-specific contextual phrases for unique FAQ answers
   const categoryContext: Record<string, string> = {
     'MCA': 'governed by the Ministry of Corporate Affairs under the Companies Act, 2013',
@@ -220,8 +216,8 @@ export default async function GlossaryTermPage({ params }: Props) {
     ]
   }
 
-  // FAQPage JSON-LD Schema — only emit for substantial content to avoid thin-content penalties
-  const faqSchema = isSubstantial ? {
+  // FAQPage JSON-LD Schema — always emit if we have FAQs to maximize Google rich results appearance
+  const faqSchema = faqsList.length > 0 ? {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": faqsList.map(faq => ({
