@@ -19,7 +19,7 @@ import ViewCounter from '@/components/ViewCounter'
 import ArticleActions from '@/components/ArticleActions'
 import ReadingProgress from '@/components/ReadingProgress'
 import FontSizeToggle from '@/components/FontSizeToggle'
-import { AlertCircle, BookOpen, CalendarDays, ChevronDown, Clock3, Eye, FileText, Lightbulb } from 'lucide-react'
+import { AlertCircle, BookOpen, CalendarDays, ChevronDown, Clock3, Eye, FileText, Lightbulb, Sparkles, CheckCircle2 } from 'lucide-react'
 import sanitizeHtml from 'sanitize-html'
 
 const sanitizeOptions = {
@@ -340,26 +340,102 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                 )}
 
                 {/* Key changes accordion - Wrapped in semantic section for accessibility & AI crawler extraction */}
-                {update.key_changes && Array.isArray(update.key_changes) && update.key_changes.length > 0 && (
-                    <section aria-label="Key Takeaways" className="mb-6">
-                        <details className="group overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
-                            <summary className="cursor-pointer p-4 font-bold text-navy flex justify-between items-center bg-white hover:bg-slate-50 transition-colors list-none [&::-webkit-details-marker]:hidden">
-                                <div className="flex items-center gap-2">
-                                    <Lightbulb className="h-5 w-5 text-amber-500" aria-hidden />
-                                    All Key Changes
+                {update.key_changes && Array.isArray(update.key_changes) && update.key_changes.length > 0 && (() => {
+                    const cat = update.category?.toUpperCase() || 'DEFAULT';
+                    let cardStyles = {
+                        borderColor: 'border-slate-200',
+                        borderLeftColor: 'border-l-gold',
+                        bgColor: 'bg-slate-50/40',
+                        accentColor: 'text-gold',
+                        iconColor: 'text-amber-500',
+                        badgeBg: 'bg-amber-50 text-amber-700 border-amber-200/50',
+                    };
+
+                    if (cat === 'SEBI') {
+                        cardStyles = {
+                            borderColor: 'border-emerald-100',
+                            borderLeftColor: 'border-l-emerald-500',
+                            bgColor: 'bg-emerald-50/30',
+                            accentColor: 'text-emerald-600',
+                            iconColor: 'text-emerald-500',
+                            badgeBg: 'bg-emerald-50 text-emerald-700 border-emerald-200/50',
+                        };
+                    } else if (cat === 'MCA') {
+                        cardStyles = {
+                            borderColor: 'border-blue-100',
+                            borderLeftColor: 'border-l-blue-500',
+                            bgColor: 'bg-blue-50/30',
+                            accentColor: 'text-blue-600',
+                            iconColor: 'text-blue-500',
+                            badgeBg: 'bg-blue-50 text-blue-700 border-blue-200/50',
+                        };
+                    } else if (cat === 'RBI') {
+                        cardStyles = {
+                            borderColor: 'border-violet-100',
+                            borderLeftColor: 'border-l-violet-500',
+                            bgColor: 'bg-violet-50/30',
+                            accentColor: 'text-violet-600',
+                            iconColor: 'text-violet-500',
+                            badgeBg: 'bg-violet-50 text-violet-700 border-violet-200/50',
+                        };
+                    } else if (cat === 'NCLT') {
+                        cardStyles = {
+                            borderColor: 'border-orange-100',
+                            borderLeftColor: 'border-l-orange-500',
+                            bgColor: 'bg-orange-50/30',
+                            accentColor: 'text-orange-600',
+                            iconColor: 'text-orange-500',
+                            badgeBg: 'bg-orange-50 text-orange-700 border-orange-200/50',
+                        };
+                    } else if (cat === 'IBC') {
+                        cardStyles = {
+                            borderColor: 'border-red-100',
+                            borderLeftColor: 'border-l-red-500',
+                            bgColor: 'bg-red-50/30',
+                            accentColor: 'text-red-600',
+                            iconColor: 'text-red-500',
+                            badgeBg: 'bg-red-50 text-red-700 border-red-200/50',
+                        };
+                    } else if (cat === 'FEMA') {
+                        cardStyles = {
+                            borderColor: 'border-teal-100',
+                            borderLeftColor: 'border-l-teal-500',
+                            bgColor: 'bg-teal-50/30',
+                            accentColor: 'text-teal-600',
+                            iconColor: 'text-teal-500',
+                            badgeBg: 'bg-teal-50 text-teal-700 border-teal-200/50',
+                        };
+                    }
+
+                    return (
+                        <section id="tldr-summary" aria-label="TL;DR Executive Summary" className="mb-6">
+                            <details open className={`group overflow-hidden rounded-xl border ${cardStyles.borderColor} border-l-[4px] ${cardStyles.borderLeftColor} ${cardStyles.bgColor} shadow-sm transition-all duration-200`}>
+                                <summary className="cursor-pointer p-4 font-bold text-navy flex justify-between items-center bg-white hover:bg-slate-50/80 transition-colors list-none [&::-webkit-details-marker]:hidden focus:outline-none">
+                                    <div className="flex items-center gap-2">
+                                        <Sparkles className={`h-5 w-5 ${cardStyles.iconColor} animate-pulse`} aria-hidden />
+                                        <span className="font-heading text-base font-bold text-navy tracking-tight">TL;DR — Executive Summary</span>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <span className={`hidden sm:inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${cardStyles.badgeBg}`}>
+                                            ⚡ AI-Optimized Scan
+                                        </span>
+                                        <ChevronDown className="h-4 w-4 text-slate-400 transition-transform duration-300 group-open:rotate-180" aria-hidden />
+                                    </div>
+                                </summary>
+                                <div className="p-5 border-t border-slate-100 bg-white/70 backdrop-blur-sm">
+                                    <ul className="space-y-3.5 list-none pl-0 m-0" itemProp="abstract" data-ai-summary="true">
+                                        {update.key_changes.map((kc: string, i: number) => (
+                                            <li key={i} className="flex items-start gap-3 text-sm text-slate-700 leading-relaxed font-medium">
+                                                <CheckCircle2 className={`h-4 w-4 mt-0.5 flex-shrink-0 ${cardStyles.iconColor}`} aria-hidden />
+                                                <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(kc, sanitizeOptions) }} />
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </div>
-                                <ChevronDown className="h-4 w-4 text-slate-400 transition-transform duration-300 group-open:rotate-180" aria-hidden />
-                            </summary>
-                            <div className="p-5 border-t border-slate-100">
-                                <ul className="list-disc pl-5 space-y-2 text-sm text-slate-700">
-                                    {update.key_changes.map((kc: string, i: number) => (
-                                        <li key={i} className="leading-relaxed" dangerouslySetInnerHTML={{ __html: sanitizeHtml(kc, sanitizeOptions) }} />
-                                    ))}
-                                </ul>
-                            </div>
-                        </details>
-                    </section>
-                )}
+                            </details>
+                        </section>
+                    );
+                })()}
 
                 {/* Title */}
                 <h1 className="font-heading text-3xl md:text-[2.2rem] text-navy font-bold mb-4 leading-snug break-words">
