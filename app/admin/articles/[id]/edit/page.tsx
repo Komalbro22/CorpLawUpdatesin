@@ -45,8 +45,11 @@ export default function EditArticle({ params }: { params: { id: string } }) {
     const [keyChange, setKeyChange] = useState('')
     const [keyChanges, setKeyChanges] = useState<string[]>([])
     const [effectiveDate, setEffectiveDate] = useState('')
+    const [bulkTldrText, setBulkTldrText] = useState('')
+    const [showBulkTldr, setShowBulkTldr] = useState(false)
     const [impactLevel, setImpactLevel] = useState<'high' | 'medium' | 'low' | ''>('')
 
+    const [loading, setLoading] = useState(false)
     const [saving, setSaving] = useState(false)
     const [pageLoading, setPageLoading] = useState(true)
     const [error, setError] = useState('')
@@ -127,6 +130,28 @@ export default function EditArticle({ params }: { params: { id: string } }) {
     }
     const removeKeyChange = (index: number) => {
         setKeyChanges(keyChanges.filter((_, i) => i !== index))
+    }
+
+    const handleBulkTldrImport = () => {
+        if (!bulkTldrText.trim()) return
+        const lines = bulkTldrText.split('\n')
+        const parsed: string[] = []
+        for (const line of lines) {
+            let trimmed = line.trim()
+            if (!trimmed) continue
+            // Clean prefix bullets (- * • + 1. etc.)
+            trimmed = trimmed
+                .replace(/^(?:[-*•+>]|\d+\.|\d+\))\s*/, '')
+                .trim()
+            if (trimmed) {
+                parsed.push(trimmed)
+            }
+        }
+        if (parsed.length > 0) {
+            setKeyChanges([...keyChanges, ...parsed])
+            setBulkTldrText('')
+            setShowBulkTldr(false)
+        }
     }
 
     const addSource = () => setSources([...sources, {name: '', url: ''}])
@@ -422,25 +447,55 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                                         (optional — key takeaways optimized for SEO & AI quick scan)
                                     </span>
                                 </label>
-                                <button type="button" onClick={addKeyChange} className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-1 rounded transition-colors">+ Add Point</button>
+                                <div className="flex gap-2">
+                                    <button 
+                                        type="button" 
+                                        onClick={() => setShowBulkTldr(!showBulkTldr)} 
+                                        className="text-xs bg-slate-100 hover:bg-slate-200 text-navy font-semibold px-2.5 py-1 rounded transition-colors"
+                                    >
+                                        {showBulkTldr ? 'Close Bulk Import' : 'Bulk Import Points'}
+                                    </button>
+                                    <button type="button" onClick={addKeyChange} className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded transition-colors">+ Add Point</button>
+                                </div>
                             </div>
-                            <div className="space-y-2">
-                                {keyChanges.map((kc, idx) => (
-                                    <div key={idx} className="flex gap-2">
-                                        <input
-                                            type="text"
-                                            value={kc}
-                                            onChange={(e) => updateKeyChange(idx, e.target.value)}
-                                            placeholder={`Key takeaway point ${idx + 1}...`}
-                                            className="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
-                                        />
-                                        <button type="button" onClick={() => removeKeyChange(idx)} className="text-slate-400 hover:text-red-500 px-2">×</button>
-                                    </div>
-                                ))}
-                                {keyChanges.length === 0 && (
-                                    <div className="text-xs text-slate-400 italic">No executive points added. Click '+ Add Point' to add.</div>
-                                )}
-                            </div>
+
+                            {showBulkTldr ? (
+                                <div className="space-y-2 bg-slate-50 border border-slate-200 p-3 rounded-lg mb-3">
+                                    <span className="text-[11px] text-slate-500 block font-medium">Paste bulleted lines here (copied from chat/docs). Clean formatting is applied automatically.</span>
+                                    <textarea 
+                                        value={bulkTldrText}
+                                        onChange={(e) => setBulkTldrText(e.target.value)}
+                                        placeholder="• Bullet 1&#10;• Bullet 2&#10;• Bullet 3"
+                                        rows={4}
+                                        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-amber-400 focus:outline-none"
+                                    />
+                                    <button 
+                                        type="button" 
+                                        onClick={handleBulkTldrImport}
+                                        className="w-full py-1.5 text-xs bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-lg transition-colors shadow-sm"
+                                    >
+                                        Parse & Import Takeaways
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="space-y-2">
+                                    {keyChanges.map((kc, idx) => (
+                                        <div key={idx} className="flex gap-2">
+                                            <input
+                                                type="text"
+                                                value={kc}
+                                                onChange={(e) => updateKeyChange(idx, e.target.value)}
+                                                placeholder={`Key takeaway point ${idx + 1}...`}
+                                                className="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+                                            />
+                                            <button type="button" onClick={() => removeKeyChange(idx)} className="text-slate-400 hover:text-red-500 px-2">×</button>
+                                        </div>
+                                    ))}
+                                    {keyChanges.length === 0 && (
+                                        <div className="text-xs text-slate-400 italic">No executive points added. Click '+ Add Point' to add.</div>
+                                    )}
+                                </div>
+                            )}
                         </div>
 
                         <div>

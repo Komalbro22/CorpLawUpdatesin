@@ -33,6 +33,15 @@ export default function EditGlossaryTermPage({ params }: Props) {
   const [definition, setDefinition] = useState('')
   const [extendedNote, setExtendedNote] = useState('')
 
+  // Premium Layout & SEO Metadata states
+  const [hideDefinition, setHideDefinition] = useState(false)
+  const [seoTitle, setSeoTitle] = useState('')
+  const [seoDescription, setSeoDescription] = useState('')
+  const [tldrPoints, setTldrPoints] = useState<string[]>([])
+  const [tldrInput, setTldrInput] = useState('')
+  const [bulkTldrText, setBulkTldrText] = useState('')
+  const [showBulkTldr, setShowBulkTldr] = useState(false)
+
   // Tag inputs
   const [keywords, setKeywords] = useState<string[]>([])
   const [keywordInput, setKeywordInput] = useState('')
@@ -50,6 +59,32 @@ export default function EditGlossaryTermPage({ params }: Props) {
   useEffect(() => {
     fetchTermDetails()
   }, [params.id])
+
+  const parseMetadata = (content: string) => {
+    const match = content.match(/^\s*<!--\s*METADATA\s*([\s\S]*?)\s*METADATA\s*-->/)
+    if (match) {
+      try {
+        const metadata = JSON.parse(match[1])
+        const cleanContent = content.substring(match[0].length).trim()
+        return {
+          hideDefinition: !!metadata.hide_definition,
+          seoTitle: metadata.seo_title || '',
+          seoDescription: metadata.seo_description || '',
+          tldr: Array.isArray(metadata.tldr) ? metadata.tldr : [],
+          cleanContent
+        }
+      } catch (e) {
+        console.error("Error parsing metadata:", e)
+      }
+    }
+    return {
+      hideDefinition: false,
+      seoTitle: '',
+      seoDescription: '',
+      tldr: [],
+      cleanContent: content
+    }
+  }
 
   const fetchTermDetails = async () => {
     try {
@@ -70,7 +105,15 @@ export default function EditGlossaryTermPage({ params }: Props) {
         setCategory(data.category || 'GENERAL')
         setIsVerified(data.is_verified || false)
         setDefinition(data.definition || '')
-        setExtendedNote(data.extended_note || '')
+        
+        const rawNote = data.extended_note || ''
+        const parsed = parseMetadata(rawNote)
+        setExtendedNote(parsed.cleanContent)
+        setHideDefinition(parsed.hideDefinition)
+        setSeoTitle(parsed.seoTitle)
+        setSeoDescription(parsed.seoDescription)
+        setTldrPoints(parsed.tldr)
+
         setKeywords(data.keywords || [])
         setSynonyms(data.synonyms || [])
         setRelatedTerms(data.related_terms ? data.related_terms.join(', ') : '')
@@ -265,6 +308,71 @@ export default function EditGlossaryTermPage({ params }: Props) {
     setFaqs(faqs.filter((_, i) => i !== index))
   }
 
+  // TL;DR / Key Takeaways handlers
+  const handleAddTldrPoint = () => {
+    const val = tldrInput.trim()
+    if (val) {
+      setTldrPoints([...tldrPoints, val])
+      setTldrInput('')
+    }
+  }
+
+  const handleRemoveTldrPoint = (index: number) => {
+    setTldrPoints(tldrPoints.filter((_, i) => i !== index))
+  }
+
+  const handleUpdateTldrPoint = (index: number, value: string) => {
+    const updated = [...tldrPoints]
+    updated[index] = value
+    setTldrPoints(updated)
+  }
+
+  const handleBulkTldrImport = () => {
+    if (!bulkTldrText.trim()) return
+    const lines = bulkTldrText.split('\n')
+    const parsed: string[] = []
+    for (const line of lines) {
+      let trimmed = line.trim()
+      if (!trimmed) continue
+      // Clean prefix bullets (- * • + 1. etc.)
+      trimmed = trimmed
+        .replace(/^(?:[-*•+>]|\d+\.|\d+\))\s*/, '')
+        .trim()
+      if (trimmed) {
+        parsed.push(trimmed)
+      }
+    }
+    if (parsed.length > 0) {
+      setTldrPoints([...tldrPoints, ...parsed])
+      setBulkTldrText('')
+      setShowBulkTldr(false)
+      showToast(`Imported ${parsed.length} key takeaways successfully!`, 'success')
+    } else {
+      showToast('No valid bullet points found in the text.', 'info')
+    }
+  }
+
+  // Serialize metadata to HTML comment at top of extended_note
+  const serializeMetadata = (
+    hideDef: boolean,
+    title: string,
+    desc: string,
+    points: string[],
+    note: string
+  ): string => {
+    const hasMeta = hideDef || title.trim() || desc.trim() || points.length > 0
+    if (!hasMeta) return note
+
+    const metaObj = {
+      hide_definition: hideDef,
+      seo_title: title.trim(),
+      seo_description: desc.trim(),
+      tldr: points.filter(Boolean)
+    }
+
+    return `<!-- METADATA\n${JSON.stringify(metaObj, null, 2)}\nMETADATA -->\n\n${note.trim()}`
+  }
+
   // Submit form
   const handleSubmit = async (e?: React.FormEvent | React.MouseEvent) => {
     if (e) e.preventDefault()
@@ -283,7 +391,7 @@ export default function EditGlossaryTermPage({ params }: Props) {
       term: term.trim(),
       slug: slug.trim(),
       definition: definition,
-      extended_note: extendedNote,
+      extended_note: serializeMetadata(hideDefinition, seoTitle, seoDescription, tldrPoints, extendedNote),
       category,
       is_verified: isVerified,
       keywords,
@@ -773,6 +881,133 @@ export default function EditGlossaryTermPage({ params }: Props) {
               className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-medium"
               placeholder="e.g. CIRP, Insolvency (comma separated)"
             />
+          </div>
+
+          {/* Card: SEO, TL;DR & Layout Controls */}
+          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm space-y-5">
+            <h3 className="text-base font-bold text-navy flex items-center gap-2 border-b border-slate-100 pb-2.5">
+              <span className="w-1.5 h-4 bg-amber-500 rounded-full"></span>
+              Layout & SEO Optimization
+            </h3>
+
+            {/* Layout Hiding */}
+            <div className="space-y-1.5">
+              <label className="flex items-center gap-3 cursor-pointer p-3 border border-slate-200 rounded-xl hover:bg-slate-50/60 transition-colors bg-white">
+                <input 
+                  type="checkbox" 
+                  checked={hideDefinition}
+                  onChange={(e) => setHideDefinition(e.target.checked)}
+                  className="w-4 h-4 text-amber-500 rounded border-slate-300 focus:ring-amber-500"
+                />
+                <div>
+                  <span className="text-sm font-semibold text-slate-800">Hide Definition Card</span>
+                  <p className="text-xs text-slate-400">If you have styled a long, detailed article below, hide the simple top definition.</p>
+                </div>
+              </label>
+            </div>
+
+            {/* SEO Custom Title */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block">Custom SEO Title</label>
+              <input 
+                type="text" 
+                value={seoTitle}
+                onChange={(e) => setSeoTitle(e.target.value)}
+                placeholder="Custom HTML page title for Google & AI search"
+                className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm"
+              />
+            </div>
+
+            {/* SEO Custom Description */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block">Custom SEO Description</label>
+              <textarea 
+                value={seoDescription}
+                onChange={(e) => setSeoDescription(e.target.value)}
+                placeholder="Custom meta description for search snippets"
+                rows={3}
+                className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm resize-none"
+              />
+            </div>
+
+            {/* TL;DR Executive Takeaways */}
+            <div className="space-y-3 pt-2.5 border-t border-slate-100">
+              <div className="flex justify-between items-center">
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Key Takeaways (TL;DR)</label>
+                <button 
+                  type="button" 
+                  onClick={() => setShowBulkTldr(!showBulkTldr)} 
+                  className="text-[10px] bg-slate-100 hover:bg-slate-200 text-navy font-bold px-2 py-1 rounded transition-colors"
+                >
+                  {showBulkTldr ? 'Close Bulk Import' : 'Bulk Import Points'}
+                </button>
+              </div>
+
+              {showBulkTldr ? (
+                <div className="space-y-2 bg-slate-50 border border-slate-200 p-3.5 rounded-xl">
+                  <span className="text-[10px] text-slate-400 block font-medium">Paste bullet points here (e.g. copied from Chat/Doc). Each line will become a bullet takeaway.</span>
+                  <textarea 
+                    value={bulkTldrText}
+                    onChange={(e) => setBulkTldrText(e.target.value)}
+                    placeholder="• Point 1&#10;• Point 2&#10;• Point 3"
+                    rows={4}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-amber-400 focus:outline-none"
+                  />
+                  <button 
+                    type="button" 
+                    onClick={handleBulkTldrImport}
+                    className="w-full py-1.5 text-xs bg-amber-500 text-white font-bold rounded-lg hover:bg-amber-600 transition-colors shadow-sm"
+                  >
+                    Parse & Import Takeaways
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <div className="flex gap-2">
+                    <input 
+                      type="text" 
+                      value={tldrInput}
+                      onChange={(e) => setTldrInput(e.target.value)}
+                      placeholder="Add key takeaway point..."
+                      className="flex-1 px-3 py-1.5 border border-slate-200 rounded-lg text-xs"
+                      onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddTldrPoint(); } }}
+                    />
+                    <button 
+                      type="button" 
+                      onClick={handleAddTldrPoint} 
+                      className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-colors"
+                    >
+                      Add
+                    </button>
+                  </div>
+
+                  {tldrPoints.length > 0 ? (
+                    <div className="space-y-2 bg-slate-50/50 p-2.5 rounded-xl border border-slate-100">
+                      {tldrPoints.map((pt, idx) => (
+                        <div key={idx} className="flex gap-2 items-start group">
+                          <span className="text-amber-500 text-xs font-bold pt-0.5">•</span>
+                          <input 
+                            type="text" 
+                            value={pt}
+                            onChange={(e) => handleUpdateTldrPoint(idx, e.target.value)}
+                            className="flex-1 bg-transparent border-none p-0 text-slate-700 text-xs focus:ring-0 focus:outline-none"
+                          />
+                          <button 
+                            type="button" 
+                            onClick={() => handleRemoveTldrPoint(idx)} 
+                            className="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity text-xs"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <span className="text-[11px] text-slate-400 italic block text-center py-2">No key takeaways added yet. Use single entry or Bulk Import!</span>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

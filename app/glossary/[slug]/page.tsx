@@ -5,12 +5,38 @@ import { supabase } from '@/lib/supabase'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import { linkGlossaryTerms } from '@/lib/glossaryLinker'
 import TableOfContents from '@/components/TableOfContents'
-import { BookOpen, Link2, Search, FileText, HelpCircle } from 'lucide-react'
+import { BookOpen, Link2, Search, FileText, HelpCircle, Sparkles } from 'lucide-react'
 
 export const revalidate = 0 // Revalidate immediately (instant updates)
 
 type Props = {
   params: { slug: string }
+}
+
+function parseMetadata(content: string) {
+  const match = content.match(/^\s*<!--\s*METADATA\s*([\s\S]*?)\s*METADATA\s*-->/)
+  if (match) {
+    try {
+      const metadata = JSON.parse(match[1])
+      const cleanContent = content.substring(match[0].length).trim()
+      return {
+        hideDefinition: !!metadata.hide_definition,
+        seoTitle: metadata.seo_title || '',
+        seoDescription: metadata.seo_description || '',
+        tldr: Array.isArray(metadata.tldr) ? metadata.tldr : [],
+        cleanContent
+      }
+    } catch (e) {
+      console.error("Error parsing metadata:", e)
+    }
+  }
+  return {
+    hideDefinition: false,
+    seoTitle: '',
+    seoDescription: '',
+    tldr: [],
+    cleanContent: content
+  }
 }
 
 function getWordCount(text: string): number {
@@ -20,6 +46,7 @@ function getWordCount(text: string): number {
   if (!clean) return 0
   return clean.split(/\s+/).length
 }
+
 function extractFaqsFromContent(content: string): { q: string; a: string }[] {
   const faqs: { q: string; a: string }[] = [];
   if (!content) return faqs;
@@ -66,21 +93,30 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: 'Term Not Found | CorpLawUpdates' }
   }
 
-  const totalWords = getWordCount(term.definition || '') + getWordCount(term.extended_note || '')
+  const parsed = parseMetadata(term.extended_note || '')
+  const totalWords = getWordCount(term.definition || '') + getWordCount(parsed.cleanContent || '')
   const isThin = totalWords < 300
 
   // Strip HTML for clean SEO description
   const cleanDescription = (term.definition || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
 
+  const title = parsed.seoTitle.trim()
+    ? parsed.seoTitle.trim()
+    : `${term.term} — Meaning, Definition | CorpLawUpdates Legal Glossary`
+
+  const description = parsed.seoDescription.trim()
+    ? parsed.seoDescription.trim()
+    : `${term.term} meaning under Indian corporate law: ${cleanDescription.slice(0, 160)}. Learn key legal provisions, statutory authorities, and compliance checklists.`
+
   return {
-    title: `${term.term} — Meaning, Definition | CorpLawUpdates Legal Glossary`,
-    description: `${term.term} meaning under Indian corporate law: ${cleanDescription.slice(0, 160)}. Learn key legal provisions, statutory authorities, and compliance checklists.`,
+    title,
+    description,
     alternates: {
       canonical: `https://corplawupdates.in/glossary/${term.slug}`,
     },
     openGraph: {
       title: `${term.term} — Legal Definition`,
-      description: cleanDescription.slice(0, 160),
+      description,
       url: `https://corplawupdates.in/glossary/${term.slug}`,
     },
     // Thin glossary pages (< 300 words) get noindex to protect domain authority
@@ -100,6 +136,9 @@ export default async function GlossaryTermPage({ params }: Props) {
     notFound()
   }
 
+  // Parse custom metadata block from extended_note
+  const parsed = parseMetadata(term.extended_note || '')
+
   // Fetch all other verified terms for internal cross-linking (excludes this term to prevent self-linking)
   const { data: allOtherTerms } = await supabase
     .from('glossary')
@@ -109,7 +148,7 @@ export default async function GlossaryTermPage({ params }: Props) {
 
   // Pass current definitions/notes through the dynamic linker helper
   const processedDefinition = linkGlossaryTerms(term.definition || '', allOtherTerms || [])
-  const processedExtendedNote = linkGlossaryTerms(term.extended_note || '', allOtherTerms || [])
+  const processedExtendedNote = linkGlossaryTerms(parsed.cleanContent || '', allOtherTerms || [])
 
   // Fetch related terms slugs based on the related_terms array (which stores term names)
   let relatedTermsData: { term: string; slug: string }[] = []
@@ -125,15 +164,36 @@ export default async function GlossaryTermPage({ params }: Props) {
     }
   }
 
-  // Fetch related updates/articles from same category
-  const { data: relatedArticles } = await supabase
+  // Smart Matching: 1. Try to find articles containing this exact term name in title/content
+  const termName = term.term.trim()
+  const { data: smartMatches } = await supabase
+    .from('updates')
+    .select('title, slug, published_at')
+    .not('published_at', 'is', null)
+    .lte('published_at', new Date().toISOString())
+    .or(`title.ilike.%${termName}%,content.ilike.%${termName}%`)
+    .order('published_at', { ascending: false })
+    .limit(3)
+
+  // 2. Fetch category updates and merge to fill standard slots (excludes duplicates)
+  const { data: categoryMatches } = await supabase
     .from('updates')
     .select('title, slug, published_at')
     .ilike('category', term.category)
     .not('published_at', 'is', null)
     .lte('published_at', new Date().toISOString())
     .order('published_at', { ascending: false })
-    .limit(3)
+    .limit(5)
+
+  const relatedArticles = [...(smartMatches || [])]
+  if (categoryMatches) {
+    for (const art of categoryMatches) {
+      if (relatedArticles.length >= 3) break
+      if (!relatedArticles.some(a => a.slug === art.slug)) {
+        relatedArticles.push(art)
+      }
+    }
+  }
 
   // Check if term is an acronym (all caps or short abbreviation)
   const isAcronym = /^[A-Z]{2,8}$/.test(term.term) || 
@@ -273,7 +333,7 @@ export default async function GlossaryTermPage({ params }: Props) {
     themeStyles = {
       borderColor: 'border-red-100',
       borderLeftColor: 'border-l-red-500',
-      badgeBg: 'bg-red-50 text-red-850 border-red-200/50',
+      badgeBg: 'bg-red-50 text-red-855 border-red-200/50',
       iconColor: 'text-red-500',
       titleColor: 'text-red-900',
     };
@@ -289,13 +349,9 @@ export default async function GlossaryTermPage({ params }: Props) {
 
   // Consolidated content outline for Table of Contents sidebar extraction
   const combinedContent = `
-## Definition
-${term.definition || ''}
-
-${term.extended_note ? `## Understanding ${term.term}\n${term.extended_note}` : ''}
-
+${!parsed.hideDefinition ? '## Definition' : ''}
+${term.extended_note ? `## Understanding ${term.term}\n${parsed.cleanContent}` : ''}
 ${!hasInlineFaqs && faqsList.length > 0 ? `## Frequently Asked Questions (FAQs)` : ''}
-
 ${relatedTermsData.length > 0 ? `## Related Terms` : ''}
 ${relatedArticles && relatedArticles.length > 0 ? `## Contextual Analysis & Regulatory Updates` : ''}
 ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
@@ -320,47 +376,98 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
 
       <div className="article-content space-y-8">
         
-        {/* Main Definition Card */}
-        <section id="definition" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-sm relative overflow-hidden border-l-[4px] md:border-l-[5px] ${themeStyles.borderLeftColor}`}>
-          {/* Decorative background letter */}
-          <div className="absolute top-0 right-0 p-8 opacity-[0.03] select-none pointer-events-none" aria-hidden="true">
-            <span className="text-9xl font-heading font-bold text-slate-900 leading-none">
-              {term.term.charAt(0).toUpperCase()}
-            </span>
-          </div>
-
-          <div className="relative z-10">
-            <div className="flex flex-wrap gap-2 items-center mb-4">
+        {parsed.hideDefinition ? (
+          <header className="mb-6 relative">
+            <div className="flex flex-wrap gap-2 items-center mb-3">
               <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${themeStyles.badgeBg} border`}>
                 {term.category}
               </span>
             </div>
-            
-            <h1 className="text-3xl md:text-4xl font-heading font-bold text-navy mb-6">
+            <h1 className="text-4xl md:text-5xl font-heading font-bold text-navy mb-4">
               {term.term}
             </h1>
-            
-            {/* Dynamically cross-linked definition */}
-            <div className="text-slate-700">
-              <MarkdownRenderer content={processedDefinition} />
+            <div className="flex flex-wrap gap-4 items-center justify-between border-b border-slate-200/80 pb-5">
+              {term.synonyms && term.synonyms.length > 0 ? (
+                <div className="flex flex-wrap gap-1.5 items-center">
+                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider mr-1.5">Acronyms / Synonyms:</span>
+                  {term.synonyms.map((syn: string) => (
+                    <span key={syn} className="inline-flex items-center px-2 py-0.5 rounded bg-slate-50 text-slate-600 text-xs font-semibold border border-slate-100">
+                      {syn}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <div />
+              )}
+              <p className="text-xs text-slate-400 font-medium">
+                Last updated: {new Date(term.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+              </p>
+            </div>
+          </header>
+        ) : (
+          /* Main Definition Card */
+          <section id="definition" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-sm relative overflow-hidden border-l-[4px] md:border-l-[5px] ${themeStyles.borderLeftColor}`}>
+            {/* Decorative background letter */}
+            <div className="absolute top-0 right-0 p-8 opacity-[0.03] select-none pointer-events-none" aria-hidden="true">
+              <span className="text-9xl font-heading font-bold text-slate-900 leading-none">
+                {term.term.charAt(0).toUpperCase()}
+              </span>
             </div>
 
-            {term.synonyms && term.synonyms.length > 0 && (
-              <div className="mt-6 pt-4 border-t border-slate-100 flex flex-wrap gap-1.5 items-center">
-                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider mr-1.5">Acronyms / Synonyms:</span>
-                {term.synonyms.map((syn: string) => (
-                  <span key={syn} className="inline-flex items-center px-2 py-0.5 rounded bg-slate-50 text-slate-600 text-xs font-semibold border border-slate-100">
-                    {syn}
-                  </span>
-                ))}
+            <div className="relative z-10">
+              <div className="flex flex-wrap gap-2 items-center mb-4">
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${themeStyles.badgeBg} border`}>
+                  {term.category}
+                </span>
               </div>
-            )}
+              
+              <h1 className="text-3xl md:text-4xl font-heading font-bold text-navy mb-6">
+                {term.term}
+              </h1>
+              
+              {/* Dynamically cross-linked definition */}
+              <div className="text-slate-700">
+                <MarkdownRenderer content={processedDefinition} />
+              </div>
 
-            <p className="text-xs text-slate-400 mt-8 text-right font-medium">
-              Last updated: {new Date(term.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
-            </p>
-          </div>
-        </section>
+              {term.synonyms && term.synonyms.length > 0 && (
+                <div className="mt-6 pt-4 border-t border-slate-100 flex flex-wrap gap-1.5 items-center">
+                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider mr-1.5">Acronyms / Synonyms:</span>
+                  {term.synonyms.map((syn: string) => (
+                    <span key={syn} className="inline-flex items-center px-2 py-0.5 rounded bg-slate-50 text-slate-600 text-xs font-semibold border border-slate-100">
+                      {syn}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <p className="text-xs text-slate-400 mt-8 text-right font-medium">
+                Last updated: {new Date(term.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+              </p>
+            </div>
+          </section>
+        )}
+
+        {/* TL;DR Executive Takeaways Bullet Card */}
+        {parsed.tldr && parsed.tldr.length > 0 && (
+          <section id="key-takeaways-tldr" className="bg-gradient-to-br from-amber-50/60 via-amber-50/20 to-transparent rounded-2xl p-6 sm:p-8 border border-amber-250/30 shadow-sm relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-8 opacity-[0.06] select-none pointer-events-none" aria-hidden="true">
+              <Sparkles className="text-6xl text-amber-500" />
+            </div>
+            <h2 className="text-xl font-bold text-navy mb-4 flex items-center gap-2 font-heading">
+              <span className="w-1.5 h-5 bg-amber-500 rounded-full"></span>
+              Quick Summary (TL;DR)
+            </h2>
+            <ul className="space-y-3.5">
+              {parsed.tldr.map((point: string, idx: number) => (
+                <li key={idx} className="flex items-start gap-3 text-slate-700 text-sm md:text-[15px] leading-relaxed">
+                  <span className="text-amber-500 font-bold select-none pt-0.5">•</span>
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         {/* Extended Note Section */}
         {term.extended_note && (
