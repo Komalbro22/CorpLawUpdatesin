@@ -125,10 +125,10 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                             </p>
                         );
                     },
-                    table: ({ node, style, children, ...props }: any) => {
+                    table: ({ node, style, className, children, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
                         return (
-                            <table style={{ ...styleObj }} {...props} className="w-full my-6 border-collapse">
+                            <table style={{ ...styleObj }} className={`w-full my-6 border-collapse ${className || ''}`} {...props}>
                                 {children}
                             </table>
                         );
@@ -157,10 +157,10 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                             </tr>
                         );
                     },
-                    th: ({ node, style, children, ...props }: any) => {
+                    th: ({ node, style, className, children, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
                         return (
-                            <th style={{ ...styleObj }} {...props} className="font-heading font-bold">
+                            <th style={{ ...styleObj }} className={`font-heading font-bold ${className || ''}`} {...props}>
                                 {children}
                             </th>
                         );
