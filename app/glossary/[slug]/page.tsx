@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import { linkGlossaryTerms } from '@/lib/glossaryLinker'
 import TableOfContents from '@/components/TableOfContents'
-import { BookOpen, Link2, Search, FileText } from 'lucide-react'
+import { BookOpen, Link2, Search, FileText, HelpCircle } from 'lucide-react'
 
 export const revalidate = 0 // Revalidate immediately (instant updates)
 
@@ -156,6 +156,8 @@ export default async function GlossaryTermPage({ params }: Props) {
 
   // Compile FAQs: 
   // 1. Try to extract from HTML-embedded structures inside definition and extended_note first
+  const hasInlineFaqs = extractFaqsFromContent(term.definition || '').length > 0 || extractFaqsFromContent(term.extended_note || '').length > 0
+
   let faqsList: { q: string; a: string }[] = [
     ...extractFaqsFromContent(term.definition || ''),
     ...extractFaqsFromContent(term.extended_note || '')
@@ -296,6 +298,8 @@ ${term.definition || ''}
 
 ${term.extended_note ? `## Understanding ${term.term}\n${term.extended_note}` : ''}
 
+${!hasInlineFaqs && faqsList.length > 0 ? `## Frequently Asked Questions (FAQs)` : ''}
+
 ${relatedTermsData.length > 0 ? `## Related Terms` : ''}
 ${relatedArticles && relatedArticles.length > 0 ? `## Contextual Analysis & Regulatory Updates` : ''}
 ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
@@ -371,6 +375,36 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
             </h2>
             <div className="text-slate-600">
               <MarkdownRenderer content={processedExtendedNote} />
+            </div>
+          </section>
+        )}
+
+        {/* Frequently Asked Questions (FAQ) Section - Only if not already inline in the text */}
+        {!hasInlineFaqs && faqsList.length > 0 && (
+          <section id="frequently-asked-questions-faqs" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-sm border-l-[4px] ${themeStyles.borderLeftColor}`}>
+            <h2 className="text-2xl font-bold text-navy mb-6 flex items-center gap-2.5 font-heading">
+              <HelpCircle className={`h-6 w-6 ${themeStyles.iconColor}`} aria-hidden />
+              Frequently Asked Questions (FAQs)
+            </h2>
+            <div className="space-y-4">
+              {faqsList.map((faq, index) => (
+                <details 
+                  key={index}
+                  className="group border border-slate-105 rounded-xl bg-slate-50/50 [&_summary::-webkit-details-marker]:hidden"
+                >
+                  <summary className="flex justify-between items-center p-4 font-bold text-navy hover:text-amber-700 cursor-pointer list-none select-none transition-colors duration-150">
+                    <span className="pr-4 text-sm sm:text-base leading-snug">
+                      Q{index + 1}. {faq.q}
+                    </span>
+                    <span className="text-slate-400 group-open:rotate-180 transition-transform duration-200 text-lg shrink-0">
+                      ▼
+                    </span>
+                  </summary>
+                  <div className="px-4 pb-4 pt-1 text-slate-600 text-sm leading-relaxed border-t border-slate-100 bg-white rounded-b-xl">
+                    {faq.a}
+                  </div>
+                </details>
+              ))}
             </div>
           </section>
         )}
