@@ -20,6 +20,29 @@ function getWordCount(text: string): number {
   if (!clean) return 0
   return clean.split(/\s+/).length
 }
+function extractFaqsFromContent(content: string): { q: string; a: string }[] {
+  const faqs: { q: string; a: string }[] = [];
+  if (!content) return faqs;
+
+  // Flexible regex to match <div class="faq-q">Question</div> followed by <div class="faq-a">Answer</div>
+  // Handles styling/attributes and extra spaces or comments seamlessly
+  const regex = /<div[^>]*class="[^"]*faq-q[^"]*"[^>]*>([\s\S]*?)<\/div>\s*<div[^>]*class="[^"]*faq-a[^"]*"[^>]*>([\s\S]*?)<\/div>/gi;
+
+  let match;
+  while ((match = regex.exec(content)) !== null) {
+    const qRaw = match[1] || '';
+    const aRaw = match[2] || '';
+
+    // Strip HTML tags inside question and answer to get clean text for Google Schema
+    const q = qRaw.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+    const a = aRaw.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+
+    if (q && a) {
+      faqs.push({ q, a });
+    }
+  }
+  return faqs;
+}
 
 export async function generateStaticParams() {
   const { data: terms } = await supabase
@@ -131,9 +154,15 @@ export default async function GlossaryTermPage({ params }: Props) {
   }
   const ctx = categoryContext[term.category] || `regulated under Indian ${term.category} law`
 
-  // Compile FAQs: use manual admin-entered ones, fallback to auto-generated
-  let faqsList: { q: string; a: string }[] = []
-  if (term.faqs && Array.isArray(term.faqs) && term.faqs.length > 0) {
+  // Compile FAQs: 
+  // 1. Try to extract from HTML-embedded structures inside definition and extended_note first
+  let faqsList: { q: string; a: string }[] = [
+    ...extractFaqsFromContent(term.definition || ''),
+    ...extractFaqsFromContent(term.extended_note || '')
+  ]
+
+  // 2. Fall back to manual database-entered FAQs if no HTML ones were parsed
+  if (faqsList.length === 0 && term.faqs && Array.isArray(term.faqs) && term.faqs.length > 0) {
     faqsList = term.faqs
       .map((f: { q?: string; question?: string; a?: string; answer?: string }) => ({
         q: f.q || f.question || '',
@@ -142,6 +171,7 @@ export default async function GlossaryTermPage({ params }: Props) {
       .filter((f: { q: string; a: string }) => f.q.trim() && f.a.trim())
   }
 
+  // 3. Fall back to auto-generated baseline ones if still empty
   if (faqsList.length === 0) {
     const cleanDef = (term.definition || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
     faqsList = [
@@ -266,9 +296,6 @@ ${term.definition || ''}
 
 ${term.extended_note ? `## Understanding ${term.term}\n${term.extended_note}` : ''}
 
-## Frequently Asked Questions
-${faqsList.map(f => `### ${f.q}\n${f.a}`).join('\n\n')}
-
 ${relatedTermsData.length > 0 ? `## Related Terms` : ''}
 ${relatedArticles && relatedArticles.length > 0 ? `## Contextual Analysis & Regulatory Updates` : ''}
 ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
@@ -347,27 +374,6 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
             </div>
           </section>
         )}
-
-        {/* Frequently Asked Questions */}
-        <section id="frequently-asked-questions" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-sm border-l-[4px] ${themeStyles.borderLeftColor}`}>
-          <h2 className="text-2xl font-bold text-navy mb-6 flex items-center gap-2.5 font-heading">
-            <HelpCircle className={`h-6 w-6 ${themeStyles.iconColor}`} aria-hidden />
-            Frequently Asked Questions
-          </h2>
-          <div className="space-y-4">
-            {faqsList.map((faq: { q: string; a: string }, i: number) => (
-              <details key={i} className="group border border-slate-100 rounded-xl p-4 bg-slate-50/50 hover:bg-slate-50 transition-colors cursor-pointer">
-                <summary className="font-semibold text-navy flex items-center justify-between focus:outline-none select-none list-none [&::-webkit-details-marker]:hidden">
-                  <span>{faq.q}</span>
-                  <span className="text-slate-400 group-open:rotate-180 transition-transform duration-200 text-[10px]">▼</span>
-                </summary>
-                <div className="mt-3 text-slate-600 text-sm leading-relaxed border-t border-slate-200/50 pt-3">
-                  <MarkdownRenderer content={faq.a} />
-                </div>
-              </details>
-            ))}
-          </div>
-        </section>
 
         {/* Related Terms */}
         {relatedTermsData.length > 0 && (
