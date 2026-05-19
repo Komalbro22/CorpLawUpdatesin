@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import { linkGlossaryTerms } from '@/lib/glossaryLinker'
 import TableOfContents from '@/components/TableOfContents'
-import { BookOpen, HelpCircle, Link2, Search, FileText } from 'lucide-react'
+import { BookOpen, Link2, Search, FileText } from 'lucide-react'
 
 export const revalidate = 0 // Revalidate immediately (instant updates)
 

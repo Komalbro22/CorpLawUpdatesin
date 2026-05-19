@@ -190,6 +190,67 @@ export default function EditGlossaryTermPage({ params }: Props) {
   }
 
   // FAQ management
+  const [bulkFaqText, setBulkFaqText] = useState('')
+  const [isBulkOpen, setIsBulkOpen] = useState(false)
+
+  const parseBulkFaqs = (text: string): { q: string; a: string }[] => {
+    const lines = text.split('\n')
+    const items: { q: string; a: string }[] = []
+    let currentQ = ''
+    let currentA: string[] = []
+
+    const commitCurrent = () => {
+      if (currentQ.trim()) {
+        items.push({
+          q: currentQ.trim(),
+          a: currentA.join('\n').trim()
+        })
+      }
+      currentQ = ''
+      currentA = []
+    }
+
+    for (const line of lines) {
+      const trimmed = line.trim()
+      if (!trimmed) continue
+
+      // Skip emojis or layout headers
+      if (
+        trimmed.startsWith('💻') || 
+        trimmed.startsWith('⚖') || 
+        trimmed.startsWith('📈') || 
+        trimmed.startsWith('🔍') || 
+        trimmed.startsWith('✔')
+      ) {
+        continue
+      }
+
+      // Question matches:
+      // 1. Starts with Q1., Q2., Q.1, Q.2, Q:, Q1: (case-insensitive)
+      // 2. Or is a short sentence ending with a question mark "?"
+      const isQuestionMarker = /^(?:Q|Question)\s*[\d\.]*[:\.]?\s+/i.test(trimmed)
+      const isQuestionEnding = trimmed.endsWith('?') && trimmed.length < 200
+
+      if (isQuestionMarker || isQuestionEnding) {
+        commitCurrent()
+        let cleanQ = trimmed
+        if (isQuestionMarker) {
+          cleanQ = trimmed.replace(/^(?:Q|Question)\s*[\d\.]*[:\.-]?\s*/i, '').trim()
+        }
+        currentQ = cleanQ
+      } else {
+        if (!currentQ && trimmed.endsWith('?') && trimmed.length < 200) {
+          currentQ = trimmed
+        } else if (currentQ) {
+          currentA.push(trimmed)
+        }
+      }
+    }
+
+    commitCurrent()
+    return items
+  }
+
   const handleAddFaq = () => {
     setFaqs([...faqs, { q: '', a: '' }])
   }
@@ -419,15 +480,72 @@ export default function EditGlossaryTermPage({ params }: Props) {
                 <span className="w-1.5 h-4 bg-amber-500 rounded-full"></span>
                 Frequently Asked Questions (FAQ)
               </h2>
-              <button 
-                type="button" 
-                onClick={handleAddFaq}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 hover:text-amber-700 bg-amber-50 hover:bg-amber-100 px-3 py-2 rounded-lg transition-colors border border-amber-100"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                Add FAQ
-              </button>
+              <div className="flex gap-2">
+                <button 
+                  type="button" 
+                  onClick={() => setIsBulkOpen(!isBulkOpen)}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 px-3 py-2 rounded-lg transition-colors border border-slate-200"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-500 animate-pulse" />
+                  Bulk Import
+                </button>
+                <button 
+                  type="button" 
+                  onClick={handleAddFaq}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 hover:text-amber-700 bg-amber-50 hover:bg-amber-100 px-3 py-2 rounded-lg transition-colors border border-amber-100"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  Add FAQ
+                </button>
+              </div>
             </div>
+
+            {isBulkOpen && (
+              <div className="mb-6 p-4 border border-amber-200/60 bg-amber-50/20 rounded-xl space-y-3">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-sm font-bold text-navy flex items-center gap-1.5">
+                    <Sparkles className="w-4 h-4 text-amber-500 fill-amber-500" />
+                    Bulk Import FAQs
+                  </h3>
+                  <button 
+                    type="button"
+                    onClick={() => setIsBulkOpen(false)}
+                    className="text-xs font-bold text-slate-400 hover:text-slate-600"
+                  >
+                    Cancel
+                  </button>
+                </div>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Paste your raw questions and answers below. The system will automatically parse lines starting with <code className="bg-amber-100 text-amber-800 px-1 py-0.5 rounded font-mono font-bold">Q1.</code> or ending with <code className="bg-amber-100 text-amber-800 px-1 py-0.5 rounded font-mono font-bold">?</code> into separate items.
+                </p>
+                <textarea
+                  rows={6}
+                  value={bulkFaqText}
+                  onChange={(e) => setBulkFaqText(e.target.value)}
+                  placeholder={`Example:\nQ1. What is MCA21?\nMCA21 is the online portal...\n\nQ2. How do I file forms?\nLog in and select the relevant e-form...`}
+                  className="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-mono text-slate-600 bg-white"
+                />
+                <div className="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const parsed = parseBulkFaqs(bulkFaqText);
+                      if (parsed.length === 0) {
+                        showToast('No FAQs could be parsed from the text.', 'error');
+                        return;
+                      }
+                      setFaqs([...faqs, ...parsed]);
+                      setBulkFaqText('');
+                      setIsBulkOpen(false);
+                      showToast(`Successfully imported ${parsed.length} FAQs!`, 'success');
+                    }}
+                    className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-lg shadow-sm transition-all"
+                  >
+                    Parse & Import ({parseBulkFaqs(bulkFaqText).length} found)
+                  </button>
+                </div>
+              </div>
+            )}
 
             {faqs.length === 0 ? (
               <div className="text-center py-8 bg-slate-50/50 border border-slate-200 border-dashed rounded-xl flex flex-col items-center justify-center">
