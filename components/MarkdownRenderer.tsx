@@ -66,9 +66,9 @@ export default function MarkdownRenderer({ content }: { content: string }) {
           prose-p:text-slate-700
           prose-strong:text-inherit
           prose-a:text-amber-600
-          prose-table:text-slate-700
-          prose-td:text-slate-700
-          prose-th:text-slate-800
+          prose-table:text-inherit
+          prose-td:text-inherit
+          prose-th:text-inherit
           [&_[style*='background:#0F172A']_p]:!text-slate-100
           [&_[style*='background:#0F172A']_h3]:!text-amber-400
           [&_[style*='background:#0F172A']_strong]:!text-amber-400
@@ -91,6 +91,54 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                             <p style={{ marginBottom: '1rem', marginTop: '0.5rem', ...styleObj }} {...props}>
                                 {children}
                             </p>
+                        );
+                    },
+                    table: ({ node, style, children, ...props }: any) => {
+                        const styleObj = typeof style === 'string' ? {} : style;
+                        return (
+                            <table style={{ ...styleObj }} {...props} className="w-full my-6 border-collapse">
+                                {children}
+                            </table>
+                        );
+                    },
+                    thead: ({ node, style, children, ...props }: any) => {
+                        const styleObj = typeof style === 'string' ? {} : style;
+                        return (
+                            <thead style={{ ...styleObj }} {...props}>
+                                {children}
+                            </thead>
+                        );
+                    },
+                    tbody: ({ node, style, children, ...props }: any) => {
+                        const styleObj = typeof style === 'string' ? {} : style;
+                        return (
+                            <tbody style={{ ...styleObj }} {...props}>
+                                {children}
+                            </tbody>
+                        );
+                    },
+                    tr: ({ node, style, children, ...props }: any) => {
+                        const styleObj = typeof style === 'string' ? {} : style;
+                        return (
+                            <tr style={{ ...styleObj }} {...props}>
+                                {children}
+                            </tr>
+                        );
+                    },
+                    th: ({ node, style, children, ...props }: any) => {
+                        const styleObj = typeof style === 'string' ? {} : style;
+                        return (
+                            <th style={{ ...styleObj }} {...props} className="font-heading font-bold">
+                                {children}
+                            </th>
+                        );
+                    },
+                    td: ({ node, style, children, ...props }: any) => {
+                        const styleObj = typeof style === 'string' ? {} : style;
+                        return (
+                            <td style={{ ...styleObj }} {...props}>
+                                {children}
+                            </td>
                         );
                     },
                     img: ({ node, style, src, alt, ...props }: any) => {

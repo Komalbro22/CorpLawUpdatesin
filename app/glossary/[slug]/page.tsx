@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import { linkGlossaryTerms } from '@/lib/glossaryLinker'
+import TableOfContents from '@/components/TableOfContents'
+import { BookOpen, HelpCircle, Link2, Search, FileText } from 'lucide-react'
 
 export const revalidate = 0 // Revalidate immediately (instant updates)
 
@@ -197,172 +199,266 @@ export default async function GlossaryTermPage({ params }: Props) {
     }))
   } : null
 
+   // Dynamic category branding colors for cards
+  const cat = term.category?.toUpperCase() || 'DEFAULT';
+  let themeStyles = {
+    borderColor: 'border-slate-200/60',
+    borderLeftColor: 'border-l-gold',
+    badgeBg: 'bg-amber-50 text-amber-800 border-amber-200/50',
+    iconColor: 'text-amber-500',
+    titleColor: 'text-navy',
+  };
+
+  if (cat === 'SEBI') {
+    themeStyles = {
+      borderColor: 'border-emerald-100',
+      borderLeftColor: 'border-l-emerald-500',
+      badgeBg: 'bg-emerald-50 text-emerald-800 border-emerald-200/50',
+      iconColor: 'text-emerald-500',
+      titleColor: 'text-emerald-900',
+    };
+  } else if (cat === 'MCA') {
+    themeStyles = {
+      borderColor: 'border-blue-100',
+      borderLeftColor: 'border-l-blue-500',
+      badgeBg: 'bg-blue-50 text-blue-800 border-blue-200/50',
+      iconColor: 'text-blue-500',
+      titleColor: 'text-blue-900',
+    };
+  } else if (cat === 'RBI') {
+    themeStyles = {
+      borderColor: 'border-violet-100',
+      borderLeftColor: 'border-l-violet-500',
+      badgeBg: 'bg-violet-50 text-violet-800 border-violet-200/50',
+      iconColor: 'text-violet-500',
+      titleColor: 'text-violet-900',
+    };
+  } else if (cat === 'NCLT') {
+    themeStyles = {
+      borderColor: 'border-orange-100',
+      borderLeftColor: 'border-l-orange-500',
+      badgeBg: 'bg-orange-50 text-orange-850 border-orange-200/50',
+      iconColor: 'text-orange-500',
+      titleColor: 'text-orange-900',
+    };
+  } else if (cat === 'IBC') {
+    themeStyles = {
+      borderColor: 'border-red-100',
+      borderLeftColor: 'border-l-red-500',
+      badgeBg: 'bg-red-50 text-red-850 border-red-200/50',
+      iconColor: 'text-red-500',
+      titleColor: 'text-red-900',
+    };
+  } else if (cat === 'FEMA') {
+    themeStyles = {
+      borderColor: 'border-teal-100',
+      borderLeftColor: 'border-l-teal-500',
+      badgeBg: 'bg-teal-50 text-teal-855 border-teal-200/50',
+      iconColor: 'text-teal-500',
+      titleColor: 'text-teal-900',
+    };
+  }
+
+  // Consolidated content outline for Table of Contents sidebar extraction
+  const combinedContent = `
+## Definition
+${term.definition || ''}
+
+${term.extended_note ? `## Understanding ${term.term}\n${term.extended_note}` : ''}
+
+## Frequently Asked Questions
+${faqsList.map(f => `### ${f.q}\n${f.a}`).join('\n\n')}
+
+${relatedTermsData.length > 0 ? `## Related Terms` : ''}
+${relatedArticles && relatedArticles.length > 0 ? `## Contextual Analysis & Regulatory Updates` : ''}
+${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
+  `
+
   return (
-    <div className="max-w-3xl mx-auto py-12 px-4">
+    <article
+      id="article-root"
+      className="article-font-md mx-auto w-full max-w-4xl px-4 py-8 sm:py-12"
+    >
       {/* Breadcrumb */}
-      <nav className="mb-8 text-sm text-slate-500 font-medium">
-        <ol className="flex items-center space-x-2">
-          <li><Link href="/" className="hover:text-gold transition-colors">Home</Link></li>
-          <li><span aria-hidden="true" className="mx-1">›</span></li>
-          <li><Link href="/glossary" className="hover:text-gold transition-colors">Glossary</Link></li>
-          <li><span aria-hidden="true" className="mx-1">›</span></li>
-          <li className="text-navy font-semibold">{term.term}</li>
-        </ol>
+      <nav className="mb-7 flex flex-wrap items-center gap-1.5 text-sm text-slate-400 print:hidden" aria-label="Breadcrumb">
+        <Link href="/" className="hover:text-gold transition-colors">Home</Link>
+        <span className="text-slate-300">/</span>
+        <Link href="/glossary" className="hover:text-gold transition-colors">Glossary</Link>
+        <span className="text-slate-300">/</span>
+        <span className="text-slate-600 font-semibold">{term.term}</span>
       </nav>
 
-      {/* Main Definition Card */}
-      <article className="bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm relative overflow-hidden">
-        {/* Decorative background letter */}
-        <div className="absolute top-0 right-0 p-8 opacity-5" aria-hidden="true">
-          <span className="text-9xl font-heading font-bold text-slate-900 leading-none">
-            {term.term.charAt(0).toUpperCase()}
-          </span>
-        </div>
+      {/* Table of Contents Sticky Sidebar */}
+      {combinedContent && <TableOfContents content={combinedContent} />}
 
-        <div className="relative z-10">
-          <div className="flex flex-wrap gap-2 items-center mb-4">
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 uppercase tracking-wide">
-              {term.category}
+      <div className="article-content space-y-8">
+        
+        {/* Main Definition Card */}
+        <section id="definition" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-sm relative overflow-hidden border-l-[4px] md:border-l-[5px] ${themeStyles.borderLeftColor}`}>
+          {/* Decorative background letter */}
+          <div className="absolute top-0 right-0 p-8 opacity-[0.03] select-none pointer-events-none" aria-hidden="true">
+            <span className="text-9xl font-heading font-bold text-slate-900 leading-none">
+              {term.term.charAt(0).toUpperCase()}
             </span>
           </div>
-          
-          <h1 className="text-3xl md:text-4xl font-heading font-bold text-navy mb-6">
-            {term.term}
-          </h1>
-          
-          {/* Dynamically cross-linked definition */}
-          <div className="prose prose-slate prose-lg max-w-none text-slate-700">
-            <MarkdownRenderer content={processedDefinition} />
-          </div>
 
-          {term.synonyms && term.synonyms.length > 0 && (
-            <div className="mt-6 pt-4 border-t border-slate-100 flex flex-wrap gap-1.5 items-center">
-              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider mr-1.5">Acronyms / Synonyms:</span>
-              {term.synonyms.map((syn: string) => (
-                <span key={syn} className="inline-flex items-center px-2 py-0.5 rounded bg-slate-50 text-slate-600 text-xs font-semibold border border-slate-100">
-                  {syn}
-                </span>
+          <div className="relative z-10">
+            <div className="flex flex-wrap gap-2 items-center mb-4">
+              <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${themeStyles.badgeBg} border`}>
+                {term.category}
+              </span>
+            </div>
+            
+            <h1 className="text-3xl md:text-4xl font-heading font-bold text-navy mb-6">
+              {term.term}
+            </h1>
+            
+            {/* Dynamically cross-linked definition */}
+            <div className="prose prose-slate prose-lg max-w-none text-slate-700">
+              <MarkdownRenderer content={processedDefinition} />
+            </div>
+
+            {term.synonyms && term.synonyms.length > 0 && (
+              <div className="mt-6 pt-4 border-t border-slate-100 flex flex-wrap gap-1.5 items-center">
+                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider mr-1.5">Acronyms / Synonyms:</span>
+                {term.synonyms.map((syn: string) => (
+                  <span key={syn} className="inline-flex items-center px-2 py-0.5 rounded bg-slate-50 text-slate-600 text-xs font-semibold border border-slate-100">
+                    {syn}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            <p className="text-xs text-slate-400 mt-8 text-right font-medium">
+              Last updated: {new Date(term.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+            </p>
+          </div>
+        </section>
+
+        {/* Extended Note Section */}
+        {term.extended_note && (
+          <section id={`understanding-${term.term.toLowerCase().replace(/[^a-z0-9]/g, '-')}`} className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-sm border-l-[4px] ${themeStyles.borderLeftColor}`}>
+            <h2 className="text-2xl font-bold text-navy mb-6 flex items-center gap-2.5 font-heading">
+              <BookOpen className={`h-6 w-6 ${themeStyles.iconColor}`} aria-hidden />
+              Understanding {term.term}
+            </h2>
+            <div className="prose prose-slate max-w-none text-slate-600">
+              <MarkdownRenderer content={processedExtendedNote} />
+            </div>
+          </section>
+        )}
+
+        {/* Frequently Asked Questions */}
+        <section id="frequently-asked-questions" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-sm border-l-[4px] ${themeStyles.borderLeftColor}`}>
+          <h2 className="text-2xl font-bold text-navy mb-6 flex items-center gap-2.5 font-heading">
+            <HelpCircle className={`h-6 w-6 ${themeStyles.iconColor}`} aria-hidden />
+            Frequently Asked Questions
+          </h2>
+          <div className="space-y-4">
+            {faqsList.map((faq: { q: string; a: string }, i: number) => (
+              <details key={i} className="group border border-slate-100 rounded-xl p-4 bg-slate-50/50 hover:bg-slate-50 transition-colors cursor-pointer">
+                <summary className="font-semibold text-navy flex items-center justify-between focus:outline-none select-none list-none [&::-webkit-details-marker]:hidden">
+                  <span>{faq.q}</span>
+                  <span className="text-slate-400 group-open:rotate-180 transition-transform duration-200 text-[10px]">▼</span>
+                </summary>
+                <div className="mt-3 text-slate-600 text-sm leading-relaxed border-t border-slate-200/50 pt-3">
+                  <MarkdownRenderer content={faq.a} />
+                </div>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* Related Terms */}
+        {relatedTermsData.length > 0 && (
+          <section id="related-terms" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-sm border-l-[4px] ${themeStyles.borderLeftColor}`}>
+            <h2 className="text-2xl font-bold text-navy mb-6 flex items-center gap-2.5 font-heading">
+              <Link2 className={`h-6 w-6 ${themeStyles.iconColor}`} aria-hidden />
+              Related Terms
+            </h2>
+            <div className="flex flex-wrap gap-3">
+              {relatedTermsData.map((related) => (
+                <Link 
+                  key={related.slug} 
+                  href={`/glossary/${related.slug}`}
+                  className="inline-flex items-center px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium text-navy hover:border-amber-400 hover:text-amber-700 hover:shadow-sm transition-all"
+                >
+                  {related.term}
+                </Link>
               ))}
             </div>
-          )}
+          </section>
+        )}
 
-          <p className="text-xs text-slate-400 mt-8 text-right">
-            Last updated: {new Date(term.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
-          </p>
-        </div>
-      </article>
-
-      {/* Extended Note Section (Dynamically cross-linked) */}
-      {term.extended_note && (
-        <section className="mt-8 bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm">
-          <h3 className="text-xl font-bold text-navy mb-4">Understanding {term.term}</h3>
-          <div className="prose prose-slate max-w-none text-slate-600">
-            <MarkdownRenderer content={processedExtendedNote} />
-          </div>
-        </section>
-      )}
-
-      {/* Frequently Asked Questions (Accordion) */}
-      <section className="mt-8 bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm">
-        <h2 className="text-xl font-bold text-navy mb-6">Frequently Asked Questions</h2>
-        <div className="space-y-4">
-          {faqsList.map((faq: { q: string; a: string }, i: number) => (
-            <details key={i} className="group border border-slate-100 rounded-xl p-4 bg-slate-50/50 hover:bg-slate-50 transition-colors cursor-pointer">
-              <summary className="font-semibold text-navy flex items-center justify-between focus:outline-none select-none list-none [&::-webkit-details-marker]:hidden">
-                <span>{faq.q}</span>
-                <span className="text-slate-400 group-open:rotate-180 transition-transform duration-200 text-[10px]">▼</span>
-              </summary>
-              <p className="mt-3 text-slate-600 text-sm leading-relaxed border-t border-slate-200/50 pt-3">
-                {faq.a}
-              </p>
-            </details>
-          ))}
-        </div>
-      </section>
-
-      {/* Related Terms */}
-      {relatedTermsData.length > 0 && (
-        <section className="mt-8 bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm">
-          <h2 className="text-xl font-bold text-navy mb-6 flex items-center gap-2">
-            <svg className="w-5 h-5 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-            </svg>
-            Related Terms
-          </h2>
-          <div className="flex flex-wrap gap-3">
-            {relatedTermsData.map((related) => (
-              <Link 
-                key={related.slug} 
-                href={`/glossary/${related.slug}`}
-                className="inline-flex items-center px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium text-navy hover:border-amber-400 hover:text-amber-700 hover:shadow-sm transition-all"
-              >
-                {related.term}
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Contextual Analysis & Related Updates */}
-      {relatedArticles && relatedArticles.length > 0 && (
-        <section className="mt-8 bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm">
-          <h3 className="text-xl font-bold text-navy mb-4">Contextual Analysis & Regulatory Updates</h3>
-          <p className="text-slate-500 text-sm mb-6">
-            Read our latest analysis and critical updates on corporate circulars related to <strong>{term.category}</strong>:
-          </p>
-          <div className="space-y-4">
-            {relatedArticles.map((article: { title: string; slug: string; published_at: string }) => (
-              <Link 
-                key={article.slug} 
-                href={`/updates/${article.slug}`}
-                className="group block p-5 border border-slate-100 rounded-2xl bg-slate-50/30 hover:bg-amber-50/10 hover:border-amber-400/60 transition-all duration-200"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="flex-1">
-                    <h4 className="font-bold text-navy group-hover:text-amber-700 transition-colors duration-150 leading-snug">
-                      {article.title}
-                    </h4>
-                    <p className="text-xs text-slate-400 mt-2 font-medium">
-                      Published: {new Date(article.published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
-                    </p>
-                  </div>
-                  <span className="text-slate-300 group-hover:text-amber-500 group-hover:translate-x-1 transition-all duration-200 text-xl font-light">→</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Related Searches (SEO smart links) */}
-      {term.keywords && term.keywords.length > 0 && (
-        <section className="mt-8 bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm">
-          <h3 className="text-lg font-bold text-navy mb-4">Related Searches</h3>
-          <div className="flex flex-wrap gap-2">
-            {term.keywords.map((kw: string, i: number) => {
-              // Find matches in verified terms to cross-link
-              const matchedTerm = allOtherTerms?.find(
-                (ot) => ot.term.toLowerCase() === kw.trim().toLowerCase()
-              )
-
-              const linkUrl = matchedTerm 
-                ? `/glossary/${matchedTerm.slug}` 
-                : `/updates?search=${encodeURIComponent(kw.trim())}`
-
-              return (
-                <Link
-                  key={i}
-                  href={linkUrl}
-                  className="text-sm bg-slate-50 text-slate-600 hover:bg-amber-50 hover:text-amber-700 hover:border-amber-300 border border-slate-200/60 px-4 py-2 rounded-full font-medium transition-all shadow-sm flex items-center gap-1 group"
+        {/* Contextual Analysis & Related Updates */}
+        {relatedArticles && relatedArticles.length > 0 && (
+          <section id="contextual-analysis-regulatory-updates" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-sm border-l-[4px] ${themeStyles.borderLeftColor}`}>
+            <h2 className="text-2xl font-bold text-navy mb-4 flex items-center gap-2.5 font-heading">
+              <FileText className={`h-6 w-6 ${themeStyles.iconColor}`} aria-hidden />
+              Contextual Analysis & Regulatory Updates
+            </h2>
+            <p className="text-slate-500 text-sm mb-6 font-medium">
+              Read our latest analysis and critical updates on corporate circulars related to <strong>{term.category}</strong>:
+            </p>
+            <div className="space-y-4">
+              {relatedArticles.map((article: { title: string; slug: string; published_at: string }) => (
+                <Link 
+                  key={article.slug} 
+                  href={`/updates/${article.slug}`}
+                  className="group block p-5 border border-slate-100 rounded-2xl bg-slate-50/30 hover:bg-amber-50/10 hover:border-amber-400/60 transition-all duration-200"
                 >
-                  <span>{kw.trim()}</span>
-                  <span className="text-slate-400 group-hover:text-amber-600 transition-colors text-xs">↗</span>
+                  <div className="flex items-start gap-4">
+                    <div className="flex-1">
+                      <h4 className="font-bold text-navy group-hover:text-amber-700 transition-colors duration-150 leading-snug">
+                        {article.title}
+                      </h4>
+                      <p className="text-xs text-slate-400 mt-2 font-medium">
+                        Published: {new Date(article.published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+                      </p>
+                    </div>
+                    <span className="text-slate-300 group-hover:text-amber-500 group-hover:translate-x-1 transition-all duration-200 text-xl font-light">→</span>
+                  </div>
                 </Link>
-              )
-            })}
-          </div>
-        </section>
-      )}
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Related Searches */}
+        {term.keywords && term.keywords.length > 0 && (
+          <section id="related-searches" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-sm border-l-[4px] ${themeStyles.borderLeftColor}`}>
+            <h2 className="text-2xl font-bold text-navy mb-4 flex items-center gap-2.5 font-heading">
+              <Search className={`h-6 w-6 ${themeStyles.iconColor}`} aria-hidden />
+              Related Searches
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              {term.keywords.map((kw: string, i: number) => {
+                const matchedTerm = allOtherTerms?.find(
+                  (ot) => ot.term.toLowerCase() === kw.trim().toLowerCase()
+                )
+
+                const linkUrl = matchedTerm 
+                  ? `/glossary/${matchedTerm.slug}` 
+                  : `/updates?search=${encodeURIComponent(kw.trim())}`
+
+                return (
+                  <Link
+                    key={i}
+                    href={linkUrl}
+                    className="text-sm bg-slate-50 text-slate-600 hover:bg-amber-50 hover:text-amber-700 hover:border-amber-300 border border-slate-200/60 px-4 py-2 rounded-full font-medium transition-all shadow-sm flex items-center gap-1 group"
+                  >
+                    <span>{kw.trim()}</span>
+                    <span className="text-slate-400 group-hover:text-amber-600 transition-colors text-xs">↗</span>
+                  </Link>
+                )
+              })}
+            </div>
+          </section>
+        )}
+
+      </div>
+
+      <div id="article-end" className="h-4" />
 
       {/* JSON-LD Schemas */}
       <script
@@ -379,6 +475,6 @@ export default async function GlossaryTermPage({ params }: Props) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
         />
       )}
-    </div>
+    </article>
   )
 }
