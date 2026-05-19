@@ -314,7 +314,7 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
             </h1>
             
             {/* Dynamically cross-linked definition */}
-            <div className="prose prose-slate prose-lg max-w-none text-slate-700">
+            <div className="text-slate-700">
               <MarkdownRenderer content={processedDefinition} />
             </div>
 
@@ -342,7 +342,7 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
               <BookOpen className={`h-6 w-6 ${themeStyles.iconColor}`} aria-hidden />
               Understanding {term.term}
             </h2>
-            <div className="prose prose-slate max-w-none text-slate-600">
+            <div className="text-slate-600">
               <MarkdownRenderer content={processedExtendedNote} />
             </div>
           </section>

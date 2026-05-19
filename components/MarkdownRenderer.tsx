@@ -190,6 +190,19 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                                 {...props}
                             />
                         );
+                    },
+                    style: ({ node, children, ...props }: any) => {
+                        let cssContent = '';
+                        if (node && node.children && node.children[0]) {
+                            cssContent = node.children[0].value || '';
+                        } else if (typeof children === 'string') {
+                            cssContent = children;
+                        } else if (Array.isArray(children)) {
+                            cssContent = children.map(c => typeof c === 'string' ? c : (c?.props?.children || '')).join('');
+                        }
+                        return (
+                            <style dangerouslySetInnerHTML={{ __html: cssContent }} {...props} />
+                        );
                     }
                 }}
             >
