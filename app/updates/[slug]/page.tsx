@@ -417,7 +417,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                                     </div>
                                     <div className="flex items-center gap-3">
                                         <span className={`hidden sm:inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${cardStyles.badgeBg}`}>
-                                            ⚡ AI-Optimized Scan
+                                            ⚡ Key Takeaways
                                         </span>
                                         <ChevronDown className="h-4 w-4 text-slate-400 transition-transform duration-300 group-open:rotate-180" aria-hidden />
                                     </div>
