@@ -251,41 +251,7 @@ export default async function GlossaryTermPage({ params }: Props) {
     ]
   }
 
-  // DefinedTerm JSON-LD Schema
-  const definedTermSchema = {
-    "@context": "https://schema.org",
-    "@type": "DefinedTerm",
-    "name": term.term,
-    "description": (term.definition || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(),
-    "inDefinedTermSet": {
-      "@type": "DefinedTermSet",
-      "name": "Indian Corporate Law Glossary",
-      "url": "https://corplawupdates.in/glossary"
-    },
-    "url": `https://corplawupdates.in/glossary/${term.slug}`
-  }
 
-  // BreadcrumbList JSON-LD Schema
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://corplawupdates.in" },
-      { "@type": "ListItem", "position": 2, "name": "Glossary", "item": "https://corplawupdates.in/glossary" },
-      { "@type": "ListItem", "position": 3, "name": term.term, "item": `https://corplawupdates.in/glossary/${term.slug}` }
-    ]
-  }
-
-  // FAQPage JSON-LD Schema — always emit if we have FAQs to maximize Google rich results appearance
-  const faqSchema = faqsList.length > 0 ? {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": faqsList.map(faq => ({
-      "@type": "Question",
-      "name": faq.q,
-      "acceptedAnswer": { "@type": "Answer", "text": faq.a }
-    }))
-  } : null
 
    // Dynamic category branding colors for cards
   const cat = term.category?.toUpperCase() || 'DEFAULT';
@@ -603,21 +569,68 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
 
       <div id="article-end" className="h-4" />
 
-      {/* JSON-LD Schemas */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(definedTermSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-      {faqSchema && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-        />
-      )}
+      {/* Unified High-Performance SEO & AI Schema Block */}
+      {(() => {
+        const pageUrl = `https://corplawupdates.in/glossary/${term.slug}`;
+        const plainTextTldr = parsed.tldr ? parsed.tldr.join(' ').replace(/"/g, '\\"') : '';
+        const cleanDescription = (term.definition || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+
+        const unifiedSchema = {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": `${pageUrl}#webpage`,
+              "url": pageUrl,
+              "name": `${term.term} — Legal Definition & Key Takeaways`,
+              "description": cleanDescription,
+              "abstract": plainTextTldr || undefined,
+              "breadcrumb": { "@id": `${pageUrl}#breadcrumb` },
+              "mainEntity": { "@id": `${pageUrl}#defined-term` }
+            },
+            {
+              "@type": "DefinedTerm",
+              "@id": `${pageUrl}#defined-term`,
+              "name": term.term,
+              "description": cleanDescription,
+              "inDefinedTermSet": {
+                "@type": "DefinedTermSet",
+                "name": "Indian Corporate Law Glossary",
+                "url": "https://corplawupdates.in/glossary"
+              },
+              "url": pageUrl
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": `${pageUrl}#breadcrumb`,
+              "itemListElement": [
+                { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://corplawupdates.in" },
+                { "@type": "ListItem", "position": 2, "name": "Glossary", "item": "https://corplawupdates.in/glossary" },
+                { "@type": "ListItem", "position": 3, "name": term.term, "item": pageUrl }
+              ]
+            },
+            ...(faqsList.length > 0 ? [{
+              "@type": "FAQPage",
+              "@id": `${pageUrl}#faq`,
+              "mainEntity": faqsList.map((faq) => ({
+                "@type": "Question",
+                "name": faq.q,
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": faq.a
+                }
+              }))
+            }] : [])
+          ]
+        };
+
+        return (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(unifiedSchema) }}
+          />
+        );
+      })()}
     </article>
   )
 }
