@@ -586,12 +586,7 @@ html[class*="dark"] .group:hover .navbar-logo-text {
 
 /* 1. Landmark Highlighter for Legal & Compliance Citations */
 .article-content strong {
-  background: linear-gradient(120deg, rgba(245, 158, 11, 0.08) 0%, rgba(245, 158, 11, 0.03) 100%);
-  padding: 0.15rem 0.35rem;
-  border-radius: 6px;
-  border: 1px solid rgba(245, 158, 11, 0.16);
   font-weight: 700;
-  color: #0f172a;
 }
 
 .article-content code {
