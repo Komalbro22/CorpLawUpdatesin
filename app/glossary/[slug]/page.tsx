@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import { linkGlossaryTerms } from '@/lib/glossaryLinker'
 import TableOfContents from '@/components/TableOfContents'
-import { BookOpen, Link2, Search, FileText, HelpCircle, Sparkles } from 'lucide-react'
+import { BookOpen, Link2, Search, FileText, HelpCircle, Sparkles, Clock } from 'lucide-react'
 
 export const revalidate = 0 // Revalidate immediately (instant updates)
 
@@ -313,6 +313,12 @@ export default async function GlossaryTermPage({ params }: Props) {
     };
   }
 
+  // Calculate dynamic reading time
+  const definitionWords = getWordCount(term.definition || '');
+  const extendedNoteWords = getWordCount(parsed.cleanContent || '');
+  const totalWords = definitionWords + extendedNoteWords;
+  const readingTime = Math.max(1, Math.round(totalWords / 200)); // 200 WPM average
+
   // Consolidated content outline for Table of Contents sidebar extraction
   const combinedContent = `
 ${!parsed.hideDefinition ? '## Definition' : ''}
@@ -348,6 +354,10 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
               <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${themeStyles.badgeBg} border`}>
                 {term.category}
               </span>
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold text-slate-500 bg-slate-50 border border-slate-200/60">
+                <Clock className="h-3.5 w-3.5 text-slate-400" />
+                {readingTime} min read
+              </span>
             </div>
             <h1 className="text-4xl md:text-5xl font-heading font-bold text-navy mb-4">
               {term.term}
@@ -364,6 +374,15 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
                 </div>
               ) : (
                 <div />
+              )}
+              {parsed.tldr && parsed.tldr.length > 0 && (
+                <Link 
+                  href="#key-takeaways-tldr" 
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 hover:text-amber-700 bg-amber-50 hover:bg-amber-100/80 border border-amber-250/30 px-3 py-1 rounded-full transition-all shadow-sm active:scale-95"
+                >
+                  <Sparkles className="h-3 w-3 animate-pulse" />
+                  Jump to TL;DR Summary ⚡
+                </Link>
               )}
               <p className="text-xs text-slate-400 font-medium">
                 Last updated: {new Date(term.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
@@ -385,11 +404,26 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
                 <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${themeStyles.badgeBg} border`}>
                   {term.category}
                 </span>
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold text-slate-500 bg-slate-50 border border-slate-200/60">
+                  <Clock className="h-3.5 w-3.5 text-slate-400" />
+                  {readingTime} min read
+                </span>
               </div>
               
-              <h1 className="text-3xl md:text-4xl font-heading font-bold text-navy mb-6">
-                {term.term}
-              </h1>
+              <div className="flex flex-wrap items-center gap-3.5 mb-6">
+                <h1 className="text-3xl md:text-4xl font-heading font-bold text-navy m-0">
+                  {term.term}
+                </h1>
+                {parsed.tldr && parsed.tldr.length > 0 && (
+                  <Link 
+                    href="#key-takeaways-tldr" 
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 hover:text-amber-700 bg-amber-50 hover:bg-amber-100/80 border border-amber-250/30 px-3 py-1 rounded-full transition-all shadow-sm active:scale-95"
+                  >
+                    <Sparkles className="h-3 w-3 animate-pulse" />
+                    Jump to TL;DR Summary ⚡
+                  </Link>
+                )}
+              </div>
               
               {/* Dynamically cross-linked definition */}
               <div className="text-slate-700">
@@ -420,9 +454,12 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
             <div className="absolute top-0 right-0 p-8 opacity-[0.06] select-none pointer-events-none" aria-hidden="true">
               <Sparkles className="text-6xl text-amber-500" />
             </div>
-            <h2 className="text-xl font-bold text-navy mb-4 flex items-center gap-2 font-heading">
+            <h2 className="text-xl font-bold text-navy mb-4 flex items-center gap-2 font-heading group">
               <span className="w-1.5 h-5 bg-amber-500 rounded-full"></span>
-              Quick Summary (TL;DR)
+              <a href="#key-takeaways-tldr" className="hover:text-amber-700 transition-colors flex items-center gap-1.5">
+                Quick Summary (TL;DR)
+                <span className="opacity-0 group-hover:opacity-100 text-slate-400 text-xs font-normal transition-opacity duration-150 select-none">🔗</span>
+              </a>
             </h2>
             <ul className="space-y-3.5">
               {parsed.tldr.map((point: string, idx: number) => (
@@ -438,9 +475,12 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
         {/* Extended Note Section */}
         {term.extended_note && (
           <section id={`understanding-${term.term.toLowerCase().replace(/[^a-z0-9]/g, '-')}`} className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-sm border-l-[4px] ${themeStyles.borderLeftColor}`}>
-            <h2 className="text-2xl font-bold text-navy mb-6 flex items-center gap-2.5 font-heading">
+            <h2 className="text-2xl font-bold text-navy mb-6 flex items-center gap-2.5 font-heading group">
               <BookOpen className={`h-6 w-6 ${themeStyles.iconColor}`} aria-hidden />
-              Understanding {term.term}
+              <a href={`#understanding-${term.term.toLowerCase().replace(/[^a-z0-9]/g, '-')}`} className="hover:text-amber-700 transition-colors flex items-center gap-1.5">
+                Understanding {term.term}
+                <span className="opacity-0 group-hover:opacity-100 text-slate-400 text-xs font-normal transition-opacity duration-150 select-none">🔗</span>
+              </a>
             </h2>
             <div className="text-slate-600">
               <MarkdownRenderer content={processedExtendedNote} />
@@ -451,9 +491,12 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
         {/* Frequently Asked Questions (FAQ) Section - Only if not already inline in the text */}
         {!hasInlineFaqs && faqsList.length > 0 && (
           <section id="frequently-asked-questions-faqs" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-sm border-l-[4px] ${themeStyles.borderLeftColor}`}>
-            <h2 className="text-2xl font-bold text-navy mb-6 flex items-center gap-2.5 font-heading">
+            <h2 className="text-2xl font-bold text-navy mb-6 flex items-center gap-2.5 font-heading group">
               <HelpCircle className={`h-6 w-6 ${themeStyles.iconColor}`} aria-hidden />
-              Frequently Asked Questions (FAQs)
+              <a href="#frequently-asked-questions-faqs" className="hover:text-amber-700 transition-colors flex items-center gap-1.5">
+                Frequently Asked Questions (FAQs)
+                <span className="opacity-0 group-hover:opacity-100 text-slate-400 text-xs font-normal transition-opacity duration-150 select-none">🔗</span>
+              </a>
             </h2>
             <div className="space-y-4">
               {faqsList.map((faq, index) => (
@@ -481,16 +524,19 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
         {/* Related Terms */}
         {relatedTermsData.length > 0 && (
           <section id="related-terms" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-sm border-l-[4px] ${themeStyles.borderLeftColor}`}>
-            <h2 className="text-2xl font-bold text-navy mb-6 flex items-center gap-2.5 font-heading">
+            <h2 className="text-2xl font-bold text-navy mb-6 flex items-center gap-2.5 font-heading group">
               <Link2 className={`h-6 w-6 ${themeStyles.iconColor}`} aria-hidden />
-              Related Terms
+              <a href="#related-terms" className="hover:text-amber-700 transition-colors flex items-center gap-1.5">
+                Related Terms
+                <span className="opacity-0 group-hover:opacity-100 text-slate-400 text-xs font-normal transition-opacity duration-150 select-none">🔗</span>
+              </a>
             </h2>
             <div className="flex flex-wrap gap-3">
               {relatedTermsData.map((related) => (
                 <Link 
                   key={related.slug} 
                   href={`/glossary/${related.slug}`}
-                  className="inline-flex items-center px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium text-navy hover:border-amber-400 hover:text-amber-700 hover:shadow-sm transition-all"
+                  className="inline-flex items-center px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium text-navy hover:border-amber-400 hover:text-amber-700 hover:shadow-sm transition-all qol-pill-hover"
                 >
                   {related.term}
                 </Link>
@@ -502,9 +548,12 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
         {/* Contextual Analysis & Related Updates */}
         {relatedArticles && relatedArticles.length > 0 && (
           <section id="contextual-analysis-regulatory-updates" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-sm border-l-[4px] ${themeStyles.borderLeftColor}`}>
-            <h2 className="text-2xl font-bold text-navy mb-4 flex items-center gap-2.5 font-heading">
+            <h2 className="text-2xl font-bold text-navy mb-4 flex items-center gap-2.5 font-heading group">
               <FileText className={`h-6 w-6 ${themeStyles.iconColor}`} aria-hidden />
-              Contextual Analysis & Regulatory Updates
+              <a href="#contextual-analysis-regulatory-updates" className="hover:text-amber-700 transition-colors flex items-center gap-1.5">
+                Contextual Analysis & Regulatory Updates
+                <span className="opacity-0 group-hover:opacity-100 text-slate-400 text-xs font-normal transition-opacity duration-150 select-none">🔗</span>
+              </a>
             </h2>
             <p className="text-slate-500 text-sm mb-6 font-medium">
               Read our latest analysis and critical updates on corporate circulars related to <strong>{term.category}</strong>:
@@ -536,9 +585,12 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
         {/* Related Searches */}
         {term.keywords && term.keywords.length > 0 && (
           <section id="related-searches" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-sm border-l-[4px] ${themeStyles.borderLeftColor}`}>
-            <h2 className="text-2xl font-bold text-navy mb-4 flex items-center gap-2.5 font-heading">
+            <h2 className="text-2xl font-bold text-navy mb-4 flex items-center gap-2.5 font-heading group">
               <Search className={`h-6 w-6 ${themeStyles.iconColor}`} aria-hidden />
-              Related Searches
+              <a href="#related-searches" className="hover:text-amber-700 transition-colors flex items-center gap-1.5">
+                Related Searches
+                <span className="opacity-0 group-hover:opacity-100 text-slate-400 text-xs font-normal transition-opacity duration-150 select-none">🔗</span>
+              </a>
             </h2>
             <div className="flex flex-wrap gap-2">
               {term.keywords.map((kw: string, i: number) => {
@@ -554,7 +606,7 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
                   <Link
                     key={i}
                     href={linkUrl}
-                    className="text-sm bg-slate-50 text-slate-600 hover:bg-amber-50 hover:text-amber-700 hover:border-amber-300 border border-slate-200/60 px-4 py-2 rounded-full font-medium transition-all shadow-sm flex items-center gap-1 group"
+                    className="text-sm bg-slate-50 text-slate-600 hover:bg-amber-50 hover:text-amber-700 hover:border-amber-300 border border-slate-200/60 px-4 py-2 rounded-full font-medium transition-all shadow-sm flex items-center gap-1 group qol-pill-hover"
                   >
                     <span>{kw.trim()}</span>
                     <span className="text-slate-400 group-hover:text-amber-600 transition-colors text-xs">↗</span>
