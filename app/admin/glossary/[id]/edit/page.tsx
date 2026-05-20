@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
@@ -14,6 +14,32 @@ const CATEGORIES = ['IBC', 'NCLT', 'MCA', 'SEBI', 'RBI', 'FEMA', 'GENERAL']
 
 type Props = {
   params: { id: string }
+}
+
+const parseMetadata = (content: string) => {
+  const match = content.match(/^\s*<!--\s*METADATA\s*([\s\S]*?)\s*METADATA\s*-->/)
+  if (match) {
+    try {
+      const metadata = JSON.parse(match[1])
+      const cleanContent = content.substring(match[0].length).trim()
+      return {
+        hideDefinition: !!metadata.hide_definition,
+        seoTitle: metadata.seo_title || '',
+        seoDescription: metadata.seo_description || '',
+        tldr: Array.isArray(metadata.tldr) ? metadata.tldr : [],
+        cleanContent
+      }
+    } catch (e) {
+      console.error("Error parsing metadata:", e)
+    }
+  }
+  return {
+    hideDefinition: false,
+    seoTitle: '',
+    seoDescription: '',
+    tldr: [],
+    cleanContent: content
+  }
 }
 
 export default function EditGlossaryTermPage({ params }: Props) {
@@ -54,39 +80,7 @@ export default function EditGlossaryTermPage({ params }: Props) {
   // FAQ creator
   const [faqs, setFaqs] = useState<{ q: string; a: string }[]>([])
 
-  // Fetch the term by ID on mount
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    fetchTermDetails()
-  }, [params.id])
-
-  const parseMetadata = (content: string) => {
-    const match = content.match(/^\s*<!--\s*METADATA\s*([\s\S]*?)\s*METADATA\s*-->/)
-    if (match) {
-      try {
-        const metadata = JSON.parse(match[1])
-        const cleanContent = content.substring(match[0].length).trim()
-        return {
-          hideDefinition: !!metadata.hide_definition,
-          seoTitle: metadata.seo_title || '',
-          seoDescription: metadata.seo_description || '',
-          tldr: Array.isArray(metadata.tldr) ? metadata.tldr : [],
-          cleanContent
-        }
-      } catch (e) {
-        console.error("Error parsing metadata:", e)
-      }
-    }
-    return {
-      hideDefinition: false,
-      seoTitle: '',
-      seoDescription: '',
-      tldr: [],
-      cleanContent: content
-    }
-  }
-
-  const fetchTermDetails = async () => {
+  const fetchTermDetails = useCallback(async () => {
     try {
       const res = await fetch(`/api/admin/glossary/${params.id}`)
       const json = await res.json()
@@ -132,7 +126,12 @@ export default function EditGlossaryTermPage({ params }: Props) {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [params.id, router, showToast])
+
+  // Fetch the term by ID on mount
+  useEffect(() => {
+    fetchTermDetails()
+  }, [fetchTermDetails])
 
   // Live word counter helper (strips HTML tags)
   const getWordCount = (text: string): number => {

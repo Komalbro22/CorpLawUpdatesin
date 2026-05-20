@@ -646,7 +646,12 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
 
       {/* DETAIL PANEL */}
       {selectedEntry && (
-        <div className="fixed inset-0 bg-black/40 z-50 flex items-end sm:items-center justify-center p-4">
+        <div
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setSelectedEntry(null)
+          }}
+          className="fixed inset-0 bg-black/40 z-50 flex items-end sm:items-center justify-center p-4"
+        >
           <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 relative">
             <button
               onClick={() => setSelectedEntry(null)}

@@ -112,12 +112,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     alternates: {
-      canonical: `https://corplawupdates.in/glossary/${term.slug}`,
+      canonical: `https://www.corplawupdates.in/glossary/${term.slug}`,
     },
     openGraph: {
       title: `${term.term} — Legal Definition`,
       description,
-      url: `https://corplawupdates.in/glossary/${term.slug}`,
+      url: `https://www.corplawupdates.in/glossary/${term.slug}`,
     },
     // Thin glossary pages (< 300 words) get noindex to protect domain authority
     ...(isThin ? { robots: { index: false, follow: true } } : {}),
@@ -623,7 +623,7 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
 
       {/* Unified High-Performance SEO & AI Schema Block */}
       {(() => {
-        const pageUrl = `https://corplawupdates.in/glossary/${term.slug}`;
+        const pageUrl = `https://www.corplawupdates.in/glossary/${term.slug}`;
         const plainTextTldr = parsed.tldr ? parsed.tldr.join(' ').replace(/"/g, '\\"') : '';
         const cleanDescription = (term.definition || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 
@@ -648,7 +648,7 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
               "inDefinedTermSet": {
                 "@type": "DefinedTermSet",
                 "name": "Indian Corporate Law Glossary",
-                "url": "https://corplawupdates.in/glossary"
+                "url": "https://www.corplawupdates.in/glossary"
               },
               "url": pageUrl
             },
@@ -656,8 +656,8 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
               "@type": "BreadcrumbList",
               "@id": `${pageUrl}#breadcrumb`,
               "itemListElement": [
-                { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://corplawupdates.in" },
-                { "@type": "ListItem", "position": 2, "name": "Glossary", "item": "https://corplawupdates.in/glossary" },
+                { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.corplawupdates.in" },
+                { "@type": "ListItem", "position": 2, "name": "Glossary", "item": "https://www.corplawupdates.in/glossary" },
                 { "@type": "ListItem", "position": 3, "name": term.term, "item": pageUrl }
               ]
             },

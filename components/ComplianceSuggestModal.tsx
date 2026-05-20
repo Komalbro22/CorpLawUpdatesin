@@ -77,7 +77,12 @@ export default function ComplianceSuggestModal({
     'w-full border border-slate-200 bg-slate-50 focus:bg-white rounded-lg px-3 py-2.5 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition-all shadow-sm'
 
   return (
-    <div className="fixed inset-0 bg-navy/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 sm:p-6 overflow-hidden">
+    <div
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose()
+      }}
+      className="fixed inset-0 bg-navy/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 sm:p-6 overflow-hidden"
+    >
       <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full flex flex-col max-h-[90vh] overflow-hidden animate-in fade-in zoom-in-95 duration-200 relative">
         
         {/* Header */}

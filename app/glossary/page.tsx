@@ -7,10 +7,13 @@ export const revalidate = 0 // Revalidate immediately (instant updates)
 export const metadata: Metadata = {
   title: 'Legal Glossary — Indian Corporate Law Terms | CorpLawUpdates',
   description: 'Plain-language definitions of 200+ Indian corporate law terms covering IBC, CIRP, SEBI, MCA, RBI, and FEMA — simplified for CS professionals, CA, CMA, and law students.',
+  alternates: {
+    canonical: 'https://www.corplawupdates.in/glossary',
+  },
   openGraph: {
     title: 'Legal Glossary — Indian Corporate Law Terms',
     description: 'Definitions of IBC, SEBI, MCA, RBI, FEMA terms for CS professionals.',
-    url: 'https://corplawupdates.in/glossary',
+    url: 'https://www.corplawupdates.in/glossary',
     type: 'website',
   },
 }
@@ -33,7 +36,7 @@ export default async function GlossaryHubPage() {
     "@type": "DefinedTermSet",
     "name": "Indian Corporate Law Glossary",
     "description": "Definitions of IBC, SEBI, MCA, RBI, FEMA, and NCLT terms for compliance professionals",
-    "url": "https://corplawupdates.in/glossary",
+    "url": "https://www.corplawupdates.in/glossary",
     "inLanguage": "en-IN"
   }
 
@@ -41,8 +44,8 @@ export default async function GlossaryHubPage() {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://corplawupdates.in" },
-      { "@type": "ListItem", "position": 2, "name": "Glossary", "item": "https://corplawupdates.in/glossary" }
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.corplawupdates.in" },
+      { "@type": "ListItem", "position": 2, "name": "Glossary", "item": "https://www.corplawupdates.in/glossary" }
     ]
   }
 
