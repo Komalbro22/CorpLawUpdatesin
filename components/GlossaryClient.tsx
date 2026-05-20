@@ -14,6 +14,11 @@ type GlossaryTerm = {
   synonyms?: string[]
 }
 
+function stripHtml(html: string) {
+  if (!html) return ''
+  return html.replace(/<[^>]*>/g, '').trim()
+}
+
 export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
   const [search, setSearch] = useState('')
   const [activeCategory, setActiveCategory] = useState('ALL')
@@ -149,7 +154,7 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
                       </span>
                     </div>
                     <p className="text-slate-500 text-sm line-clamp-2 leading-relaxed">
-                      {t.definition}
+                      {stripHtml(t.definition)}
                     </p>
                   </Link>
                 ))}
