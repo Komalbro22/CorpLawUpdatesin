@@ -421,6 +421,300 @@ export function buildNewsletterTemplateHtml({
 </html>`
 }
 
+export function buildWeeklyDigestHtml({
+    startDateStr,
+    endDateStr,
+    entries,
+    unsubscribeUrl
+}: {
+    startDateStr: string
+    endDateStr: string
+    entries: any[]
+    unsubscribeUrl: string
+}): string {
+    const SITE_URL = BASE_URL || 'https://www.corplawupdates.in'
+
+    // Group entries by regulator
+    const groups: Record<string, any[]> = {}
+    entries.forEach(e => {
+        const reg = (e.regulator || 'other').toLowerCase()
+        if (!groups[reg]) groups[reg] = []
+        groups[reg].push(e)
+    })
+
+    const REGULATOR_META: Record<string, { label: string; color: string }> = {
+        mca: { label: 'MCA / ROC / LLP', color: '#3B82F6' },
+        sebi: { label: 'SEBI LODR & Sec', color: '#10B981' },
+        rbi: { label: 'RBI / Banking', color: '#8B5CF6' },
+        income_tax: { label: 'Income Tax & TDS', color: '#F97316' },
+        fema: { label: 'RBI FEMA', color: '#14B8A6' },
+        nclt: { label: 'NCLT Orders', color: '#EF4444' },
+        ibc: { label: 'IBC / Insolvency', color: '#EC4899' },
+        gst: { label: 'GST Filings', color: '#06B6D4' },
+        labor_law: { label: 'Labor Laws (PF & ESIC)', color: '#6366F1' },
+        other: { label: 'General / Other', color: '#6B7280' }
+    }
+
+    // Render grouped event lists
+    let groupsHtml = ''
+
+    if (entries.length === 0) {
+        groupsHtml = `
+            <tr>
+                <td style="padding: 30px 24px; text-align: center; background: #FFFDF5; border: 1px dashed #F59E0B; border-radius: 12px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+                    <div style="font-size: 32px; margin-bottom: 12px;">🎉</div>
+                    <div style="font-size: 15px; font-weight: 700; color: #0F172A; margin-bottom: 4px;">No Deadlines This Week</div>
+                    <div style="font-size: 13px; color: #64748B;">No statutory compliance deadlines are scheduled between ${startDateStr} and ${endDateStr}. Enjoy a quiet, compliant week!</div>
+                </td>
+            </tr>
+        `
+    } else {
+        // Order by priority
+        const order = ['mca', 'gst', 'income_tax', 'sebi', 'labor_law', 'rbi', 'fema', 'ibc', 'nclt', 'other']
+        const keys = Object.keys(groups).sort((a, b) => {
+            let idxA = order.indexOf(a)
+            let idxB = order.indexOf(b)
+            if (idxA === -1) idxA = 99
+            if (idxB === -1) idxB = 99
+            return idxA - idxB
+        })
+
+        groupsHtml = keys.map(key => {
+            const meta = REGULATOR_META[key] || REGULATOR_META['other']
+            const groupEntries = groups[key]
+
+            const entriesListHtml = groupEntries.map(e => {
+                const penaltyHtml = e.penalty 
+                    ? `<div style="background:#FFF1F2; border-left:3px solid #EF4444; border-radius:4px; padding:8px 12px; margin-top:10px; font-size:12px; color:#991B1B; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+                         <strong>Penalty for Delay:</strong> ${e.penalty}
+                       </div>`
+                    : ''
+                
+                const refHtml = e.regulation_reference
+                    ? `<div style="margin-top:6px; font-size:12px; color:#64748B; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+                         <strong>Ref:</strong> ${e.regulation_reference}
+                       </div>`
+                    : ''
+
+                return `
+                    <div style="background:#ffffff; border:1px solid #E2E8F0; border-radius:12px; padding:16px 20px; margin-bottom:12px; box-shadow:0 1px 3px rgba(0,0,0,0.02);">
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+                            <tr>
+                                <td valign="top" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+                                    <div style="font-size:13px; font-weight:800; color:${meta.color}; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">
+                                        ${e.form_name}
+                                    </div>
+                                    <h4 style="margin:0 0 8px 0; font-family:Georgia,serif; font-size:16px; font-weight:700; color:#0F172A; line-height:1.4;">
+                                        ${e.compliance_title}
+                                    </h4>
+                                    <div style="font-size:13px; color:#475569; line-height:1.5;">
+                                        <strong>Applicable To:</strong> ${e.applicable_to}
+                                    </div>
+                                    ${refHtml}
+                                    ${penaltyHtml}
+                                </td>
+                                <td valign="top" align="right" style="padding-left:16px; min-width:110px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+                                    <div style="background:${meta.color}10; border:1px solid ${meta.color}30; border-radius:8px; padding:6px 10px; text-align:center;">
+                                        <div style="font-size:10px; color:${meta.color}; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;">DUE DATE</div>
+                                        <div style="font-size:13px; color:#0F172A; font-weight:700; margin-top:2px; white-space:nowrap;">
+                                            ${e.due_date.replace(/\s+\d{4}$/, '')}
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                `
+            }).join('')
+
+            return `
+                <tr>
+                    <td style="padding: 16px 24px 8px;">
+                        <h3 style="margin:0 0 12px 0; font-family:Georgia,serif; font-size:18px; font-weight:800; color:#0F172A; border-bottom:2px solid ${meta.color}30; padding-bottom:6px;">
+                            <span style="background:${meta.color}; width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:8px; vertical-align:middle;"></span>
+                            ${meta.label}
+                        </h3>
+                        ${entriesListHtml}
+                    </td>
+                </tr>
+            `
+        }).join('')
+    }
+
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>📅 Weekly Compliance Digest: ${startDateStr} - ${endDateStr}</title>
+</head>
+<body style="margin:0;padding:0;background:#F8FAFC;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+
+  <!-- Preheader text (hidden) -->
+  <div style="display:none;max-height:0;overflow:hidden;font-size:1px;color:#ffffff;line-height:1px;">
+    MCA, GST, SEBI & Income Tax statutory compliance deadlines for the week of ${startDateStr} - ${endDateStr}. Stay compliant!
+  </div>
+
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F8FAFC; padding: 24px 0; border-collapse:collapse;">
+    <tr>
+      <td align="center">
+        
+        <!-- Main container -->
+        <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #E2E8F0;box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);border-collapse:collapse;">
+
+          <!-- ── HEADER ── -->
+          <tr>
+            <td style="background:#0F172A; padding:32px 32px 28px;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+                <tr>
+                  <td>
+                    <span style="font-size:22px; font-weight:900; color:#ffffff; font-family:Georgia,serif; letter-spacing:-0.5px;">
+                      CorpLawUpdates<span style="color:#F59E0B;">.</span>in
+                    </span>
+                  </td>
+                  <td align="right">
+                    <span style="background:#F59E0B20; color:#F59E0B; font-size:11px; font-weight:700; padding:4px 10px; border-radius:20px; letter-spacing:0.5px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+                      AUTOMATED DIGEST
+                    </span>
+                  </td>
+                </tr>
+              </table>
+
+              <h1 style="margin:24px 0 8px; font-size:24px; font-weight:800; color:#ffffff; font-family:Georgia,serif; line-height:1.3;">
+                Weekly Compliance Alert
+              </h1>
+              <p style="margin:0; font-size:14px; color:#94A3B8; line-height:1.5;">
+                Stay ahead of statutory deadlines. Keep your business, clients, and filings perfectly compliant.
+              </p>
+            </td>
+          </tr>
+
+          <!-- ── DATE BANNER ── -->
+          <tr>
+            <td style="padding: 20px 24px 0;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#FFF7ED; border-left:4px solid #F59E0B; border-radius:4px; border-collapse:collapse;">
+                <tr>
+                  <td style="padding:14px 20px; font-size:14px; color:#92400E; font-weight:700; font-family:Georgia,serif; line-height:1.5;">
+                     📅 Deadlines for the Week: ${startDateStr} to ${endDateStr}
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ── STATS BAR ── -->
+          ${entries.length > 0 ? `
+          <tr>
+            <td style="padding:20px 24px 0;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F8FAFC; border-radius:8px; border:1px solid #E2E8F0; padding:14px 16px; border-collapse:collapse;">
+                <tr>
+                  <td style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+                    <div style="font-size:12px; color:#64748B; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">
+                      📋 Week Summary
+                    </div>
+                    <div style="font-size:14px; color:#334155;">
+                      There are <strong>${entries.length} statutory compliance deadlines</strong> requiring execution this week. Grouped below by regulatory authority.
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          ` : ''}
+
+          <!-- ── GROUPED ENTRIES LIST ── -->
+          ${groupsHtml}
+
+          <!-- ── COMPLIANCE CALENDAR CTA ── -->
+          <tr>
+            <td style="padding:24px 24px 24px;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0F172A; border-radius:12px; overflow:hidden; border-collapse:collapse;">
+                <tr>
+                  <td style="padding:20px 24px;">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+                      <tr>
+                        <td style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+                          <p style="margin:0 0 4px; font-size:15px; font-weight:800; color:#ffffff; font-family:Georgia,serif;">
+                            📅 Interactive Compliance Calendar
+                          </p>
+                          <p style="margin:0; font-size:12px; color:#94A3B8;">
+                            Browse full monthly grids, filter by regulator, or search specific compliance forms.
+                          </p>
+                        </td>
+                        <td align="right" style="padding-left:12px; white-space:nowrap;">
+                          <a href="${SITE_URL}/calendar" style="display:inline-block; background:#F59E0B; color:#0F172A; font-weight:700; font-size:12px; padding:8px 16px; border-radius:6px; text-decoration:none; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+                            Open Calendar
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ── SOCIAL & FEED ── -->
+          <tr>
+            <td style="padding:0 24px 24px;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F8FAFC; border-radius:12px; border:1px solid #E2E8F0; border-collapse:collapse;">
+                <tr>
+                  <td style="padding:16px 20px; text-align:center; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+                    <div style="font-size:12px; color:#64748B; font-weight:700; margin-bottom:10px; letter-spacing:0.5px;">
+                      FOLLOW US FOR DAILY LEGAL INTELLIGENCE
+                    </div>
+                    <table cellpadding="0" cellspacing="4" border="0" align="center" style="border-collapse:collapse;">
+                      <tr>
+                        <td>
+                          <a href="https://twitter.com/corplawupdates" style="display:inline-block; background:#000000; color:#ffffff; font-size:11px; font-weight:700; padding:6px 12px; border-radius:6px; text-decoration:none;">
+                            𝕏 Twitter
+                          </a>
+                        </td>
+                        <td>
+                          <a href="https://linkedin.com/company/corplawupdates" style="display:inline-block; background:#0A66C2; color:#ffffff; font-size:11px; font-weight:700; padding:6px 12px; border-radius:6px; text-decoration:none;">
+                            in LinkedIn
+                          </a>
+                        </td>
+                        <td>
+                          <a href="https://whatsapp.com/channel/corplawupdates" style="display:inline-block; background:#25D366; color:#ffffff; font-size:11px; font-weight:700; padding:6px 12px; border-radius:6px; text-decoration:none;">
+                            💬 WhatsApp
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ── FOOTER ── -->
+          <tr>
+            <td style="background:#0F172A; padding:24px 32px; text-align:center; border-radius:0 0 16px 16px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+              <p style="margin:0 0 8px; font-size:12px; color:#94A3B8;">
+                You are receiving this because you subscribed at <a href="${SITE_URL}" style="color:#F59E0B; text-decoration:none;">corplawupdates.in</a>
+              </p>
+              <p style="margin:0 0 16px; font-size:11px; color:#64748B; line-height:1.4;">
+                India's Free Corporate Law Intelligence Platform · MCA · SEBI · RBI · NCLT · IBC · FEMA
+              </p>
+              <a href="${unsubscribeUrl}" style="font-size:11px; color:#94A3B8; text-decoration:underline;">
+                Unsubscribe from this newsletter
+              </a>
+              <p style="margin:12px 0 0; font-size:10px; color:#475569;">
+                Disclaimer: The content provided is for educational and informational purposes only and does not constitute legal or professional advice.
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`
+}
+
 export async function sendNewsletterEmails({
     subject,
     previewText,
