@@ -58,7 +58,7 @@ const settingGroups: { id: string; title: string; Icon: LucideIcon; keys: string
     id: 'analytics',
     title: 'Analytics & SEO',
     Icon: BarChart2,
-    keys: ['google_analytics_id', 'google_search_console'],
+    keys: ['google_analytics_id', 'google_search_console', 'microsoft_clarity_id'],
   },
 ]
 
