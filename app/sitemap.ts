@@ -6,13 +6,40 @@ export const revalidate = 3600
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const BASE_URL = 'https://www.corplawupdates.in'
 
-  // Fetch published articles
-  const { data: articles } = await supabaseAdmin
-    .from('updates')
-    .select('slug, title, content, published_at, updated_at, category')
-    .not('published_at', 'is', null)
-    .lte('published_at', new Date().toISOString())
-    .order('published_at', { ascending: false })
+  interface SitemapArticle {
+    slug: string
+    title: string | null
+    content: string | null
+    published_at: string | null
+    updated_at: string | null
+    category: string | null
+  }
+
+  interface SitemapGlossaryTerm {
+    slug: string
+    created_at: string
+    definition: string | null
+    extended_note: string | null
+  }
+
+  // Fetch published articles (paginated to handle > 1000 items)
+  const articles: SitemapArticle[] = []
+  let articlePage = 0
+  const pageSize = 1000
+  while (true) {
+    const { data, error } = await supabaseAdmin
+      .from('updates')
+      .select('slug, title, content, published_at, updated_at, category')
+      .not('published_at', 'is', null)
+      .lte('published_at', new Date().toISOString())
+      .order('published_at', { ascending: false })
+      .range(articlePage * pageSize, (articlePage + 1) * pageSize - 1)
+
+    if (error || !data || data.length === 0) break
+    articles.push(...(data as SitemapArticle[]))
+    if (data.length < pageSize) break
+    articlePage++
+  }
 
   // Fetch calendar events
   const { data: compliance_entries } = await supabaseAdmin
@@ -22,11 +49,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .order('updated_at', { ascending: false })
     .limit(1)
 
-  // Fetch glossary terms
-  const { data: glossaryTerms } = await supabaseAdmin
-    .from('glossary')
-    .select('slug, created_at, definition, extended_note')
-    .eq('is_verified', true)
+  // Fetch glossary terms (paginated to handle > 1000 items)
+  const glossaryTerms: SitemapGlossaryTerm[] = []
+  let glossaryPage = 0
+  while (true) {
+    const { data, error } = await supabaseAdmin
+      .from('glossary')
+      .select('slug, created_at, definition, extended_note')
+      .eq('is_verified', true)
+      .range(glossaryPage * pageSize, (glossaryPage + 1) * pageSize - 1)
+
+    if (error || !data || data.length === 0) break
+    glossaryTerms.push(...(data as SitemapGlossaryTerm[]))
+    if (data.length < pageSize) break
+    glossaryPage++
+  }
 
   const latestCalendarDate = compliance_entries?.[0]?.updated_at 
     ? new Date(compliance_entries[0].updated_at)
