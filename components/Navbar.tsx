@@ -77,10 +77,13 @@ export default function Navbar() {
         { href: '/calendar',       label: 'Compliance Calendar',Icon: Calendar,  color: 'text-cyan-600',     bg: 'hover:bg-cyan-50'     },
     ] as const
 
+    const isHome = pathname === '/'
+    const isLightNav = !isHome || scrolled || isOpen
+
     const navHeight = scrolled ? 'h-14' : 'h-16'
-    const navBg = scrolled
-        ? 'bg-white/97 shadow-nav backdrop-blur-xl'
-        : 'bg-white/92 backdrop-blur-md border-b border-slate-200/80'
+    const navBg = isLightNav
+        ? 'bg-white/95 shadow-nav backdrop-blur-xl border-b border-slate-200/80'
+        : 'bg-transparent border-transparent'
 
     return (
         <nav className={`sticky top-0 z-50 w-full transition-[background-color,backdrop-filter,box-shadow,border-color] duration-300 ease-in-out ${navBg}`}>
@@ -89,10 +92,14 @@ export default function Navbar() {
 
                     {/* Logo */}
                     <Link href="/" className="flex-shrink-0 flex flex-col justify-center group">
-                        <span className="font-heading text-xl font-bold navbar-logo-text leading-tight">
+                        <span className={`font-heading text-xl font-bold navbar-logo-text leading-tight transition-colors duration-200 ${
+                            isLightNav ? 'text-navy' : 'text-white'
+                        }`}>
                             CorpLawUpdates<span className="text-gold group-hover:text-amber-500 transition-colors">.in</span>
                         </span>
-                        <span className="hidden sm:block text-[10px] font-semibold text-slate-400 tracking-[0.18em] uppercase mt-0.5">
+                        <span className={`hidden sm:block text-[10px] font-semibold tracking-[0.18em] uppercase mt-0.5 transition-colors duration-200 ${
+                            isLightNav ? 'text-slate-400' : 'text-slate-300'
+                        }`}>
                             Corporate Law Intelligence
                         </span>
                     </Link>
@@ -103,16 +110,22 @@ export default function Navbar() {
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className={`relative inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
-                                    isActive(link.href)
-                                        ? 'text-amber-600'
-                                        : 'text-slate-600 hover:text-navy hover:bg-slate-50'
+                                className={`relative inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-md transition-all duration-200 ${
+                                    isLightNav
+                                        ? isActive(link.href)
+                                            ? 'text-amber-600'
+                                            : 'text-slate-600 hover:text-navy hover:bg-slate-50'
+                                        : isActive(link.href)
+                                            ? 'text-gold'
+                                            : 'text-slate-200 hover:text-white hover:bg-white/10'
                                 }`}
                             >
                                 {link.label}
                                 {/* Animated underline for active */}
                                 {isActive(link.href) && (
-                                    <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-amber-400 rounded-full" />
+                                    <span className={`absolute bottom-0 left-2 right-2 h-0.5 rounded-full ${
+                                        isLightNav ? 'bg-amber-400' : 'bg-gold'
+                                    }`} />
                                 )}
                             </Link>
                         ))}
@@ -130,7 +143,11 @@ export default function Navbar() {
                                 aria-expanded={categoriesOpen}
                                 aria-haspopup="true"
                                 aria-label="Browse categories"
-                                className="flex items-center gap-1 text-slate-600 hover:text-navy text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-amber-400/80 focus:ring-offset-2 rounded-md px-3 py-1.5 hover:bg-slate-50"
+                                className={`flex items-center gap-1 text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400/80 focus:ring-offset-2 rounded-md px-3 py-1.5 ${
+                                    isLightNav
+                                        ? 'text-slate-600 hover:text-navy hover:bg-slate-50'
+                                        : 'text-slate-200 hover:text-white hover:bg-white/10'
+                                }`}
                             >
                                 Categories
                                 <ChevronDown
@@ -166,7 +183,11 @@ export default function Navbar() {
                             href="/updates"
                             aria-label="Search articles"
                             title="Search articles"
-                            className="ml-2 p-2 rounded-md text-slate-500 hover:text-navy hover:bg-slate-100 transition-colors"
+                            className={`ml-2 p-2 rounded-md transition-all duration-200 ${
+                                isLightNav
+                                    ? 'text-slate-500 hover:text-navy hover:bg-slate-100'
+                                    : 'text-slate-200 hover:text-white hover:bg-white/10'
+                            }`}
                         >
                             <Search className="w-4 h-4" aria-hidden />
                         </Link>
@@ -177,13 +198,21 @@ export default function Navbar() {
                         <Link
                             href="/updates"
                             aria-label="Search"
-                            className="p-2 rounded-md text-slate-500 hover:text-navy hover:bg-slate-100 transition-colors"
+                            className={`p-2 rounded-md transition-all duration-200 ${
+                                isLightNav
+                                    ? 'text-slate-500 hover:text-navy hover:bg-slate-100'
+                                    : 'text-slate-200 hover:text-white hover:bg-white/10'
+                            }`}
                         >
                             <Search className="w-4 h-4" />
                         </Link>
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="inline-flex items-center justify-center p-2 rounded-md text-slate-500 hover:text-navy hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gold/80"
+                            className={`inline-flex items-center justify-center p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gold/80 transition-all duration-200 ${
+                                isLightNav
+                                    ? 'text-slate-500 hover:text-navy hover:bg-slate-100'
+                                    : 'text-slate-200 hover:text-white hover:bg-white/10'
+                            }`}
                             aria-expanded={isOpen}
                             aria-label={isOpen ? 'Close menu' : 'Open main menu'}
                         >

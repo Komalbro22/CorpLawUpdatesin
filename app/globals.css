@@ -24,14 +24,12 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;
 }
 
 body {
   color: #0F172A;
   background: #F8FAFC;
   width: 100%;
-  overflow-x: clip;
 }
 
 /* ============================================================
@@ -395,12 +393,7 @@ h2, h3, h4 {
 
 /* Ensure the brand name logo is always visible on dark backgrounds and forced dark mode */
 .navbar-logo-text {
-  color: #0F172A !important;
   transition: color 0.2s ease;
-}
-
-.group:hover .navbar-logo-text {
-  color: rgba(15, 23, 42, 0.9) !important;
 }
 
 [data-theme="dark"] .navbar-logo-text,

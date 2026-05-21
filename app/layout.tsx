@@ -179,7 +179,7 @@ export default async function RootLayout({
           </a>
           <HideOnAdmin><AnnouncementBar /></HideOnAdmin>
           <HideOnAdmin><Navbar /></HideOnAdmin>
-          <main id="main-content" tabIndex={-1} className="flex-grow outline-none">
+          <main id="main-content" tabIndex={-1} className="flex-grow outline-none overflow-x-hidden">
             {children}
           </main>
           <HideOnAdmin><Footer /></HideOnAdmin>
