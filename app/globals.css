@@ -391,21 +391,9 @@ h2, h3, h4 {
   }
 }
 
-/* Ensure the brand name logo is always visible on dark backgrounds and forced dark mode */
+/* Ensure the brand name logo transitions smoothly */
 .navbar-logo-text {
   transition: color 0.2s ease;
-}
-
-[data-theme="dark"] .navbar-logo-text,
-.dark .navbar-logo-text,
-html[class*="dark"] .navbar-logo-text {
-  color: #FFFFFF !important;
-}
-
-[data-theme="dark"] .group:hover .navbar-logo-text,
-.dark .group:hover .navbar-logo-text,
-html[class*="dark"] .group:hover .navbar-logo-text {
-  color: rgba(255, 255, 255, 0.9) !important;
 }
 
 /* ============================================================
