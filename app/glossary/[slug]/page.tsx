@@ -94,8 +94,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const parsed = parseMetadata(term.extended_note || '')
-  const totalWords = getWordCount(term.definition || '') + getWordCount(parsed.cleanContent || '')
-  const isThin = totalWords < 300
 
   // Strip HTML for clean SEO description
   const cleanDescription = (term.definition || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
@@ -119,8 +117,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       url: `https://www.corplawupdates.in/glossary/${term.slug}`,
     },
-    // Thin glossary pages (< 300 words) get noindex to protect domain authority
-    ...(isThin ? { robots: { index: false, follow: true } } : {}),
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+        'max-video-preview': -1,
+      },
+    },
   }
 }
 
