@@ -9,6 +9,17 @@ async function hashSHA256(str: string): Promise<string> {
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
 }
 
+function timingSafeEqualEdge(a: string, b: string): boolean {
+    if (a.length !== b.length) {
+        return false
+    }
+    let result = 0
+    for (let i = 0; i < a.length; i++) {
+        result |= a.charCodeAt(i) ^ b.charCodeAt(i)
+    }
+    return result === 0
+}
+
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl
     const isAdminRoute = pathname.startsWith('/admin')
@@ -38,8 +49,8 @@ export async function middleware(request: NextRequest) {
         const [payloadB64, signature] = parts
         const expected = await hashSHA256(payloadB64 + adminPassword + adminSalt)
         
-        // Timing-safe equal for Edge middleware
-        if (signature !== expected) {
+        // Timing-safe comparison to prevent timing attacks in Edge runtime
+        if (!timingSafeEqualEdge(signature, expected)) {
             return NextResponse.redirect(new URL('/admin/login', request.url))
         }
 

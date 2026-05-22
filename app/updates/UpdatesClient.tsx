@@ -40,11 +40,14 @@ export default function UpdatesClient({ updates, counts }: UpdatesClientProps) {
             isInternalChangeRef.current = false
             return
         }
-        if (searchFromUrl !== search) {
-            setSearch(searchFromUrl)
-            setDebouncedSearch(searchFromUrl)
-            lastPushedSearchRef.current = searchFromUrl
-        }
+        setSearch(prev => {
+            if (searchFromUrl !== prev) {
+                setDebouncedSearch(searchFromUrl)
+                lastPushedSearchRef.current = searchFromUrl
+                return searchFromUrl
+            }
+            return prev
+        })
     }, [searchFromUrl])
 
     useEffect(() => {

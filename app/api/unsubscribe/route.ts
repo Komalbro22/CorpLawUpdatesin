@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { generateUnsubscribeToken } from '@/lib/utils'
+import { generateUnsubscribeToken, safeCompare } from '@/lib/utils'
 import { supabaseAdmin } from '@/lib/supabase-server'
 
 export async function GET(request: NextRequest) {
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
         }
 
         const expectedToken = generateUnsubscribeToken(email)
-        if (token !== expectedToken) {
+        if (!safeCompare(token, expectedToken)) {
             return new NextResponse(errorHtml('Invalid or expired unsubscribe link'), {
                 status: 400,
                 headers: { 'Content-Type': 'text/html' }

@@ -4,12 +4,10 @@ import { supabaseAdmin } from '@/lib/supabase-server'
 import { sendNewsletterEmails } from '@/lib/newsletter'
 
 export async function GET(request: Request) {
-    // Basic security check (could use a secret header from Vercel)
+    // Strict security check using Vercel Cron secrets
     const authHeader = request.headers.get('authorization')
     if (process.env.CRON_SECRET && authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-        // return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-        // Note: For now, we'll allow it if CRON_SECRET is not set, or just log it.
-        // Vercel Cron sends a secret if configured.
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     try {

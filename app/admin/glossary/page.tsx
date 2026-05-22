@@ -143,10 +143,9 @@ export default function AdminGlossaryPage() {
                         )}
                       </div>
                       <p className="text-xs text-slate-400 font-mono mt-1">{term.slug}</p>
-                      <div 
-                        className="text-sm text-slate-500 mt-2 line-clamp-2"
-                        dangerouslySetInnerHTML={{ __html: term.definition || '' }}
-                      />
+                      <div className="text-sm text-slate-500 mt-2 line-clamp-2">
+                        {term.definition ? term.definition.replace(/<[^>]*>/g, '').trim() : ''}
+                      </div>
                     </td>
                     <td className="p-4 align-top">
                       <span className="inline-flex items-center px-2 py-1 rounded text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200">

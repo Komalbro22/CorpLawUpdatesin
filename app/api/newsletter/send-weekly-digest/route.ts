@@ -22,12 +22,12 @@ export async function GET(request: Request) {
         const isForce = searchParams.get('force') === 'true'
         const testEmail = searchParams.get('testEmail')
 
-        // 1. Basic security check (Bearer token from Vercel Cron or local test)
+        // 1. Strict security check (Bearer token from Vercel Cron or local test)
         const authHeader = request.headers.get('authorization')
         const hasSecret = !!process.env.CRON_SECRET
         const isAuthorized = !hasSecret || authHeader === `Bearer ${process.env.CRON_SECRET}`
 
-        if (hasSecret && !isAuthorized && !isForce && !testEmail) {
+        if (hasSecret && !isAuthorized) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }
 
