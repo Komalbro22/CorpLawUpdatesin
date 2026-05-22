@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 import { Search, SearchX } from 'lucide-react'
 import UpdateCard from '@/components/UpdateCard'
@@ -32,11 +32,14 @@ export default function UpdatesClient({ updates, counts }: UpdatesClientProps) {
     const [search, setSearch] = useState(searchFromUrl)
     const [debouncedSearch, setDebouncedSearch] = useState(searchFromUrl)
 
+    const lastPushedSearchRef = useRef(searchFromUrl)
+
     useEffect(() => {
         const inputMatchesCommitted = search === debouncedSearch
         if (searchFromUrl !== debouncedSearch && inputMatchesCommitted) {
             setSearch(searchFromUrl)
             setDebouncedSearch(searchFromUrl)
+            lastPushedSearchRef.current = searchFromUrl
         }
     }, [searchFromUrl, debouncedSearch, search])
 
@@ -56,14 +59,14 @@ export default function UpdatesClient({ updates, counts }: UpdatesClientProps) {
     )
 
     useEffect(() => {
-        const current = searchParams.get('search') ?? ''
-        if (debouncedSearch === current) return
+        if (debouncedSearch === lastPushedSearchRef.current) return
+        lastPushedSearchRef.current = debouncedSearch
         replaceQuery(p => {
             if (debouncedSearch) p.set('search', debouncedSearch)
             else p.delete('search')
             p.set('page', '1')
         })
-    }, [debouncedSearch, replaceQuery, searchParams])
+    }, [debouncedSearch, replaceQuery])
 
     const filteredUpdates = useMemo(() => {
         return updates.filter(update => {
@@ -125,6 +128,7 @@ export default function UpdatesClient({ updates, counts }: UpdatesClientProps) {
     const clearFilters = () => {
         setSearch('')
         setDebouncedSearch('')
+        lastPushedSearchRef.current = ''
         router.replace(pathname, { scroll: false })
     }
 
