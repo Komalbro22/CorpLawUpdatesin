@@ -60,19 +60,19 @@ export default function AdminLogin() {
                 aria-hidden
             />
 
-            <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl shadow-slate-900/25 border border-slate-200/80 p-8 md:p-10">
+            <div className="relative w-full max-w-md bg-white/95 backdrop-blur-md rounded-2xl shadow-premium border border-slate-200/60 p-8 md:p-10 transform transition-all duration-300 hover:shadow-premium-hover">
                 <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-navy text-gold mb-4">
-                        <Lock className="w-6 h-6" aria-hidden />
+                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-navy text-gold mb-4 shadow-glow-gold-sm border border-gold/20 animate-pulse-subtle">
+                        <Lock className="w-5 h-5" aria-hidden />
                     </div>
                     <h1 className="font-heading text-2xl md:text-3xl font-bold flex justify-center items-baseline gap-0.5 flex-wrap">
                         <span className="text-navy">CorpLawUpdates</span>
                         <span className="text-gold">.in</span>
                     </h1>
-                    <p className="text-slate-500 text-sm mt-2 font-medium">Secure admin sign-in</p>
+                    <p className="text-slate-500 text-sm mt-2 font-medium tracking-wide">Secure admin sign-in</p>
                 </div>
 
-                <div className="border-t border-slate-100 pt-6">
+                <div className="border-t border-slate-100/80 pt-6">
                     <label htmlFor="admin-password" className="block text-sm font-semibold text-navy mb-2">
                         Password
                     </label>
@@ -84,17 +84,17 @@ export default function AdminLogin() {
                             onChange={(e) => setPassword(e.target.value)}
                             onKeyDown={handleKeyDown}
                             autoComplete="current-password"
-                            className="w-full border border-slate-200 rounded-lg px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold/40 text-navy placeholder:text-slate-400"
+                            className="w-full border border-slate-200/80 rounded-lg px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500/50 text-navy placeholder:text-slate-400/70 transition-all duration-200 bg-white/80"
                             placeholder="Enter admin password"
                             disabled={loading}
                         />
                         <button
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-navy rounded-md focus:outline-none focus:ring-2 focus:ring-gold/40"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-navy rounded-md focus:outline-none focus:ring-2 focus:ring-gold/45"
                             aria-label={showPassword ? 'Hide password' : 'Show password'}
                         >
-                            {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                         </button>
                     </div>
                 </div>
@@ -102,7 +102,7 @@ export default function AdminLogin() {
                 {error && (
                     <div
                         role="alert"
-                        className="mt-5 text-red-700 text-sm bg-red-50 border border-red-100 px-3 py-3 rounded-lg"
+                        className="mt-5 text-red-700 text-sm bg-red-50/80 border border-red-100/90 px-3 py-3 rounded-lg font-medium"
                     >
                         {error}
                     </div>
@@ -112,7 +112,7 @@ export default function AdminLogin() {
                     type="button"
                     onClick={handleSubmit}
                     disabled={loading || !password}
-                    className="mt-6 w-full bg-navy text-gold font-semibold py-3 px-4 rounded-lg hover:bg-navy/95 transition-colors disabled:opacity-50 disabled:pointer-events-none shadow-md shadow-slate-900/10"
+                    className="mt-6 w-full bg-navy text-gold font-semibold py-3 px-4 rounded-lg hover:bg-navy/95 transition-all duration-200 hover:shadow-glow-gold-sm disabled:opacity-50 disabled:pointer-events-none active:scale-[0.995]"
                 >
                     {loading ? 'Verifying…' : 'Sign in'}
                 </button>

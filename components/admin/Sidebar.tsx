@@ -221,14 +221,14 @@ export default function Sidebar() {
                                                     href={link.href}
                                                     key={link.href}
                                                     onClick={closeDrawer}
-                                                    className={`flex min-h-[44px] items-center gap-2.5 rounded-lg border-l-2 px-3 py-2.5 text-[13px] transition-all duration-150 ${
+                                                    className={`flex min-h-[44px] items-center gap-2.5 rounded-lg border-l-2 px-3 py-2.5 text-[13px] transition-all duration-200 ${
                                                         active
-                                                            ? 'border-amber-400 bg-amber-400/10 font-semibold text-amber-400 shadow-glow-gold-sm'
-                                                            : 'border-transparent text-slate-300 hover:bg-white/[0.05] hover:text-white'
+                                                            ? 'border-amber-400 bg-gradient-to-r from-amber-400/15 to-amber-400/5 font-semibold text-gold shadow-glow-gold-sm'
+                                                            : 'border-transparent text-slate-300 hover:bg-white/[0.05] hover:text-white hover:pl-4.5'
                                                     }`}
                                                 >
                                                     <Icon
-                                                        className={`h-[15px] w-[15px] shrink-0 ${active ? 'opacity-100' : 'opacity-60'}`}
+                                                        className={`h-[14px] w-[14px] shrink-0 ${active ? 'opacity-100 text-gold shadow-glow-gold-sm' : 'opacity-60'}`}
                                                         aria-hidden
                                                     />
                                                     {link.label}
@@ -256,13 +256,13 @@ export default function Sidebar() {
 
         <aside className="hidden w-[240px] h-screen bg-[#080f1e] flex-col shrink-0 border-r border-white/[0.06] lg:flex">
             {/* Logo */}
-            <div className="px-5 py-5 shrink-0 border-b border-white/[0.06]">
+            <div className="px-5 py-5 shrink-0 border-b border-white/[0.06] bg-slate-950/40">
                 <Link href="/admin/dashboard" className="block group">
-                    <h2 className="font-heading text-base font-bold leading-tight">
-                        <span className="text-white group-hover:text-white/90 transition-colors">CorpLawUpdates</span>
-                        <span className="text-gold">.in</span>
+                    <h2 className="font-heading text-base font-bold leading-tight tracking-tight transition-transform duration-300 group-hover:translate-x-0.5">
+                        <span className="text-white group-hover:text-white/95 transition-colors">CorpLawUpdates</span>
+                        <span className="text-gold group-hover:text-amber-300 transition-colors">.in</span>
                     </h2>
-                    <p className="text-[10px] font-semibold text-slate-400 mt-1 tracking-[0.18em] uppercase">
+                    <p className="text-[9px] font-semibold text-slate-400 mt-1.5 tracking-[0.18em] group-hover:tracking-[0.22em] uppercase transition-all duration-300">
                         Admin Console
                     </p>
                 </Link>
@@ -287,14 +287,14 @@ export default function Sidebar() {
                                         <Link
                                             href={link.href}
                                             key={link.href}
-                                            className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] transition-all duration-150 ${
+                                            className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-[13px] transition-all duration-200 ${
                                                 active
-                                                    ? 'bg-amber-400/10 text-amber-400 font-semibold border-l-2 border-amber-400 shadow-glow-gold-sm'
-                                                    : 'text-slate-400 hover:text-white hover:bg-white/[0.05] border-l-2 border-transparent'
+                                                    ? 'bg-gradient-to-r from-amber-400/15 to-transparent text-gold font-semibold border-l-[3px] border-amber-400 shadow-glow-gold-sm'
+                                                    : 'text-slate-400 hover:text-white hover:bg-white/[0.04] border-l-[3px] border-transparent hover:pl-4'
                                             }`}
                                         >
                                             <Icon
-                                                className={`w-[15px] h-[15px] shrink-0 ${active ? 'opacity-100' : 'opacity-60'}`}
+                                                className={`w-[14px] h-[14px] shrink-0 ${active ? 'opacity-100 text-gold shadow-glow-gold-sm' : 'opacity-60'}`}
                                                 aria-hidden
                                             />
                                             {link.label}

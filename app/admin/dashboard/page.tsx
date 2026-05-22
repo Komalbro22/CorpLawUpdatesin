@@ -62,40 +62,47 @@ export default async function AdminDashboard() {
             )}
             {/* STATS ROW */}
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6">
-                <div className="bg-white rounded-xl p-5 md:p-6 shadow-card border border-slate-200/80 flex items-center gap-4 min-w-0">
-                    <div className="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-700 shrink-0 ring-1 ring-amber-100">
-                        <FileText className="w-6 h-6" aria-hidden />
+                {/* Published Articles Card */}
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-5 md:p-6 shadow-premium border border-slate-200/60 flex items-center gap-4 min-w-0 transition-all duration-300 hover:-translate-y-1 hover:shadow-premium-hover group hover:border-amber-200/70">
+                    <div className="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-700 shrink-0 ring-1 ring-amber-100/80 shadow-glow-gold-sm transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+                        <FileText className="w-5 h-5" aria-hidden />
                     </div>
                     <div className="min-w-0">
-                        <p className="text-sm font-medium text-slate-500">Published articles</p>
-                        <p className="text-2xl font-heading font-bold text-navy tabular-nums">{publishedCount || 0}</p>
+                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Published articles</p>
+                        <p className="text-2xl font-heading font-extrabold text-navy tabular-nums mt-0.5">{publishedCount || 0}</p>
                     </div>
                 </div>
-                <div className="bg-white rounded-xl p-5 md:p-6 shadow-card border border-slate-200/80 flex items-center gap-4 min-w-0">
-                    <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700 shrink-0 ring-1 ring-slate-200/80">
-                        <PenLine className="w-6 h-6" aria-hidden />
+
+                {/* Draft Articles Card */}
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-5 md:p-6 shadow-premium border border-slate-200/60 flex items-center gap-4 min-w-0 transition-all duration-300 hover:-translate-y-1 hover:shadow-premium-hover group hover:border-slate-300">
+                    <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700 shrink-0 ring-1 ring-slate-200/80 transition-all duration-300 group-hover:scale-110 group-hover:-rotate-3">
+                        <PenLine className="w-5 h-5" aria-hidden />
                     </div>
                     <div className="min-w-0">
-                        <p className="text-sm font-medium text-slate-500">Draft articles</p>
-                        <p className="text-2xl font-heading font-bold text-navy tabular-nums">{draftCount || 0}</p>
+                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Draft articles</p>
+                        <p className="text-2xl font-heading font-extrabold text-navy tabular-nums mt-0.5">{draftCount || 0}</p>
                     </div>
                 </div>
-                <div className="bg-white rounded-xl p-5 md:p-6 shadow-card border border-slate-200/80 flex items-center gap-4 min-w-0">
-                    <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-700 shrink-0 ring-1 ring-emerald-100">
-                        <Users className="w-6 h-6" aria-hidden />
+
+                {/* Active Subscribers Card */}
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-5 md:p-6 shadow-premium border border-slate-200/60 flex items-center gap-4 min-w-0 transition-all duration-300 hover:-translate-y-1 hover:shadow-premium-hover group hover:border-emerald-200/70">
+                    <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-700 shrink-0 ring-1 ring-emerald-100/80 shadow-glow-emerald transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+                        <Users className="w-5 h-5" aria-hidden />
                     </div>
                     <div className="min-w-0">
-                        <p className="text-sm font-medium text-slate-500">Active subscribers</p>
-                        <p className="text-2xl font-heading font-bold text-navy tabular-nums">{activeSubscribers || 0}</p>
+                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active subscribers</p>
+                        <p className="text-2xl font-heading font-extrabold text-navy tabular-nums mt-0.5">{activeSubscribers || 0}</p>
                     </div>
                 </div>
-                <div className="bg-white rounded-xl p-5 md:p-6 shadow-card border border-slate-200/80 flex items-center gap-4 min-w-0">
-                    <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-700 shrink-0 ring-1 ring-blue-100">
-                        <CalendarDays className="w-6 h-6" aria-hidden />
+
+                {/* New This Month Card */}
+                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-5 md:p-6 shadow-premium border border-slate-200/60 flex items-center gap-4 min-w-0 transition-all duration-300 hover:-translate-y-1 hover:shadow-premium-hover group hover:border-blue-200/70">
+                    <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-700 shrink-0 ring-1 ring-blue-100/80 transition-all duration-300 group-hover:scale-110 group-hover:-rotate-3">
+                        <CalendarDays className="w-5 h-5" aria-hidden />
                     </div>
                     <div className="min-w-0">
-                        <p className="text-sm font-medium text-slate-500">New this month</p>
-                        <p className="text-2xl font-heading font-bold text-navy tabular-nums">{thisMonthCount || 0}</p>
+                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">New this month</p>
+                        <p className="text-2xl font-heading font-extrabold text-navy tabular-nums mt-0.5">{thisMonthCount || 0}</p>
                     </div>
                 </div>
             </div>
@@ -104,18 +111,18 @@ export default async function AdminDashboard() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2">
                     <h2 className="text-lg font-heading font-bold text-navy mb-4">Recent Articles</h2>
-                    <div className="bg-white rounded-xl shadow-card border border-slate-200/80 overflow-hidden">
+                    <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-premium border border-slate-200/60 overflow-hidden transition-all duration-300 hover:shadow-premium-hover">
                         <div className="overflow-x-auto">
                         <table className="w-full min-w-[520px] text-left text-sm">
-                            <thead className="sticky top-0 z-10 bg-slate-50 text-slate-500 shadow-sm backdrop-blur-sm">
+                            <thead className="sticky top-0 z-10 bg-slate-50/90 backdrop-blur-sm text-slate-500 shadow-sm">
                                 <tr>
-                                    <th className="px-6 py-4 font-medium">Title</th>
-                                    <th className="px-6 py-4 font-medium hidden sm:table-cell">Category</th>
-                                    <th className="px-6 py-4 font-medium">Status</th>
-                                    <th className="px-6 py-4 font-medium hidden md:table-cell">Date</th>
+                                    <th className="px-6 py-4.5 font-semibold">Title</th>
+                                    <th className="px-6 py-4.5 font-semibold hidden sm:table-cell">Category</th>
+                                    <th className="px-6 py-4.5 font-semibold">Status</th>
+                                    <th className="px-6 py-4.5 font-semibold hidden md:table-cell">Date</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-slate-100">
+                            <tbody className="divide-y divide-slate-100/80">
                                 {(!recentArticles || recentArticles.length === 0) && (
                                     <tr>
                                         <td colSpan={4} className="px-6 py-8 text-center text-slate-500">No articles yet.</td>
@@ -124,29 +131,29 @@ export default async function AdminDashboard() {
                                 {recentArticles?.map(article => {
                                     const isPublished = !!article.published_at
                                     return (
-                                        <tr key={article.id} className="hover:bg-slate-50 group transition-colors">
+                                        <tr key={article.id} className="hover:bg-slate-50/70 group transition-colors">
                                             <td className="px-6 py-4">
-                                                <Link href={`/admin/articles/${article.id}/edit`} className="font-medium text-navy group-hover:text-gold transition-colors line-clamp-1 max-w-[200px] sm:max-w-[300px]">
+                                                <Link href={`/admin/articles/${article.id}/edit`} className="font-semibold text-navy group-hover:text-gold transition-colors line-clamp-1 max-w-[200px] sm:max-w-[300px]">
                                                     {article.title}
                                                 </Link>
                                             </td>
                                             <td className="px-6 py-4 hidden sm:table-cell">
-                                                <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600">
+                                                <span className="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200/30">
                                                     {article.category}
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4">
                                                 {isPublished ? (
-                                                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-emerald-50 text-emerald-700">
+                                                    <span className="glow-dot-emerald px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/50">
                                                         Published
                                                     </span>
                                                 ) : (
-                                                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-50 text-amber-700">
+                                                    <span className="glow-dot-amber px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200/50">
                                                         Draft
                                                     </span>
                                                 )}
                                             </td>
-                                            <td className="px-6 py-4 hidden md:table-cell text-slate-500">
+                                            <td className="px-6 py-4 hidden md:table-cell text-slate-400 font-medium">
                                                 {formatDate(article.created_at)}
                                             </td>
                                         </tr>
@@ -160,17 +167,17 @@ export default async function AdminDashboard() {
 
                 <div>
                     <h2 className="text-lg font-heading font-bold text-navy mb-4">Recent Subscribers</h2>
-                    <div className="bg-white rounded-xl shadow-card border border-slate-200/80 p-2">
+                    <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-premium border border-slate-200/60 p-3 transition-all duration-300 hover:shadow-premium-hover">
                         {(!recentSubscribers || recentSubscribers.length === 0) && (
                             <div className="p-4 text-center text-sm text-slate-500">No subscribers yet.</div>
                         )}
-                        <ul className="divide-y divide-slate-100">
+                        <ul className="divide-y divide-slate-100/80">
                             {recentSubscribers?.map(sub => (
-                                <li key={sub.id} className="p-4 flex justify-between items-center text-sm hover:bg-slate-50 transition-colors rounded-lg">
-                                    <span className="font-medium text-navy truncate max-w-[150px]" title={sub.email}>{sub.email}</span>
-                                    <span className="text-slate-400 text-xs ml-2 shrink-0">{formatDate(sub.subscribed_at)}</span>
+                                <li key={sub.id} className="p-3.5 flex justify-between items-center text-sm hover:bg-slate-50/70 transition-all duration-200 rounded-xl mb-1 last:mb-0">
+                                    <span className="font-semibold text-navy truncate max-w-[150px]" title={sub.email}>{sub.email}</span>
+                                    <span className="text-slate-400 font-medium text-xs ml-2 shrink-0">{formatDate(sub.subscribed_at)}</span>
                                 </li>
-                            ))}
+                             ))}
                         </ul>
                     </div>
                 </div>
@@ -182,7 +189,7 @@ export default async function AdminDashboard() {
                 <div className="flex flex-wrap gap-3">
                     <Link
                         href="/admin/articles/new"
-                        className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-transparent text-sm font-semibold rounded-lg text-navy bg-gold hover:bg-amber-400 transition-colors shadow-sm shadow-slate-900/5"
+                        className="inline-flex items-center justify-center gap-2 px-5 py-3 border border-gold/30 text-sm font-bold rounded-xl text-navy bg-gold hover:bg-amber-400 transition-all duration-200 shadow-glow-gold-sm hover:-translate-y-0.5 active:translate-y-0"
                     >
                         New article
                     </Link>
@@ -190,14 +197,14 @@ export default async function AdminDashboard() {
                         href="/updates"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-slate-200 text-sm font-semibold rounded-lg text-navy hover:border-slate-300 hover:bg-white bg-slate-50/80 transition-colors"
+                        className="inline-flex items-center justify-center gap-2 px-5 py-3 border border-slate-200 bg-white/95 text-sm font-semibold rounded-xl text-navy hover:border-slate-300 hover:bg-white hover:-translate-y-0.5 transition-all duration-200 active:translate-y-0 shadow-sm"
                     >
                         View public updates
                         <ExternalLink className="w-4 h-4 opacity-70" aria-hidden />
                     </a>
                     <a
                         href="/api/admin/subscribers?export=csv"
-                        className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-slate-200 text-sm font-semibold rounded-lg text-navy hover:border-slate-300 hover:bg-white bg-slate-50/80 transition-colors"
+                        className="inline-flex items-center justify-center gap-2 px-5 py-3 border border-slate-200 bg-white/95 text-sm font-semibold rounded-xl text-navy hover:border-slate-300 hover:bg-white hover:-translate-y-0.5 transition-all duration-200 active:translate-y-0 shadow-sm"
                     >
                         Export subscribers (CSV)
                         <Download className="w-4 h-4 opacity-70" aria-hidden />

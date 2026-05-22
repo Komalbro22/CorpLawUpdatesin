@@ -600,6 +600,83 @@ details[open] summary ~ * {
 }
 
 /* ============================================================
+   PREMIUM GLASSMORPHIC & AMBIENT VISUAL EFFECTS
+   ============================================================ */
+
+/* 1. Custom premium card shadows with HSL color parameters */
+.shadow-premium {
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.02), 0 12px 40px -8px rgba(15, 23, 42, 0.03) !important;
+}
+.shadow-premium-hover {
+  box-shadow: 0 12px 30px -4px rgba(15, 23, 42, 0.04), 0 20px 50px -10px rgba(15, 23, 42, 0.06) !important;
+}
+
+/* 2. Ambient glowing indicator shadows */
+.shadow-glow-gold-sm {
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.12) !important;
+}
+.shadow-glow-gold {
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.22) !important;
+}
+.shadow-glow-emerald {
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.3) !important;
+}
+.shadow-glow-amber {
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.3) !important;
+}
+
+/* 3. Subtle micro-animations for premium UX feedback */
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(0.985); }
+}
+.animate-pulse-subtle {
+  animation: pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes float-subtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+.animate-float-subtle {
+  animation: float-subtle 4s ease-in-out infinite;
+}
+
+/* 4. Glowing dot layout indicator classes */
+.glow-dot-emerald {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.glow-dot-emerald::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  background-color: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #10b981, 0 0 12px #10b981;
+  animation: pulse-subtle 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.glow-dot-amber {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.glow-dot-amber::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  background-color: #f59e0b;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #f59e0b, 0 0 12px #f59e0b;
+  animation: pulse-subtle 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+
+/* ============================================================
    RESPONSIVE MOBILE OVERRIDES FOR DYNAMIC HTML (GRIDS & TABLES)
    ============================================================ */
 @media (max-width: 768px) {
