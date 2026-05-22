@@ -33,15 +33,19 @@ export default function UpdatesClient({ updates, counts }: UpdatesClientProps) {
     const [debouncedSearch, setDebouncedSearch] = useState(searchFromUrl)
 
     const lastPushedSearchRef = useRef(searchFromUrl)
+    const isInternalChangeRef = useRef(false)
 
     useEffect(() => {
-        const inputMatchesCommitted = search === debouncedSearch
-        if (searchFromUrl !== debouncedSearch && inputMatchesCommitted) {
+        if (isInternalChangeRef.current) {
+            isInternalChangeRef.current = false
+            return
+        }
+        if (searchFromUrl !== search) {
             setSearch(searchFromUrl)
             setDebouncedSearch(searchFromUrl)
             lastPushedSearchRef.current = searchFromUrl
         }
-    }, [searchFromUrl, debouncedSearch, search])
+    }, [searchFromUrl])
 
     useEffect(() => {
         const id = window.setTimeout(() => setDebouncedSearch(search), 300)
@@ -61,6 +65,7 @@ export default function UpdatesClient({ updates, counts }: UpdatesClientProps) {
     useEffect(() => {
         if (debouncedSearch === lastPushedSearchRef.current) return
         lastPushedSearchRef.current = debouncedSearch
+        isInternalChangeRef.current = true
         replaceQuery(p => {
             if (debouncedSearch) p.set('search', debouncedSearch)
             else p.delete('search')
@@ -129,6 +134,7 @@ export default function UpdatesClient({ updates, counts }: UpdatesClientProps) {
         setSearch('')
         setDebouncedSearch('')
         lastPushedSearchRef.current = ''
+        isInternalChangeRef.current = true
         router.replace(pathname, { scroll: false })
     }
 
