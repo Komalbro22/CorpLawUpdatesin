@@ -599,3 +599,33 @@ details[open] summary ~ * {
   transform: translateY(0) scale(1);
 }
 
+/* ============================================================
+   RESPONSIVE MOBILE OVERRIDES FOR DYNAMIC HTML (GRIDS & TABLES)
+   ============================================================ */
+@media (max-width: 768px) {
+  /* 1. Force inline styled grid layouts to stack vertically on mobile */
+  .article-content div[style*="display: grid"],
+  .article-content div[style*="display:grid"],
+  .article-content div[style*="grid-template-columns"],
+  .article-content div[style*="gridTemplateColumns"] {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: none !important;
+    gap: 16px !important;
+  }
+
+  /* 2. Enforce readable min-width on dynamic tables to prevent text squishing and enable scroll */
+  .article-content table {
+    min-width: 650px !important;
+    width: 100% !important;
+    display: table !important; /* Ensure it remains a table */
+  }
+
+  /* Ensure smooth inertial scrolling on mobile devices */
+  .article-content div.overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    width: 100% !important;
+  }
+}
+
+

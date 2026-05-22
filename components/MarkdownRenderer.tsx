@@ -128,9 +128,11 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                     table: ({ node, style, className, children, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
                         return (
-                            <table style={{ ...styleObj }} className={`w-full my-6 border-collapse ${className || ''}`} {...props}>
-                                {children}
-                            </table>
+                            <div className="w-full overflow-x-auto my-6 border border-slate-200/80 rounded-xl shadow-sm scrollbar-thin">
+                                <table style={{ ...styleObj }} className={`w-full border-collapse ${className || ''}`} {...props}>
+                                    {children}
+                                </table>
+                            </div>
                         );
                     },
                     thead: ({ node, style, children, ...props }: any) => {
