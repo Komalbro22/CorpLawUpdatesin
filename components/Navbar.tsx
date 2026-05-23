@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import GlobalSearch from './GlobalSearch'
 import {
     Building2,
     Calendar,
@@ -12,7 +13,6 @@ import {
     Landmark,
     Menu,
     Scale,
-    Search,
     TrendingUp,
     X,
 } from 'lucide-react'
@@ -162,25 +162,14 @@ export default function Navbar() {
                         </div>
 
                         {/* Search shortcut */}
-                        <Link
-                            href="/updates"
-                            aria-label="Search articles"
-                            title="Search articles"
-                            className="ml-2 p-2 rounded-md transition-all duration-200 text-slate-500 hover:text-navy hover:bg-slate-100"
-                        >
-                            <Search className="w-4 h-4" aria-hidden />
-                        </Link>
+                        <div className="ml-2">
+                            <GlobalSearch />
+                        </div>
                     </div>
 
                     {/* Mobile menu button */}
                     <div className="flex items-center gap-2 md:hidden">
-                        <Link
-                            href="/updates"
-                            aria-label="Search"
-                            className="p-2 rounded-md transition-all duration-200 text-slate-500 hover:text-navy hover:bg-slate-100"
-                        >
-                            <Search className="w-4 h-4" />
-                        </Link>
+                        <GlobalSearch />
                         <button
                             onClick={() => setIsOpen(!isOpen)}
                             className="inline-flex items-center justify-center p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gold/80 transition-all duration-200 text-slate-500 hover:text-navy hover:bg-slate-100"
