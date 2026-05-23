@@ -43,6 +43,127 @@ function parseStyle(styleInput: any, node?: any): React.CSSProperties {
     return {};
 }
 
+function processInlineStyles(styleObj: any, className: string = ''): { processedStyle: any; processedClassName: string } {
+    const processedStyle = { ...styleObj };
+    const classes = className ? className.split(' ') : [];
+    
+    // 1. Detect background color or gradient
+    const bgVal = styleObj.background || styleObj.backgroundColor;
+    if (bgVal && typeof bgVal === 'string') {
+        const bgValLower = bgVal.toLowerCase().replace(/\s+/g, '');
+        
+        // Blue card detection
+        if (
+            bgValLower.includes('#eff6ff') || 
+            bgValLower.includes('#bfdbfe') || 
+            bgValLower.includes('rgb(239,246,255)') ||
+            bgValLower.includes('rgb(191,219,254)')
+        ) {
+            classes.push('dynamic-card-blue');
+            delete processedStyle.background;
+            delete processedStyle.backgroundColor;
+        }
+        // Green card detection
+        else if (
+            bgValLower.includes('#f0fdf4') || 
+            bgValLower.includes('#bbf7d0') || 
+            bgValLower.includes('rgb(240,253,244)') ||
+            bgValLower.includes('rgb(187,247,208)')
+        ) {
+            classes.push('dynamic-card-green');
+            delete processedStyle.background;
+            delete processedStyle.backgroundColor;
+        }
+        // Yellow/Amber/Orange card detection
+        else if (
+            bgValLower.includes('#fff7ed') || 
+            bgValLower.includes('#fffbeb') || 
+            bgValLower.includes('#fed7aa') || 
+            bgValLower.includes('#fffaf5') || 
+            bgValLower.includes('#ffedd5') || 
+            bgValLower.includes('rgb(255,247,237)') ||
+            bgValLower.includes('rgb(255,251,235)') ||
+            bgValLower.includes('rgb(254,215,170)') ||
+            bgValLower.includes('rgb(255,237,213)')
+        ) {
+            classes.push('dynamic-card-yellow');
+            delete processedStyle.background;
+            delete processedStyle.backgroundColor;
+        }
+        // Red/Rose card detection
+        else if (
+            bgValLower.includes('#fef2f2') || 
+            bgValLower.includes('#fecaca') || 
+            bgValLower.includes('rgb(254,242,242)') ||
+            bgValLower.includes('rgb(254,202,202)')
+        ) {
+            classes.push('dynamic-card-red');
+            delete processedStyle.background;
+            delete processedStyle.backgroundColor;
+        }
+        // Neutral card detection (pure whites, light grays)
+        else if (
+            bgValLower.includes('#ffffff') || 
+            bgValLower.includes('#f8fafc') || 
+            bgValLower.includes('#f9fafb') || 
+            bgValLower.includes('#f1f5f9') || 
+            bgValLower.includes('#fafafa') ||
+            bgValLower.includes('#e2e8f0') ||
+            bgValLower.includes('rgb(255,255,255)') ||
+            bgValLower.includes('rgb(248,250,252)') ||
+            bgValLower.includes('rgb(249,250,251)') ||
+            bgValLower.includes('rgb(241,245,249)')
+        ) {
+            classes.push('dynamic-card-neutral');
+            delete processedStyle.background;
+            delete processedStyle.backgroundColor;
+        }
+    }
+    
+    // 2. Detect text colors
+    const textVal = styleObj.color;
+    if (textVal && typeof textVal === 'string') {
+        const textValLower = textVal.toLowerCase().replace(/\s+/g, '');
+        
+        if (
+            textValLower.includes('#0f172a') || 
+            textValLower.includes('#1e293b') || 
+            textValLower.includes('#334155') || 
+            textValLower.includes('#4b5563') || 
+            textValLower.includes('#374151') || 
+            textValLower.includes('#455a64') ||
+            textValLower.includes('#000000') ||
+            textValLower.includes('rgb(15,23,42)') ||
+            textValLower.includes('rgb(30,41,59)') ||
+            textValLower.includes('rgb(0,0,0)')
+        ) {
+            classes.push('dynamic-text-dark');
+            delete processedStyle.color;
+        }
+        else if (textValLower.includes('#1e40af') || textValLower.includes('#1e3a8a') || textValLower.includes('#1d4ed8') || textValLower.includes('rgb(30,64,175)')) {
+            classes.push('dynamic-text-blue-heading');
+            delete processedStyle.color;
+        }
+        else if (textValLower.includes('#14532d') || textValLower.includes('#15803d') || textValLower.includes('#166534') || textValLower.includes('rgb(20,83,45)')) {
+            classes.push('dynamic-text-green-heading');
+            delete processedStyle.color;
+        }
+        else if (textValLower.includes('#92400e') || textValLower.includes('#9a3412') || textValLower.includes('#b45309') || textValLower.includes('rgb(146,64,14)')) {
+            classes.push('dynamic-text-yellow-heading');
+            delete processedStyle.color;
+        }
+        else if (textValLower.includes('#991b1b') || textValLower.includes('#b91c1c') || textValLower.includes('#dc2626') || textValLower.includes('rgb(153,27,27)')) {
+            classes.push('dynamic-text-red-heading');
+            delete processedStyle.color;
+        }
+    }
+    
+    return {
+        processedStyle,
+        processedClassName: Array.from(new Set(classes.filter(Boolean))).join(' ')
+    };
+}
+
 export default function MarkdownRenderer({ content }: { content: string }) {
     const ref = useRef<HTMLDivElement>(null)
 
@@ -120,13 +241,103 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                 remarkPlugins={[remarkGfm, remarkBreaks]}
                 rehypePlugins={[rehypeRaw]}
                 components={{
-                    p: ({ node, style, children, ...props }: any) => {
+                    p: ({ node, style, children, className, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return (
-                            <p style={{ marginBottom: '1rem', marginTop: '0.5rem', ...styleObj }} {...props}>
+                            <p style={{ marginBottom: '1rem', marginTop: '0.5rem', ...processedStyle }} className={processedClassName} {...props}>
                                 {children}
                             </p>
                         );
+                    },
+                    div: ({ node, style, children, className, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        return (
+                            <div style={processedStyle} className={processedClassName} {...props}>
+                                {children}
+                            </div>
+                        );
+                    },
+                    section: ({ node, style, children, className, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        return (
+                            <section style={processedStyle} className={processedClassName} {...props}>
+                                {children}
+                            </section>
+                        );
+                    },
+                    span: ({ node, style, children, className, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        return (
+                            <span style={processedStyle} className={processedClassName} {...props}>
+                                {children}
+                            </span>
+                        );
+                    },
+                    li: ({ node, style, children, className, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        return (
+                            <li style={processedStyle} className={processedClassName} {...props}>
+                                {children}
+                            </li>
+                        );
+                    },
+                    ul: ({ node, style, children, className, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        return (
+                            <ul style={processedStyle} className={processedClassName} {...props}>
+                                {children}
+                            </ul>
+                        );
+                    },
+                    ol: ({ node, style, children, className, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        return (
+                            <ol style={processedStyle} className={processedClassName} {...props}>
+                                {children}
+                            </ol>
+                        );
+                    },
+                    h1: ({ node, style, children, className, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        return <h1 style={processedStyle} className={processedClassName} {...props}>{children}</h1>;
+                    },
+                    h2: ({ node, style, children, className, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        return <h2 style={processedStyle} className={processedClassName} {...props}>{children}</h2>;
+                    },
+                    h3: ({ node, style, children, className, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        return <h3 style={processedStyle} className={processedClassName} {...props}>{children}</h3>;
+                    },
+                    h4: ({ node, style, children, className, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        return <h4 style={processedStyle} className={processedClassName} {...props}>{children}</h4>;
+                    },
+                    h5: ({ node, style, children, className, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        return <h5 style={processedStyle} className={processedClassName} {...props}>{children}</h5>;
+                    },
+                    h6: ({ node, style, children, className, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        return <h6 style={processedStyle} className={processedClassName} {...props}>{children}</h6>;
+                    },
+                    strong: ({ node, style, children, className, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        return <strong style={processedStyle} className={processedClassName} {...props}>{children}</strong>;
                     },
                     table: ({ node, style, className, children, ...props }: any) => {
                         const styleObj = parseStyle(style, node);

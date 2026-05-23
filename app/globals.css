@@ -1103,8 +1103,79 @@ details[open] summary ~ * {
   color: #CBD5E1 !important;
 }
 
+/* --- High-Contrast Globally Adaptive text-navy in Dark Mode --- */
+.dark .text-navy {
+  color: #F8FAFC !important;
+}
 
+/* --- Dynamic Content Styled Card Adaptations --- */
+.dynamic-card-blue {
+  background: linear-gradient(135deg, #eff6ff, #f8faff) !important;
+  border: 1px solid #bfdbfe !important;
+}
+.dynamic-card-green {
+  background: linear-gradient(135deg, #f0fdf4, #f8fff9) !important;
+  border: 1px solid #bbf7d0 !important;
+}
+.dynamic-card-yellow {
+  background: linear-gradient(135deg, #fff7ed, #fffaf5) !important;
+  border: 1px solid #fed7aa !important;
+}
+.dynamic-card-red {
+  background: linear-gradient(135deg, #fef2f2, #fff7f7) !important;
+  border: 1px solid #fecaca !important;
+}
+.dynamic-card-neutral {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+}
 
+/* Gorgeous, ultra-premium Glassmorphic Dark Mode adaptation for content cards */
+.dark .dynamic-card-blue {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.75), rgba(15, 23, 42, 0.85)) !important;
+  border: 1px solid rgba(59, 130, 246, 0.25) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3) !important;
+}
+.dark .dynamic-card-green {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.75), rgba(15, 23, 42, 0.85)) !important;
+  border: 1px solid rgba(16, 185, 129, 0.25) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3) !important;
+}
+.dark .dynamic-card-yellow {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.75), rgba(15, 23, 42, 0.85)) !important;
+  border: 1px solid rgba(245, 158, 11, 0.25) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3) !important;
+}
+.dark .dynamic-card-red {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.75), rgba(15, 23, 42, 0.85)) !important;
+  border: 1px solid rgba(239, 68, 68, 0.25) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3) !important;
+}
+.dark .dynamic-card-neutral {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.75), rgba(15, 23, 42, 0.85)) !important;
+  border: 1px solid rgba(148, 163, 184, 0.2) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3) !important;
+}
 
+/* Inner elements styling within adapt-system cards under dark mode */
+.dark .dynamic-text-blue-heading { color: #60a5fa !important; }
+.dark .dynamic-text-green-heading { color: #34d399 !important; }
+.dark .dynamic-text-yellow-heading { color: #fbbf24 !important; }
+.dark .dynamic-text-red-heading { color: #f87171 !important; }
+.dark .dynamic-text-dark { color: #cbd5e1 !important; }
 
+/* Wildcard text override overrides inside adapt cards */
+.dark [class*="dynamic-card-"] p,
+.dark [class*="dynamic-card-"] li,
+.dark [class*="dynamic-card-"] span,
+.dark [class*="dynamic-card-"] td,
+.dark [class*="dynamic-card-"] strong {
+  color: #e2e8f0 !important;
+}
+.dark [class*="dynamic-card-"] h1,
+.dark [class*="dynamic-card-"] h2,
+.dark [class*="dynamic-card-"] h3,
+.dark [class*="dynamic-card-"] h4 {
+  color: #f8fafc !important;
+}
 
