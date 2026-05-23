@@ -7,6 +7,7 @@ import UpdateCard from '@/components/UpdateCard'
 import Pagination from '@/components/Pagination'
 import { Metadata } from 'next'
 import Link from 'next/link'
+import EmptyState from '@/components/EmptyState'
 
 export const revalidate = 3600
 
@@ -363,10 +364,14 @@ export default async function CategoryPage({
                         )}
                     </>
                 ) : (
-                    <div className="bg-white p-16 md:p-20 rounded-2xl border border-slate-200/80 text-center shadow-card ring-1 ring-slate-900/[0.02] content-fade-in">
-                        <div className="text-5xl mb-4">🔍</div>
-                        <h3 className="text-2xl font-heading font-bold text-navy mb-2">No updates yet</h3>
-                        <p className="text-slate-500 max-w-md mx-auto">We haven't published any {cat.toUpperCase()} specific updates recently. Please check back later.</p>
+                    <div className="bg-white rounded-2xl border border-slate-200/80 shadow-card ring-1 ring-slate-900/[0.02]">
+                        <EmptyState
+                            icon="📋"
+                            title={`No ${cat.toUpperCase()} updates yet`}
+                            description={`We're working on adding articles for this category. Subscribe to get notified when new updates are published.`}
+                            actionLabel="Subscribe to Newsletter"
+                            actionHref="/newsletter"
+                        />
                     </div>
                 )}
             </div>

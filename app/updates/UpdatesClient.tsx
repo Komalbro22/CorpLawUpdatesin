@@ -2,10 +2,11 @@
 
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
-import { Search, SearchX } from 'lucide-react'
+import { Search } from 'lucide-react'
 import UpdateCard from '@/components/UpdateCard'
 import Pagination from '@/components/Pagination'
 import { Update } from '@/types'
+import EmptyState from '@/components/EmptyState'
 
 const CATEGORIES = ['All', 'MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA'] as const
 
@@ -133,13 +134,6 @@ export default function UpdatesClient({ updates, counts }: UpdatesClientProps) {
         })
     }
 
-    const clearFilters = () => {
-        setSearch('')
-        setDebouncedSearch('')
-        lastPushedSearchRef.current = ''
-        isInternalChangeRef.current = true
-        router.replace(pathname, { scroll: false })
-    }
 
     return (
         <div className="flex flex-col md:flex-row gap-8 md:gap-10">
@@ -263,21 +257,14 @@ export default function UpdatesClient({ updates, counts }: UpdatesClientProps) {
                         )}
                     </>
                 ) : (
-                    <div className="bg-white p-10 md:p-14 rounded-xl border border-slate-200/80 text-center shadow-card ring-1 ring-slate-900/[0.03] content-fade-in">
-                        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-slate-100 text-slate-400 mb-5">
-                            <SearchX className="w-7 h-7" strokeWidth={1.75} aria-hidden />
-                        </div>
-                        <h3 className="text-xl font-heading font-bold text-navy mb-2">No updates match</h3>
-                        <p className="text-slate-500 max-w-md mx-auto leading-relaxed">
-                            Try a different keyword, pick another category, or clear filters to see the full list.
-                        </p>
-                        <button
-                            type="button"
-                            onClick={clearFilters}
-                            className="mt-8 inline-flex items-center justify-center rounded-lg bg-navy text-gold font-bold px-6 py-3 min-h-[44px] text-sm hover:bg-slate-800 transition-all duration-200 shadow-md motion-safe:active:scale-95"
-                        >
-                            Clear all filters
-                        </button>
+                    <div className="bg-white rounded-xl border border-slate-200/80 shadow-card ring-1 ring-slate-900/[0.03]">
+                        <EmptyState
+                            icon="🔍"
+                            title="No results found"
+                            description={debouncedSearch ? `No articles found for "${debouncedSearch}". Try a different keyword or browse all updates.` : "No articles found matching the current filters."}
+                            actionLabel="Browse All Updates"
+                            actionHref="/updates"
+                        />
                     </div>
                 )}
             </div>

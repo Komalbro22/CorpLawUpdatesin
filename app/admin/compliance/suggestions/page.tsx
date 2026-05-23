@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import EmptyState from '@/components/EmptyState'
 
 const FREQUENCIES = [
   { value: 'monthly',       label: 'Monthly' },
@@ -196,8 +197,12 @@ export default function AdminSuggestionsPage() {
       {loading ? (
         <div className="text-center py-12 text-slate-400">Loading suggestions...</div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-12 text-slate-400">
-          No {tab === 'all' ? '' : tab} suggestions yet.
+        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm">
+          <EmptyState
+            icon={tab === 'pending' ? '✅' : tab === 'approved' ? '👍' : tab === 'rejected' ? '❌' : '📋'}
+            title={tab === 'pending' ? 'No pending suggestions' : `No ${tab} suggestions`}
+            description={tab === 'pending' ? 'All community suggestions have been reviewed. Great work!' : `No suggestions currently match the "${tab}" filter status.`}
+          />
         </div>
       ) : (
         <div className="space-y-3">

@@ -6,6 +6,7 @@ import React from 'react'
 import dynamic from 'next/dynamic'
 import NewsletterWidget from '@/components/NewsletterWidget'
 import JsonLd from '@/components/JsonLd'
+import EmptyState from '@/components/EmptyState'
 
 const ComplianceSuggestModal = dynamic(
   () => import('@/components/ComplianceSuggestModal'),
@@ -179,6 +180,20 @@ function EntryBadges({ entry }: { entry: ComplianceEntry }) {
   )
 }
 
+function googleCalendarUrl(entry: ComplianceEntry): string {
+  const title = encodeURIComponent(
+    `📋 ${entry.form_name} — ${entry.compliance_title}`
+  )
+  const details = encodeURIComponent(
+    `Applicable to: ${entry.applicable_to || '—'}\n` +
+    (entry.penalty 
+      ? `Penalty: ${entry.penalty}\n` 
+      : '') +
+    `Source: https://www.corplawupdates.in/calendar`
+  )
+  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&sf=true&output=xml`
+}
+
 function TableSection({
   title,
   color,
@@ -317,9 +332,19 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
 
   function makeFormCell(entry: ComplianceEntry) {
     return (
-      <span className="inline-flex flex-wrap items-center gap-1">
+      <span className="inline-flex flex-wrap items-center gap-1.5">
         {entry.form_name}
         <EntryBadges entry={entry} />
+        <a
+          href={googleCalendarUrl(entry)}
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Add to Google Calendar"
+          onClick={(e) => e.stopPropagation()}
+          className="text-blue-500 hover:text-blue-700 text-xs px-1.5 py-0.5 rounded hover:bg-blue-50 transition-colors whitespace-nowrap"
+        >
+          📅+
+        </a>
       </span>
     )
   }
@@ -397,6 +422,35 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
 
       <div className="max-w-6xl mx-auto px-4 py-10 space-y-10">
 
+        {/* EXPORT COMPLIANCE CALENDAR */}
+        <div className="flex flex-wrap items-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+          <div className="flex-1">
+            <p className="font-semibold text-blue-900 text-sm">
+              📅 Export Compliance Calendar
+            </p>
+            <p className="text-blue-700 text-xs mt-0.5">
+              Subscribe to get deadline reminders in Google Calendar, Outlook or Apple Calendar
+            </p>
+          </div>
+          <div className="flex gap-2 flex-wrap">
+            <a 
+              href="/api/calendar/export"
+              download="compliance-calendar-2026.ics"
+              className="flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors"
+            >
+              ⬇️ Download .ics
+            </a>
+            <a
+              href="https://calendar.google.com/calendar/r?cid=https://www.corplawupdates.in/api/calendar/export"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 bg-white border border-blue-300 text-blue-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-55 transition-colors"
+            >
+              + Subscribe in Google Calendar
+            </a>
+          </div>
+        </div>
+
         {/* VIEW TOGGLE */}
         <div className="flex gap-2">
           <button
@@ -417,7 +471,17 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
           </button>
         </div>
 
-        {view === 'table' ? (
+        {entries.length === 0 ? (
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm">
+            <EmptyState
+              icon="📅"
+              title="No compliance deadlines found"
+              description="No compliance entries match your filter. Try a different regulator or clear the filter."
+              actionLabel="View All Deadlines"
+              actionHref="/calendar"
+            />
+          </div>
+        ) : view === 'table' ? (
           <>
             {/* DISCLAIMER */}
             <div className="space-y-2">
