@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { Suspense } from 'react'
 import { supabase } from '@/lib/supabase'
 import CalendarPageClient, { type ComplianceEntry } from '@/components/CalendarPageClient'
 
@@ -32,6 +33,8 @@ export const metadata: Metadata = {
     'ROC filing deadlines India',
     'SEBI LODR compliance deadlines',
     'RBI compliance due dates',
+    'MSME-1 due date',
+    'Professional Tax due dates'
   ],
   alternates: { canonical: 'https://www.corplawupdates.in/calendar' },
   openGraph: {
@@ -62,7 +65,15 @@ export default async function CalendarPage() {
 
   return (
     <>
-      <CalendarPageClient entries={(rawEntries || []) as ComplianceEntry[]} />
+      <Suspense fallback={
+        <div className="space-y-4 max-w-5xl mx-auto px-4 py-8">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="h-12 bg-slate-100 rounded-lg animate-pulse" />
+          ))}
+        </div>
+      }>
+        <CalendarPageClient entries={(rawEntries || []) as ComplianceEntry[]} />
+      </Suspense>
 
       {/* SEO Knowledge Footer */}
       <section className="max-w-5xl mx-auto px-4 pb-16 pt-4 border-t border-slate-100">

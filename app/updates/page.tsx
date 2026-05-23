@@ -2,7 +2,7 @@
 import { Suspense } from 'react'
 import { supabase } from '@/lib/supabase'
 import UpdatesClient from './UpdatesClient'
-import { SkeletonGrid } from '@/components/LoadingSkeleton'
+import LoadingSkeleton from '@/components/LoadingSkeleton'
 import { Metadata } from 'next'
 import Link from 'next/link'
 
@@ -181,7 +181,13 @@ export default async function UpdatesPage() {
                         </p>
                     </div>
                 ) : (
-                    <Suspense fallback={<SkeletonGrid />}>
+                    <Suspense fallback={
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {Array.from({ length: 9 }).map((_, i) => (
+                          <LoadingSkeleton key={i} />
+                        ))}
+                      </div>
+                    }>
                         <UpdatesClient updates={updates} counts={counts} />
                     </Suspense>
                 )}
