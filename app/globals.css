@@ -1125,6 +1125,14 @@ details[open] summary ~ * {
   background: linear-gradient(135deg, #fef2f2, #fff7f7) !important;
   border: 1px solid #fecaca !important;
 }
+.dynamic-card-purple {
+  background: linear-gradient(135deg, #f5f3ff, #faf8ff) !important;
+  border: 1px solid #ddd6fe !important;
+}
+.dynamic-card-pink {
+  background: linear-gradient(135deg, #fdf2f8, #fdfafc) !important;
+  border: 1px solid #fbcfe8 !important;
+}
 .dynamic-card-neutral {
   background: #ffffff !important;
   border: 1px solid #e2e8f0 !important;
@@ -1151,6 +1159,16 @@ details[open] summary ~ * {
   border: 1px solid rgba(239, 68, 68, 0.25) !important;
   box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3) !important;
 }
+.dark .dynamic-card-purple {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.75), rgba(15, 23, 42, 0.85)) !important;
+  border: 1px solid rgba(139, 92, 246, 0.25) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3) !important;
+}
+.dark .dynamic-card-pink {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.75), rgba(15, 23, 42, 0.85)) !important;
+  border: 1px solid rgba(236, 72, 153, 0.25) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3) !important;
+}
 .dark .dynamic-card-neutral {
   background: linear-gradient(135deg, rgba(30, 41, 59, 0.75), rgba(15, 23, 42, 0.85)) !important;
   border: 1px solid rgba(148, 163, 184, 0.2) !important;
@@ -1162,6 +1180,8 @@ details[open] summary ~ * {
 .dark .dynamic-text-green-heading { color: #34d399 !important; }
 .dark .dynamic-text-yellow-heading { color: #fbbf24 !important; }
 .dark .dynamic-text-red-heading { color: #f87171 !important; }
+.dark .dynamic-text-purple-heading { color: #c084fc !important; }
+.dark .dynamic-text-pink-heading { color: #f472b6 !important; }
 .dark .dynamic-text-dark { color: #cbd5e1 !important; }
 
 /* Wildcard text override overrides inside adapt cards */

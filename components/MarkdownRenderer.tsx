@@ -101,6 +101,36 @@ function processInlineStyles(styleObj: any, className: string = ''): { processed
             delete processedStyle.background;
             delete processedStyle.backgroundColor;
         }
+        // Purple/Indigo card detection
+        else if (
+            bgValLower.includes('#f5f3ff') || 
+            bgValLower.includes('#faf8ff') || 
+            bgValLower.includes('#ddd6fe') || 
+            bgValLower.includes('#e0e7ff') || 
+            bgValLower.includes('#c7d2fe') || 
+            bgValLower.includes('#eef2ff') || 
+            bgValLower.includes('rgb(245,243,255)') ||
+            bgValLower.includes('rgb(250,248,255)') ||
+            bgValLower.includes('rgb(221,214,254)') ||
+            bgValLower.includes('rgb(224,231,255)') ||
+            bgValLower.includes('rgb(199,210,254)') ||
+            bgValLower.includes('rgb(238,242,255)')
+        ) {
+            classes.push('dynamic-card-purple');
+            delete processedStyle.background;
+            delete processedStyle.backgroundColor;
+        }
+        // Pink card detection
+        else if (
+            bgValLower.includes('#fdf2f8') || 
+            bgValLower.includes('#fbcfe8') || 
+            bgValLower.includes('rgb(253,242,248)') ||
+            bgValLower.includes('rgb(251,207,232)')
+        ) {
+            classes.push('dynamic-card-pink');
+            delete processedStyle.background;
+            delete processedStyle.backgroundColor;
+        }
         // Neutral card detection (pure whites, light grays)
         else if (
             bgValLower.includes('#ffffff') || 
@@ -154,6 +184,14 @@ function processInlineStyles(styleObj: any, className: string = ''): { processed
         }
         else if (textValLower.includes('#991b1b') || textValLower.includes('#b91c1c') || textValLower.includes('#dc2626') || textValLower.includes('rgb(153,27,27)')) {
             classes.push('dynamic-text-red-heading');
+            delete processedStyle.color;
+        }
+        else if (textValLower.includes('#4c1d95') || textValLower.includes('#312e81') || textValLower.includes('#4338ca') || textValLower.includes('rgb(76,29,149)')) {
+            classes.push('dynamic-text-purple-heading');
+            delete processedStyle.color;
+        }
+        else if (textValLower.includes('#9d174d') || textValLower.includes('#be185d') || textValLower.includes('#db2777') || textValLower.includes('rgb(157,23,77)')) {
+            classes.push('dynamic-text-pink-heading');
             delete processedStyle.color;
         }
     }
