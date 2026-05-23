@@ -12,6 +12,7 @@ import MarkdownRenderer from '@/components/MarkdownRenderer'
 import LoadingSkeleton from '@/components/LoadingSkeleton'
 import { useToast } from '@/components/Toast'
 import { Category } from '@/types'
+import SeoScorePanel from '@/components/admin/SeoScorePanel'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 
@@ -740,7 +741,8 @@ export default function EditArticle({ params }: { params: { id: string } }) {
 
                 {/* RIGHT COLUMN - PREVIEW */}
                 <div className={`w-full lg:w-[40%] ${activeTab === 'write' ? 'hidden lg:block' : 'block'}`}>
-                    <div className="sticky top-24 border border-slate-200/80 rounded-xl p-6 bg-white shadow-card ring-1 ring-slate-900/[0.02] min-h-[600px]">
+                    <div className="sticky top-24 space-y-6">
+                        <div className="border border-slate-200/80 rounded-xl p-6 bg-white shadow-card ring-1 ring-slate-900/[0.02] min-h-[600px]">
                         <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-6 pb-4 border-b border-slate-100">Live Preview</h3>
 
                         {!title && !content ? (
@@ -774,6 +776,15 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                                 )}
                             </div>
                         )}
+                        </div>
+                        <SeoScorePanel
+                            title={title}
+                            summary={summary}
+                            content={content}
+                            slug={slug}
+                            tags={tags}
+                            keyChange={keyChange}
+                        />
                     </div>
                 </div>
             </div>
