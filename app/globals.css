@@ -705,4 +705,118 @@ details[open] summary ~ * {
   }
 }
 
+/* ============================================================
+   DARK MODE SYSTEM STYLES
+   ============================================================ */
+
+/* Dark mode base */
+.dark body {
+  background: #0F172A;
+  color: #E2E8F0;
+}
+
+/* Dark mode cards */
+.dark .bg-white {
+  background: #1E293B !important;
+  border-color: #334155 !important;
+}
+
+/* Dark mode text */
+.dark .text-navy {
+  color: #E2E8F0 !important;
+}
+
+.dark .text-slate-700 {
+  color: #CBD5E1 !important;
+}
+
+.dark .text-slate-500 {
+  color: #94A3B8 !important;
+}
+
+/* Dark mode inputs */
+.dark input,
+.dark select,
+.dark textarea {
+  background: #1E293B !important;
+  border-color: #334155 !important;
+  color: #E2E8F0 !important;
+}
+
+/* Dark mode navbar */
+.dark nav {
+  background: #0F172A !important;
+  border-color: #1E293B !important;
+}
+
+/* Dark mode article content */
+.dark .article-content {
+  color: #CBD5E1;
+}
+
+.dark .article-content h2,
+.dark .article-content h3 {
+  color: #E2E8F0;
+}
+
+/* Dark mode table */
+.dark table {
+  color: #CBD5E1;
+}
+
+.dark thead tr {
+  background: #1E3A5F !important;
+}
+
+.dark tbody tr:nth-child(even) {
+  background: #1E293B !important;
+}
+
+/* Keep amber/gold accents */
+.dark .text-amber-600,
+.dark .text-gold {
+  color: #F59E0B !important;
+}
+
+/* Dark mode summary box */
+.dark .bg-blue-50 {
+  background: #1E3A5F !important;
+}
+
+.dark .bg-amber-50 {
+  background: #3D2000 !important;
+}
+
+.dark .border-slate-200 {
+  border-color: #334155 !important;
+}
+
+.dark .text-slate-600 {
+  color: #CBD5E1 !important;
+}
+
+.dark .text-slate-400 {
+  color: #94A3B8 !important;
+}
+
+.dark .hover\:bg-slate-50:hover {
+  background-color: #1E293B !important;
+}
+
+.dark .hover\:text-navy:hover {
+  color: #ffffff !important;
+}
+
+.dark .bg-slate-50 {
+  background-color: #0F172A !important;
+}
+
+.dark .bg-slate-100 {
+  background-color: #1E293B !important;
+}
+
+.dark .border-slate-100 {
+  border-color: #334155 !important;
+}
+
 

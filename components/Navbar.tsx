@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import GlobalSearch from './GlobalSearch'
+import DarkModeToggle from './DarkModeToggle'
 import {
     Building2,
     Calendar,
@@ -162,14 +163,16 @@ export default function Navbar() {
                         </div>
 
                         {/* Search shortcut */}
-                        <div className="ml-2">
+                        <div className="ml-2 flex items-center gap-2">
                             <GlobalSearch />
+                            <DarkModeToggle />
                         </div>
                     </div>
 
                     {/* Mobile menu button */}
                     <div className="flex items-center gap-2 md:hidden">
                         <GlobalSearch />
+                        <DarkModeToggle />
                         <button
                             onClick={() => setIsOpen(!isOpen)}
                             className="inline-flex items-center justify-center p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gold/80 transition-all duration-200 text-slate-500 hover:text-navy hover:bg-slate-100"
