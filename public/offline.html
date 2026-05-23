@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline | CorpLawUpdates.in</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #0b1121;
+            --navy-light: #1e293b;
+            --gold: #d97706;
+            --gold-hover: #b45309;
+            --slate-100: #f1f5f9;
+            --slate-300: #cbd5e1;
+            --slate-400: #94a3b8;
+            --slate-700: #334155;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: var(--navy) !important;
+                color: var(--slate-100) !important;
+            }
+            .card {
+                background-color: var(--navy-light) !important;
+                border-color: #334155 !important;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+            }
+            .text-muted {
+                color: var(--slate-400) !important;
+            }
+            .title {
+                color: #ffffff !important;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8fafc;
+            color: var(--slate-700);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 40px 30px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.06), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+        }
+
+        .logo-container {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .logo-container {
+                background: linear-gradient(135deg, #78350f, #451a03);
+            }
+        }
+
+        .logo-icon {
+            font-size: 36px;
+        }
+
+        .title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .description {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--slate-700);
+            margin-bottom: 30px;
+        }
+
+        .text-muted {
+            color: #64748b;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 10px;
+            background-color: var(--gold);
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(217, 119, 6, 0.2);
+            width: 100%;
+        }
+
+        .btn:hover {
+            background-color: var(--gold-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 8px -1px rgba(217, 119, 6, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: var(--slate-400);
+        }
+
+        .wifi-icon {
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(0.95);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="logo-container">
+            <span class="logo-icon wifi-icon">📡</span>
+        </div>
+        <h1 class="title">You are offline</h1>
+        <p class="description text-muted">
+            It looks like you've lost connection. No worries! Visited articles and key updates are cached and available to read offline anytime.
+        </p>
+        <button onclick="window.location.reload()" class="btn">
+            🔄 Retry Connection
+        </button>
+        <div class="footer">
+            CorpLawUpdates.in • Your offline legal companion
+        </div>
+    </div>
+</body>
+</html>
