@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Lightbulb, Loader2, Plus } from 'lucide-react'
+import { useToast } from '@/components/Toast'
 
 interface ComplianceEntry {
   id: string
@@ -40,6 +41,7 @@ const emptyForm = {
 }
 
 export default function AdminCompliancePage() {
+  const { showToast } = useToast()
   const [entries, setEntries] = useState<ComplianceEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -85,6 +87,10 @@ export default function AdminCompliancePage() {
   const community = entries.filter(e => e.created_by?.startsWith('community:')).length
 
   async function handleSave() {
+    if (!form.form_name.trim() || !form.compliance_title.trim() || !form.due_date.trim() || !form.applicable_to.trim()) {
+      showToast('Form Name, Compliance Title, Due Date, and Applicable To are required fields.', 'error')
+      return
+    }
     setSaving(true)
     try {
       const url = editingId ? `/api/admin/compliance/${editingId}` : '/api/admin/compliance'
@@ -95,29 +101,52 @@ export default function AdminCompliancePage() {
         body: JSON.stringify(form),
       })
       if (res.ok) {
+        showToast(editingId ? 'Compliance entry updated successfully!' : 'New compliance entry added!', 'success')
         setShowForm(false)
         setForm(emptyForm)
         setEditingId(null)
         await loadEntries()
+      } else {
+        showToast('Failed to save compliance entry.', 'error')
       }
+    } catch {
+      showToast('An error occurred while saving.', 'error')
     } finally {
       setSaving(false)
     }
   }
 
   async function handleToggle(id: string, current: boolean) {
-    await fetch(`/api/admin/compliance/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ is_active: !current }),
-    })
-    await loadEntries()
+    try {
+      const res = await fetch(`/api/admin/compliance/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ is_active: !current }),
+      })
+      if (res.ok) {
+        showToast(`Compliance entry ${!current ? 'activated' : 'hidden'} successfully!`, 'success')
+        await loadEntries()
+      } else {
+        showToast('Failed to update status.', 'error')
+      }
+    } catch {
+      showToast('Error updating status.', 'error')
+    }
   }
 
   async function handleDelete(id: string) {
     if (!confirm('Soft-delete this entry? It will be hidden from public view.')) return
-    await fetch(`/api/admin/compliance/${id}`, { method: 'DELETE' })
-    await loadEntries()
+    try {
+      const res = await fetch(`/api/admin/compliance/${id}`, { method: 'DELETE' })
+      if (res.ok) {
+        showToast('Compliance entry deleted successfully!', 'success')
+        await loadEntries()
+      } else {
+        showToast('Failed to delete entry.', 'error')
+      }
+    } catch {
+      showToast('Error deleting entry.', 'error')
+    }
   }
 
   function handleEdit(entry: ComplianceEntry) {

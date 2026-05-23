@@ -508,6 +508,74 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                                     )}
                                 </div>
                             )}
+
+                            {/* AI Citation Guidelines & Pre-fill Templates */}
+                            <details className="mt-3 bg-slate-50 border border-slate-200 rounded-xl overflow-hidden transition-all duration-200">
+                                <summary className="cursor-pointer text-xs font-semibold text-slate-700 hover:text-navy px-4 py-3 bg-slate-100/50 flex justify-between items-center select-none">
+                                    <span>💡 AI Citation Guidelines & Templates for Takeaways</span>
+                                    <span className="text-slate-400 text-[10px]">Click to expand</span>
+                                </summary>
+                                <div className="p-4 space-y-4 text-xs text-slate-600 leading-relaxed border-t border-slate-200">
+                                    <div>
+                                        <p className="font-bold text-navy mb-1">Why key takeaways matter for AI bots:</p>
+                                        <p>
+                                            Large Language Models (LLMs) like Gemini, Claude, and GPT crawl this site searching for clean, structured legal facts. To make your article highly citeable, ensure your bullet points contain:
+                                        </p>
+                                        <ul className="list-disc list-inside mt-1 ml-1 space-y-1 text-slate-500">
+                                            <li><strong>Exact regulatory circular numbers</strong> and dates.</li>
+                                            <li><strong>Specific entities affected</strong> (e.g. "Listed companies with market cap &gt; 250 Cr").</li>
+                                            <li><strong>Explicit penalties</strong> for non-compliance.</li>
+                                        </ul>
+                                    </div>
+                                    <div className="border-t border-slate-200/80 pt-3">
+                                        <p className="font-bold text-navy mb-2">Use one-click templates to pre-fill:</p>
+                                        <div className="flex gap-2 flex-wrap">
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setKeyChanges([
+                                                        "MCA vide Circular No. [Circular_No] dated [Date] has [extended/modified] the compliance deadline for [Form Name].",
+                                                        "This is applicable to [Target Entities/Companies] having a paid-up capital of [X] or more.",
+                                                        "Non-compliance will attract an additional fee of [X] per day under Section [Y] of the Companies Act, 2013."
+                                                    ])
+                                                    showToast('Companies Act template applied!', 'success')
+                                                }}
+                                                className="bg-white hover:bg-amber-50 border border-slate-200 hover:border-amber-400 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition-all"
+                                            >
+                                                🏛️ Companies Act Template
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setKeyChanges([
+                                                        "SEBI vide Circular SEBI/HO/[Dept]/[Circular_No] dated [Date] has introduced new guidelines for [Subject].",
+                                                        "Applicable immediately to all listed companies having a market capitalization of [X] or more.",
+                                                        "Compliance reports must be submitted on a [quarterly/annual] basis within [X] days from [event]."
+                                                    ])
+                                                    showToast('SEBI Circular template applied!', 'success')
+                                                }}
+                                                className="bg-white hover:bg-amber-50 border border-slate-200 hover:border-amber-400 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition-all"
+                                            >
+                                                📈 SEBI Circular Template
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setKeyChanges([
+                                                        "RBI Notification RBI/[Year]/[No] / [Ref] dated [Date] modifies the [Policy/Rule Name].",
+                                                        "Applies to all [Scheduled Commercial Banks / NBFCs / Payment Gateways].",
+                                                        "The effective date for implementation of the revised rules is [Date]."
+                                                    ])
+                                                    showToast('RBI Notification template applied!', 'success')
+                                                }}
+                                                className="bg-white hover:bg-amber-50 border border-slate-200 hover:border-amber-400 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition-all"
+                                            >
+                                                🏦 RBI Circular Template
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </details>
                         </div>
 
                         <div>

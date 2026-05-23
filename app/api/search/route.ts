@@ -1,5 +1,23 @@
 import { supabase } from '@/lib/supabase'
 import { NextResponse } from 'next/server'
+import { Ratelimit } from '@upstash/ratelimit'
+import { Redis } from '@upstash/redis'
+
+// Initialize Upstash Redis and Ratelimit only if env vars are present (supports Vercel KV or direct Upstash)
+const redisUrl = process.env.KV_REST_API_URL || process.env.corplawupdates_KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL
+const redisToken = process.env.KV_REST_API_TOKEN || process.env.corplawupdates_KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN
+
+const hasUpstashConfig = redisUrl && redisToken
+const redis = hasUpstashConfig ? new Redis({ url: redisUrl, token: redisToken }) : null
+
+// Create a new ratelimiter that allows up to 30 search requests per minute per IP address
+const ratelimit = redis
+  ? new Ratelimit({
+      redis: redis,
+      limiter: Ratelimit.slidingWindow(30, '1 m'),
+      analytics: true,
+    })
+  : null
 
 interface UpdateRecord {
   id: string
@@ -22,8 +40,16 @@ interface CalendarRecord {
   penalty: string
 }
 
+interface GlossaryRecord {
+  id: string
+  term: string
+  slug: string
+  definition: string
+  category: string
+}
+
 interface UnifiedSearchResult {
-  type: 'article' | 'calendar'
+  type: 'article' | 'calendar' | 'glossary'
   id: string
   title: string
   slug?: string
@@ -36,6 +62,16 @@ interface UnifiedSearchResult {
 }
 
 export async function GET(request: Request) {
+  // Rate Limit check
+  if (ratelimit) {
+    const rawIp = request.headers.get('x-forwarded-for') || '127.0.0.1'
+    const ip = rawIp.split(',')[0].trim()
+    const { success } = await ratelimit.limit(`search_${ip}`)
+    if (!success) {
+      return NextResponse.json({ error: 'Too many search requests. Please slow down.' }, { status: 429 })
+    }
+  }
+
   const { searchParams } = new URL(request.url)
   const q = searchParams.get('q')?.trim() || ''
   const category = searchParams.get('category') || ''
@@ -127,7 +163,45 @@ export async function GET(request: Request) {
       category: e.regulator,
       due_date: e.due_date,
       applicable_to: e.applicable_to,
-      url: '/calendar',
+      url: `/calendar?highlight=${e.id}`,
+    })))
+  }
+
+  // Search glossary terms (matching term, definition, keywords, and synonyms)
+  if (type === 'all' || type === 'glossary') {
+    const lowercaseQ = escapedQ.toLowerCase()
+    const uppercaseQ = escapedQ.toUpperCase()
+
+    let glossQuery = supabase
+      .from('glossary')
+      .select('id, term, slug, definition, category')
+      .eq('is_verified', true)
+      .or(
+        `term.ilike.%${escapedQ}%,` +
+        `definition.ilike.%${escapedQ}%,` +
+        `synonyms.cs.{"${lowercaseQ}"},` +
+        `synonyms.cs.{"${uppercaseQ}"},` +
+        `synonyms.cs.{"${escapedQ}"},` +
+        `keywords.cs.{"${lowercaseQ}"},` +
+        `keywords.cs.{"${uppercaseQ}"},` +
+        `keywords.cs.{"${escapedQ}"}`
+      )
+      .limit(5)
+
+    if (category) {
+      glossQuery = glossQuery.eq('category', category)
+    }
+
+    const { data: glossary } = (await glossQuery) as { data: GlossaryRecord[] | null }
+
+    results.push(...(glossary || []).map((g: GlossaryRecord) => ({
+      type: 'glossary' as const,
+      id: g.id,
+      title: g.term,
+      slug: g.slug,
+      summary: g.definition,
+      category: g.category || 'GENERAL',
+      url: `/glossary/${g.slug}`,
     })))
   }
 

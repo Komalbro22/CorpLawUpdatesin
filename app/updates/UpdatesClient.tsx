@@ -11,7 +11,9 @@ import EmptyState from '@/components/EmptyState'
 const CATEGORIES = ['All', 'MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA'] as const
 
 interface UpdatesClientProps {
-    updates: Update[]
+    paginatedUpdates: Update[]
+    totalFilteredCount: number
+    totalPublishedCount: number
     counts: Record<string, number>
 }
 
@@ -21,7 +23,12 @@ function parseCategoryParam(raw: string | null): string {
     return match || 'All'
 }
 
-export default function UpdatesClient({ updates, counts }: UpdatesClientProps) {
+export default function UpdatesClient({
+    paginatedUpdates,
+    totalFilteredCount,
+    totalPublishedCount,
+    counts,
+}: UpdatesClientProps) {
     const router = useRouter()
     const pathname = usePathname()
     const searchParams = useSearchParams()
@@ -77,20 +84,8 @@ export default function UpdatesClient({ updates, counts }: UpdatesClientProps) {
         })
     }, [debouncedSearch, replaceQuery])
 
-    const filteredUpdates = useMemo(() => {
-        return updates.filter(update => {
-            const matchCategory = activeCategory === 'All' || update.category === activeCategory
-            const searchLower = debouncedSearch.toLowerCase()
-            const matchSearch =
-                !debouncedSearch ||
-                update.title.toLowerCase().includes(searchLower) ||
-                (update.summary && update.summary.toLowerCase().includes(searchLower))
-            return matchCategory && matchSearch
-        })
-    }, [updates, activeCategory, debouncedSearch])
-
     const ITEMS_PER_PAGE = 10
-    const totalPages = Math.max(1, Math.ceil(filteredUpdates.length / ITEMS_PER_PAGE))
+    const totalPages = Math.max(1, Math.ceil(totalFilteredCount / ITEMS_PER_PAGE))
     const currentPage = Math.min(pageFromUrl, totalPages)
 
     useEffect(() => {
@@ -100,15 +95,6 @@ export default function UpdatesClient({ updates, counts }: UpdatesClientProps) {
             })
         }
     }, [pageFromUrl, totalPages, replaceQuery])
-
-    const paginatedUpdates = useMemo(
-        () =>
-            filteredUpdates.slice(
-                (currentPage - 1) * ITEMS_PER_PAGE,
-                currentPage * ITEMS_PER_PAGE
-            ),
-        [filteredUpdates, currentPage]
-    )
 
     const paginationBasePath = useMemo(() => {
         const p = new URLSearchParams()
@@ -133,6 +119,7 @@ export default function UpdatesClient({ updates, counts }: UpdatesClientProps) {
             p.set('page', '1')
         })
     }
+
 
 
     return (
@@ -190,7 +177,7 @@ export default function UpdatesClient({ updates, counts }: UpdatesClientProps) {
                         <h3 className="block text-sm font-semibold text-navy mb-3">Categories</h3>
                         <ul className="flex flex-row md:flex-col gap-1.5 overflow-x-auto pb-2 md:pb-0">
                             {CATEGORIES.map(cat => {
-                                const count = cat === 'All' ? updates.length : counts[cat] || 0
+                                const count = cat === 'All' ? totalPublishedCount : counts[cat] || 0
                                 const isActive = activeCategory === cat
                                 return (
                                     <li key={cat} className="md:w-full">
@@ -226,12 +213,12 @@ export default function UpdatesClient({ updates, counts }: UpdatesClientProps) {
                 <div className="mb-6 flex flex-wrap items-baseline gap-2 text-slate-600 text-sm md:text-base">
                     <span>
                         Showing{' '}
-                        <span className="font-semibold text-navy tabular-nums">{filteredUpdates.length}</span>
+                        <span className="font-semibold text-navy tabular-nums">{totalFilteredCount}</span>
                         {' '}
                         of{' '}
-                        <span className="font-semibold text-navy tabular-nums">{updates.length}</span>
+                        <span className="font-semibold text-navy tabular-nums">{totalPublishedCount}</span>
                     </span>
-                    {filteredUpdates.length !== updates.length && (
+                    {totalFilteredCount !== totalPublishedCount && (
                         <span className="text-slate-400">· filtered</span>
                     )}
                 </div>

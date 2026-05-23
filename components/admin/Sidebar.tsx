@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation'
 import {
     BarChart3,
     Calendar,
-    ClipboardList,
     FileText,
     Landmark,
     LayoutDashboard,
@@ -62,8 +61,7 @@ const sections: SidebarSection[] = [
         label: 'Tools',
         links: [
             { href: '/admin/repo-rate',            icon: Landmark,     label: 'Repo Rate'   },
-            { href: '/admin/calendar',             icon: Calendar,     label: 'Calendar'    },
-            { href: '/admin/compliance',           icon: ClipboardList, label: 'Compliance' },
+            { href: '/admin/compliance',           icon: Calendar,     label: 'Compliance Calendar' },
             { href: '/admin/compliance/suggestions', icon: Lightbulb,  label: 'Suggestions' },
         ],
     },
@@ -75,8 +73,20 @@ const sections: SidebarSection[] = [
     },
 ]
 
+function isLinkActive(linkHref: string, pathname: string): boolean {
+    if (linkHref === '/admin/articles') {
+        // Keep "All Articles" highlighted for edit pages but not for "/admin/articles/new"
+        return pathname.startsWith('/admin/articles') && pathname !== '/admin/articles/new'
+    }
+    if (linkHref === '/admin/compliance') {
+        // Keep "Compliance Calendar" highlighted for its details and suggestions if relevant
+        return pathname.startsWith('/admin/compliance') && !pathname.includes('/suggestions')
+    }
+    return pathname === linkHref
+}
+
 export default function Sidebar() {
-    const pathname = usePathname()
+    const pathname = usePathname() || ''
     const [drawerOpen, setDrawerOpen] = useState(false)
     const drawerRef = useRef<HTMLDivElement>(null)
     const menuButtonRef = useRef<HTMLButtonElement>(null)
@@ -98,54 +108,63 @@ export default function Sidebar() {
             }
         }
 
-        const focusables = drawer.querySelectorAll<HTMLElement>(
-            'a[href], button:not([disabled])'
+        const focusableElements = drawer.querySelectorAll<HTMLElement>(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
         )
-        const first = focusables[0]
-        const last = focusables[focusables.length - 1]
-        window.setTimeout(() => first?.focus(), 0)
+        const firstElement = focusableElements[0]
+        const lastElement = focusableElements[focusableElements.length - 1]
 
-        function onKeyDown(e: KeyboardEvent) {
-            if (e.key === 'Escape') {
-                e.preventDefault()
-                setDrawerOpen(false)
-                menuButtonRef.current?.focus()
-                return
-            }
-            if (e.key !== 'Tab' || focusables.length === 0) return
+        const handleTab = (e: KeyboardEvent) => {
+            if (e.key !== 'Tab') return
             if (e.shiftKey) {
-                if (document.activeElement === first) {
+                if (document.activeElement === firstElement) {
+                    lastElement?.focus()
                     e.preventDefault()
-                    last?.focus()
                 }
-            } else if (document.activeElement === last) {
-                e.preventDefault()
-                first?.focus()
+            } else {
+                if (document.activeElement === lastElement) {
+                    firstElement?.focus()
+                    e.preventDefault()
+                }
             }
         }
 
-        document.addEventListener('keydown', onKeyDown)
+        const handleEscape = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                setDrawerOpen(false)
+            }
+        }
+
+        window.addEventListener('keydown', handleEscape)
+        drawer.addEventListener('keydown', handleTab)
+
         return () => {
-            document.removeEventListener('keydown', onKeyDown)
             document.body.style.overflow = prevOverflow
+            window.removeEventListener('keydown', handleEscape)
+            drawer.removeEventListener('keydown', handleTab)
         }
     }, [drawerOpen])
 
-    const closeDrawer = () => {
-        setDrawerOpen(false)
-        menuButtonRef.current?.focus()
-    }
+    useEffect(() => {
+        if (!drawerOpen && menuButtonRef.current) {
+            menuButtonRef.current.focus()
+        }
+    }, [drawerOpen])
+
+    const closeDrawer = () => setDrawerOpen(false)
 
     return (
         <>
-        <div className="shrink-0 border-b border-white/[0.06] bg-[#080f1e] lg:hidden">
-            <div className="flex items-center justify-between gap-3 px-4 py-3">
-                <Link href="/admin/dashboard" className="block group min-w-0">
-                    <h2 className="truncate font-heading text-base font-bold leading-tight">
-                        <span className="text-white group-hover:text-white/90 transition-colors">CorpLawUpdates</span>
-                        <span className="text-gold">.in</span>
-                    </h2>
-                    <p className="text-[9px] font-semibold text-slate-400 mt-0.5 tracking-[0.18em] uppercase">
+        {/* Mobile Header */}
+        <div className="flex h-14 items-center justify-between border-b border-white/[0.06] bg-[#080f1e] px-4 lg:hidden shrink-0">
+            <Link href="/admin/dashboard" className="block">
+                <h2 className="font-heading text-sm font-bold text-white">
+                    CorpLawUpdates<span className="text-gold">.in</span>
+                </h2>
+            </Link>
+            <div className="flex items-center gap-4">
+                <Link href="/admin/dashboard" className="block group">
+                    <p className="text-[9px] font-semibold text-slate-400 tracking-[0.18em] group-hover:tracking-[0.22em] uppercase transition-all duration-300">
                         Admin Console
                     </p>
                 </Link>
@@ -202,7 +221,7 @@ export default function Sidebar() {
                     </div>
                     <nav className="flex-1 space-y-4 overflow-y-auto px-2 py-4" aria-label="Admin navigation">
                         {sections.map(section => {
-                            const hasActive = section.links.some(l => pathname === l.href)
+                            const hasActive = section.links.some(l => isLinkActive(l.href, pathname))
                             return (
                                 <div key={section.label}>
                                     <p
@@ -214,7 +233,7 @@ export default function Sidebar() {
                                     </p>
                                     <div className="space-y-0.5">
                                         {section.links.map(link => {
-                                            const active = pathname === link.href
+                                            const active = isLinkActive(link.href, pathname)
                                             const Icon = link.icon
                                             return (
                                                 <Link
@@ -271,7 +290,7 @@ export default function Sidebar() {
             {/* Nav sections */}
             <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-4" aria-label="Admin navigation">
                 {sections.map((section) => {
-                    const hasActive = section.links.some(l => pathname === l.href)
+                    const hasActive = section.links.some(l => isLinkActive(l.href, pathname))
                     return (
                         <div key={section.label}>
                             <p className={`px-3 mb-1 text-[9px] font-bold tracking-[0.2em] uppercase transition-colors ${
@@ -281,7 +300,7 @@ export default function Sidebar() {
                             </p>
                             <div className="space-y-0.5">
                                 {section.links.map((link) => {
-                                    const active = pathname === link.href
+                                    const active = isLinkActive(link.href, pathname)
                                     const Icon = link.icon
                                     return (
                                         <Link

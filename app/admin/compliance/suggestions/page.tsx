@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import EmptyState from '@/components/EmptyState'
+import { useToast } from '@/components/Toast'
 
 const FREQUENCIES = [
   { value: 'monthly',       label: 'Monthly' },
@@ -49,6 +50,7 @@ interface Suggestion {
 type TabFilter = 'all' | 'pending' | 'approved' | 'rejected'
 
 export default function AdminSuggestionsPage() {
+  const { showToast } = useToast()
   const [suggestions, setSuggestions] = useState<Suggestion[]>([])
   const [loading, setLoading] = useState(true)
   const [tab, setTab] = useState<TabFilter>('pending')
@@ -98,7 +100,7 @@ export default function AdminSuggestionsPage() {
 
   async function handleAction(id: string, action: 'approve' | 'reject', override_data?: Record<string, unknown> | null) {
     if (action === 'reject' && !adminNote.trim()) {
-      alert('Please provide a reason for rejection.')
+      showToast('Please provide a reason for rejection.', 'error')
       return
     }
     setProcessing(id)
@@ -113,11 +115,16 @@ export default function AdminSuggestionsPage() {
         }),
       })
       if (res.ok) {
+        showToast(action === 'approve' ? 'Suggestion approved successfully!' : 'Suggestion rejected.', 'success')
         setExpanded(null)
         setEditingApproval(null)
         setAdminNote('')
         await loadSuggestions()
+      } else {
+        showToast('Failed to update suggestion.', 'error')
       }
+    } catch {
+      showToast('An error occurred.', 'error')
     } finally {
       setProcessing(null)
     }

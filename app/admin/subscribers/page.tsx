@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { CalendarDays, Download, Search, Trash2, UserMinus, Users } from 'lucide-react'
 import Pagination from '@/components/Pagination'
 import { formatDate } from '@/lib/utils'
+import { useToast } from '@/components/Toast'
 
 interface Subscriber {
     id: string
@@ -23,6 +24,7 @@ interface Stats {
 }
 
 export default function AdminSubscribers() {
+    const { showToast } = useToast()
     const router = useRouter()
     const searchParams = useSearchParams()
 
@@ -96,13 +98,13 @@ export default function AdminSubscribers() {
             const res = await fetch(`/api/admin/subscribers/${id}`, { method: 'PATCH' })
             if (res.ok) {
                 setSubscribers(prev => prev.map(s => s.id === id ? { ...s, is_active: false } : s))
-                alert('Subscriber unsubscribed successfully')
+                showToast('Subscriber unsubscribed successfully.', 'success')
             } else {
                 const data = await res.json()
-                alert('Error: ' + (data.error || 'Failed'))
+                showToast('Error: ' + (data.error || 'Failed to unsubscribe'), 'error')
             }
         } catch (err) {
-            alert('Network error — please try again')
+            showToast('Network error — please try again', 'error')
         }
     }
 
@@ -113,13 +115,13 @@ export default function AdminSubscribers() {
             const res = await fetch(`/api/admin/subscribers/${id}`, { method: 'DELETE' })
             if (res.ok) {
                 setSubscribers(prev => prev.filter(s => s.id !== id))
-                alert('Subscriber deleted successfully')
+                showToast('Subscriber deleted successfully.', 'success')
             } else {
                 const data = await res.json()
-                alert('Error: ' + (data.error || 'Failed'))
+                showToast('Error: ' + (data.error || 'Failed to delete'), 'error')
             }
         } catch (err) {
-            alert('Network error — please try again')
+            showToast('Network error — please try again', 'error')
         }
     }
 
@@ -127,10 +129,13 @@ export default function AdminSubscribers() {
         if (!selected.length) return
         if (!confirm(`Delete ${selected.length} subscribers?`)) return
         
+        let count = 0
         for (const id of selected) {
-            await fetch(`/api/admin/subscribers/${id}`, { method: 'DELETE' })
+            const res = await fetch(`/api/admin/subscribers/${id}`, { method: 'DELETE' })
+            if (res.ok) count++
         }
         setSubscribers(prev => prev.filter(s => !selected.includes(s.id)))
+        showToast(`Successfully deleted ${count} subscriber(s).`, 'success')
         setSelected([])
     }
 

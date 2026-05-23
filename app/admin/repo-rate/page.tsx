@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { ArrowDown, ArrowUp, Landmark, Loader2, Minus, Save } from 'lucide-react'
+import { useToast } from '@/components/Toast'
 
 interface RateEntry {
   id: string
@@ -16,6 +17,7 @@ interface RateEntry {
 }
 
 export default function AdminRepoRatePage() {
+  const { showToast } = useToast()
   const [history, setHistory] = useState<RateEntry[]>([])
   const [currentRate, setCurrentRate] = useState<Record<string, string>>({})
   const [loading, setLoading] = useState(true)
@@ -53,7 +55,7 @@ export default function AdminRepoRatePage() {
 
   async function handleSaveNewRate() {
     if (!form.repo_rate || !form.meeting_name || !form.meeting_date) {
-      alert('Repo Rate, Meeting Name and Meeting Date are required')
+      showToast('Repo Rate, Meeting Name and Meeting Date are required fields.', 'error')
       return
     }
     setSaving(true)
@@ -64,22 +66,30 @@ export default function AdminRepoRatePage() {
     })
     if (res.ok) {
       setSaved(true)
+      showToast('MPC decision saved and live page updated!', 'success')
       setTimeout(() => setSaved(false), 3000)
       // Refresh history
       const d = await fetch('/api/admin/repo-rate').then(r => r.json())
       setHistory(d.history || [])
+    } else {
+      showToast('Failed to save MPC decision.', 'error')
     }
     setSaving(false)
   }
 
   async function handleDeleteEntry(id: string) {
     if (!confirm('Delete this history entry?')) return
-    await fetch('/api/admin/repo-rate', {
+    const res = await fetch('/api/admin/repo-rate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'delete_history_entry', id }),
     })
-    setHistory(prev => prev.filter(e => e.id !== id))
+    if (res.ok) {
+      showToast('History entry deleted successfully.', 'success')
+      setHistory(prev => prev.filter(e => e.id !== id))
+    } else {
+      showToast('Failed to delete history entry.', 'error')
+    }
   }
 
   if (loading) {

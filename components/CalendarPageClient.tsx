@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import React from 'react'
 import dynamic from 'next/dynamic'
@@ -297,6 +298,28 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
   const [selectedEntryName, setSelectedEntryName] = useState<string | undefined>()
   const [selectedEntry, setSelectedEntry] = useState<ComplianceEntry | null>(null)
   const [view, setView] = useState<'table' | 'calendar'>('table')
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const highlightId = searchParams?.get('highlight')
+    if (highlightId) {
+      const entry = entries.find(e => e.id === highlightId)
+      if (entry) {
+        setSelectedEntry(entry)
+        
+        setTimeout(() => {
+          const row = document.querySelector(`[data-entry-id="${highlightId}"]`) as HTMLElement | null
+          if (row) {
+            row.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            row.classList.add('bg-amber-200/80', 'transition-all', 'duration-500', 'ring-2', 'ring-amber-400')
+            setTimeout(() => {
+              row.classList.remove('bg-amber-200/80', 'ring-2', 'ring-amber-400')
+            }, 2500)
+          }
+        }, 300)
+      }
+    }
+  }, [searchParams, entries])
 
   function openReportError(entryId: string, entryName: string) {
     setSelectedEntryId(entryId)

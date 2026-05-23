@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { useToast } from '@/components/Toast'
 
 interface LinkResult {
   url: string
@@ -10,6 +11,7 @@ interface LinkResult {
 export default function LinkChecker({ 
   content 
 }: { content: string }) {
+  const { showToast } = useToast()
   const [results, setResults] = useState<LinkResult[]>([])
   const [checking, setChecking] = useState(false)
   const [done, setDone] = useState(false)
@@ -40,7 +42,7 @@ export default function LinkChecker({
   async function checkLinks() {
     const links = extractLinks(content)
     if (links.length === 0) {
-      alert('No external links found in content')
+      showToast('No external links found in content', 'info')
       return
     }
 

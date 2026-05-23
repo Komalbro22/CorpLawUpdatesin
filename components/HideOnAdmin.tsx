@@ -1,11 +1,15 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
+import { ReactNode } from 'react'
 
-export default function HideOnAdmin({ children }: { children: React.ReactNode }) {
+export default function HideOnAdmin({ children }: { children: ReactNode }) {
     const pathname = usePathname()
-    if (pathname.startsWith('/admin')) {
+    const isAdmin = pathname?.startsWith('/admin')
+    
+    if (isAdmin) {
         return null
     }
+    
     return <>{children}</>
 }

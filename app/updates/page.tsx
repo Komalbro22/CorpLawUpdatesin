@@ -54,20 +54,60 @@ export async function generateMetadata(
   }
 }
 
-export default async function UpdatesPage() {
-    const { data } = await supabase
+export default async function UpdatesPage({
+    searchParams,
+}: {
+    searchParams: { search?: string; category?: string; page?: string }
+}) {
+    const search = searchParams?.search || ''
+    const category = searchParams?.category || ''
+    const page = Math.max(1, parseInt(searchParams?.page || '1', 10))
+    const ITEMS_PER_PAGE = 10
+
+    // Fetch dynamic counts by category of all active updates (only select category column to keep it ultra lightweight)
+    const { data: allCategories } = await supabase
+        .from('updates')
+        .select('category')
+        .not('published_at', 'is', null)
+        .lte('published_at', new Date().toISOString())
+
+    const totalPublishedCount = allCategories?.length || 0
+    const counts: Record<string, number> = {}
+    allCategories?.forEach(u => { counts[u.category] = (counts[u.category] || 0) + 1 })
+
+    // Build paginated query
+    let query = supabase
+        .from('updates')
+        .select('*', { count: 'exact' })
+        .not('published_at', 'is', null)
+        .lte('published_at', new Date().toISOString())
+        .order('published_at', { ascending: false })
+
+    if (category && category !== 'All') {
+        query = query.eq('category', category)
+    }
+
+    if (search) {
+        query = query.or(`title.ilike.%${search}%,summary.ilike.%${search}%`)
+    }
+
+    const from = (page - 1) * ITEMS_PER_PAGE
+    const to = from + ITEMS_PER_PAGE - 1
+
+    const { data, count } = await query.range(from, to)
+    const paginatedUpdates = data || []
+    const totalFilteredCount = count || 0
+
+    // Fetch top 5 updates separately to guarantee stable metadata/schemas
+    const { data: top5Data } = await supabase
         .from('updates')
         .select('*')
         .not('published_at', 'is', null)
         .lte('published_at', new Date().toISOString())
         .order('published_at', { ascending: false })
-
-    const updates = data || []
-    const top5 = updates.slice(0, 5)
-    const lastModified = updates[0]?.published_at || new Date().toISOString()
-
-    const counts: Record<string, number> = {}
-    updates.forEach(u => { counts[u.category] = (counts[u.category] || 0) + 1 })
+        .limit(5)
+    const top5 = top5Data || []
+    const lastModified = top5[0]?.published_at || new Date().toISOString()
 
     // JSON-LD Schemas
     const collectionSchema = {
@@ -155,17 +195,17 @@ export default async function UpdatesPage() {
                             Latest Corporate Law & Regulatory Updates {CURRENT_YEAR}
                         </h1>
                         <span className="inline-flex items-center w-fit bg-white/10 text-white font-semibold py-2 px-4 rounded-lg text-sm ring-1 ring-white/15 backdrop-blur-sm">
-                            {updates.length} articles
+                            {totalPublishedCount} articles
                         </span>
                     </div>
                     {/* Answer-First paragraph for AI/Google */}
                     <p className="text-slate-300 mt-4 max-w-3xl text-sm md:text-base leading-relaxed">
                         Track all latest regulatory updates in India — MCA circulars today, SEBI notifications, RBI guidelines, NCLT orders, IBC circulars and FEMA notifications — updated daily for Company Secretaries, Chartered Accountants, Cost Accountants (CMA), law students, CS students, legal enthusiasts, and corporate compliance professionals.
                     </p>
-                    {updates[0] && (
+                    {top5[0] && (
                         <p className="text-white/50 text-xs mt-3">
-                            Last updated: <time dateTime={updates[0].published_at}>
-                                {new Date(updates[0].published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+                            Last updated: <time dateTime={top5[0].published_at}>
+                                {new Date(top5[0].published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
                             </time>
                         </p>
                     )}
@@ -173,7 +213,7 @@ export default async function UpdatesPage() {
             </div>
 
             <div className="max-w-7xl mx-auto px-4 pb-16 pt-8 md:pt-10">
-                {updates.length === 0 ? (
+                {totalPublishedCount === 0 ? (
                     <div className="rounded-lg border border-slate-200 bg-white px-6 py-12 text-center shadow-card">
                         <h2 className="font-heading text-xl font-bold text-navy">No updates published yet</h2>
                         <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-slate-500">
@@ -188,7 +228,12 @@ export default async function UpdatesPage() {
                         ))}
                       </div>
                     }>
-                        <UpdatesClient updates={updates} counts={counts} />
+                        <UpdatesClient 
+                            paginatedUpdates={paginatedUpdates} 
+                            totalFilteredCount={totalFilteredCount}
+                            totalPublishedCount={totalPublishedCount}
+                            counts={counts} 
+                        />
                     </Suspense>
                 )}
             </div>

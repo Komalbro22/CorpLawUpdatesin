@@ -87,7 +87,6 @@ export const metadata: Metadata = {
   verification: {
     google: process.env.NEXT_PUBLIC_GSC_VERIFICATION || '',
   },
-  manifest: '/manifest.json',
 }
 
 export default async function RootLayout({
@@ -101,6 +100,20 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  document.documentElement.classList.add('dark');
+                } else {
+                  document.documentElement.classList.remove('dark');
+                }
+              } catch (_) {}
+            `,
+          }}
+        />
+        <link rel="llms" href="/llms.txt" />
         <meta name="theme-color" content="#0F172A" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -142,33 +155,35 @@ export default async function RootLayout({
             'query-input': 'required name=search_term_string',
           },
         }} />
-        {gaId && gaId.startsWith('G-') && (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-              strategy="lazyOnload"
-            />
-            <Script id="ga4-init" strategy="lazyOnload">
+        <HideOnAdmin>
+          {gaId && gaId.startsWith('G-') && (
+            <>
+              <Script
+                src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+                strategy="lazyOnload"
+              />
+              <Script id="ga4-init" strategy="lazyOnload">
+                {`
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${gaId}');
+                `}
+              </Script>
+            </>
+          )}
+          {clarityId && (
+            <Script id="microsoft-clarity" strategy="afterInteractive">
               {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${gaId}');
+                (function(c,l,a,r,i,t,y){
+                  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                  t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+                })(window,document,"clarity","script","${clarityId}");
               `}
             </Script>
-          </>
-        )}
-        {clarityId && (
-          <Script id="microsoft-clarity" strategy="afterInteractive">
-            {`
-              (function(c,l,a,r,i,t,y){
-                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-              })(window,document,"clarity","script","${clarityId}");
-            `}
-          </Script>
-        )}
+          )}
+        </HideOnAdmin>
       </head>
       <body className={`${lora.variable} ${sourceSans.variable} font-body bg-slate-50 text-navy antialiased min-h-screen flex flex-col selection:bg-amber-200/50 selection:text-navy break-words`}>
         <ToastProvider>
@@ -187,8 +202,10 @@ export default async function RootLayout({
           <HideOnAdmin><BackToTop /></HideOnAdmin>
           <HideOnAdmin><WhatsAppButton /></HideOnAdmin>
         </ToastProvider>
-        <Analytics />
-        <SpeedInsights />
+        <HideOnAdmin>
+          <Analytics />
+          <SpeedInsights />
+        </HideOnAdmin>
         {/* Google Reader Revenue Manager - SWG */}
         <Script
           src="https://news.google.com/swg/js/v1/swg-basic.js"
@@ -220,7 +237,7 @@ export default async function RootLayout({
               if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function() {
                   navigator.serviceWorker.register('/sw.js').then(function(reg) {
-                    console.log('PWA Service Worker registered with scope:', reg.scope);
+                    // PWA registered successfully
                   }).catch(function(err) {
                     console.error('PWA Service Worker registration failed:', err);
                   });

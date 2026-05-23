@@ -8,9 +8,9 @@ export default function DarkModeToggle() {
   useEffect(() => {
     setMounted(true)
     // Check localStorage first, then system preference
-    const stored = localStorage.getItem('darkMode')
+    const stored = localStorage.getItem('theme')
     if (stored !== null) {
-      const isDark = stored === 'true'
+      const isDark = stored === 'dark'
       setDark(isDark)
       document.documentElement.classList.toggle('dark', isDark)
     } else {
@@ -23,7 +23,7 @@ export default function DarkModeToggle() {
   function toggle() {
     const newDark = !dark
     setDark(newDark)
-    localStorage.setItem('darkMode', String(newDark))
+    localStorage.setItem('theme', newDark ? 'dark' : 'light')
     document.documentElement.classList.toggle('dark', newDark)
   }
 

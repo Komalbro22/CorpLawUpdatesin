@@ -46,7 +46,7 @@ Overall status: IN PROGRESS
 ## PHASE 6 — PUBLIC PAGES
 - [x] 28. app/layout.tsx (root layout, fonts, Navbar, Footer, Analytics)
 - [x] 29. app/page.tsx (homepage, featured fetch + latest fetch parallel, static sections)
-- [x] 30. app/updates/page.tsx (All updates page, client-side filter+search, full fetch)
+- [x] 30. app/updates/page.tsx (All updates page, server-side pagination, category filtering, and search)
 - [x] 31. app/updates/[slug]/page.tsx (single article, JSON-LD, tags, share buttons)
 - [x] 32. app/category/[category]/page.tsx (static generation for 6 categories)
 - [x] 33. app/about/page.tsx (static about page with disclaimer)

@@ -7,8 +7,10 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { BarChart3, Users, Mail, MousePointerClick, RefreshCw, Eye, Trash2, Calendar, Clock } from 'lucide-react'
+import { useToast } from '@/components/Toast'
 
 export default function HistoryDashboard({ searchParams }: { searchParams: { page?: string } }) {
+    const { showToast } = useToast()
     const page = parseInt(searchParams.page || '1')
     const limit = 10
     
@@ -42,12 +44,13 @@ export default function HistoryDashboard({ searchParams }: { searchParams: { pag
                     ...prev,
                     scheduled: prev.scheduled.filter((s: any) => s.id !== id)
                 }))
+                showToast('Scheduled newsletter cancelled successfully.', 'success')
             } else {
-                alert('Failed to cancel')
+                showToast('Failed to cancel scheduled newsletter.', 'error')
             }
         } catch (err) {
             console.error(err)
-            alert('Error canceling')
+            showToast('Error canceling scheduled newsletter.', 'error')
         }
     }
 

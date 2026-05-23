@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 
 interface SearchResult {
-  type: 'article' | 'calendar'
+  type: 'article' | 'calendar' | 'glossary'
   id: string
   title: string
   slug?: string
@@ -96,6 +96,38 @@ export default function GlobalSearch() {
     ibc: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
     fema: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400',
     income_tax: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
+  }
+
+  // Get categories options dynamically based on search type
+  const getCategoriesForType = (activeType: string) => {
+    const allOptions = [
+      { value: 'mca', label: 'MCA' },
+      { value: 'sebi', label: 'SEBI' },
+      { value: 'rbi', label: 'RBI' },
+      { value: 'nclt', label: 'NCLT' },
+      { value: 'ibc', label: 'IBC' },
+      { value: 'fema', label: 'FEMA' },
+      { value: 'income_tax', label: 'Income Tax' },
+    ]
+
+    if (activeType === 'articles') {
+      return allOptions.filter(o => ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema'].includes(o.value))
+    }
+    if (activeType === 'calendar') {
+      return allOptions.filter(o => ['mca', 'sebi', 'rbi', 'fema', 'income_tax'].includes(o.value))
+    }
+    if (activeType === 'glossary') {
+      return allOptions.filter(o => ['mca', 'sebi', 'rbi', 'ibc', 'fema'].includes(o.value))
+    }
+    return allOptions
+  }
+
+  const handleTypeChange = (newType: string) => {
+    setType(newType)
+    const allowed = getCategoriesForType(newType).map(o => o.value)
+    if (category && !allowed.includes(category)) {
+      setCategory('')
+    }
   }
 
   return (
@@ -199,7 +231,7 @@ export default function GlobalSearch() {
               {/* Type filter */}
               <select
                 value={type}
-                onChange={e => setType(e.target.value)}
+                onChange={e => handleTypeChange(e.target.value)}
                 className="text-xs border border-slate-200 dark:border-slate-800
                            rounded-lg px-2 py-1 
                            bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300
@@ -210,6 +242,7 @@ export default function GlobalSearch() {
                 <option value="all">All Types</option>
                 <option value="articles">Articles</option>
                 <option value="calendar">Calendar</option>
+                <option value="glossary">Glossary</option>
               </select>
 
               {/* Category filter */}
@@ -224,13 +257,11 @@ export default function GlobalSearch() {
                            focus:ring-amber-400"
               >
                 <option value="">All Categories</option>
-                <option value="mca">MCA</option>
-                <option value="sebi">SEBI</option>
-                <option value="rbi">RBI</option>
-                <option value="nclt">NCLT</option>
-                <option value="ibc">IBC</option>
-                <option value="fema">FEMA</option>
-                <option value="income_tax">Income Tax</option>
+                {getCategoriesForType(type).map(opt => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -283,7 +314,7 @@ export default function GlobalSearch() {
                                        flex-shrink-0 
                                        mt-0.5">
                         {result.type === 'article' 
-                          ? '📄' : '📅'}
+                          ? '📄' : result.type === 'calendar' ? '📅' : '📖'}
                       </span>
 
                       <div className="flex-1 min-w-0">
@@ -329,6 +360,15 @@ export default function GlobalSearch() {
                                              text-blue-600 dark:text-blue-400
                                              font-medium">
                               Calendar
+                            </span>
+                          )}
+                          {result.type === 'glossary' && (
+                            <span className="text-[10px] px-1.5 
+                                             py-0.5 rounded-full 
+                                             bg-emerald-50 dark:bg-emerald-950/30
+                                             text-emerald-600 dark:text-emerald-400
+                                             font-medium">
+                              Glossary
                             </span>
                           )}
                           {result.impact && (

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Plus, Edit2, Trash2, CheckCircle2, XCircle, Search, ExternalLink } from 'lucide-react'
+import { useToast } from '@/components/Toast'
 
 type GlossaryTerm = {
   id: string
@@ -18,6 +19,7 @@ type GlossaryTerm = {
 }
 
 export default function AdminGlossaryPage() {
+  const { showToast } = useToast()
   const [terms, setTerms] = useState<GlossaryTerm[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -51,8 +53,9 @@ export default function AdminGlossaryPage() {
     const res = await fetch(`/api/admin/glossary/${id}`, { method: 'DELETE' })
     if (!res.ok) {
       const json = await res.json()
-      alert('Failed to delete term.' + (json.error ? ` ${json.error}` : ''))
+      showToast('Failed to delete term.' + (json.error ? ` ${json.error}` : ''), 'error')
     } else {
+      showToast('Glossary term deleted successfully.', 'success')
       fetchTerms()
     }
   }
@@ -65,6 +68,9 @@ export default function AdminGlossaryPage() {
     })
     if (res.ok) {
       setTerms(terms.map(t => t.id === id ? { ...t, is_verified: !currentStatus } : t))
+      showToast(`Term status set to ${!currentStatus ? 'Verified' : 'Draft'}.`, 'success')
+    } else {
+      showToast('Failed to update term verification status.', 'error')
     }
   }
 
