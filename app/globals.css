@@ -778,15 +778,6 @@ details[open] summary ~ * {
   color: #F59E0B !important;
 }
 
-/* Dark mode summary box */
-.dark .bg-blue-50 {
-  background: #1E3A5F !important;
-}
-
-.dark .bg-amber-50 {
-  background: #3D2000 !important;
-}
-
 .dark .border-slate-200 {
   border-color: #334155 !important;
 }
@@ -818,5 +809,302 @@ details[open] summary ~ * {
 .dark .border-slate-100 {
   border-color: #334155 !important;
 }
+
+/* Dynamic category backgrounds in dark mode */
+.dark .bg-emerald-50,
+.dark .bg-emerald-50\/30,
+.dark .bg-emerald-50\/40,
+.dark .bg-emerald-50\/50 {
+  background-color: rgba(16, 185, 129, 0.1) !important;
+  border-color: rgba(16, 185, 129, 0.25) !important;
+}
+
+.dark .bg-blue-50,
+.dark .bg-blue-50\/30,
+.dark .bg-blue-50\/40,
+.dark .bg-blue-50\/50 {
+  background-color: rgba(59, 130, 246, 0.1) !important;
+  border-color: rgba(59, 130, 246, 0.25) !important;
+}
+
+.dark .bg-violet-50,
+.dark .bg-violet-50\/30,
+.dark .bg-violet-50\/40,
+.dark .bg-violet-50\/50 {
+  background-color: rgba(139, 92, 246, 0.1) !important;
+  border-color: rgba(139, 92, 246, 0.25) !important;
+}
+
+.dark .bg-orange-50,
+.dark .bg-orange-50\/30,
+.dark .bg-orange-50\/40,
+.dark .bg-orange-50\/50 {
+  background-color: rgba(249, 115, 22, 0.1) !important;
+  border-color: rgba(249, 115, 22, 0.25) !important;
+}
+
+.dark .bg-red-50,
+.dark .bg-red-50\/30,
+.dark .bg-red-50\/40,
+.dark .bg-red-50\/50 {
+  background-color: rgba(239, 68, 68, 0.1) !important;
+  border-color: rgba(239, 68, 68, 0.25) !important;
+}
+
+.dark .bg-teal-50,
+.dark .bg-teal-50\/30,
+.dark .bg-teal-50\/40,
+.dark .bg-teal-50\/50 {
+  background-color: rgba(20, 184, 166, 0.1) !important;
+  border-color: rgba(20, 184, 166, 0.25) !important;
+}
+
+.dark .bg-amber-50,
+.dark .bg-amber-50\/30,
+.dark .bg-amber-50\/40,
+.dark .bg-amber-50\/50,
+.dark .bg-amber-50\/90 {
+  background-color: rgba(245, 158, 11, 0.1) !important;
+  border-color: rgba(245, 158, 11, 0.25) !important;
+}
+
+.dark .bg-slate-50\/40 {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+.dark .bg-white\/70 {
+  background-color: rgba(30, 41, 59, 0.7) !important;
+}
+
+.dark .hover\:bg-slate-50\/80:hover {
+  background-color: rgba(51, 65, 85, 0.8) !important;
+}
+
+/* Specific text tags inside category containers */
+.dark .text-emerald-700, .dark .text-emerald-800 { color: #34d399 !important; }
+.dark .text-blue-700, .dark .text-blue-800 { color: #60a5fa !important; }
+.dark .text-violet-700, .dark .text-violet-800 { color: #a78bfa !important; }
+.dark .text-orange-700, .dark .text-orange-800 { color: #f97316 !important; }
+.dark .text-red-700, .dark .text-red-800 { color: #f87171 !important; }
+.dark .text-teal-700, .dark .text-teal-800 { color: #2dd4bf !important; }
+.dark .text-amber-700, .dark .text-amber-800, .dark .text-amber-900 { color: #fbbf24 !important; }
+
+/* Force dynamic table elements to dark mode backgrounds and border colors, overriding inline styles */
+.dark .article-content table {
+  background-color: #111827 !important;
+  border-color: #374151 !important;
+}
+
+.dark .article-content th {
+  background-color: #1f2937 !important;
+  color: #f9fafb !important;
+  border-color: #374151 !important;
+}
+
+.dark .article-content tr,
+.dark .article-content td {
+  background-color: #111827 !important;
+  color: #cbd5e1 !important;
+  border-color: #374151 !important;
+}
+
+.dark .article-content tr:nth-child(even),
+.dark .article-content tr:nth-child(even) td {
+  background-color: #1f2937 !important;
+}
+
+/* Override any inline light backgrounds inside article content divs, spans, sections, paragraphs, list items */
+.dark .article-content div[style*="background"],
+.dark .article-content section[style*="background"],
+.dark .article-content p[style*="background"],
+.dark .article-content span[style*="background"],
+.dark .article-content li[style*="background"] {
+  background-color: #1e293b !important;
+  color: #e2e8f0 !important;
+}
+
+/* Preserve original dark color schemes inside dynamic content */
+.dark .article-content div[style*="background:#0F172A"],
+.dark .article-content div[style*="background:#0f172a"],
+.dark .article-content div[style*="background:#0f2342"],
+.dark .article-content div[style*="background:#0F2342"],
+.dark .article-content div[style*="background:#0b1121"],
+.dark .article-content div[style*="background:#0B1121"] {
+  background-color: #0b1121 !important;
+  color: #f1f5f9 !important;
+}
+
+/* TableOfContents Dark Mode adjustments */
+.dark nav[aria-label="Table of contents"] div {
+  background-color: rgba(30, 41, 59, 0.95) !important;
+  border-color: #334155 !important;
+}
+
+.dark nav[aria-label="Table of contents"] button {
+  color: #94a3b8 !important;
+}
+
+.dark nav[aria-label="Table of contents"] button:hover {
+  background-color: rgba(51, 65, 85, 0.5) !important;
+  color: #f8fafc !important;
+}
+
+.dark nav[aria-label="Table of contents"] button[class*="bg-amber-50"] {
+  background-color: rgba(245, 158, 11, 0.15) !important;
+  color: #fbbf24 !important;
+  border-left-color: #f59e0b !important;
+}
+
+.dark .xl\:hidden button[class*="bg-white"] {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+  color: #cbd5e1 !important;
+}
+
+.dark .xl\:hidden button[class*="bg-white"]:hover {
+  background-color: #334155 !important;
+  border-color: #f59e0b !important;
+  color: #f8fafc !important;
+}
+
+.dark .xl\:hidden div[class*="bg-slate-50"] {
+  background-color: #0f172a !important;
+  border-color: #334155 !important;
+}
+
+.dark .xl\:hidden button[class*="bg-amber-400"] {
+  background-color: #f59e0b !important;
+  border-color: #f59e0b !important;
+  color: #0f172a !important;
+}
+
+/* --- High-Contrast Dark Mode Readability Fixes --- */
+
+/* Fix major Section Headings being dark navy / invisible */
+.dark .article-content h1,
+.dark .article-content h2,
+.dark .article-content h3,
+.dark .article-content h4,
+.dark .article-content h5,
+.dark .article-content h6,
+.dark .prose h1,
+.dark .prose h2,
+.dark .prose h3,
+.dark .prose h4 {
+  color: #F8FAFC !important;
+}
+
+/* Fix text colors inside styled content boxes & cards in dark mode */
+.dark .article-content [style*="color:#0F172A"],
+.dark .article-content [style*="color:#0f172a"],
+.dark .article-content [style*="color:#1e293b"],
+.dark .article-content [style*="color:#1E293B"],
+.dark .article-content [style*="color:#334155"],
+.dark .article-content [style*="color:#334155"],
+.dark .article-content [style*="color:#475569"],
+.dark .article-content [style*="color:#475569"],
+.dark .article-content [style*="color:#000000"] {
+  color: #CBD5E1 !important;
+}
+
+/* Fix dynamic list items, paragraphs, blockquotes inside custom blocks */
+.dark .article-content div[style*="background"] p,
+.dark .article-content div[style*="background"] li,
+.dark .article-content div[style*="background"] span,
+.dark .article-content div[style*="background"] strong,
+.dark .article-content section[style*="background"] p,
+.dark .article-content section[style*="background"] li,
+.dark .article-content section[style*="background"] span,
+.dark .article-content section[style*="background"] strong {
+  color: #CBD5E1 !important;
+}
+
+/* Turn light inline background cards into beautiful dark glassmorphic cards in dark mode */
+.dark .article-content div[style*="background:#ffffff"],
+.dark .article-content div[style*="background:#FFFFFF"],
+.dark .article-content div[style*="background: #ffffff"],
+.dark .article-content div[style*="background: #FFFFFF"],
+.dark .article-content div[style*="background:#f8fafc"],
+.dark .article-content div[style*="background:#f1f5f9"],
+.dark .article-content div[style*="background:#e2e8f0"],
+.dark .article-content div[style*="background:#f7fafc"],
+.dark .article-content div[style*="background:#f9fafb"],
+.dark .article-content div[style*="background:#fffbeb"],
+.dark .article-content div[style*="background: #fffbeb"],
+.dark .article-content div[style*="background:#fff3cd"],
+.dark .article-content div[style*="background: #fff3cd"],
+.dark .article-content div[style*="background:#fef2f2"],
+.dark .article-content div[style*="background:#f0fdf4"],
+.dark .article-content div[style*="background:#eff6ff"] {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+.dark .article-content div[style*="background:#ffffff"] h3,
+.dark .article-content div[style*="background:#ffffff"] h4,
+.dark .article-content div[style*="background:#ffffff"] strong,
+.dark .article-content div[style*="background:#fffbeb"] h3,
+.dark .article-content div[style*="background:#fffbeb"] strong {
+  color: #F59E0B !important;
+}
+
+/* Comprehensive Tailwind light-background class overrides for true native dark theme */
+.dark .bg-slate-50, .dark .bg-slate-100, .dark .bg-slate-200,
+.dark .bg-gray-50, .dark .bg-gray-100,
+.dark .bg-zinc-50, .dark .bg-zinc-100,
+.dark .bg-neutral-50, .dark .bg-neutral-100,
+.dark .bg-stone-50, .dark .bg-stone-100,
+.dark .bg-red-50, .dark .bg-red-100,
+.dark .bg-orange-50, .dark .bg-orange-100,
+.dark .bg-amber-50, .dark .bg-amber-100,
+.dark .bg-yellow-50, .dark .bg-yellow-100,
+.dark .bg-lime-50, .dark .bg-lime-100,
+.dark .bg-green-50, .dark .bg-green-100,
+.dark .bg-emerald-50, .dark .bg-emerald-100,
+.dark .bg-teal-50, .dark .bg-teal-100,
+.dark .bg-cyan-50, .dark .bg-cyan-100,
+.dark .bg-sky-50, .dark .bg-sky-100,
+.dark .bg-blue-50, .dark .bg-blue-100,
+.dark .bg-indigo-50, .dark .bg-indigo-100,
+.dark .bg-violet-50, .dark .bg-violet-100,
+.dark .bg-purple-50, .dark .bg-purple-100,
+.dark .bg-fuchsia-50, .dark .bg-fuchsia-100,
+.dark .bg-pink-50, .dark .bg-pink-100,
+.dark .bg-rose-50, .dark .bg-rose-100 {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+/* Wildcard catches for dynamic slash opacity Tailwind light classes */
+.dark div[class*="bg-"][class*="-50"],
+.dark div[class*="bg-"][class*="-100"],
+.dark section[class*="bg-"][class*="-50"],
+.dark section[class*="bg-"][class*="-100"],
+.dark article[class*="bg-"][class*="-50"],
+.dark article[class*="bg-"][class*="-100"] {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+/* Ensure text inside overridden Tailwind light cards matches the beautiful dark-mode light slate */
+.dark div[class*="bg-"][class*="-50"] p,
+.dark div[class*="bg-"][class*="-50"] li,
+.dark div[class*="bg-"][class*="-50"] span,
+.dark div[class*="bg-"][class*="-100"] p,
+.dark div[class*="bg-"][class*="-100"] li,
+.dark div[class*="bg-"][class*="-100"] span,
+.dark section[class*="bg-"][class*="-50"] p,
+.dark section[class*="bg-"][class*="-50"] li,
+.dark section[class*="bg-"][class*="-50"] span,
+.dark section[class*="bg-"][class*="-100"] p,
+.dark section[class*="bg-"][class*="-100"] li,
+.dark section[class*="bg-"][class*="-100"] span {
+  color: #CBD5E1 !important;
+}
+
+
+
+
 
 
