@@ -12,6 +12,7 @@ import MarkdownRenderer from '@/components/MarkdownRenderer'
 import { useToast } from '@/components/Toast'
 import { Category } from '@/types'
 import SeoScorePanel from '@/components/admin/SeoScorePanel'
+import { optimizeImageClientSide } from '@/lib/image-optimizer'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 
@@ -175,10 +176,13 @@ export default function NewArticle() {
         if (!file) return
 
         setUploadingImage(true)
-        const formData = new FormData()
-        formData.append('file', file)
 
         try {
+            const { file: optimizedFile, originalSize, optimizedSize, savingsPercent } = await optimizeImageClientSide(file)
+            
+            const formData = new FormData()
+            formData.append('file', optimizedFile)
+
             const res = await fetch('/api/admin/articles/upload-image', {
                 method: 'POST',
                 body: formData
@@ -187,7 +191,13 @@ export default function NewArticle() {
                 const data = await res.json()
                 const imageMarkdown = `\n![image](${data.url})\n`
                 setContent((prev) => prev + imageMarkdown)
-                showToast('Image inserted into article', 'success')
+                
+                const origMb = (originalSize / (1024 * 1024)).toFixed(2)
+                const optKb = (optimizedSize / 1024).toFixed(0)
+                const msg = savingsPercent > 0 
+                    ? `Uploaded optimized WebP! (${origMb}MB → ${optKb}KB, saved ${savingsPercent}%)`
+                    : 'Image inserted into article'
+                showToast(msg, 'success')
             } else {
                 showToast('Image upload failed', 'error')
             }
