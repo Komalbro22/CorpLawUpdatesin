@@ -13,6 +13,7 @@ import { useToast } from '@/components/Toast'
 import { Category } from '@/types'
 import SeoScorePanel from '@/components/admin/SeoScorePanel'
 import { optimizeImageClientSide } from '@/lib/image-optimizer'
+import LinkChecker from '@/components/admin/LinkChecker'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 
@@ -536,6 +537,9 @@ export default function NewArticle() {
                                     rehypePlugins: [[require('rehype-raw')]]
                                 }}
                             />
+                        </div>
+                        <div className="mt-2">
+                            <LinkChecker content={content} />
                         </div>
                         <p className="text-sm font-medium text-slate-500 mt-3 pt-2">
                             Tip: Use two blank lines after images for spacing, or manually add &lt;br/&gt;.
