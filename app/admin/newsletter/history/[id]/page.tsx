@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { ArrowLeft, Download, RefreshCw, Mail, AlertCircle, CheckCircle2, Search, Filter } from 'lucide-react'
 import { useToast } from '@/components/Toast'
+import { sanitizeHtml } from '@/lib/sanitize'
 
 export default function CampaignDetails() {
     const { id } = useParams()
@@ -231,7 +232,7 @@ export default function CampaignDetails() {
                             {campaign.rendered_html ? (
                                 <div className="bg-white mx-auto shadow-md overflow-hidden rounded" style={{maxWidth: '600px'}}>
                                     <div 
-                                        dangerouslySetInnerHTML={{ __html: campaign.rendered_html }} 
+                                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(campaign.rendered_html) }} 
                                         className="pointer-events-none" // Prevents accidentally clicking links in preview
                                     />
                                 </div>

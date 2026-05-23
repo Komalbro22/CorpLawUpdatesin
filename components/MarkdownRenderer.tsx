@@ -9,6 +9,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkBreaks from 'remark-breaks'
 import rehypeRaw from 'rehype-raw'
+import { sanitizeHtml } from '@/lib/sanitize'
 
 function parseStyle(styleInput: any, node?: any): React.CSSProperties {
     let styleVal = styleInput;
@@ -90,6 +91,8 @@ export default function MarkdownRenderer({ content }: { content: string }) {
     const processedContent = content
         ? content.replace(/^\s+(?=<(?:\/)?(?:div|p|img|span|table|tr|td|th|tbody|thead|ul|ol|li|h[1-6]|a|strong|em|b|i|ins|del|iframe|svg|!--))/gim, '')
         : ''
+
+    const sanitizedContent = sanitizeHtml(processedContent)
 
     return (
         <div ref={ref} className={`
@@ -208,7 +211,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                     }
                 }}
             >
-                {processedContent}
+                {sanitizedContent}
             </ReactMarkdown>
         </div>
     )

@@ -20,15 +20,7 @@ import ArticleActions from '@/components/ArticleActions'
 import ReadingProgress from '@/components/ReadingProgress'
 import FontSizeToggle from '@/components/FontSizeToggle'
 import { AlertCircle, BookOpen, CalendarDays, ChevronDown, Clock3, Eye, FileText, Lightbulb, Sparkles, CheckCircle2 } from 'lucide-react'
-import sanitizeHtml from 'sanitize-html'
-
-const sanitizeOptions = {
-    allowedTags: [ 'b', 'i', 'em', 'strong', 'a', 'span', 'code', 'p', 'br', 'ul', 'li', 'ol' ],
-    allowedAttributes: {
-        'a': [ 'href', 'target', 'rel' ],
-        'span': [ 'class' ]
-    }
-}
+import { sanitizeHtml } from '@/lib/sanitize'
 
 const stripHtml = (html: string) => html ? html.replace(/<[^>]*>/g, '').trim() : ''
 
@@ -334,7 +326,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                         <FileText className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-600" aria-hidden />
                         <div>
                             <p className="text-xs font-bold text-amber-900 uppercase tracking-widest mb-1">Key Change</p>
-                            <p className="text-amber-800 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: sanitizeHtml(update.key_change, sanitizeOptions) }} />
+                            <p className="text-amber-800 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: sanitizeHtml(update.key_change) }} />
                         </div>
                     </div>
                 )}
@@ -427,7 +419,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                                         {update.key_changes.map((kc: string, i: number) => (
                                             <li key={i} className="flex items-start gap-3 text-sm text-slate-700 leading-relaxed font-medium">
                                                 <CheckCircle2 className={`h-4 w-4 mt-0.5 flex-shrink-0 ${cardStyles.iconColor}`} aria-hidden />
-                                                <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(kc, sanitizeOptions) }} />
+                                                <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(kc) }} />
                                             </li>
                                         ))}
                                     </ul>
