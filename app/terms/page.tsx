@@ -13,7 +13,7 @@ export const metadata: Metadata = {
         title: 'Terms of Service',
         description: 'Terms of Service for CorpLawUpdates.in — Informational platform for Indian corporate law updates.',
         url: 'https://www.corplawupdates.in/terms',
-        images: [{ url: 'https://www.corplawupdates.in/og-image.jpg', width: 1200, height: 630 }],
+        images: [{ url: 'https://www.corplawupdates.in/api/og?title=Terms%20of%20Service&category=', width: 1200, height: 630 }],
     },
 }
 

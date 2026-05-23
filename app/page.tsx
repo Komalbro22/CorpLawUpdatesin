@@ -66,17 +66,22 @@ export default async function HomePage() {
 
   return (
     <div>
-      <section className="relative w-full overflow-hidden bg-navy">
+      <section className="relative w-full overflow-hidden bg-slate-950">
+        {/* Soft glowing premium color orbs */}
         <div
-          className="absolute inset-0 bg-[url('/og-image.jpg')] bg-cover bg-center opacity-[0.08]"
+          className="absolute -top-[40%] -left-[20%] w-[80%] h-[80%] rounded-full bg-gradient-to-br from-amber-500/15 to-transparent blur-[120px] pointer-events-none"
           aria-hidden
         />
         <div
-          className="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,23,42,0.98)_0%,rgba(15,23,42,0.92)_56%,rgba(15,23,42,0.76)_100%)]"
+          className="absolute -bottom-[40%] -right-[20%] w-[80%] h-[80%] rounded-full bg-gradient-to-tl from-indigo-500/15 to-transparent blur-[120px] pointer-events-none"
           aria-hidden
         />
         <div
-          className="absolute inset-0 opacity-[0.08] bg-[linear-gradient(rgba(255,255,255,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.12)_1px,transparent_1px)] bg-[size:72px_72px]"
+          className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(15,23,42,0.95),rgba(15,23,42,0.98))]"
+          aria-hidden
+        />
+        <div
+          className="absolute inset-0 opacity-[0.05] bg-[linear-gradient(rgba(255,255,255,.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.1)_1px,transparent_1px)] bg-[size:72px_72px]"
           aria-hidden
         />
 

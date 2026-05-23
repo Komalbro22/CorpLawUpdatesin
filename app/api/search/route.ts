@@ -49,6 +49,13 @@ export async function GET(request: Request) {
     })
   }
 
+  // Escape special characters for PostgREST .or() / .ilike() filter to avoid syntax errors and wildcard injection
+  const escapedQ = q
+    .replace(/\\/g, '\\\\')  // Escape backslash
+    .replace(/%/g, '\\%')    // Escape wildcard %
+    .replace(/_/g, '\\_')    // Escape wildcard _
+    .replace(/,/g, '\\,')    // Escape comma to prevent .or() syntax breaking
+
   const results: UnifiedSearchResult[] = []
 
   // Search articles
@@ -62,9 +69,9 @@ export async function GET(request: Request) {
       .not('published_at', 'is', null)
       .lte('published_at', new Date().toISOString())
       .or(
-        `title.ilike.%${q}%,` +
-        `summary.ilike.%${q}%,` +
-        `key_change.ilike.%${q}%`
+        `title.ilike.%${escapedQ}%,` +
+        `summary.ilike.%${escapedQ}%,` +
+        `key_change.ilike.%${escapedQ}%`
       )
       .order('published_at', { ascending: false })
       .limit(10)
@@ -101,9 +108,9 @@ export async function GET(request: Request) {
       )
       .eq('is_active', true)
       .or(
-        `form_name.ilike.%${q}%,` +
-        `compliance_title.ilike.%${q}%,` +
-        `applicable_to.ilike.%${q}%`
+        `form_name.ilike.%${escapedQ}%,` +
+        `compliance_title.ilike.%${escapedQ}%,` +
+        `applicable_to.ilike.%${escapedQ}%`
       )
       .limit(5)
 

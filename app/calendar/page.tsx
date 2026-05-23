@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     title: `Compliance Calendar ${CURRENT_YEAR}-${String(NEXT_YEAR).slice(2)} — All MCA GST SEBI RBI Due Dates India`,
     description: `Complete compliance deadline calendar for Indian companies. MCA, GST, SEBI, RBI, Income Tax and Labor Laws due dates for FY ${CURRENT_YEAR}-${String(NEXT_YEAR).slice(2)} in one place.`,
     url: 'https://www.corplawupdates.in/calendar',
-    images: [{ url: 'https://www.corplawupdates.in/og-image.jpg', width: 1200, height: 630 }],
+    images: [{ url: `https://www.corplawupdates.in/api/og?title=${encodeURIComponent(`Compliance Calendar ${CURRENT_YEAR}-${String(NEXT_YEAR).slice(2)}`)}&category=`, width: 1200, height: 630 }],
   },
 }
 
@@ -53,6 +53,23 @@ const breadcrumbSchema = {
     { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.corplawupdates.in' },
     { '@type': 'ListItem', position: 2, name: `Compliance Calendar ${CURRENT_YEAR}`, item: 'https://www.corplawupdates.in/calendar' },
   ],
+}
+
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  'name': `Key Corporate Compliance Deadlines India ${CURRENT_YEAR}`,
+  'description': 'Latest GST, MCA, ROC, Income Tax, and Labor Law deadline due dates.',
+  'itemListElement': [
+    { '@type': 'ListItem', position: 1, name: 'GSTR-1 Outward Supplies Due Date (Monthly) - 11th of every month' },
+    { '@type': 'ListItem', position: 2, name: 'GSTR-3B Tax Return Due Date (Monthly) - 20th of every month' },
+    { '@type': 'ListItem', position: 3, name: 'EPF (PF) & ESIC Monthly Deposit Due Date - 15th of every month' },
+    { '@type': 'ListItem', position: 4, name: 'TDS Challan Deposit Due Date (Monthly) - 7th of every month' },
+    { '@type': 'ListItem', position: 5, name: 'MCA DIR-3 KYC Director Verification Due Date - 30th September annually' },
+    { '@type': 'ListItem', position: 6, name: 'MCA DPT-3 ROC Return Due Date - 30th June annually' },
+    { '@type': 'ListItem', position: 7, name: 'MCA AOC-4 Company Accounts due date - 30 days from AGM' },
+    { '@type': 'ListItem', position: 8, name: 'MCA MGT-7 Company Annual Return due date - 60 days from AGM' }
+  ]
 }
 
 export default async function CalendarPage() {
@@ -141,6 +158,7 @@ export default async function CalendarPage() {
 
       {/* JSON-LD Schemas */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />
     </>
   )
 }

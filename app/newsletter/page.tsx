@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     title: 'Subscribe — Free Corporate Law Newsletter India',
     description: 'Subscribe to India\'s free corporate law newsletter. Weekly MCA, SEBI, RBI updates delivered to your inbox. No spam. Unsubscribe anytime.',
     url: 'https://www.corplawupdates.in/newsletter',
-    images: [{ url: 'https://www.corplawupdates.in/og-image.jpg', width: 1200, height: 630 }],
+    images: [{ url: 'https://www.corplawupdates.in/api/og?title=Free%20Corporate%20Law%20Newsletter&category=', width: 1200, height: 630 }],
   },
 }
 

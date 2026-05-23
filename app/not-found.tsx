@@ -4,7 +4,16 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import type { Metadata } from 'next'
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+    title: '404 - Page Not Found',
+    robots: {
+        index: false,
+        follow: true,
+    },
+}
 
 export default function NotFound() {
     return (

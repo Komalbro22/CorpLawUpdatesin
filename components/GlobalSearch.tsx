@@ -89,13 +89,13 @@ export default function GlobalSearch() {
   }, [query, category, type])
 
   const categoryColors: Record<string, string> = {
-    mca: 'bg-blue-100 text-blue-700',
-    sebi: 'bg-green-100 text-green-700',
-    rbi: 'bg-purple-100 text-purple-700',
-    nclt: 'bg-orange-100 text-orange-700',
-    ibc: 'bg-red-100 text-red-700',
-    fema: 'bg-teal-100 text-teal-700',
-    income_tax: 'bg-amber-100 text-amber-700',
+    mca: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+    sebi: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+    rbi: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
+    nclt: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
+    ibc: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+    fema: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400',
+    income_tax: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
   }
 
   return (
@@ -110,13 +110,13 @@ export default function GlobalSearch() {
           )
         }}
         className="flex items-center gap-2 
-                   text-sm text-slate-400 
-                   bg-slate-100 hover:bg-slate-200
-                   border border-slate-200 
+                   text-sm text-slate-400 dark:text-slate-400
+                   bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800
+                   border border-slate-200 dark:border-slate-800
                    rounded-xl px-3 py-2
                    transition-colors"
       >
-        <svg className="w-4 h-4 text-slate-500" fill="none" 
+        <svg className="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" 
              viewBox="0 0 24 24" 
              stroke="currentColor">
           <path strokeLinecap="round" 
@@ -128,9 +128,10 @@ export default function GlobalSearch() {
           Search...
         </span>
         <kbd className="hidden md:block text-xs 
-                        bg-white border border-slate-200 
+                        bg-white dark:bg-slate-950 
+                        border border-slate-200 dark:border-slate-800 
                         rounded px-1.5 py-0.5 
-                        font-mono text-slate-500">
+                        font-mono text-slate-500 dark:text-slate-400">
           ⌘K
         </kbd>
       </button>
@@ -138,20 +139,21 @@ export default function GlobalSearch() {
       {/* Search modal */}
       {open && (
         <div className="fixed inset-0 z-50 
-                        bg-black/40 
+                        bg-black/40 dark:bg-black/60
                         flex items-start 
                         justify-center pt-20 
                         px-4">
-          <div className="bg-white rounded-2xl 
+          <div className="bg-white dark:bg-slate-900 rounded-2xl 
                           shadow-2xl w-full 
                           max-w-2xl 
-                          overflow-hidden animate-fade-in">
+                          overflow-hidden animate-fade-in
+                          border border-transparent dark:border-slate-800">
             
             {/* Search input */}
             <div className="flex items-center 
                             gap-3 px-4 py-3 
-                            border-b border-slate-200">
-              <svg className="w-5 h-5 text-slate-400 
+                            border-b border-slate-200 dark:border-slate-800">
+              <svg className="w-5 h-5 text-slate-400 dark:text-slate-500
                               flex-shrink-0" 
                    fill="none" viewBox="0 0 24 24"
                    stroke="currentColor">
@@ -166,8 +168,8 @@ export default function GlobalSearch() {
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 placeholder="Search articles, compliance deadlines..."
-                className="flex-1 text-navy text-base 
-                           outline-none placeholder-slate-400"
+                className="flex-1 text-navy dark:text-slate-100 text-base bg-transparent
+                           outline-none placeholder-slate-400 dark:placeholder-slate-500"
                 autoComplete="off"
               />
               {loading && (
@@ -181,8 +183,8 @@ export default function GlobalSearch() {
                   setOpen(false)
                   setQuery('')
                 }}
-                className="text-slate-400 
-                           hover:text-slate-600 
+                className="text-slate-400 dark:text-slate-500
+                           hover:text-slate-600 dark:hover:text-slate-300
                            text-lg leading-none"
               >
                 ✕
@@ -191,16 +193,16 @@ export default function GlobalSearch() {
 
             {/* Filters */}
             <div className="flex gap-2 px-4 py-2 
-                            border-b border-slate-100 
-                            bg-slate-50 
+                            border-b border-slate-100 dark:border-slate-800/80
+                            bg-slate-50 dark:bg-slate-950/40
                             overflow-x-auto">
               {/* Type filter */}
               <select
                 value={type}
                 onChange={e => setType(e.target.value)}
-                className="text-xs border border-slate-200 
+                className="text-xs border border-slate-200 dark:border-slate-800
                            rounded-lg px-2 py-1 
-                           bg-white text-slate-600
+                           bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300
                            focus:outline-none 
                            focus:ring-1 
                            focus:ring-amber-400"
@@ -214,9 +216,9 @@ export default function GlobalSearch() {
               <select
                 value={category}
                 onChange={e => setCategory(e.target.value)}
-                className="text-xs border border-slate-200 
+                className="text-xs border border-slate-200 dark:border-slate-800
                            rounded-lg px-2 py-1 
-                           bg-white text-slate-600
+                           bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300
                            focus:outline-none 
                            focus:ring-1 
                            focus:ring-amber-400"
@@ -253,7 +255,7 @@ export default function GlobalSearch() {
                                 text-center 
                                 text-slate-400 text-sm">
                   No results found for{' '}
-                  <strong className="text-slate-600 font-semibold">
+                  <strong className="text-slate-600 dark:text-slate-300 font-semibold">
                     &quot;{query}&quot;
                   </strong>
                 </div>
@@ -271,9 +273,9 @@ export default function GlobalSearch() {
                       }}
                       className="flex items-start gap-3 
                                  px-4 py-3 
-                                 hover:bg-slate-50 
+                                 hover:bg-slate-50 dark:hover:bg-slate-950
                                  transition-colors 
-                                 border-b border-slate-50
+                                 border-b border-slate-50 dark:border-slate-800/50
                                  last:border-0 text-left"
                     >
                       {/* Type icon */}
@@ -287,7 +289,7 @@ export default function GlobalSearch() {
                       <div className="flex-1 min-w-0">
                         {/* Title */}
                         <p className="text-sm font-semibold 
-                                      text-navy 
+                                      text-navy dark:text-slate-200
                                       line-clamp-1">
                           {result.title}
                         </p>
@@ -295,7 +297,7 @@ export default function GlobalSearch() {
                         {/* Summary or due date */}
                         {result.summary && (
                           <p className="text-xs 
-                                        text-slate-500 
+                                        text-slate-500 dark:text-slate-400
                                         mt-0.5 
                                         line-clamp-1">
                             {result.summary}
@@ -303,7 +305,7 @@ export default function GlobalSearch() {
                         )}
                         {result.due_date && (
                           <p className="text-xs 
-                                        text-amber-600 
+                                        text-amber-600 dark:text-amber-400
                                         mt-0.5 
                                         font-medium">
                             Due: {result.due_date}
@@ -317,14 +319,14 @@ export default function GlobalSearch() {
                             uppercase
                             ${categoryColors[
                               result.category.toLowerCase()
-                            ] || 'bg-slate-100 text-slate-600'}`}>
+                            ] || 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'}`}>
                             {result.category}
                           </span>
                           {result.type === 'calendar' && (
                             <span className="text-[10px] px-1.5 
                                              py-0.5 rounded-full 
-                                             bg-blue-50 
-                                             text-blue-600 
+                                             bg-blue-50 dark:bg-blue-950/30
+                                             text-blue-600 dark:text-blue-400
                                              font-medium">
                               Calendar
                             </span>
@@ -333,10 +335,10 @@ export default function GlobalSearch() {
                             <span className={`text-[10px] px-1.5 
                               py-0.5 rounded-full font-medium
                               ${result.impact === 'High Impact'
-                                ? 'bg-red-50 text-red-600'
+                                ? 'bg-red-50 text-red-600 dark:bg-red-950/30 dark:text-red-400'
                                 : result.impact === 'Medium Impact'
-                                ? 'bg-amber-50 text-amber-600'
-                                : 'bg-green-50 text-green-600'}`}>
+                                ? 'bg-amber-50 text-amber-600 dark:bg-amber-950/30 dark:text-amber-400'
+                                : 'bg-green-50 text-green-600 dark:bg-green-950/30 dark:text-green-400'}`}>
                               {result.impact.replace(' Impact', '')}
                             </span>
                           )}
@@ -344,7 +346,7 @@ export default function GlobalSearch() {
                       </div>
 
                       {/* Arrow */}
-                      <span className="text-slate-300 
+                      <span className="text-slate-300 dark:text-slate-600
                                        flex-shrink-0 mt-1">
                         →
                       </span>
@@ -356,20 +358,21 @@ export default function GlobalSearch() {
 
             {/* Footer */}
             <div className="px-4 py-2 border-t 
-                            border-slate-100 bg-slate-50 
+                            border-slate-100 dark:border-slate-800
+                            bg-slate-50 dark:bg-slate-950/60
                             flex justify-between 
                             items-center">
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-400 dark:text-slate-500">
                 Press{' '}
-                <kbd className="bg-white border 
-                                border-slate-200 rounded 
-                                px-1 font-mono text-xs">
+                <kbd className="bg-white dark:bg-slate-900 border 
+                                border-slate-200 dark:border-slate-800 rounded 
+                                px-1 font-mono text-xs text-slate-500 dark:text-slate-400">
                   ESC
                 </kbd>
                 {' '}to close
               </p>
               {results.length > 0 && (
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-400 dark:text-slate-500">
                   {results.length} result
                   {results.length !== 1 ? 's' : ''}
                 </p>
