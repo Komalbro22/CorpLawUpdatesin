@@ -7,6 +7,7 @@ interface Article {
 }
 
 interface WelcomeEmailProps {
+  email: string
   unsubscribeToken: string
   recentArticles: Article[]
 }
@@ -32,12 +33,13 @@ const categoryLabels: Record<string, string> = {
 }
 
 export function generateWelcomeEmail({
+  email,
   unsubscribeToken,
   recentArticles,
 }: WelcomeEmailProps): string {
   const BASE_URL = 'https://www.corplawupdates.in'
   const unsubscribeUrl = 
-    `${BASE_URL}/unsubscribe?token=${unsubscribeToken}`
+    `${BASE_URL}/api/unsubscribe?email=${encodeURIComponent(email)}&token=${unsubscribeToken}`
 
   const articlesHtml = recentArticles
     .slice(0, 5)

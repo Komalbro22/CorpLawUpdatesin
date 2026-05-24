@@ -24,6 +24,15 @@ import { sanitizeHtml } from '@/lib/sanitize'
 
 const stripHtml = (html: string) => html ? html.replace(/<[^>]*>/g, '').trim() : ''
 
+function extractFirstImage(content: string): string | null {
+    if (!content) return null
+    const mdMatch = content.match(/!\[.*?\]\((.*?)\)/)
+    if (mdMatch && mdMatch[1]) return mdMatch[1]
+    const htmlMatch = content.match(/<img.*?src=["'](.*?)["']/)
+    if (htmlMatch && htmlMatch[1]) return htmlMatch[1]
+    return null
+}
+
 export const revalidate = 3600
 
 export async function generateStaticParams() {
@@ -38,7 +47,7 @@ export async function generateMetadata(
   
   const { data: update } = await supabase
     .from('updates')
-    .select('title, summary, category, published_at, updated_at, tags, slug, seo_title, seo_description, content')
+    .select('title, summary, category, published_at, updated_at, tags, slug, seo_title, seo_description, content, featured_image_url')
     .ilike('slug', decodedSlug)
     .single()
 
@@ -57,8 +66,8 @@ export async function generateMetadata(
   const seoTitle = (t: string): string => t.length <= 100 ? t : t.slice(0, 97) + '...'
   const descStr = update.seo_description || update.summary
   const seoDesc = (d: string): string => d.length <= 300 ? d : d.slice(0, 297) + '...'
-  let extractedImageUrl = null;
-  if (update.content) {
+  let extractedImageUrl = update.featured_image_url || null;
+  if (!extractedImageUrl && update.content) {
     const imgMatch = update.content.match(/<img[^>]+src=["']([^"']+)["']/i) || update.content.match(/!\[.*?\]\((.*?)\)/i);
     if (imgMatch && imgMatch[1]) {
       extractedImageUrl = imgMatch[1];
@@ -197,6 +206,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
         : []
 
     const articleUrl = `https://www.corplawupdates.in/updates/${update.slug}`
+    const imageUrl = update.featured_image_url || extractFirstImage(update.content || '')
 
     // Auto-extract FAQs for Search Console Rich Results
     const faqs: { question: string; answer: string }[] = []
@@ -307,10 +317,10 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                 </div>
 
                 {/* Hero image */}
-                {update.image_url && (
+                {imageUrl && (
                     <div className="relative mb-8 h-64 w-full overflow-hidden rounded-xl border border-slate-200/80 shadow-card md:h-[400px]">
                         <Image
-                            src={update.image_url}
+                            src={imageUrl}
                             alt={update.title}
                             fill
                             className="object-cover"
@@ -624,7 +634,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
               ].join(', '),
               inLanguage: 'en-IN',
               isAccessibleForFree: true,
-              ...(update.image_url ? { image: { '@type': 'ImageObject', url: update.image_url } } : {}),
+              ...(imageUrl ? { image: { '@type': 'ImageObject', url: imageUrl } } : {}),
               ...(update.source_url ? { citation: { '@type': 'CreativeWork', name: update.source_name || 'Official Source', url: update.source_url } } : {}),
               ...(update.effective_date ? { temporal: update.effective_date } : {}),
             }} />

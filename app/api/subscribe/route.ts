@@ -94,8 +94,9 @@ export async function POST(request: NextRequest) {
                 .order('published_at', { ascending: false })
                 .limit(5)
 
-            const token = generateUnsubscribeToken(email)
+                        const token = generateUnsubscribeToken(email)
             const welcomeHtml = generateWelcomeEmail({
+                email,
                 unsubscribeToken: token,
                 recentArticles: recentArticles || [],
             })
@@ -109,7 +110,7 @@ export async function POST(request: NextRequest) {
                 subject: '🎉 Welcome to CorpLawUpdates.in — Your Free Corporate Law Digest',
                 html: welcomeHtml,
                 headers: {
-                    'List-Unsubscribe': `<https://www.corplawupdates.in/unsubscribe?token=${token}>`,
+                    'List-Unsubscribe': `<https://www.corplawupdates.in/api/unsubscribe?email=${encodeURIComponent(email)}&token=${token}>`,
                     'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
                 },
             })

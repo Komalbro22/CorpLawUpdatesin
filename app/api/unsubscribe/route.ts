@@ -43,10 +43,14 @@ export async function GET(request: NextRequest) {
             })
         }
 
-        await supabaseAdmin
+        const { error: updateError } = await supabaseAdmin
             .from('subscribers')
             .update({ is_active: false, unsubscribed_at: new Date().toISOString() })
             .eq('email', email)
+
+        if (updateError) {
+            throw updateError
+        }
 
         const successHtml = `
     <!DOCTYPE html>
