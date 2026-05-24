@@ -57,10 +57,258 @@ h2, h3, h4 {
 
 /* Admin route transition */
 @keyframes admin-main-fade {
-  from { opacity: 0.88; transform: translateY(6px); }
-  to   { opacity: 1;    transform: translateY(0);   }
+  from { opacity: 0.88; transform: translateY(6px) scale(0.998); }
+  to   { opacity: 1;    transform: translateY(0) scale(1);       }
 }
-.admin-main-fade { animation: admin-main-fade 0.22s ease-out; }
+.admin-main-fade { animation: admin-main-fade 0.28s cubic-bezier(0.22, 0.68, 0, 1.2); }
+
+/* ============================================================
+   ADMIN PANEL — PREMIUM DARK DESIGN SYSTEM
+   ============================================================ */
+
+/* Admin glassmorphic card */
+.admin-card {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  transition: all 0.3s cubic-bezier(0.22, 0.68, 0, 1.2);
+}
+.admin-card:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 40px -4px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(245, 158, 11, 0.08);
+  transform: translateY(-2px);
+}
+
+/* Admin stat card gradient variants */
+.admin-stat-amber {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(217, 119, 6, 0.06) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.15);
+}
+.admin-stat-amber:hover {
+  border-color: rgba(245, 158, 11, 0.3);
+  box-shadow: 0 0 30px rgba(245, 158, 11, 0.1), 0 8px 32px -4px rgba(0, 0, 0, 0.3);
+}
+.admin-stat-emerald {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(5, 150, 105, 0.06) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.15);
+}
+.admin-stat-emerald:hover {
+  border-color: rgba(16, 185, 129, 0.3);
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.1), 0 8px 32px -4px rgba(0, 0, 0, 0.3);
+}
+.admin-stat-blue {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(37, 99, 235, 0.06) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.15);
+}
+.admin-stat-blue:hover {
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.1), 0 8px 32px -4px rgba(0, 0, 0, 0.3);
+}
+.admin-stat-violet {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.12) 0%, rgba(109, 40, 217, 0.06) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.15);
+}
+.admin-stat-violet:hover {
+  border-color: rgba(139, 92, 246, 0.3);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.1), 0 8px 32px -4px rgba(0, 0, 0, 0.3);
+}
+
+/* Admin stat card icon containers */
+.admin-icon-amber {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.15);
+}
+.admin-icon-emerald {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+}
+.admin-icon-blue {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
+}
+.admin-icon-violet {
+  background: rgba(139, 92, 246, 0.15);
+  color: #a78bfa;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
+}
+
+/* Admin table styling */
+.admin-table {
+  width: 100%;
+  text-align: left;
+  font-size: 0.875rem;
+}
+.admin-table thead {
+  background: rgba(15, 23, 42, 0.5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.admin-table thead th {
+  padding: 14px 24px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+}
+.admin-table tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  transition: all 0.2s ease;
+}
+.admin-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+.admin-table tbody td {
+  padding: 14px 24px;
+  color: #cbd5e1;
+}
+
+/* Admin gradient text */
+.admin-gradient-text {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Admin topbar glassmorphic */
+.admin-topbar {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Admin content scrollbar */
+.admin-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.admin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.admin-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+}
+.admin-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 158, 11, 0.25);
+}
+
+/* Admin sidebar scrollbar */
+.admin-sidebar-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+}
+.admin-sidebar-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.admin-sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.admin-sidebar-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+}
+.admin-sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 158, 11, 0.2);
+}
+
+/* Admin welcome banner gradient */
+.admin-welcome-gradient {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(59, 130, 246, 0.06) 50%, rgba(139, 92, 246, 0.04) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Admin status badges */
+.admin-badge-published {
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+.admin-badge-draft {
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+/* Admin avatar */
+.admin-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.3));
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fbbf24;
+}
+
+/* Floating orb animations for login */
+@keyframes float-orb-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+  25% { transform: translate(60px, -40px) scale(1.1); opacity: 0.8; }
+  50% { transform: translate(20px, -80px) scale(0.95); opacity: 0.5; }
+  75% { transform: translate(-30px, -30px) scale(1.05); opacity: 0.7; }
+}
+@keyframes float-orb-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+  33% { transform: translate(-50px, 30px) scale(1.15); opacity: 0.7; }
+  66% { transform: translate(40px, 60px) scale(0.9); opacity: 0.4; }
+}
+@keyframes float-orb-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+  50% { transform: translate(-70px, -50px) scale(1.2); opacity: 0.6; }
+}
+.float-orb-1 { animation: float-orb-1 18s ease-in-out infinite; }
+.float-orb-2 { animation: float-orb-2 22s ease-in-out infinite; }
+.float-orb-3 { animation: float-orb-3 15s ease-in-out infinite; }
+
+/* Login card entrance */
+@keyframes login-card-enter {
+  from { opacity: 0; transform: translateY(20px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.login-card-enter { animation: login-card-enter 0.5s cubic-bezier(0.22, 0.68, 0, 1.2) both; }
+
+/* Login button shimmer */
+.admin-btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.admin-btn-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  transition: left 0.5s ease;
+}
+.admin-btn-shimmer:hover::after {
+  left: 100%;
+}
+
+/* Spinner for loading state */
+@keyframes admin-spin {
+  to { transform: rotate(360deg); }
+}
+.admin-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(245, 158, 11, 0.3);
+  border-top-color: #fbbf24;
+  border-radius: 50%;
+  animation: admin-spin 0.6s linear infinite;
+  display: inline-block;
+}
 
 /* Skeleton shimmer */
 @keyframes skeleton-shimmer {

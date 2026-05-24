@@ -13,6 +13,13 @@ const config: Config = {
         'glow-gold-sm': '0 0 10px rgba(245, 158, 11, 0.20)',
         'inner-gold': 'inset 0 0 0 1px rgba(245, 158, 11, 0.25)',
         admin: '0 1px 3px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.15)',
+        'admin-glass': '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05)',
+        'admin-card': '0 4px 24px -2px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.05)',
+        'admin-card-hover': '0 8px 40px -4px rgba(0,0,0,0.35), 0 0 0 1px rgba(245,158,11,0.15)',
+        'admin-glow-amber': '0 0 20px rgba(245,158,11,0.15), 0 0 40px rgba(245,158,11,0.05)',
+        'admin-glow-emerald': '0 0 20px rgba(16,185,129,0.15), 0 0 40px rgba(16,185,129,0.05)',
+        'admin-glow-blue': '0 0 20px rgba(59,130,246,0.15), 0 0 40px rgba(59,130,246,0.05)',
+        'admin-glow-violet': '0 0 20px rgba(139,92,246,0.15), 0 0 40px rgba(139,92,246,0.05)',
       },
       typography: {
         DEFAULT: {
@@ -62,12 +69,32 @@ const config: Config = {
           '0%,100%': { opacity: '1'   },
           '50%':     { opacity: '0.7' },
         },
+        'admin-shimmer': {
+          '0%':   { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0'  },
+        },
+        'admin-float': {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%':      { transform: 'translateY(-6px)' },
+        },
+        'admin-glow-pulse': {
+          '0%, 100%': { opacity: '1', boxShadow: '0 0 15px rgba(245,158,11,0.2)' },
+          '50%':      { opacity: '0.8', boxShadow: '0 0 25px rgba(245,158,11,0.35)' },
+        },
+        'admin-border-glow': {
+          '0%, 100%': { borderColor: 'rgba(245,158,11,0.3)' },
+          '50%':      { borderColor: 'rgba(245,158,11,0.6)' },
+        },
       },
       animation: {
         'fade-up':       'fade-up 0.4s ease-out both',
         'fade-in':       'fade-in 0.3s ease-out both',
         'slide-in-left': 'slide-in-left 0.3s cubic-bezier(0.22, 0.68, 0, 1.2) both',
         'pulse-soft':    'pulse-soft 2s ease-in-out infinite',
+        'admin-shimmer': 'admin-shimmer 2.5s ease-in-out infinite',
+        'admin-float':   'admin-float 5s ease-in-out infinite',
+        'admin-glow':    'admin-glow-pulse 3s ease-in-out infinite',
+        'admin-border':  'admin-border-glow 3s ease-in-out infinite',
       },
     },
   },
