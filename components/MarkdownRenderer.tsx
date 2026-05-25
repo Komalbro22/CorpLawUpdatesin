@@ -248,7 +248,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
     // Preprocess content to strip leading indentation from lines starting with HTML tags or comments.
     // This prevents standard CommonMark parser from treating indented HTML blocks as code blocks.
     const processedContent = content
-        ? content.replace(/^\s+(?=<(?:\/)?(?:div|p|img|span|table|tr|td|th|tbody|thead|ul|ol|li|h[1-6]|a|strong|em|b|i|ins|del|iframe|svg|!--))/gim, '')
+        ? content.replace(/^\s+(?=<(?:\/)?(?:div|p|img|span|table|tr|td|th|tbody|thead|ul|ol|li|h[1-6]|a|strong|em|b|i|ins|del|iframe|svg|style|!--))/gim, '')
         : ''
 
     const sanitizedContent = sanitizeHtml(processedContent)

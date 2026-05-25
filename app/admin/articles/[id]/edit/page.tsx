@@ -332,7 +332,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
     return (
         <div className="pb-24 content-fade-in">
             <div className="flex justify-between items-center mb-6">
-                <h1 className="font-heading font-bold text-2xl text-navy flex items-center gap-2">
+                <h1 className="font-heading font-bold text-2xl text-slate-100 flex items-center gap-2">
                     <FilePenLine className="w-7 h-7 text-amber-600 shrink-0" aria-hidden />
                     Edit article
                 </h1>
@@ -364,7 +364,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                             placeholder="Article title..."
                             value={title}
                             onChange={(e) => handleTitleChange(e.target.value)}
-                            className="w-full bg-transparent font-heading font-bold text-3xl placeholder:text-slate-300 text-navy border-none focus:outline-none focus:ring-0 p-0"
+                            className="w-full bg-transparent font-heading font-bold text-3xl placeholder:text-slate-400 text-slate-100 border-none focus:outline-none focus:ring-0 p-0"
                             autoFocus
                         />
                     </div>

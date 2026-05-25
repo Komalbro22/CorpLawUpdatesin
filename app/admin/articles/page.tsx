@@ -187,7 +187,7 @@ export default function AdminArticles() {
                 {listStatusMessage}
             </p>
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-                <h1 className="font-heading text-2xl font-bold text-navy">All articles</h1>
+                <h1 className="font-heading text-2xl font-bold text-slate-100">All articles</h1>
                 <Link
                     href="/admin/articles/new"
                     className="inline-flex items-center justify-center gap-2 bg-gold text-navy font-semibold px-4 py-2.5 rounded-lg hover:bg-amber-400 transition-colors duration-200 shadow-sm"
