@@ -316,19 +316,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                     <FontSizeToggle />
                 </div>
 
-                {/* Hero image */}
-                {imageUrl && (
-                    <div className="relative mb-8 h-64 w-full overflow-hidden rounded-xl border border-slate-200/80 shadow-card md:h-[400px]">
-                        <Image
-                            src={imageUrl}
-                            alt={update.title}
-                            fill
-                            className="object-cover"
-                            priority={true}
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 800px, 1200px"
-                        />
-                    </div>
-                )}
+
 
                 {/* Key change banner */}
                 {update.key_change && (
