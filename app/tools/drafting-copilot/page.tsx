@@ -326,7 +326,7 @@ export default function DraftingCopilotPage() {
   const triggerAiCompilation = async (promptText: string) => {
     setLoading(true)
     try {
-      const response = await fetch('/api/tools/drafting-copilot', {
+      const response = await fetch('/api/ai/draft', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

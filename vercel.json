@@ -7,6 +7,10 @@
     {
       "path": "/api/newsletter/send-weekly-digest",
       "schedule": "30 2 * * 1"
+    },
+    {
+      "path": "/api/cron/update-rbi-rates",
+      "schedule": "0 4 * * *"
     }
   ]
 }

@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from 'react'
 import { Scale } from 'lucide-react'
 import { calculateFees, getStatutoryDueDate, FormType } from '@/lib/mca-fees'
+import { supabase } from '@/lib/supabase'
 import { AmnestyBanner } from '@/components/mca/AmnestyBanner'
 import { MCAForm } from '@/components/mca/MCAForm'
 import { MCAResults } from '@/components/mca/MCAResults'
@@ -15,7 +16,37 @@ export default function McaCalculatorPage() {
   const [nominalCapital, setNominalCapital] = useState(100000)
   const [financialYear, setFinancialYear] = useState(2025)
   const [actualFilingDate, setActualFilingDate] = useState('')
+  
+  // Database amnesty parameters
   const [isAmnestyActive, setIsAmnestyActive] = useState(false)
+  const [schemeName, setSchemeName] = useState('')
+  const [circularUrl, setCircularUrl] = useState('')
+
+  // Sync active amnesty parameters from Supabase compliance_rates
+  useEffect(() => {
+    async function fetchAmnesty() {
+      try {
+        const { data: rates } = await supabase
+          .from('compliance_rates')
+          .select('key, text_value')
+          .in('key', ['active_amnesty_scheme', 'amnesty_scheme_name', 'amnesty_scheme_url'])
+
+        if (rates && rates.length > 0) {
+          const activeFlag = rates.find(r => r.key === 'active_amnesty_scheme')?.text_value === 'true'
+          setIsAmnestyActive(activeFlag)
+          
+          const name = rates.find(r => r.key === 'amnesty_scheme_name')?.text_value || ''
+          setSchemeName(name)
+          
+          const url = rates.find(r => r.key === 'amnesty_scheme_url')?.text_value || ''
+          setCircularUrl(url)
+        }
+      } catch (err) {
+        console.error('Failed to load database amnesty schemes:', err)
+      }
+    }
+    fetchAmnesty()
+  }, [])
 
   // Auto-set standard form types when entity shifts to avoid mismatches
   useEffect(() => {
@@ -70,10 +101,11 @@ export default function McaCalculatorPage() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
         <div className="space-y-8">
           
-          {/* Amnesty Waiver Banner Alert Toggle */}
+          {/* Amnesty Waiver Banner Alert (Renders strictly if database flag is true) */}
           <AmnestyBanner
             isActive={isAmnestyActive}
-            onToggle={() => setIsAmnestyActive(!isAmnestyActive)}
+            schemeName={schemeName}
+            circularUrl={circularUrl}
           />
 
           {/* Form and calculation output grid */}

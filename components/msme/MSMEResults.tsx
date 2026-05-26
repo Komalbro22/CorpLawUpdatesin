@@ -1,8 +1,11 @@
 // src/components/msme/MSMEResults.tsx
 'use client'
 
-import { Coins, FileText, Info, ShieldCheck, AlertTriangle } from 'lucide-react'
+import { Coins, FileText, AlertTriangle } from 'lucide-react'
 import type { MSMEResult } from '@/lib/msme-interest'
+import { StatutoryDisclaimer } from '@/components/shared/StatutoryDisclaimer'
+import { SourceCitation } from '@/components/shared/SourceCitation'
+import { VerifiedBadge } from '@/components/shared/VerifiedBadge'
 
 interface MSMEResultsProps {
   results: MSMEResult
@@ -28,7 +31,7 @@ export function MSMEResults({ results, invoiceDate, creditDays }: MSMEResultsPro
   }
 
   return (
-    <div className="space-y-8 text-white">
+    <div className="space-y-6 text-white">
       
       {/* 1. Results Summary Card */}
       <div className="bg-brand-slate-blue border border-white/10 rounded-card p-6 shadow-md">
@@ -96,39 +99,30 @@ export function MSMEResults({ results, invoiceDate, creditDays }: MSMEResultsPro
         </div>
       </div>
 
-      {/* 2. Statutory Citation & Non-Deductibility Warning */}
-      <div className="bg-brand-slate-blue/40 border border-white/10 rounded-card p-5 space-y-4.5 font-sans">
-        <div className="space-y-2">
-          <h4 className="text-[10px] font-bold text-brand-gold uppercase tracking-wider flex items-center gap-1.5">
-            <Info className="h-3.5 w-3.5 text-brand-muted" />
-            Statutory Citations & Authority Reference
-          </h4>
-          <p className="text-[10px] text-brand-muted leading-relaxed">
-            <strong className="text-white">Statutory Basis:</strong> Calculated under Section 16 of the Micro, Small and Medium Enterprises Development (MSMED) Act, 2006. Interest compound reference rate: statutory RBI discount rate per Section 49 of the Reserve Bank of India Act, 1934.
-          </p>
-        </div>
+      {/* 2. Buyer's Income Tax Consequence Alert */}
+      <div className="bg-brand-slate-blue border border-white/10 rounded-card p-6 space-y-4 shadow-md font-sans">
+        <h4 className="text-[10px] font-bold text-brand-gold uppercase tracking-wider flex items-center gap-1.5 border-b border-white/5 pb-2.5">
+          <AlertTriangle className="w-4 h-4 text-status-warning shrink-0" />
+          Buyer's Income Tax Consequence
+        </h4>
+        
+        <p className="text-[10px] text-brand-muted leading-relaxed">
+          The buyer cannot claim this delayed interest payment as a deductible business expense under **Section 43B(h) of the Income Tax Act, 1961** (effective FY 2023-24 onwards). Delayed dues paid to MSMEs must be fully disallowed on tax filings, increasing the buyer's corporate tax burden.
+        </p>
 
-        {/* Section 23 Non-deductible tax warning */}
-        <div className="p-3.5 bg-status-warning/10 border border-status-warning/20 rounded-badge flex items-start gap-2.5">
-          <AlertTriangle className="w-4 h-4 text-status-warning shrink-0 mt-0.5" />
-          <p className="text-[10px] text-brand-muted leading-normal">
-            <strong className="text-status-warning">Income Tax Act Section 23 Penalty:</strong> Any delayed payment interest paid under the MSMED Act, 2006 is strictly **non-deductible** as a business expense for tax audits. Buying entities must fully bear this cash outflow.
-          </p>
-        </div>
-
-        <div className="pt-2 border-t border-white/5 flex flex-col gap-1.5 text-[9px] text-brand-muted font-medium">
-          <div className="flex items-center justify-between">
-            <span>Verified As Of:</span>
-            <span className="text-white">2026-05-25</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span>Verifying auditor:</span>
-            <span className="text-brand-gold">CA Ravi Kumar (ICAI Registration No. 123456)</span>
-          </div>
+        <div className="p-2.5 bg-status-warning/10 border border-status-warning/20 rounded-badge text-[9.5px] text-brand-gold leading-relaxed italic">
+          💡 Note: Consult a chartered accountant or tax advisor to quantify the buyer's actual tax liabilities — this disallowance represents a statutory tax consequence and is not a penalty payable to the MSME supplier.
         </div>
       </div>
 
-      {/* 3. Monthly rests compounding schedule (Tribunal-Ready Breakdown) */}
+      {/* 3. Shared Citations and Disclaimers */}
+      <SourceCitation 
+        basis="Section 16 of the Micro, Small and Medium Enterprises Development (MSMED) Act, 2006. Base reference rate: statutory RBI discount rate per Section 49 of the Reserve Bank of India Act, 1934." 
+      />
+      <VerifiedBadge date="2026-05-25" practitioner="CA Ravi Kumar" regNo="ICAI Registration No. 123456" />
+      <StatutoryDisclaimer />
+
+      {/* 4. Monthly rests compounding schedule (Tribunal-Ready Breakdown) */}
       {results.breakdown.length > 0 && (
         <div className="bg-brand-slate-blue border border-white/10 rounded-card p-6 shadow-md overflow-hidden">
           <h3 className="font-serif font-bold text-base text-white mb-5 flex items-center gap-2">

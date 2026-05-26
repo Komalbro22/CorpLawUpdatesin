@@ -61,6 +61,7 @@ const sections: SidebarSection[] = [
         label: 'Tools',
         links: [
             { href: '/admin/repo-rate',            icon: Landmark,     label: 'Repo Rate'   },
+            { href: '/admin/rates',                icon: Settings,     label: 'Tool Rates & Waiver' },
             { href: '/admin/compliance',           icon: Calendar,     label: 'Compliance Calendar' },
             { href: '/admin/compliance/suggestions', icon: Lightbulb,  label: 'Suggestions' },
         ],
