@@ -20,6 +20,11 @@ const config: Config = {
         'admin-glow-emerald': '0 0 20px rgba(16,185,129,0.15), 0 0 40px rgba(16,185,129,0.05)',
         'admin-glow-blue': '0 0 20px rgba(59,130,246,0.15), 0 0 40px rgba(59,130,246,0.05)',
         'admin-glow-violet': '0 0 20px rgba(139,92,246,0.15), 0 0 40px rgba(139,92,246,0.05)',
+        'a4': '0 4px 32px rgba(0,0,0,0.18)',
+      },
+      borderRadius: {
+        'card': '12px',
+        'badge': '6px',
       },
       typography: {
         DEFAULT: {
@@ -42,11 +47,28 @@ const config: Config = {
           ibc:  '#EF4444',
           fema: '#14B8A6',
         },
+        brand: {
+          navy:       '#0B1F3A',  // Primary dark background
+          'slate-blue': '#1E3A5F', // Secondary backgrounds, cards
+          'mid-blue':   '#2E5F8A', // Interactive elements
+          gold:         '#C9A84C', // Accent, CTAs, highlights
+          'gold-light': '#E8C97D', // Hover states for gold
+          cream:        '#F5F0E8', // Light background
+          muted:        '#8B9BB4', // Secondary text on dark backgrounds
+        },
+        status: {
+          verified:  '#16A34A',  // Rate badge green
+          stale:     '#D97706',  // Rate badge amber
+          error:     '#DC2626',  // Rate badge red
+          warning:   '#F59E0B',  // Alert cards
+        }
       },
       fontFamily: {
         heading: ['var(--font-lora)',        'Georgia', 'serif'],
         body:    ['var(--font-source-sans)', 'Arial',   'sans-serif'],
-        sans:    ['var(--font-source-sans)', 'Arial',   'sans-serif'],
+        sans:    ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        serif:   ['var(--font-playfair)', 'Georgia', 'serif'],
+        mono:    ['var(--font-jetbrains-mono)', 'monospace'],
       },
       transitionTimingFunction: {
         'spring': 'cubic-bezier(0.22, 0.68, 0, 1.2)',
