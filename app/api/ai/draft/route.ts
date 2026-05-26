@@ -26,10 +26,10 @@ export async function POST(req: Request) {
 
     try {
       if (queryEmbedding.length > 0) {
-        // Query pgvector similarity via RPC function
+        // Query pgvector similarity via RPC function with elevated strict threshold
         const { data: matched, error: rpcError } = await supabaseAdmin.rpc('match_templates', {
           query_embedding: queryEmbedding,
-          match_threshold: 0.70,
+          match_threshold: 0.80, // Prevent false positives on completely different documents
           match_count: 1
         })
 
@@ -41,7 +41,7 @@ export async function POST(req: Request) {
       console.warn('pgvector matching failed or function missing, trying text query:', err)
     }
 
-    // Fallback standard fuzzy query
+    // Fallback standard fuzzy query with strict stop-word and significant matches criteria
     if (!bestTemplate) {
       const { data: templates } = await supabaseAdmin
         .from('legal_templates')
@@ -49,12 +49,28 @@ export async function POST(req: Request) {
         .is('effective_to', null)
 
       if (templates && templates.length > 0) {
+        const STOP_WORDS = new Set([
+          'and', 'or', 'the', 'of', 'with', 'for', 'as', 'to', 'between', 'in', 
+          'on', 'at', 'by', 'from', 'a', 'an', 'is', 'are', 'was', 'were', 'be', 
+          'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'but', 'if', 
+          'then', 'else', 'when', 'where', 'why', 'how', 'who', 'whom', 'this', 
+          'that', 'these', 'those', 'about', 'into', 'through', 'after', 'before', 
+          'during', 'under', 'above', 'below', 'write', 'draft', 'create', 'make', 
+          'generate', 'weite', 'betwwen', 'seller', 'buyer', 'komal', 'mandeep'
+        ])
+
+        const significantTerms = searchTerms.filter((term: string) => !STOP_WORDS.has(term) && term.length > 2)
         let maxMatchCount = 0
+
         templates.forEach((t: any) => {
           const searchTagsString = Array.isArray(t.search_tags) ? t.search_tags.join(' ') : ''
           const corpus = `${t.title} ${t.category} ${t.statutory_basis} ${searchTagsString}`.toLowerCase()
-          const matches = searchTerms.filter((term: string) => corpus.includes(term)).length
-          if (matches > maxMatchCount && matches >= 1) {
+          
+          // Calculate matches only on significant keywords
+          const matches = significantTerms.filter((term: string) => corpus.includes(term)).length
+          
+          // Require at least 2 significant keyword matches for co-opting a static template
+          if (matches > maxMatchCount && matches >= 2) {
             maxMatchCount = matches
             bestTemplate = t
           }
