@@ -22,6 +22,7 @@ const links = [
     { href: '/', label: 'Home' },
     { href: '/updates', label: 'Updates' },
     { href: '/glossary', label: 'Glossary' },
+    { href: '/documents', label: '📄 Documents' },
     { href: '/about', label: 'About' },
     { href: '/newsletter', label: 'Newsletter' },
 ]

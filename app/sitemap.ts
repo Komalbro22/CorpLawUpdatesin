@@ -89,7 +89,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: BASE_URL, lastModified: latestArticleDate, changeFrequency: 'daily' as const, priority: 1.0 },
     { url: `${BASE_URL}/updates`, lastModified: latestArticleDate, changeFrequency: 'daily' as const, priority: 0.8 },
     { url: `${BASE_URL}/calendar`, lastModified: latestCalendarDate, changeFrequency: 'weekly' as const, priority: 0.8 },
-    { url: `${BASE_URL}/glossary`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.7 },
+    {url: `${BASE_URL}/glossary`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.7 },
+    { url: `${BASE_URL}/documents`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.9 },
     { url: `${BASE_URL}/rbi/repo-rate`, changeFrequency: 'weekly' as const, priority: 0.6 },
     { url: `${BASE_URL}/newsletter`, changeFrequency: 'yearly' as const, priority: 0.5 },
     { url: `${BASE_URL}/about`, changeFrequency: 'yearly' as const, priority: 0.3 },
@@ -126,5 +127,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.4,
     }))
 
-  return [...staticPages, ...categoryPages, ...articlePages, ...glossaryPages]
+  // Fetch active document templates for sitemap SEO indexing
+  const { data: docTemplates } = await supabaseAdmin
+    .from('document_templates')
+    .select('slug, updated_at')
+    .eq('is_active', true)
+
+  const documentPages = (docTemplates || []).map(d => ({
+    url: `${BASE_URL}/documents/${d.slug}`,
+    lastModified: d.updated_at ? new Date(d.updated_at) : new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }))
+
+  return [...staticPages, ...categoryPages, ...articlePages, ...glossaryPages, ...documentPages]
 }

@@ -6,7 +6,7 @@ import { populateTemplate, getMissingFields } from '@/lib/template-engine'
 
 export async function POST(req: Request) {
   try {
-    const { userPrompt, sessionId, conversationHistory } = await req.json()
+    const { userPrompt, sessionId, conversationHistory, currentDraft } = await req.json()
 
     if (!userPrompt) {
       return NextResponse.json({ error: 'Missing userPrompt' }, { status: 400 })
@@ -80,12 +80,40 @@ export async function POST(req: Request) {
 
     // 3. Fallback to custom AI Drafting if no templates matched
     if (!bestTemplate) {
-      const customDraft = await generateCustomDraft(userPrompt, conversationHistory)
+      const customDraft = await generateCustomDraft(userPrompt, conversationHistory, currentDraft)
+
+      // Save custom draft to draft_sessions for reviews and history
+      try {
+        const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // 7 days
+        const sessionData = {
+          template_slug: null,
+          variables: { custom_prompt: userPrompt },
+          conversation: [
+            ...(conversationHistory || []),
+            { role: 'user', content: userPrompt },
+            { role: 'assistant', content: "Generated custom draft." }
+          ],
+          draft_html: customDraft,
+          draft_status: 'complete',
+          expires_at: expiresAt,
+          updated_at: new Date().toISOString()
+        }
+
+        if (sessionId) {
+          await supabaseAdmin
+            .from('draft_sessions')
+            .upsert({ session_token: sessionId, ...sessionData }, { onConflict: 'session_token' })
+        }
+      } catch (err) {
+        console.warn('Failed to upsert custom draft session:', err)
+      }
+
       return NextResponse.json({
         message: "I couldn't find an exact pre-verified template, so I've drafted a custom Indian compliance document based on your parameters. Please review carefully.",
         draftHtml: customDraft,
         status: 'complete',
-        isCustom: true
+        isCustom: true,
+        sessionId
       })
     }
 
@@ -97,43 +125,69 @@ export async function POST(req: Request) {
     // 5. Check for missing variables
     const missing = getMissingFields(schemaFields, extractedVars)
 
-    // Save session state to Supabase draft_sessions
-    try {
-      const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
-      
-      const sessionData = {
-        template_slug: bestTemplate.slug,
-        variables: extractedVars,
-        conversation: [
-          ...(conversationHistory || []),
-          { role: 'user', content: userPrompt }
-        ],
-        draft_status: missing.length > 0 ? 'variables_pending' : 'complete',
-        expires_at: expiresAt,
-        updated_at: new Date().toISOString()
-      }
-
-      if (sessionId && sessionId.startsWith('session-')) {
-        await supabaseAdmin
-          .from('draft_sessions')
-          .insert({ session_token: sessionId, ...sessionData })
-          .select()
-      }
-    } catch (sessionErr) {
-      console.warn('Failed to save draft session cache:', sessionErr)
-    }
-
     if (missing.length > 0) {
+      // Save partial session state (with status variables_pending)
+      try {
+        const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+        const sessionData = {
+          template_slug: bestTemplate.slug,
+          variables: extractedVars,
+          conversation: [
+            ...(conversationHistory || []),
+            { role: 'user', content: userPrompt }
+          ],
+          draft_html: '',
+          draft_status: 'variables_pending',
+          expires_at: expiresAt,
+          updated_at: new Date().toISOString()
+        }
+
+        if (sessionId) {
+          await supabaseAdmin
+            .from('draft_sessions')
+            .upsert({ session_token: sessionId, ...sessionData }, { onConflict: 'session_token' })
+        }
+      } catch (sessionErr) {
+        console.warn('Failed to save partial draft session cache:', sessionErr)
+      }
+
       const questions = missing.map((f: any, i: number) => `${i + 1}. **${f.label}** ${f.hint ? `(${f.hint})` : ''}`)
       return NextResponse.json({
         message: `I've matched your request to our verified template **${bestTemplate.title}** (${bestTemplate.statutory_basis}).\n\nTo complete your draft, please fill out the fields in the editor or reply here with these details:\n\n${questions.join('\n')}`,
         extracted: extractedVars,
-        status: 'prompt_more'
+        status: 'prompt_more',
+        sessionId
       })
     }
 
     // 6. Compile draft dynamically using safe template compiler
     const compiledDraft = populateTemplate(bestTemplate.body, extractedVars)
+
+    // Save complete session state (with status complete and compiled draft)
+    try {
+      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+      const sessionData = {
+        template_slug: bestTemplate.slug,
+        variables: extractedVars,
+        conversation: [
+          ...(conversationHistory || []),
+          { role: 'user', content: userPrompt },
+          { role: 'assistant', content: "Generated template-based draft." }
+        ],
+        draft_html: compiledDraft,
+        draft_status: 'complete',
+        expires_at: expiresAt,
+        updated_at: new Date().toISOString()
+      }
+
+      if (sessionId) {
+        await supabaseAdmin
+          .from('draft_sessions')
+          .upsert({ session_token: sessionId, ...sessionData }, { onConflict: 'session_token' })
+      }
+    } catch (sessionErr) {
+      console.warn('Failed to save complete draft session cache:', sessionErr)
+    }
 
     return NextResponse.json({
       message: `Here is your pre-verified draft: **${bestTemplate.title}**.\n\n⚠️ Please review the board resolutions, signing blocks, and statutory dates in the A4 editor before printing.`,

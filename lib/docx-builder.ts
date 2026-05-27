@@ -120,22 +120,6 @@ export async function generateDocx(
     }
   })
 
-  // 3. Mandatory Statutory Disclaimer Footer
-  children.push(
-    new Paragraph({
-      spacing: { before: 480 },
-      alignment: AlignmentType.CENTER,
-      children: [
-        new TextRun({
-          text: 'IMPORTANT LEGAL NOTICE: This document is generated as an un-audited draft template by the CorpLawUpdates.in automated assistant. Verify all statutory items (including stamp duty and witness signatures) with a qualified CS or auditor before final signature execution.',
-          size: 14,
-          color: '8B9BB4',
-          italics: true,
-          font: 'Arial'
-        })
-      ]
-    })
-  )
 
   const doc = new Document({
     sections: [

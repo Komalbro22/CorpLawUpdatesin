@@ -1,7 +1,7 @@
 // src/lib/gemini.ts
 // Secure server-side wrapper for Google Gemini models.
 
-const GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY || ''
+const GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || ''
 
 /**
  * Generate 768-dimension vector embeddings using text-embedding-004.
@@ -104,13 +104,34 @@ Return ONLY a clean JSON object matching this structure:
  */
 export async function generateCustomDraft(
   userPrompt: string, 
-  history: any[] = []
+  history: any[] = [],
+  currentDraft?: string
 ): Promise<string> {
   if (!GEMINI_API_KEY) {
     throw new Error('Missing GOOGLE_GEMINI_API_KEY environment variable.')
   }
 
-  const promptText = `
+  let promptText = ""
+  if (currentDraft && currentDraft.length > 50) {
+    promptText = `
+You are an expert Indian Corporate Lawyer. The user wants to modify their existing legal document draft.
+
+User's requested modification: "${userPrompt}"
+Previous conversation context: "${JSON.stringify(history)}"
+
+Here is the CURRENT legal document draft:
+\`\`\`markdown
+${currentDraft}
+\`\`\`
+
+Strict Revision Guidelines:
+1. Apply the user's requested modifications (additions, deletions, adjustments, or rewrites) precisely to the CURRENT draft.
+2. Maintain the exact same formatting style, formal legal English, statutory references, and structure of the document where possible.
+3. Return the ENTIRE revised legal document in Markdown format.
+4. Do NOT output any conversational introductions, greetings, meta-discussions, explanations, or postscripts. Return ONLY the final legal markdown body text starting with '# '.
+`
+  } else {
+    promptText = `
 You are an expert Indian Corporate Lawyer. Draft a highly professional document in Markdown format for this user request: "${userPrompt}".
 Previous conversation context: "${JSON.stringify(history)}".
 
@@ -119,6 +140,7 @@ Strict Professional Guidelines:
 - Always include clear signing blocks at the bottom.
 - Do NOT output any conversational introductions, greetings, meta-discussions, or postscripts. Return ONLY the final legal markdown body text starting with '# '.
 `
+  }
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`
 

@@ -6,29 +6,33 @@ interface LetterheadToggleProps {
   setLetterheadMode: (mode: 'digital' | 'preprinted' | 'none') => void
   isStampPaper: boolean
   setIsStampPaper: (val: boolean) => void
+  isCorporate?: boolean
 }
 
 export function LetterheadToggle({
   letterheadMode,
   setLetterheadMode,
   isStampPaper,
-  setIsStampPaper
+  setIsStampPaper,
+  isCorporate = true
 }: LetterheadToggleProps) {
   return (
     <div className="flex flex-wrap items-center gap-4 bg-brand-slate-blue border border-white/10 p-3 rounded-card text-white shadow-sm">
       
       {/* 1. Spacing Mode Selection Group */}
       <div className="flex items-center gap-1 bg-brand-navy border border-white/5 p-1 rounded-badge">
-        <button
-          onClick={() => setLetterheadMode('digital')}
-          className={`px-3 py-1.5 text-xs font-bold rounded-badge transition-all ${
-            letterheadMode === 'digital' 
-              ? 'bg-brand-gold text-brand-navy shadow-sm' 
-              : 'text-brand-muted hover:text-white'
-          }`}
-        >
-          Digital Header
-        </button>
+        {isCorporate && (
+          <button
+            onClick={() => setLetterheadMode('digital')}
+            className={`px-3 py-1.5 text-xs font-bold rounded-badge transition-all ${
+              letterheadMode === 'digital' 
+                ? 'bg-brand-gold text-brand-navy shadow-sm' 
+                : 'text-brand-muted hover:text-white'
+            }`}
+          >
+            Digital Header
+          </button>
+        )}
         <button
           onClick={() => setLetterheadMode('preprinted')}
           className={`px-3 py-1.5 text-xs font-bold rounded-badge transition-all ${

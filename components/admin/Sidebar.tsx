@@ -40,6 +40,7 @@ const sections: SidebarSection[] = [
             { href: '/admin/articles/new',   icon: PenSquare,       label: 'New Article'  },
             { href: '/admin/articles',       icon: FileText,        label: 'All Articles' },
             { href: '/admin/glossary',       icon: BookOpen,        label: 'Glossary'     },
+            { href: '/admin/documents',      icon: ScrollText,      label: 'Documents'    },
         ],
     },
     {

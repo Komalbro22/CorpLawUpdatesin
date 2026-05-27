@@ -217,6 +217,26 @@ export default async function HomePage() {
         </section>
       )}
 
+      {/* Premium Legal Document Generator Promo Section */}
+      <section className="py-16 px-4 max-w-7xl mx-auto border-t border-slate-100">
+        <div className="bg-navy rounded-3xl p-8 md:p-12 text-white text-center relative overflow-hidden shadow-xl">
+          <div className="absolute inset-0 opacity-[0.05] bg-[linear-gradient(rgba(255,255,255,.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.1)_1px,transparent_1px)] bg-[size:32px_32px]" aria-hidden />
+          <div className="relative z-10 max-w-2xl mx-auto flex flex-col items-center">
+            <div className="text-4xl mb-4">📄</div>
+            <h2 className="text-2xl md:text-3xl font-bold font-heading mb-3 text-white">
+              Free Legal Document Generator
+            </h2>
+            <p className="text-slate-350 max-w-lg mx-auto mb-8 text-sm leading-relaxed font-light">
+              Generate Board Resolutions, Director Appointment letters, Bank Account Opening authorities and legal documents in seconds. Powered by AI. Based on ICSI Secretarial Standards and Companies Act 2013.
+            </p>
+            <Link href="/documents"
+                  className="inline-block bg-gold hover:bg-amber-400 text-navy font-bold px-8 py-3.5 rounded-xl transition-all duration-200 shadow-md">
+              Generate Documents Free →
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <section className="w-full bg-navy py-16 md:py-20 px-4 text-center relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.08] bg-[linear-gradient(rgba(255,255,255,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.12)_1px,transparent_1px)] bg-[size:72px_72px]" aria-hidden />
         <div className="max-w-3xl mx-auto flex flex-col items-center relative z-10">
