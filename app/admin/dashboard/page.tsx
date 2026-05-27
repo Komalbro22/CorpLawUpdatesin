@@ -25,20 +25,24 @@ export default async function AdminDashboard() {
         day: 'numeric',
     })
 
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString()
+
     const [
         publishedRes,
         draftRes,
         subscribersCountRes,
         thisMonthRes,
         articlesListRes,
-        subscribersListRes
+        subscribersListRes,
+        calcStatsRes
     ] = await Promise.all([
         supabaseAdmin.from('updates').select('*', { count: 'exact', head: true }).not('published_at', 'is', null),
         supabaseAdmin.from('updates').select('*', { count: 'exact', head: true }).is('published_at', null),
         supabaseAdmin.from('subscribers').select('*', { count: 'exact', head: true }).eq('is_active', true),
         supabaseAdmin.from('updates').select('*', { count: 'exact', head: true }).gte('created_at', firstDayOfMonth),
         supabaseAdmin.from('updates').select('id, title, category, published_at, created_at').order('created_at', { ascending: false }).limit(5),
-        supabaseAdmin.from('subscribers').select('id, email, subscribed_at').order('subscribed_at', { ascending: false }).limit(5)
+        supabaseAdmin.from('subscribers').select('id, email, subscribed_at').order('subscribed_at', { ascending: false }).limit(5),
+        supabaseAdmin.from('calculator_usage').select('calculator_type').gte('created_at', sevenDaysAgo)
     ])
 
     const publishedCount = publishedRes.count
@@ -47,6 +51,7 @@ export default async function AdminDashboard() {
     const thisMonthCount = thisMonthRes.count
     const recentArticles = articlesListRes.data
     const recentSubscribers = subscribersListRes.data
+    const calcStats = calcStatsRes.data || []
 
     const firstDbError =
         publishedRes.error ||
@@ -54,7 +59,23 @@ export default async function AdminDashboard() {
         subscribersCountRes.error ||
         thisMonthRes.error ||
         articlesListRes.error ||
-        subscribersListRes.error
+        subscribersListRes.error ||
+        calcStatsRes.error
+
+    // Group calculator usage statistics
+    const statsMap: Record<string, number> = {}
+    calcStats.forEach(row => {
+        const type = row.calculator_type || 'unknown'
+        statsMap[type] = (statsMap[type] || 0) + 1
+    })
+
+    const TYPE_LABELS: Record<string, string> = {
+        mca_late_fee: 'MCA Late Fee Calculator',
+        llp_late_fee: 'LLP Late Fee Calculator',
+        msme_penalty: 'MSME Penalty Viewer',
+        ccfs_savings: 'CCFS 2026 Savings Calculator',
+    }
+
 
     return (
         <div className="space-y-8">
@@ -215,30 +236,52 @@ export default async function AdminDashboard() {
                     </div>
                 </div>
 
-                {/* Recent Subscribers */}
-                <div>
-                    <h2 className="text-lg font-heading font-bold text-white mb-4">Recent Subscribers</h2>
-                    <div className="admin-card p-3">
-                        {(!recentSubscribers || recentSubscribers.length === 0) && (
-                            <div className="p-4 text-center text-sm text-slate-500">No subscribers yet.</div>
-                        )}
-                        <ul className="space-y-1">
-                            {recentSubscribers?.map(sub => {
-                                const initial = sub.email ? sub.email.charAt(0).toUpperCase() : '?'
-                                return (
-                                    <li key={sub.id} className="p-3 flex items-center gap-3 text-sm hover:bg-white/[0.04] transition-all duration-200 rounded-xl">
-                                        <div
-                                            className="admin-avatar shrink-0 flex items-center justify-center rounded-full text-xs font-bold"
-                                            style={{ width: 28, height: 28 }}
-                                        >
-                                            {initial}
+                {/* Recent Subscribers & Tool Usage Stats */}
+                <div className="space-y-6">
+                    <div>
+                        <h2 className="text-lg font-heading font-bold text-white mb-4">Recent Subscribers</h2>
+                        <div className="admin-card p-3">
+                            {(!recentSubscribers || recentSubscribers.length === 0) && (
+                                <div className="p-4 text-center text-sm text-slate-500">No subscribers yet.</div>
+                            )}
+                            <ul className="space-y-1">
+                                {recentSubscribers?.map(sub => {
+                                    const initial = sub.email ? sub.email.charAt(0).toUpperCase() : '?'
+                                    return (
+                                        <li key={sub.id} className="p-3 flex items-center gap-3 text-sm hover:bg-white/[0.04] transition-all duration-200 rounded-xl">
+                                            <div
+                                                className="admin-avatar shrink-0 flex items-center justify-center rounded-full text-xs font-bold"
+                                                style={{ width: 28, height: 28 }}
+                                            >
+                                                {initial}
+                                            </div>
+                                            <span className="font-semibold text-slate-200 truncate max-w-[140px]" title={sub.email}>{sub.email}</span>
+                                            <span className="text-slate-500 text-xs ml-auto shrink-0">{formatDate(sub.subscribed_at)}</span>
+                                        </li>
+                                    )
+                                })}
+                            </ul>
+                        </div>
+                    </div>
+
+                    {/* Tool Usage Analytics Card */}
+                    <div>
+                        <h2 className="text-lg font-heading font-bold text-white mb-4">🛠️ Tool Usage (7 Days)</h2>
+                        <div className="admin-card p-5 space-y-4">
+                            <div className="space-y-3">
+                                {Object.entries(TYPE_LABELS).map(([type, label]) => {
+                                    const count = statsMap[type] || 0
+                                    return (
+                                        <div key={type} className="flex justify-between items-center py-2 border-b border-white/[0.04] last:border-0 text-sm">
+                                            <span className="text-slate-400 font-medium">{label}</span>
+                                            <span className="bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold px-2.5 py-0.5 rounded-lg text-xs">
+                                                {count} runs
+                                            </span>
                                         </div>
-                                        <span className="font-semibold text-slate-200 truncate max-w-[140px]" title={sub.email}>{sub.email}</span>
-                                        <span className="text-slate-500 text-xs ml-auto shrink-0">{formatDate(sub.subscribed_at)}</span>
-                                    </li>
-                                )
-                            })}
-                        </ul>
+                                    )
+                                })}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -217,6 +217,62 @@ export default async function HomePage() {
         </section>
       )}
 
+      {/* Free Tools Section */}
+      <section className="py-16 px-4 max-w-7xl mx-auto border-t border-slate-100">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-navy dark:text-white font-heading tracking-tight">
+            🛠️ Free Compliance Tools
+          </h2>
+          <Link href="/tools"
+                className="text-amber-600 hover:text-amber-700 text-sm font-semibold flex items-center gap-1 group">
+            View All Tools <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            {
+              href: '/documents',
+              icon: '📄',
+              title: 'Document Generator',
+              desc: 'Board resolutions, agreements — AI powered',
+              badge: 'AI',
+              badgeColor: 'bg-purple-100 text-purple-700 dark:bg-purple-950/40 dark:text-purple-400',
+            },
+            {
+              href: '/tools/fee-calculator',
+              icon: '🧮',
+              title: 'Late Fee Calculator',
+              desc: 'MCA, LLP & MSME penalty calculator',
+              badge: 'New',
+              badgeColor: 'bg-green-100 text-green-700 dark:bg-green-950/40 dark:text-green-400',
+            },
+            {
+              href: '/calendar',
+              icon: '📅',
+              title: 'Compliance Calendar',
+              desc: '50+ deadlines with Google Calendar export',
+              badge: 'Free',
+              badgeColor: 'bg-blue-100 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400',
+            },
+          ].map(tool => (
+            <Link key={tool.href} href={tool.href}
+                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 hover:border-amber-400 dark:hover:border-amber-500 hover:shadow-md transition-all group">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-3xl bg-slate-50 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-100 dark:border-slate-850 group-hover:scale-105 transition-transform">{tool.icon}</span>
+                <span className={`text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md ${tool.badgeColor}`}>
+                  {tool.badge}
+                </span>
+              </div>
+              <h3 className="font-bold text-navy dark:text-white text-base mb-1.5 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                {tool.title}
+              </h3>
+              <p className="text-slate-500 dark:text-slate-400 text-xs font-light leading-relaxed">{tool.desc}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       {/* Premium Legal Document Generator Promo Section */}
       <section className="py-16 px-4 max-w-7xl mx-auto border-t border-slate-100">
         <div className="bg-navy rounded-3xl p-8 md:p-12 text-white text-center relative overflow-hidden shadow-xl">
