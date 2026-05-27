@@ -51,7 +51,7 @@ function formatTimeToIndianLegal(timeStr: string): string {
 
 export async function POST(request: Request) {
   try {
-    let { 
+    const { 
       template_slug, 
       form_data, 
       use_ai,

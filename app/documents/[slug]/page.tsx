@@ -347,7 +347,7 @@ export default function DocumentGeneratorPage() {
             const arrayBuffer = evt.target?.result as ArrayBuffer
             const mammoth = await import('mammoth')
             const result = await mammoth.extractRawText({ arrayBuffer })
-            let rawText = result.value
+            const rawText = result.value
 
             // Perform dynamic placeholder substitution based on current form fields
             let processedText = rawText
