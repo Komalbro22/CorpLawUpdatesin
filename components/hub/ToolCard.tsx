@@ -21,7 +21,7 @@ export function ToolCard({ tool }: ToolCardProps) {
       role="link"
     >
       {/* Absolute link mapping the whole card */}
-      <Link href={tool.path} className="absolute inset-0 z-10 rounded-card" />
+      <Link href={tool.path} className="absolute inset-0 z-30 rounded-card" />
       
       {/* Glowing corner gradient visible on hover */}
       <div 
