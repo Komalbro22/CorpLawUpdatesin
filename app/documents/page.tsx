@@ -50,6 +50,18 @@ const categoryConfig = {
     color: 'bg-teal-50 border-teal-200 text-teal-700',
     description: 'Board meeting, AGM, EGM notices'
   },
+  commercial_contracts: {
+    label: 'Commercial Contracts',
+    icon: '📑',
+    color: 'bg-indigo-50 border-indigo-200 text-indigo-700',
+    description: 'NDAs, service agreements, JV contracts, vendor agreements'
+  },
+  company_drafts: {
+    label: 'Company Drafts',
+    icon: '🏢',
+    color: 'bg-cyan-50 border-cyan-200 text-cyan-700',
+    description: 'Share transfers, MOA amendments, statutory registers'
+  },
 }
 
 export default async function DocumentsPage() {
