@@ -5,7 +5,16 @@ import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 
 export async function POST(request: Request) {
   try {
-    const { content, document_name, letterhead_url, letterhead_type, format } = await request.json()
+    const { 
+      content, 
+      document_name, 
+      letterhead_url, 
+      letterhead_type, 
+      format,
+      custom_margin_top,
+      custom_margin_bottom,
+      custom_margin_side 
+    } = await request.json()
 
     if (!content) {
       return NextResponse.json({ error: 'Content is required' }, { status: 400 })
@@ -58,30 +67,32 @@ export async function POST(request: Request) {
       const pageW = 595.27 // A4 width
       const pageH = 841.89 // A4 height
       
-      // Determine print-safe margins based on letterhead layout type
-      let marginT = 72 // Default 1 inch
-      let marginB = 72
-      const marginL = 54 // Enforce standard print-safe 0.75-inch side margins
-      const marginR = 54
+      // Determine print-safe margins based on letterhead layout type or custom slider offsets
+      let marginT = custom_margin_top !== undefined ? Number(custom_margin_top) : 72
+      let marginB = custom_margin_bottom !== undefined ? Number(custom_margin_bottom) : 72
+      const marginL = custom_margin_side !== undefined ? Number(custom_margin_side) : 54
+      const marginR = custom_margin_side !== undefined ? Number(custom_margin_side) : 54
 
-      if (letterhead_type === 'full_page') {
-        marginT = 180 // Clears top header
-        marginB = 120 // Clears bottom footer
-      } else if (letterhead_type === 'top_only') {
-        marginT = 180
-        marginB = 54
-      } else if (letterhead_type === 'footer_only') {
-        marginT = 54
-        marginB = 120
-      } else if (letterhead_type === 'top_bottom_footer') {
-        marginT = 180
-        marginB = 120
-      } else if (letterhead_type === 'logo_only') {
-        marginT = 120
-        marginB = 54
-      } else if (letterhead_type === 'watermark') {
-        marginT = 72
-        marginB = 72
+      if (custom_margin_top === undefined) {
+        if (letterhead_type === 'full_page') {
+          marginT = 180 // Clears top header
+          marginB = 120 // Clears bottom footer
+        } else if (letterhead_type === 'top_only') {
+          marginT = 180
+          marginB = 54
+        } else if (letterhead_type === 'footer_only') {
+          marginT = 54
+          marginB = 120
+        } else if (letterhead_type === 'top_bottom_footer') {
+          marginT = 180
+          marginB = 120
+        } else if (letterhead_type === 'logo_only') {
+          marginT = 120
+          marginB = 54
+        } else if (letterhead_type === 'watermark') {
+          marginT = 72
+          marginB = 72
+        }
       }
 
       const printableW = pageW - marginL - marginR
@@ -289,23 +300,25 @@ export async function POST(request: Request) {
       }
 
       // Determine Twip margins for Word export: 1pt = 20 twips
-      let twipT = 1440 // 1 inch (72 * 20)
-      let twipB = 1440
-      const twipL = 1080 // 0.75 inch (54 * 20)
-      const twipR = 1080
+      let twipT = (custom_margin_top !== undefined ? Number(custom_margin_top) : 72) * 20
+      let twipB = (custom_margin_bottom !== undefined ? Number(custom_margin_bottom) : 72) * 20
+      const twipL = (custom_margin_side !== undefined ? Number(custom_margin_side) : 54) * 20
+      const twipR = (custom_margin_side !== undefined ? Number(custom_margin_side) : 54) * 20
 
-      if (letterhead_type === 'full_page' || letterhead_type === 'top_bottom_footer') {
-        twipT = 3600 // 180 points * 20 = 3600 twips
-        twipB = 2400 // 120 points * 20 = 2400 twips
-      } else if (letterhead_type === 'top_only') {
-        twipT = 3600
-        twipB = 1080
-      } else if (letterhead_type === 'footer_only') {
-        twipT = 1080
-        twipB = 2400
-      } else if (letterhead_type === 'logo_only') {
-        twipT = 2400 // 120 points * 20
-        twipB = 1080
+      if (custom_margin_top === undefined) {
+        if (letterhead_type === 'full_page' || letterhead_type === 'top_bottom_footer') {
+          twipT = 3600 // 180 points * 20 = 3600 twips
+          twipB = 2400 // 120 points * 20 = 2400 twips
+        } else if (letterhead_type === 'top_only') {
+          twipT = 3600
+          twipB = 1080
+        } else if (letterhead_type === 'footer_only') {
+          twipT = 1080
+          twipB = 2400
+        } else if (letterhead_type === 'logo_only') {
+          twipT = 2400 // 120 points * 20
+          twipB = 1080
+        }
       }
 
       const doc = new Document({

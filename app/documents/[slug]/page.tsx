@@ -298,6 +298,9 @@ export default function DocumentGeneratorPage() {
   const [autoAdjustMargins, setAutoAdjustMargins] = useState(true)
   const [preserveA4Layout, setPreserveA4Layout] = useState(true)
   const [maintainEditableText, setMaintainEditableText] = useState(true)
+  const [customMarginTop, setCustomMarginTop] = useState(180)
+  const [customMarginBottom, setCustomMarginBottom] = useState(120)
+  const [customMarginSide, setCustomMarginSide] = useState(54)
 
   // Auto-detection states
   const [autoDetecting, setAutoDetecting] = useState(false)
@@ -398,6 +401,21 @@ export default function DocumentGeneratorPage() {
       setSuppressCompanyDetails(false)
     } else {
       setSuppressCompanyDetails(true)
+    }
+
+    // Set custom margin states dynamically based on standard layouts
+    if (type === 'full_page') {
+      setCustomMarginTop(180); setCustomMarginBottom(120); setCustomMarginSide(54);
+    } else if (type === 'top_only') {
+      setCustomMarginTop(180); setCustomMarginBottom(54); setCustomMarginSide(54);
+    } else if (type === 'footer_only') {
+      setCustomMarginTop(54); setCustomMarginBottom(120); setCustomMarginSide(54);
+    } else if (type === 'top_bottom_footer') {
+      setCustomMarginTop(180); setCustomMarginBottom(120); setCustomMarginSide(54);
+    } else if (type === 'logo_only') {
+      setCustomMarginTop(120); setCustomMarginBottom(54); setCustomMarginSide(54);
+    } else if (type === 'watermark') {
+      setCustomMarginTop(72); setCustomMarginBottom(72); setCustomMarginSide(54);
     }
 
     if (!pendingLetterheadFile) {
@@ -684,6 +702,9 @@ export default function DocumentGeneratorPage() {
             letterhead_url: letterheadUrl,
             letterhead_type: letterheadType,
             format,
+            custom_margin_top: customMarginTop,
+            custom_margin_bottom: customMarginBottom,
+            custom_margin_side: customMarginSide,
           }),
         }
       )
@@ -909,6 +930,62 @@ export default function DocumentGeneratorPage() {
                         Maintain text
                       </span>
                     </label>
+                  </div>
+                </div>
+
+                {/* Interactive Writable Area Margin Sliders */}
+                <div className="space-y-3 pt-3 border-t border-slate-100 mt-2">
+                  <p className="text-[11px] font-bold text-navy uppercase tracking-wider flex items-center justify-between">
+                    <span>📏 Adjust Writable Area Margins</span>
+                  </p>
+                  <div className="space-y-2 bg-slate-50 p-3 rounded-xl border border-slate-200/60">
+                    {/* Top Margin */}
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-[10px] font-semibold text-slate-600">
+                        <span>Top Padding (Header Clearance)</span>
+                        <span className="text-amber-600 font-bold">{customMarginTop} pt</span>
+                      </div>
+                      <input 
+                        type="range" 
+                        min="30" 
+                        max="300" 
+                        value={customMarginTop}
+                        onChange={(e) => setCustomMarginTop(Number(e.target.value))}
+                        className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500"
+                      />
+                    </div>
+
+                    {/* Bottom Margin */}
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-[10px] font-semibold text-slate-600">
+                        <span>Bottom Padding (Footer Clearance)</span>
+                        <span className="text-amber-600 font-bold">{customMarginBottom} pt</span>
+                      </div>
+                      <input 
+                        type="range" 
+                        min="30" 
+                        max="300" 
+                        value={customMarginBottom}
+                        onChange={(e) => setCustomMarginBottom(Number(e.target.value))}
+                        className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500"
+                      />
+                    </div>
+
+                    {/* Side Margin */}
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-[10px] font-semibold text-slate-600">
+                        <span>Side Margin (Left & Right)</span>
+                        <span className="text-amber-600 font-bold">{customMarginSide} pt</span>
+                      </div>
+                      <input 
+                        type="range" 
+                        min="20" 
+                        max="150" 
+                        value={customMarginSide}
+                        onChange={(e) => setCustomMarginSide(Number(e.target.value))}
+                        className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500"
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -1152,19 +1229,14 @@ export default function DocumentGeneratorPage() {
 
                     {/* Scrollable text container constrained to the blank middle area */}
                     <div 
-                      className="absolute overflow-y-auto select-text font-serif text-[11px] text-navy leading-relaxed pr-6 pl-[45px] py-4 whitespace-pre-wrap z-10"
+                      className="absolute overflow-y-auto select-text font-serif text-[11px] text-navy leading-relaxed py-4 whitespace-pre-wrap z-10"
                       style={{
-                        top: letterheadType === 'full_page' ? '155px' : 
-                             letterheadType === 'top_only' ? '120px' : 
-                             letterheadType === 'footer_only' ? '40px' :
-                             letterheadType === 'top_bottom_footer' ? '145px' : 
-                             letterheadType === 'logo_only' ? '100px' : 
-                             letterheadType === 'watermark' ? '40px' : '40px',
-                        bottom: letterheadType === 'full_page' ? '95px' : 
-                                letterheadType === 'footer_only' ? '115px' :
-                                letterheadType === 'top_bottom_footer' ? '115px' : '40px',
+                        top: `${customMarginTop}px`,
+                        bottom: `${customMarginBottom}px`,
                         left: '0px',
                         right: '0px',
+                        paddingLeft: `${customMarginSide}px`,
+                        paddingRight: `${customMarginSide}px`,
                       }}
                     >
                       {getCleanedContent(generatedContent)}
