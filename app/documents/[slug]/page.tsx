@@ -288,6 +288,7 @@ export default function DocumentGeneratorPage() {
   const [downloading, setDownloading] = useState(false)
   const [useAi, setUseAi] = useState(true)
   const [chatHistory, setChatHistory] = useState<{ role: 'user' | 'ai'; text: string }[]>([])
+  const [generationError, setGenerationError] = useState<string | null>(null)
 
   // Letterhead states
   const [showLetterheadModal, setShowLetterheadModal] = useState(false)
@@ -591,6 +592,7 @@ export default function DocumentGeneratorPage() {
   async function handleGenerate() {
     if (!template) return
     setGenerating(true)
+    setGenerationError(null)
     try {
       const res = await fetch(
         '/api/documents/generate',
@@ -607,12 +609,15 @@ export default function DocumentGeneratorPage() {
         }
       )
       const data = await res.json()
-      if (data.content) {
+      if (res.ok && data.content) {
         setGeneratedContent(data.content)
         setDocumentId(data.document_id)
+      } else {
+        setGenerationError(data.error || 'Failed to generate document. Please verify your form entries and try again.')
       }
-    } catch {
-      // Handle error silently
+    } catch (err: any) {
+      console.error('Failed to generate document:', err)
+      setGenerationError('A network or server error occurred. Please verify your connection.')
     } finally {
       setGenerating(false)
     }
@@ -622,6 +627,7 @@ export default function DocumentGeneratorPage() {
   async function handleAiEdit() {
     if (!editInstruction.trim() || !generatedContent) return
     setEditing(true)
+    setGenerationError(null)
     try {
       const res = await fetch(
         '/api/documents/edit',
@@ -639,7 +645,7 @@ export default function DocumentGeneratorPage() {
         }
       )
       const data = await res.json()
-      if (data.content) {
+      if (res.ok && data.content) {
         setGeneratedContent(data.content)
         setChatHistory(prev => [
           ...prev,
@@ -647,9 +653,12 @@ export default function DocumentGeneratorPage() {
           { role: 'ai', text: 'Done! Applied your changes.' }
         ])
         setEditInstruction('')
+      } else {
+        setGenerationError(data.error || 'Failed to apply AI edits. Please try rephrasing your instructions.')
       }
-    } catch {
-      // Handle error silently
+    } catch (err: any) {
+      console.error('Failed to apply AI edits:', err)
+      setGenerationError('A network or server error occurred during AI editing.')
     } finally {
       setEditing(false)
     }
@@ -1013,6 +1022,23 @@ export default function DocumentGeneratorPage() {
                   )}
                 </div>
               ))}
+
+              {generationError && (
+                <div className="bg-red-50 border border-red-200 text-red-800 p-3.5 rounded-xl text-xs font-semibold leading-relaxed flex items-start gap-2.5 shadow-sm animate-fade-in mb-2 text-left">
+                  <span className="text-sm">⚠️</span>
+                  <div className="flex-1">
+                    <p className="font-bold">Generation Failed</p>
+                    <p className="text-red-600/90 font-medium mt-0.5">{generationError}</p>
+                  </div>
+                  <button 
+                    type="button"
+                    onClick={() => setGenerationError(null)} 
+                    className="text-red-400 hover:text-red-600 font-bold text-sm select-none"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
 
               {/* Generate button */}
               <button
