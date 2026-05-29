@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function FeeCalculatorPage() {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-screen bg-slate-50">
       
       {/* Page Header */}
       <div className="bg-navy py-10 px-4">
@@ -39,7 +39,7 @@ export default function FeeCalculatorPage() {
 
       {/* Related articles */}
       <div className="max-w-3xl mx-auto px-4 pb-16">
-        <h2 className="text-xl font-bold text-navy dark:text-white font-heading mb-4">
+        <h2 className="text-xl font-bold text-navy font-heading mb-4">
           Related Articles
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -71,11 +71,11 @@ export default function FeeCalculatorPage() {
           ].map(article => (
             <a key={article.href}
                href={article.href}
-               className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-4 hover:border-amber-400 transition-colors">
+               className="bg-white border border-slate-200 rounded-xl p-4 hover:border-amber-400 transition-colors">
               <span className={`text-xs font-bold ${article.color}`}>
                 {article.category}
               </span>
-              <p className="text-navy dark:text-white font-semibold text-sm mt-1">
+              <p className="text-navy font-semibold text-sm mt-1">
                 {article.title} →
               </p>
             </a>
@@ -85,7 +85,7 @@ export default function FeeCalculatorPage() {
 
       {/* FAQ for SEO */}
       <div className="max-w-3xl mx-auto px-4 pb-16">
-        <h2 className="text-xl font-bold text-navy dark:text-white font-heading mb-6">
+        <h2 className="text-xl font-bold text-navy font-heading mb-6">
           Frequently Asked Questions
         </h2>
         <div className="space-y-4">
@@ -112,11 +112,11 @@ export default function FeeCalculatorPage() {
             },
           ].map((faq, i) => (
             <div key={i}
-                 className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-5">
-              <p className="font-bold text-navy dark:text-white text-sm mb-2">
+                 className="bg-white border border-slate-200 rounded-xl p-5">
+              <p className="font-bold text-navy text-sm mb-2">
                 Q: {faq.q}
               </p>
-              <p className="text-slate-600 dark:text-slate-300 text-sm">
+              <p className="text-slate-600 text-sm">
                 A: {faq.a}
               </p>
             </div>

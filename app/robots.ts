@@ -16,6 +16,7 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
       },
       // Explicitly allow AI crawler bots for citation indexing
+      { userAgent: 'Google-Extended', allow: '/' },
       { userAgent: 'GPTBot', allow: '/' },
       { userAgent: 'PerplexityBot', allow: '/' },
       { userAgent: 'ClaudeBot', allow: '/' },

@@ -289,6 +289,7 @@ export default function DocumentGeneratorPage() {
   const [useAi, setUseAi] = useState(true)
   const [chatHistory, setChatHistory] = useState<{ role: 'user' | 'ai'; text: string }[]>([])
   const [generationError, setGenerationError] = useState<string | null>(null)
+  const [generationWarning, setGenerationWarning] = useState<string | null>(null)
 
   // Letterhead states
   const [showLetterheadModal, setShowLetterheadModal] = useState(false)
@@ -525,21 +526,20 @@ export default function DocumentGeneratorPage() {
   // Clean company metadata duplicates from the generated draft header dynamically
   function getCleanedContent(content: string) {
     if (!content) return ''
-    if (!letterheadUrl || !letterheadType) return content
 
-    // Full, top, or footer letterheads always suppress
-    const suppressAll = letterheadType === 'full_page' || 
-                        letterheadType === 'top_only' || 
-                        letterheadType === 'top_bottom_footer'
-    
-    // Logo header suppresses only if suppressCompanyDetails checkbox is active
-    const suppressLogoOnly = letterheadType === 'logo_only' && suppressCompanyDetails
+    // Determine if we should suppress company details from the document text body.
+    // Clean if suppressCompanyDetails is checked, or if there is an active letterhead that covers header/footer.
+    const shouldClean = suppressCompanyDetails || (letterheadUrl && (
+      letterheadType === 'full_page' || 
+      letterheadType === 'top_only' || 
+      letterheadType === 'top_bottom_footer'
+    ));
 
-    if (!suppressAll && !suppressLogoOnly) return content
+    if (!shouldClean) return content
 
     const lines = content.split('\n')
     const cleaned: string[] = []
-
+    
     // Look up company name, CIN, and address by checking all keys case-insensitively
     let compName = ''
     let cin = ''
@@ -558,16 +558,37 @@ export default function DocumentGeneratorPage() {
     if (!cin) cin = formData.CIN || formData.cin || formData.company_cin || formData.COMPANY_CIN || ''
     if (!address) address = formData.REGISTERED_OFFICE || formData.registered_office || formData.address || ''
 
+    let headerAreaEnded = false;
+
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i].trim()
       const lineUpper = line.toUpperCase()
-      
-      // Only check for suppression in the first 15 lines of the document
-      if (i < 15) {
-        if (line === '' || /^[-=_*#]+$/.test(line)) {
+
+      // Only check for suppression in the first 15 lines of the document, and before headerAreaEnded is true
+      if (i < 15 && !headerAreaEnded) {
+        // If we hit standard resolution body markers, we stop the header suppression sweep immediately
+        const isResolutionTitle = 
+          lineUpper.includes('RESOLVED THAT') ||
+          lineUpper.includes('RESOLVED FURTHER') ||
+          lineUpper.includes('CERTIFIED TRUE COPY') ||
+          lineUpper.includes('MINUTES OF') ||
+          lineUpper.includes('BOARD OF DIRECTORS') ||
+          lineUpper.includes('DIRECTORS PRESENT') ||
+          lineUpper.includes('CHAIRPERSON:') ||
+          lineUpper.includes('HELD ON');
+
+        if (isResolutionTitle) {
+          headerAreaEnded = true;
+          cleaned.push(lines[i]);
+          continue;
+        }
+
+        // 1. Skip empty lines or standard horizontal divider lines
+        if (line === '' || /^[-=_*#\s]+$/.test(line)) {
           continue
         }
 
+        // 2. Matching using active formData values
         const isNameMatch = compName && (
           lineUpper === compName.toUpperCase() ||
           lineUpper.includes(compName.toUpperCase()) ||
@@ -586,20 +607,40 @@ export default function DocumentGeneratorPage() {
           address.toUpperCase().includes(lineUpper) && lineUpper.length > 10
         )
 
-        const isContactMatch = 
+        if (isNameMatch || isCinMatch || isAddrMatch) {
+          continue
+        }
+
+        // 3. Smart Regex Pattern sweeps (handles template defaults/mocks)
+        // A. CIN pattern (matches standard 21-digit Indian CIN like U72200MH2019PTC325678 or label CIN)
+        const cinRegex = /[A-Z]\d{5}[A-Z]{2}\d{4}[A-Z]{3}\d{6}/i;
+        const isCinPattern = cinRegex.test(line) || /^CIN\s*[:\-\s]*$/i.test(line);
+
+        // B. Corporate Name patterns (e.g. Private Limited, Pvt Ltd, Ltd, LLP etc.)
+        const isCorpNamePattern = /\b(pvt\b\.?\s*ltd|private\s+limited|limited|ltd|llp)\b/i.test(line);
+
+        // C. Address patterns (e.g. registered office, road, avenue, floor, building, pincode)
+        const isAddressPattern = /\b(registered\s+office|corp(orate)?\s+office|office|road|avenue|street|lane|marg|nagar|building|floor|plot|extension|delhi|mumbai|bangalore|bengaluru|chennai|kolkata|pune|hyderabad|gujarat|maharashtra|india|pincode|pin\s*code)\b/i.test(line) || /\b\d{6}\b/.test(line);
+
+        // D. Contact Details patterns (e.g. email, phone, tel, fax, website, www., email patterns)
+        const isContactPattern = 
           lineUpper.includes('EMAIL:') || 
           lineUpper.includes('PHONE:') || 
           lineUpper.includes('WEBSITE:') || 
           lineUpper.includes('TEL:') ||
           lineUpper.includes('EMAIL') ||
           lineUpper.includes('FAX') ||
-          lineUpper.includes('WWW.');
+          lineUpper.includes('WWW.') ||
+          lineUpper.includes('[TELEPHONE]') ||
+          lineUpper.includes('[EMAIL]') ||
+          /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/i.test(line) ||
+          /\b(tel\b\.?|phone\b\.?|mob\b\.?)\s*[:\-\s]*/i.test(line);
 
-        if (isNameMatch || isCinMatch || isAddrMatch || isContactMatch) {
+        if (isCinPattern || isCorpNamePattern || isAddressPattern || isContactPattern) {
           continue
         }
       }
-      
+
       cleaned.push(lines[i])
     }
 
@@ -611,6 +652,7 @@ export default function DocumentGeneratorPage() {
     if (!template) return
     setGenerating(true)
     setGenerationError(null)
+    setGenerationWarning(null)
     try {
       const res = await fetch(
         '/api/documents/generate',
@@ -630,6 +672,9 @@ export default function DocumentGeneratorPage() {
       if (res.ok && data.content) {
         setGeneratedContent(data.content)
         setDocumentId(data.document_id)
+        if (data.fell_back) {
+          setGenerationWarning('Gemini AI daily rate limit or free tier quota exceeded. Your document has been successfully generated using the high-quality standard template format instead!')
+        }
       } else {
         setGenerationError(data.error || 'Failed to generate document. Please verify your form entries and try again.')
       }
@@ -1117,6 +1162,23 @@ export default function DocumentGeneratorPage() {
                 </div>
               )}
 
+              {generationWarning && (
+                <div className="bg-amber-50 border border-amber-200 text-amber-800 p-3.5 rounded-xl text-xs font-semibold leading-relaxed flex items-start gap-2.5 shadow-sm animate-fade-in mb-2 text-left">
+                  <span className="text-sm">⚡</span>
+                  <div className="flex-1">
+                    <p className="font-bold">AI Quota Limit — Fallback Active</p>
+                    <p className="text-amber-700 font-medium mt-0.5">{generationWarning}</p>
+                  </div>
+                  <button 
+                    type="button"
+                    onClick={() => setGenerationWarning(null)} 
+                    className="text-amber-400 hover:text-amber-600 font-bold text-sm select-none"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
+
               {/* Generate button */}
               <button
                 onClick={handleGenerate}
@@ -1366,9 +1428,9 @@ export default function DocumentGeneratorPage() {
               {(() => {
                 const steps = NEXT_STEPS[slug] || NEXT_STEPS['_default']
                 return (
-                  <div className="bg-blue-50 dark:bg-blue-950 
+                  <div className="bg-blue-50  
                                   border border-blue-200 
-                                  dark:border-blue-800 
+                                   
                                   rounded-2xl overflow-hidden">
                     <div className="bg-blue-600 px-5 py-3">
                       <h3 className="font-bold text-white text-sm">
@@ -1381,16 +1443,16 @@ export default function DocumentGeneratorPage() {
                              className={`flex items-start gap-3 
                                p-3 rounded-xl
                                ${step.urgent 
-                                 ? 'bg-red-50 dark:bg-red-950 border border-red-300 dark:border-red-700' 
-                                 : 'bg-white dark:bg-blue-900/30'}`}>
+                                 ? 'bg-red-50  border border-red-300 ' 
+                                 : 'bg-white '}`}>
                           <span className="flex-shrink-0 text-lg mt-0.5">
                             {step.icon}
                           </span>
                           <div className="min-w-0">
                             <p className={`text-sm font-semibold 
                               ${step.urgent 
-                                ? 'text-red-800 dark:text-red-300' 
-                                : 'text-navy dark:text-blue-100'}`}>
+                                ? 'text-red-800 ' 
+                                : 'text-navy '}`}>
                               <span className="text-xs opacity-60 mr-1">
                                 {i + 1}.
                               </span>
@@ -1400,8 +1462,8 @@ export default function DocumentGeneratorPage() {
                               <p className={`text-xs mt-1 
                                 whitespace-pre-line leading-relaxed
                                 ${step.urgent 
-                                  ? 'text-red-600 dark:text-red-400' 
-                                  : 'text-slate-500 dark:text-blue-300'}`}>
+                                  ? 'text-red-600 ' 
+                                  : 'text-slate-500 '}`}>
                                 {step.note}
                               </p>
                             )}

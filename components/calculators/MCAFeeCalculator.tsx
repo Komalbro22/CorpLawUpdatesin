@@ -116,11 +116,11 @@ export default function MCAFeeCalculator() {
     { id: 'msme', label: 'MSME Penalties', icon: '📋' },
   ]
 
-  const inputClass = `w-full border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm text-navy dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 bg-white dark:bg-slate-950 transition-all shadow-sm`
+  const inputClass = `w-full border border-slate-200  rounded-xl px-4 py-3 text-sm text-navy  focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 bg-white  transition-all shadow-sm`
   const selectClass = inputClass
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-card transition-all hover:shadow-card-hover max-w-4xl mx-auto">
+    <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-card transition-all hover:shadow-card-hover max-w-4xl mx-auto">
       {/* Header */}
       <div className="bg-gradient-to-r from-navy via-slate-900 to-navy p-6 md:p-8 text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(rgba(255,255,255,.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.1)_1px,transparent_1px)] bg-[size:20px_20px]" aria-hidden />
@@ -138,15 +138,15 @@ export default function MCAFeeCalculator() {
       </div>
 
       {/* Tabs Menu */}
-      <div className="flex border-b border-slate-200 dark:border-slate-850 overflow-x-auto bg-slate-50 dark:bg-slate-950/40 p-1">
+      <div className="flex border-b border-slate-200 overflow-x-auto bg-slate-50 p-1">
         {tabs.map(tab => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`flex items-center gap-2 px-6 py-3.5 text-sm font-semibold rounded-2xl whitespace-nowrap transition-all duration-200
               ${activeTab === tab.id
-                ? 'bg-white dark:bg-slate-900 text-amber-600 dark:text-amber-400 shadow-sm border border-slate-250/20'
-                : 'text-slate-500 dark:text-slate-400 hover:text-navy dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-900/50'
+                ? 'bg-white  text-amber-600  shadow-sm border border-slate-250/20'
+                : 'text-slate-500  hover:text-navy  hover:bg-white/50 '
               }`}
           >
             <span>{tab.icon}</span>
@@ -193,22 +193,22 @@ export default function MCAFeeCalculator() {
               const form = MCA_FORMS.find(f => f.id === mcaForm)
               if (!form) return null
               return (
-                <div className="bg-blue-50/50 dark:bg-blue-950/20 border border-blue-150/40 dark:border-blue-900/30 rounded-2xl p-4 text-sm space-y-1.5">
-                  <p className="text-blue-800 dark:text-blue-300 font-semibold flex items-center gap-1.5">
+                <div className="bg-blue-50/50 border border-blue-150/40 rounded-2xl p-4 text-sm space-y-1.5">
+                  <p className="text-blue-800 font-semibold flex items-center gap-1.5">
                     🏛️ {form.section}
                   </p>
                   {form.gracePeriodDays > 0 && (
-                    <p className="text-blue-650 dark:text-blue-400 text-xs font-light">
+                    <p className="text-blue-650 text-xs font-light">
                       ✅ **Grace Period:** {form.gracePeriodDays} days allowed to file before additional fees apply.
                     </p>
                   )}
                   {form.additionalFeePerDay > 0 && (
-                    <p className="text-blue-650 dark:text-blue-400 text-xs font-light">
+                    <p className="text-blue-650 text-xs font-light">
                       📌 **Late Penalty Fee:** ₹{form.additionalFeePerDay}/day {form.maxAdditionalFee ? `(capped at ₹${form.maxAdditionalFee.toLocaleString('en-IN')})` : '(unlimited accrual)'}.
                     </p>
                   )}
                   {form.ccfsEligible && (
-                    <p className="text-emerald-700 dark:text-emerald-400 text-xs font-semibold flex items-center gap-1 mt-1">
+                    <p className="text-emerald-700 text-xs font-semibold flex items-center gap-1 mt-1">
                       🎉 eligible for **CCFS 2026** — 90% discount on late additional fees!
                     </p>
                   )}
@@ -236,8 +236,8 @@ export default function MCAFeeCalculator() {
                     }}
                     className={`py-3 px-4 rounded-xl text-sm font-semibold border transition-all text-center
                       ${companyType === ct.v
-                        ? 'bg-navy dark:bg-amber-500 text-white dark:text-navy border-navy dark:border-amber-500 shadow-sm'
-                        : 'bg-white dark:bg-slate-950 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:border-slate-350 hover:bg-slate-50'
+                        ? 'bg-navy  text-white  border-navy  shadow-sm'
+                        : 'bg-white  text-slate-600  border-slate-200  hover:border-slate-350 hover:bg-slate-50'
                       }`}
                   >
                     {ct.l}
@@ -263,7 +263,7 @@ export default function MCAFeeCalculator() {
                   placeholder="e.g. 180"
                   className={inputClass}
                 />
-                <span className="text-slate-500 dark:text-slate-400 font-semibold text-sm">days</span>
+                <span className="text-slate-500 font-semibold text-sm">days</span>
               </div>
               <div className="flex gap-2 mt-3 flex-wrap">
                 {[30, 90, 180, 365, 730].map(d => (
@@ -274,7 +274,7 @@ export default function MCAFeeCalculator() {
                       setMcaDays(String(d))
                       setMcaResult(null)
                     }}
-                    className="text-xs bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-400 hover:bg-amber-100 hover:text-amber-700 dark:hover:bg-amber-950/40 dark:hover:text-amber-300 px-3.5 py-1.5 rounded-full border border-slate-200/60 dark:border-slate-850 transition-colors"
+                    className="text-xs bg-slate-100 text-slate-600 hover:bg-amber-100 hover:text-amber-700 px-3.5 py-1.5 rounded-full border border-slate-200/60 transition-colors"
                   >
                     {d < 365 ? `${d} Days` : d === 365 ? '1 Year' : '2 Years'}
                   </button>
@@ -283,12 +283,12 @@ export default function MCAFeeCalculator() {
             </div>
 
             {mcaForm && MCA_FORMS.find(f => f.id === mcaForm)?.ccfsEligible && (
-              <div className="bg-emerald-50/50 dark:bg-emerald-950/10 border border-emerald-150/40 dark:border-emerald-900/30 rounded-2xl p-4.5 flex items-center justify-between gap-4">
+              <div className="bg-emerald-50/50 border border-emerald-150/40 rounded-2xl p-4.5 flex items-center justify-between gap-4">
                 <div>
-                  <p className="text-emerald-850 dark:text-emerald-300 font-bold text-sm">
+                  <p className="text-emerald-850 font-bold text-sm">
                     Apply CCFS 2026 Relief Scheme
                   </p>
-                  <p className="text-emerald-650 dark:text-emerald-450 text-xs mt-0.5 font-light">
+                  <p className="text-emerald-650 text-xs mt-0.5 font-light">
                     Waives 90% of accumulated additional fees (Pay only 10%). Closes **15 July 2026**.
                   </p>
                 </div>
@@ -299,7 +299,7 @@ export default function MCAFeeCalculator() {
                     setMcaResult(null)
                   }}
                   className={`relative w-12 h-6 rounded-full transition-colors focus:outline-none ring-2 ring-amber-500/10
-                    ${applyCcfs ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-800'}`}
+                    ${applyCcfs ? 'bg-emerald-500' : 'bg-slate-300 '}`}
                 >
                   <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-md transition-transform
                     ${applyCcfs ? 'translate-x-6' : ''}`}
@@ -317,16 +317,16 @@ export default function MCAFeeCalculator() {
             </button>
 
             {mcaResult && (
-              <div className="space-y-4 animate-fade-in pt-4 border-t border-slate-100 dark:border-slate-800">
+              <div className="space-y-4 animate-fade-in pt-4 border-t border-slate-100">
                 <div className={`rounded-2xl p-6 border ${
                   mcaResult.ccfsEligible
-                    ? 'border-emerald-250 bg-emerald-50/30 dark:bg-emerald-950/15'
-                    : 'border-amber-250 bg-amber-50/30 dark:bg-amber-950/15'
+                    ? 'border-emerald-250 bg-emerald-50/30 '
+                    : 'border-amber-250 bg-amber-50/30 '
                 }`}>
                   {mcaResult.ccfsEligible ? (
                     <div className="space-y-4">
                       <div className="grid grid-cols-2 gap-4">
-                        <div className="text-center border-r border-slate-200 dark:border-slate-850">
+                        <div className="text-center border-r border-slate-200">
                           <p className="text-xs text-slate-500 mb-1 line-through">Normal Total Fee</p>
                           <p className="text-2xl font-extrabold text-red-500 line-through">
                             {formatINR(mcaResult.totalNormalFee)}
@@ -334,12 +334,12 @@ export default function MCAFeeCalculator() {
                         </div>
                         <div className="text-center">
                           <p className="text-xs text-emerald-600 font-bold mb-1">With CCFS 2026</p>
-                          <p className="text-2xl font-black text-emerald-650 dark:text-emerald-450">
+                          <p className="text-2xl font-black text-emerald-650">
                             {formatINR(mcaResult.totalCcfsFee)}
                           </p>
                         </div>
                       </div>
-                      <div className="bg-emerald-650 dark:bg-emerald-900 text-white rounded-xl p-4 text-center shadow-sm">
+                      <div className="bg-emerald-650 text-white rounded-xl p-4 text-center shadow-sm">
                         <p className="text-sm font-bold">
                           🎉 Saved {formatINR(mcaResult.ccfsSavings)} under CCFS 2026!
                         </p>
@@ -351,7 +351,7 @@ export default function MCAFeeCalculator() {
                   ) : (
                     <div className="text-center">
                       <p className="text-xs text-slate-500 mb-1">Total Fee Payable</p>
-                      <p className="text-4xl font-black text-navy dark:text-white">
+                      <p className="text-4xl font-black text-navy">
                         {formatINR(mcaResult.flatLateFee || mcaResult.totalNormalFee)}
                       </p>
                       <p className="text-xs text-slate-400 mt-1.5 italic font-light">
@@ -362,18 +362,18 @@ export default function MCAFeeCalculator() {
                 </div>
 
                 {/* Breakdown List */}
-                <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-2xl overflow-hidden shadow-sm">
-                  <div className="bg-slate-50 dark:bg-slate-900 px-5 py-3 border-b border-slate-200 dark:border-slate-850">
+                <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                  <div className="bg-slate-50 px-5 py-3 border-b border-slate-200">
                     <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Fee Breakdown Detail</p>
                   </div>
-                  <div className="divide-y divide-slate-100 dark:divide-slate-850">
+                  <div className="divide-y divide-slate-100">
                     {mcaResult.breakdown.map((item, i) => (
                       <div key={i} className="flex justify-between items-center px-5 py-3.5">
                         <div>
-                          <p className="text-sm font-medium text-slate-700 dark:text-slate-350">{item.label}</p>
-                          {item.note && <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">{item.note}</p>}
+                          <p className="text-sm font-medium text-slate-700">{item.label}</p>
+                          {item.note && <p className="text-xs text-slate-400 mt-0.5">{item.note}</p>}
                         </div>
-                        <p className="text-sm font-bold text-navy dark:text-white">{formatINR(item.amount)}</p>
+                        <p className="text-sm font-bold text-navy">{formatINR(item.amount)}</p>
                       </div>
                     ))}
                     <div className="flex justify-between items-center px-5 py-4 bg-navy text-white">
@@ -389,11 +389,11 @@ export default function MCAFeeCalculator() {
                 </div>
 
                 {!applyCcfs && MCA_FORMS.find(f => f.id === mcaForm)?.ccfsEligible && (
-                  <div className="bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/40 rounded-xl p-4.5 flex gap-3 text-sm">
+                  <div className="bg-amber-50/50 border border-amber-200/40 rounded-xl p-4.5 flex gap-3 text-sm">
                     <span className="text-2xl">💡</span>
                     <div>
-                      <p className="text-amber-900 dark:text-amber-300 font-bold">Additional CCFS 2026 Savings Potential!</p>
-                      <p className="text-amber-700 dark:text-amber-450 text-xs mt-1 leading-relaxed">
+                      <p className="text-amber-900 font-bold">Additional CCFS 2026 Savings Potential!</p>
+                      <p className="text-amber-700 text-xs mt-1 leading-relaxed">
                         This form supports the government's Companies Compliance Facilitation Scheme. Enable the toggle above to instantly wave **90%** of accumulated fees.
                       </p>
                     </div>
@@ -432,12 +432,12 @@ export default function MCAFeeCalculator() {
               const form = LLP_FORMS.find(f => f.id === llpForm)
               if (!form) return null
               return (
-                <div className="bg-blue-50/50 dark:bg-blue-950/20 border border-blue-150/40 dark:border-blue-900/30 rounded-2xl p-4 text-sm">
-                  <p className="text-blue-800 dark:text-blue-300 font-semibold">🤝 {form.section}</p>
-                  <p className="text-blue-650 dark:text-blue-400 text-xs font-light mt-1">
+                <div className="bg-blue-50/50 border border-blue-150/40 rounded-2xl p-4 text-sm">
+                  <p className="text-blue-800 font-semibold">🤝 {form.section}</p>
+                  <p className="text-blue-650 text-xs font-light mt-1">
                     Applicable: {form.applicableTo} | Category: {form.category}
                   </p>
-                  <p className="text-blue-650 dark:text-blue-400 text-xs font-light mt-0.5">
+                  <p className="text-blue-650 text-xs font-light mt-0.5">
                     Late fee rate: ₹{form.additionalFeePerDay}/day {form.gracePeriodDays > 0 ? `(after ${form.gracePeriodDays} days grace period)` : ''}.
                   </p>
                 </div>
@@ -468,7 +468,7 @@ export default function MCAFeeCalculator() {
                       setLlpDays(String(d))
                       setLlpResult(null)
                     }}
-                    className="text-xs bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-400 hover:bg-amber-100 hover:text-amber-700 dark:hover:bg-amber-950/40 px-3.5 py-1.5 rounded-full border border-slate-200/60 dark:border-slate-850 transition-colors"
+                    className="text-xs bg-slate-100 text-slate-600 hover:bg-amber-100 hover:text-amber-700 px-3.5 py-1.5 rounded-full border border-slate-200/60 transition-colors"
                   >
                     {d} Days
                   </button>
@@ -485,10 +485,10 @@ export default function MCAFeeCalculator() {
             </button>
 
             {llpResult && (
-              <div className="space-y-4 animate-fade-in pt-4 border-t border-slate-100 dark:border-slate-800">
-                <div className="bg-amber-50/30 dark:bg-amber-950/15 border border-amber-250 rounded-2xl p-6 text-center">
+              <div className="space-y-4 animate-fade-in pt-4 border-t border-slate-100">
+                <div className="bg-amber-50/30 border border-amber-250 rounded-2xl p-6 text-center">
                   <p className="text-xs text-slate-500 mb-1">Total LLP Fee Payable</p>
-                  <p className="text-4xl font-black text-navy dark:text-white">
+                  <p className="text-4xl font-black text-navy">
                     {formatINR(llpResult.totalFee)}
                   </p>
                   <p className="text-xs text-slate-400 mt-1.5 italic font-light">
@@ -496,17 +496,17 @@ export default function MCAFeeCalculator() {
                   </p>
                 </div>
 
-                <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-2xl overflow-hidden shadow-sm">
-                  <div className="bg-slate-50 dark:bg-slate-900 px-5 py-3 border-b border-slate-200 dark:border-slate-850">
+                <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                  <div className="bg-slate-50 px-5 py-3 border-b border-slate-200">
                     <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">LLP Fee Breakdown</p>
                   </div>
                   {llpResult.breakdown.map((item: any, i: number) => (
-                    <div key={i} className="flex justify-between items-center px-5 py-3.5 border-b border-slate-100 dark:border-slate-850 last:border-none">
+                    <div key={i} className="flex justify-between items-center px-5 py-3.5 border-b border-slate-100 last:border-none">
                       <div>
-                        <p className="text-sm font-medium text-slate-700 dark:text-slate-350">{item.label}</p>
-                        {item.note && <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">{item.note}</p>}
+                        <p className="text-sm font-medium text-slate-700">{item.label}</p>
+                        {item.note && <p className="text-xs text-slate-400 mt-0.5">{item.note}</p>}
                       </div>
-                      <p className="text-sm font-bold text-navy dark:text-white">{formatINR(item.amount)}</p>
+                      <p className="text-sm font-bold text-navy">{formatINR(item.amount)}</p>
                     </div>
                   ))}
                   <div className="flex justify-between items-center px-5 py-4 bg-navy text-white">
@@ -522,11 +522,11 @@ export default function MCAFeeCalculator() {
         {/* ── CCFS SAVINGS TAB ── */}
         {activeTab === 'ccfs' && (
           <div className="space-y-6">
-            <div className="bg-emerald-50/50 dark:bg-emerald-950/15 border border-emerald-250/50 rounded-2xl p-5 space-y-2">
-              <h3 className="font-bold text-emerald-800 dark:text-emerald-300 flex items-center gap-1">
+            <div className="bg-emerald-50/50 border border-emerald-250/50 rounded-2xl p-5 space-y-2">
+              <h3 className="font-bold text-emerald-800 flex items-center gap-1">
                 💰 CCFS 2026 — Scheme Details
               </h3>
-              <div className="space-y-1.5 text-sm text-emerald-700 dark:text-emerald-400 font-light leading-relaxed">
+              <div className="space-y-1.5 text-sm text-emerald-700 font-light leading-relaxed">
                 <p>• Pays a mere **10%** of accumulated additional late fees (waiving **90%** of penalties).</p>
                 <p>• Applicable on key MCA compliance forms: MGT-7, AOC-4, DIR-12, INC-20A, etc.</p>
                 <p>• **Deadline Warning:** Scheme closes permanently on **15 July 2026**.</p>
@@ -569,8 +569,8 @@ export default function MCAFeeCalculator() {
                     }}
                     className={`py-3 px-2 rounded-xl border transition-all text-center flex flex-col justify-center items-center
                       ${ccfsRate === r.v
-                        ? 'bg-navy dark:bg-emerald-500 text-white dark:text-navy border-navy dark:border-emerald-500 shadow-sm'
-                        : 'bg-white dark:bg-slate-950 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:border-slate-350 hover:bg-slate-50'
+                        ? 'bg-navy  text-white  border-navy  shadow-sm'
+                        : 'bg-white  text-slate-600  border-slate-200  hover:border-slate-350 hover:bg-slate-50'
                       }`}
                   >
                     <span className="text-sm font-bold">{r.l}</span>
@@ -589,7 +589,7 @@ export default function MCAFeeCalculator() {
             </button>
 
             {ccfsResult && (
-              <div className="space-y-4 animate-fade-in pt-4 border-t border-slate-100 dark:border-slate-800">
+              <div className="space-y-4 animate-fade-in pt-4 border-t border-slate-100">
                 <div className="bg-emerald-600 text-white rounded-2xl p-6 text-center shadow-sm">
                   <p className="text-sm text-emerald-100 mb-1 font-light">Total CCFS 2026 Savings</p>
                   <p className="text-5xl font-black tracking-tight">{formatINR(ccfsResult.savings)}</p>
@@ -599,13 +599,13 @@ export default function MCAFeeCalculator() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-red-50/50 dark:bg-red-950/10 border border-red-200/30 rounded-xl p-4 text-center">
-                    <p className="text-xs text-red-600 dark:text-red-400 font-semibold mb-1">Standard Additional Fee</p>
-                    <p className="text-xl font-extrabold text-red-650 dark:text-red-400">{formatINR(ccfsResult.normal)}</p>
+                  <div className="bg-red-50/50 border border-red-200/30 rounded-xl p-4 text-center">
+                    <p className="text-xs text-red-600 font-semibold mb-1">Standard Additional Fee</p>
+                    <p className="text-xl font-extrabold text-red-650">{formatINR(ccfsResult.normal)}</p>
                   </div>
-                  <div className="bg-emerald-50/50 dark:bg-emerald-950/10 border border-emerald-250/30 rounded-xl p-4 text-center">
-                    <p className="text-xs text-emerald-650 dark:text-emerald-400 font-semibold mb-1">With CCFS 2026</p>
-                    <p className="text-xl font-extrabold text-emerald-650 dark:text-emerald-400">{formatINR(ccfsResult.ccfs)}</p>
+                  <div className="bg-emerald-50/50 border border-emerald-250/30 rounded-xl p-4 text-center">
+                    <p className="text-xs text-emerald-650 font-semibold mb-1">With CCFS 2026</p>
+                    <p className="text-xl font-extrabold text-emerald-650">{formatINR(ccfsResult.ccfs)}</p>
                   </div>
                 </div>
               </div>
@@ -616,25 +616,25 @@ export default function MCAFeeCalculator() {
         {/* ── MSME TAB ── */}
         {activeTab === 'msme' && (
           <div className="space-y-6">
-            <div className="bg-amber-50/50 dark:bg-amber-950/15 border border-amber-250/50 rounded-2xl p-5 space-y-2">
-              <h3 className="font-bold text-amber-900 dark:text-amber-350 flex items-center gap-1.5">
+            <div className="bg-amber-50/50 border border-amber-250/50 rounded-2xl p-5 space-y-2">
+              <h3 className="font-bold text-amber-900 flex items-center gap-1.5">
                 📢 MSMED Act 2006 Statutory Penalties
               </h3>
-              <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed font-light">
+              <p className="text-slate-600 text-sm leading-relaxed font-light">
                 Under the Indian MSMED Act and Companies Act, corporations face severe financial liabilities for non-compliance or payment delays to Micro and Small vendors.
               </p>
             </div>
 
             <div className="space-y-4">
               {MSME_PENALTIES.map((penalty, idx) => (
-                <div key={idx} className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-2xl p-5.5 shadow-sm space-y-2.5">
+                <div key={idx} className="bg-white border border-slate-200 rounded-2xl p-5.5 shadow-sm space-y-2.5">
                   <div className="flex justify-between items-start gap-4">
-                    <h4 className="font-bold text-navy dark:text-slate-200 text-sm">{penalty.description}</h4>
-                    <span className="text-[10px] font-bold bg-slate-100 dark:bg-slate-900 text-slate-500 border border-slate-200 dark:border-slate-800 rounded px-2.5 py-0.5 whitespace-nowrap">
+                    <h4 className="font-bold text-navy text-sm">{penalty.description}</h4>
+                    <span className="text-[10px] font-bold bg-slate-100 text-slate-500 border border-slate-200 rounded px-2.5 py-0.5 whitespace-nowrap">
                       {penalty.section}
                     </span>
                   </div>
-                  <div className="bg-red-50/30 dark:bg-red-950/10 border border-red-200/40 rounded-xl p-3.5 text-xs font-semibold text-red-750 dark:text-red-400 leading-relaxed">
+                  <div className="bg-red-50/30 border border-red-200/40 rounded-xl p-3.5 text-xs font-semibold text-red-750 leading-relaxed">
                     ⚠️ {penalty.penaltyAmount}
                   </div>
                 </div>

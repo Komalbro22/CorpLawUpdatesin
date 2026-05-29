@@ -19,7 +19,9 @@
 - `[x]` Admin Refresh
     - `[x]` Sidebar: Grouped sections (Content/Subscribers/Analytics/Tools/System), gold glow active
     - `[x]` TopBar: Breadcrumbs, today's date badge, quick-action buttons
-    - `[x]` AdminMain: Smooth fade-in transitions between routes
+    - `[x]` Add grace fallback system for Gemini API quota exhaustion errors to prevent generation failure screens.
+    - `[x]` Integrate live Google & Bing AI SEO Copywriting Helper drawer in Admin CMS creation/edit interfaces.
+- `[x]` AdminMain: Smooth fade-in transitions between routes
 - `[x]` SEO & Performance
     - `[x]` root layout: Preconnect Google Fonts, theme-color, PWA meta tags
     - `[x]` metadata: Improved SEO titles, descriptions, and modifiedTime coverage

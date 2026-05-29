@@ -163,7 +163,7 @@ const comingTools = tools.filter(t => !t.isLive)
 
 export default function ToolsPage() {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-screen bg-slate-50">
       <JsonLd data={toolsJsonLd as any} />
 
       {/* Hero */}
@@ -206,7 +206,7 @@ export default function ToolsPage() {
         <div className="mb-12">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse" />
-            <h2 className="text-2xl font-bold text-navy dark:text-white font-heading">
+            <h2 className="text-2xl font-bold text-navy font-heading">
               Live Tools
             </h2>
             <span className="bg-green-100 text-green-700 text-xs font-bold px-2.5 py-1 rounded-full">
@@ -219,7 +219,7 @@ export default function ToolsPage() {
               <Link
                 key={tool.id}
                 href={tool.href}
-                className={`group bg-white dark:bg-slate-800 border-2 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-200 ${tool.color}`}
+                className={`group bg-white  border-2 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-200 ${tool.color}`}
               >
                 {/* Card header */}
                 <div className={`bg-gradient-to-r ${tool.headerBg} p-5 flex items-center gap-4`}>
@@ -243,14 +243,14 @@ export default function ToolsPage() {
 
                 {/* Card body */}
                 <div className="p-5">
-                  <p className="text-slate-600 dark:text-slate-300 text-sm mb-4 leading-relaxed">
+                  <p className="text-slate-600 text-sm mb-4 leading-relaxed">
                     {tool.description}
                   </p>
 
                   {/* Tags */}
                   <div className="flex flex-wrap gap-1.5 mb-4">
                     {tool.tags.map(tag => (
-                      <span key={tag} className="text-xs bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full">
+                      <span key={tag} className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
                         {tag}
                       </span>
                     ))}
@@ -260,7 +260,7 @@ export default function ToolsPage() {
                     <span className="text-xs text-green-600 font-semibold">
                       ● Live Now
                     </span>
-                    <span className="text-navy dark:text-amber-400 font-bold text-sm group-hover:translate-x-1 transition-transform inline-block">
+                    <span className="text-navy font-bold text-sm group-hover:translate-x-1 transition-transform inline-block">
                       Open Tool →
                     </span>
                   </div>
@@ -274,7 +274,7 @@ export default function ToolsPage() {
         <div>
           <div className="flex items-center gap-3 mb-6">
             <span className="text-2xl">🚀</span>
-            <h2 className="text-2xl font-bold text-navy dark:text-white font-heading">
+            <h2 className="text-2xl font-bold text-navy font-heading">
               Coming Soon
             </h2>
             <span className="bg-slate-100 text-slate-500 text-xs font-bold px-2.5 py-1 rounded-full">
@@ -285,27 +285,27 @@ export default function ToolsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {comingTools.map(tool => (
               <div key={tool.id}
-                   className="bg-white dark:bg-slate-800 border border-dashed border-slate-300 dark:border-slate-600 rounded-2xl p-5 opacity-80">
+                   className="bg-white border border-dashed border-slate-300 rounded-2xl p-5 opacity-80">
                 <div className="flex items-start gap-4">
                   <span className="text-4xl flex-shrink-0 opacity-60">
                     {tool.icon}
                   </span>
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-bold text-navy dark:text-white text-sm">
+                      <h3 className="font-bold text-navy text-sm">
                         {tool.label}
                       </h3>
-                      <span className="text-xs bg-slate-100 dark:bg-slate-700 text-slate-500 px-2 py-0.5 rounded-full flex-shrink-0">
+                      <span className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full flex-shrink-0">
                         Coming Soon
                       </span>
                     </div>
-                    <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">
+                    <p className="text-slate-500 text-xs leading-relaxed">
                       {tool.description}
                     </p>
                     <div className="flex flex-wrap gap-1 mt-2">
                       {tool.tags.slice(0, 3).map(tag => (
                         <span key={tag}
-                              className="text-xs bg-slate-55 dark:bg-slate-700 text-slate-45 px-2 py-0.5 rounded-full">
+                              className="text-xs bg-slate-55 text-slate-45 px-2 py-0.5 rounded-full">
                           {tag}
                         </span>
                       ))}

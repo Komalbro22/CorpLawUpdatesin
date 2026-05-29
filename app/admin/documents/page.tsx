@@ -62,12 +62,12 @@ const CATEGORY_LABELS: Record<string, string> = {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  board_resolution: 'bg-blue-50 border-blue-200 text-blue-700 dark:bg-blue-900/30 dark:border-blue-800 dark:text-blue-400',
-  shareholders_meeting: 'bg-green-50 border-green-200 text-green-700 dark:bg-green-900/30 dark:border-green-800 dark:text-green-400',
-  agreements: 'bg-purple-50 border-purple-200 text-purple-700 dark:bg-purple-900/30 dark:border-purple-800 dark:text-purple-400',
-  appointments: 'bg-amber-50 border-amber-200 text-amber-700 dark:bg-amber-900/30 dark:border-amber-800 dark:text-amber-400',
-  mca_forms: 'bg-red-50 border-red-200 text-red-700 dark:bg-red-900/30 dark:border-red-800 dark:text-red-400',
-  notices: 'bg-teal-50 border-teal-200 text-teal-700 dark:bg-teal-900/30 dark:border-teal-800 dark:text-teal-400',
+  board_resolution: 'bg-blue-50 border-blue-200 text-blue-700   ',
+  shareholders_meeting: 'bg-green-50 border-green-200 text-green-700   ',
+  agreements: 'bg-purple-50 border-purple-200 text-purple-700   ',
+  appointments: 'bg-amber-50 border-amber-200 text-amber-700   ',
+  mca_forms: 'bg-red-50 border-red-200 text-red-700   ',
+  notices: 'bg-teal-50 border-teal-200 text-teal-700   ',
 }
 
 export default function AdminDocumentsPage() {
@@ -301,10 +301,10 @@ export default function AdminDocumentsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-navy dark:text-white font-heading">
+          <h1 className="text-3xl font-extrabold text-navy font-heading">
             AI Legal Document Templates
           </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-sm text-slate-500 mt-1">
             Publish, edit, and manage dynamic templates used by the AI Legal Document Generator.
           </p>
         </div>
@@ -320,15 +320,15 @@ export default function AdminDocumentsPage() {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Card 1 */}
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4 transition-all hover:shadow-md">
-          <div className="p-3 bg-amber-50 dark:bg-amber-950/40 rounded-xl text-amber-600 dark:text-amber-400">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 transition-all hover:shadow-md">
+          <div className="p-3 bg-amber-50 rounded-xl text-amber-600">
             <ScrollText className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
               Total Templates
             </p>
-            <h3 className="text-2xl font-bold text-navy dark:text-white mt-1">
+            <h3 className="text-2xl font-bold text-navy mt-1">
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin text-slate-300" />
               ) : (
@@ -339,15 +339,15 @@ export default function AdminDocumentsPage() {
         </div>
 
         {/* Card 2 */}
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4 transition-all hover:shadow-md">
-          <div className="p-3 bg-blue-50 dark:bg-blue-950/40 rounded-xl text-blue-600 dark:text-blue-400">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 transition-all hover:shadow-md">
+          <div className="p-3 bg-blue-50 rounded-xl text-blue-600">
             <TrendingUp className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
               Total Generated Docs
             </p>
-            <h3 className="text-2xl font-bold text-navy dark:text-white mt-1">
+            <h3 className="text-2xl font-bold text-navy mt-1">
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin text-slate-300" />
               ) : (
@@ -358,15 +358,15 @@ export default function AdminDocumentsPage() {
         </div>
 
         {/* Card 3 */}
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4 transition-all hover:shadow-md col-span-1">
-          <div className="p-3 bg-purple-50 dark:bg-purple-950/40 rounded-xl text-purple-600 dark:text-purple-400">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4 transition-all hover:shadow-md col-span-1">
+          <div className="p-3 bg-purple-50 rounded-xl text-purple-600">
             <FileSpreadsheet className="w-6 h-6" />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
               Most Popular
             </p>
-            <h3 className="text-base font-bold text-navy dark:text-white mt-1 truncate" title={popularTemplate?.name}>
+            <h3 className="text-base font-bold text-navy mt-1 truncate" title={popularTemplate?.name}>
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin text-slate-300" />
               ) : popularTemplate ? (
@@ -380,15 +380,15 @@ export default function AdminDocumentsPage() {
       </div>
 
       {/* Filters and Search */}
-      <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
+      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
         <div className="relative w-full md:max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <input
             type="text"
             placeholder="Search template name, category, or slug..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 text-sm border border-slate-200 dark:border-slate-800 dark:bg-slate-950 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 text-navy dark:text-white"
+            className="w-full pl-10 pr-4 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 text-navy"
           />
         </div>
 
@@ -396,7 +396,7 @@ export default function AdminDocumentsPage() {
           <select
             value={categoryFilter}
             onChange={e => setCategoryFilter(e.target.value)}
-            className="flex-1 md:flex-none border border-slate-200 dark:border-slate-800 dark:bg-slate-950 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 text-navy dark:text-white"
+            className="flex-1 md:flex-none border border-slate-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 text-navy"
           >
             <option value="all">All Categories</option>
             {Object.entries(CATEGORY_LABELS).map(([key, label]) => (
@@ -409,14 +409,14 @@ export default function AdminDocumentsPage() {
       </div>
 
       {/* Table Section */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden">
+      <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+              <tr className="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 <th
                   onClick={() => handleSort('name')}
-                  className="p-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors"
+                  className="p-4 cursor-pointer hover:bg-slate-100 transition-colors"
                 >
                   <div className="flex items-center gap-1.5">
                     Template Name
@@ -426,7 +426,7 @@ export default function AdminDocumentsPage() {
                 <th className="p-4">Category</th>
                 <th
                   onClick={() => handleSort('usage')}
-                  className="p-4 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors"
+                  className="p-4 cursor-pointer hover:bg-slate-100 transition-colors"
                 >
                   <div className="flex items-center gap-1.5">
                     Usage
@@ -438,7 +438,7 @@ export default function AdminDocumentsPage() {
                 <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+            <tbody className="divide-y divide-slate-100">
               {isLoading ? (
                 <tr>
                   <td colSpan={6} className="p-12 text-center">
@@ -452,8 +452,8 @@ export default function AdminDocumentsPage() {
                 <tr>
                   <td colSpan={6} className="p-12 text-center">
                     <div className="flex flex-col items-center justify-center gap-2">
-                      <ScrollText className="w-10 h-10 text-slate-300 dark:text-slate-700" />
-                      <span className="text-base font-bold text-navy dark:text-white">No Templates Found</span>
+                      <ScrollText className="w-10 h-10 text-slate-300" />
+                      <span className="text-base font-bold text-navy">No Templates Found</span>
                       <span className="text-sm text-slate-400">
                         Try modifying your query or filters.
                       </span>
@@ -462,17 +462,17 @@ export default function AdminDocumentsPage() {
                 </tr>
               ) : (
                 filteredTemplates.map(t => (
-                  <tr key={t.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors group">
+                  <tr key={t.id} className="hover:bg-slate-50/50 transition-colors group">
                     <td className="p-4 max-w-sm">
                       <div className="flex items-start gap-2">
                         <div>
-                          <h4 className="font-semibold text-navy dark:text-white text-sm group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                          <h4 className="font-semibold text-navy text-sm group-hover:text-amber-600 transition-colors">
                             {t.name}
                           </h4>
-                          <p className="text-xs text-slate-400 dark:text-slate-500 font-mono mt-1 font-medium">
+                          <p className="text-xs text-slate-400 font-mono mt-1 font-medium">
                             /{t.slug}
                           </p>
-                          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5 line-clamp-1">
+                          <p className="text-xs text-slate-500 mt-1.5 line-clamp-1">
                             {t.description || 'No description provided.'}
                           </p>
                         </div>
@@ -489,16 +489,16 @@ export default function AdminDocumentsPage() {
                     </td>
                     <td className="p-4">
                       <div className="flex items-center gap-1.5">
-                        <span className="text-sm font-bold text-navy dark:text-white">
+                        <span className="text-sm font-bold text-navy">
                           {t.usage_count || 0}
                         </span>
                         <span className="text-[10px] text-slate-400">generations</span>
                       </div>
                     </td>
                     <td className="p-4">
-                      <div className="text-xs font-medium text-slate-600 dark:text-slate-400">
+                      <div className="text-xs font-medium text-slate-600">
                         {t.regulation_reference ? (
-                          <div className="font-semibold text-navy dark:text-slate-300">
+                          <div className="font-semibold text-navy">
                             {t.regulation_reference}
                           </div>
                         ) : (
@@ -514,8 +514,8 @@ export default function AdminDocumentsPage() {
                         onClick={() => handleToggleActive(t.id, t.is_active)}
                         className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold transition-all ${
                           t.is_active
-                            ? 'bg-green-50 text-green-700 border border-green-200 dark:bg-green-950/30 dark:border-green-800 dark:text-green-400'
-                            : 'bg-slate-50 text-slate-500 border border-slate-200 dark:bg-slate-950 dark:border-slate-800 dark:text-slate-500'
+                            ? 'bg-green-50 text-green-700 border border-green-200   '
+                            : 'bg-slate-50 text-slate-500 border border-slate-200   '
                         }`}
                       >
                         {t.is_active ? <CheckCircle2 className="w-3.5 h-3.5" /> : <XCircle className="w-3.5 h-3.5" />}
@@ -528,7 +528,7 @@ export default function AdminDocumentsPage() {
                           <Link
                             href={`/documents/${t.slug}`}
                             target="_blank"
-                            className="p-2 text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                            className="p-2 text-slate-400 hover:text-amber-600 hover:bg-slate-100 rounded-lg transition-colors"
                             title="Test Generator"
                           >
                             <ExternalLink className="w-4 h-4" />
@@ -536,14 +536,14 @@ export default function AdminDocumentsPage() {
                         )}
                         <button
                           onClick={() => handleOpenEdit(t)}
-                          className="p-2 text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                          className="p-2 text-slate-400 hover:text-blue-600 hover:bg-slate-100 rounded-lg transition-colors"
                           title="Edit Template"
                         >
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleDelete(t.id, t.name)}
-                          className="p-2 text-slate-400 hover:text-red-600 dark:hover:text-red-450 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+                          className="p-2 text-slate-400 hover:text-red-600 hover:bg-slate-100 rounded-lg transition-colors"
                           title="Delete Template"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -561,11 +561,11 @@ export default function AdminDocumentsPage() {
       {/* Editor Modal */}
       {isModalOpen && editingTemplate && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex justify-end animate-fade-in">
-          <div className="bg-white dark:bg-slate-900 w-full max-w-4xl h-screen flex flex-col shadow-2xl animate-slide-in overflow-hidden border-l border-slate-200 dark:border-slate-800">
+          <div className="bg-white w-full max-w-4xl h-screen flex flex-col shadow-2xl animate-slide-in overflow-hidden border-l border-slate-200">
             {/* Modal Header */}
-            <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-800/40">
+            <div className="p-6 border-b border-slate-200 flex justify-between items-center bg-slate-50">
               <div>
-                <h3 className="text-xl font-bold text-navy dark:text-white font-heading">
+                <h3 className="text-xl font-bold text-navy font-heading">
                   {editingTemplate.id ? 'Edit Document Template' : 'Create Document Template'}
                 </h3>
                 <p className="text-xs text-slate-500 mt-1">
@@ -574,7 +574,7 @@ export default function AdminDocumentsPage() {
               </div>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-2 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-400 dark:text-slate-500 rounded-lg transition-colors"
+                className="p-2 hover:bg-slate-200 text-slate-400 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -591,7 +591,7 @@ export default function AdminDocumentsPage() {
                   </h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-navy dark:text-slate-350 mb-1.5">
+                      <label className="block text-xs font-bold text-navy mb-1.5">
                         Template Name *
                       </label>
                       <input
@@ -602,12 +602,12 @@ export default function AdminDocumentsPage() {
                         onChange={e =>
                           setEditingTemplate(prev => ({ ...prev, name: e.target.value }))
                         }
-                        className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 dark:bg-slate-950 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 text-navy dark:text-white"
+                        className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 text-navy"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-navy dark:text-slate-350 mb-1.5">
+                      <label className="block text-xs font-bold text-navy mb-1.5">
                         URL Slug (Optional)
                       </label>
                       <input
@@ -617,12 +617,12 @@ export default function AdminDocumentsPage() {
                         onChange={e =>
                           setEditingTemplate(prev => ({ ...prev, slug: e.target.value }))
                         }
-                        className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 dark:bg-slate-950 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 text-navy dark:text-white"
+                        className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 text-navy"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-navy dark:text-slate-350 mb-1.5">
+                      <label className="block text-xs font-bold text-navy mb-1.5">
                         Category *
                       </label>
                       <select
@@ -631,7 +631,7 @@ export default function AdminDocumentsPage() {
                         onChange={e =>
                           setEditingTemplate(prev => ({ ...prev, category: e.target.value }))
                         }
-                        className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 dark:bg-slate-950 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 text-navy dark:text-white"
+                        className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 text-navy"
                       >
                         {Object.entries(CATEGORY_LABELS).map(([key, label]) => (
                           <option key={key} value={key}>
@@ -642,7 +642,7 @@ export default function AdminDocumentsPage() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-navy dark:text-slate-350 mb-1.5">
+                      <label className="block text-xs font-bold text-navy mb-1.5">
                         Display Order
                       </label>
                       <input
@@ -655,12 +655,12 @@ export default function AdminDocumentsPage() {
                             display_order: parseInt(e.target.value) || 0,
                           }))
                         }
-                        className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 dark:bg-slate-950 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 text-navy dark:text-white"
+                        className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 text-navy"
                       />
                     </div>
 
                     <div className="md:col-span-2">
-                      <label className="block text-xs font-bold text-navy dark:text-slate-350 mb-1.5">
+                      <label className="block text-xs font-bold text-navy mb-1.5">
                         Short Description *
                       </label>
                       <textarea
@@ -674,20 +674,20 @@ export default function AdminDocumentsPage() {
                             description: e.target.value,
                           }))
                         }
-                        className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 dark:bg-slate-950 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 text-navy dark:text-white"
+                        className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 text-navy"
                       />
                     </div>
                   </div>
                 </div>
 
                 {/* Section 2: Regulation & Legals */}
-                <div className="border-t border-slate-100 dark:border-slate-800 pt-6">
+                <div className="border-t border-slate-100 pt-6">
                   <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5">
                     🏛️ Legals & Verification
                   </h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-navy dark:text-slate-350 mb-1.5">
+                      <label className="block text-xs font-bold text-navy mb-1.5">
                         Regulation Reference
                       </label>
                       <input
@@ -700,12 +700,12 @@ export default function AdminDocumentsPage() {
                             regulation_reference: e.target.value,
                           }))
                         }
-                        className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 dark:bg-slate-950 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 text-navy dark:text-white"
+                        className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 text-navy"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-navy dark:text-slate-350 mb-1.5">
+                      <label className="block text-xs font-bold text-navy mb-1.5">
                         Source
                       </label>
                       <input
@@ -715,12 +715,12 @@ export default function AdminDocumentsPage() {
                         onChange={e =>
                           setEditingTemplate(prev => ({ ...prev, source: e.target.value }))
                         }
-                        className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 dark:bg-slate-950 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 text-navy dark:text-white"
+                        className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 text-navy"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-navy dark:text-slate-350 mb-1.5">
+                      <label className="block text-xs font-bold text-navy mb-1.5">
                         Last Verified Date
                       </label>
                       <input
@@ -732,14 +732,14 @@ export default function AdminDocumentsPage() {
                             last_verified: e.target.value,
                           }))
                         }
-                        className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 dark:bg-slate-950 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 text-navy dark:text-white"
+                        className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 text-navy"
                       />
                     </div>
                   </div>
                 </div>
 
                 {/* Section 3: Dynamic Variables / Form Fields */}
-                <div className="border-t border-slate-100 dark:border-slate-800 pt-6">
+                <div className="border-t border-slate-100 pt-6">
                   <div className="flex justify-between items-center mb-3">
                     <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
                       📋 Form Input Fields (Variables)
@@ -754,7 +754,7 @@ export default function AdminDocumentsPage() {
                   </div>
 
                   {modalFields.length === 0 ? (
-                    <div className="bg-slate-50 dark:bg-slate-950 border border-dashed border-slate-200 dark:border-slate-800 rounded-xl p-6 text-center text-slate-400 dark:text-slate-500 text-xs">
+                    <div className="bg-slate-50 border border-dashed border-slate-200 rounded-xl p-6 text-center text-slate-400 text-xs">
                       No parameters added yet. Click &quot;Add Field&quot; to specify form elements for compiling variables.
                     </div>
                   ) : (
@@ -762,7 +762,7 @@ export default function AdminDocumentsPage() {
                       {modalFields.map((field, idx) => (
                         <div
                           key={field.id}
-                          className="p-4 bg-slate-50 dark:bg-slate-950/45 border border-slate-200 dark:border-slate-800 rounded-xl relative space-y-3"
+                          className="p-4 bg-slate-50 border border-slate-200 rounded-xl relative space-y-3"
                         >
                           <button
                             type="button"
@@ -784,7 +784,7 @@ export default function AdminDocumentsPage() {
                                 placeholder="e.g. director_name"
                                 value={field.id}
                                 onChange={e => handleUpdateField(idx, 'id', e.target.value)}
-                                className="w-full px-2.5 py-1.5 border border-slate-200 dark:border-slate-800 dark:bg-slate-950 rounded-lg text-xs font-mono focus:outline-none focus:border-amber-500 text-navy dark:text-white"
+                                className="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg text-xs font-mono focus:outline-none focus:border-amber-500 text-navy"
                               />
                             </div>
 
@@ -798,7 +798,7 @@ export default function AdminDocumentsPage() {
                                 placeholder="e.g. Appointed Director Name"
                                 value={field.label}
                                 onChange={e => handleUpdateField(idx, 'label', e.target.value)}
-                                className="w-full px-2.5 py-1.5 border border-slate-200 dark:border-slate-800 dark:bg-slate-950 rounded-lg text-xs focus:outline-none focus:border-amber-500 text-navy dark:text-white"
+                                className="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg text-xs focus:outline-none focus:border-amber-500 text-navy"
                               />
                             </div>
 
@@ -809,7 +809,7 @@ export default function AdminDocumentsPage() {
                               <select
                                 value={field.type}
                                 onChange={e => handleUpdateField(idx, 'type', e.target.value)}
-                                className="w-full px-2.5 py-1.5 border border-slate-200 dark:border-slate-800 dark:bg-slate-950 rounded-lg text-xs focus:outline-none focus:border-amber-500 text-navy dark:text-white"
+                                className="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg text-xs focus:outline-none focus:border-amber-500 text-navy"
                               >
                                 <option value="text">Single-line Text</option>
                                 <option value="textarea">Multi-line Text</option>
@@ -827,7 +827,7 @@ export default function AdminDocumentsPage() {
                                 placeholder="e.g. Enter name..."
                                 value={field.placeholder || ''}
                                 onChange={e => handleUpdateField(idx, 'placeholder', e.target.value)}
-                                className="w-full px-2.5 py-1.5 border border-slate-200 dark:border-slate-800 dark:bg-slate-950 rounded-lg text-xs focus:outline-none focus:border-amber-500 text-navy dark:text-white"
+                                className="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg text-xs focus:outline-none focus:border-amber-500 text-navy"
                               />
                             </div>
 
@@ -840,7 +840,7 @@ export default function AdminDocumentsPage() {
                                 placeholder="Helpful hint visible near the input..."
                                 value={field.help_text || ''}
                                 onChange={e => handleUpdateField(idx, 'help_text', e.target.value)}
-                                className="w-full px-2.5 py-1.5 border border-slate-200 dark:border-slate-800 dark:bg-slate-950 rounded-lg text-xs focus:outline-none focus:border-amber-500 text-navy dark:text-white"
+                                className="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg text-xs focus:outline-none focus:border-amber-500 text-navy"
                               />
                             </div>
 
@@ -854,7 +854,7 @@ export default function AdminDocumentsPage() {
                                   placeholder="e.g. Ordinary Resolution, Special Resolution"
                                   value={field.options?.join(', ') || ''}
                                   onChange={e => handleUpdateField(idx, 'options', e.target.value)}
-                                  className="w-full px-2.5 py-1.5 border border-slate-200 dark:border-slate-800 dark:bg-slate-950 rounded-lg text-xs focus:outline-none focus:border-amber-500 text-navy dark:text-white"
+                                  className="w-full px-2.5 py-1.5 border border-slate-200 rounded-lg text-xs focus:outline-none focus:border-amber-500 text-navy"
                                 />
                               </div>
                             )}
@@ -867,7 +867,7 @@ export default function AdminDocumentsPage() {
                                 onChange={e => handleUpdateField(idx, 'required', e.target.checked)}
                                 className="rounded text-amber-500 focus:ring-amber-500 w-4 h-4"
                               />
-                              <label htmlFor={`required_${field.id}`} className="text-xs font-semibold text-slate-600 dark:text-slate-400">
+                              <label htmlFor={`required_${field.id}`} className="text-xs font-semibold text-slate-600">
                                 This parameter is strictly required to compile this template.
                               </label>
                             </div>
@@ -879,9 +879,9 @@ export default function AdminDocumentsPage() {
                 </div>
 
                 {/* Section 4: Boilerplate Markdown Template */}
-                <div className="border-t border-slate-100 dark:border-slate-800 pt-6">
+                <div className="border-t border-slate-100 pt-6">
                   <div className="flex justify-between items-center mb-1.5">
-                    <label className="block text-xs font-bold text-navy dark:text-slate-350">
+                    <label className="block text-xs font-bold text-navy">
                       Boilerplate Document Content (Markdown Format) *
                     </label>
                     <span className="text-[10px] text-slate-400 font-mono">
@@ -900,13 +900,13 @@ export default function AdminDocumentsPage() {
                         template_content: e.target.value,
                       }))
                     }
-                    className="w-full px-3.5 py-3 border border-slate-200 dark:border-slate-800 dark:bg-slate-950 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 leading-relaxed text-navy dark:text-white"
+                    className="w-full px-3.5 py-3 border border-slate-200 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 leading-relaxed text-navy"
                   />
                 </div>
 
                 {/* Section 5: AI System Guidance */}
-                <div className="border-t border-slate-100 dark:border-slate-800 pt-6">
-                  <label className="block text-xs font-bold text-navy dark:text-slate-350 mb-1.5">
+                <div className="border-t border-slate-100 pt-6">
+                  <label className="block text-xs font-bold text-navy mb-1.5">
                     Gemini AI Editor System Prompt *
                   </label>
                   <textarea
@@ -920,17 +920,17 @@ export default function AdminDocumentsPage() {
                         ai_system_prompt: e.target.value,
                       }))
                     }
-                    className="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-800 dark:bg-slate-950 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 text-navy dark:text-white"
+                    className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/25 focus:border-amber-500 text-navy"
                   />
                 </div>
               </div>
 
               {/* Modal Actions */}
-              <div className="p-6 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 flex justify-end gap-3.5">
+              <div className="p-6 border-t border-slate-200 bg-slate-50 flex justify-end gap-3.5">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-bold text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  className="px-4 py-2 border border-slate-200 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-100 transition-colors"
                 >
                   Cancel
                 </button>

@@ -97,6 +97,7 @@ export async function POST(request: Request) {
     }
 
     let documentContent = ''
+    let fellBackToStandard = false
 
     if (use_ai && template.ai_system_prompt) {
       if (!GEMINI_API_KEY) {
@@ -129,29 +130,36 @@ Instructions:
 
       const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`
 
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ 
-            role: 'user', 
-            parts: [{ text: `System Instructions: ${template.ai_system_prompt}\n\n${promptText}` }] 
-          }]
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ 
+              role: 'user', 
+              parts: [{ text: `System Instructions: ${template.ai_system_prompt}\n\n${promptText}` }] 
+            }]
+          })
         })
-      })
 
-      if (!response.ok) {
-        const errorText = await response.text()
-        return NextResponse.json(
-          { error: `Gemini generation call failed: ${errorText}` },
-          { status: 500 }
-        )
+        if (!response.ok) {
+          const errorJson = await response.json().catch(() => ({}))
+          console.warn('Gemini generation failed, falling back to standard substitution. Status:', response.status, errorJson)
+          fellBackToStandard = true
+        } else {
+          const data = await response.json()
+          documentContent = data.candidates?.[0]?.content?.parts?.[0]?.text || ''
+          if (!documentContent) {
+            fellBackToStandard = true
+          }
+        }
+      } catch (err) {
+        console.error('Gemini call failed with error, falling back:', err)
+        fellBackToStandard = true
       }
+    }
 
-      const data = await response.json()
-      documentContent = data.candidates?.[0]?.content?.parts?.[0]?.text || ''
-
-    } else {
+    if (!use_ai || !template.ai_system_prompt || fellBackToStandard) {
       // Simple template substitution
       documentContent = template.template_content
       Object.entries(form_data || {}).forEach(([key, value]) => {
@@ -196,6 +204,7 @@ Instructions:
       document_id: saved?.id,
       content: documentContent,
       template_name: template.name,
+      fell_back: fellBackToStandard,
     })
 
   } catch (error: any) {

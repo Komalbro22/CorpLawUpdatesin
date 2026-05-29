@@ -98,21 +98,8 @@ export default async function RootLayout({
   const clarityId = (await getSetting('microsoft_clarity_id')) || process.env.NEXT_PUBLIC_CLARITY_ID
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              try {
-                if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                  document.documentElement.classList.add('dark');
-                } else {
-                  document.documentElement.classList.remove('dark');
-                }
-              } catch (_) {}
-            `,
-          }}
-        />
         <link rel="llms" href="/llms.txt" />
         <meta name="theme-color" content="#0F172A" />
         <meta name="mobile-web-app-capable" content="yes" />

@@ -448,24 +448,22 @@ export default function NewArticle() {
                             {/* AI Citation Guidelines & Pre-fill Templates */}
                             <details className="mt-3 bg-slate-50 border border-slate-200 rounded-xl overflow-hidden transition-all duration-200">
                                 <summary className="cursor-pointer text-xs font-semibold text-slate-700 hover:text-navy px-4 py-3 bg-slate-100/50 flex justify-between items-center select-none">
-                                    <span>💡 AI Citation Guidelines & Templates for Takeaways</span>
+                                    <span>💡 Google & Bing AI SEO Guidelines & Templates</span>
                                     <span className="text-slate-400 text-[10px]">Click to expand</span>
                                 </summary>
                                 <div className="p-4 space-y-4 text-xs text-slate-600 leading-relaxed border-t border-slate-200">
+                                    {/* 1. Bullet Takeaways */}
                                     <div>
-                                        <p className="font-bold text-navy mb-1">Why key takeaways matter for AI bots:</p>
+                                        <p className="font-bold text-navy mb-1">1. Writing High-Density Takeaways (TL;DR):</p>
                                         <p>
-                                            Large Language Models (LLMs) like Gemini, Claude, and GPT crawl this site searching for clean, structured legal facts. To make your article highly citeable, ensure your bullet points contain:
+                                            To make your bullet points highly quoteable by Gemini & Copilot RAG grounding engines, ensure they contain:
                                         </p>
                                         <ul className="list-disc list-inside mt-1 ml-1 space-y-1 text-slate-500">
-                                            <li><strong>Exact regulatory circular numbers</strong> and dates.</li>
-                                            <li><strong>Specific entities affected</strong> (e.g. "Listed companies with market cap &gt; 250 Cr").</li>
+                                            <li><strong>Exact circular numbers</strong> and dates.</li>
+                                            <li><strong>Specific entities affected</strong> (e.g. "Listed companies with assets &gt; ₹250 Cr").</li>
                                             <li><strong>Explicit penalties</strong> for non-compliance.</li>
                                         </ul>
-                                    </div>
-                                    <div className="border-t border-slate-200/80 pt-3">
-                                        <p className="font-bold text-navy mb-2">Use one-click templates to pre-fill:</p>
-                                        <div className="flex gap-2 flex-wrap">
+                                        <div className="flex gap-2 flex-wrap mt-2.5">
                                             <button
                                                 type="button"
                                                 onClick={() => {
@@ -508,6 +506,41 @@ export default function NewArticle() {
                                             >
                                                 🏦 RBI Circular Template
                                             </button>
+                                        </div>
+                                    </div>
+
+                                    {/* 2. Writing Format Guidance */}
+                                    <div className="border-t border-slate-200/80 pt-3">
+                                        <p className="font-bold text-navy mb-1">2. Core Prose & Q&A Formatting (Google & Bing AI Search):</p>
+                                        <ul className="list-disc list-inside space-y-1.5 text-slate-500">
+                                            <li><strong>Answer-First Structure</strong>: Always put direct, bolded regulatory answers in the first sentence under heading tags (`## Heading`). Move details and explanations further down.</li>
+                                            <li><strong>Trigger FAQ Schema</strong>: Format questions inside your markdown using clear prefixes like <code>Q1: [Question]?</code> or <code>Question 1: [Question]?</code>. The site template automatically parses these to build schema indexing metadata!</li>
+                                        </ul>
+                                    </div>
+
+                                    {/* 3. Human E-E-A-T credentials */}
+                                    <div className="border-t border-slate-200/80 pt-3">
+                                        <p className="font-bold text-navy mb-1">3. Human E-E-A-T Trust Bio Credentials (Bottom of Article):</p>
+                                        <p className="mb-2">To prevent search engines from filtering your legal content, always copy and paste one of these verified, high-trust bio templates at the very bottom of your Article Content box:</p>
+                                        <div className="space-y-2">
+                                            <div className="bg-white border border-slate-200 p-2.5 rounded-lg">
+                                                <p className="font-semibold text-navy text-[10px] uppercase mb-0.5">Template 1 — Editorial Board Bio</p>
+                                                <code className="text-slate-600 select-all block bg-slate-50 p-1.5 rounded font-mono text-[10px] border border-slate-100">
+                                                    *This compliance alert was prepared by the editorial board of CorpLawUpdates.in, specializing in real-time corporate regulatory intelligence in India.*
+                                                </code>
+                                            </div>
+                                            <div className="bg-white border border-slate-200 p-2.5 rounded-lg">
+                                                <p className="font-semibold text-navy text-[10px] uppercase mb-0.5">Template 2 — Chief Editor Bio</p>
+                                                <code className="text-slate-600 select-all block bg-slate-50 p-1.5 rounded font-mono text-[10px] border border-slate-100">
+                                                    *Factual summary prepared by Komalpreet, Chief Editor at CorpLawUpdates.in.*
+                                                </code>
+                                            </div>
+                                            <div className="bg-white border border-slate-200 p-2.5 rounded-lg">
+                                                <p className="font-semibold text-navy text-[10px] uppercase mb-0.5">Template 3 — Research Team Bio</p>
+                                                <code className="text-slate-600 select-all block bg-slate-50 p-1.5 rounded font-mono text-[10px] border border-slate-100">
+                                                    *This article has been researched and compiled by the corporate intelligence team at CorpLawUpdates.in to provide verified regulatory updates.*
+                                                </code>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
