@@ -30,7 +30,7 @@ const companyFaqs = [
   },
   {
     q: 'What is the penalty on directors for not filing AOC-4?',
-    a: 'Under Section 137(3), the Managing Director or CFO can be penalised ₹1,000 per day up to a maximum of ₹5,00,000. Other directors face ₹1,000/day up to ₹1,00,000 each.',
+    a: 'Under Section 137(3) of the Companies Act, 2013 (as amended by the Companies Amendment Act 2019), the company is liable to a penalty of ₹10,000 plus ₹100 per day of continuing failure, subject to a maximum of ₹2,00,000. Every officer in default (including MD, CFO, WTD) faces the same ₹10,000 + ₹100/day penalty, capped at ₹50,000 per officer.',
   },
 ]
 
@@ -594,7 +594,7 @@ export default function CompanyPenaltyCalculator() {
                     <ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180 text-slate-400" />
                   </summary>
                   <div className="p-4 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-light bg-slate-50/50 dark:bg-slate-950/20">
-                    If a company fails to file the copy of the financial statements under sub-section (1) or sub-section (2), as the case may be, before the expiry of the period specified therein, the company shall be liable to a penalty of ₹10,000 and in case of continuing failure, with a further penalty of ₹100 for each day during which such failure continues, subject to a maximum of ₹2,00,000 in case of a company and ₹50,000 in case of an officer in default.
+                    Under Section 137(3) of the Companies Act, 2013 (as amended by the Companies Amendment Act 2019), if a company fails to file the financial statements, the company shall be liable to a penalty of ₹10,000 and in case of continuing failure, with a further penalty of ₹100 for each day during which such failure continues, subject to a maximum of ₹2,00,000. Every officer in default faces the same ₹10,000 + ₹100/day, capped at ₹50,000 per officer.
                   </div>
                 </details>
               </div>
@@ -621,7 +621,7 @@ export default function CompanyPenaltyCalculator() {
             It is critical to distinguish between portal late fees and ROC adjudication penalties. While late fees are paid automatically upon filing a delayed form, the Registrar of Companies (ROC) can initiate separate legal adjudication proceedings for non-compliance under Section 92(5) and Section 137(3).
           </p>
           <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed font-light">
-            For MGT-7, the statutory penalty starts at ₹10,000, with a continuing default rate of ₹100/day, capped at ₹2,00,000 for the company and ₹50,000 for each officer in default. For AOC-4, the continuing penalty is ₹1,000/day, capped at ₹10,000,000 for the company, ₹5,00,050 for the MD/CFO, and ₹1,00,000 for standard directors.
+            For MGT-7 (Section 92(5)), the statutory adjudication penalty starts at ₹10,000 fixed, with a continuing default rate of ₹100/day, capped at ₹2,00,000 for the company and ₹50,000 for each officer in default. For AOC-4 (Section 137(3)), the post-2019 amendment penalty is also ₹10,000 fixed + ₹100/day, capped at ₹2,00,000 for the company and ₹50,000 per officer in default — the earlier higher figures were revised as part of the Companies (Amendment) Act 2019 decriminalization exercise.
           </p>
         </section>
 

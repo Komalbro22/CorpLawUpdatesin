@@ -88,24 +88,25 @@ export function calculateCompanyFee(params: CompanyFeeParams): CompanyCalculatio
   // 2. Late Fee (Additional Fee)
   let lateFee = 0;
   
-  // Annual Return / Financial Statement forms & commencement of business (MGT-7, MGT-7A, AOC-4, AOC-4 XBRL, AOC-4 CFS, INC-20A, ADT-1)
+  // Only MGT-7, MGT-7A, AOC-4 variants attract the flat ₹100/day additional fee under
+  // the Companies (Registration Offices & Fees) Second Amendment Rules, 2018.
+  // ADT-1, INC-20A and all other general forms use the time-slab multiplier system.
   const isAnnualOrFSReturn = [
     'MGT-7',
     'MGT-7A',
     'AOC-4',
     'AOC-4-XBRL',
     'AOC-4-CFS',
-    'INC-20A',
-    'ADT-1'
   ].includes(formId);
 
   if (daysDelayed > 0) {
     if (formId === 'DIR-3-KYC') {
-      lateFee = 5000; // Flat penalty, no daily rate
+      lateFee = 5000; // Flat penalty, no daily rate — Rule 12A
     } else if (isAnnualOrFSReturn) {
-      lateFee = 100 * daysDelayed; // Flat 100 per day, no cap
+      lateFee = 100 * daysDelayed; // ₹100/day, no cap — 2018 amendment
     } else {
-      // General forms time-multiple slab (DIR-12, MGT-14, PAS-3, INC-22, CHG-1, CHG-4)
+      // General forms time-slab multiplier system (DIR-12, MGT-14, PAS-3, INC-22,
+      // CHG-1, CHG-4, ADT-1, INC-20A, etc.) — Companies (Reg Offices & Fees) Rules 2014
       let multiplier = 1;
       if (daysDelayed <= 30) {
         multiplier = 2;
@@ -116,7 +117,7 @@ export function calculateCompanyFee(params: CompanyFeeParams): CompanyCalculatio
       } else if (daysDelayed <= 180) {
         multiplier = 10;
       } else {
-        // Beyond 180 days
+        // Beyond 180 days — PAS-3/INC-22 repeat default triggers 18× (Rule 12 proviso)
         multiplier = isRepeatDefault && ['PAS-3', 'INC-22'].includes(formId) ? 18 : 12;
       }
       
@@ -124,28 +125,24 @@ export function calculateCompanyFee(params: CompanyFeeParams): CompanyCalculatio
     }
   }
 
-  // 3. Statutory Penalty (Section 92(5) / 137(3) Adjudication Penalty)
+  // 3. Statutory Adjudication Penalty (ROC must pass formal adjudication order under Sec 454)
   let companyPenalty = 0;
   let officerPenalty = 0;
 
   if (daysDelayed > 0) {
     if (formId === 'MGT-7' || formId === 'MGT-7A') {
-      // Section 92(5) - MGT-7
-      // Company: 10,000 fixed + 100/day continuing -> max 2,00,000
-      // Officer: 10,000 fixed + 100/day continuing -> max 50,000 per officer
+      // Section 92(5) Companies Act 2013 (as amended by Amendment Act 2019)
+      // Company:  ₹10,000 fixed + ₹100/day continuing, max ₹2,00,000
+      // Officer:  ₹10,000 fixed + ₹100/day continuing, max ₹50,000 per officer
       companyPenalty = Math.min(10000 + daysDelayed * 100, 200000);
       officerPenalty = Math.min(10000 + daysDelayed * 100, 50000) * officersCount;
     } else if (['AOC-4', 'AOC-4-XBRL', 'AOC-4-CFS'].includes(formId)) {
-      // Section 137(3) - AOC-4
-      // Company: 1,000/day -> max 10,00,000
-      // MD/CFO/Directors: 1,000/day -> max 1,00,000 or 5,00,000
-      companyPenalty = Math.min(daysDelayed * 1000, 1000000);
-      // Let's assume 1 is MD/CFO (max 5L) and others are standard directors (max 1L)
-      if (officersCount > 0) {
-        const mdCfoPenalty = Math.min(daysDelayed * 1000, 500000);
-        const directorsPenalty = Math.min(daysDelayed * 1000, 100000) * Math.max(0, officersCount - 1);
-        officerPenalty = mdCfoPenalty + directorsPenalty;
-      }
+      // Section 137(3) Companies Act 2013 (as amended by Amendment Act 2019)
+      // Company:  ₹10,000 fixed + ₹100/day continuing, max ₹2,00,000
+      // Officer:  ₹10,000 fixed + ₹100/day continuing, max ₹50,000 per officer
+      // (Pre-2019 figures of ₹1,000/day are no longer applicable after decriminalization)
+      companyPenalty = Math.min(10000 + daysDelayed * 100, 200000);
+      officerPenalty = Math.min(10000 + daysDelayed * 100, 50000) * officersCount;
     }
   }
 
@@ -226,14 +223,47 @@ export function calculateLlpFee(params: LlpFeeParams): LlpCalculationResult {
   }
 
   // 2. Additional Fee (Late Fee)
-  // ₹100 per day, no cap, per form
-  const lateFee = daysDelayed > 0 ? 100 * daysDelayed : 0;
+  // LLP 2nd Amendment Rules, 2022 (effective April 1, 2022) replaced the old flat ₹100/day
+  // with a slab-multiplier system based on the normal filing fee and LLP type.
+  // Source: Rule 36 & Annexure-A, LLP Rules 2009 as amended by LLP 2nd Amendment Rules 2022.
+  let lateFee = 0;
+  if (daysDelayed > 0) {
+    let multiplier = 0;
+    if (isSmallLlp) {
+      // Small LLP multipliers
+      if (daysDelayed <= 15)       multiplier = 1;
+      else if (daysDelayed <= 30)  multiplier = 2;
+      else if (daysDelayed <= 60)  multiplier = 4;
+      else if (daysDelayed <= 90)  multiplier = 6;
+      else if (daysDelayed <= 180) multiplier = 10;
+      else if (daysDelayed <= 360) multiplier = 15;
+      else multiplier = 15; // Beyond 360: 15x + ₹10/day (applied separately below)
+    } else {
+      // Other than Small LLP multipliers
+      if (daysDelayed <= 15)       multiplier = 1;
+      else if (daysDelayed <= 30)  multiplier = 4;
+      else if (daysDelayed <= 60)  multiplier = 8;
+      else if (daysDelayed <= 90)  multiplier = 12;
+      else if (daysDelayed <= 180) multiplier = 20;
+      else if (daysDelayed <= 360) multiplier = 30;
+      else multiplier = 30; // Beyond 360: 30x + ₹20/day (applied separately below)
+    }
 
-  // 3. LLP Statutory Penalty (Section 34(4) / 35(3) of LLP Act)
-  // LLP: ₹100/day, no cap
-  // Each DP: ₹100/day, no cap
-  const llpPenalty = daysDelayed > 0 ? 100 * daysDelayed : 0;
-  const dpPenalty = daysDelayed > 0 ? 100 * daysDelayed * dpCount : 0;
+    lateFee = normalFee * multiplier;
+
+    // Beyond 360 days: add daily per-day surcharge on top of the 15x/30x base
+    if (daysDelayed > 360) {
+      const extraDays = daysDelayed - 360;
+      lateFee += isSmallLlp ? extraDays * 10 : extraDays * 20;
+    }
+  }
+
+  // 3. LLP Statutory Adjudication Penalty (ROC passes formal order under Sec 454)
+  // LLP Amendment Act 2021, effective April 1, 2022 — Section 34(4) / 35(3):
+  // LLP entity:         ₹100/day, maximum cap ₹1,00,000
+  // Each Designated Partner: ₹100/day, maximum cap ₹50,000 per DP
+  const llpPenalty = daysDelayed > 0 ? Math.min(100 * daysDelayed, 100000) : 0;
+  const dpPenalty  = daysDelayed > 0 ? Math.min(100 * daysDelayed, 50000) * dpCount : 0;
 
   return {
     normalFee,

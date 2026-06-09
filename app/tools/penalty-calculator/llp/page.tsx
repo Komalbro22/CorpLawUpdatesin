@@ -165,14 +165,14 @@ export default function LlpPenaltyCalculator() {
             LLP Annual Filing Penalty & Late Fee Calculator
           </h1>
           <p className="text-amber-400 text-xs font-semibold mt-1 mb-1 tracking-wide">
-            LLP Form 8 Late Fee | Form 11 Penalty | ₹100/Day | No Maximum Cap
+            LLP Form 8 &amp; Form 11 Late Fee &amp; Penalty Calculator — 2022 Slab System
           </p>
           <p className="text-slate-400 text-sm mt-1">
-            Calculate contribution-based filing fees, ₹100/day statutory late fees for Form 8 & Form 11, and Designated Partner penalty exposures.
+            Calculate contribution-based filing fees, slab-multiplier based late fees for Form 8 &amp; Form 11, and Designated Partner penalty exposures.
           </p>
           <div className="flex flex-wrap gap-2 mt-4">
             <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-white/10 text-white border border-white/20 px-3 py-1 rounded-full">📋 Form 8 &amp; Form 11</span>
-            <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-white/10 text-white border border-white/20 px-3 py-1 rounded-full">⚡ ₹100/Day Unlimited</span>
+            <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-white/10 text-white border border-white/20 px-3 py-1 rounded-full">⚡ 2022 Slab System</span>
             <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-white/10 text-white border border-white/20 px-3 py-1 rounded-full">🆓 Free Calculator</span>
           </div>
         </div>
@@ -437,7 +437,7 @@ export default function LlpPenaltyCalculator() {
                   <div className="border border-red-200 dark:border-red-800/40 bg-red-50 dark:bg-red-950/20 rounded-xl p-3">
                     <span className="text-[10px] font-black uppercase tracking-wider text-red-600 dark:text-red-400 px-2 py-0.5 bg-red-100 dark:bg-red-900/40 rounded-full border border-red-200 dark:border-red-700/40">HIGH RISK</span>
                     <p className="text-xs font-bold text-slate-800 dark:text-slate-100 mt-2 mb-1">LLP Entity Penalty</p>
-                    <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-light">Registrar may initiate adjudication. ₹100/day — no upper cap — under Sec 34(3) LLP Act.</p>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-light">Registrar may initiate adjudication. ₹100/day — capped at ₹1,00,000 — under Sec 34(4) / 35(3) LLP Act.</p>
                   </div>
                   <div className="border border-amber-200 dark:border-amber-800/40 bg-amber-50 dark:bg-amber-950/20 rounded-xl p-3">
                     <span className="text-[10px] font-black uppercase tracking-wider text-amber-700 dark:text-amber-400 px-2 py-0.5 bg-amber-100 dark:bg-amber-900/40 rounded-full border border-amber-200 dark:border-amber-700/40">MEDIUM RISK</span>
@@ -527,15 +527,15 @@ export default function LlpPenaltyCalculator() {
             <div className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
               <details className="group">
                 <summary className="flex justify-between items-center p-4 text-xs font-bold uppercase tracking-wider text-slate-650 dark:text-slate-350 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-950/50 focus:outline-none">
-                  <span>Section 34 & 35 LLP Act — Late Fees</span>
+                  <span>Section 34 &amp; 35 LLP Act — Late Fees</span>
                   <ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180 text-slate-400" />
                 </summary>
                 <div className="p-4 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-450 leading-relaxed space-y-2 font-light bg-slate-50/50 dark:bg-slate-955/20">
                   <p>
-                    Under Rule 37 and Annexure A of the LLP Rules 2009, if an LLP fails to file Form 8 (Solvency Statement) or Form 11 (Annual Return) on time, it is liable to pay an <Link href="/glossary/additional-fee" className="text-amber-600 dark:text-amber-500 font-semibold underline">Additional Fee</Link> of <strong>₹100 per day</strong> for each day of delay.
+                    Under the LLP 2nd Amendment Rules, 2022 (effective April 1, 2022), if an LLP fails to file Form 8 (Solvency Statement) or Form 11 (Annual Return) on time, it is liable to pay an <Link href="/glossary/additional-fee" className="text-amber-600 dark:text-amber-500 font-semibold underline">Additional Fee</Link> calculated as a multiple (multiplier) of the normal filing fee depending on the delay duration.
                   </p>
                   <p>
-                    Unlike standard companies, LLP late fees do not scale down or cap; they accumulate indefinitely at ₹100/day.
+                    For delays exceeding 360 days, a daily surcharge of ₹10 (for Small LLPs) or ₹20 (for other LLPs) is added to the maximum slab multiplier (15× or 30× respectively).
                   </p>
                 </div>
               </details>
@@ -544,11 +544,11 @@ export default function LlpPenaltyCalculator() {
             <div className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
               <details className="group">
                 <summary className="flex justify-between items-center p-4 text-xs font-bold uppercase tracking-wider text-slate-655 dark:text-slate-350 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-950/50 focus:outline-none">
-                  <span>Section 34(4) & 35(3) — Statutory Adjudication Penalties</span>
+                  <span>Section 34(4) &amp; 35(3) — Statutory Adjudication Penalties</span>
                   <ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180 text-slate-400" />
                 </summary>
                 <div className="p-4 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-450 leading-relaxed font-light bg-slate-50/50 dark:bg-slate-955/20">
-                  If an LLP fails to file its statement of accounts or annual return, the LLP and its designated partners are liable to pay a penalty of ₹100 for each day during which such failure continues, without any maximum cap under the amended provisions of the LLP Act, 2008.
+                  If an LLP fails to file its statement of accounts or annual return, the LLP is liable to a penalty of ₹100/day (capped at ₹1,00,000) and each Designated Partner is liable to ₹100/day (capped at ₹50,000 per partner) under Section 34(4) &amp; 35(3) as amended by the LLP Amendment Act 2021.
                 </div>
               </details>
             </div>
@@ -559,19 +559,19 @@ export default function LlpPenaltyCalculator() {
       {/* Static SEO Article Sections */}
       <article className="max-w-4xl mx-auto px-4 py-16 border-t border-slate-200 dark:border-slate-800/60 mt-10 space-y-12">
         <section className="space-y-4 border-l-4 border-l-amber-500 pl-4">
-          <h2 className="text-2xl font-bold font-heading text-navy dark:text-white">LLP Form 8 Late Fee — ₹100 Per Day with No Upper Limit</h2>
+          <h2 className="text-2xl font-bold font-heading text-navy dark:text-white">LLP Form 8 Late Fee — 2022 Slab-Multiplier System</h2>
           <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed font-light">
-            Form 8 is the Statement of Account and Solvency that every Limited Liability Partnership must file within 30 days from the end of six months of the financial year (i.e. by <strong>October 30</strong> each year). If missed, Rule 37 of the LLP Rules mandates a late fee of <strong>₹100 per day</strong>.
+            Form 8 is the Statement of Account and Solvency that every Limited Liability Partnership must file within 30 days from the end of six months of the financial year (i.e. by <strong>October 30</strong> each year). Under the LLP 2nd Amendment Rules, 2022, the additional filing fee is calculated using a slab-multiplier system based on the delay period.
           </p>
           <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed font-light">
-            Unlike private limited companies which enjoy schemes or minor caps on select forms, there is no maximum limit or cap on the late fees accumulated by an LLP. The daily ₹100 late fee continues to grow until the form is uploaded and registered on the MCA portal.
+            Small LLPs pay additional fees ranging from 1× to 15× the normal fee, while other LLPs pay between 1× and 30× the normal fee. For delays exceeding 360 days, an additional surcharge of ₹10/day (for Small LLPs) or ₹20/day (for other LLPs) is added.
           </p>
         </section>
 
         <section className="space-y-4 border-l-4 border-l-amber-500 pl-4">
           <h2 className="text-2xl font-bold font-heading text-navy dark:text-white">LLP Form 11 Penalty — Annual Return Filing Due May 30</h2>
           <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed font-light">
-            LLP Form 11 is the Annual Return of the partnership, which must be submitted to the Registrar within 60 days of the close of the financial year (meaning the due date is <strong>May 30</strong> each year). The penalty for delayed filing of Form 11 is also <strong>₹100 per day</strong>.
+            LLP Form 11 is the Annual Return of the partnership, which must be submitted to the Registrar within 60 days of the close of the financial year (meaning the due date is <strong>May 30</strong> each year). The additional fee for delayed filing of Form 11 follows the same slab-multiplier system.
           </p>
           <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed font-light">
             This late fee is paid directly on the portal. Designated partners must ensure timely filing to avoid deactivation of DPINs and potential prosecution under the LLP Act, 2008.
