@@ -252,19 +252,77 @@ ${customInstructions ? `6. Weave the user's custom instructions, reasons, and sp
     if (!use_ai || !template.ai_system_prompt || fellBackToStandard) {
       // Simple template substitution
       documentContent = template.template_content
+
+      // Build fields map for easy lookup of requirement status
+      const fieldsMap = new Map<string, any>()
+      if (template.fields && Array.isArray(template.fields)) {
+        template.fields.forEach((f: any) => {
+          fieldsMap.set(f.id, f)
+        })
+      }
+
+      // First, substitute fields present in form_data
       Object.entries(form_data || {}).forEach(([key, value]) => {
+        if (key === 'custom_instructions') return
+
+        const field = fieldsMap.get(key)
+        const isRequired = field ? field.required !== false : true
         const regex = new RegExp(`{{${key}}}`, 'g')
-        documentContent = documentContent.replace(
-          regex, 
-          String(value || `[${key}]`)
-        )
+
+        let replacement = ''
+        if (value !== undefined && value !== null && String(value).trim() !== '') {
+          replacement = String(value).trim()
+        } else {
+          replacement = isRequired ? `[${key}]` : ''
+        }
+
+        documentContent = documentContent.replace(regex, replacement)
       })
+
+      // Next, replace any defined fields that were not passed in form_data at all
+      if (template.fields && Array.isArray(template.fields)) {
+        template.fields.forEach((f: any) => {
+          if (f.id === 'custom_instructions') return
+          const regex = new RegExp(`{{${f.id}}}`, 'g')
+          if (documentContent.includes(`{{${f.id}}}`)) {
+            const isRequired = f.required !== false
+            const replacement = isRequired ? `[${f.id}]` : ''
+            documentContent = documentContent.replace(regex, replacement)
+          }
+        })
+      }
       
-      // Replace any remaining placeholders
+      // Replace any other remaining placeholders that are not in template fields
       documentContent = documentContent.replace(
         /{{[A-Z_]+}}/g,
         '[TO BE FILLED]'
       )
+
+      // Append custom instructions if present, so they are not ignored
+      const customInstructions = form_data?.custom_instructions || ''
+      if (customInstructions && String(customInstructions).trim()) {
+        const trimmedIns = String(customInstructions).trim()
+        const customBlock = `\n\nADDITIONAL CONDITIONS / SPECIAL CLAUSES:\n${trimmedIns}\n\n`
+        
+        if (documentContent.includes('IN WITNESS WHEREOF')) {
+          documentContent = documentContent.replace('IN WITNESS WHEREOF', `${customBlock}IN WITNESS WHEREOF`)
+        } else {
+          documentContent = documentContent + customBlock
+        }
+      }
+
+      // Post-process the text to clean up consecutive commas, spaces before commas, trailing commas, etc.
+      // caused by empty optional fields.
+      documentContent = documentContent
+        // Replace multiple consecutive commas (with optional whitespace) with a single comma
+        .replace(/,\s*(,\s*)+/g, ', ')
+        // Remove spaces before commas
+        .replace(/\s+,\s*/g, ', ')
+        // Remove a comma right before a period (e.g. "something, .")
+        .replace(/,\s*\./g, '.')
+        // Clean up a trailing comma right before the end of a line or paragraph
+        .replace(/,\s*$/gm, '')
+        .trim()
     }
 
     // Save to database

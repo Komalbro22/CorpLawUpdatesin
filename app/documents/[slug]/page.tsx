@@ -608,11 +608,12 @@ export default function DocumentGeneratorPage() {
 
     // Determine if we should suppress company details from the document text body.
     // Clean if suppressCompanyDetails is checked, or if there is an active letterhead that covers header/footer.
-    const shouldClean = suppressCompanyDetails || (letterheadUrl && (
+    // Restrict this cleanup to board resolutions only to avoid stripping preamble party details in contracts/agreements.
+    const shouldClean = (suppressCompanyDetails || (letterheadUrl && (
       letterheadType === 'full_page' || 
       letterheadType === 'top_only' || 
       letterheadType === 'top_bottom_footer'
-    ));
+    ))) && template?.category === 'board_resolution';
 
     if (!shouldClean) return content
 
@@ -752,7 +753,11 @@ export default function DocumentGeneratorPage() {
         setGeneratedContent(data.content)
         setDocumentId(data.document_id)
         if (data.fell_back) {
-          setGenerationWarning('Gemini AI daily rate limit or free tier quota exceeded. Your document has been successfully generated using the high-quality standard template format instead!')
+          if (formData.custom_instructions && formData.custom_instructions.trim()) {
+            setGenerationWarning('AI Quota Limit — Fallback Active. Please note that your custom instructions could not be automatically woven into the standard template clauses. We have appended them at the end of the document under "ADDITIONAL CONDITIONS / SPECIAL CLAUSES" for your manual review and editing.')
+          } else {
+            setGenerationWarning('Gemini AI daily rate limit or free tier quota exceeded. Your document has been successfully generated using the high-quality standard template format instead!')
+          }
         }
         
         // Check for missing clauses
