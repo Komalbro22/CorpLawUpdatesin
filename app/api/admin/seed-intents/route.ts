@@ -1818,6 +1818,70 @@ const INTENTS_TO_SEED: IntentDef[] = [
       }
     ]
   },
+
+  // ── LEASE AGREEMENT INTENTS ──
+  {
+    name: 'ADD_LOCK_IN_BREACH_COMPENSATION_LEASE',
+    description: 'Add a lock-in breach compensation clause specifying penalty if either party terminates during the lock-in period',
+    aliases: [
+      'add lock in breach penalty',
+      'add lock in breach compensation lease',
+      'add early termination penalty lessor lease',
+      'lessor exit penalty during lock in',
+      'breach of lock in clause rent agreement',
+      'exit compensation during lockin'
+    ],
+    clauses: [
+      {
+        document_type: 'LEASE_AGREEMENT',
+        category: 'INSERT',
+        content: 'BREACH OF LOCK-IN: In the event that either Party terminates this Deed during the lock-in period, or breaches any material covenant hereunder forcing the other Party to terminate, the breaching Party shall pay to the non-breaching Party an amount equivalent to {{compensation_months}} months\' rent as compensation, in addition to any other damages or remedies available under law.',
+        variables: { compensation_months: 'NUMBER' },
+        placement_rules: {
+          action: 'INSERT_AFTER',
+          anchor: 'LOCK-IN PERIOD',
+          anchor_type: 'HEADING',
+          fallback: 'BOTTOM'
+        },
+        legal_basis: 'Section 74 of the Indian Contract Act, 1872 — Compensation for breach of contract',
+        related_forms: [],
+        compliance_deadline: null,
+      }
+    ]
+  },
+  {
+    name: 'ADD_STRUCTURAL_REPAIRS_OBLIGATION',
+    description: 'Clarify responsibility for structural and major repairs versus minor day-to-day repairs in lease',
+    aliases: [
+      'add repair obligation',
+      'who does repairs in lease',
+      'major repairs lessor obligation',
+      'add structural repairs clause lease',
+      'maintenance responsibility rent agreement',
+      'add repair clause lease',
+      'add minor repairs lessee',
+      'add repair cost allocation',
+      'repairs and maintenance clause lease',
+      'add landlord repair duty'
+    ],
+    clauses: [
+      {
+        document_type: 'LEASE_AGREEMENT',
+        category: 'INSERT',
+        content: 'REPAIRS AND MAINTENANCE: (a) MAJOR REPAIRS: All major structural repairs, repairs to the roof, external walls, main plumbing lines, main electrical wiring, and structural defects shall be carried out by the Lessor at the Lessor\'s own cost within 30 days of written intimation by the Lessee. (b) MINOR REPAIRS: Day-to-day minor repairs such as repair of tap washers, door handles, minor plastering, painting of minor chips, repairs to fittings provided by the Lessee, shall be carried out by the Lessee at the Lessee\'s cost. (c) If the Lessor fails to carry out major repairs within 30 days, the Lessee may carry out the repairs and deduct the cost from the monthly rent, after giving an additional 15 days\' notice.',
+        variables: {},
+        placement_rules: {
+          action: 'INSERT_AFTER',
+          anchor: 'OBLIGATIONS OF THE LESSOR',
+          anchor_type: 'HEADING',
+          fallback: 'BOTTOM'
+        },
+        legal_basis: 'Section 108 of the Transfer of Property Act, 1882 — Rights and liabilities of lessor and lessee',
+        related_forms: [],
+        compliance_deadline: null,
+      }
+    ]
+  },
 ];
 
 // ─────────────────────────────────────────────────────────────

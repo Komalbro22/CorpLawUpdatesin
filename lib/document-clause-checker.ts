@@ -265,3 +265,71 @@ export function formatTemplateSource(
 
   return cleanSource.replace(/^\/|\/$/g, '').trim()
 }
+
+export function checkLeaseClauses(
+  content: string
+): ClauseCheck[] {
+  const lowerContent = content.toLowerCase()
+
+  const leaseChecks: ClauseCheck[] = [
+    {
+      id: 'SECURITY_DEPOSIT',
+      name: 'Security Deposit Clause',
+      description: 'Defines refundable deposit amount, interest and refund timeline',
+      importance: 'critical',
+      missing: !lowerContent.includes('security deposit') &&
+               !lowerContent.includes('deposit'),
+      aiPrompt: 'Add a security deposit clause specifying the deposit amount, that it is interest-free and refundable, and the timeline for refund after vacating',
+      aliases: ['security deposit', 'deposit', 'caution money'],
+      applicableTo: ['agreements'],
+    },
+    {
+      id: 'LOCK_IN_PERIOD',
+      name: 'Lock-in Period',
+      description: 'Protects both parties from early exit during initial period',
+      importance: 'recommended',
+      missing: !lowerContent.includes('lock-in') &&
+               !lowerContent.includes('lock in'),
+      aiPrompt: 'Add a lock-in period clause specifying minimum 6 months during which neither party can terminate, with penalty for early exit',
+      aliases: ['lock-in', 'minimum term', 'penalty exit'],
+      applicableTo: ['agreements'],
+    },
+    {
+      id: 'RENT_ESCALATION',
+      name: 'Rent Escalation Clause',
+      description: 'Defines how rent increases annually',
+      importance: 'recommended',
+      missing: !lowerContent.includes('escalat') &&
+               !lowerContent.includes('increment') &&
+               !lowerContent.includes('increase'),
+      aiPrompt: 'Add a rent escalation clause providing for annual increase of 10% on the monthly rent at the commencement of each subsequent year',
+      aliases: ['rent increase', 'escalation', 'rent revision'],
+      applicableTo: ['agreements'],
+    },
+    {
+      id: 'QUIET_ENJOYMENT',
+      name: 'Quiet Enjoyment Covenant',
+      description: 'Lessor guarantees Lessee will not be disturbed',
+      importance: 'recommended',
+      missing: !lowerContent.includes('quiet enjoyment') &&
+               !lowerContent.includes('peaceful possession'),
+      aiPrompt: 'Add a quiet enjoyment covenant by the Lessor guaranteeing that the Lessee shall have peaceful and undisturbed possession of the premises throughout the lease term',
+      aliases: ['quiet enjoyment', 'peaceful possession', 'undisturbed'],
+      applicableTo: ['agreements'],
+    },
+    {
+      id: 'TDS_RENT',
+      name: 'TDS on Rent Clause',
+      description: 'TDS applicable if annual rent exceeds ₹2.4 lakh',
+      importance: 'recommended',
+      missing: !lowerContent.includes('tds') &&
+               !lowerContent.includes('tax deducted') &&
+               !lowerContent.includes('194i'),
+      aiPrompt: 'Add a TDS on rent clause addressing applicability of Section 194IB/194I of the Income Tax Act 1961 where annual rent exceeds Rs. 2,40,000',
+      aliases: ['tds', 'tax deduction', '194i', '194ib'],
+      applicableTo: ['agreements'],
+    },
+  ]
+
+  return leaseChecks
+}

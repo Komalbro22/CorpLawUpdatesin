@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { FuzzyClarifier } from '@/components/documents/FuzzyClarifier'
 import { LegalBasisCard } from '@/components/documents/LegalBasisCard'
 import { ConflictAuditor } from '@/components/documents/ConflictAuditor'
-import { checkMissingClauses, getImportanceIcon, getImportanceLabel, formatTemplateSource, type ClauseCheck } from '@/lib/document-clause-checker'
+import { checkMissingClauses, checkLeaseClauses, getImportanceIcon, getImportanceLabel, formatTemplateSource, type ClauseCheck } from '@/lib/document-clause-checker'
 
 interface Field {
   id: string
@@ -41,6 +41,58 @@ const NEXT_STEPS: Record<string, {
     link?: { text: string; href: string }
   }[]
 }> = {
+
+  'lease-agreement': {
+    title: 'After Downloading — Execute and Register Lease Deed',
+    steps: [
+      {
+        icon: '⚠️',
+        text: 'CHECK — Is registration compulsory for your lease?',
+        note: 'Lease for MORE than 1 year = MUST register\nLease for 11 months or less = registration optional (but notarize)',
+        urgent: true
+      },
+      {
+        icon: '💰',
+        text: 'Pay stamp duty before signing',
+        note: 'Stamp duty is state-specific:\nMaharashtra: 0.25% of total rent for up to 1 year\nDelhi: 2% of annual rent\nKarnataka: 0.1% of total rent\nPay on e-stamp paper from state portal or SHCIL'
+      },
+      {
+        icon: '✍️',
+        text: 'Both Lessor and Lessee sign on all pages',
+        note: 'Two witnesses must sign on the last page with their name and address'
+      },
+      {
+        icon: '🏛️',
+        text: 'Register at Sub-Registrar Office (if lease > 1 year)',
+        note: 'Documents needed:\n• Original deed + 2 photocopies\n• ID proof of both parties\n• Address proof\n• Property documents (7/12 extract, ownership proof)\n• Recent property tax receipt\n• Passport photos of both parties\n• Pay registration fee'
+      },
+      {
+        icon: '💳',
+        text: 'Collect security deposit cheque/transfer from Lessee',
+        note: 'Take cheque or bank transfer — avoid cash deposits above ₹20,000 (IT Act restriction). Issue written receipt.'
+      },
+      {
+        icon: '📸',
+        text: 'Do a joint inspection and photo/video documentation',
+        note: 'Before handing over keys, document the property condition with dated photos/video. Attach inventory list as Schedule II.'
+      },
+      {
+        icon: '📄',
+        text: 'Complete TDS compliance if applicable',
+        note: 'Annual rent > ₹2.4 lakh:\n• Individual Lessee: TDS @ 2% under Section 194IB\n• Company/Firm Lessee: TDS @ 10% under Section 194I\nFile Form 26QC (individual) or 26Q (company) quarterly'
+      },
+      {
+        icon: '🔑',
+        text: 'Hand over keys and possession receipt',
+        note: 'Issue written "Possession Receipt" confirming Lessee has taken possession. Keep signed copy.'
+      },
+      {
+        icon: '🏛️',
+        text: 'Inform local police/society about new tenant',
+        note: 'File tenant verification form with local police (mandatory in many states). Inform housing society/RWA. Update address change on Aadhaar if Lessee is using as residence.'
+      },
+    ],
+  },
 
   'board-resolution-bank-account': {
     title: 'How to Open Bank Account with This Resolution',
@@ -201,6 +253,35 @@ const AI_SUGGESTIONS: Record<string, {
   prompt: string
   category: 'add' | 'remove' | 'modify' | 'improve'
 }[]> = {
+
+  'lease-agreement': [
+    // ADD CLAUSES
+    { label: '+ Add sub-lease prohibition', prompt: 'Add an explicit clause prohibiting the Lessee from sub-letting, underletting or parting with possession of the premises or any part thereof without prior written consent of the Lessor', category: 'add' },
+    { label: '+ Add pet policy clause', prompt: 'Add a clause specifying whether pets are allowed — if residential lease, add that no pets are permitted without prior written consent of the Lessor', category: 'add' },
+    { label: '+ Add maintenance charge clause', prompt: 'Add a clause that all maintenance charges, society charges, parking charges and common area charges shall be paid by the Lessee in addition to the rent', category: 'add' },
+    { label: '+ Add painting obligation', prompt: 'Add a clause that the Lessee shall get the premises freshly painted at their own cost before vacating, or shall pay an amount equivalent to painting charges to the Lessor', category: 'add' },
+    { label: '+ Add notice/notice board clause', prompt: 'Add that the Lessor shall have the right to display a "To Let" notice on the premises during the last 30 days before lease expiry', category: 'add' },
+    { label: '+ Add diplomatic/break clause', prompt: 'Add a diplomatic break clause allowing either party to terminate after 6 months on giving 2 months written notice, notwithstanding the lock-in period, for diplomatic or relocation reasons', category: 'add' },
+    { label: '+ Add GST on rent clause', prompt: 'Add a clause confirming whether GST is applicable on the lease rent — if commercial lease and Lessor is GST registered, add that GST at 18% shall be charged on rent and the Lessee shall be entitled to claim input tax credit if eligible', category: 'add' },
+    { label: '+ Add generator/power backup clause', prompt: 'Add that the Lessee shall bear the cost of generator/power backup usage at actuals in addition to regular electricity charges', category: 'add' },
+    { label: '+ Add lock change prohibition', prompt: 'Add that the Lessee shall not change the locks or add additional locks to the premises without prior written consent of the Lessor, and any new keys must be provided to the Lessor', category: 'add' },
+    { label: '+ Add early termination penalty', prompt: 'Add an early termination penalty clause — if the Lessee terminates during the lock-in period, they shall forfeit the security deposit and pay rent for the unexpired lock-in period', category: 'add' },
+
+    // REMOVE CLAUSES
+    { label: '− Remove sub-lease restriction', prompt: 'Modify the sub-letting clause to allow the Lessee to sublet part of the premises with prior written intimation to the Lessor (not requiring formal consent)', category: 'remove' },
+    { label: '− Remove arbitration (keep court only)', prompt: 'Remove the arbitration clause and replace with exclusive jurisdiction of courts at the specified city only', category: 'remove' },
+
+    // MODIFY
+    { label: '↕ Convert to 11-month lease', prompt: 'Convert this to an 11-month lease (not exceeding 1 year) to avoid compulsory registration requirement under Section 17 of Registration Act 1908. Update the lease end date, duration, and registration clause accordingly.', category: 'modify' },
+    { label: '↕ Convert to commercial lease', prompt: 'Convert this from a residential to a commercial office space lease. Update the purpose clause, add GST clause, add signboard/branding rights, add business hours access clause, and remove residential-specific obligations', category: 'modify' },
+    { label: '↕ Add rent-free period', prompt: 'Add a rent-free period of {{number}} months at the start of the lease for fitting out and renovation purposes, during which no rent shall be payable but the security deposit shall apply', category: 'modify' },
+    { label: '↕ Make security deposit interest-bearing', prompt: 'Modify the security deposit clause to make it interest-bearing at {{rate}}% per annum, and update the refund clause accordingly', category: 'modify' },
+
+    // IMPROVE
+    { label: '✦ Strengthen Lessor protections', prompt: 'Strengthen all Lessor protection clauses — add right to enter and inspect monthly without notice, add right to terminate for non-payment after 1 month, add explicit forfeiture of deposit on damage', category: 'improve' },
+    { label: '✦ Strengthen Lessee protections', prompt: 'Strengthen Lessee protection clauses — add minimum 3 months written notice for rent increase, add Lessor\'s obligation to repair within 30 days, clarify that deposit is fully refundable without deduction for normal wear and tear', category: 'improve' },
+    { label: '🔤 Make language more formal', prompt: 'Rewrite the entire lease deed in more formal legal language with proper recitals, covenants, and legal terminology as used in registered documents', category: 'improve' },
+  ],
 
   'board-resolution-bank-account': [
     { label: '+ Add joint signing requirement', prompt: 'Add a clause that two authorized signatories must sign jointly for transactions above ₹1,00,000', category: 'add' },
@@ -369,6 +450,7 @@ export default function DocumentGeneratorPage() {
   const [chatHistory, setChatHistory] = useState<{ role: 'user' | 'ai'; text: string }[]>([])
   const [generationError, setGenerationError] = useState<string | null>(null)
   const [generationWarning, setGenerationWarning] = useState<string | null>(null)
+  const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(null)
 
   // Letterhead states
   const [showLetterheadModal, setShowLetterheadModal] = useState(false)
@@ -770,6 +852,13 @@ export default function DocumentGeneratorPage() {
             template?.category || ''
           )
           const actuallyMissing = missing.filter(c => c.missing)
+          
+          // Lease-specific additional checks
+          if (slug === 'lease-agreement') {
+            const leaseSpecific = checkLeaseClauses(data.content).filter(c => c.missing)
+            actuallyMissing.push(...leaseSpecific)
+          }
+
           setMissingClauses(actuallyMissing)
           if (actuallyMissing.length > 0) {
             setShowClauseChecker(true)
@@ -831,7 +920,15 @@ export default function DocumentGeneratorPage() {
               template?.slug || '',
               template?.category || ''
             )
-            setMissingClauses(missing.filter(c => c.missing))
+            const actuallyMissing = missing.filter(c => c.missing)
+
+            // Lease-specific additional checks
+            if (slug === 'lease-agreement') {
+              const leaseSpecific = checkLeaseClauses(data.content).filter(c => c.missing)
+              actuallyMissing.push(...leaseSpecific)
+            }
+
+            setMissingClauses(actuallyMissing)
           }
 
           setChatHistory(prev => [
@@ -1818,6 +1915,103 @@ export default function DocumentGeneratorPage() {
           )}
         </div>
       </div>
+
+      {slug === 'lease-agreement' && (
+        <div className="border-t border-slate-200 dark:border-slate-800 pt-12 mt-12 space-y-12">
+          {/* Section 1: Educational Legal Content */}
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 md:p-8 shadow-sm">
+            <h2 className="text-2xl md:text-3xl font-bold font-heading text-navy dark:text-white mb-6 flex items-center gap-2">
+              <span>⚖️</span> Immovable Property Lease Law — Transfer of Property Act, 1882
+            </h2>
+            
+            <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-8">
+              A lease of immovable property is not merely a contract; it is a transfer of an interest in the property. In India, leases are primarily governed by Chapter V of the <strong>Transfer of Property Act, 1882</strong> (TPA), along with the <strong>Registration Act, 1908</strong> and state-specific Rent Control Acts. Understanding the legal framework is essential for both landlords (lessors) and tenants (lessees) to safeguard their interests.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-slate-50 dark:bg-slate-950 p-5 rounded-2xl border border-slate-100 dark:border-slate-900 space-y-2">
+                <div className="text-amber-500 font-bold text-xs uppercase tracking-wide">Section 105 TPA</div>
+                <h3 className="font-bold text-navy dark:text-slate-200 text-base">Definition of Lease</h3>
+                <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">
+                  A lease is a transfer of a right to enjoy such property, made for a certain time, express or implied, or in perpetuity, in consideration of a price paid or promised, or of money, a share of crops, service or any other thing of value.
+                </p>
+              </div>
+
+              <div className="bg-slate-50 dark:bg-slate-950 p-5 rounded-2xl border border-slate-100 dark:border-slate-900 space-y-2">
+                <div className="text-amber-500 font-bold text-xs uppercase tracking-wide">Section 107 TPA & Sec 17 Registration Act</div>
+                <h3 className="font-bold text-navy dark:text-slate-200 text-base">Registration Requirements</h3>
+                <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">
+                  Leases from year to year, or for any term exceeding one year, or reserving a yearly rent, can be made <strong>only by a registered instrument</strong>. Leases of 11 months or less do not require compulsory registration, though notarization is standard practice.
+                </p>
+              </div>
+
+              <div className="bg-slate-50 dark:bg-slate-950 p-5 rounded-2xl border border-slate-100 dark:border-slate-900 space-y-2">
+                <div className="text-amber-500 font-bold text-xs uppercase tracking-wide">Section 108 TPA</div>
+                <h3 className="font-bold text-navy dark:text-slate-200 text-base">Rights & Liabilities</h3>
+                <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">
+                  Defines default statutory obligations unless modified by agreement: Landlord must ensure peaceful possession (quiet enjoyment) and major repairs; tenant must pay rent timely, use property reasonably, and refrain from structural changes.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Section 2: FAQs Accordion */}
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 md:p-8 shadow-sm">
+            <h2 className="text-2xl md:text-3xl font-bold font-heading text-navy dark:text-white mb-2 text-center">
+              Frequently Asked Questions (FAQs)
+            </h2>
+            <p className="text-slate-500 dark:text-slate-400 text-sm mb-8 text-center max-w-2xl mx-auto">
+              Clear answers to the most common legal and tax queries concerning rent agreements and lease deeds in India.
+            </p>
+
+            <div className="space-y-4 max-w-3xl mx-auto">
+              {[
+                {
+                  q: "What is the difference between a Lease Agreement and a License Agreement?",
+                  a: "A Lease (governed by the Transfer of Property Act, 1882) transfers an interest in the property, creating tenancy rights and granting exclusive possession. It is relatively difficult for landlords to evict tenants under a lease. A License (governed by the Indian Easements Act, 1882) only grants permission to occupy the property without transferring any interest. License agreements (commonly called Leave and License) are preferred for residential lettings as they simplify eviction."
+                },
+                {
+                  q: "Why are rent agreements commonly drawn for 11 months in India?",
+                  a: "Under Section 17 of the Registration Act, 1908, leases exceeding 12 months require compulsory registration at the Sub-Registrar's office, involving expensive stamp duty and registration fees. To avoid these costs and lengthy administrative procedures, landlords and tenants routinely sign 11-month agreements, which can be notarized on non-judicial stamp paper."
+                },
+                {
+                  q: "What is the stamp duty rate on Lease Deeds in India?",
+                  a: "Stamp duty is state-specific and is calculated as a percentage of the annual rent plus any security deposit or premium. For instance, in Maharashtra, the stamp duty is 0.25% of the total rent payable for the entire period. In Delhi, it ranges from 2% to 3% of the average annual rent depending on the term. E-stamp paper can be bought online via SHCIL or authorized state portals."
+                },
+                {
+                  q: "Who is responsible for repairs in a leased property?",
+                  a: "Under Section 108 of the Transfer of Property Act, the Lessor (Landlord) is responsible for all major structural repairs (such as wall cracks, roof leakage, structural plumbing, and external electrical lines) to keep the premises fit for habitability. The Lessee (Tenant) is responsible for day-to-day minor maintenance (e.g., replacement of bulbs, tap washers, minor cleaning, and repairing fixtures damaged due to negligence)."
+                },
+                {
+                  q: "Is TDS applicable on monthly rent payments?",
+                  a: "Yes, under the Income Tax Act, 1961: (1) Section 194I: Companies, Partnership Firms, and Sole Proprietorships (subject to tax audit) must deduct TDS at 10% on annual rent payments exceeding ₹2,40,000. (2) Section 194IB: Individuals and HUFs not subject to audit must deduct TDS at 5% if the monthly rent exceeds ₹50,000. The tenant must submit Form 26QC or Form 26Q to deposit this tax."
+                }
+              ].map((faq, idx) => {
+                const isOpen = openFaqIdx === idx;
+                return (
+                  <div key={idx} className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() => setOpenFaqIdx(isOpen ? null : idx)}
+                      className="w-full flex justify-between items-center px-5 py-4 text-left font-bold text-navy dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors text-sm md:text-base"
+                    >
+                      <span>{faq.q}</span>
+                      <span className="text-amber-500 font-extrabold text-xl leading-none">
+                        {isOpen ? '−' : '+'}
+                      </span>
+                    </button>
+                    {isOpen && (
+                      <div className="px-5 pb-5 pt-1 text-slate-600 dark:text-slate-400 text-xs md:text-sm leading-relaxed border-t border-slate-100 dark:border-slate-900 bg-slate-50/50 dark:bg-slate-900/10">
+                        {faq.a}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Letterhead Classification Dialog Modal */}
       {showLetterheadModal && pendingLetterheadFile && (
