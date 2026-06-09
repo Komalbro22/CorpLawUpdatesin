@@ -37,41 +37,51 @@ const companyFaqs = [
 // JsonLd structure for company calculator
 const seoJsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'WebPage',
-  name: 'Company ROC Late Fee & Penalty Calculator',
-  description: 'Calculate exact ROC filing fees and late fees for MGT-7, AOC-4, DIR-3 KYC, and more.',
-  url: 'https://www.corplawupdates.in/tools/penalty-calculator/company',
-  breadcrumb: {
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.corplawupdates.in' },
-      { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://www.corplawupdates.in/tools' },
-      { '@type': 'ListItem', position: 3, name: 'Penalty Calculator', item: 'https://www.corplawupdates.in/tools/penalty-calculator' },
-      { '@type': 'ListItem', position: 4, name: 'Company', item: 'https://www.corplawupdates.in/tools/penalty-calculator/company' },
-    ],
-  },
-  mainEntity: [
+  '@graph': [
     {
-      '@type': 'WebApplication',
-      name: 'Company ROC Late Fee & Penalty Calculator',
+      '@type': 'WebPage',
+      name: 'Company ROC Penalty & Late Fee Calculator 2026 — MGT-7, AOC-4 | CorpLawUpdates',
+      description: 'Calculate exact MCA late filing fees for MGT-7, AOC-4, DIR-3 KYC, ADT-1 and 11 more forms. Includes Section 92/137 adjudication penalties, Section 446B small company relief. Free ROC penalty calculator India.',
       url: 'https://www.corplawupdates.in/tools/penalty-calculator/company',
-      applicationCategory: 'BusinessApplication',
-      offers: {
-        '@type': 'Offer',
-        price: '0',
-        priceCurrency: 'INR',
+      keywords: 'company ROC penalty calculator India, ROC late filing penalty calculator, MCA late fees calculator, AOC-4 late fees calculator, MGT-7 late fees calculator, ADT-1 late fees calculator, authorised capital fees calculator, ROC fees calculator, company late fee calculator India, MCA fees calculator v3, company fee calculator MCA, SH-7 fees calculator, company incorporation fees calculator',
+      breadcrumb: {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.corplawupdates.in' },
+          { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://www.corplawupdates.in/tools' },
+          { '@type': 'ListItem', position: 3, name: 'Penalty Calculator', item: 'https://www.corplawupdates.in/tools/penalty-calculator' },
+          { '@type': 'ListItem', position: 4, name: 'Company ROC Calculator', item: 'https://www.corplawupdates.in/tools/penalty-calculator/company' },
+        ],
       },
+    },
+    {
+      '@type': 'SoftwareApplication',
+      name: 'Company ROC Penalty & Late Fee Calculator',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Any',
+      url: 'https://www.corplawupdates.in/tools/penalty-calculator/company',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      featureList: 'MGT-7 late fee, AOC-4 late fee, DIR-3 KYC penalty, Section 403 calculator, Section 446B relief, Adjudication penalty, Authorized capital fee slabs',
     },
     {
       '@type': 'FAQPage',
       mainEntity: companyFaqs.map(faq => ({
         '@type': 'Question',
         name: faq.q,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: faq.a,
-        },
+        acceptedAnswer: { '@type': 'Answer', text: faq.a },
       })),
+    },
+    {
+      '@type': 'HowTo',
+      name: 'How to Calculate Company ROC Late Fee',
+      description: 'Calculate MCA additional fees for delayed filing of MGT-7, AOC-4 and other forms.',
+      step: [
+        { '@type': 'HowToStep', position: 1, name: 'Select Company Type', text: 'Choose Pvt Ltd, Public Ltd, OPC, Small Company, or Section 8.' },
+        { '@type': 'HowToStep', position: 2, name: 'Enter Authorized Capital', text: 'Enter the authorized share capital amount or select a slab.' },
+        { '@type': 'HowToStep', position: 3, name: 'Choose MCA Form', text: 'Select the delayed form: MGT-7, AOC-4, DIR-3 KYC, ADT-1, etc.' },
+        { '@type': 'HowToStep', position: 4, name: 'Enter Due & Filing Dates', text: 'Enter the statutory due date and actual filing date. Days delayed are auto-calculated.' },
+        { '@type': 'HowToStep', position: 5, name: 'Read Results', text: 'View normal filing fee, late fee, total payable, and adjudication penalty exposure.' },
+      ],
     },
   ],
 }
@@ -149,7 +159,7 @@ export default function CompanyPenaltyCalculator() {
       <JsonLd data={seoJsonLd as any} />
       
       {/* Page header */}
-      <div className="bg-navy py-8 px-4">
+      <div className="bg-navy py-10 px-4">
         <div className="max-w-7xl mx-auto">
           <nav className="text-xs text-slate-400 mb-3">
             <Link href="/tools" className="hover:text-amber-400">
@@ -165,11 +175,46 @@ export default function CompanyPenaltyCalculator() {
             </span>
           </nav>
           <h1 className="text-2xl md:text-3xl font-bold text-white font-heading">
-            Company ROC Penalty & Late Fee Calculator
+            Company ROC Penalty &amp; Late Fee Calculator
           </h1>
+          <p className="text-amber-400/80 text-xs font-semibold mt-1 mb-2 tracking-wide">
+            ROC Late Filing Fees — MGT-7 | AOC-4 | DIR-3 KYC | ADT-1 | PAS-3 | INC-22
+          </p>
           <p className="text-slate-400 text-sm mt-1">
             Calculate statutory filing fees, Section 403 ROC late fees, and potential Section 92/137 adjudication penalties. Covers Section 446B reliefs.
           </p>
+          {/* Badge pills */}
+          <div className="flex flex-wrap gap-2 mt-4">
+            {[
+              { label: '⚡ Instant Calculation', color: 'bg-amber-400/10 text-amber-400 border border-amber-500/20' },
+              { label: '📋 14 MCA Forms', color: 'bg-blue-500/10 text-blue-400 border border-blue-500/20' },
+              { label: '🆓 Free Tool', color: 'bg-green-500/10 text-green-400 border border-green-500/20' },
+            ].map(pill => (
+              <span key={pill.label} className={`text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider ${pill.color}`}>
+                {pill.label}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Stats */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-5 mb-6">
+        <div className="grid grid-cols-3 gap-4">
+          <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/8 rounded-2xl p-4 shadow-sm text-center">
+            <div className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">DELAY PERIOD</div>
+            <div className="text-2xl font-black text-navy dark:text-white font-heading">{daysDelayed > 0 ? `${daysDelayed} Days` : '— Days'}</div>
+          </div>
+          <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/8 rounded-2xl p-4 shadow-sm text-center">
+            <div className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">TOTAL MCA FEE</div>
+            <div className="text-2xl font-black text-amber-500 font-heading">{formatINR(results.totalPayable)}</div>
+            <div className="text-[10px] text-slate-400 mt-0.5">Normal + Late Fee</div>
+          </div>
+          <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/8 rounded-2xl p-4 shadow-sm text-center">
+            <div className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">PENALTY EXPOSURE</div>
+            <div className="text-2xl font-black text-red-500 font-heading">{formatINR(results.totalPenaltyExposure)}</div>
+            <div className="text-[10px] text-slate-400 mt-0.5">Max Statutory Risk</div>
+          </div>
         </div>
       </div>
 
@@ -177,7 +222,7 @@ export default function CompanyPenaltyCalculator() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Left: Input Form */}
-        <section className="lg:col-span-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden flex flex-col justify-between">
+        <section className="lg:col-span-5 bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/8 rounded-2xl shadow-sm overflow-hidden flex flex-col justify-between">
           <div>
             <div className="bg-slate-50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-800 px-5 py-3">
               <h2 className="text-sm font-bold font-heading text-navy dark:text-white">Filing Parameters</h2>
@@ -356,7 +401,7 @@ export default function CompanyPenaltyCalculator() {
           </div>
           
           <div className="p-5 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/30">
-            <span>All calculations conform to MCA & Companies Act 2013 rules.</span>
+            <span>All calculations conform to MCA &amp; Companies Act 2013 rules.</span>
           </div>
         </section>
 
@@ -364,7 +409,7 @@ export default function CompanyPenaltyCalculator() {
         <section className="lg:col-span-7 flex flex-col gap-6">
           
           {/* Result Card */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden flex flex-col justify-between">
+          <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/8 rounded-2xl shadow-sm overflow-hidden flex flex-col justify-between">
             <div className="bg-slate-50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-800 px-5 py-3 flex items-center justify-between">
               <h2 className="text-sm font-bold font-heading text-navy dark:text-white">Calculation Breakdown</h2>
               <button
@@ -377,7 +422,7 @@ export default function CompanyPenaltyCalculator() {
             </div>
 
             {isCalculating ? (
-              <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-slate-900">
+              <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-[#111827]">
                 <div className="w-8 h-8 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
                 <p className="text-slate-500 text-xs mt-4 uppercase tracking-wider">Recalculating Exposure...</p>
               </div>
@@ -447,9 +492,9 @@ export default function CompanyPenaltyCalculator() {
           </div>
 
           {/* Interactive Chart */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+          <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/8 rounded-2xl p-6 shadow-sm">
             <h3 className="text-sm font-bold font-heading text-navy dark:text-white mb-1">Penalty Growth over Time</h3>
-            <p className="text-xs text-slate-450 dark:text-slate-500 mb-6">Click any bar to instantly set the calculator's delay to that period.</p>
+            <p className="text-xs text-slate-450 dark:text-slate-500 mb-6">Click any bar to instantly set the calculator&apos;s delay to that period.</p>
             
             <div className="flex justify-between items-end h-32 pt-4 px-2">
               {[30, 60, 90, 180, 365].map(days => {
@@ -492,8 +537,8 @@ export default function CompanyPenaltyCalculator() {
                         style={{ height: `${heightPct}%` }}
                         className={`w-full rounded-t-md transition-all ${
                           isActive
-                            ? 'bg-amber-400 shadow-sm shadow-amber-500/10'
-                            : 'bg-slate-200 dark:bg-slate-800 group-hover:bg-amber-400/50'
+                            ? 'bg-gradient-to-t from-amber-500 to-amber-300 shadow-sm shadow-amber-500/10'
+                            : 'bg-gradient-to-t from-slate-300 to-slate-200 dark:from-slate-700 dark:to-slate-600 group-hover:from-amber-500/50 group-hover:to-amber-300/50'
                         }`}
                       />
                     </div>
@@ -507,7 +552,7 @@ export default function CompanyPenaltyCalculator() {
           </div>
 
           {/* Legal provisions collapsible boxes */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
+          <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/8 rounded-2xl p-6 shadow-sm space-y-4">
             <h3 className="text-sm font-bold font-heading text-navy dark:text-white">Relevant Legal Provisions</h3>
             
             <div className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
@@ -560,7 +605,7 @@ export default function CompanyPenaltyCalculator() {
 
       {/* Static SEO Article Sections */}
       <article className="max-w-4xl mx-auto px-4 py-16 border-t border-slate-200 dark:border-slate-800/60 mt-10 space-y-12">
-        <section className="space-y-4">
+        <section className="space-y-4 border-l-4 border-l-amber-500 pl-4">
           <h2 className="text-2xl font-bold font-heading text-navy dark:text-white">How to Calculate MCA Late Fee for Companies?</h2>
           <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed font-light">
             Under Section 403 of the Companies Act, 2013, companies that miss standard deadlines face daily late fees. For annual returns (Form MGT-7/7A) and financial statements (Form AOC-4), the Ministry of Corporate Affairs (MCA) charges a flat additional fee of <strong>₹100 per day</strong>. This fee accumulates indefinitely until the form is successfully uploaded to the MCA V3 portal.
@@ -570,7 +615,7 @@ export default function CompanyPenaltyCalculator() {
           </p>
         </section>
 
-        <section className="space-y-4">
+        <section className="space-y-4 border-l-4 border-l-amber-500 pl-4">
           <h2 className="text-2xl font-bold font-heading text-navy dark:text-white">What is the ROC Penalty for Non-Filing MGT-7 and AOC-4?</h2>
           <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed font-light">
             It is critical to distinguish between portal late fees and ROC adjudication penalties. While late fees are paid automatically upon filing a delayed form, the Registrar of Companies (ROC) can initiate separate legal adjudication proceedings for non-compliance under Section 92(5) and Section 137(3).
@@ -580,15 +625,15 @@ export default function CompanyPenaltyCalculator() {
           </p>
         </section>
 
-        <section className="space-y-4">
+        <section className="space-y-4 border-l-4 border-l-amber-500 pl-4">
           <h2 className="text-2xl font-bold font-heading text-navy dark:text-white">Section 446B — Relief for Small Companies</h2>
           <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed font-light">
-            Under Section 446B of the Companies Act, 2013, the government provides significant compliance relief for Small Companies, One Person Companies (OPCs), and Startups. If these entities default, all statutory penalties under the Act are capped at 50% of the standard penalty amounts. The calculator applies this relief automatically when selecting "Small Company" or "OPC" as the company type.
+            Under Section 446B of the Companies Act, 2013, the government provides significant compliance relief for Small Companies, One Person Companies (OPCs), and Startups. If these entities default, all statutory penalties under the Act are capped at 50% of the standard penalty amounts. The calculator applies this relief automatically when selecting &quot;Small Company&quot; or &quot;OPC&quot; as the company type.
           </p>
         </section>
 
-        <section className="space-y-4">
-          <h2 className="text-2xl font-bold font-heading text-navy dark:text-white">Section 403 Penalty Calculator & Forms Summary</h2>
+        <section className="space-y-4 border-l-4 border-l-amber-500 pl-4">
+          <h2 className="text-2xl font-bold font-heading text-navy dark:text-white">Section 403 Penalty Calculator &amp; Forms Summary</h2>
           <div className="overflow-x-auto border border-slate-200 dark:border-slate-800 rounded-2xl bg-white dark:bg-slate-900 shadow-sm">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
@@ -632,7 +677,8 @@ export default function CompanyPenaltyCalculator() {
 
       {/* FAQs Accordion */}
       <section className="max-w-4xl mx-auto px-4 pb-20 border-t border-slate-200 dark:border-slate-800/60 pt-16">
-        <h2 className="text-2xl font-bold font-heading text-navy dark:text-white mb-8 text-center">Frequently Asked Questions (FAQs)</h2>
+        <h2 className="text-2xl font-bold font-heading text-navy dark:text-white mb-4 text-center">Frequently Asked Questions (FAQs)</h2>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mb-8 text-center">Common questions about Company ROC penalty, MCA late filing fees, and adjudication exposure.</p>
         <div className="space-y-4">
           {companyFaqs.map((faq, i) => (
             <div key={i} className="border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-sm">

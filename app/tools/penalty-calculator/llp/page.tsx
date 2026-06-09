@@ -33,41 +33,51 @@ const llpFaqs = [
 // JsonLd structure for LLP calculator
 const seoJsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'WebPage',
-  name: 'LLP Late Fee & Penalty Calculator',
-  description: 'Calculate LLP Form 8 and Form 11 late fees at ₹100/day. Includes contribution-based normal filing fees, LLP Act 2008 penalty provisions, and Small LLP reduced penalties.',
-  url: 'https://www.corplawupdates.in/tools/penalty-calculator/llp',
-  breadcrumb: {
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.corplawupdates.in' },
-      { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://www.corplawupdates.in/tools' },
-      { '@type': 'ListItem', position: 3, name: 'Penalty Calculator', item: 'https://www.corplawupdates.in/tools/penalty-calculator' },
-      { '@type': 'ListItem', position: 4, name: 'LLP', item: 'https://www.corplawupdates.in/tools/penalty-calculator/llp' },
-    ],
-  },
-  mainEntity: [
+  '@graph': [
     {
-      '@type': 'WebApplication',
-      name: 'LLP Late Fee & Penalty Calculator',
+      '@type': 'WebPage',
+      name: 'LLP Annual Filing Penalty & Late Fee Calculator 2026 — Form 8 & Form 11 | CorpLawUpdates',
+      description: 'Calculate LLP Form 8 and Form 11 late fees at ₹100/day with no maximum cap. Includes contribution-based normal fees, Section 34(3) & 35(3) adjudication penalties. Free LLP fee calculator India.',
       url: 'https://www.corplawupdates.in/tools/penalty-calculator/llp',
-      applicationCategory: 'BusinessApplication',
-      offers: {
-        '@type': 'Offer',
-        price: '0',
-        priceCurrency: 'INR',
+      keywords: 'LLP fee calculator India, ROC fees calculator, MCA fees calculator v3, MCA LLP fee calculator, LLP Form 8 late fee calculator, LLP late fee calculator India, LLP late fee calculator MCA, LLP Form 3 late fee calculator, Form 11 LLP late fees calculator, MCA late fees calculator, ADT-1 fees calculator, LLP late calculator India, ROC late filing penalty calculator, authorised capital fees calculator, MCA stamp duty calculator, MCA fees calculator v2, What is the late fee for LLP, What is the maximum late filing fee, How to calculate late fee in MCA',
+      breadcrumb: {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.corplawupdates.in' },
+          { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://www.corplawupdates.in/tools' },
+          { '@type': 'ListItem', position: 3, name: 'Penalty Calculator', item: 'https://www.corplawupdates.in/tools/penalty-calculator' },
+          { '@type': 'ListItem', position: 4, name: 'LLP Calculator', item: 'https://www.corplawupdates.in/tools/penalty-calculator/llp' },
+        ],
       },
+    },
+    {
+      '@type': 'SoftwareApplication',
+      name: 'LLP Annual Filing Penalty & Late Fee Calculator',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Any',
+      url: 'https://www.corplawupdates.in/tools/penalty-calculator/llp',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      featureList: 'LLP Form 8 late fee, LLP Form 11 late fee, ₹100 per day penalty, Small LLP fee concession, Designated Partner penalty, Section 34/35 LLP Act',
     },
     {
       '@type': 'FAQPage',
       mainEntity: llpFaqs.map(faq => ({
         '@type': 'Question',
         name: faq.q,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: faq.a,
-        },
+        acceptedAnswer: { '@type': 'Answer', text: faq.a },
       })),
+    },
+    {
+      '@type': 'HowTo',
+      name: 'How to Calculate LLP Late Filing Fee',
+      description: 'Calculate LLP Form 8 and Form 11 additional fees at ₹100/day.',
+      step: [
+        { '@type': 'HowToStep', position: 1, name: 'Select LLP Type', text: 'Choose Regular LLP or Small LLP (turnover under ₹40L, contribution under ₹25L).' },
+        { '@type': 'HowToStep', position: 2, name: 'Enter Contribution', text: 'Enter total partner contribution or select a contribution slab.' },
+        { '@type': 'HowToStep', position: 3, name: 'Select Form', text: 'Select Form 8 (due Oct 30) or Form 11 (due May 30).' },
+        { '@type': 'HowToStep', position: 4, name: 'Enter Filing Date', text: 'Enter the actual or planned filing date. Days delayed are auto-calculated.' },
+        { '@type': 'HowToStep', position: 5, name: 'Read Results', text: 'View normal fee, late fee at ₹100/day, total MCA fee, and statutory penalty exposure.' },
+      ],
     },
   ],
 }
@@ -136,7 +146,7 @@ export default function LlpPenaltyCalculator() {
       <JsonLd data={seoJsonLd as any} />
       
       {/* Page header */}
-      <div className="bg-navy py-8 px-4">
+      <div className="bg-navy py-10 px-4">
         <div className="max-w-7xl mx-auto">
           <nav className="text-xs text-slate-400 mb-3">
             <Link href="/tools" className="hover:text-amber-400">
@@ -154,9 +164,33 @@ export default function LlpPenaltyCalculator() {
           <h1 className="text-2xl md:text-3xl font-bold text-white font-heading">
             LLP Annual Filing Penalty & Late Fee Calculator
           </h1>
+          <p className="text-amber-400 text-xs font-semibold mt-1 mb-1 tracking-wide">
+            LLP Form 8 Late Fee | Form 11 Penalty | ₹100/Day | No Maximum Cap
+          </p>
           <p className="text-slate-400 text-sm mt-1">
             Calculate contribution-based filing fees, ₹100/day statutory late fees for Form 8 & Form 11, and Designated Partner penalty exposures.
           </p>
+          <div className="flex flex-wrap gap-2 mt-4">
+            <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-white/10 text-white border border-white/20 px-3 py-1 rounded-full">📋 Form 8 &amp; Form 11</span>
+            <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-white/10 text-white border border-white/20 px-3 py-1 rounded-full">⚡ ₹100/Day Unlimited</span>
+            <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-white/10 text-white border border-white/20 px-3 py-1 rounded-full">🆓 Free Calculator</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Stats */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-5 mb-6">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/8 rounded-2xl p-4 shadow-sm text-center">
+            <div className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">TOTAL MCA FEE</div>
+            <div className="text-2xl font-black text-amber-500 font-heading">{formatINR(results.totalPayable)}</div>
+            <div className="text-[10px] text-slate-400 mt-0.5">Includes standard filing fees</div>
+          </div>
+          <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/8 rounded-2xl p-4 shadow-sm text-center">
+            <div className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">PENALTY EXPOSURE</div>
+            <div className="text-2xl font-black text-red-500 font-heading">{formatINR(results.totalPenaltyExposure)}</div>
+            <div className="text-[10px] text-slate-400 mt-0.5">Sec 34(3) &amp; 35(3) liability</div>
+          </div>
         </div>
       </div>
 
@@ -398,6 +432,20 @@ export default function LlpPenaltyCalculator() {
                   </div>
                 </div>
 
+                {/* Risk Cards */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="border border-red-200 dark:border-red-800/40 bg-red-50 dark:bg-red-950/20 rounded-xl p-3">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-red-600 dark:text-red-400 px-2 py-0.5 bg-red-100 dark:bg-red-900/40 rounded-full border border-red-200 dark:border-red-700/40">HIGH RISK</span>
+                    <p className="text-xs font-bold text-slate-800 dark:text-slate-100 mt-2 mb-1">LLP Entity Penalty</p>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-light">Registrar may initiate adjudication. ₹100/day — no upper cap — under Sec 34(3) LLP Act.</p>
+                  </div>
+                  <div className="border border-amber-200 dark:border-amber-800/40 bg-amber-50 dark:bg-amber-950/20 rounded-xl p-3">
+                    <span className="text-[10px] font-black uppercase tracking-wider text-amber-700 dark:text-amber-400 px-2 py-0.5 bg-amber-100 dark:bg-amber-900/40 rounded-full border border-amber-200 dark:border-amber-700/40">MEDIUM RISK</span>
+                    <p className="text-xs font-bold text-slate-800 dark:text-slate-100 mt-2 mb-1">Designated Partner Liability</p>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-light">Each DP liable at ₹100/day under Sec 35(3) LLP Act. Max ₹50,000 per partner.</p>
+                  </div>
+                </div>
+
                 {/* Warning message */}
                 {daysDelayed > 730 && (
                   <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 flex items-start gap-2.5">
@@ -510,7 +558,7 @@ export default function LlpPenaltyCalculator() {
 
       {/* Static SEO Article Sections */}
       <article className="max-w-4xl mx-auto px-4 py-16 border-t border-slate-200 dark:border-slate-800/60 mt-10 space-y-12">
-        <section className="space-y-4">
+        <section className="space-y-4 border-l-4 border-l-amber-500 pl-4">
           <h2 className="text-2xl font-bold font-heading text-navy dark:text-white">LLP Form 8 Late Fee — ₹100 Per Day with No Upper Limit</h2>
           <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed font-light">
             Form 8 is the Statement of Account and Solvency that every Limited Liability Partnership must file within 30 days from the end of six months of the financial year (i.e. by <strong>October 30</strong> each year). If missed, Rule 37 of the LLP Rules mandates a late fee of <strong>₹100 per day</strong>.
@@ -520,7 +568,7 @@ export default function LlpPenaltyCalculator() {
           </p>
         </section>
 
-        <section className="space-y-4">
+        <section className="space-y-4 border-l-4 border-l-amber-500 pl-4">
           <h2 className="text-2xl font-bold font-heading text-navy dark:text-white">LLP Form 11 Penalty — Annual Return Filing Due May 30</h2>
           <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed font-light">
             LLP Form 11 is the Annual Return of the partnership, which must be submitted to the Registrar within 60 days of the close of the financial year (meaning the due date is <strong>May 30</strong> each year). The penalty for delayed filing of Form 11 is also <strong>₹100 per day</strong>.
@@ -530,7 +578,7 @@ export default function LlpPenaltyCalculator() {
           </p>
         </section>
 
-        <section className="space-y-4">
+        <section className="space-y-4 border-l-4 border-l-amber-500 pl-4">
           <h2 className="text-2xl font-bold font-heading text-navy dark:text-white">What Happens If LLP Does Not File for 2+ Years?</h2>
           <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed font-light">
             If an LLP fails to file Form 8 and Form 11 for two or more consecutive financial years, the Registrar of Companies (ROC) is empowered to strike off the name of the LLP from the register under Rule 37A of the LLP Rules. Additionally, the LLP cannot be closed voluntarily or transformed into a company unless all pending annual returns are filed first.
@@ -540,7 +588,8 @@ export default function LlpPenaltyCalculator() {
 
       {/* FAQs Accordion */}
       <section className="max-w-4xl mx-auto px-4 pb-20 border-t border-slate-200 dark:border-slate-800/60 pt-16">
-        <h2 className="text-2xl font-bold font-heading text-navy dark:text-white mb-8 text-center">Frequently Asked Questions (FAQs)</h2>
+        <h2 className="text-2xl font-bold font-heading text-navy dark:text-white mb-4 text-center">Frequently Asked Questions (FAQs)</h2>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mb-8 text-center">Common questions about LLP late fee for Form 8 and Form 11, MCA calculator, and penalty provisions.</p>
         <div className="space-y-4">
           {llpFaqs.map((faq, i) => (
             <div key={i} className="border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-sm">

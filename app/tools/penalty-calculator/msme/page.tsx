@@ -37,41 +37,59 @@ const msmeFaqs = [
 // JsonLd structure for MSME calculator
 const seoJsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'WebPage',
-  name: 'MSME Delayed Payment Interest & Penalty Calculator',
-  description: 'Calculate compound interest on delayed MSME payments at 3x RBI Bank Rate. Also calculates Form MSME-1 non-filing penalty.',
-  url: 'https://www.corplawupdates.in/tools/penalty-calculator/msme',
-  breadcrumb: {
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.corplawupdates.in' },
-      { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://www.corplawupdates.in/tools' },
-      { '@type': 'ListItem', position: 3, name: 'Penalty Calculator', item: 'https://www.corplawupdates.in/tools/penalty-calculator' },
-      { '@type': 'ListItem', position: 4, name: 'MSME', item: 'https://www.corplawupdates.in/tools/penalty-calculator/msme' },
-    ],
-  },
-  mainEntity: [
+  '@graph': [
     {
-      '@type': 'WebApplication',
-      name: 'MSME Delayed Payment Interest & Penalty Calculator',
+      '@type': 'WebPage',
+      name: 'MSME Delayed Payment Interest Calculator 2026 — Section 16 MSMED Act | CorpLawUpdates',
+      description: 'Calculate compound interest on delayed MSME payments at 3× RBI Bank Rate (monthly compounding) under Section 16 MSMED Act 2006. Also calculate Form MSME-1 non-filing adjudication penalty. Section 43B(h) IT Act alert included.',
       url: 'https://www.corplawupdates.in/tools/penalty-calculator/msme',
-      applicationCategory: 'BusinessApplication',
-      offers: {
-        '@type': 'Offer',
-        price: '0',
-        priceCurrency: 'INR',
+      keywords: 'MSME late fee calculator India, MSME delayed payment interest calculator, msme delayed payment interest calculation in excel, MSME late payment interest rate, MSME interest calculation from which date, MSME payment within 45 days, MSME samadhaan, msme late fee calculator 2022, MSME fee calculator India, MSME fee calculator ODR, msme interest calculator, How to calculate interest on late payment to MSME, What happens if MSME is not paid in 45 days, How is the MSME 45 days calculated, What is the interest rate for MSME payment, MSME late fee payment, MSME delayed payment act, What is the grace period for MSME, msme registration fees, MSME 45 day rule, Section 43B(h) MSME, MSME-1 penalty calculator',
+      breadcrumb: {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.corplawupdates.in' },
+          { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://www.corplawupdates.in/tools' },
+          { '@type': 'ListItem', position: 3, name: 'Penalty Calculator', item: 'https://www.corplawupdates.in/tools/penalty-calculator' },
+          { '@type': 'ListItem', position: 4, name: 'MSME Calculator', item: 'https://www.corplawupdates.in/tools/penalty-calculator/msme' },
+        ],
       },
+    },
+    {
+      '@type': 'SoftwareApplication',
+      name: 'MSME Delayed Payment Interest & Penalty Calculator',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Any',
+      url: 'https://www.corplawupdates.in/tools/penalty-calculator/msme',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+      featureList: 'Section 16 MSMED interest, 3x RBI Bank Rate compound interest, monthly compounding, MSME-1 penalty calculator, Section 43B(h) tax alert, MSME Samadhaan guidance',
     },
     {
       '@type': 'FAQPage',
       mainEntity: msmeFaqs.map(faq => ({
         '@type': 'Question',
         name: faq.q,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: faq.a,
-        },
+        acceptedAnswer: { '@type': 'Answer', text: faq.a },
       })),
+    },
+    {
+      '@type': 'HowTo',
+      name: 'How to Calculate MSME Delayed Payment Interest',
+      description: 'Calculate compound interest at 3x RBI Bank Rate on delayed payments to MSME suppliers.',
+      step: [
+        { '@type': 'HowToStep', position: 1, name: 'Enter Invoice Amount', text: 'Enter the principal invoice/payment amount due to the MSME supplier.' },
+        { '@type': 'HowToStep', position: 2, name: 'Enter Acceptance Date', text: 'Enter the date of acceptance (or deemed acceptance) of goods/services.' },
+        { '@type': 'HowToStep', position: 3, name: 'Enter Payment Dates', text: 'Optionally enter agreed payment date (capped at 45 days). Enter actual payment date or check "not yet paid".' },
+        { '@type': 'HowToStep', position: 4, name: 'Verify Bank Rate', text: 'Confirm the current RBI Bank Rate. Interest is calculated at exactly 3x this rate.' },
+        { '@type': 'HowToStep', position: 5, name: 'Read Results', text: 'View interest accrued, total payable, monthly compounding schedule, and Section 43B(h) tax impact.' },
+      ],
+    },
+    {
+      '@type': 'SpecialAnnouncement',
+      name: 'Section 43B(h) of Income Tax Act — MSME Payment Disallowance from AY 2024-25',
+      text: 'From Assessment Year 2024-25, payments outstanding to Micro or Small Enterprises beyond 45 days are disallowed as business expenses under Section 43B(h) of the Income Tax Act, 1961. Interest under MSME Act is also non-deductible under Section 23.',
+      category: 'GovernmentService',
+      datePosted: '2023-04-01',
+      expires: '2030-01-01',
     },
   ],
 }
@@ -150,7 +168,7 @@ export default function MsmePenaltyCalculator() {
       <JsonLd data={seoJsonLd as any} />
       
       {/* Page header */}
-      <div className="bg-navy py-8 px-4">
+      <div className="bg-navy py-10 px-4">
         <div className="max-w-7xl mx-auto">
           <nav className="text-xs text-slate-400 mb-3">
             <Link href="/tools" className="hover:text-amber-400">
@@ -166,39 +184,68 @@ export default function MsmePenaltyCalculator() {
             </span>
           </nav>
           <h1 className="text-2xl md:text-3xl font-bold text-white font-heading">
-            MSME Delayed Payment Interest & Penalty Calculator
+            MSME Delayed Payment Interest &amp; Penalty Calculator
           </h1>
+          <p className="text-amber-400 text-xs font-semibold mt-1 mb-1 tracking-wide">
+            Section 16 MSMED Act | 3× RBI Bank Rate | Monthly Compounding | Section 43B(h) Alert
+          </p>
           <p className="text-slate-400 text-sm mt-1">
             Calculate compound interest under Section 16 of the MSMED Act 2006, and evaluate Form MSME-1 non-filing adjudication penalties.
           </p>
+          <div className="flex flex-wrap gap-2 mt-4">
+            <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-white/10 text-white border border-white/20 px-3 py-1 rounded-full">🏭 MSMED Act 2006</span>
+            <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-white/10 text-white border border-white/20 px-3 py-1 rounded-full">📊 Monthly Compounding</span>
+            <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-white/10 text-white border border-white/20 px-3 py-1 rounded-full">⚠️ Sec 43B(h) Alert</span>
+          </div>
         </div>
       </div>
 
       {/* Tabs Menu */}
       <div className="max-w-3xl mx-auto px-4 mt-8 mb-4">
-        <div className="flex border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-1 rounded-xl shadow-sm">
+        <div className="flex bg-slate-100 dark:bg-[#111827] border border-slate-200 dark:border-white/8 p-1 rounded-2xl shadow-sm">
           <button
             onClick={() => setActiveTab('interest')}
-            className={`flex-1 py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all focus:outline-none ${
+            className={`flex-1 py-2.5 text-xs md:text-sm rounded-xl transition-all focus:outline-none ${
               activeTab === 'interest'
-                ? 'bg-amber-400 text-navy shadow-sm'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                ? 'bg-amber-400 text-navy shadow-md shadow-amber-400/30 font-black'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-semibold'
             }`}
           >
             Delayed Payment Interest (Section 16)
           </button>
           <button
             onClick={() => setActiveTab('msme1')}
-            className={`flex-1 py-2.5 text-xs md:text-sm font-bold rounded-lg transition-all focus:outline-none ${
+            className={`flex-1 py-2.5 text-xs md:text-sm rounded-xl transition-all focus:outline-none ${
               activeTab === 'msme1'
-                ? 'bg-amber-400 text-navy shadow-sm'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                ? 'bg-amber-400 text-navy shadow-md shadow-amber-400/30 font-black'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-semibold'
             }`}
           >
             Form MSME-1 Non-Filing Penalty
           </button>
         </div>
       </div>
+
+      {activeTab === 'interest' && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+          <div className="grid grid-cols-3 gap-4">
+            <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/8 rounded-2xl p-4 shadow-sm text-center">
+              <div className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">DEFAULT PERIOD</div>
+              <div className="text-2xl font-black text-navy dark:text-white font-heading">{interestResult.daysDelayed > 0 ? `${interestResult.daysDelayed} Days` : '— Days'}</div>
+            </div>
+            <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/8 rounded-2xl p-4 shadow-sm text-center">
+              <div className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">INTEREST ACCRUED</div>
+              <div className="text-2xl font-black text-amber-500 font-heading">{formatINR(interestResult.accruedInterest)}</div>
+              <div className="text-[10px] text-slate-400 mt-0.5">Compounded Monthly</div>
+            </div>
+            <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/8 rounded-2xl p-4 shadow-sm text-center">
+              <div className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">TOTAL PAYABLE</div>
+              <div className="text-2xl font-black text-red-500 font-heading">{formatINR(interestResult.totalPayable)}</div>
+              <div className="text-[10px] text-slate-400 mt-0.5">Principal + Interest</div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Main Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -584,7 +631,7 @@ export default function MsmePenaltyCalculator() {
 
       {/* Static SEO Article Sections */}
       <article className="max-w-4xl mx-auto px-4 py-16 border-t border-slate-200 dark:border-slate-800 mt-10 space-y-12">
-        <section className="space-y-4">
+        <section className="space-y-4 border-l-4 border-l-amber-500 pl-4">
           <h2 className="text-2xl font-bold font-heading text-navy dark:text-white">What is MSME Delayed Payment Interest Under Section 16?</h2>
           <p className="text-slate-605 dark:text-slate-400 text-sm leading-relaxed">
             Under Section 15 of the MSMED Act, 2006, buyers must make payments to Micro and Small enterprise suppliers within the agreed time, not exceeding <strong>45 days</strong> from acceptance. If no written contract exists, payment is due within <strong>15 days</strong>.
@@ -594,7 +641,7 @@ export default function MsmePenaltyCalculator() {
           </p>
         </section>
 
-        <section className="space-y-4">
+        <section className="space-y-4 border-l-4 border-l-amber-500 pl-4">
           <h2 className="text-2xl font-bold font-heading text-navy dark:text-white">Section 43B(h) — Why Delayed MSME Payments Also Hit Your Tax Deduction</h2>
           <p className="text-slate-605 dark:text-slate-400 text-sm leading-relaxed">
             Beginning in Assessment Year (AY) 2024-25, any outstanding payable to Micro or Small enterprise suppliers exceeding the 15/45-day deadline is disallowed as a business expense deduction under <strong>Section 43B(h)</strong> of the Income Tax Act, 1961. 
@@ -604,14 +651,14 @@ export default function MsmePenaltyCalculator() {
           </p>
         </section>
 
-        <section className="space-y-4">
+        <section className="space-y-4 border-l-4 border-l-amber-500 pl-4">
           <h2 className="text-2xl font-bold font-heading text-navy dark:text-white">What is Form MSME-1 and Who Must File It?</h2>
           <p className="text-slate-605 dark:text-slate-400 text-sm leading-relaxed">
             Form MSME-1 is a half-yearly return filed by specified companies that have outstanding dues exceeding 45 days to Micro and Small Enterprise suppliers. Specified companies are Pvt Ltd, Public Ltd, OPC, and Section 8 companies that meet these criteria. Note that <strong>Medium Enterprises are excluded</strong> from this reporting.
           </p>
         </section>
 
-        <section className="space-y-4">
+        <section className="space-y-4 border-l-4 border-l-amber-500 pl-4">
           <h2 className="text-2xl font-bold font-heading text-navy dark:text-white">Penalty for Not Filing Form MSME-1</h2>
           <p className="text-slate-655 dark:text-slate-400 text-sm leading-relaxed">
             Under Section 405(4) of the Companies Act, 2013, failure to file MSME-1 carries an adjudication penalty starting at ₹20,000, with a continuing default penalty of ₹1,000 per day. The penalty is capped at ₹3,00,000 each for the company and officers in default. Small companies and OPCs receive a 50% penalty reduction under Section 446B.
@@ -621,7 +668,8 @@ export default function MsmePenaltyCalculator() {
 
       {/* FAQs Accordion */}
       <section className="max-w-4xl mx-auto px-4 pb-20 border-t border-slate-200 dark:border-slate-800 pt-16">
-        <h2 className="text-2xl font-bold font-heading text-navy dark:text-white mb-8 text-center">Frequently Asked Questions (FAQs)</h2>
+        <h2 className="text-2xl font-bold font-heading text-navy dark:text-white mb-4 text-center">Frequently Asked Questions (FAQs)</h2>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mb-8 text-center">Questions about MSME delayed payment interest, 45-day rule, Section 43B(h), MSME-1 filing, and MSME Samadhaan.</p>
         <div className="space-y-4">
           {msmeFaqs.map((faq, i) => (
             <div key={i} className="border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-xl overflow-hidden shadow-sm">
