@@ -743,7 +743,9 @@ export default function DocumentGeneratorPage() {
           },
           body: JSON.stringify({
             template_slug: slug,
-            form_data: formData,
+            form_data: Object.fromEntries(
+              Object.entries(formData).filter(([k]) => !k.endsWith('__mode'))
+            ),
             use_ai: useAi,
           }),
         }
@@ -1243,20 +1245,36 @@ export default function DocumentGeneratorPage() {
                       className={inputClass}
                     />
                   ) : field.type === 'select' ? (
-                    <select
-                      value={formData[field.id] || ''}
-                      onChange={e => setFormData(p => ({
-                        ...p, [field.id]: e.target.value
-                      }))}
-                      className={inputClass}
-                    >
-                      <option value="">Select...</option>
-                      {field.options?.map(opt => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
+                    <>
+                      <select
+                        value={formData[`${field.id}__mode`] === 'custom' ? '__custom__' : (formData[field.id] || '')}
+                        onChange={e => {
+                          if (e.target.value === '__custom__') {
+                            setFormData(p => ({ ...p, [`${field.id}__mode`]: 'custom', [field.id]: '' }))
+                          } else {
+                            setFormData(p => ({ ...p, [`${field.id}__mode`]: 'preset', [field.id]: e.target.value }))
+                          }
+                        }}
+                        className={inputClass}
+                      >
+                        <option value="">Select...</option>
+                        {field.options?.map(opt => (
+                          <option key={opt} value={opt}>{opt}</option>
+                        ))}
+                        <option value="__custom__">✏️ Other — type custom value</option>
+                      </select>
+                      {formData[`${field.id}__mode`] === 'custom' && (
+                        <input
+                          type="text"
+                          value={formData[field.id] || ''}
+                          onChange={e => setFormData(p => ({ ...p, [field.id]: e.target.value }))}
+                          placeholder={field.placeholder || `Type custom ${field.label.toLowerCase()}`}
+                          className={`${inputClass} mt-2`}
+                          autoFocus
+                        />
+                      )}
+                    </>
+
                   ) : (
                     <input
                       type={field.type}
