@@ -5,7 +5,12 @@ const docDb = supabaseDocumentsAdmin || supabaseAdmin;
 import { NextResponse } from 'next/server';
 import { executeRule, extractVariablesFromPrompt } from '@/lib/rule-engine';
 
-const GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || '';
+const GEMINI_KEYS = [
+  process.env.GOOGLE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || '',
+  process.env.GOOGLE_GEMINI_API_KEY_2 || '',
+  process.env.GOOGLE_GEMINI_API_KEY_3 || '',
+  process.env.GOOGLE_GEMINI_API_KEY_4 || '',
+].map(k => k.trim()).filter(Boolean);
 
 export async function POST(request: Request) {
   try {
@@ -25,7 +30,7 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!GEMINI_API_KEY) {
+    if (GEMINI_KEYS.length === 0) {
       return NextResponse.json(
         { error: 'Missing Gemini API configuration for document editing' },
         { status: 500 }
@@ -197,29 +202,62 @@ Edit instruction: ${edit_instruction}
 
 Apply this change and return the complete updated document text only.`;
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    // Attempt Gemini API call with key rotation (same pattern as generate/route.ts)
+    let editedContent: string | null = null;
+    let lastErrorText = '';
 
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ 
-          role: 'user', 
-          parts: [{ text: `System Guidance: ${systemPrompt}\n\n${promptText}` }] 
-        }]
-      })
-    });
+    for (let i = 0; i < GEMINI_KEYS.length; i++) {
+      const apiKey = GEMINI_KEYS[i];
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      return NextResponse.json(
-        { error: `Gemini edit call failed: ${errorText}` },
-        { status: 500 }
-      );
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ 
+              role: 'user', 
+              parts: [{ text: `System Guidance: ${systemPrompt}\n\n${promptText}` }] 
+            }]
+          })
+        });
+
+        if (!response.ok) {
+          const errorJson = await response.json().catch(() => ({}));
+          lastErrorText = JSON.stringify(errorJson);
+          const isQuotaError =
+            response.status === 429 ||
+            response.status === 403 ||
+            lastErrorText.toLowerCase().includes('quota') ||
+            lastErrorText.toLowerCase().includes('limit');
+
+          if (isQuotaError && i < GEMINI_KEYS.length - 1) {
+            console.log(`[edit/route.ts] Quota error on key ${i}, rotating to key ${i + 1}...`);
+            continue;
+          }
+          // Non-quota error or last key — break
+          break;
+        }
+
+        const data = await response.json();
+        const candidate = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (candidate) {
+          editedContent = candidate;
+          break;
+        }
+      } catch (fetchErr: any) {
+        lastErrorText = fetchErr.message || 'Network error';
+        console.error(`[edit/route.ts] Gemini fetch error on key ${i}:`, lastErrorText);
+        if (i < GEMINI_KEYS.length - 1) continue;
+      }
     }
 
-    const data = await response.json();
-    const editedContent = data.candidates?.[0]?.content?.parts?.[0]?.text || current_content;
+    if (!editedContent) {
+      return NextResponse.json(
+        { error: 'AI editing is currently unavailable — daily quota exceeded on all API keys. Please try again tomorrow or use the manual editor to make changes.' },
+        { status: 429 }
+      );
+    }
 
     // Save edited version to database if document_id is provided
     if (document_id) {
