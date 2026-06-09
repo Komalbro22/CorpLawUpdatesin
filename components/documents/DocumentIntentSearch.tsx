@@ -105,14 +105,14 @@ export default function DocumentIntentSearch() {
 
       {/* Intent result */}
       {result && (
-        <div className="mt-4 bg-white rounded-2xl 
+        <div className="mt-4 bg-white dark:bg-slate-900 border dark:border-slate-800 rounded-2xl 
                         p-5 text-left shadow-xl">
           
           {result.intent?.warning && (
-            <div className="bg-red-50 border border-red-200 
+            <div className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 
                             rounded-xl p-3 mb-4 flex gap-2">
               <span className="text-red-500">⚠️</span>
-              <p className="text-red-800 text-sm 
+              <p className="text-red-800 dark:text-red-400 text-sm 
                             font-medium">
                 {result.intent.warning}
               </p>
@@ -121,21 +121,21 @@ export default function DocumentIntentSearch() {
 
           {result.matched_template ? (
             <div>
-              <p className="text-xs text-slate-500 mb-2">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">
                 Best match found:
               </p>
-              <div className="bg-amber-50 border 
-                              border-amber-200 
+              <div className="bg-amber-50 dark:bg-amber-950/15 border 
+                              border-amber-200 dark:border-amber-900/30 
                               rounded-xl p-4 mb-4">
-                <h3 className="font-bold text-navy">
+                <h3 className="font-bold text-navy dark:text-white">
                   {result.matched_template.name}
                 </h3>
-                <p className="text-sm text-slate-600 
+                <p className="text-sm text-slate-600 dark:text-slate-350 
                               mt-1">
                   {result.matched_template.description}
                 </p>
                 <div className="mt-1 text-xs 
-                                text-amber-700 font-medium">
+                                text-amber-700 dark:text-amber-400 font-medium">
                   Confidence: {Math.round(
                     (result.intent.confidence || 0) * 100
                   )}% match
@@ -143,9 +143,9 @@ export default function DocumentIntentSearch() {
               </div>
               
               {result.intent.missing_info?.length > 0 && (
-                <div className="text-xs text-slate-500 
+                <div className="text-xs text-slate-500 dark:text-slate-450 
                                 mb-4">
-                  <span className="font-semibold">
+                  <span className="font-semibold text-slate-700 dark:text-slate-300">
                     You may also need:
                   </span>
                   {' '}
@@ -167,7 +167,7 @@ export default function DocumentIntentSearch() {
 
               {result.intent.alternatives?.length > 0 && (
                 <div className="mt-3">
-                  <p className="text-xs text-slate-500 mb-2">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">
                     Or choose an alternative:
                   </p>
                   <div className="space-y-1">
@@ -185,11 +185,11 @@ export default function DocumentIntentSearch() {
                               `/documents/${altSlug}`
                             )}
                             className="w-full text-left 
-                                       text-sm text-navy 
-                                       hover:text-amber-700 
-                                       border border-slate-200 
+                                       text-sm text-navy dark:text-slate-200 
+                                       hover:text-amber-700 dark:hover:text-amber-400 
+                                       border border-slate-200 dark:border-slate-800 
                                        rounded-lg px-3 py-2
-                                       hover:border-amber-300
+                                       hover:border-amber-300 dark:hover:border-amber-500
                                        transition-colors"
                           >
                             {alt.name} →
@@ -202,10 +202,10 @@ export default function DocumentIntentSearch() {
             </div>
           ) : (
             <div className="text-center py-4">
-              <p className="text-slate-600 font-medium">
+              <p className="text-slate-600 dark:text-slate-350 font-medium">
                 No exact match found
               </p>
-              <p className="text-slate-500 text-sm mt-1">
+              <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
                 Browse all document types below
               </p>
             </div>
@@ -213,8 +213,8 @@ export default function DocumentIntentSearch() {
 
           <button
             onClick={() => setResult(null)}
-            className="mt-3 text-xs text-slate-400 
-                       hover:text-slate-600 w-full 
+            className="mt-3 text-xs text-slate-400 dark:text-slate-500 
+                       hover:text-slate-600 dark:hover:text-slate-300 w-full 
                        text-center"
           >
             ← Try a different query

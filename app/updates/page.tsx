@@ -214,9 +214,9 @@ export default async function UpdatesPage({
 
             <div className="max-w-7xl mx-auto px-4 pb-16 pt-8 md:pt-10">
                 {totalPublishedCount === 0 ? (
-                    <div className="rounded-lg border border-slate-200 bg-white px-6 py-12 text-center shadow-card">
-                        <h2 className="font-heading text-xl font-bold text-navy">No updates published yet</h2>
-                        <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-slate-500">
+                    <div className="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-12 text-center shadow-card">
+                        <h2 className="font-heading text-xl font-bold text-navy dark:text-white">No updates published yet</h2>
+                        <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-slate-500 dark:text-slate-400">
                             Published regulatory updates will appear here once they are available.
                         </p>
                     </div>
@@ -239,19 +239,19 @@ export default async function UpdatesPage({
             </div>
 
             {/* SEO Knowledge Footer */}
-            <section className="max-w-7xl mx-auto px-4 pb-16 border-t border-slate-100">
-                <div className="bg-slate-50/50 rounded-2xl border border-slate-200/60 p-8 shadow-sm">
-                    <h2 className="text-xl font-bold text-navy mb-4 font-heading">
+            <section className="max-w-7xl mx-auto px-4 pb-16 border-t border-slate-100 dark:border-slate-800">
+                <div className="bg-slate-50/50 dark:bg-slate-900/50 rounded-2xl border border-slate-200/60 dark:border-slate-800 p-8 shadow-sm">
+                    <h2 className="text-xl font-bold text-navy dark:text-white mb-4 font-heading">
                         About Indian Corporate Law & Regulatory Updates {CURRENT_YEAR}
                     </h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 text-sm text-slate-500 leading-relaxed">
                         <div className="space-y-3">
-                            <p>
+                            <p className="text-slate-500 dark:text-slate-400">
                                 Stay ahead with the <strong>latest corporate law updates in India</strong> including
                                 <strong> MCA circulars today</strong>, <strong>SEBI notifications</strong>,
                                 <strong> RBI circulars</strong>, NCLT orders, IBC amendments, and FEMA notifications.
                             </p>
-                            <p>
+                            <p className="text-slate-500 dark:text-slate-400">
                                 Our platform provides simplified, expert-sourced summaries of every <strong>regulatory update in India {CURRENT_YEAR}</strong> — ideal for Company Secretaries (CS), Chartered Accountants (CA), Cost Accountants (CMA), law students, CS/CA/CMA students, legal enthusiasts, corporate lawyers, and compliance teams tracking daily regulatory changes.
                             </p>
                         </div>
@@ -267,7 +267,7 @@ export default async function UpdatesPage({
                                     { label: 'FEMA Notifications', href: '/category/fema' },
                                     { label: `Compliance Calendar ${CURRENT_YEAR}`, href: '/calendar' },
                                 ].map(l => (
-                                    <Link key={l.href} href={l.href} className="text-xs bg-white border border-slate-200 text-gold px-3 py-1.5 rounded-full hover:border-amber-300 hover:bg-amber-50 transition-colors font-medium">
+                                    <Link key={l.href} href={l.href} className="text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-gold px-3 py-1.5 rounded-full hover:border-amber-300 hover:bg-amber-50 dark:hover:bg-slate-800 transition-colors font-medium">
                                         {l.label}
                                     </Link>
                                 ))}

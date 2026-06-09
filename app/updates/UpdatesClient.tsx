@@ -125,9 +125,9 @@ export default function UpdatesClient({
     return (
         <div className="flex flex-col md:flex-row gap-8 md:gap-10">
             <aside className="w-full md:w-72 flex-shrink-0">
-                <div className="sticky top-24 bg-white p-5 md:p-6 rounded-xl shadow-card border border-slate-200/80 ring-1 ring-slate-900/[0.03]">
+                <div className="sticky top-24 bg-white dark:bg-slate-900 p-5 md:p-6 rounded-xl shadow-card border border-slate-200/80 dark:border-slate-800 ring-1 ring-slate-900/[0.03] dark:ring-white/[0.03]">
                     <div className="mb-6">
-                        <label htmlFor="search" className="block text-sm font-semibold text-navy mb-2">
+                        <label htmlFor="search" className="block text-sm font-semibold text-navy dark:text-slate-200 mb-2">
                             Search
                         </label>
                         <div className="relative mb-4">
@@ -142,11 +142,11 @@ export default function UpdatesClient({
                                 value={search}
                                 onChange={e => handleSearchInput(e.target.value)}
                                 autoComplete="off"
-                                className="w-full pl-10 pr-3 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold/30 text-sm text-navy placeholder:text-slate-400 transition-shadow duration-200"
+                                className="w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold/30 text-sm text-navy dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-650 transition-shadow duration-200"
                             />
                         </div>
                         <div className="flex flex-wrap gap-2 mb-2">
-                            <span className="text-xs text-slate-500 self-center font-semibold uppercase tracking-wide w-full md:w-auto mb-1 md:mb-0">
+                            <span className="text-xs text-slate-500 dark:text-slate-400 self-center font-semibold uppercase tracking-wide w-full md:w-auto mb-1 md:mb-0">
                                 Quick filters
                             </span>
                             {[
@@ -166,7 +166,7 @@ export default function UpdatesClient({
                                     key={tag}
                                     type="button"
                                     onClick={() => handleQuickFilter(tag)}
-                                    className="text-xs bg-slate-50 hover:bg-amber-50 text-slate-600 hover:text-amber-900 px-3 py-1.5 rounded-full border border-slate-200/90 hover:border-amber-200 transition-colors duration-200 motion-safe:active:scale-[0.98] min-h-[36px]"
+                                    className="text-xs bg-slate-50 dark:bg-slate-800 hover:bg-amber-50 dark:hover:bg-amber-900/30 text-slate-600 dark:text-slate-350 hover:text-amber-900 dark:hover:text-amber-350 px-3 py-1.5 rounded-full border border-slate-200/90 dark:border-slate-700 hover:border-amber-200 transition-colors duration-200 motion-safe:active:scale-[0.98] min-h-[36px]"
                                 >
                                     {tag}
                                 </button>
@@ -174,7 +174,7 @@ export default function UpdatesClient({
                         </div>
                     </div>
                     <div>
-                        <h3 className="block text-sm font-semibold text-navy mb-3">Categories</h3>
+                        <h3 className="block text-sm font-semibold text-navy dark:text-slate-200 mb-3">Categories</h3>
                         <ul className="flex flex-row md:flex-col gap-1.5 overflow-x-auto pb-2 md:pb-0">
                             {CATEGORIES.map(cat => {
                                 const count = cat === 'All' ? totalPublishedCount : counts[cat] || 0
@@ -186,16 +186,16 @@ export default function UpdatesClient({
                                             onClick={() => handleCategoryClick(cat)}
                                             className={`text-left whitespace-nowrap md:whitespace-normal px-3 py-3 min-h-[44px] rounded-lg text-sm w-full flex justify-between items-center gap-2 transition-colors duration-150 ${
                                                 isActive
-                                                    ? 'bg-navy/5 text-navy font-semibold ring-1 ring-gold/40 shadow-sm'
-                                                    : 'text-slate-600 hover:bg-slate-50'
+                                                    ? 'bg-navy/5 dark:bg-slate-800 text-navy dark:text-slate-200 font-semibold ring-1 ring-gold/40 shadow-sm'
+                                                    : 'text-slate-600 dark:text-slate-350 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-navy dark:hover:text-white'
                                             }`}
                                         >
                                             <span>{cat}</span>
                                             <span
                                                 className={`tabular-nums py-0.5 px-2 rounded-md text-xs font-medium ${
                                                     isActive
-                                                        ? 'bg-white text-navy ring-1 ring-slate-200/80'
-                                                        : 'bg-slate-100 text-slate-500'
+                                                        ? 'bg-white dark:bg-slate-900 text-navy dark:text-slate-200 ring-1 ring-slate-200/80 dark:ring-slate-800'
+                                                        : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
                                                 }`}
                                             >
                                                 {count}
@@ -210,13 +210,13 @@ export default function UpdatesClient({
             </aside>
 
             <div className="flex-grow min-w-0">
-                <div className="mb-6 flex flex-wrap items-baseline gap-2 text-slate-600 text-sm md:text-base">
+                <div className="mb-6 flex flex-wrap items-baseline gap-2 text-slate-600 dark:text-slate-450 text-sm md:text-base">
                     <span>
                         Showing{' '}
-                        <span className="font-semibold text-navy tabular-nums">{totalFilteredCount}</span>
+                        <span className="font-semibold text-navy dark:text-white tabular-nums">{totalFilteredCount}</span>
                         {' '}
                         of{' '}
-                        <span className="font-semibold text-navy tabular-nums">{totalPublishedCount}</span>
+                        <span className="font-semibold text-navy dark:text-white tabular-nums">{totalPublishedCount}</span>
                     </span>
                     {totalFilteredCount !== totalPublishedCount && (
                         <span className="text-slate-400">· filtered</span>
@@ -244,7 +244,7 @@ export default function UpdatesClient({
                         )}
                     </>
                 ) : (
-                    <div className="bg-white rounded-xl border border-slate-200/80 shadow-card ring-1 ring-slate-900/[0.03]">
+                    <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-card ring-1 ring-slate-900/[0.03] dark:ring-white/[0.03]">
                         <EmptyState
                             icon="🔍"
                             title="No results found"

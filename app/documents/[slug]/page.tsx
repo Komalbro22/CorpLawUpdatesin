@@ -1,6 +1,10 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
+import { FuzzyClarifier } from '@/components/documents/FuzzyClarifier'
+import { LegalBasisCard } from '@/components/documents/LegalBasisCard'
+import { ConflictAuditor } from '@/components/documents/ConflictAuditor'
+import { checkMissingClauses, getImportanceIcon, getImportanceLabel, formatTemplateSource, type ClauseCheck } from '@/lib/document-clause-checker'
 
 interface Field {
   id: string
@@ -148,6 +152,34 @@ const NEXT_STEPS: Record<string, {
     ],
   },
 
+  'partnership-deed': {
+    title: 'After Executing Deed — Complete Formalities',
+    steps: [
+      { icon: '📜', text: 'Print the deed on Non-Judicial Stamp Paper', note: 'Stamp duty value varies by state (e.g. ₹500 to 1% of capital). Refer to local state stamp rules.', urgent: true },
+      { icon: '✍️', text: 'Sign on each page by both partners', note: 'Both partners must sign at the bottom of each page and execute at the end in full.' },
+      { icon: '👥', text: 'Get two independent witnesses to sign', note: 'Witnesses must provide their names, addresses, and signatures.' },
+      { icon: '⚖️', text: 'Notarize the executed Partnership Deed', note: 'Notary public verification adds legal weight and prevents future authenticity disputes.' },
+      { icon: '📋', text: 'Register firm with Registrar of Firms (ROF)', note: 'File Form 1 with ROF of your state. Registration is required to sue third parties (Section 69).' },
+      { icon: '💳', text: 'Apply for Partnership Firm PAN Card', note: 'Apply online on NSDL portal using the notarized deed. Partnership is a separate tax entity.' },
+      { icon: '🏦', text: 'Open a Current Bank Account in the firm name', note: 'Submit: Executed deed, ROF certificate/acknowledgment, PAN of firm, and KYC of partners.' },
+      { icon: '📈', text: 'Apply for GST and local business registrations', note: 'Register for GST on GST portal, and apply for Shops & Establishment license (Gumasta).' },
+    ],
+  },
+
+  'general-power-of-attorney': {
+    title: 'After Executing GPA — Proper Formalities',
+    steps: [
+      { icon: '📜', text: 'Print on Non-Judicial Stamp Paper of correct value', note: 'Stamp duty varies by state and whether property sale/transfer is authorized. Consult local state stamp act rules.', urgent: true },
+      { icon: '👥', text: 'Execute in the presence of two independent witnesses', note: 'Witnesses must sign and provide their full names, addresses, and occupations.' },
+      { icon: '⚖️', text: 'Notarize before a Notary Public', note: 'Notarization authenticates execution and is required for administrative, banking, and general actions.' },
+      { icon: '📋', text: 'Register the GPA at the Sub-Registrar Office (if required)', note: 'Mandatory under Section 17 of the Registration Act, 1908 if the GPA grants power to sell, mortgage, or transfer immovable property.', urgent: true },
+      { icon: '🌍', text: 'Consulate Attestation / Apostille (for NRI/Overseas execution)', note: 'If executed outside India, must be notarized abroad and attested by the Indian Consulate or Apostilled within 3 months.' },
+      { icon: '🏦', text: 'Submit certified copy to Banks and Financial Institutions', note: 'Banks will verify the clauses and update their records to allow the Attorney to operate accounts.' },
+      { icon: '🏢', text: 'Submit copy to MCA/ROC/Sub-Registrar for transactions', note: 'For company matters or property registrations, the registered GPA must be filed alongside relevant forms.' },
+      { icon: '📄', text: 'Maintain a detailed ledger of all actions taken by Attorney', note: 'The Principal has a legal right to inspect all actions and accounts under Section 213 of the Indian Contract Act, 1872.' },
+    ],
+  },
+
   // DEFAULT for any template not specifically listed
   '_default': {
     title: 'Steps After Downloading Your Document',
@@ -256,6 +288,40 @@ const AI_SUGGESTIONS: Record<string, {
     { label: '+ Add governing law clause', prompt: 'Add clause specifying this agreement is governed by laws of India and disputes subject to jurisdiction of courts at [city of registered office]', category: 'add' },
   ],
 
+  'partnership-deed': [
+    { label: '+ Add banking single signatory operation', prompt: 'Add clause specifying the bank account can be operated by either partner individually up to a transaction limit of ₹50,000, and jointly for higher amounts', category: 'add' },
+    { label: '+ Add admission of new partner clause', prompt: 'Add clause stating that new partners can be admitted to the firm only with the written consent of all existing partners', category: 'add' },
+    { label: '+ Add partner salary cap', prompt: 'Add clause specifying the partner remuneration shall be capped strictly at the maximum permissible limit under Section 40(b)(v) of the Income Tax Act 1961', category: 'add' },
+    { label: '+ Add partner loan interest rate', prompt: 'Add clause specifying that if any partner provides a loan to the firm, they shall receive simple interest at the rate of 12% per annum', category: 'add' },
+    { label: '+ Add goodwill valuation formula', prompt: 'Add clause defining the goodwill valuation method (three times the average net profits of preceding three years) in case of retirement or death of a partner', category: 'add' },
+    { label: '+ Add non-compete for outgoing partner', prompt: 'Add clause restricting a retiring partner from engaging in any competing business within a radius of 5 kilometers for a period of 2 years from their retirement', category: 'add' },
+    { label: '+ Add accounting system details', prompt: 'Add clause specifying that the firm shall maintain books of account on a mercantile/accrual basis', category: 'add' },
+    { label: '− Remove capital interest clause', prompt: 'Remove the clause providing interest on capital contributions—no interest shall be paid on partners capital', category: 'remove' },
+    { label: '+ Add partner drawings limits', prompt: 'Add clause limiting monthly partner drawings to ₹25,000 without prior mutual consent', category: 'add' },
+    { label: '+ Add dispute mediation step', prompt: 'Add clause mandating that before referring any dispute to arbitration, partners must first attempt resolution through good-faith mediation within 30 days', category: 'add' },
+    { label: '+ Add intellectual property clause', prompt: 'Add clause specifying that any intellectual property developed by a partner during the partnership shall belong exclusively to the partnership firm', category: 'add' },
+    { label: '+ Add specific partner roles', prompt: 'Add clause defining roles: Partner 1 shall manage daily sales and client relations, and Partner 2 shall manage finance, accounts, and administration', category: 'add' },
+    { label: '+ Restrict dissolution by notice', prompt: 'Add clause stating that the partnership shall not be dissolved by notice by a single partner, but requires the mutual written consent of both partners', category: 'add' },
+    { label: '↕ Update profit-sharing ratio', prompt: 'Modify the profit and loss sharing ratio to 60:40 between Partner 1 and Partner 2 respectively', category: 'modify' },
+  ],
+
+  'general-power-of-attorney': [
+    { label: '🔒 Restrict property sale', prompt: 'Add a clause explicitly prohibiting the attorney from selling, transferring, or creating third-party rights on any immovable property (lease and maintenance only)', category: 'modify' },
+    { label: '⏳ Limit validity duration', prompt: 'Limit the power of attorney validity to a fixed duration of 1 year from the date of execution', category: 'modify' },
+    { label: '📅 Add revocation notice period', prompt: 'Add a clause requiring a 30-day written notice for revocation of this power of attorney', category: 'add' },
+    { label: '🚫 Remove power of substitution', prompt: 'Remove the power of substitution clause so that the attorney cannot delegate powers to a substitute', category: 'remove' },
+    { label: '💰 Restrict borrowing/loans', prompt: 'Add a restriction that the attorney cannot borrow money or take loans on my behalf without prior written consent', category: 'modify' },
+    { label: '📊 Add monthly account reporting', prompt: 'Add a clause requiring the attorney to submit a detailed monthly statement of accounts to me on or before the 10th of every month', category: 'add' },
+    { label: '🔨 Exclude construction/demolition', prompt: 'Remove the power to construct, demolish, or rebuild properties from the attorney\'s scope of powers', category: 'remove' },
+    { label: '🏦 Limit single bank transaction', prompt: 'Add a limit of ₹1,00,000 per banking transaction for operations conducted by the attorney', category: 'modify' },
+    { label: '🏛️ Exclude trust/trustee powers', prompt: 'Delete the section authorizing the attorney to act in relation to trusts where I am a trustee or beneficiary', category: 'remove' },
+    { label: '🏢 Exclude company promotion', prompt: 'Remove the powers allowing the attorney to promote or form new companies in my name', category: 'remove' },
+    { label: '🛡️ Add principal indemnity', prompt: 'Add a clause where the principal agrees to indemnify the attorney for all lawful acts done in good faith within the scope of this GPA', category: 'add' },
+    { label: '⚖️ Add governing law & jurisdiction', prompt: 'Add a governing law clause specifying Indian law and court jurisdiction at New Delhi', category: 'add' },
+    { label: '🔑 Grant specific power of sale', prompt: 'Add a clause explicitly authorizing the attorney to sell and register a sale deed for the immovable properties listed in Schedule I', category: 'add' },
+    { label: '👥 Add joint attorney operations', prompt: 'Add a requirement that if multiple attorneys are appointed, they must act and sign jointly for all transactions', category: 'add' },
+  ],
+
   // Default suggestions for any unspecified template
   '_default': [
     { label: '+ Add confidentiality clause', prompt: 'Add a comprehensive confidentiality clause covering all business information, trade secrets and client data', category: 'add' },
@@ -274,6 +340,19 @@ const AI_SUGGESTIONS: Record<string, {
 export default function DocumentGeneratorPage() {
   const params = useParams()
   const slug = params.slug as string
+  const router = useRouter()
+
+  // Rule engine states
+  const [fuzzyMatch, setFuzzyMatch] = useState<{ intentId: string; intent: string; confidence: number; suggested_label: string } | null>(null)
+  const [legalCardClauseId, setLegalCardClauseId] = useState<string | null>(null)
+  const [legalCardOpen, setLegalCardOpen] = useState(false)
+  const [lastAppliedClauseId, setLastAppliedClauseId] = useState<string | null>(null)
+  const [missingVariables, setMissingVariables] = useState<string[] | null>(null)
+  const [requiresInputData, setRequiresInputData] = useState<{ clauseId: string; currentVariables: Record<string, string> } | null>(null)
+  const [inputVariablesValues, setInputVariablesValues] = useState<Record<string, string>>({})
+  const [hasCriticalConflict, setHasCriticalConflict] = useState(false)
+  const [missingClauses, setMissingClauses] = useState<ClauseCheck[]>([])
+  const [showClauseChecker, setShowClauseChecker] = useState(false)
 
   const [template, setTemplate] = useState<Template | null>(null)
   const [formData, setFormData] = useState<Record<string, string>>({})
@@ -675,6 +754,20 @@ export default function DocumentGeneratorPage() {
         if (data.fell_back) {
           setGenerationWarning('Gemini AI daily rate limit or free tier quota exceeded. Your document has been successfully generated using the high-quality standard template format instead!')
         }
+        
+        // Check for missing clauses
+        if (template?.category !== 'board_resolution') {
+          const missing = checkMissingClauses(
+            data.content,
+            template?.slug || '',
+            template?.category || ''
+          )
+          const actuallyMissing = missing.filter(c => c.missing)
+          setMissingClauses(actuallyMissing)
+          if (actuallyMissing.length > 0) {
+            setShowClauseChecker(true)
+          }
+        }
       } else {
         setGenerationError(data.error || 'Failed to generate document. Please verify your form entries and try again.')
       }
@@ -687,8 +780,9 @@ export default function DocumentGeneratorPage() {
   }
 
   // AI Edit
-  async function handleAiEdit() {
-    if (!editInstruction.trim() || !generatedContent) return
+  async function handleAiEdit(confirmedIntentId?: string, overrideVars?: Record<string, string>) {
+    const instruction = editInstruction.trim() || (fuzzyMatch ? fuzzyMatch.suggested_label : '');
+    if (!instruction || !generatedContent) return
     setEditing(true)
     setGenerationError(null)
     try {
@@ -702,20 +796,55 @@ export default function DocumentGeneratorPage() {
           body: JSON.stringify({
             document_id: documentId,
             current_content: generatedContent,
-            edit_instruction: editInstruction,
+            edit_instruction: instruction,
             document_type: template?.name,
+            intent_id: confirmedIntentId || undefined,
+            variables: overrideVars || undefined,
           }),
         }
       )
       const data = await res.json()
-      if (res.ok && data.content) {
-        setGeneratedContent(data.content)
-        setChatHistory(prev => [
-          ...prev,
-          { role: 'user', text: editInstruction },
-          { role: 'ai', text: 'Done! Applied your changes.' }
-        ])
-        setEditInstruction('')
+      if (res.ok) {
+        if (data.fuzzyMatch) {
+          setFuzzyMatch(data.suggestion)
+          setMissingVariables(null)
+          setRequiresInputData(null)
+        } else if (data.requiresInput) {
+          setMissingVariables(data.missingVariables)
+          setRequiresInputData({ clauseId: data.clauseId, currentVariables: data.currentVariables })
+          setInputVariablesValues({})
+          setFuzzyMatch(null)
+        } else if (data.content) {
+          setGeneratedContent(data.content)
+          
+          // Re-check missing clauses
+          if (template?.category !== 'board_resolution') {
+            const missing = checkMissingClauses(
+              data.content,
+              template?.slug || '',
+              template?.category || ''
+            )
+            setMissingClauses(missing.filter(c => c.missing))
+          }
+
+          setChatHistory(prev => [
+            ...prev,
+            { role: 'user', text: instruction },
+            { role: 'ai', text: data.source === 'rule_engine' ? '✓ Applied standard template from corporate compliance library.' : 'Done! Applied your changes.' }
+          ])
+          
+          if (data.clauseId) {
+            setLastAppliedClauseId(data.clauseId)
+            setLegalCardClauseId(data.clauseId)
+            setLegalCardOpen(true)
+          }
+          
+          // Clear rule engine temporary states
+          setFuzzyMatch(null)
+          setMissingVariables(null)
+          setRequiresInputData(null)
+          setEditInstruction('')
+        }
       } else {
         setGenerationError(data.error || 'Failed to apply AI edits. Please try rephrasing your instructions.')
       }
@@ -817,7 +946,7 @@ export default function DocumentGeneratorPage() {
           </p>
           <div className="flex gap-3 mt-3 flex-wrap">
             <span className="text-xs bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full font-medium">
-              📚 {template.source}
+              📚 {formatTemplateSource(template.slug, template.source, template.category)}
             </span>
             <span className="text-xs bg-green-500/20 text-green-300 px-3 py-1 rounded-full font-medium">
               ⚖️ {template.regulation_reference}
@@ -1145,6 +1274,25 @@ export default function DocumentGeneratorPage() {
                 </div>
               ))}
 
+              {/* Additional Custom Instructions / Special Conditions */}
+              <div className="border-t border-slate-100 pt-4 mt-2">
+                <label className="block text-xs font-bold text-navy mb-1.5 flex items-center gap-1">
+                  <span>💡</span> Additional Custom Instructions / Special Conditions (Optional)
+                </label>
+                <textarea
+                  rows={3}
+                  value={formData.custom_instructions || ''}
+                  onChange={e => setFormData(p => ({
+                    ...p, custom_instructions: e.target.value
+                  }))}
+                  placeholder="Specify details, e.g., why this document is being executed, any custom conditions/restrictions, or special clauses you want the AI to weave into the draft."
+                  className={inputClass}
+                />
+                <p className="text-[10px] text-slate-400 mt-1 leading-normal">
+                  The AI will naturally incorporate these instructions, reasons, or conditions into the drafted document before generation.
+                </p>
+              </div>
+
               {generationError && (
                 <div className="bg-red-50 border border-red-200 text-red-800 p-3.5 rounded-xl text-xs font-semibold leading-relaxed flex items-start gap-2.5 shadow-sm animate-fade-in mb-2 text-left">
                   <span className="text-sm">⚠️</span>
@@ -1228,6 +1376,14 @@ export default function DocumentGeneratorPage() {
                   </div>
                 </div>
 
+                {/* Pre-Download Compliance Conflict Sweep */}
+                <div className="p-4 border-b border-slate-200 bg-slate-50/50">
+                  <ConflictAuditor
+                    documentText={generatedContent}
+                    onAuditComplete={(hasCritical) => setHasCriticalConflict(hasCritical)}
+                  />
+                </div>
+
                 {/* Document text preview in A4 page style */}
                 <div className="p-4 bg-slate-100 border-t border-slate-200 overflow-x-auto flex justify-center select-none">
                   <div 
@@ -1307,8 +1463,93 @@ export default function DocumentGeneratorPage() {
                 </div>
               </div>
 
+              {showClauseChecker && missingClauses.length > 0 && (
+                <div className="bg-white dark:bg-slate-800 border-2 border-amber-300 dark:border-amber-700 rounded-2xl overflow-hidden mb-4 animate-fade-in">
+                  {/* Header */}
+                  <div className="bg-amber-50 dark:bg-amber-900/30 border-b border-amber-200 dark:border-amber-700 px-5 py-3 flex items-center justify-between">
+                    <div>
+                      <h3 className="font-bold text-amber-900 dark:text-amber-300 text-sm flex items-center gap-2">
+                        ⚡ {missingClauses.length} Recommended Clauses Not Found
+                      </h3>
+                      <p className="text-amber-700 dark:text-amber-400 text-xs mt-0.5">
+                        Click any clause to add it to your document via AI
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setShowClauseChecker(false)}
+                      className="text-amber-500 hover:text-amber-700 text-lg font-bold"
+                    >
+                      ×
+                    </button>
+                  </div>
+
+                  {/* Missing clauses list */}
+                  <div className="p-4 space-y-3">
+                    {/* Critical first, then recommended, then optional */}
+                    {(['critical', 'recommended', 'optional'] as const).map(importance => {
+                      const clauses = missingClauses.filter(c => c.importance === importance)
+                      if (clauses.length === 0) return null
+                      
+                      return (
+                        <div key={importance} className="space-y-2">
+                          <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                            {getImportanceIcon(importance)} {getImportanceLabel(importance)} Clauses
+                          </p>
+                          <div className="grid grid-cols-1 gap-2">
+                            {clauses.map(clause => (
+                              <div
+                                key={clause.id}
+                                className="flex items-start justify-between gap-3 p-3 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-700"
+                              >
+                                <div className="min-w-0 flex-1">
+                                  <p className="text-xs font-semibold text-navy dark:text-slate-100">
+                                    {clause.name}
+                                  </p>
+                                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                                    {clause.description}
+                                  </p>
+                                </div>
+                                <button
+                                  onClick={() => {
+                                    setEditInstruction(clause.aiPrompt)
+                                    setShowClauseChecker(false)
+                                    // Scroll to AI editor
+                                    document.getElementById('ai-editor')?.scrollIntoView({ behavior: 'smooth' })
+                                  }}
+                                  className="flex-shrink-0 text-xs bg-amber-400 hover:bg-amber-500 text-navy font-bold px-3 py-1.5 rounded-lg whitespace-nowrap transition-colors"
+                                >
+                                  + Add
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )
+                    })}
+                    
+                    {/* Add all missing critical clauses at once */}
+                    {missingClauses.filter(c => c.importance === 'critical').length > 1 && (
+                      <button
+                        onClick={() => {
+                          const criticalPrompts = missingClauses
+                            .filter(c => c.importance === 'critical')
+                            .map(c => c.aiPrompt)
+                            .join('. Also, ')
+                          setEditInstruction(criticalPrompts)
+                          setShowClauseChecker(false)
+                          document.getElementById('ai-editor')?.scrollIntoView({ behavior: 'smooth' })
+                        }}
+                        className="w-full mt-2 bg-navy text-white text-xs font-bold py-2.5 rounded-xl hover:opacity-90 transition-opacity"
+                      >
+                        ⚡ Add All Critical Clauses at Once
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* AI Chat Editor */}
-              <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+              <div id="ai-editor" className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
                 <div className="bg-slate-50 border-b border-slate-200 px-5 py-3">
                   <h3 className="font-bold text-navy text-sm">
                     🤖 AI Document Editor
@@ -1331,6 +1572,63 @@ export default function DocumentGeneratorPage() {
 
                 {/* Edit input */}
                 <div className="p-4">
+                  {fuzzyMatch && (
+                    <FuzzyClarifier
+                      suggestion={fuzzyMatch}
+                      onConfirm={(intentId) => handleAiEdit(intentId)}
+                      onDismiss={() => {
+                        setFuzzyMatch(null)
+                        handleAiEdit()
+                      }}
+                    />
+                  )}
+
+                  {missingVariables && missingVariables.length > 0 && requiresInputData && (
+                    <div className="border border-blue-200 bg-blue-50 dark:bg-blue-950/30 dark:border-blue-800 rounded-lg p-4 mb-3 shadow-sm animate-fade-in">
+                      <p className="text-sm font-semibold text-blue-900 dark:text-blue-100 mb-1 flex items-center gap-1">
+                        📋 Additional Information Required
+                      </p>
+                      <p className="text-xs text-blue-700 dark:text-blue-300 mb-3">
+                        Please fill in these details to automatically insert the standard compliance clause:
+                      </p>
+                      <div className="space-y-3 mb-3">
+                        {missingVariables.map((varName) => (
+                          <div key={varName}>
+                            <label className="block text-[10px] font-bold text-blue-800 dark:text-blue-200 uppercase tracking-wider mb-1">
+                              {varName.replace(/_/g, ' ')}
+                            </label>
+                            <input
+                              type="text"
+                              value={inputVariablesValues[varName] || ''}
+                              onChange={(e) => setInputVariablesValues(prev => ({ ...prev, [varName]: e.target.value }))}
+                              placeholder={`Enter ${varName.toLowerCase().replace(/_/g, ' ')}`}
+                              className={`${inputClass} border-blue-300 focus:ring-blue-400`}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleAiEdit(undefined, { ...requiresInputData.currentVariables, ...inputVariablesValues })}
+                          disabled={missingVariables.some(v => !inputVariablesValues[v]?.trim())}
+                          className="px-3 py-1.5 text-xs font-semibold bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-colors disabled:opacity-50"
+                        >
+                          ✓ Submit & Apply
+                        </button>
+                        <button
+                          onClick={() => {
+                            setMissingVariables(null)
+                            setRequiresInputData(null)
+                            setInputVariablesValues({})
+                          }}
+                          className="px-3 py-1.5 text-xs font-semibold border border-blue-300 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-md transition-colors"
+                        >
+                          ✕ Cancel
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="flex gap-2">
                     <input
                       type="text"
@@ -1346,7 +1644,7 @@ export default function DocumentGeneratorPage() {
                       className={inputClass}
                     />
                     <button
-                      onClick={handleAiEdit}
+                      onClick={() => handleAiEdit()}
                       disabled={editing || !editInstruction.trim()}
                       className="px-4 py-2 bg-navy text-white rounded-xl text-sm font-semibold hover:bg-navy/90 disabled:opacity-60 flex-shrink-0"
                     >
@@ -1759,6 +2057,12 @@ export default function DocumentGeneratorPage() {
           </div>
         </div>
       )}
+      {/* Legal Basis Sidebar Card */}
+      <LegalBasisCard
+        clauseId={legalCardClauseId}
+        isOpen={legalCardOpen}
+        onClose={() => setLegalCardOpen(false)}
+      />
     </div>
   )
 }

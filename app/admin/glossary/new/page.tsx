@@ -338,23 +338,23 @@ export default function NewGlossaryTermPage() {
   }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto min-h-screen bg-slate-50/50">
+    <div className="p-6 max-w-7xl mx-auto min-h-screen text-slate-200">
       {/* Top Bar */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
         <div className="flex items-center gap-4">
           <Link 
             href="/admin/glossary"
-            className="p-2 hover:bg-slate-200/60 rounded-xl transition-colors border border-slate-200 bg-white"
+            className="p-2 bg-slate-900 hover:bg-slate-800 rounded-xl transition-colors border border-slate-800"
             title="Back to Glossary list"
           >
-            <ArrowLeft className="w-5 h-5 text-navy" />
+            <ArrowLeft className="w-5 h-5 text-white" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-navy flex items-center gap-2">
+            <h1 className="text-3xl font-extrabold text-white flex items-center gap-2 font-heading">
               Add Legal Glossary Term
               <Sparkles className="w-5 h-5 text-amber-500 fill-amber-500 animate-pulse" />
             </h1>
-            <p className="text-sm text-slate-500 mt-0.5">Write premium corporate definitions with interactive elements.</p>
+            <p className="text-sm text-slate-400 mt-0.5">Write premium corporate definitions with interactive elements.</p>
           </div>
         </div>
 
@@ -362,9 +362,9 @@ export default function NewGlossaryTermPage() {
           <button 
             type="button"
             onClick={() => setIsPreviewOpen(true)}
-            className="inline-flex items-center gap-2 px-5 py-3 bg-white hover:bg-slate-50 text-navy font-semibold rounded-xl border border-slate-200 shadow-sm transition-all hover:scale-[1.01] active:scale-[0.99]"
+            className="inline-flex items-center gap-2 px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl border border-slate-800 shadow-sm transition-all hover:scale-[1.01] active:scale-[0.99]"
           >
-            <Eye className="w-4 h-4 text-slate-500" />
+            <Eye className="w-4 h-4 text-slate-400" />
             Live Preview
           </button>
 
@@ -386,27 +386,27 @@ export default function NewGlossaryTermPage() {
         <div className="lg:col-span-2 space-y-6">
           
           {/* Card: Basic Info */}
-          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm">
-            <h2 className="text-lg font-bold text-navy mb-4 pb-2 border-b border-slate-100 flex items-center gap-2">
+          <div className="admin-card p-6">
+            <h2 className="text-lg font-bold text-white mb-4 pb-2 border-b border-slate-800 flex items-center gap-2">
               <span className="w-1.5 h-4 bg-amber-500 rounded-full"></span>
               Term Definition & Details
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
               <div className="space-y-1.5">
-                <label className="text-sm font-semibold text-slate-700">Term Name <span className="text-red-500">*</span></label>
+                <label className="text-sm font-semibold text-slate-300">Term Name <span className="text-rose-500">*</span></label>
                 <input 
                   required
                   type="text" 
                   value={term}
                   onChange={handleTermChange}
                   placeholder="e.g. Committee of Creditors"
-                  className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-medium"
+                  className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-medium text-white"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-sm font-semibold text-slate-700">URL Slug <span className="text-red-500">*</span></label>
+                <label className="text-sm font-semibold text-slate-300">URL Slug <span className="text-rose-500">*</span></label>
                 <input 
                   required
                   type="text" 
@@ -415,34 +415,34 @@ export default function NewGlossaryTermPage() {
                     setSlug(e.target.value)
                     setSlugEdited(true)
                   }}
-                  className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-mono text-slate-600 bg-slate-50/50"
+                  className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-mono text-slate-400"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
               <div className="space-y-1.5">
-                <label className="text-sm font-semibold text-slate-700">Category <span className="text-red-500">*</span></label>
+                <label className="text-sm font-semibold text-slate-300">Category <span className="text-rose-500">*</span></label>
                 <select 
                   required
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm bg-white font-medium text-slate-800"
+                  className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-medium text-slate-200"
                 >
-                  {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                  {CATEGORIES.map(cat => <option className="bg-slate-900 text-white" key={cat} value={cat}>{cat}</option>)}
                 </select>
               </div>
 
               <div className="space-y-1.5 flex flex-col justify-end">
-                <label className="flex items-center gap-3 cursor-pointer p-3 border border-slate-200 rounded-xl hover:bg-slate-50/60 transition-colors bg-white">
+                <label className="flex items-center gap-3 cursor-pointer p-3 border border-slate-800 rounded-xl hover:bg-slate-900/30 transition-colors bg-slate-950">
                   <input 
                     type="checkbox" 
                     checked={isVerified}
                     onChange={(e) => setIsVerified(e.target.checked)}
-                    className="w-4 h-4 text-amber-500 rounded border-slate-300 focus:ring-amber-500"
+                    className="w-4 h-4 text-amber-500 rounded border-slate-800 bg-slate-900 focus:ring-amber-500"
                   />
                   <div>
-                    <span className="text-sm font-bold text-slate-800">Publish as verified</span>
+                    <span className="text-sm font-bold text-white">Publish as verified</span>
                     <p className="text-xs text-slate-400">Makes term visible on the public glossary.</p>
                   </div>
                 </label>
@@ -451,11 +451,11 @@ export default function NewGlossaryTermPage() {
 
             {/* MDEditor for Definition */}
             <div className="space-y-2 mb-6">
-              <label className="text-sm font-semibold text-slate-700 flex justify-between items-center">
-                <span>Definition <span className="text-red-500">*</span></span>
-                <span className="text-xs font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">{defWords} words</span>
+              <label className="text-sm font-semibold text-slate-300 flex justify-between items-center">
+                <span>Definition <span className="text-rose-500">*</span></span>
+                <span className="text-xs font-semibold text-slate-400 bg-slate-950 px-2 py-0.5 rounded">{defWords} words</span>
               </label>
-              <div data-color-mode="light" className="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+              <div data-color-mode="dark" className="border border-slate-800 rounded-xl overflow-hidden shadow-sm">
                 <MDEditor 
                   value={definition}
                   onChange={(val) => setDefinition(val || '')}
@@ -467,11 +467,11 @@ export default function NewGlossaryTermPage() {
 
             {/* MDEditor for Extended Note */}
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-slate-700 flex justify-between items-center">
+              <label className="text-sm font-semibold text-slate-300 flex justify-between items-center">
                 <span>Extended Note (SEO Explanatory Paragraphs)</span>
-                <span className="text-xs font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">{noteWords} words</span>
+                <span className="text-xs font-semibold text-slate-400 bg-slate-950 px-2 py-0.5 rounded">{noteWords} words</span>
               </label>
-              <div data-color-mode="light" className="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+              <div data-color-mode="dark" className="border border-slate-800 rounded-xl overflow-hidden shadow-sm">
                 <MDEditor 
                   value={extendedNote}
                   onChange={(val) => setExtendedNote(val || '')}
@@ -479,14 +479,14 @@ export default function NewGlossaryTermPage() {
                   preview="edit"
                 />
               </div>
-              <p className="text-xs text-slate-400 mt-1">Use HTML or Markdown tables, styling, bullets, and links to make this definition premium.</p>
+              <p className="text-xs text-slate-505 mt-1">Use HTML or Markdown tables, styling, bullets, and links to make this definition premium.</p>
             </div>
           </div>
 
           {/* Card: FAQ Builder */}
-          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm">
-            <div className="flex justify-between items-center pb-2 border-b border-slate-100 mb-4">
-              <h2 className="text-lg font-bold text-navy flex items-center gap-2">
+          <div className="admin-card p-6">
+            <div className="flex justify-between items-center pb-2 border-b border-slate-800 mb-4">
+              <h2 className="text-lg font-bold text-white flex items-center gap-2">
                 <span className="w-1.5 h-4 bg-amber-500 rounded-full"></span>
                 Frequently Asked Questions (FAQ)
               </h2>
@@ -494,7 +494,7 @@ export default function NewGlossaryTermPage() {
                 <button 
                   type="button" 
                   onClick={() => setIsBulkOpen(!isBulkOpen)}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 px-3 py-2 rounded-lg transition-colors border border-slate-200"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-300 hover:text-white bg-slate-950 hover:bg-slate-900 px-3 py-2 rounded-lg transition-colors border border-slate-800"
                 >
                   <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-500 animate-pulse" />
                   Bulk Import
@@ -502,7 +502,7 @@ export default function NewGlossaryTermPage() {
                 <button 
                   type="button" 
                   onClick={handleAddFaq}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 hover:text-amber-700 bg-amber-50 hover:bg-amber-100 px-3 py-2 rounded-lg transition-colors border border-amber-100"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-500 hover:text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 px-3 py-2 rounded-lg transition-colors border border-amber-500/20"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   Add FAQ
@@ -511,29 +511,29 @@ export default function NewGlossaryTermPage() {
             </div>
 
             {isBulkOpen && (
-              <div className="mb-6 p-4 border border-amber-200/60 bg-amber-50/20 rounded-xl space-y-3">
+              <div className="mb-6 p-4 border border-amber-500/20 bg-amber-500/5 rounded-xl space-y-3">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-sm font-bold text-navy flex items-center gap-1.5">
+                  <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
                     <Sparkles className="w-4 h-4 text-amber-500 fill-amber-500" />
                     Bulk Import FAQs
                   </h3>
                   <button 
                     type="button"
                     onClick={() => setIsBulkOpen(false)}
-                    className="text-xs font-bold text-slate-400 hover:text-slate-600"
+                    className="text-xs font-bold text-slate-400 hover:text-slate-200"
                   >
                     Cancel
                   </button>
                 </div>
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  Paste your raw questions and answers below. The system will automatically parse lines starting with <code className="bg-amber-100 text-amber-800 px-1 py-0.5 rounded font-mono font-bold">Q1.</code> or ending with <code className="bg-amber-100 text-amber-800 px-1 py-0.5 rounded font-mono font-bold">?</code> into separate items.
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Paste your raw questions and answers below. The system will automatically parse lines starting with <code className="bg-amber-500/20 text-amber-300 px-1 py-0.5 rounded font-mono font-bold">Q1.</code> or ending with <code className="bg-amber-500/20 text-amber-300 px-1 py-0.5 rounded font-mono font-bold">?</code> into separate items.
                 </p>
                 <textarea
                   rows={6}
                   value={bulkFaqText}
                   onChange={(e) => setBulkFaqText(e.target.value)}
                   placeholder={`Example:\nQ1. What is MCA21?\nMCA21 is the online portal...\n\nQ2. How do I file forms?\nLog in and select the relevant e-form...`}
-                  className="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-mono text-slate-600 bg-white"
+                  className="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-mono text-slate-300"
                 />
                 <div className="flex justify-end gap-2">
                   <button
@@ -558,43 +558,43 @@ export default function NewGlossaryTermPage() {
             )}
 
             {faqs.length === 0 ? (
-              <div className="text-center py-8 bg-slate-50/50 border border-slate-200 border-dashed rounded-xl flex flex-col items-center justify-center">
-                <HelpCircle className="w-8 h-8 text-slate-300 mb-2" />
-                <p className="text-sm text-slate-500 font-medium">No custom FAQs defined.</p>
-                <p className="text-xs text-slate-400 mt-1 max-w-md">The system will automatically generate 3 optimized legal FAQs in the public view and Google FAQ schemas.</p>
+              <div className="text-center py-8 bg-slate-950/40 border border-slate-800 border-dashed rounded-xl flex flex-col items-center justify-center">
+                <HelpCircle className="w-8 h-8 text-slate-500 mb-2" />
+                <p className="text-sm text-slate-400 font-medium">No custom FAQs defined.</p>
+                <p className="text-xs text-slate-500 mt-1 max-w-md">The system will automatically generate 3 optimized legal FAQs in the public view and Google FAQ schemas.</p>
               </div>
             ) : (
               <div className="space-y-4">
                 {faqs.map((faq, i) => (
-                  <div key={i} className="p-4 border border-slate-100 rounded-xl bg-slate-50/50 space-y-3 relative">
+                  <div key={i} className="p-4 border border-slate-850 rounded-xl bg-slate-950/40 space-y-3 relative">
                     <button 
                       type="button"
                       onClick={() => handleRemoveFaq(i)}
-                      className="absolute top-3 right-3 text-slate-400 hover:text-red-500 transition-colors p-1 hover:bg-white rounded-lg border border-transparent hover:border-slate-100"
+                      className="absolute top-3 right-3 text-slate-400 hover:text-rose-400 transition-colors p-1 hover:bg-slate-900 rounded-lg border border-transparent hover:border-slate-800"
                       title="Remove Item"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
                     
                     <div className="space-y-1 pr-8">
-                      <label className="text-xs font-bold text-slate-600 uppercase tracking-wide">Question {i + 1}</label>
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">Question {i + 1}</label>
                       <input 
                         type="text" 
                         value={faq.q}
                         onChange={(e) => handleFaqChange(i, 'q', e.target.value)}
                         placeholder="e.g. What is the scope of CoC?"
-                        className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm bg-white"
+                        className="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm text-white"
                       />
                     </div>
 
                     <div className="space-y-1">
-                      <label className="text-xs font-bold text-slate-600 uppercase tracking-wide">Answer</label>
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">Answer</label>
                       <textarea 
                         rows={2}
                         value={faq.a}
                         onChange={(e) => handleFaqChange(i, 'a', e.target.value)}
                         placeholder="Provide a clean, descriptive answer..."
-                        className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm bg-white"
+                        className="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm text-white"
                       />
                     </div>
                   </div>
@@ -608,31 +608,31 @@ export default function NewGlossaryTermPage() {
         <div className="space-y-6">
           
           {/* Card: SEO Indexing Progress */}
-          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm">
-            <h3 className="text-base font-bold text-navy mb-4 flex items-center gap-2">
+          <div className="admin-card p-6">
+            <h3 className="text-base font-bold text-white mb-4 flex items-center gap-2">
               <span className="w-1.5 h-4 bg-amber-500 rounded-full"></span>
               Google SEO Index Status
             </h3>
 
             {isSubstantial ? (
-              <div className="p-4 bg-green-50 border border-green-200 rounded-xl mb-6">
+              <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl mb-6">
                 <div className="flex gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0" />
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
                   <div>
-                    <h4 className="font-bold text-green-800 text-sm">SEO Indexing Eligible</h4>
-                    <p className="text-xs text-green-600 mt-1 leading-relaxed">
+                    <h4 className="font-bold text-emerald-300 text-sm">SEO Indexing Eligible</h4>
+                    <p className="text-xs text-emerald-400 mt-1 leading-relaxed">
                       Excellent! The combined definition and note contains <strong>{totalWords} words</strong>. Google will index this page.
                     </p>
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl mb-6">
+              <div className="p-4 bg-slate-950/45 border border-slate-850 rounded-xl mb-6">
                 <div className="flex gap-2">
                   <AlertTriangle className="w-5 h-5 text-slate-500 shrink-0" />
                   <div>
-                    <h4 className="font-bold text-slate-800 text-sm">Noindex Active (Thin Content)</h4>
-                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                    <h4 className="font-bold text-slate-200 text-sm">Noindex Active (Thin Content)</h4>
+                    <p className="text-xs text-slate-400 mt-1 leading-relaxed">
                       Current combined length: <strong>{totalWords}/300 words</strong>. Write {300 - totalWords} more words to make it indexable and remove `noindex` tag.
                     </p>
                   </div>
@@ -642,14 +642,14 @@ export default function NewGlossaryTermPage() {
 
             {/* Progress Bar */}
             <div className="space-y-1 mb-6">
-              <div className="flex justify-between text-xs font-semibold text-slate-500">
+              <div className="flex justify-between text-xs font-semibold text-slate-400">
                 <span>Indexing Milestone Progress</span>
                 <span>{Math.min(100, Math.round((totalWords / 300) * 100))}%</span>
               </div>
-              <div className="w-full bg-slate-100 rounded-full h-2">
+              <div className="w-full bg-slate-950 rounded-full h-2">
                 <div 
                   className={`h-2 rounded-full transition-all duration-300 ${
-                    isSubstantial ? 'bg-green-500' : 'bg-amber-400'
+                    isSubstantial ? 'bg-emerald-500' : 'bg-amber-500'
                   }`}
                   style={{ width: `${Math.min(100, (totalWords / 300) * 100)}%` }}
                 ></div>
@@ -658,35 +658,35 @@ export default function NewGlossaryTermPage() {
 
             {/* Checklist */}
             <div className="space-y-3">
-              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">SEO Best Practices Checklist</h4>
+              <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider">SEO Best Practices Checklist</h4>
               <div className="space-y-2.5">
                 <div className="flex items-center gap-2 text-sm">
-                  <span className={`w-2 h-2 rounded-full ${term.trim() ? 'bg-green-500' : 'bg-slate-300'}`}></span>
-                  <span className={term.trim() ? 'text-slate-700 font-medium' : 'text-slate-400'}>Term Name entered</span>
+                  <span className={`w-2 h-2 rounded-full ${term.trim() ? 'bg-emerald-500' : 'bg-slate-700'}`}></span>
+                  <span className={term.trim() ? 'text-slate-200 font-medium' : 'text-slate-500'}>Term Name entered</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
-                  <span className={`w-2 h-2 rounded-full ${isSubstantial ? 'bg-green-500' : 'bg-slate-300'}`}></span>
-                  <span className={isSubstantial ? 'text-slate-700 font-medium' : 'text-slate-400'}>At least 300 words ({totalWords})</span>
+                  <span className={`w-2 h-2 rounded-full ${isSubstantial ? 'bg-emerald-500' : 'bg-slate-700'}`}></span>
+                  <span className={isSubstantial ? 'text-slate-200 font-medium' : 'text-slate-500'}>At least 300 words ({totalWords})</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
-                  <span className={`w-2 h-2 rounded-full ${extendedNote.trim() ? 'bg-green-500' : 'bg-slate-300'}`}></span>
-                  <span className={extendedNote.trim() ? 'text-slate-700 font-medium' : 'text-slate-400'}>Extended note explanation added</span>
+                  <span className={`w-2 h-2 rounded-full ${extendedNote.trim() ? 'bg-emerald-500' : 'bg-slate-700'}`}></span>
+                  <span className={extendedNote.trim() ? 'text-slate-200 font-medium' : 'text-slate-500'}>Extended note explanation added</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
-                  <span className={`w-2 h-2 rounded-full ${synonyms.length > 0 ? 'bg-green-500' : 'bg-slate-300'}`}></span>
-                  <span className={synonyms.length > 0 ? 'text-slate-700 font-medium' : 'text-slate-400'}>Synonyms/Acronyms listed ({synonyms.length})</span>
+                  <span className={`w-2 h-2 rounded-full ${synonyms.length > 0 ? 'bg-emerald-500' : 'bg-slate-700'}`}></span>
+                  <span className={synonyms.length > 0 ? 'text-slate-200 font-medium' : 'text-slate-500'}>Synonyms/Acronyms listed ({synonyms.length})</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
-                  <span className={`w-2 h-2 rounded-full ${keywords.length > 0 ? 'bg-green-500' : 'bg-slate-300'}`}></span>
-                  <span className={keywords.length > 0 ? 'text-slate-700 font-medium' : 'text-slate-400'}>Keywords configured ({keywords.length})</span>
+                  <span className={`w-2 h-2 rounded-full ${keywords.length > 0 ? 'bg-emerald-500' : 'bg-slate-700'}`}></span>
+                  <span className={keywords.length > 0 ? 'text-slate-200 font-medium' : 'text-slate-500'}>Keywords configured ({keywords.length})</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Card: Synonyms & Acronyms for Auto-linking */}
-          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm">
-            <h3 className="text-base font-bold text-navy mb-2 flex items-center gap-2">
+          <div className="admin-card p-6">
+            <h3 className="text-base font-bold text-white mb-2 flex items-center gap-2">
               <span className="w-1.5 h-4 bg-amber-500 rounded-full"></span>
               Auto-Link Synonyms & Acronyms
             </h3>
@@ -700,22 +700,22 @@ export default function NewGlossaryTermPage() {
               onChange={(e) => setSynonymInput(e.target.value)}
               onKeyDown={handleSynonymKeyDown}
               onPaste={handleSynonymPaste}
-              className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-medium"
+              className="w-full px-4 py-2 bg-slate-950 border border-slate-800 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-medium text-white"
               placeholder="Add synonym (e.g. CoC, ADR) and press Enter"
             />
             
             {synonyms.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-3 p-3 bg-slate-50 border border-slate-100 rounded-xl">
+              <div className="flex flex-wrap gap-2 mt-3 p-3 bg-slate-950/40 border border-slate-855 rounded-xl">
                 {synonyms.map((syn, index) => (
                   <span 
                     key={index} 
-                    className="inline-flex items-center gap-1.5 bg-white border border-slate-200 text-navy text-xs font-bold px-2.5 py-1.5 rounded-lg shadow-sm"
+                    className="inline-flex items-center gap-1.5 bg-slate-900 border border-slate-800 text-white text-xs font-bold px-2.5 py-1.5 rounded-lg shadow-sm"
                   >
                     {syn}
                     <button 
                       type="button" 
                       onClick={() => handleRemoveSynonym(index)}
-                      className="text-slate-400 hover:text-red-500 transition-colors p-0.5 rounded-full hover:bg-slate-100"
+                      className="text-slate-400 hover:text-rose-400 transition-colors p-0.5 rounded-full hover:bg-slate-850"
                     >
                       <X className="w-3 h-3" />
                     </button>
@@ -726,8 +726,8 @@ export default function NewGlossaryTermPage() {
           </div>
 
           {/* Card: Keywords (Search queries) */}
-          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm">
-            <h3 className="text-base font-bold text-navy mb-2 flex items-center gap-2">
+          <div className="admin-card p-6">
+            <h3 className="text-base font-bold text-white mb-2 flex items-center gap-2">
               <span className="w-1.5 h-4 bg-amber-500 rounded-full"></span>
               Search Query Keywords
             </h3>
@@ -741,22 +741,22 @@ export default function NewGlossaryTermPage() {
               onChange={(e) => setKeywordInput(e.target.value)}
               onKeyDown={handleKeywordKeyDown}
               onPaste={handleKeywordPaste}
-              className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-medium"
+              className="w-full px-4 py-2 bg-slate-950 border border-slate-800 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-medium text-white"
               placeholder="Add keyword query (comma-separated also supported) and press Enter"
             />
             
             {keywords.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-3 p-3 bg-slate-50 border border-slate-100 rounded-xl">
+              <div className="flex flex-wrap gap-2 mt-3 p-3 bg-slate-950/40 border border-slate-855 rounded-xl">
                 {keywords.map((kw, index) => (
                   <span 
                     key={index} 
-                    className="inline-flex items-center gap-1.5 bg-white border border-slate-200 text-slate-700 text-xs font-semibold px-2.5 py-1.5 rounded-lg shadow-sm"
+                    className="inline-flex items-center gap-1.5 bg-slate-900 border border-slate-800 text-slate-200 text-xs font-semibold px-2.5 py-1.5 rounded-lg shadow-sm"
                   >
                     {kw}
                     <button 
                       type="button" 
                       onClick={() => handleRemoveKeyword(index)}
-                      className="text-slate-400 hover:text-red-500 transition-colors p-0.5 rounded-full hover:bg-slate-100"
+                      className="text-slate-400 hover:text-rose-400 transition-colors p-0.5 rounded-full hover:bg-slate-850"
                     >
                       <X className="w-3 h-3" />
                     </button>
@@ -767,8 +767,8 @@ export default function NewGlossaryTermPage() {
           </div>
 
           {/* Card: Related Terms */}
-          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm">
-            <h3 className="text-base font-bold text-navy mb-2 flex items-center gap-2">
+          <div className="admin-card p-6">
+            <h3 className="text-base font-bold text-white mb-2 flex items-center gap-2">
               <span className="w-1.5 h-4 bg-amber-500 rounded-full"></span>
               Related Term Links
             </h3>
@@ -780,29 +780,29 @@ export default function NewGlossaryTermPage() {
               type="text" 
               value={relatedTerms}
               onChange={(e) => setRelatedTerms(e.target.value)}
-              className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-medium"
+              className="w-full px-4 py-2 bg-slate-950 border border-slate-800 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-medium text-white"
               placeholder="e.g. CIRP, Insolvency (comma separated)"
             />
           </div>
 
           {/* Card: SEO, TL;DR & Layout Controls */}
-          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm space-y-5">
-            <h3 className="text-base font-bold text-navy flex items-center gap-2 border-b border-slate-100 pb-2.5">
+          <div className="admin-card p-6 space-y-5">
+            <h3 className="text-base font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-2.5">
               <span className="w-1.5 h-4 bg-amber-500 rounded-full"></span>
               Layout & SEO Optimization
             </h3>
 
             {/* Layout Hiding */}
             <div className="space-y-1.5">
-              <label className="flex items-center gap-3 cursor-pointer p-3 border border-slate-200 rounded-xl hover:bg-slate-50/60 transition-colors bg-white">
+              <label className="flex items-center gap-3 cursor-pointer p-3 border border-slate-800 rounded-xl hover:bg-slate-900/30 transition-colors bg-slate-950">
                 <input 
                   type="checkbox" 
                   checked={hideDefinition}
                   onChange={(e) => setHideDefinition(e.target.checked)}
-                  className="w-4 h-4 text-amber-500 rounded border-slate-300 focus:ring-amber-500"
+                  className="w-4 h-4 text-amber-500 rounded border-slate-800 bg-slate-900 focus:ring-amber-500"
                 />
                 <div>
-                  <span className="text-sm font-semibold text-slate-800">Hide Definition Card</span>
+                  <span className="text-sm font-semibold text-white">Hide Definition Card</span>
                   <p className="text-xs text-slate-400">If you have styled a long, detailed article below, hide the simple top definition.</p>
                 </div>
               </label>
@@ -810,50 +810,50 @@ export default function NewGlossaryTermPage() {
 
             {/* SEO Custom Title */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block">Custom SEO Title</label>
+              <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Custom SEO Title</label>
               <input 
                 type="text" 
                 value={seoTitle}
                 onChange={(e) => setSeoTitle(e.target.value)}
                 placeholder="Custom HTML page title for Google & AI search"
-                className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm"
+                className="w-full px-4 py-2 bg-slate-950 border border-slate-800 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm text-white"
               />
             </div>
 
             {/* SEO Custom Description */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block">Custom SEO Description</label>
+              <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Custom SEO Description</label>
               <textarea 
                 value={seoDescription}
                 onChange={(e) => setSeoDescription(e.target.value)}
                 placeholder="Custom meta description for search snippets"
                 rows={3}
-                className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm resize-none"
+                className="w-full px-4 py-2 bg-slate-950 border border-slate-800 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm resize-none text-white animate-none"
               />
             </div>
 
             {/* TL;DR Executive Takeaways */}
-            <div className="space-y-3 pt-2.5 border-t border-slate-100">
+            <div className="space-y-3 pt-2.5 border-t border-slate-800">
               <div className="flex justify-between items-center">
-                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Key Takeaways (TL;DR)</label>
+                <label className="text-xs font-bold text-slate-300 uppercase tracking-wider">Key Takeaways (TL;DR)</label>
                 <button 
                   type="button" 
                   onClick={() => setShowBulkTldr(!showBulkTldr)} 
-                  className="text-[10px] bg-slate-100 hover:bg-slate-200 text-navy font-bold px-2 py-1 rounded transition-colors"
+                  className="text-[10px] bg-slate-900 hover:bg-slate-800 text-white font-bold px-2 py-1 rounded transition-colors border border-slate-800"
                 >
                   {showBulkTldr ? 'Close Bulk Import' : 'Bulk Import Points'}
                 </button>
               </div>
 
               {showBulkTldr ? (
-                <div className="space-y-2 bg-slate-50 border border-slate-200 p-3.5 rounded-xl">
-                  <span className="text-[10px] text-slate-400 block font-medium">Paste bullet points here (e.g. copied from Chat/Doc). Each line will become a bullet takeaway.</span>
+                <div className="space-y-2 bg-slate-950 border border-slate-800 p-3.5 rounded-xl">
+                  <span className="text-[10px] text-slate-500 block font-medium">Paste bullet points here (e.g. copied from Chat/Doc). Each line will become a bullet takeaway.</span>
                   <textarea 
                     value={bulkTldrText}
                     onChange={(e) => setBulkTldrText(e.target.value)}
                     placeholder="• Point 1&#10;• Point 2&#10;• Point 3"
                     rows={4}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-amber-400 focus:outline-none"
+                    className="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-lg text-xs focus:ring-2 focus:ring-amber-400 focus:outline-none text-white"
                   />
                   <button 
                     type="button" 
@@ -871,20 +871,20 @@ export default function NewGlossaryTermPage() {
                       value={tldrInput}
                       onChange={(e) => setTldrInput(e.target.value)}
                       placeholder="Add key takeaway point..."
-                      className="flex-1 px-3 py-1.5 border border-slate-200 rounded-lg text-xs"
+                      className="flex-1 px-3 py-1.5 bg-slate-955 border border-slate-800 rounded-lg text-xs text-white"
                       onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddTldrPoint(); } }}
                     />
                     <button 
                       type="button" 
                       onClick={handleAddTldrPoint} 
-                      className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-colors"
+                      className="bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-colors"
                     >
                       Add
                     </button>
                   </div>
 
                   {tldrPoints.length > 0 ? (
-                    <div className="space-y-2 bg-slate-50/50 p-2.5 rounded-xl border border-slate-100">
+                    <div className="space-y-2 bg-slate-950/40 p-2.5 rounded-xl border border-slate-850">
                       {tldrPoints.map((pt, idx) => (
                         <div key={idx} className="flex gap-2 items-start group">
                           <span className="text-amber-500 text-xs font-bold pt-0.5">•</span>
@@ -892,12 +892,12 @@ export default function NewGlossaryTermPage() {
                             type="text" 
                             value={pt}
                             onChange={(e) => handleUpdateTldrPoint(idx, e.target.value)}
-                            className="flex-1 bg-transparent border-none p-0 text-slate-700 text-xs focus:ring-0 focus:outline-none"
+                            className="flex-1 bg-transparent border-none p-0 text-slate-300 text-xs focus:ring-0 focus:outline-none"
                           />
                           <button 
                             type="button" 
                             onClick={() => handleRemoveTldrPoint(idx)} 
-                            className="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity text-xs"
+                            className="text-slate-550 hover:text-rose-400 opacity-0 group-hover:opacity-100 transition-opacity text-xs"
                           >
                             ×
                           </button>
@@ -905,7 +905,7 @@ export default function NewGlossaryTermPage() {
                       ))}
                     </div>
                   ) : (
-                    <span className="text-[11px] text-slate-400 italic block text-center py-2">No key takeaways added yet. Use single entry or Bulk Import!</span>
+                    <span className="text-[11px] text-slate-500 italic block text-center py-2">No key takeaways added yet. Use single entry or Bulk Import!</span>
                   )}
                 </div>
               )}
@@ -916,75 +916,75 @@ export default function NewGlossaryTermPage() {
 
       {/* Live Preview Modal */}
       {isPreviewOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm flex justify-center p-4 sm:p-6 md:p-10">
-          <div className="relative w-full max-w-4xl bg-slate-50 rounded-3xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col my-auto max-h-[90vh]">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-955/80 backdrop-blur-sm flex justify-center p-4 sm:p-6 md:p-10">
+          <div className="relative w-full max-w-4xl bg-slate-950 rounded-3xl shadow-2xl border border-slate-800 overflow-hidden flex flex-col my-auto max-h-[90vh]">
             
             {/* Modal Header */}
-            <div className="flex justify-between items-center px-8 py-5 bg-white border-b border-slate-200 shrink-0">
+            <div className="flex justify-between items-center px-8 py-5 bg-slate-900 border-b border-slate-850 shrink-0">
               <div>
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-600 border border-amber-200">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">
                   <Eye className="w-3.5 h-3.5" />
                   Interactive Preview
                 </span>
-                <h2 className="text-lg font-bold text-navy mt-1 font-heading">Live Public View Simulation</h2>
+                <h2 className="text-lg font-bold text-white mt-1 font-heading">Live Public View Simulation</h2>
               </div>
               <button
                 type="button"
                 onClick={() => setIsPreviewOpen(false)}
-                className="p-2 hover:bg-slate-100 rounded-xl transition-colors border border-slate-200/60"
+                className="p-2 hover:bg-slate-800 rounded-xl transition-colors border border-slate-800"
               >
-                <X className="w-5 h-5 text-slate-500" />
+                <X className="w-5 h-5 text-slate-400" />
               </button>
             </div>
 
             {/* Modal Content - scrollable */}
-            <div className="flex-1 overflow-y-auto px-8 py-10 bg-slate-50/50">
+            <div className="flex-1 overflow-y-auto px-8 py-10 bg-slate-900/60">
               <div className="max-w-3xl mx-auto">
                 
                 {/* Simulated Breadcrumb */}
-                <nav className="mb-8 text-sm text-slate-500 font-medium select-none pointer-events-none">
+                <nav className="mb-8 text-sm text-slate-400 font-medium select-none pointer-events-none">
                   <ol className="flex items-center space-x-2">
                     <li>Home</li>
                     <li><span aria-hidden="true" className="mx-1">›</span></li>
                     <li>Glossary</li>
                     <li><span aria-hidden="true" className="mx-1">›</span></li>
-                    <li className="text-navy font-semibold">{term || 'New Term'}</li>
+                    <li className="text-white font-semibold">{term || 'New Term'}</li>
                   </ol>
                 </nav>
 
                 {/* Main Card */}
-                <article className="bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm relative overflow-hidden text-left">
+                <article className="bg-slate-950 border border-slate-805 rounded-2xl p-8 shadow-sm relative overflow-hidden text-left bg-slate-950">
                   {/* Decorative background letter */}
-                  <div className="absolute top-0 right-0 p-8 opacity-5 select-none pointer-events-none" aria-hidden="true">
-                    <span className="text-9xl font-heading font-bold text-slate-900 leading-none">
+                  <div className="absolute top-0 right-0 p-8 opacity-[0.02] select-none pointer-events-none" aria-hidden="true">
+                    <span className="text-9xl font-heading font-bold text-white leading-none">
                       {(term || 'N').charAt(0).toUpperCase()}
                     </span>
                   </div>
 
                   <div className="relative z-10">
                     <div className="flex flex-wrap gap-2 items-center mb-4">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 uppercase tracking-wide">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 uppercase tracking-wide">
                         {category}
                       </span>
                     </div>
                     
-                    <h1 className="text-3xl md:text-4xl font-heading font-bold text-navy mb-6">
+                    <h1 className="text-3xl md:text-4xl font-heading font-bold text-white mb-6">
                       {term || 'Committee of Creditors'}
                     </h1>
                     
-                    <div className="prose prose-slate prose-lg max-w-none text-slate-700">
+                    <div className="prose prose-invert max-w-none text-slate-200">
                       {definition ? (
                         <MarkdownRenderer content={definition} />
                       ) : (
-                        <p className="text-slate-400 italic">No definition written yet. Use the editor to write the definition.</p>
+                        <p className="text-slate-550 italic">No definition written yet. Use the editor to write the definition.</p>
                       )}
                     </div>
 
                     {synonyms.length > 0 && (
-                      <div className="mt-6 pt-4 border-t border-slate-100 flex flex-wrap gap-1.5 items-center">
-                        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider mr-1.5">Acronyms / Synonyms:</span>
+                      <div className="mt-6 pt-4 border-t border-slate-800 flex flex-wrap gap-1.5 items-center">
+                        <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider mr-1.5">Acronyms / Synonyms:</span>
                         {synonyms.map((syn) => (
-                          <span key={syn} className="inline-flex items-center px-2 py-0.5 rounded bg-slate-50 text-slate-600 text-xs font-semibold border border-slate-100">
+                          <span key={syn} className="inline-flex items-center px-2 py-0.5 rounded bg-slate-955 text-slate-300 text-xs font-semibold border border-slate-850">
                             {syn}
                           </span>
                         ))}
@@ -995,17 +995,17 @@ export default function NewGlossaryTermPage() {
 
                 {/* Extended Note Section */}
                 {extendedNote && (
-                  <section className="mt-8 bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm text-left">
-                    <h3 className="text-xl font-bold text-navy mb-4 font-heading">Understanding {term || 'Term'}</h3>
-                    <div className="prose prose-slate max-w-none text-slate-600">
+                  <section className="mt-8 bg-slate-955 border border-slate-800 rounded-2xl p-8 shadow-sm text-left">
+                    <h3 className="text-xl font-bold text-white mb-4 font-heading">Understanding {term || 'Term'}</h3>
+                    <div className="prose prose-invert max-w-none text-slate-300">
                       <MarkdownRenderer content={extendedNote} />
                     </div>
                   </section>
                 )}
 
                 {/* FAQ Section */}
-                <section className="mt-8 bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm text-left">
-                  <h2 className="text-xl font-bold text-navy mb-6 font-heading">Frequently Asked Questions</h2>
+                <section className="mt-8 bg-slate-955 border border-slate-800 rounded-2xl p-8 shadow-sm text-left">
+                  <h2 className="text-xl font-bold text-white mb-6 font-heading">Frequently Asked Questions</h2>
                   <div className="space-y-4">
                     {(faqs.length > 0 ? faqs.map(f => ({ q: f.q, a: f.a })) : [
                       {
@@ -1017,12 +1017,12 @@ export default function NewGlossaryTermPage() {
                         a: `${term || 'Term'} is governed under Indian ${category} law. Understanding this concept is essential for ensuring regulatory compliance, avoiding penalties, and making corporate decisions in India.`
                       }
                     ]).map((faq, i) => (
-                      <div key={i} className="border border-slate-100 rounded-xl p-4 bg-slate-50/50">
-                        <h4 className="font-semibold text-navy flex items-center justify-between">
+                      <div key={i} className="border border-slate-850 rounded-xl p-4 bg-slate-900/40">
+                        <h4 className="font-semibold text-white flex items-center justify-between">
                           <span>{faq.q || 'Question...'}</span>
-                          <span className="text-slate-400 text-[10px]">▼</span>
+                          <span className="text-slate-550 text-[10px]">▼</span>
                         </h4>
-                        <p className="mt-3 text-slate-600 text-sm leading-relaxed border-t border-slate-200/50 pt-3">
+                        <p className="mt-3 text-slate-300 text-sm leading-relaxed border-t border-slate-850/50 pt-3">
                           {faq.a || 'Answer will be displayed here...'}
                         </p>
                       </div>
@@ -1032,16 +1032,16 @@ export default function NewGlossaryTermPage() {
 
                 {/* Related Searches Section */}
                 {keywords.length > 0 && (
-                  <section className="mt-8 bg-white rounded-2xl p-8 border border-slate-200/60 shadow-sm text-left">
-                    <h3 className="text-lg font-bold text-navy mb-4 font-heading">Related Searches</h3>
+                  <section className="mt-8 bg-slate-955 border border-slate-800 rounded-2xl p-8 shadow-sm text-left">
+                    <h3 className="text-lg font-bold text-white mb-4 font-heading">Related Searches</h3>
                     <div className="flex flex-wrap gap-2">
                       {keywords.map((kw, i) => (
                         <span
                           key={i}
-                          className="text-sm bg-slate-50 text-slate-600 border border-slate-200/60 px-4 py-2 rounded-full font-medium shadow-sm flex items-center gap-1 cursor-pointer hover:bg-slate-100"
+                          className="text-sm bg-slate-950 text-slate-300 border border-slate-850 px-4 py-2 rounded-full font-medium shadow-sm flex items-center gap-1 cursor-pointer hover:bg-slate-900"
                         >
                           <span>{kw}</span>
-                          <span className="text-slate-400 text-xs">↗</span>
+                          <span className="text-slate-500 text-xs">↗</span>
                         </span>
                       ))}
                     </div>
@@ -1052,11 +1052,11 @@ export default function NewGlossaryTermPage() {
             </div>
 
             {/* Modal Footer */}
-            <div className="px-8 py-4 bg-white border-t border-slate-200 flex justify-end gap-3 shrink-0">
+            <div className="px-8 py-4 bg-slate-900 border-t border-slate-855 flex justify-end gap-3 shrink-0">
               <button
                 type="button"
                 onClick={() => setIsPreviewOpen(false)}
-                className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-navy font-semibold rounded-xl text-sm border border-slate-200 transition-colors"
+                className="px-5 py-2.5 bg-slate-950 hover:bg-slate-850 text-slate-300 font-semibold rounded-xl text-sm border border-slate-800 transition-colors"
               >
                 Close Preview
               </button>

@@ -19,6 +19,7 @@ import {
     Users,
     X,
     BookOpen,
+    Cpu,
 } from 'lucide-react'
 
 interface SidebarLink {
@@ -56,6 +57,7 @@ const sections: SidebarSection[] = [
         links: [
             { href: '/admin/analytics',           icon: BarChart3,   label: 'Analytics'       },
             { href: '/admin/analytics/articles',  icon: LineChart,   label: 'Article Stats'   },
+            { href: '/admin/documents/analytics', icon: Cpu,         label: 'Doc AI Analytics'},
         ],
     },
     {
@@ -65,6 +67,7 @@ const sections: SidebarSection[] = [
             { href: '/admin/rates',                icon: Settings,     label: 'Tool Rates & Waiver' },
             { href: '/admin/compliance',           icon: Calendar,     label: 'Compliance Calendar' },
             { href: '/admin/compliance/suggestions', icon: Lightbulb,  label: 'Suggestions' },
+            { href: '/admin/rule-engine',          icon: Cpu,          label: 'Rule Engine' },
         ],
     },
     {

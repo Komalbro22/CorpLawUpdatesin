@@ -39,6 +39,13 @@ const config: Config = {
       colors: {
         navy: '#0F172A',
         gold: '#F59E0B',
+        // Add dark mode specific colors
+        'dark-bg': '#0A0F1E',
+        'dark-surface': '#111827',
+        'dark-card': '#1E2433',
+        'dark-border': '#2D3748',
+        'dark-text': '#E2E8F0',
+        'dark-text-muted': '#94A3B8',
         category: {
           mca:  '#3B82F6',
           sebi: '#10B981',

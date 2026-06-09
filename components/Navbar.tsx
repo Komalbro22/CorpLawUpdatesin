@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import GlobalSearch from './GlobalSearch'
+import DarkModeToggle from './DarkModeToggle'
 import {
     Building2,
     Calendar,
@@ -79,8 +80,8 @@ export default function Navbar() {
 
     const navHeight = scrolled ? 'h-14' : 'h-16'
     const navBg = scrolled
-        ? 'bg-white/95 shadow-nav backdrop-blur-xl'
-        : 'bg-white/90 backdrop-blur-md border-b border-slate-200/80'
+        ? 'bg-white/95 dark:bg-slate-900/95 shadow-nav backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800/80'
+        : 'bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80'
 
     return (
         <nav className={`sticky top-0 z-50 w-full transition-[background-color,backdrop-filter,box-shadow,border-color] duration-300 ease-in-out ${navBg}`}>
@@ -89,10 +90,10 @@ export default function Navbar() {
 
                     {/* Logo */}
                     <Link href="/" className="flex-shrink-0 flex flex-col justify-center group">
-                        <span className="font-heading text-xl font-bold navbar-logo-text leading-tight transition-colors duration-200 text-navy">
+                        <span className="font-heading text-xl font-bold navbar-logo-text leading-tight transition-colors duration-200 text-navy dark:text-white">
                             CorpLawUpdates<span className="text-gold group-hover:text-amber-500 transition-colors">.in</span>
                         </span>
-                        <span className="hidden sm:block text-[10px] font-semibold tracking-[0.18em] uppercase mt-0.5 transition-colors duration-200 text-slate-400">
+                        <span className="hidden sm:block text-[10px] font-semibold tracking-[0.18em] uppercase mt-0.5 transition-colors duration-200 text-slate-400 dark:text-slate-500">
                             Corporate Law Intelligence
                         </span>
                     </Link>
@@ -105,8 +106,8 @@ export default function Navbar() {
                                 href={link.href}
                                 className={`relative inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-md transition-all duration-200 ${
                                     isActive(link.href)
-                                        ? 'text-amber-600'
-                                        : 'text-slate-600 hover:text-navy hover:bg-slate-50'
+                                        ? 'text-amber-600 dark:text-amber-400'
+                                        : 'text-slate-600 dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
                                 }`}
                             >
                                 {link.label}
@@ -130,7 +131,7 @@ export default function Navbar() {
                                 aria-expanded={categoriesOpen}
                                 aria-haspopup="true"
                                 aria-label="Browse categories"
-                                className="flex items-center gap-1 text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400/80 focus:ring-offset-2 rounded-md px-3 py-1.5 text-slate-600 hover:text-navy hover:bg-slate-50"
+                                className="flex items-center gap-1 text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400/80 focus:ring-offset-2 rounded-md px-3 py-1.5 text-slate-600 dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
                             >
                                 Categories
                                 <ChevronDown
@@ -143,7 +144,7 @@ export default function Navbar() {
                                 <div
                                     role="menu"
                                     aria-label="Category navigation"
-                                    className="absolute top-full left-0 mt-2 w-60 bg-white/98 backdrop-blur-md rounded-xl shadow-card-hover border border-slate-200/90 py-1.5 z-50 animate-fade-in"
+                                    className="absolute top-full left-0 mt-2 w-60 bg-white/98 dark:bg-slate-900/98 backdrop-blur-md rounded-xl shadow-card-hover border border-slate-200/90 dark:border-slate-800/90 py-1.5 z-50 animate-fade-in"
                                 >
                                     {categoryItems.map(({ href, label, Icon, color, bg }) => (
                                         <Link
@@ -151,7 +152,7 @@ export default function Navbar() {
                                             href={href}
                                             role="menuitem"
                                             onClick={() => setCategoriesOpen(false)}
-                                            className={`flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors focus:outline-none focus:bg-amber-50/80 ${color} ${bg}`}
+                                            className={`flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors focus:outline-none focus:bg-amber-50/80 dark:focus:bg-slate-800/80 ${color} ${bg} dark:hover:bg-slate-800/50`}
                                         >
                                             <Icon className="w-4 h-4 shrink-0 opacity-80" aria-hidden />
                                             {label}
@@ -164,15 +165,17 @@ export default function Navbar() {
                         {/* Search shortcut */}
                         <div className="ml-2 flex items-center gap-2">
                             <GlobalSearch />
+                            <DarkModeToggle />
                         </div>
                     </div>
 
                     {/* Mobile menu button */}
                     <div className="flex items-center gap-2 md:hidden">
                         <GlobalSearch />
+                        <DarkModeToggle />
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="inline-flex items-center justify-center p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gold/80 transition-all duration-200 text-slate-500 hover:text-navy hover:bg-slate-100"
+                            className="inline-flex items-center justify-center p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gold/80 transition-all duration-200 text-slate-500 dark:text-slate-400 hover:text-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
                             aria-expanded={isOpen}
                             aria-label={isOpen ? 'Close menu' : 'Open main menu'}
                         >
@@ -184,7 +187,7 @@ export default function Navbar() {
 
             {/* Mobile Nav */}
             {isOpen && (
-                <div className="md:hidden border-t border-slate-200 max-h-[80vh] overflow-y-auto bg-white/98 backdrop-blur-md">
+                <div className="md:hidden border-t border-slate-200 dark:border-slate-800 max-h-[80vh] overflow-y-auto bg-white/98 dark:bg-slate-900/98 backdrop-blur-md">
                     <div className="pt-2 pb-4 space-y-0.5 px-3">
                         {links.map((link) => (
                             <Link
@@ -192,8 +195,8 @@ export default function Navbar() {
                                 href={link.href}
                                 className={`block pl-3 pr-4 py-3 min-h-[44px] flex items-center text-sm font-medium rounded-lg ${
                                     isActive(link.href)
-                                        ? 'bg-amber-50 text-amber-700 border-l-2 border-amber-400'
-                                        : 'text-slate-600 hover:bg-slate-50 hover:text-navy'
+                                        ? 'bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border-l-2 border-amber-400'
+                                        : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-navy dark:hover:text-white'
                                 }`}
                                 onClick={() => setIsOpen(false)}
                             >
@@ -201,13 +204,13 @@ export default function Navbar() {
                             </Link>
                         ))}
                         <div className="pl-3 pr-4 py-2">
-                            <span className="text-sm font-semibold text-slate-500 uppercase tracking-wide text-[11px]">Categories</span>
+                            <span className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide text-[11px]">Categories</span>
                             <div className="mt-2 space-y-0.5">
                                 {categoryItems.map(({ href, label, Icon, color }) => (
                                     <Link
                                         key={href}
                                         href={href}
-                                        className={`flex min-h-[44px] items-center gap-2 py-2 px-2 text-sm font-medium hover:bg-slate-50 rounded-lg ${color}`}
+                                        className={`flex min-h-[44px] items-center gap-2 py-2 px-2 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg ${color}`}
                                         onClick={() => setIsOpen(false)}
                                     >
                                         <Icon className="w-4 h-4 shrink-0 opacity-80" aria-hidden />

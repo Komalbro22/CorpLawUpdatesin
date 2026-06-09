@@ -90,6 +90,11 @@ const nextConfig = {
         destination: '/updates',
         permanent: true,
       },
+      {
+        source: '/tools/fee-calculator',
+        destination: '/tools/penalty-calculator',
+        permanent: true,
+      },
     ]
   },
 }

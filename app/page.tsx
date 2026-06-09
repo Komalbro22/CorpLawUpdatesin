@@ -91,25 +91,31 @@ export default async function HomePage() {
               MCA - SEBI - RBI - NCLT - IBC - FEMA
             </p>
             <h1 className="font-heading text-4xl font-bold leading-[1.1] text-white text-balance md:text-5xl lg:text-6xl">
-              Corporate Law Updates
+              Corporate Law Updates & Tools
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-slate-300 md:text-lg text-balance">
-              CorpLawUpdates.in provides the latest corporate law updates including SEBI regulations, RBI notifications, MCA circulars, and NCLT judgments — simplified and beautifully structured for all professionals, corporates, and modern compliance leaders.
+              CorpLawUpdates.in provides the latest corporate law updates and free compliance tools — including SEBI regulations, RBI notifications, MCA circulars, NCLT judgments, AI document generators, and fee calculators — simplified and beautifully structured for all professionals, corporates, and modern compliance leaders.
             </p>
             <p className="mt-4 text-sm text-slate-400 font-medium italic">
-              Updated daily with the latest corporate law updates.
+              Updated daily with the latest updates and compliance tools.
             </p>
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row justify-center">
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row justify-center items-center">
               <Link
                 href="/updates"
-                className="group inline-flex items-center justify-center gap-2 rounded-lg bg-gold px-8 py-4 text-sm font-bold text-navy shadow-lg shadow-amber-900/20 transition-colors hover:bg-amber-400 motion-safe:hover:scale-105"
+                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-gold px-8 py-4 text-sm font-bold text-navy shadow-lg shadow-amber-900/20 transition-colors hover:bg-amber-400 motion-safe:hover:scale-105"
               >
                 Browse updates
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden />
               </Link>
               <Link
+                href="/tools"
+                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg border border-amber-400/30 bg-amber-450/10 px-8 py-4 text-sm font-bold text-amber-400 transition-colors hover:bg-amber-400/20 hover:border-amber-400/60 motion-safe:hover:scale-105"
+              >
+                Explore tools
+              </Link>
+              <Link
                 href="/newsletter"
-                className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/15 bg-white/[0.06] px-8 py-4 text-sm font-bold text-white transition-colors hover:bg-white/[0.10] motion-safe:hover:scale-105"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg border border-white/15 bg-white/[0.06] px-8 py-4 text-sm font-bold text-white transition-colors hover:bg-white/[0.10] motion-safe:hover:scale-105"
               >
                 Subscribe free
               </Link>
@@ -155,12 +161,12 @@ export default async function HomePage() {
         </section>
       )}
 
-      <section className="py-14 px-4 w-full border-y border-slate-200/80 bg-gradient-to-b from-white to-slate-50/60">
+      <section className="py-14 px-4 w-full border-y border-slate-200/80 dark:border-slate-800 bg-gradient-to-b from-white to-slate-50/60 dark:from-slate-900 dark:to-slate-950/60">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-xl md:text-2xl font-bold text-navy mb-2 font-heading text-center">
+          <h2 className="text-xl md:text-2xl font-bold text-navy dark:text-white mb-2 font-heading text-center">
             Browse by regulator
           </h2>
-          <p className="text-slate-500 text-center text-sm md:text-base mb-10 max-w-xl mx-auto">
+          <p className="text-slate-500 dark:text-slate-400 text-center text-sm md:text-base mb-10 max-w-xl mx-auto">
             Jump straight to updates from the authority you follow.
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
@@ -194,7 +200,7 @@ export default async function HomePage() {
             </div>
             <Link
               href="/updates"
-              className="hidden sm:inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-navy shadow-sm transition-colors hover:bg-slate-50"
+              className="hidden sm:inline-flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 text-sm font-semibold text-navy dark:text-slate-100 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-800"
             >
               View all
               <ArrowRight className="w-4 h-4" aria-hidden />
@@ -217,83 +223,101 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Free Tools Section */}
-      <section className="py-16 px-4 max-w-7xl mx-auto border-t border-slate-100">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-navy font-heading tracking-tight">
-            🛠️ Free Compliance Tools
-          </h2>
+      {/* Free Compliance & Legal Tools Section */}
+      <section className="py-16 md:py-20 px-4 max-w-7xl mx-auto border-t border-slate-200/80 dark:border-slate-800/85">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-600 dark:text-amber-500">Interactive Suite</p>
+            <h2 className="mt-2 text-2xl md:text-3xl font-extrabold text-navy dark:text-white font-heading tracking-tight">
+              🛠️ Free Legal & Compliance Tools
+            </h2>
+            <p className="mt-2 text-slate-500 dark:text-slate-400 text-sm md:text-base">
+              No login required. Self-service utilities for Company Secretaries, corporate lawyers, and compliance teams.
+            </p>
+          </div>
           <Link href="/tools"
-                className="text-amber-600 hover:text-amber-700 text-sm font-semibold flex items-center gap-1 group">
-            View All Tools <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                className="inline-flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 text-sm font-semibold text-navy dark:text-slate-100 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-800 whitespace-nowrap self-start md:self-end">
+            View All Tools <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[
             {
               href: '/documents',
               icon: '📄',
               title: 'Document Generator',
-              desc: 'Board resolutions, agreements — AI powered',
-              badge: 'AI',
-              badgeColor: 'bg-purple-100 text-purple-700  ',
+              desc: 'Generate Board Resolutions, Director Appointment letters, Agreements, and corporate letters in seconds. AI-powered with ICSI SS-1 formatting.',
+              badge: 'AI Powered',
+              badgeColor: 'bg-purple-100 text-purple-755 dark:bg-purple-950/50 dark:text-purple-300',
             },
             {
-              href: '/tools/fee-calculator',
+              href: '/tools/penalty-calculator',
               icon: '🧮',
-              title: 'Late Fee Calculator',
-              desc: 'MCA, LLP & MSME penalty calculator',
-              badge: 'New',
-              badgeColor: 'bg-green-100 text-green-700  ',
+              title: 'Penalty Calculator',
+              desc: 'Calculate statutory filing fees, ROC late fees, adjudication penalties, and MSME payment interest.',
+              badge: 'Free',
+              badgeColor: 'bg-green-100 text-green-755 dark:bg-green-950/50 dark:text-green-300',
             },
             {
               href: '/calendar',
               icon: '📅',
               title: 'Compliance Calendar',
-              desc: '50+ deadlines with Google Calendar export',
+              desc: 'Track 50+ deadlines for MCA, SEBI, RBI, FEMA, and Tax compliance. Export events directly to Google Calendar.',
+              badge: 'Community',
+              badgeColor: 'bg-blue-100 text-blue-755 dark:bg-blue-950/50 dark:text-blue-300',
+            },
+            {
+              href: '/rbi/repo-rate',
+              icon: '🏦',
+              title: 'RBI Repo Rate Tracker',
+              desc: 'Get the latest repo rate, change histories, next MPC schedule, and run home loan EMI impact calculations.',
+              badge: 'Live Data',
+              badgeColor: 'bg-amber-100 text-amber-755 dark:bg-amber-950/50 dark:text-amber-300',
+            },
+            {
+              href: '/glossary',
+              icon: '📚',
+              title: 'Corporate Law Glossary',
+              desc: 'Over 200+ complex corporate law, IBC, SEBI, and FEMA definitions explained in simplified, plain English.',
               badge: 'Free',
-              badgeColor: 'bg-blue-100 text-blue-700  ',
+              badgeColor: 'bg-teal-100 text-teal-755 dark:bg-teal-950/50 dark:text-teal-300',
+            },
+            {
+              href: '/tools',
+              icon: '🎯',
+              title: 'Daily Corporate Law Quiz',
+              desc: '5 daily quick MCQs covering Companies Act, SEBI guidelines, and RBI updates. Perfect for self-testing and mock practice.',
+              badge: 'Coming Soon',
+              badgeColor: 'bg-slate-100 text-slate-550 dark:bg-slate-800 dark:text-slate-400',
             },
           ].map(tool => (
             <Link key={tool.href} href={tool.href}
-                  className="bg-white border border-slate-200 rounded-2xl p-6 hover:border-amber-400 hover:shadow-md transition-all group">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="text-3xl bg-slate-50 p-2.5 rounded-xl border border-slate-100 group-hover:scale-105 transition-transform">{tool.icon}</span>
-                <span className={`text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md ${tool.badgeColor}`}>
-                  {tool.badge}
-                </span>
+                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 hover:border-amber-400 hover:shadow-md transition-all group flex flex-col justify-between animate-fade-up">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-3xl bg-slate-50 dark:bg-slate-800 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800 group-hover:scale-105 transition-transform">{tool.icon}</span>
+                  <span className={`text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-md ${tool.badgeColor}`}>
+                    {tool.badge}
+                  </span>
+                </div>
+                <h3 className="font-bold text-navy dark:text-slate-100 text-base mb-1.5 group-hover:text-amber-600 transition-colors">
+                  {tool.title}
+                </h3>
+                <p className="text-slate-500 dark:text-slate-400 text-xs font-light leading-relaxed">{tool.desc}</p>
               </div>
-              <h3 className="font-bold text-navy text-base mb-1.5 group-hover:text-amber-600 transition-colors">
-                {tool.title}
-              </h3>
-              <p className="text-slate-500 text-xs font-light leading-relaxed">{tool.desc}</p>
+              <div className="flex items-center justify-between mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/60">
+                <span className="text-xs text-slate-400 dark:text-slate-500">
+                  {tool.badge === 'Coming Soon' ? 'Coming Soon' : 'Explore Tool'}
+                </span>
+                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-amber-500 group-hover:translate-x-1 transition-all duration-200" />
+              </div>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* Premium Legal Document Generator Promo Section */}
-      <section className="py-16 px-4 max-w-7xl mx-auto border-t border-slate-100">
-        <div className="bg-navy rounded-3xl p-8 md:p-12 text-white text-center relative overflow-hidden shadow-xl">
-          <div className="absolute inset-0 opacity-[0.05] bg-[linear-gradient(rgba(255,255,255,.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.1)_1px,transparent_1px)] bg-[size:32px_32px]" aria-hidden />
-          <div className="relative z-10 max-w-2xl mx-auto flex flex-col items-center">
-            <div className="text-4xl mb-4">📄</div>
-            <h2 className="text-2xl md:text-3xl font-bold font-heading mb-3 text-white">
-              Free Legal Document Generator
-            </h2>
-            <p className="text-slate-350 max-w-lg mx-auto mb-8 text-sm leading-relaxed font-light">
-              Generate Board Resolutions, Director Appointment letters, Bank Account Opening authorities and legal documents in seconds. Powered by AI. Based on ICSI Secretarial Standards and Companies Act 2013.
-            </p>
-            <Link href="/documents"
-                  className="inline-block bg-gold hover:bg-amber-400 text-navy font-bold px-8 py-3.5 rounded-xl transition-all duration-200 shadow-md">
-              Generate Documents Free →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="w-full bg-navy py-16 md:py-20 px-4 text-center relative overflow-hidden">
+      <section className="w-full bg-navy dark:bg-slate-950 py-16 md:py-20 px-4 text-center relative overflow-hidden border-t border-slate-800">
         <div className="absolute inset-0 opacity-[0.08] bg-[linear-gradient(rgba(255,255,255,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.12)_1px,transparent_1px)] bg-[size:72px_72px]" aria-hidden />
         <div className="max-w-3xl mx-auto flex flex-col items-center relative z-10">
           <Newspaper className="mb-4 h-8 w-8 text-gold" aria-hidden />
@@ -314,24 +338,34 @@ export default async function HomePage() {
       </section>
 
       {/* Subtle SEO Context at Bottom */}
-      <section className="max-w-7xl mx-auto px-4 py-16 border-t border-slate-100 mt-10">
-        <div className="bg-slate-50/50 rounded-2xl border border-slate-200/60 p-8 shadow-sm text-center">
-          <h2 className="text-xl font-bold text-navy mb-4 font-heading">Latest Corporate Law Updates</h2>
+      <section className="max-w-7xl mx-auto px-4 py-16 border-t border-slate-100 dark:border-slate-800 mt-10">
+        <div className="bg-slate-50/50 dark:bg-slate-900/50 rounded-2xl border border-slate-200/60 dark:border-slate-800 p-8 shadow-sm text-center">
+          <h2 className="text-xl font-bold text-navy dark:text-white mb-4 font-heading">Latest Corporate Law Updates & Compliance Tools</h2>
           <div className="max-w-3xl mx-auto text-sm text-slate-500 leading-relaxed space-y-4">
             <p>
-              CorpLawUpdates.in provides the <strong>latest corporate law updates</strong> covering 
+              CorpLawUpdates.in provides the <strong>latest corporate law updates</strong> and <strong>free compliance tools</strong> covering 
               <Link href="/category/sebi" className="text-gold hover:underline font-medium mx-1">SEBI updates</Link>, 
               <Link href="/category/rbi" className="text-gold hover:underline font-medium mx-1">RBI circular updates</Link>, 
               <Link href="/category/mca" className="text-gold hover:underline font-medium mx-1">MCA updates</Link>, 
               NCLT, IBC and FEMA regulations.
             </p>
             <p>
-              We simplify complex legal updates into easy-to-understand summaries with key insights and practical implications 
-              to help you stay ahead with <strong>corporate law updates</strong>.
+              We simplify complex legal updates into easy-to-understand summaries with key insights and practical implications. 
+              Our suite of interactive utilities, including the 
+              <Link href="/documents" className="text-gold hover:underline font-medium mx-1 font-semibold">Legal Document Generator</Link>, 
+              <Link href="/tools/penalty-calculator" className="text-gold hover:underline font-medium mx-1 font-semibold">ROC Compliance Penalty Calculator</Link>, 
+              <Link href="/calendar" className="text-gold hover:underline font-medium mx-1 font-semibold">Compliance Calendar</Link>, 
+              and 
+              <Link href="/rbi/repo-rate" className="text-gold hover:underline font-medium mx-1 font-semibold">RBI Repo Rate Tracker</Link>, 
+              helps you stay ahead with all aspects of <strong>corporate law and compliance</strong>.
             </p>
-            <p className="pt-2">
-              👉 <Link href="/updates" className="text-gold font-bold hover:text-amber-700 transition-colors underline decoration-gold/30 underline-offset-4">
-                Browse all corporate law updates
+            <p className="pt-4 flex flex-wrap items-center justify-center gap-4 text-sm font-semibold">
+              <Link href="/updates" className="text-gold hover:text-amber-700 transition-colors underline decoration-gold/30 underline-offset-4 font-heading">
+                👉 Browse all updates
+              </Link>
+              <span className="text-slate-300 dark:text-slate-700 hidden sm:inline">|</span>
+              <Link href="/tools" className="text-gold hover:text-amber-700 transition-colors underline decoration-gold/30 underline-offset-4 font-heading">
+                👉 Explore compliance tools
               </Link>
             </p>
           </div>

@@ -1,7 +1,12 @@
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { NextResponse } from 'next/server'
 
-const GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || ''
+const GEMINI_KEYS = [
+  process.env.GOOGLE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || '',
+  process.env.GOOGLE_GEMINI_API_KEY_2 || '',
+  process.env.GOOGLE_GEMINI_API_KEY_3 || '',
+  process.env.GOOGLE_GEMINI_API_KEY_4 || '',
+].map(k => k.trim()).filter(Boolean)
 
 function formatDateToIndianLegal(dateStr: string): string {
   if (!dateStr) return dateStr;
@@ -96,25 +101,77 @@ export async function POST(request: Request) {
       });
     }
 
+    // Client IP Parsing (split proxy chains, take first value)
+    const forwarded = request.headers.get('x-forwarded-for')
+    const ip = forwarded ? forwarded.split(',')[0].trim() : request.headers.get('x-real-ip') ?? '127.0.0.1'
+
+    // Load rate limit and whitelist settings
+    const { data: settingsData } = await supabaseAdmin
+      .from('site_settings')
+      .select('key, value')
+      .in('key', ['max_requests_per_ip_daily', 'max_tokens_per_ip_daily', 'whitelisted_ips'])
+
+    const maxRequests = parseInt(settingsData?.find(s => s.key === 'max_requests_per_ip_daily')?.value || '50', 10)
+    const maxTokens = parseInt(settingsData?.find(s => s.key === 'max_tokens_per_ip_daily')?.value || '100000', 10)
+    const whitelistedIpsStr = settingsData?.find(s => s.key === 'whitelisted_ips')?.value || '127.0.0.1'
+    const whitelistedIps = whitelistedIpsStr.split(',').map((s: string) => s.trim()).filter(Boolean)
+
+    const isWhitelisted = whitelistedIps.includes(ip)
+
+    // Rate Limit Checks
+    if (use_ai && !isWhitelisted) {
+      const startOfToday = new Date()
+      startOfToday.setUTCHours(0, 0, 0, 0)
+      const startOfTodayIso = startOfToday.toISOString()
+
+      const { data: usageData, error: usageError } = await supabaseAdmin
+        .from('generated_documents')
+        .select('total_tokens')
+        .eq('ip_address', ip)
+        .eq('generation_type', 'ai')
+        .gte('created_at', startOfTodayIso)
+
+      if (!usageError && usageData) {
+        const requestsToday = usageData.length
+        const tokensToday = usageData.reduce((acc, row) => acc + (row.total_tokens || 0), 0)
+
+        if (requestsToday >= maxRequests || tokensToday >= maxTokens) {
+          return NextResponse.json(
+            { error: 'Daily document generation limit exceeded for your IP address. Please try again tomorrow.' },
+            { status: 429 }
+          )
+        }
+      }
+    }
+
     let documentContent = ''
     let fellBackToStandard = false
+    let promptTokens = 0
+    let completionTokens = 0
+    let totalTokens = 0
+    let generationType: 'ai' | 'standard' | 'fallback' = 'standard'
 
     if (use_ai && template.ai_system_prompt) {
-      if (!GEMINI_API_KEY) {
+      if (GEMINI_KEYS.length === 0) {
         return NextResponse.json(
           { error: 'Missing Gemini API configuration for AI generation' },
           { status: 500 }
         )
       }
 
-      // AI-powered generation
-      const fieldsSummary = Object.entries(form_data || {})
+      // AI-powered generation parameters
+      const customInstructions = form_data?.custom_instructions || ''
+      const filteredFormData = { ...form_data }
+      delete filteredFormData.custom_instructions
+
+      const fieldsSummary = Object.entries(filteredFormData || {})
         .map(([key, value]) => `${key}: ${value}`)
         .join('\n')
 
       const promptText = `Generate a complete ${template.name} using these details:
 
 ${fieldsSummary}
+${customInstructions ? `\nUser's Custom Instructions / Special Conditions / Reasons for Generation:\n${customInstructions}\n` : ''}
 
 Base template format:
 ${template.template_content}
@@ -123,39 +180,72 @@ Instructions:
 1. Fill all {{PLACEHOLDERS}} with provided data.
 2. CRITICAL FOR AI-ENHANCED GENERATION: Do not simply copy-paste raw user inputs from the form fields. Read, understand, and frame them in professional, polished Indian corporate legal terminology (e.g., if the user enters 'Rs. 10,000 per Board Meeting attended' in a remuneration field, frame it elegantly in the resolution: 'RESOLVED FURTHER THAT the sitting fees/remuneration payable to the Director shall be Rs. 10,000 (Rupees Ten Thousand only) per meeting of the Board attended by them...').
 3. Always spell out numeric amounts in words, like 'Rs. 10,000 (Rupees Ten Thousand only)'.
-4. Ensure all mandatory clauses per Companies Act / ICSI SS-1 are present.
-5. If any field is empty, use appropriate placeholder text [TO BE FILLED].
-6. Maintain exact formatting — do not add markdown wrapping or post-text notes.
-7. Output only the final document text, nothing else.`
+4. Ensure all mandatory clauses per Companies Act / ICSI SS-1 / other applicable acts are present.
+5. If any field is empty, use appropriate placeholder text [TO BE FILLED]. If optional fields like Schedule I or Schedule II are empty, write '[None described / Not applicable]' or adjust based on the user's custom instructions.
+${customInstructions ? `6. Weave the user's custom instructions, reasons, and special conditions naturally and professionally into the draft's clauses.\n` : ''}7. Maintain exact formatting — do not add markdown wrapping or post-text notes.
+8. Output only the final document text, nothing else.`
 
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`
+      // Attempt Gemini API call with key rotation
+      let generationSuccess = false
+      for (let i = 0; i < GEMINI_KEYS.length; i++) {
+        const apiKey = GEMINI_KEYS[i]
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`
 
-      try {
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ 
-              role: 'user', 
-              parts: [{ text: `System Instructions: ${template.ai_system_prompt}\n\n${promptText}` }] 
-            }]
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ 
+                role: 'user', 
+                parts: [{ text: `System Instructions: ${template.ai_system_prompt}\n\n${promptText}` }] 
+              }]
+            })
           })
-        })
 
-        if (!response.ok) {
-          const errorJson = await response.json().catch(() => ({}))
-          console.warn('Gemini generation failed, falling back to standard substitution. Status:', response.status, errorJson)
-          fellBackToStandard = true
-        } else {
+          if (!response.ok) {
+            const errorJson = await response.json().catch(() => ({}))
+            console.warn(`Gemini generation failed with key index ${i}. Status:`, response.status, errorJson)
+            
+            const isQuotaError = 
+              response.status === 429 || 
+              response.status === 403 || 
+              JSON.stringify(errorJson).toLowerCase().includes('quota') ||
+              JSON.stringify(errorJson).toLowerCase().includes('limit')
+              
+            if (isQuotaError && i < GEMINI_KEYS.length - 1) {
+              console.log(`Rotating to next Gemini key index ${i + 1}...`)
+              continue
+            }
+            break
+          }
+
           const data = await response.json()
           documentContent = data.candidates?.[0]?.content?.parts?.[0]?.text || ''
-          if (!documentContent) {
-            fellBackToStandard = true
+          
+          if (documentContent) {
+            generationSuccess = true
+            generationType = 'ai'
+            
+            // Extract token usage metadata
+            if (data.usageMetadata) {
+              promptTokens = data.usageMetadata.promptTokenCount || 0
+              completionTokens = data.usageMetadata.candidatesTokenCount || 0
+              totalTokens = data.usageMetadata.totalTokenCount || 0
+            }
+            break
+          }
+        } catch (err) {
+          console.error(`Gemini call failed on key index ${i}:`, err)
+          if (i < GEMINI_KEYS.length - 1) {
+            continue
           }
         }
-      } catch (err) {
-        console.error('Gemini call failed with error, falling back:', err)
+      }
+
+      if (!generationSuccess) {
         fellBackToStandard = true
+        generationType = 'fallback'
       }
     }
 
@@ -188,6 +278,11 @@ Instructions:
         edited_content: documentContent,
         session_id: session_id || null,
         status: 'draft',
+        prompt_tokens: promptTokens,
+        completion_tokens: completionTokens,
+        total_tokens: totalTokens,
+        ip_address: ip,
+        generation_type: generationType,
       })
       .select()
       .single()

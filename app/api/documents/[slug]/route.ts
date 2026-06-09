@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase'
+import { supabaseAdmin } from '@/lib/supabase-server'
 import { NextResponse } from 'next/server'
 
 export const revalidate = 0 // Disable cache to track usage increments correctly
@@ -27,7 +28,7 @@ export async function GET(
     // Safely increment usage count asynchronously (non-blocking)
     ;(async () => {
       try {
-        await supabase
+        await supabaseAdmin
           .from('document_templates')
           .update({ usage_count: (data.usage_count || 0) + 1 })
           .eq('id', data.id)

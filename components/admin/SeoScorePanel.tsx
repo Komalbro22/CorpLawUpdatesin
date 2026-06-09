@@ -115,10 +115,10 @@ export default function SeoScorePanel({
   }, [checks])
 
   const ratingColor = score >= 80
-    ? 'text-emerald-600 border-emerald-200 bg-emerald-50'
+    ? 'text-emerald-600 border-emerald-200 bg-emerald-50 dark:text-emerald-450 dark:border-emerald-900/40 dark:bg-emerald-950/30'
     : score >= 50
-    ? 'text-amber-600 border-amber-200 bg-amber-50'
-    : 'text-rose-600 border-rose-200 bg-rose-50'
+    ? 'text-amber-600 border-amber-200 bg-amber-50 dark:text-amber-450 dark:border-amber-900/40 dark:bg-amber-950/30'
+    : 'text-rose-600 border-rose-200 bg-rose-50 dark:text-rose-455 dark:border-rose-900/40 dark:bg-rose-950/30'
 
   const progressBg = score >= 80
     ? 'bg-emerald-500'
@@ -127,11 +127,11 @@ export default function SeoScorePanel({
     : 'bg-rose-500'
 
   return (
-    <div className="border border-slate-200/80 rounded-xl p-5 bg-white shadow-card ring-1 ring-slate-900/[0.02]">
+    <div className="border border-slate-200/80 dark:border-slate-800 rounded-xl p-5 bg-white dark:bg-slate-900 shadow-card ring-1 ring-slate-900/[0.02]">
       <div className="flex justify-between items-center mb-4">
         <div>
-          <h3 className="font-bold text-navy text-base">Real-time SEO Audit</h3>
-          <p className="text-xs text-slate-400">Continuous scoring as you edit</p>
+          <h3 className="font-bold text-navy dark:text-slate-100 text-base">Real-time SEO Audit</h3>
+          <p className="text-xs text-slate-400 dark:text-slate-500">Continuous scoring as you edit</p>
         </div>
         <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-sm font-bold shadow-sm ${ratingColor}`}>
           <span>🎯</span>
@@ -140,7 +140,7 @@ export default function SeoScorePanel({
       </div>
 
       {/* Progress Bar */}
-      <div className="w-full bg-slate-100 rounded-full h-2.5 mb-5 overflow-hidden">
+      <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5 mb-5 overflow-hidden">
         <div
           className={`h-full transition-all duration-500 ease-out ${progressBg}`}
           style={{ width: `${score}%` }}
@@ -155,10 +155,10 @@ export default function SeoScorePanel({
               {check.pass ? '✅' : '❌'}
             </span>
             <div className="min-w-0">
-              <p className={`text-xs font-bold ${check.pass ? 'text-navy' : 'text-slate-500'}`}>
+              <p className={`text-xs font-bold ${check.pass ? 'text-navy dark:text-slate-200' : 'text-slate-500 dark:text-slate-400'}`}>
                 {check.label}
               </p>
-              <p className="text-[11px] text-slate-400 leading-normal mt-0.5">
+              <p className="text-[11px] text-slate-400 dark:text-slate-500 leading-normal mt-0.5">
                 {check.message}
               </p>
             </div>

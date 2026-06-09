@@ -93,9 +93,9 @@ export default async function CalendarPage() {
       </Suspense>
 
       {/* SEO Knowledge Footer */}
-      <section className="max-w-5xl mx-auto px-4 pb-16 pt-4 border-t border-slate-100">
-        <div className="bg-slate-50/50 rounded-2xl border border-slate-200/60 p-8 shadow-sm">
-          <h2 className="text-xl font-bold text-navy mb-4 font-heading">
+      <section className="max-w-5xl mx-auto px-4 pb-16 pt-4 border-t border-slate-100 dark:border-slate-800">
+        <div className="bg-slate-50/50 dark:bg-slate-900/50 rounded-2xl border border-slate-200/60 dark:border-slate-800 p-8 shadow-sm">
+          <h2 className="text-xl font-bold text-navy dark:text-white mb-4 font-heading">
             About the Corporate Compliance Calendar {CURRENT_YEAR}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 text-sm text-slate-500 leading-relaxed">
@@ -130,8 +130,8 @@ export default async function CalendarPage() {
           </div>
 
           {/* SEO Compliance Keywords Directory */}
-          <div className="mt-8 pt-6 border-t border-slate-200/60">
-            <h3 className="text-xs font-bold text-navy uppercase tracking-wider mb-3 font-semibold">
+          <div className="mt-8 pt-6 border-t border-slate-200/60 dark:border-slate-800">
+            <h3 className="text-xs font-bold text-navy dark:text-white uppercase tracking-wider mb-3 font-semibold">
               Frequently Searched Compliances & Due Dates
             </h3>
             <div className="flex flex-wrap gap-2">
@@ -146,7 +146,7 @@ export default async function CalendarPage() {
               ].map((kw, i) => (
                 <span 
                   key={i} 
-                  className="inline-flex items-center text-[11px] bg-slate-100 text-slate-500 hover:text-slate-700 hover:bg-slate-200/80 px-2 py-0.5 rounded transition-colors cursor-default"
+                  className="inline-flex items-center text-[11px] bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-200/80 dark:hover:bg-slate-700 px-2 py-0.5 rounded transition-colors cursor-default"
                 >
                   {kw}
                 </span>

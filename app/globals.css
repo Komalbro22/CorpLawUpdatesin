@@ -2,6 +2,318 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ═══════════════════════════════════
+   DARK MODE CSS VARIABLES
+   ═══════════════════════════════════ */
+
+:root {
+  /* Light mode (default) */
+  --bg-primary: #F8FAFC;
+  --bg-secondary: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --bg-nav: #FFFFFF;
+  --bg-hover: #F1F5F9;
+  
+  --text-primary: #0F172A;
+  --text-secondary: #334155;
+  --text-muted: #64748B;
+  --text-subtle: #94A3B8;
+  
+  --border-default: #E2E8F0;
+  --border-light: #F1F5F9;
+  
+  --navy: #0F172A;
+  --gold: #F59E0B;
+  --gold-hover: #D97706;
+  
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+/* Dark mode overrides */
+.dark {
+  --bg-primary: #0A0F1E;
+  --bg-secondary: #111827;
+  --bg-card: #1E2433;
+  --bg-nav: #111827;
+  --bg-hover: #1E2433;
+  
+  --text-primary: #E2E8F0;
+  --text-secondary: #CBD5E1;
+  --text-muted: #94A3B8;
+  --text-subtle: #64748B;
+  
+  --border-default: #2D3748;
+  --border-light: #1E2433;
+  
+  --navy: #1E2433;
+  --gold: #F59E0B;
+  --gold-hover: #FBBF24;
+  
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+  
+  /* Additional tokens override for compatibility */
+  --background: #0A0F1E;
+  --foreground: #E2E8F0;
+  --surface: #111827;
+  --surface-muted: #1E2433;
+  --border-subtle: #2D3748;
+}
+
+/* ═══════════════════════════════════
+   BASE DARK MODE STYLES
+   Apply to root elements using variables
+   ═══════════════════════════════════ */
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.2s ease, 
+              color 0.2s ease;
+}
+
+/* Cards and surfaces */
+.dark .bg-white {
+  background-color: var(--bg-card) !important;
+}
+
+.dark .bg-slate-50 {
+  background-color: var(--bg-secondary) !important;
+}
+
+.dark .bg-slate-100 {
+  background-color: var(--bg-card) !important;
+}
+
+/* Text colors */
+.dark .text-slate-900,
+.dark .text-slate-800 {
+  color: var(--text-primary) !important;
+}
+
+.dark .text-slate-700,
+.dark .text-slate-600 {
+  color: var(--text-secondary) !important;
+}
+
+.dark .text-slate-500,
+.dark .text-slate-400 {
+  color: var(--text-muted) !important;
+}
+
+/* Navy color (your brand color) */
+.dark .text-navy {
+  color: var(--text-primary) !important;
+}
+
+.dark .bg-navy {
+  background-color: #0A0F1E !important;
+}
+
+/* Borders */
+.dark .border-slate-200 {
+  border-color: var(--border-default) !important;
+}
+
+.dark .border-slate-100 {
+  border-color: var(--border-light) !important;
+}
+
+/* Keep gold/amber as-is in dark mode */
+.dark .text-amber-600,
+.dark .text-amber-700,
+.dark .bg-amber-400,
+.dark .bg-amber-500 {
+  /* Keep unchanged — gold works on dark */
+}
+
+/* Input fields */
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: var(--bg-secondary) !important;
+  border-color: var(--border-default) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: var(--text-subtle) !important;
+}
+
+/* Tables */
+.dark table {
+  color: var(--text-secondary);
+}
+
+.dark thead {
+  background-color: #0A0F1E !important;
+}
+
+.dark thead th {
+  color: #E2E8F0 !important;
+}
+
+.dark tbody tr:nth-child(even) {
+  background-color: var(--bg-secondary) !important;
+}
+
+.dark tbody tr:nth-child(odd) {
+  background-color: var(--bg-card) !important;
+}
+
+.dark tbody td {
+  border-color: var(--border-default) !important;
+}
+
+/* Article content */
+.dark .article-content {
+  color: var(--text-secondary);
+}
+
+.dark .article-content h1,
+.dark .article-content h2,
+.dark .article-content h3,
+.dark .article-content h4 {
+  color: var(--text-primary) !important;
+}
+
+.dark .article-content p {
+  color: var(--text-secondary);
+}
+
+.dark .article-content strong {
+  color: var(--text-primary);
+}
+
+.dark .article-content a {
+  color: #F59E0B !important;
+}
+
+/* Code blocks */
+.dark pre,
+.dark code {
+  background-color: #0A0F1E !important;
+  color: #E2E8F0 !important;
+  border-color: var(--border-default) !important;
+}
+
+/* Key change box (amber/yellow box) */
+.dark .bg-amber-50 {
+  background-color: rgba(245, 158, 11, 0.08) !important;
+  border-color: rgba(245, 158, 11, 0.3) !important;
+}
+
+.dark .text-amber-900 {
+  color: #FCD34D !important;
+}
+
+.dark .text-amber-800,
+.dark .text-amber-700 {
+  color: #FDE68A !important;
+}
+
+/* Summary box (blue box) */
+.dark .bg-blue-50 {
+  background-color: rgba(59, 130, 246, 0.08) !important;
+  border-color: rgba(59, 130, 246, 0.3) !important;
+}
+
+.dark .text-blue-900 {
+  color: #93C5FD !important;
+}
+
+.dark .text-blue-800,
+.dark .text-blue-700 {
+  color: #BFDBFE !important;
+}
+
+/* Green boxes */
+.dark .bg-green-50 {
+  background-color: rgba(34, 197, 94, 0.08) !important;
+  border-color: rgba(34, 197, 94, 0.3) !important;
+}
+
+.dark .text-green-800,
+.dark .text-green-700 {
+  color: #86EFAC !important;
+}
+
+/* Red boxes */
+.dark .bg-red-50 {
+  background-color: rgba(239, 68, 68, 0.08) !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+.dark .text-red-800,
+.dark .text-red-700 {
+  color: #FCA5A5 !important;
+}
+
+/* Bottom line dark box — keep as-is in dark */
+.dark div[style*="background:#0F172A"],
+.dark div[style*="background:#0f172a"] {
+  background-color: #000000 !important;
+}
+
+/* Navbar */
+.dark nav {
+  background-color: var(--bg-nav) !important;
+  border-bottom-color: var(--border-default) !important;
+}
+
+/* Footer */
+.dark footer {
+  background-color: #070C18 !important;
+}
+
+/* Admin sidebar */
+.dark .admin-sidebar {
+  background-color: #070C18 !important;
+  border-right-color: var(--border-default) !important;
+}
+
+/* Reading progress bar */
+.dark .reading-progress {
+  background-color: var(--bg-nav);
+}
+
+/* Scrollbar styling for dark mode */
+.dark ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #4A5568;
+}
+
+/* Transition for smooth theme switching */
+*, *::before, *::after {
+  transition: background-color 0.2s ease,
+              border-color 0.2s ease,
+              color 0.2s ease;
+}
+
+/* But NOT for animations that should be fast */
+.animate-spin,
+.animate-pulse,
+.animate-bounce {
+  transition: none !important;
+}
+
 /* ============================================================
    DESIGN TOKENS
    ============================================================ */

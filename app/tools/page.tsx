@@ -3,8 +3,8 @@ import Link from 'next/link'
 import JsonLd from '@/components/JsonLd'
 
 export const metadata: Metadata = {
-  title: 'Free Legal & Compliance Tools for CS Professionals | CorpLawUpdates.in',
-  description: 'Free tools for Indian Company Secretaries and compliance professionals. Document generator, fee calculators, compliance calendar and more. No login required.',
+  title: 'Free Corporate Law & Compliance Tools for Everyone | CorpLawUpdates.in',
+  description: 'Free interactive compliance and corporate law tools open to everyone. Access our AI document generator, MCA late fee calculator, compliance calendar, repo rate tracker, and glossary. No login required.',
   alternates: {
     canonical: 'https://www.corplawupdates.in/tools',
   },
@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 const toolsJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
-  name: 'Free Legal & Compliance Tools',
-  description: 'Free tools for Indian CS professionals',
+  name: 'Free Corporate Law & Compliance Tools',
+  description: 'Free interactive compliance and corporate law tools open to everyone.',
   url: 'https://www.corplawupdates.in/tools',
   hasPart: [
     {
@@ -30,8 +30,30 @@ const toolsJsonLd = {
     },
     {
       '@type': 'WebApplication',
-      name: 'MCA Late Fee Calculator',
-      url: 'https://www.corplawupdates.in/tools/fee-calculator',
+      name: 'ROC Compliance Penalty Calculator',
+      url: 'https://www.corplawupdates.in/tools/penalty-calculator',
+      applicationCategory: 'BusinessApplication',
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'INR',
+      }
+    },
+    {
+      '@type': 'WebApplication',
+      name: 'Compliance Calendar 2026',
+      url: 'https://www.corplawupdates.in/calendar',
+      applicationCategory: 'UtilityApplication',
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'INR',
+      }
+    },
+    {
+      '@type': 'WebApplication',
+      name: 'RBI Repo Rate Tracker',
+      url: 'https://www.corplawupdates.in/rbi/repo-rate',
       applicationCategory: 'FinanceApplication',
       offers: {
         '@type': 'Offer',
@@ -39,6 +61,17 @@ const toolsJsonLd = {
         priceCurrency: 'INR',
       }
     },
+    {
+      '@type': 'WebApplication',
+      name: 'Corporate Law Glossary',
+      url: 'https://www.corplawupdates.in/glossary',
+      applicationCategory: 'EducationalApplication',
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'INR',
+      }
+    }
   ]
 }
 
@@ -51,25 +84,25 @@ const tools = [
     label: 'Legal Document Generator',
     description: 'Generate board resolutions, agreements, appointment letters and more. AI-powered with ICSI SS-1 format.',
     badge: 'AI Powered',
-    badgeColor: 'bg-purple-100 text-purple-700',
+    badgeColor: 'bg-purple-100 text-purple-700 dark:bg-purple-950/50 dark:text-purple-300',
     stats: '8+ document types',
     isLive: true,
     tags: ['Board Resolution', 'MOA', 'Director Appointment', 'Agreements'],
-    color: 'border-purple-200 hover:border-purple-400',
+    color: 'border-purple-200 hover:border-purple-400 dark:border-slate-800 dark:hover:border-purple-900/50',
     headerBg: 'from-purple-600 to-purple-800',
   },
   {
-    id: 'fee-calculator',
-    href: '/tools/fee-calculator',
+    id: 'penalty-calculator',
+    href: '/tools/penalty-calculator',
     icon: '🧮',
-    label: 'MCA Late Fee Calculator',
-    description: 'Calculate exact penalties for delayed MCA forms, LLP forms and MSME returns. Includes CCFS 2026 savings calculator.',
+    label: 'ROC Compliance Penalty Calculator',
+    description: 'Calculate statutory filing fees, ROC late fees, adjudication penalties, and MSME delayed payment interest for Companies, LLPs, and MSMEs.',
     badge: 'Free',
-    badgeColor: 'bg-green-100 text-green-700',
-    stats: '15+ forms covered',
+    badgeColor: 'bg-green-100 text-green-700 dark:bg-green-950/50 dark:text-green-300',
+    stats: 'Companies, LLP & MSME',
     isLive: true,
-    tags: ['MGT-7', 'AOC-4', 'DIR-3 KYC', 'CCFS 2026', 'LLP Form 11'],
-    color: 'border-green-200 hover:border-green-400',
+    tags: ['MGT-7', 'AOC-4', 'DIR-3 KYC', 'Section 403', 'LLP Form 11', 'MSME Interest'],
+    color: 'border-green-200 hover:border-green-400 dark:border-slate-800 dark:hover:border-green-900/50',
     headerBg: 'from-green-600 to-green-800',
   },
   {
@@ -79,11 +112,11 @@ const tools = [
     label: 'Compliance Calendar 2026',
     description: 'Complete compliance deadline calendar for MCA, SEBI, RBI, FEMA and Income Tax. Export to Google Calendar.',
     badge: 'Community',
-    badgeColor: 'bg-blue-100 text-blue-700',
+    badgeColor: 'bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300',
     stats: '50+ deadlines',
     isLive: true,
     tags: ['MCA Deadlines', 'SEBI Quarterly', 'Income Tax', 'FEMA'],
-    color: 'border-blue-200 hover:border-blue-400',
+    color: 'border-blue-200 hover:border-blue-400 dark:border-slate-800 dark:hover:border-blue-900/50',
     headerBg: 'from-blue-600 to-blue-800',
   },
   {
@@ -93,11 +126,11 @@ const tools = [
     label: 'RBI Repo Rate Tracker',
     description: 'Current RBI repo rate, rate history, next MPC meeting date and impact on home loans and EMIs.',
     badge: 'Live Data',
-    badgeColor: 'bg-amber-100 text-amber-700',
+    badgeColor: 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300',
     stats: 'Updated after every MPC',
     isLive: true,
     tags: ['Repo Rate', 'RBI MPC', 'Interest Rate', 'Home Loan'],
-    color: 'border-amber-200 hover:border-amber-400',
+    color: 'border-amber-200 hover:border-amber-400 dark:border-slate-800 dark:hover:border-amber-900/50',
     headerBg: 'from-amber-500 to-amber-700',
   },
   {
@@ -106,13 +139,13 @@ const tools = [
     icon: '📚',
     label: 'Corporate Law Glossary',
     description: 'Plain English definitions of 200+ corporate law terms. IBC, MCA, SEBI, RBI and FEMA terminology explained.',
-    badge: 'Coming Soon',
-    badgeColor: 'bg-slate-100 text-slate-500',
-    stats: '200+ terms planned',
-    isLive: false,
+    badge: 'Free',
+    badgeColor: 'bg-green-100 text-green-700 dark:bg-green-950/50 dark:text-green-300',
+    stats: '200+ terms',
+    isLive: true,
     tags: ['CIRP', 'DIN', 'NCLT', 'IBC', 'SEBI', 'FEMA'],
-    color: 'border-slate-200 hover:border-slate-300',
-    headerBg: 'from-slate-500 to-slate-700',
+    color: 'border-teal-200 hover:border-teal-400 dark:border-slate-800 dark:hover:border-teal-900/50',
+    headerBg: 'from-teal-600 to-teal-800',
   },
   {
     id: 'circular-summarizer',
@@ -121,11 +154,11 @@ const tools = [
     label: 'AI Circular Summarizer',
     description: 'Paste any SEBI/MCA/RBI circular URL and get an instant plain-English summary with key changes and action items.',
     badge: 'Coming Soon',
-    badgeColor: 'bg-slate-100 text-slate-500',
+    badgeColor: 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400',
     stats: 'AI powered',
     isLive: false,
     tags: ['SEBI Circular', 'MCA Notification', 'RBI Circular', 'Summary'],
-    color: 'border-slate-200 hover:border-slate-300',
+    color: 'border-slate-200 hover:border-slate-300 dark:border-slate-800/50 dark:hover:border-slate-700',
     headerBg: 'from-slate-500 to-slate-700',
   },
   {
@@ -135,25 +168,25 @@ const tools = [
     label: 'Compliance Checklist Generator',
     description: 'Answer 5 questions about your company and get a personalized compliance checklist with all applicable deadlines.',
     badge: 'Coming Soon',
-    badgeColor: 'bg-slate-100 text-slate-500',
+    badgeColor: 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400',
     stats: 'Personalized',
     isLive: false,
     tags: ['Pvt Ltd', 'LLP', 'Listed Company', 'OPC', 'Annual Compliance'],
-    color: 'border-slate-200 hover:border-slate-300',
+    color: 'border-slate-200 hover:border-slate-300 dark:border-slate-800/50 dark:hover:border-slate-700',
     headerBg: 'from-slate-500 to-slate-700',
   },
   {
     id: 'quiz',
     href: '/tools/cs-quiz',
     icon: '🎯',
-    label: 'Daily CS Professional Quiz',
-    description: '5 questions daily based on CS Professional exam syllabus and current regulatory affairs. Build your streak!',
+    label: 'Daily Corporate Law Quiz',
+    description: '5 quick MCQs every day on Companies Act, SEBI, RBI and business law. Perfect for students, professionals and curious minds. Build your streak!',
     badge: 'Coming Soon',
-    badgeColor: 'bg-slate-100 text-slate-500',
-    stats: 'Daily updated',
+    badgeColor: 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400',
+    stats: 'New questions daily',
     isLive: false,
-    tags: ['CS Exam', 'MCQ', 'Companies Act', 'SEBI', 'Streak'],
-    color: 'border-slate-200 hover:border-slate-300',
+    tags: ['Daily Quiz', 'MCQ', 'Companies Act', 'Anyone Can Play'],
+    color: 'border-slate-200 hover:border-slate-300 dark:border-slate-800/50 dark:hover:border-slate-700',
     headerBg: 'from-slate-500 to-slate-700',
   },
 ]
@@ -163,7 +196,7 @@ const comingTools = tools.filter(t => !t.isLive)
 
 export default function ToolsPage() {
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
       <JsonLd data={toolsJsonLd as any} />
 
       {/* Hero */}
@@ -176,7 +209,7 @@ export default function ToolsPage() {
             Compliance Tools Hub
           </h1>
           <p className="text-slate-400 text-lg max-w-2xl mx-auto mb-8">
-            Free tools built for Indian Company Secretaries, corporate lawyers and compliance professionals.
+            Free interactive tools open to everyone — built for professionals, students, business owners, and anyone looking to simplify legal compliance.
           </p>
 
           {/* Stats row */}
@@ -206,10 +239,10 @@ export default function ToolsPage() {
         <div className="mb-12">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse" />
-            <h2 className="text-2xl font-bold text-navy font-heading">
+            <h2 className="text-2xl font-bold text-navy dark:text-white font-heading">
               Live Tools
             </h2>
-            <span className="bg-green-100 text-green-700 text-xs font-bold px-2.5 py-1 rounded-full">
+            <span className="bg-green-100 text-green-700 dark:bg-green-950/50 dark:text-green-300 dark:border dark:border-green-900/30 text-xs font-bold px-2.5 py-1 rounded-full">
               {liveTools.length} Available Now
             </span>
           </div>
@@ -219,7 +252,7 @@ export default function ToolsPage() {
               <Link
                 key={tool.id}
                 href={tool.href}
-                className={`group bg-white  border-2 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-200 ${tool.color}`}
+                className={`group bg-white dark:bg-slate-900 border-2 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-200 ${tool.color}`}
               >
                 {/* Card header */}
                 <div className={`bg-gradient-to-r ${tool.headerBg} p-5 flex items-center gap-4`}>
@@ -243,24 +276,24 @@ export default function ToolsPage() {
 
                 {/* Card body */}
                 <div className="p-5">
-                  <p className="text-slate-600 text-sm mb-4 leading-relaxed">
+                  <p className="text-slate-600 dark:text-slate-300 text-sm mb-4 leading-relaxed">
                     {tool.description}
                   </p>
 
                   {/* Tags */}
                   <div className="flex flex-wrap gap-1.5 mb-4">
                     {tool.tags.map(tag => (
-                      <span key={tag} className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
+                      <span key={tag} className="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded-full">
                         {tag}
                       </span>
                     ))}
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-green-600 font-semibold">
+                    <span className="text-xs text-green-600 dark:text-green-400 font-semibold">
                       ● Live Now
                     </span>
-                    <span className="text-navy font-bold text-sm group-hover:translate-x-1 transition-transform inline-block">
+                    <span className="text-navy dark:text-amber-400 font-bold text-sm group-hover:translate-x-1 transition-transform inline-block">
                       Open Tool →
                     </span>
                   </div>
@@ -274,10 +307,10 @@ export default function ToolsPage() {
         <div>
           <div className="flex items-center gap-3 mb-6">
             <span className="text-2xl">🚀</span>
-            <h2 className="text-2xl font-bold text-navy font-heading">
+            <h2 className="text-2xl font-bold text-navy dark:text-white font-heading">
               Coming Soon
             </h2>
-            <span className="bg-slate-100 text-slate-500 text-xs font-bold px-2.5 py-1 rounded-full">
+            <span className="bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 dark:border dark:border-slate-750 text-xs font-bold px-2.5 py-1 rounded-full">
               {comingTools.length} In Development
             </span>
           </div>
@@ -285,27 +318,27 @@ export default function ToolsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {comingTools.map(tool => (
               <div key={tool.id}
-                   className="bg-white border border-dashed border-slate-300 rounded-2xl p-5 opacity-80">
+                   className="bg-white dark:bg-slate-900/40 border border-dashed border-slate-300 dark:border-slate-850 rounded-2xl p-5 opacity-80">
                 <div className="flex items-start gap-4">
                   <span className="text-4xl flex-shrink-0 opacity-60">
                     {tool.icon}
                   </span>
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-bold text-navy text-sm">
+                      <h3 className="font-bold text-navy dark:text-slate-200 text-sm">
                         {tool.label}
                       </h3>
-                      <span className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full flex-shrink-0">
+                      <span className="text-xs bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 px-2 py-0.5 rounded-full flex-shrink-0">
                         Coming Soon
                       </span>
                     </div>
-                    <p className="text-slate-500 text-xs leading-relaxed">
+                    <p className="text-slate-500 dark:text-slate-450 text-xs leading-relaxed">
                       {tool.description}
                     </p>
                     <div className="flex flex-wrap gap-1 mt-2">
                       {tool.tags.slice(0, 3).map(tag => (
                         <span key={tag}
-                              className="text-xs bg-slate-55 text-slate-45 px-2 py-0.5 rounded-full">
+                              className="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-450 px-2 py-0.5 rounded-full">
                           {tag}
                         </span>
                       ))}

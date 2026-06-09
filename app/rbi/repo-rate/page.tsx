@@ -85,7 +85,7 @@ export default async function RepoRatePage() {
           Current RBI Repo Rate
         </p>
         <p className="text-slate-300 text-sm">
-          Decided at 60th MPC Meeting · {rateDate} · Unchanged · {stance} Stance
+          Decided at 61st MPC Meeting · {rateDate} · Unchanged · {stance} Stance
         </p>
       </div>
 
@@ -182,7 +182,7 @@ export default async function RepoRatePage() {
               {
                 icon: '📈',
                 title: 'Equity Investors',
-                text: 'Market watching June 2026 MPC closely. Rate cut signals will boost markets.',
+                text: 'June 2026 MPC held rates steady at 5.25%. Market now watching August 4-6, 2026 MPC — a rate cut is possible if inflation stays within the 2-6% band.',
                 color: 'bg-purple-50 border-purple-200',
               },
             ].map(card => (
@@ -204,15 +204,15 @@ export default async function RepoRatePage() {
             {[
               {
                 q: 'What is the current RBI repo rate in 2026?',
-                a: `The current RBI repo rate is ${repoRate} as decided in the 60th MPC meeting held April 6-8, 2026. The rate has been unchanged since the February 2026 MPC meeting.`,
+                a: `The current RBI repo rate is ${repoRate} as decided in the 61st MPC meeting held June 4-6, 2026. The rate has been unchanged since the February 2026 MPC meeting when RBI cut rates by 25 bps.`,
               },
               {
                 q: 'When is the next RBI MPC meeting in 2026?',
                 a: `The next RBI Monetary Policy Committee (MPC) meeting is scheduled for ${nextMpc}. The decision will be announced on the last day of the meeting.`,
               },
               {
-                q: 'Will RBI cut repo rate in June 2026?',
-                a: 'A rate cut in June 2026 depends on the West Asia conflict situation and crude oil price trajectory. If the conflict eases and inflation remains within the 2-6% band, a 25 bps rate cut is possible.',
+                q: 'Did RBI cut repo rate in June 2026?',
+                a: 'No. RBI kept the repo rate unchanged at 5.25% in the June 2026 (61st MPC) meeting. The MPC maintained a Neutral stance. The next opportunity for a rate cut is the August 4-6, 2026 MPC meeting.',
               },
               {
                 q: 'What is the difference between repo rate and reverse repo rate?',
@@ -236,10 +236,16 @@ export default async function RepoRatePage() {
           <h3 className="font-bold text-navy mb-3">📚 Related RBI Updates</h3>
           <div className="space-y-2">
             <Link
+              href="/updates/rbi-mpc-repo-rate-june-2026"
+              className="block text-amber-600 hover:underline text-sm font-semibold"
+            >
+              → RBI MPC June 2026 Meeting — Full Analysis (61st MPC)
+            </Link>
+            <Link
               href="/updates/rbi-keeps-repo-rate-unchanged-at-525-mpc-april-2026-meeting-key-highlights"
               className="block text-amber-600 hover:underline text-sm"
             >
-              → RBI MPC April 2026 Meeting — Full Analysis
+              → RBI MPC April 2026 Meeting — Full Analysis (60th MPC)
             </Link>
             <Link href="/category/rbi" className="block text-amber-600 hover:underline text-sm">
               → All RBI Updates 2026

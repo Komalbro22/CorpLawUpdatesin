@@ -275,12 +275,13 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
     }
 
     return (
-        <article
-          id="article-root"
-          className="article-font-md mx-auto w-full max-w-4xl px-4 py-8 sm:py-12"
-        >
-            <ReadingProgress />
-            <ViewCounter slug={update.slug} />
+        <div className="min-h-screen bg-white dark:bg-slate-900">
+            <article
+              id="article-root"
+              className="article-font-md mx-auto w-full max-w-4xl px-4 py-8 sm:py-12"
+            >
+                <ReadingProgress />
+                <ViewCounter slug={update.slug} />
 
             {/* Breadcrumb JSON-LD */}
             <BreadcrumbJsonLd items={[
@@ -295,7 +296,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                 <span className="text-slate-300">/</span>
                 <Link href="/updates" className="hover:text-gold transition-colors">Updates</Link>
                 <span className="text-slate-300">/</span>
-                <span className="text-navy font-medium truncate max-w-[220px]">
+                <span className="text-navy dark:text-slate-200 font-medium truncate max-w-[220px]">
                     {update.title.length > 45 ? update.title.substring(0, 45) + '...' : update.title}
                 </span>
             </nav>
@@ -320,11 +321,11 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
                 {/* Key change banner */}
                 {update.key_change && (
-                    <div className="mb-6 flex items-start gap-3 rounded-xl border border-amber-200/80 border-l-[3px] border-l-amber-500 bg-amber-50/90 p-4 shadow-sm ring-1 ring-slate-900/[0.02]">
-                        <FileText className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-600" aria-hidden />
+                    <div className="mb-6 flex items-start gap-3 rounded-xl border border-amber-200/80 dark:border-amber-900/30 border-l-[3px] border-l-amber-500 bg-amber-50/90 dark:bg-amber-950/20 p-4 shadow-sm ring-1 ring-slate-900/[0.02] dark:ring-white/[0.02]">
+                        <FileText className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-600 dark:text-amber-400" aria-hidden />
                         <div>
-                            <p className="text-xs font-bold text-amber-900 uppercase tracking-widest mb-1">Key Change</p>
-                            <p className="text-amber-800 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: sanitizeHtml(update.key_change) }} />
+                            <p className="text-xs font-bold text-amber-900 dark:text-amber-450 uppercase tracking-widest mb-1">Key Change</p>
+                            <p className="text-amber-800 dark:text-amber-300 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: sanitizeHtml(update.key_change) }} />
                         </div>
                     </div>
                 )}
@@ -399,11 +400,11 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
                     return (
                         <section id="tldr-summary" aria-label="TL;DR Executive Summary" className="mb-6">
-                            <details open className={`group overflow-hidden rounded-xl border ${cardStyles.borderColor} border-l-[4px] ${cardStyles.borderLeftColor} ${cardStyles.bgColor} shadow-sm transition-all duration-200`}>
-                                <summary className="cursor-pointer p-4 font-bold text-navy flex justify-between items-center bg-white hover:bg-slate-50/80 transition-colors list-none [&::-webkit-details-marker]:hidden focus:outline-none">
+                            <details open className={`group overflow-hidden rounded-xl border ${cardStyles.borderColor} dark:border-slate-800 border-l-[4px] ${cardStyles.borderLeftColor} ${cardStyles.bgColor} shadow-sm transition-all duration-200`}>
+                                <summary className="cursor-pointer p-4 font-bold text-navy dark:text-slate-100 flex justify-between items-center bg-white dark:bg-slate-900 hover:bg-slate-50/80 dark:hover:bg-slate-800/80 transition-colors list-none [&::-webkit-details-marker]:hidden focus:outline-none">
                                     <div className="flex items-center gap-2">
                                         <Sparkles className={`h-5 w-5 ${cardStyles.iconColor} animate-pulse`} aria-hidden />
-                                        <span className="font-heading text-base font-bold text-navy tracking-tight">TL;DR — Executive Summary</span>
+                                        <span className="font-heading text-base font-bold text-navy dark:text-white tracking-tight">TL;DR — Executive Summary</span>
                                     </div>
                                     <div className="flex items-center gap-3">
                                         <span className={`hidden sm:inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${cardStyles.badgeBg}`}>
@@ -412,10 +413,10 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                                         <ChevronDown className="h-4 w-4 text-slate-400 transition-transform duration-300 group-open:rotate-180" aria-hidden />
                                     </div>
                                 </summary>
-                                <div className="p-5 border-t border-slate-100 bg-white/70 backdrop-blur-sm">
+                                <div className="p-5 border-t border-slate-100 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm">
                                     <ul className="space-y-3.5 list-none pl-0 m-0" itemProp="abstract" data-ai-summary="true">
                                         {update.key_changes.map((kc: string, i: number) => (
-                                            <li key={i} className="flex items-start gap-3 text-sm text-slate-700 leading-relaxed font-medium">
+                                            <li key={i} className="flex items-start gap-3 text-sm text-slate-700 dark:text-slate-350 leading-relaxed font-medium">
                                                 <CheckCircle2 className={`h-4 w-4 mt-0.5 flex-shrink-0 ${cardStyles.iconColor}`} aria-hidden />
                                                 <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(kc) }} />
                                             </li>
@@ -428,12 +429,10 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                 })()}
 
                 {/* Title */}
-                <h1 className="font-heading text-3xl md:text-[2.2rem] text-navy font-bold mb-4 leading-snug break-words">
+                <h1 className="font-heading text-3xl md:text-[2.2rem] text-navy dark:text-slate-50 font-bold mb-4 leading-snug break-words">
                     {update.title}
-                </h1>
-
-                {/* Meta row */}
-                <div className="mb-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-500">
+                </h1>                {/* Meta row */}
+                <div className="mb-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-500 dark:text-slate-400">
                     <time className="publish-date inline-flex items-center gap-1.5" dateTime={update.published_at}>
                         <CalendarDays className="h-4 w-4 text-slate-400" aria-hidden />
                         {formattedDate}
@@ -449,19 +448,19 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                         </span>
                     )}
                     {update.source_name && (
-                        <span className="print:hidden text-slate-500">{update.source_name}</span>
+                        <span className="print:hidden text-slate-500 dark:text-slate-400">{update.source_name}</span>
                     )}
                     {update.effective_date && (
-                        <span className="inline-flex items-center gap-1 rounded-md border border-green-100 bg-green-50 px-2 py-1 text-xs font-medium text-green-700">
+                        <span className="inline-flex items-center gap-1 rounded-md border border-green-100 dark:border-green-900/30 bg-green-50 dark:bg-green-950/20 px-2 py-1 text-xs font-medium text-green-755">
                             <CalendarDays className="h-3.5 w-3.5" aria-hidden />
                             Effective: {formatDate(update.effective_date)}
                         </span>
                     )}
                     {update.impact_level && (
                         <span className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium ${
-                            update.impact_level === 'high'   ? 'bg-red-100 text-red-700'   :
-                            update.impact_level === 'medium' ? 'bg-amber-100 text-amber-700' :
-                                                               'bg-green-100 text-green-700'
+                            update.impact_level === 'high'   ? 'bg-red-100 dark:bg-red-950/30 text-red-700 dark:text-red-400'   :
+                            update.impact_level === 'medium' ? 'bg-amber-100 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400' :
+                                                               'bg-green-100 dark:bg-green-950/30 text-green-700 dark:text-green-400'
                         }`}>
                             <AlertCircle className="h-3.5 w-3.5" aria-hidden />
                             {update.impact_level === 'high'   && 'High impact'}
@@ -479,12 +478,12 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
                 {/* Summary box */}
                 {update.summary && (
-                    <div className="mb-6 rounded-r-lg border-l-4 border-blue-400 bg-blue-50 p-4">
-                        <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-blue-800">
+                    <div className="mb-6 rounded-r-lg border-l-4 border-blue-400 dark:border-l-blue-500 bg-blue-50 dark:bg-blue-950/20 p-4">
+                        <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-blue-800 dark:text-blue-400">
                             <FileText className="h-4 w-4" aria-hidden />
                             Summary
                         </p>
-                        <p className="text-blue-900 text-sm leading-relaxed font-medium">{update.summary}</p>
+                        <p className="text-blue-900 dark:text-blue-300 text-sm leading-relaxed font-medium">{update.summary}</p>
                     </div>
                 )}
 
@@ -508,8 +507,8 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
             {/* 4. SOURCE ATTRIBUTION */}
             <div className="print:hidden">
                 {(update.source_url || (update.sources && update.sources.length > 0)) && (
-                    <div className="mb-8 flex flex-col gap-2 rounded-lg border border-slate-100 bg-slate-50 p-4">
-                        <span className="text-slate-600 font-semibold text-sm">Sources</span>
+                    <div className="mb-8 flex flex-col gap-2 rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-4">
+                        <span className="text-slate-600 dark:text-slate-300 font-semibold text-sm">Sources</span>
                         <ul className="space-y-1">
                             {update.source_name && update.source_url && (
                                 <li>
@@ -548,7 +547,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                         <Link
                             key={tag}
                             href={`/updates?search=${encodeURIComponent(tag.trim())}`}
-                            className="rounded-md border border-slate-200 bg-slate-100 px-3 py-1 text-xs text-slate-600 transition-all duration-200 hover:border-amber-300 hover:bg-amber-50 hover:text-amber-700 hover:shadow-sm"
+                            className="rounded-md border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 px-3 py-1 text-xs text-slate-600 dark:text-slate-400 transition-all duration-200 hover:border-amber-300 hover:bg-amber-50 dark:hover:bg-slate-800 hover:text-amber-700 dark:hover:text-amber-400 hover:shadow-sm"
                         >
                             #{tag.trim()}
                         </Link>
@@ -560,8 +559,8 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
             {/* 6. RELATED UPDATES */}
             {related.length > 0 && (
-                <section className="pt-10 border-t border-slate-200 print:hidden">
-                    <h2 className="text-xl font-heading font-bold text-navy mb-6">Related Updates</h2>
+                <section className="pt-10 border-t border-slate-200 dark:border-slate-800 print:hidden">
+                    <h2 className="text-xl font-heading font-bold text-navy dark:text-white mb-6">Related Updates</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                         {related.map((rel: any, i: number) => (
                             <UpdateCard key={rel.id} update={rel} animationDelay={i * 60} />
@@ -571,8 +570,8 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
             )}
 
             {/* 7. INTERNAL LINKS - SEO */}
-            <div className="mt-8 rounded-lg border border-slate-200 bg-slate-50 p-5 print:hidden">
-                <h3 className="mb-3 flex items-center gap-2 text-sm font-bold text-navy">
+            <div className="mt-8 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-5 print:hidden">
+                <h3 className="mb-3 flex items-center gap-2 text-sm font-bold text-navy dark:text-white">
                     <BookOpen className="h-4 w-4 text-amber-600" aria-hidden />
                     Browse More {update.category.toUpperCase()} Updates
                 </h3>
@@ -586,7 +585,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                         <Link
                             key={link.href}
                             href={link.href}
-                            className="text-sm bg-white border border-slate-200 text-navy px-3 py-1.5 rounded-lg hover:border-amber-400 hover:text-amber-700 transition-colors"
+                            className="text-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-navy dark:text-slate-200 px-3 py-1.5 rounded-lg hover:border-amber-400 hover:text-amber-700 dark:hover:text-amber-400 transition-colors"
                         >
                             {link.label} <span aria-hidden>{'->'}</span>
                         </Link>
@@ -665,8 +664,6 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
               }} />
             )}
         </article>
-
-
-
+      </div>
     )
 }

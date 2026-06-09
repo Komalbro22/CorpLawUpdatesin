@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import DocumentIntentSearch from '@/components/documents/DocumentIntentSearch'
+import { formatTemplateSource } from '@/lib/document-clause-checker'
 
 export const metadata: Metadata = {
   title: 'Free Legal Document Generator — Board Resolutions, MOA, Agreements | CorpLawUpdates.in',
@@ -17,50 +18,50 @@ const categoryConfig = {
   board_resolution: {
     label: 'Board Resolutions',
     icon: '🏛️',
-    color: 'bg-blue-50 border-blue-200 text-blue-700',
+    color: 'bg-blue-50 border-blue-200 text-blue-700 dark:bg-blue-950/30 dark:border-blue-900/50 dark:text-blue-300',
     description: 'Certified true copies per ICSI Secretarial Standards'
+  },
+  commercial_contracts: {
+    label: 'Commercial Contracts & Deeds',
+    icon: '📑',
+    color: 'bg-indigo-50 border-indigo-200 text-indigo-700 dark:bg-indigo-950/30 dark:border-indigo-900/50 dark:text-indigo-300',
+    description: 'Partnership deeds, power of attorney, SLAs, joint venture agreements'
+  },
+  appointments: {
+    label: 'Appointment Letters',
+    icon: '📄',
+    color: 'bg-amber-50 border-amber-200 text-amber-700 dark:bg-amber-950/30 dark:border-amber-900/50 dark:text-amber-300',
+    description: 'Director, KMP, CS appointment letters'
+  },
+  company_drafts: {
+    label: 'Company Drafts',
+    icon: '🏢',
+    color: 'bg-cyan-50 border-cyan-200 text-cyan-700 dark:bg-cyan-950/30 dark:border-cyan-900/50 dark:text-cyan-300',
+    description: 'Share transfers, MOA amendments, statutory registers'
   },
   shareholders_meeting: {
     label: 'Shareholders Meeting',
     icon: '👥',
-    color: 'bg-green-50 border-green-200 text-green-700',
+    color: 'bg-green-50 border-green-200 text-green-700 dark:bg-green-950/30 dark:border-green-900/50 dark:text-green-300',
     description: 'AGM/EGM notices, minutes, resolutions'
   },
   agreements: {
     label: 'Agreements',
     icon: '🤝',
-    color: 'bg-purple-50 border-purple-200 text-purple-700',
+    color: 'bg-purple-50 border-purple-200 text-purple-700 dark:bg-purple-950/30 dark:border-purple-900/50 dark:text-purple-300',
     description: 'Employment, NDA, service agreements'
-  },
-  appointments: {
-    label: 'Appointment Letters',
-    icon: '📄',
-    color: 'bg-amber-50 border-amber-200 text-amber-700',
-    description: 'Director, KMP, CS appointments'
   },
   mca_forms: {
     label: 'MCA Form Guides',
     icon: '📋',
-    color: 'bg-red-50 border-red-200 text-red-700',
+    color: 'bg-red-50 border-red-200 text-red-700 dark:bg-red-950/30 dark:border-red-900/50 dark:text-red-300',
     description: 'MGT-7, AOC-4, DIR forms'
   },
   notices: {
     label: 'Notices',
     icon: '📢',
-    color: 'bg-teal-50 border-teal-200 text-teal-700',
+    color: 'bg-teal-50 border-teal-200 text-teal-700 dark:bg-teal-950/30 dark:border-teal-900/50 dark:text-teal-300',
     description: 'Board meeting, AGM, EGM notices'
-  },
-  commercial_contracts: {
-    label: 'Commercial Contracts',
-    icon: '📑',
-    color: 'bg-indigo-50 border-indigo-200 text-indigo-700',
-    description: 'NDAs, service agreements, JV contracts, vendor agreements'
-  },
-  company_drafts: {
-    label: 'Company Drafts',
-    icon: '🏢',
-    color: 'bg-cyan-50 border-cyan-200 text-cyan-700',
-    description: 'Share transfers, MOA amendments, statutory registers'
   },
 }
 
@@ -84,7 +85,7 @@ export default async function DocumentsPage() {
   const totalDocs = templates?.length || 0
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
       
       {/* Hero */}
       <div className="bg-navy py-14 px-4">
@@ -136,13 +137,13 @@ export default async function DocumentsPage() {
       </div>
 
       {/* Disclaimer */}
-      <div className="bg-amber-50 border-b 
-                      border-amber-200 py-3 px-4">
-        <p className="text-amber-800 text-xs 
+      <div className="bg-amber-50 dark:bg-amber-950/15 border-b 
+                      border-amber-200 dark:border-amber-900/35 py-3 px-4">
+        <p className="text-amber-800 dark:text-amber-300 text-xs 
                       text-center max-w-3xl mx-auto">
           ⚠️ These are draft documents for reference 
-          only. Always verify with a qualified Company 
-          Secretary or Advocate before filing. 
+          only. Always verify with a qualified legal 
+          professional before filing. 
           CorpLawUpdates.in is not liable for any 
           legal consequences of use.
         </p>
@@ -167,10 +168,10 @@ export default async function DocumentsPage() {
                   </span>
                   <div>
                     <h2 className="text-2xl font-bold 
-                                   text-navy font-heading">
+                                   text-navy dark:text-white font-heading">
                       {config.label}
                     </h2>
-                    <p className="text-slate-500 text-sm">
+                    <p className="text-slate-500 dark:text-slate-400 text-sm">
                       {config.description}
                     </p>
                   </div>
@@ -190,10 +191,10 @@ export default async function DocumentsPage() {
                     <Link
                       key={template.slug}
                       href={`/documents/${template.slug}`}
-                      className="bg-white border 
-                                 border-slate-200 
+                      className="bg-white dark:bg-slate-900 border 
+                                 border-slate-200 dark:border-slate-800 
                                  rounded-2xl p-5 
-                                 hover:border-amber-400
+                                 hover:border-amber-400 dark:hover:border-amber-500
                                  hover:shadow-md
                                  transition-all 
                                  duration-200 group"
@@ -203,14 +204,14 @@ export default async function DocumentsPage() {
                                       items-start mb-3">
                         {template.is_free ? (
                           <span className="text-xs 
-                            bg-green-100 text-green-700 
+                            bg-green-100 text-green-700 dark:bg-green-950/50 dark:text-green-300 
                             font-bold px-2 py-0.5 
                             rounded-full">
                             FREE
                           </span>
                         ) : (
                           <span className="text-xs 
-                            bg-purple-100 text-purple-700 
+                            bg-purple-100 text-purple-700 dark:bg-purple-950/50 dark:text-purple-300 
                             font-bold px-2 py-0.5 
                             rounded-full">
                             PRO
@@ -218,23 +219,23 @@ export default async function DocumentsPage() {
                         )}
                         {template.usage_count > 0 && (
                           <span className="text-xs 
-                                           text-slate-400">
+                                           text-slate-400 dark:text-slate-500">
                             {template.usage_count} uses
                           </span>
                         )}
                       </div>
 
                       {/* Name */}
-                      <h3 className="font-bold text-navy 
+                      <h3 className="font-bold text-navy dark:text-slate-100 
                                      text-sm mb-2 
-                                     group-hover:text-amber-700
+                                     group-hover:text-amber-705 dark:group-hover:text-amber-400
                                      transition-colors
                                      leading-snug">
                         {template.name}
                       </h3>
 
                       {/* Description */}
-                      <p className="text-slate-500 
+                      <p className="text-slate-500 dark:text-slate-400 
                                     text-xs mb-3 
                                     line-clamp-2">
                         {template.description}
@@ -244,12 +245,12 @@ export default async function DocumentsPage() {
                       <div className="flex items-center 
                                       justify-between">
                         <span className="text-xs 
-                                         text-slate-400">
-                          📚 {template.source || 'ICSI SS-1'}
+                                         text-slate-400 dark:text-slate-500">
+                          📚 {formatTemplateSource(template.slug, template.source, template.category)}
                         </span>
                         {template.last_verified && (
                           <span className="text-xs 
-                                           text-green-600">
+                                           text-green-600 dark:text-green-455">
                             ✓ Verified {new Date(
                               template.last_verified
                             ).toLocaleDateString('en-IN', {
@@ -271,9 +272,9 @@ export default async function DocumentsPage() {
                   ))}
 
                   {/* Coming soon card */}
-                  <div className="bg-slate-50 border 
+                  <div className="bg-slate-50 dark:bg-slate-900/50 border 
                                   border-dashed 
-                                  border-slate-300 
+                                  border-slate-300 dark:border-slate-800 
                                   rounded-2xl p-5 
                                   flex flex-col 
                                   items-center 
@@ -283,10 +284,10 @@ export default async function DocumentsPage() {
                       ➕
                     </span>
                     <p className="text-sm font-semibold 
-                                  text-slate-500">
+                                  text-slate-500 dark:text-slate-450">
                       More Coming Soon
                     </p>
-                    <p className="text-xs text-slate-400 
+                    <p className="text-xs text-slate-400 dark:text-slate-500 
                                   mt-1">
                       Suggest a document type
                     </p>

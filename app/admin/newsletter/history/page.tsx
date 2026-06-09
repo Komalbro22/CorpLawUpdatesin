@@ -55,117 +55,138 @@ export default function HistoryDashboard({ searchParams }: { searchParams: { pag
     }
 
     if (loading) {
-        return <div className="flex justify-center py-20 text-slate-500"><RefreshCw className="animate-spin h-8 w-8 text-amber-500" /></div>
+        return (
+            <div className="flex justify-center py-20 text-slate-400">
+                <RefreshCw className="animate-spin h-8 w-8 text-amber-500" />
+            </div>
+        )
     }
 
     if (!data || data.error) {
-        return <div className="text-red-500 text-center py-10">Error loading dashboard</div>
+        return <div className="text-rose-500 text-center py-10">Error loading dashboard</div>
     }
 
     const { campaigns, total, stats, chartData } = data
     const totalPages = Math.ceil(total / limit)
 
     return (
-        <div className="max-w-6xl mx-auto space-y-8 pb-10 content-fade-in">
+        <div className="max-w-6xl mx-auto space-y-8 pb-10 content-fade-in text-slate-200">
             {/* Header */}
             <div>
-                <h1 className="text-3xl font-heading font-bold text-navy flex items-center gap-3">
+                <h1 className="text-3xl font-heading font-extrabold text-white flex items-center gap-3">
                     <BarChart3 className="text-amber-500" />
                     Newsletter History
                 </h1>
-                <p className="text-slate-500 mt-2">Track campaign performance, delivery rates, and subscriber engagement.</p>
+                <p className="text-slate-400 mt-2">Track campaign performance, delivery rates, and subscriber engagement.</p>
             </div>
 
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="bg-white rounded-xl shadow-card border border-slate-200/80 p-6 ring-1 ring-slate-900/[0.02]">
+                {/* Stats Sent */}
+                <div className="admin-card p-6 flex flex-col justify-between">
                     <div className="flex items-center justify-between mb-4">
-                        <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 ring-1 ring-blue-100">
+                        <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 border border-blue-500/20">
                             <Mail size={20} />
                         </div>
                     </div>
-                    <div className="text-slate-500 text-sm font-medium">Total Sent</div>
-                    <div className="text-2xl font-bold text-navy mt-1">{stats.totalSent.toLocaleString()}</div>
+                    <div>
+                        <div className="text-slate-400 text-sm font-medium">Total Sent</div>
+                        <div className="text-2xl font-bold text-white mt-1">{stats.totalSent.toLocaleString()}</div>
+                    </div>
                 </div>
-                <div className="bg-white rounded-xl shadow-card border border-slate-200/80 p-6 ring-1 ring-slate-900/[0.02]">
+
+                {/* Stats Delivered */}
+                <div className="admin-card p-6 flex flex-col justify-between">
                     <div className="flex items-center justify-between mb-4">
-                        <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 ring-1 ring-emerald-100">
+                        <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 border border-emerald-500/20">
                             <Users size={20} />
                         </div>
                     </div>
-                    <div className="text-slate-500 text-sm font-medium">Delivered</div>
-                    <div className="text-2xl font-bold text-navy mt-1">{stats.totalDelivered.toLocaleString()}</div>
+                    <div>
+                        <div className="text-slate-400 text-sm font-medium">Delivered</div>
+                        <div className="text-2xl font-bold text-white mt-1">{stats.totalDelivered.toLocaleString()}</div>
+                    </div>
                 </div>
-                <div className="bg-white rounded-xl shadow-card border border-slate-200/80 p-6 ring-1 ring-slate-900/[0.02]">
+
+                {/* Stats Delivery Rate */}
+                <div className="admin-card p-6 flex flex-col justify-between">
                     <div className="flex items-center justify-between mb-4">
-                        <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-700 ring-1 ring-amber-100">
+                        <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400 border border-amber-500/20">
                             <BarChart3 size={20} />
                         </div>
                     </div>
-                    <div className="text-slate-500 text-sm font-medium">Delivery Rate</div>
-                    <div className="text-2xl font-bold text-navy mt-1">{stats.deliveryRate}%</div>
+                    <div>
+                        <div className="text-slate-400 text-sm font-medium">Delivery Rate</div>
+                        <div className="text-2xl font-bold text-white mt-1">{stats.deliveryRate}%</div>
+                    </div>
                 </div>
-                <div className="bg-white rounded-xl shadow-card border border-slate-200/80 p-6 ring-1 ring-slate-900/[0.02]">
+
+                {/* Stats Open Rate */}
+                <div className="admin-card p-6 flex flex-col justify-between">
                     <div className="flex items-center justify-between mb-4">
-                        <div className="w-10 h-10 rounded-xl bg-violet-50 flex items-center justify-center text-violet-600 ring-1 ring-violet-100">
+                        <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400 border border-purple-500/20">
                             <MousePointerClick size={20} />
                         </div>
                     </div>
-                    <div className="text-slate-500 text-sm font-medium">Open Rate</div>
-                    <div className="text-2xl font-bold text-navy mt-1">{stats.openRate}%</div>
+                    <div>
+                        <div className="text-slate-400 text-sm font-medium">Open Rate</div>
+                        <div className="text-2xl font-bold text-white mt-1">{stats.openRate}%</div>
+                    </div>
                 </div>
             </div>
 
             {/* Chart */}
-            <div className="bg-white rounded-xl shadow-card border border-slate-200/80 p-6 ring-1 ring-slate-900/[0.02]">
-                <h3 className="font-semibold text-navy mb-6">Emails Sent Over Time</h3>
+            <div className="admin-card p-6">
+                <h3 className="font-semibold text-white mb-6">Emails Sent Over Time</h3>
                 <div className="h-72 w-full">
                     {chartData && chartData.length > 0 ? (
                         <ResponsiveContainer width="100%" height="100%">
                             <LineChart data={chartData}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-                                <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{fill: '#64748B', fontSize: 12}} dy={10} />
-                                <YAxis axisLine={false} tickLine={false} tick={{fill: '#64748B', fontSize: 12}} />
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1e293b" />
+                                <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} dy={10} />
+                                <YAxis axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} />
                                 <Tooltip 
-                                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                                    contentStyle={{ backgroundColor: '#090d16', borderRadius: '8px', border: '1px solid #1e293b', color: '#fff' }}
                                 />
                                 <Line type="monotone" dataKey="sent" stroke="#F59E0B" strokeWidth={3} dot={{r: 4, fill: '#F59E0B', strokeWidth: 0}} activeDot={{r: 6}} />
                             </LineChart>
                         </ResponsiveContainer>
                     ) : (
-                        <div className="h-full flex items-center justify-center text-slate-400">No chart data available</div>
+                        <div className="h-full flex items-center justify-center text-slate-500">No chart data available</div>
                     )}
                 </div>
             </div>
 
             {/* Scheduled Newsletters */}
             {data.scheduled && data.scheduled.length > 0 && (
-                <div className="bg-white rounded-xl shadow-card border border-slate-200/80 overflow-hidden ring-1 ring-slate-900/[0.02]">
-                    <div className="p-6 border-b border-slate-100 flex items-center gap-2">
-                        <Calendar className="text-amber-600 w-5 h-5" />
-                        <h3 className="font-semibold text-navy">Scheduled Newsletters</h3>
+                <div className="admin-card overflow-hidden">
+                    <div className="p-6 border-b border-slate-800 flex items-center gap-2 bg-slate-950/40">
+                        <Calendar className="text-amber-500 w-5 h-5" />
+                        <h3 className="font-semibold text-white">Scheduled Newsletters</h3>
                     </div>
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr className="bg-slate-50 border-b border-slate-100 text-xs text-slate-500 uppercase tracking-wider">
+                                <tr className="bg-slate-950 border-b border-slate-800 text-xs text-slate-400 uppercase tracking-wider">
                                     <th className="p-4 font-semibold">Subject</th>
                                     <th className="p-4 font-semibold">Scheduled For</th>
                                     <th className="p-4 font-semibold text-right">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="text-sm">
+                            <tbody className="text-sm divide-y divide-slate-800/40">
                                 {data.scheduled.map((newsletter: any) => (
-                                    <tr key={newsletter.id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
-                                        <td className="p-4 font-medium text-navy">{newsletter.subject}</td>
-                                        <td className="p-4 text-slate-500 flex items-center gap-2">
-                                            <Clock size={14} className="text-slate-400" />
-                                            {new Date(newsletter.scheduled_at).toLocaleString()}
+                                    <tr key={newsletter.id} className="hover:bg-slate-900/30 transition-colors">
+                                        <td className="p-4 font-medium text-slate-200">{newsletter.subject}</td>
+                                        <td className="p-4 text-slate-400">
+                                            <div className="flex items-center gap-2">
+                                                <Clock size={14} className="text-slate-500" />
+                                                {new Date(newsletter.scheduled_at).toLocaleString()}
+                                            </div>
                                         </td>
                                         <td className="p-4 text-right">
                                             <button
                                                 onClick={() => handleCancel(newsletter.id)}
-                                                className="inline-flex items-center justify-center px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-100"
+                                                className="inline-flex items-center justify-center px-3 py-1.5 text-xs font-semibold text-rose-400 hover:bg-slate-800 rounded-lg transition-colors border border-transparent hover:border-slate-800"
                                             >
                                                 <Trash2 size={14} className="mr-1.5" />
                                                 Cancel
@@ -180,14 +201,14 @@ export default function HistoryDashboard({ searchParams }: { searchParams: { pag
             )}
 
             {/* Campaigns Table */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-                <div className="p-6 border-b border-slate-100 flex justify-between items-center">
-                    <h3 className="font-semibold text-navy">Campaign History</h3>
+            <div className="admin-card overflow-hidden">
+                <div className="p-6 border-b border-slate-800 flex justify-between items-center bg-slate-950/40">
+                    <h3 className="font-semibold text-white">Campaign History</h3>
                 </div>
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
-                            <tr className="bg-slate-50 border-b border-slate-100 text-sm text-slate-500">
+                            <tr className="bg-slate-950 border-b border-slate-800 text-sm text-slate-400">
                                 <th className="p-4 font-medium">Subject</th>
                                 <th className="p-4 font-medium">Date Sent</th>
                                 <th className="p-4 font-medium">Recipients</th>
@@ -196,33 +217,33 @@ export default function HistoryDashboard({ searchParams }: { searchParams: { pag
                                 <th className="p-4 font-medium text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="text-sm">
+                        <tbody className="text-sm divide-y divide-slate-800/40">
                             {campaigns?.length > 0 ? (
                                 campaigns.map((campaign: any) => (
-                                    <tr key={campaign.id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
-                                        <td className="p-4 font-medium text-navy max-w-xs truncate" title={campaign.subject}>
+                                    <tr key={campaign.id} className="hover:bg-slate-900/30 transition-colors">
+                                        <td className="p-4 font-medium text-slate-200 max-w-xs truncate" title={campaign.subject}>
                                             {campaign.subject}
                                         </td>
-                                        <td className="p-4 text-slate-500">
+                                        <td className="p-4 text-slate-400">
                                             {new Date(campaign.created_at).toLocaleString()}
                                         </td>
-                                        <td className="p-4 text-slate-600 font-medium">
+                                        <td className="p-4 text-slate-300 font-medium">
                                             {campaign.total_recipients || 0}
                                         </td>
                                         <td className="p-4">
-                                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700">
+                                            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                                                 {campaign.sent_count || 0}
                                             </span>
                                         </td>
                                         <td className="p-4">
-                                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${campaign.failed_count > 0 ? 'bg-red-50 text-red-700' : 'bg-slate-100 text-slate-600'}`}>
+                                            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold ${campaign.failed_count > 0 ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' : 'bg-slate-800 text-slate-400 border border-slate-700'}`}>
                                                 {campaign.failed_count || 0}
                                             </span>
                                         </td>
                                         <td className="p-4 text-right">
                                             <Link 
                                                 href={`/admin/newsletter/history/${campaign.id}`}
-                                                className="inline-flex items-center justify-center px-3 py-1.5 text-sm font-medium bg-white border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 hover:text-navy transition-colors"
+                                                className="inline-flex items-center justify-center px-3 py-1.5 text-sm font-medium bg-slate-950 border border-slate-850 text-slate-300 rounded-lg hover:bg-slate-800 hover:text-white transition-colors"
                                             >
                                                 <Eye size={16} className="mr-1.5" />
                                                 View
@@ -232,7 +253,7 @@ export default function HistoryDashboard({ searchParams }: { searchParams: { pag
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={6} className="p-8 text-center text-slate-500">
+                                    <td colSpan={6} className="p-8 text-center text-slate-500 bg-slate-900/10">
                                         No campaigns found.
                                     </td>
                                 </tr>
@@ -243,13 +264,13 @@ export default function HistoryDashboard({ searchParams }: { searchParams: { pag
                 
                 {/* Custom internal Pagination for Client Component using Next.js Link (assumes page refresh or soft nav) */}
                 {totalPages > 1 && (
-                    <div className="flex justify-center p-6 border-t border-slate-100 gap-2">
+                    <div className="flex justify-center p-6 border-t border-slate-800 gap-2 bg-slate-950/20">
                         {page > 1 && (
-                            <Link href={`/admin/newsletter/history?page=${page - 1}`} className="px-3 py-1.5 border border-slate-200 rounded-lg hover:bg-slate-50 text-sm">Prev</Link>
+                            <Link href={`/admin/newsletter/history?page=${page - 1}`} className="px-3 py-1.5 bg-slate-950 border border-slate-800 text-slate-300 rounded-lg hover:bg-slate-850 text-sm">Prev</Link>
                         )}
-                        <span className="px-3 py-1.5 text-sm font-medium text-slate-600">Page {page} of {totalPages}</span>
+                        <span className="px-3 py-1.5 text-sm font-medium text-slate-400">Page {page} of {totalPages}</span>
                         {page < totalPages && (
-                            <Link href={`/admin/newsletter/history?page=${page + 1}`} className="px-3 py-1.5 border border-slate-200 rounded-lg hover:bg-slate-50 text-sm">Next</Link>
+                            <Link href={`/admin/newsletter/history?page=${page + 1}`} className="px-3 py-1.5 bg-slate-950 border border-slate-800 text-slate-300 rounded-lg hover:bg-slate-850 text-sm">Next</Link>
                         )}
                     </div>
                 )}
@@ -257,4 +278,3 @@ export default function HistoryDashboard({ searchParams }: { searchParams: { pag
         </div>
     )
 }
-

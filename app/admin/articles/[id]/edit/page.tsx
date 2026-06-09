@@ -370,9 +370,9 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                     </div>
 
                     {/* Slug */}
-                    <div className="border border-slate-200/80 rounded-xl p-5 bg-white shadow-card ring-1 ring-slate-900/[0.02] space-y-4">
+                    <div className="border border-slate-200/80 dark:border-slate-800 rounded-xl p-5 bg-white dark:bg-slate-900 shadow-card ring-1 ring-slate-900/[0.02] space-y-4">
                         <div>
-                            <label className="block text-sm font-bold text-navy mb-1">URL Slug</label>
+                            <label className="block text-sm font-bold text-navy dark:text-slate-200 mb-1">URL Slug</label>
                             <div className="flex gap-2 items-start">
                                 <input
                                     type="text"
@@ -381,7 +381,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                                         setSlugEdited(true)
                                         setSlug(e.target.value)
                                     }}
-                                    className="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-none font-mono"
+                                    className="flex-1 border border-slate-300 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-none font-mono text-navy dark:text-slate-100 bg-white dark:bg-slate-950"
                                 />
                                 {slugEdited && (
                                     <button
@@ -390,24 +390,24 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                                             setSlugEdited(false)
                                             setSlug(slugify(title))
                                         }}
-                                        className="text-xs font-medium text-slate-500 hover:text-navy px-3 py-2 bg-slate-100 rounded-lg"
+                                        className="text-xs font-medium text-slate-500 hover:text-navy dark:hover:text-slate-200 px-3 py-2 bg-slate-100 dark:bg-slate-800 rounded-lg text-slate-700 dark:text-slate-300"
                                     >
                                         Reset
                                     </button>
                                 )}
                             </div>
-                            <p className="text-xs text-slate-400 mt-2 font-mono">
+                            <p className="text-xs text-slate-400 dark:text-slate-500 mt-2 font-mono">
                                 corplawupdates.in/updates/{slug || '...'}
                             </p>
                         </div>
 
                         {/* Category */}
                         <div>
-                            <label className="block text-sm font-bold text-navy mb-1">Regulator / Category <span className="text-red-500">*</span></label>
+                            <label className="block text-sm font-bold text-navy dark:text-slate-200 mb-1">Regulator / Category <span className="text-red-500">*</span></label>
                             <select
                                 value={category}
                                 onChange={(e) => setCategory(e.target.value)}
-                                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-none"
+                                className="w-full border border-slate-300 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-none text-navy dark:text-slate-100 bg-white dark:bg-slate-950"
                             >
                                 <option value="" disabled>Select a category...</option>
                                 {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
@@ -416,27 +416,27 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                     </div>
 
                     {/* Summary */}
-                    <div className="border border-slate-200/80 rounded-xl p-5 bg-white shadow-card ring-1 ring-slate-900/[0.02]">
-                        <label className="block text-sm font-bold text-navy mb-1">Summary <span className="text-red-500">*</span></label>
+                    <div className="border border-slate-200/80 dark:border-slate-800 rounded-xl p-5 bg-white dark:bg-slate-900 shadow-card ring-1 ring-slate-900/[0.02]">
+                        <label className="block text-sm font-bold text-navy dark:text-slate-200 mb-1">Summary <span className="text-red-500">*</span></label>
                         <textarea
                             value={summary}
                             onChange={(e) => setSummary(e.target.value)}
                             maxLength={300}
                             rows={3}
                             placeholder="Brief summary shown in article cards..."
-                            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-none resize-none"
+                            className="w-full border border-slate-300 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-none text-navy dark:text-slate-100 bg-white dark:bg-slate-955 resize-none"
                         />
-                        <div className="text-right text-xs text-slate-400 mt-1">
+                        <div className="text-right text-xs text-slate-400 dark:text-slate-500 mt-1">
                             {summary.length}/300
                         </div>
                     </div>
 
                     {/* Key Change, Effective Date, Impact Level */}
-                    <div className="border border-slate-200/80 rounded-xl p-5 bg-white shadow-card ring-1 ring-slate-900/[0.02] space-y-5">
+                    <div className="border border-slate-200/80 dark:border-slate-800 rounded-xl p-5 bg-white dark:bg-slate-900 shadow-card ring-1 ring-slate-900/[0.02] space-y-5">
                         <div>
-                            <label htmlFor="keyChange" className="block text-sm font-semibold text-navy mb-2">
+                            <label htmlFor="keyChange" className="block text-sm font-semibold text-navy dark:text-slate-200 mb-2">
                                 Key Change Pill
-                                <span className="text-slate-400 font-normal ml-2 text-xs">
+                                <span className="text-slate-400 dark:text-slate-500 font-normal ml-2 text-xs">
                                     (optional — one-liner shown as highlighted box)
                                 </span>
                             </label>
@@ -446,16 +446,16 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                                 value={keyChange}
                                 onChange={(e) => setKeyChange(e.target.value)}
                                 placeholder="e.g. DIR-3 KYC filing fee increased to ₹5,000"
-                                className="w-full border border-slate-300 rounded-lg px-4 py-3 text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+                                className="w-full border border-slate-300 dark:border-slate-800 rounded-lg px-4 py-3 text-navy dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent bg-white dark:bg-slate-955"
                                 maxLength={200}
                             />
                         </div>
 
                         <div>
                             <div className="flex justify-between items-center mb-2">
-                                <label className="block text-sm font-semibold text-navy">
+                                <label className="block text-sm font-semibold text-navy dark:text-slate-200">
                                     TL;DR — Executive Summary
-                                    <span className="text-slate-400 font-normal ml-2 text-xs">
+                                    <span className="text-slate-400 dark:text-slate-500 font-normal ml-2 text-xs">
                                         (optional — key takeaways optimized for SEO & AI quick scan)
                                     </span>
                                 </label>
@@ -463,23 +463,23 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                                     <button 
                                         type="button" 
                                         onClick={() => setShowBulkTldr(!showBulkTldr)} 
-                                        className="text-xs bg-slate-100 hover:bg-slate-200 text-navy font-semibold px-2.5 py-1 rounded transition-colors"
+                                        className="text-xs bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-navy dark:text-slate-200 font-semibold px-2.5 py-1 rounded transition-colors"
                                     >
                                         {showBulkTldr ? 'Close Bulk Import' : 'Bulk Import Points'}
                                     </button>
-                                    <button type="button" onClick={addKeyChange} className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded transition-colors">+ Add Point</button>
+                                    <button type="button" onClick={addKeyChange} className="text-xs bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-2.5 py-1 rounded transition-colors">+ Add Point</button>
                                 </div>
                             </div>
 
                             {showBulkTldr ? (
-                                <div className="space-y-2 bg-slate-50 border border-slate-200 p-3 rounded-lg mb-3">
-                                    <span className="text-[11px] text-slate-500 block font-medium">Paste bulleted lines here (copied from chat/docs). Clean formatting is applied automatically.</span>
+                                <div className="space-y-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-3 rounded-lg mb-3">
+                                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block font-medium">Paste bulleted lines here (copied from chat/docs). Clean formatting is applied automatically.</span>
                                     <textarea 
                                         value={bulkTldrText}
                                         onChange={(e) => setBulkTldrText(e.target.value)}
                                         placeholder="• Bullet 1&#10;• Bullet 2&#10;• Bullet 3"
                                         rows={4}
-                                        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-amber-400 focus:outline-none"
+                                        className="w-full px-3 py-2 border border-slate-300 dark:border-slate-800 rounded-lg text-xs focus:ring-2 focus:ring-amber-400 focus:outline-none text-navy dark:text-slate-100 bg-white dark:bg-slate-900"
                                     />
                                     <button 
                                         type="button" 
@@ -498,31 +498,31 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                                                 value={kc}
                                                 onChange={(e) => updateKeyChange(idx, e.target.value)}
                                                 placeholder={`Key takeaway point ${idx + 1}...`}
-                                                className="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+                                                className="flex-1 border border-slate-300 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent text-navy dark:text-slate-100 bg-white dark:bg-slate-950"
                                             />
                                             <button type="button" onClick={() => removeKeyChange(idx)} className="text-slate-400 hover:text-red-500 px-2">×</button>
                                         </div>
                                     ))}
                                     {keyChanges.length === 0 && (
-                                        <div className="text-xs text-slate-400 italic">No executive points added. Click '+ Add Point' to add.</div>
+                                        <div className="text-xs text-slate-400 dark:text-slate-500 italic">No executive points added. Click '+ Add Point' to add.</div>
                                     )}
                                 </div>
                             )}
 
                             {/* AI Citation Guidelines & Pre-fill Templates */}
-                            <details className="mt-3 bg-slate-50 border border-slate-200 rounded-xl overflow-hidden transition-all duration-200">
-                                <summary className="cursor-pointer text-xs font-semibold text-slate-700 hover:text-navy px-4 py-3 bg-slate-100/50 flex justify-between items-center select-none">
+                            <details className="mt-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-xl overflow-hidden transition-all duration-200">
+                                <summary className="cursor-pointer text-xs font-semibold text-slate-700 dark:text-slate-350 hover:text-navy dark:hover:text-slate-200 px-4 py-3 bg-slate-105/50 dark:bg-slate-900/50 flex justify-between items-center select-none">
                                     <span>💡 Google & Bing AI SEO Guidelines & Templates</span>
-                                    <span className="text-slate-400 text-[10px]">Click to expand</span>
+                                    <span className="text-slate-450 dark:text-slate-500 text-[10px]">Click to expand</span>
                                 </summary>
-                                <div className="p-4 space-y-4 text-xs text-slate-600 leading-relaxed border-t border-slate-200">
+                                <div className="p-4 space-y-4 text-xs text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-200 dark:border-slate-850">
                                     {/* 1. Bullet Takeaways */}
                                     <div>
-                                        <p className="font-bold text-navy mb-1">1. Writing High-Density Takeaways (TL;DR):</p>
+                                        <p className="font-bold text-navy dark:text-slate-200 mb-1">1. Writing High-Density Takeaways (TL;DR):</p>
                                         <p>
                                             To make your bullet points highly quoteable by Gemini & Copilot RAG grounding engines, ensure they contain:
                                         </p>
-                                        <ul className="list-disc list-inside mt-1 ml-1 space-y-1 text-slate-500">
+                                        <ul className="list-disc list-inside mt-1 ml-1 space-y-1 text-slate-500 dark:text-slate-400">
                                             <li><strong>Exact circular numbers</strong> and dates.</li>
                                             <li><strong>Specific entities affected</strong> (e.g. "Listed companies with assets &gt; ₹250 Cr").</li>
                                             <li><strong>Explicit penalties</strong> for non-compliance.</li>
@@ -538,7 +538,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                                                     ])
                                                     showToast('Companies Act template applied!', 'success')
                                                 }}
-                                                className="bg-white hover:bg-amber-50 border border-slate-200 hover:border-amber-400 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition-all"
+                                                className="bg-white dark:bg-slate-900 hover:bg-amber-50 dark:hover:bg-slate-850 border border-slate-200 dark:border-slate-800 hover:border-amber-400 dark:hover:border-amber-500 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-lg font-medium transition-all"
                                             >
                                                 🏛️ Companies Act Template
                                             </button>
@@ -552,7 +552,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                                                     ])
                                                     showToast('SEBI Circular template applied!', 'success')
                                                 }}
-                                                className="bg-white hover:bg-amber-50 border border-slate-200 hover:border-amber-400 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition-all"
+                                                className="bg-white dark:bg-slate-900 hover:bg-amber-50 dark:hover:bg-slate-850 border border-slate-200 dark:border-slate-800 hover:border-amber-400 dark:hover:border-amber-500 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-lg font-medium transition-all"
                                             >
                                                 📈 SEBI Circular Template
                                             </button>
@@ -566,7 +566,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                                                     ])
                                                     showToast('RBI Notification template applied!', 'success')
                                                 }}
-                                                className="bg-white hover:bg-amber-50 border border-slate-200 hover:border-amber-400 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition-all"
+                                                className="bg-white dark:bg-slate-900 hover:bg-amber-50 dark:hover:bg-slate-850 border border-slate-200 dark:border-slate-800 hover:border-amber-400 dark:hover:border-amber-500 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-lg font-medium transition-all"
                                             >
                                                 🏦 RBI Circular Template
                                             </button>
@@ -574,34 +574,34 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                                     </div>
 
                                     {/* 2. Writing Format Guidance */}
-                                    <div className="border-t border-slate-200/80 pt-3">
-                                        <p className="font-bold text-navy mb-1">2. Core Prose & Q&A Formatting (Google & Bing AI Search):</p>
-                                        <ul className="list-disc list-inside space-y-1.5 text-slate-500">
+                                    <div className="border-t border-slate-200/80 dark:border-slate-850 pt-3">
+                                        <p className="font-bold text-navy dark:text-slate-200 mb-1">2. Core Prose & Q&A Formatting (Google & Bing AI Search):</p>
+                                        <ul className="list-disc list-inside space-y-1.5 text-slate-500 dark:text-slate-400">
                                             <li><strong>Answer-First Structure</strong>: Always put direct, bolded regulatory answers in the first sentence under heading tags (`## Heading`). Move details and explanations further down.</li>
                                             <li><strong>Trigger FAQ Schema</strong>: Format questions inside your markdown using clear prefixes like <code>Q1: [Question]?</code> or <code>Question 1: [Question]?</code>. The site template automatically parses these to build schema indexing metadata!</li>
                                         </ul>
                                     </div>
 
                                     {/* 3. Human E-E-A-T credentials */}
-                                    <div className="border-t border-slate-200/80 pt-3">
-                                        <p className="font-bold text-navy mb-1">3. Human E-E-A-T Trust Bio Credentials (Bottom of Article):</p>
+                                    <div className="border-t border-slate-200/80 dark:border-slate-855 pt-3">
+                                        <p className="font-bold text-navy dark:text-slate-200 mb-1">3. Human E-E-A-T Trust Bio Credentials (Bottom of Article):</p>
                                         <p className="mb-2">To prevent search engines from filtering your legal content, always copy and paste one of these verified, high-trust bio templates at the very bottom of your Article Content box:</p>
                                         <div className="space-y-2">
-                                            <div className="bg-white border border-slate-200 p-2.5 rounded-lg">
-                                                <p className="font-semibold text-navy text-[10px] uppercase mb-0.5">Template 1 — Editorial Board Bio</p>
-                                                <code className="text-slate-600 select-all block bg-slate-50 p-1.5 rounded font-mono text-[10px] border border-slate-100">
+                                            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-2.5 rounded-lg">
+                                                <p className="font-semibold text-navy dark:text-slate-200 text-[10px] uppercase mb-0.5">Template 1 — Editorial Board Bio</p>
+                                                <code className="text-slate-600 dark:text-slate-350 select-all block bg-slate-55 dark:bg-slate-950 p-1.5 rounded font-mono text-[10px] border border-slate-100 dark:border-slate-800">
                                                     *This compliance alert was prepared by the editorial board of CorpLawUpdates.in, specializing in real-time corporate regulatory intelligence in India.*
                                                 </code>
                                             </div>
-                                            <div className="bg-white border border-slate-200 p-2.5 rounded-lg">
-                                                <p className="font-semibold text-navy text-[10px] uppercase mb-0.5">Template 2 — Chief Editor Bio</p>
-                                                <code className="text-slate-600 select-all block bg-slate-50 p-1.5 rounded font-mono text-[10px] border border-slate-100">
+                                            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-2.5 rounded-lg">
+                                                <p className="font-semibold text-navy dark:text-slate-200 text-[10px] uppercase mb-0.5">Template 2 — Chief Editor Bio</p>
+                                                <code className="text-slate-600 dark:text-slate-350 select-all block bg-slate-55 dark:bg-slate-955 p-1.5 rounded font-mono text-[10px] border border-slate-100 dark:border-slate-800">
                                                     *Factual summary prepared by Komalpreet, Chief Editor at CorpLawUpdates.in.*
                                                 </code>
                                             </div>
-                                            <div className="bg-white border border-slate-200 p-2.5 rounded-lg">
-                                                <p className="font-semibold text-navy text-[10px] uppercase mb-0.5">Template 3 — Research Team Bio</p>
-                                                <code className="text-slate-600 select-all block bg-slate-50 p-1.5 rounded font-mono text-[10px] border border-slate-100">
+                                            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-2.5 rounded-lg">
+                                                <p className="font-semibold text-navy dark:text-slate-200 text-[10px] uppercase mb-0.5">Template 3 — Research Team Bio</p>
+                                                <code className="text-slate-600 dark:text-slate-350 select-all block bg-slate-55 dark:bg-slate-955 p-1.5 rounded font-mono text-[10px] border border-slate-100 dark:border-slate-800">
                                                     *This article has been researched and compiled by the corporate intelligence team at CorpLawUpdates.in to provide verified regulatory updates.*
                                                 </code>
                                             </div>
@@ -612,9 +612,9 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                         </div>
 
                         <div>
-                            <label htmlFor="effectiveDate" className="block text-sm font-semibold text-navy mb-2">
+                            <label htmlFor="effectiveDate" className="block text-sm font-semibold text-navy dark:text-slate-200 mb-2">
                                 Effective Date
-                                <span className="text-slate-400 font-normal ml-2 text-xs">
+                                <span className="text-slate-400 dark:text-slate-500 font-normal ml-2 text-xs">
                                     (optional — when does this change take effect?)
                                 </span>
                             </label>
@@ -623,17 +623,17 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                                 type="date"
                                 value={effectiveDate}
                                 onChange={(e) => setEffectiveDate(e.target.value)}
-                                className="border border-slate-300 rounded-lg px-4 py-3 text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent w-full"
+                                className="border border-slate-300 dark:border-slate-800 rounded-lg px-4 py-3 text-navy dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent w-full bg-white dark:bg-slate-955"
                             />
-                            <p className="text-xs text-slate-400 mt-1">
+                            <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
                                 Shown on article card and page for quick reference
                             </p>
                         </div>
 
                         <div>
-                            <label htmlFor="impactLevel" className="block text-sm font-semibold text-navy mb-2">
+                            <label htmlFor="impactLevel" className="block text-sm font-semibold text-navy dark:text-slate-200 mb-2">
                                 Impact Level
-                                <span className="text-slate-400 font-normal ml-2 text-xs">
+                                <span className="text-slate-400 dark:text-slate-500 font-normal ml-2 text-xs">
                                     (optional)
                                 </span>
                             </label>
@@ -641,35 +641,35 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                                 id="impactLevel"
                                 value={impactLevel}
                                 onChange={(e) => setImpactLevel(e.target.value as 'high' | 'medium' | 'low' | '')}
-                                className="w-full border border-slate-300 rounded-lg px-4 py-3 text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent bg-white"
+                                className="w-full border border-slate-300 dark:border-slate-800 rounded-lg px-4 py-3 text-navy dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent bg-white dark:bg-slate-955"
                             >
                                 <option value="">Select impact level...</option>
                                 <option value="high">🔴 High Impact — Major regulatory change</option>
                                 <option value="medium">🟡 Medium Impact — Amendment to existing rule</option>
                                 <option value="low">🟢 Low Impact — Clarification or minor circular</option>
                             </select>
-                            <p className="text-xs text-slate-400 mt-1">
+                            <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
                                 Shown as badge on article card and page
                             </p>
                         </div>
                     </div>
 
                     {/* Content Markdown */}
-                    <div className="border border-slate-200/80 rounded-xl p-5 bg-white shadow-card ring-1 ring-slate-900/[0.02]" data-color-mode="light">
+                    <div className="border border-slate-200/80 dark:border-slate-800 rounded-xl p-5 bg-white dark:bg-slate-900 shadow-card ring-1 ring-slate-900/[0.02]" data-color-mode="dark">
                         {content.includes('ibb.co') && (
-                            <div className="mb-4 p-3 bg-amber-50 border border-amber-200 text-amber-800 rounded-lg text-sm flex items-center gap-2">
+                            <div className="mb-4 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/30 text-amber-800 dark:text-amber-350 rounded-lg text-sm flex items-center gap-2">
                                 <span>⚠️</span>
                                 <span><strong>SEO Warning:</strong> Re-upload image to Supabase for better SEO. (Found 'ibb.co' in content)</span>
                             </div>
                         )}
                         <div className="flex justify-between items-end mb-3">
-                            <label className="block text-sm font-bold text-navy">Article Content (Markdown)</label>
+                            <label className="block text-sm font-bold text-navy dark:text-slate-200">Article Content (Markdown)</label>
                             <div className="flex items-center gap-2 relative">
                                 <button
                                     type="button"
                                     onClick={handleClean}
                                     title="Convert HTML to clean Markdown (keeps styled boxes and tables)"
-                                    className="flex items-center gap-1.5 px-3 py-1.5 text-sm border border-slate-300 text-slate-600 rounded-lg hover:bg-slate-50 hover:border-amber-400 hover:text-amber-700 transition-colors"
+                                    className="flex items-center gap-1.5 px-3 py-1.5 text-sm border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-lg bg-white dark:bg-slate-950 hover:bg-slate-50 dark:hover:bg-slate-900 hover:border-amber-400 dark:hover:border-amber-500 hover:text-amber-700 dark:hover:text-amber-400 transition-colors"
                                 >
                                     🧹 Clean HTML
                                 </button>
@@ -684,14 +684,14 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                                     type="button"
                                     onClick={() => fileInputRef.current?.click()}
                                     disabled={uploadingImage}
-                                    className="text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded disabled:opacity-50 flex items-center gap-1 transition-colors"
+                                    className="text-xs font-medium bg-slate-100 dark:bg-slate-850 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded disabled:opacity-50 flex items-center gap-1 transition-colors"
                                 >
                                     {uploadingImage ? '⏳ Uploading...' : '📎 Upload Image'}
                                 </button>
                             </div>
                         </div>
 
-                        <div className="border border-slate-200 rounded-lg overflow-hidden">
+                        <div className="border border-slate-200 dark:border-slate-850 rounded-lg overflow-hidden">
                             <MDEditor
                                 value={content}
                                 onChange={(val) => setContent(val || '')}
@@ -706,43 +706,43 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                         <div className="mt-2">
                             <LinkChecker content={content} />
                         </div>
-                        <p className="text-sm font-medium text-slate-500 mt-3 pt-2">
+                        <p className="text-sm font-medium text-slate-500 dark:text-slate-450 mt-3 pt-2">
                             Tip: Use two blank lines after images for spacing, or manually add &lt;br/&gt;.
                         </p>
                     </div>
 
                     {/* SEO Fields */}
-                    <div className="border border-slate-200/80 rounded-xl p-5 bg-white shadow-card ring-1 ring-slate-900/[0.02] space-y-4">
-                        <h3 className="font-bold text-navy text-sm border-b border-slate-100 pb-2 mb-3">Search Engine Optimization (SEO)</h3>
+                    <div className="border border-slate-200/80 dark:border-slate-800 rounded-xl p-5 bg-white dark:bg-slate-900 shadow-card ring-1 ring-slate-900/[0.02] space-y-4">
+                        <h3 className="font-bold text-navy dark:text-slate-200 text-sm border-b border-slate-100 dark:border-slate-850 pb-2 mb-3">Search Engine Optimization (SEO)</h3>
                         <div>
-                            <label className="block text-sm font-semibold text-navy mb-1">SEO Title (max 80 chars)</label>
+                            <label className="block text-sm font-semibold text-navy dark:text-slate-200 mb-1">SEO Title (max 80 chars)</label>
                             <input
                                 type="text"
                                 value={seoTitle}
                                 onChange={(e) => setSeoTitle(e.target.value)}
                                 placeholder="Optimized title for search engines..."
-                                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-none"
+                                className="w-full border border-slate-300 dark:border-slate-800 rounded-lg px-3 py-2 text-sm text-navy dark:text-slate-100 bg-white dark:bg-slate-955 focus:ring-2 focus:ring-gold focus:outline-none"
                                 maxLength={80}
                             />
-                            <p className="text-xs text-slate-400 mt-1 text-right">{seoTitle.length}/80</p>
+                            <p className="text-xs text-slate-400 dark:text-slate-550 mt-1 text-right">{seoTitle.length}/80</p>
                         </div>
                         <div>
-                            <label className="block text-sm font-semibold text-navy mb-1">SEO Meta Description (max 250 chars)</label>
+                            <label className="block text-sm font-semibold text-navy dark:text-slate-200 mb-1">SEO Meta Description (max 250 chars)</label>
                             <textarea
                                 value={seoDescription}
                                 onChange={(e) => setSeoDescription(e.target.value)}
                                 placeholder="Brief description to appear in search results..."
-                                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-none resize-none"
+                                className="w-full border border-slate-300 dark:border-slate-800 rounded-lg px-3 py-2 text-sm text-navy dark:text-slate-100 bg-white dark:bg-slate-955 focus:ring-2 focus:ring-gold focus:outline-none resize-none"
                                 rows={3}
                                 maxLength={250}
                             />
-                            <p className="text-xs text-slate-400 mt-1 text-right">{seoDescription.length}/250</p>
+                            <p className="text-xs text-slate-400 dark:text-slate-550 mt-1 text-right">{seoDescription.length}/250</p>
                         </div>
                     </div>
 
                     {/* Tags */}
-                    <div className="border border-slate-200/80 rounded-xl p-5 bg-white shadow-card ring-1 ring-slate-900/[0.02]">
-                        <label className="block text-sm font-bold text-navy mb-1">Tags (press Enter to add)</label>
+                    <div className="border border-slate-200/80 dark:border-slate-800 rounded-xl p-5 bg-white dark:bg-slate-900 shadow-card ring-1 ring-slate-900/[0.02]">
+                        <label className="block text-sm font-bold text-navy dark:text-slate-200 mb-1">Tags (press Enter to add)</label>
                         <input
                             type="text"
                             value={tagInput}
@@ -750,53 +750,53 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                             onKeyDown={handleTagKeyDown}
                             onPaste={handleTagPaste}
                             placeholder="Type tag and press Enter or comma, or paste multiple tags separated by commas"
-                            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-none mb-3"
+                            className="w-full border border-slate-300 dark:border-slate-800 rounded-lg px-3 py-2 text-sm text-navy dark:text-slate-100 bg-white dark:bg-slate-950 focus:ring-2 focus:ring-gold focus:outline-none mb-3"
                             disabled={tags.length >= 10}
                         />
                         <div className="flex flex-wrap gap-2">
                             {tags.map(tag => (
-                                <span key={tag} className="inline-flex items-center gap-1 bg-gold/20 text-navy text-xs font-medium px-2.5 py-1 rounded">
+                                <span key={tag} className="inline-flex items-center gap-1 bg-gold/20 text-navy dark:text-amber-300 text-xs font-medium px-2.5 py-1 rounded">
                                     {tag}
-                                    <button onClick={() => removeTag(tag)} className="text-navy hover:text-red-500 ml-1">×</button>
+                                    <button onClick={() => removeTag(tag)} className="text-navy dark:text-amber-300 hover:text-red-500 ml-1">×</button>
                                 </span>
                             ))}
                         </div>
-                        <p className="text-xs text-slate-400 mt-2">
+                        <p className="text-xs text-slate-400 dark:text-slate-500 mt-2">
                             Press Enter or comma to add. Paste multiple tags separated by commas. {tags.length}/10 tags added.
                         </p>
                     </div>
 
                     {/* Source and Advanced */}
-                    <div className="border border-slate-200/80 rounded-xl p-5 bg-white shadow-card ring-1 ring-slate-900/[0.02] grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div className="border border-slate-200/80 dark:border-slate-800 rounded-xl p-5 bg-white dark:bg-slate-900 shadow-card ring-1 ring-slate-900/[0.02] grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div className="md:col-span-2">
-                            <h3 className="font-bold text-navy text-sm border-b border-slate-100 pb-2 mb-4">Sources & Publishing</h3>
+                            <h3 className="font-bold text-navy dark:text-slate-200 text-sm border-b border-slate-100 dark:border-slate-855 pb-2 mb-4">Sources & Publishing</h3>
                         </div>
                         
                         <div>
-                            <label className="block text-sm font-bold text-navy mb-1">Primary Source Name</label>
+                            <label className="block text-sm font-bold text-navy dark:text-slate-200 mb-1">Primary Source Name</label>
                             <input
                                 type="text"
                                 value={sourceName}
                                 onChange={(e) => setSourceName(e.target.value)}
                                 placeholder="e.g. MCA Official Circular"
-                                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-none"
+                                className="w-full border border-slate-300 dark:border-slate-800 rounded-lg px-3 py-2 text-sm text-navy dark:text-slate-100 bg-white dark:bg-slate-950 focus:ring-2 focus:ring-gold focus:outline-none"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-bold text-navy mb-1">Primary Source URL</label>
+                            <label className="block text-sm font-bold text-navy dark:text-slate-200 mb-1">Primary Source URL</label>
                             <input
                                 type="url"
                                 value={sourceUrl}
                                 onChange={(e) => setSourceUrl(e.target.value)}
                                 placeholder="https://..."
-                                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-none"
+                                className="w-full border border-slate-300 dark:border-slate-800 rounded-lg px-3 py-2 text-sm text-navy dark:text-slate-100 bg-white dark:bg-slate-955 focus:ring-2 focus:ring-gold focus:outline-none"
                             />
                         </div>
 
-                        <div className="md:col-span-2 bg-slate-50 p-4 rounded-lg border border-slate-100">
+                        <div className="md:col-span-2 bg-slate-50 dark:bg-slate-955 p-4 rounded-lg border border-slate-100 dark:border-slate-850">
                             <div className="flex justify-between items-center mb-3">
-                                <label className="block text-sm font-bold text-navy">Additional Sources</label>
-                                <button type="button" onClick={addSource} className="text-xs bg-white border border-slate-200 hover:border-amber-300 text-slate-700 px-3 py-1.5 rounded transition-colors">+ Add Source</button>
+                                <label className="block text-sm font-bold text-navy dark:text-slate-200">Additional Sources</label>
+                                <button type="button" onClick={addSource} className="text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-850 hover:border-amber-300 dark:hover:border-amber-500 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded transition-colors">+ Add Source</button>
                             </div>
                             <div className="space-y-3">
                                 {sources.map((s, idx) => (
@@ -807,30 +807,30 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                                                 value={s.name}
                                                 onChange={(e) => updateSource(idx, 'name', e.target.value)}
                                                 placeholder="Source Name"
-                                                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
+                                                className="w-full border border-slate-300 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 text-navy dark:text-slate-100 bg-white dark:bg-slate-950"
                                             />
                                             <input
                                                 type="url"
                                                 value={s.url}
                                                 onChange={(e) => updateSource(idx, 'url', e.target.value)}
                                                 placeholder="Source URL"
-                                                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
+                                                className="w-full border border-slate-300 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 text-navy dark:text-slate-100 bg-white dark:bg-slate-955"
                                             />
                                         </div>
-                                        <button type="button" onClick={() => removeSource(idx)} className="text-slate-400 hover:text-red-500 p-2 mt-1 bg-white rounded-lg border border-slate-200">×</button>
+                                        <button type="button" onClick={() => removeSource(idx)} className="text-slate-400 hover:text-red-500 p-2 mt-1 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800">×</button>
                                     </div>
                                 ))}
-                                {sources.length === 0 && <p className="text-xs text-slate-400 italic">No additional sources added.</p>}
+                                {sources.length === 0 && <p className="text-xs text-slate-400 dark:text-slate-500 italic">No additional sources added.</p>}
                             </div>
                         </div>
 
                         <div>
-                            <label className="block text-sm font-bold text-navy mb-1">Publish Date & Time</label>
+                            <label className="block text-sm font-bold text-navy dark:text-slate-200 mb-1">Publish Date & Time</label>
                             <input
                                 type="datetime-local"
                                 value={publishedAt}
                                 onChange={(e) => setPublishedAt(e.target.value)}
-                                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-none"
+                                className="w-full border border-slate-300 dark:border-slate-800 rounded-lg px-3 py-2 text-sm text-navy dark:text-slate-100 bg-white dark:bg-slate-955 focus:ring-2 focus:ring-gold focus:outline-none"
                             />
                         </div>
                         <div className="flex flex-col justify-center">
@@ -842,12 +842,12 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                                         checked={isFeatured}
                                         onChange={(e) => setIsFeatured(e.target.checked)}
                                     />
-                                    <div className={`block w-10 h-6 rounded-full transition-colors ${isFeatured ? 'bg-gold' : 'bg-slate-300'}`}></div>
+                                    <div className={`block w-10 h-6 rounded-full transition-colors ${isFeatured ? 'bg-gold' : 'bg-slate-300 dark:bg-slate-700'}`}></div>
                                     <div className={`dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${isFeatured ? 'transform translate-x-4' : ''}`}></div>
                                 </div>
                                 <div>
-                                    <span className="block text-sm font-bold text-navy">Featured Article</span>
-                                    <span className="block text-xs text-slate-500">Appears on the homepage</span>
+                                    <span className="block text-sm font-bold text-navy dark:text-slate-200">Featured Article</span>
+                                    <span className="block text-xs text-slate-500 dark:text-slate-400">Appears on the homepage</span>
                                 </div>
                             </label>
                         </div>
@@ -857,13 +857,13 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                 {/* RIGHT COLUMN - PREVIEW */}
                 <div className={`w-full lg:w-[40%] ${activeTab === 'write' ? 'hidden lg:block' : 'block'}`}>
                     <div className="sticky top-24 space-y-6">
-                        <div className="border border-slate-200/80 rounded-xl p-6 bg-white shadow-card ring-1 ring-slate-900/[0.02] min-h-[600px]">
-                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-6 pb-4 border-b border-slate-100">Live Preview</h3>
+                        <div className="border border-slate-200/80 dark:border-slate-800 rounded-xl p-6 bg-white dark:bg-slate-900 shadow-card ring-1 ring-slate-900/[0.02] min-h-[600px]">
+                        <h3 className="text-xs font-bold text-slate-400 dark:text-slate-555 uppercase tracking-wider mb-6 pb-4 border-b border-slate-100 dark:border-slate-850">Live Preview</h3>
 
                         {!title && !content ? (
-                            <div className="text-center text-slate-400 mt-20 italic">Preview will appear here...</div>
+                            <div className="text-center text-slate-400 dark:text-slate-500 mt-20 italic">Preview will appear here...</div>
                         ) : (
-                            <div className="prose prose-slate max-w-none">
+                            <div className="prose prose-slate max-w-none dark:prose-invert">
                                 {category && (
                                     <div className="mb-4">
                                         <CategoryBadge category={category as Category} />
@@ -871,21 +871,21 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                                 )}
 
                                 {title && (
-                                    <h1 className="font-heading font-bold text-3xl text-navy mb-4 leading-tight">{title}</h1>
+                                    <h1 className="font-heading font-bold text-3xl text-navy dark:text-slate-100 mb-4 leading-tight">{title}</h1>
                                 )}
 
                                 {content && (
-                                    <div className="mb-8 text-sm text-slate-500 font-medium">
+                                    <div className="mb-8 text-sm text-slate-500 dark:text-slate-400 font-medium">
                                         {calculateReadingTime(content)} min read
                                     </div>
                                 )}
 
                                 {summary && !content && (
-                                    <p className="text-lg text-slate-600 mb-8">{summary}</p>
+                                    <p className="text-lg text-slate-600 dark:text-slate-300 mb-8">{summary}</p>
                                 )}
 
                                 {content && (
-                                    <div className="mt-8 pt-8 border-t border-slate-100">
+                                    <div className="mt-8 pt-8 border-t border-slate-100 dark:border-slate-800">
                                         <MarkdownRenderer content={content} />
                                     </div>
                                 )}
@@ -905,7 +905,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
             </div>
 
             {/* STICKY BOTTOM ACTION BAR */}
-            <div className="fixed bottom-0 left-0 lg:left-[240px] right-0 bg-white border-t border-slate-200 px-6 py-4 flex flex-col sm:flex-row justify-between items-center z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] gap-4 sm:gap-0">
+            <div className="fixed bottom-0 left-0 lg:left-[240px] right-0 bg-white dark:bg-slate-955 border-t border-slate-200 dark:border-slate-850 px-6 py-4 flex flex-col sm:flex-row justify-between items-center z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] gap-4 sm:gap-0">
                 <div className="flex-1 flex gap-4 w-full sm:w-auto overflow-x-auto whitespace-nowrap">
                     {error && <span className="text-red-500 text-sm font-medium">⚠ {error}</span>}
                     {success && <span className="text-emerald-600 text-sm font-medium">✨ Article saved! Redirecting...</span>}
@@ -913,7 +913,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                         <button
                             onClick={handleUnpublish}
                             disabled={saving}
-                            className="px-4 py-2 border border-red-600 text-red-600 font-semibold rounded-lg hover:bg-red-50 transition-colors disabled:opacity-50 text-sm"
+                            className="px-4 py-2 border border-red-600 text-red-600 font-semibold rounded-lg hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors disabled:opacity-50 text-sm bg-transparent"
                         >
                             Unpublish to Draft
                         </button>
@@ -924,14 +924,14 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                     <button
                         onClick={() => handleSave(null)}
                         disabled={saving || success}
-                        className="px-5 py-2 border border-navy text-navy font-semibold rounded-lg hover:bg-slate-50 transition-colors disabled:opacity-50 text-sm"
+                        className="px-5 py-2 border border-navy dark:border-slate-700 text-navy dark:text-slate-200 bg-transparent dark:bg-slate-900 font-semibold rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors disabled:opacity-50 text-sm"
                     >
                         Save Draft
                     </button>
                     <button
                         onClick={() => handleSave(publishedAt ? new Date(publishedAt).toISOString() : new Date().toISOString())}
                         disabled={saving || success}
-                        className="px-5 py-2 bg-navy text-gold font-semibold rounded-lg hover:bg-navy/90 transition-colors disabled:opacity-50 text-sm"
+                        className="px-5 py-2 bg-navy text-gold dark:text-amber-300 font-semibold rounded-lg hover:bg-navy/90 transition-colors disabled:opacity-50 text-sm"
                     >
                         {saving ? 'Saving...' : 'Save Changes'}
                     </button>
@@ -941,37 +941,37 @@ export default function EditArticle({ params }: { params: { id: string } }) {
             {/* Clean HTML Modal */}
             {showCleanConfirm && cleanStats && (
                 <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 space-y-4">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl max-w-2xl w-full p-6 space-y-4 border border-slate-200 dark:border-slate-800">
                         <div className="flex items-center gap-3">
                             <span className="text-3xl">🧹</span>
                             <div>
-                                <h3 className="font-bold text-navy text-lg">Clean HTML Preview</h3>
-                                <p className="text-slate-500 text-sm">Review changes before applying</p>
+                                <h3 className="font-bold text-navy dark:text-slate-100 text-lg">Clean HTML Preview</h3>
+                                <p className="text-slate-500 dark:text-slate-400 text-sm">Review changes before applying</p>
                             </div>
                         </div>
 
                         {/* Stats */}
                         <div className="grid grid-cols-3 gap-3">
-                            <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-center">
+                            <div className="bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-900/30 rounded-xl p-3 text-center">
                                 <div className="text-2xl font-bold text-green-700">{cleanStats.tagsRemoved}</div>
-                                <div className="text-xs text-green-600">HTML tags removed</div>
+                                <div className="text-xs text-green-600 dark:text-green-400">HTML tags removed</div>
                             </div>
-                            <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 text-center">
+                            <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/30 rounded-xl p-3 text-center">
                                 <div className="text-2xl font-bold text-blue-700">{cleanStats.tablesKept}</div>
-                                <div className="text-xs text-blue-600">Tables preserved</div>
+                                <div className="text-xs text-blue-600 dark:text-blue-400">Tables preserved</div>
                             </div>
-                            <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-center">
+                            <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/30 rounded-xl p-3 text-center">
                                 <div className="text-2xl font-bold text-amber-700">{cleanStats.styledDivsKept}</div>
-                                <div className="text-xs text-amber-600">Styled boxes kept</div>
+                                <div className="text-xs text-amber-600 dark:text-amber-400">Styled boxes kept</div>
                             </div>
                         </div>
 
                         {/* Warning */}
-                        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3">
+                        <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/30 rounded-xl p-4 flex gap-3">
                             <span className="text-xl flex-shrink-0">⚠️</span>
                             <div>
-                                <p className="font-semibold text-amber-900 text-sm">This will modify your content</p>
-                                <p className="text-amber-700 text-sm mt-1">
+                                <p className="font-semibold text-amber-900 dark:text-amber-300 text-sm">This will modify your content</p>
+                                <p className="text-amber-700 dark:text-amber-400 text-sm mt-1">
                                     Tables and styled boxes (info panels, warning boxes) are preserved as HTML. Simple text formatting is converted to Markdown. Visual output will look the same.
                                 </p>
                             </div>
@@ -979,8 +979,8 @@ export default function EditArticle({ params }: { params: { id: string } }) {
 
                         {/* Preview */}
                         <div>
-                            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Preview (first 500 chars):</p>
-                            <div className="bg-slate-50 rounded-xl p-4 text-sm font-mono text-slate-700 max-h-40 overflow-y-auto whitespace-pre-wrap break-words">
+                            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Preview (first 500 chars):</p>
+                            <div className="bg-slate-50 dark:bg-slate-950 rounded-xl p-4 text-sm font-mono text-slate-700 dark:text-slate-350 max-h-40 overflow-y-auto whitespace-pre-wrap break-words border border-slate-100 dark:border-slate-800">
                                 {cleanPreview.slice(0, 500)}
                                 {cleanPreview.length > 500 && '...'}
                             </div>
@@ -994,7 +994,7 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                                     setCleanPreview('')
                                     setCleanStats(null)
                                 }}
-                                className="flex-1 border border-slate-300 text-slate-600 py-3 rounded-xl font-semibold text-sm hover:bg-slate-50"
+                                className="flex-1 border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 py-3 rounded-xl font-semibold text-sm hover:bg-slate-50 dark:hover:bg-slate-800 bg-transparent"
                             >
                                 Cancel — Keep Original
                             </button>

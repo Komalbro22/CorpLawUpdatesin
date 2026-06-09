@@ -12,6 +12,7 @@ import AnnouncementBar from '@/components/AnnouncementBar'
 import Script from 'next/script'
 import JsonLd from '@/components/JsonLd'
 import { getSetting } from '@/lib/settings'
+import { themeScript } from '@/lib/theme-script'
 import './globals.css'
 
 const lora = Lora({ subsets: ['latin'], variable: '--font-lora', display: 'swap' })
@@ -100,6 +101,10 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Anti-flash theme script — MUST be first */}
+        <script
+          dangerouslySetInnerHTML={{ __html: themeScript }}
+        />
         <link rel="llms" href="/llms.txt" />
         <meta name="theme-color" content="#0F172A" />
         <meta name="mobile-web-app-capable" content="yes" />
