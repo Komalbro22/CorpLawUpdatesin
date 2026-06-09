@@ -8,6 +8,53 @@ const GEMINI_KEYS = [
   process.env.GOOGLE_GEMINI_API_KEY_4 || '',
 ].map(k => k.trim()).filter(Boolean)
 
+function cleanGeneratedLegalContent(content: string): string {
+  let text = content
+
+  // 1. Clean up party preamble details based on entity type (individual vs company/firm)
+  // Individual cleanup: remove CIN reference, age if empty, registered office reference
+  text = text
+    .replace(/(an\s+individual,?\s+aged\s+\d+\s+years)\s*\/[^,]*CIN:[^,]*,\s*(residing\s+at\s*\/)?\s*having\s+(registered|residential)?\s*office\s+at/gi, '$1, residing at')
+    .replace(/(an\s+individual,?\s+aged\s+\d+\s+years)\s*\/[^,]*CIN:\s*,?\s*(residing\s+at\s*\/)?\s*having\s+(registered|residential)?\s*office\s+at/gi, '$1, residing at')
+    .replace(/(an\s+individual,?\s+aged\s+\d+\s+years)\s*\/[^,]*CIN:\s*[^,]*,\s*residing\s+at/gi, '$1, residing at')
+    .replace(/an\s+individual,?\s*\/[^,]*CIN:\s*,?\s*(residing\s+at\s*\/)?\s*having\s+(registered|residential)?\s*office\s+at/gi, 'an individual, residing at')
+    .replace(/an\s+individual,?\s+residing\s+at\s*\/[^,]*office\s+at/gi, 'an individual, residing at')
+    .replace(/an\s+individual,?\s+residing\s+at\s*\/[^,]*address\s+at/gi, 'an individual, residing at')
+
+  // 2. Company / Firm / LLP cleanup: remove age reference, clean up registered office
+  text = text
+    .replace(/,\s*aged\s*\d*\s*years\s*\/(\s*CIN:\s*[A-Z0-9]+),?\s*(residing\s+at\s*\/)?\s*having\s+(registered|residential)?\s*office\s+at/gi, ', $1, having registered office at')
+    .replace(/,\s*aged\s*\d*\s*years\s*\/(\s*CIN:\s*,?\s*),?\s*(residing\s+at\s*\/)?\s*having\s+(registered|residential)?\s*office\s+at/gi, ', having registered office at')
+    .replace(/,\s*aged\s*\d*\s*years\s*,\s*(residing\s+at\s*\/)?\s*having\s+(registered|residential)?\s*office\s+at/gi, ', having registered office at')
+
+  // 3. Clean up slash choices in party descriptions if any are left
+  text = text
+    .replace(/residing\s+at\s*\/\s*having\s+registered\s+office\s+at/gi, 'residing at')
+    .replace(/residing\s+at\s*\/\s*having\s+its\s+registered\s+office\s+at/gi, 'residing at')
+    .replace(/aged\s+\d+\s+years\s*\/\s*CIN:\s*,?\s*/gi, '')
+
+  // 4. Grammar and preposition cleanup
+  text = text
+    .replace(/borne\s+by\s+shared\s+equally/gi, 'shared equally')
+    .replace(/borne\s+by\s+shared/gi, 'shared')
+
+  // 5. Area description cleanups to avoid unit duplication (e.g. "1 Acre sq. ft. / sq. mtrs.")
+  text = text
+    .replace(/(\d+)\s*(acre|acres|sq\.\s*ft|sq\s*ft|square\s*feet|sq\.\s*mtrs?|square\s*meters?)\.?\s*sq\.\s*ft\.?\s*\/\s*sq\.\s*mtrs?\.?/gi, '$1 $2')
+
+  // 6. Clean up trailing empty labels/sections at the end of the document
+  text = text
+    .replace(/Notarized\/Registered\s+at:\s*$/gmi, '')
+    .replace(/Registration\s+Office\s+Details:\s*$/gmi, '')
+
+  // 7. Common typo corrections in legal/currency text
+  text = text
+    .replace(/\bthirt\b/gi, 'thirty')
+    .replace(/\bfourty\b/gi, 'forty')
+
+  return text
+}
+
 function formatDateToIndianLegal(dateStr: string): string {
   if (!dateStr) return dateStr;
   const match = dateStr.trim().match(/^(\d{4})-(\d{2})-(\d{2})$/);
@@ -325,10 +372,8 @@ ${customInstructions ? `6. Weave the user's custom instructions, reasons, and sp
         .trim()
     }
 
-    // Clean up phrasing for individual parties (e.g. "an individual, residing at" instead of "having its registered address at")
-    documentContent = documentContent
-      .replace(/an\s+individual,?\s+having\s+(its|their|a|his|her)?\s*(registered|residential)?\s*address\s+at/gi, 'an individual, residing at')
-      .replace(/an\s+individual,?\s+having\s+(its|their|a|his|her)?\s*(registered|residential)?\s*office\s+at/gi, 'an individual, residing at')
+    // Post-process the generated text to clean up phrasing, slashes, prepositions, empty labels, and common spelling typos
+    documentContent = cleanGeneratedLegalContent(documentContent)
 
     // Save to database
     const { data: saved, error: saveError } = await supabaseAdmin
