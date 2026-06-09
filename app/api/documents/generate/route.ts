@@ -325,6 +325,11 @@ ${customInstructions ? `6. Weave the user's custom instructions, reasons, and sp
         .trim()
     }
 
+    // Clean up phrasing for individual parties (e.g. "an individual, residing at" instead of "having its registered address at")
+    documentContent = documentContent
+      .replace(/an\s+individual,?\s+having\s+(its|their|a|his|her)?\s*(registered|residential)?\s*address\s+at/gi, 'an individual, residing at')
+      .replace(/an\s+individual,?\s+having\s+(its|their|a|his|her)?\s*(registered|residential)?\s*office\s+at/gi, 'an individual, residing at')
+
     // Save to database
     const { data: saved, error: saveError } = await supabaseAdmin
       .from('generated_documents')
