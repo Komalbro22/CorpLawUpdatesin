@@ -532,7 +532,7 @@ export default function NewArticle() {
                                             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-2.5 rounded-lg">
                                                 <p className="font-semibold text-navy dark:text-slate-200 text-[10px] uppercase mb-0.5">Template 2 — Chief Editor Bio</p>
                                                 <code className="text-slate-600 dark:text-slate-300 select-all block bg-slate-50 dark:bg-slate-950 p-1.5 rounded font-mono text-[10px] border border-slate-100 dark:border-slate-800">
-                                                    *Factual summary prepared by Komalpreet, Chief Editor at CorpLawUpdates.in.*
+                                                    *Factual summary prepared by the Editorial Team at CorpLawUpdates.in.*
                                                 </code>
                                             </div>
                                             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-2.5 rounded-lg">
