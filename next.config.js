@@ -91,8 +91,13 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/tools/fee-calculator',
-        destination: '/tools/penalty-calculator',
+        source: '/tools/penalty-calculator/:path*',
+        destination: '/tools/fee-calculator',
+        permanent: true,
+      },
+      {
+        source: '/tools/penalty-calculator',
+        destination: '/tools/fee-calculator',
         permanent: true,
       },
     ]

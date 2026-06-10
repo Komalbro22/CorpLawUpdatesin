@@ -30,8 +30,8 @@ const toolsJsonLd = {
     },
     {
       '@type': 'WebApplication',
-      name: 'ROC Compliance Penalty Calculator',
-      url: 'https://www.corplawupdates.in/tools/penalty-calculator',
+      name: 'MCA & ROC Fee Calculator',
+      url: 'https://www.corplawupdates.in/tools/fee-calculator',
       applicationCategory: 'BusinessApplication',
       offers: {
         '@type': 'Offer',
@@ -92,11 +92,11 @@ const tools = [
     headerBg: 'from-purple-600 to-purple-800',
   },
   {
-    id: 'penalty-calculator',
-    href: '/tools/penalty-calculator',
+    id: 'fee-calculator',
+    href: '/tools/fee-calculator',
     icon: '🧮',
-    label: 'ROC Compliance Penalty Calculator',
-    description: 'Calculate statutory filing fees, ROC late fees, adjudication penalties, and MSME delayed payment interest for Companies, LLPs, and MSMEs.',
+    label: 'MCA & ROC Fee Calculator',
+    description: 'Calculate statutory filing fees, ROC late fees, adjudication penalties, stamp duty and MSME delayed payment interest for Companies, LLPs, and MSMEs.',
     badge: 'Free',
     badgeColor: 'bg-green-100 text-green-700 dark:bg-green-950/50 dark:text-green-300',
     stats: 'Companies, LLP & MSME',
