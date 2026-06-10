@@ -33,6 +33,7 @@ export default function UnifiedCalculator() {
   const [state, setState] = useState('maharashtra')
   const [isRepeatOffender, setIsRepeatOffender] = useState(false)
   const [chargeAmount, setChargeAmount] = useState<number>(1000000)
+  const [showModal, setShowModal] = useState(false)
 
   const allForms = useMemo(() => {
     const combined = [...mcaForms, ...extraForms]
@@ -264,53 +265,89 @@ export default function UnifiedCalculator() {
         )}
       </div>
 
-      {result.warningText && (
-        <div className="bg-amber-50 border border-amber-200 rounded-[8px] p-4 mb-8 flex gap-3">
-          <span className="text-amber-500 text-lg">⚠️</span>
-          <p className="text-sm text-amber-800 leading-relaxed font-medium" dangerouslySetInnerHTML={{__html: result.warningText}} />
-        </div>
-      )}
-
-      {/* Results Section */}
-      <div className="border-l-4 border-blue-600 bg-blue-50/50 rounded-r-[8px] p-6 md:p-8 relative">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-6">Calculation Summary</h3>
-        
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 items-end">
-          <div className="flex flex-col">
-            <span className="text-sm font-medium text-slate-500 mb-1">Base Fee</span>
-            <span className="text-2xl font-semibold text-slate-900 font-tabular-nums">₹{result.baseFee.toLocaleString()}</span>
-          </div>
-          
-          <div className="flex flex-col">
-            <span className="text-sm font-medium text-slate-500 mb-1">Late Fee</span>
-            <span className="text-2xl font-semibold text-red-600 font-tabular-nums">₹{result.lateFee.toLocaleString()}</span>
-          </div>
-
-          {(result.stampDuty > 0 || result.adValoremFee > 0) ? (
-            <div className="flex flex-col">
-              <span className="text-sm font-medium text-slate-500 mb-1">{result.stampDuty > 0 ? 'Stamp Duty' : 'Ad Valorem'}</span>
-              <span className="text-2xl font-semibold text-slate-900 font-tabular-nums">₹{(result.stampDuty || result.adValoremFee).toLocaleString()}</span>
-            </div>
-          ) : (
-            <div className="hidden md:block"></div>
-          )}
-
-          <div className="flex flex-col col-span-2 md:col-span-1 md:text-right">
-            <span className="text-sm font-medium text-slate-500 mb-1">Total Liability</span>
-            <span className="text-4xl font-bold text-slate-900 font-tabular-nums tracking-tight">₹{result.total.toLocaleString()}</span>
-          </div>
-        </div>
-      </div>
-      
-      <div className="mt-8 flex justify-end">
+      {/* Calculate Button (replaces live result section) */}
+      <div className="mt-8">
         <button
-          onClick={generatePDF}
-          className="bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 font-medium px-6 py-2.5 rounded-[4px] shadow-sm transition-all flex items-center gap-2"
+          onClick={() => setShowModal(true)}
+          className="w-full bg-[#0a0a0a] hover:bg-black text-white font-bold py-4 px-6 rounded-[8px] transition-all flex items-center justify-center gap-2 text-lg shadow-md hover:shadow-xl"
         >
-          <svg className="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-          Download Detailed PDF
+          Calculate Fee <span aria-hidden="true">→</span>
         </button>
       </div>
+
+      {/* Modal Overlay */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-xl shadow-2xl flex flex-col md:flex-row w-full max-w-3xl overflow-hidden relative animate-in zoom-in-95 duration-200">
+            
+            {/* Mobile Close Button */}
+            <button onClick={() => setShowModal(false)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 z-10 p-1 md:hidden bg-white rounded-full shadow-sm">
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+
+            {/* Left side - Breakdown */}
+            <div className="flex-1 p-8 md:p-10">
+              <h3 className="text-xs font-bold text-slate-500 tracking-wider mb-6">FEE BREAKDOWN</h3>
+              
+              <p className="text-sm text-slate-500 mb-1 font-medium">Total Payable</p>
+              <div className="text-[2.75rem] font-bold text-slate-900 mb-10 font-tabular-nums flex items-baseline leading-none">
+                <span className="text-[1.5rem] mr-1 text-slate-400 font-medium">₹</span>
+                {result.total.toLocaleString()}
+              </div>
+
+              <div className="flex justify-between py-4 border-b border-slate-100 text-sm">
+                <span className="text-slate-600 font-medium">Normal filing fee</span>
+                <span className="font-bold text-slate-900 font-tabular-nums">₹ {result.baseFee.toLocaleString()}</span>
+              </div>
+              
+              {result.lateFee > 0 && (
+                <div className="flex justify-between py-4 border-b border-slate-100 text-sm">
+                  <span className="text-slate-600 font-medium">Additional fee (late filing)</span>
+                  <span className="font-bold text-slate-900 font-tabular-nums">₹ {result.lateFee.toLocaleString()}</span>
+                </div>
+              )}
+
+              {(result.stampDuty > 0 || result.adValoremFee > 0) && (
+                <div className="flex justify-between py-4 border-b border-slate-100 text-sm">
+                  <span className="text-slate-600 font-medium">{result.stampDuty > 0 ? 'Estimated Stamp Duty' : 'Ad Valorem Fee'}</span>
+                  <span className="font-bold text-slate-900 font-tabular-nums">₹ {(result.stampDuty || result.adValoremFee).toLocaleString()}</span>
+                </div>
+              )}
+
+              {result.warningText && (
+                <div className="mt-8 bg-[#FFFBF0] border border-[#FDE68A] rounded-[8px] p-4 flex gap-3 text-sm text-[#92400E]">
+                  <span className="text-amber-500">⚠️</span>
+                  <span dangerouslySetInnerHTML={{__html: result.warningText}} className="font-medium leading-relaxed"></span>
+                </div>
+              )}
+            </div>
+
+            {/* Right side - Black Callout Box */}
+            <div className="w-full md:w-[320px] bg-[#0a0a0a] p-8 md:p-10 text-white flex flex-col justify-center relative">
+              {/* Desktop Close Button */}
+              <button onClick={() => setShowModal(false)} className="absolute top-4 right-4 text-slate-400 hover:text-white z-10 p-1 rounded-full hidden md:block transition-colors">
+                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+              
+              <h4 className="text-[1.35rem] font-bold mb-5 leading-snug">
+                Your filing is now ₹{result.total.toLocaleString()}
+                {result.lateFee > 0 && selectedForm.penaltyType === 'per_day' ? ', and growing by ₹100 every day.' : '.'}
+              </h4>
+              
+              <p className="text-[0.9rem] text-slate-400 mb-8 leading-relaxed font-medium">
+                Need this for your records or clients? Generate a professional PDF estimate containing the full breakdown, penalty rules, and official disclaimers.
+              </p>
+              
+              <button 
+                onClick={generatePDF} 
+                className="w-full bg-white text-black font-bold py-3.5 px-4 rounded-[6px] hover:bg-slate-100 transition-colors flex items-center justify-center gap-2 shadow-lg"
+              >
+                 Download Detailed PDF <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

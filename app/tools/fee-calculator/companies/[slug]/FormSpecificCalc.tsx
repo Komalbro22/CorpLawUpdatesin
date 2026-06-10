@@ -67,6 +67,7 @@ export default function FormSpecificCalc({ form }: { form: MCAForm }) {
 
   const [hasCalculated, setHasCalculated] = useState(false)
   const [results, setResults] = useState<{ rows: ResultRow[], total: number } | null>(null)
+  const [showModal, setShowModal] = useState(false)
   
   const pdfRef = useRef<HTMLDivElement>(null)
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
@@ -177,6 +178,7 @@ export default function FormSpecificCalc({ form }: { form: MCAForm }) {
 
     setResults({ rows, total })
     setHasCalculated(true)
+    setShowModal(true)
   }
 
   const delayValue = calculateDelay()
@@ -375,144 +377,71 @@ export default function FormSpecificCalc({ form }: { form: MCAForm }) {
 
       <button
         onClick={handleCalculate}
-        className="w-full bg-[#1D4ED8] text-white font-bold text-[1rem] px-[24px] py-[12px] rounded-lg hover:bg-blue-800 transition-colors normal-case"
+        className="w-full bg-[#0a0a0a] hover:bg-black text-white font-bold py-4 px-6 rounded-[8px] transition-all flex items-center justify-center gap-2 text-lg shadow-md hover:shadow-xl mt-4"
       >
-        Calculate {isSpice ? 'Estimate' : 'Fee'}
+        Calculate {isSpice ? 'Estimate' : 'Fee'} <span aria-hidden="true">→</span>
       </button>
 
-      {/* Hidden Div for PDF Generation (Only for SPICe+) */}
-      {isSpice && hasCalculated && results && (
-        <div className="hidden">
-          <div ref={pdfRef} className="bg-white p-10 w-[800px] text-slate-900">
-            <div className="border-b-2 border-navy pb-4 mb-6 flex justify-between items-end">
-              <div>
-                <h1 className="text-2xl font-bold text-navy">CorpLawUpdates.in</h1>
-                <p className="text-sm text-slate-500">India's Free Corporate Law Intelligence Platform</p>
+      {/* Modal Overlay */}
+      {showModal && hasCalculated && results && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-xl shadow-2xl flex flex-col md:flex-row w-full max-w-3xl overflow-hidden relative animate-in zoom-in-95 duration-200">
+            
+            {/* Mobile Close Button */}
+            <button onClick={() => setShowModal(false)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 z-10 p-1 md:hidden bg-white rounded-full shadow-sm">
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+
+            {/* Left side - Breakdown */}
+            <div className="flex-1 p-8 md:p-10">
+              <h3 className="text-xs font-bold text-slate-500 tracking-wider mb-6">FEE BREAKDOWN</h3>
+              
+              <p className="text-sm text-slate-500 mb-1 font-medium">Total Payable</p>
+              <div className="text-[2.75rem] font-bold text-slate-900 mb-10 font-tabular-nums flex items-baseline leading-none">
+                <span className="text-[1.5rem] mr-1 text-slate-400 font-medium">₹</span>
+                {results.total.toLocaleString()}
               </div>
-              <div className="text-right">
-                <p className="font-bold">Fee Estimate — SPICe+ Incorporation</p>
-                <p className="text-sm text-slate-500">Date: {new Date().toLocaleDateString()}</p>
-              </div>
+
+              {results.rows.map((r, i) => (
+                <div key={i} className="flex justify-between py-4 border-b border-slate-100 text-sm">
+                  <div className="flex flex-col">
+                    <span className="text-slate-600 font-medium">{r.component}</span>
+                    <span className="text-xs text-slate-400 mt-0.5">{r.basis}</span>
+                  </div>
+                  <span className={`font-bold font-tabular-nums ${r.component.includes('Penalty') ? 'text-[#DC2626]' : 'text-slate-900'}`}>
+                    ₹ {r.amount.toLocaleString()}
+                  </span>
+                </div>
+              ))}
             </div>
 
-            <div className="mb-6 grid grid-cols-2 gap-4 text-sm bg-slate-50 p-4 rounded-lg">
-              <div><strong>Form:</strong> INC-32 (SPICe+)</div>
-              <div><strong>State:</strong> {state}</div>
-              <div><strong>Authorized Capital:</strong> ₹ {capital.toLocaleString()}</div>
-              <div><strong>Directors:</strong> {directors}</div>
-            </div>
-
-            <table className="w-full text-left text-sm mb-6 border-collapse">
-              <thead>
-                <tr className="bg-[#F1F5F9] border-y border-[#E2E8F0]">
-                  <th className="p-3">Component</th>
-                  <th className="p-3">Category</th>
-                  <th className="p-3 text-right">Amount (₹)</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200">
-                {results.rows.map((r, i) => (
-                  <tr key={i}>
-                    <td className="p-3">{r.component}</td>
-                    <td className="p-3 text-slate-600">{r.category}</td>
-                    <td className="p-3 text-right font-bold">{r.amount.toLocaleString()}</td>
-                  </tr>
-                ))}
-                <tr className="bg-slate-50 font-bold border-t-2 border-slate-300">
-                  <td className="p-3 text-lg" colSpan={2}>Estimated Total</td>
-                  <td className="p-3 text-right text-lg">₹ {results.total.toLocaleString()}</td>
-                </tr>
-              </tbody>
-            </table>
-
-            <div className="bg-red-50 border border-red-200 p-4 rounded-lg mt-8">
-              <p className="text-xs font-bold text-red-800 leading-relaxed">
-                DISCLAIMER: This is an indicative estimate for planning purposes only. It does not constitute legal advice or an official fee challan. Actual fees and stamp duties are determined strictly at the time of filing on the MCA21 portal. Stamp duty is a state subject and changes based on state laws. CorpLawUpdates.in is not liable for any discrepancy between this estimate and actual fees charged.
+            {/* Right side - Black Callout Box */}
+            <div className="w-full md:w-[320px] bg-[#0a0a0a] p-8 md:p-10 text-white flex flex-col justify-center relative">
+              {/* Desktop Close Button */}
+              <button onClick={() => setShowModal(false)} className="absolute top-4 right-4 text-slate-400 hover:text-white z-10 p-1 rounded-full hidden md:block transition-colors">
+                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+              
+              <h4 className="text-[1.35rem] font-bold mb-5 leading-snug">
+                Your filing is now ₹{results.total.toLocaleString()}
+                {delayValue > 0 && form.penaltyType === 'per_day' ? ', and growing by ₹100 every day.' : '.'}
+              </h4>
+              
+              <p className="text-[0.9rem] text-slate-400 mb-8 leading-relaxed font-medium">
+                Need this for your records or clients? Generate a professional PDF estimate containing the full breakdown, penalty rules, and official disclaimers.
               </p>
-            </div>
-            <div className="text-center text-xs text-slate-400 mt-8 pt-4 border-t border-slate-200">
-              Generated by CorpLawUpdates.in
+              
+              <button 
+                onClick={generatePDF} 
+                className="w-full bg-white text-black font-bold py-3.5 px-4 rounded-[6px] hover:bg-slate-100 transition-colors flex items-center justify-center gap-2 shadow-lg disabled:opacity-70"
+                disabled={isGeneratingPDF}
+              >
+                 {isGeneratingPDF ? 'Generating...' : 'Download Detailed PDF'} <span aria-hidden="true">→</span>
+              </button>
             </div>
           </div>
         </div>
       )}
-
-      <div className="min-h-[500px]">
-        {hasCalculated && results ? (
-          <div className="mt-8 border-t border-[#E2E8F0] dark:border-slate-800 pt-8 transition-opacity duration-500 ease-in-out opacity-100" role="status" aria-live="polite">
-          <div className="text-center mb-6">
-            <h3 className="text-slate-500 dark:text-slate-400 text-sm uppercase tracking-wider font-bold mb-2">
-              {isSpice ? 'Estimated Total' : 'Total Liability'}
-            </h3>
-            <div className="text-[2.5rem] font-bold text-[#0F172A] dark:text-white">
-              ₹ {results.total.toLocaleString()}
-            </div>
-            {!isSpice && (
-              <div className="flex items-center justify-center gap-2 mt-4 flex-wrap">
-                <span className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-3 py-1 rounded-full text-xs font-bold">
-                  Includes Base Fee
-                </span>
-                {delayValue > 0 && (
-                  <span className="bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 px-3 py-1 rounded-full text-xs font-bold">
-                    Includes Late Penalty
-                  </span>
-                )}
-              </div>
-            )}
-          </div>
-
-          <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 mb-6">
-            <table className="w-full text-left text-sm whitespace-nowrap">
-              <thead className="bg-[#F1F5F9] dark:bg-slate-900/50">
-                <tr>
-                  <th className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-300">Component</th>
-                  <th className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-300">Category</th>
-                  <th className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-300">Calculation Basis</th>
-                  <th className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-300 text-right">Amount (₹)</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/50 bg-white dark:bg-slate-900">
-                {results.rows.map((r, i) => (
-                  <tr key={i} className="bg-[#FFFFFF] even:bg-[#F8FAFC] dark:bg-slate-900 dark:even:bg-slate-800/50">
-                    <td className="px-4 py-3 font-medium text-slate-900 dark:text-white">{r.component}</td>
-                    <td className="px-4 py-3 text-[#64748B] dark:text-slate-400">{r.category}</td>
-                    <td className="px-4 py-3 text-[#64748B] dark:text-slate-400">{r.basis}</td>
-                    <td className={`px-4 py-3 text-right font-bold ${r.component.includes('Penalty') ? 'text-[#DC2626]' : 'text-[#0F172A] dark:text-white'}`}>
-                      {r.amount.toLocaleString()}
-                    </td>
-                  </tr>
-                ))}
-                <tr className="bg-[#F1F5F9] dark:bg-slate-900/80 font-bold border-t border-[#E2E8F0] dark:border-slate-700">
-                  <td className="px-4 py-4 text-slate-900 dark:text-white" colSpan={3}>
-                    {isSpice ? 'Estimated Total' : 'Total Liability'}
-                  </td>
-                  <td className="px-4 py-4 text-right text-navy dark:text-white text-lg">₹ {results.total.toLocaleString()}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div className="mt-8 text-center border-t border-[#E2E8F0] dark:border-slate-800 pt-6">
-            <button
-              onClick={generatePDF}
-              disabled={isGeneratingPDF}
-              className="bg-[#1D4ED8] hover:bg-blue-800 text-white font-bold py-[12px] px-[24px] rounded-lg transition-colors inline-flex items-center gap-2 disabled:opacity-70 normal-case"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-              {isGeneratingPDF ? 'Generating PDF...' : 'Download Detailed PDF'}
-            </button>
-            <p className="text-xs text-slate-400 mt-4">
-              Per Companies (Registration Offices and Fees) Rules, 2014 — Rule 12
-            </p>
-          </div>
-        </div>
-        ) : (
-          <div className="mt-8 border-t border-[#E2E8F0] dark:border-slate-800 pt-16 flex flex-col items-center justify-center text-slate-400 opacity-50">
-            <span className="text-4xl mb-4">🧮</span>
-            <p>Enter the details above and click Calculate</p>
-          </div>
-        )}
-      </div>
     </div>
   )
 }
