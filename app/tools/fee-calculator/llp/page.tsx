@@ -1,15 +1,85 @@
 import { Metadata } from 'next'
-import LLPFeeCalc from '../components/LLPFeeCalc'
 import Link from 'next/link'
+import JsonLd from '@/components/JsonLd'
+import LLPFeeCalc from '../components/LLPFeeCalc'
+import LLPFAQ from './LLPFAQ'
 
 export const metadata: Metadata = {
-  title: 'LLP Fee Calculator | MCA Penalty & Form Filing Fees',
-  description: 'Calculate LLP filing fees and late penalties for Form 8, Form 11, Form 3, and DIR-3 KYC.',
+  title: 'LLP Fee Calculator | Form 11 & Form 8 Penalty Calculator',
+  description: 'Calculate LLP filing fees and strict ₹100/day late penalties for Form 8, Form 11, Form 3, and DIR-3 KYC.',
+  keywords: ['LLP fee calculator', 'LLP late fee penalty', 'Form 11 penalty calculator', 'Form 8 late fee LLP', 'LLP filing fee'],
+  alternates: {
+    canonical: 'https://www.corplawupdates.in/tools/fee-calculator/llp',
+  },
+}
+
+const llpJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'LLP Fee & Penalty Calculator',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web Browser',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'INR'
+  },
+  description: 'Calculate statutory filing fees and flat ₹100/day late filing penalties for Limited Liability Partnerships (Form 8, Form 11, etc).',
+  featureList: [
+    'Form 11 Annual Return Penalty',
+    'Form 8 Statement of Account Penalty',
+    'Form 3 LLP Agreement Fee',
+    'DIR-3 KYC Late Fee'
+  ]
+}
+
+function LLPSEO() {
+  return (
+    <article className="prose prose-slate dark:prose-invert max-w-none mb-16">
+      <h2 className="text-2xl md:text-3xl font-bold text-navy dark:text-white font-heading mb-6 border-b border-slate-200 dark:border-slate-800 pb-4">
+        Understanding LLP Filing Fees and the ₹100/Day Penalty
+      </h2>
+      <p className="text-slate-600 dark:text-slate-300 text-lg leading-relaxed">
+        Limited Liability Partnerships (LLPs) are subject to some of the strictest late filing penalties under the Indian regulatory framework. While private limited companies enjoy a multiplier-based penalty cap for many forms, LLPs face an aggressive and uncapped penalty regime.
+      </p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-10 not-prose">
+        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <h3 className="font-bold text-slate-800 dark:text-slate-200 mb-2 flex items-center gap-2">
+            <span className="w-6 h-6 rounded bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center text-blue-600 dark:text-blue-400">📝</span>
+            Normal Base Fees
+          </h3>
+          <p className="text-sm text-slate-600 dark:text-slate-400">
+            The normal filing fee for an LLP form depends entirely on the total capital contribution of the LLP. It starts as low as ₹50 for LLPs with contributions up to ₹1 Lakh, and caps at ₹600 for LLPs with contributions exceeding ₹1 Crore.
+          </p>
+        </div>
+        <div className="bg-red-50 dark:bg-red-900/10 p-6 rounded-2xl border border-red-200 dark:border-red-900/30 shadow-sm">
+          <h3 className="font-bold text-red-800 dark:text-red-400 mb-2 flex items-center gap-2">
+            <span className="w-6 h-6 rounded bg-red-100 dark:bg-red-900/50 flex items-center justify-center text-red-600 dark:text-red-400">🚨</span>
+            The ₹100/Day Rule
+          </h3>
+          <p className="text-sm text-red-700 dark:text-red-300">
+            Almost every statutory form, including the crucial Form 11 (Annual Return) and Form 8 (Statement of Accounts), attracts a flat, uncapped penalty of ₹100 per day. A delay of one year results in a massive ₹36,500 penalty per form.
+          </p>
+        </div>
+      </div>
+
+      <h3 className="text-xl font-bold text-navy dark:text-white mt-8 mb-4">
+        Key LLP Forms and Their Due Dates
+      </h3>
+      <ul className="list-disc pl-6 space-y-3 text-slate-600 dark:text-slate-300">
+        <li><strong>Form 11 (Annual Return):</strong> Must be filed within 60 days of the closure of the financial year (i.e., by 30th May every year).</li>
+        <li><strong>Form 8 (Statement of Account & Solvency):</strong> Must be filed within 30 days from the end of 6 months of the financial year (i.e., by 30th October every year).</li>
+        <li><strong>Form 3 (LLP Agreement):</strong> Must be filed within 30 days of the date of incorporation or within 30 days of any subsequent changes to the agreement.</li>
+      </ul>
+    </article>
+  )
 }
 
 export default function LLPFeePage() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-200 pb-20">
+      <JsonLd data={llpJsonLd as any} />
       <div className="bg-navy py-12 px-4 border-b border-slate-800">
         <div className="max-w-4xl mx-auto">
           <Link href="/tools/fee-calculator" className="text-slate-400 hover:text-white transition-colors text-sm font-semibold mb-6 inline-flex items-center gap-2">
@@ -31,6 +101,11 @@ export default function LLPFeePage() {
         <div className="bg-white dark:bg-slate-900 shadow-xl rounded-2xl border border-slate-200 dark:border-slate-800 p-4 md:p-8 mb-16">
           <LLPFeeCalc />
         </div>
+      </div>
+
+      <div className="max-w-5xl mx-auto px-4">
+        <LLPSEO />
+        <LLPFAQ />
       </div>
     </div>
   )

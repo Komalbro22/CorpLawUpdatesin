@@ -21,6 +21,7 @@ import ReadingProgress from '@/components/ReadingProgress'
 import FontSizeToggle from '@/components/FontSizeToggle'
 import { AlertCircle, BookOpen, CalendarDays, ChevronDown, Clock3, Eye, FileText, Lightbulb, Sparkles, CheckCircle2 } from 'lucide-react'
 import { sanitizeHtml } from '@/lib/sanitize'
+import { mcaForms } from '@/data/mca-forms'
 
 const stripHtml = (html: string) => html ? html.replace(/<[^>]*>/g, '').trim() : ''
 
@@ -274,6 +275,26 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
         })
     }
 
+    let contentPart1 = update.content || ''
+    let contentPart2 = ''
+    
+    // Find if this article is mapped to any form's filingGuides
+    const relatedForm = mcaForms.find(f => f.filingGuides && f.filingGuides.some(g => g.slug.includes(update.slug)))
+
+    if (relatedForm && update.content) {
+        const pTags = update.content.split('</p>')
+        if (pTags.length > 3) {
+            contentPart1 = pTags.slice(0, 3).join('</p>') + '</p>'
+            contentPart2 = pTags.slice(3).join('</p>')
+        } else {
+            const mdParas = update.content.split(/\n\n+/)
+            if (mdParas.length > 3) {
+                contentPart1 = mdParas.slice(0, 3).join('\n\n') + '\n\n'
+                contentPart2 = mdParas.slice(3).join('\n\n')
+            }
+        }
+    }
+
     return (
         <div className="min-h-screen bg-white dark:bg-slate-900">
             <article
@@ -499,7 +520,31 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                 {update.content && <TableOfContents content={update.content} />}
                 <ErrorBoundary>
                     <div className="article-content">
-                        <MarkdownRenderer content={update.content || ''} />
+                        <MarkdownRenderer content={contentPart1} />
+                        
+                        {relatedForm && (
+                            <div className="my-10 bg-[#0F172A] rounded-[12px] p-8 flex flex-col items-center text-center shadow-lg border border-slate-800 clear-both">
+                                <span className="text-4xl mb-4" aria-hidden>🧮</span>
+                                <h3 className="text-2xl font-bold text-white mb-3">
+                                    Calculate Your {relatedForm.formNumber} Fee & Penalty
+                                </h3>
+                                <p className="text-slate-300 text-base max-w-lg mb-8 leading-relaxed">
+                                    Use our free calculator to get the exact filing fee and late penalty for your company in under 30 seconds.
+                                </p>
+                                <Link 
+                                    href={`/tools/fee-calculator/companies/${relatedForm.slug}`}
+                                    className="bg-[#1D4ED8] hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg transition-colors inline-block w-full sm:w-auto"
+                                >
+                                    Open {relatedForm.formNumber} Fee Calculator →
+                                </Link>
+                                {/* 10E SEO Rule: Contextual Link within the widget block */}
+                                <p className="sr-only">
+                                    <a href={`/tools/fee-calculator/companies/${relatedForm.slug}`}>{relatedForm.formNumber} fee calculator</a>
+                                </p>
+                            </div>
+                        )}
+                        
+                        {contentPart2 && <MarkdownRenderer content={contentPart2} />}
                     </div>
                 </ErrorBoundary>
             </div>

@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { supabaseAdmin } from '@/lib/supabase-server'
+import { mcaForms } from '@/data/mca-forms'
 
 export const revalidate = 3600
 
@@ -92,10 +93,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {url: `${BASE_URL}/glossary`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.7 },
     { url: `${BASE_URL}/documents`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.9 },
     { url: `${BASE_URL}/tools`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.9 },
-    { url: `${BASE_URL}/tools/penalty-calculator`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.8 },
-    { url: `${BASE_URL}/tools/penalty-calculator/company`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.9 },
-    { url: `${BASE_URL}/tools/penalty-calculator/llp`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.9 },
-    { url: `${BASE_URL}/tools/penalty-calculator/msme`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.9 },
+    { url: `${BASE_URL}/tools/fee-calculator`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.9 },
+    { url: `${BASE_URL}/tools/fee-calculator/companies`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.9 },
+    { url: `${BASE_URL}/tools/fee-calculator/llp`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.9 },
+    { url: `${BASE_URL}/tools/fee-calculator/msme`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.9 },
     { url: `${BASE_URL}/rbi/repo-rate`, changeFrequency: 'weekly' as const, priority: 0.6 },
     { url: `${BASE_URL}/newsletter`, changeFrequency: 'yearly' as const, priority: 0.5 },
     { url: `${BASE_URL}/about`, changeFrequency: 'yearly' as const, priority: 0.3 },
@@ -145,5 +146,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  return [...staticPages, ...categoryPages, ...articlePages, ...glossaryPages, ...documentPages]
+  const companyFormPages = mcaForms.map(form => ({
+    url: `${BASE_URL}/tools/fee-calculator/companies/${form.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+  }))
+
+  return [...staticPages, ...categoryPages, ...articlePages, ...glossaryPages, ...documentPages, ...companyFormPages]
 }
