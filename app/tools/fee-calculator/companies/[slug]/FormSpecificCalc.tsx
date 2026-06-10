@@ -182,30 +182,72 @@ export default function FormSpecificCalc({ form }: { form: MCAForm }) {
   const delayValue = calculateDelay()
 
   const generatePDF = async () => {
-    if (!pdfRef.current || !results) return
+    if (!results) return
     setIsGeneratingPDF(true)
     
     try {
-      const html2canvas = (await import('html2canvas')).default
       const jsPDF = (await import('jspdf')).default
-      const canvas = await html2canvas(pdfRef.current, {
-        scale: 2,
-        useCORS: true,
-        logging: false
-      })
+      const autoTable = (await import('jspdf-autotable')).default
       
-      const imgData = canvas.toDataURL('image/jpeg', 1.0)
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4'
+      const doc = new jsPDF()
+      const pageWidth = doc.internal.pageSize.width
+      
+      // Header
+      doc.setFontSize(22)
+      doc.setFont("helvetica", "bold")
+      doc.setTextColor(15, 23, 42) // Slate-900
+      doc.text('CorpLawUpdates.in', 14, 22)
+      
+      doc.setFontSize(10)
+      doc.setFont("helvetica", "normal")
+      doc.setTextColor(100, 116, 139) // Slate-500
+      doc.text("India's Free Corporate Law Intelligence Platform", 14, 28)
+      
+      doc.setFontSize(12)
+      doc.setFont("helvetica", "bold")
+      doc.setTextColor(37, 99, 235) // Blue-600
+      doc.text(`Fee Estimate — ${form.formNumber}`, 14, 40)
+      
+      // Metadata
+      doc.setFontSize(10)
+      doc.setFont("helvetica", "normal")
+      doc.setTextColor(15, 23, 42)
+      doc.text(`Date: ${new Date().toLocaleDateString()}`, pageWidth - 14, 40, { align: 'right' })
+      doc.text(`Form: ${form.formNumber} - ${form.formName}`, 14, 50)
+      doc.text(`Authorized Capital: INR ${capital.toLocaleString()}`, 14, 56)
+      if (isSpice) {
+        doc.text(`State: ${state}`, 14, 62)
+        doc.text(`Directors: ${directors}`, 14, 68)
+      } else {
+        doc.text(`Company Type: ${companyType.toUpperCase()}`, 14, 62)
+        doc.text(`Delay in Days: ${delayValue}`, 14, 68)
+      }
+
+      // Details table
+      const tableData: any[] = results.rows.map(r => [r.component, r.category, r.basis, `INR ${r.amount.toLocaleString()}`])
+      tableData.push([{ content: 'Total Liability', colSpan: 3, styles: { fontStyle: 'bold' } }, { content: `INR ${results.total.toLocaleString()}`, styles: { fontStyle: 'bold' } }])
+
+      autoTable(doc, {
+        startY: 75,
+        head: [['Component', 'Category', 'Calculation Basis', 'Amount']],
+        body: tableData,
+        theme: 'grid',
+        headStyles: { fillColor: [37, 99, 235], textColor: [255, 255, 255], fontStyle: 'bold' },
+        bodyStyles: { textColor: [15, 23, 42] },
+        alternateRowStyles: { fillColor: [248, 250, 252] },
+        columnStyles: {
+          3: { cellWidth: 40, halign: 'right' }
+        }
       })
 
-      const pdfWidth = pdf.internal.pageSize.getWidth()
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width
-      
-      pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight)
-      pdf.save(`CorpLawUpdates_SPICe_Estimate_${new Date().getTime()}.pdf`)
+      // Disclaimer
+      const finalY = (doc as any).lastAutoTable.finalY || 120
+      doc.setFontSize(8)
+      doc.setTextColor(220, 38, 38) // Red-600
+      const disclaimer = "DISCLAIMER: This is an indicative estimate for planning purposes only. It does not constitute legal advice or an official fee challan. Actual fees are determined strictly at the time of filing on the MCA21 portal."
+      doc.text(doc.splitTextToSize(disclaimer, pageWidth - 28), 14, finalY + 15)
+
+      doc.save(`CorpLawUpdates_Estimate_${form.formNumber}.pdf`)
     } catch (error) {
       console.error('PDF generation failed', error)
       alert('Failed to generate PDF. Please try again.')
@@ -450,21 +492,19 @@ export default function FormSpecificCalc({ form }: { form: MCAForm }) {
             </table>
           </div>
 
-          {isSpice ? (
-            <div className="text-center">
-              <button
-                onClick={generatePDF}
-                disabled={isGeneratingPDF}
-                className="bg-[#1D4ED8] hover:bg-blue-800 text-white font-bold py-[12px] px-[24px] rounded-lg transition-colors inline-flex items-center gap-2 disabled:opacity-70 normal-case"
-              >
-                {isGeneratingPDF ? 'Generating...' : '📄 Download Fee Estimate (PDF)'}
-              </button>
-            </div>
-          ) : (
-            <p className="text-xs text-slate-400 mt-3 text-center">
+          <div className="mt-8 text-center border-t border-[#E2E8F0] dark:border-slate-800 pt-6">
+            <button
+              onClick={generatePDF}
+              disabled={isGeneratingPDF}
+              className="bg-[#1D4ED8] hover:bg-blue-800 text-white font-bold py-[12px] px-[24px] rounded-lg transition-colors inline-flex items-center gap-2 disabled:opacity-70 normal-case"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+              {isGeneratingPDF ? 'Generating PDF...' : 'Download Detailed PDF'}
+            </button>
+            <p className="text-xs text-slate-400 mt-4">
               Per Companies (Registration Offices and Fees) Rules, 2014 — Rule 12
             </p>
-          )}
+          </div>
         </div>
         ) : (
           <div className="mt-8 border-t border-[#E2E8F0] dark:border-slate-800 pt-16 flex flex-col items-center justify-center text-slate-400 opacity-50">
