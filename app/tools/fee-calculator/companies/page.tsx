@@ -3,6 +3,7 @@ import Link from 'next/link'
 import JsonLd from '@/components/JsonLd'
 import CompanyFAQ from './CompanyFAQ'
 import { mcaForms } from '@/data/mca-forms'
+import UnifiedCalculator from './UnifiedCalculator'
 
 export const metadata: Metadata = {
   title: 'Company ROC Fee Calculator | Late Fee Penalty & Stamp Duty',
@@ -99,7 +100,11 @@ export default function CompaniesFeePage() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 -mt-8 relative z-10 mb-16">
+      <div className="max-w-5xl mx-auto px-4 relative z-10 -mt-8 mb-8">
+        <UnifiedCalculator />
+      </div>
+
+      <div className="max-w-5xl mx-auto px-4 mb-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {mcaForms.map(form => (
             <Link 
