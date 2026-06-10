@@ -202,21 +202,23 @@ export default function UnifiedCalculator() {
         </div>
 
         {/* Conditional Inputs */}
-        {isSH7 && (
+        {(isSH7 || isSpice) && (
           <>
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-slate-700 mb-2">New Capital (₹)</label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-medium">₹</span>
-                <input
-                  type="number"
-                  min="0"
-                  value={newCapital}
-                  onChange={e => setNewCapital(Number(e.target.value))}
-                  className="w-full border border-slate-300 bg-white text-slate-900 rounded-[4px] pl-8 pr-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm"
-                />
+            {isSH7 && (
+              <div className="flex flex-col">
+                <label className="text-sm font-medium text-slate-700 mb-2">New Capital (₹)</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-medium">₹</span>
+                  <input
+                    type="number"
+                    min="0"
+                    value={newCapital}
+                    onChange={e => setNewCapital(Number(e.target.value))}
+                    className="w-full border border-slate-300 bg-white text-slate-900 rounded-[4px] pl-8 pr-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm"
+                  />
+                </div>
               </div>
-            </div>
+            )}
             <div className="flex flex-col">
               <label className="text-sm font-medium text-slate-700 mb-2">Registered State</label>
               <select
@@ -224,10 +226,17 @@ export default function UnifiedCalculator() {
                 onChange={e => setState(e.target.value)}
                 className="w-full border border-slate-300 bg-white text-slate-900 rounded-[4px] px-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm"
               >
+                <option value="andhrapradesh">Andhra Pradesh</option>
+                <option value="bihar">Bihar</option>
                 <option value="delhi">Delhi</option>
-                <option value="maharashtra">Maharashtra</option>
+                <option value="gujarat">Gujarat</option>
                 <option value="karnataka">Karnataka</option>
+                <option value="madhyapradesh">Madhya Pradesh</option>
+                <option value="maharashtra">Maharashtra</option>
+                <option value="punjab">Punjab</option>
+                <option value="rajasthan">Rajasthan</option>
                 <option value="tamilnadu">Tamil Nadu</option>
+                <option value="telangana">Telangana</option>
                 <option value="other">Other States</option>
               </select>
             </div>

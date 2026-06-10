@@ -50,6 +50,62 @@ export function getLateFeeMultiplier(days: number, isHigherFee: boolean, hasGrac
   return m[999];
 }
 
+export function calculateIncorporationStampDuty(state: string, capital: number): { moa: number, aoa: number, form: number } {
+  let moa = 0, aoa = 0, form = 0;
+  const s = state.toLowerCase().replace(/\s/g, '');
+
+  switch(s) {
+    case 'andhrapradesh':
+      moa = 500; aoa = 500;
+      form = Math.min(500000, Math.max(1000, capital * 0.0015));
+      break;
+    case 'bihar':
+      moa = 500; aoa = 500;
+      form = Math.min(500000, Math.max(1000, capital * 0.0015));
+      break;
+    case 'delhi':
+      moa = 200; aoa = 200;
+      form = Math.min(2500000, capital * 0.0015);
+      break;
+    case 'gujarat':
+      moa = 100; aoa = 100;
+      form = Math.min(500000, capital * 0.005);
+      break;
+    case 'karnataka':
+      moa = 1000; aoa = 1000;
+      form = Math.min(500000, capital * 0.005);
+      break;
+    case 'maharashtra':
+      moa = 200; aoa = 200;
+      form = Math.min(5000000, Math.ceil(capital / 500000) * 1000);
+      break;
+    case 'madhyapradesh':
+      moa = 2500; aoa = 2500;
+      form = Math.min(2500000, Math.max(5000, capital * 0.0015));
+      break;
+    case 'punjab':
+      moa = 5000; aoa = 5000;
+      form = capital <= 100000 ? 5000 : 10000;
+      break;
+    case 'tamilnadu':
+      moa = 200; aoa = 200;
+      form = capital <= 100000 ? 300 : 600;
+      break;
+    case 'telangana':
+      moa = 500; aoa = 500;
+      form = Math.min(500000, Math.max(1000, capital * 0.0015));
+      break;
+    case 'rajasthan':
+      moa = 500; aoa = 500;
+      form = Math.min(2500000, capital * 0.005);
+      break;
+    default:
+      moa = 1000; aoa = 1000;
+      form = 0;
+  }
+  return { moa, aoa, form };
+}
+
 export function calculateMCAFee(params: CalculatorParams): CalculatorResult {
   const { formSlug, companyType, capital, delayDays, isRepeatOffender = false, newCapital = 0, state = 'other', chargeAmount = 0 } = params;
   
@@ -110,10 +166,10 @@ export function calculateMCAFee(params: CalculatorParams): CalculatorResult {
       // Waived up to 15L
       baseFee = capital <= 1500000 ? 0 : getNormalFee(capital, isOpcSmall);
     }
-    // Assume Maharashtra for stamp duty demo for SPICe+ if no state is specified
-    const moaAoaStamp = 1500; 
-    stampDuty = moaAoaStamp;
-    warningText = 'Initial filing — no late penalty applies. Stamp duty is estimated.';
+    
+    const sd = calculateIncorporationStampDuty(state, capital);
+    stampDuty = sd.moa + sd.aoa + sd.form;
+    warningText = 'Initial filing — no late penalty applies. State Stamp Duty is estimated based on authorized capital and state rates.';
     return { baseFee, lateFee, stampDuty, adValoremFee, total: baseFee + lateFee + stampDuty, warningText };
   }
 

@@ -2,27 +2,13 @@
 
 import React, { useState, useRef } from 'react'
 import { MCAForm } from '@/data/mca-forms'
+import { calculateIncorporationStampDuty } from '@/lib/calculatorUtils'
 
 interface ResultRow {
   component: string
   category: string
   basis: string
   amount: number
-}
-
-// SPICe+ Stamp Duty Base Estimates (Simplified)
-const stateStampDuty: Record<string, { moa: number, aoa: number }> = {
-  'Maharashtra': { moa: 1000, aoa: 500 },
-  'Delhi': { moa: 200, aoa: 300 },
-  'Karnataka': { moa: 1000, aoa: 1000 },
-  'Tamil Nadu': { moa: 1000, aoa: 300 },
-  'Gujarat': { moa: 100, aoa: 1000 },
-  'Rajasthan': { moa: 500, aoa: 500 }, // AOA is technically 0.5%, simplifying
-  'West Bengal': { moa: 300, aoa: 300 },
-  'Uttar Pradesh': { moa: 2000, aoa: 1000 },
-  'Telangana': { moa: 500, aoa: 500 },
-  'Kerala': { moa: 5000, aoa: 1000 },
-  'Other': { moa: 1000, aoa: 1000 }
 }
 
 function getNormalFee(capital: number, isSmall: boolean): number {
@@ -114,7 +100,7 @@ export default function FormSpecificCalc({ form }: { form: MCAForm }) {
       }
 
       // 3. Stamp Duty
-      const sd = stateStampDuty[state] || stateStampDuty['Other']
+      const sd = calculateIncorporationStampDuty(state, capital)
       rows.push({
         component: 'Estimated MOA Stamp Duty',
         category: 'State Tax',
@@ -127,8 +113,16 @@ export default function FormSpecificCalc({ form }: { form: MCAForm }) {
         basis: `Rates for ${state}`,
         amount: sd.aoa
       })
+      if (sd.form > 0) {
+        rows.push({
+          component: 'Estimated Form/Capital Stamp Duty',
+          category: 'State Tax',
+          basis: `Rates for ${state}`,
+          amount: sd.form
+        })
+      }
       
-      total += mcaFee + sd.moa + sd.aoa
+      total += mcaFee + sd.moa + sd.aoa + sd.form
 
     } else {
       // Normal logic
@@ -316,7 +310,18 @@ export default function FormSpecificCalc({ form }: { form: MCAForm }) {
                 onChange={e => setState(e.target.value)}
                 className="w-full border-[1.5px] border-[#CBD5E1] dark:border-slate-700 bg-[#FFFFFF] dark:bg-slate-900 text-slate-900 dark:text-white rounded-lg px-[14px] py-[10px] focus:ring-2 focus:ring-[#1D4ED8] focus:border-[#1D4ED8] transition-colors"
               >
-                {Object.keys(stateStampDuty).map(s => <option key={s} value={s}>{s}</option>)}
+                <option value="andhrapradesh">Andhra Pradesh</option>
+                <option value="bihar">Bihar</option>
+                <option value="delhi">Delhi</option>
+                <option value="gujarat">Gujarat</option>
+                <option value="karnataka">Karnataka</option>
+                <option value="madhyapradesh">Madhya Pradesh</option>
+                <option value="maharashtra">Maharashtra</option>
+                <option value="punjab">Punjab</option>
+                <option value="rajasthan">Rajasthan</option>
+                <option value="tamilnadu">Tamil Nadu</option>
+                <option value="telangana">Telangana</option>
+                <option value="other">Other States</option>
               </select>
             </div>
             <div>
