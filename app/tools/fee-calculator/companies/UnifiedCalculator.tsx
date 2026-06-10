@@ -28,13 +28,30 @@ function getMultiplier(delay: number): number {
   return 12
 }
 
+const extraForms = [
+  { slug: 'inc-22', formNumber: 'INC-22', formName: 'Notice of change of registered office', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
+  { slug: 'inc-24', formNumber: 'INC-24', formName: 'Application for change of name', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
+  { slug: 'inc-28', formNumber: 'INC-28', formName: 'Notice of order of Court/Tribunal', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
+  { slug: 'pas-4', formNumber: 'PAS-4', formName: 'Private Placement Offer Letter', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
+  { slug: 'sh-7', formNumber: 'SH-7', formName: 'Notice of alteration of share capital', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
+  { slug: 'chg-4', formNumber: 'CHG-4', formName: 'Particulars for satisfaction of charge', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
+  { slug: 'dir-3', formNumber: 'DIR-3', formName: 'Application for allotment of DIN', penaltyType: 'nil', penaltyRate: 'N/A', normalFeeStructure: 'flat', concessionApplies: false },
+  { slug: 'mgt-14', formNumber: 'MGT-14', formName: 'Filing of Resolutions and agreements', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
+  { slug: 'other-general', formNumber: 'Other General Form', formName: 'Any standard event-based MCA form', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true }
+]
+
 export default function UnifiedCalculator() {
   const [selectedSlug, setSelectedSlug] = useState('aoc-4')
   const [companyType, setCompanyType] = useState('private')
   const [capital, setCapital] = useState<number>(100000)
   const [delay, setDelay] = useState<number>(0)
 
-  const selectedForm = useMemo(() => mcaForms.find(f => f.slug === selectedSlug) || mcaForms[0], [selectedSlug])
+  const allForms = useMemo(() => {
+    const combined = [...mcaForms, ...extraForms]
+    return combined.sort((a, b) => a.formNumber.localeCompare(b.formNumber))
+  }, [])
+
+  const selectedForm = useMemo(() => allForms.find(f => f.slug === selectedSlug) || allForms[0], [allForms, selectedSlug])
   
   const isSpice = selectedForm.slug === 'spice-plus'
 
@@ -107,7 +124,7 @@ export default function UnifiedCalculator() {
             onChange={e => setSelectedSlug(e.target.value)}
             className="w-full border-[1.5px] border-[#CBD5E1] dark:border-slate-700 bg-[#FFFFFF] dark:bg-slate-900 text-slate-900 dark:text-white rounded-lg px-[14px] py-[10px] focus:ring-2 focus:ring-[#1D4ED8] focus:border-[#1D4ED8] outline-none transition-colors"
           >
-            {mcaForms.map(form => (
+            {allForms.map(form => (
               <option key={form.slug} value={form.slug}>
                 {form.formNumber} — {form.formName}
               </option>
