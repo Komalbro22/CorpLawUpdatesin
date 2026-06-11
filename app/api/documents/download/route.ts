@@ -70,8 +70,8 @@ export async function POST(request: Request) {
       // Determine print-safe margins based on letterhead layout type or custom slider offsets
       let marginT = custom_margin_top !== undefined ? Number(custom_margin_top) : 72
       let marginB = custom_margin_bottom !== undefined ? Number(custom_margin_bottom) : 72
-      const marginL = custom_margin_side !== undefined ? Number(custom_margin_side) : 54
-      const marginR = custom_margin_side !== undefined ? Number(custom_margin_side) : 54
+      const marginL = custom_margin_side !== undefined ? Number(custom_margin_side) : 72 // 1-inch
+      const marginR = custom_margin_side !== undefined ? Number(custom_margin_side) : 72 // 1-inch
 
       if (custom_margin_top === undefined) {
         if (letterhead_type === 'full_page') {
@@ -98,63 +98,69 @@ export async function POST(request: Request) {
       const printableW = pageW - marginL - marginR
       const printableH = pageH - marginT - marginB
 
-      // Split and wrap text lines
+      // Split and wrap text lines by paragraph/clause to prevent mid-clause page breaks
       const fontHeight = 11
       const lineHeight = 15
       const lines = content.split('\n')
-      const wrappedLines: { text: string; isBold: boolean }[] = []
-
-      for (const line of lines) {
-        if (line.trim() === '') {
-          wrappedLines.push({ text: '', isBold: false })
-          continue
-        }
-
-        // Bolding heuristics for legal documents
-        const isLineBold = 
-          line.toUpperCase() === line ||
-          line.trim().startsWith('RESOLVED THAT') ||
-          line.trim().startsWith('FURTHER RESOLVED') ||
-          line.trim().startsWith('DIRECTORS PRESENT') ||
-          line.trim().startsWith('CHAIRPERSON') ||
-          line.trim().startsWith('CERTIFIED TRUE COPY');
-
-        const activeFont = isLineBold ? timesBold : timesRoman
-        const words = line.split(' ')
-        let currentLine = ''
-
-        for (const word of words) {
-          const testLine = currentLine === '' ? word : `${currentLine} ${word}`
-          const testWidth = activeFont.widthOfTextAtSize(testLine, fontHeight)
-          if (testWidth > printableW) {
-            wrappedLines.push({ text: currentLine, isBold: isLineBold })
-            currentLine = word
-          } else {
-            currentLine = testLine
-          }
-        }
-        if (currentLine !== '') {
-          wrappedLines.push({ text: currentLine, isBold: isLineBold })
-        }
-      }
-
-      // Group wrapped lines into pages
+      
       const pagesData: { text: string; isBold: boolean }[][] = [[]]
       let currentPageLines = pagesData[0]
       let currentHeightUsed = 0
 
-      for (const wl of wrappedLines) {
-        const lineH = lineHeight
-        
-        if (currentHeightUsed + lineH > printableH) {
-          // Create new page
+      for (const line of lines) {
+        const paragraphLines: { text: string; isBold: boolean }[] = []
+        if (line.trim() === '') {
+          paragraphLines.push({ text: '', isBold: false })
+        } else {
+          // Bolding heuristics for legal documents
+          const isLineBold = 
+            line.toUpperCase() === line ||
+            line.trim().startsWith('RESOLVED THAT') ||
+            line.trim().startsWith('FURTHER RESOLVED') ||
+            line.trim().startsWith('DIRECTORS PRESENT') ||
+            line.trim().startsWith('CHAIRPERSON') ||
+            line.trim().startsWith('CERTIFIED TRUE COPY');
+
+          const activeFont = isLineBold ? timesBold : timesRoman
+          const words = line.split(' ')
+          let currentLine = ''
+
+          for (const word of words) {
+            const testLine = currentLine === '' ? word : `${currentLine} ${word}`
+            const testWidth = activeFont.widthOfTextAtSize(testLine, fontHeight)
+            if (testWidth > printableW) {
+              paragraphLines.push({ text: currentLine, isBold: isLineBold })
+              currentLine = word
+            } else {
+              currentLine = testLine
+            }
+          }
+          if (currentLine !== '') {
+            paragraphLines.push({ text: currentLine, isBold: isLineBold })
+          }
+        }
+
+        // Calculate height needed for this paragraph
+        const paragraphHeight = paragraphLines.length * lineHeight
+
+        // Prevent mid-clause page breaks:
+        // If the paragraph doesn't fit on the current page, AND it's smaller than a full page, move to next page
+        if (currentHeightUsed + paragraphHeight > printableH && paragraphHeight < printableH) {
           pagesData.push([])
           currentPageLines = pagesData[pagesData.length - 1]
           currentHeightUsed = 0
         }
-        
-        currentPageLines.push(wl)
-        currentHeightUsed += lineH
+
+        // Add lines to current page (might still overflow if the paragraph is larger than a full page)
+        for (const wl of paragraphLines) {
+          if (currentHeightUsed + lineHeight > printableH) {
+            pagesData.push([])
+            currentPageLines = pagesData[pagesData.length - 1]
+            currentHeightUsed = 0
+          }
+          currentPageLines.push(wl)
+          currentHeightUsed += lineHeight
+        }
       }
 
       // Render each page using vector page-layering if PDF letterhead is uploaded
@@ -302,8 +308,8 @@ export async function POST(request: Request) {
       // Determine Twip margins for Word export: 1pt = 20 twips
       let twipT = (custom_margin_top !== undefined ? Number(custom_margin_top) : 72) * 20
       let twipB = (custom_margin_bottom !== undefined ? Number(custom_margin_bottom) : 72) * 20
-      const twipL = (custom_margin_side !== undefined ? Number(custom_margin_side) : 54) * 20
-      const twipR = (custom_margin_side !== undefined ? Number(custom_margin_side) : 54) * 20
+      const twipL = (custom_margin_side !== undefined ? Number(custom_margin_side) : 72) * 20 // 1-inch
+      const twipR = (custom_margin_side !== undefined ? Number(custom_margin_side) : 72) * 20 // 1-inch
 
       if (custom_margin_top === undefined) {
         if (letterhead_type === 'full_page' || letterhead_type === 'top_bottom_footer') {

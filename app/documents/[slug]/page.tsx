@@ -430,6 +430,7 @@ export default function DocumentGeneratorPage() {
   const [legalCardOpen, setLegalCardOpen] = useState(false)
   const [lastAppliedClauseId, setLastAppliedClauseId] = useState<string | null>(null)
   const [errorCode, setErrorCode] = useState<string | null>(null)
+  const [errors, setErrors] = useState<Record<string, string>>({})
   const [missingVariables, setMissingVariables] = useState<string[] | null>(null)
   const [requiresInputData, setRequiresInputData] = useState<{ clauseId: string; currentVariables: Record<string, string> } | null>(null)
   const [inputVariablesValues, setInputVariablesValues] = useState<Record<string, string>>({})
@@ -821,6 +822,24 @@ export default function DocumentGeneratorPage() {
   // Generate document
   async function handleGenerate() {
     if (!template) return
+    
+    // Validate required fields
+    const newErrors: Record<string, string> = {}
+    template.fields?.forEach((f: Field) => {
+      if (f.required && !formData[f.id]) {
+        newErrors[f.id] = `${f.label} is required`
+      }
+    })
+    
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors)
+      // Scroll to the first error
+      const firstErrorId = Object.keys(newErrors)[0]
+      document.getElementById(`field-${firstErrorId}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      return
+    }
+
+    setErrors({})
     setGenerating(true)
     setGenerationError(null)
     setGenerationWarning(null)
@@ -999,7 +1018,10 @@ export default function DocumentGeneratorPage() {
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `${slug}.${format}`
+      const dateStr = new Date().toISOString().split('T')[0]
+      const company = formData.COMPANY_NAME || formData.company_name || formData.name || 'Document'
+      const cleanCompany = company.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 20)
+      a.download = `${slug}_${cleanCompany}_${dateStr}.${format}`
       a.click()
       URL.revokeObjectURL(url)
     } catch {
@@ -1131,6 +1153,26 @@ export default function DocumentGeneratorPage() {
             Use our AI-powered {template.name} generator to draft a legally compliant document in minutes. 
             This intelligent tool analyzes your inputs to automatically format clauses, structure the document correctly according to the <strong>{template.regulation_reference}</strong>, and check for legal conflicts. Completely free to use.
           </p>
+        </div>
+      </div>
+
+      {/* Step Indicator */}
+      <div className="max-w-7xl mx-auto px-4 mb-8">
+        <div className="flex items-center justify-between md:justify-start md:gap-8 overflow-x-auto pb-2 scrollbar-hide">
+          <div className={`flex items-center gap-2 whitespace-nowrap ${!generatedContent ? 'text-amber-500 font-bold' : 'text-slate-400 font-medium'}`}>
+            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${!generatedContent ? 'bg-amber-100 text-amber-600' : 'bg-slate-200 text-slate-500'}`}>1</span>
+            Fill Details
+          </div>
+          <div className="h-px bg-slate-300 w-8 md:w-16 hidden md:block"></div>
+          <div className={`flex items-center gap-2 whitespace-nowrap ${generatedContent && !downloading ? 'text-amber-500 font-bold' : 'text-slate-400 font-medium'}`}>
+            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${generatedContent && !downloading ? 'bg-amber-100 text-amber-600' : 'bg-slate-200 text-slate-500'}`}>2</span>
+            Review & Edit
+          </div>
+          <div className="h-px bg-slate-300 w-8 md:w-16 hidden md:block"></div>
+          <div className={`flex items-center gap-2 whitespace-nowrap ${downloading ? 'text-amber-500 font-bold' : 'text-slate-400 font-medium'}`}>
+            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${downloading ? 'bg-amber-100 text-amber-600' : 'bg-slate-200 text-slate-500'}`}>3</span>
+            Download PDF
+          </div>
         </div>
       </div>
 
@@ -1387,7 +1429,7 @@ export default function DocumentGeneratorPage() {
             
             <div className="p-5 space-y-4">
               {template.fields.map((field: Field) => (
-                <div key={field.id}>
+                <div key={field.id} id={`field-${field.id}`}>
                   <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                     {field.label}
                     {field.required && (
@@ -1401,11 +1443,12 @@ export default function DocumentGeneratorPage() {
                     <textarea
                       rows={3}
                       value={formData[field.id] || ''}
-                      onChange={e => setFormData(p => ({
-                        ...p, [field.id]: e.target.value
-                      }))}
+                      onChange={e => {
+                        setFormData(p => ({ ...p, [field.id]: e.target.value }))
+                        if (errors[field.id]) setErrors(p => ({ ...p, [field.id]: '' }))
+                      }}
                       placeholder={field.placeholder}
-                      className={inputClass}
+                      className={`${inputClass} ${errors[field.id] ? 'border-red-400 ring-1 ring-red-400 focus:ring-red-500' : ''}`}
                     />
                   ) : field.type === 'select' ? (
                     <>
@@ -1417,8 +1460,9 @@ export default function DocumentGeneratorPage() {
                           } else {
                             setFormData(p => ({ ...p, [`${field.id}__mode`]: 'preset', [field.id]: e.target.value }))
                           }
+                          if (errors[field.id]) setErrors(p => ({ ...p, [field.id]: '' }))
                         }}
-                        className={inputClass}
+                        className={`${inputClass} ${errors[field.id] ? 'border-red-400 ring-1 ring-red-400 focus:ring-red-500' : ''}`}
                       >
                         <option value="">Select...</option>
                         {field.options?.map(opt => (
@@ -1430,9 +1474,12 @@ export default function DocumentGeneratorPage() {
                         <input
                           type="text"
                           value={formData[field.id] || ''}
-                          onChange={e => setFormData(p => ({ ...p, [field.id]: e.target.value }))}
+                          onChange={e => {
+                            setFormData(p => ({ ...p, [field.id]: e.target.value }))
+                            if (errors[field.id]) setErrors(p => ({ ...p, [field.id]: '' }))
+                          }}
                           placeholder={field.placeholder || `Type custom ${field.label.toLowerCase()}`}
-                          className={`${inputClass} mt-2`}
+                          className={`${inputClass} mt-2 ${errors[field.id] ? 'border-red-400 ring-1 ring-red-400 focus:ring-red-500' : ''}`}
                           autoFocus
                         />
                       )}
@@ -1442,17 +1489,24 @@ export default function DocumentGeneratorPage() {
                     <input
                       type={field.type}
                       value={formData[field.id] || ''}
-                      onChange={e => setFormData(p => ({
-                        ...p, [field.id]: e.target.value
-                      }))}
+                      onChange={e => {
+                        setFormData(p => ({ ...p, [field.id]: e.target.value }))
+                        if (errors[field.id]) setErrors(p => ({ ...p, [field.id]: '' }))
+                      }}
                       placeholder={field.placeholder}
-                      className={inputClass}
+                      className={`${inputClass} ${errors[field.id] ? 'border-red-400 ring-1 ring-red-400 focus:ring-red-500' : ''}`}
                       pattern={field.pattern}
                       title={field.help_text || field.placeholder}
                     />
                   )}
 
-                  {field.help_text && (
+                  {errors[field.id] && (
+                    <p className="text-xs text-red-500 mt-1 font-medium animate-fade-in">
+                      {errors[field.id]}
+                    </p>
+                  )}
+
+                  {field.help_text && !errors[field.id] && (
                     <p className="text-xs text-slate-400 mt-1">
                       💡 {field.help_text}
                     </p>
@@ -1544,20 +1598,36 @@ export default function DocumentGeneratorPage() {
                   <h3 className="font-bold text-navy text-sm">
                     📄 Generated Document
                   </h3>
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      onClick={handleGenerate}
+                      disabled={generating || downloading}
+                      className="text-xs bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-semibold hover:bg-slate-300 disabled:opacity-60"
+                    >
+                      🔄 Regenerate
+                    </button>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(generatedContent)
+                        alert('Copied to clipboard!')
+                      }}
+                      className="text-xs bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-semibold hover:bg-slate-300 disabled:opacity-60"
+                    >
+                      📋 Copy Text
+                    </button>
                     <button
                       onClick={() => handleDownload('docx')}
                       disabled={downloading}
-                      className="text-xs bg-blue-600 text-white px-3 py-1.5 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-60"
+                      className="text-xs border border-blue-600 text-blue-600 px-3 py-1.5 rounded-lg font-semibold hover:bg-blue-50 disabled:opacity-60"
                     >
                       ⬇️ Word
                     </button>
                     <button
                       onClick={() => handleDownload('pdf')}
                       disabled={downloading}
-                      className="text-xs bg-red-600 text-white px-3 py-1.5 rounded-lg font-semibold hover:bg-red-700 disabled:opacity-60"
+                      className="text-xs bg-red-600 text-white px-4 py-1.5 rounded-lg font-bold hover:bg-red-700 disabled:opacity-60 shadow-sm"
                     >
-                      ⬇️ PDF
+                      ⬇️ Download PDF
                     </button>
                   </div>
                 </div>
