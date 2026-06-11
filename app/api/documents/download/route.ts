@@ -254,58 +254,8 @@ export async function POST(request: Request) {
       })
     } else {
       // WORD (DOCX) EXPORT
-      const wordParagraphs: Paragraph[] = []
-
-      // If we have a top header or logo, add it to the body (DOCX fallback)
-      if (letterheadBuffer) {
-        try {
-          const image = new ImageRun({
-            data: letterheadBuffer,
-            transformation: {
-              width: letterhead_type === 'logo_only' ? 120 : 600,
-              height: letterhead_type === 'logo_only' ? 75 : 100,
-            },
-          } as any)
-
-          wordParagraphs.push(new Paragraph({
-            children: [image],
-            alignment: letterhead_type === 'logo_only' ? AlignmentType.LEFT : AlignmentType.CENTER,
-            spacing: { after: 360 }
-          }))
-        } catch (err) {
-          console.error('Failed to embed letterhead in DOCX:', err)
-        }
-      }
-
-      const lines = content.split('\n')
-      for (const line of lines) {
-        const isLineBold = 
-          line.toUpperCase() === line ||
-          line.trim().startsWith('RESOLVED THAT') ||
-          line.trim().startsWith('FURTHER RESOLVED') ||
-          line.trim().startsWith('DIRECTORS PRESENT') ||
-          line.trim().startsWith('CHAIRPERSON') ||
-          line.trim().startsWith('CERTIFIED TRUE COPY');
-
-        wordParagraphs.push(new Paragraph({
-          children: [
-            new TextRun({
-              text: line,
-              bold: isLineBold,
-              font: 'Times New Roman',
-              size: 22,
-              color: '111122',
-            })
-          ],
-          spacing: {
-            line: 360,
-            before: 60,
-            after: 60,
-          }
-        }))
-      }
-
-      // Determine Twip margins for Word export: 1pt = 20 twips
+      const htmlToDocx = require('html-to-docx');
+      
       let twipT = (custom_margin_top !== undefined ? Number(custom_margin_top) : 72) * 20
       let twipB = (custom_margin_bottom !== undefined ? Number(custom_margin_bottom) : 72) * 20
       const twipL = (custom_margin_side !== undefined ? Number(custom_margin_side) : 72) * 20 // 1-inch
@@ -327,24 +277,29 @@ export async function POST(request: Request) {
         }
       }
 
-      const doc = new Document({
-        sections: [{
-          properties: {
-            page: {
-              margin: {
-                top: twipT,
-                bottom: twipB,
-                left: twipL,
-                right: twipR,
-              }
-            }
-          },
-          children: wordParagraphs
-        }]
-      })
+      let htmlContent = content;
+      if (!/<[a-z][\\s\\S]*>/i.test(htmlContent)) {
+        htmlContent = htmlContent.split('\\n').map((line: string) => `<p>${line || '<br/>'}</p>`).join('');
+      }
 
-      const buffer = await Packer.toBuffer(doc)
-      const uint8Array = new Uint8Array(buffer)
+      const docxOptions = {
+        margins: {
+          top: twipT,
+          bottom: twipB,
+          left: twipL,
+          right: twipR,
+        },
+        font: 'Times New Roman',
+      };
+
+      let headerHTML = null;
+      if (letterhead_url && letterhead_type === 'logo_only') {
+         headerHTML = `<div><img src="${letterhead_url}" width="120" /></div>`;
+      }
+
+      const buffer = await htmlToDocx(htmlContent, headerHTML, docxOptions);
+      const uint8Array = new Uint8Array(buffer);
+
       return new Response(uint8Array, {
         status: 200,
         headers: {

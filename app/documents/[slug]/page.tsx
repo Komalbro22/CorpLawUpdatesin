@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import DOMPurify from 'dompurify'
 import { useParams, useRouter } from 'next/navigation'
 import { useToast } from '@/components/Toast'
 import { FuzzyClarifier } from '@/components/documents/FuzzyClarifier'
@@ -1239,13 +1240,124 @@ export default function DocumentGeneratorPage() {
     if (!generatedContent) return
     setDownloading(true)
     try {
-      const res = await fetch(
-        '/api/documents/download',
-        {
+      const dateStr = new Date().toISOString().split('T')[0]
+      const company = formData.COMPANY_NAME || formData.company_name || formData.name || 'Document'
+      const cleanCompany = company.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 20)
+      const filename = `${slug}_${cleanCompany}_${dateStr}.${format}`
+
+      if (format === 'pdf') {
+        const html2pdf = (await import('html2pdf.js')).default;
+        
+        const container = document.createElement('div');
+        container.style.width = '794px';
+        container.style.position = 'absolute';
+        container.style.left = '-9999px';
+        container.style.top = '0';
+        container.style.backgroundColor = 'white';
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'font-serif text-[14px] leading-relaxed prose max-w-none';
+        contentDiv.style.paddingTop = `${customMarginTop}px`;
+        contentDiv.style.paddingBottom = `${customMarginBottom}px`;
+        contentDiv.style.paddingLeft = `${customMarginSide}px`;
+        contentDiv.style.paddingRight = `${customMarginSide}px`;
+        
+        const rawContent = getCleanedContent(generatedContent);
+        contentDiv.innerHTML = typeof window !== 'undefined' 
+          ? DOMPurify.sanitize(/<[a-z][\\s\\S]*>/i.test(rawContent) ? rawContent : rawContent.replace(/\\n/g, '<br/>'))
+          : rawContent;
+        
+        const isPdfLetterhead = letterheadUrl && letterheadUrl.toLowerCase().endsWith('.pdf');
+        if (letterheadUrl && !isPdfLetterhead) {
+          const img = document.createElement('img');
+          img.src = letterheadUrl;
+          img.style.position = 'absolute';
+          img.style.zIndex = '-1';
+          if (letterheadType === 'watermark') {
+            img.style.opacity = '0.1';
+            img.style.width = '400px';
+            img.style.left = '50%';
+            img.style.top = '50%';
+            img.style.transform = 'translate(-50%, -50%)';
+          } else if (letterheadType === 'full_page' || letterheadType === 'top_bottom_footer') {
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.left = '0';
+            img.style.top = '0';
+            img.style.objectFit = 'cover';
+          } else if (letterheadType === 'top_only') {
+            img.style.width = '100%';
+            img.style.height = '180px';
+            img.style.left = '0';
+            img.style.top = '0';
+            img.style.objectFit = 'cover';
+          } else if (letterheadType === 'logo_only') {
+            img.style.width = '120px';
+            img.style.height = 'auto';
+            img.style.left = `${customMarginSide}px`;
+            img.style.top = '40px';
+          }
+          container.appendChild(img);
+        }
+
+        container.appendChild(contentDiv);
+        document.body.appendChild(container);
+
+        const opt = {
+          margin: 0,
+          filename: filename,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true, logging: false },
+          jsPDF: { unit: 'px', format: 'a4', orientation: 'portrait' },
+          pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        };
+
+        if (isPdfLetterhead) {
+          const arrayBuffer = await html2pdf().from(container).set(opt).outputPdf('arraybuffer');
+          const { PDFDocument } = await import('pdf-lib');
+          const generatedDoc = await PDFDocument.load(arrayBuffer);
+          
+          const letterheadRes = await fetch(letterheadUrl);
+          const letterheadArrayBuffer = await letterheadRes.arrayBuffer();
+          const letterheadDoc = await PDFDocument.load(letterheadArrayBuffer);
+          
+          const finalDoc = await PDFDocument.create();
+          const genPages = generatedDoc.getPages();
+          
+          for (let i = 0; i < genPages.length; i++) {
+            const lIdx = i < letterheadDoc.getPageCount() ? i : 0;
+            const [lPage] = await finalDoc.copyPages(letterheadDoc, [lIdx]);
+            const finalPage = finalDoc.addPage(lPage);
+            
+            const [copiedGenPage] = await finalDoc.copyPages(generatedDoc, [i]);
+            const embeddedGenPage = await finalDoc.embedPage(copiedGenPage);
+            finalPage.drawPage(embeddedGenPage, { x: 0, y: 0 });
+          }
+          
+          const finalPdfBytes = await finalDoc.save();
+          const pdfBlob = new Blob([finalPdfBytes], { type: 'application/pdf' });
+          const url = URL.createObjectURL(pdfBlob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = filename;
+          a.click();
+          URL.revokeObjectURL(url);
+        } else {
+          const pdfBlob = await html2pdf().from(container).set(opt).output('blob');
+          const url = URL.createObjectURL(pdfBlob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = filename;
+          a.click();
+          URL.revokeObjectURL(url);
+        }
+
+        document.body.removeChild(container);
+      } else {
+        // DOCX Export
+        const res = await fetch('/api/documents/download', {
           method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json' 
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             content: getCleanedContent(generatedContent),
             document_name: template?.name,
@@ -1256,20 +1368,17 @@ export default function DocumentGeneratorPage() {
             custom_margin_bottom: customMarginBottom,
             custom_margin_side: customMarginSide,
           }),
-        }
-      )
-      const blob = await res.blob()
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      const dateStr = new Date().toISOString().split('T')[0]
-      const company = formData.COMPANY_NAME || formData.company_name || formData.name || 'Document'
-      const cleanCompany = company.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 20)
-      a.download = `${slug}_${cleanCompany}_${dateStr}.${format}`
-      a.click()
-      URL.revokeObjectURL(url)
-    } catch {
-      // Handle error silently
+        });
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    } catch (err) {
+      console.error('Download error:', err);
     } finally {
       setDownloading(false)
     }
@@ -1945,9 +2054,8 @@ export default function DocumentGeneratorPage() {
                       </div>
                     )}
 
-                    {/* Scrollable text container constrained to the blank middle area */}
                     <div 
-                      className="absolute overflow-y-auto select-text font-serif text-[11px] text-navy leading-relaxed py-4 whitespace-pre-wrap z-10"
+                      className="absolute overflow-y-auto select-text font-serif text-[11px] text-navy leading-relaxed py-4 whitespace-pre-wrap z-10 prose prose-sm max-w-none"
                       style={{
                         top: `${customMarginTop}px`,
                         bottom: `${customMarginBottom}px`,
@@ -1956,9 +2064,16 @@ export default function DocumentGeneratorPage() {
                         paddingLeft: `${customMarginSide}px`,
                         paddingRight: `${customMarginSide}px`,
                       }}
-                    >
-                      {getCleanedContent(generatedContent)}
-                    </div>
+                      dangerouslySetInnerHTML={{
+                        __html: typeof window !== 'undefined' 
+                          ? DOMPurify.sanitize(
+                              /<[a-z][\\s\\S]*>/i.test(getCleanedContent(generatedContent)) 
+                                ? getCleanedContent(generatedContent) 
+                                : getCleanedContent(generatedContent).replace(/\\n/g, '<br/>')
+                            )
+                          : getCleanedContent(generatedContent)
+                      }}
+                    />
                   </div>
                 </div>
               </div>
