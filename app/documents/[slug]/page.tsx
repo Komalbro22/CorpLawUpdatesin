@@ -1335,7 +1335,7 @@ export default function DocumentGeneratorPage() {
           }
           
           const finalPdfBytes = await finalDoc.save();
-          const pdfBlob = new Blob([finalPdfBytes], { type: 'application/pdf' });
+          const pdfBlob = new Blob([finalPdfBytes as unknown as BlobPart], { type: 'application/pdf' });
           const url = URL.createObjectURL(pdfBlob);
           const a = document.createElement('a');
           a.href = url;
