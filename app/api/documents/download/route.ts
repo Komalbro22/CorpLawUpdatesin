@@ -298,7 +298,7 @@ export async function POST(request: Request) {
       }
 
       const buffer = await HTMLtoDOCX(htmlContent, headerHTML, docxOptions);
-      const uint8Array = new Uint8Array(buffer);
+      const uint8Array = new Uint8Array(buffer as ArrayBuffer);
 
       return new Response(uint8Array, {
         status: 200,
