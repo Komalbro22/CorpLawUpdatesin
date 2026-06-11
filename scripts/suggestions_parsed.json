@@ -1,0 +1,597 @@
+[
+  {
+    "document_type": "lease-agreement",
+    "label": "+ Add sub-lease prohibition",
+    "prompt": "Add an explicit clause prohibiting the Lessee from sub-letting, underletting or parting with possession of the premises or any part thereof without prior written consent of the Lessor"
+  },
+  {
+    "document_type": "lease-agreement",
+    "label": "+ Add pet policy clause",
+    "prompt": "Add a clause specifying whether pets are allowed — if residential lease, add that no pets are permitted without prior written consent of the Lessor"
+  },
+  {
+    "document_type": "lease-agreement",
+    "label": "+ Add maintenance charge clause",
+    "prompt": "Add a clause that all maintenance charges, society charges, parking charges and common area charges shall be paid by the Lessee in addition to the rent"
+  },
+  {
+    "document_type": "lease-agreement",
+    "label": "+ Add painting obligation",
+    "prompt": "Add a clause that the Lessee shall get the premises freshly painted at their own cost before vacating, or shall pay an amount equivalent to painting charges to the Lessor"
+  },
+  {
+    "document_type": "lease-agreement",
+    "label": "+ Add notice/notice board clause",
+    "prompt": "Add that the Lessor shall have the right to display a \"To Let\" notice on the premises during the last 30 days before lease expiry"
+  },
+  {
+    "document_type": "lease-agreement",
+    "label": "+ Add diplomatic/break clause",
+    "prompt": "Add a diplomatic break clause allowing either party to terminate after 6 months on giving 2 months written notice, notwithstanding the lock-in period, for diplomatic or relocation reasons"
+  },
+  {
+    "document_type": "lease-agreement",
+    "label": "+ Add GST on rent clause",
+    "prompt": "Add a clause confirming whether GST is applicable on the lease rent — if commercial lease and Lessor is GST registered, add that GST at 18% shall be charged on rent and the Lessee shall be entitled to claim input tax credit if eligible"
+  },
+  {
+    "document_type": "lease-agreement",
+    "label": "+ Add generator/power backup clause",
+    "prompt": "Add that the Lessee shall bear the cost of generator/power backup usage at actuals in addition to regular electricity charges"
+  },
+  {
+    "document_type": "lease-agreement",
+    "label": "+ Add lock change prohibition",
+    "prompt": "Add that the Lessee shall not change the locks or add additional locks to the premises without prior written consent of the Lessor, and any new keys must be provided to the Lessor"
+  },
+  {
+    "document_type": "lease-agreement",
+    "label": "+ Add early termination penalty",
+    "prompt": "Add an early termination penalty clause — if the Lessee terminates during the lock-in period, they shall forfeit the security deposit and pay rent for the unexpired lock-in period"
+  },
+  {
+    "document_type": "lease-agreement",
+    "label": "− Remove sub-lease restriction",
+    "prompt": "Modify the sub-letting clause to allow the Lessee to sublet part of the premises with prior written intimation to the Lessor (not requiring formal consent)"
+  },
+  {
+    "document_type": "lease-agreement",
+    "label": "− Remove arbitration (keep court only)",
+    "prompt": "Remove the arbitration clause and replace with exclusive jurisdiction of courts at the specified city only"
+  },
+  {
+    "document_type": "lease-agreement",
+    "label": "↕ Convert to 11-month lease",
+    "prompt": "Convert this to an 11-month lease (not exceeding 1 year) to avoid compulsory registration requirement under Section 17 of Registration Act 1908. Update the lease end date, duration, and registration clause accordingly."
+  },
+  {
+    "document_type": "lease-agreement",
+    "label": "↕ Convert to commercial lease",
+    "prompt": "Convert this from a residential to a commercial office space lease. Update the purpose clause, add GST clause, add signboard/branding rights, add business hours access clause, and remove residential-specific obligations"
+  },
+  {
+    "document_type": "lease-agreement",
+    "label": "↕ Add rent-free period",
+    "prompt": "Add a rent-free period of {{number}} months at the start of the lease for fitting out and renovation purposes, during which no rent shall be payable but the security deposit shall apply"
+  },
+  {
+    "document_type": "lease-agreement",
+    "label": "↕ Make security deposit interest-bearing",
+    "prompt": "Modify the security deposit clause to make it interest-bearing at {{rate}}% per annum, and update the refund clause accordingly"
+  },
+  {
+    "document_type": "lease-agreement",
+    "label": "✦ Strengthen Lessor protections",
+    "prompt": "Strengthen all Lessor protection clauses — add right to enter and inspect monthly without notice, add right to terminate for non-payment after 1 month, add explicit forfeiture of deposit on damage"
+  },
+  {
+    "document_type": "lease-agreement",
+    "label": "✦ Strengthen Lessee protections",
+    "prompt": "Strengthen Lessee protection clauses — add minimum 3 months written notice for rent increase, add Lessor\\"
+  },
+  {
+    "document_type": "lease-agreement",
+    "label": "🔤 Make language more formal",
+    "prompt": "Rewrite the entire lease deed in more formal legal language with proper recitals, covenants, and legal terminology as used in registered documents"
+  },
+  {
+    "document_type": "board-resolution-bank-account",
+    "label": "+ Add joint signing requirement",
+    "prompt": "Add a clause that two authorized signatories must sign jointly for transactions above ₹1,00,000"
+  },
+  {
+    "document_type": "board-resolution-bank-account",
+    "label": "+ Add transaction limit",
+    "prompt": "Add a clause specifying the authorized signatories can operate up to their designated transaction limits: single signatory up to ₹50,000, joint signatories above ₹50,000"
+  },
+  {
+    "document_type": "board-resolution-bank-account",
+    "label": "+ Add internet banking authorization",
+    "prompt": "Add authorization for internet banking, NEFT, RTGS and IMPS transactions"
+  },
+  {
+    "document_type": "board-resolution-bank-account",
+    "label": "+ Add locker authorization",
+    "prompt": "Add authorization to open and operate safe deposit locker at the bank"
+  },
+  {
+    "document_type": "board-resolution-bank-account",
+    "label": "↕ Change to joint signing only",
+    "prompt": "Modify the resolution so that ALL transactions require JOINT signing by any two of the authorized signatories — no single signatory operation allowed"
+  },
+  {
+    "document_type": "board-resolution-bank-account",
+    "label": "− Remove seal clause",
+    "prompt": "Remove any reference to company seal — common seal is optional under Companies Act 2013"
+  },
+  {
+    "document_type": "board-resolution-bank-account",
+    "label": "✦ Add FD authorization",
+    "prompt": "Add authorization to open Fixed Deposits with the bank from the current account balance"
+  },
+  {
+    "document_type": "board-resolution-bank-account",
+    "label": "✦ Add cheque book authorization",
+    "prompt": "Add explicit authorization to obtain cheque books and debit cards for the account"
+  },
+  {
+    "document_type": "board-resolution-bank-account",
+    "label": "🔤 Make more formal",
+    "prompt": "Make the entire resolution more formal and legally precise. Use proper legal language throughout."
+  },
+  {
+    "document_type": "board-resolution-bank-account",
+    "label": "📋 Add FEMA compliance clause",
+    "prompt": "Add a clause confirming compliance with FEMA regulations for any foreign exchange transactions from this account"
+  },
+  {
+    "document_type": "board-resolution-director-appointment",
+    "label": "+ Add independence declaration",
+    "prompt": "Add a clause that the director has declared their independence as required under Section 149(6) and Schedule IV of the Companies Act 2013 (use only if this is an Independent Director)"
+  },
+  {
+    "document_type": "board-resolution-director-appointment",
+    "label": "+ Add non-compete clause",
+    "prompt": "Add a clause that the director shall not engage in any competing business during and for 1 year after the tenure"
+  },
+  {
+    "document_type": "board-resolution-director-appointment",
+    "label": "+ Add disclosure of interest clause",
+    "prompt": "Add a clause requiring the director to disclose all their other directorships and interests as per Section 184 within 30 days"
+  },
+  {
+    "document_type": "board-resolution-director-appointment",
+    "label": "+ Add CSR committee mention",
+    "prompt": "Add authorization for the director to be a member of the CSR Committee if the company is required to constitute one under Section 135"
+  },
+  {
+    "document_type": "board-resolution-director-appointment",
+    "label": "+ Add audit committee authorization",
+    "prompt": "Add authorization for the director to be part of the Audit Committee as required under Section 177"
+  },
+  {
+    "document_type": "board-resolution-director-appointment",
+    "label": "↕ Change to MD appointment",
+    "prompt": "Convert this from an ordinary director appointment to a Managing Director appointment under Section 196, adding managing director powers and responsibilities"
+  },
+  {
+    "document_type": "board-resolution-director-appointment",
+    "label": "↕ Change to WTD appointment",
+    "prompt": "Convert this to a Whole-time Director appointment under Section 196 of Companies Act 2013"
+  },
+  {
+    "document_type": "board-resolution-director-appointment",
+    "label": "− Remove remuneration clause",
+    "prompt": "Remove the remuneration clause — this director is being appointed on a non-remuneration/honorary basis"
+  },
+  {
+    "document_type": "board-resolution-director-appointment",
+    "label": "📋 Add DIR-12 filing authorization",
+    "prompt": "Add a specific clause authorizing the Company Secretary to file Form DIR-12 with ROC within 30 days"
+  },
+  {
+    "document_type": "board-resolution-director-appointment",
+    "label": "📋 Add Whole-time KMP declaration",
+    "prompt": "Add a clause confirming this director is appointed as Key Managerial Personnel (KMP) under Section 203"
+  },
+  {
+    "document_type": "board-resolution-registered-office-change",
+    "label": "+ Add NOC acknowledgment",
+    "prompt": "Add a clause acknowledging receipt of No Objection Certificate from the property owner/landlord for using the premises as registered office"
+  },
+  {
+    "document_type": "board-resolution-registered-office-change",
+    "label": "+ Add GST update authorization",
+    "prompt": "Add authorization to update the registered office address in GST registration within 15 days"
+  },
+  {
+    "document_type": "board-resolution-registered-office-change",
+    "label": "+ Add INC-22 filing authorization",
+    "prompt": "Add explicit authorization to file Form INC-22 with ROC within 30 days of this resolution"
+  },
+  {
+    "document_type": "board-resolution-registered-office-change",
+    "label": "+ Add bank intimation clause",
+    "prompt": "Add a clause authorizing intimation to all banks and financial institutions about the change of registered office"
+  },
+  {
+    "document_type": "board-resolution-registered-office-change",
+    "label": "↕ Convert to different state change",
+    "prompt": "Convert this to a special resolution for change of registered office to a different state, which requires approval under Section 13 and Central Government approval"
+  },
+  {
+    "document_type": "board-resolution-registered-office-change",
+    "label": "+ Add newspaper publication clause",
+    "prompt": "Add a clause authorizing publication of notice of change of registered office in a local newspaper (required for different city change)"
+  },
+  {
+    "document_type": "board-resolution-registered-office-change",
+    "label": "📋 Add stationery update clause",
+    "prompt": "Add a clause directing all departments to update company letterheads, invoice formats and other stationery with the new address within 30 days"
+  },
+  {
+    "document_type": "board-resolution-bank-loan",
+    "label": "+ Add security creation clause",
+    "prompt": "Add detailed clause about creation of charge on company assets — specifying the assets to be hypothecated or mortgaged as security"
+  },
+  {
+    "document_type": "board-resolution-bank-loan",
+    "label": "+ Add CHG-1 filing authorization",
+    "prompt": "Add explicit authorization to file Form CHG-1 with ROC within 30 days of charge creation under Section 77"
+  },
+  {
+    "document_type": "board-resolution-bank-loan",
+    "label": "+ Add personal guarantee mention",
+    "prompt": "Add a clause authorizing specific directors to provide personal guarantee to the bank as additional security for the loan"
+  },
+  {
+    "document_type": "board-resolution-bank-loan",
+    "label": "+ Add interest rate clause",
+    "prompt": "Add a clause specifying the interest rate terms: fixed/floating rate, reset period and any prepayment conditions"
+  },
+  {
+    "document_type": "board-resolution-bank-loan",
+    "label": "+ Add repayment schedule clause",
+    "prompt": "Add a clause noting the repayment schedule: monthly EMI amount and loan tenure"
+  },
+  {
+    "document_type": "board-resolution-bank-loan",
+    "label": "↕ Convert to cash credit facility",
+    "prompt": "Convert this from a term loan resolution to a Cash Credit Facility resolution with revolving credit feature"
+  },
+  {
+    "document_type": "board-resolution-bank-loan",
+    "label": "+ Add Section 180 compliance note",
+    "prompt": "Add a note confirming that the borrowing is within the limits approved by shareholders under Section 180(1)(c)"
+  },
+  {
+    "document_type": "board-resolution-bank-loan",
+    "label": "+ Add insurance clause",
+    "prompt": "Add a clause authorizing creation of insurance on the assets being hypothecated as security, with bank as co-beneficiary"
+  },
+  {
+    "document_type": "board-resolution-bank-loan",
+    "label": "− Remove personal guarantee",
+    "prompt": "Remove any personal guarantee clause — this loan is purely corporate without personal guarantee from directors"
+  },
+  {
+    "document_type": "board-resolution-investment",
+    "label": "+ Add Section 186 compliance note",
+    "prompt": "Add explicit compliance confirmation under Section 186 stating the investment is within statutory limits of 60% of paid-up capital and free reserves or 100% of free reserves whichever is higher"
+  },
+  {
+    "document_type": "board-resolution-investment",
+    "label": "+ Add risk disclosure clause",
+    "prompt": "Add a clause acknowledging the investment carries market risks and directors have conducted due diligence"
+  },
+  {
+    "document_type": "board-resolution-investment",
+    "label": "+ Add rollover authorization",
+    "prompt": "Add authorization to rollover/renew the Fixed Deposit on maturity at prevailing interest rates without fresh board resolution"
+  },
+  {
+    "document_type": "board-resolution-investment",
+    "label": "+ Add redemption authorization",
+    "prompt": "Add authorization for premature redemption of the investment if required for business needs"
+  },
+  {
+    "document_type": "board-resolution-investment",
+    "label": "↕ Convert to inter-corporate loan",
+    "prompt": "Convert this from investment to an inter-corporate loan resolution with interest rate and repayment terms as per Section 186"
+  },
+  {
+    "document_type": "board-resolution-investment",
+    "label": "+ Add Board Report disclosure clause",
+    "prompt": "Add clause noting this investment will be disclosed in the Annual Board Report under Section 186(4)"
+  },
+  {
+    "document_type": "board-resolution-dividend",
+    "label": "+ Add TDS deduction clause",
+    "prompt": "Add explicit clause about TDS deduction at 10% on dividend payments exceeding ₹5,000 per shareholder under Section 194 of Income Tax Act"
+  },
+  {
+    "document_type": "board-resolution-dividend",
+    "label": "+ Add IEPF transfer clause",
+    "prompt": "Add clause about transfer of unclaimed dividend to Investor Education and Protection Fund (IEPF) after 7 years"
+  },
+  {
+    "document_type": "board-resolution-dividend",
+    "label": "+ Add separate bank account clause",
+    "prompt": "Add clause directing opening of separate Unpaid Dividend Account and transfer of dividend within 5 days"
+  },
+  {
+    "document_type": "board-resolution-dividend",
+    "label": "↕ Convert to interim dividend",
+    "prompt": "Convert this from final dividend recommendation to interim dividend declaration by the Board under Section 123(3)"
+  },
+  {
+    "document_type": "board-resolution-dividend",
+    "label": "↕ Convert to final dividend",
+    "prompt": "Convert this to final dividend recommendation by Board to shareholders for approval at AGM"
+  },
+  {
+    "document_type": "board-resolution-dividend",
+    "label": "+ Add ECS payment clause",
+    "prompt": "Add authorization for payment of dividend through ECS/NECS directly to shareholders bank accounts"
+  },
+  {
+    "document_type": "board-resolution-dividend",
+    "label": "+ Add stock exchange intimation",
+    "prompt": "Add clause authorizing intimation to stock exchanges (BSE/NSE) within 30 minutes of board decision (for listed companies)"
+  },
+  {
+    "document_type": "board-resolution-common-seal",
+    "label": "+ Add seal register maintenance clause",
+    "prompt": "Add clause directing Company Secretary to maintain a Seal Register recording every use of seal with date, document name and authorizing signatories"
+  },
+  {
+    "document_type": "board-resolution-common-seal",
+    "label": "+ Add security custody clause",
+    "prompt": "Add clause specifying the seal shall be kept in a locked safe at registered office and CS holds the key"
+  },
+  {
+    "document_type": "board-resolution-common-seal",
+    "label": "↕ Specify joint authorization for seal",
+    "prompt": "Modify to require TWO authorized persons to be present whenever seal is affixed — one director and company secretary"
+  },
+  {
+    "document_type": "board-resolution-common-seal",
+    "label": "+ Add lost seal procedure",
+    "prompt": "Add clause specifying procedure if seal is lost or stolen — board must pass new resolution and inform ROC"
+  },
+  {
+    "document_type": "board-resolution-common-seal",
+    "label": "📋 Add note on optional nature",
+    "prompt": "Add a note that common seal is optional under Companies Act 2013 as amended, and documents are equally valid without seal if signed by authorized persons"
+  },
+  {
+    "document_type": "director-appointment-letter",
+    "label": "+ Add Schedule IV obligations",
+    "prompt": "Add a clause listing the Independent Director obligations under Schedule IV (Code for Independent Directors) if this is an independent director appointment"
+  },
+  {
+    "document_type": "director-appointment-letter",
+    "label": "+ Add D&O insurance clause",
+    "prompt": "Add clause stating the company will obtain Directors and Officers (D&O) liability insurance covering the director during their tenure"
+  },
+  {
+    "document_type": "director-appointment-letter",
+    "label": "+ Add data confidentiality clause",
+    "prompt": "Add comprehensive confidentiality clause covering trade secrets, customer data, business strategies and financial information — both during and 3 years after tenure"
+  },
+  {
+    "document_type": "director-appointment-letter",
+    "label": "+ Add IP assignment clause",
+    "prompt": "Add intellectual property assignment clause — all inventions, designs or improvements made during tenure belong to the company"
+  },
+  {
+    "document_type": "director-appointment-letter",
+    "label": "+ Add expense reimbursement clause",
+    "prompt": "Add clause about reimbursement of travel, accommodation and out-of-pocket expenses incurred in performance of duties"
+  },
+  {
+    "document_type": "director-appointment-letter",
+    "label": "− Remove non-compete clause",
+    "prompt": "Remove the non-compete restriction — this appointment does not include any non-compete obligation"
+  },
+  {
+    "document_type": "director-appointment-letter",
+    "label": "↕ Add MD-level remuneration structure",
+    "prompt": "Expand remuneration clause to include full MD-level structure: basic salary, perquisites, commission, incentives and retirement benefits as per Schedule V"
+  },
+  {
+    "document_type": "director-appointment-letter",
+    "label": "+ Add governing law clause",
+    "prompt": "Add clause specifying this agreement is governed by laws of India and disputes subject to jurisdiction of courts at [city of registered office]"
+  },
+  {
+    "document_type": "partnership-deed",
+    "label": "+ Add banking single signatory operation",
+    "prompt": "Add clause specifying the bank account can be operated by either partner individually up to a transaction limit of ₹50,000, and jointly for higher amounts"
+  },
+  {
+    "document_type": "partnership-deed",
+    "label": "+ Add admission of new partner clause",
+    "prompt": "Add clause stating that new partners can be admitted to the firm only with the written consent of all existing partners"
+  },
+  {
+    "document_type": "partnership-deed",
+    "label": "+ Add partner salary cap",
+    "prompt": "Add clause specifying the partner remuneration shall be capped strictly at the maximum permissible limit under Section 40(b)(v) of the Income Tax Act 1961"
+  },
+  {
+    "document_type": "partnership-deed",
+    "label": "+ Add partner loan interest rate",
+    "prompt": "Add clause specifying that if any partner provides a loan to the firm, they shall receive simple interest at the rate of 12% per annum"
+  },
+  {
+    "document_type": "partnership-deed",
+    "label": "+ Add goodwill valuation formula",
+    "prompt": "Add clause defining the goodwill valuation method (three times the average net profits of preceding three years) in case of retirement or death of a partner"
+  },
+  {
+    "document_type": "partnership-deed",
+    "label": "+ Add non-compete for outgoing partner",
+    "prompt": "Add clause restricting a retiring partner from engaging in any competing business within a radius of 5 kilometers for a period of 2 years from their retirement"
+  },
+  {
+    "document_type": "partnership-deed",
+    "label": "+ Add accounting system details",
+    "prompt": "Add clause specifying that the firm shall maintain books of account on a mercantile/accrual basis"
+  },
+  {
+    "document_type": "partnership-deed",
+    "label": "− Remove capital interest clause",
+    "prompt": "Remove the clause providing interest on capital contributions—no interest shall be paid on partners capital"
+  },
+  {
+    "document_type": "partnership-deed",
+    "label": "+ Add partner drawings limits",
+    "prompt": "Add clause limiting monthly partner drawings to ₹25,000 without prior mutual consent"
+  },
+  {
+    "document_type": "partnership-deed",
+    "label": "+ Add dispute mediation step",
+    "prompt": "Add clause mandating that before referring any dispute to arbitration, partners must first attempt resolution through good-faith mediation within 30 days"
+  },
+  {
+    "document_type": "partnership-deed",
+    "label": "+ Add intellectual property clause",
+    "prompt": "Add clause specifying that any intellectual property developed by a partner during the partnership shall belong exclusively to the partnership firm"
+  },
+  {
+    "document_type": "partnership-deed",
+    "label": "+ Add specific partner roles",
+    "prompt": "Add clause defining roles: Partner 1 shall manage daily sales and client relations, and Partner 2 shall manage finance, accounts, and administration"
+  },
+  {
+    "document_type": "partnership-deed",
+    "label": "+ Restrict dissolution by notice",
+    "prompt": "Add clause stating that the partnership shall not be dissolved by notice by a single partner, but requires the mutual written consent of both partners"
+  },
+  {
+    "document_type": "partnership-deed",
+    "label": "↕ Update profit-sharing ratio",
+    "prompt": "Modify the profit and loss sharing ratio to 60:40 between Partner 1 and Partner 2 respectively"
+  },
+  {
+    "document_type": "general-power-of-attorney",
+    "label": "🔒 Restrict property sale",
+    "prompt": "Add a clause explicitly prohibiting the attorney from selling, transferring, or creating third-party rights on any immovable property (lease and maintenance only)"
+  },
+  {
+    "document_type": "general-power-of-attorney",
+    "label": "⏳ Limit validity duration",
+    "prompt": "Limit the power of attorney validity to a fixed duration of 1 year from the date of execution"
+  },
+  {
+    "document_type": "general-power-of-attorney",
+    "label": "📅 Add revocation notice period",
+    "prompt": "Add a clause requiring a 30-day written notice for revocation of this power of attorney"
+  },
+  {
+    "document_type": "general-power-of-attorney",
+    "label": "🚫 Remove power of substitution",
+    "prompt": "Remove the power of substitution clause so that the attorney cannot delegate powers to a substitute"
+  },
+  {
+    "document_type": "general-power-of-attorney",
+    "label": "💰 Restrict borrowing/loans",
+    "prompt": "Add a restriction that the attorney cannot borrow money or take loans on my behalf without prior written consent"
+  },
+  {
+    "document_type": "general-power-of-attorney",
+    "label": "📊 Add monthly account reporting",
+    "prompt": "Add a clause requiring the attorney to submit a detailed monthly statement of accounts to me on or before the 10th of every month"
+  },
+  {
+    "document_type": "general-power-of-attorney",
+    "label": "🔨 Exclude construction/demolition",
+    "prompt": "Remove the power to construct, demolish, or rebuild properties from the attorney\\"
+  },
+  {
+    "document_type": "general-power-of-attorney",
+    "label": "🏦 Limit single bank transaction",
+    "prompt": "Add a limit of ₹1,00,000 per banking transaction for operations conducted by the attorney"
+  },
+  {
+    "document_type": "general-power-of-attorney",
+    "label": "🏛️ Exclude trust/trustee powers",
+    "prompt": "Delete the section authorizing the attorney to act in relation to trusts where I am a trustee or beneficiary"
+  },
+  {
+    "document_type": "general-power-of-attorney",
+    "label": "🏢 Exclude company promotion",
+    "prompt": "Remove the powers allowing the attorney to promote or form new companies in my name"
+  },
+  {
+    "document_type": "general-power-of-attorney",
+    "label": "🛡️ Add principal indemnity",
+    "prompt": "Add a clause where the principal agrees to indemnify the attorney for all lawful acts done in good faith within the scope of this GPA"
+  },
+  {
+    "document_type": "general-power-of-attorney",
+    "label": "⚖️ Add governing law & jurisdiction",
+    "prompt": "Add a governing law clause specifying Indian law and court jurisdiction at New Delhi"
+  },
+  {
+    "document_type": "general-power-of-attorney",
+    "label": "🔑 Grant specific power of sale",
+    "prompt": "Add a clause explicitly authorizing the attorney to sell and register a sale deed for the immovable properties listed in Schedule I"
+  },
+  {
+    "document_type": "general-power-of-attorney",
+    "label": "👥 Add joint attorney operations",
+    "prompt": "Add a requirement that if multiple attorneys are appointed, they must act and sign jointly for all transactions"
+  },
+  {
+    "document_type": "_default",
+    "label": "+ Add confidentiality clause",
+    "prompt": "Add a comprehensive confidentiality clause covering all business information, trade secrets and client data"
+  },
+  {
+    "document_type": "_default",
+    "label": "+ Add dispute resolution clause",
+    "prompt": "Add a dispute resolution clause specifying arbitration under Arbitration and Conciliation Act 1996 with seat at [city]"
+  },
+  {
+    "document_type": "_default",
+    "label": "+ Add governing law clause",
+    "prompt": "Add that this document is governed by laws of India and subject to jurisdiction of courts at the company\\"
+  },
+  {
+    "document_type": "_default",
+    "label": "+ Add force majeure clause",
+    "prompt": "Add a force majeure clause covering pandemic, natural disaster, government action and other unforeseeable events"
+  },
+  {
+    "document_type": "_default",
+    "label": "+ Add penalty clause",
+    "prompt": "Add a clause specifying penalties for breach of any obligation in this document"
+  },
+  {
+    "document_type": "_default",
+    "label": "+ Add witness signatures block",
+    "prompt": "Add signature blocks for two independent witnesses with name, address and signature lines"
+  },
+  {
+    "document_type": "_default",
+    "label": "🔤 Make more formal",
+    "prompt": "Rewrite the entire document in more formal legal language — more precise, professional tone throughout"
+  },
+  {
+    "document_type": "_default",
+    "label": "📝 Simplify language",
+    "prompt": "Simplify the legal language to be clearer and easier to understand while keeping it legally valid"
+  },
+  {
+    "document_type": "_default",
+    "label": "− Remove seal reference",
+    "prompt": "Remove all references to company seal — it is optional under Companies Act 2013"
+  },
+  {
+    "document_type": "_default",
+    "label": "↕ Add amendment clause",
+    "prompt": "Add a clause that this document can only be amended by written consent of all parties"
+  }
+]

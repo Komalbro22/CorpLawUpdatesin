@@ -1,0 +1,127 @@
+[
+  {
+    "original_prompt": "Add an explicit clause prohibiting the Lessee from sub-letting, underletting or parting with possession of the premises or any part thereof without prior written consent of the Lessor",
+    "original_label": "+ Add sub-lease prohibition",
+    "document_type": "lease-agreement",
+    "name": "ADD_SUBLEASE_PROHIBITION",
+    "description": "Adds a clause prohibiting the Lessee from sub-letting, underletting, assigning, or parting with possession of the premises without the Lessor's prior written consent.",
+    "content": "The Lessee shall not be entitled to sub-let, underlet, assign, transfer, or part with possession of the Demised Premises or any portion thereof, or create any third-party rights or interests therein, whether by way of licence or otherwise, without the prior express written consent of the Lessor. Any such act without the Lessor's prior written consent shall be deemed a material breach of this Agreement and render this Agreement liable for termination forthwith.",
+    "variables": {},
+    "placement_action": "APPEND",
+    "placement_anchor": ""
+  },
+  {
+    "original_prompt": "Add a clause specifying whether pets are allowed — if residential lease, add that no pets are permitted without prior written consent of the Lessor",
+    "original_label": "+ Add pet policy clause",
+    "document_type": "lease-agreement",
+    "name": "ADD_SOMETHING_SPECIFIC",
+    "description": "Add a clause specifying whether pets are allowed.",
+    "content": "Pets are not permitted on the Leased Premises without the prior express written consent of the Lessor. Any breach of this condition shall constitute a material breach of this Agreement.",
+    "variables": {},
+    "placement_action": "APPEND",
+    "placement_anchor": ""
+  },
+  {
+    "original_prompt": "Add a clause that all maintenance charges, society charges, parking charges and common area charges shall be paid by the Lessee in addition to the rent",
+    "original_label": "+ Add maintenance charge clause",
+    "document_type": "lease-agreement",
+    "name": "ADD_MAINTENANCE_AND_SOCIETY_CHARGES_CLAUSE",
+    "description": "Adds a clause stipulating that the Lessee is responsible for paying maintenance, society, parking, and common area charges in addition to the rent.",
+    "content": "The Lessee shall, in addition to the Rent as stipulated hereinabove, be solely responsible for the timely payment of all maintenance charges, society charges, parking charges, and common area charges as may be levied from time to time by the relevant authorities or the society/association.",
+    "variables": {},
+    "placement_action": "APPEND",
+    "placement_anchor": ""
+  },
+  {
+    "original_prompt": "Add a clause that the Lessee shall get the premises freshly painted at their own cost before vacating, or shall pay an amount equivalent to painting charges to the Lessor",
+    "original_label": "+ Add painting obligation",
+    "document_type": "lease-agreement",
+    "name": "ADD_SOMETHING_SPECIFIC",
+    "description": "Specifies the Lessee's obligation to paint the premises or pay an equivalent amount to the Lessor upon vacating.",
+    "content": "OBLIGATION TO PAINT: The Lessee shall, at their sole cost and expense, cause the Demised Premises to be freshly painted and restored to its original condition, fair wear and tear excepted, immediately prior to the vacation of the said premises. In the event the Lessee fails to comply with this obligation, the Lessee shall be liable to pay to the Lessor an amount equivalent to {{painting_charges_amount}} (Rupees {{painting_charges_amount_in_words}} only) as compensation towards painting charges, which amount shall be paid by the Lessee to the Lessor prior to or at the time of vacation of the Demised Premises.",
+    "variables": {
+      "painting_charges_amount": "CURRENCY",
+      "painting_charges_amount_in_words": "STRING"
+    },
+    "placement_action": "APPEND",
+    "placement_anchor": ""
+  },
+  {
+    "original_prompt": "Add that the Lessor shall have the right to display a \"To Let\" notice on the premises during the last 30 days before lease expiry",
+    "original_label": "+ Add notice/notice board clause",
+    "document_type": "lease-agreement",
+    "name": "ADD_SOMETHING_SPECIFIC",
+    "description": "Adds a clause granting the Lessor the right to display a 'To Let' notice on the premises during a specified period before lease expiry.",
+    "content": "Notwithstanding anything contained herein to the contrary, the Lessor shall have the absolute right and liberty to affix or display a 'To Let' or 'For Rent' notice board or sign on the exterior or interior of the Demised Premises, or any part thereof, during the period of {{notice_period_days}} days immediately preceding the expiry or earlier termination of this Lease Agreement, and the Lessee shall not object to the same.",
+    "variables": {
+      "notice_period_days": "NUMBER"
+    },
+    "placement_action": "APPEND",
+    "placement_anchor": ""
+  },
+  {
+    "original_prompt": "Add a diplomatic break clause allowing either party to terminate after 6 months on giving 2 months written notice, notwithstanding the lock-in period, for diplomatic or relocation reasons",
+    "original_label": "+ Add diplomatic/break clause",
+    "document_type": "lease-agreement",
+    "name": "ADD_SOMETHING_SPECIFIC",
+    "description": "Add a diplomatic/break clause to allow early termination under specific conditions.",
+    "content": "Notwithstanding anything contained herein to the contrary, including any stipulated lock-in period, either party hereto shall have the prerogative to terminate this Lease Agreement prematurely, provided such termination is sought subsequent to the expiry of the initial period of {{initial_months_before_termination}} months from the Commencement Date of this Agreement. To effectuate such termination, the party desirous of terminating shall serve upon the other party a prior written notice of not less than {{months_written_notice}} months, explicitly citing bonafide diplomatic or relocation imperatives as the underlying grounds for such termination. Upon the diligent expiry of the said notice period, this Lease Agreement shall stand automatically terminated, and the parties shall forthwith proceed to settle all respective obligations and entitlements in accordance with the provisions of this Agreement.",
+    "variables": {
+      "initial_months_before_termination": "NUMBER",
+      "months_written_notice": "NUMBER"
+    },
+    "placement_action": "APPEND",
+    "placement_anchor": ""
+  },
+  {
+    "original_prompt": "Add a clause confirming whether GST is applicable on the lease rent — if commercial lease and Lessor is GST registered, add that GST at 18% shall be charged on rent and the Lessee shall be entitled to claim input tax credit if eligible",
+    "original_label": "+ Add GST on rent clause",
+    "document_type": "lease-agreement",
+    "name": "ADD_GST_ON_RENT_CLAUSE",
+    "description": "Adds a clause specifying the applicability of Goods and Services Tax (GST) on lease rent and other charges, including the GST rate and the Lessee's entitlement to Input Tax Credit.",
+    "content": "It is hereby mutually agreed and declared by and between the Parties that in the event this Lease Agreement pertains to a commercial property and the Lessor is duly registered under the provisions of the Central Goods and Services Tax Act, 2017, or any successor legislation thereto, then the Goods and Services Tax (GST) at the prevailing rate of {{gst_rate}}% shall be charged on the monthly lease rent, maintenance charges, and any other charges or payments designated as taxable supplies under the aforesaid Act, payable by the Lessee to the Lessor under this Agreement. The Lessee shall promptly pay the applicable GST along with the respective charges. The Lessee shall be entitled to claim input tax credit on such GST paid, subject to its eligibility and compliance with all applicable provisions of the Goods and Services Tax Act, 2017, and the rules framed thereunder, as amended from time to time.",
+    "variables": {
+      "gst_rate": "NUMBER"
+    },
+    "placement_action": "INSERT_AFTER",
+    "placement_anchor": "RENT"
+  },
+  {
+    "original_prompt": "Add that the Lessee shall bear the cost of generator/power backup usage at actuals in addition to regular electricity charges",
+    "original_label": "+ Add generator/power backup clause",
+    "document_type": "lease-agreement",
+    "name": "ADD_SOMETHING_SPECIFIC",
+    "description": "Adds a clause stipulating that the Lessee shall bear the cost of generator/power backup usage at actuals.",
+    "content": "It is hereby mutually agreed and understood that the Lessee shall be solely responsible for bearing the costs associated with the usage of generator and/or power backup facilities, which costs shall be calculated at actuals. Such charges shall be borne by the Lessee in addition to and over and above the regular electricity consumption charges and any other utility charges as may be applicable under this Agreement.",
+    "variables": {},
+    "placement_action": "INSERT_AFTER",
+    "placement_anchor": "Electricity Charges"
+  },
+  {
+    "original_prompt": "Make the entire resolution more formal and legally precise. Use proper legal language throughout.",
+    "original_label": "🔤 Make more formal",
+    "document_type": "board-resolution-bank-account",
+    "name": "FORMAL_BANK_ACCOUNT_RESOLUTION_TEMPLATE",
+    "description": "Generates a comprehensive and legally precise template for a Board Resolution to open and operate a bank account, including details for authorized signatories and banking facilities, drafted in formal Indian legal language.",
+    "content": "**CERTIFIED TRUE COPY OF THE RESOLUTION PASSED AT THE MEETING OF THE BOARD OF DIRECTORS OF {{company_name}} HELD ON {{meeting_date}} AT {{meeting_venue}}**\n\n**RESOLVED THAT** the consent of the Board of Directors be and is hereby accorded to open a {{account_type}} account with **{{bank_name}}**, situated at its branch located at **{{bank_branch_address}}**, in the name of the Company, **{{company_name}}** (hereinafter referred to as 'the Company').\n\n**FURTHER RESOLVED THAT** the following Directors/Officers of the Company be and are hereby jointly/severally (strike out whichever is not applicable) authorised to operate the aforesaid bank account, including but not limited to, drawing, accepting, endorsing, making, and signing cheques, drafts, bills of exchange, promissory notes, and other negotiable instruments, and to execute all such documents as may be necessary or incidental thereto:\n1.  **{{authorized_signatory_1_name}}**, {{authorized_signatory_1_designation}}\n2.  **{{authorized_signatory_2_name}}**, {{authorized_signatory_2_designation}}\n(Add more signatories as required)\n\n**AND FURTHER RESOLVED THAT** any {{number_of_signatories_required}} of the above-named authorised signatories be and are hereby empowered to jointly/severally (strike out whichever is not applicable) operate the said bank account, and their specimen signatures duly attested by the Chairperson of the Board meeting are appended hereto.\n\n**RESOLVED FURTHER THAT** the Company do avail of internet banking, mobile banking, ATM facilities, debit card facilities, and other allied electronic banking services provided by **{{bank_name}}** for the said account, and that the aforesaid authorised signatories be and are hereby empowered to execute all necessary applications, forms, undertakings, and indemnities in connection therewith.\n\n**RESOLVED FURTHER THAT** any one Director or the Company Secretary be and is hereby authorised to do all such acts, deeds, and things, including without limitation, furnishing necessary documents, certified true copies of resolutions, and information, as may be necessary or incidental for giving effect to the foregoing resolutions.\n\n**RESOLVED FURTHER THAT** a certified true copy of this Resolution be provided to **{{bank_name}}** for their records and necessary action.\n\n**// CERTIFIED TRUE COPY //**\n\n**FOR {{company_name}}**\n\n**(Signature)**\n**{{certifying_officer_name}}**\n**{{certifying_officer_designation}}**\n**DIN/Membership No.: {{certifying_officer_id}}**\n**Date: {{certification_date}}**",
+    "variables": {
+      "company_name": "STRING",
+      "meeting_date": "DATE",
+      "meeting_venue": "STRING",
+      "account_type": "STRING",
+      "bank_name": "STRING",
+      "bank_branch_address": "STRING",
+      "authorized_signatory_1_name": "STRING",
+      "authorized_signatory_1_designation": "STRING",
+      "authorized_signatory_2_name": "STRING",
+      "authorized_signatory_2_designation": "STRING",
+      "number_of_signatories_required": "NUMBER",
+      "certifying_officer_name": "STRING",
+      "certifying_officer_designation": "STRING",
+      "certifying_officer_id": "STRING",
+      "certification_date": "DATE"
+    },
+    "placement_action": "APPEND",
+    "placement_anchor": ""
+  }
+]
