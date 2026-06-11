@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
   if (supabaseDocumentsAdmin) {
     const { data } = await supabaseDocumentsAdmin
       .from('document_templates')
-      .select('name, description')
+      .select('name, description, tags, category')
       .eq('slug', slug)
       .single()
     template = data
@@ -34,14 +34,27 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
   }
 
   // Optimize title/description for SEO based on document type
-  let title = `${template.name} Generator India — AI-Powered & Free | CorpLawUpdates.in`
-  let description = `${template.description}. Create, customize, and edit your document instantly with AI. Fully verified for compliance under Indian laws.`
-  let keywords = [template.name, 'generator', 'india', 'drafting', 'legal format', 'template', 'pdf download']
+  let title = `${template.name} Format India (Free Generator) | CorpLawUpdates.in`
+  let description = `${template.description} Create, customize, and edit your document instantly with AI. Fully verified for compliance under Indian laws.`
+  let keywords = [template.name, `${template.name} format`, `${template.name} india`, 'generator', 'drafting', 'legal template', 'pdf download']
+  
+  if (template.tags && Array.isArray(template.tags)) {
+    keywords = [...keywords, ...template.tags]
+  }
 
+  // Special overrides for highly searched templates
   if (slug === 'lease-agreement') {
     title = 'Rent Agreement & Lease Deed Generator India — Free & Legal | CorpLawUpdates.in'
     description = 'Generate a legally compliant Lease Agreement or Rent Deed under the Transfer of Property Act 1882. Add security deposit, lock-in, escalation, and TDS clauses. Draft in minutes.'
-    keywords = ['rent agreement generator', 'lease deed format', 'commercial lease india', '11 month rent agreement', 'online rent agreement']
+    keywords = [...keywords, 'rent agreement generator', 'commercial lease india', '11 month rent agreement']
+  } else if (slug.includes('mortgage')) {
+    title = `${template.name} Format & Generator India — Free & Legal | CorpLawUpdates.in`
+    description = `Generate a legally valid ${template.name} under the Transfer of Property Act, 1882. Add custom clauses, specify property details, and download in PDF/Word format instantly.`
+    keywords = [...keywords, 'mortgage deed format', 'TPA 1882', 'property mortgage india']
+  } else if (slug.includes('bank-guarantee') || slug.includes('letter-of-credit')) {
+    title = `${template.name} Format India — Bank Draft Generator | CorpLawUpdates.in`
+    description = `Standard ${template.name} format as per Indian banking norms. Draft and customize financial guarantees and trade finance documents instantly.`
+    keywords = [...keywords, 'bank guarantee format', 'trade finance india']
   }
 
   const ogImageUrl = `https://www.corplawupdates.in/api/og?title=${encodeURIComponent(template.name)}&type=Document Generator`
