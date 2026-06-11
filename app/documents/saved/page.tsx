@@ -64,21 +64,21 @@ export default function SavedDocumentsPage() {
                     onClick={() => {
                       const w = window.open('', '_blank')
                       if (w) {
-                        w.document.write(\`
+                        w.document.write(`
                           <html>
                             <head>
-                              <title>\${doc.title}</title>
+                              <title>${doc.title}</title>
                               <style>
                                 body { font-family: serif; max-width: 800px; margin: 0 auto; padding: 40px; line-height: 1.6; }
                                 @media print { body { padding: 0; } }
                               </style>
                             </head>
                             <body>
-                              \${doc.content}
+                              ${doc.content}
                             </body>
                             <script>window.onload = function() { window.print(); }</script>
                           </html>
-                        \`)
+                        `)
                         w.document.close()
                       }
                     }}
