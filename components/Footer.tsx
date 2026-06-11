@@ -27,6 +27,13 @@ export default async function Footer() {
             'whatsapp_channel',
         ])
 
+    const { count: subscriberCountRes } = await supabase
+        .from('subscribers')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true)
+
+    const activeSubscribersCount = subscriberCountRes || 500
+
     const social: Record<string, string> = {}
     settings?.forEach(s => {
         social[s.key] = s.value || ''
@@ -83,7 +90,7 @@ export default async function Footer() {
                     <div className="lg:col-span-2">
                         <h4 className="font-heading text-sm font-bold text-white uppercase tracking-widest mb-6">Explore</h4>
                         <ul className="space-y-3">
-                            {['Home', 'Updates', 'Glossary', 'About', 'Newsletter', 'Contact'].map(item => (
+                            {['Home', 'Updates', 'Documents', 'Tools', 'Glossary', 'About', 'Newsletter', 'Contact'].map(item => (
                                 <li key={item}>
                                     <Link href={item === 'Home' ? '/' : `/${item.toLowerCase()}`} className="text-slate-400 hover:text-gold transition-colors text-sm font-medium">
                                         {item}
@@ -116,7 +123,7 @@ export default async function Footer() {
                                 Stay Informed
                             </h4>
                             <p className="text-slate-400 text-xs leading-relaxed mb-4">
-                                Join 500+ professionals receiving our weekly Monday digest.
+                                Join {activeSubscribersCount.toLocaleString()}+ professionals receiving our weekly Monday digest.
                             </p>
                             <Link href="/newsletter" className="flex items-center justify-between bg-gold text-navy text-[11px] font-bold px-4 py-2 rounded-lg hover:bg-amber-400 transition-all">
                                 SUBSCRIBE FREE

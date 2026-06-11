@@ -2,10 +2,10 @@
 
 import { useState } from 'react'
 
-export default function MSMEFeeCalc() {
+export default function MSMEFeeCalc({ initialBankRate = '6.75' }: { initialBankRate?: string }) {
   const [principalAmount, setPrincipalAmount] = useState('100000')
   const [delayDays, setDelayDays] = useState('45')
-  const [repoRate, setRepoRate] = useState('6.5')
+  const [repoRate, setRepoRate] = useState(initialBankRate)
 
   const [result, setResult] = useState<{interest: number, total: number} | null>(null)
 
@@ -60,7 +60,7 @@ export default function MSMEFeeCalc() {
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Current RBI Repo Rate (%)</label>
+          <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Current RBI Bank Rate (%)</label>
           <input 
             type="number" 
             step="0.1"

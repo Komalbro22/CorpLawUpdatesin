@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import React from 'react'
@@ -105,33 +105,33 @@ function ComplianceCalendarView({
           <div className="flex gap-2 overflow-x-auto pb-1">
             {upcoming.map(({ entry, date }) => (
               <button key={entry.id} onClick={() => onEntryClick(entry)}
-                className="flex-shrink-0 bg-white border border-amber-200 rounded-xl p-3 text-left hover:border-amber-400 transition-colors min-w-[160px]">
-                <div className="text-xs text-amber-600 font-bold mb-1">{date?.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</div>
-                <div className="text-xs font-bold text-navy leading-tight">{entry.form_name}</div>
-                <div className="text-xs text-slate-500 mt-0.5 truncate">{entry.compliance_title}</div>
+                className="flex-shrink-0 bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/50 rounded-xl p-3 text-left hover:border-amber-400 dark:hover:border-amber-500 transition-colors min-w-[160px]">
+                <div className="text-xs text-amber-600 dark:text-amber-500 font-bold mb-1">{date?.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</div>
+                <div className="text-xs font-bold text-navy dark:text-white leading-tight">{entry.form_name}</div>
+                <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">{entry.compliance_title}</div>
                 <div className={`text-xs mt-1 px-1.5 py-0.5 rounded border w-fit ${REGULATOR_COLORS[entry.regulator] || REGULATOR_COLORS['other']}`}>{entry.regulator.toUpperCase()}</div>
               </button>
             ))}
           </div>
         </div>
       )}
-      <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-          <button onClick={prevMonth} className="text-slate-400 hover:text-navy p-1 rounded-lg hover:bg-slate-100">◀</button>
-          <h2 className="font-bold text-navy text-lg">{MONTHS[currentMonth]} {currentYear}</h2>
-          <button onClick={nextMonth} className="text-slate-400 hover:text-navy p-1 rounded-lg hover:bg-slate-100">▶</button>
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
+          <button onClick={prevMonth} className="text-slate-400 hover:text-navy dark:hover:text-white p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">◀</button>
+          <h2 className="font-bold text-navy dark:text-white text-lg">{MONTHS[currentMonth]} {currentYear}</h2>
+          <button onClick={nextMonth} className="text-slate-400 hover:text-navy dark:hover:text-white p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">▶</button>
         </div>
-        <div className="grid grid-cols-7 border-b border-slate-100">
+        <div className="grid grid-cols-7 border-b border-slate-100 dark:border-slate-800">
           {['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d => (
             <div key={d} className="text-center text-xs font-semibold text-slate-400 py-2">{d}</div>
           ))}
         </div>
-        <div className="grid grid-cols-7 divide-x divide-y divide-slate-100">
+        <div className="grid grid-cols-7 divide-x divide-y divide-slate-100 dark:divide-slate-800">
           {cells.map((day, idx) => (
-            <div key={idx} className={`min-h-[80px] p-1 ${day === null ? 'bg-slate-50' : isPast(day) ? 'bg-white opacity-60' : 'bg-white'}`}>
+            <div key={idx} className={`min-h-[80px] p-1 ${day === null ? 'bg-slate-50 dark:bg-slate-800/50' : isPast(day) ? 'bg-white dark:bg-slate-900 opacity-60' : 'bg-white dark:bg-slate-900'}`}>
               {day !== null && (
                 <>
-                  <div className={`text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full mb-1 ${isToday(day) ? 'bg-amber-400 text-navy' : 'text-slate-600'}`}>{day}</div>
+                  <div className={`text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full mb-1 ${isToday(day) ? 'bg-amber-400 text-navy' : 'text-slate-600 dark:text-slate-400'}`}>{day}</div>
                   <div className="space-y-0.5">
                     {(dayMap[day] || []).slice(0, 2).map(entry => (
                       <button key={entry.id} onClick={() => onEntryClick(entry)}
@@ -220,15 +220,15 @@ function TableSection({
   onReport?: (id: string, name: string) => void
   onRowClick?: (id: string) => void
 }) {
-  const displayHeaders = onReport ? [...headers, ''] : headers
+  const displayHeaders = onReport ? ['Done', ...headers, ''] : ['Done', ...headers]
 
   return (
     <section>
-      <h2 className="text-2xl font-heading font-bold text-navy mb-4 flex items-center gap-2">
+      <h2 className="text-2xl font-heading font-bold text-navy dark:text-white mb-4 flex items-center gap-2">
         <span className={`w-3 h-3 rounded-full ${dot} inline-block`} />
         {title}
       </h2>
-      <div className="overflow-x-auto rounded-xl border border-slate-200 shadow-sm">
+      <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
         <table className="w-full text-sm min-w-[640px]">
           <thead>
             <tr className={color}>
@@ -242,31 +242,72 @@ function TableSection({
           <tbody>
             {rows.map((row, i) => {
               const dateStr = rowDates?.[i] || ''
-              let rowBg = i % 2 === 0 ? 'bg-white' : 'bg-slate-50'
-              if (dateStr.includes('May 2026') || dateStr.includes('June 2026')) {
-                rowBg = 'bg-amber-100'
-              } else if (dateStr.includes('July 2026')) {
-                rowBg = 'bg-yellow-50'
-              }
+              let rowBg = i % 2 === 0 ? 'bg-white dark:bg-slate-900' : 'bg-slate-50 dark:bg-slate-800/50'
+              
               const entryId   = entryIds?.[i] || ''
               const entryName = entryNames?.[i] || ''
+              
+              let urgencyBorder = 'border-l-4 border-slate-300'
+              if (dateStr) {
+                try {
+                  const d = new Date(dateStr)
+                  if (isNaN(d.getTime())) {
+                    const p = new Date(dateStr.replace(/(\d+)\s+(\w+)\s+(\d+)/, '$2 $1, $3'))
+                    if (!isNaN(p.getTime())) {
+                      const diff = p.getTime() - new Date().getTime()
+                      const days = diff / (1000 * 3600 * 24)
+                      if (days < 0) urgencyBorder = 'border-l-4 border-red-500'
+                      else if (days <= 7) urgencyBorder = 'border-l-4 border-amber-500'
+                      else urgencyBorder = 'border-l-4 border-green-500'
+                    }
+                  } else {
+                      const diff = d.getTime() - new Date().getTime()
+                      const days = diff / (1000 * 3600 * 24)
+                      if (days < 0) urgencyBorder = 'border-l-4 border-red-500'
+                      else if (days <= 7) urgencyBorder = 'border-l-4 border-amber-500'
+                      else urgencyBorder = 'border-l-4 border-green-500'
+                  }
+                } catch(e) {}
+              }
+              
+              const isDone = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('compliance_done') || '{}')[entryId] : false;
+              if (isDone) {
+                 rowBg = 'bg-slate-100 dark:bg-slate-800 opacity-60';
+                 urgencyBorder = 'border-l-4 border-slate-300 dark:border-slate-700';
+              }
               return (
                 <tr
                   key={entryId || i}
                   id={rowIds?.[i]}
                   data-entry-id={entryId}
-                  className={`${rowBg}${onRowClick ? ' cursor-pointer hover:bg-amber-50 transition-colors' : ''}`}
+                  className={`${rowBg} ${urgencyBorder} ${onRowClick ? 'cursor-pointer hover:bg-amber-50 transition-colors' : ''}`}
                   onClick={onRowClick && entryId ? () => onRowClick(entryId) : undefined}
                 >
+                  <td className="px-4 py-3">
+                    <input 
+                      type="checkbox" 
+                      className="w-4 h-4 cursor-pointer"
+                      checked={isDone}
+                      onClick={(e) => {
+                         e.stopPropagation();
+                         if (typeof window !== 'undefined') {
+                           const current = JSON.parse(localStorage.getItem('compliance_done') || '{}');
+                           current[entryId] = !current[entryId];
+                           localStorage.setItem('compliance_done', JSON.stringify(current));
+                           window.dispatchEvent(new Event('compliance_done_updated'));
+                         }
+                      }}
+                    />
+                  </td>
                   {row.map((cell, j) => (
                     <td
                       key={j}
                       className={`px-4 py-3 ${
                         j === 0
-                          ? 'font-semibold text-blue-700 whitespace-nowrap'
+                          ? 'font-semibold text-blue-700 dark:text-blue-400 whitespace-nowrap'
                           : j === row.length - 1 && headers.includes('Penalty')
-                          ? 'text-red-600 font-medium whitespace-nowrap'
-                          : 'text-slate-700'
+                          ? 'text-red-600 dark:text-red-400 font-medium whitespace-nowrap'
+                          : 'text-slate-700 dark:text-slate-300'
                       }`}
                     >
                       {cell}
@@ -298,7 +339,16 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
   const [selectedEntryName, setSelectedEntryName] = useState<string | undefined>()
   const [selectedEntry, setSelectedEntry] = useState<ComplianceEntry | null>(null)
   const [view, setView] = useState<'table' | 'calendar'>('table')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [filterMode, setFilterMode] = useState<'all' | 'this_week'>('all')
+  const [doneVersion, setDoneVersion] = useState(0) // used to trigger re-renders on checkbox toggle
   const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const handleUpdate = () => setDoneVersion(v => v + 1);
+    window.addEventListener('compliance_done_updated', handleUpdate);
+    return () => window.removeEventListener('compliance_done_updated', handleUpdate);
+  }, []);
 
   useEffect(() => {
     const highlightId = searchParams?.get('highlight')
@@ -338,7 +388,37 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
     if (entry) setSelectedEntry(entry)
   }
 
-  const grouped = entries.reduce<Record<string, ComplianceEntry[]>>((acc, entry) => {
+  const filteredEntries = useMemo(() => {
+    let result = entries;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(e => 
+        e.form_name?.toLowerCase().includes(q) || 
+        e.compliance_title?.toLowerCase().includes(q) ||
+        e.regulator?.toLowerCase().includes(q)
+      );
+    }
+    if (filterMode === 'this_week') {
+      result = result.filter(e => {
+        try {
+          const d = new Date(e.due_date);
+          if (isNaN(d.getTime())) {
+             const p = new Date(e.due_date.replace(/(\d+)\s+(\w+)\s+(\d+)/, '$2 $1, $3'));
+             if (isNaN(p.getTime())) return false;
+             const diff = p.getTime() - new Date().getTime();
+             const days = diff / (1000 * 3600 * 24);
+             return days >= 0 && days <= 7;
+          }
+          const diff = d.getTime() - new Date().getTime();
+          const days = diff / (1000 * 3600 * 24);
+          return days >= 0 && days <= 7;
+        } catch(err) { return false; }
+      });
+    }
+    return result;
+  }, [entries, searchQuery, filterMode, doneVersion]);
+
+  const grouped = filteredEntries.reduce<Record<string, ComplianceEntry[]>>((acc, entry) => {
     const key = entry.regulator || 'other'
     if (!acc[key]) acc[key] = []
     acc[key]!.push(entry)
@@ -474,28 +554,48 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
           </div>
         </div>
 
-        {/* VIEW TOGGLE */}
-        <div className="flex gap-2">
-          <button
-            onClick={() => setView('table')}
-            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
-              view === 'table' ? 'bg-navy text-white' : 'border border-slate-300 text-slate-600 hover:bg-slate-50'
-            }`}
-          >
-            📋 List View
-          </button>
-          <button
-            onClick={() => setView('calendar')}
-            className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
-              view === 'calendar' ? 'bg-navy text-white' : 'border border-slate-300 text-slate-600 hover:bg-slate-50'
-            }`}
-          >
-            📅 Calendar View
-          </button>
+        {/* VIEW TOGGLE & SEARCH */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex gap-2">
+            <button
+              onClick={() => setView('table')}
+              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
+                view === 'table' ? 'bg-navy text-white' : 'border border-slate-300 text-slate-600 hover:bg-slate-50'
+              }`}
+            >
+              📋 List View
+            </button>
+            <button
+              onClick={() => setView('calendar')}
+              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
+                view === 'calendar' ? 'bg-navy text-white' : 'border border-slate-300 text-slate-600 hover:bg-slate-50'
+              }`}
+            >
+              📅 Calendar View
+            </button>
+          </div>
+          
+          <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 w-full sm:w-auto">
+            <input 
+              type="text"
+              placeholder="Search forms or compliance..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="flex-1 sm:w-64 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-amber-400 outline-none"
+            />
+            <button
+              onClick={() => setFilterMode(m => m === 'all' ? 'this_week' : 'all')}
+              className={`px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition-colors ${
+                filterMode === 'this_week' ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'border border-slate-300 text-slate-600 hover:bg-slate-50'
+              }`}
+            >
+              🔥 Due This Week
+            </button>
+          </div>
         </div>
 
         {entries.length === 0 ? (
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
             <EmptyState
               icon="📅"
               title="No compliance deadlines found"
@@ -601,7 +701,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
             )}
           </>
         ) : (
-          <ComplianceCalendarView entries={entries} onEntryClick={setSelectedEntry} />
+          <ComplianceCalendarView entries={filteredEntries} onEntryClick={setSelectedEntry} />
         )}
 
         {/* COMMUNITY NOTICE */}
@@ -624,8 +724,8 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
         </div>
 
         {/* USEFUL LINKS */}
-        <section className="bg-slate-50 rounded-2xl p-6">
-          <h3 className="text-xl font-heading font-bold text-navy mb-4">
+        <section className="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-6 border border-slate-200/60 dark:border-slate-800">
+          <h3 className="text-xl font-heading font-bold text-navy dark:text-white mb-4">
             Official Portals for Verification
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -639,10 +739,10 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex flex-col p-4 bg-white rounded-xl border border-slate-200 hover:border-amber-400 hover:shadow-md transition-all"
+                className="flex flex-col p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-amber-400 dark:hover:border-amber-500 hover:shadow-md transition-all"
               >
-                <span className="font-semibold text-navy text-sm">{link.name} ↗</span>
-                <span className="text-xs text-slate-500 mt-1">{link.desc}</span>
+                <span className="font-semibold text-navy dark:text-white text-sm">{link.name} ↗</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 mt-1">{link.desc}</span>
               </a>
             ))}
           </div>

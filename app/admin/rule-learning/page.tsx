@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useToast } from '@/components/Toast';
 
 interface QueueItem {
   id: string;
@@ -32,6 +33,7 @@ export default function RuleLearningPage() {
   const [activeTab, setActiveTab] = useState<'queue' | 'health'>('queue');
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const { showToast } = useToast();
 
   useEffect(() => {
     loadData();
@@ -66,10 +68,10 @@ export default function RuleLearningPage() {
       const result = await res.json();
       if (result.success) {
         setQueue(prev => prev.filter(q => q.id !== item.id));
-        alert(`Rule "${item.proposed_intent}" approved and activated!`);
+        showToast(`Rule "${item.proposed_intent}" approved and activated!`, 'success');
         loadData();
       } else {
-        alert('Error: ' + result.error);
+        showToast('Error: ' + result.error, 'error');
       }
     } catch (err) {
       console.error('Approve failed:', err);

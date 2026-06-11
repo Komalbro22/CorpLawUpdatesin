@@ -31,7 +31,7 @@ export default async function AdminDashboard() {
         publishedRes,
         draftRes,
         subscribersCountRes,
-        thisMonthRes,
+        gensRes,
         articlesListRes,
         subscribersListRes,
         calcStatsRes
@@ -39,7 +39,7 @@ export default async function AdminDashboard() {
         supabaseAdmin.from('updates').select('*', { count: 'exact', head: true }).not('published_at', 'is', null),
         supabaseAdmin.from('updates').select('*', { count: 'exact', head: true }).is('published_at', null),
         supabaseAdmin.from('subscribers').select('*', { count: 'exact', head: true }).eq('is_active', true),
-        supabaseAdmin.from('updates').select('*', { count: 'exact', head: true }).gte('created_at', firstDayOfMonth),
+        supabaseAdmin.from('generated_documents').select('*', { count: 'exact', head: true }),
         supabaseAdmin.from('updates').select('id, title, category, published_at, created_at').order('created_at', { ascending: false }).limit(5),
         supabaseAdmin.from('subscribers').select('id, email, subscribed_at').order('subscribed_at', { ascending: false }).limit(5),
         supabaseAdmin.from('calculator_usage').select('calculator_type').gte('created_at', sevenDaysAgo)
@@ -48,7 +48,7 @@ export default async function AdminDashboard() {
     const publishedCount = publishedRes.count
     const draftCount = draftRes.count
     const activeSubscribers = subscribersCountRes.count
-    const thisMonthCount = thisMonthRes.count
+    const gensCount = gensRes.count
     const recentArticles = articlesListRes.data
     const recentSubscribers = subscribersListRes.data
     const calcStats = calcStatsRes.data || []
@@ -57,7 +57,7 @@ export default async function AdminDashboard() {
         publishedRes.error ||
         draftRes.error ||
         subscribersCountRes.error ||
-        thisMonthRes.error ||
+        gensRes.error ||
         articlesListRes.error ||
         subscribersListRes.error ||
         calcStatsRes.error
@@ -151,15 +151,15 @@ export default async function AdminDashboard() {
                     </div>
                 </div>
 
-                {/* New This Month Card */}
+                {/* Document Gens Card */}
                 <div className="admin-stat-blue rounded-2xl p-5 md:p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 group">
                     <div className="flex items-center gap-4 min-w-0">
                         <div className="admin-icon-blue w-12 h-12 rounded-xl flex items-center justify-center shrink-0 animate-admin-float">
-                            <CalendarDays className="w-5 h-5" aria-hidden />
+                            <FileText className="w-5 h-5" aria-hidden />
                         </div>
                         <div className="min-w-0">
-                            <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider">New this month</p>
-                            <p className="text-white text-2xl font-heading font-extrabold tabular-nums mt-0.5">{thisMonthCount || 0}</p>
+                            <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Document Gens</p>
+                            <p className="text-white text-2xl font-heading font-extrabold tabular-nums mt-0.5">{gensCount || 0}</p>
                         </div>
                     </div>
                 </div>

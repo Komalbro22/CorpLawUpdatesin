@@ -59,8 +59,14 @@ export async function GET(request: NextRequest) {
             })
         )
 
+        const articlesWithCounts = articles?.map(a => {
+            const wordCount = a.content ? a.content.replace(/<[^>]*>/g, '').split(/\s+/).length : 0;
+            const { content, ...rest } = a; // Strip content to save bandwidth
+            return { ...rest, word_count: wordCount };
+        });
+
         return NextResponse.json({
-            articles,
+            articles: articlesWithCounts || [],
             total: count || 0,
             categoryCounts
         })

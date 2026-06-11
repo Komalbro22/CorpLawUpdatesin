@@ -82,15 +82,22 @@ export function calculateFees(
     let late = 0
 
     if (delay > 0) {
-      if (delay <= 15) late = baseFee * 1
-      else if (delay <= 30) late = baseFee * (isSmallLLP ? 2 : 4)
-      else if (delay <= 60) late = baseFee * (isSmallLLP ? 4 : 8)
-      else if (delay <= 90) late = baseFee * (isSmallLLP ? 6 : 12)
-      else if (delay <= 180) late = baseFee * (isSmallLLP ? 10 : 20)
-      else {
-        late = baseFee * (isSmallLLP ? 15 : 30)
-        const cap = isSmallLLP ? 5000 : 50000
-        late = Math.min(late, cap) // Statutory Cap Limits
+      if (isSmallLLP) {
+        if (delay <= 15) late = baseFee * 1
+        else if (delay <= 30) late = baseFee * 2
+        else if (delay <= 60) late = baseFee * 4
+        else if (delay <= 90) late = baseFee * 6
+        else if (delay <= 180) late = baseFee * 10
+        else if (delay <= 360) late = baseFee * 15
+        else late = baseFee * 15 + (delay - 360) * 10
+      } else {
+        if (delay <= 15) late = baseFee * 1
+        else if (delay <= 30) late = baseFee * 4
+        else if (delay <= 60) late = baseFee * 8
+        else if (delay <= 90) late = baseFee * 12
+        else if (delay <= 180) late = baseFee * 20
+        else if (delay <= 360) late = baseFee * 30
+        else late = baseFee * 30 + (delay - 360) * 20
       }
     }
 
@@ -100,19 +107,52 @@ export function calculateFees(
       total: baseFee + late,
       daysDelayed: delay,
       source: 'Rule 36 & Annexure-A of Limited Liability Partnership Rules, 2009 (As amended by LLP Second Amendment Rules, 2022, effective April 1, 2022).',
-      legalNotes: `LLP Caps: Late fees are capped at a maximum of ₹${isSmallLLP ? '5,000' : '50,000'} for ${isSmallLLP ? 'Small LLPs' : 'Other LLPs'}.`
+      legalNotes: 'LLP Slabs: The flat ₹100/day penalty was replaced by a slab multiplier system based on the delay period.'
     }
   }
 
   // Standard Company Forms: AOC-4, MGT-7, DPT-3
   const standard = getCompanyStandardFee(nominalCapital, isSmallOrOPC)
-  const late = delay * 100 // Statutory ₹100/day
+  let late = 0
+
+  if (delay > 0) {
+    if (form === 'MGT-7' || form === 'AOC-4') {
+      late = delay * 100 // Statutory ₹100/day
+      return {
+        standard,
+        late,
+        total: standard + late,
+        daysDelayed: delay,
+        source: 'Section 403 of Companies Act, 2013 read with Companies (Registration Offices and Fees) Amendment Rules, 2018 (effective July 1, 2018).',
+        legalNotes: 'Standard Penalties: Additional late fee of ₹100 per day is calculated daily without any statutory maximum cap.'
+      }
+    } else {
+      // General forms (e.g. DPT-3) use time-slab multiplier
+      let multiplier = 1
+      if (delay <= 30) multiplier = 2
+      else if (delay <= 60) multiplier = 4
+      else if (delay <= 90) multiplier = 6
+      else if (delay <= 180) multiplier = 10
+      else multiplier = 12
+
+      late = standard * multiplier
+      return {
+        standard,
+        late,
+        total: standard + late,
+        daysDelayed: delay,
+        source: 'Companies (Registration Offices and Fees) Rules, 2014.',
+        legalNotes: 'General Forms: Additional late fee is calculated using a multiplier (up to 12x) on the standard filing fee based on delay period.'
+      }
+    }
+  }
+
   return {
     standard,
-    late,
-    total: standard + late,
+    late: 0,
+    total: standard,
     daysDelayed: delay,
-    source: 'Section 403 of Companies Act, 2013 read with Companies (Registration Offices and Fees) Amendment Rules, 2018 (effective July 1, 2018).',
-    legalNotes: 'Standard Penalties: Additional late fee of ₹100 per day is calculated daily without any statutory maximum cap.'
+    source: 'Companies Act, 2013 / LLP Act, 2008.',
+    legalNotes: 'Filed on time. No additional fee applies.'
   }
 }

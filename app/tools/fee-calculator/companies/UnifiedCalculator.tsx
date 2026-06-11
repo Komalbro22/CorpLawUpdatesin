@@ -65,6 +65,27 @@ export default function UnifiedCalculator() {
     return calculateMCAFee(params)
   }, [selectedForm, companyType, capital, delay, isRepeatOffender, newCapital, state, chargeAmount])
 
+  const commonForms = useMemo(() => {
+    const commonSlugs = ['aoc-4', 'mgt-7', 'adt-1', 'inc-22', 'dir-12', 'dir-3-kyc', 'chg-1', 'inc-20a', 'mgt-14']
+    return commonSlugs.map(slug => {
+      const form = allForms.find(f => f.slug === slug)
+      if (!form) return null
+      return {
+        form,
+        result: calculateMCAFee({
+          formSlug: slug,
+          companyType,
+          capital,
+          delayDays: delay,
+          isRepeatOffender,
+          newCapital,
+          state,
+          chargeAmount
+        })
+      }
+    }).filter(Boolean)
+  }, [allForms, companyType, capital, delay, isRepeatOffender, newCapital, state, chargeAmount])
+
   const generatePDF = () => {
     const doc = new jsPDF()
     const pageWidth = doc.internal.pageSize.width
@@ -282,6 +303,42 @@ export default function UnifiedCalculator() {
         >
           Calculate Fee <span aria-hidden="true">→</span>
         </button>
+      </div>
+
+      {/* Quick Compare 9 Common Forms */}
+      <div className="mt-12 pt-8 border-t border-slate-200">
+        <h3 className="text-xl font-bold text-slate-900 mb-2">Quick Compare: 9 Common Forms</h3>
+        <p className="text-sm text-slate-500 mb-6">See how your current inputs (Company Type, Capital, Delay) affect the 9 most frequently filed MCA forms simultaneously.</p>
+        <div className="overflow-x-auto rounded-[8px] border border-slate-200 shadow-sm">
+          <table className="w-full text-left text-sm whitespace-nowrap">
+            <thead className="bg-slate-50 border-b border-slate-200">
+              <tr>
+                <th className="px-4 py-3 font-semibold text-slate-700">Form</th>
+                <th className="px-4 py-3 font-semibold text-slate-700">Normal Fee</th>
+                <th className="px-4 py-3 font-semibold text-slate-700">Late Penalty</th>
+                <th className="px-4 py-3 font-semibold text-slate-700">Other (Stamp Duty / Ad Valorem)</th>
+                <th className="px-4 py-3 font-bold text-slate-900 text-right">Total Payable</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {commonForms.map((item: any) => (
+                <tr key={item.form.slug} className="hover:bg-slate-50 transition-colors">
+                  <td className="px-4 py-3 font-bold text-blue-700">{item.form.formNumber}</td>
+                  <td className="px-4 py-3 text-slate-600 font-tabular-nums">₹{item.result.baseFee.toLocaleString()}</td>
+                  <td className={`px-4 py-3 font-tabular-nums ${item.result.lateFee > 0 ? 'text-red-600 font-bold' : 'text-slate-600'}`}>
+                    ₹{item.result.lateFee.toLocaleString()}
+                  </td>
+                  <td className="px-4 py-3 text-slate-600 font-tabular-nums">
+                    {(item.result.stampDuty > 0 || item.result.adValoremFee > 0) 
+                      ? `₹${(item.result.stampDuty + item.result.adValoremFee).toLocaleString()}` 
+                      : '-'}
+                  </td>
+                  <td className="px-4 py-3 font-bold text-slate-900 text-right font-tabular-nums">₹{item.result.total.toLocaleString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Modal Overlay */}

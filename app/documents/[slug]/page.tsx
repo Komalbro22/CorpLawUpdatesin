@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import { useToast } from '@/components/Toast'
 import { FuzzyClarifier } from '@/components/documents/FuzzyClarifier'
 import { LegalBasisCard } from '@/components/documents/LegalBasisCard'
 import { ConflictAuditor } from '@/components/documents/ConflictAuditor'
@@ -423,6 +424,7 @@ export default function DocumentGeneratorPage() {
   const params = useParams()
   const slug = params.slug as string
   const router = useRouter()
+  const { showToast } = useToast()
 
   // Rule engine states
   const [fuzzyMatch, setFuzzyMatch] = useState<{ intentId: string; intent: string; confidence: number; suggested_label: string } | null>(null)
@@ -1609,7 +1611,7 @@ export default function DocumentGeneratorPage() {
                     <button
                       onClick={() => {
                         navigator.clipboard.writeText(generatedContent)
-                        alert('Copied to clipboard!')
+                        showToast('Copied to clipboard!', 'success')
                       }}
                       className="text-xs bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-semibold hover:bg-slate-300 disabled:opacity-60"
                     >

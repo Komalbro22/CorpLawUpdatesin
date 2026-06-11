@@ -11,7 +11,7 @@ import { Update } from '@/types'
 import { AlertTriangle, Plus, Search } from 'lucide-react'
 import { useToast } from '@/components/Toast'
 
-type ArticleWithCounts = Update & { updated_at: string }
+type ArticleWithCounts = Update & { updated_at: string, word_count?: number }
 
 export default function AdminArticles() {
     const router = useRouter()
@@ -167,6 +167,33 @@ export default function AdminArticles() {
         }
     }
 
+    const performBulkAction = async (action: 'publish' | 'unpublish') => {
+        setDeleting(true)
+        try {
+            const results = await Promise.all(
+                Array.from(selectedIds).map(id =>
+                    fetch(`/api/admin/articles/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ published_at: action === 'publish' ? new Date().toISOString() : null })
+                    }).then(r => r.ok)
+                )
+            )
+            if (results.some(ok => !ok)) {
+                showToast(`Some articles could not be ${action}ed`, 'error')
+            } else {
+                showToast(`${selectedIds.size} articles ${action}ed`, 'success')
+            }
+            setSelectedIds(new Set())
+            fetchArticles()
+        } catch (err) {
+            console.error(`${action} failed:`, err)
+            showToast(`${action} failed`, 'error')
+        } finally {
+            setDeleting(false)
+        }
+    }
+
     const totalPages = Math.ceil(totalCount / 20)
 
     // Construct base path preserving search state but updating page
@@ -255,8 +282,14 @@ export default function AdminArticles() {
                         <button onClick={() => setSelectedIds(new Set())} className="text-sm font-medium text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-300 transition-colors">
                             Clear Selection
                         </button>
-                        <button onClick={() => setDeleteConfirm('bulk')} className="bg-red-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
-                            Delete Selected
+                        <button onClick={() => performBulkAction('publish')} disabled={deleting} className="bg-emerald-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50">
+                            Publish
+                        </button>
+                        <button onClick={() => performBulkAction('unpublish')} disabled={deleting} className="bg-amber-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-amber-700 transition-colors disabled:opacity-50">
+                            Unpublish
+                        </button>
+                        <button onClick={() => setDeleteConfirm('bulk')} disabled={deleting} className="bg-red-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50">
+                            Delete
                         </button>
                     </div>
                 </div>
@@ -276,10 +309,11 @@ export default function AdminArticles() {
                                         onChange={toggleAll}
                                     />
                                 </th>
-                                <th className="px-6 py-4 font-medium w-[40%]">Title</th>
+                                <th className="px-6 py-4 font-medium w-[30%]">Title</th>
                                 <th className="px-6 py-4 font-medium">Category</th>
                                 <th className="px-6 py-4 font-medium">Status</th>
-                                <th className="px-6 py-4 font-medium">Date</th>
+                                <th className="px-6 py-4 font-medium">Words</th>
+                                <th className="px-6 py-4 font-medium">Last Edited</th>
                                 <th className="px-6 py-4 font-medium">Featured</th>
                                 <th className="px-6 py-4 font-medium text-right">Actions</th>
                             </tr>
@@ -340,7 +374,10 @@ export default function AdminArticles() {
                                                 )}
                                             </td>
                                             <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
-                                                {formatDate(dateStr)}
+                                                {article.word_count || 0}
+                                            </td>
+                                            <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
+                                                {formatDate(article.updated_at || article.created_at || '')}
                                             </td>
                                             <td className="px-6 py-4">
                                                 <input 

@@ -42,8 +42,23 @@ const categoryMeta = [
   { id: 'FEMA', label: 'FEMA', Icon: Globe2, bg: 'from-teal-600 to-teal-700', ring: 'ring-teal-500/20', desc: 'Foreign Exchange Management' },
 ]
 
-export default async function HomePage() {
-  const [featuredRes, latestRes] = await Promise.all([
+export default async function HomePage({ searchParams }: { searchParams: { sort?: string } }) {
+  const sort = searchParams?.sort || 'newest'
+
+  const latestQuery = supabase
+    .from('updates')
+    .select(UPDATE_LIST_COLUMNS)
+    .not('published_at', 'is', null)
+    .lte('published_at', new Date().toISOString())
+    .limit(9)
+
+  if (sort === 'views') {
+    latestQuery.order('views', { ascending: false }).order('published_at', { ascending: false })
+  } else {
+    latestQuery.order('published_at', { ascending: false })
+  }
+
+  const [featuredRes, latestRes, popularRes] = await Promise.all([
     supabase
       .from('updates')
       .select(UPDATE_LIST_COLUMNS)
@@ -51,18 +66,22 @@ export default async function HomePage() {
       .not('published_at', 'is', null)
       .lte('published_at', new Date().toISOString())
       .order('published_at', { ascending: false })
+      .order('published_at', { ascending: false })
       .limit(3),
+    latestQuery,
     supabase
       .from('updates')
       .select(UPDATE_LIST_COLUMNS)
       .not('published_at', 'is', null)
       .lte('published_at', new Date().toISOString())
-      .order('published_at', { ascending: false })
-      .limit(9),
+      .gte('published_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
+      .order('views', { ascending: false })
+      .limit(3),
   ])
 
   const featuredUpdates = featuredRes.data || []
   const latestUpdates = latestRes.data || []
+  const popularUpdates = popularRes.data || []
   const hasUpdates = featuredUpdates.length > 0 || latestUpdates.length > 0
 
   return (
@@ -162,6 +181,29 @@ export default async function HomePage() {
         </section>
       )}
 
+      {popularUpdates.length > 0 && (
+        <section className="py-12 md:py-16 px-4 max-w-7xl mx-auto border-t border-slate-200/80 dark:border-slate-800/85">
+          <div className="mb-8 md:mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-red-600 dark:text-red-500 flex items-center gap-2">
+                <TrendingUp className="w-4 h-4" /> Trending
+              </p>
+              <h2 className="mt-2 text-2xl md:text-3xl font-bold text-navy dark:text-white font-heading">
+                Popular this week
+              </h2>
+              <p className="mt-2 text-slate-500 dark:text-slate-400 text-sm md:text-base">
+                The most read corporate law updates from the past 7 days.
+              </p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {popularUpdates.map((update: any, i: number) => (
+              <UpdateCard key={update.id} update={update} animationDelay={i * 80} />
+            ))}
+          </div>
+        </section>
+      )}
+
       <section className="py-14 px-4 w-full border-y border-slate-200/80 dark:border-slate-800 bg-gradient-to-b from-white to-slate-50/60 dark:from-slate-900 dark:to-slate-950/60">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-xl md:text-2xl font-bold text-navy dark:text-white mb-2 font-heading text-center">
@@ -189,9 +231,17 @@ export default async function HomePage() {
 
       {latestUpdates.length > 0 && (
         <section className="py-16 md:py-20 px-4 max-w-7xl mx-auto">
-          <div className="mb-8 md:mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div className="mb-8 md:mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between" id="updates">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-600">Newest first</p>
+              <div className="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.18em]">
+                <Link href="/?sort=newest#updates" className={`transition-colors ${sort !== 'views' ? 'text-amber-600 dark:text-amber-500' : 'text-slate-400 hover:text-amber-600'}`}>
+                  Newest first
+                </Link>
+                <span className="text-slate-300 dark:text-slate-700">|</span>
+                <Link href="/?sort=views#updates" className={`transition-colors flex items-center gap-1 ${sort === 'views' ? 'text-amber-600 dark:text-amber-500' : 'text-slate-400 hover:text-amber-600'}`}>
+                  Most viewed
+                </Link>
+              </div>
               <h2 className="mt-2 text-2xl md:text-3xl font-bold text-navy font-heading">
                 Latest updates
               </h2>

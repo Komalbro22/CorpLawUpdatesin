@@ -31,7 +31,7 @@ interface UpdateCardProps {
 
 export default function UpdateCard({ update, showExcerpt = true, animationDelay = 0 }: UpdateCardProps) {
     // Favor the new DB column; fallback to regex for older articles during transition
-    const imageUrl = update.featured_image_url || extractFirstImage(update.content || '')
+    const imageUrl = update.featured_image_url || extractFirstImage(update.content || '') || '/images/og-default.png'
     const isNew = Boolean(
         update.published_at &&
         (Date.now() - new Date(update.published_at).getTime()) <

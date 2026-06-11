@@ -3,6 +3,7 @@
 import React, { useState, useRef } from 'react'
 import { MCAForm } from '@/data/mca-forms'
 import { calculateIncorporationStampDuty } from '@/lib/calculatorUtils'
+import { useToast } from '@/components/Toast'
 
 interface ResultRow {
   component: string
@@ -57,6 +58,7 @@ export default function FormSpecificCalc({ form }: { form: MCAForm }) {
   
   const pdfRef = useRef<HTMLDivElement>(null)
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
+  const { showToast } = useToast()
 
   const isDateBased = form.slug === 'mgt-7' || form.slug === 'aoc-4'
   const isSpice = form.slug === 'spice-plus'
@@ -246,7 +248,7 @@ export default function FormSpecificCalc({ form }: { form: MCAForm }) {
       doc.save(`CorpLawUpdates_Estimate_${form.formNumber}.pdf`)
     } catch (error) {
       console.error('PDF generation failed', error)
-      alert('Failed to generate PDF. Please try again.')
+      showToast('Failed to generate PDF. Please try again.', 'error')
     } finally {
       setIsGeneratingPDF(false)
     }

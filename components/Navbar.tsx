@@ -21,6 +21,7 @@ import {
 const links = [
     { href: '/', label: 'Home' },
     { href: '/updates', label: 'Updates' },
+    { href: '/documents', label: '📄 Documents' },
     { href: '/tools', label: '🛠️ Tools' },
     { href: '/about', label: 'About' },
     { href: '/newsletter', label: 'Newsletter' },

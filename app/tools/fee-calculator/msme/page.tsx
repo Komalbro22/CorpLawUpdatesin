@@ -3,6 +3,7 @@ import Link from 'next/link'
 import JsonLd from '@/components/JsonLd'
 import MSMEFeeCalc from '../components/MSMEFeeCalc'
 import MSMEFAQ from './MSMEFAQ'
+import { supabase } from '@/lib/supabase'
 
 export const metadata: Metadata = {
   title: 'MSME Delayed Payment Interest Calculator | Section 16 MSMED Act',
@@ -76,7 +77,25 @@ function MSMESEO() {
   )
 }
 
-export default function MSMEFeePage() {
+async function getSettings() {
+  const { data } = await supabase
+    .from('site_settings')
+    .select('key, value')
+    .in('key', ['msf_rate', 'next_mpc_date'])
+
+  const settings: Record<string, string> = {}
+  data?.forEach(row => {
+    settings[row.key] = row.value || ''
+  })
+  return settings
+}
+
+export default async function MSMEFeePage() {
+  const settings = await getSettings()
+  // msf_rate is stored like "6.75%" so we parse it
+  const msfRateStr = settings.msf_rate ? settings.msf_rate.replace('%', '') : '6.75'
+  const nextMpcDate = settings.next_mpc_date || 'TBD'
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-200 pb-20">
       <JsonLd data={msmeJsonLd as any} />
@@ -91,15 +110,18 @@ export default function MSMEFeePage() {
           <h1 className="text-3xl md:text-5xl font-bold text-white font-heading mb-4">
             MSME Interest Calculator
           </h1>
-          <p className="text-slate-400 text-lg max-w-2xl">
+          <p className="text-slate-400 text-lg max-w-2xl mb-2">
             Calculate the exact delayed payment compound interest owed to MSMEs under the MSME Samadhaan scheme.
+          </p>
+          <p className="text-slate-500 text-sm">
+            Current RBI Bank Rate: <strong className="text-amber-400">{msfRateStr}%</strong> (Next MPC Date: {nextMpcDate})
           </p>
         </div>
       </div>
 
       <div className="max-w-4xl mx-auto px-4 -mt-6 relative z-10">
         <div className="bg-white dark:bg-slate-900 shadow-xl rounded-2xl border border-slate-200 dark:border-slate-800 p-4 md:p-8 mb-16">
-          <MSMEFeeCalc />
+          <MSMEFeeCalc initialBankRate={msfRateStr} />
         </div>
       </div>
 
