@@ -15,8 +15,7 @@ export async function GET(
     }
 
     const { data, error } = await supabaseAdmin
-      .from('glossary')
-      .select('*')
+      .from('glossary').select('id, term, slug, definition, category, keywords, synonyms, is_verified, created_at, updated_at')
       .eq('id', params.id)
       .single()
 

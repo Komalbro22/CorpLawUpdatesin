@@ -1,8 +1,9 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
+import { REPO_RATE_HISTORY_COLUMNS } from '@/lib/supabase-queries'
 
-export const revalidate = 3600
+export const revalidate = 86400
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getRateSettings()
@@ -52,7 +53,7 @@ async function getRateSettings() {
 async function getRateHistory() {
   const { data } = await supabase
     .from('repo_rate_history')
-    .select('*')
+    .select(REPO_RATE_HISTORY_COLUMNS)
     .order('meeting_date', { ascending: false })
     .limit(20)
   return data || []

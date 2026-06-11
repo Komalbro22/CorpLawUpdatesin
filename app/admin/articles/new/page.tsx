@@ -593,9 +593,8 @@ export default function NewArticle() {
                     {/* Content Markdown */}
                     <div className="border border-slate-200/80 dark:border-slate-800 rounded-xl p-5 bg-white dark:bg-slate-900 shadow-card ring-1 ring-slate-900/[0.02]" data-color-mode="dark">
                         {content.includes('ibb.co') && (
-                            <div className="mb-4 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/30 text-amber-800 dark:text-amber-350 rounded-lg text-sm flex items-center gap-2">
-                                <span>⚠️</span>
-                                <span><strong>SEO Warning:</strong> Re-upload image to Supabase for better SEO. (Found 'ibb.co' in content)</span>
+                            <div className="text-amber-600 text-sm mt-1 mb-2">
+                                <span><strong>SEO Warning:</strong> Please upload this image directly to our Supabase Storage instead of using 'ibb.co' or third-party hosts.</span>
                             </div>
                         )}
                         <div className="flex justify-between items-end mb-3">

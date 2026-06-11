@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Update } from '@/types'
+import { UpdateListItem } from '@/types'
 import { formatDate, calculateReadingTime } from '@/lib/utils'
 import CategoryBadge from '@/components/CategoryBadge'
 import { ArrowUpRight, Clock } from 'lucide-react'
@@ -24,7 +24,7 @@ const categoryBorderColor: Record<string, string> = {
 }
 
 interface UpdateCardProps {
-    update: Update
+    update: UpdateListItem
     showExcerpt?: boolean
     animationDelay?: number
 }

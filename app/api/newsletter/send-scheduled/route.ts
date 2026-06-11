@@ -16,7 +16,7 @@ export async function GET(request: Request) {
         // 1. Fetch pending newsletters where scheduled_at <= now()
         const { data: pending, error: fetchError } = await supabaseAdmin
             .from('scheduled_newsletters')
-            .select('*')
+            .select('id, subject, preview_text, body, scheduled_at, status')
             .eq('status', 'pending')
             .lte('scheduled_at', new Date().toISOString())
 

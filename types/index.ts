@@ -9,6 +9,24 @@ export interface Update extends Omit<Database['public']['Tables']['updates']['Ro
     impact_level: 'high' | 'medium' | 'low' | null
 }
 
+/** Subset of Update fields used on list/card views (no `content` body). */
+export type UpdateListItem = Pick<
+    Update,
+    | 'id'
+    | 'title'
+    | 'slug'
+    | 'summary'
+    | 'category'
+    | 'published_at'
+    | 'is_featured'
+    | 'effective_date'
+    | 'featured_image_url'
+    | 'impact_level'
+    | 'source_name'
+    | 'views'
+    | 'tags'
+> & { content?: string | null }
+
 export interface Subscriber {
     id: string
     email: string

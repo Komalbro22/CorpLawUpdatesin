@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase'
+import { COMPLIANCE_ENTRY_COLUMNS } from '@/lib/supabase-queries'
 import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
@@ -7,7 +8,7 @@ export async function GET(request: Request) {
 
   let query = supabase
     .from('compliance_entries')
-    .select('*')
+    .select(COMPLIANCE_ENTRY_COLUMNS)
     .eq('is_active', true)
     .order('display_order')
 

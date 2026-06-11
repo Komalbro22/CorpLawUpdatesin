@@ -2,6 +2,7 @@
 import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { sendNewsletterEmails, buildWeeklyDigestHtml } from '@/lib/newsletter'
+import { COMPLIANCE_ENTRY_COLUMNS } from '@/lib/supabase-queries'
 
 export const dynamic = 'force-dynamic'
 
@@ -61,7 +62,7 @@ export async function GET(request: Request) {
         // 4. Fetch all active compliance entries
         const { data: rawEntries, error: fetchError } = await supabaseAdmin
             .from('compliance_entries')
-            .select('*')
+            .select(COMPLIANCE_ENTRY_COLUMNS)
             .eq('is_active', true)
 
         if (fetchError) throw fetchError

@@ -6,6 +6,7 @@ import JsonLd from '@/components/JsonLd'
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd'
 import type { Metadata } from 'next'
 import { supabase } from '@/lib/supabase'
+import { UPDATE_DETAIL_COLUMNS, UPDATE_LIST_COLUMNS } from '@/lib/supabase-queries'
 import Link from 'next/link'
 import Image from 'next/image'
 import CategoryBadge from '@/components/CategoryBadge'
@@ -126,7 +127,7 @@ export async function generateMetadata(
 export default async function SingleUpdatePage({ params }: { params: { slug: string } }) {
     const { data: update } = await supabase
         .from('updates')
-        .select('*')
+        .select(UPDATE_DETAIL_COLUMNS)
         .ilike('slug', decodeURIComponent(params.slug))
         .not('published_at', 'is', null)
         .lte('published_at', new Date().toISOString())
@@ -136,7 +137,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
     const { data: relatedRes } = await supabase
         .from('updates')
-        .select('*')
+        .select(UPDATE_LIST_COLUMNS)
         .eq('category', update.category)
         .neq('slug', update.slug)
         .not('published_at', 'is', null)

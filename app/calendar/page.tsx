@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { Suspense } from 'react'
 import { supabase } from '@/lib/supabase'
+import { COMPLIANCE_ENTRY_COLUMNS } from '@/lib/supabase-queries'
 import CalendarPageClient, { type ComplianceEntry } from '@/components/CalendarPageClient'
 
 export const revalidate = 1800
@@ -75,7 +76,7 @@ const itemListSchema = {
 export default async function CalendarPage() {
   const { data: rawEntries } = await supabase
     .from('compliance_entries')
-    .select('*')
+    .select(COMPLIANCE_ENTRY_COLUMNS)
     .eq('is_active', true)
     .order('regulator')
     .order('display_order')

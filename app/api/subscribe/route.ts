@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
         // Rate limiting logic
         const { data: attemptData } = await supabaseAdmin
             .from('login_attempts')
-            .select('*')
+            .select('attempts, window_start')
             .eq('ip', ipKey)
             .single()
 
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
         // Check subscribers
         const { data: existing } = await supabaseAdmin
             .from('subscribers')
-            .select('*')
+            .select('id, email, is_active')
             .eq('email', email)
             .single()
 
@@ -127,7 +127,8 @@ export async function POST(request: NextRequest) {
             message: 'Subscribed! Check your inbox for a welcome email.' 
         }, { status: 200 })
 
-    } catch (err: any) {
-        return NextResponse.json({ error: err.message || 'Internal server error' }, { status: 500 })
+    } catch (err: unknown) {
+        console.error('Subscribe error:', err)
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
     }
 }

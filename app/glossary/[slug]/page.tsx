@@ -2,12 +2,13 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
+import { GLOSSARY_LINK_COLUMNS } from '@/lib/supabase-queries'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import { linkGlossaryTerms } from '@/lib/glossaryLinker'
 import TableOfContents from '@/components/TableOfContents'
 import { BookOpen, Link2, Search, FileText, HelpCircle, Sparkles, Clock } from 'lucide-react'
 
-export const revalidate = 0 // Revalidate immediately (instant updates)
+export const revalidate = false
 
 type Props = {
   params: { slug: string }
@@ -149,7 +150,7 @@ export default async function GlossaryTermPage({ params }: Props) {
   // Fetch all other verified terms for internal cross-linking (excludes this term to prevent self-linking)
   const { data: allOtherTerms } = await supabase
     .from('glossary')
-    .select('term, slug')
+    .select(GLOSSARY_LINK_COLUMNS)
     .eq('is_verified', true)
     .neq('slug', params.slug)
 
@@ -172,13 +173,13 @@ export default async function GlossaryTermPage({ params }: Props) {
   }
 
   // Smart Matching: 1. Try to find articles containing this exact term name in title/content
-  const termName = term.term.trim()
+  const termName = term.term.trim().replace(/[%_,\\]/g, '\\$&')
   const { data: smartMatches } = await supabase
     .from('updates')
     .select('title, slug, published_at')
     .not('published_at', 'is', null)
     .lte('published_at', new Date().toISOString())
-    .or(`title.ilike.%${termName}%,content.ilike.%${termName}%`)
+    .or(`title.ilike.%${termName}%,summary.ilike.%${termName}%`)
     .order('published_at', { ascending: false })
     .limit(3)
 

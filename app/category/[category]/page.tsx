@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { supabase } from '@/lib/supabase'
+import { UPDATE_LIST_COLUMNS } from '@/lib/supabase-queries'
 import { notFound, redirect } from 'next/navigation'
 import UpdateCard from '@/components/UpdateCard'
 import Pagination from '@/components/Pagination'
@@ -185,19 +186,29 @@ export default async function CategoryPage({
     const currentPage = Math.max(1, page)
     const ITEMS_PER_PAGE = 12
 
-    const { data: updates } = await supabase
-        .from('updates')
-        .select('*')
-        .eq('category', cat.toUpperCase())
-        .not('published_at', 'is', null)
-        .lte('published_at', new Date().toISOString())
-        .order('published_at', { ascending: false })
+    const now = new Date().toISOString()
+    const from = (currentPage - 1) * ITEMS_PER_PAGE
+    const to = from + ITEMS_PER_PAGE - 1
 
-    const allUpdates = updates || []
-    const totalPages = Math.ceil(allUpdates.length / ITEMS_PER_PAGE)
-    const paginatedUpdates = allUpdates.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
-    const top5Updates = allUpdates.slice(0, 5)
-    const latestUpdate = allUpdates[0]
+    const categoryBase = (withCount = false) =>
+        supabase
+            .from('updates')
+            .select(UPDATE_LIST_COLUMNS, withCount ? { count: 'exact' } : undefined)
+            .eq('category', cat.toUpperCase())
+            .not('published_at', 'is', null)
+            .lte('published_at', now)
+            .order('published_at', { ascending: false })
+
+    const [{ data: paginatedUpdates, count: totalCount }, { data: top5Data }] = await Promise.all([
+        categoryBase(true).range(from, to),
+        categoryBase().limit(5),
+    ])
+
+    const pageUpdates = paginatedUpdates || []
+
+    const top5Updates = top5Data || []
+    const totalPages = Math.ceil((totalCount || 0) / ITEMS_PER_PAGE)
+    const latestUpdate = top5Updates[0]
     const lastModified = latestUpdate?.published_at ? new Date(latestUpdate.published_at).toISOString() : new Date().toISOString()
 
     const answerFirst = ANSWER_FIRST[cat]
@@ -242,7 +253,7 @@ export default async function CategoryPage({
                 'acceptedAnswer': {
                     '@type': 'Answer',
                     'text': top5Updates[0]
-                        ? `The latest ${cat.toUpperCase()} update is "${top5Updates[0].title}", published on ${new Date(top5Updates[0].published_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}. ${top5Updates[0].excerpt || ''}`
+                        ? `The latest ${cat.toUpperCase()} update is "${top5Updates[0].title}", published on ${new Date(top5Updates[0].published_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}. ${top5Updates[0].summary || ''}`
                         : `Visit our ${cat.toUpperCase()} updates page for the latest circulars and notifications.`,
                 },
             },
@@ -251,7 +262,7 @@ export default async function CategoryPage({
                 'name': `What is the latest ${cat.toUpperCase()} circular/notification about "${u.title}"?`,
                 'acceptedAnswer': {
                     '@type': 'Answer',
-                    'text': `${u.excerpt || u.title} — Published on ${new Date(u.published_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}. Read more at https://www.corplawupdates.in/updates/${u.slug}`,
+                    'text': `${u.summary || u.title} — Published on ${new Date(u.published_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}. Read more at https://www.corplawupdates.in/updates/${u.slug}`,
                 },
             })),
         ],
@@ -314,7 +325,7 @@ export default async function CategoryPage({
                             Regulator
                         </span>
                         <span className="text-white/60 text-sm">·</span>
-                        <span className="text-white/80 text-sm font-medium">{allUpdates.length} articles</span>
+                        <span className="text-white/80 text-sm font-medium">{totalCount || 0} articles</span>
                         {latestUpdate && (
                             <>
                                 <span className="text-white/60 text-sm">·</span>
@@ -344,10 +355,10 @@ export default async function CategoryPage({
 
             {/* Content Area */}
             <div className="max-w-7xl mx-auto py-10 px-4">
-                {paginatedUpdates.length > 0 ? (
+                {pageUpdates.length > 0 ? (
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12">
-                            {paginatedUpdates.map((update: any, i: number) => (
+                            {pageUpdates.map((update: any, i: number) => (
                                 <UpdateCard
                                     key={update.id}
                                     update={update}

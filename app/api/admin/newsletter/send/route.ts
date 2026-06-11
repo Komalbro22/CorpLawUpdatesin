@@ -55,8 +55,7 @@ export async function POST(request: NextRequest) {
                 sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
 
                 const { data, error: fetchErr } = await supabaseAdmin
-                    .from('updates')
-                    .select('*')
+                    .from('updates').select('id, title, slug, summary, content, category, published_at, updated_at, is_featured, effective_date, featured_image_url, impact_level, source_name, source_url, sources, key_change, key_changes, tags, views, seo_title, seo_description')
                     .not('published_at', 'is', null)
                     .gte('published_at', sevenDaysAgo.toISOString())
                     .order('published_at', { ascending: false })
@@ -72,8 +71,7 @@ export async function POST(request: NextRequest) {
                 }
 
                 const { data, error: fetchErr } = await supabaseAdmin
-                    .from('updates')
-                    .select('*')
+                    .from('updates').select('id, title, slug, summary, content, category, published_at, updated_at, is_featured, effective_date, featured_image_url, impact_level, source_name, source_url, sources, key_change, key_changes, tags, views, seo_title, seo_description')
                     .in('id', selectedArticleIds)
                     .order('published_at', { ascending: false })
 

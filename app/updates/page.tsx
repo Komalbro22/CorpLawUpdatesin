@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Suspense } from 'react'
 import { supabase } from '@/lib/supabase'
+import { UPDATE_LIST_COLUMNS } from '@/lib/supabase-queries'
 import UpdatesClient from './UpdatesClient'
 import LoadingSkeleton from '@/components/LoadingSkeleton'
 import { Metadata } from 'next'
@@ -78,7 +79,7 @@ export default async function UpdatesPage({
     // Build paginated query
     let query = supabase
         .from('updates')
-        .select('*', { count: 'exact' })
+        .select(UPDATE_LIST_COLUMNS, { count: 'exact' })
         .not('published_at', 'is', null)
         .lte('published_at', new Date().toISOString())
         .order('published_at', { ascending: false })
@@ -101,7 +102,7 @@ export default async function UpdatesPage({
     // Fetch top 5 updates separately to guarantee stable metadata/schemas
     const { data: top5Data } = await supabase
         .from('updates')
-        .select('*')
+        .select(UPDATE_LIST_COLUMNS)
         .not('published_at', 'is', null)
         .lte('published_at', new Date().toISOString())
         .order('published_at', { ascending: false })

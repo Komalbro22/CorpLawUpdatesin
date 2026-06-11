@@ -2,6 +2,7 @@
 // Triggering new build fix
 /* eslint-disable react/no-unescaped-entities */
 import { supabase } from '@/lib/supabase'
+import { UPDATE_LIST_COLUMNS } from '@/lib/supabase-queries'
 import UpdateCard from '@/components/UpdateCard'
 import Link from 'next/link'
 import { Metadata } from 'next'
@@ -45,7 +46,7 @@ export default async function HomePage() {
   const [featuredRes, latestRes] = await Promise.all([
     supabase
       .from('updates')
-      .select('*')
+      .select(UPDATE_LIST_COLUMNS)
       .eq('is_featured', true)
       .not('published_at', 'is', null)
       .lte('published_at', new Date().toISOString())
@@ -53,7 +54,7 @@ export default async function HomePage() {
       .limit(3),
     supabase
       .from('updates')
-      .select('*')
+      .select(UPDATE_LIST_COLUMNS)
       .not('published_at', 'is', null)
       .lte('published_at', new Date().toISOString())
       .order('published_at', { ascending: false })

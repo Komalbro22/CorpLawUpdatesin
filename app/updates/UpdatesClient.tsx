@@ -5,13 +5,13 @@ import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 import { Search } from 'lucide-react'
 import UpdateCard from '@/components/UpdateCard'
 import Pagination from '@/components/Pagination'
-import { Update } from '@/types'
+import { UpdateListItem } from '@/types'
 import EmptyState from '@/components/EmptyState'
 
 const CATEGORIES = ['All', 'MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA'] as const
 
 interface UpdatesClientProps {
-    paginatedUpdates: Update[]
+    paginatedUpdates: UpdateListItem[]
     totalFilteredCount: number
     totalPublishedCount: number
     counts: Record<string, number>

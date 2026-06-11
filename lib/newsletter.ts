@@ -780,7 +780,7 @@ export async function sendNewsletterEmails({
     }
 
     // Dynamic fetch subscribers based on confirmed field (fallback to is_active if column does not exist)
-    let query = supabaseAdmin.from('subscribers').select('id, email')
+    let query = supabaseAdmin.from('subscribers').select('id, email').limit(500)
     if (targetEmails && Array.isArray(targetEmails) && targetEmails.length > 0) {
         query = query.in('email', targetEmails)
     }
@@ -794,7 +794,7 @@ export async function sendNewsletterEmails({
             // Check if column confirmed does not exist
             if (error.message.includes('confirmed') || error.code === '42703') {
                 console.log("[Newsletter] Column 'confirmed' missing in subscribers table. Falling back to is_active filter.")
-                let fallbackQuery = supabaseAdmin.from('subscribers').select('id, email').eq('is_active', true)
+                let fallbackQuery = supabaseAdmin.from('subscribers').select('id, email').eq('is_active', true).limit(500)
                 if (targetEmails && Array.isArray(targetEmails) && targetEmails.length > 0) {
                     fallbackQuery = fallbackQuery.in('email', targetEmails)
                 }
@@ -809,7 +809,7 @@ export async function sendNewsletterEmails({
         }
     } catch (e: any) {
         console.warn("[Newsletter] Dynamic query threw error. Falling back...", e)
-        let fallbackQuery = supabaseAdmin.from('subscribers').select('id, email').eq('is_active', true)
+        let fallbackQuery = supabaseAdmin.from('subscribers').select('id, email').eq('is_active', true).limit(500)
         if (targetEmails && Array.isArray(targetEmails) && targetEmails.length > 0) {
             fallbackQuery = fallbackQuery.in('email', targetEmails)
         }
