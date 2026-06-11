@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { supabaseAdmin } from '@/lib/supabase-server'
+import { supabaseDocumentsAdmin } from '@/lib/supabase-documents-server'
 import { mcaForms } from '@/data/mca-forms'
 
 export const revalidate = 3600
@@ -134,10 +135,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
 
   // Fetch active document templates for sitemap SEO indexing
-  const { data: docTemplates } = await supabaseAdmin
-    .from('document_templates')
-    .select('slug, updated_at')
-    .eq('is_active', true)
+  let docTemplates: any[] = []
+  if (supabaseDocumentsAdmin) {
+    const { data } = await supabaseDocumentsAdmin
+      .from('document_templates')
+      .select('slug, updated_at')
+      .eq('is_active', true)
+    docTemplates = data || []
+  }
 
   const documentPages = (docTemplates || []).map(d => ({
     url: `${BASE_URL}/documents/${d.slug}`,

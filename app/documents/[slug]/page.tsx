@@ -1042,6 +1042,50 @@ export default function DocumentGeneratorPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "SoftwareApplication",
+                "name": `${template.name} Generator`,
+                "applicationCategory": "BusinessApplication",
+                "operatingSystem": "Any",
+                "offers": {
+                  "@type": "Offer",
+                  "price": "0",
+                  "priceCurrency": "INR"
+                }
+              },
+              {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://www.corplawupdates.in"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Documents",
+                    "item": "https://www.corplawupdates.in/documents"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": template.name,
+                    "item": `https://www.corplawupdates.in/documents/${template.slug}`
+                  }
+                ]
+              }
+            ]
+          })
+        }}
+      />
       
       {/* Page header */}
       <div className="bg-navy py-8 px-4">
@@ -1081,7 +1125,16 @@ export default function DocumentGeneratorPage() {
       </div>
 
       {/* Main layout */}
-      <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="max-w-7xl mx-auto px-4 pt-8">
+        <div className="prose prose-slate max-w-none mb-8">
+          <p className="text-slate-600 leading-relaxed text-sm md:text-base">
+            Use our AI-powered {template.name} generator to draft a legally compliant document in minutes. 
+            This intelligent tool analyzes your inputs to automatically format clauses, structure the document correctly according to the <strong>{template.regulation_reference}</strong>, and check for legal conflicts. Completely free to use.
+          </p>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 pb-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
 
         {/* LEFT — Form */}
         <div className="space-y-6">
@@ -2287,6 +2340,28 @@ export default function DocumentGeneratorPage() {
           </div>
         </div>
       )}
+
+      {/* SEO FAQs */}
+      <div className="bg-white border-t border-slate-200 py-12 px-4 mt-12">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-2xl font-bold text-navy mb-8">Frequently Asked Questions</h2>
+          <div className="space-y-6">
+            <div>
+              <h3 className="font-semibold text-lg text-slate-800">Is this {template.name} generator free?</h3>
+              <p className="text-slate-600 mt-2">Yes, our legal document generator is completely free for professionals and businesses. We believe in open access to reliable compliance formats.</p>
+            </div>
+            <div>
+              <h3 className="font-semibold text-lg text-slate-800">Is the generated document legally valid in India?</h3>
+              <p className="text-slate-600 mt-2">Yes, the generated {template.name} is drafted in compliance with the {template.regulation_reference}. However, we always recommend getting the final draft reviewed by a qualified legal professional before execution.</p>
+            </div>
+            <div>
+              <h3 className="font-semibold text-lg text-slate-800">Can I download the {template.name} as a PDF?</h3>
+              <p className="text-slate-600 mt-2">Absolutely! Once you've customized the clauses and filled in your specific details, you can download a clean, formatted PDF version instantly.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Legal Basis Sidebar Card */}
       <LegalBasisCard
         clauseId={legalCardClauseId}

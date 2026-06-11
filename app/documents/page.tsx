@@ -1,12 +1,13 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { supabase } from '@/lib/supabase'
+import { supabaseDocuments } from '@/lib/supabase-documents'
 import DocumentIntentSearch from '@/components/documents/DocumentIntentSearch'
 import { formatTemplateSource } from '@/lib/document-clause-checker'
 
 export const metadata: Metadata = {
-  title: 'Free Legal Document Generator — Board Resolutions, MOA, Agreements | CorpLawUpdates.in',
-  description: 'Generate legally accurate Indian company documents free. Board resolutions, MOA, director appointments, agreements — powered by AI. Updated to latest MCA/ICSI formats.',
+  title: 'Free Legal Document Generator India — Board Resolutions, Agreements | CorpLawUpdates.in',
+  description: 'Generate legally accurate Indian company documents free. Board resolutions, MOA, director appointments, lease agreements — powered by AI. Updated to latest MCA/ICSI formats.',
+  keywords: ['legal document generator', 'free board resolution generator', 'draft lease agreement india', 'online rent agreement format', 'mca compliance documents'],
   alternates: {
     canonical: 'https://www.corplawupdates.in/documents',
   },
@@ -66,11 +67,15 @@ const categoryConfig = {
 }
 
 export default async function DocumentsPage() {
-  const { data: templates } = await supabase
-    .from('document_templates')
-    .select('id, name, slug, description, category, source, last_verified, is_free, usage_count, tags')
-    .eq('is_active', true)
-    .order('display_order')
+  let templates: any[] = []
+  if (supabaseDocuments) {
+    const { data } = await supabaseDocuments
+      .from('document_templates')
+      .select('id, name, slug, description, category, source, last_verified, is_free, usage_count, tags')
+      .eq('is_active', true)
+      .order('display_order')
+    templates = data || []
+  }
 
   // Group by category
   const grouped = (templates || []).reduce(
@@ -187,7 +192,7 @@ export default async function DocumentsPage() {
                                 md:grid-cols-2 
                                 lg:grid-cols-3 
                                 gap-4">
-                  {catTemplates.map(template => (
+                  {catTemplates.map((template: any) => (
                     <Link
                       key={template.slug}
                       href={`/documents/${template.slug}`}
