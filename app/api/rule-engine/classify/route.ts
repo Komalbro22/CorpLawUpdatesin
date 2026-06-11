@@ -154,7 +154,7 @@ export async function POST(request: Request) {
     // ── STEP 7: pgvector cosine similarity query ──────────────────────────────
     const { data: intentMatches, error: matchError } = await docDb.rpc('match_intents', {
       query_embedding: embedding,
-      match_threshold: 0.80,
+      match_threshold: 0.85,
       match_count: 1,
     });
 
@@ -165,8 +165,8 @@ export async function POST(request: Request) {
     const match = intentMatches[0];
 
     // ── STEP 8: Route by confidence bands ────────────────────────────────────
-    // Band 1: HIGH confidence (≥85%) → deterministic rule execution
-    if (match.similarity >= 0.85) {
+    // Band 1: HIGH confidence (≥90%) → deterministic rule execution
+    if (match.similarity >= 0.90) {
       const responsePayload = {
         status: 'success',
         confidence: match.similarity,
@@ -179,8 +179,8 @@ export async function POST(request: Request) {
       return NextResponse.json(responsePayload);
     }
 
-    // Band 2: MEDIUM confidence (80–85%) → FuzzyClarifier UI confirmation
-    if (match.similarity >= 0.80 && match.similarity < 0.85) {
+    // Band 2: MEDIUM confidence (85–90%) → FuzzyClarifier UI confirmation
+    if (match.similarity >= 0.85 && match.similarity < 0.90) {
       return NextResponse.json({
         status: 'fuzzy_match',
         confidence: match.similarity,
@@ -191,7 +191,7 @@ export async function POST(request: Request) {
       });
     }
 
-    // Band 3: LOW confidence (<80%) → AI fallback
+    // Band 3: LOW confidence (<85%) → AI fallback
     return NextResponse.json({ status: 'fallback_to_ai', source: 'low_confidence' });
 
   } catch (error: any) {

@@ -906,8 +906,8 @@ export default function DocumentGeneratorPage() {
   }
 
   // AI Edit
-  async function handleAiEdit(confirmedIntentId?: string, overrideVars?: Record<string, string>) {
-    const instruction = editInstruction.trim() || (fuzzyMatch ? fuzzyMatch.suggested_label : '');
+  async function handleAiEdit(confirmedIntentId?: string, overrideVars?: Record<string, string>, forceAi?: boolean) {
+    const instruction = editInstruction.trim() || (fuzzyMatch && !forceAi ? fuzzyMatch.suggested_label : '');
     if (!instruction || !generatedContent) return
     setEditing(true)
     setGenerationError(null)
@@ -926,6 +926,7 @@ export default function DocumentGeneratorPage() {
             document_type: template?.name,
             intent_id: confirmedIntentId || undefined,
             variables: overrideVars || undefined,
+            force_ai: forceAi || undefined,
           }),
         }
       )
@@ -1836,7 +1837,7 @@ export default function DocumentGeneratorPage() {
                       onConfirm={(intentId) => handleAiEdit(intentId)}
                       onDismiss={() => {
                         setFuzzyMatch(null)
-                        handleAiEdit()
+                        handleAiEdit(undefined, undefined, true)
                       }}
                     />
                   )}

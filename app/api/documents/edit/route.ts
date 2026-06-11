@@ -21,6 +21,7 @@ export async function POST(request: Request) {
       document_type,
       intent_id,
       variables,
+      force_ai,
     } = await request.json();
 
     if (!current_content || !edit_instruction) {
@@ -41,7 +42,9 @@ export async function POST(request: Request) {
     try {
       let classification = null;
 
-      if (intent_id) {
+      if (force_ai) {
+        classification = { status: 'fallback_to_ai', source: 'user_forced_ai' };
+      } else if (intent_id) {
         const { data: intent } = await docDb
           .from('intents')
           .select('id, name')
