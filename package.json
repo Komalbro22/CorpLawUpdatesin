@@ -51,6 +51,7 @@
     "@tailwindcss/typography": "^0.5.19",
     "@types/dompurify": "^3.0.5",
     "@types/file-saver": "^2.0.7",
+    "@types/html-to-docx": "^1.8.1",
     "@types/node": "^20.19.39",
     "@types/react": "^18",
     "@types/react-dom": "^18",
