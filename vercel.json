@@ -11,6 +11,10 @@
     {
       "path": "/api/cron/update-rbi-rates",
       "schedule": "0 4 * * *"
+    },
+    {
+      "path": "/api/cron/ping-secondary",
+      "schedule": "0 9 */3 * *"
     }
   ]
 }

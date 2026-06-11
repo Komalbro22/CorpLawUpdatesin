@@ -5,6 +5,7 @@ import { FuzzyClarifier } from '@/components/documents/FuzzyClarifier'
 import { LegalBasisCard } from '@/components/documents/LegalBasisCard'
 import { ConflictAuditor } from '@/components/documents/ConflictAuditor'
 import { checkMissingClauses, checkLeaseClauses, getImportanceIcon, getImportanceLabel, formatTemplateSource, type ClauseCheck } from '@/lib/document-clause-checker'
+import { DocumentRetry } from '@/components/documents/DocumentRetry'
 
 interface Field {
   id: string
@@ -428,6 +429,7 @@ export default function DocumentGeneratorPage() {
   const [legalCardClauseId, setLegalCardClauseId] = useState<string | null>(null)
   const [legalCardOpen, setLegalCardOpen] = useState(false)
   const [lastAppliedClauseId, setLastAppliedClauseId] = useState<string | null>(null)
+  const [errorCode, setErrorCode] = useState<string | null>(null)
   const [missingVariables, setMissingVariables] = useState<string[] | null>(null)
   const [requiresInputData, setRequiresInputData] = useState<{ clauseId: string; currentVariables: Record<string, string> } | null>(null)
   const [inputVariablesValues, setInputVariablesValues] = useState<Record<string, string>>({})
@@ -477,9 +479,14 @@ export default function DocumentGeneratorPage() {
     if (template && (template.slug === slug || template.slug.replace(/_/g, '-') === slug)) return
 
     setLoading(true)
+    setErrorCode(null)
     fetch(`/api/documents/${slug}`)
       .then(r => r.json())
       .then(d => {
+        if (d.error) {
+          setErrorCode(d.code || 'UNKNOWN')
+          return
+        }
         setTemplate(d.template)
         // Pre-fill defaults
         const defaults: Record<string, string> = {}
@@ -491,7 +498,9 @@ export default function DocumentGeneratorPage() {
         })
         setFormData(defaults)
       })
-      .catch(() => {})
+      .catch(() => {
+        setErrorCode('NETWORK_ERROR')
+      })
       .finally(() => setLoading(false))
   }, [slug, template])
 
@@ -1011,6 +1020,10 @@ export default function DocumentGeneratorPage() {
         </div>
       </div>
     )
+  }
+
+  if (errorCode === 'COLD_START') {
+    return <DocumentRetry />
   }
 
   if (!template) {
