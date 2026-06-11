@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { Document, Packer, Paragraph, TextRun, ImageRun, AlignmentType } from 'docx'
 import sharp from 'sharp'
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
+import HTMLtoDOCX from 'html-to-docx'
 
 export async function POST(request: Request) {
   try {
@@ -254,7 +255,6 @@ export async function POST(request: Request) {
       })
     } else {
       // WORD (DOCX) EXPORT
-      const htmlToDocx = require('html-to-docx');
       
       let twipT = (custom_margin_top !== undefined ? Number(custom_margin_top) : 72) * 20
       let twipB = (custom_margin_bottom !== undefined ? Number(custom_margin_bottom) : 72) * 20
@@ -297,7 +297,7 @@ export async function POST(request: Request) {
          headerHTML = `<div><img src="${letterhead_url}" width="120" /></div>`;
       }
 
-      const buffer = await htmlToDocx(htmlContent, headerHTML, docxOptions);
+      const buffer = await HTMLtoDOCX(htmlContent, headerHTML, docxOptions);
       const uint8Array = new Uint8Array(buffer);
 
       return new Response(uint8Array, {
