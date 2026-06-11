@@ -807,8 +807,6 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                                 )}
                             </div>
                         </div>
-                    </div>
-
                     {/* Content Markdown */}
                     <div className="border border-slate-200/80 dark:border-slate-800 rounded-xl p-5 bg-white dark:bg-slate-900 shadow-card ring-1 ring-slate-900/[0.02]" data-color-mode="dark">
                         {content.includes('ibb.co') && (
