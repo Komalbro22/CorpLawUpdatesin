@@ -469,7 +469,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-navy text-white font-bold">CL</div>
                             <div>
                                 <p className="font-bold text-slate-700 dark:text-slate-300">Editorial team</p>
-                                <p className="text-slate-500">CorpLawUpdates.in · CS professionals & compliance specialists</p>
+                                <p className="text-slate-500">CorpLawUpdates.in · Professionals & compliance specialists</p>
                             </div>
                         </div>
                         <div className="flex flex-col items-end">

@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     default: 'CorpLawUpdates.in - Free Corporate Law Updates',
     template: '%s | CorpLawUpdates.in',
   },
-  description: 'Free Indian corporate law updates - MCA, SEBI, RBI, NCLT, IBC and FEMA regulatory updates for CS professionals, corporate lawyers and compliance officers.',
+  description: 'Free Indian corporate law updates - MCA, SEBI, RBI, NCLT, IBC and FEMA regulatory updates for professionals, corporate lawyers and compliance officers.',
 
   authors: [{ name: 'CorpLawUpdates.in' }],
   creator: 'CorpLawUpdates.in',
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     url: 'https://www.corplawupdates.in',
     siteName: 'CorpLawUpdates.in',
     title: 'CorpLawUpdates.in - India\'s Free Corporate Law Intelligence Platform',
-    description: 'Free Indian corporate law updates - MCA, SEBI, RBI, NCLT, IBC and FEMA regulatory updates for CS professionals.',
+    description: 'Free Indian corporate law updates - MCA, SEBI, RBI, NCLT, IBC and FEMA regulatory updates for professionals.',
     images: [
       {
         url: 'https://www.corplawupdates.in/api/og?title=India%27s+Free+Corporate+Law+Intelligence+Platform&category=',
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
       default: 'CorpLawUpdates.in - India\'s Free Corporate Law Intelligence Platform',
       template: '%s | CorpLawUpdates.in',
     },
-    description: 'Free MCA, SEBI, RBI, NCLT, IBC and FEMA updates for CS professionals.',
+    description: 'Free MCA, SEBI, RBI, NCLT, IBC and FEMA updates for professionals.',
     images: ['https://www.corplawupdates.in/api/og?title=India%27s+Free+Corporate+Law+Intelligence+Platform&category='],
   },
   alternates: {

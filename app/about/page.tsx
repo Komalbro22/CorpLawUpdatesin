@@ -5,13 +5,13 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'About — India\'s Free Corporate Law Platform',
-  description: 'Learn about CorpLawUpdates.in — India\'s free corporate law intelligence platform providing MCA, SEBI, RBI updates for CS professionals.',
+  description: 'Learn about CorpLawUpdates.in — India\'s free corporate law intelligence platform providing MCA, SEBI, RBI updates for professionals.',
   alternates: {
     canonical: 'https://www.corplawupdates.in/about',
   },
   openGraph: {
     title: 'About CorpLawUpdates.in — India\'s Free Corporate Law Intelligence Platform',
-    description: 'CorpLawUpdates.in publishes free, plain-English corporate law updates covering MCA, SEBI, RBI, NCLT and IBC for CS professionals, lawyers and compliance officers.',
+    description: 'CorpLawUpdates.in publishes free, plain-English corporate law updates covering MCA, SEBI, RBI, NCLT and IBC for professionals, lawyers and compliance officers.',
     url: 'https://www.corplawupdates.in/about',
     images: [{ url: 'https://www.corplawupdates.in/api/og?title=About%20CorpLawUpdates&category=', width: 1200, height: 630 }],
   },
@@ -59,7 +59,7 @@ export default async function AboutPage() {
             <section className="mb-12">
                 <h2 className="text-3xl font-heading font-bold text-navy mb-6 border-l-4 border-gold pl-4">Who We Serve</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {['Corporate Lawyers', 'Compliance Officers', 'CS Professionals (ICSI)', 'Law Students'].map((item) => (
+                    {['Corporate Lawyers', 'Compliance Officers', 'Professionals', 'Law Students'].map((item) => (
                         <div key={item} className="bg-white border border-slate-200 p-4 rounded-xl flex items-center shadow-sm">
                             <svg className="w-6 h-6 text-gold mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />

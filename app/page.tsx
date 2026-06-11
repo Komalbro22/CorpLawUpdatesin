@@ -445,7 +445,7 @@ export default async function HomePage({ searchParams }: { searchParams: { sort?
               "name": "CorpLawUpdates.in",
               "url": "https://www.corplawupdates.in",
               "logo": "https://www.corplawupdates.in/icon.png",
-              "description": "India's free corporate law intelligence platform for CS professionals, CA firms, and compliance officers.",
+              "description": "India's free corporate law intelligence platform for professionals, CA firms, and compliance officers.",
               "sameAs": [
                 "https://www.linkedin.com/company/corplawupdates/",
                 "https://x.com/CorpLawUpdates"
