@@ -43,6 +43,171 @@ const NEXT_STEPS: Record<string, {
     link?: { text: string; href: string }
   }[]
 }> = {
+  'simple-mortgage-deed': {
+    title: 'After Generating — Executing the Simple Mortgage',
+    steps: [
+      {
+        icon: '💰',
+        text: 'Pay Stamp Duty',
+        note: 'Stamp duty must be paid before or at the time of execution. Rates vary significantly by state.',
+        urgent: true
+      },
+      {
+        icon: '✍️',
+        text: 'Signatures & Witnesses',
+        note: 'The Mortgagor must sign in the presence of at least two attesting witnesses.'
+      },
+      {
+        icon: '🏛️',
+        text: 'Registration (Compulsory)',
+        note: 'Under Section 59 of the Transfer of Property Act, a simple mortgage securing ₹100 or more must be registered at the Sub-Registrar\'s office.',
+        urgent: true
+      }
+    ]
+  },
+  'mortgage-conditional-sale': {
+    title: 'After Generating — Executing the Mortgage by Conditional Sale',
+    steps: [
+      {
+        icon: '💰',
+        text: 'Pay Stamp Duty',
+        note: 'Stamp duty must be paid before execution. Since it operates like a sale conditionally, check your state\'s specific stamp duty rates for this instrument.',
+        urgent: true
+      },
+      {
+        icon: '✍️',
+        text: 'Signatures & Witnesses',
+        note: 'Both the Vendor (Mortgagor) and Purchaser (Mortgagee) should sign, with at least two attesting witnesses.'
+      },
+      {
+        icon: '🏛️',
+        text: 'Registration (Compulsory)',
+        note: 'Must be registered at the Sub-Registrar\'s office since it involves the transfer of an interest in immovable property.',
+        urgent: true
+      }
+    ]
+  },
+  'english-mortgage-deed': {
+    title: 'After Generating — Executing the English Mortgage',
+    steps: [
+      {
+        icon: '💰',
+        text: 'Pay Stamp Duty',
+        note: 'Because an English Mortgage involves an absolute transfer (subject to re-transfer), stamp duty is usually higher. Check your state\'s Stamp Act.',
+        urgent: true
+      },
+      {
+        icon: '✍️',
+        text: 'Signatures & Witnesses',
+        note: 'The Mortgagor must sign the absolute transfer in the presence of at least two attesting witnesses.'
+      },
+      {
+        icon: '🏛️',
+        text: 'Registration (Compulsory)',
+        note: 'Registration is compulsory under the Indian Registration Act for an English Mortgage.',
+        urgent: true
+      }
+    ]
+  },
+  'usufructuary-mortgage-deed': {
+    title: 'After Generating — Executing the Usufructuary Mortgage',
+    steps: [
+      {
+        icon: '💰',
+        text: 'Pay Stamp Duty',
+        note: 'Stamp duty must be paid before execution. Rates vary by state.',
+        urgent: true
+      },
+      {
+        icon: '🔑',
+        text: 'Deliver Possession',
+        note: 'The defining feature of this mortgage is the delivery of possession. The Mortgagor must hand over the property to the Mortgagee.',
+        urgent: true
+      },
+      {
+        icon: '🏛️',
+        text: 'Registration (Compulsory)',
+        note: 'Registration is compulsory as it involves the transfer of property rights and possession.',
+        urgent: true
+      }
+    ]
+  },
+  'equitable-mortgage-deed': {
+    title: 'After Generating — Executing the Memorandum of Deposit of Title Deeds',
+    steps: [
+      {
+        icon: '📑',
+        text: 'Deposit Original Documents',
+        note: 'The borrower must physically deposit the original title deeds with the lender in a notified town (as per State Government notification).',
+        urgent: true
+      },
+      {
+        icon: '💰',
+        text: 'Pay Stamp Duty',
+        note: 'Even though the mortgage is created by conduct, the Memorandum itself must be stamped as per the state\'s Stamp Act.',
+        urgent: true
+      },
+      {
+        icon: '🏛️',
+        text: 'Registration (State Dependent)',
+        note: 'While Equitable Mortgages don\'t inherently require registration under Central law, many states (like Maharashtra, Karnataka) have made notice of intimation or registration of the MODT mandatory.'
+      }
+    ]
+  },
+
+  'letter-of-credit': {
+    title: 'After Generating — Executing the Letter of Credit',
+    steps: [
+      {
+        icon: '✍️',
+        text: 'Authorized Bank Signatures',
+        note: 'Ensure the LC is signed by authorized officials of the Issuing Bank. Check the signing mandate/delegation of authority.',
+        urgent: true
+      },
+      {
+        icon: '💰',
+        text: 'Pay Stamp Duty',
+        note: 'Letters of Credit must be stamped as per the respective State Stamp Act where it is issued (e.g., Article 37 in Maharashtra).'
+      },
+      {
+        icon: '🌐',
+        text: 'Transmit via SWIFT (MT 700)',
+        note: 'The Issuing Bank will typically transmit the structured LC to the Advising Bank via the secure SWIFT network using message type MT 700.'
+      },
+      {
+        icon: '📜',
+        text: 'Beneficiary Review',
+        note: 'Upon receipt from the Advising Bank, the Beneficiary MUST review the terms immediately to ensure they can strictly comply with the document presentation requirements before shipment.'
+      }
+    ],
+  },
+
+  'bank-guarantee': {
+    title: 'After Generating — Executing the Bank Guarantee',
+    steps: [
+      {
+        icon: '💰',
+        text: 'Pay Appropriate Stamp Duty',
+        note: 'Bank Guarantees are chargeable with stamp duty. Failure to pay correct stamp duty renders it inadmissible in evidence.',
+        urgent: true
+      },
+      {
+        icon: '🏦',
+        text: 'Bank Issues Guarantee against Margin/Collateral',
+        note: 'The Contractor/Applicant must deposit the required cash margin or collateral with the Bank before the BG is issued.'
+      },
+      {
+        icon: '✍️',
+        text: 'Signatures and Bank Seal',
+        note: 'Must be signed by authorized bank officials and stamped with the official Bank Seal. Two witnesses are required as per the deed format.'
+      },
+      {
+        icon: '📬',
+        text: 'Direct Dispatch to Beneficiary',
+        note: 'Many Purchasing Entities require the Bank to send the BG directly to them (or via SFMS - Structured Financial Messaging System) rather than handing it to the contractor to avoid fraud.'
+      }
+    ],
+  },
 
   'lease-agreement': {
     title: 'After Downloading — Execute and Register Lease Deed',
@@ -234,6 +399,26 @@ const NEXT_STEPS: Record<string, {
     ],
   },
 
+  'public-notice-financial-results': {
+    title: 'After Downloading — Publish and File Results',
+    steps: [
+      { icon: '📰', text: 'Publish in English & Regional Newspapers', note: 'Must be published within 48 hours of conclusion of the board meeting.', urgent: true },
+      { icon: '🖥️', text: 'Submit to Stock Exchanges', note: 'File the full financial results to NSE/BSE within 30 minutes of board meeting conclusion.', urgent: true },
+      { icon: '🌐', text: 'Upload to Company Website', note: 'Host the full format of the results on the company\'s official website.' },
+      { icon: '📝', text: 'Review by Auditors', note: 'Ensure the results have been subjected to limited review/audit by statutory auditors.' },
+    ],
+  },
+
+  'public-notice-trading-member-expulsion': {
+    title: 'After Downloading — Publicize Defaulter Notice',
+    steps: [
+      { icon: '📰', text: 'Publish in Newspapers', note: 'Ensure wide circulation in national and regional dailies to alert all affected investors.', urgent: true },
+      { icon: '🌐', text: 'Upload to Exchange Website', note: 'Must be prominently displayed on the Exchange\'s portal under the Defaulters section.' },
+      { icon: '📧', text: 'Notify SEBI', note: 'Inform SEBI regarding the expulsion and the initiation of the claim process.' },
+      { icon: '🏛️', text: 'Setup Investor Helpdesk', note: 'Ensure the Defaulters\' Section is ready to receive physical and online claims from constituents.' },
+    ],
+  },
+
   // DEFAULT for any template not specifically listed
   '_default': {
     title: 'Steps After Downloading Your Document',
@@ -255,6 +440,35 @@ const AI_SUGGESTIONS: Record<string, {
   prompt: string
   category: 'add' | 'remove' | 'modify' | 'improve'
 }[]> = {
+
+  'letter-of-credit': [
+    { label: '+ Add "Without Recourse" clause', prompt: 'Add a clause ensuring the Issuing Bank has no recourse to the exporter/beneficiary if the importer defaults', category: 'add' },
+    { label: '+ Add Red Clause', prompt: 'Add a red clause giving authority to grant packing credit advance to the beneficiary', category: 'add' },
+    { label: '⇄ Convert to Transferable LC', prompt: 'Modify the LC to explicitly allow the beneficiary to transfer the credit to a local supplier', category: 'modify' },
+    { label: '- Remove partial shipment', prompt: 'Remove any clauses allowing partial shipments or multiple drawings', category: 'remove' }
+  ],
+
+  'bank-guarantee': [
+    { label: '+ Add Automatic Extension Clause', prompt: 'Add a clause that automatically extends the validity if the guarantee is not renewed or released 30 days prior to expiry', category: 'add' },
+    { label: '- Remove Original Return Condition', prompt: 'Remove the requirement that the original Bank Guarantee must be returned to discharge the bank', category: 'remove' },
+    { label: '⇄ Change to Financial Guarantee', prompt: 'Replace the performance guarantee clauses with clauses suitable for a pure financial/payment obligation', category: 'modify' }
+  ],
+
+  'simple-mortgage-deed': [
+    { label: '+ Add Penal Interest Clause', prompt: 'Add a penal interest clause of 2% per month for delayed payments', category: 'add' }
+  ],
+  'mortgage-conditional-sale': [
+    { label: '⇄ Extend Repayment Period', prompt: 'Extend the maximum repayment period by 2 years', category: 'modify' }
+  ],
+  'english-mortgage-deed': [
+    { label: '+ Add Right to Lease Clause', prompt: 'Allow the mortgagor to lease the property with prior written consent', category: 'add' }
+  ],
+  'usufructuary-mortgage-deed': [
+    { label: '+ Specify Repair Limits', prompt: 'Limit the mortgagee\'s repair and maintenance expenses to Rs. 50,000 per year', category: 'add' }
+  ],
+  'equitable-mortgage-deed': [
+    { label: '+ Add Joint Liability Clause', prompt: 'Make all co-owners jointly and severally liable for the loan', category: 'add' }
+  ],
 
   'lease-agreement': [
     // ADD CLAUSES
@@ -403,6 +617,18 @@ const AI_SUGGESTIONS: Record<string, {
     { label: '⚖️ Add governing law & jurisdiction', prompt: 'Add a governing law clause specifying Indian law and court jurisdiction at New Delhi', category: 'add' },
     { label: '🔑 Grant specific power of sale', prompt: 'Add a clause explicitly authorizing the attorney to sell and register a sale deed for the immovable properties listed in Schedule I', category: 'add' },
     { label: '👥 Add joint attorney operations', prompt: 'Add a requirement that if multiple attorneys are appointed, they must act and sign jointly for all transactions', category: 'add' },
+  ],
+
+  'public-notice-financial-results': [
+    { label: '↕ Convert to Consolidated Results', prompt: 'Convert this notice from Standalone to Consolidated unaudited financial results', category: 'modify' },
+    { label: '+ Add exceptional items note', prompt: 'Add a note explaining the exceptional items included in the net profit calculation', category: 'add' },
+    { label: '+ Add previous year comparison', prompt: 'Add a column showing the audited figures for the previous full financial year', category: 'add' },
+  ],
+
+  'public-notice-trading-member-expulsion': [
+    { label: '+ Add investor grievance email', prompt: 'Add a specific email address (e.g., ig@exchange.com) for investors to send their queries', category: 'add' },
+    { label: '↕ Extend claim period to 6 months', prompt: 'Modify the claim lodgment period from 3 months to 6 months from the date of this notice', category: 'modify' },
+    { label: '+ Add reference to SEBI circular', prompt: 'Add a reference to the specific SEBI circular governing the maximum compensation limit from the Investor Protection Fund', category: 'add' },
   ],
 
   // Default suggestions for any unspecified template
@@ -866,6 +1092,21 @@ export default function DocumentGeneratorPage() {
       if (res.ok && data.content) {
         setGeneratedContent(data.content)
         setDocumentId(data.document_id)
+        
+        // Save permanently to local storage
+        try {
+          // Dynamic import to avoid SSR issues with localStorage if not caught by lib
+          import('@/lib/saved-documents').then(({ saveDocumentLocally }) => {
+            saveDocumentLocally({
+              title: template?.name || 'Generated Document',
+              slug: template?.slug || slug,
+              content: data.content
+            })
+          })
+        } catch(e) {
+          console.error("Could not save to local storage", e)
+        }
+
         if (data.fell_back) {
           if (formData.custom_instructions && formData.custom_instructions.trim()) {
             setGenerationWarning('AI Quota Limit — Fallback Active. Please note that your custom instructions could not be automatically woven into the standard template clauses. We have appended them at the end of the document under "ADDITIONAL CONDITIONS / SPECIAL CLAUSES" for your manual review and editing.')
@@ -1981,64 +2222,7 @@ export default function DocumentGeneratorPage() {
                 </div>
               </div>
 
-              {/* What to do next — document specific */}
-              {(() => {
-                const steps = NEXT_STEPS[slug] || NEXT_STEPS['_default']
-                return (
-                  <div className="bg-blue-50  
-                                  border border-blue-200 
-                                   
-                                  rounded-2xl overflow-hidden">
-                    <div className="bg-blue-600 px-5 py-3">
-                      <h3 className="font-bold text-white text-sm">
-                        📋 {steps.title}
-                      </h3>
-                    </div>
-                    <div className="p-5 space-y-3">
-                      {steps.steps.map((step, i) => (
-                        <div key={i} 
-                             className={`flex items-start gap-3 
-                               p-3 rounded-xl
-                               ${step.urgent 
-                                 ? 'bg-red-50  border border-red-300 ' 
-                                 : 'bg-white '}`}>
-                          <span className="flex-shrink-0 text-lg mt-0.5">
-                            {step.icon}
-                          </span>
-                          <div className="min-w-0">
-                            <p className={`text-sm font-semibold 
-                              ${step.urgent 
-                                ? 'text-red-800 ' 
-                                : 'text-navy '}`}>
-                              <span className="text-xs opacity-60 mr-1">
-                                {i + 1}.
-                              </span>
-                              {step.text}
-                            </p>
-                            {step.note && (
-                              <p className={`text-xs mt-1 
-                                whitespace-pre-line leading-relaxed
-                                ${step.urgent 
-                                  ? 'text-red-600 ' 
-                                  : 'text-slate-500 '}`}>
-                                {step.note}
-                              </p>
-                            )}
-                            {step.link && (
-                              <a href={step.link.href}
-                                 className="text-xs text-amber-600 
-                                            underline font-semibold 
-                                            mt-1 inline-block">
-                                {step.link.text} →
-                              </a>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )
-              })()}
+
             </>
           ) : (
             /* Empty state */
@@ -2052,6 +2236,65 @@ export default function DocumentGeneratorPage() {
               </p>
             </div>
           )}
+
+          {/* What to do next — document specific */}
+          {(() => {
+            const steps = NEXT_STEPS[slug] || NEXT_STEPS['_default']
+            return (
+              <div className="bg-blue-50  
+                              border border-blue-200 
+                               
+                              rounded-2xl overflow-hidden">
+                <div className="bg-blue-600 px-5 py-3">
+                  <h3 className="font-bold text-white text-sm">
+                    📋 {steps.title}
+                  </h3>
+                </div>
+                <div className="p-5 space-y-3">
+                  {steps.steps.map((step, i) => (
+                    <div key={i} 
+                         className={`flex items-start gap-3 
+                           p-3 rounded-xl
+                           ${step.urgent 
+                             ? 'bg-red-50  border border-red-300 ' 
+                             : 'bg-white '}`}>
+                      <span className="flex-shrink-0 text-lg mt-0.5">
+                        {step.icon}
+                      </span>
+                      <div className="min-w-0">
+                        <p className={`text-sm font-semibold 
+                          ${step.urgent 
+                            ? 'text-red-800 ' 
+                            : 'text-navy '}`}>
+                          <span className="text-xs opacity-60 mr-1">
+                            {i + 1}.
+                          </span>
+                          {step.text}
+                        </p>
+                        {step.note && (
+                          <p className={`text-xs mt-1 
+                            whitespace-pre-line leading-relaxed
+                            ${step.urgent 
+                              ? 'text-red-600 ' 
+                              : 'text-slate-500 '}`}>
+                            {step.note}
+                          </p>
+                        )}
+                        {step.link && (
+                          <a href={step.link.href}
+                             className="text-xs text-amber-600 
+                                        underline font-semibold 
+                                        mt-1 inline-block">
+                            {step.link.text} →
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
+          })()}
         </div>
       </div>
 

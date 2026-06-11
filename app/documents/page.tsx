@@ -59,10 +59,22 @@ const categoryConfig = {
     description: 'MGT-7, AOC-4, DIR forms'
   },
   notices: {
-    label: 'Notices',
+    label: 'Notices & Public Notices',
     icon: '📢',
     color: 'bg-teal-50 border-teal-200 text-teal-700 dark:bg-teal-950/30 dark:border-teal-900/50 dark:text-teal-300',
-    description: 'Board meeting, AGM, EGM notices'
+    description: 'Board meeting, AGM, EGM, and SEBI Public notices'
+  },
+  banking_finance: {
+    label: 'Banking & Finance',
+    icon: '🏦',
+    color: 'bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-950/30 dark:border-emerald-900/50 dark:text-emerald-300',
+    description: 'Letters of Credit, Bank Guarantees, Financial Instruments'
+  },
+  real_estate: {
+    label: 'Real Estate & Property',
+    icon: '🏠',
+    color: 'bg-orange-50 border-orange-200 text-orange-700 dark:bg-orange-950/30 dark:border-orange-900/50 dark:text-orange-300',
+    description: 'Mortgage Deeds, Lease Agreements, and Property Transfers'
   },
 }
 
@@ -77,11 +89,39 @@ export default async function DocumentsPage() {
     templates = data || []
   }
 
-  // Group by category
+  // Group by category, and allow drafts to appear in multiple categories based on tags!
   const grouped = (templates || []).reduce(
     (acc, t) => {
+      // 1. Add to primary category
       if (!acc[t.category]) acc[t.category] = []
       acc[t.category].push(t)
+
+      // 2. Add to secondary categories based on tags or other logic
+      if (t.tags && Array.isArray(t.tags)) {
+        // Group into banking & finance if it has banking related tags
+        if (t.tags.some((tag: string) => tag.toLowerCase().includes('banking') || tag.toLowerCase().includes('finance') || tag.toLowerCase().includes('credit') || tag.toLowerCase().includes('guarantee'))) {
+          if (!acc['banking_finance']) acc['banking_finance'] = []
+          // ensure we don't duplicate if primary category was already banking_finance
+          if (t.category !== 'banking_finance') {
+            acc['banking_finance'].push(t)
+          }
+        }
+        
+        // Group into real estate if it has real estate related tags
+        if (t.tags.some((tag: string) => tag.toLowerCase().includes('real estate') || tag.toLowerCase().includes('mortgage') || tag.toLowerCase().includes('property'))) {
+          if (!acc['real_estate']) acc['real_estate'] = []
+          if (t.category !== 'real_estate') {
+            acc['real_estate'].push(t)
+          }
+        }
+      }
+
+      // If it's an agreement, and not already in commercial_contracts, put it there too
+      if (t.category === 'agreements' && t.category !== 'commercial_contracts') {
+        if (!acc['commercial_contracts']) acc['commercial_contracts'] = []
+        acc['commercial_contracts'].push(t)
+      }
+
       return acc
     },
     {} as Record<string, any[]>
@@ -136,7 +176,15 @@ export default async function DocumentsPage() {
           </div>
 
           {/* AI Intent Search */}
-          <DocumentIntentSearch />
+          <div className="flex flex-col items-center gap-4">
+            <DocumentIntentSearch />
+            <Link 
+              href="/documents/saved" 
+              className="inline-flex items-center gap-2 text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors bg-white/5 px-4 py-2 rounded-full border border-white/10 hover:border-amber-400/50"
+            >
+              📄 View Saved Documents
+            </Link>
+          </div>
 
         </div>
       </div>
