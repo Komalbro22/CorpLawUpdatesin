@@ -54,6 +54,13 @@ export default function NewArticle() {
     const [bulkTldrText, setBulkTldrText] = useState('')
     const [showBulkTldr, setShowBulkTldr] = useState(false)
     const [impactLevel, setImpactLevel] = useState<'high' | 'medium' | 'low' | ''>('')
+    const [quickAnswer, setQuickAnswer] = useState('')
+    const [regulationRef, setRegulationRef] = useState('')
+    const [lastVerified, setLastVerified] = useState('')
+    const [lastAmended, setLastAmended] = useState('')
+    const [keyTakeaways, setKeyTakeaways] = useState<string[]>([])
+    const [hasSteps, setHasSteps] = useState(false)
+    const [stepsJson, setStepsJson] = useState<{heading: string, description: string}[]>([])
 
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
@@ -86,6 +93,26 @@ export default function NewArticle() {
     }
     const removeKeyChange = (index: number) => {
         setKeyChanges(keyChanges.filter((_, i) => i !== index))
+    }
+
+    const addKeyTakeaway = () => setKeyTakeaways([...keyTakeaways, ''])
+    const updateKeyTakeaway = (index: number, value: string) => {
+        const newArr = [...keyTakeaways]
+        newArr[index] = value
+        setKeyTakeaways(newArr)
+    }
+    const removeKeyTakeaway = (index: number) => {
+        setKeyTakeaways(keyTakeaways.filter((_, i) => i !== index))
+    }
+
+    const addStep = () => setStepsJson([...stepsJson, { heading: '', description: '' }])
+    const updateStep = (index: number, field: 'heading'|'description', value: string) => {
+        const newArr = [...stepsJson]
+        newArr[index][field] = value
+        setStepsJson(newArr)
+    }
+    const removeStep = (index: number) => {
+        setStepsJson(stepsJson.filter((_, i) => i !== index))
     }
 
     const handleBulkTldrImport = () => {
@@ -241,6 +268,13 @@ export default function NewArticle() {
                     key_changes: keyChanges.filter(k => k.trim()).length > 0 ? keyChanges.filter(k => k.trim()) : null,
                     effective_date: effectiveDate || null,
                     impact_level: impactLevel || null,
+                    quick_answer: quickAnswer.trim() || null,
+                    regulation_ref: regulationRef.trim() || null,
+                    last_verified: lastVerified || null,
+                    last_amended: lastAmended || null,
+                    key_takeaways: keyTakeaways.filter(k => k.trim()).length > 0 ? keyTakeaways.filter(k => k.trim()) : null,
+                    has_steps: hasSteps,
+                    steps_json: stepsJson.filter(s => s.heading.trim() || s.description.trim()).length > 0 ? stepsJson.filter(s => s.heading.trim() || s.description.trim()) : null,
                 })
             })
 
@@ -587,6 +621,119 @@ export default function NewArticle() {
                             <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
                                 Shown as badge on article card and page
                             </p>
+                        </div>
+                        
+                        {/* GEO Fields Added for AI Optimization */}
+                        <div className="pt-4 border-t border-slate-200/80 dark:border-slate-800 space-y-5">
+                            <h4 className="font-bold text-navy dark:text-slate-200 text-sm">Generative Engine Optimization (GEO)</h4>
+                            
+                            <div>
+                                <label className="block text-sm font-semibold text-navy dark:text-slate-200 mb-2">Quick Answer (AI Box)</label>
+                                <textarea
+                                    value={quickAnswer}
+                                    onChange={(e) => setQuickAnswer(e.target.value)}
+                                    placeholder="Direct 1-2 sentence answer to the most common query about this article..."
+                                    rows={2}
+                                    className="w-full border border-slate-300 dark:border-slate-800 rounded-lg px-4 py-3 text-navy dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white dark:bg-slate-955"
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-semibold text-navy dark:text-slate-200 mb-2">Regulation Ref</label>
+                                    <input
+                                        type="text"
+                                        value={regulationRef}
+                                        onChange={(e) => setRegulationRef(e.target.value)}
+                                        placeholder="e.g. Section 135 of Companies Act"
+                                        className="w-full border border-slate-300 dark:border-slate-800 rounded-lg px-4 py-3 text-navy dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white dark:bg-slate-955"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-semibold text-navy dark:text-slate-200 mb-2">Last Amended</label>
+                                    <input
+                                        type="date"
+                                        value={lastAmended}
+                                        onChange={(e) => setLastAmended(e.target.value)}
+                                        className="w-full border border-slate-300 dark:border-slate-800 rounded-lg px-4 py-3 text-navy dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white dark:bg-slate-955"
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-semibold text-navy dark:text-slate-200 mb-2">Last Verified By Team</label>
+                                <input
+                                    type="date"
+                                    value={lastVerified}
+                                    onChange={(e) => setLastVerified(e.target.value)}
+                                    className="w-full border border-slate-300 dark:border-slate-800 rounded-lg px-4 py-3 text-navy dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white dark:bg-slate-955"
+                                />
+                            </div>
+
+                            <div>
+                                <div className="flex justify-between items-center mb-2">
+                                    <label className="block text-sm font-semibold text-navy dark:text-slate-200">Key Takeaways (Bullet points)</label>
+                                    <button type="button" onClick={addKeyTakeaway} className="text-xs bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300 px-2.5 py-1 rounded">+ Add Point</button>
+                                </div>
+                                <div className="space-y-2">
+                                    {keyTakeaways.map((kt, idx) => (
+                                        <div key={idx} className="flex gap-2">
+                                            <input
+                                                type="text"
+                                                value={kt}
+                                                onChange={(e) => updateKeyTakeaway(idx, e.target.value)}
+                                                placeholder={`Takeaway point ${idx + 1}...`}
+                                                className="flex-1 border border-slate-300 dark:border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 text-navy dark:text-slate-100 bg-white dark:bg-slate-950"
+                                            />
+                                            <button type="button" onClick={() => removeKeyTakeaway(idx)} className="text-slate-400 hover:text-red-500 px-2">×</button>
+                                        </div>
+                                    ))}
+                                    {keyTakeaways.length === 0 && <div className="text-xs text-slate-400 italic">No takeaways added.</div>}
+                                </div>
+                            </div>
+
+                            <div className="pt-2">
+                                <label className="flex items-center gap-2 text-sm font-semibold text-navy dark:text-slate-200 mb-3 cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        checked={hasSteps}
+                                        onChange={(e) => setHasSteps(e.target.checked)}
+                                        className="rounded border-slate-300 text-amber-500 focus:ring-amber-500"
+                                    />
+                                    Contains "How-To" Steps (Generates HowTo Schema)
+                                </label>
+                                
+                                {hasSteps && (
+                                    <div className="space-y-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-xl">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-sm font-bold text-navy dark:text-slate-200">Steps Builder</span>
+                                            <button type="button" onClick={addStep} className="text-xs bg-amber-100 text-amber-700 hover:bg-amber-200 px-2.5 py-1 rounded">+ Add Step</button>
+                                        </div>
+                                        {stepsJson.map((step, idx) => (
+                                            <div key={idx} className="flex gap-3 bg-white dark:bg-slate-950 p-3 rounded-lg border border-slate-200 dark:border-slate-800 flex-col sm:flex-row">
+                                                <div className="flex-1 space-y-2">
+                                                    <input
+                                                        type="text"
+                                                        value={step.heading}
+                                                        onChange={(e) => updateStep(idx, 'heading', e.target.value)}
+                                                        placeholder={`Step ${idx + 1} Heading...`}
+                                                        className="w-full border border-slate-300 dark:border-slate-800 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-amber-400 bg-transparent text-navy dark:text-slate-100"
+                                                    />
+                                                    <textarea
+                                                        value={step.description}
+                                                        onChange={(e) => updateStep(idx, 'description', e.target.value)}
+                                                        placeholder={`Step ${idx + 1} Description...`}
+                                                        rows={2}
+                                                        className="w-full border border-slate-300 dark:border-slate-800 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-amber-400 bg-transparent resize-none text-navy dark:text-slate-100"
+                                                    />
+                                                </div>
+                                                <button type="button" onClick={() => removeStep(idx)} className="text-slate-400 hover:text-red-500 pt-1 shrink-0">×</button>
+                                            </div>
+                                        ))}
+                                        {stepsJson.length === 0 && <div className="text-xs text-slate-400 italic">No steps added.</div>}
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
 

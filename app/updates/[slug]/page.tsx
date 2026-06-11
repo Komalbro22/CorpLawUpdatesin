@@ -20,6 +20,7 @@ import ViewCounter from '@/components/ViewCounter'
 import ArticleActions from '@/components/ArticleActions'
 import ReadingProgress from '@/components/ReadingProgress'
 import FontSizeToggle from '@/components/FontSizeToggle'
+import { QuickAnswer } from '@/components/QuickAnswer'
 import { AlertCircle, BookOpen, CalendarDays, ChevronDown, Clock3, Eye, FileText, Lightbulb, Sparkles, CheckCircle2 } from 'lucide-react'
 import { sanitizeHtml } from '@/lib/sanitize'
 import { mcaForms } from '@/data/mca-forms'
@@ -134,6 +135,14 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
         .single()
 
     if (!update) notFound()
+
+    // GEO / AI Fields - separate query to avoid crashing if columns don't exist yet
+    const { data: geoData } = await supabase
+        .from('updates')
+        .select('quick_answer, has_steps, steps_json, last_verified, regulation_ref, key_takeaways, last_amended')
+        .ilike('slug', decodeURIComponent(params.slug))
+        .maybeSingle()
+        .catch(() => ({ data: null }));
 
     const { data: relatedRes } = await supabase
         .from('updates')
@@ -453,7 +462,36 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                 {/* Title */}
                 <h1 className="font-heading text-3xl md:text-[2.2rem] text-navy dark:text-slate-50 font-bold mb-4 leading-snug break-words">
                     {update.title}
-                </h1>                {/* Meta row */}
+                </h1>
+                
+                {/* 3.1 About this article / Editorial team */}
+                {geoData?.last_verified && (
+                    <div className="mb-4 flex flex-wrap items-center justify-between gap-4 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-3 text-xs">
+                        <div className="flex items-center gap-3">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-navy text-white font-bold">CL</div>
+                            <div>
+                                <p className="font-bold text-slate-700 dark:text-slate-300">Editorial team</p>
+                                <p className="text-slate-500">CorpLawUpdates.in · CS professionals & compliance specialists</p>
+                            </div>
+                        </div>
+                        <div className="flex flex-col items-end">
+                            <span className="flex items-center gap-1 font-semibold text-green-600 dark:text-green-500">
+                                <CheckCircle2 className="h-3.5 w-3.5" aria-hidden /> Verified for compliance
+                            </span>
+                            <span className="text-slate-400">Last verified: {formatDate(geoData.last_verified)}</span>
+                        </div>
+                    </div>
+                )}
+                
+                {/* 3.2 Regulation reference */}
+                {geoData?.regulation_ref && (
+                    <div className="mb-6 flex items-center gap-2 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-600 dark:text-slate-300 shadow-sm">
+                        <BookOpen className="h-4 w-4 text-amber-600" aria-hidden />
+                        <span className="font-bold">Legal basis:</span> {geoData.regulation_ref}
+                    </div>
+                )}
+                
+                {/* Meta row */}
                 <div className="mb-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-500 dark:text-slate-400">
                     <time className="publish-date inline-flex items-center gap-1.5" dateTime={update.published_at}>
                         <CalendarDays className="h-4 w-4 text-slate-400" aria-hidden />
@@ -476,6 +514,12 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                         <span className="inline-flex items-center gap-1 rounded-md border border-green-100 dark:border-green-900/30 bg-green-50 dark:bg-green-950/20 px-2 py-1 text-xs font-medium text-green-755">
                             <CalendarDays className="h-3.5 w-3.5" aria-hidden />
                             Effective: {formatDate(update.effective_date)}
+                        </span>
+                    )}
+                    {geoData?.last_amended && (
+                        <span className="inline-flex items-center gap-1 rounded-md border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 px-2 py-1 text-xs font-medium text-slate-600 dark:text-slate-400">
+                            <Clock3 className="h-3.5 w-3.5" aria-hidden />
+                            Last amended: {formatDate(geoData.last_amended)}
                         </span>
                     )}
                     {update.impact_level && (
@@ -506,6 +550,29 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                             Summary
                         </p>
                         <p className="text-blue-900 dark:text-blue-300 text-sm leading-relaxed font-medium">{update.summary}</p>
+                    </div>
+                )}
+
+                {/* Quick Answer box */}
+                {geoData?.quick_answer && (
+                    <QuickAnswer answer={geoData.quick_answer} />
+                )}
+
+                {/* Key Takeaways */}
+                {geoData?.key_takeaways && Array.isArray(geoData.key_takeaways) && geoData.key_takeaways.length > 0 && (
+                    <div className="mb-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 p-5 shadow-sm">
+                        <h3 className="mb-3 font-heading text-lg font-bold text-navy dark:text-white flex items-center gap-2">
+                            <Sparkles className="h-5 w-5 text-amber-500" aria-hidden />
+                            Key Takeaways
+                        </h3>
+                        <ul className="space-y-2 pl-2">
+                            {geoData.key_takeaways.map((point: string, i: number) => (
+                                <li key={i} className="flex items-start gap-3 text-[15px] text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
+                                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" aria-hidden />
+                                    <span>{point}</span>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 )}
 
@@ -707,6 +774,22 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                     text: f.answer,
                   },
                 })),
+              }} />
+            )}
+
+            {/* 11. HOWTO SCHEMA */}
+            {geoData?.has_steps && Array.isArray(geoData.steps_json) && geoData.steps_json.length > 0 && (
+              <JsonLd data={{
+                '@context': 'https://schema.org',
+                '@type': 'HowTo',
+                name: update.title,
+                description: update.summary,
+                step: geoData.steps_json.map((step: any, i: number) => ({
+                  '@type': 'HowToStep',
+                  position: i + 1,
+                  name: step.heading || `Step ${i + 1}`,
+                  text: step.description || '',
+                }))
               }} />
             )}
         </article>

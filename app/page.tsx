@@ -427,21 +427,40 @@ export default async function HomePage({ searchParams }: { searchParams: { sort?
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            "name": "CorpLawUpdates.in",
-            "url": "https://www.corplawupdates.in",
-            "description": "Latest corporate law updates (SEBI, RBI, MCA, NCLT, IBC)",
-            "publisher": {
-              "@type": "Organization",
+          __html: JSON.stringify([
+            {
+              "@context": "https://schema.org",
+              "@type": "WebSite",
               "name": "CorpLawUpdates.in",
-              "logo": {
-                "@type": "ImageObject",
-                "url": "https://www.corplawupdates.in/icon.png"
+              "url": "https://www.corplawupdates.in",
+              "description": "Latest corporate law updates (SEBI, RBI, MCA, NCLT, IBC)",
+              "publisher": {
+                "@id": "https://www.corplawupdates.in/#organization"
               }
+            },
+            {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "@id": "https://www.corplawupdates.in/#organization",
+              "name": "CorpLawUpdates.in",
+              "url": "https://www.corplawupdates.in",
+              "logo": "https://www.corplawupdates.in/icon.png",
+              "description": "India's free corporate law intelligence platform for CS professionals, CA firms, and compliance officers.",
+              "sameAs": [
+                "https://www.linkedin.com/company/corplawupdates/",
+                "https://x.com/CorpLawUpdates"
+              ],
+              "knowsAbout": [
+                "Companies Act 2013",
+                "SEBI Regulations",
+                "MCA Compliance",
+                "Insolvency and Bankruptcy Code",
+                "FEMA Regulations",
+                "RBI Regulations",
+                "Corporate Secretarial Practice"
+              ]
             }
-          })
+          ])
         }}
       />
     </div>

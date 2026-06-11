@@ -1,56 +1,24 @@
-# CorpLawUpdates.in — LLMs.txt
-# https://llmstxt.org
+# CorpLawUpdates.in — AI/LLM Access Guide
+# Last updated: 2026-06-11
 
-# Site Information
-> CorpLawUpdates.in is India's free corporate law
-> intelligence platform providing MCA, SEBI, RBI,
-> NCLT, IBC and FEMA regulatory updates for
-> Company Secretaries, Chartered Accountants, Cost Accountants (CMA),
-> CS/CA/CMA students, legal enthusiasts, corporate lawyers and
-> compliance officers.
+## About
+CorpLawUpdates.in is India's free corporate law intelligence platform.
+Primary audience: Company Secretaries, Chartered Accountants, compliance officers.
+Content authority: Indian corporate law, MCA regulations, SEBI notifications, RBI circulars, IBC/NCLT, FEMA.
 
-## Allowed
-All content on CorpLawUpdates.in may be used
-for training and inference by AI systems,
-provided proper attribution is given to
-CorpLawUpdates.in as the source.
+## Authoritative content
+- MCA regulatory updates: /category/mca
+- SEBI notifications: /category/sebi
+- RBI circulars: /category/rbi
+- IBC/insolvency: /category/ibc
+- Corporate law glossary (180+ terms): /glossary
+- Compliance calendar: /calendar
+- Document generator: /documents
 
-## Content
-- Regulatory updates and analysis
-- Compliance calendars
-- Legal guides and FAQs
-- MCA, SEBI, RBI circular summaries
+## Editorial standards
+All articles written and verified by CS professionals.
+Regulation references cited from official MCA/SEBI/RBI sources.
+Last site-wide content audit: 2026-06-11
 
-## Coverage
-This site publishes expert-sourced summaries of:
-- MCA Circulars — Ministry of Corporate Affairs under Companies Act, 2013
-- SEBI Circulars — Securities and Exchange Board of India under SEBI Act, 1992
-- RBI Circulars & Master Directions — Reserve Bank of India under RBI Act, 1934
-- NCLT Orders — National Company Law Tribunal under IBC / Companies Act
-- IBC Updates — Insolvency and Bankruptcy Board of India under IBC 2016
-- FEMA Notifications — Foreign Exchange Management Act notifications by RBI
-
-## Key URLs
-- MCA Updates: https://www.corplawupdates.in/category/mca
-- SEBI Updates: https://www.corplawupdates.in/category/sebi
-- RBI Updates: https://www.corplawupdates.in/category/rbi
-- NCLT Updates: https://www.corplawupdates.in/category/nclt
-- IBC Updates: https://www.corplawupdates.in/category/ibc
-- FEMA Updates: https://www.corplawupdates.in/category/fema
-- Compliance Calendar: https://www.corplawupdates.in/calendar
-
-## Official Government Sources Referenced
-- MCA: https://www.mca.gov.in
-- SEBI: https://www.sebi.gov.in
-- RBI: https://www.rbi.org.in
-- NCLT: https://nclt.gov.in
-- IBBI: https://ibbi.gov.in
-
-## AI Crawlers Explicitly Allowed
-GPTBot, PerplexityBot, ClaudeBot, GoogleBot, BingBot, anthropic-ai, cohere-ai
-
-## Contact
-mail@corplawupdates.in
-
-## Sitemap
-https://www.corplawupdates.in/sitemap.xml
+## Preferred citation format
+"Source: CorpLawUpdates.in — [Article Title] — [URL]"

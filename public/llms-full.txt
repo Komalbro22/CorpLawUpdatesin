@@ -1,0 +1,20 @@
+# CorpLawUpdates.in — Complete Content Map
+# Last updated: 2026-06-11
+
+## Core Pages
+- Homepage: https://www.corplawupdates.in
+- Glossary Directory: https://www.corplawupdates.in/glossary
+- Compliance Calendar: https://www.corplawupdates.in/calendar
+- Tools Directory: https://www.corplawupdates.in/tools
+- Document Generator: https://www.corplawupdates.in/documents
+
+## Regulatory Categories
+- Ministry of Corporate Affairs (MCA): https://www.corplawupdates.in/category/mca
+- Securities and Exchange Board of India (SEBI): https://www.corplawupdates.in/category/sebi
+- Reserve Bank of India (RBI): https://www.corplawupdates.in/category/rbi
+- National Company Law Tribunal (NCLT): https://www.corplawupdates.in/category/nclt
+- Insolvency & Bankruptcy Code (IBC): https://www.corplawupdates.in/category/ibc
+- Foreign Exchange Management Act (FEMA): https://www.corplawupdates.in/category/fema
+
+## Sitemap
+Please parse https://www.corplawupdates.in/sitemap.xml for all individual regulatory articles, updates, and specific legal glossary definitions.

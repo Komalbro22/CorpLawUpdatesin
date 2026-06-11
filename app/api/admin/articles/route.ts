@@ -87,7 +87,8 @@ export async function POST(request: NextRequest) {
             source_url, source_name, sources,
             seo_title, seo_description, featured_image_url,
             published_at, is_featured, 
-            key_change, key_changes, effective_date, impact_level
+            key_change, key_changes, effective_date, impact_level,
+            quick_answer, regulation_ref, last_verified, last_amended, key_takeaways, has_steps, steps_json
         } = body
 
         if (!title || !summary || !category) {
@@ -133,7 +134,14 @@ export async function POST(request: NextRequest) {
                 key_change: key_change || null,
                 key_changes: key_changes || null,
                 effective_date: effective_date || null,
-                impact_level: impact_level || null
+                impact_level: impact_level || null,
+                quick_answer: quick_answer || null,
+                regulation_ref: regulation_ref || null,
+                last_verified: last_verified || null,
+                last_amended: last_amended || null,
+                key_takeaways: key_takeaways || null,
+                has_steps: has_steps || false,
+                steps_json: steps_json || null
             })
             .select()
             .single()
