@@ -1313,7 +1313,7 @@ export default function DocumentGeneratorPage() {
         };
 
         if (isPdfLetterhead) {
-          const arrayBuffer = await html2pdf().from(container).set(opt).outputPdf('arraybuffer');
+          const arrayBuffer = await html2pdf().from(container).set(opt as any).outputPdf('arraybuffer');
           const { PDFDocument } = await import('pdf-lib');
           const generatedDoc = await PDFDocument.load(arrayBuffer);
           
@@ -1343,7 +1343,7 @@ export default function DocumentGeneratorPage() {
           a.click();
           URL.revokeObjectURL(url);
         } else {
-          const pdfBlob = await html2pdf().from(container).set(opt).output('blob');
+          const pdfBlob = await html2pdf().from(container).set(opt as any).output('blob');
           const url = URL.createObjectURL(pdfBlob);
           const a = document.createElement('a');
           a.href = url;
