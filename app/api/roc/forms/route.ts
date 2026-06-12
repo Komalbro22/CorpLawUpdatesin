@@ -1,17 +1,17 @@
 import { NextResponse } from 'next/server'
-import { supabaseDocuments } from '@/lib/supabase-documents'
+import { supabaseDocumentsAdmin } from '@/lib/supabase-documents-server'
 
 export const revalidate = 3600 // Cache 1 hour
 
 export async function GET() {
-  if (!supabaseDocuments) {
+  if (!supabaseDocumentsAdmin) {
     return NextResponse.json(
       { error: 'DB not available' },
       { status: 503 }
     )
   }
 
-  const { data, error } = await supabaseDocuments
+  const { data, error } = await supabaseDocumentsAdmin
     .from('roc_forms')
     .select('*')
     .eq('is_active', true)

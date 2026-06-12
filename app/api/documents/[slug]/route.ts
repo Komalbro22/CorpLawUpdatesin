@@ -1,5 +1,5 @@
 import { supabaseDocuments } from '@/lib/supabase-documents'
-import { supabaseDocumentsAdmin } from '@/lib/supabase-documents-server'
+import { supabaseAdmin } from '@/lib/supabase-server'
 import { NextResponse } from 'next/server'
 
 export const revalidate = 0 // Disable cache to track usage increments correctly
@@ -58,8 +58,8 @@ export async function GET(
     // Safely increment usage count asynchronously (non-blocking)
     ;(async () => {
       try {
-        if (!supabaseDocumentsAdmin) throw new Error('Supabase Documents Admin client not initialized')
-        await supabaseDocumentsAdmin
+        if (!supabaseAdmin) throw new Error('Supabase Admin client not initialized')
+        await supabaseAdmin
           .from('document_templates')
           .update({ usage_count: (data.usage_count || 0) + 1 })
           .eq('id', data.id)

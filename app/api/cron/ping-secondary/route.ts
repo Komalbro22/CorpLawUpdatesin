@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { supabaseDocuments } from '@/lib/supabase-documents'
+import { supabaseDocumentsAdmin } from '@/lib/supabase-documents-server'
 import { supabase } from '@/lib/supabase'
 
 export async function GET(request: Request) {
@@ -9,9 +9,9 @@ export async function GET(request: Request) {
   }
   try {
     // Ping SECONDARY
-    if (!supabaseDocuments) throw new Error('Supabase Documents client not initialized')
-    const { error: secondaryError } = await supabaseDocuments
-      .from('document_templates')
+    if (!supabaseDocumentsAdmin) throw new Error('Supabase Documents Admin client not initialized')
+    const { error: secondaryError } = await supabaseDocumentsAdmin
+      .from('intents')
       .select('id')
       .limit(1)
       

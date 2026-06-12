@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { supabaseDocumentsAdmin } from '@/lib/supabase-documents-server'
+import { supabaseAdmin } from '@/lib/supabase-server'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -18,8 +18,8 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
 
   // Fetch template from Supabase
   let template = null
-  if (supabaseDocumentsAdmin) {
-    const { data } = await supabaseDocumentsAdmin
+  if (supabaseAdmin) {
+    const { data } = await supabaseAdmin
       .from('document_templates')
       .select('name, description, tags, category')
       .eq('slug', slug)
