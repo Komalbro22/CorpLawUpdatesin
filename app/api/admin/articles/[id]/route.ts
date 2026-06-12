@@ -6,6 +6,7 @@ import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
 import { submitArticleToIndexNow } from '@/lib/indexnow'
+import { calculateReadingTime } from '@/lib/utils'
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
     if (!verifyAdminSession()) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -44,9 +45,14 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
             return NextResponse.json({ error: 'Article not found' }, { status: 404 })
         }
 
+        const updateData = { ...body }
+        if (body.content !== undefined) {
+            updateData.reading_time = calculateReadingTime(body.content || '')
+        }
+
         const { data: updatedArticle, error: updateError } = await supabaseAdmin
             .from('updates')
-            .update(body)
+            .update(updateData)
             .eq('id', params.id)
             .select()
             .single()
@@ -61,10 +67,23 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
         revalidatePath('/', 'layout')
         revalidatePath('/updates', 'layout')
+        revalidatePath('/sitemap.xml')
+
+        if (updatedArticle?.category) {
+            revalidatePath(`/category/${updatedArticle.category.toLowerCase()}`)
+        }
+        if (oldArticle?.category && oldArticle.category !== updatedArticle?.category) {
+            revalidatePath(`/category/${oldArticle.category.toLowerCase()}`)
+        }
 
         if (body.slug !== undefined && body.slug !== oldArticle.slug) {
             revalidatePath(`/updates/${oldArticle.slug}`, 'page')
+            if (updatedArticle?.slug) {
+                revalidatePath(`/updates/${updatedArticle.slug}`, 'page')
+            }
         } else if (body.title !== undefined && body.title !== oldArticle.title) {
+            revalidatePath(`/updates/${oldArticle.slug}`, 'page')
+        } else {
             revalidatePath(`/updates/${oldArticle.slug}`, 'page')
         }
 
@@ -93,6 +112,11 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 
         revalidatePath('/', 'layout')
         revalidatePath('/updates', 'layout')
+        revalidatePath('/sitemap.xml')
+        if (deletedArticle?.category) {
+            revalidatePath(`/category/${deletedArticle.category.toLowerCase()}`)
+        }
+        revalidatePath(`/updates/${deletedArticle.slug}`, 'page')
 
         return NextResponse.json({ success: true, message: 'Article deleted' })
     } catch (err: unknown) {

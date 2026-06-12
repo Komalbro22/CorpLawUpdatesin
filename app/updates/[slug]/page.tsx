@@ -36,7 +36,7 @@ function extractFirstImage(content: string): string | null {
     return null
 }
 
-export const revalidate = 3600
+export const revalidate = 86400 // 24 hours
 
 export async function generateStaticParams() {
     const { data } = await supabase.from('updates').select('slug')

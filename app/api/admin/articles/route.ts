@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
-import { slugify } from '@/lib/utils'
+import { slugify, calculateReadingTime } from '@/lib/utils'
 import { submitArticleToIndexNow } from '@/lib/indexnow'
 
 export async function GET(request: NextRequest) {
@@ -141,7 +141,8 @@ export async function POST(request: NextRequest) {
                 last_amended: last_amended || null,
                 key_takeaways: key_takeaways || null,
                 has_steps: has_steps || false,
-                steps_json: steps_json || null
+                steps_json: steps_json || null,
+                reading_time: calculateReadingTime(content || '')
             })
             .select()
             .single()
@@ -156,6 +157,10 @@ export async function POST(request: NextRequest) {
 
         revalidatePath('/', 'layout')
         revalidatePath('/updates', 'layout')
+        revalidatePath('/sitemap.xml')
+        if (category) {
+            revalidatePath(`/category/${category.toLowerCase()}`)
+        }
 
         return NextResponse.json(createdArticle, { status: 201 })
     } catch (err: unknown) {

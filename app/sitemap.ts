@@ -3,15 +3,13 @@ import { supabaseAdmin } from '@/lib/supabase-server'
 import { supabaseDocumentsAdmin } from '@/lib/supabase-documents-server'
 import { mcaForms } from '@/data/mca-forms'
 
-export const revalidate = 3600
+export const revalidate = 86400 // 24 hours
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const BASE_URL = 'https://www.corplawupdates.in'
 
   interface SitemapArticle {
     slug: string
-    title: string | null
-    content: string | null
     published_at: string | null
     updated_at: string | null
     category: string | null
@@ -20,8 +18,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   interface SitemapGlossaryTerm {
     slug: string
     created_at: string
-    definition: string | null
-    extended_note: string | null
   }
 
   // Fetch published articles (paginated to handle > 1000 items)
@@ -31,7 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   while (true) {
     const { data, error } = await supabaseAdmin
       .from('updates')
-      .select('slug, title, content, published_at, updated_at, category')
+      .select('slug, published_at, updated_at, category')
       .not('published_at', 'is', null)
       .lte('published_at', new Date().toISOString())
       .order('published_at', { ascending: false })
@@ -57,7 +53,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   while (true) {
     const { data, error } = await supabaseAdmin
       .from('glossary')
-      .select('slug, created_at, definition, extended_note')
+      .select('slug, created_at')
       .eq('is_verified', true)
       .range(glossaryPage * pageSize, (glossaryPage + 1) * pageSize - 1)
 
@@ -124,17 +120,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const CONTENT_QUALITY_THRESHOLD = 200
 
-  const glossaryPages = (glossaryTerms || [])
-    .filter(term => {
-      const contentLength = (term.definition || '').length + (term.extended_note || '').length
-      return contentLength >= CONTENT_QUALITY_THRESHOLD
-    })
-    .map(term => ({
-      url: `${BASE_URL}/glossary/${term.slug}`,
-      lastModified: new Date(term.created_at),
-      changeFrequency: 'yearly' as const,
-      priority: 0.4,
-    }))
+  const glossaryPages = (glossaryTerms || []).map(term => ({
+    url: `${BASE_URL}/glossary/${term.slug}`,
+    lastModified: new Date(term.created_at),
+    changeFrequency: 'yearly' as const,
+    priority: 0.4,
+  }))
 
   // Fetch active document templates for sitemap SEO indexing
   let docTemplates: any[] = []

@@ -68,6 +68,7 @@ export async function PUT(
     }
 
     revalidatePath('/glossary', 'layout')
+    revalidatePath('/sitemap.xml')
     revalidatePath(`/glossary/${oldTerm.slug}`, 'page')
     if (body.slug && body.slug !== oldTerm.slug) {
       revalidatePath(`/glossary/${body.slug}`, 'page')
@@ -106,6 +107,7 @@ export async function DELETE(
     }
 
     revalidatePath('/glossary', 'layout')
+    revalidatePath('/sitemap.xml')
     if (term?.slug) {
       revalidatePath(`/glossary/${term.slug}`, 'page')
     }
@@ -141,6 +143,7 @@ export async function PATCH(
     }
 
     revalidatePath('/glossary', 'layout')
+    revalidatePath('/sitemap.xml')
     if (data?.slug) {
       revalidatePath(`/glossary/${data.slug}`, 'page')
     }

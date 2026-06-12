@@ -69,6 +69,7 @@ export async function PUT(
     }
 
     revalidatePath('/documents', 'layout')
+    revalidatePath('/sitemap.xml')
     revalidatePath(`/documents/${oldTemplate.slug}`, 'page')
     if (body.slug && body.slug !== oldTemplate.slug) {
       revalidatePath(`/documents/${body.slug}`, 'page')
@@ -107,6 +108,7 @@ export async function DELETE(
     }
 
     revalidatePath('/documents', 'layout')
+    revalidatePath('/sitemap.xml')
     if (template?.slug) {
       revalidatePath(`/documents/${template.slug}`, 'page')
     }
@@ -142,6 +144,7 @@ export async function PATCH(
     }
 
     revalidatePath('/documents', 'layout')
+    revalidatePath('/sitemap.xml')
     if (data?.slug) {
       revalidatePath(`/documents/${data.slug}`, 'page')
     }

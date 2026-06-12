@@ -7,7 +7,7 @@ import LoadingSkeleton from '@/components/LoadingSkeleton'
 import { Metadata } from 'next'
 import Link from 'next/link'
 
-export const revalidate = 3600
+export const revalidate = 43200 // 12 hours
 
 const CURRENT_YEAR = new Date().getFullYear()
 const CURRENT_MONTH = new Date().toLocaleString('en-IN', { month: 'long' })

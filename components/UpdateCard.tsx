@@ -121,7 +121,7 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
                     <div className="flex shrink-0 items-center gap-2">
                         <span className="flex items-center gap-1 whitespace-nowrap rounded-md bg-slate-50 dark:bg-slate-800 px-2 py-1 text-[11px] font-medium text-slate-500 dark:text-slate-400">
                             <Clock className="w-3 h-3 text-slate-400" aria-hidden />
-                            {calculateReadingTime(update.content || update.summary || '')} min
+                            {update.reading_time || calculateReadingTime(update.content || update.summary || '')} min
                         </span>
                         <span className="hidden h-7 w-7 items-center justify-center rounded-md bg-slate-900 dark:bg-slate-800 text-white dark:text-slate-200 transition-colors group-hover:bg-amber-500 dark:group-hover:bg-amber-500 sm:flex">
                             <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />

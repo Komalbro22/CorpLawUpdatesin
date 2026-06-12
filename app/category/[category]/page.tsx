@@ -10,7 +10,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import EmptyState from '@/components/EmptyState'
 
-export const revalidate = 3600
+export const revalidate = 43200 // 12 hours
 
 const CATEGORIES = ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema']
 

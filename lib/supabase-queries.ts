@@ -2,7 +2,7 @@
 
 /** Card / list views (homepage, /updates, /category, related articles). Excludes `content`. */
 export const UPDATE_LIST_COLUMNS =
-  'id, title, slug, summary, content, category, published_at, is_featured, effective_date, featured_image_url, impact_level, source_name, views, tags' as const
+  'id, title, slug, summary, reading_time, category, published_at, is_featured, effective_date, featured_image_url, impact_level, source_name, views, tags' as const
 
 /** Full article detail page — includes body and metadata fields. */
 export const UPDATE_DETAIL_COLUMNS =

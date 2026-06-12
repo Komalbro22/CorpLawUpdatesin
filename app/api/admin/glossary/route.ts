@@ -46,6 +46,7 @@ export async function POST(request: NextRequest) {
     }
 
     revalidatePath('/glossary', 'layout')
+    revalidatePath('/sitemap.xml')
     if (data?.slug) {
       revalidatePath(`/glossary/${data.slug}`, 'page')
     }

@@ -25,6 +25,7 @@ export type UpdateListItem = Pick<
     | 'source_name'
     | 'views'
     | 'tags'
+    | 'reading_time'
 > & { content?: string | null }
 
 export interface Subscriber {
