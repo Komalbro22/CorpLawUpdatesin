@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
-import { slugify, calculateReadingTime } from '@/lib/utils'
+import { slugify, calculateReadingTime, extractFirstImage } from '@/lib/utils'
 import { submitArticleToIndexNow } from '@/lib/indexnow'
 
 export async function GET(request: NextRequest) {
@@ -128,7 +128,7 @@ export async function POST(request: NextRequest) {
                 sources: sources || null,
                 seo_title: seo_title || null,
                 seo_description: seo_description || null,
-                featured_image_url: featured_image_url || null,
+                featured_image_url: featured_image_url || extractFirstImage(content || '') || null,
                 published_at,
                 is_featured: is_featured || false,
                 key_change: key_change || null,

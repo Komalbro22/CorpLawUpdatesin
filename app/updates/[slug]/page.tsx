@@ -14,7 +14,7 @@ import MarkdownRenderer from '@/components/MarkdownRenderer'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import TableOfContents from '@/components/TableOfContents'
 import UpdateCard from '@/components/UpdateCard'
-import { calculateReadingTime, formatDate, BASE_URL } from '@/lib/utils'
+import { calculateReadingTime, formatDate, BASE_URL, extractFirstImage } from '@/lib/utils'
 import { linkGlossaryTerms } from '@/lib/glossaryLinker'
 import ViewCounter from '@/components/ViewCounter'
 import ArticleActions from '@/components/ArticleActions'
@@ -26,15 +26,6 @@ import { sanitizeHtml } from '@/lib/sanitize'
 import { mcaForms } from '@/data/mca-forms'
 
 const stripHtml = (html: string) => html ? html.replace(/<[^>]*>/g, '').trim() : ''
-
-function extractFirstImage(content: string): string | null {
-    if (!content) return null
-    const mdMatch = content.match(/!\[.*?\]\((.*?)\)/)
-    if (mdMatch && mdMatch[1]) return mdMatch[1]
-    const htmlMatch = content.match(/<img.*?src=["'](.*?)["']/)
-    if (htmlMatch && htmlMatch[1]) return htmlMatch[1]
-    return null
-}
 
 export const revalidate = 86400 // 24 hours
 

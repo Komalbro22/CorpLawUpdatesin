@@ -1,18 +1,9 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { UpdateListItem } from '@/types'
-import { formatDate, calculateReadingTime } from '@/lib/utils'
+import { formatDate, calculateReadingTime, extractFirstImage } from '@/lib/utils'
 import CategoryBadge from '@/components/CategoryBadge'
 import { ArrowUpRight, Clock } from 'lucide-react'
-
-function extractFirstImage(content: string): string | null {
-    if (!content) return null
-    const mdMatch = content.match(/!\[.*?\]\((.*?)\)/)
-    if (mdMatch && mdMatch[1]) return mdMatch[1]
-    const htmlMatch = content.match(/<img.*?src=["'](.*?)["']/)
-    if (htmlMatch && htmlMatch[1]) return htmlMatch[1]
-    return null
-}
 
 const categoryBorderColor: Record<string, string> = {
     MCA:  'border-t-blue-500',

@@ -59,3 +59,12 @@ export function safeCompare(a: string, b: string): boolean {
     return timingSafeEqual(hashA, hashB)
 }
 
+export function extractFirstImage(content: string): string | null {
+    if (!content) return null
+    const mdMatch = content.match(/!\[.*?\]\((.*?)\)/)
+    if (mdMatch && mdMatch[1]) return mdMatch[1]
+    const htmlMatch = content.match(/<img.*?src=["'](.*?)["']/)
+    if (htmlMatch && htmlMatch[1]) return htmlMatch[1]
+    return null
+}
+

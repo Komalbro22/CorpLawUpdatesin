@@ -6,7 +6,7 @@ import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
 import { submitArticleToIndexNow } from '@/lib/indexnow'
-import { calculateReadingTime } from '@/lib/utils'
+import { calculateReadingTime, extractFirstImage } from '@/lib/utils'
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
     if (!verifyAdminSession()) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -48,6 +48,9 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
         const updateData = { ...body }
         if (body.content !== undefined) {
             updateData.reading_time = calculateReadingTime(body.content || '')
+            if (!body.featured_image_url) {
+                updateData.featured_image_url = extractFirstImage(body.content || '') || null
+            }
         }
 
         const { data: updatedArticle, error: updateError } = await supabaseAdmin
