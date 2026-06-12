@@ -226,6 +226,9 @@ export function calculateMCAFee(params: CalculatorParams): CalculatorResult {
     baseFee = 500;
     return { baseFee, lateFee, stampDuty, adValoremFee, total: baseFee, warningText: '' };
   }
+  if (formSlug === 'mbp-1') {
+    return { baseFee: 0, lateFee: 0, stampDuty: 0, adValoremFee: 0, total: 0, warningText: 'MBP-1 is a physical board disclosure. No ROC portal fees apply.' };
+  }
 
   // 6. Other Event-Based Forms
   baseFee = getNormalFee(capital, isOpcSmall);

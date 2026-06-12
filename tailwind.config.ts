@@ -71,8 +71,8 @@ const config: Config = {
         }
       },
       fontFamily: {
-        heading: ['var(--font-lora)',        'Georgia', 'serif'],
-        body:    ['var(--font-source-sans)', 'Arial',   'sans-serif'],
+        heading: ['var(--font-outfit)', 'var(--font-lora)', 'sans-serif'],
+        body:    ['var(--font-source-sans)', 'Arial',            'sans-serif'],
         sans:    ['var(--font-inter)', 'system-ui', 'sans-serif'],
         serif:   ['var(--font-playfair)', 'Georgia', 'serif'],
         mono:    ['var(--font-jetbrains-mono)', 'monospace'],

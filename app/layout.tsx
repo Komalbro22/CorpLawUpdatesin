@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Lora, Source_Sans_3 } from 'next/font/google'
+import { Lora, Source_Sans_3, Outfit } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import Navbar from '@/components/Navbar'
@@ -17,6 +17,7 @@ import './globals.css'
 
 const lora = Lora({ subsets: ['latin'], variable: '--font-lora', display: 'swap' })
 const sourceSans = Source_Sans_3({ subsets: ['latin'], variable: '--font-source-sans', display: 'swap' })
+const outfit = Outfit({ subsets: ['latin'], variable: '--font-outfit', display: 'swap' })
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.corplawupdates.in'),
@@ -165,7 +166,7 @@ export default async function RootLayout({
           )}
         </HideOnAdmin>
       </head>
-      <body className={`${lora.variable} ${sourceSans.variable} font-body bg-slate-50 text-navy antialiased min-h-screen flex flex-col selection:bg-amber-200/50 selection:text-navy break-words`}>
+      <body className={`${lora.variable} ${sourceSans.variable} ${outfit.variable} font-body bg-slate-50 text-navy antialiased min-h-screen flex flex-col selection:bg-amber-200/50 selection:text-navy break-words`}>
         <ToastProvider>
           <a
             href="#main-content"

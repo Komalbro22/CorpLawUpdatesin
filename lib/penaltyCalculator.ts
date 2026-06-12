@@ -129,20 +129,56 @@ export function calculateCompanyFee(params: CompanyFeeParams): CompanyCalculatio
   let companyPenalty = 0;
   let officerPenalty = 0;
 
+  interface PenaltyRules {
+    companyBase?: number;
+    companyPerDay?: number;
+    companyMax?: number;
+    officerBase?: number;
+    officerPerDay?: number;
+    officerMax?: number;
+  }
+
+  const formPenaltyRules: Record<string, PenaltyRules> = {
+    'MGT-7': { companyBase: 10000, companyPerDay: 100, companyMax: 200000, officerBase: 10000, officerPerDay: 100, officerMax: 50000 },
+    'MGT-7A': { companyBase: 10000, companyPerDay: 100, companyMax: 200000, officerBase: 10000, officerPerDay: 100, officerMax: 50000 },
+    'AOC-4': { companyBase: 10000, companyPerDay: 100, companyMax: 200000, officerBase: 10000, officerPerDay: 100, officerMax: 50000 },
+    'AOC-4-XBRL': { companyBase: 10000, companyPerDay: 100, companyMax: 200000, officerBase: 10000, officerPerDay: 100, officerMax: 50000 },
+    'AOC-4-CFS': { companyBase: 10000, companyPerDay: 100, companyMax: 200000, officerBase: 10000, officerPerDay: 100, officerMax: 50000 },
+    'DIR-3-KYC': { officerBase: 5000, officerMax: 5000 },
+    'DPT-3': { companyBase: 5000, companyPerDay: 500, officerBase: 5000, officerPerDay: 500 },
+    'BEN-2': { companyBase: 1000000, companyPerDay: 1000, companyMax: 5000000, officerBase: 1000000, officerPerDay: 1000, officerMax: 5000000 },
+    'INC-20A': { companyBase: 50000, companyMax: 50000, officerBase: 1000, officerPerDay: 1000, officerMax: 100000 },
+    'INC-22': { companyBase: 1000, companyPerDay: 1000, companyMax: 100000, officerBase: 1000, officerPerDay: 1000, officerMax: 100000 },
+    'PAS-3': { companyBase: 1000, companyPerDay: 1000, companyMax: 100000, officerBase: 1000, officerPerDay: 1000, officerMax: 100000 },
+    'MGT-14': { companyBase: 100000, companyPerDay: 500, companyMax: 2500000, officerBase: 50000, officerPerDay: 500, officerMax: 500000 },
+    'MSME-1': { companyBase: 25000, companyPerDay: 500, companyMax: 300000, officerBase: 25000, officerPerDay: 500, officerMax: 300000 },
+    'PAS-6': { companyBase: 10000, companyPerDay: 1000, companyMax: 200000, officerBase: 10000, officerPerDay: 1000, officerMax: 50000 },
+    'SH-7': { companyBase: 1000, companyPerDay: 500, companyMax: 500000, officerBase: 1000, officerPerDay: 500, officerMax: 500000 },
+    'ADT-3': { officerBase: 50000, officerPerDay: 500, officerMax: 200000 },
+    'CRA-2': { companyBase: 25000, companyPerDay: 1000, companyMax: 500000, officerBase: 10000, officerPerDay: 1000, officerMax: 200000 },
+    'CRA-4': { companyBase: 25000, companyPerDay: 1000, companyMax: 500000, officerBase: 10000, officerPerDay: 1000, officerMax: 200000 },
+    'AOC-5': { officerBase: 50000, officerMax: 500000 },
+    'MGT-15': { companyBase: 100000, companyPerDay: 500, companyMax: 500000, officerBase: 25000, officerPerDay: 500, officerMax: 100000 },
+    'MBP-1': { officerBase: 100000, officerMax: 100000 }
+  };
+
   if (daysDelayed > 0) {
-    if (formId === 'MGT-7' || formId === 'MGT-7A') {
-      // Section 92(5) Companies Act 2013 (as amended by Amendment Act 2019)
-      // Company:  ₹10,000 fixed + ₹100/day continuing, max ₹2,00,000
-      // Officer:  ₹10,000 fixed + ₹100/day continuing, max ₹50,000 per officer
-      companyPenalty = Math.min(10000 + daysDelayed * 100, 200000);
-      officerPenalty = Math.min(10000 + daysDelayed * 100, 50000) * officersCount;
-    } else if (['AOC-4', 'AOC-4-XBRL', 'AOC-4-CFS'].includes(formId)) {
-      // Section 137(3) Companies Act 2013 (as amended by Amendment Act 2019)
-      // Company:  ₹10,000 fixed + ₹100/day continuing, max ₹2,00,000
-      // Officer:  ₹10,000 fixed + ₹100/day continuing, max ₹50,000 per officer
-      // (Pre-2019 figures of ₹1,000/day are no longer applicable after decriminalization)
-      companyPenalty = Math.min(10000 + daysDelayed * 100, 200000);
-      officerPenalty = Math.min(10000 + daysDelayed * 100, 50000) * officersCount;
+    const rules = formPenaltyRules[formId];
+    if (rules) {
+      if (rules.companyBase !== undefined || rules.companyPerDay !== undefined) {
+        let compPenalty = (rules.companyBase || 0) + (rules.companyPerDay || 0) * daysDelayed;
+        if (rules.companyMax !== undefined) {
+          compPenalty = Math.min(compPenalty, rules.companyMax);
+        }
+        companyPenalty = compPenalty;
+      }
+      if (rules.officerBase !== undefined || rules.officerPerDay !== undefined) {
+        let offPenalty = (rules.officerBase || 0) + (rules.officerPerDay || 0) * daysDelayed;
+        if (rules.officerMax !== undefined) {
+          offPenalty = Math.min(offPenalty, rules.officerMax);
+        }
+        officerPenalty = offPenalty * officersCount;
+      }
     }
   }
 

@@ -19,6 +19,15 @@ const extraForms = [
   { slug: 'dir-3-kyc', formNumber: 'DIR-3-KYC', formName: 'Director KYC', penaltyType: 'flat', penaltyRate: '₹5000', normalFeeStructure: 'flat', concessionApplies: false },
   { slug: 'stk-2', formNumber: 'STK-2', formName: 'Strike off company', penaltyType: 'flat', penaltyRate: '₹5000', normalFeeStructure: 'flat', concessionApplies: false },
   { slug: 'mgt-14', formNumber: 'MGT-14', formName: 'Filing of Resolutions and agreements', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
+  { slug: 'dpt-3', formNumber: 'DPT-3', formName: 'Return of Deposits', penaltyType: 'multiplier', penaltyRate: '1.2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
+  { slug: 'ben-2', formNumber: 'BEN-2', formName: 'Return of SBO Disclosures', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
+  { slug: 'pas-6', formNumber: 'PAS-6', formName: 'Reconciliation of share capital audit', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
+  { slug: 'adt-3', formNumber: 'ADT-3', formName: 'Notice of resignation by auditor', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
+  { slug: 'cra-2', formNumber: 'CRA-2', formName: 'Appointment of Cost Auditor Intimation', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
+  { slug: 'cra-4', formNumber: 'CRA-4', formName: 'Filing of Cost Audit Report', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
+  { slug: 'aoc-5', formNumber: 'AOC-5', formName: 'Notice of address for keeping books of account', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
+  { slug: 'mgt-15', formNumber: 'MGT-15', formName: 'AGM Report of listed company', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
+  { slug: 'mbp-1', formNumber: 'MBP-1', formName: 'Disclosure of interest by directors', penaltyType: 'nil', penaltyRate: 'N/A (Physical)', normalFeeStructure: 'nil', concessionApplies: false },
   { slug: 'other-general', formNumber: 'Other General Form', formName: 'Any standard event-based MCA form', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true }
 ]
 

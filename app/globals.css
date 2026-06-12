@@ -22,9 +22,9 @@
   --border-default: #E2E8F0;
   --border-light: #F1F5F9;
   
-  --navy: #0F172A;
-  --gold: #F59E0B;
-  --gold-hover: #D97706;
+  --navy: #0B1F3A;
+  --gold: #C9A84C;
+  --gold-hover: #B8963B;
   
   --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
@@ -33,33 +33,33 @@
 
 /* Dark mode overrides */
 .dark {
-  --bg-primary: #0A0F1E;
+  --bg-primary: #040814;
   --bg-secondary: #111827;
-  --bg-card: #1E2433;
+  --bg-card: #0E1626;
   --bg-nav: #111827;
-  --bg-hover: #1E2433;
+  --bg-hover: #0E1626;
   
   --text-primary: #E2E8F0;
-  --text-secondary: #CBD5E1;
+  --text-secondary: #94A3B8;
   --text-muted: #94A3B8;
   --text-subtle: #64748B;
   
   --border-default: #2D3748;
-  --border-light: #1E2433;
+  --border-light: #0E1626;
   
-  --navy: #1E2433;
-  --gold: #F59E0B;
-  --gold-hover: #FBBF24;
+  --navy: #0E1626;
+  --gold: #C9A84C;
+  --gold-hover: #B8963B;
   
   --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.5);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
   
   /* Additional tokens override for compatibility */
-  --background: #0A0F1E;
+  --background: #040814;
   --foreground: #E2E8F0;
   --surface: #111827;
-  --surface-muted: #1E2433;
+  --surface-muted: #0E1626;
   --border-subtle: #2D3748;
 }
 
@@ -73,6 +73,10 @@ body {
   color: var(--text-primary);
   transition: background-color 0.2s ease, 
               color 0.2s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-outfit), sans-serif;
 }
 
 /* Cards and surfaces */
