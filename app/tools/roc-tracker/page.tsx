@@ -17,6 +17,21 @@ function daysUntilCCFSExpiry(): number {
   ))
 }
 
+function getDefaultFilingYear(): string {
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = today.getMonth() // 0-11
+  if (month >= 3) {
+    const start = year - 1
+    const end = year
+    return `${start}-${String(end).slice(-2)}`
+  } else {
+    const start = year - 2
+    const end = year - 1
+    return `${start}-${String(end).slice(-2)}`
+  }
+}
+
 export default function ROCTrackerPage() {
   // Forms data from DB
   const [dbForms, setDbForms] = 
@@ -38,6 +53,10 @@ export default function ROCTrackerPage() {
       hasDeposits: true,
       paidUpCapital: 1000000,
       turnover: 5000000,
+      hasSBO: false,
+      hasResolutions: false,
+      hasSubsidiaries: false,
+      filingYear: getDefaultFilingYear(),
     })
 
   // Results
@@ -112,6 +131,10 @@ export default function ROCTrackerPage() {
       hasForeignShareholders: profile.hasForeignShareholders || false,
       hasDeposits: profile.hasDeposits || true,
       auditDate: null,
+      hasSBO: profile.hasSBO || false,
+      hasResolutions: profile.hasResolutions || false,
+      hasSubsidiaries: profile.hasSubsidiaries || false,
+      filingYear: profile.filingYear || getDefaultFilingYear(),
     }
   }
 
@@ -450,6 +473,30 @@ export default function ROCTrackerPage() {
               <label className="block text-xs font-bold 
                                 text-slate-600 
                                 dark:text-slate-400 mb-1.5">
+                Filing Financial Year *
+              </label>
+              <select
+                value={profile.filingYear || '2025-26'}
+                onChange={e => setProfile(p => ({
+                  ...p, filingYear: e.target.value
+                }))}
+                className={inputClass}>
+                <option value="2024-25">
+                  FY 2024-25 (Previous Year)
+                </option>
+                <option value="2025-26">
+                  FY 2025-26 (Current Year)
+                </option>
+                <option value="2026-27">
+                  FY 2026-27 (Next Year)
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold 
+                                text-slate-600 
+                                dark:text-slate-400 mb-1.5">
                 Financial Year End
               </label>
               <select
@@ -467,21 +514,35 @@ export default function ROCTrackerPage() {
               </select>
             </div>
 
-            <div>
-              <label className="block text-xs font-bold 
-                                text-slate-600 
-                                dark:text-slate-400 mb-1.5">
-                Last AGM Date
-              </label>
-              <input type="date"
-                value={profile.agmDate 
-                  ? new Date(profile.agmDate).toISOString().split('T')[0]
-                  : ''}
-                onChange={e => setProfile(p => ({
-                  ...p, agmDate: e.target.value ? new Date(e.target.value) : null
-                }))}
-                className={inputClass} />
-            </div>
+            {profile.companyType !== 'opc' ? (
+              <div>
+                <label className="block text-xs font-bold 
+                                  text-slate-600 
+                                  dark:text-slate-400 mb-1.5">
+                  Last AGM Date
+                </label>
+                <input type="date"
+                  value={profile.agmDate 
+                    ? new Date(profile.agmDate).toISOString().split('T')[0]
+                    : ''}
+                  onChange={e => setProfile(p => ({
+                    ...p, agmDate: e.target.value ? new Date(e.target.value) : null
+                  }))}
+                  className={inputClass} />
+              </div>
+            ) : (
+              <div>
+                <label className="block text-xs font-bold 
+                                  text-slate-600 
+                                  dark:text-slate-400 mb-1.5 opacity-60">
+                  Last AGM Date
+                </label>
+                <input type="text"
+                  disabled
+                  value="Not Applicable (OPC is exempt)"
+                  className={`${inputClass} opacity-60 bg-slate-100 dark:bg-slate-900`} />
+              </div>
+            )}
 
             <div>
               <label className="block text-xs font-bold 
@@ -564,6 +625,18 @@ export default function ROCTrackerPage() {
                 { 
                   key: 'hasCS', 
                   label: '👩💼 Has whole-time CS' 
+                },
+                { 
+                  key: 'hasSubsidiaries', 
+                  label: '🏢 Has subsidiaries/associates/JVs' 
+                },
+                { 
+                  key: 'hasSBO', 
+                  label: '🔍 Has SBO declarations (BEN-1/2)' 
+                },
+                { 
+                  key: 'hasResolutions', 
+                  label: '📜 Passed resolutions (MGT-14)' 
                 },
               ].map(item => (
                 <label key={item.key}

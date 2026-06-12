@@ -14,7 +14,33 @@ export interface CompanyProfile {
   hasForeignShareholders: boolean
   hasDeposits: boolean
   auditDate: Date | null
+  hasSBO?: boolean
+  hasResolutions?: boolean
+  hasSubsidiaries?: boolean
+  filingYear?: string
 }
+
+export function getFYFromYear(
+  financialYearEnd: 'march' | 'september',
+  filingYear: string
+): { start: Date, end: Date, label: string } {
+  const parts = filingYear.split('-')
+  const startYear = parseInt(parts[0])
+  const endYear = startYear + 1
+
+  if (financialYearEnd === 'march') {
+    const start = new Date(startYear, 3, 1) // April 1st
+    const end = new Date(endYear, 2, 31)   // March 31st
+    const label = `FY ${filingYear}`
+    return { start, end, label }
+  } else {
+    const start = new Date(startYear, 9, 1) // October 1st
+    const end = new Date(endYear, 8, 30)   // September 30th
+    const label = `FY ${filingYear}`
+    return { start, end, label }
+  }
+}
+
 
 export interface DeadlineItem {
   id: string
@@ -150,7 +176,9 @@ export function calculateDeadlinesFromDB(
   forms: ROCFormDB[]
 ): DeadlineItem[] {
   const today = new Date()
-  const fy = getFY(profile.financialYearEnd, today)
+  const fy = profile.filingYear
+    ? getFYFromYear(profile.financialYearEnd, profile.filingYear)
+    : getFY(profile.financialYearEnd, today)
   const currentYear = today.getFullYear()
   
   const agmDate = profile.agmDate || (
@@ -204,9 +232,29 @@ export function calculateDeadlinesFromDB(
 
     // AOC-4 CFS only if has subsidiaries
     if (form.form_code === 'AOC-4 CFS') {
-      specialApplicable = false
-      notApplicableReason = 
-        'Enable if company has subsidiaries/associates'
+      specialApplicable = isApplicable && !!profile.hasSubsidiaries
+      if (!specialApplicable) {
+        notApplicableReason = 
+          'Only applicable if company has subsidiaries, associates or joint ventures'
+      }
+    }
+
+    // BEN-2 only if has SBO
+    if (form.form_code === 'BEN-2') {
+      specialApplicable = isApplicable && !!profile.hasSBO
+      if (!specialApplicable) {
+        notApplicableReason = 
+          'Only applicable if company has Significant Beneficial Owners (SBO)'
+      }
+    }
+
+    // MGT-14 only if resolutions passed
+    if (form.form_code === 'MGT-14') {
+      specialApplicable = isApplicable && !!profile.hasResolutions
+      if (!specialApplicable) {
+        notApplicableReason = 
+          'Only applicable if company passed resolutions requiring MGT-14 filing'
+      }
     }
 
     // MGT-7A for OPC/Small, MGT-7 for others
@@ -224,60 +272,56 @@ export function calculateDeadlinesFromDB(
     // Calculate due date from DB logic
     let dueDate: Date
 
-    switch (form.due_basis) {
-      case 'from_agm':
-        dueDate = addDays(agmDate, form.due_days || 60)
-        break
-      
-      case 'from_fy_end':
-        dueDate = addDays(fy.end, form.due_days || 30)
-        break
-      
-      case 'fixed_date':
-        // Pick next occurrence
-        const fixedThisYear = new Date(
-          currentYear,
-          (form.due_fixed_month || 6) - 1,
-          form.due_fixed_day || 30
-        )
-        dueDate = today <= fixedThisYear 
-          ? fixedThisYear 
-          : new Date(
-              currentYear + 1,
-              (form.due_fixed_month || 6) - 1,
-              form.due_fixed_day || 30
-            )
+    if (profile.companyType === 'opc' && form.form_code === 'AOC-4') {
+      dueDate = addDays(fy.end, 180)
+    } else if (profile.companyType === 'opc' && form.form_code === 'MGT-7A') {
+      dueDate = addDays(fy.end, 240)
+    } else {
+      switch (form.due_basis) {
+        case 'from_agm':
+          dueDate = addDays(agmDate, form.due_days || 60)
+          break
         
-        // Half-yearly forms
-        if (form.due_second_date_month) {
-          const secondDate = new Date(
-            currentYear,
-            form.due_second_date_month - 1,
-            form.due_second_date_day || 30
+        case 'from_fy_end':
+          dueDate = addDays(fy.end, form.due_days || 30)
+          break
+        
+        case 'fixed_date': {
+          const fyEndYear = fy.end.getFullYear()
+          const dueDate1 = new Date(
+            fyEndYear,
+            (form.due_fixed_month || 6) - 1,
+            form.due_fixed_day || 30
           )
-          if (today <= fixedThisYear) {
-            dueDate = fixedThisYear
-          } else if (today <= secondDate) {
-            dueDate = secondDate
-          } else {
-            dueDate = new Date(
-              currentYear + 1,
-              (form.due_fixed_month || 4) - 1,
-              form.due_fixed_day || 30
+          dueDate = dueDate1
+          
+          if (form.due_second_date_month) {
+            const dueDate2 = new Date(
+              fyEndYear,
+              form.due_second_date_month - 1,
+              form.due_second_date_day || 30
             )
+            if (today <= dueDate1) {
+              dueDate = dueDate1
+            } else if (today <= dueDate2) {
+              dueDate = dueDate2
+            } else {
+              dueDate = dueDate2
+            }
           }
+          break
         }
-        break
-      
-      case 'from_incorporation':
-        dueDate = addDays(
-          profile.incorporationDate, 
-          form.due_days || 180
-        )
-        break
-      
-      default:
-        dueDate = addMonths(today, 3)
+        
+        case 'from_incorporation':
+          dueDate = addDays(
+            profile.incorporationDate, 
+            form.due_days || 180
+          )
+          break
+        
+        default:
+          dueDate = addMonths(today, 3)
+      }
     }
 
     // Calculate fees
