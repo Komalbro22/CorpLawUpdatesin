@@ -68,6 +68,7 @@ const sections: SidebarSection[] = [
             { href: '/admin/compliance',           icon: Calendar,     label: 'Compliance Calendar' },
             { href: '/admin/compliance/suggestions', icon: Lightbulb,  label: 'Suggestions' },
             { href: '/admin/rule-engine',          icon: Cpu,          label: 'Rule Engine' },
+            { href: '/admin/roc',                  icon: ScrollText,   label: 'ROC Forms'   },
         ],
     },
     {

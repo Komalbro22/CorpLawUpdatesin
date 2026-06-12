@@ -98,6 +98,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/tools/fee-calculator/companies`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.9 },
     { url: `${BASE_URL}/tools/fee-calculator/llp`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.9 },
     { url: `${BASE_URL}/tools/fee-calculator/msme`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.9 },
+    { url: `${BASE_URL}/tools/roc-tracker`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.9 },
+    { url: `${BASE_URL}/roc-deadline-tracker`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.9 },
     { url: `${BASE_URL}/rbi/repo-rate`, changeFrequency: 'weekly' as const, priority: 0.6 },
     { url: `${BASE_URL}/newsletter`, changeFrequency: 'yearly' as const, priority: 0.5 },
     { url: `${BASE_URL}/about`, changeFrequency: 'yearly' as const, priority: 0.3 },
