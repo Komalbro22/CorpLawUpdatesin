@@ -1249,12 +1249,33 @@ export default function DocumentGeneratorPage() {
         const html2pdf = (await import('html2pdf.js')).default;
         
         const container = document.createElement('div');
+        container.id = 'pdf-print-container';
         container.style.width = '794px';
-        container.style.position = 'fixed';
-        container.style.left = '0';
+        container.style.position = 'absolute';
+        container.style.left = '-9999px';
         container.style.top = '0';
-        container.style.zIndex = '-9999';
         container.style.backgroundColor = 'white';
+
+        const styleBlock = document.createElement('style');
+        styleBlock.innerHTML = `
+          #pdf-print-container {
+            background-color: white !important;
+          }
+          #pdf-print-container,
+          #pdf-print-container p,
+          #pdf-print-container span,
+          #pdf-print-container h1,
+          #pdf-print-container h2,
+          #pdf-print-container h3,
+          #pdf-print-container h4,
+          #pdf-print-container li,
+          #pdf-print-container td,
+          #pdf-print-container th,
+          #pdf-print-container strong {
+            color: #1e293b !important;
+          }
+        `;
+        container.appendChild(styleBlock);
         
         const contentDiv = document.createElement('div');
         contentDiv.className = 'font-serif text-[14px] leading-relaxed prose max-w-none';
@@ -1313,6 +1334,17 @@ export default function DocumentGeneratorPage() {
           pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
 
+        // Wait for all images inside the container to load before generating the PDF
+        const images = container.getElementsByTagName('img');
+        const imagePromises = Array.from(images).map((img) => {
+          if (img.complete) return Promise.resolve();
+          return new Promise((resolve) => {
+            img.onload = resolve;
+            img.onerror = resolve;
+          });
+        });
+        await Promise.all(imagePromises);
+
         if (isPdfLetterhead) {
           const arrayBuffer = await html2pdf().from(container).set(opt as any).outputPdf('arraybuffer');
           const { PDFDocument } = await import('pdf-lib');
@@ -1370,6 +1402,12 @@ export default function DocumentGeneratorPage() {
             custom_margin_side: customMarginSide,
           }),
         });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || `Server responded with status ${res.status}`);
+        }
+
         const blob = await res.blob();
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -1378,8 +1416,9 @@ export default function DocumentGeneratorPage() {
         a.click();
         URL.revokeObjectURL(url);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Download error:', err);
+      alert(err.message || 'Failed to download the document. Please try again.');
     } finally {
       setDownloading(false)
     }

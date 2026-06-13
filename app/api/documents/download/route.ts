@@ -298,14 +298,14 @@ export async function POST(request: Request) {
       }
 
       const buffer = await HTMLtoDOCX(htmlContent, headerHTML, docxOptions);
-      const uint8Array = new Uint8Array(buffer as ArrayBuffer);
+      const responseData = buffer instanceof ArrayBuffer ? new Uint8Array(buffer) : (buffer as any);
 
-      return new Response(uint8Array, {
+      return new Response(responseData, {
         status: 200,
         headers: {
           'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
           'Content-Disposition': `attachment; filename="${encodeURIComponent(document_name || 'document')}.docx"`,
-          'Content-Length': uint8Array.length.toString(),
+          'Content-Length': responseData.length.toString(),
         },
       })
     }
