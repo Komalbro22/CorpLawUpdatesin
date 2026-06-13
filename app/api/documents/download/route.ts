@@ -3,6 +3,8 @@ import { Document, Packer, Paragraph, TextRun, ImageRun, AlignmentType } from 'd
 import sharp from 'sharp'
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 import HTMLtoDOCX from 'html-to-docx'
+import { markdownToHtml } from '@/lib/markdown'
+
 
 export async function POST(request: Request) {
   try {
@@ -277,10 +279,7 @@ export async function POST(request: Request) {
         }
       }
 
-      let htmlContent = content;
-      if (!/<[a-z][\\s\\S]*>/i.test(htmlContent)) {
-        htmlContent = htmlContent.split('\\n').map((line: string) => `<p>${line || '<br/>'}</p>`).join('');
-      }
+      const htmlContent = markdownToHtml(content);
 
       const docxOptions = {
         margins: {
@@ -288,6 +287,9 @@ export async function POST(request: Request) {
           bottom: twipB,
           left: twipL,
           right: twipR,
+          header: 720,
+          footer: 720,
+          gutter: 0,
         },
         font: 'Times New Roman',
       };

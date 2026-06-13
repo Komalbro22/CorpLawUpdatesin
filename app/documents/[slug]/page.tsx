@@ -8,6 +8,8 @@ import { LegalBasisCard } from '@/components/documents/LegalBasisCard'
 import { ConflictAuditor } from '@/components/documents/ConflictAuditor'
 import { checkMissingClauses, checkLeaseClauses, getImportanceIcon, getImportanceLabel, formatTemplateSource, type ClauseCheck } from '@/lib/document-clause-checker'
 import { DocumentRetry } from '@/components/documents/DocumentRetry'
+import { markdownToHtml } from '@/lib/markdown'
+
 
 interface Field {
   id: string
@@ -1285,9 +1287,10 @@ export default function DocumentGeneratorPage() {
         contentDiv.style.paddingRight = `${customMarginSide}px`;
         
         const rawContent = getCleanedContent(generatedContent);
+        const htmlContent = markdownToHtml(rawContent);
         contentDiv.innerHTML = typeof window !== 'undefined' 
-          ? DOMPurify.sanitize(/<[a-z][\\s\\S]*>/i.test(rawContent) ? rawContent : rawContent.replace(/\\n/g, '<br/>'))
-          : rawContent;
+          ? DOMPurify.sanitize(htmlContent)
+          : htmlContent;
         
         const isPdfLetterhead = letterheadUrl && letterheadUrl.toLowerCase().endsWith('.pdf');
         if (letterheadUrl && !isPdfLetterhead) {
@@ -1329,7 +1332,19 @@ export default function DocumentGeneratorPage() {
           margin: 0,
           filename: filename,
           image: { type: 'jpeg' as const, quality: 0.98 },
-          html2canvas: { scale: 2, useCORS: true, logging: false },
+          html2canvas: { 
+            scale: 2, 
+            useCORS: true, 
+            logging: false,
+            onclone: (clonedDoc: Document) => {
+              const el = clonedDoc.getElementById('pdf-print-container');
+              if (el) {
+                el.style.position = 'relative';
+                el.style.left = '0';
+                el.style.top = '0';
+              }
+            }
+          },
           jsPDF: { unit: 'px', format: 'a4', orientation: 'portrait' },
           pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
@@ -2106,11 +2121,7 @@ export default function DocumentGeneratorPage() {
                       }}
                       dangerouslySetInnerHTML={{
                         __html: typeof window !== 'undefined' 
-                          ? DOMPurify.sanitize(
-                              /<[a-z][\\s\\S]*>/i.test(getCleanedContent(generatedContent)) 
-                                ? getCleanedContent(generatedContent) 
-                                : getCleanedContent(generatedContent).replace(/\\n/g, '<br/>')
-                            )
+                          ? DOMPurify.sanitize(markdownToHtml(getCleanedContent(generatedContent)))
                           : getCleanedContent(generatedContent)
                       }}
                     />
