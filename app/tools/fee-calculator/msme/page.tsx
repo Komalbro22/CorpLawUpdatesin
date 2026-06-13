@@ -16,21 +16,35 @@ export const metadata: Metadata = {
 
 const msmeJsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
-  name: 'MSME Delayed Payment Interest Calculator',
-  applicationCategory: 'FinanceApplication',
-  operatingSystem: 'Web Browser',
-  offers: {
-    '@type': 'Offer',
-    price: '0',
-    priceCurrency: 'INR'
-  },
-  description: 'Calculate the exact delayed payment compound interest owed to MSMEs under Section 16 of the MSMED Act.',
-  featureList: [
-    'Section 16 MSMED Act Compliance',
-    '3x RBI Repo Rate Compound Interest',
-    'Monthly Rest Calculation',
-    'Principal + Interest Payable tracking'
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      '@id': 'https://www.corplawupdates.in/tools/fee-calculator/msme#softwareapplication',
+      name: 'MSME Delayed Payment Interest Calculator',
+      applicationCategory: 'FinanceApplication',
+      operatingSystem: 'Web Browser',
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'INR'
+      },
+      description: 'Calculate the exact delayed payment compound interest owed to MSMEs under Section 16 of the MSMED Act.',
+      featureList: [
+        'Section 16 MSMED Act Compliance',
+        '3x RBI Repo Rate Compound Interest',
+        'Monthly Rest Calculation',
+        'Principal + Interest Payable tracking'
+      ]
+    },
+    {
+      '@type': 'BreadcrumbList',
+      'itemListElement': [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.corplawupdates.in' },
+        { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://www.corplawupdates.in/tools' },
+        { '@type': 'ListItem', position: 3, name: 'Fee Calculator', item: 'https://www.corplawupdates.in/tools/fee-calculator' },
+        { '@type': 'ListItem', position: 4, name: 'MSME Interest Calculator', item: 'https://www.corplawupdates.in/tools/fee-calculator/msme' }
+      ]
+    }
   ]
 }
 

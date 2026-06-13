@@ -8,33 +8,46 @@ import { mcaForms } from '@/data/mca-forms'
 
 const hubJsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'CollectionPage',
-  name: 'Compliance Fee & Penalty Calculators Hub',
-  description: 'Free interactive fee and penalty calculators for Companies, LLPs, MSMEs, and GST late fees.',
-  url: 'https://www.corplawupdates.in/tools/fee-calculator',
-  mainEntity: {
-    '@type': 'ItemList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        url: 'https://www.corplawupdates.in/tools/fee-calculator/companies',
-        name: 'Company ROC Fee Calculator'
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        url: 'https://www.corplawupdates.in/tools/fee-calculator/llp',
-        name: 'LLP Fee & Penalty Calculator'
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
-        url: 'https://www.corplawupdates.in/tools/fee-calculator/msme',
-        name: 'MSME Interest Calculator'
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      '@id': 'https://www.corplawupdates.in/tools/fee-calculator#collectionpage',
+      name: 'Compliance Fee & Penalty Calculators Hub',
+      description: 'Free interactive fee and penalty calculators for Companies, LLPs, MSMEs, and GST late fees.',
+      url: 'https://www.corplawupdates.in/tools/fee-calculator',
+      mainEntity: {
+        '@type': 'ItemList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            url: 'https://www.corplawupdates.in/tools/fee-calculator/companies',
+            name: 'Company ROC Fee Calculator'
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            url: 'https://www.corplawupdates.in/tools/fee-calculator/llp',
+            name: 'LLP Fee & Penalty Calculator'
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            url: 'https://www.corplawupdates.in/tools/fee-calculator/msme',
+            name: 'MSME Interest Calculator'
+          }
+        ]
       }
-    ]
-  }
+    },
+    {
+      '@type': 'BreadcrumbList',
+      'itemListElement': [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.corplawupdates.in' },
+        { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://www.corplawupdates.in/tools' },
+        { '@type': 'ListItem', position: 3, name: 'Fee Calculator', item: 'https://www.corplawupdates.in/tools/fee-calculator' }
+      ]
+    }
+  ]
 }
 
 const calculators = [

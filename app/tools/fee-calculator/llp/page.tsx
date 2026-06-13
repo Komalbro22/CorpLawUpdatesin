@@ -15,21 +15,35 @@ export const metadata: Metadata = {
 
 const llpJsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
-  name: 'LLP Fee & Penalty Calculator',
-  applicationCategory: 'BusinessApplication',
-  operatingSystem: 'Web Browser',
-  offers: {
-    '@type': 'Offer',
-    price: '0',
-    priceCurrency: 'INR'
-  },
-  description: 'Calculate statutory filing fees and flat ₹100/day late filing penalties for Limited Liability Partnerships (Form 8, Form 11, etc).',
-  featureList: [
-    'Form 11 Annual Return Penalty',
-    'Form 8 Statement of Account Penalty',
-    'Form 3 LLP Agreement Fee',
-    'DIR-3 KYC Late Fee'
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      '@id': 'https://www.corplawupdates.in/tools/fee-calculator/llp#softwareapplication',
+      name: 'LLP Fee & Penalty Calculator',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web Browser',
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'INR'
+      },
+      description: 'Calculate statutory filing fees and flat ₹100/day late filing penalties for Limited Liability Partnerships (Form 8, Form 11, etc).',
+      featureList: [
+        'Form 11 Annual Return Penalty',
+        'Form 8 Statement of Account Penalty',
+        'Form 3 LLP Agreement Fee',
+        'DIR-3 KYC Late Fee'
+      ]
+    },
+    {
+      '@type': 'BreadcrumbList',
+      'itemListElement': [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.corplawupdates.in' },
+        { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://www.corplawupdates.in/tools' },
+        { '@type': 'ListItem', position: 3, name: 'Fee Calculator', item: 'https://www.corplawupdates.in/tools/fee-calculator' },
+        { '@type': 'ListItem', position: 4, name: 'LLP Fee Calculator', item: 'https://www.corplawupdates.in/tools/fee-calculator/llp' }
+      ]
+    }
   ]
 }
 

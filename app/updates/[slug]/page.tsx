@@ -449,7 +449,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                 })()}
 
                 {/* Title */}
-                <h1 className="font-heading text-3xl md:text-[2.2rem] text-navy dark:text-slate-50 font-bold mb-4 leading-snug break-words">
+                <h1 id="article-title" className="font-heading text-3xl md:text-[2.2rem] text-navy dark:text-slate-50 font-bold mb-4 leading-snug break-words">
                     {update.title}
                 </h1>
                 
@@ -538,7 +538,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                             <FileText className="h-4 w-4" aria-hidden />
                             Summary
                         </p>
-                        <p className="text-blue-900 dark:text-blue-300 text-sm leading-relaxed font-medium">{update.summary}</p>
+                        <p id="article-summary" className="text-blue-900 dark:text-blue-300 text-sm leading-relaxed font-medium">{update.summary}</p>
                     </div>
                 )}
 
@@ -702,6 +702,10 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
               headline: update.title,
               description: update.summary,
               abstract: update.summary,
+              speakable: {
+                '@type': 'SpeakableSpecification',
+                cssSelector: ['#article-title', '#article-summary']
+              },
               url: articleUrl,
               datePublished: update.published_at,
               dateModified: update.updated_at || update.published_at,

@@ -16,21 +16,35 @@ export const metadata: Metadata = {
 
 const companyJsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
-  name: 'Company ROC Fee Calculator',
-  applicationCategory: 'BusinessApplication',
-  operatingSystem: 'Web Browser',
-  offers: {
-    '@type': 'Offer',
-    price: '0',
-    priceCurrency: 'INR'
-  },
-  description: 'Calculate exact ROC filing fees, late penalties, and state-wise stamp duty for Private, Public, OPC and Small Companies.',
-  featureList: [
-    'General Forms (ADT-1, INC-22) Penalty',
-    'Annual Returns (AOC-4, MGT-7) Late Fee',
-    'Share Capital (SH-7) Stamp Duty',
-    'Charge Forms (CHG-1, CHG-4) Ad Valorem'
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      '@id': 'https://www.corplawupdates.in/tools/fee-calculator/companies#softwareapplication',
+      name: 'Company ROC Fee Calculator',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web Browser',
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'INR'
+      },
+      description: 'Calculate exact ROC filing fees, late penalties, and state-wise stamp duty for Private, Public, OPC and Small Companies.',
+      featureList: [
+        'General Forms (ADT-1, INC-22) Penalty',
+        'Annual Returns (AOC-4, MGT-7) Late Fee',
+        'Share Capital (SH-7) Stamp Duty',
+        'Charge Forms (CHG-1, CHG-4) Ad Valorem'
+      ]
+    },
+    {
+      '@type': 'BreadcrumbList',
+      'itemListElement': [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.corplawupdates.in' },
+        { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://www.corplawupdates.in/tools' },
+        { '@type': 'ListItem', position: 3, name: 'Fee Calculator', item: 'https://www.corplawupdates.in/tools/fee-calculator' },
+        { '@type': 'ListItem', position: 4, name: 'Company Fee Calculator', item: 'https://www.corplawupdates.in/tools/fee-calculator/companies' }
+      ]
+    }
   ]
 }
 

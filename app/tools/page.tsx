@@ -12,65 +12,88 @@ export const metadata: Metadata = {
 
 const toolsJsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'WebPage',
-  name: 'Free Corporate Law & Compliance Tools',
-  description: 'Free interactive compliance and corporate law tools open to everyone.',
-  url: 'https://www.corplawupdates.in/tools',
-  hasPart: [
+  '@graph': [
     {
-      '@type': 'WebApplication',
-      name: 'Legal Document Generator',
-      url: 'https://www.corplawupdates.in/documents',
-      applicationCategory: 'LegalApplication',
-      offers: {
-        '@type': 'Offer',
-        price: '0',
-        priceCurrency: 'INR',
-      }
+      '@type': 'WebPage',
+      '@id': 'https://www.corplawupdates.in/tools#webpage',
+      name: 'Free Corporate Law & Compliance Tools',
+      description: 'Free interactive compliance and corporate law tools open to everyone. Access our AI document generator, MCA late fee calculator, compliance calendar, repo rate tracker, and glossary.',
+      url: 'https://www.corplawupdates.in/tools',
+      hasPart: [
+        {
+          '@type': 'WebApplication',
+          name: 'Legal Document Generator',
+          url: 'https://www.corplawupdates.in/documents',
+          applicationCategory: 'LegalApplication',
+          offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'INR',
+          }
+        },
+        {
+          '@type': 'WebApplication',
+          name: 'MCA & ROC Fee Calculator',
+          url: 'https://www.corplawupdates.in/tools/fee-calculator',
+          applicationCategory: 'BusinessApplication',
+          offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'INR',
+          }
+        },
+        {
+          '@type': 'WebApplication',
+          name: 'Compliance Calendar 2026',
+          url: 'https://www.corplawupdates.in/calendar',
+          applicationCategory: 'UtilityApplication',
+          offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'INR',
+          }
+        },
+        {
+          '@type': 'WebApplication',
+          name: 'RBI Repo Rate Tracker',
+          url: 'https://www.corplawupdates.in/rbi/repo-rate',
+          applicationCategory: 'FinanceApplication',
+          offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'INR',
+          }
+        },
+        {
+          '@type': 'WebApplication',
+          name: 'Corporate Law Glossary',
+          url: 'https://www.corplawupdates.in/glossary',
+          applicationCategory: 'EducationalApplication',
+          offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'INR',
+          }
+        },
+        {
+          '@type': 'WebApplication',
+          name: 'ROC Compliance Tracker',
+          url: 'https://www.corplawupdates.in/tools/roc-tracker',
+          applicationCategory: 'BusinessApplication',
+          offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'INR',
+          }
+        }
+      ]
     },
     {
-      '@type': 'WebApplication',
-      name: 'MCA & ROC Fee Calculator',
-      url: 'https://www.corplawupdates.in/tools/fee-calculator',
-      applicationCategory: 'BusinessApplication',
-      offers: {
-        '@type': 'Offer',
-        price: '0',
-        priceCurrency: 'INR',
-      }
-    },
-    {
-      '@type': 'WebApplication',
-      name: 'Compliance Calendar 2026',
-      url: 'https://www.corplawupdates.in/calendar',
-      applicationCategory: 'UtilityApplication',
-      offers: {
-        '@type': 'Offer',
-        price: '0',
-        priceCurrency: 'INR',
-      }
-    },
-    {
-      '@type': 'WebApplication',
-      name: 'RBI Repo Rate Tracker',
-      url: 'https://www.corplawupdates.in/rbi/repo-rate',
-      applicationCategory: 'FinanceApplication',
-      offers: {
-        '@type': 'Offer',
-        price: '0',
-        priceCurrency: 'INR',
-      }
-    },
-    {
-      '@type': 'WebApplication',
-      name: 'Corporate Law Glossary',
-      url: 'https://www.corplawupdates.in/glossary',
-      applicationCategory: 'EducationalApplication',
-      offers: {
-        '@type': 'Offer',
-        price: '0',
-        priceCurrency: 'INR',
-      }
+      '@type': 'BreadcrumbList',
+      'itemListElement': [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.corplawupdates.in' },
+        { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://www.corplawupdates.in/tools' }
+      ]
     }
   ]
 }
