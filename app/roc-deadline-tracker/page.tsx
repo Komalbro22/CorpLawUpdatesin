@@ -70,7 +70,7 @@ const faqs = [
   },
   {
     q: 'Can a Small Company skip some ROC filings?',
-    a: 'Small Companies (paid-up capital ≤ Rs. 4 Crore AND turnover ≤ Rs. 40 Crore) have a simplified annual return — MGT-7A instead of MGT-7. They are also exempt from certain requirements like mandatory rotation of auditors and secretarial audit. However, core filings like AOC-4, DIR-3 KYC, ADT-1 and DPT-3 remain mandatory.'
+    a: 'Small Companies (paid-up capital ≤ Rs. 10 Crore AND turnover ≤ Rs. 100 Crore) have a simplified annual return — MGT-7A instead of MGT-7. They are also exempt from certain requirements like mandatory rotation of auditors and secretarial audit. However, core filings like AOC-4, DIR-3 KYC, ADT-1 and DPT-3 remain mandatory.'
   },
 ]
 

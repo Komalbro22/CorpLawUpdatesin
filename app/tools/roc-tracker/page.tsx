@@ -565,11 +565,17 @@ export default function ROCTrackerPage() {
                 <option value={10000000}>
                   ₹10 Lakh–1 Crore
                 </option>
+                <option value={40000000}>
+                  ₹1–4 Crore
+                </option>
                 <option value={50000000}>
-                  ₹1–5 Crore
+                  ₹4–5 Crore (XBRL limit starts at ₹5 Crore)
+                </option>
+                <option value={100000000}>
+                  ₹5–10 Crore (Small Company Limit)
                 </option>
                 <option value={500000000}>
-                  ₹5 Crore+ (XBRL likely needed)
+                  Above ₹10 Crore
                 </option>
               </select>
             </div>
@@ -586,17 +592,17 @@ export default function ROCTrackerPage() {
                   ...p, turnover: Number(e.target.value)
                 }))}
                 className={inputClass}>
-                <option value={4000000}>
-                  Below ₹40 Lakh (Small Company)
+                <option value={20000000}>
+                  Up to ₹2 Crore
                 </option>
-                <option value={50000000}>
-                  ₹40 Lakh–5 Crore
+                <option value={400000000}>
+                  ₹2–40 Crore
                 </option>
-                <option value={500000000}>
-                  ₹5–50 Crore
+                <option value={1000000000}>
+                  ₹40–100 Crore (Small Company Limit)
                 </option>
                 <option value={5000000000}>
-                  ₹50 Crore+ (Cost Audit likely)
+                  Above ₹100 Crore (Cost Audit / XBRL likely)
                 </option>
               </select>
             </div>
