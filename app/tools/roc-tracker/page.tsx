@@ -230,7 +230,7 @@ export default function ROCTrackerPage() {
     if (prevProfile) {
       const prevResult = calculateDeadlinesFromDB(prevProfile, dbForms)
       const filteredPrev = prevResult.filter(d => 
-        ['aoc-4', 'aoc-4 cfs', 'mgt-7', 'mgt-7a', 'adt-1'].includes(d.id)
+        ['aoc-4', 'aoc-4 cfs', 'mgt-7', 'mgt-7a', 'adt-1', 'itr-6', 'form-3cd', 'rbi-fla'].includes(d.id)
       )
       setPrevDeadlines(filteredPrev)
     } else {
@@ -244,7 +244,7 @@ export default function ROCTrackerPage() {
     const prevYearStr = getPreviousYearStr(currentYearStr)
     const adjustedCurrent = adjustDeadlines(result, currentYearStr)
     const adjustedPrev = prevProfile 
-      ? adjustDeadlines(calculateDeadlinesFromDB(prevProfile, dbForms).filter(d => ['aoc-4', 'aoc-4 cfs', 'mgt-7', 'mgt-7a', 'adt-1'].includes(d.id)), prevYearStr)
+      ? adjustDeadlines(calculateDeadlinesFromDB(prevProfile, dbForms).filter(d => ['aoc-4', 'aoc-4 cfs', 'mgt-7', 'mgt-7a', 'adt-1', 'itr-6', 'form-3cd', 'rbi-fla'].includes(d.id)), prevYearStr)
       : []
     const summaryData = getAdjustedSummary(adjustedCurrent, adjustedPrev)
 
@@ -406,6 +406,45 @@ export default function ROCTrackerPage() {
         isApplicable = d.isApplicable && (!!profile.hasDeposits || !!profile.hasPublicDeposits)
         if (!isApplicable) {
           notApplicableReason = 'Only applicable if company has outstanding loans or deposits as on 31st March'
+        }
+      }
+
+      if (d.id === 'rbi-fla') {
+        isApplicable = d.isApplicable && !!profile.hasForeignShareholders
+        if (!isApplicable) {
+          notApplicableReason = 'Only applicable if company has foreign shareholders or FDI/ODI'
+        }
+      }
+
+      if (d.id === 'form-3cd') {
+        isApplicable = d.isApplicable && (profile.turnover || 0) > 20000000
+        if (!isApplicable) {
+          notApplicableReason = 'Only applicable if annual turnover exceeds ₹2 Crore (or ₹10 Crore under specific conditions)'
+        }
+      }
+
+      if (d.id === 'itr-6') {
+        if (profile.companyType === 'section8') {
+          d.formName = 'ITR-7'
+          d.description = `Income Tax Return (ITR-7) — ${year}`
+          d.legalSection = 'Section 139(4A) / 139(4C) of the Income Tax Act, 1961'
+        } else {
+          d.formName = 'ITR-6'
+          d.description = `Income Tax Return (ITR-6) — ${year}`
+          d.legalSection = 'Section 139(1) of the Income Tax Act, 1961'
+        }
+      }
+
+      if (d.id === 'board-meetings') {
+        isApplicable = d.isApplicable && profile.companyType !== 'opc'
+        if (profile.companyType === 'opc') {
+          notApplicableReason = 'Exempt for One Person Company (OPC) if there is only one director'
+        } else if (isSmallCompanyActive) {
+          d.description = `Board Meetings (Min 2, one in each half calendar year) — ${year}`
+          d.legalSection = 'Section 173(5) of the Companies Act, 2013'
+        } else {
+          d.description = `Board Meetings (Min 4, max 120-day interval) — ${year}`
+          d.legalSection = 'Section 173(1) of the Companies Act, 2013'
         }
       }
 
@@ -1210,7 +1249,11 @@ export default function ROCTrackerPage() {
             {( (csMandatory && !profile.hasCS) || 
                (!qualifiesAsSmall && isSmallCompanyActive) ||
                (profile.hasMSMEDues && !filedForms[`msme-1_${currentYear}`]?.filed) ||
-               ((profile.hasDeposits || profile.hasPublicDeposits) && !filedForms[`dpt-3_${currentYear}`]?.filed) ) && (
+               ((profile.hasDeposits || profile.hasPublicDeposits) && !filedForms[`dpt-3_${currentYear}`]?.filed) ||
+               (profile.hasForeignShareholders && !filedForms[`rbi-fla_${currentYear}`]?.filed) ||
+               ((profile.turnover || 0) > 20000000 && !filedForms[`form-3cd_${currentYear}`]?.filed) ||
+               (!filedForms[`itr-6_${currentYear}`]?.filed) ||
+               (profile.companyType !== 'opc' && !filedForms[`board-meetings_${currentYear}`]?.filed) ) && (
               <div className="bg-amber-500/10 border border-amber-500/20 rounded-3xl p-5 space-y-3">
                 <h3 className="text-sm font-black text-amber-600 dark:text-amber-400 font-heading flex items-center gap-2">
                   ⚠️ Critical Compliance Warnings
@@ -1228,12 +1271,32 @@ export default function ROCTrackerPage() {
                   )}
                   {profile.hasMSMEDues && !filedForms[`msme-1_${currentYear}`]?.filed && (
                     <li>
-                      <strong>Pending MSME Dues Return:</strong> Outstanding payments to MSMEs exceed 45 days. Must file Form MSME-1 twice a year to avoid fixed penalties up to ₹3,00,000.
+                      <strong>Pending MSME Dues Return:</strong> Outstanding payments to MSMEs exceed 45 days. Must file Form MSME-1 twice a year to avoid fixed penalties up to ₹3,0,000.
                     </li>
                   )}
                   {(profile.hasDeposits || profile.hasPublicDeposits) && !filedForms[`dpt-3_${currentYear}`]?.filed && (
                     <li>
                       <strong>Outstanding Loans/Deposits:</strong> Outstanding borrowings or deposits require annual Form DPT-3 filing by 30th June to avoid a flat penalty of ₹50,000.
+                    </li>
+                  )}
+                  {profile.hasForeignShareholders && !filedForms[`rbi-fla_${currentYear}`]?.filed && (
+                    <li>
+                      <strong>Pending RBI FLA Return:</strong> Foreign shareholding requires annual FLA return filing on the RBI FLAIR portal by 15th July to avoid FEMA penalties (₹7,500 Late Submission Fee).
+                    </li>
+                  )}
+                  {(profile.turnover || 0) > 20000000 && !filedForms[`form-3cd_${currentYear}`]?.filed && (
+                    <li>
+                      <strong>Mandatory Tax Audit (Form 3CD):</strong> Turnover exceeds ₹2 Crore, requiring a Tax Audit Report under Section 44AB by 30th September. Non-compliance attracts a penalty of 0.5% of turnover (max ₹1.5 Lakh).
+                    </li>
+                  )}
+                  {!filedForms[`itr-6_${currentYear}`]?.filed && (
+                    <li>
+                      <strong>Income Tax Return ({profile.companyType === 'section8' ? 'ITR-7' : 'ITR-6'}):</strong> Annual income tax return must be filed by 31st October to avoid late filing fees under Section 234F (up to ₹5,000) and interest on unpaid tax.
+                    </li>
+                  )}
+                  {profile.companyType !== 'opc' && !filedForms[`board-meetings_${currentYear}`]?.filed && (
+                    <li>
+                      <strong>Board Meetings Compliance:</strong> Ensure minimum board meetings are held and recorded in the minutes book (Notice, Agenda, and signed Minutes required). Default attracts a penalty of up to ₹10,000 under Section 450.
                     </li>
                   )}
                 </ul>

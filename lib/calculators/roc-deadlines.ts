@@ -193,9 +193,122 @@ export function calculateDeadlinesFromDB(
   const ccfsStillActive = 
     new Date() <= new Date('2026-07-15')
 
+  // Ensure the 4 new compliance requirements are present in forms list (as fallback if not loaded from DB)
+  const requiredFormCodes = ['RBI-FLA', 'FORM-3CD', 'ITR-6', 'BOARD-MEETINGS'];
+  
+  const fallbackFormsMap: Record<string, ROCFormDB> = {
+    'RBI-FLA': {
+      form_code: 'RBI-FLA',
+      form_name: 'RBI FLA Return',
+      short_description: 'Annual Return on Foreign Liabilities and Assets',
+      applicable_to: ['private', 'public', 'opc', 'small', 'section8'],
+      due_basis: 'fixed_date',
+      due_days: null,
+      due_fixed_month: 7,
+      due_fixed_day: 15,
+      due_second_date_month: null,
+      due_second_date_day: null,
+      normal_govt_fee: 0,
+      additional_fee_per_day: 0,
+      max_additional_fee: null,
+      flat_late_fee: 7500,
+      grace_period_days: 0,
+      ccfs_eligible: false,
+      ccfs_expiry: '2026-07-15',
+      ccfs_waiver_percent: 0,
+      legal_section: 'Section 7(3)(b) of FEMA, 1999 read with RBI regulations',
+      more_info_url: 'https://flair.rbi.org.in',
+      how_to_file: 'RBI FLAIR Portal',
+      mca_portal_path: null,
+      priority: 'high'
+    },
+    'FORM-3CD': {
+      form_code: 'FORM-3CD',
+      form_name: 'Tax Audit Report (Form 3CD)',
+      short_description: 'Tax Audit Report under Section 44AB of Income Tax Act',
+      applicable_to: ['private', 'public', 'opc', 'small', 'section8'],
+      due_basis: 'fixed_date',
+      due_days: null,
+      due_fixed_month: 9,
+      due_fixed_day: 30,
+      due_second_date_month: null,
+      due_second_date_day: null,
+      normal_govt_fee: 0,
+      additional_fee_per_day: 0,
+      max_additional_fee: 150000,
+      flat_late_fee: null,
+      grace_period_days: 0,
+      ccfs_eligible: false,
+      ccfs_expiry: '2026-07-15',
+      ccfs_waiver_percent: 0,
+      legal_section: 'Section 44AB of the Income Tax Act, 1961',
+      more_info_url: 'https://www.incometax.gov.in',
+      how_to_file: 'Income Tax e-Filing Portal',
+      mca_portal_path: null,
+      priority: 'critical'
+    },
+    'ITR-6': {
+      form_code: 'ITR-6',
+      form_name: 'Income Tax Return (ITR-6)',
+      short_description: 'Annual corporate income tax return for companies',
+      applicable_to: ['private', 'public', 'opc', 'small', 'section8'],
+      due_basis: 'fixed_date',
+      due_days: null,
+      due_fixed_month: 10,
+      due_fixed_day: 31,
+      due_second_date_month: null,
+      due_second_date_day: null,
+      normal_govt_fee: 0,
+      additional_fee_per_day: 0,
+      max_additional_fee: null,
+      flat_late_fee: 5000,
+      grace_period_days: 0,
+      ccfs_eligible: false,
+      ccfs_expiry: '2026-07-15',
+      ccfs_waiver_percent: 0,
+      legal_section: 'Section 139(1) of the Income Tax Act, 1961',
+      more_info_url: 'https://www.incometax.gov.in',
+      how_to_file: 'Income Tax e-Filing Portal',
+      mca_portal_path: null,
+      priority: 'critical'
+    },
+    'BOARD-MEETINGS': {
+      form_code: 'BOARD-MEETINGS',
+      form_name: 'Board Meetings Compliance',
+      short_description: 'Holding of minimum number of Board Meetings annually',
+      applicable_to: ['private', 'public', 'small', 'section8'],
+      due_basis: 'fixed_date',
+      due_days: null,
+      due_fixed_month: 3,
+      due_fixed_day: 31,
+      due_second_date_month: null,
+      due_second_date_day: null,
+      normal_govt_fee: 0,
+      additional_fee_per_day: 0,
+      max_additional_fee: null,
+      flat_late_fee: 10000,
+      grace_period_days: 0,
+      ccfs_eligible: false,
+      ccfs_expiry: '2026-07-15',
+      ccfs_waiver_percent: 0,
+      legal_section: 'Section 173 of the Companies Act, 2013',
+      more_info_url: null,
+      how_to_file: 'Kept internally in company Minutes Book',
+      mca_portal_path: null,
+      priority: 'high'
+    }
+  };
+
+  const processedForms = [...forms];
+  for (const code of requiredFormCodes) {
+    if (!processedForms.some(f => f.form_code.toUpperCase() === code)) {
+      processedForms.push(fallbackFormsMap[code]);
+    }
+  }
+
   const deadlines: DeadlineItem[] = []
 
-  for (const form of forms) {
+  for (const form of processedForms) {
     
     // Check applicability
     const isApplicable = form.applicable_to.includes(
@@ -331,7 +444,14 @@ export function calculateDeadlinesFromDB(
     const daysOverdue = Math.max(0, -daysRemaining)
 
     let currentPenalty = 0
-    if (daysOverdue > form.grace_period_days) {
+    if (form.form_code === 'FORM-3CD') {
+      if (daysOverdue > 0) {
+        const calculatedPenalty = Math.round((profile.turnover || 0) * 0.005)
+        currentPenalty = Math.min(calculatedPenalty, 150000)
+      } else {
+        currentPenalty = 0
+      }
+    } else if (daysOverdue > form.grace_period_days) {
       if (form.flat_late_fee) {
         currentPenalty = form.flat_late_fee
       } else {
