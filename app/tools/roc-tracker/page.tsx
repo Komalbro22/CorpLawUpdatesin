@@ -50,18 +50,29 @@ export default function ROCTrackerPage() {
       isXBRL: false,
       isListed: false,
       hasForeignShareholders: false,
-      hasDeposits: true,
+      hasDeposits: false,
       paidUpCapital: 1000000,
       turnover: 5000000,
       hasSBO: false,
       hasResolutions: false,
       hasSubsidiaries: false,
       filingYear: getDefaultFilingYear(),
+      hasMSMEDues: false,
+      hasPublicDeposits: false,
     })
+
+  // Small Company Manual Override
+  const [isSmallCompanyManual, setIsSmallCompanyManual] = useState<boolean | null>(null)
+
+  // Filed forms tracking
+  const [filedForms, setFiledForms] = useState<Record<string, { filed: boolean; filingDate?: string }>>({})
 
   // Results
   const [deadlines, setDeadlines] = 
     useState<DeadlineItem[] | null>(null)
+  const [prevDeadlines, setPrevDeadlines] = 
+    useState<DeadlineItem[] | null>(null)
+  const [activeResultsTab, setActiveResultsTab] = useState<'current' | 'previous'>('current')
   const [calculated, setCalculated] = 
     useState(false)
   const [showAll, setShowAll] = useState(false)
@@ -81,6 +92,26 @@ export default function ROCTrackerPage() {
     useState(false)
   const [reminderLoading, setReminderLoading] = 
     useState(false)
+
+  // Auto-evaluation flags
+  const qualifiesAsSmall = 
+    profile.companyType === 'private' &&
+    (profile.paidUpCapital || 0) <= 100000000 && // 10 Crore
+    (profile.turnover || 0) <= 1000000000 && // 100 Crore
+    !profile.hasSubsidiaries
+
+  const isSmallCompanyActive = 
+    profile.companyType === 'private' &&
+    (isSmallCompanyManual !== null ? isSmallCompanyManual : qualifiesAsSmall)
+
+  const csMandatory = 
+    profile.companyType !== 'opc' &&
+    (profile.paidUpCapital || 0) >= 500000000 // Above 10 Crore
+
+  const xbrlMandatory = 
+    profile.isListed ||
+    (profile.paidUpCapital || 0) >= 50000000 || // 5 Crore or more
+    (profile.turnover || 0) >= 1000000000 // 100 Crore or more
 
   // Load DB forms on mount
   useEffect(() => {
@@ -110,6 +141,20 @@ export default function ROCTrackerPage() {
         console.error('Failed to parse saved profile', e)
       }
     }
+    const savedSmall = localStorage.getItem('roc_tracker_small_manual')
+    if (savedSmall) {
+      try {
+        setIsSmallCompanyManual(JSON.parse(savedSmall))
+      } catch (e) {}
+    }
+    const savedFiled = localStorage.getItem('roc_tracker_filed_forms')
+    if (savedFiled) {
+      try {
+        setFiledForms(JSON.parse(savedFiled))
+      } catch (e) {
+        console.error('Failed to parse filed forms', e)
+      }
+    }
   }, [])
 
   function getFullProfile(): CompanyProfile {
@@ -123,19 +168,48 @@ export default function ROCTrackerPage() {
       financialYearEnd: profile.financialYearEnd || 'march',
       paidUpCapital: profile.paidUpCapital || 1000000,
       turnover: profile.turnover || 5000000,
-      hasCS: profile.hasCS || false,
+      hasCS: csMandatory ? true : (profile.hasCS || false),
       agmDate: profile.agmDate ? new Date(profile.agmDate) : null,
       directorCount: profile.directorCount || 2,
-      isXBRL: profile.isXBRL || false,
+      isXBRL: xbrlMandatory ? true : (profile.isXBRL || false),
       isListed: profile.isListed || false,
       hasForeignShareholders: profile.hasForeignShareholders || false,
-      hasDeposits: profile.hasDeposits || true,
+      hasDeposits: (profile.hasDeposits || profile.hasPublicDeposits) || false,
       auditDate: null,
       hasSBO: profile.hasSBO || false,
       hasResolutions: profile.hasResolutions || false,
       hasSubsidiaries: profile.hasSubsidiaries || false,
       filingYear: profile.filingYear || getDefaultFilingYear(),
+      hasMSMEDues: profile.hasMSMEDues || false,
+      hasPublicDeposits: profile.hasPublicDeposits || false,
     }
+  }
+
+  function getPreviousYearProfile(currentProfile: CompanyProfile): CompanyProfile | null {
+    if (!currentProfile.filingYear || currentProfile.filingYear === '2024-25') {
+      return null
+    }
+    const parts = currentProfile.filingYear.split('-')
+    if (parts.length === 2) {
+      const startYear = parseInt(parts[0]) - 1
+      const endYear = parseInt(parts[1]) - 1
+      const prevYearStr = `${startYear}-${String(endYear).slice(-2)}`
+      return {
+        ...currentProfile,
+        filingYear: prevYearStr
+      }
+    }
+    return null
+  }
+
+  function getPreviousYearStr(filingYear: string): string {
+    const parts = filingYear.split('-')
+    if (parts.length === 2) {
+      const startYear = parseInt(parts[0]) - 1
+      const endYear = parseInt(parts[1]) - 1
+      return `${startYear}-${String(endYear).slice(-2)}`
+    }
+    return '2024-25'
   }
 
   function handleCalculate() {
@@ -145,26 +219,47 @@ export default function ROCTrackerPage() {
     }
 
     const fullProfile = getFullProfile()
-    const result = calculateDeadlinesFromDB(fullProfile, dbForms)
+    if (isSmallCompanyActive) {
+      fullProfile.companyType = 'small'
+    }
 
+    const result = calculateDeadlinesFromDB(fullProfile, dbForms)
     setDeadlines(result)
+
+    const prevProfile = getPreviousYearProfile(fullProfile)
+    if (prevProfile) {
+      const prevResult = calculateDeadlinesFromDB(prevProfile, dbForms)
+      const filteredPrev = prevResult.filter(d => 
+        ['aoc-4', 'aoc-4 cfs', 'mgt-7', 'mgt-7a', 'adt-1'].includes(d.id)
+      )
+      setPrevDeadlines(filteredPrev)
+    } else {
+      setPrevDeadlines(null)
+    }
+
     setCalculated(true)
 
-    // Log usage
-    const summary = getPenaltySummary(result)
+    // Log usage with adjusted summaries
+    const currentYearStr = fullProfile.filingYear || '2025-26'
+    const prevYearStr = getPreviousYearStr(currentYearStr)
+    const adjustedCurrent = adjustDeadlines(result, currentYearStr)
+    const adjustedPrev = prevProfile 
+      ? adjustDeadlines(calculateDeadlinesFromDB(prevProfile, dbForms).filter(d => ['aoc-4', 'aoc-4 cfs', 'mgt-7', 'mgt-7a', 'adt-1'].includes(d.id)), prevYearStr)
+      : []
+    const summaryData = getAdjustedSummary(adjustedCurrent, adjustedPrev)
+
     fetch('/api/roc/log-usage', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        company_type: profile.companyType,
-        fy_end: profile.financialYearEnd,
+        company_type: fullProfile.companyType,
+        fy_end: fullProfile.financialYearEnd,
         forms_count: result.filter(d => d.isApplicable).length,
-        overdue_count: summary.overdueCount,
-        total_penalty: summary.totalNormalPenalty,
+        overdue_count: summaryData.overdueCount,
+        total_penalty: summaryData.totalNormalPenalty,
       })
     }).catch(() => {})
 
-    // Scroll to results
     setTimeout(() => {
       document.getElementById('results')?.scrollIntoView({ behavior: 'smooth' })
     }, 100)
@@ -185,6 +280,8 @@ export default function ROCTrackerPage() {
       }
 
       localStorage.setItem('roc_tracker_saved_profile', JSON.stringify(profile))
+      localStorage.setItem('roc_tracker_small_manual', JSON.stringify(isSmallCompanyManual))
+      localStorage.setItem('roc_tracker_filed_forms', JSON.stringify(filedForms))
 
       const res = await fetch('/api/roc/save-profile', {
         method: 'POST',
@@ -256,15 +353,194 @@ export default function ROCTrackerPage() {
     }
   }
 
+  function handleToggleFiled(formId: string, year: string, checked: boolean) {
+    const key = `${formId.toLowerCase()}_${year}`
+    setFiledForms(prev => {
+      const updated = {
+        ...prev,
+        [key]: {
+          filed: checked,
+          filingDate: checked ? new Date().toISOString().split('T')[0] : undefined
+        }
+      }
+      localStorage.setItem('roc_tracker_filed_forms', JSON.stringify(updated))
+      return updated
+    })
+  }
+
+  function handleUpdateFilingDate(formId: string, year: string, dateStr: string) {
+    const key = `${formId.toLowerCase()}_${year}`
+    setFiledForms(prev => {
+      const updated = {
+        ...prev,
+        [key]: {
+          filed: true,
+          filingDate: dateStr || undefined
+        }
+      }
+      localStorage.setItem('roc_tracker_filed_forms', JSON.stringify(updated))
+      return updated
+    })
+  }
+
+  // Adjust raw deadline items based on filed status and MSME/deposit rules
+  function adjustDeadlines(items: DeadlineItem[] | null, year: string): DeadlineItem[] {
+    if (!items) return []
+
+    return items.map(d => {
+      const key = `${d.id}_${year}`
+      const filedInfo = filedForms[key]
+
+      // Custom rule adjustments for applicability in frontend
+      let isApplicable = d.isApplicable
+      let notApplicableReason = d.notApplicableReason
+
+      if (d.id === 'msme-1') {
+        isApplicable = d.isApplicable && !!profile.hasMSMEDues
+        if (!isApplicable) {
+          notApplicableReason = 'Only applicable if company has outstanding dues to MSME suppliers > 45 days'
+        }
+      }
+
+      if (d.id === 'dpt-3') {
+        isApplicable = d.isApplicable && (!!profile.hasDeposits || !!profile.hasPublicDeposits)
+        if (!isApplicable) {
+          notApplicableReason = 'Only applicable if company has outstanding loans or deposits as on 31st March'
+        }
+      }
+
+      if (filedInfo?.filed) {
+        const filingDate = filedInfo.filingDate ? new Date(filedInfo.filingDate) : null
+        
+        if (filingDate) {
+          const dueDateTime = d.dueDate.getTime()
+          const filingDateTime = filingDate.getTime()
+          
+          const diffTime = filingDateTime - dueDateTime
+          const delayDays = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)))
+          
+          const origForm = dbForms.find(f => f.form_code.toLowerCase() === d.id)
+          let currentPenalty = 0
+          let ccfsPenalty = 0
+          
+          if (origForm) {
+            const gracePeriod = origForm.grace_period_days || 0
+            if (delayDays > gracePeriod) {
+              if (origForm.flat_late_fee) {
+                currentPenalty = origForm.flat_late_fee
+              } else {
+                const billableDays = delayDays - gracePeriod
+                currentPenalty = billableDays * (origForm.additional_fee_per_day || 100)
+                if (origForm.max_additional_fee) {
+                  currentPenalty = Math.min(currentPenalty, origForm.max_additional_fee)
+                }
+              }
+            }
+            const ccfsExpiryDate = new Date(origForm.ccfs_expiry || '2026-07-15')
+            const ccfsEligible = origForm.ccfs_eligible && filingDate <= ccfsExpiryDate
+            if (ccfsEligible) {
+              const waiver = origForm.ccfs_waiver_percent || 90
+              ccfsPenalty = Math.ceil(currentPenalty * (1 - waiver / 100))
+            } else {
+              ccfsPenalty = currentPenalty
+            }
+          }
+
+          return {
+            ...d,
+            isApplicable,
+            notApplicableReason,
+            status: 'upcoming',
+            daysRemaining: 0,
+            currentPenalty: 0,
+            ccfsPenalty: 0,
+            ccfsSavings: 0,
+            isFiled: true,
+            actualFilingDate: filingDate,
+            calculatedLateFee: currentPenalty,
+            calculatedCcfsLateFee: ccfsPenalty,
+          } as any
+        } else {
+          return {
+            ...d,
+            isApplicable,
+            notApplicableReason,
+            status: 'upcoming',
+            daysRemaining: 0,
+            currentPenalty: 0,
+            ccfsPenalty: 0,
+            ccfsSavings: 0,
+            isFiled: true,
+            actualFilingDate: null,
+            calculatedLateFee: 0,
+            calculatedCcfsLateFee: 0,
+          } as any
+        }
+      }
+
+      return {
+        ...d,
+        isApplicable,
+        notApplicableReason,
+        isFiled: false,
+      } as any
+    })
+  }
+
+  function getAdjustedSummary(currList: DeadlineItem[], prevList: DeadlineItem[]) {
+    let overdueCount = 0
+    let dueSoonCount = 0
+    let totalNormalPenalty = 0
+    let totalCCFSPenalty = 0
+    let totalSavings = 0
+
+    const combined = [...currList, ...prevList]
+
+    for (const item of combined) {
+      if (item.isApplicable && !(item as any).isFiled) {
+        if (item.status === 'overdue') {
+          overdueCount++
+        } else if (item.status === 'due-soon') {
+          dueSoonCount++
+        }
+        totalNormalPenalty += item.currentPenalty || 0
+        totalCCFSPenalty += item.ccfsPenalty || 0
+        totalSavings += item.ccfsSavings || 0
+      }
+    }
+
+    return {
+      overdueCount,
+      dueSoonCount,
+      totalNormalPenalty,
+      totalCCFSPenalty,
+      totalSavings,
+    }
+  }
+
+  const currentYear = profile.filingYear || '2025-26'
+  const previousYear = getPreviousYearStr(currentYear)
+
+  const adjustedCurrentDeadlines = adjustDeadlines(deadlines, currentYear)
+  const adjustedPrevDeadlines = adjustDeadlines(prevDeadlines, previousYear)
+
   const summary = deadlines 
-    ? getPenaltySummary(deadlines) 
+    ? getAdjustedSummary(adjustedCurrentDeadlines, adjustedPrevDeadlines) 
     : null
 
   const ccfsDaysLeft = daysUntilCCFSExpiry()
 
-  const visibleDeadlines = showAll
-    ? deadlines
-    : deadlines?.filter(d => d.isApplicable)
+  const currentVisibleDeadlines = showAll
+    ? adjustedCurrentDeadlines
+    : adjustedCurrentDeadlines.filter(d => d.isApplicable)
+
+  const prevVisibleDeadlines = showAll
+    ? adjustedPrevDeadlines
+    : adjustedPrevDeadlines.filter(d => d.isApplicable)
+
+  const activeVisibleDeadlines = activeResultsTab === 'current'
+    ? currentVisibleDeadlines
+    : prevVisibleDeadlines
 
   const statusColors = {
     overdue: 'border-l-4 border-l-red-500 bg-red-50 dark:bg-red-950/30',
@@ -359,348 +635,524 @@ export default function ROCTrackerPage() {
         </div>
 
         {/* Company Profile Form */}
-        <div className="bg-white dark:bg-slate-800 
-                        rounded-2xl border border-slate-200 
-                        dark:border-slate-700 
+        <div className="bg-white dark:bg-[#111827] 
+                        rounded-3xl border border-slate-200/60 
+                        dark:border-white/8 
+                        shadow-2xl shadow-slate-100 dark:shadow-none
                         overflow-hidden mb-8 
                         print:hidden">
-          <div className="bg-slate-50 dark:bg-slate-900 
+          
+          <div className="bg-gradient-to-r from-navy via-slate-900 to-navy
                           border-b border-slate-200 
-                          dark:border-slate-700 
-                          px-6 py-4 flex items-center 
+                          dark:border-slate-800 
+                          px-6 py-5 flex items-center 
                           justify-between">
             <div>
-              <h2 className="font-bold text-navy 
-                             dark:text-white text-base">
-                🏢 Your Company Details
+              <h2 className="font-extrabold text-white text-lg font-heading tracking-tight">
+                🏢 Company Intake Profile
               </h2>
-              <p className="text-slate-500 text-xs mt-0.5">
+              <p className="text-slate-400 text-xs mt-1">
                 {formsLoading 
-                  ? 'Loading latest ROC form data...'
-                  : `${dbForms.length} forms loaded from latest database`}
+                  ? '⏳ Syncing latest MCA compliance rules...'
+                  : `✔️ ${dbForms.length} MCA forms loaded and active`}
               </p>
             </div>
             {!formsLoading && (
-              <div className="w-2 h-2 bg-green-500 
-                              rounded-full 
-                              animate-pulse" 
-                   title="Live data" />
+              <div className="flex items-center gap-2 text-xs font-semibold text-green-400 bg-green-500/10 px-2.5 py-1 rounded-full">
+                <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
+                Live Rules
+              </div>
             )}
           </div>
 
-          <div className="p-6 grid grid-cols-1 
-                          md:grid-cols-2 gap-4">
-
-            <div>
-              <label className="block text-xs font-bold 
-                                text-slate-600 
-                                dark:text-slate-400 
-                                mb-1.5">
-                Company Name
-              </label>
-              <input type="text"
-                value={profile.companyName || ''}
-                onChange={e => setProfile(p => ({
-                  ...p, companyName: e.target.value
-                }))}
-                placeholder="ABC Private Limited"
-                className={inputClass} />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold 
-                                text-slate-600 
-                                dark:text-slate-400 mb-1.5">
-                CIN
-              </label>
-              <input type="text"
-                value={profile.cin || ''}
-                onChange={e => setProfile(p => ({
-                  ...p, cin: e.target.value
-                }))}
-                placeholder="U74999MH2024PTC123456"
-                className={inputClass} />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold 
-                                text-slate-600 
-                                dark:text-slate-400 mb-1.5">
-                Company Type *
-              </label>
-              <select
-                value={profile.companyType}
-                onChange={e => setProfile(p => ({
-                  ...p, 
-                  companyType: e.target.value as any
-                }))}
-                className={inputClass}>
-                <option value="private">
-                  Private Limited
-                </option>
-                <option value="public">
-                  Public Limited
-                </option>
-                <option value="opc">
-                  One Person Company (OPC)
-                </option>
-                <option value="small">
-                  Small Company
-                </option>
-                <option value="section8">
-                  Section 8 (NGO/Charity)
-                </option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold 
-                                text-slate-600 
-                                dark:text-slate-400 mb-1.5">
-                Date of Incorporation *
-              </label>
-              <input type="date"
-                value={profile.incorporationDate 
-                  ? new Date(profile.incorporationDate).toISOString().split('T')[0]
-                  : ''}
-                onChange={e => setProfile(p => ({
-                  ...p, incorporationDate: e.target.value ? new Date(e.target.value) : undefined
-                }))}
-                className={inputClass} />
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold 
-                                text-slate-600 
-                                dark:text-slate-400 mb-1.5">
-                Filing Financial Year *
-              </label>
-              <select
-                value={profile.filingYear || '2025-26'}
-                onChange={e => setProfile(p => ({
-                  ...p, filingYear: e.target.value
-                }))}
-                className={inputClass}>
-                <option value="2024-25">
-                  FY 2024-25 (Previous Year)
-                </option>
-                <option value="2025-26">
-                  FY 2025-26 (Current Year)
-                </option>
-                <option value="2026-27">
-                  FY 2026-27 (Next Year)
-                </option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold 
-                                text-slate-600 
-                                dark:text-slate-400 mb-1.5">
-                Financial Year End
-              </label>
-              <select
-                value={profile.financialYearEnd}
-                onChange={e => setProfile(p => ({
-                  ...p, financialYearEnd: e.target.value as any
-                }))}
-                className={inputClass}>
-                <option value="march">
-                  31st March (Standard — most companies)
-                </option>
-                <option value="september">
-                  30th September (Alternate FY)
-                </option>
-              </select>
-            </div>
-
-            {profile.companyType !== 'opc' ? (
-              <div>
-                <label className="block text-xs font-bold 
-                                  text-slate-600 
-                                  dark:text-slate-400 mb-1.5">
-                  Last AGM Date
-                </label>
-                <input type="date"
-                  value={profile.agmDate 
-                    ? new Date(profile.agmDate).toISOString().split('T')[0]
-                    : ''}
-                  onChange={e => setProfile(p => ({
-                    ...p, agmDate: e.target.value ? new Date(e.target.value) : null
-                  }))}
-                  className={inputClass} />
-              </div>
-            ) : (
-              <div>
-                <label className="block text-xs font-bold 
-                                  text-slate-600 
-                                  dark:text-slate-400 mb-1.5 opacity-60">
-                  Last AGM Date
-                </label>
-                <input type="text"
-                  disabled
-                  value="Not Applicable (OPC is exempt)"
-                  className={`${inputClass} opacity-60 bg-slate-100 dark:bg-slate-900`} />
+          <div className="p-6 space-y-6">
+            
+            {/* CS Violation Alert Banner */}
+            {csMandatory && !profile.hasCS && (
+              <div className="bg-red-500/10 border border-red-500/30 rounded-2xl p-4 flex gap-3 items-start animate-pulse">
+                <span className="text-xl">⚠️</span>
+                <div>
+                  <p className="text-sm font-extrabold text-red-600 dark:text-red-400 font-heading">
+                    Mandatory CS Appointment Violation (Section 203)
+                  </p>
+                  <p className="text-xs text-red-500/80 dark:text-red-400/80 mt-1 leading-relaxed">
+                    Private companies with paid-up capital of <strong>₹10 Crore or more</strong> are mandatorily required to appoint a whole-time Company Secretary (CS). Failure to comply attracts a penalty of <strong>₹5 Lakh</strong> on the company and <strong>₹50,000 + ₹1,000 per day</strong> on every defaulting director.
+                  </p>
+                </div>
               </div>
             )}
 
-            <div>
-              <label className="block text-xs font-bold 
-                                text-slate-600 
-                                dark:text-slate-400 mb-1.5">
-                Paid-up Capital
-              </label>
-              <select
-                value={profile.paidUpCapital}
-                onChange={e => setProfile(p => ({
-                  ...p, paidUpCapital: Number(e.target.value)
-                }))}
-                className={inputClass}>
-                <option value={100000}>
-                  Up to ₹1 Lakh
-                </option>
-                <option value={1000000}>
-                  ₹1–10 Lakh
-                </option>
-                <option value={10000000}>
-                  ₹10 Lakh–1 Crore
-                </option>
-                <option value={40000000}>
-                  ₹1–4 Crore
-                </option>
-                <option value={50000000}>
-                  ₹4–5 Crore (XBRL limit starts at ₹5 Crore)
-                </option>
-                <option value={100000000}>
-                  ₹5–10 Crore (Small Company Limit)
-                </option>
-                <option value={500000000}>
-                  Above ₹10 Crore
-                </option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold 
-                                text-slate-600 
-                                dark:text-slate-400 mb-1.5">
-                Annual Turnover
-              </label>
-              <select
-                value={profile.turnover}
-                onChange={e => setProfile(p => ({
-                  ...p, turnover: Number(e.target.value)
-                }))}
-                className={inputClass}>
-                <option value={20000000}>
-                  Up to ₹2 Crore
-                </option>
-                <option value={400000000}>
-                  ₹2–40 Crore
-                </option>
-                <option value={1000000000}>
-                  ₹40–100 Crore (Small Company Limit)
-                </option>
-                <option value={5000000000}>
-                  Above ₹100 Crore (Cost Audit / XBRL likely)
-                </option>
-              </select>
-            </div>
-
-            {/* Checkboxes */}
-            <div className="md:col-span-2 
-                            grid grid-cols-2 
-                            md:grid-cols-3 gap-2">
-              {[
-                { 
-                  key: 'hasDeposits', 
-                  label: '📋 Has loans from members/directors' 
-                },
-                { 
-                  key: 'hasForeignShareholders', 
-                  label: '🌍 Has foreign shareholders' 
-                },
-                { 
-                  key: 'isXBRL', 
-                  label: '📊 XBRL filing required' 
-                },
-                { 
-                  key: 'isListed', 
-                  label: '📈 Listed on BSE/NSE' 
-                },
-                { 
-                  key: 'hasCS', 
-                  label: '👩💼 Has whole-time CS' 
-                },
-                { 
-                  key: 'hasSubsidiaries', 
-                  label: '🏢 Has subsidiaries/associates/JVs' 
-                },
-                { 
-                  key: 'hasSBO', 
-                  label: '🔍 Has SBO declarations (BEN-1/2)' 
-                },
-                { 
-                  key: 'hasResolutions', 
-                  label: '📜 Passed resolutions (MGT-14)' 
-                },
-              ].map(item => (
-                <label key={item.key}
-                  className="flex items-center gap-2 
-                             cursor-pointer 
-                             bg-slate-50 
-                             dark:bg-slate-900 
-                             border border-slate-200 
-                             dark:border-slate-700 
-                             rounded-xl p-2.5 
-                             hover:border-amber-400 
-                             transition-colors">
-                  <input type="checkbox"
-                    checked={
-                      (profile as any)[item.key] || false
-                    }
+            {/* Section 1: Core Details */}
+            <div className="space-y-3">
+              <h3 className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                01. Core Identity
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5">
+                    Company Name
+                  </label>
+                  <input type="text"
+                    value={profile.companyName || ''}
                     onChange={e => setProfile(p => ({
-                      ...p, 
-                      [item.key]: e.target.checked
+                      ...p, companyName: e.target.value
                     }))}
-                    className="w-4 h-4 accent-amber-400" />
-                  <span className="text-xs text-slate-600 
-                                   dark:text-slate-300">
-                    {item.label}
-                  </span>
-                </label>
-              ))}
+                    placeholder="e.g. Acme Private Limited"
+                    className={inputClass} />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5">
+                    CIN (Corporate Identity Number)
+                  </label>
+                  <input type="text"
+                    value={profile.cin || ''}
+                    onChange={e => setProfile(p => ({
+                      ...p, cin: e.target.value
+                    }))}
+                    placeholder="U74999MH2024PTC123456"
+                    className={inputClass} />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5">
+                    Date of Incorporation *
+                  </label>
+                  <input type="date"
+                    value={profile.incorporationDate 
+                      ? new Date(profile.incorporationDate).toISOString().split('T')[0]
+                      : ''}
+                    onChange={e => setProfile(p => ({
+                      ...p, incorporationDate: e.target.value ? new Date(e.target.value) : undefined
+                    }))}
+                    className={inputClass} />
+                </div>
+              </div>
             </div>
+
+            <hr className="border-slate-100 dark:border-white/5" />
+
+            {/* Section 2: Financial Slabs & Classification */}
+            <div className="space-y-3">
+              <h3 className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                02. Size & Capital Slabs
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5">
+                    Company Type *
+                  </label>
+                  <select
+                    value={profile.companyType}
+                    onChange={e => {
+                      const val = e.target.value as any
+                      setProfile(p => ({
+                        ...p, 
+                        companyType: val,
+                        // Reset manual CS if OPC selected
+                        hasCS: val === 'opc' ? false : p.hasCS
+                      }))
+                    }}
+                    className={inputClass}>
+                    <option value="private">Private Limited</option>
+                    <option value="public">Public Limited</option>
+                    <option value="opc">One Person Company (OPC)</option>
+                    <option value="section8">Section 8 (Charity/NGO)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5">
+                    Filing Financial Year *
+                  </label>
+                  <select
+                    value={profile.filingYear || '2025-26'}
+                    onChange={e => setProfile(p => ({
+                      ...p, filingYear: e.target.value
+                    }))}
+                    className={inputClass}>
+                    <option value="2024-25">FY 2024-25 (Previous Year)</option>
+                    <option value="2025-26">FY 2025-26 (Current Year)</option>
+                    <option value="2026-27">FY 2026-27 (Next Year)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5">
+                    Financial Year End
+                  </label>
+                  <select
+                    value={profile.financialYearEnd}
+                    onChange={e => setProfile(p => ({
+                      ...p, financialYearEnd: e.target.value as any
+                    }))}
+                    className={inputClass}>
+                    <option value="march">31st March (Standard)</option>
+                    <option value="september">30th September (Alternate)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5">
+                    Paid-up Capital
+                  </label>
+                  <select
+                    value={profile.paidUpCapital}
+                    onChange={e => setProfile(p => ({
+                      ...p, paidUpCapital: Number(e.target.value)
+                    }))}
+                    className={inputClass}>
+                    <option value={100000}>Up to ₹1 Lakh</option>
+                    <option value={1000000}>₹1–10 Lakh</option>
+                    <option value={10000000}>₹10 Lakh–1 Crore</option>
+                    <option value={40000000}>₹1–4 Crore</option>
+                    <option value={50000000}>₹4–5 Crore</option>
+                    <option value={100000000}>₹5–10 Crore</option>
+                    <option value={500000000}>Above ₹10 Crore</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5">
+                    Annual Turnover
+                  </label>
+                  <select
+                    value={profile.turnover}
+                    onChange={e => setProfile(p => ({
+                      ...p, turnover: Number(e.target.value)
+                    }))}
+                    className={inputClass}>
+                    <option value={20000000}>Up to ₹2 Crore</option>
+                    <option value={400000000}>₹2–40 Crore</option>
+                    <option value={1000000000}>₹40–100 Crore</option>
+                    <option value={5000000000}>Above ₹100 Crore</option>
+                  </select>
+                </div>
+
+                {profile.companyType !== 'opc' ? (
+                  <div>
+                    <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5">
+                      Last AGM Date
+                    </label>
+                    <input type="date"
+                      value={profile.agmDate 
+                        ? new Date(profile.agmDate).toISOString().split('T')[0]
+                        : ''}
+                      onChange={e => setProfile(p => ({
+                        ...p, agmDate: e.target.value ? new Date(e.target.value) : null
+                      }))}
+                      className={inputClass} />
+                  </div>
+                ) : (
+                  <div>
+                    <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5 opacity-60">
+                      Last AGM Date
+                    </label>
+                    <input type="text"
+                      disabled
+                      value="Not Applicable (OPC is exempt)"
+                      className={`${inputClass} opacity-60 bg-slate-100 dark:bg-slate-900`} />
+                  </div>
+                )}
+              </div>
+
+              {/* Small Company Evaluation Alert / Toggle */}
+              {profile.companyType === 'private' && (
+                <div className="mt-4">
+                  {qualifiesAsSmall ? (
+                    <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                      <div>
+                        <p className="text-xs font-extrabold text-emerald-600 dark:text-emerald-400 font-heading">
+                          🎉 Qualifies as a Small Company (Section 2(85))
+                        </p>
+                        <p className="text-[11px] text-emerald-600/80 dark:text-emerald-400/80 mt-0.5">
+                          Paid-up Capital $\le$ ₹10 Cr and Turnover $\le$ ₹100 Cr. Concessions applied: abridged return (MGT-7A) and 50% penalty relief.
+                        </p>
+                      </div>
+                      <label className="flex items-center gap-2 bg-emerald-500 text-white font-bold text-xs px-4 py-2 rounded-xl cursor-pointer hover:bg-emerald-600 transition-colors shadow-sm self-start md:self-auto">
+                        <input
+                          type="checkbox"
+                          checked={isSmallCompanyActive}
+                          onChange={e => setIsSmallCompanyManual(e.target.checked)}
+                          className="w-4 h-4 accent-emerald-600 cursor-pointer"
+                        />
+                        Apply Concessions
+                      </label>
+                    </div>
+                  ) : (
+                    <div className="bg-slate-100 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-2xl p-4">
+                      <p className="text-xs font-extrabold text-slate-500 dark:text-slate-400 font-heading">
+                        ℹ️ Standard Private Limited Compliance
+                      </p>
+                      <p className="text-[11px] text-slate-500/80 dark:text-slate-400/80 mt-0.5">
+                        {profile.hasSubsidiaries 
+                          ? 'Holding, subsidiary, or joint venture companies are legally excluded from Small Company concessions under Section 2(85).'
+                          : 'Paid-up Capital exceeds ₹10 Crore or Turnover exceeds ₹100 Crore. Standard compliance rules and normal filing fees apply.'}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            <hr className="border-slate-100 dark:border-white/5" />
+
+            {/* Section 3: Compliance profile questionnaire */}
+            <div className="space-y-3">
+              <h3 className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                03. Governance & Borrowing Profile
+              </h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                {/* Panel A: Structure & Governance */}
+                <div className="bg-slate-50/50 dark:bg-slate-900/20 border border-slate-200/50 dark:border-slate-800 rounded-2xl p-4 space-y-3">
+                  <h4 className="text-xs font-extrabold text-slate-700 dark:text-slate-300 font-heading border-b border-slate-200/40 dark:border-slate-800 pb-2">
+                    🔑 Management & Structure
+                  </h4>
+                  
+                  <div className="space-y-2.5">
+                    {/* CS Appointment toggle */}
+                    <div className="flex items-center justify-between gap-3 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                          👩💼 Appointed Whole-time CS
+                        </p>
+                        <p className="text-[10px] text-slate-400 truncate">
+                          {csMandatory ? 'Required by capital slab (>= 10Cr)' : 'Required if paid-up capital >= 10Cr'}
+                        </p>
+                      </div>
+                      <input
+                        type="checkbox"
+                        disabled={csMandatory}
+                        checked={csMandatory ? true : (profile.hasCS || false)}
+                        onChange={e => setProfile(p => ({ ...p, hasCS: e.target.checked }))}
+                        className="w-4 h-4 accent-amber-400 disabled:opacity-50 cursor-pointer"
+                      />
+                    </div>
+
+                    {/* Listed Company */}
+                    <div className="flex items-center justify-between gap-3 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                          📈 Listed on stock exchange
+                        </p>
+                        <p className="text-[10px] text-slate-400">
+                          Triggers Demat audits (PAS-6) and XBRL
+                        </p>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={profile.isListed || false}
+                        onChange={e => setProfile(p => ({ ...p, isListed: e.target.checked }))}
+                        className="w-4 h-4 accent-amber-400 cursor-pointer"
+                      />
+                    </div>
+
+                    {/* Subsidiaries / Associates / JVs */}
+                    <div className="flex items-center justify-between gap-3 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                          🏢 Has Subsidiaries / JVs / Associates
+                        </p>
+                        <p className="text-[10px] text-slate-400">
+                          Triggers Consolidated Accounts (AOC-4 CFS)
+                        </p>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={profile.hasSubsidiaries || false}
+                        onChange={e => {
+                          const checked = e.target.checked
+                          setProfile(p => ({ ...p, hasSubsidiaries: checked }))
+                          if (checked) {
+                            // If holding/subsidiary, turn off small manual concessions
+                            setIsSmallCompanyManual(false)
+                          }
+                        }}
+                        className="w-4 h-4 accent-amber-400 cursor-pointer"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Panel B: Borrowings, Loans & Vendor Dues */}
+                <div className="bg-slate-50/50 dark:bg-slate-900/20 border border-slate-200/50 dark:border-slate-800 rounded-2xl p-4 space-y-3">
+                  <h4 className="text-xs font-extrabold text-slate-700 dark:text-slate-300 font-heading border-b border-slate-200/40 dark:border-slate-800 pb-2">
+                    💸 Transactions & Vendor Liabilities
+                  </h4>
+
+                  <div className="space-y-2.5">
+                    {/* Loans from Members/Directors */}
+                    <div className="flex items-center justify-between gap-3 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                          📋 Outstanding Member / Director Loans
+                        </p>
+                        <p className="text-[10px] text-slate-400">
+                          Requires DPT-3 return of exempted deposits
+                        </p>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={profile.hasDeposits || false}
+                        onChange={e => setProfile(p => ({ ...p, hasDeposits: e.target.checked }))}
+                        className="w-4 h-4 accent-amber-400 cursor-pointer"
+                      />
+                    </div>
+
+                    {/* Accepted Public Deposits */}
+                    <div className="flex items-center justify-between gap-3 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                          💰 Accepted Public Deposits
+                        </p>
+                        <p className="text-[10px] text-slate-400">
+                          Requires auditor certificate and Form DPT-3
+                        </p>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={profile.hasPublicDeposits || false}
+                        onChange={e => setProfile(p => ({ ...p, hasPublicDeposits: e.target.checked }))}
+                        className="w-4 h-4 accent-amber-400 cursor-pointer"
+                      />
+                    </div>
+
+                    {/* MSME Outstanding Dues */}
+                    <div className="flex items-center justify-between gap-3 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                          ⚖️ Outstanding MSME supplier dues &gt; 45d
+                        </p>
+                        <p className="text-[10px] text-slate-400">
+                          Triggers Form MSME-1 half-yearly returns
+                        </p>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={profile.hasMSMEDues || false}
+                        onChange={e => setProfile(p => ({ ...p, hasMSMEDues: e.target.checked }))}
+                        className="w-4 h-4 accent-amber-400 cursor-pointer"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Panel C: Shareholders & Ownership */}
+                <div className="bg-slate-50/50 dark:bg-slate-900/20 border border-slate-200/50 dark:border-slate-800 rounded-2xl p-4 space-y-3">
+                  <h4 className="text-xs font-extrabold text-slate-700 dark:text-slate-300 font-heading border-b border-slate-200/40 dark:border-slate-800 pb-2">
+                    🌍 Ownership & Shareholding
+                  </h4>
+
+                  <div className="space-y-2.5">
+                    {/* Foreign Shareholders */}
+                    <div className="flex items-center justify-between gap-3 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                          🌍 Has Foreign Shareholders / Directors
+                        </p>
+                        <p className="text-[10px] text-slate-400">
+                          Requires RBI FLA return and compliance
+                        </p>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={profile.hasForeignShareholders || false}
+                        onChange={e => setProfile(p => ({ ...p, hasForeignShareholders: e.target.checked }))}
+                        className="w-4 h-4 accent-amber-400 cursor-pointer"
+                      />
+                    </div>
+
+                    {/* SBO Declarations */}
+                    <div className="flex items-center justify-between gap-3 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                          🔍 Has SBO Declarations (BEN-1)
+                        </p>
+                        <p className="text-[10px] text-slate-400">
+                          Triggers Form BEN-2 declaration filing
+                        </p>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={profile.hasSBO || false}
+                        onChange={e => setProfile(p => ({ ...p, hasSBO: e.target.checked }))}
+                        className="w-4 h-4 accent-amber-400 cursor-pointer"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Panel D: Filings & Audits */}
+                <div className="bg-slate-50/50 dark:bg-slate-900/20 border border-slate-200/50 dark:border-slate-800 rounded-2xl p-4 space-y-3">
+                  <h4 className="text-xs font-extrabold text-slate-700 dark:text-slate-300 font-heading border-b border-slate-200/40 dark:border-slate-800 pb-2">
+                    📊 Filing Slabs & Form Triggers
+                  </h4>
+
+                  <div className="space-y-2.5">
+                    {/* XBRL Filing */}
+                    <div className="flex items-center justify-between gap-3 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                          📊 XBRL filing format required
+                        </p>
+                        <p className="text-[10px] text-slate-400">
+                          {xbrlMandatory ? 'Mandated by size limits' : 'Required if Capital >= 5Cr or Turnover >= 100Cr'}
+                        </p>
+                      </div>
+                      <input
+                        type="checkbox"
+                        disabled={xbrlMandatory}
+                        checked={xbrlMandatory ? true : (profile.isXBRL || false)}
+                        onChange={e => setProfile(p => ({ ...p, isXBRL: e.target.checked }))}
+                        className="w-4 h-4 accent-amber-400 disabled:opacity-50 cursor-pointer"
+                      />
+                    </div>
+
+                    {/* Passed special resolutions */}
+                    <div className="flex items-center justify-between gap-3 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                          📜 Passed board / special resolutions
+                        </p>
+                        <p className="text-[10px] text-slate-400">
+                          Requires Form MGT-14 filing within 30 days
+                        </p>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={profile.hasResolutions || false}
+                        onChange={e => setProfile(p => ({ ...p, hasResolutions: e.target.checked }))}
+                        className="w-4 h-4 accent-amber-400 cursor-pointer"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
           </div>
 
-          <div className="px-6 pb-6 flex flex-col md:flex-row gap-3">
+          <div className="px-6 py-5 bg-slate-50 dark:bg-slate-900/60 border-t border-slate-200/60 dark:border-white/5 flex flex-col md:flex-row gap-3">
             <button
               onClick={handleCalculate}
               disabled={formsLoading}
-              className="flex-1 bg-amber-400 
-                         hover:bg-amber-500 text-navy 
-                         font-bold py-4 rounded-xl 
-                         text-base transition-colors
-                         disabled:opacity-50">
+              className="flex-1 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-400 bg-[length:200%_auto] hover:bg-right text-navy font-black py-4 rounded-2xl text-sm transition-all duration-300 shadow-lg shadow-amber-400/10 hover:shadow-amber-400/20 hover:-translate-y-0.5 disabled:opacity-50">
               {formsLoading 
-                ? '⏳ Loading latest data...' 
+                ? '⏳ Syncing Latest MCA Rules...' 
                 : '📋 Calculate My ROC Deadlines →'}
             </button>
             <button
               onClick={handleSaveProfile}
               disabled={profileSaving}
-              className="md:w-1/3 bg-slate-100 hover:bg-slate-200 
-                         dark:bg-slate-700 dark:hover:bg-slate-600 
-                         text-navy dark:text-white 
-                         font-bold py-4 rounded-xl 
-                         text-base transition-colors
-                         disabled:opacity-50">
+              className="md:w-1/3 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-white font-extrabold py-4 rounded-2xl text-sm transition-all shadow-md disabled:opacity-50">
               {profileSaving ? 'Saving...' : profileSaved ? 'Saved! ✓' : '💾 Save Profile'}
             </button>
           </div>
         </div>
 
-        {/* Results Section */}
         {calculated && deadlines && summary && (
           <div id="results" 
                className="space-y-6 
@@ -712,7 +1164,7 @@ export default function ROCTrackerPage() {
                             md:grid-cols-4 gap-3">
               {[
                 {
-                  label: 'Overdue',
+                  label: 'Pending Overdue',
                   value: summary.overdueCount,
                   bg: 'bg-red-600',
                   icon: '🔴',
@@ -753,6 +1205,40 @@ export default function ROCTrackerPage() {
                 </div>
               ))}
             </div>
+
+            {/* Critical Compliance Violations / Warnings Box */}
+            {( (csMandatory && !profile.hasCS) || 
+               (!qualifiesAsSmall && isSmallCompanyActive) ||
+               (profile.hasMSMEDues && !filedForms[`msme-1_${currentYear}`]?.filed) ||
+               ((profile.hasDeposits || profile.hasPublicDeposits) && !filedForms[`dpt-3_${currentYear}`]?.filed) ) && (
+              <div className="bg-amber-500/10 border border-amber-500/20 rounded-3xl p-5 space-y-3">
+                <h3 className="text-sm font-black text-amber-600 dark:text-amber-400 font-heading flex items-center gap-2">
+                  ⚠️ Critical Compliance Warnings
+                </h3>
+                <ul className="text-xs text-slate-600 dark:text-slate-400 space-y-2 list-disc list-inside">
+                  {csMandatory && !profile.hasCS && (
+                    <li>
+                      <strong>Section 203 CS Default:</strong> Whole-time Company Secretary has not been appointed despite paid-up capital being $\ge$ ₹10 Crore.
+                    </li>
+                  )}
+                  {!qualifiesAsSmall && isSmallCompanyActive && (
+                    <li>
+                      <strong>Small Company Limit Warning:</strong> Claiming Small Company concessions, but Paid-up Capital or Turnover exceeds limits (₹10 Cr / ₹100 Cr).
+                    </li>
+                  )}
+                  {profile.hasMSMEDues && !filedForms[`msme-1_${currentYear}`]?.filed && (
+                    <li>
+                      <strong>Pending MSME Dues Return:</strong> Outstanding payments to MSMEs exceed 45 days. Must file Form MSME-1 twice a year to avoid fixed penalties up to ₹3,00,000.
+                    </li>
+                  )}
+                  {(profile.hasDeposits || profile.hasPublicDeposits) && !filedForms[`dpt-3_${currentYear}`]?.filed && (
+                    <li>
+                      <strong>Outstanding Loans/Deposits:</strong> Outstanding borrowings or deposits require annual Form DPT-3 filing by 30th June to avoid a flat penalty of ₹50,000.
+                    </li>
+                  )}
+                </ul>
+              </div>
+            )}
 
             {/* Action buttons */}
             <div className="flex gap-2 flex-wrap 
@@ -811,7 +1297,7 @@ export default function ROCTrackerPage() {
             {summary.totalSavings > 0 && (
               <div className="bg-green-50 
                               dark:bg-green-950/30 
-                              border-2 border-green-400 
+                              border border-green-200 
                               rounded-2xl p-5 
                               flex items-start gap-3">
                 <span className="text-3xl flex-shrink-0">
@@ -846,15 +1332,40 @@ export default function ROCTrackerPage() {
               </div>
             )}
 
-            {/* Toggle */}
+            {/* Segment Controls for Current vs Previous Year Filings */}
+            {prevDeadlines && prevDeadlines.length > 0 && (
+              <div className="flex border-b border-slate-200 dark:border-slate-800 mb-6 print:hidden">
+                <button
+                  onClick={() => setActiveResultsTab('current')}
+                  className={`flex-1 py-3 text-sm font-bold text-center border-b-2 transition-all ${
+                    activeResultsTab === 'current'
+                      ? 'border-amber-400 text-navy dark:text-white font-extrabold'
+                      : 'border-transparent text-slate-400 hover:text-slate-600'
+                  }`}
+                >
+                  📅 FY {currentYear} Filings (Current)
+                </button>
+                <button
+                  onClick={() => setActiveResultsTab('previous')}
+                  className={`flex-1 py-3 text-sm font-bold text-center border-b-2 transition-all ${
+                    activeResultsTab === 'previous'
+                      ? 'border-amber-400 text-navy dark:text-white font-extrabold'
+                      : 'border-transparent text-slate-400 hover:text-slate-600'
+                  }`}
+                >
+                  ⏳ FY {previousYear} Filings (Remaining / Maybe Filed)
+                </button>
+              </div>
+            )}
+
+            {/* Toggle Show All */}
             <div className="flex items-center 
                             justify-between">
               <h2 className="text-xl font-bold 
                              text-navy dark:text-white 
                              font-heading">
-                Deadline Report — {
-                  profile.companyName || 'Your Company'
-                }
+                Deadline Report — {profile.companyName || 'Your Company'}
+                {activeResultsTab === 'previous' ? ` (FY ${previousYear})` : ` (FY ${currentYear})`}
               </h2>
               <button
                 onClick={() => setShowAll(p => !p)}
@@ -867,163 +1378,217 @@ export default function ROCTrackerPage() {
               </button>
             </div>
 
+            {/* Previous Year Alert Banner */}
+            {activeResultsTab === 'previous' && (
+              <div className="bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 text-xs text-slate-600 dark:text-slate-400">
+                💡 <strong>Prior Year Annual Checklist:</strong> These are the core annual filings for the previous financial year (FY {previousYear}). If you have already filed them, mark them as Filed and input the filing date to compute past fees. If they are still pending, massive penalties will apply.
+              </div>
+            )}
+
             {/* Deadline List */}
             <div className="space-y-3">
-              {(visibleDeadlines || []).map(d => (
-                <div key={d.id}
-                     className={`border 
-                       dark:border-slate-700 
-                       rounded-2xl overflow-hidden 
-                       bg-white dark:bg-slate-800 
-                       ${statusColors[d.status]}`}>
-                  <div className="p-4 md:p-5">
-                    <div className="flex items-start 
-                                    justify-between 
-                                    gap-3">
-                      <div className="min-w-0 flex-1">
-                        
-                        {/* Header row */}
-                        <div className="flex items-center 
-                                        gap-2 mb-1 
-                                        flex-wrap">
-                          <span className="font-black 
-                                           text-navy 
-                                           dark:text-white 
-                                           text-base">
-                            {d.formName}
-                          </span>
-                          
-                          {/* Status badge */}
-                          <span className={`text-xs 
-                            px-2 py-0.5 rounded-full 
-                            font-bold
-                            ${d.status === 'overdue' 
-                              ? 'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300'
-                              : d.status === 'due-soon'
-                              ? 'bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300'
-                              : d.status === 'upcoming'
-                              ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300'
-                              : 'bg-slate-100 dark:bg-slate-700 text-slate-500'}`}>
-                            {d.status === 'overdue' 
-                              ? `🔴 ${Math.abs(d.daysRemaining)}d overdue`
-                              : d.status === 'due-soon'
-                              ? `⚡ ${d.daysRemaining}d left`
-                              : d.status === 'upcoming'
-                              ? `🟢 ${d.daysRemaining}d`
-                              : '⚪ N/A'}
-                          </span>
+              {(activeVisibleDeadlines || []).map(d => {
+                const isFiled = (d as any).isFiled
+                const borderClass = isFiled
+                  ? 'border-l-4 border-l-green-500 bg-green-50/20 dark:bg-green-950/10 border border-slate-200 dark:border-slate-700'
+                  : statusColors[d.status]
 
-                          {/* Priority badge */}
-                          {d.priority === 'critical' && 
-                           d.isApplicable && (
-                            <span className="text-xs 
-                                             bg-red-600 
-                                             text-white 
-                                             px-2 py-0.5 
-                                             rounded-full 
-                                             font-bold">
-                              CRITICAL
+                return (
+                  <div key={d.id}
+                       className={`rounded-2xl overflow-hidden bg-white dark:bg-slate-800 ${borderClass}`}>
+                    <div className="p-4 md:p-5">
+                      <div className="flex items-start 
+                                      justify-between 
+                                      gap-3">
+                        <div className="min-w-0 flex-1">
+                          
+                          {/* Header row */}
+                          <div className="flex items-center 
+                                          gap-2 mb-1.5 
+                                          flex-wrap">
+                            <span className="font-black 
+                                             text-navy 
+                                             dark:text-white 
+                                             text-base">
+                              {d.formName}
                             </span>
+                            
+                            {/* Status badge */}
+                            {isFiled ? (
+                              <span className="text-xs px-2.5 py-0.5 rounded-full font-bold bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300">
+                                ✔️ Filed
+                              </span>
+                            ) : (
+                              <span className={`text-xs 
+                                px-2 py-0.5 rounded-full 
+                                font-bold
+                                ${d.status === 'overdue' 
+                                  ? 'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300'
+                                  : d.status === 'due-soon'
+                                  ? 'bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300'
+                                  : d.status === 'upcoming'
+                                  ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300'
+                                  : 'bg-slate-100 dark:bg-slate-700 text-slate-500'}`}>
+                                {d.status === 'overdue' 
+                                  ? `🔴 ${d.dueDate < new Date() ? `${Math.abs(d.daysRemaining)}d overdue` : 'Overdue'}`
+                                  : d.status === 'due-soon'
+                                  ? `⚡ ${d.daysRemaining}d left`
+                                  : d.status === 'upcoming'
+                                  ? `🟢 ${d.daysRemaining}d`
+                                  : '⚪ N/A'}
+                              </span>
+                            )}
+
+                            {/* Priority badge */}
+                            {d.priority === 'critical' && 
+                             d.isApplicable && (
+                              <span className="text-xs 
+                                               bg-red-600 
+                                               text-white 
+                                               px-2 py-0.5 
+                                               rounded-full 
+                                               font-bold">
+                                CRITICAL
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Description */}
+                          <p className="text-sm text-slate-600 
+                                        dark:text-slate-300">
+                            {d.description}
+                          </p>
+
+                          {/* Due date */}
+                          {d.isApplicable && (
+                            <p className="text-xs 
+                                          text-slate-500 
+                                          dark:text-slate-400 
+                                          mt-1">
+                              📅 Due Date: {d.dueDate
+                                .toLocaleDateString(
+                                  'en-IN', {
+                                    day: 'numeric',
+                                    month: 'short',
+                                    year: 'numeric'
+                                  }
+                                )}
+                            </p>
+                          )}
+
+                          {/* Not applicable reason */}
+                          {!d.isApplicable && 
+                           d.notApplicableReason && (
+                            <p className="text-xs 
+                                          text-slate-400 
+                                          italic mt-1">
+                              {d.notApplicableReason}
+                            </p>
+                          )}
+
+                          {/* Filed Date & Late Fee Paid details */}
+                          {isFiled && (d as any).calculatedLateFee > 0 && (
+                            <p className="text-xs text-red-600 dark:text-red-400 font-semibold mt-1">
+                              ⚠️ Delayed Filing: Late fee paid/payable: <strong>₹{(d as any).calculatedLateFee.toLocaleString('en-IN')}</strong>
+                              {(d as any).calculatedCcfsLateFee < (d as any).calculatedLateFee && (
+                                <span> (CCFS rate paid: <strong>₹{(d as any).calculatedCcfsLateFee.toLocaleString('en-IN')}</strong>)</span>
+                              )}
+                            </p>
+                          )}
+
+                          {/* Interactive Mark-As-Filed controls */}
+                          {d.isApplicable && (
+                            <div className="flex flex-wrap items-center gap-3 mt-3 pt-3 border-t border-slate-100 dark:border-slate-700 print:hidden">
+                              <label className="flex items-center gap-1.5 cursor-pointer text-xs font-bold text-slate-600 dark:text-slate-400">
+                                <input
+                                  type="checkbox"
+                                  checked={isFiled || false}
+                                  onChange={e => handleToggleFiled(d.id, activeResultsTab === 'current' ? currentYear : previousYear, e.target.checked)}
+                                  className="w-4 h-4 accent-emerald-500 rounded"
+                                />
+                                Mark as Filed
+                              </label>
+
+                              {isFiled && (
+                                <div className="flex items-center gap-1.5 animate-in fade-in slide-in-from-left-2 duration-200">
+                                  <span className="text-slate-400 text-[10px] uppercase font-bold">Filing Date:</span>
+                                  <input
+                                    type="date"
+                                    value={(d as any).actualFilingDate ? new Date((d as any).actualFilingDate).toISOString().split('T')[0] : ''}
+                                    onChange={e => handleUpdateFilingDate(d.id, activeResultsTab === 'current' ? currentYear : previousYear, e.target.value)}
+                                    className="text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                                  />
+                                </div>
+                              )}
+                            </div>
                           )}
                         </div>
 
-                        {/* Description */}
-                        <p className="text-sm text-slate-600 
-                                      dark:text-slate-300">
-                          {d.description}
-                        </p>
-
-                        {/* Due date */}
-                        {d.isApplicable && (
-                          <p className="text-xs 
-                                        text-slate-500 
-                                        dark:text-slate-400 
-                                        mt-1">
-                            📅 Due: {d.dueDate
-                              .toLocaleDateString(
-                                'en-IN', {
-                                  day: 'numeric',
-                                  month: 'short',
-                                  year: 'numeric'
-                                }
-                              )}
-                          </p>
-                        )}
-
-                        {/* Not applicable reason */}
-                        {!d.isApplicable && 
-                         d.notApplicableReason && (
-                          <p className="text-xs 
-                                        text-slate-400 
-                                        italic mt-1">
-                            {d.notApplicableReason}
-                          </p>
+                        {/* Penalty column for active unfiled forms */}
+                        {d.isApplicable && 
+                         !isFiled &&
+                         d.currentPenalty > 0 && (
+                          <div className="text-right 
+                                          flex-shrink-0 
+                                          ml-3">
+                            <p className="text-xs 
+                                          text-slate-400 
+                                          line-through">
+                              ₹{d.currentPenalty.toLocaleString('en-IN')}
+                            </p>
+                            {d.ccfsEligible ? (
+                              <p className="text-green-700 
+                                            dark:text-green-400 
+                                            font-bold text-sm">
+                                ₹{d.ccfsPenalty.toLocaleString('en-IN')}
+                                <span className="block 
+                                                 text-xs 
+                                                 font-normal">
+                                  with CCFS
+                                </span>
+                              </p>
+                            ) : (
+                              <p className="text-red-600 
+                                            font-bold text-sm">
+                                ₹{d.currentPenalty.toLocaleString('en-IN')}
+                              </p>
+                            )}
+                          </div>
                         )}
                       </div>
 
-                      {/* Penalty column */}
-                      {d.isApplicable && 
-                       d.currentPenalty > 0 && (
-                        <div className="text-right 
-                                        flex-shrink-0 
-                                        ml-3">
+                      {/* Footer row */}
+                      {d.isApplicable && (
+                        <div className="flex items-center 
+                                        justify-between 
+                                        mt-3 pt-3 
+                                        border-t 
+                                        border-slate-100 
+                                        dark:border-slate-700">
                           <p className="text-xs 
                                         text-slate-400 
-                                        line-through">
-                            ₹{d.currentPenalty.toLocaleString('en-IN')}
+                                        truncate 
+                                        max-w-xs">
+                            {d.legalSection}
                           </p>
-                          {d.ccfsEligible ? (
-                            <p className="text-green-700 
-                                          dark:text-green-400 
-                                          font-bold text-sm">
-                              ₹{d.ccfsPenalty.toLocaleString('en-IN')}
-                              <span className="block 
-                                               text-xs 
-                                               font-normal">
-                                with CCFS
-                              </span>
-                            </p>
-                          ) : (
-                            <p className="text-red-600 
-                                          font-bold text-sm">
-                              ₹{d.currentPenalty.toLocaleString('en-IN')}
-                            </p>
+                          {d.moreInfoUrl && (
+                            <a href={d.moreInfoUrl}
+                               className="text-xs 
+                                          text-amber-600 
+                                          dark:text-amber-400 
+                                          font-semibold 
+                                          underline 
+                                          flex-shrink-0 
+                                          print:hidden">
+                              Guide →
+                            </a>
                           )}
                         </div>
                       )}
                     </div>
-
-                    {/* Footer row */}
-                    {d.isApplicable && (
-                      <div className="flex items-center 
-                                      justify-between 
-                                      mt-3 pt-3 
-                                      border-t 
-                                      border-slate-100 
-                                      dark:border-slate-700">
-                        <p className="text-xs 
-                                      text-slate-400 
-                                      truncate 
-                                      max-w-xs">
-                          {d.legalSection}
-                        </p>
-                        {d.moreInfoUrl && (
-                          <a href={d.moreInfoUrl}
-                             className="text-xs 
-                                        text-amber-600 
-                                        dark:text-amber-400 
-                                        font-semibold 
-                                        underline 
-                                        flex-shrink-0 
-                                        print:hidden">
-                            Guide →
-                          </a>
-                        )}
-                      </div>
-                    )}
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
 
             {/* Disclaimer */}

@@ -18,6 +18,8 @@ export interface CompanyProfile {
   hasResolutions?: boolean
   hasSubsidiaries?: boolean
   filingYear?: string
+  hasMSMEDues?: boolean
+  hasPublicDeposits?: boolean
 }
 
 export function getFYFromYear(
