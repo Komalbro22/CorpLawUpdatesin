@@ -22,10 +22,11 @@ export interface CalculatorResult {
 export function getNormalFee(capital: number, isSmallOrOpc: boolean): number {
   if (capital < 0) return 0;
   if (isSmallOrOpc) {
-    if (capital <= 100000) return 50;
-    if (capital <= 500000) return 100;
-    if (capital <= 2500000) return 150;
-    return 200;
+    if (capital <= 100000) return 100;
+    if (capital <= 500000) return 150;
+    if (capital <= 2500000) return 200;
+    if (capital <= 10000000) return 250;
+    return 300;
   } else {
     if (capital <= 100000) return 200;
     if (capital <= 500000) return 300;
@@ -39,10 +40,9 @@ export function getLateFeeMultiplier(days: number, isHigherFee: boolean, hasGrac
   if (days <= 0) return 0;
   if (hasGracePeriod && days <= 15) return 0;
   const m = isHigherFee 
-    ? { 15: 1, 30: 3, 60: 6, 90: 9, 180: 15, 999: 18 } 
-    : { 15: 1, 30: 2, 60: 4, 90: 6, 180: 10, 999: 12 };
+    ? { 30: 3, 60: 6, 90: 9, 180: 15, 999: 18 } 
+    : { 30: 2, 60: 4, 90: 6, 180: 10, 999: 12 };
   
-  if (days <= 15) return m[15];
   if (days <= 30) return m[30];
   if (days <= 60) return m[60];
   if (days <= 90) return m[90];
