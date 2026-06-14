@@ -4,10 +4,12 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { CheckCircle2, Loader2, Mail } from 'lucide-react'
 
 export default function NewsletterWidget() {
     const [email, setEmail] = useState('')
+    const [consent, setConsent] = useState(false)
     const [loading, setLoading] = useState(false)
     const [success, setSuccess] = useState(false)
     const [error, setError] = useState('')
@@ -19,6 +21,11 @@ export default function NewsletterWidget() {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
         if (!emailRegex.test(email)) {
             setError('Please enter a valid email address.')
+            return
+        }
+
+        if (!consent) {
+            setError('You must consent to our Privacy Policy to subscribe.')
             return
         }
 
@@ -91,6 +98,26 @@ export default function NewsletterWidget() {
                             autoComplete="email"
                         />
                     </div>
+                    
+                    <div className="flex items-start gap-2.5 my-1.5">
+                        <input
+                            id="consent"
+                            type="checkbox"
+                            checked={consent}
+                            onChange={e => setConsent(e.target.checked)}
+                            className="mt-1 h-4 w-4 rounded border-slate-300 text-navy focus:ring-navy cursor-pointer"
+                            required
+                            disabled={loading}
+                        />
+                        <label htmlFor="consent" className="text-xs text-slate-500 leading-normal select-none cursor-pointer">
+                            I consent to receive weekly updates and agree to the{' '}
+                            <Link href="/privacy-policy" target="_blank" className="text-amber-500 hover:underline">
+                                Privacy Policy
+                            </Link>{' '}
+                            including email tracking.
+                        </label>
+                    </div>
+
                     {error && (
                         <p className="text-red-600 text-sm font-medium" role="alert">
                             {error}

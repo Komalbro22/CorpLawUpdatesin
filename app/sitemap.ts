@@ -129,8 +129,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Fetch active document templates for sitemap SEO indexing
   let docTemplates: any[] = []
-  if (supabaseDocumentsAdmin) {
-    const { data } = await supabaseDocumentsAdmin
+  if (supabaseAdmin) {
+    const { data } = await supabaseAdmin
       .from('document_templates')
       .select('slug, updated_at')
       .eq('is_active', true)

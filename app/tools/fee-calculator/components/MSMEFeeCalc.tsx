@@ -14,16 +14,30 @@ export default function MSMEFeeCalc({ initialBankRate = '6.75' }: { initialBankR
     const d = parseInt(delayDays) || 0
     const r = parseFloat(repoRate) || 0
 
-    // MSME Act Section 16: Compound interest with monthly rests at 3 times the bank rate (RBI Repo Rate)
-    // Formula for daily compound interest: A = P(1 + R/n)^(nt)
-    // Here we approximate with a daily compound interest rate. R = 3 * repo rate.
-    
+    // MSME Act Section 16: Compound interest with monthly rests at 3 times the bank rate
     const yearlyRate = (r * 3) / 100
-    // MSME allows compounding with monthly rests, but simple approximation for days is often used:
-    // Interest = Principal * (3 * Repo Rate) * (Delayed Days / 365)
-    // Let's use simple interest for the calculator approximation, or daily compound.
-    // We will use simple interest for ease:
-    const interest = p * yearlyRate * (d / 365)
+    const monthlyRate = yearlyRate / 12
+
+    let interest = 0
+    if (d > 0) {
+      const completeMonths = Math.floor(d / 30)
+      const remainingDays = d % 30
+
+      let runningPrincipal = p
+      let runningInterest = 0
+
+      for (let m = 1; m <= completeMonths; m++) {
+        const interestThisMonth = runningPrincipal * monthlyRate
+        runningInterest += interestThisMonth
+        runningPrincipal = p + runningInterest
+      }
+
+      if (remainingDays > 0) {
+        const interestRemaining = runningPrincipal * (monthlyRate * remainingDays / 30)
+        runningInterest += interestRemaining
+      }
+      interest = runningInterest
+    }
     
     setResult({
       interest: Math.round(interest),
@@ -63,12 +77,12 @@ export default function MSMEFeeCalc({ initialBankRate = '6.75' }: { initialBankR
           <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Current RBI Bank Rate (%)</label>
           <input 
             type="number" 
-            step="0.1"
+            step="0.01"
             className="w-full p-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-navy focus:border-navy outline-none transition-all" 
             value={repoRate} 
             onChange={(e) => setRepoRate(e.target.value)} 
           />
-          <p className="text-xs text-slate-500 mt-1">Applicable interest rate will be {parseFloat(repoRate) * 3}% per annum.</p>
+          <p className="text-xs text-slate-500 mt-1">Applicable interest rate will be {(parseFloat(repoRate) * 3).toFixed(2)}% per annum.</p>
         </div>
       </div>
 
@@ -82,19 +96,23 @@ export default function MSMEFeeCalc({ initialBankRate = '6.75' }: { initialBankR
 
       {result && (
         <div className="mt-8 p-6 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700">
-          <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 mb-4">Calculation Result</h3>
+          <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 mb-4 font-heading">Calculation Result</h3>
           
           <div className="space-y-3">
             <div className="flex justify-between items-center text-sm">
               <span className="text-slate-600 dark:text-slate-400">Principal Amount</span>
-              <span className="font-bold">₹ {Math.round(parseFloat(principalAmount) || 0).toLocaleString('en-IN')}</span>
+              <span className="font-semibold text-slate-900 dark:text-slate-100">₹ {Math.round(parseFloat(principalAmount) || 0).toLocaleString('en-IN')}</span>
+            </div>
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-slate-600 dark:text-slate-400">Interest Rate (3x Bank Rate)</span>
+              <span className="font-semibold text-slate-900 dark:text-slate-100">{(parseFloat(repoRate) * 3).toFixed(2)}% p.a. (compounded monthly)</span>
             </div>
             <div className="flex justify-between items-center text-sm">
               <span className="text-slate-600 dark:text-slate-400">Total Interest Accrued</span>
               <span className="font-bold text-red-600 dark:text-red-400">₹ {result.interest.toLocaleString('en-IN')}</span>
             </div>
             <div className="pt-3 mt-3 border-t border-slate-200 dark:border-slate-700 flex justify-between items-center">
-              <span className="font-semibold">Total Payable</span>
+              <span className="font-semibold text-slate-900 dark:text-slate-100">Total Payable</span>
               <span className="text-2xl font-black text-navy dark:text-white">₹ {result.total.toLocaleString('en-IN')}</span>
             </div>
           </div>
