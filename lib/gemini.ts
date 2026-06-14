@@ -200,3 +200,114 @@ Strict Professional Guidelines:
     return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
   });
 }
+
+/**
+ * Refine a standardized clause based on custom instructions in the user's prompt.
+ */
+export async function refineClauseContent(
+  clauseText: string,
+  userPrompt: string
+): Promise<string> {
+  return runWithKeyRotation(async (apiKey) => {
+    const promptText = `
+You are a highly precise legal draftsman specializing in Indian corporate law.
+We have a standardized clause that has been generated:
+---
+${clauseText}
+---
+
+The user has provided this custom editing instruction/prompt:
+"${userPrompt}"
+
+If the user's instruction specifies additional roles, names, custom limits, conditions, or specific nuances that are not fully reflected in the standardized clause, refine the clause text to incorporate those details.
+
+Strict Rules:
+1. Maintain the exact formal legal terminology, structure, and formatting of the standardized clause.
+2. Only adapt or add details to match the user's instruction. Do not rewrite the entire clause from scratch.
+3. If the user's instruction is simple (e.g. just asking to add a limit, which is already in the clause) and doesn't require any additional modifications, return the standardized clause exactly as-is.
+4. Output ONLY the refined clause text. Do NOT include any conversational comments, greetings, markdown ticks, or explanations.
+`;
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: promptText }] }]
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(`Gemini clause refinement failed (status \${response.status}): \${response.statusText} \${JSON.stringify(errorData)}`);
+    }
+
+    const data = await response.json();
+    const result = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    return result.trim();
+  });
+}
+
+/**
+ * Semantically insert a clause into a document when standard anchor matching fails.
+ */
+export async function semanticInsertClause(
+  currentText: string,
+  clauseText: string,
+  action: string,
+  anchor: string,
+  fallback: string
+): Promise<string> {
+  return runWithKeyRotation(async (apiKey) => {
+    const promptText = `
+You are a highly precise legal document editor. Your task is to insert a new clause into an existing legal document at the semantically correct position.
+
+Here is the existing legal document content:
+---
+${currentText}
+---
+
+Here is the new clause to be inserted:
+---
+${clauseText}
+---
+
+The instruction was to insert this clause:
+- Action: ${action}
+- Anchor (intended section or location): "${anchor}"
+
+Since the physical anchor text was not found or has been modified, find the most appropriate location in the document to insert this clause (e.g., place a transaction limit or signee clause near existing signatories, bank authorization, or operational parameters).
+If there is absolutely no logical place, default to the fallback position: ${fallback} (either TOP of the document or BOTTOM of the document).
+
+Strict Rules:
+1. Return the ENTIRE updated legal document text.
+2. Do not change any other text in the document.
+3. Output ONLY the final updated document text. Do NOT include any conversational introductions, markdown code block backticks (like \`\`\`markdown), or explanations.
+`;
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: promptText }] }]
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(`Gemini semantic clause insertion failed (status \${response.status}): \${response.statusText} \${JSON.stringify(errorData)}`);
+    }
+
+    const data = await response.json();
+    const result = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    // Clean up potential markdown wrapper code ticks if Gemini fails to follow instructions
+    let cleaned = result.trim();
+    if (cleaned.startsWith('```')) {
+      cleaned = cleaned.replace(/^```[a-zA-Z]*\n/, '').replace(/\\n\`\`\`$/, '').replace(/\n\`\`\`$/, '');
+    }
+    return cleaned.trim();
+  });
+}

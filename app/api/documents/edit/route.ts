@@ -127,7 +127,8 @@ export async function POST(request: Request) {
               current_content,
               rule.clause_id,
               extractedVars,
-              document_id
+              document_id,
+              edit_instruction
             );
 
             // Increment rule accepted_count (user got a result)

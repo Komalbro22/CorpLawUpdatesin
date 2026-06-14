@@ -652,6 +652,8 @@ const AI_SUGGESTIONS: Record<string, {
 export default function DocumentGeneratorPage() {
   const params = useParams()
   const slug = params.slug as string
+  const isBorrowingDoc = slug === 'board-resolution-bank-loan' || slug.includes('borrowing-limit');
+  const isStampDutyRequired = slug.includes('agreement') || slug.includes('deed') || slug.includes('mortgage') || slug.includes('understanding') || slug.includes('power-of-attorney') || slug.includes('transfer');
   const router = useRouter()
   const { showToast } = useToast()
 
@@ -684,6 +686,14 @@ export default function DocumentGeneratorPage() {
   const [calcTerm, setCalcTerm] = useState<string>('11')
   const [calcCapital, setCalcCapital] = useState<string>('')
   const [calcLoan, setCalcLoan] = useState<string>('')
+
+  // Section 180(1)(c) Borrowing Limits Calculator
+  const [s180Open, setS180Open] = useState(true)
+  const [s180PaidUpCapital, setS180PaidUpCapital] = useState<string>('')
+  const [s180FreeReserves, setS180FreeReserves] = useState<string>('')
+  const [s180SecuritiesPremium, setS180SecuritiesPremium] = useState<string>('')
+  const [s180ProposedBorrowing, setS180ProposedBorrowing] = useState<string>('')
+  const [s180ExistingBorrowing, setS180ExistingBorrowing] = useState<string>('')
 
   const [template, setTemplate] = useState<Template | null>(null)
   const [formData, setFormData] = useState<Record<string, string>>({})
@@ -1531,6 +1541,14 @@ export default function DocumentGeneratorPage() {
     runCalculation()
   }, [stampState, calcRent, calcDeposit, calcTerm, calcCapital, calcLoan])
 
+  // Auto-fill proposed borrowing from formData when relevant fields are populated
+  useEffect(() => {
+    const loanVal = formData.LOAN_AMOUNT || formData.BORROWING_LIMIT || '';
+    if (loanVal && /^\d+$/.test(loanVal)) {
+      setS180ProposedBorrowing(loanVal);
+    }
+  }, [formData])
+
   // Download DOCX or PDF
   async function handleDownload(
     format: 'docx' | 'pdf'
@@ -1991,150 +2009,332 @@ export default function DocumentGeneratorPage() {
           </div>
 
           {/* Stamp Duty & Execution Guide */}
-          <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-            <button
-              type="button"
-              onClick={() => setStampDutyOpen(p => !p)}
-              className="w-full bg-slate-50 border-b border-slate-200 px-5 py-3.5 flex items-center justify-between text-left focus:outline-none"
-            >
-              <div>
-                <h3 className="font-bold text-navy text-sm flex items-center gap-2">
-                  ⚖️ Stamp Duty & Notary Guide (India)
-                </h3>
-                <p className="text-[11px] text-slate-500 mt-0.5">
-                  Calculate state-specific stamp duty and registration fees.
-                </p>
-              </div>
-              <span className={`text-slate-400 text-lg transition-transform ${stampDutyOpen ? 'rotate-180' : ''}`}>
-                ▼
-              </span>
-            </button>
-            
-            {stampDutyOpen && (
-              <div className="p-5 space-y-4">
+          {isStampDutyRequired && (
+            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+              <button
+                type="button"
+                onClick={() => setStampDutyOpen(p => !p)}
+                className="w-full bg-slate-50 border-b border-slate-200 px-5 py-3.5 flex items-center justify-between text-left focus:outline-none"
+              >
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                    Select Indian State
-                  </label>
-                  <select
-                    value={stampState}
-                    onChange={(e) => setStampState(e.target.value)}
-                    className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent bg-white"
-                  >
-                    <option value="">Select State...</option>
-                    <option value="Delhi">Delhi</option>
-                    <option value="Maharashtra">Maharashtra</option>
-                    <option value="Karnataka">Karnataka</option>
-                    <option value="Tamil Nadu">Tamil Nadu</option>
-                    <option value="Uttar Pradesh">Uttar Pradesh</option>
-                    <option value="Haryana">Haryana</option>
-                    <option value="West Bengal">West Bengal</option>
-                    <option value="Gujarat">Gujarat</option>
-                    <option value="Other">Other States (Nominal)</option>
-                  </select>
+                  <h3 className="font-bold text-navy text-sm flex items-center gap-2">
+                    ⚖️ Stamp Duty & Notary Guide (India)
+                  </h3>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    Calculate state-specific stamp duty and registration fees.
+                  </p>
                 </div>
+                <span className={`text-slate-400 text-lg transition-transform ${stampDutyOpen ? 'rotate-180' : ''}`}>
+                  ▼
+                </span>
+              </button>
+              
+              {stampDutyOpen && (
+                <div className="p-5 space-y-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                      Select Indian State
+                    </label>
+                    <select
+                      value={stampState}
+                      onChange={(e) => setStampState(e.target.value)}
+                      className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent bg-white"
+                    >
+                      <option value="">Select State...</option>
+                      <option value="Delhi">Delhi</option>
+                      <option value="Maharashtra">Maharashtra</option>
+                      <option value="Karnataka">Karnataka</option>
+                      <option value="Tamil Nadu">Tamil Nadu</option>
+                      <option value="Uttar Pradesh">Uttar Pradesh</option>
+                      <option value="Haryana">Haryana</option>
+                      <option value="West Bengal">West Bengal</option>
+                      <option value="Gujarat">Gujarat</option>
+                      <option value="Other">Other States (Nominal)</option>
+                    </select>
+                  </div>
 
-                {/* Conditional Input Fields */}
-                {stampState && (
-                  <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200/60 space-y-3">
+                  {/* Conditional Input Fields */}
+                  {stampState && (
+                    <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200/60 space-y-3">
+                      <p className="text-[10px] font-bold text-navy uppercase tracking-wider">
+                        Calculation Parameters
+                      </p>
+                      
+                      {(slug.includes('lease') || slug.includes('rent')) ? (
+                        <div className="grid grid-cols-3 gap-2">
+                          <div>
+                            <label className="block text-[10px] font-semibold text-slate-500 mb-1">
+                              Rent / Month (₹)
+                            </label>
+                            <input
+                              type="number"
+                              value={calcRent}
+                              onChange={(e) => setCalcRent(e.target.value)}
+                              className="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs text-navy focus:ring-2 focus:ring-amber-400"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-semibold text-slate-500 mb-1">
+                              Deposit (₹)
+                            </label>
+                            <input
+                              type="number"
+                              value={calcDeposit}
+                              onChange={(e) => setCalcDeposit(e.target.value)}
+                              className="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs text-navy focus:ring-2 focus:ring-amber-400"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] font-semibold text-slate-500 mb-1">
+                              Term (Months)
+                            </label>
+                            <input
+                              type="number"
+                              value={calcTerm}
+                              onChange={(e) => setCalcTerm(e.target.value)}
+                              className="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs text-navy focus:ring-2 focus:ring-amber-400"
+                            />
+                          </div>
+                        </div>
+                      ) : (slug.includes('partnership') || slug.includes('incorporation') || slug.includes('llp')) ? (
+                        <div>
+                          <label className="block text-[10px] font-semibold text-slate-500 mb-1">
+                            Capital Contribution (₹)
+                          </label>
+                          <input
+                            type="number"
+                            value={calcCapital}
+                            onChange={(e) => setCalcCapital(e.target.value)}
+                            className="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs text-navy focus:ring-2 focus:ring-amber-400"
+                          />
+                        </div>
+                      ) : (
+                        <div>
+                          <label className="block text-[10px] font-semibold text-slate-500 mb-1">
+                            Loan / Consideration Amount (₹)
+                          </label>
+                          <input
+                            type="number"
+                            value={calcLoan}
+                            onChange={(e) => setCalcLoan(e.target.value)}
+                            className="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs text-navy focus:ring-2 focus:ring-amber-400"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {stampState && calculatedDuty !== null && (
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-2.5">
+                      <div className="flex justify-between text-xs font-bold text-navy">
+                        <span>Stamp Duty Payable:</span>
+                        <span className="text-amber-700">₹{calculatedDuty?.toLocaleString('en-IN')}</span>
+                      </div>
+                      <div className="flex justify-between text-xs font-bold text-navy">
+                        <span>Registration Fee:</span>
+                        <span className="text-amber-700">₹{calculatedReg?.toLocaleString('en-IN')}</span>
+                      </div>
+                      <div className="border-t border-amber-200/50 pt-2 text-[10px] text-slate-600 leading-normal">
+                        <p>
+                          💡 <strong>Execution Advice:</strong> Stamping must be done on Non-Judicial stamp paper or e-stamp. Purchase via the official Stock Holding Corporation of India Limited (SHCIL) portal or authorized vendors.
+                        </p>
+                        <p className="mt-1">
+                          <a
+                            href="https://www.shcilestamp.com/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-amber-600 hover:text-amber-700 font-bold underline flex items-center gap-1 mt-1.5"
+                          >
+                            Visit SHCIL E-Stamping Portal ↗
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Section 180(1)(c) Calculator */}
+          {isBorrowingDoc && (
+            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+              <button
+                type="button"
+                onClick={() => setS180Open(p => !p)}
+                className="w-full bg-slate-50 border-b border-slate-200 px-5 py-3.5 flex items-center justify-between text-left focus:outline-none"
+              >
+                <div>
+                  <h3 className="font-bold text-navy text-sm flex items-center gap-2">
+                    💳 Section 180(1)(c) Borrowing Calculator
+                  </h3>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    Check if borrowing requires Special Resolution (shareholder approval).
+                  </p>
+                </div>
+                <span className={`text-slate-400 text-lg transition-transform ${s180Open ? 'rotate-180' : ''}`}>
+                  ▼
+                </span>
+              </button>
+
+              {s180Open && (
+                <div className="p-5 space-y-4">
+                  {/* S180 Calculation Inputs */}
+                  <div className="space-y-3">
                     <p className="text-[10px] font-bold text-navy uppercase tracking-wider">
-                      Calculation Parameters
+                      Company Limits Parameters
                     </p>
-                    
-                    {(slug.includes('lease') || slug.includes('rent')) ? (
-                      <div className="grid grid-cols-3 gap-2">
-                        <div>
-                          <label className="block text-[10px] font-semibold text-slate-500 mb-1">
-                            Rent / Month (₹)
-                          </label>
-                          <input
-                            type="number"
-                            value={calcRent}
-                            onChange={(e) => setCalcRent(e.target.value)}
-                            className="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs text-navy focus:ring-2 focus:ring-amber-400"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-[10px] font-semibold text-slate-500 mb-1">
-                            Deposit (₹)
-                          </label>
-                          <input
-                            type="number"
-                            value={calcDeposit}
-                            onChange={(e) => setCalcDeposit(e.target.value)}
-                            className="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs text-navy focus:ring-2 focus:ring-amber-400"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-[10px] font-semibold text-slate-500 mb-1">
-                            Term (Months)
-                          </label>
-                          <input
-                            type="number"
-                            value={calcTerm}
-                            onChange={(e) => setCalcTerm(e.target.value)}
-                            className="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs text-navy focus:ring-2 focus:ring-amber-400"
-                          />
-                        </div>
-                      </div>
-                    ) : (slug.includes('partnership') || slug.includes('incorporation') || slug.includes('llp')) ? (
+                    <div className="grid grid-cols-2 gap-3">
                       <div>
                         <label className="block text-[10px] font-semibold text-slate-500 mb-1">
-                          Capital Contribution (₹)
+                          Paid-up Capital (₹)
                         </label>
                         <input
                           type="number"
-                          value={calcCapital}
-                          onChange={(e) => setCalcCapital(e.target.value)}
-                          className="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs text-navy focus:ring-2 focus:ring-amber-400"
+                          placeholder="e.g. 5000000"
+                          value={s180PaidUpCapital}
+                          onChange={(e) => setS180PaidUpCapital(e.target.value)}
+                          className="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white"
                         />
                       </div>
-                    ) : (
                       <div>
                         <label className="block text-[10px] font-semibold text-slate-500 mb-1">
-                          Loan / Consideration Amount (₹)
+                          Free Reserves (₹)
                         </label>
                         <input
                           type="number"
-                          value={calcLoan}
-                          onChange={(e) => setCalcLoan(e.target.value)}
-                          className="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs text-navy focus:ring-2 focus:ring-amber-400"
+                          placeholder="e.g. 3000000"
+                          value={s180FreeReserves}
+                          onChange={(e) => setS180FreeReserves(e.target.value)}
+                          className="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white"
                         />
                       </div>
-                    )}
-                  </div>
-                )}
+                    </div>
 
-                {stampState && calculatedDuty !== null && (
-                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-2.5">
-                    <div className="flex justify-between text-xs font-bold text-navy">
-                      <span>Stamp Duty Payable:</span>
-                      <span className="text-amber-700">₹{calculatedDuty?.toLocaleString('en-IN')}</span>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[10px] font-semibold text-slate-500 mb-1">
+                          Securities Premium (₹)
+                        </label>
+                        <input
+                          type="number"
+                          placeholder="e.g. 2000000"
+                          value={s180SecuritiesPremium}
+                          onChange={(e) => setS180SecuritiesPremium(e.target.value)}
+                          className="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-semibold text-slate-500 mb-1">
+                          Proposed Loan/CC (₹)
+                        </label>
+                        <input
+                          type="number"
+                          placeholder="e.g. 3000000"
+                          value={s180ProposedBorrowing}
+                          onChange={(e) => setS180ProposedBorrowing(e.target.value)}
+                          className="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white"
+                        />
+                      </div>
                     </div>
-                    <div className="flex justify-between text-xs font-bold text-navy">
-                      <span>Registration Fee:</span>
-                      <span className="text-amber-700">₹{calculatedReg?.toLocaleString('en-IN')}</span>
-                    </div>
-                    <div className="border-t border-amber-200/50 pt-2 text-[10px] text-slate-600 leading-normal">
-                      <p>
-                        💡 <strong>Execution Advice:</strong> Stamping must be done on Non-Judicial stamp paper or e-stamp. Purchase via the official Stock Holding Corporation of India Limited (SHCIL) portal or authorized vendors.
-                      </p>
-                      <p className="mt-1">
-                        <a
-                          href="https://www.shcilestamp.com/"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-amber-600 hover:text-amber-700 font-bold underline flex items-center gap-1 mt-1.5"
-                        >
-                          Visit SHCIL E-Stamping Portal ↗
-                        </a>
-                      </p>
+
+                    <div>
+                      <label className="block text-[10px] font-semibold text-slate-500 mb-1">
+                        Existing Borrowings (₹)
+                      </label>
+                      <input
+                        type="number"
+                        placeholder="e.g. 8000000 (excluding temporary bank loans)"
+                        value={s180ExistingBorrowing}
+                        onChange={(e) => setS180ExistingBorrowing(e.target.value)}
+                        className="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white"
+                      />
                     </div>
                   </div>
-                )}
-              </div>
-            )}
-          </div>
+
+                  {/* Calculator Logic & Results */}
+                  {(() => {
+                    const capital = parseFloat(s180PaidUpCapital) || 0;
+                    const reserves = parseFloat(s180FreeReserves) || 0;
+                    const premium = parseFloat(s180SecuritiesPremium) || 0;
+                    const proposed = parseFloat(s180ProposedBorrowing) || 0;
+                    const existing = parseFloat(s180ExistingBorrowing) || 0;
+
+                    const totalLimit = capital + reserves + premium;
+                    const totalBorrowing = proposed + existing;
+                    const isExceeded = totalBorrowing > totalLimit;
+
+                    const hasEnteredValues = s180PaidUpCapital || s180FreeReserves || s180SecuritiesPremium || s180ProposedBorrowing || s180ExistingBorrowing;
+
+                    if (!hasEnteredValues) {
+                      return (
+                        <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-[11px] text-slate-500 leading-relaxed">
+                          💡 <strong>Statutory Assumption:</strong> Since no capital values were provided, the borrowing is assumed to be within limits. A standard <strong>Board Resolution</strong> (under Sec 179(3)(d)) is sufficient. Enter values above to check compliance thresholds.
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-center text-xs border-b border-slate-100 pb-2">
+                          <span className="font-semibold text-slate-600">Aggregate limit (Sec 180(1)(c)):</span>
+                          <span className="font-bold text-navy">₹{totalLimit.toLocaleString('en-IN')}</span>
+                        </div>
+                        <div className="flex justify-between items-center text-xs border-b border-slate-100 pb-2">
+                          <span className="font-semibold text-slate-600">Total Borrowing (Proposed + Existing):</span>
+                          <span className="font-bold text-navy">₹{totalBorrowing.toLocaleString('en-IN')}</span>
+                        </div>
+
+                        {isExceeded ? (
+                          <div className="bg-rose-50 border border-rose-200 rounded-xl p-3.5 space-y-2">
+                            <div className="flex items-center gap-1.5 text-xs font-bold text-rose-700">
+                              ⚠️ Special Resolution Required
+                            </div>
+                            <p className="text-[11px] text-rose-800 leading-normal">
+                              Total borrowings (₹{totalBorrowing.toLocaleString('en-IN')}) exceed the aggregate limit (₹{totalLimit.toLocaleString('en-IN')}) by <strong>₹{(totalBorrowing - totalLimit).toLocaleString('en-IN')}</strong>.
+                            </p>
+                            <p className="text-[10px] text-slate-600 leading-normal border-t border-rose-200/50 pt-1.5">
+                              <strong>Actions Required:</strong><br />
+                              1. Pass a <strong>Special Resolution</strong> in a General Meeting of the members (shareholders).<br />
+                              2. File <strong>Form MGT-14</strong> with the Registrar of Companies (ROC) within 30 days.
+                            </p>
+                          </div>
+                        ) : (
+                          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-3.5 space-y-2">
+                            <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-700">
+                              ✅ Within Board limits (Board Resolution OK)
+                            </div>
+                            <p className="text-[11px] text-emerald-800 leading-normal">
+                              Total borrowings (₹{totalBorrowing.toLocaleString('en-IN')}) are within the aggregate board limit (₹{totalLimit.toLocaleString('en-IN')}).
+                            </p>
+                            <p className="text-[10px] text-slate-600 leading-normal border-t border-emerald-200/50 pt-1.5">
+                              A simple <strong>Board Resolution</strong> under Section 179(3)(d) is sufficient. No shareholder approval is required.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
+
+                  {/* Statutory Reference Educational Tip */}
+                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-[11px] text-slate-700 leading-normal space-y-1.5">
+                    <p className="font-semibold text-amber-900">
+                      📖 Section 180(1)(c) Statutory Guidance:
+                    </p>
+                    <p>
+                      • <strong>Formula:</strong> Board can borrow up to Paid-up Capital + Free Reserves + Securities Premium.
+                    </p>
+                    <p>
+                      • <strong>Exclusions:</strong> "Temporary loans" obtained from bankers in the ordinary course of business are excluded (i.e., loans repayable on demand or within 6 months, such as Cash Credit/Overdraft or bills discounting, but excluding loans for capital expenditure).
+                    </p>
+                    <p>
+                      • <strong>Reserves:</strong> Free reserves do not include revaluation, share premium, capital reserves, or deferred tax reserves.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* AI toggle */}
           <div className="bg-white rounded-2xl border border-slate-200 p-4 flex items-center justify-between">

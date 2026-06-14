@@ -115,7 +115,8 @@ export async function executeRule(
   currentText: string,
   clauseId: string,
   extractedVariables: Record<string, string>,
-  documentId?: string
+  documentId?: string,
+  editInstruction?: string
 ): Promise<{
   text: string;
   inlineWarnings: string[];
@@ -170,6 +171,20 @@ export async function executeRule(
 
     interpolatedClause = interpolatedClause.replace(new RegExp(`{{${key}}}`, 'g'), normalizedValue);
   });
+
+  // 3b. AI-Enhanced Clause Refinement (Optional - to capture custom nuances from the user prompt)
+  if (editInstruction && editInstruction.trim() !== '') {
+    try {
+      console.log('[executeRule] Refining clause with user prompt context:', editInstruction);
+      const { refineClauseContent } = await import('@/lib/gemini');
+      const refined = await refineClauseContent(interpolatedClause, editInstruction);
+      if (refined && refined.length > 5) {
+        interpolatedClause = refined;
+      }
+    } catch (refineErr: any) {
+      console.error('[executeRule] Clause refinement error, falling back to standard interpolated clause:', refineErr.message);
+    }
+  }
 
   // 4. Format safeguard: convert MD to HTML if document is HTML
   const isHtml = currentText.includes('<p>') || currentText.includes('</div>') || currentText.includes('<br');
@@ -236,16 +251,33 @@ export async function executeRule(
     }
   }
 
+  let updatedText = '';
+
   // Fallback if no anchor found
   if (!injected) {
-    if (placement.fallback === 'TOP') {
-      lines.unshift('\n' + interpolatedClause + '\n');
-    } else {
-      lines.push('\n' + interpolatedClause + '\n');
+    try {
+      console.log(`[executeRule] Anchor "${placement.anchor}" not found, executing Semantic AI Placement Fallback...`);
+      const { semanticInsertClause } = await import('@/lib/gemini');
+      updatedText = await semanticInsertClause(
+        currentText,
+        interpolatedClause,
+        placement.action,
+        placement.anchor,
+        placement.fallback
+      );
+    } catch (insertErr: any) {
+      console.error('[executeRule] Semantic insertion failed, falling back to physical top/bottom injection:', insertErr.message);
+      // Traditional top/bottom fallback
+      if (placement.fallback === 'TOP') {
+        lines.unshift('\n' + interpolatedClause + '\n');
+      } else {
+        lines.push('\n' + interpolatedClause + '\n');
+      }
+      updatedText = lines.join('\n');
     }
+  } else {
+    updatedText = lines.join('\n');
   }
-
-  const updatedText = lines.join('\n');
 
   // 6. Lightweight inline CRITICAL compliance check
   const inlineWarnings: string[] = [];
