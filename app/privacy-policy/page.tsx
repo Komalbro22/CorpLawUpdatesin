@@ -239,8 +239,8 @@ export default function PrivacyPolicyPage() {
                         For privacy-related queries or to exercise your rights under the Digital Personal Data Protection (DPDP) Act 2023, please contact our designated Grievance Officer:
                     </p>
                     <div className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl text-slate-600 dark:text-slate-300 space-y-1">
-                        <p><strong>Grievance Officer:</strong> Komalpreet Kaur</p>
-                        <p><strong>Role:</strong> Founder & Company Secretary</p>
+                        <p><strong>Grievance Officer:</strong> Komalpreet Singh</p>
+                        <p><strong>Role:</strong> Founder</p>
                         <p><strong>Email:</strong> <a href="mailto:legal@corplawupdates.in" className="text-amber-500 hover:underline">legal@corplawupdates.in</a></p>
                         <p><strong>Website:</strong> <a href="https://www.corplawupdates.in" className="text-amber-500 hover:underline">www.corplawupdates.in</a></p>
                     </div>
