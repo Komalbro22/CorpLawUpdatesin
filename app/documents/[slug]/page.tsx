@@ -669,6 +669,22 @@ export default function DocumentGeneratorPage() {
   const [missingClauses, setMissingClauses] = useState<ClauseCheck[]>([])
   const [showClauseChecker, setShowClauseChecker] = useState(false)
 
+  // Conversational AI Prompt
+  const [aiPromptText, setAiPromptText] = useState('')
+  const [extractingVars, setExtractingVars] = useState(false)
+  const [promptFeedback, setPromptFeedback] = useState<string | null>(null)
+
+  // Stamp Duty Calculator
+  const [stampState, setStampState] = useState('')
+  const [calculatedDuty, setCalculatedDuty] = useState<number | null>(null)
+  const [calculatedReg, setCalculatedReg] = useState<number | null>(null)
+  const [stampDutyOpen, setStampDutyOpen] = useState(false)
+  const [calcRent, setCalcRent] = useState<string>('')
+  const [calcDeposit, setCalcDeposit] = useState<string>('')
+  const [calcTerm, setCalcTerm] = useState<string>('11')
+  const [calcCapital, setCalcCapital] = useState<string>('')
+  const [calcLoan, setCalcLoan] = useState<string>('')
+
   const [template, setTemplate] = useState<Template | null>(null)
   const [formData, setFormData] = useState<Record<string, string>>({})
   const [generatedContent, setGeneratedContent] = useState<string>('')
@@ -1235,6 +1251,286 @@ export default function DocumentGeneratorPage() {
     }
   }
 
+  // Extract values from formData to prefill the calculator parameters
+  useEffect(() => {
+    if (!formData) return;
+    
+    // Try to find rent amount
+    const rentKey = Object.keys(formData).find(k => k.toLowerCase().includes('rent') || k.toLowerCase().includes('monthly_pay') || k.toLowerCase().includes('charges'));
+    if (rentKey && formData[rentKey]) {
+      const parsed = formData[rentKey].replace(/[^0-9]/g, '');
+      if (parsed) setCalcRent(parsed);
+    }
+    // Try to find deposit
+    const depositKey = Object.keys(formData).find(k => k.toLowerCase().includes('deposit') || k.toLowerCase().includes('advance'));
+    if (depositKey && formData[depositKey]) {
+      const parsed = formData[depositKey].replace(/[^0-9]/g, '');
+      if (parsed) setCalcDeposit(parsed);
+    }
+    // Try to find term
+    const termKey = Object.keys(formData).find(k => k.toLowerCase().includes('period') || k.toLowerCase().includes('duration') || k.toLowerCase().includes('month'));
+    if (termKey && formData[termKey]) {
+      const parsed = formData[termKey].replace(/[^0-9]/g, '');
+      if (parsed) setCalcTerm(parsed);
+    }
+    // Try to find capital
+    const capitalKey = Object.keys(formData).find(k => k.toLowerCase().includes('capital') || k.toLowerCase().includes('contribution'));
+    if (capitalKey && formData[capitalKey]) {
+      const parsed = formData[capitalKey].replace(/[^0-9]/g, '');
+      if (parsed) setCalcCapital(parsed);
+    }
+    // Try to find loan
+    const loanKey = Object.keys(formData).find(k => k.toLowerCase().includes('loan') || k.toLowerCase().includes('mortgage_amount') || k.toLowerCase().includes('consideration'));
+    if (loanKey && formData[loanKey]) {
+      const parsed = formData[loanKey].replace(/[^0-9]/g, '');
+      if (parsed) setCalcLoan(parsed);
+    }
+  }, [formData]);
+
+  // Execute AI Named Entity Recognition variable extraction
+  async function handleExtractVariables() {
+    if (!aiPromptText.trim() || !template) return
+    setExtractingVars(true)
+    setPromptFeedback(null)
+    try {
+      const res = await fetch('/api/documents/extract-vars', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prompt: aiPromptText,
+          fields: template.fields
+        })
+      })
+      const data = await res.json()
+      if (res.ok && data.success && data.extracted) {
+        const newFormData = { ...formData }
+        let count = 0
+        Object.entries(data.extracted).forEach(([key, val]) => {
+          if (val !== null && val !== undefined && val !== '') {
+            newFormData[key] = String(val)
+            count++
+          }
+        })
+        setFormData(newFormData)
+        setPromptFeedback(`Success: Pre-filled ${count} fields from your prompt!`)
+        showToast(`Extracted ${count} details from prompt!`, 'success')
+      } else {
+        setPromptFeedback(data.error || 'Failed to extract details. Try rephrasing.')
+      }
+    } catch (err: any) {
+      console.error(err)
+      setPromptFeedback('Error connecting to AI extractor.')
+    } finally {
+      setExtractingVars(false)
+    }
+  }
+
+  // Calculate Indian state-wise stamp duty and registration fees
+  function runCalculation() {
+    if (!stampState) {
+      setCalculatedDuty(null)
+      setCalculatedReg(null)
+      return
+    }
+
+    const rent = parseFloat(calcRent) || 0
+    const deposit = parseFloat(calcDeposit) || 0
+    const term = parseFloat(calcTerm) || 11
+    const capital = parseFloat(calcCapital) || 0
+    const loan = parseFloat(calcLoan) || 0
+
+    let duty = 0
+    let reg = 0
+
+    // Detect document category based on slug
+    let category = 'agreement'
+    if (slug.includes('lease') || slug.includes('rent')) {
+      category = 'lease'
+    } else if (slug.includes('partnership') || slug.includes('incorporation') || slug.includes('llp')) {
+      category = 'partnership'
+    } else if (slug.includes('mortgage') || slug.includes('loan')) {
+      category = 'mortgage'
+    }
+
+    if (category === 'lease') {
+      const totalRent = rent * term
+      const avgAnnualRent = term >= 12 ? (rent * 12) : totalRent
+
+      switch (stampState) {
+        case 'Maharashtra':
+          duty = Math.max(100, (totalRent * 0.0025) + (deposit * 0.0025))
+          reg = 1000
+          break
+        case 'Delhi':
+          const basisDelhi = term < 12 ? totalRent : avgAnnualRent
+          duty = basisDelhi * 0.02
+          reg = (basisDelhi * 0.01) + 100
+          break
+        case 'Karnataka':
+          if (term < 12) {
+            duty = (totalRent + deposit) * 0.005
+          } else {
+            duty = (avgAnnualRent + deposit) * 0.01
+          }
+          reg = Math.max(200, (totalRent + deposit) * 0.01)
+          break
+        case 'Tamil Nadu':
+          duty = (totalRent + deposit) * 0.01
+          reg = Math.min(20000, (totalRent + deposit) * 0.01)
+          break
+        case 'Uttar Pradesh':
+          const basisUP = term < 12 ? totalRent : avgAnnualRent
+          duty = (basisUP + deposit) * 0.02
+          reg = (basisUP + deposit) * 0.02
+          break
+        case 'Haryana':
+          duty = term < 12 ? (totalRent * 0.015) : (avgAnnualRent * 0.03)
+          reg = totalRent * 0.01
+          break
+        case 'West Bengal':
+          duty = term < 12 ? (totalRent * 0.005) : (avgAnnualRent * 0.01)
+          reg = totalRent * 0.01
+          break
+        case 'Gujarat':
+          duty = term < 12 ? (totalRent * 0.01) : (avgAnnualRent * 0.015)
+          reg = totalRent * 0.01
+          break
+        default:
+          duty = 100
+          reg = 100
+          break
+      }
+    } else if (category === 'partnership') {
+      switch (stampState) {
+        case 'Maharashtra':
+          if (capital <= 50000) duty = 500
+          else if (capital <= 200000) duty = 1500
+          else duty = 2000
+          reg = Math.min(5000, capital * 0.01)
+          break
+        case 'Delhi':
+          duty = 200
+          reg = 200
+          break
+        case 'Karnataka':
+          if (capital <= 20000) duty = 1000
+          else duty = Math.min(20000, capital * 0.01)
+          reg = 2000
+          break
+        case 'Tamil Nadu':
+          duty = capital * 0.01
+          reg = capital * 0.01
+          break
+        case 'Uttar Pradesh':
+          duty = 750
+          reg = 100
+          break
+        case 'Haryana':
+          duty = 1000
+          reg = 1000
+          break
+        case 'West Bengal':
+          duty = Math.max(500, Math.min(5000, capital * 0.005))
+          reg = 1000
+          break
+        case 'Gujarat':
+          duty = Math.max(1000, capital * 0.01)
+          reg = 1000
+          break
+        default:
+          duty = 500
+          reg = 200
+          break
+      }
+    } else if (category === 'mortgage') {
+      switch (stampState) {
+        case 'Maharashtra':
+          duty = loan * 0.005
+          reg = Math.min(30000, loan * 0.01)
+          break
+        case 'Delhi':
+          duty = loan * 0.005
+          reg = loan * 0.01
+          break
+        case 'Karnataka':
+          duty = loan * 0.005
+          reg = loan * 0.01
+          break
+        case 'Tamil Nadu':
+          duty = loan * 0.01
+          reg = Math.min(10000, loan * 0.01)
+          break
+        case 'Uttar Pradesh':
+          duty = loan * 0.005
+          reg = loan * 0.01
+          break
+        case 'Haryana':
+          duty = loan * 0.0025
+          reg = 1000
+          break
+        case 'West Bengal':
+          duty = loan * 0.005
+          reg = loan * 0.01
+          break
+        case 'Gujarat':
+          duty = loan * 0.005
+          reg = loan * 0.01
+          break
+        default:
+          duty = loan * 0.005
+          reg = loan * 0.01
+          break
+      }
+    } else {
+      switch (stampState) {
+        case 'Maharashtra':
+          duty = 500
+          reg = 200
+          break
+        case 'Delhi':
+          duty = 50
+          reg = 200
+          break
+        case 'Karnataka':
+          duty = 200
+          reg = 200
+          break
+        case 'Tamil Nadu':
+          duty = 100
+          reg = 100
+          break
+        case 'Uttar Pradesh':
+          duty = 100
+          reg = 100
+          break
+        case 'Haryana':
+          duty = 300
+          reg = 100
+          break
+        case 'West Bengal':
+          duty = 50
+          reg = 100
+          break
+        case 'Gujarat':
+          duty = 300
+          reg = 100
+          break
+        default:
+          duty = 100
+          reg = 100
+          break
+      }
+    }
+
+    setCalculatedDuty(Math.round(duty))
+    setCalculatedReg(Math.round(reg))
+  }
+
+  // Recalculate stamp duty dynamically when state or parameters change
+  useEffect(() => {
+    runCalculation()
+  }, [stampState, calcRent, calcDeposit, calcTerm, calcCapital, calcLoan])
+
   // Download DOCX or PDF
   async function handleDownload(
     format: 'docx' | 'pdf'
@@ -1247,190 +1543,33 @@ export default function DocumentGeneratorPage() {
       const cleanCompany = company.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 20)
       const filename = `${slug}_${cleanCompany}_${dateStr}.${format}`
 
-      if (format === 'pdf') {
-        const html2pdf = (await import('html2pdf.js')).default;
-        
-        const container = document.createElement('div');
-        container.id = 'pdf-print-container';
-        container.style.width = '794px';
-        container.style.position = 'absolute';
-        container.style.left = '-9999px';
-        container.style.top = '0';
-        container.style.backgroundColor = 'white';
+      const res = await fetch('/api/documents/download', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          content: getCleanedContent(generatedContent),
+          document_name: template?.name,
+          letterhead_url: letterheadUrl,
+          letterhead_type: letterheadType,
+          format,
+          custom_margin_top: customMarginTop,
+          custom_margin_bottom: customMarginBottom,
+          custom_margin_side: customMarginSide,
+        }),
+      });
 
-        const styleBlock = document.createElement('style');
-        styleBlock.innerHTML = `
-          #pdf-print-container {
-            background-color: white !important;
-          }
-          #pdf-print-container,
-          #pdf-print-container p,
-          #pdf-print-container span,
-          #pdf-print-container h1,
-          #pdf-print-container h2,
-          #pdf-print-container h3,
-          #pdf-print-container h4,
-          #pdf-print-container li,
-          #pdf-print-container td,
-          #pdf-print-container th,
-          #pdf-print-container strong {
-            color: #1e293b !important;
-          }
-        `;
-        container.appendChild(styleBlock);
-        
-        const contentDiv = document.createElement('div');
-        contentDiv.className = 'font-serif text-[14px] leading-relaxed prose max-w-none';
-        contentDiv.style.paddingTop = `${customMarginTop}px`;
-        contentDiv.style.paddingBottom = `${customMarginBottom}px`;
-        contentDiv.style.paddingLeft = `${customMarginSide}px`;
-        contentDiv.style.paddingRight = `${customMarginSide}px`;
-        
-        const rawContent = getCleanedContent(generatedContent);
-        const htmlContent = markdownToHtml(rawContent);
-        contentDiv.innerHTML = typeof window !== 'undefined' 
-          ? DOMPurify.sanitize(htmlContent)
-          : htmlContent;
-        
-        const isPdfLetterhead = letterheadUrl && letterheadUrl.toLowerCase().endsWith('.pdf');
-        if (letterheadUrl && !isPdfLetterhead) {
-          const img = document.createElement('img');
-          img.src = letterheadUrl;
-          img.style.position = 'absolute';
-          img.style.zIndex = '-1';
-          if (letterheadType === 'watermark') {
-            img.style.opacity = '0.1';
-            img.style.width = '400px';
-            img.style.left = '50%';
-            img.style.top = '50%';
-            img.style.transform = 'translate(-50%, -50%)';
-          } else if (letterheadType === 'full_page' || letterheadType === 'top_bottom_footer') {
-            img.style.width = '100%';
-            img.style.height = '100%';
-            img.style.left = '0';
-            img.style.top = '0';
-            img.style.objectFit = 'cover';
-          } else if (letterheadType === 'top_only') {
-            img.style.width = '100%';
-            img.style.height = '180px';
-            img.style.left = '0';
-            img.style.top = '0';
-            img.style.objectFit = 'cover';
-          } else if (letterheadType === 'logo_only') {
-            img.style.width = '120px';
-            img.style.height = 'auto';
-            img.style.left = `${customMarginSide}px`;
-            img.style.top = '40px';
-          }
-          container.appendChild(img);
-        }
-
-        container.appendChild(contentDiv);
-        document.body.appendChild(container);
-
-        const opt = {
-          margin: 0,
-          filename: filename,
-          image: { type: 'jpeg' as const, quality: 0.98 },
-          html2canvas: { 
-            scale: 2, 
-            useCORS: true, 
-            logging: false,
-            onclone: (clonedDoc: Document) => {
-              const el = clonedDoc.getElementById('pdf-print-container');
-              if (el) {
-                el.style.position = 'relative';
-                el.style.left = '0';
-                el.style.top = '0';
-              }
-            }
-          },
-          jsPDF: { unit: 'px', format: 'a4', orientation: 'portrait' },
-          pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-        };
-
-        // Wait for all images inside the container to load before generating the PDF
-        const images = container.getElementsByTagName('img');
-        const imagePromises = Array.from(images).map((img) => {
-          if (img.complete) return Promise.resolve();
-          return new Promise((resolve) => {
-            img.onload = resolve;
-            img.onerror = resolve;
-          });
-        });
-        await Promise.all(imagePromises);
-
-        if (isPdfLetterhead) {
-          const arrayBuffer = await html2pdf().from(container).set(opt as any).outputPdf('arraybuffer');
-          const { PDFDocument } = await import('pdf-lib');
-          const generatedDoc = await PDFDocument.load(arrayBuffer);
-          
-          const letterheadRes = await fetch(letterheadUrl);
-          const letterheadArrayBuffer = await letterheadRes.arrayBuffer();
-          const letterheadDoc = await PDFDocument.load(letterheadArrayBuffer);
-          
-          const finalDoc = await PDFDocument.create();
-          const genPages = generatedDoc.getPages();
-          
-          for (let i = 0; i < genPages.length; i++) {
-            const lIdx = i < letterheadDoc.getPageCount() ? i : 0;
-            const [lPage] = await finalDoc.copyPages(letterheadDoc, [lIdx]);
-            const finalPage = finalDoc.addPage(lPage);
-            
-            const [copiedGenPage] = await finalDoc.copyPages(generatedDoc, [i]);
-            const embeddedGenPage = await finalDoc.embedPage(copiedGenPage);
-            finalPage.drawPage(embeddedGenPage, { x: 0, y: 0 });
-          }
-          
-          const finalPdfBytes = await finalDoc.save();
-          const pdfBlob = new Blob([finalPdfBytes as unknown as BlobPart], { type: 'application/pdf' });
-          const url = URL.createObjectURL(pdfBlob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = filename;
-          a.click();
-          URL.revokeObjectURL(url);
-        } else {
-          const pdfBlob = await html2pdf().from(container).set(opt as any).output('blob');
-          const url = URL.createObjectURL(pdfBlob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = filename;
-          a.click();
-          URL.revokeObjectURL(url);
-        }
-
-        document.body.removeChild(container);
-      } else {
-        // DOCX Export
-        const res = await fetch('/api/documents/download', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            content: getCleanedContent(generatedContent),
-            document_name: template?.name,
-            letterhead_url: letterheadUrl,
-            letterhead_type: letterheadType,
-            format,
-            custom_margin_top: customMarginTop,
-            custom_margin_bottom: customMarginBottom,
-            custom_margin_side: customMarginSide,
-          }),
-        });
-
-        if (!res.ok) {
-          const errData = await res.json().catch(() => ({}));
-          throw new Error(errData.error || `Server responded with status ${res.status}`);
-        }
-
-        const blob = await res.blob();
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        a.click();
-        URL.revokeObjectURL(url);
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || `Server responded with status ${res.status}`);
       }
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
     } catch (err: any) {
       console.error('Download error:', err);
       alert(err.message || 'Failed to download the document. Please try again.');
@@ -1589,6 +1728,51 @@ export default function DocumentGeneratorPage() {
         {/* LEFT — Form */}
         <div className="space-y-6">
           
+          {/* AI Prompter - Conversational Draft Mode */}
+          <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+            <div className="bg-gradient-to-r from-amber-400/20 to-amber-500/10 border-b border-slate-200 px-5 py-3.5">
+              <h3 className="font-bold text-navy text-sm flex items-center gap-2">
+                ✨ AI Conversational Drafting Assistant
+              </h3>
+              <p className="text-[11px] text-slate-500 mt-0.5">
+                Type details in plain English to automatically pre-fill all the fields below.
+              </p>
+            </div>
+            <div className="p-5 space-y-4">
+              <div>
+                <textarea
+                  rows={2}
+                  value={aiPromptText}
+                  onChange={(e) => setAiPromptText(e.target.value)}
+                  placeholder="e.g., Draft a lease for 11 months in Mumbai, rent is 30,000, security deposit is 1.5 Lakhs, starting next month..."
+                  className="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent bg-white resize-none"
+                />
+              </div>
+              
+              {promptFeedback && (
+                <p className={`text-xs font-semibold ${promptFeedback.startsWith('Success') ? 'text-emerald-600' : 'text-amber-600'}`}>
+                  {promptFeedback}
+                </p>
+              )}
+
+              <button
+                type="button"
+                onClick={handleExtractVariables}
+                disabled={extractingVars || !aiPromptText.trim()}
+                className="w-full bg-navy text-white hover:bg-slate-800 font-bold py-2.5 rounded-xl text-xs transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+              >
+                {extractingVars ? (
+                  <>
+                    <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Analyzing Prompt...
+                  </>
+                ) : (
+                  <>🪄 Pre-fill Form Details</>
+                )}
+              </button>
+            </div>
+          </div>
+
           {/* Letterhead upload */}
           <div className="bg-white rounded-2xl border border-slate-200 p-5">
             <h3 className="font-bold text-navy text-sm mb-3 flex items-center gap-2">
@@ -1803,6 +1987,152 @@ export default function DocumentGeneratorPage() {
                   disabled={letterheadUploading}
                 />
               </label>
+            )}
+          </div>
+
+          {/* Stamp Duty & Execution Guide */}
+          <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+            <button
+              type="button"
+              onClick={() => setStampDutyOpen(p => !p)}
+              className="w-full bg-slate-50 border-b border-slate-200 px-5 py-3.5 flex items-center justify-between text-left focus:outline-none"
+            >
+              <div>
+                <h3 className="font-bold text-navy text-sm flex items-center gap-2">
+                  ⚖️ Stamp Duty & Notary Guide (India)
+                </h3>
+                <p className="text-[11px] text-slate-500 mt-0.5">
+                  Calculate state-specific stamp duty and registration fees.
+                </p>
+              </div>
+              <span className={`text-slate-400 text-lg transition-transform ${stampDutyOpen ? 'rotate-180' : ''}`}>
+                ▼
+              </span>
+            </button>
+            
+            {stampDutyOpen && (
+              <div className="p-5 space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                    Select Indian State
+                  </label>
+                  <select
+                    value={stampState}
+                    onChange={(e) => setStampState(e.target.value)}
+                    className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent bg-white"
+                  >
+                    <option value="">Select State...</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Karnataka">Karnataka</option>
+                    <option value="Tamil Nadu">Tamil Nadu</option>
+                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                    <option value="Haryana">Haryana</option>
+                    <option value="West Bengal">West Bengal</option>
+                    <option value="Gujarat">Gujarat</option>
+                    <option value="Other">Other States (Nominal)</option>
+                  </select>
+                </div>
+
+                {/* Conditional Input Fields */}
+                {stampState && (
+                  <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200/60 space-y-3">
+                    <p className="text-[10px] font-bold text-navy uppercase tracking-wider">
+                      Calculation Parameters
+                    </p>
+                    
+                    {(slug.includes('lease') || slug.includes('rent')) ? (
+                      <div className="grid grid-cols-3 gap-2">
+                        <div>
+                          <label className="block text-[10px] font-semibold text-slate-500 mb-1">
+                            Rent / Month (₹)
+                          </label>
+                          <input
+                            type="number"
+                            value={calcRent}
+                            onChange={(e) => setCalcRent(e.target.value)}
+                            className="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs text-navy focus:ring-2 focus:ring-amber-400"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-semibold text-slate-500 mb-1">
+                            Deposit (₹)
+                          </label>
+                          <input
+                            type="number"
+                            value={calcDeposit}
+                            onChange={(e) => setCalcDeposit(e.target.value)}
+                            className="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs text-navy focus:ring-2 focus:ring-amber-400"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-semibold text-slate-500 mb-1">
+                            Term (Months)
+                          </label>
+                          <input
+                            type="number"
+                            value={calcTerm}
+                            onChange={(e) => setCalcTerm(e.target.value)}
+                            className="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs text-navy focus:ring-2 focus:ring-amber-400"
+                          />
+                        </div>
+                      </div>
+                    ) : (slug.includes('partnership') || slug.includes('incorporation') || slug.includes('llp')) ? (
+                      <div>
+                        <label className="block text-[10px] font-semibold text-slate-500 mb-1">
+                          Capital Contribution (₹)
+                        </label>
+                        <input
+                          type="number"
+                          value={calcCapital}
+                          onChange={(e) => setCalcCapital(e.target.value)}
+                          className="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs text-navy focus:ring-2 focus:ring-amber-400"
+                        />
+                      </div>
+                    ) : (
+                      <div>
+                        <label className="block text-[10px] font-semibold text-slate-500 mb-1">
+                          Loan / Consideration Amount (₹)
+                        </label>
+                        <input
+                          type="number"
+                          value={calcLoan}
+                          onChange={(e) => setCalcLoan(e.target.value)}
+                          className="w-full border border-slate-300 rounded-lg px-2 py-1 text-xs text-navy focus:ring-2 focus:ring-amber-400"
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {stampState && calculatedDuty !== null && (
+                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-2.5">
+                    <div className="flex justify-between text-xs font-bold text-navy">
+                      <span>Stamp Duty Payable:</span>
+                      <span className="text-amber-700">₹{calculatedDuty?.toLocaleString('en-IN')}</span>
+                    </div>
+                    <div className="flex justify-between text-xs font-bold text-navy">
+                      <span>Registration Fee:</span>
+                      <span className="text-amber-700">₹{calculatedReg?.toLocaleString('en-IN')}</span>
+                    </div>
+                    <div className="border-t border-amber-200/50 pt-2 text-[10px] text-slate-600 leading-normal">
+                      <p>
+                        💡 <strong>Execution Advice:</strong> Stamping must be done on Non-Judicial stamp paper or e-stamp. Purchase via the official Stock Holding Corporation of India Limited (SHCIL) portal or authorized vendors.
+                      </p>
+                      <p className="mt-1">
+                        <a
+                          href="https://www.shcilestamp.com/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-amber-600 hover:text-amber-700 font-bold underline flex items-center gap-1 mt-1.5"
+                        >
+                          Visit SHCIL E-Stamping Portal ↗
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
           </div>
 

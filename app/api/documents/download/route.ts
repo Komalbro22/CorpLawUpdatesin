@@ -5,6 +5,129 @@ import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 import HTMLtoDOCX from 'html-to-docx'
 import { markdownToHtml } from '@/lib/markdown'
 
+// ─── Markdown Blocks & Text Runs Parser ──────────────────────────────────────
+interface TextRunItem {
+  text: string
+  isBold: boolean
+}
+
+interface Block {
+  type: 'heading1' | 'heading2' | 'heading3' | 'list_item' | 'paragraph'
+  runs: TextRunItem[]
+}
+
+function parseTextRuns(text: string): TextRunItem[] {
+  const parts = text.split('**')
+  const runs: TextRunItem[] = []
+  parts.forEach((part, index) => {
+    const isBold = index % 2 === 1
+    if (part !== '') {
+      runs.push({ text: part, isBold })
+    }
+  })
+  return runs
+}
+
+function parseBlocks(markdown: string): Block[] {
+  const rawParagraphs = markdown.split(/\n\s*\n/)
+  const blocks: Block[] = []
+
+  for (const rawPara of rawParagraphs) {
+    const trimmed = rawPara.trim()
+    if (trimmed === '') continue
+
+    let type: Block['type'] = 'paragraph'
+    let content = trimmed
+
+    if (trimmed.startsWith('# ')) {
+      type = 'heading1'
+      content = trimmed.slice(2).trim()
+    } else if (trimmed.startsWith('## ')) {
+      type = 'heading2'
+      content = trimmed.slice(3).trim()
+    } else if (trimmed.startsWith('### ')) {
+      type = 'heading3'
+      content = trimmed.slice(4).trim()
+    } else if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+      type = 'list_item'
+      content = trimmed.slice(2).trim()
+    } else {
+      const numMatch = trimmed.match(/^(\d+)\.\s+([\s\S]*)$/)
+      if (numMatch) {
+        type = 'list_item'
+        content = `${numMatch[1]}. ${numMatch[2].trim()}`
+      }
+    }
+
+    const cleanContent = content.replace(/\r?\n/g, ' ')
+    blocks.push({
+      type,
+      runs: parseTextRuns(cleanContent)
+    })
+  }
+
+  return blocks
+}
+
+// ─── Tokenized Word Wrapping Engine ──────────────────────────────────────────
+type LineSegment = { text: string; isBold: boolean }
+type WrappedLine = LineSegment[]
+
+function wrapRuns(
+  runs: TextRunItem[],
+  printableW: number,
+  fontNormal: any,
+  fontBold: any,
+  fontSize: number
+): WrappedLine[] {
+  const wrappedLines: WrappedLine[] = []
+  const tokens: { text: string; isBold: boolean }[] = []
+
+  for (const run of runs) {
+    const wordsAndSpaces = run.text.split(/(\s+)/)
+    for (const ws of wordsAndSpaces) {
+      if (ws === '') continue
+      tokens.push({ text: ws, isBold: run.isBold })
+    }
+  }
+
+  let activeLineSegments: LineSegment[] = []
+  let activeLineWidth = 0
+
+  for (const token of tokens) {
+    const font = token.isBold ? fontBold : fontNormal
+    const tokenWidth = font.widthOfTextAtSize(token.text, fontSize)
+
+    if (token.text.trim() === '' && activeLineWidth === 0) {
+      continue
+    }
+
+    if (activeLineWidth + tokenWidth <= printableW) {
+      activeLineSegments.push({ text: token.text, isBold: token.isBold })
+      activeLineWidth += tokenWidth
+    } else {
+      if (token.text.trim() !== '') {
+        if (activeLineSegments.length > 0) {
+          wrappedLines.push(activeLineSegments)
+        }
+        activeLineSegments = [{ text: token.text, isBold: token.isBold }]
+        activeLineWidth = tokenWidth
+      } else {
+        if (activeLineSegments.length > 0) {
+          wrappedLines.push(activeLineSegments)
+          activeLineSegments = []
+          activeLineWidth = 0
+        }
+      }
+    }
+  }
+
+  if (activeLineSegments.length > 0) {
+    wrappedLines.push(activeLineSegments)
+  }
+
+  return wrappedLines
+}
 
 export async function POST(request: Request) {
   try {
@@ -52,7 +175,6 @@ export async function POST(request: Request) {
     }
 
     if (format === 'pdf') {
-      // Create a PDF Document
       const pdfDoc = await PDFDocument.create()
       const timesRoman = await pdfDoc.embedFont(StandardFonts.TimesRoman)
       const timesBold = await pdfDoc.embedFont(StandardFonts.TimesRomanBold)
@@ -70,16 +192,15 @@ export async function POST(request: Request) {
       const pageW = 595.27 // A4 width
       const pageH = 841.89 // A4 height
       
-      // Determine print-safe margins based on letterhead layout type or custom slider offsets
       let marginT = custom_margin_top !== undefined ? Number(custom_margin_top) : 72
       let marginB = custom_margin_bottom !== undefined ? Number(custom_margin_bottom) : 72
-      const marginL = custom_margin_side !== undefined ? Number(custom_margin_side) : 72 // 1-inch
-      const marginR = custom_margin_side !== undefined ? Number(custom_margin_side) : 72 // 1-inch
+      const marginL = custom_margin_side !== undefined ? Number(custom_margin_side) : 72
+      const marginR = custom_margin_side !== undefined ? Number(custom_margin_side) : 72
 
       if (custom_margin_top === undefined) {
         if (letterhead_type === 'full_page') {
-          marginT = 180 // Clears top header
-          marginB = 120 // Clears bottom footer
+          marginT = 180
+          marginB = 120
         } else if (letterhead_type === 'top_only') {
           marginT = 180
           marginB = 54
@@ -101,93 +222,28 @@ export async function POST(request: Request) {
       const printableW = pageW - marginL - marginR
       const printableH = pageH - marginT - marginB
 
-      // Split and wrap text lines by paragraph/clause to prevent mid-clause page breaks
-      const fontHeight = 11
-      const lineHeight = 15
-      const lines = content.split('\n')
-      
-      const pagesData: { text: string; isBold: boolean }[][] = [[]]
-      let currentPageLines = pagesData[0]
-      let currentHeightUsed = 0
-
-      for (const line of lines) {
-        const paragraphLines: { text: string; isBold: boolean }[] = []
-        if (line.trim() === '') {
-          paragraphLines.push({ text: '', isBold: false })
-        } else {
-          // Bolding heuristics for legal documents
-          const isLineBold = 
-            line.toUpperCase() === line ||
-            line.trim().startsWith('RESOLVED THAT') ||
-            line.trim().startsWith('FURTHER RESOLVED') ||
-            line.trim().startsWith('DIRECTORS PRESENT') ||
-            line.trim().startsWith('CHAIRPERSON') ||
-            line.trim().startsWith('CERTIFIED TRUE COPY');
-
-          const activeFont = isLineBold ? timesBold : timesRoman
-          const words = line.split(' ')
-          let currentLine = ''
-
-          for (const word of words) {
-            const testLine = currentLine === '' ? word : `${currentLine} ${word}`
-            const testWidth = activeFont.widthOfTextAtSize(testLine, fontHeight)
-            if (testWidth > printableW) {
-              paragraphLines.push({ text: currentLine, isBold: isLineBold })
-              currentLine = word
-            } else {
-              currentLine = testLine
-            }
-          }
-          if (currentLine !== '') {
-            paragraphLines.push({ text: currentLine, isBold: isLineBold })
-          }
-        }
-
-        // Calculate height needed for this paragraph
-        const paragraphHeight = paragraphLines.length * lineHeight
-
-        // Prevent mid-clause page breaks:
-        // If the paragraph doesn't fit on the current page, AND it's smaller than a full page, move to next page
-        if (currentHeightUsed + paragraphHeight > printableH && paragraphHeight < printableH) {
-          pagesData.push([])
-          currentPageLines = pagesData[pagesData.length - 1]
-          currentHeightUsed = 0
-        }
-
-        // Add lines to current page (might still overflow if the paragraph is larger than a full page)
-        for (const wl of paragraphLines) {
-          if (currentHeightUsed + lineHeight > printableH) {
-            pagesData.push([])
-            currentPageLines = pagesData[pagesData.length - 1]
-            currentHeightUsed = 0
-          }
-          currentPageLines.push(wl)
-          currentHeightUsed += lineHeight
-        }
-      }
-
-      // Render each page using vector page-layering if PDF letterhead is uploaded
-      for (let pageIdx = 0; pageIdx < pagesData.length; pageIdx++) {
+      // Dynamic page builder
+      const pages: any[] = []
+      const addPage = async () => {
+        const pageIdx = pages.length
         let page: any = null
-        
+
         if (letterheadPdfDoc) {
           try {
-            // Copy the matching template page (fallback to page 0 if template has fewer pages)
             const templatePageIdx = pageIdx < letterheadPdfDoc.getPageCount() ? pageIdx : 0
-            const [copiedPage] = await pdfDoc.copyPages(letterheadPdfDoc, [templatePageIdx])
+            const copiedPages = await pdfDoc.copyPages(letterheadPdfDoc, [templatePageIdx])
+            const copiedPage = copiedPages[0]
             page = pdfDoc.addPage(copiedPage)
           } catch (err) {
             console.error('Failed to copy PDF letterhead page:', err)
           }
         }
-        
+
         if (!page) {
           page = pdfDoc.addPage([pageW, pageH])
         }
 
-        const pageLines = pagesData[pageIdx]
-
-        // If a raster image is provided as the fallback letterhead
+        // Draw image backdrop if exists
         if (embeddedImage) {
           if (letterhead_type === 'full_page') {
             page.drawImage(embeddedImage, { x: 0, y: 0, width: pageW, height: pageH })
@@ -203,9 +259,8 @@ export async function POST(request: Request) {
           }
         }
 
-        // Draw standard faded center watermark if watermark layout is active (and we don't have a PDF letterhead backdrop already)
+        // Faded watermark if active
         if (letterhead_type === 'watermark' && embeddedImage && !letterheadPdfDoc) {
-          // Centered faded logo watermark: opacity between 0.03 - 0.08
           page.drawImage(embeddedImage, {
             x: (pageW - 200) / 2,
             y: (pageH - 200) / 2,
@@ -215,34 +270,120 @@ export async function POST(request: Request) {
           })
         }
 
-        // Draw page numbers in bottom footer margin space
-        if (pagesData.length > 1) {
-          const pageNumStr = `Page ${pageIdx + 1} of ${pagesData.length}`
+        pages.push(page)
+        return page
+      }
+
+      // Initialize first page
+      let currentPage = await addPage()
+      let yPos = pageH - marginT
+
+      // Parse document markdown into blocks
+      const blocks = parseBlocks(content)
+
+      for (const block of blocks) {
+        let fontSize = 10.5
+        let lineHeight = 14.5
+        let spaceBefore = 0
+        let spaceAfter = 7
+        let isBlockBold = false
+        let indent = 0
+
+        if (block.type === 'heading1') {
+          fontSize = 15
+          lineHeight = 19
+          spaceBefore = 14
+          spaceAfter = 8
+          isBlockBold = true
+        } else if (block.type === 'heading2') {
+          fontSize = 13
+          lineHeight = 17
+          spaceBefore = 12
+          spaceAfter = 6
+          isBlockBold = true
+        } else if (block.type === 'heading3') {
+          fontSize = 11.5
+          lineHeight = 15
+          spaceBefore = 10
+          spaceAfter = 6
+          isBlockBold = true
+        } else if (block.type === 'list_item') {
+          fontSize = 10.5
+          lineHeight = 14
+          spaceAfter = 5
+          indent = 15
+        }
+
+        // Apply space before if not at top of page
+        if (spaceBefore > 0 && yPos < pageH - marginT) {
+          yPos -= spaceBefore
+        }
+
+        const blockPrintableW = printableW - indent
+        const wrappedLines = wrapRuns(block.runs, blockPrintableW, timesRoman, timesBold, fontSize)
+
+        for (let lineIdx = 0; lineIdx < wrappedLines.length; lineIdx++) {
+          const line = wrappedLines[lineIdx]
+
+          // Check for page break
+          if (yPos - lineHeight < marginB) {
+            currentPage = await addPage()
+            yPos = pageH - marginT
+          }
+
+          let currentX = marginL + indent
+
+          // Draw bullet / prefix
+          if (block.type === 'list_item' && lineIdx === 0) {
+            const firstSegmentText = line[0]?.text || ''
+            const hasNumberPrefix = /^\s*\d+\./.test(firstSegmentText)
+
+            if (!hasNumberPrefix) {
+              currentPage.drawText('•', {
+                x: marginL + 4,
+                y: yPos,
+                size: fontSize,
+                font: timesBold,
+                color: rgb(0.12, 0.16, 0.23),
+              })
+            }
+          }
+
+          // Draw text segments
+          for (const segment of line) {
+            const isBold = isBlockBold || segment.isBold
+            const font = isBold ? timesBold : timesRoman
+
+            currentPage.drawText(segment.text, {
+              x: currentX,
+              y: yPos,
+              size: fontSize,
+              font: font,
+              color: rgb(0.12, 0.16, 0.23),
+            })
+            currentX += font.widthOfTextAtSize(segment.text, fontSize)
+          }
+
+          yPos -= lineHeight
+        }
+
+        yPos -= spaceAfter
+      }
+
+      // Draw page numbers
+      const totalPages = pages.length
+      if (totalPages > 1) {
+        for (let pageIdx = 0; pageIdx < totalPages; pageIdx++) {
+          const page = pages[pageIdx]
+          const pageNumStr = `Page ${pageIdx + 1} of ${totalPages}`
           const pageNumW = timesRoman.widthOfTextAtSize(pageNumStr, 9)
           page.drawText(pageNumStr, {
             x: pageW - marginR - pageNumW,
-            y: 36, // Print-safe 0.5-inch margin from bottom edge
+            y: 36,
             size: 9,
             font: timesRoman,
             color: rgb(0.4, 0.4, 0.4),
           })
-        }
-
-        // Draw document content text
-        let yPos = pageH - marginT
-        for (const wl of pageLines) {
-          if (wl.text !== '') {
-            const font = wl.isBold ? timesBold : timesRoman
-            
-            page.drawText(wl.text, {
-              x: marginL,
-              y: yPos,
-              size: fontHeight,
-              font: font,
-              color: rgb(0.1, 0.1, 0.2),
-            })
-          }
-          yPos -= lineHeight
         }
       }
 

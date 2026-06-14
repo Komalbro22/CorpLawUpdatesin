@@ -74,6 +74,16 @@ function markdownToHtml(md: string): string {
     .replace(/^(?!<[h|p])(.+)/gm, '<p>$1</p>');
 }
 
+// ─── Normalize Anchor Text (Fuzzy Matching) ──────────────────────────────────
+function normalizeAnchorText(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[#\d.,\/#!$%\^&\*;:{}=\-_`~()?]/g, '') // remove markdown symbols, numbers, punctuation
+    .replace(/\b(please|the|a|an|could|you|insert|add|put|show|make|in|for|to|into|section|clause|article|agreement)\b/gi, '') // strip fluff
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 // ─── Variable Extractor using Gemini NER ─────────────────────────────────────
 // Extracts named entities from user prompt based on the clause's variables schema
 export async function extractVariablesFromPrompt(
@@ -177,7 +187,11 @@ export async function executeRule(
     let isMatch = false;
 
     if (placement.anchor_type === 'HEADING') {
-      isMatch = line.trim().startsWith('#') && line.toLowerCase().includes(placement.anchor.toLowerCase());
+      if (line.trim().startsWith('#')) {
+        const normalizedLine = normalizeAnchorText(line);
+        const normalizedAnchor = normalizeAnchorText(placement.anchor);
+        isMatch = normalizedLine.includes(normalizedAnchor) && normalizedAnchor !== '';
+      }
     } else if (placement.anchor_type === 'REGEX') {
       try {
         isMatch = new RegExp(placement.anchor, 'i').test(line);
