@@ -654,6 +654,7 @@ export default function DocumentGeneratorPage() {
   const slug = params.slug as string
   const isBorrowingDoc = slug === 'board-resolution-bank-loan' || slug.includes('borrowing-limit');
   const isStampDutyRequired = slug.includes('agreement') || slug.includes('deed') || slug.includes('mortgage') || slug.includes('understanding') || slug.includes('power-of-attorney') || slug.includes('transfer');
+  const isOfficeShiftingDoc = slug === 'board-resolution-registered-office-change';
   const router = useRouter()
   const { showToast } = useToast()
 
@@ -694,6 +695,11 @@ export default function DocumentGeneratorPage() {
   const [s180SecuritiesPremium, setS180SecuritiesPremium] = useState<string>('')
   const [s180ProposedBorrowing, setS180ProposedBorrowing] = useState<string>('')
   const [s180ExistingBorrowing, setS180ExistingBorrowing] = useState<string>('')
+
+  // Registered Office Shifting Guide
+  const [officeShiftingOpen, setOfficeShiftingOpen] = useState(true)
+  const [shiftingScope, setShiftingScope] = useState<string>('local')
+  const [isListedCompany, setIsListedCompany] = useState<boolean>(false)
 
   const [template, setTemplate] = useState<Template | null>(null)
   const [formData, setFormData] = useState<Record<string, string>>({})
@@ -2330,6 +2336,212 @@ export default function DocumentGeneratorPage() {
                     <p>
                       • <strong>Reserves:</strong> Free reserves do not include revaluation, share premium, capital reserves, or deferred tax reserves.
                     </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Registered Office Shifting Compliance Navigator */}
+          {isOfficeShiftingDoc && (
+            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+              <button
+                type="button"
+                onClick={() => setOfficeShiftingOpen(p => !p)}
+                className="w-full bg-slate-50 border-b border-slate-200 px-5 py-3.5 flex items-center justify-between text-left focus:outline-none"
+              >
+                <div>
+                  <h3 className="font-bold text-navy text-sm flex items-center gap-2">
+                    🏢 Shifting Compliance Navigator
+                  </h3>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    Select scope to view Companies Act compliance roadmap.
+                  </p>
+                </div>
+                <span className={`text-slate-400 text-lg transition-transform ${officeShiftingOpen ? 'rotate-180' : ''}`}>
+                  ▼
+                </span>
+              </button>
+
+              {officeShiftingOpen && (
+                <div className="p-5 space-y-4">
+                  {/* Selector fields */}
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                        Shifting Scope
+                      </label>
+                      <select
+                        value={shiftingScope}
+                        onChange={(e) => setShiftingScope(e.target.value)}
+                        className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white"
+                      >
+                        <option value="local">Within same town/city (Local Limits)</option>
+                        <option value="outside_local">Outside local limits (Same State & ROC)</option>
+                        <option value="between_roc">One ROC to another ROC (Same State)</option>
+                        <option value="between_state">One State to another State</option>
+                      </select>
+                    </div>
+
+                    <div className="flex items-center gap-2 pt-1">
+                      <input
+                        type="checkbox"
+                        id="isListedCompany"
+                        checked={isListedCompany}
+                        onChange={(e) => setIsListedCompany(e.target.checked)}
+                        className="w-4 h-4 rounded text-amber-500 focus:ring-amber-400 border-slate-300 cursor-pointer"
+                      />
+                      <label htmlFor="isListedCompany" className="text-xs font-semibold text-slate-700 cursor-pointer">
+                        Is this a Listed Company?
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Dynamic Steps Checklist */}
+                  <div className="space-y-3.5">
+                    <p className="text-[10px] font-bold text-navy uppercase tracking-wider border-b border-slate-100 pb-1.5">
+                      Compliance Checklist
+                    </p>
+
+                    <div className="space-y-3.5 text-xs leading-relaxed text-slate-600">
+                      {/* Step 1: Board Meeting */}
+                      <div className="flex gap-2.5">
+                        <span className="text-sm shrink-0">📅</span>
+                        <div>
+                          <strong className="text-navy block">1. Notice of Board Meeting</strong>
+                          <p className="text-[10px] text-slate-500">Send board meeting notice at least 7 days before meeting date.</p>
+                          {isListedCompany && (
+                            <p className="text-[9px] text-amber-600 font-medium mt-0.5">★ Listed requirement: Publish notice in newspapers at least 7 days prior; notify stock exchange.</p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Step 2: Board Approval */}
+                      <div className="flex gap-2.5">
+                        <span className="text-sm shrink-0">🤝</span>
+                        <div>
+                          <strong className="text-navy block">2. Hold Board Meeting</strong>
+                          <p className="text-[10px] text-slate-500">
+                            {shiftingScope === 'local' 
+                              ? 'Pass Board Resolution approving shifting within local limits and authorizing Form INC-22 filing.' 
+                              : 'Pass Board Resolution shifting registered office, approve Notice for calling EGM (21 clear days notice), and authorize petition/filing signees.'
+                            }
+                          </p>
+                          {isListedCompany && (
+                            <p className="text-[9px] text-amber-600 font-medium mt-0.5">★ Listed requirement: Notify stock exchange about Board decisions within 24 hours.</p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Scenario-specific steps */}
+                      {shiftingScope !== 'local' && (
+                        <>
+                          {/* Step EGM */}
+                          <div className="flex gap-2.5">
+                            <span className="text-sm shrink-0">🗳️</span>
+                            <div>
+                              <strong className="text-navy block">3. EGM & Special Resolution</strong>
+                              <p className="text-[10px] text-slate-500">Pass Special Resolution at the Extraordinary General Meeting. Alter Clause II of the MOA.</p>
+                              {shiftingScope === 'outside_local' && (
+                                <p className="text-[9px] text-slate-500 font-medium mt-0.5">Note: Voting through Postal Ballot is required if the company is eligible under Rule 22.</p>
+                              )}
+                              {isListedCompany && (
+                                <p className="text-[9px] text-amber-600 font-medium mt-0.5">★ Listed requirement: Notify stock exchange of EGM proceedings within 24 hours.</p>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Step MGT-14 */}
+                          <div className="flex gap-2.5">
+                            <span className="text-sm shrink-0">🖥️</span>
+                            <div>
+                              <strong className="text-navy block">4. File Form MGT-14</strong>
+                              <p className="text-[10px] text-slate-500">File Special Resolution with ROC in Form MGT-14 within 30 days of EGM.</p>
+                            </div>
+                          </div>
+                        </>
+                      )}
+
+                      {/* Shifting ROC or State - Regional Director approval */}
+                      {(shiftingScope === 'between_roc' || shiftingScope === 'between_state') && (
+                        <>
+                          {/* Step Advertisement */}
+                          {shiftingScope === 'between_state' && (
+                            <div className="flex gap-2.5">
+                              <span className="text-sm shrink-0">📰</span>
+                              <div>
+                                <strong className="text-navy block">5. Publish Newspaper Ads & Notice</strong>
+                                <p className="text-[10px] text-slate-500">Publish Form INC-26 advertisement in vernacular and English newspapers (not more than 30 days before filing INC-23).</p>
+                                <p className="text-[10px] text-slate-500 mt-0.5">Serve individual notice by registered post to each creditor and debenture-holder of the company.</p>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Step INC-23 */}
+                          <div className="flex gap-2.5">
+                            <span className="text-sm shrink-0">📁</span>
+                            <div>
+                              <strong className="text-navy block">{shiftingScope === 'between_state' ? '6. File Form INC-23 (Regional Director)' : '5. File Form INC-23 (Regional Director)'}</strong>
+                              <p className="text-[10px] text-slate-500">File application seeking confirmation of shifting in Form INC-23. Attach MOA alterations, EGM minutes, list of creditors, declarations, and service copy to Chief Secretary.</p>
+                            </div>
+                          </div>
+
+                          {/* Step RD Order */}
+                          <div className="flex gap-2.5">
+                            <span className="text-sm shrink-0">⚖️</span>
+                            <div>
+                              <strong className="text-navy block">{shiftingScope === 'between_state' ? '7. Obtain Regional Director Order' : '6. Obtain Regional Director Order'}</strong>
+                              <p className="text-[10px] text-slate-500">RD shall pass orders approving/rejecting within 15 days (if no objection) or 60 days (if hearings/objections need resolve).</p>
+                            </div>
+                          </div>
+
+                          {/* Step INC-28 */}
+                          <div className="flex gap-2.5">
+                            <span className="text-sm shrink-0">🏛️</span>
+                            <div>
+                              <strong className="text-navy block">{shiftingScope === 'between_state' ? '8. File Order in Form INC-28' : '7. File Order in Form INC-28'}</strong>
+                              <p className="text-[10px] text-slate-500">File a certified copy of the Regional Director's approval order in Form INC-28 with the ROC within 30 days of receipt.</p>
+                            </div>
+                          </div>
+                        </>
+                      )}
+
+                      {/* Final Step: INC-22 */}
+                      <div className="flex gap-2.5">
+                        <span className="text-sm shrink-0">🏢</span>
+                        <div>
+                          <strong className="text-navy block">
+                            {shiftingScope === 'local' ? '3. File Form INC-22 (Change of Address)' :
+                             shiftingScope === 'outside_local' ? '5. File Form INC-22 (Change of Address)' :
+                             shiftingScope === 'between_roc' ? '8. File Form INC-22 (Change of Address)' : '9. File Form INC-22 (Change of Address)'}
+                          </strong>
+                          <p className="text-[10px] text-slate-500">File Form INC-22 with ROC within 30 days of change (or RD order approval) along with lease deeds, NOC from owner, utility bills (not older than 2 months), and RD order certified copy.</p>
+                          {shiftingScope === 'between_state' && (
+                            <p className="text-[9px] text-emerald-600 font-medium mt-0.5">✔ The new ROC will issue a fresh Certificate of Incorporation indicating the shifted State address.</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Explanatory Note */}
+                  <div className="bg-amber-50/70 border border-amber-200/70 rounded-xl p-4 text-[10px] text-slate-700 leading-normal space-y-1.5">
+                    <p className="font-semibold text-amber-900">
+                      📝 Key Compliance Deadlines & Forms:
+                    </p>
+                    <p>
+                      • <strong>Form INC-22:</strong> Changing address (Must file within 30 days). Attach lease deed, NOC, utility bills.
+                    </p>
+                    {shiftingScope !== 'local' && (
+                      <p>
+                        • <strong>Form MGT-14:</strong> Registering Special Resolution (Must file within 30 days).
+                      </p>
+                    )}
+                    {(shiftingScope === 'between_roc' || shiftingScope === 'between_state') && (
+                      <p>
+                        • <strong>Form INC-28:</strong> Filing certified Regional Director (RD) approval order with ROC within 30 days.
+                      </p>
+                    )}
                   </div>
                 </div>
               )}
