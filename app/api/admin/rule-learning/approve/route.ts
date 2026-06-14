@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-server';
 import { supabaseDocumentsAdmin } from '@/lib/supabase-documents-server';
+import { verifyAdminSession } from '@/lib/admin-auth';
 
 const docDb = supabaseDocumentsAdmin || supabaseAdmin;
 
@@ -8,6 +9,9 @@ type PlacementDSL = { action: string; anchor: string; anchor_type: string; fallb
 
 export async function POST(request: Request) {
   try {
+    if (!verifyAdminSession()) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     const { queueItemId } = await request.json();
 
     // Fetch the queue item

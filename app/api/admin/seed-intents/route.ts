@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-server';
 import { supabaseDocumentsAdmin } from '@/lib/supabase-documents-server';
 import { getEmbedding } from '@/lib/gemini';
+import { verifyAdminSession } from '@/lib/admin-auth';
 
 const docDb = supabaseDocumentsAdmin || supabaseAdmin;
 
@@ -1902,6 +1903,9 @@ function normalizeAlias(alias: string): string {
 // ─────────────────────────────────────────────────────────────
 
 export async function POST() {
+  if (!verifyAdminSession()) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
   const results: Record<string, unknown>[] = [];
 
   for (const intentDef of INTENTS_TO_SEED) {

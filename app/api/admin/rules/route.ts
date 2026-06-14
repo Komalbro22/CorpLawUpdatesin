@@ -3,11 +3,15 @@ import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-server';
 import { supabaseDocumentsAdmin } from '@/lib/supabase-documents-server';
 import { getEmbedding } from '@/lib/gemini';
+import { verifyAdminSession } from '@/lib/admin-auth';
 
 const docDb = supabaseDocumentsAdmin || supabaseAdmin;
 
 // ─── GET — fetch all rules with intent + clause details ───────────────────────
 export async function GET() {
+  if (!verifyAdminSession()) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
   const { data, error } = await docDb
     .from('rules')
     .select(`
@@ -32,6 +36,9 @@ export async function GET() {
 // ─── POST — create a new intent + aliases + clause + rule ─────────────────────
 export async function POST(request: Request) {
   try {
+    if (!verifyAdminSession()) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     const body = await request.json();
     const {
       intent_name,

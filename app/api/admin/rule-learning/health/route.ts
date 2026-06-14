@@ -1,11 +1,15 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-server';
 import { supabaseDocumentsAdmin } from '@/lib/supabase-documents-server';
+import { verifyAdminSession } from '@/lib/admin-auth';
 
 const docDb = supabaseDocumentsAdmin || supabaseAdmin;
 
 export async function GET() {
   try {
+    if (!verifyAdminSession()) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     const { data, error } = await docDb
       .from('rules')
       .select(`

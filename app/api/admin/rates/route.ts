@@ -1,12 +1,11 @@
 // src/app/api/admin/rates/route.ts
 import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
-import { cookies } from 'next/headers'
+import { verifyAdminSession } from '@/lib/admin-auth'
 
 // Authorization check helper
 function checkAdminAuth() {
-  const session = cookies().get('admin_session')
-  if (!session) {
+  if (!verifyAdminSession()) {
     throw new Error('Unauthorized administrative access.')
   }
 }
