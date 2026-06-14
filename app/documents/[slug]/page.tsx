@@ -307,6 +307,19 @@ const NEXT_STEPS: Record<string, {
     ],
   },
 
+  'special-resolution-registered-office-shifting': {
+    title: 'After Resolution — Steps for State-to-State Shifting',
+    steps: [
+      { icon: '⚠️', text: 'FILE FORM MGT-14 within 30 days of Special Resolution', note: 'Attach: Special resolution + Explanatory statement. Required before filing RD petition.', urgent: true },
+      { icon: '📰', text: 'Publish newspaper notice in Form INC-26', note: 'Publish in one English & one vernacular newspaper at least 30 days before filing RD petition.' },
+      { icon: '✉️', text: 'Send individual notices to all Creditors & Debenture Holders', note: 'Serve notices by registered post with acknowledgment due.' },
+      { icon: '🖥️', text: 'File Petition to Regional Director (RD) in Form INC-23', note: 'Attach list of creditors, newspaper clippings, affidavits, and petition fee.' },
+      { icon: '📜', text: 'Obtain RD Order of Shifting Confirmation', note: 'Attend hearings before the Regional Director (RD) if any objections are received.' },
+      { icon: '🖥️', text: 'File Form INC-28 with ROC within 30 days of RD Order', note: 'Filing the certified copy of the Regional Director\'s order is mandatory to make the shifting effective.', urgent: true },
+      { icon: '🏢', text: 'File Form INC-22 within 30 days of INC-28 registration', note: 'Notify the actual new registered office address with utility bill and NOC proof.', urgent: true }
+    ],
+  },
+
   'board-resolution-bank-loan': {
     title: 'After Resolution — Execute Loan Documents',
     steps: [
@@ -538,6 +551,13 @@ const AI_SUGGESTIONS: Record<string, {
     { label: '📋 Add stationery update clause', prompt: 'Add a clause directing all departments to update company letterheads, invoice formats and other stationery with the new address within 30 days', category: 'add' },
   ],
 
+  'special-resolution-registered-office-shifting': [
+    { label: '+ Add Creditor Affidavit clause', prompt: 'Add a clause referencing that the Board/directors have executed an affidavit verifying the list of creditors and confirming there are no debts/dues or all have consented.', category: 'add' },
+    { label: '+ Add SEBI/Stock Exchange Notification', prompt: 'Add a clause authorizing immediate disclosure of this resolution and EGM proceedings to stock exchanges (BSE/NSE) under SEBI LODR Regulation 30.', category: 'add' },
+    { label: '− Remove Newspaper Notice clause', prompt: 'Remove the clause authorizing newspaper publication in Form INC-26.', category: 'remove' },
+    { label: '↕ Convert to ROC-to-ROC shifting', prompt: 'Convert this resolution to a ROC-to-ROC shifting within the same state under Section 12(5), removing references to state shifting and Clause II of MOA.', category: 'modify' },
+  ],
+
   'board-resolution-bank-loan': [
     { label: '+ Add security creation clause', prompt: 'Add detailed clause about creation of charge on company assets — specifying the assets to be hypothecated or mortgaged as security', category: 'add' },
     { label: '+ Add CHG-1 filing authorization', prompt: 'Add explicit authorization to file Form CHG-1 with ROC within 30 days of charge creation under Section 77', category: 'add' },
@@ -654,7 +674,7 @@ export default function DocumentGeneratorPage() {
   const slug = params.slug as string
   const isBorrowingDoc = slug === 'board-resolution-bank-loan' || slug.includes('borrowing-limit');
   const isStampDutyRequired = slug.includes('agreement') || slug.includes('deed') || slug.includes('mortgage') || slug.includes('understanding') || slug.includes('power-of-attorney') || slug.includes('transfer');
-  const isOfficeShiftingDoc = slug === 'board-resolution-registered-office-change';
+  const isOfficeShiftingDoc = slug === 'board-resolution-registered-office-change' || slug === 'special-resolution-registered-office-shifting';
   const router = useRouter()
   const { showToast } = useToast()
 
@@ -698,7 +718,7 @@ export default function DocumentGeneratorPage() {
 
   // Registered Office Shifting Guide
   const [officeShiftingOpen, setOfficeShiftingOpen] = useState(true)
-  const [shiftingScope, setShiftingScope] = useState<string>('local')
+  const [shiftingScope, setShiftingScope] = useState<string>(slug === 'special-resolution-registered-office-shifting' ? 'between_state' : 'local')
   const [isListedCompany, setIsListedCompany] = useState<boolean>(false)
 
   const [template, setTemplate] = useState<Template | null>(null)
@@ -1079,7 +1099,7 @@ export default function DocumentGeneratorPage() {
       cleaned.push(lines[i])
     }
 
-    return cleaned.join('\n').trim()
+    return cleaned.join('\n').trim().replace(/(\r?\n){3,}/g, '\n\n')
   }
 
   // Generate document
@@ -2852,7 +2872,7 @@ export default function DocumentGeneratorPage() {
                     )}
 
                     <div 
-                      className="absolute overflow-y-auto select-text font-serif text-[11px] text-navy leading-relaxed py-4 whitespace-pre-wrap z-10 prose prose-sm max-w-none"
+                      className="absolute overflow-y-auto select-text font-serif text-[11px] text-navy leading-relaxed py-4 z-10 prose prose-sm max-w-none"
                       style={{
                         top: `${customMarginTop}px`,
                         bottom: `${customMarginBottom}px`,

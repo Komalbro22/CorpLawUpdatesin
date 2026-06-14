@@ -230,7 +230,11 @@ Instructions:
 4. Ensure all mandatory clauses per Companies Act / ICSI SS-1 / other applicable acts are present.
 5. If any field is empty, use appropriate placeholder text [TO BE FILLED]. If optional fields like Schedule I or Schedule II are empty, write '[None described / Not applicable]' or adjust based on the user's custom instructions.
 ${customInstructions ? `6. Weave the user's custom instructions, reasons, and special conditions naturally and professionally into the draft's clauses.\n` : ''}7. Maintain exact formatting — do not add markdown wrapping or post-text notes.
-8. Output only the final document text, nothing else.`
+8. Output only the final document text, nothing else.
+9. CRITICAL DRAFTING STANDARDS:
+   (a) Do NOT include explanatory paragraphs or expository background text explaining the law or differences (such as 'It is noted that for a change of Registered Office...') inside the resolution itself. Any such notes belong in the Explanatory Statement or Board Notes, not the resolution text.
+   (b) For standard approvals of draft notices/agreements/resolutions, use direct approvals ('be and is hereby approved') rather than 'approved in principle'.
+   (c) Ensure all statutory filings mentioned have accurate timelines per the Companies Act, 2013 (e.g. Form INC-22 notice of change of registered office must be filed within 30 days of the change/registration of the RD order, NOT 60 days).`
 
       // Attempt Gemini API call with key rotation
       let generationSuccess = false

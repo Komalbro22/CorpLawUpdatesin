@@ -55,6 +55,10 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
     title = `${template.name} Format India — Bank Draft Generator | CorpLawUpdates.in`
     description = `Standard ${template.name} format as per Indian banking norms. Draft and customize financial guarantees and trade finance documents instantly.`
     keywords = [...keywords, 'bank guarantee format', 'trade finance india']
+  } else if (slug === 'special-resolution-registered-office-shifting') {
+    title = 'Special Resolution for Shifting of Registered Office (State-to-State) | CorpLawUpdates.in'
+    description = 'Generate a legally valid Board Resolution, Special Resolution, and Section 102 Explanatory Statement for shifting the registered office from one State to another under Section 13 of the Companies Act 2013.'
+    keywords = [...keywords, 'shifting of registered office from one state to another', 'state to state registered office shifting', 'section 13 special resolution', 'explanatory statement section 102']
   }
 
   const ogImageUrl = `https://www.corplawupdates.in/api/og?title=${encodeURIComponent(template.name)}&type=Document Generator`
