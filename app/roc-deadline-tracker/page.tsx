@@ -54,7 +54,7 @@ const faqs = [
   },
   {
     q: 'What is DPT-3 and when is it due?',
-    a: 'DPT-3 is the annual return of outstanding deposits and exempted deposits (including loans from directors and shareholders) as on 31 March. It must be filed by 30 June every year. Most companies have loans that qualify — even if no public deposits are accepted. Failure attracts Rs. 100/day additional fee.'
+    a: 'DPT-3 is the annual return of outstanding deposits and exempted deposits (including loans from directors and shareholders) as on 31 March. It must be filed by 30 June every year. Most companies have loans that qualify — even if no public deposits are accepted. Delayed filing attracts a slab-based additional late fee of 2x to 12x the normal filing fee depending on the delay.'
   },
   {
     q: 'What is MSME-1 and who needs to file it?',
@@ -78,11 +78,11 @@ const forms = [
   { code: 'MGT-7/MGT-7A', name: 'Annual Return', due: '60 days from AGM', fee: '₹100/day', ccfs: true },
   { code: 'AOC-4', name: 'Financial Statements', due: '30 days from AGM', fee: '₹100/day', ccfs: true },
   { code: 'DIR-3 KYC', name: 'Director KYC', due: '30 September', fee: '₹5,000 flat', ccfs: false },
-  { code: 'ADT-1', name: 'Auditor Appointment', due: '15 days from AGM', fee: '₹300/day', ccfs: true },
-  { code: 'DPT-3', name: 'Return of Deposits', due: '30 June', fee: '₹100/day', ccfs: true },
+  { code: 'ADT-1', name: 'Auditor Appointment', due: '15 days from AGM', fee: '2x to 12x fee', ccfs: true },
+  { code: 'DPT-3', name: 'Return of Deposits', due: '30 June', fee: '2x to 12x fee', ccfs: true },
   { code: 'MSME-1', name: 'MSME Payments Return', due: 'Apr 30 & Oct 31', fee: 'Fixed penalty', ccfs: false },
-  { code: 'INC-20A', name: 'Commencement of Business', due: '180 days from incorporation', fee: '₹50,000+', ccfs: true },
-  { code: 'BEN-2', name: 'Beneficial Ownership', due: '30 days from FY start', fee: '₹100/day', ccfs: true },
+  { code: 'INC-20A', name: 'Commencement of Business', due: '180 days from incorporation', fee: '2x to 12x fee', ccfs: true },
+  { code: 'BEN-2', name: 'Beneficial Ownership', due: '30 days from FY start', fee: '2x to 12x fee', ccfs: true },
 ]
 
 export default function ROCTrackerSEOPage() {

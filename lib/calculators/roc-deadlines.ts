@@ -173,6 +173,119 @@ export function getPenaltySummary(deadlines: DeadlineItem[]): PenaltySummary {
   }
 }
 
+export function getNormalFeeForTracker(
+  formCode: string,
+  companyType: 'private' | 'public' | 'opc' | 'small' | 'section8',
+  capital: number
+): number {
+  const code = formCode.toUpperCase().trim();
+  
+  // Forms with zero normal fee
+  if (['DIR-3-KYC', 'DIR-3 KYC', 'RBI-FLA', 'FORM-3CD', 'ITR-6', 'BOARD-MEETINGS', 'MSME-1', 'MBP-1'].includes(code)) {
+    return 0;
+  }
+
+  // OPC / Small company concessional fee structure
+  const isSmallOrOpc = companyType === 'opc' || companyType === 'small';
+  
+  let normalFee = 0;
+  if (isSmallOrOpc) {
+    if (capital <= 100000) normalFee = 100;
+    else if (capital <= 500000) normalFee = 150;
+    else if (capital <= 2500000) normalFee = 200;
+    else if (capital <= 10000000) normalFee = 250;
+    else normalFee = 300;
+  } else {
+    if (capital <= 100000) normalFee = 200;
+    else if (capital <= 500000) normalFee = 300;
+    else if (capital <= 2500000) normalFee = 400;
+    else if (capital <= 10000000) normalFee = 500;
+    else normalFee = 600;
+  }
+
+  // Section 8 company discount: 1/3rd of the standard fee, rounded to nearest 50 (minimum 50)
+  if (companyType === 'section8') {
+    normalFee = Math.round(normalFee / 3 / 50) * 50;
+    if (normalFee < 50) normalFee = 50;
+  }
+
+  return normalFee;
+}
+
+export function calculateLateFeeForTracker(
+  formCode: string,
+  daysOverdue: number,
+  normalFee: number,
+  turnover: number,
+  dbFlatFee?: number | null
+): number {
+  if (daysOverdue <= 0) return 0;
+
+  const code = formCode.toUpperCase().trim();
+
+  // 1. Annual returns & Financial statements have flat ₹100/day
+  if (['MGT-7', 'MGT-7A', 'AOC-4', 'AOC-4-CFS', 'AOC-4 CFS', 'AOC-4-XBRL', 'AOC-4 XBRL'].includes(code)) {
+    return daysOverdue * 100;
+  }
+
+  // 2. DIR-3 KYC flat penalty
+  if (code === 'DIR-3-KYC' || code === 'DIR-3 KYC') {
+    return 5000;
+  }
+
+  // 3. RBI FLA Return flat late submission fee
+  if (code === 'RBI-FLA') {
+    return 7500;
+  }
+
+  // 4. Tax Audit Report (Form 3CD): 0.5% of turnover, max ₹1.5 Lakh
+  if (code === 'FORM-3CD') {
+    const calculatedPenalty = Math.round(turnover * 0.005);
+    return Math.min(calculatedPenalty, 150000);
+  }
+
+  // 5. Income Tax Return (ITR-6/ITR-7): Flat ₹5,000
+  if (code === 'ITR-6') {
+    return 5000;
+  }
+
+  // 6. Board Meetings Compliance: Flat ₹10,000
+  if (code === 'BOARD-MEETINGS') {
+    return 10000;
+  }
+
+  // 7. MSME-1 has no portal late fee
+  if (code === 'MSME-1') {
+    return 0;
+  }
+
+  // 8. MBP-1 has no portal late fee
+  if (code === 'MBP-1') {
+    return 0;
+  }
+
+  // 9. If database defines a flat late fee (e.g. STK-2 or other future forms), prioritize it
+  if (dbFlatFee && dbFlatFee > 0) {
+    return dbFlatFee;
+  }
+
+  // 10. General forms use the multiplier system (2x to 12x of normal fee)
+  let multiplier = 1;
+  if (daysOverdue <= 30) {
+    multiplier = 2;
+  } else if (daysOverdue <= 60) {
+    multiplier = 4;
+  } else if (daysOverdue <= 90) {
+    multiplier = 6;
+  } else if (daysOverdue <= 180) {
+    multiplier = 10;
+  } else {
+    multiplier = 12;
+  }
+
+  return normalFee * multiplier;
+}
+
 export function calculateDeadlinesFromDB(
   profile: CompanyProfile,
   forms: ROCFormDB[]
@@ -389,8 +502,6 @@ export function calculateDeadlinesFromDB(
 
     if (profile.companyType === 'opc' && form.form_code === 'AOC-4') {
       dueDate = addDays(fy.end, 180)
-    } else if (profile.companyType === 'opc' && form.form_code === 'MGT-7A') {
-      dueDate = addDays(fy.end, 240)
     } else {
       switch (form.due_basis) {
         case 'from_agm':
@@ -443,30 +554,14 @@ export function calculateDeadlinesFromDB(
     const daysRemaining = daysFromToday(dueDate)
     const daysOverdue = Math.max(0, -daysRemaining)
 
-    let currentPenalty = 0
-    if (form.form_code === 'FORM-3CD') {
-      if (daysOverdue > 0) {
-        const calculatedPenalty = Math.round((profile.turnover || 0) * 0.005)
-        currentPenalty = Math.min(calculatedPenalty, 150000)
-      } else {
-        currentPenalty = 0
-      }
-    } else if (daysOverdue > form.grace_period_days) {
-      if (form.flat_late_fee) {
-        currentPenalty = form.flat_late_fee
-      } else {
-        const billableDays = 
-          daysOverdue - form.grace_period_days
-        currentPenalty = billableDays * 
-          form.additional_fee_per_day
-        if (form.max_additional_fee) {
-          currentPenalty = Math.min(
-            currentPenalty, 
-            form.max_additional_fee
-          )
-        }
-      }
-    }
+    const normalFee = getNormalFeeForTracker(form.form_code, profile.companyType, profile.paidUpCapital)
+    const currentPenalty = calculateLateFeeForTracker(
+      form.form_code,
+      daysOverdue,
+      normalFee,
+      profile.turnover,
+      form.flat_late_fee
+    )
 
     // CCFS calculation
     const ccfsActive = 
@@ -491,8 +586,8 @@ export function calculateDeadlinesFromDB(
         : daysRemaining < 0 ? 'overdue'
         : daysRemaining <= 30 ? 'due-soon'
         : 'upcoming',
-      normalFee: form.normal_govt_fee,
-      lateFeePerDay: form.additional_fee_per_day,
+      normalFee,
+      lateFeePerDay: ['MGT-7', 'MGT-7A', 'AOC-4', 'AOC-4 CFS', 'AOC-4 XBRL'].includes(form.form_code) ? 100 : 0,
       currentPenalty,
       ccfsEligible: form.ccfs_eligible && ccfsStillActive,
       ccfsPenalty,

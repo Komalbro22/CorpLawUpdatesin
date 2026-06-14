@@ -4,6 +4,8 @@ import JsonLd from '@/components/JsonLd'
 import {
   calculateDeadlinesFromDB,
   getPenaltySummary,
+  getNormalFeeForTracker,
+  calculateLateFeeForTracker,
   type CompanyProfile,
   type DeadlineItem,
   type ROCFormDB,
@@ -464,18 +466,18 @@ export default function ROCTrackerPage() {
           let ccfsPenalty = 0
           
           if (origForm) {
-            const gracePeriod = origForm.grace_period_days || 0
-            if (delayDays > gracePeriod) {
-              if (origForm.flat_late_fee) {
-                currentPenalty = origForm.flat_late_fee
-              } else {
-                const billableDays = delayDays - gracePeriod
-                currentPenalty = billableDays * (origForm.additional_fee_per_day || 100)
-                if (origForm.max_additional_fee) {
-                  currentPenalty = Math.min(currentPenalty, origForm.max_additional_fee)
-                }
-              }
-            }
+            const normalFee = getNormalFeeForTracker(
+              origForm.form_code,
+              profile.companyType || 'private',
+              profile.paidUpCapital || 1000000
+            )
+            currentPenalty = calculateLateFeeForTracker(
+              origForm.form_code,
+              delayDays,
+              normalFee,
+              profile.turnover || 5000000,
+              origForm.flat_late_fee
+            )
             const ccfsExpiryDate = new Date(origForm.ccfs_expiry || '2026-07-15')
             const ccfsEligible = origForm.ccfs_eligible && filingDate <= ccfsExpiryDate
             if (ccfsEligible) {
