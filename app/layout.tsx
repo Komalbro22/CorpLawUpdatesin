@@ -137,12 +137,12 @@ export default async function RootLayout({
             'query-input': 'required name=search_term_string',
           },
         }} />
-        <HideOnAdmin>
-          <TrackingScripts gaId={gaId || null} clarityId={clarityId || null} />
-        </HideOnAdmin>
       </head>
       <body className={`${lora.variable} ${sourceSans.variable} ${outfit.variable} font-body bg-slate-50 text-navy antialiased min-h-screen flex flex-col selection:bg-amber-200/50 selection:text-navy break-words`}>
         <ToastProvider>
+          <HideOnAdmin>
+            <TrackingScripts gaId={gaId || null} clarityId={clarityId || null} />
+          </HideOnAdmin>
           <a
             href="#main-content"
             className="absolute left-4 top-4 z-[100] -translate-y-[200%] rounded-lg bg-navy px-4 py-2.5 text-sm font-semibold text-gold shadow-lg ring-2 ring-amber-400/50 transition-transform focus:left-4 focus:top-4 focus:translate-y-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
