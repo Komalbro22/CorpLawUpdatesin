@@ -10,27 +10,37 @@ interface TrackingScriptsProps {
 
 export default function TrackingScripts({ gaId, clarityId }: TrackingScriptsProps) {
   const [showBanner, setShowBanner] = useState(false)
-  const [mounted, setMounted] = useState(false)
+  const [consentGiven, setConsentGiven] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
-    const acknowledged = localStorage.getItem('cookie_consent_acknowledged')
-    if (!acknowledged) {
+    try {
+      const acknowledged = localStorage.getItem('cookie_consent_acknowledged')
+      if (acknowledged === 'true') {
+        setConsentGiven(true)
+      } else {
+        setShowBanner(true)
+      }
+    } catch (e) {
+      console.warn('LocalStorage is blocked or unavailable:', e)
+      // Fallback: show banner if we cannot read/verify consent state
       setShowBanner(true)
     }
   }, [])
 
   const handleAcknowledge = () => {
-    localStorage.setItem('cookie_consent_acknowledged', 'true')
+    try {
+      localStorage.setItem('cookie_consent_acknowledged', 'true')
+    } catch (e) {
+      console.warn('Failed to write to LocalStorage:', e)
+    }
+    setConsentGiven(true)
     setShowBanner(false)
   }
 
-  if (!mounted) return null
-
   return (
     <>
-      {/* Load scripts immediately (Implied Consent) */}
-      {gaId && gaId.startsWith('G-') && (
+      {/* Load scripts only after consent is given */}
+      {consentGiven && gaId && gaId.startsWith('G-') && (
         <>
           <Script
             src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
@@ -48,7 +58,7 @@ export default function TrackingScripts({ gaId, clarityId }: TrackingScriptsProp
           </Script>
         </>
       )}
-      {clarityId && (
+      {consentGiven && clarityId && (
         <Script id="microsoft-clarity" strategy="afterInteractive">
           {`
             (function(c,l,a,r,i,t,y){
