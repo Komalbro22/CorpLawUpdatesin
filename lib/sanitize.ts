@@ -33,6 +33,7 @@ export function sanitizeHtml(html: string): string {
       },
       allowedSchemes: ['http', 'https', 'mailto'],
       disallowedTagsMode: 'discard',
+      allowVulnerableTags: true,
     })
   }
   
