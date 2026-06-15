@@ -18,10 +18,16 @@ ALTER TABLE compliance_entries ADD COLUMN IF NOT EXISTS search_vector tsvector
 
 CREATE INDEX IF NOT EXISTS compliance_entries_search_vector_idx ON compliance_entries USING GIN (search_vector);
 
+-- Helper function to join array elements immutably for FTS generated columns
+CREATE OR REPLACE FUNCTION immutable_array_to_string(arr text[], sep text)
+RETURNS text AS $$
+  SELECT array_to_string(arr, sep);
+$$ LANGUAGE sql IMMUTABLE;
+
 -- 3. Glossary table search vector (includes synonyms and keywords array elements)
 ALTER TABLE glossary ADD COLUMN IF NOT EXISTS search_vector tsvector
   GENERATED ALWAYS AS (
-    to_tsvector('english', coalesce(term, '') || ' ' || coalesce(definition, '') || ' ' || coalesce(array_to_string(synonyms, ' '), '') || ' ' || coalesce(array_to_string(keywords, ' '), ''))
+    to_tsvector('english', coalesce(term, '') || ' ' || coalesce(definition, '') || ' ' || coalesce(immutable_array_to_string(synonyms, ' '), '') || ' ' || coalesce(immutable_array_to_string(keywords, ' '), ''))
   ) STORED;
 
 CREATE INDEX IF NOT EXISTS glossary_search_vector_idx ON glossary USING GIN (search_vector);
