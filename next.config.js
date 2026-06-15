@@ -113,6 +113,11 @@ const nextConfig = {
         destination: '/tools/fee-calculator',
         permanent: true,
       },
+      {
+        source: '/roc-deadline-tracker',
+        destination: '/tools/roc-tracker',
+        permanent: true,
+      },
     ]
   },
 }
