@@ -127,11 +127,8 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
     if (!update) notFound()
 
-    const { data: geoData } = await supabase
-        .from('updates')
-        .select('quick_answer, has_steps, steps_json, last_verified, regulation_ref, key_takeaways, last_amended')
-        .ilike('slug', decodeURIComponent(params.slug))
-        .maybeSingle();
+    // These fields are now included in UPDATE_DETAIL_COLUMNS — no second query needed
+    const geoData = update;
 
     const { data: relatedRes } = await supabase
         .from('updates')

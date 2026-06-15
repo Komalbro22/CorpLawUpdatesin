@@ -66,15 +66,14 @@ export default async function UpdatesPage({
     const ITEMS_PER_PAGE = 10
 
     // Fetch dynamic counts by category of all active updates (only select category column to keep it ultra lightweight)
-    const { data: allCategories } = await supabase
-        .from('updates')
-        .select('category')
-        .not('published_at', 'is', null)
-        .lte('published_at', new Date().toISOString())
-
-    const totalPublishedCount = allCategories?.length || 0
+    // Use server-side RPC for efficient category aggregation (no full-table scan)
+    const { data: categoryRows } = await supabase.rpc('get_published_category_counts')
     const counts: Record<string, number> = {}
-    allCategories?.forEach(u => { counts[u.category] = (counts[u.category] || 0) + 1 })
+    let totalPublishedCount = 0
+    ;(categoryRows || []).forEach((row: { category: string; count: number }) => {
+        counts[row.category] = Number(row.count)
+        totalPublishedCount += Number(row.count)
+    })
 
     // Build paginated query
     let query = supabase
@@ -88,8 +87,13 @@ export default async function UpdatesPage({
         query = query.eq('category', category)
     }
 
+
     if (search) {
-        query = query.or(`title.ilike.%${search}%,summary.ilike.%${search}%`)
+        // Sanitize search input: strip PostgREST-special characters to prevent filter injection
+        const sanitizedSearch = search.replace(/[%_\\()\.,]/g, '')
+        if (sanitizedSearch.trim()) {
+            query = query.or(`title.ilike.%${sanitizedSearch}%,summary.ilike.%${sanitizedSearch}%`)
+        }
     }
 
     const from = (page - 1) * ITEMS_PER_PAGE

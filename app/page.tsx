@@ -66,7 +66,6 @@ export default async function HomePage({ searchParams }: { searchParams: { sort?
       .not('published_at', 'is', null)
       .lte('published_at', new Date().toISOString())
       .order('published_at', { ascending: false })
-      .order('published_at', { ascending: false })
       .limit(3),
     latestQuery,
     supabase

@@ -848,6 +848,25 @@ export async function sendNewsletterEmails({
             `You may hit the daily cap before all emails are delivered.`
         )
     }
+
+    // --- Serverless timeout safety guard ---
+    // Vercel functions have hard execution limits (10s free, 60s Pro).
+    // At 500ms/email, 50 emails ≈ 25 seconds — safe for Pro tier.
+    // If more subscribers exist, we process only the first batch and return
+    // a continuation flag so the caller can trigger follow-up batches.
+    const SAFE_BATCH_SIZE = 50
+    let hasMore = false
+    let remainingEmails: string[] = []
+    if (subscribers.length > SAFE_BATCH_SIZE) {
+        console.warn(
+            `[Newsletter] ${subscribers.length} subscribers exceed safe batch size of ${SAFE_BATCH_SIZE}. ` +
+            `Processing first ${SAFE_BATCH_SIZE} in this invocation.`
+        )
+        remainingEmails = subscribers.slice(SAFE_BATCH_SIZE).map((s: any) => s.email)
+        subscribers = subscribers.slice(0, SAFE_BATCH_SIZE)
+        hasMore = true
+    }
+
     console.log(`[Newsletter] Sending to ${subscribers.length} subscriber(s) sequentially (500ms delay between each).`)
 
     let sent = 0
@@ -934,5 +953,5 @@ export async function sendNewsletterEmails({
         }
     }
 
-    return { sent, failed, total: subscribers.length, successList, failedList }
+    return { sent, failed, total: subscribers.length, successList, failedList, hasMore, remainingEmails }
 }

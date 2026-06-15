@@ -79,32 +79,32 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-outfit), sans-serif;
 }
 
-/* Cards and surfaces */
-.dark .bg-white {
+/* Cards and surfaces — exempt elements with .dark-override-exempt preserve their original colors */
+.dark .bg-white:not(.dark-override-exempt):not(.dark-override-exempt *) {
   background-color: var(--bg-card) !important;
 }
 
-.dark .bg-slate-50 {
+.dark .bg-slate-50:not(.dark-override-exempt):not(.dark-override-exempt *) {
   background-color: var(--bg-secondary) !important;
 }
 
-.dark .bg-slate-100 {
+.dark .bg-slate-100:not(.dark-override-exempt):not(.dark-override-exempt *) {
   background-color: var(--bg-card) !important;
 }
 
 /* Text colors */
-.dark .text-slate-900,
-.dark .text-slate-800 {
+.dark .text-slate-900:not(.dark-override-exempt *),
+.dark .text-slate-800:not(.dark-override-exempt *) {
   color: var(--text-primary) !important;
 }
 
-.dark .text-slate-700,
-.dark .text-slate-600 {
+.dark .text-slate-700:not(.dark-override-exempt *),
+.dark .text-slate-600:not(.dark-override-exempt *) {
   color: var(--text-secondary) !important;
 }
 
-.dark .text-slate-500,
-.dark .text-slate-400 {
+.dark .text-slate-500:not(.dark-override-exempt *),
+.dark .text-slate-400:not(.dark-override-exempt *) {
   color: var(--text-muted) !important;
 }
 
@@ -118,11 +118,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Borders */
-.dark .border-slate-200 {
+.dark .border-slate-200:not(.dark-override-exempt *) {
   border-color: var(--border-default) !important;
 }
 
-.dark .border-slate-100 {
+.dark .border-slate-100:not(.dark-override-exempt *) {
   border-color: var(--border-light) !important;
 }
 

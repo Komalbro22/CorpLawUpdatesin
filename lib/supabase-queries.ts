@@ -6,7 +6,7 @@ export const UPDATE_LIST_COLUMNS =
 
 /** Full article detail page — includes body and metadata fields. */
 export const UPDATE_DETAIL_COLUMNS =
-  'id, title, slug, summary, content, category, published_at, updated_at, is_featured, effective_date, featured_image_url, impact_level, source_name, source_url, sources, key_change, key_changes, tags, views, seo_title, seo_description' as const
+  'id, title, slug, summary, content, category, published_at, updated_at, is_featured, effective_date, featured_image_url, impact_level, source_name, source_url, sources, key_change, key_changes, tags, views, seo_title, seo_description, quick_answer, has_steps, steps_json, last_verified, regulation_ref, key_takeaways, last_amended' as const
 
 /** Glossary hub index — definitions needed for client-side search preview. */
 export const GLOSSARY_INDEX_COLUMNS =

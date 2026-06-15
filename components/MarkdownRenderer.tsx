@@ -454,6 +454,14 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         } else if (Array.isArray(children)) {
                             cssContent = children.map(c => typeof c === 'string' ? c : (c?.props?.children || '')).join('');
                         }
+                        // Sanitize CSS: strip expressions, imports, urls, behaviors that could be exploited
+                        cssContent = cssContent
+                            .replace(/expression\s*\(/gi, '')
+                            .replace(/@import\b/gi, '')
+                            .replace(/behavior\s*:/gi, '')
+                            .replace(/javascript\s*:/gi, '')
+                            .replace(/-moz-binding\s*:/gi, '')
+                            .replace(/url\s*\(\s*["']?\s*javascript:/gi, 'url(""')
                         return (
                             <style dangerouslySetInnerHTML={{ __html: cssContent }} {...props} />
                         );

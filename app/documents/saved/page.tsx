@@ -64,19 +64,24 @@ export default function SavedDocumentsPage() {
                     onClick={() => {
                       const w = window.open('', '_blank')
                       if (w) {
+                        // Sanitize title (HTML-escape) and content (DOMPurify) before injecting
+                        const escTitle = doc.title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+                        const cleanContent = typeof window !== 'undefined' && window.DOMPurify
+                          ? window.DOMPurify.sanitize(doc.content)
+                          : doc.content.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
                         w.document.write(`
                           <html>
                             <head>
-                              <title>${doc.title}</title>
+                              <title>${escTitle}</title>
                               <style>
                                 body { font-family: serif; max-width: 800px; margin: 0 auto; padding: 40px; line-height: 1.6; }
                                 @media print { body { padding: 0; } }
                               </style>
                             </head>
                             <body>
-                              ${doc.content}
+                              ${cleanContent}
                             </body>
-                            <script>window.onload = function() { window.print(); }</script>
+                            <script>window.onload = function() { window.print(); }<\/script>
                           </html>
                         `)
                         w.document.close()
