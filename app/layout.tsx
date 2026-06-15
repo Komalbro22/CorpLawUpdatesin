@@ -12,7 +12,7 @@ import AnnouncementBar from '@/components/AnnouncementBar'
 import Script from 'next/script'
 import JsonLd from '@/components/JsonLd'
 import TrackingScripts from '@/components/TrackingScripts'
-import { getSetting } from '@/lib/settings'
+
 import { themeScript } from '@/lib/theme-script'
 import './globals.css'
 
@@ -85,9 +85,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const gaId = await getSetting('google_analytics_id')
-  const clarityId = (await getSetting('microsoft_clarity_id')) || process.env.NEXT_PUBLIC_CLARITY_ID
-
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -141,7 +138,7 @@ export default async function RootLayout({
       <body className={`${lora.variable} ${sourceSans.variable} ${outfit.variable} font-body bg-slate-50 text-navy antialiased min-h-screen flex flex-col selection:bg-amber-200/50 selection:text-navy break-words`}>
         <ToastProvider>
           <HideOnAdmin>
-            <TrackingScripts gaId={gaId || null} clarityId={clarityId || null} />
+            <TrackingScripts />
           </HideOnAdmin>
           <a
             href="#main-content"

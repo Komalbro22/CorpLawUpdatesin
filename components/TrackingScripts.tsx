@@ -2,14 +2,10 @@
 
 import { useState, useEffect } from 'react'
 
-interface TrackingScriptsProps {
-  gaId: string | null
-  clarityId: string | null
-}
-
-export default function TrackingScripts({ gaId, clarityId }: TrackingScriptsProps) {
+export default function TrackingScripts() {
   const [showBanner, setShowBanner] = useState(false)
   const [consentGiven, setConsentGiven] = useState(false)
+  const [ids, setIds] = useState<{ gaId: string | null; clarityId: string | null } | null>(null)
 
   useEffect(() => {
     try {
@@ -24,10 +20,25 @@ export default function TrackingScripts({ gaId, clarityId }: TrackingScriptsProp
       // Fallback: show banner if we cannot read/verify consent state
       setShowBanner(true)
     }
+
+    // Fetch tracker IDs dynamically at runtime
+    fetch('/api/settings/trackers')
+      .then(res => res.json())
+      .then(data => {
+        setIds({
+          gaId: data.gaId || null,
+          clarityId: data.clarityId || null
+        })
+      })
+      .catch(err => {
+        console.error('Failed to load tracker settings:', err)
+      })
   }, [])
 
   useEffect(() => {
-    if (!consentGiven) return
+    if (!consentGiven || !ids) return
+
+    const { gaId, clarityId } = ids
 
     // 1. Inject Google Analytics
     if (gaId && gaId.startsWith('G-')) {
@@ -67,7 +78,7 @@ export default function TrackingScripts({ gaId, clarityId }: TrackingScriptsProp
         document.head.appendChild(clarityScript)
       }
     }
-  }, [consentGiven, gaId, clarityId])
+  }, [consentGiven, ids])
 
   const handleAcknowledge = () => {
     try {
