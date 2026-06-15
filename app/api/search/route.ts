@@ -97,9 +97,6 @@ export async function GET(request: Request) {
       )
       .not('published_at', 'is', null)
       .lte('published_at', new Date().toISOString())
-      .textSearch('search_vector', q, { config: 'english', type: 'websearch' })
-      .order('published_at', { ascending: false })
-      .limit(10)
 
     if (category) {
       query = query.eq('category', category)
@@ -108,7 +105,40 @@ export async function GET(request: Request) {
       query = query.eq('impact_level', impact)
     }
 
-    const { data: articles } = (await query) as { data: UpdateRecord[] | null }
+    // Try Full-Text Search first
+    const { data: ftsArticles, error } = await query
+      .textSearch('search_vector', q, { config: 'english', type: 'websearch' })
+      .order('published_at', { ascending: false })
+      .limit(10) as { data: UpdateRecord[] | null, error: any }
+
+    let articles = ftsArticles
+
+    // Fallback if migration is not run / column doesn't exist yet
+    if (error || !articles) {
+      const escapedQ = q.replace(/[%_\\]/g, '\\$&')
+      let fallbackQuery = supabase
+        .from('updates')
+        .select(
+          'id, title, slug, summary, category, ' +
+          'published_at, impact_level, key_change'
+        )
+        .not('published_at', 'is', null)
+        .lte('published_at', new Date().toISOString())
+        .or(`title.ilike.%${escapedQ}%,summary.ilike.%${escapedQ}%,key_change.ilike.%${escapedQ}%`)
+
+      if (category) {
+        fallbackQuery = fallbackQuery.eq('category', category)
+      }
+      if (impact) {
+        fallbackQuery = fallbackQuery.eq('impact_level', impact)
+      }
+
+      const { data: fallbackData } = await fallbackQuery
+        .order('published_at', { ascending: false })
+        .limit(10) as { data: UpdateRecord[] | null }
+      
+      articles = fallbackData
+    }
 
     results.push(...(articles || []).map((a: UpdateRecord) => ({
       type: 'article' as const,
@@ -132,14 +162,37 @@ export async function GET(request: Request) {
         'regulator, due_date, applicable_to, penalty'
       )
       .eq('is_active', true)
-      .textSearch('search_vector', q, { config: 'english', type: 'websearch' })
-      .limit(5)
 
     if (category) {
       calQuery = calQuery.eq('regulator', category)
     }
 
-    const { data: calEntries } = (await calQuery) as { data: CalendarRecord[] | null }
+    // Try Full-Text Search first
+    const { data: ftsCalEntries, error: calError } = await calQuery
+      .textSearch('search_vector', q, { config: 'english', type: 'websearch' })
+      .limit(5) as { data: CalendarRecord[] | null, error: any }
+
+    let calEntries = ftsCalEntries
+
+    // Fallback if migration is not run / column doesn't exist yet
+    if (calError || !calEntries) {
+      const escapedQ = q.replace(/[%_\\]/g, '\\$&')
+      let fallbackCalQuery = supabase
+        .from('compliance_entries')
+        .select(
+          'id, form_name, compliance_title, ' +
+          'regulator, due_date, applicable_to, penalty'
+        )
+        .eq('is_active', true)
+        .or(`form_name.ilike.%${escapedQ}%,compliance_title.ilike.%${escapedQ}%,applicable_to.ilike.%${escapedQ}%`)
+
+      if (category) {
+        fallbackCalQuery = fallbackCalQuery.eq('regulator', category)
+      }
+
+      const { data: fallbackCalData } = await fallbackCalQuery.limit(5) as { data: CalendarRecord[] | null }
+      calEntries = fallbackCalData
+    }
 
     results.push(...(calEntries || []).map((e: CalendarRecord) => ({
       type: 'calendar' as const,
@@ -158,14 +211,34 @@ export async function GET(request: Request) {
       .from('glossary')
       .select('id, term, slug, definition, category')
       .eq('is_verified', true)
-      .textSearch('search_vector', q, { config: 'english', type: 'websearch' })
-      .limit(5)
 
     if (category) {
       glossQuery = glossQuery.eq('category', category)
     }
 
-    const { data: glossary } = (await glossQuery) as { data: GlossaryRecord[] | null }
+    // Try Full-Text Search first
+    const { data: ftsGlossary, error: glossError } = await glossQuery
+      .textSearch('search_vector', q, { config: 'english', type: 'websearch' })
+      .limit(5) as { data: GlossaryRecord[] | null, error: any }
+
+    let glossary = ftsGlossary
+
+    // Fallback if migration is not run / column doesn't exist yet
+    if (glossError || !glossary) {
+      const escapedQ = q.replace(/[%_\\]/g, '\\$&')
+      let fallbackGlossQuery = supabase
+        .from('glossary')
+        .select('id, term, slug, definition, category')
+        .eq('is_verified', true)
+        .or(`term.ilike.%${escapedQ}%,definition.ilike.%${escapedQ}%`)
+
+      if (category) {
+        fallbackGlossQuery = fallbackGlossQuery.eq('category', category)
+      }
+
+      const { data: fallbackGlossData } = await fallbackGlossQuery.limit(5) as { data: GlossaryRecord[] | null }
+      glossary = fallbackGlossData
+    }
 
     results.push(...(glossary || []).map((g: GlossaryRecord) => ({
       type: 'glossary' as const,

@@ -511,12 +511,13 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                                     target="_blank" 
                                     rel="noopener noreferrer" 
                                     className="hover:text-gold underline font-semibold transition-colors"
+                                    title={update.source_name}
                                 >
-                                    {update.source_name.length > 40 ? 'Official Gazette' : update.source_name}
+                                    {update.source_name.length > 30 ? `${update.source_name.slice(0, 30)}...` : update.source_name}
                                 </a>
                             ) : (
-                                <span className="font-semibold">
-                                    {update.source_name.length > 40 ? 'Official Source' : update.source_name}
+                                <span className="font-semibold" title={update.source_name}>
+                                    {update.source_name.length > 30 ? `${update.source_name.slice(0, 30)}...` : update.source_name}
                                 </span>
                             )}
                         </span>
