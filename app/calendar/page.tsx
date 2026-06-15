@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { Suspense } from 'react'
 import { supabase } from '@/lib/supabase'
 import { COMPLIANCE_ENTRY_COLUMNS } from '@/lib/supabase-queries'
+import { getCached, setCached } from '@/lib/redis-cache'
 import CalendarPageClient, { type ComplianceEntry } from '@/components/CalendarPageClient'
 
 export const revalidate = 1800
@@ -74,12 +75,21 @@ const itemListSchema = {
 }
 
 export default async function CalendarPage() {
-  const { data: rawEntries } = await supabase
-    .from('compliance_entries')
-    .select(COMPLIANCE_ENTRY_COLUMNS)
-    .eq('is_active', true)
-    .order('regulator')
-    .order('display_order')
+  const cacheKey = 'compliance_entries:active'
+  let rawEntries = await getCached<any[]>(cacheKey)
+
+  if (!rawEntries) {
+    const { data } = await supabase
+      .from('compliance_entries')
+      .select(COMPLIANCE_ENTRY_COLUMNS)
+      .eq('is_active', true)
+      .order('regulator')
+      .order('display_order')
+    rawEntries = data || []
+    if (data) {
+      await setCached(cacheKey, data, 86400) // 24 hours TTL
+    }
+  }
 
   return (
     <>

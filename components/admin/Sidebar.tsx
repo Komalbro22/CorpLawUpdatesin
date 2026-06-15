@@ -20,6 +20,7 @@ import {
     X,
     BookOpen,
     Cpu,
+    Brain,
 } from 'lucide-react'
 
 interface SidebarLink {
@@ -68,6 +69,7 @@ const sections: SidebarSection[] = [
             { href: '/admin/compliance',           icon: Calendar,     label: 'Compliance Calendar' },
             { href: '/admin/compliance/suggestions', icon: Lightbulb,  label: 'Suggestions' },
             { href: '/admin/rule-engine',          icon: Cpu,          label: 'Rule Engine' },
+            { href: '/admin/rule-learning',        icon: Brain,        label: 'Rule Learning Queue' },
             { href: '/admin/roc',                  icon: ScrollText,   label: 'ROC Forms'   },
         ],
     },

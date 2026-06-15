@@ -468,6 +468,15 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                         </div>
                     </div>
                 )}
+
+                {/* Top compact share actions */}
+                <div className="mb-4">
+                    <ArticleActions
+                        title={update.title}
+                        url={`${BASE_URL}/updates/${update.slug}`}
+                        compact={true}
+                    />
+                </div>
                 
                 {/* 3.2 Regulation reference */}
                 {geoData?.regulation_ref && (
@@ -494,7 +503,23 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                         </span>
                     )}
                     {update.source_name && (
-                        <span className="print:hidden text-slate-500 dark:text-slate-400">{update.source_name}</span>
+                        <span className="print:hidden text-slate-500 dark:text-slate-400">
+                            Source:{' '}
+                            {update.source_url ? (
+                                <a 
+                                    href={update.source_url} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                    className="hover:text-gold underline font-semibold transition-colors"
+                                >
+                                    {update.source_name.length > 40 ? 'Official Gazette' : update.source_name}
+                                </a>
+                            ) : (
+                                <span className="font-semibold">
+                                    {update.source_name.length > 40 ? 'Official Source' : update.source_name}
+                                </span>
+                            )}
+                        </span>
                     )}
                     {update.effective_date && (
                         <span className="inline-flex items-center gap-1 rounded-md border border-green-100 dark:border-green-900/30 bg-green-50 dark:bg-green-950/20 px-2 py-1 text-xs font-medium text-green-755">
@@ -561,12 +586,6 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                         </ul>
                     </div>
                 )}
-
-                {/* Share buttons */}
-                <ArticleActions
-                    title={update.title}
-                    url={`${BASE_URL}/updates/${update.slug}`}
-                />
             </header>
 
             {/* 3. ARTICLE CONTENT (+ sticky sidebar TOC auto-renders at xl) */}
@@ -601,6 +620,14 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                         {contentPart2 && <MarkdownRenderer content={contentPart2} />}
                     </div>
                 </ErrorBoundary>
+                
+                {/* Bottom Share Buttons */}
+                <div className="mt-6 border-t border-slate-100 dark:border-slate-800 pt-4 print:hidden">
+                    <ArticleActions
+                        title={update.title}
+                        url={`${BASE_URL}/updates/${update.slug}`}
+                    />
+                </div>
             </div>
 
             {/* 4. SOURCE ATTRIBUTION */}

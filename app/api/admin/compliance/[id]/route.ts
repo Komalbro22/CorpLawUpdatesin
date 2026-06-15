@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
+import { invalidateCache } from '@/lib/redis-cache'
 
 export async function PATCH(
   request: Request,
@@ -29,6 +30,9 @@ export async function PATCH(
       if (error) {
         return NextResponse.json({ error: error.message }, { status: 500 })
       }
+
+      // Invalidate active calendar entries cache
+      await invalidateCache('compliance_entries:active')
 
       return NextResponse.json({ entry: data })
       } catch (error) {
@@ -67,6 +71,9 @@ export async function DELETE(
       if (error) {
         return NextResponse.json({ error: error.message }, { status: 500 })
       }
+
+      // Invalidate active calendar entries cache
+      await invalidateCache('compliance_entries:active')
 
       return NextResponse.json({ success: true })
       } catch (error) {

@@ -85,13 +85,6 @@ export async function GET(request: Request) {
     })
   }
 
-  // Escape special characters for PostgREST .or() / .ilike() filter to avoid syntax errors and wildcard injection
-  const escapedQ = q
-    .replace(/\\/g, '\\\\')  // Escape backslash
-    .replace(/%/g, '\\%')    // Escape wildcard %
-    .replace(/_/g, '\\_')    // Escape wildcard _
-    .replace(/,/g, '\\,')    // Escape comma to prevent .or() syntax breaking
-
   const results: UnifiedSearchResult[] = []
 
   // Search articles
@@ -104,11 +97,7 @@ export async function GET(request: Request) {
       )
       .not('published_at', 'is', null)
       .lte('published_at', new Date().toISOString())
-      .or(
-        `title.ilike.%${escapedQ}%,` +
-        `summary.ilike.%${escapedQ}%,` +
-        `key_change.ilike.%${escapedQ}%`
-      )
+      .textSearch('search_vector', q, { config: 'english', type: 'websearch' })
       .order('published_at', { ascending: false })
       .limit(10)
 
@@ -143,11 +132,7 @@ export async function GET(request: Request) {
         'regulator, due_date, applicable_to, penalty'
       )
       .eq('is_active', true)
-      .or(
-        `form_name.ilike.%${escapedQ}%,` +
-        `compliance_title.ilike.%${escapedQ}%,` +
-        `applicable_to.ilike.%${escapedQ}%`
-      )
+      .textSearch('search_vector', q, { config: 'english', type: 'websearch' })
       .limit(5)
 
     if (category) {
@@ -167,25 +152,13 @@ export async function GET(request: Request) {
     })))
   }
 
-  // Search glossary terms (matching term, definition, keywords, and synonyms)
+  // Search glossary terms
   if (type === 'all' || type === 'glossary') {
-    const lowercaseQ = escapedQ.toLowerCase()
-    const uppercaseQ = escapedQ.toUpperCase()
-
     let glossQuery = supabase
       .from('glossary')
       .select('id, term, slug, definition, category')
       .eq('is_verified', true)
-      .or(
-        `term.ilike.%${escapedQ}%,` +
-        `definition.ilike.%${escapedQ}%,` +
-        `synonyms.cs.{"${lowercaseQ}"},` +
-        `synonyms.cs.{"${uppercaseQ}"},` +
-        `synonyms.cs.{"${escapedQ}"},` +
-        `keywords.cs.{"${lowercaseQ}"},` +
-        `keywords.cs.{"${uppercaseQ}"},` +
-        `keywords.cs.{"${escapedQ}"}`
-      )
+      .textSearch('search_vector', q, { config: 'english', type: 'websearch' })
       .limit(5)
 
     if (category) {

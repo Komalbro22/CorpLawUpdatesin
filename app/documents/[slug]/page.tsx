@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import DOMPurify from 'dompurify'
 import { useParams, useRouter } from 'next/navigation'
 import { useToast } from '@/components/Toast'
@@ -936,7 +937,7 @@ export default function DocumentGeneratorPage() {
           aspectRatio = width / height
         }
       } else {
-        const img = new Image()
+        const img = new window.Image()
         const objectUrl = URL.createObjectURL(pendingLetterheadFile)
         img.src = objectUrl
 
@@ -1834,11 +1835,16 @@ export default function DocumentGeneratorPage() {
                       📕
                     </div>
                   ) : (
-                    <img 
-                      src={letterheadUrl} 
-                      alt="Letterhead preview"
-                      className="w-16 h-12 object-contain bg-white border border-slate-200 rounded-lg"
-                    />
+                    <div className="relative w-16 h-12 shrink-0">
+                      <Image 
+                        src={letterheadUrl} 
+                        alt="Letterhead preview"
+                        fill
+                        sizes="64px"
+                        unoptimized={letterheadUrl.startsWith('blob:') || letterheadUrl.startsWith('data:')}
+                        className="object-contain bg-white border border-slate-200 rounded-lg"
+                      />
+                    </div>
                   )}
                   <div className="min-w-0 flex-1">
                     <p className="text-xs font-bold text-navy truncate">
@@ -2841,21 +2847,27 @@ export default function DocumentGeneratorPage() {
                     {/* Render top header graphic if 'top_only' and not PDF */}
                     {letterheadType === 'top_only' && letterheadUrl && !letterheadUrl.toLowerCase().endsWith('.pdf') && (
                       <div className="absolute top-0 left-0 w-full h-[105px] pointer-events-none z-10 border-b border-slate-100">
-                        <img 
+                        <Image 
                           src={letterheadUrl} 
                           alt="Top Header Banner" 
-                          className="w-full h-full object-fill"
+                          fill
+                          sizes="100vw"
+                          unoptimized={letterheadUrl.startsWith('blob:') || letterheadUrl.startsWith('data:')}
+                          className="object-fill"
                         />
                       </div>
                     )}
 
                     {/* Render logo graphic if 'logo_only' and not PDF */}
                     {letterheadType === 'logo_only' && letterheadUrl && !letterheadUrl.toLowerCase().endsWith('.pdf') && (
-                      <div className="absolute top-6 left-[45px] pointer-events-none z-10">
-                        <img 
+                      <div className="absolute top-6 left-[45px] pointer-events-none z-10 h-10 w-36">
+                        <Image 
                           src={letterheadUrl} 
                           alt="Company Logo" 
-                          className="h-[40px] w-auto object-contain"
+                          fill
+                          sizes="150px"
+                          unoptimized={letterheadUrl.startsWith('blob:') || letterheadUrl.startsWith('data:')}
+                          className="object-contain object-left"
                         />
                       </div>
                     )}
@@ -2863,11 +2875,16 @@ export default function DocumentGeneratorPage() {
                     {/* Centered Watermark if watermark is selected and not PDF */}
                     {letterheadType === 'watermark' && letterheadUrl && !letterheadUrl.toLowerCase().endsWith('.pdf') && (
                       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 opacity-[0.06]">
-                        <img 
-                          src={letterheadUrl} 
-                          alt="Watermark Logo" 
-                          className="w-[200px] h-[200px] object-contain"
-                        />
+                        <div className="relative w-[200px] h-[200px]">
+                          <Image 
+                            src={letterheadUrl} 
+                            alt="Watermark Logo" 
+                            fill
+                            sizes="200px"
+                            unoptimized={letterheadUrl.startsWith('blob:') || letterheadUrl.startsWith('data:')}
+                            className="object-contain"
+                          />
+                        </div>
                       </div>
                     )}
 
@@ -3382,11 +3399,15 @@ export default function DocumentGeneratorPage() {
                       className="w-full h-full border-0 rounded bg-white pointer-events-none z-0"
                     />
                   ) : (
-                    <img 
-                      src={URL.createObjectURL(pendingLetterheadFile)} 
-                      alt="Pending upload preview"
-                      className="max-w-full max-h-full object-contain bg-white rounded shadow-sm"
-                    />
+                    <div className="relative w-full h-full">
+                      <Image 
+                        src={URL.createObjectURL(pendingLetterheadFile)} 
+                        alt="Pending upload preview"
+                        fill
+                        unoptimized={true}
+                        className="object-contain bg-white rounded shadow-sm"
+                      />
+                    </div>
                   )}
 
                   {/* Scanning overlay bar */}

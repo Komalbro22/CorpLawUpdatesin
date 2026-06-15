@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     if (!verifyAdminSession()) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-    const { queueItemId } = await request.json();
+    const { queueItemId, proposed_intent, ai_clause_draft, variables_schema } = await request.json();
 
     // Fetch the queue item
     const { data: item, error: fetchError } = await docDb
@@ -25,12 +25,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Queue item not found' }, { status: 404 });
     }
 
+    const finalIntentName = (proposed_intent || item.proposed_intent || '').trim().toUpperCase();
+    const finalClauseContent = ai_clause_draft || item.ai_clause_draft;
+    const finalVarSchema = variables_schema || item.variables_schema;
+
+    if (!finalIntentName) {
+      return NextResponse.json({ error: 'Intent name is required' }, { status: 400 });
+    }
+
     // Create the intent (or find existing)
     let intentId: string;
     const { data: existingIntent } = await docDb
       .from('intents')
       .select('id')
-      .eq('name', item.proposed_intent)
+      .eq('name', finalIntentName)
       .single();
 
     if (existingIntent) {
@@ -38,11 +46,11 @@ export async function POST(request: Request) {
     } else {
       // Generate embedding for the new intent
       const { getEmbedding } = await import('@/lib/gemini');
-      const embedding = await getEmbedding(item.proposed_intent.replace(/_/g, ' ').toLowerCase());
+      const embedding = await getEmbedding(finalIntentName.replace(/_/g, ' ').toLowerCase());
 
       const { data: newIntent, error: intentError } = await docDb
         .from('intents')
-        .insert({ name: item.proposed_intent, embedding, description: item.generalized_prompt })
+        .insert({ name: finalIntentName, embedding, description: item.generalized_prompt || finalIntentName })
         .select('id')
         .single();
 
@@ -67,8 +75,8 @@ export async function POST(request: Request) {
         is_active: true,
         document_type: item.document_type || 'GENERAL',
         category: 'INSERT',
-        content: item.ai_clause_draft,
-        variables: item.variables_schema,
+        content: finalClauseContent,
+        variables: finalVarSchema,
         placement_rules: defaultPlacement,
       })
       .select('id')
