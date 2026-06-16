@@ -22,16 +22,15 @@ export interface CalculatorResult {
 export function getNormalFee(capital: number, isSmallOrOpc: boolean): number {
   if (capital < 0) return 0;
   if (isSmallOrOpc) {
-    if (capital <= 100000) return 100;
-    if (capital <= 500000) return 150;
-    if (capital <= 2500000) return 200;
-    if (capital <= 10000000) return 250;
-    return 300;
+    if (capital < 100000) return 50;
+    if (capital < 500000) return 100;
+    if (capital < 2500000) return 150;
+    return 200;
   } else {
-    if (capital <= 100000) return 200;
-    if (capital <= 500000) return 300;
-    if (capital <= 2500000) return 400;
-    if (capital <= 10000000) return 500;
+    if (capital < 100000) return 200;
+    if (capital < 500000) return 300;
+    if (capital < 2500000) return 400;
+    if (capital < 10000000) return 500;
     return 600;
   }
 }
@@ -85,11 +84,11 @@ export function calculateIncorporationStampDuty(state: string, capital: number):
       break;
     case 'punjab':
       moa = 5000; aoa = 5000;
-      form = capital <= 100000 ? 5000 : 10000;
+      form = capital < 100000 ? 5000 : 10000;
       break;
     case 'tamilnadu':
       moa = 200; aoa = 200;
-      form = capital <= 100000 ? 300 : 600;
+      form = capital < 100000 ? 300 : 600;
       break;
     case 'telangana':
       moa = 500; aoa = 500;

@@ -190,16 +190,15 @@ export function getNormalFeeForTracker(
   
   let normalFee = 0;
   if (isSmallOrOpc) {
-    if (capital <= 100000) normalFee = 100;
-    else if (capital <= 500000) normalFee = 150;
-    else if (capital <= 2500000) normalFee = 200;
-    else if (capital <= 10000000) normalFee = 250;
-    else normalFee = 300;
+    if (capital < 100000) normalFee = 50;
+    else if (capital < 500000) normalFee = 100;
+    else if (capital < 2500000) normalFee = 150;
+    else normalFee = 200;
   } else {
-    if (capital <= 100000) normalFee = 200;
-    else if (capital <= 500000) normalFee = 300;
-    else if (capital <= 2500000) normalFee = 400;
-    else if (capital <= 10000000) normalFee = 500;
+    if (capital < 100000) normalFee = 200;
+    else if (capital < 500000) normalFee = 300;
+    else if (capital < 2500000) normalFee = 400;
+    else if (capital < 10000000) normalFee = 500;
     else normalFee = 600;
   }
 

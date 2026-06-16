@@ -66,16 +66,29 @@ export function calculateCompanyFee(params: CompanyFeeParams): CompanyCalculatio
   if (formId === 'DIR-3-KYC') {
     normalFee = 0; // always 0 if on time
   } else {
-    if (authorizedCapital <= 100000) {
-      normalFee = 200;
-    } else if (authorizedCapital <= 500000) {
-      normalFee = 300;
-    } else if (authorizedCapital <= 2500000) {
-      normalFee = 400;
-    } else if (authorizedCapital <= 10000000) {
-      normalFee = 500;
+    const isSmallOrOpc = companyType === 'OPC' || companyType === 'Small';
+    if (isSmallOrOpc) {
+      if (authorizedCapital < 100000) {
+        normalFee = 50;
+      } else if (authorizedCapital < 500000) {
+        normalFee = 100;
+      } else if (authorizedCapital < 2500000) {
+        normalFee = 150;
+      } else {
+        normalFee = 200;
+      }
     } else {
-      normalFee = 600;
+      if (authorizedCapital < 100000) {
+        normalFee = 200;
+      } else if (authorizedCapital < 500000) {
+        normalFee = 300;
+      } else if (authorizedCapital < 2500000) {
+        normalFee = 400;
+      } else if (authorizedCapital < 10000000) {
+        normalFee = 500;
+      } else {
+        normalFee = 600;
+      }
     }
 
     // Section 8 company discount: 1/3rd of fee, rounded to nearest 50

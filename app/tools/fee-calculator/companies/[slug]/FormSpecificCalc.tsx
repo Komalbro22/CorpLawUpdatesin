@@ -14,15 +14,15 @@ interface ResultRow {
 
 function getNormalFee(capital: number, isSmall: boolean): number {
   if (isSmall) {
-    if (capital <= 100000) return 50
-    if (capital <= 500000) return 100
-    if (capital <= 2500000) return 150
+    if (capital < 100000) return 50
+    if (capital < 500000) return 100
+    if (capital < 2500000) return 150
     return 200
   } else {
-    if (capital <= 100000) return 200
-    if (capital <= 500000) return 300
-    if (capital <= 2500000) return 400
-    if (capital <= 10000000) return 500
+    if (capital < 100000) return 200
+    if (capital < 500000) return 300
+    if (capital < 2500000) return 400
+    if (capital < 10000000) return 500
     return 600
   }
 }
