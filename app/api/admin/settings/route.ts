@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
+import { invalidateCache } from '@/lib/redis-cache'
 
 // GET — fetch all settings
 export async function GET() {
@@ -75,6 +76,12 @@ export async function POST(request: Request) {
           { status: 500 }
         )
       }
+
+      // Invalidate Redis caches properly
+      const ALL_SETTINGS_CACHE_KEY = 'settings:all'
+      const SETTING_KEY_PREFIX = 'settings:key:'
+      await invalidateCache(ALL_SETTINGS_CACHE_KEY)
+      await invalidateCache(`${SETTING_KEY_PREFIX}${key}`)
 
       return NextResponse.json({ success: true, key, value })
       } catch (error) {
