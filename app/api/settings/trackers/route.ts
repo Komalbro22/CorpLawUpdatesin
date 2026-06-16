@@ -5,12 +5,15 @@ export const revalidate = 0
 
 export async function GET() {
   try {
-    const gaId = await getSetting('google_analytics_id')
-    const clarityId = await getSetting('microsoft_clarity_id')
+    // Fetch GA and Clarity IDs in parallel for performance
+    const [gaId, clarityId] = await Promise.all([
+      getSetting('google_analytics_id'),
+      getSetting('microsoft_clarity_id'),
+    ])
 
     return NextResponse.json({
       gaId: gaId || null,
-      clarityId: clarityId || null
+      clarityId: clarityId || null,
     })
   } catch (error) {
     const err = error as Error & { digest?: string }

@@ -58,7 +58,7 @@ const settingGroups: { id: string; title: string; Icon: LucideIcon; keys: string
     id: 'analytics',
     title: 'Analytics & SEO Trackers',
     Icon: BarChart2,
-    keys: ['google_analytics_id', 'google_search_console', 'microsoft_clarity_id'],
+    keys: ['google_analytics_id', 'microsoft_clarity_id', 'google_search_console'],
   },
   {
     id: 'rate_limiting',

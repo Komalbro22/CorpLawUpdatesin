@@ -27,7 +27,7 @@ export default function TrackingScripts() {
       .then(data => {
         setIds({
           gaId: data.gaId || null,
-          clarityId: data.clarityId || null
+          clarityId: data.clarityId || null,
         })
       })
       .catch(err => {
@@ -63,7 +63,8 @@ export default function TrackingScripts() {
       }
     }
 
-    // 2. Inject Microsoft Clarity
+    // 2. Inject Microsoft Clarity — official IIFE snippet from learn.microsoft.com/en-us/clarity/
+    //    Guard with getElementById to prevent double-injection on SPA navigations.
     if (clarityId) {
       if (!document.getElementById('clarity-script')) {
         const clarityScript = document.createElement('script')
@@ -73,7 +74,7 @@ export default function TrackingScripts() {
             c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
             t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
             y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-          })(window,document,"clarity","script","${clarityId}");
+          })(window, document, "clarity", "script", "${clarityId}");
         `
         document.head.appendChild(clarityScript)
       }
@@ -119,3 +120,4 @@ export default function TrackingScripts() {
     </>
   )
 }
+
