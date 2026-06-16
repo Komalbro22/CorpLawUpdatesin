@@ -20,6 +20,14 @@ export interface CompanyProfile {
   filingYear?: string
   hasMSMEDues?: boolean
   hasPublicDeposits?: boolean
+  hasOfficeChange?: boolean
+  hasDirectorChange?: boolean
+  hasShareAllotment?: boolean
+  hasCapitalChange?: boolean
+  hasAuditorAppointment?: boolean
+  hasAuditorResignation?: boolean
+  hasBooksOtherPlace?: boolean
+  hasDirectorInterest?: boolean
 }
 
 export function getFYFromYear(
@@ -50,7 +58,7 @@ export interface DeadlineItem {
   description: string
   dueDate: Date
   daysRemaining: number
-  status: 'overdue' | 'due-soon' | 'upcoming' | 'not-applicable'
+  status: 'overdue' | 'due-soon' | 'upcoming' | 'not-applicable' | 'unconfirmed-due'
   normalFee: number
   lateFeePerDay: number
   currentPenalty: number
@@ -446,6 +454,63 @@ export function calculateDeadlinesFromDB(
       }
     }
 
+    // Event-based form triggers
+    if (form.form_code === 'INC-22') {
+      specialApplicable = isApplicable && !!profile.hasOfficeChange
+      if (!specialApplicable) {
+        notApplicableReason = 'Only applicable if company changed its registered office address'
+      }
+    }
+
+    if (form.form_code === 'DIR-12') {
+      specialApplicable = isApplicable && !!profile.hasDirectorChange
+      if (!specialApplicable) {
+        notApplicableReason = 'Only applicable if company had changes in its Directors or Key Managerial Personnel (KMP)'
+      }
+    }
+
+    if (form.form_code === 'PAS-3') {
+      specialApplicable = isApplicable && !!profile.hasShareAllotment
+      if (!specialApplicable) {
+        notApplicableReason = 'Only applicable if company allotted new shares'
+      }
+    }
+
+    if (form.form_code === 'SH-7') {
+      specialApplicable = isApplicable && !!profile.hasCapitalChange
+      if (!specialApplicable) {
+        notApplicableReason = 'Only applicable if company increased or changed its authorised share capital'
+      }
+    }
+
+    if (form.form_code === 'ADT-1') {
+      specialApplicable = isApplicable && !!profile.hasAuditorAppointment
+      if (!specialApplicable) {
+        notApplicableReason = 'Only applicable if company appointed a statutory auditor'
+      }
+    }
+
+    if (form.form_code === 'ADT-3') {
+      specialApplicable = isApplicable && !!profile.hasAuditorResignation
+      if (!specialApplicable) {
+        notApplicableReason = 'Only applicable if statutory auditor resigned'
+      }
+    }
+
+    if (form.form_code === 'AOC-5') {
+      specialApplicable = isApplicable && !!profile.hasBooksOtherPlace
+      if (!specialApplicable) {
+        notApplicableReason = 'Only applicable if books of accounts are kept at a place other than registered office'
+      }
+    }
+
+    if (form.form_code === 'MBP-1') {
+      specialApplicable = isApplicable && !!profile.hasDirectorInterest
+      if (!specialApplicable) {
+        notApplicableReason = 'Only applicable if directors disclosed interest in other entities'
+      }
+    }
+
     // PAS-6 only for unlisted public
     if (form.form_code === 'PAS-6') {
       specialApplicable = 
@@ -606,8 +671,8 @@ export function calculateDeadlinesFromDB(
   // Sort: overdue → due-soon → upcoming → N/A
   return deadlines.sort((a, b) => {
     const order = { 
-      overdue: 0, 'due-soon': 1, 
-      upcoming: 2, 'not-applicable': 3 
+      overdue: 0, 'unconfirmed-due': 1, 'due-soon': 2, 
+      upcoming: 3, 'not-applicable': 4 
     }
     if (order[a.status] !== order[b.status]) {
       return order[a.status] - order[b.status]

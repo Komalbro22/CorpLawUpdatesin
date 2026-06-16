@@ -45,7 +45,7 @@ export default function ROCTrackerPage() {
   // Profile form
   const [profile, setProfile] = 
     useState<Partial<CompanyProfile>>({
-      companyName: 'Your Company',
+      companyName: '',
       companyType: 'private',
       financialYearEnd: 'march',
       directorCount: 2,
@@ -62,6 +62,14 @@ export default function ROCTrackerPage() {
       filingYear: getDefaultFilingYear(),
       hasMSMEDues: false,
       hasPublicDeposits: false,
+      hasOfficeChange: false,
+      hasDirectorChange: false,
+      hasShareAllotment: false,
+      hasCapitalChange: false,
+      hasAuditorAppointment: false,
+      hasAuditorResignation: false,
+      hasBooksOtherPlace: false,
+      hasDirectorInterest: false,
     })
 
   // Small Company Manual Override
@@ -162,7 +170,7 @@ export default function ROCTrackerPage() {
 
   function getFullProfile(): CompanyProfile {
     return {
-      companyName: profile.companyName || 'Your Company',
+      companyName: profile.companyName || '',
       cin: profile.cin || '',
       companyType: profile.companyType || 'private',
       incorporationDate: profile.incorporationDate 
@@ -185,6 +193,14 @@ export default function ROCTrackerPage() {
       filingYear: profile.filingYear || getDefaultFilingYear(),
       hasMSMEDues: profile.hasMSMEDues || false,
       hasPublicDeposits: profile.hasPublicDeposits || false,
+      hasOfficeChange: profile.hasOfficeChange || false,
+      hasDirectorChange: profile.hasDirectorChange || false,
+      hasShareAllotment: profile.hasShareAllotment || false,
+      hasCapitalChange: profile.hasCapitalChange || false,
+      hasAuditorAppointment: profile.hasAuditorAppointment || false,
+      hasAuditorResignation: profile.hasAuditorResignation || false,
+      hasBooksOtherPlace: profile.hasBooksOtherPlace || false,
+      hasDirectorInterest: profile.hasDirectorInterest || false,
     }
   }
 
@@ -386,6 +402,24 @@ export default function ROCTrackerPage() {
     })
   }
 
+  function handleMarkAllPrevFiled() {
+    if (!prevDeadlines) return
+    setFiledForms(prev => {
+      const updated = { ...prev }
+      prevDeadlines.forEach(d => {
+        if (d.isApplicable) {
+          const key = `${d.id}_${previousYear}`
+          updated[key] = {
+            filed: true,
+            filingDate: d.dueDate ? new Date(d.dueDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]
+          }
+        }
+      })
+      localStorage.setItem('roc_tracker_filed_forms', JSON.stringify(updated))
+      return updated
+    })
+  }
+
   // Adjust raw deadline items based on filed status and MSME/deposit rules
   function adjustDeadlines(items: DeadlineItem[] | null, year: string): DeadlineItem[] {
     if (!items) return []
@@ -520,6 +554,29 @@ export default function ROCTrackerPage() {
         }
       }
 
+      if (filedInfo && filedInfo.filed === false) {
+        return {
+          ...d,
+          isApplicable,
+          notApplicableReason,
+          isFiled: false,
+          status: 'overdue',
+        } as any
+      }
+
+      if (d.status === 'overdue') {
+        return {
+          ...d,
+          isApplicable,
+          notApplicableReason,
+          isFiled: false,
+          status: 'unconfirmed-due',
+          currentPenalty: 0,
+          ccfsPenalty: 0,
+          ccfsSavings: 0,
+        } as any
+      }
+
       return {
         ...d,
         isApplicable,
@@ -587,6 +644,7 @@ export default function ROCTrackerPage() {
   const statusColors = {
     overdue: 'border-l-4 border-l-red-500 bg-red-50 dark:bg-red-950/30',
     'due-soon': 'border-l-4 border-l-amber-500 bg-amber-50 dark:bg-amber-950/30',
+    'unconfirmed-due': 'border-l-4 border-l-amber-500 bg-amber-50 dark:bg-amber-950/30 border border-slate-200 dark:border-slate-700',
     upcoming: 'border-l-4 border-l-green-500 bg-green-50 dark:bg-green-950/30',
     'not-applicable': 'border-l-4 border-l-slate-300 bg-slate-50 dark:bg-slate-800/30 opacity-60',
   }
@@ -1041,6 +1099,114 @@ export default function ROCTrackerPage() {
                         className="w-4 h-4 accent-amber-400 cursor-pointer"
                       />
                     </div>
+
+                    {/* Has changed registered office */}
+                    <div className="flex items-center justify-between gap-3 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                          🏠 Has changed registered office
+                        </p>
+                        <p className="text-[10px] text-slate-400">
+                          Triggers Form INC-22 (Change of Registered Office) within 30 days
+                        </p>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={profile.hasOfficeChange || false}
+                        onChange={e => setProfile(p => ({ ...p, hasOfficeChange: e.target.checked }))}
+                        className="w-4 h-4 accent-amber-400 cursor-pointer"
+                      />
+                    </div>
+
+                    {/* Has changed directors / KMP */}
+                    <div className="flex items-center justify-between gap-3 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                          👥 Has changed directors / KMP
+                        </p>
+                        <p className="text-[10px] text-slate-400">
+                          Triggers Form DIR-12 change notice within 30 days
+                        </p>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={profile.hasDirectorChange || false}
+                        onChange={e => setProfile(p => ({ ...p, hasDirectorChange: e.target.checked }))}
+                        className="w-4 h-4 accent-amber-400 cursor-pointer"
+                      />
+                    </div>
+
+                    {/* Has appointed statutory auditor */}
+                    <div className="flex items-center justify-between gap-3 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                          ✍️ Has appointed statutory auditor
+                        </p>
+                        <p className="text-[10px] text-slate-400">
+                          Triggers Form ADT-1 auditor appointment notice within 15 days of AGM
+                        </p>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={profile.hasAuditorAppointment || false}
+                        onChange={e => setProfile(p => ({ ...p, hasAuditorAppointment: e.target.checked }))}
+                        className="w-4 h-4 accent-amber-400 cursor-pointer"
+                      />
+                    </div>
+
+                    {/* Has statutory auditor resigned */}
+                    <div className="flex items-center justify-between gap-3 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                          🚪 Has statutory auditor resigned
+                        </p>
+                        <p className="text-[10px] text-slate-400">
+                          Triggers Form ADT-3 auditor resignation notice within 30 days
+                        </p>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={profile.hasAuditorResignation || false}
+                        onChange={e => setProfile(p => ({ ...p, hasAuditorResignation: e.target.checked }))}
+                        className="w-4 h-4 accent-amber-400 cursor-pointer"
+                      />
+                    </div>
+
+                    {/* Keeps books of accounts at other place */}
+                    <div className="flex items-center justify-between gap-3 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                          📚 Keeps books of accounts at other place
+                        </p>
+                        <p className="text-[10px] text-slate-400">
+                          Triggers Form AOC-5 notice of address of books within 7 days
+                        </p>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={profile.hasBooksOtherPlace || false}
+                        onChange={e => setProfile(p => ({ ...p, hasBooksOtherPlace: e.target.checked }))}
+                        className="w-4 h-4 accent-amber-400 cursor-pointer"
+                      />
+                    </div>
+
+                    {/* Directors have interest disclosures */}
+                    <div className="flex items-center justify-between gap-3 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                          🤝 Directors have interest disclosures
+                        </p>
+                        <p className="text-[10px] text-slate-400">
+                          Triggers MBP-1 disclosure at first Board Meeting of FY
+                        </p>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={profile.hasDirectorInterest || false}
+                        onChange={e => setProfile(p => ({ ...p, hasDirectorInterest: e.target.checked }))}
+                        className="w-4 h-4 accent-amber-400 cursor-pointer"
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -1146,6 +1312,42 @@ export default function ROCTrackerPage() {
                         type="checkbox"
                         checked={profile.hasSBO || false}
                         onChange={e => setProfile(p => ({ ...p, hasSBO: e.target.checked }))}
+                        className="w-4 h-4 accent-amber-400 cursor-pointer"
+                      />
+                    </div>
+
+                    {/* Has allotted shares */}
+                    <div className="flex items-center justify-between gap-3 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                          📝 Has allotted shares
+                        </p>
+                        <p className="text-[10px] text-slate-400">
+                          Triggers Form PAS-3 Return of Allotment within 30 days
+                        </p>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={profile.hasShareAllotment || false}
+                        onChange={e => setProfile(p => ({ ...p, hasShareAllotment: e.target.checked }))}
+                        className="w-4 h-4 accent-amber-400 cursor-pointer"
+                      />
+                    </div>
+
+                    {/* Has changed/increased share capital */}
+                    <div className="flex items-center justify-between gap-3 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                      <div className="min-w-0">
+                        <p className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                          🪙 Has changed/increased share capital
+                        </p>
+                        <p className="text-[10px] text-slate-400">
+                          Triggers Form SH-7 capital alteration notice within 30 days
+                        </p>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={profile.hasCapitalChange || false}
+                        onChange={e => setProfile(p => ({ ...p, hasCapitalChange: e.target.checked }))}
                         className="w-4 h-4 accent-amber-400 cursor-pointer"
                       />
                     </div>
@@ -1272,6 +1474,11 @@ export default function ROCTrackerPage() {
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* Tick forms banner */}
+            <div className="bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-300 rounded-2xl p-4 text-xs font-semibold flex items-center gap-2">
+              💡 <strong>Tip:</strong> Tick any forms already filed to clear them from your pending list.
             </div>
 
             {/* Critical Compliance Violations / Warnings Box */}
@@ -1472,8 +1679,17 @@ export default function ROCTrackerPage() {
 
             {/* Previous Year Alert Banner */}
             {activeResultsTab === 'previous' && (
-              <div className="bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 text-xs text-slate-600 dark:text-slate-400">
-                💡 <strong>Prior Year Annual Checklist:</strong> These are the core annual filings for the previous financial year (FY {previousYear}). If you have already filed them, mark them as Filed and input the filing date to compute past fees. If they are still pending, massive penalties will apply.
+              <div className="bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 text-xs text-slate-600 dark:text-slate-400 space-y-3">
+                <div>
+                  💡 <strong>Prior Year Annual Checklist:</strong> These are the core annual filings for the previous financial year (FY {previousYear}). If you have already filed them, mark them as Filed and input the filing date to compute past fees. If they are still pending, massive penalties will apply.
+                </div>
+                <div className="flex justify-start">
+                  <button
+                    onClick={handleMarkAllPrevFiled}
+                    className="bg-amber-400 hover:bg-amber-500 text-navy font-bold px-3 py-1.5 rounded-lg text-[11px] transition-all shadow print:hidden">
+                    ✔️ Mark All Previous Year Checklist as Filed
+                  </button>
+                </div>
               </div>
             )}
 
@@ -1516,13 +1732,15 @@ export default function ROCTrackerPage() {
                                 font-bold
                                 ${d.status === 'overdue' 
                                   ? 'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300'
-                                  : d.status === 'due-soon'
+                                  : (d.status === 'due-soon' || d.status === 'unconfirmed-due')
                                   ? 'bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300'
                                   : d.status === 'upcoming'
                                   ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300'
                                   : 'bg-slate-100 dark:bg-slate-700 text-slate-500'}`}>
                                 {d.status === 'overdue' 
                                   ? `🔴 ${d.dueDate < new Date() ? `${Math.abs(d.daysRemaining)}d overdue` : 'Overdue'}`
+                                  : d.status === 'unconfirmed-due'
+                                  ? `⚡ Due — please confirm if filed`
                                   : d.status === 'due-soon'
                                   ? `⚡ ${d.daysRemaining}d left`
                                   : d.status === 'upcoming'
