@@ -34,9 +34,10 @@ export default function ClarityScript() {
       const projectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID
       // Prevent multiple initializations
       if (projectId && !(window as any).__clarity_initialized) {
-        import('clarity-js').then(({ clarity }) => {
-          clarity.start({ projectId })
-          ;(window as any).__clarity_initialized = true
+        ;(window as any).__clarity_initialized = true
+        import('@microsoft/clarity').then((module) => {
+          const Clarity = module.default
+          Clarity.init(projectId)
         })
       }
     }
