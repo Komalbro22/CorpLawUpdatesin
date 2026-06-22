@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { clarity } from 'clarity-js'
 
 export default function ClarityScript() {
   const [consentGiven, setConsentGiven] = useState(false)
@@ -35,8 +34,10 @@ export default function ClarityScript() {
       const projectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID
       // Prevent multiple initializations
       if (projectId && !(window as any).__clarity_initialized) {
-        clarity.start({ projectId })
-        ;(window as any).__clarity_initialized = true
+        import('clarity-js').then(({ clarity }) => {
+          clarity.start({ projectId })
+          ;(window as any).__clarity_initialized = true
+        })
       }
     }
   }, [consentGiven])
