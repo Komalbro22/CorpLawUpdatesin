@@ -35,7 +35,7 @@ export default function ClarityScript() {
       const projectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID
       // Prevent multiple initializations
       if (projectId && !(window as any).__clarity_initialized) {
-        clarity.init(projectId)
+        clarity.start({ projectId })
         ;(window as any).__clarity_initialized = true
       }
     }
