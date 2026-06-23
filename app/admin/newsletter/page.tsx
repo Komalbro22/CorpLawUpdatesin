@@ -300,7 +300,7 @@ export default function NewsletterPage() {
     if (result) {
         return (
             <div className="max-w-2xl mx-auto content-fade-in">
-                <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-card border border-slate-200/80 dark:border-slate-800 p-10 text-center ring-1 ring-slate-900/[0.02]">
+                <div className="admin-card-glass rounded-2xl shadow-card border border-white/60 p-10 text-center ring-1 ring-slate-900/[0.02]">
                     <div className="flex justify-center mb-5">
                         {result.testOnly ? (
                             <span className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-100 dark:bg-violet-950/40 text-violet-700 dark:text-violet-400">
@@ -312,7 +312,7 @@ export default function NewsletterPage() {
                             </span>
                         )}
                     </div>
-                    <h2 className="text-2xl font-heading font-bold text-navy dark:text-slate-105 mb-2">
+                    <h2 className="text-2xl font-heading font-bold text-slate-900  mb-2">
                         {result.testOnly
                             ? 'Test Email Sent!'
                             : (result as any).scheduled 
@@ -320,29 +320,29 @@ export default function NewsletterPage() {
                                 : 'Newsletter Sent Successfully!'}
                     </h2>
                     {(result as any).scheduled && (
-                        <p className="text-slate-600 dark:text-slate-400 mb-6">
+                        <p className="text-slate-600  mb-6">
                             Your newsletter is queued for <span className="font-bold">{new Date((result as any).scheduledAt).toLocaleString()}</span>
                         </p>
                     )}
                     {!result.testOnly && (
-                        <div className="bg-slate-50 dark:bg-slate-950 rounded-xl p-4 my-4 flex justify-around border border-slate-100 dark:border-slate-850">
+                        <div className="bg-slate-50  rounded-xl p-4 my-4 flex justify-around border border-slate-100">
                             <div>
                                 <div className="text-3xl font-bold text-green-600 dark:text-green-455">
                                     {result.sent}
                                 </div>
-                                <div className="text-sm text-slate-500 dark:text-slate-400">Sent</div>
+                                <div className="text-sm text-slate-500">Sent</div>
                             </div>
                             <div>
                                 <div className="text-3xl font-bold text-red-500 dark:text-red-455">
                                     {result.failed}
                                 </div>
-                                <div className="text-sm text-slate-500 dark:text-slate-400">Failed</div>
+                                <div className="text-sm text-slate-500">Failed</div>
                             </div>
                             <div>
-                                <div className="text-3xl font-bold text-navy dark:text-slate-100">
+                                <div className="text-3xl font-bold text-slate-900">
                                     {result.total}
                                 </div>
-                                <div className="text-sm text-slate-500 dark:text-slate-400">Total</div>
+                                <div className="text-sm text-slate-500">Total</div>
                             </div>
                         </div>
                     )}
@@ -350,7 +350,7 @@ export default function NewsletterPage() {
                         <div className="mt-8 text-left bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 rounded-xl p-6 w-full mx-auto">
                             <h3 className="text-red-800 dark:text-red-300 font-semibold mb-2 text-lg">Failed Deliveries ({failedList.length})</h3>
                             <p className="text-red-600 dark:text-red-400 text-sm mb-4">The following emails experienced provider rejections or bounces. You can attempt to retry them directly.</p>
-                            <ul className="list-disc ml-5 text-sm text-red-700 dark:text-red-400 mb-6 max-h-40 overflow-y-auto w-full border border-red-200/50 dark:border-red-900/30 bg-white dark:bg-slate-950 p-3 rounded shadow-inner">
+                            <ul className="list-disc ml-5 text-sm text-red-700 dark:text-red-400 mb-6 max-h-40 overflow-y-auto w-full border border-red-200/50 dark:border-red-900/30 bg-slate-50/50 backdrop-blur-sm p-3 rounded shadow-inner">
                                 {failedList.map((email, i) => <li key={i} className="py-0.5">{email}</li>)}
                             </ul>
                             <div className="flex justify-end gap-3">
@@ -388,7 +388,7 @@ export default function NewsletterPage() {
                                 setCustomSelectedIds([])
                                 setIntroMessage('')
                             }}
-                            className="px-6 py-3 bg-gold text-navy font-semibold rounded-xl hover:bg-amber-400 transition-colors shadow-sm animate-pulse"
+                            className="px-6 py-3 bg-gold text-slate-900 font-semibold rounded-xl hover:bg-amber-400 transition-colors shadow-sm animate-pulse"
                         >
                             Compose another send
                         </button>
@@ -403,11 +403,11 @@ export default function NewsletterPage() {
             {/* Header & Meta */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-heading font-bold text-navy dark:text-slate-100 flex items-center gap-3">
+                    <h1 className="text-3xl font-heading font-bold text-slate-900  flex items-center gap-3">
                         <Mail className="w-8 h-8 text-amber-500" aria-hidden />
                         Newsletter Campaign Center
                     </h1>
-                    <p className="text-slate-500 dark:text-slate-400 mt-1">
+                    <p className="text-slate-500  mt-1">
                         {subscriberCount > 0
                             ? `Connected to ${subscriberCount} active & verified compliance subscribers`
                             : 'Loading active subscribers...'}
@@ -416,7 +416,7 @@ export default function NewsletterPage() {
                 <div>
                     <a
                         href="/admin/newsletter/history"
-                        className="inline-flex items-center gap-2 px-4 py-2 border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-sm font-semibold text-slate-700 dark:text-slate-300 transition-colors shadow-sm"
+                        className="inline-flex items-center gap-2 px-4 py-2 border border-white/60 rounded-xl admin-card-glass hover:bg-slate-50  text-sm font-semibold text-slate-700  transition-colors shadow-sm"
                     >
                         <History size={16} />
                         View Campaign History
@@ -447,14 +447,14 @@ export default function NewsletterPage() {
                 <div className="lg:col-span-7 space-y-6">
                     
                     {/* MODE TABS BAR */}
-                    <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200/80 dark:border-slate-800 p-1 flex ring-1 ring-slate-900/[0.01]">
+                    <div className="admin-card-glass border border-white/60 p-1 flex ring-1 ring-slate-900/[0.01]">
                         <button
                             type="button"
                             onClick={() => setModeTab('auto')}
                             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-bold transition-all ${
                                 modeTab === 'auto'
-                                    ? 'bg-navy dark:bg-slate-950 text-white shadow-md'
-                                    : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-navy dark:hover:text-slate-100'
+                                    ? 'bg-navy text-white shadow-md'
+                                    : 'text-slate-500  hover:bg-slate-50  hover:text-slate-900 dark:hover:text-slate-900'
                             }`}
                         >
                             <Sparkles size={16} className={modeTab === 'auto' ? 'text-amber-400' : ''} />
@@ -465,8 +465,8 @@ export default function NewsletterPage() {
                             onClick={() => setModeTab('custom')}
                             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-bold transition-all ${
                                 modeTab === 'custom'
-                                    ? 'bg-navy dark:bg-slate-950 text-white shadow-md'
-                                    : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-navy dark:hover:text-slate-100'
+                                    ? 'bg-navy text-white shadow-md'
+                                    : 'text-slate-500  hover:bg-slate-50  hover:text-slate-900 dark:hover:text-slate-900'
                             }`}
                         >
                             <Settings size={16} className={modeTab === 'custom' ? 'text-amber-400' : ''} />
@@ -477,8 +477,8 @@ export default function NewsletterPage() {
                             onClick={() => setModeTab('legacy')}
                             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-bold transition-all ${
                                 modeTab === 'legacy'
-                                    ? 'bg-navy dark:bg-slate-950 text-white shadow-md'
-                                    : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-navy dark:hover:text-slate-100'
+                                    ? 'bg-navy text-white shadow-md'
+                                    : 'text-slate-500  hover:bg-slate-50  hover:text-slate-900 dark:hover:text-slate-900'
                             }`}
                         >
                             <FileText size={16} />
@@ -487,16 +487,16 @@ export default function NewsletterPage() {
                     </div>
 
                     {/* GENERAL METADATA CARD */}
-                    <div className="bg-white dark:bg-slate-900 rounded-xl shadow-card border border-slate-200/80 dark:border-slate-800 p-6 space-y-5 ring-1 ring-slate-900/[0.02]">
+                    <div className="admin-card-glass border border-white/60 p-6 space-y-5 ring-1 ring-slate-900/[0.02]">
                         
-                        <div className="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-850">
+                        <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
                             <FileText className="text-amber-500" size={18} />
-                            <h2 className="font-heading font-bold text-navy dark:text-slate-200 text-lg">Envelope Details</h2>
+                            <h2 className="font-heading font-bold text-slate-900  text-lg">Envelope Details</h2>
                         </div>
 
                         {/* Subject */}
                         <div>
-                            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+                            <label className="block text-xs font-bold text-slate-500  uppercase tracking-wider mb-2">
                                 Subject Line <span className="text-red-500">*</span>
                             </label>
                             <input
@@ -504,15 +504,15 @@ export default function NewsletterPage() {
                                 value={subject}
                                 onChange={e => setSubject(e.target.value)}
                                 placeholder="Weekly Corporate Law Update — April 2026"
-                                className="w-full border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-3 text-navy dark:text-slate-100 bg-white dark:bg-slate-950 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
+                                className="w-full border border-white/60 rounded-lg px-4 py-3 text-slate-900  bg-slate-50/50 backdrop-blur-sm text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
                             />
                         </div>
 
                         {/* Preview Text */}
                         <div>
-                            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+                            <label className="block text-xs font-bold text-slate-500  uppercase tracking-wider mb-2">
                                 Preview text / Preheader
-                                <span className="text-slate-400 dark:text-slate-500 font-normal lowercase ml-2">
+                                <span className="text-slate-500  font-normal lowercase ml-2">
                                     (displays below subject line in inbox)
                                 </span>
                             </label>
@@ -522,22 +522,22 @@ export default function NewsletterPage() {
                                 onChange={e => setPreviewText(e.target.value)}
                                 placeholder="This week's top compliance developments: MCA rules, SEBI circulars..."
                                 maxLength={100}
-                                className="w-full border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-3 text-navy dark:text-slate-100 bg-white dark:bg-slate-955 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
+                                className="w-full border border-white/60 rounded-lg px-4 py-3 text-slate-900  bg-white  text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
                             />
-                            <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1 text-right font-medium">
+                            <p className="text-[10px] text-slate-500  mt-1 text-right font-medium">
                                 {previewText.length}/100 characters
                             </p>
                         </div>
                     </div>
 
                     {/* DYNAMIC MODE SPECIFIC FIELDS CONTAINER */}
-                    <div className="bg-white dark:bg-slate-900 rounded-xl shadow-card border border-slate-200/80 dark:border-slate-800 p-6 ring-1 ring-slate-900/[0.02] min-h-[16rem]">
+                    <div className="admin-card-glass border border-white/60 p-6 ring-1 ring-slate-900/[0.02] min-h-[16rem]">
                         
                         {/* ───────────────── AUTO GENERATE TAB ───────────────── */}
                         {modeTab === 'auto' && (
                             <div className="space-y-4">
-                                <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-850 pb-3">
-                                    <h3 className="font-heading font-bold text-navy dark:text-slate-200 flex items-center gap-2">
+                                <div className="flex items-center justify-between border-b border-slate-100  pb-3">
+                                    <h3 className="font-heading font-bold text-slate-900  flex items-center gap-2">
                                         <Sparkles className="text-amber-500" size={18} />
                                         Auto-Aggregated Regulator Updates (Last 7 Days)
                                     </h3>
@@ -546,15 +546,15 @@ export default function NewsletterPage() {
 
                                 {autoArticles.length > 0 ? (
                                     <div className="space-y-3">
-                                        <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                                            The system automatically fetched the following <span className="font-bold text-navy dark:text-slate-100">{autoArticles.length} published updates</span> to build your digest block.
+                                        <p className="text-xs text-slate-500  leading-relaxed">
+                                            The system automatically fetched the following <span className="font-bold text-slate-900">{autoArticles.length} published updates</span> to build your digest block.
                                         </p>
-                                        <div className="border border-slate-100 dark:border-slate-850 rounded-xl divide-y divide-slate-100 dark:divide-slate-850 max-h-60 overflow-y-auto">
+                                        <div className="border border-slate-100  rounded-xl divide-y divide-slate-100 dark:divide-slate-850 max-h-60 overflow-y-auto">
                                             {autoArticles.map((art, index) => (
-                                                <div key={art.id} className="p-3 text-sm flex items-start gap-3 hover:bg-slate-50/50 dark:hover:bg-slate-850 transition-colors">
-                                                    <span className="text-xs font-bold text-slate-400 min-w-[1.2rem] text-right mt-0.5">{index + 1}.</span>
+                                                <div key={art.id} className="p-3 text-sm flex items-start gap-3 hover:bg-slate-50/50  transition-colors">
+                                                    <span className="text-xs font-bold text-slate-500 min-w-[1.2rem] text-right mt-0.5">{index + 1}.</span>
                                                     <div className="flex-1">
-                                                        <p className="font-semibold text-navy dark:text-slate-200 leading-tight">{art.title}</p>
+                                                        <p className="font-semibold text-slate-900  leading-tight">{art.title}</p>
                                                         <div className="flex items-center gap-2 mt-1">
                                                             <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-1.5 py-0.5 rounded uppercase">
                                                                  {art.category}
@@ -573,10 +573,10 @@ export default function NewsletterPage() {
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className="text-center py-10 space-y-2 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50/50 dark:bg-slate-950/20">
-                                        <AlertTriangle className="mx-auto text-slate-400" size={32} />
-                                        <p className="text-sm font-semibold text-slate-600 dark:text-slate-400">No updates published in the last 7 days</p>
-                                        <p className="text-xs text-slate-400 max-w-xs mx-auto">Publish new regulator updates in your system first, or use the **Custom Curated** tab to select older updates manually.</p>
+                                    <div className="text-center py-10 space-y-2 border-2 border-dashed border-white/60 rounded-xl bg-slate-50/50 /20">
+                                        <AlertTriangle className="mx-auto text-slate-500" size={32} />
+                                        <p className="text-sm font-semibold text-slate-600">No updates published in the last 7 days</p>
+                                        <p className="text-xs text-slate-500 max-w-xs mx-auto">Publish new regulator updates in your system first, or use the **Custom Curated** tab to select older updates manually.</p>
                                     </div>
                                 )}
                             </div>
@@ -585,8 +585,8 @@ export default function NewsletterPage() {
                         {/* ───────────────── CUSTOM CURATED TAB ───────────────── */}
                         {modeTab === 'custom' && (
                             <div className="space-y-4">
-                                <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-850 pb-3">
-                                    <h3 className="font-heading font-bold text-navy dark:text-slate-200 flex items-center gap-2">
+                                <div className="flex items-center justify-between border-b border-slate-100  pb-3">
+                                    <h3 className="font-heading font-bold text-slate-900  flex items-center gap-2">
                                         <Settings className="text-amber-500" size={18} />
                                         Manual Curation Drawer
                                     </h3>
@@ -597,7 +597,7 @@ export default function NewsletterPage() {
 
                                 {/* Custom intro banner text */}
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+                                    <label className="block text-xs font-bold text-slate-500  uppercase tracking-wider mb-2">
                                         Headline Banner Message (Optional)
                                     </label>
                                     <input
@@ -605,25 +605,25 @@ export default function NewsletterPage() {
                                         value={introMessage}
                                         onChange={e => setIntroMessage(e.target.value)}
                                         placeholder="Featured regulatory update: SPICe+ incorporation rules amended. Details inside."
-                                        className="w-full border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2.5 text-navy dark:text-slate-105 text-sm bg-white dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+                                        className="w-full border border-white/60 rounded-lg px-4 py-2.5 text-slate-900  text-sm bg-slate-50/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
                                     />
-                                    <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">If blank, the banner defaults to: "Featured update: [first chosen article title]. Read inside."</p>
+                                    <p className="text-[10px] text-slate-500  mt-1">If blank, the banner defaults to:"Featured update: [first chosen article title]. Read inside."</p>
                                 </div>
 
                                 {/* Search updates input */}
                                 <div className="relative">
-                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
                                     <input
                                         type="text"
                                         value={searchQuery}
                                         onChange={e => setSearchQuery(e.target.value)}
                                         placeholder="Type to search published updates..."
-                                        className="w-full border border-slate-200 dark:border-slate-800 rounded-lg pl-9 pr-4 py-2.5 text-navy dark:text-slate-100 bg-white dark:bg-slate-955 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+                                        className="w-full border border-white/60 rounded-lg pl-9 pr-4 py-2.5 text-slate-900  bg-white  text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
                                     />
                                 </div>
 
                                 {/* Selected & Available updates lists */}
-                                <div className="border border-slate-100 dark:border-slate-850 rounded-xl divide-y divide-slate-100 dark:divide-slate-850 max-h-64 overflow-y-auto bg-slate-50/20 dark:bg-slate-950/20">
+                                <div className="border border-slate-100  rounded-xl divide-y divide-slate-100 dark:divide-slate-850 max-h-64 overflow-y-auto bg-slate-50/20 /20">
                                     {availableArticles.length > 0 ? (
                                         availableArticles.map((art) => {
                                             const isSelected = customSelectedIds.includes(art.id)
@@ -631,9 +631,9 @@ export default function NewsletterPage() {
                                                 <div
                                                     key={art.id}
                                                     onClick={() => toggleArticleSelection(art.id)}
-                                                    className="p-3 text-sm flex items-start gap-3 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-850 transition-colors select-none"
+                                                    className="p-3 text-sm flex items-start gap-3 cursor-pointer hover:bg-slate-50  transition-colors select-none"
                                                 >
-                                                    <span className="mt-0.5 text-slate-400">
+                                                    <span className="mt-0.5 text-slate-500">
                                                         {isSelected ? (
                                                             <CheckSquare size={16} className="text-amber-500 fill-amber-105 dark:fill-amber-950" />
                                                         ) : (
@@ -641,14 +641,14 @@ export default function NewsletterPage() {
                                                         )}
                                                     </span>
                                                     <div className="flex-1">
-                                                        <p className={`font-semibold leading-tight ${isSelected ? 'text-navy dark:text-slate-100' : 'text-slate-650 dark:text-slate-400'}`}>
+                                                        <p className={`font-semibold leading-tight ${isSelected ? 'text-slate-900 ' : 'text-slate-650 '}`}>
                                                             {art.title}
                                                         </p>
                                                         <div className="flex items-center gap-2 mt-1">
                                                             <span className="text-[9px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-1 py-0.2 rounded uppercase">
                                                                 {art.category}
                                                             </span>
-                                                            <span className="text-[9px] text-slate-400 dark:text-slate-500 font-medium">
+                                                            <span className="text-[9px] text-slate-500  font-medium">
                                                                 {new Date(art.published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
                                                             </span>
                                                         </div>
@@ -657,7 +657,7 @@ export default function NewsletterPage() {
                                             )
                                         })
                                     ) : (
-                                        <div className="text-center py-8 text-slate-400 dark:text-slate-500 text-xs font-semibold">
+                                        <div className="text-center py-8 text-slate-500  text-xs font-semibold">
                                             No published updates match your query
                                         </div>
                                     )}
@@ -668,23 +668,23 @@ export default function NewsletterPage() {
                         {/* ───────────────── CLASSIC MARKDOWN TAB ───────────────── */}
                         {modeTab === 'legacy' && (
                             <div className="space-y-4">
-                                <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-850 pb-3">
-                                    <h3 className="font-heading font-bold text-navy dark:text-slate-200 flex items-center gap-2">
+                                <div className="flex items-center justify-between border-b border-slate-100  pb-3">
+                                    <h3 className="font-heading font-bold text-slate-900  flex items-center gap-2">
                                         <FileText size={18} />
                                         Classic Freeform Composer
                                     </h3>
-                                    <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-950 border dark:border-slate-850 p-1 rounded-lg">
+                                    <div className="flex items-center gap-2 bg-slate-100  border  p-1 rounded-lg">
                                         <button
                                             type="button"
                                             onClick={() => setEditorMode('markdown')}
-                                            className={`px-2.5 py-1 text-[10px] font-bold rounded transition-colors ${editorMode === 'markdown' ? 'bg-white dark:bg-slate-900 shadow text-navy dark:text-slate-200' : 'text-slate-500 dark:text-slate-400 hover:text-navy dark:hover:text-slate-250'}`}
+                                            className={`px-2.5 py-1 text-[10px] font-bold rounded transition-colors ${editorMode === 'markdown' ? 'admin-card-glass shadow text-slate-900 ' : 'text-slate-500  hover:text-slate-900 dark:hover:text-slate-250'}`}
                                         >
                                             Markdown
                                         </button>
                                         <button
                                             type="button"
                                             onClick={() => setEditorMode('html')}
-                                            className={`px-2.5 py-1 text-[10px] font-bold rounded transition-colors ${editorMode === 'html' ? 'bg-white dark:bg-slate-900 shadow text-navy dark:text-slate-200' : 'text-slate-500 dark:text-slate-400 hover:text-navy dark:hover:text-slate-250'}`}
+                                            className={`px-2.5 py-1 text-[10px] font-bold rounded transition-colors ${editorMode === 'html' ? 'admin-card-glass shadow text-slate-900 ' : 'text-slate-500  hover:text-slate-900 dark:hover:text-slate-250'}`}
                                         >
                                             HTML
                                         </button>
@@ -699,7 +699,7 @@ export default function NewsletterPage() {
                                             height={300}
                                             preview="edit"
                                         />
-                                        <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-2">
+                                        <p className="text-[10px] text-slate-500  mt-2">
                                             Standard syntax: **bold**, *italic*, ## headings, [links](url), - lists.
                                         </p>
                                     </div>
@@ -710,9 +710,9 @@ export default function NewsletterPage() {
                                             onChange={e => setBody(e.target.value)}
                                             rows={11}
                                             placeholder="<h1>Your custom email structure</h1><p>Body...</p>"
-                                            className="w-full border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-3 text-navy dark:text-slate-100 bg-white dark:bg-slate-950 font-mono text-xs focus:outline-none focus:ring-2 focus:ring-amber-500"
+                                            className="w-full border border-white/60 rounded-lg px-4 py-3 text-slate-900  bg-slate-50/50 backdrop-blur-sm font-mono text-xs focus:outline-none focus:ring-2 focus:ring-amber-500"
                                         />
-                                        <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">
+                                        <p className="text-[10px] text-slate-500  mt-1">
                                             All styles must be formatted directly in tag style properties: e.g. style="color:#0F172A;"
                                         </p>
                                     </div>
@@ -723,17 +723,17 @@ export default function NewsletterPage() {
                     </div>
 
                     {/* CAMPAIGN RECIPIENTS & TIMING SETTINGS */}
-                    <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-card p-6 space-y-6 ring-1 ring-slate-900/[0.02]">
-                        <div className="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-850">
+                    <div className="admin-card-glass p-6 space-y-6 ring-1 ring-slate-900/[0.02]">
+                        <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
                             <Settings className="text-amber-500" size={18} />
-                            <h2 className="font-heading font-bold text-navy dark:text-slate-200 text-lg font-sans">Campaign Settings</h2>
+                            <h2 className="font-heading font-bold text-slate-900  text-lg font-sans">Campaign Settings</h2>
                         </div>
                         
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             
                             {/* Send Targets */}
                             <div className="space-y-4">
-                                <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Recipients Selection</label>
+                                <label className="block text-xs font-bold text-slate-500  uppercase tracking-wider">Recipients Selection</label>
                                 <div className="flex flex-col gap-3">
                                     <label className="flex items-center gap-2.5 cursor-pointer">
                                         <input 
@@ -742,7 +742,7 @@ export default function NewsletterPage() {
                                             onChange={() => setTargetType('all')}
                                             className="text-amber-500 focus:ring-amber-500 h-4 w-4"
                                         />
-                                        <span className="text-sm font-semibold text-slate-750 dark:text-slate-300">All Subscribers ({subscriberCount})</span>
+                                        <span className="text-sm font-semibold text-slate-750">All Subscribers ({subscriberCount})</span>
                                     </label>
                                     <label className="flex items-center gap-2.5 cursor-pointer">
                                         <input 
@@ -751,7 +751,7 @@ export default function NewsletterPage() {
                                             onChange={() => setTargetType('specific')}
                                             className="text-amber-500 focus:ring-amber-500 h-4 w-4"
                                         />
-                                        <span className="text-sm font-semibold text-slate-755 dark:text-slate-300">Specific Subscriber</span>
+                                        <span className="text-sm font-semibold text-slate-755">Specific Subscriber</span>
                                     </label>
                                 </div>
                                 {targetType === 'specific' && (
@@ -760,14 +760,14 @@ export default function NewsletterPage() {
                                         value={specificEmail}
                                         onChange={e => setSpecificEmail(e.target.value)}
                                         placeholder="subscriber@example.com"
-                                        className="w-full border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2.5 text-sm text-navy dark:text-slate-101 bg-white dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-amber-505/20 focus:border-amber-500"
+                                        className="w-full border border-white/60 rounded-lg px-4 py-2.5 text-sm text-slate-900  bg-slate-50/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-amber-505/20 focus:border-amber-500"
                                     />
                                 )}
                             </div>
 
                             {/* Schedule Timers */}
                             <div className="space-y-4">
-                                <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Delivery Option</label>
+                                <label className="block text-xs font-bold text-slate-500  uppercase tracking-wider">Delivery Option</label>
                                 <div className="flex flex-col gap-3">
                                     <label className="flex items-center gap-2.5 cursor-pointer">
                                         <input 
@@ -776,7 +776,7 @@ export default function NewsletterPage() {
                                             onChange={() => setIsScheduled(false)}
                                             className="text-amber-500 focus:ring-amber-500 h-4 w-4"
                                         />
-                                        <span className="text-sm font-semibold text-slate-750 dark:text-slate-300">Send Now (Instant delivery)</span>
+                                        <span className="text-sm font-semibold text-slate-750">Send Now (Instant delivery)</span>
                                     </label>
                                     <label className="flex items-center gap-2.5 cursor-pointer">
                                         <input 
@@ -785,7 +785,7 @@ export default function NewsletterPage() {
                                             onChange={() => setIsScheduled(true)}
                                             className="text-amber-500 focus:ring-amber-500 h-4 w-4"
                                         />
-                                        <span className="text-sm font-semibold text-slate-755 dark:text-slate-300">Schedule Delivery</span>
+                                        <span className="text-sm font-semibold text-slate-755">Schedule Delivery</span>
                                     </label>
                                 </div>
                                 {isScheduled && (
@@ -794,16 +794,16 @@ export default function NewsletterPage() {
                                             type="datetime-local"
                                             value={scheduledAt}
                                             onChange={e => setScheduledAt(e.target.value)}
-                                            className="w-full border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2 text-sm text-navy dark:text-slate-101 bg-white dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                                            className="w-full border border-white/60 rounded-lg px-4 py-2 text-sm text-slate-900  bg-slate-50/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
                                         />
-                                        <p className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">Timers process in IST. Please select a valid future date & time.</p>
+                                        <p className="text-[10px] text-slate-500  font-medium">Timers process in IST. Please select a valid future date & time.</p>
                                     </div>
                                 )}
                             </div>
                         </div>
 
                         {/* SEND ACTIONS FOOTER */}
-                        <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-100 dark:border-slate-850">
+                        <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-100">
                             
                             {/* Test Send Area */}
                             <div className="flex items-center gap-2.5 w-full md:w-auto">
@@ -812,13 +812,13 @@ export default function NewsletterPage() {
                                     value={testEmail}
                                     onChange={e => setTestEmail(e.target.value)}
                                     placeholder="Enter test recipient email..."
-                                    className="w-full md:w-60 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-2.5 text-xs text-navy dark:text-slate-100 bg-white dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                                    className="w-full md:w-60 border border-white/60 rounded-lg px-4 py-2.5 text-xs text-slate-900  bg-slate-50/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
                                 />
                                 <button
                                     type="button"
                                     onClick={() => handleSend(true)}
                                     disabled={testSending || sending || !subject}
-                                    className="inline-flex items-center justify-center gap-2 px-4 py-2.5 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-305 rounded-lg text-xs font-bold bg-white dark:bg-slate-900 hover:bg-slate-55 dark:hover:bg-slate-800 transition-colors disabled:opacity-40"
+                                    className="inline-flex items-center justify-center gap-2 px-4 py-2.5 border border-white/60 text-slate-700  rounded-lg text-xs font-bold admin-card-glass hover:bg-slate-55  transition-colors disabled:opacity-40"
                                 >
                                     {testSending ? (
                                         <>
@@ -857,7 +857,7 @@ export default function NewsletterPage() {
                                     setShowConfirm(true)
                                 }}
                                 disabled={sending || testSending}
-                                className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-gold text-navy rounded-xl font-bold hover:bg-amber-400 transition-all shadow-sm active:scale-95 disabled:opacity-45"
+                                className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-gold text-slate-900 rounded-xl font-bold hover:bg-amber-400 transition-all shadow-sm active:scale-95 disabled:opacity-45"
                             >
                                 {sending ? (
                                     <>
@@ -877,10 +877,10 @@ export default function NewsletterPage() {
 
                 {/* RIGHT ISOLATED LIVE PREVIEW */}
                 <div className="lg:col-span-5 lg:sticky lg:top-6 space-y-4">
-                    <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
+                    <div className="flex items-center justify-between border-b border-white/60 pb-2">
                         <div className="flex items-center gap-2">
                             <CheckCircle2 className="text-emerald-500" size={18} />
-                            <h3 className="font-heading font-bold text-navy dark:text-slate-200">Live Email Preview</h3>
+                            <h3 className="font-heading font-bold text-slate-900">Live Email Preview</h3>
                         </div>
                         {renderingPreview && (
                             <span className="flex items-center gap-1.5 text-xs font-bold text-amber-600 bg-amber-50 dark:bg-amber-955/20 px-2 py-0.5 rounded-full">
@@ -891,17 +891,17 @@ export default function NewsletterPage() {
                     </div>
 
                     {subject ? (
-                        <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-lg bg-white dark:bg-slate-900">
-                            <div className="bg-slate-100/80 dark:bg-slate-950 px-4 py-3 border-b border-slate-200 dark:border-slate-850 text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center justify-between">
+                        <div className="border border-white/60 rounded-2xl overflow-hidden shadow-lg admin-card-glass">
+                            <div className="bg-slate-100/80  px-4 py-3 border-b border-slate-200  text-xs font-semibold text-slate-500  flex items-center justify-between">
                                 <span className="flex items-center gap-1.5 font-sans uppercase tracking-wider text-[10px]">
                                     <Mail size={12} />
                                     Visualizer container (100% exact rendering)
                                 </span>
-                                <span className="text-[10px] text-slate-400 dark:text-slate-500">Desktop view width</span>
+                                <span className="text-[10px] text-slate-500">Desktop view width</span>
                             </div>
                             
                             {/* Isolated iframe container for 100% accurate visual testing */}
-                            <div className="relative bg-slate-50/50 dark:bg-slate-950/50 h-[38rem] w-full flex flex-col">
+                            <div className="relative bg-slate-50/50 /50 h-[38rem] w-full flex flex-col">
                                 {previewHtml ? (
                                     <iframe
                                         srcDoc={previewHtml}
@@ -910,7 +910,7 @@ export default function NewsletterPage() {
                                         sandbox="allow-same-origin allow-popups"
                                     />
                                 ) : (
-                                    <div className="flex-1 flex flex-col items-center justify-center text-center p-8 text-slate-400 dark:text-slate-500 space-y-3">
+                                    <div className="flex-1 flex flex-col items-center justify-center text-center p-8 text-slate-500  space-y-3">
                                         <Loader2 className="animate-spin text-amber-500 w-8 h-8" />
                                         <p className="text-sm font-semibold">Generating visual structure...</p>
                                     </div>
@@ -918,10 +918,10 @@ export default function NewsletterPage() {
                             </div>
                         </div>
                     ) : (
-                        <div className="border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl h-[42rem] flex flex-col items-center justify-center text-center p-8 bg-slate-50/40 dark:bg-slate-950/20 text-slate-400 dark:text-slate-500">
-                            <Mail size={40} className="text-slate-300 dark:text-slate-650 mb-3" />
-                            <p className="font-bold text-sm text-slate-500 dark:text-slate-400">Preview Visualizer Offline</p>
-                            <p className="text-xs text-slate-400 dark:text-slate-500 max-w-xs mt-1">Please enter a Subject Line in the envelope settings to compile the preview canvas.</p>
+                        <div className="border border-dashed border-white/60 rounded-2xl h-[42rem] flex flex-col items-center justify-center text-center p-8 bg-slate-50/40 /20 text-slate-500">
+                            <Mail size={40} className="text-slate-700  mb-3" />
+                            <p className="font-bold text-sm text-slate-500">Preview Visualizer Offline</p>
+                            <p className="text-xs text-slate-500  max-w-xs mt-1">Please enter a Subject Line in the envelope settings to compile the preview canvas.</p>
                         </div>
                     )}
                 </div>
@@ -930,12 +930,12 @@ export default function NewsletterPage() {
             {/* CONFIRMATION CONFIRM PANEL */}
             {showConfirm && (
                 <div
-                    className="fixed inset-0 bg-slate-900/55 backdrop-blur-[2px] flex items-center justify-center z-50 p-4 content-fade-in"
+                    className="fixed inset-0 bg-slate-100/55 backdrop-blur-[2px] flex items-center justify-center z-50 p-4 content-fade-in"
                     role="presentation"
                     onClick={() => setShowConfirm(false)}
                 >
                     <div
-                        className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl p-8 max-w-md w-full border border-slate-200/80 dark:border-slate-800 ring-1 ring-slate-900/5"
+                        className="admin-card-glass rounded-2xl shadow-2xl p-8 max-w-md w-full border border-white/60 ring-1 ring-slate-900/5"
                         role="dialog"
                         aria-modal="true"
                         aria-labelledby="newsletter-confirm-title"
@@ -948,41 +948,41 @@ export default function NewsletterPage() {
                         </div>
                         <h2
                             id="newsletter-confirm-title"
-                            className="text-xl font-heading font-bold text-navy dark:text-slate-100 text-center mb-2"
+                            className="text-xl font-heading font-bold text-slate-900  text-center mb-2"
                         >
                             {isScheduled ? 'Confirm schedule' : 'Confirm send'}
                         </h2>
-                        <p className="text-slate-500 dark:text-slate-400 text-center mb-4 text-sm leading-relaxed">
+                        <p className="text-slate-500  text-center mb-4 text-sm leading-relaxed">
                             {isScheduled 
                                 ? 'Are you sure you want to schedule this campaign queue?' 
                                 : 'Are you sure you want to broadcast this campaign instantly to subscribers?'}
                         </p>
-                        <div className="text-4xl font-bold text-navy dark:text-slate-100 text-center mb-4 font-sans">
+                        <div className="text-4xl font-bold text-slate-900  text-center mb-4 font-sans">
                             {targetType === 'all' ? (
                                 <>
                                     {subscriberCount}
-                                    <span className="text-lg font-normal text-slate-550 dark:text-slate-400 ml-2">
+                                    <span className="text-lg font-normal text-slate-550  ml-2">
                                         subscribers
                                     </span>
                                 </>
                             ) : (
                                 <>
                                     <span className="text-xl">1</span>
-                                    <span className="text-lg font-normal text-slate-550 dark:text-slate-400 ml-2">
+                                    <span className="text-lg font-normal text-slate-550  ml-2">
                                         subscriber ({specificEmail})
                                     </span>
                                 </>
                             )}
                         </div>
                         
-                        <div className="bg-slate-50 dark:bg-slate-950 rounded-xl p-4 mb-4 space-y-2 border border-slate-100 dark:border-slate-800">
-                            <p className="text-xs text-slate-700 dark:text-slate-300 leading-tight">
-                                <span className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Subject:</span>{' '}
+                        <div className="bg-slate-50  rounded-xl p-4 mb-4 space-y-2 border border-slate-100">
+                            <p className="text-xs text-slate-700  leading-tight">
+                                <span className="font-bold text-slate-500  uppercase tracking-wider">Subject:</span>{' '}
                                 {subject}
                             </p>
                             {previewText && (
-                                <p className="text-xs text-slate-600 dark:text-slate-350 leading-tight">
-                                    <span className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Preview text:</span>{' '}
+                                <p className="text-xs text-slate-600  leading-tight">
+                                    <span className="font-bold text-slate-500  uppercase tracking-wider">Preview text:</span>{' '}
                                     {previewText}
                                 </p>
                             )}
@@ -992,9 +992,9 @@ export default function NewsletterPage() {
                                     {new Date(scheduledAt).toLocaleString()}
                                 </p>
                             )}
-                            <p className="text-xs text-slate-600 dark:text-slate-355 leading-tight">
-                                <span className="font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Campaign Mode:</span>{' '}
-                                <span className="font-semibold text-navy dark:text-amber-300 capitalize">{modeTab} Builder</span>
+                            <p className="text-xs text-slate-600  leading-tight">
+                                <span className="font-bold text-slate-500  uppercase tracking-wider">Campaign Mode:</span>{' '}
+                                <span className="font-semibold text-slate-900 dark:text-amber-300 capitalize">{modeTab} Builder</span>
                             </p>
                         </div>
                         
@@ -1006,14 +1006,14 @@ export default function NewsletterPage() {
                             <button
                                 type="button"
                                 onClick={() => setShowConfirm(false)}
-                                className="flex-1 px-4 py-3 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-xl font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-sm bg-transparent"
+                                className="flex-1 px-4 py-3 border border-slate-200  text-slate-700  rounded-xl font-bold hover:bg-slate-50  transition-colors text-sm bg-transparent"
                             >
                                 Cancel
                             </button>
                             <button
                                 type="button"
                                 onClick={() => handleSend(false)}
-                                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 bg-gold text-navy rounded-xl font-bold hover:bg-amber-400 transition-colors text-sm shadow"
+                                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 bg-gold text-slate-900 rounded-xl font-bold hover:bg-amber-400 transition-colors text-sm shadow"
                             >
                                 <Rocket className="w-4 h-4" aria-hidden />
                                 {isScheduled ? 'Schedule' : 'Send now'}

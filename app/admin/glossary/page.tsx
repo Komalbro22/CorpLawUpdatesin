@@ -80,15 +80,15 @@ export default function AdminGlossaryPage() {
   )
 
   return (
-    <div className="p-6 max-w-7xl mx-auto text-slate-200">
+    <div className="p-6 max-w-7xl mx-auto text-slate-800">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-white font-heading">Legal Glossary</h1>
-          <p className="text-sm text-slate-400 mt-1">Manage dictionary terms and definitions.</p>
+          <h1 className="text-3xl font-extrabold text-slate-900 font-heading">Legal Glossary</h1>
+          <p className="text-sm text-slate-500 mt-1">Manage dictionary terms and definitions.</p>
         </div>
         <Link 
           href="/admin/glossary/new"
-          className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm"
+          className="inline-flex items-center gap-2 btn-vibrant-amber text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm"
         >
           <Plus className="w-4 h-4" />
           Add Term
@@ -96,52 +96,52 @@ export default function AdminGlossaryPage() {
       </div>
 
       <div className="admin-card overflow-hidden flex flex-col h-[calc(100vh-200px)]">
-        <div className="p-4 border-b border-slate-800 flex items-center gap-4 bg-slate-950/60">
+        <div className="p-4 border-b border-white/60 flex items-center gap-4 bg-slate-50/60">
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
             <input 
               type="text" 
               placeholder="Search terms or categories..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 text-sm bg-slate-900 border border-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-white"
+              className="w-full pl-9 pr-4 py-2 text-sm bg-slate-100 border border-white/60 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
             />
           </div>
-          <div className="text-sm text-slate-400 font-medium">
+          <div className="text-sm text-slate-500 font-medium">
             {filteredTerms.length} terms
           </div>
         </div>
 
         <div className="flex-1 overflow-auto">
           <table className="w-full text-left border-collapse">
-            <thead className="sticky top-0 bg-slate-950/90 backdrop-blur-sm shadow-sm z-10">
+            <thead className="sticky top-0 bg-slate-50/90 backdrop-blur-sm shadow-sm z-10">
               <tr>
-                <th className="p-4 text-xs font-semibold text-slate-400 uppercase tracking-wider border-b border-slate-800">Term</th>
-                <th className="p-4 text-xs font-semibold text-slate-400 uppercase tracking-wider border-b border-slate-800">Category</th>
-                <th className="p-4 text-xs font-semibold text-slate-400 uppercase tracking-wider border-b border-slate-800">Verified</th>
-                <th className="p-4 text-xs font-semibold text-slate-400 uppercase tracking-wider border-b border-slate-800 text-right">Actions</th>
+                <th className="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-white/60">Term</th>
+                <th className="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-white/60">Category</th>
+                <th className="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-white/60">Verified</th>
+                <th className="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-white/60 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="divide-y divide-slate-200/50/60">
               {isLoading ? (
                 <tr>
-                  <td colSpan={4} className="p-8 text-center text-slate-500 bg-slate-900/10">Loading terms...</td>
+                  <td colSpan={4} className="p-8 text-center text-slate-500 bg-slate-100/10">Loading terms...</td>
                 </tr>
               ) : filteredTerms.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="p-8 text-center text-slate-500 bg-slate-900/10">No terms found.</td>
+                  <td colSpan={4} className="p-8 text-center text-slate-500 bg-slate-100/10">No terms found.</td>
                 </tr>
               ) : (
                 filteredTerms.map(term => (
-                  <tr key={term.id} className="hover:bg-slate-900/30 transition-colors">
+                  <tr key={term.id} className="hover:bg-slate-100/50 transition-colors">
                     <td className="p-4 align-top">
                       <div className="flex items-center gap-2">
-                        <p className="font-bold text-white">{term.term}</p>
+                        <p className="font-bold text-slate-900">{term.term}</p>
                         {term.is_verified && (
                           <Link 
                             href={`/glossary/${term.slug}`} 
                             target="_blank"
-                            className="text-slate-400 hover:text-amber-500 transition-colors p-0.5 rounded"
+                            className="text-slate-500 hover:text-amber-500 transition-colors p-0.5 rounded"
                             title="View Public Page"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
@@ -149,12 +149,12 @@ export default function AdminGlossaryPage() {
                         )}
                       </div>
                       <p className="text-xs text-slate-500 font-mono mt-1">{term.slug}</p>
-                      <div className="text-sm text-slate-300 mt-2 line-clamp-2">
+                      <div className="text-sm text-slate-700 mt-2 line-clamp-2">
                         {term.definition ? term.definition.replace(/<[^>]*>/g, '').trim() : ''}
                       </div>
                     </td>
                     <td className="p-4 align-top">
-                      <span className="inline-flex items-center px-2 py-1 rounded text-xs font-bold bg-slate-800 text-slate-300 border border-slate-700">
+                      <span className="inline-flex items-center px-2 py-1 rounded text-xs font-bold bg-slate-100 text-slate-700 border border-slate-700">
                         {term.category}
                       </span>
                     </td>
@@ -175,14 +175,14 @@ export default function AdminGlossaryPage() {
                       <div className="flex items-center justify-end gap-2">
                         <Link 
                           href={`/admin/glossary/${term.id}/edit`}
-                          className="p-1.5 text-slate-400 hover:text-blue-400 hover:bg-slate-850 rounded transition-colors"
+                          className="p-1.5 text-slate-500 hover:text-blue-400 hover:bg-slate-100 rounded transition-colors"
                           title="Edit Term"
                         >
                           <Edit2 className="w-4 h-4" />
                         </Link>
                         <button 
                           onClick={() => handleDelete(term.id)}
-                          className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-slate-850 rounded transition-colors"
+                          className="p-1.5 text-slate-500 hover:text-rose-600 hover:bg-slate-100 rounded transition-colors"
                           title="Delete Term"
                         >
                           <Trash2 className="w-4 h-4" />

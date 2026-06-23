@@ -74,7 +74,7 @@ function RuleCard({ rule }: { rule: Rule }) {
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-1">
-            <span className="text-white font-semibold text-sm font-mono">
+            <span className="text-slate-900 font-semibold text-sm font-mono">
               {rule.intents?.name || 'Unknown Intent'}
             </span>
             <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 font-medium">
@@ -87,7 +87,7 @@ function RuleCard({ rule }: { rule: Rule }) {
             )}
             <HealthBadge accepted={rule.accepted_count} rejected={rule.rejected_count} />
           </div>
-          <p className="text-slate-400 text-xs line-clamp-1">{rule.intents?.description || '—'}</p>
+          <p className="text-slate-500 text-xs line-clamp-1">{rule.intents?.description || '—'}</p>
         </div>
         <div className="flex items-center gap-3 shrink-0">
           <span className="text-xs text-slate-500">{rule.usage_count} uses</span>
@@ -103,7 +103,7 @@ function RuleCard({ rule }: { rule: Rule }) {
             <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2 flex items-center gap-1.5">
               <FileText className="w-3 h-3" /> Clause Content
             </p>
-            <pre className="bg-black/30 border border-white/[0.06] rounded-lg p-3 text-xs text-slate-300 whitespace-pre-wrap font-mono leading-relaxed max-h-40 overflow-y-auto">
+            <pre className="bg-black/30 border border-white/[0.06] rounded-lg p-3 text-xs text-slate-700 whitespace-pre-wrap font-mono leading-relaxed max-h-40 overflow-y-auto">
               {rule.clauses?.content || '—'}
             </pre>
           </div>
@@ -130,12 +130,12 @@ function RuleCard({ rule }: { rule: Rule }) {
               <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2 flex items-center gap-1.5">
                 <Layers className="w-3 h-3" /> Placement
               </p>
-              <div className="space-y-1 text-xs text-slate-400">
+              <div className="space-y-1 text-xs text-slate-500">
                 <div>Action: <span className="text-amber-400 font-mono">{rule.clauses?.placement_rules?.action}</span></div>
                 {rule.clauses?.placement_rules?.anchor && (
-                  <div>Anchor: <span className="text-slate-300 font-mono">"{rule.clauses.placement_rules.anchor}"</span></div>
+                  <div>Anchor: <span className="text-slate-700 font-mono">"{rule.clauses.placement_rules.anchor}"</span></div>
                 )}
-                <div>Fallback: <span className="text-slate-300">{rule.clauses?.placement_rules?.fallback}</span></div>
+                <div>Fallback: <span className="text-slate-700">{rule.clauses?.placement_rules?.fallback}</span></div>
               </div>
             </div>
           </div>
@@ -147,7 +147,7 @@ function RuleCard({ rule }: { rule: Rule }) {
                 <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-1 flex items-center gap-1.5">
                   <Scale className="w-3 h-3" /> Legal Basis
                 </p>
-                <p className="text-xs text-slate-400">{rule.clauses.legal_basis}</p>
+                <p className="text-xs text-slate-500">{rule.clauses.legal_basis}</p>
               </div>
             )}
 
@@ -165,7 +165,7 @@ function RuleCard({ rule }: { rule: Rule }) {
           {/* Stats */}
           <div className="flex gap-4 pt-2 border-t border-white/[0.06]">
             <div className="text-center">
-              <p className="text-lg font-bold text-white">{rule.usage_count}</p>
+              <p className="text-lg font-bold text-slate-900">{rule.usage_count}</p>
               <p className="text-[10px] text-slate-500">Total Uses</p>
             </div>
             <div className="text-center">
@@ -241,11 +241,11 @@ function AddRuleModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: 
               <Plus className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-white font-heading font-bold text-base">Add New Rule</h2>
+              <h2 className="text-slate-900 font-heading font-bold text-base">Add New Rule</h2>
               <p className="text-slate-500 text-xs">Create intent + clause + rule in Supabase2</p>
             </div>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors">
+          <button onClick={onClose} className="text-slate-500 hover:text-slate-900 p-1 rounded-lg hover:bg-white/10 transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -255,48 +255,48 @@ function AddRuleModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: 
 
           {/* Intent Name */}
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5">Intent Name <span className="text-red-400">*</span></label>
+            <label className="block text-xs font-semibold text-slate-500 mb-1.5">Intent Name <span className="text-red-400">*</span></label>
             <input
               value={form.intent_name}
               onChange={e => set('intent_name', e.target.value)}
               placeholder="e.g. ADD_PENALTY_CLAUSE"
               required
-              className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 focus:bg-white/[0.06] transition-all font-mono"
+              className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 focus:bg-white/[0.06] transition-all font-mono"
             />
             <p className="text-[10px] text-slate-600 mt-1">Will be auto-uppercased and underscored. e.g. ADD_MY_CLAUSE</p>
           </div>
 
           {/* Intent Description */}
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5">Intent Description <span className="text-red-400">*</span></label>
+            <label className="block text-xs font-semibold text-slate-500 mb-1.5">Intent Description <span className="text-red-400">*</span></label>
             <input
               value={form.intent_description}
               onChange={e => set('intent_description', e.target.value)}
               placeholder="e.g. Add a penalty clause for breach of contract"
               required
-              className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all"
+              className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all"
             />
           </div>
 
           {/* Aliases */}
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5">Trigger Aliases</label>
+            <label className="block text-xs font-semibold text-slate-500 mb-1.5">Trigger Aliases</label>
             <input
               value={form.aliases}
               onChange={e => set('aliases', e.target.value)}
               placeholder="add penalty, add breach penalty, insert penalty clause"
-              className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all"
+              className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all"
             />
             <p className="text-[10px] text-slate-600 mt-1">Comma-separated. Users can type these exact phrases to trigger this rule.</p>
           </div>
 
           {/* Document Type */}
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5">Document Type <span className="text-red-400">*</span></label>
+            <label className="block text-xs font-semibold text-slate-500 mb-1.5">Document Type <span className="text-red-400">*</span></label>
             <select
               value={form.document_type}
               onChange={e => set('document_type', e.target.value)}
-              className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500/50 transition-all"
+              className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500/50 transition-all"
             >
               {DOC_TYPE_OPTIONS.map(t => <option key={t} value={t} className="bg-[#0d1627]">{t}</option>)}
             </select>
@@ -304,14 +304,14 @@ function AddRuleModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: 
 
           {/* Clause Content */}
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5">Clause Content <span className="text-red-400">*</span></label>
+            <label className="block text-xs font-semibold text-slate-500 mb-1.5">Clause Content <span className="text-red-400">*</span></label>
             <textarea
               value={form.clause_content}
               onChange={e => set('clause_content', e.target.value)}
               rows={5}
               required
               placeholder="PENALTY: In the event of breach... Use {{variable_name}} for dynamic values."
-              className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all font-mono resize-none leading-relaxed"
+              className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all font-mono resize-none leading-relaxed"
             />
             <p className="text-[10px] text-slate-600 mt-1">Use {`{{variable_name}}`} syntax for dynamic values.</p>
           </div>
@@ -319,16 +319,16 @@ function AddRuleModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: 
           {/* Category + Placement in 2 cols */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1.5">Category</label>
+              <label className="block text-xs font-semibold text-slate-500 mb-1.5">Category</label>
               <select value={form.clause_category} onChange={e => set('clause_category', e.target.value)}
-                className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500/50 transition-all">
+                className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500/50 transition-all">
                 {CATEGORIES.map(c => <option key={c} value={c} className="bg-[#0d1627]">{c}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1.5">Placement Action</label>
+              <label className="block text-xs font-semibold text-slate-500 mb-1.5">Placement Action</label>
               <select value={form.placement_action} onChange={e => set('placement_action', e.target.value)}
-                className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500/50 transition-all">
+                className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500/50 transition-all">
                 {PLACEMENT_ACTIONS.map(a => <option key={a} value={a} className="bg-[#0d1627]">{a}</option>)}
               </select>
             </div>
@@ -337,22 +337,22 @@ function AddRuleModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: 
           {/* Anchor + Anchor Type + Fallback */}
           <div className="grid grid-cols-3 gap-4">
             <div className="col-span-1">
-              <label className="block text-xs font-semibold text-slate-400 mb-1.5">Anchor Keyword</label>
+              <label className="block text-xs font-semibold text-slate-500 mb-1.5">Anchor Keyword</label>
               <input value={form.placement_anchor} onChange={e => set('placement_anchor', e.target.value)}
                 placeholder="TERMINATION"
-                className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all" />
+                className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all" />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1.5">Anchor Type</label>
+              <label className="block text-xs font-semibold text-slate-500 mb-1.5">Anchor Type</label>
               <select value={form.placement_anchor_type} onChange={e => set('placement_anchor_type', e.target.value)}
-                className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500/50 transition-all">
+                className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500/50 transition-all">
                 {ANCHOR_TYPES.map(t => <option key={t} value={t} className="bg-[#0d1627]">{t}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1.5">Fallback</label>
+              <label className="block text-xs font-semibold text-slate-500 mb-1.5">Fallback</label>
               <select value={form.placement_fallback} onChange={e => set('placement_fallback', e.target.value)}
-                className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500/50 transition-all">
+                className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500/50 transition-all">
                 {FALLBACK_OPTIONS.map(f => <option key={f} value={f} className="bg-[#0d1627]">{f}</option>)}
               </select>
             </div>
@@ -360,34 +360,34 @@ function AddRuleModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: 
 
           {/* Variables JSON */}
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5">Variables Schema (JSON)</label>
+            <label className="block text-xs font-semibold text-slate-500 mb-1.5">Variables Schema (JSON)</label>
             <input value={form.variables_raw} onChange={e => set('variables_raw', e.target.value)}
               placeholder='{"name":"STRING","amount":"NUMBER","date":"DATE"}'
-              className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all font-mono" />
+              className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all font-mono" />
             <p className="text-[10px] text-slate-600 mt-1">Types: STRING, NUMBER, DATE, CITY, CURRENCY</p>
           </div>
 
           {/* Legal Basis */}
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5">Legal Basis</label>
+            <label className="block text-xs font-semibold text-slate-500 mb-1.5">Legal Basis</label>
             <input value={form.legal_basis} onChange={e => set('legal_basis', e.target.value)}
               placeholder="Section 74 of the Indian Contract Act, 1872"
-              className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all" />
+              className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all" />
           </div>
 
           {/* Related Forms + Deadline */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1.5">Related Forms</label>
+              <label className="block text-xs font-semibold text-slate-500 mb-1.5">Related Forms</label>
               <input value={form.related_forms_raw} onChange={e => set('related_forms_raw', e.target.value)}
                 placeholder="DIR-12, MBP-1"
-                className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all" />
+                className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all" />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1.5">Compliance Deadline</label>
+              <label className="block text-xs font-semibold text-slate-500 mb-1.5">Compliance Deadline</label>
               <input value={form.compliance_deadline} onChange={e => set('compliance_deadline', e.target.value)}
                 placeholder="Within 30 days of..."
-                className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all" />
+                className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all" />
             </div>
           </div>
 
@@ -401,7 +401,7 @@ function AddRuleModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: 
 
         {/* Modal Footer */}
         <div className="px-6 py-4 border-t border-white/[0.06] flex items-center justify-end gap-3 shrink-0 bg-black/20">
-          <button onClick={onClose} className="px-4 py-2 text-sm text-slate-400 hover:text-white rounded-lg hover:bg-white/[0.05] transition-all">
+          <button onClick={onClose} className="px-4 py-2 text-sm text-slate-500 hover:text-slate-900 rounded-lg hover:bg-white/[0.05] transition-all">
             Cancel
           </button>
           <button
@@ -475,7 +475,7 @@ export default function RuleEnginePage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-heading font-extrabold admin-gradient-text">Rule Engine</h1>
-          <p className="text-slate-400 text-sm mt-1">Manage intents, clauses and rules for all document types</p>
+          <p className="text-slate-500 text-sm mt-1">Manage intents, clauses and rules for all document types</p>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
@@ -498,20 +498,20 @@ export default function RuleEnginePage() {
       {/* Stats Row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="admin-stat-amber rounded-xl p-4">
-          <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Total Rules</p>
-          <p className="text-white text-2xl font-heading font-extrabold mt-1">{rules.length}</p>
+          <p className="text-slate-500 text-xs font-semibold uppercase tracking-wider">Total Rules</p>
+          <p className="text-slate-900 text-2xl font-heading font-extrabold mt-1">{rules.length}</p>
         </div>
         <div className="admin-stat-violet rounded-xl p-4">
-          <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Document Types</p>
-          <p className="text-white text-2xl font-heading font-extrabold mt-1">{docTypes.length}</p>
+          <p className="text-slate-500 text-xs font-semibold uppercase tracking-wider">Document Types</p>
+          <p className="text-slate-900 text-2xl font-heading font-extrabold mt-1">{docTypes.length}</p>
         </div>
         <div className="admin-stat-emerald rounded-xl p-4">
-          <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Total Uses</p>
-          <p className="text-white text-2xl font-heading font-extrabold mt-1">{totalUses}</p>
+          <p className="text-slate-500 text-xs font-semibold uppercase tracking-wider">Total Uses</p>
+          <p className="text-slate-900 text-2xl font-heading font-extrabold mt-1">{totalUses}</p>
         </div>
         <div className="admin-stat-blue rounded-xl p-4">
-          <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Active Intents</p>
-          <p className="text-white text-2xl font-heading font-extrabold mt-1">
+          <p className="text-slate-500 text-xs font-semibold uppercase tracking-wider">Active Intents</p>
+          <p className="text-slate-900 text-2xl font-heading font-extrabold mt-1">
             {Array.from(new Set(rules.map(r => r.intents?.id).filter(Boolean))).length}
           </p>
         </div>
@@ -525,18 +525,18 @@ export default function RuleEnginePage() {
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search rules, intents, clause content..."
-            className="w-full bg-white/[0.04] border border-white/[0.10] rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all"
+            className="w-full bg-white/[0.04] border border-white/[0.10] rounded-xl pl-9 pr-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all"
           />
         </div>
         <select
           value={filterDoc}
           onChange={e => setFilterDoc(e.target.value)}
-          className="bg-white/[0.04] border border-white/[0.10] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500/50 transition-all"
+          className="bg-white/[0.04] border border-white/[0.10] rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-500/50 transition-all"
         >
           <option value="ALL" className="bg-[#0d1627]">All Document Types</option>
           {docTypes.map(t => <option key={t} value={t} className="bg-[#0d1627]">{t}</option>)}
         </select>
-        <button onClick={fetchRules} className="flex items-center gap-2 px-4 py-2.5 border border-white/10 text-slate-400 hover:text-white rounded-xl hover:bg-white/[0.04] transition-all text-sm">
+        <button onClick={fetchRules} className="flex items-center gap-2 px-4 py-2.5 border border-white/10 text-slate-500 hover:text-slate-900 rounded-xl hover:bg-white/[0.04] transition-all text-sm">
           <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           Refresh
         </button>
@@ -554,7 +554,7 @@ export default function RuleEnginePage() {
       ) : filtered.length === 0 ? (
         <div className="text-center py-16">
           <BookOpen className="w-10 h-10 text-slate-700 mx-auto mb-3" />
-          <p className="text-slate-500 text-sm">No rules found{search ? ` for "${search}"` : ''}.</p>
+          <p className="text-slate-500 text-sm">No rules found{search ? ` for"${search}"` : ''}.</p>
           <button onClick={() => setShowAddModal(true)} className="mt-4 text-amber-400 text-sm hover:text-amber-300 transition-colors">
             + Add your first rule
           </button>

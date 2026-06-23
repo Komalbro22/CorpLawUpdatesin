@@ -93,13 +93,13 @@ export default function ArticleAnalyticsPage() {
   ]
 
   return (
-    <div className="space-y-6 max-w-6xl content-fade-in text-slate-100">
+    <div className="space-y-6 max-w-6xl content-fade-in text-slate-900">
       <div>
-        <h1 className="text-2xl font-heading font-bold text-white flex items-center gap-2">
+        <h1 className="text-2xl font-heading font-bold text-slate-900 flex items-center gap-2">
           <LineChart className="w-7 h-7 text-amber-500" aria-hidden />
           Article performance
         </h1>
-        <p className="text-slate-400 text-sm mt-2 leading-relaxed max-w-2xl">
+        <p className="text-slate-500 text-sm mt-2 leading-relaxed max-w-2xl">
           Sort and filter by database view counts. For session-level analytics, use Google Analytics.
         </p>
       </div>
@@ -115,13 +115,13 @@ export default function ArticleAnalyticsPage() {
             key={stat.label}
             className={`rounded-xl border p-4 text-center shadow-card ring-1 ring-slate-900/[0.02] ${stat.color}`}
           >
-            <div className="text-2xl font-heading font-bold text-white tabular-nums">{stat.value}</div>
-            <div className="text-xs font-semibold mt-1 text-slate-300 opacity-90">{stat.label}</div>
+            <div className="text-2xl font-heading font-bold text-slate-900 tabular-nums">{stat.value}</div>
+            <div className="text-xs font-semibold mt-1 text-slate-700 opacity-90">{stat.label}</div>
           </div>
         ))}
       </div>
 
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 md:p-5 space-y-3">
+      <div className="bg-slate-100 border border-white/60 rounded-xl p-4 md:p-5 space-y-3">
         <div className="flex flex-wrap gap-2 items-center">
           <div className="relative flex-1 min-w-[200px]">
             <Search
@@ -133,13 +133,13 @@ export default function ArticleAnalyticsPage() {
               placeholder="Search titles…"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-10 pr-3 py-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-gold/20 transition-shadow"
+              className="w-full bg-slate-50 border border-white/60 rounded-lg pl-10 pr-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-gold/20 transition-shadow"
             />
           </div>
           <select
             value={statusFilter}
             onChange={e => setStatusFilter(e.target.value)}
-            className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-gold/20"
+            className="bg-slate-50 border border-white/60 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-gold/20"
           >
             <option value="All">All status</option>
             <option value="published">Published</option>
@@ -154,7 +154,7 @@ export default function ArticleAnalyticsPage() {
                 className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold transition-colors duration-200 ${
                   sortBy === key
                     ? 'bg-gold text-slate-950 shadow-md shadow-amber-500/10'
-                    : 'bg-slate-950 border border-slate-800 text-slate-300 hover:bg-slate-800'
+                    : 'bg-slate-50 border border-white/60 text-slate-700 hover:bg-slate-100'
                 }`}
               >
                 <Icon className="w-4 h-4 opacity-90" aria-hidden />
@@ -172,7 +172,7 @@ export default function ArticleAnalyticsPage() {
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors duration-200 ${
                 categoryFilter === cat
                   ? 'bg-gold text-slate-950'
-                  : 'bg-slate-950 border border-slate-800 text-slate-300 hover:bg-slate-800'
+                  : 'bg-slate-50 border border-white/60 text-slate-700 hover:bg-slate-100'
               }`}
             >
               {cat}{' '}
@@ -188,7 +188,7 @@ export default function ArticleAnalyticsPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-slate-950/60 border-b border-slate-800 text-slate-300 font-semibold">
+              <tr className="bg-slate-50/60 border-b border-white/60 text-slate-700 font-semibold">
                 <th className="text-left px-4 py-3 w-8">#</th>
                 <th className="text-left px-4 py-3">Article</th>
                 <th className="text-center px-4 py-3 w-24">Category</th>
@@ -210,17 +210,17 @@ export default function ArticleAnalyticsPage() {
                 filtered.map((article, i) => {
                   const barWidth = Math.max(4, Math.round(((article.views || 0) / maxViews) * 100))
                   const catColor =
-                    categoryColors[article.category?.toLowerCase()] || 'bg-slate-950 border border-slate-800 text-slate-400'
+                    categoryColors[article.category?.toLowerCase()] || 'bg-slate-50 border border-white/60 text-slate-500'
                   return (
                     <tr
                       key={article.id}
-                      className={`transition-colors border-b border-slate-800/40 ${
-                        i % 2 === 0 ? 'bg-slate-900/10 hover:bg-slate-800/30' : 'bg-slate-900/30 hover:bg-slate-800/30'
+                      className={`transition-colors border-b border-white/60/40 ${
+                        i % 2 === 0 ? 'bg-slate-100/10 hover:bg-slate-100/30' : 'bg-slate-100/50 hover:bg-slate-100/30'
                       }`}
                     >
                       <td className="px-4 py-3 text-slate-500 font-medium tabular-nums">{i + 1}</td>
                       <td className="px-4 py-3">
-                        <p className="font-medium text-slate-200 text-sm leading-snug line-clamp-2 max-w-md">
+                        <p className="font-medium text-slate-800 text-sm leading-snug line-clamp-2 max-w-md">
                           {article.title}
                         </p>
                       </td>
@@ -232,19 +232,19 @@ export default function ArticleAnalyticsPage() {
                         </span>
                       </td>
                       <td className="px-4 py-3 text-center">
-                        <span className="text-lg font-bold text-white tabular-nums">
+                        <span className="text-lg font-bold text-slate-900 tabular-nums">
                           {(article.views || 0).toLocaleString('en-IN')}
                         </span>
                       </td>
                       <td className="px-4 py-3">
-                        <div className="w-full bg-slate-950 rounded-full h-2 overflow-hidden">
+                        <div className="w-full bg-slate-50 rounded-full h-2 overflow-hidden">
                           <div
                             className="bg-gold h-2 rounded-full transition-all duration-500"
                             style={{ width: `${barWidth}%` }}
                           />
                         </div>
                       </td>
-                      <td className="px-4 py-3 text-center text-slate-400 text-xs tabular-nums">
+                      <td className="px-4 py-3 text-center text-slate-500 text-xs tabular-nums">
                         {article.published_at
                           ? new Date(article.published_at).toLocaleDateString('en-IN', {
                               day: '2-digit',
@@ -285,7 +285,7 @@ export default function ArticleAnalyticsPage() {
             </tbody>
           </table>
         </div>
-        <div className="px-4 py-3 border-t border-slate-800/80 text-xs text-slate-400 text-center leading-relaxed">
+        <div className="px-4 py-3 border-t border-white/60/80 text-xs text-slate-500 text-center leading-relaxed">
           Showing {filtered.length} of {articles.length} articles · DB view counts · Pair with Google Analytics
           for audience insights
         </div>

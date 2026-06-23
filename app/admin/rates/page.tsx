@@ -78,19 +78,19 @@ export default function AdminRatesOverridePage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-3 text-slate-500 font-sans">
         <div className="w-8 h-8 rounded-full border-4 border-slate-700 border-t-amber-500 animate-spin" />
-        <p className="text-sm font-semibold text-slate-400">Loading statutory variables…</p>
+        <p className="text-sm font-semibold text-slate-500">Loading statutory variables…</p>
       </div>
     )
   }
 
   return (
-    <div className="space-y-8 max-w-5xl text-white font-sans">
+    <div className="space-y-8 max-w-5xl text-slate-900 font-sans">
       <div>
-        <h1 className="text-2xl font-serif font-bold text-white flex items-center gap-2">
+        <h1 className="text-2xl font-serif font-bold text-slate-900 flex items-center gap-2">
           <Sliders className="w-7 h-7 text-amber-500" />
           Tool Rates & Waiver Override Panel
         </h1>
-        <p className="text-slate-400 text-sm mt-2 leading-relaxed">
+        <p className="text-slate-500 text-sm mt-2 leading-relaxed">
           Directly manage delayed compounding interest reference rates, WhatsApp counts, and active MCA CFSS waivers.
         </p>
       </div>
@@ -102,12 +102,12 @@ export default function AdminRatesOverridePage() {
         <div className="space-y-6">
           
           {/* RBI Rate Card */}
-          <div className="bg-slate-900 border border-white/5 rounded-xl p-6 space-y-4 shadow-lg">
-            <h3 className="text-base font-bold text-white flex items-center gap-2 border-b border-white/5 pb-3">
+          <div className="bg-slate-100 border border-white/5 rounded-xl p-6 space-y-4 shadow-lg">
+            <h3 className="text-base font-bold text-slate-900 flex items-center gap-2 border-b border-white/5 pb-3">
               <Landmark className="w-5 h-5 text-amber-500" />
               RBI Bank Reference Rate
             </h3>
-            <p className="text-xs text-slate-400 leading-normal">
+            <p className="text-xs text-slate-500 leading-normal">
               Enter the statutory bank rate under Section 49 of the RBI Act. Compounding calculators use 3× this value.
             </p>
             <div className="flex gap-3">
@@ -116,7 +116,7 @@ export default function AdminRatesOverridePage() {
                 step="0.01"
                 value={bankRate}
                 onChange={(e) => setBankRate(e.target.value)}
-                className="flex-grow bg-slate-950 border border-white/10 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
+                className="flex-grow bg-slate-50 border border-white/10 rounded-lg p-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
               />
               <button
                 onClick={() => updateSetting('rbi_bank_rate', parseFloat(bankRate), null)}
@@ -130,12 +130,12 @@ export default function AdminRatesOverridePage() {
           </div>
 
           {/* WhatsApp Member Count */}
-          <div className="bg-slate-900 border border-white/5 rounded-xl p-6 space-y-4 shadow-lg">
-            <h3 className="text-base font-bold text-white flex items-center gap-2 border-b border-white/5 pb-3">
+          <div className="bg-slate-100 border border-white/5 rounded-xl p-6 space-y-4 shadow-lg">
+            <h3 className="text-base font-bold text-slate-900 flex items-center gap-2 border-b border-white/5 pb-3">
               <Users className="w-5 h-5 text-amber-500" />
               WhatsApp Member Count
             </h3>
-            <p className="text-xs text-slate-400 leading-normal">
+            <p className="text-xs text-slate-500 leading-normal">
               Update the active community subscriber numbers displayed on the homepage sidebar.
             </p>
             <div className="flex gap-3">
@@ -143,7 +143,7 @@ export default function AdminRatesOverridePage() {
                 type="number"
                 value={whatsappCount}
                 onChange={(e) => setWhatsappCount(e.target.value)}
-                className="flex-grow bg-slate-950 border border-white/10 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
+                className="flex-grow bg-slate-50 border border-white/10 rounded-lg p-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
               />
               <button
                 onClick={() => updateSetting('whatsapp_member_count', null, whatsappCount)}
@@ -159,20 +159,20 @@ export default function AdminRatesOverridePage() {
         </div>
 
         {/* Right Column: Amnesty Waiver toggles */}
-        <div className="bg-slate-900 border border-white/5 rounded-xl p-6 space-y-5 shadow-lg">
-          <h3 className="text-base font-bold text-white flex items-center gap-2 border-b border-white/5 pb-3">
+        <div className="bg-slate-100 border border-white/5 rounded-xl p-6 space-y-5 shadow-lg">
+          <h3 className="text-base font-bold text-slate-900 flex items-center gap-2 border-b border-white/5 pb-3">
             <ShieldAlert className="w-5 h-5 text-amber-500" />
             MCA CFSS / Amnesty Scheme Waiver Settings
           </h3>
-          <p className="text-xs text-slate-400 leading-normal">
+          <p className="text-xs text-slate-500 leading-normal">
             Enable or disable standard daily additional late filing fees (₹100/day) across company delay calculators.
           </p>
 
           {/* Scheme Active Toggle */}
-          <div className="flex justify-between items-center bg-slate-950 border border-white/5 rounded-lg p-4">
+          <div className="flex justify-between items-center bg-slate-50 border border-white/5 rounded-lg p-4">
             <div>
-              <span className="text-xs font-bold text-white block">Amnesty Active status</span>
-              <span className="text-[10px] text-slate-400 block mt-0.5">Toggle live waivers across calculators</span>
+              <span className="text-xs font-bold text-slate-900 block">Amnesty Active status</span>
+              <span className="text-[10px] text-slate-500 block mt-0.5">Toggle live waivers across calculators</span>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input
@@ -185,14 +185,14 @@ export default function AdminRatesOverridePage() {
                 }}
                 className="sr-only peer"
               />
-              <div className="w-9 h-5 bg-slate-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-500 after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500 peer-checked:after:bg-slate-900" />
+              <div className="w-9 h-5 bg-slate-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-500 after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500 peer-checked:after:bg-slate-100" />
             </label>
           </div>
 
           {/* Scheme Details */}
           <div className="space-y-4 pt-3 border-t border-white/5">
             <div>
-              <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5">
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5">
                 Scheme Display Name
               </label>
               <input
@@ -200,12 +200,12 @@ export default function AdminRatesOverridePage() {
                 value={schemeName}
                 onChange={(e) => setSchemeName(e.target.value)}
                 placeholder="e.g. Fresh Start Scheme 2026"
-                className="w-full bg-slate-950 border border-white/10 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
+                className="w-full bg-slate-50 border border-white/10 rounded-lg p-2.5 text-xs text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5 flex items-center gap-1">
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 flex items-center gap-1">
                 Circular Reference Link URL
                 {schemeUrl && (
                   <a href={schemeUrl} target="_blank" rel="noopener noreferrer" className="text-amber-500">
@@ -218,7 +218,7 @@ export default function AdminRatesOverridePage() {
                 value={schemeUrl}
                 onChange={(e) => setSchemeUrl(e.target.value)}
                 placeholder="https://www.mca.gov.in/bin/dms/getdocument..."
-                className="w-full bg-slate-950 border border-white/10 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
+                className="w-full bg-slate-50 border border-white/10 rounded-lg p-2.5 text-xs text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
               />
             </div>
 

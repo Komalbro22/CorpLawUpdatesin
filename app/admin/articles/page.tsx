@@ -214,10 +214,10 @@ export default function AdminArticles() {
                 {listStatusMessage}
             </p>
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-                <h1 className="font-heading text-2xl font-bold text-slate-100">All articles</h1>
+                <h1 className="font-heading text-2xl font-bold text-slate-900">All articles</h1>
                 <Link
                     href="/admin/articles/new"
-                    className="inline-flex items-center justify-center gap-2 bg-gold text-navy font-semibold px-4 py-2.5 rounded-lg hover:bg-amber-400 transition-colors duration-200 shadow-sm"
+                    className="inline-flex items-center justify-center gap-2 bg-gold text-slate-900 font-semibold px-4 py-2.5 rounded-lg hover:bg-amber-400 transition-colors duration-200 shadow-sm"
                 >
                     <Plus className="w-4 h-4" aria-hidden />
                     New article
@@ -225,10 +225,10 @@ export default function AdminArticles() {
             </div>
 
             {/* FILTER BAR */}
-            <div className="bg-white dark:bg-slate-900 p-4 md:p-5 rounded-xl shadow-card border border-slate-200/80 dark:border-slate-800 flex flex-col md:flex-row gap-4 items-stretch md:items-center ring-1 ring-slate-900/[0.02]">
+            <div className="admin-card-glass p-4 md:p-5 rounded-xl shadow-card border border-white/60 flex flex-col md:flex-row gap-4 items-stretch md:items-center ring-1 ring-slate-900/[0.02]">
                 <div className="flex-1 w-full relative">
                     <Search
-                        className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none"
+                        className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none"
                         aria-hidden
                     />
                     <input
@@ -236,7 +236,7 @@ export default function AdminArticles() {
                         placeholder="Search titles…"
                         value={search}
                         onChange={handleSearchChange}
-                        className="w-full pl-10 pr-4 py-2.5 border border-slate-200 dark:border-slate-800 rounded-lg text-sm focus:ring-2 focus:ring-gold/45 focus:outline-none text-navy dark:text-slate-100 bg-white dark:bg-slate-950 transition-shadow"
+                        className="w-full pl-10 pr-4 py-2.5 border border-white/60 rounded-lg text-sm focus:ring-2 focus:ring-gold/45 focus:outline-none text-slate-900  bg-slate-50/50 backdrop-blur-sm transition-shadow"
                     />
                 </div>
 
@@ -244,7 +244,7 @@ export default function AdminArticles() {
                     <select
                         value={categoryFilter}
                         onChange={handleCategoryChange}
-                        className="flex-1 md:w-48 appearance-none bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 text-sm rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-gold/45 focus:outline-none transition-shadow"
+                        className="flex-1 md:w-48 appearance-none admin-card-glass text-slate-700  text-sm rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-gold/45 focus:outline-none transition-shadow"
                     >
                         <option value="All">All Categories</option>
                         {Object.entries(categoryCounts).map(([cat, count]) => (
@@ -259,7 +259,7 @@ export default function AdminArticles() {
                     <select
                         value={statusFilter}
                         onChange={handleStatusChange}
-                        className="flex-1 md:w-40 appearance-none bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 text-sm rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-gold/45 focus:outline-none transition-shadow"
+                        className="flex-1 md:w-40 appearance-none admin-card-glass text-slate-700  text-sm rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-gold/45 focus:outline-none transition-shadow"
                     >
                         <option value="All">All Status</option>
                         <option value="Published">Published</option>
@@ -268,7 +268,7 @@ export default function AdminArticles() {
                 </div>
             </div>
             
-            <div className="text-sm text-slate-500 dark:text-slate-400 font-medium">
+            <div className="text-sm text-slate-500  font-medium">
                 Showing {totalCount} articles
             </div>
 
@@ -296,15 +296,15 @@ export default function AdminArticles() {
             )}
 
             {/* ARTICLES TABLE */}
-            <div className="bg-white dark:bg-slate-900 rounded-xl shadow-card border border-slate-200/80 dark:border-slate-800 overflow-hidden ring-1 ring-slate-900/[0.02]">
+            <div className="admin-card-glass border border-white/60 overflow-hidden ring-1 ring-slate-900/[0.02]">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm whitespace-nowrap">
-                        <thead className="sticky top-0 z-10 bg-slate-50/95 dark:bg-slate-950 text-slate-600 dark:text-slate-400 border-b border-slate-100 dark:border-slate-800/80 backdrop-blur-sm shadow-sm">
+                        <thead className="sticky top-0 z-10 bg-slate-50/95  text-slate-600  border-b border-slate-100 /80 backdrop-blur-sm shadow-sm">
                             <tr>
                                 <th className="px-6 py-4 w-12">
                                     <input 
                                         type="checkbox" 
-                                        className="rounded border-slate-300 dark:border-slate-700 text-navy focus:ring-navy bg-white dark:bg-slate-950" 
+                                        className="rounded border-slate-300  text-slate-900 focus:ring-navy bg-slate-50/50 backdrop-blur-sm" 
                                         checked={articles.length > 0 && selectedIds.size === articles.length}
                                         onChange={toggleAll}
                                     />
@@ -318,13 +318,13 @@ export default function AdminArticles() {
                                 <th className="px-6 py-4 font-medium text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                        <tbody className="divide-y divide-slate-100 dark:divide-slate-200/50">
                             {loading ? (
                                 <>
                                     {Array.from({ length: 6 }).map((_, i) => (
                                         <tr key={i} className="animate-pulse">
                                             <td colSpan={7} className="px-6 py-4">
-                                                <div className="h-4 bg-slate-100 dark:bg-slate-850 rounded w-2/3 max-w-md" />
+                                                <div className="h-4 bg-slate-100  rounded w-2/3 max-w-md" />
                                             </td>
                                         </tr>
                                     ))}
@@ -332,7 +332,7 @@ export default function AdminArticles() {
                             ) : articles.length === 0 ? (
                                 <tr>
                                     <td colSpan={7} className="px-6 py-12 text-center">
-                                        <p className="text-slate-500 dark:text-slate-400 mb-4">No articles found. Try adjusting your filters.</p>
+                                        <p className="text-slate-500  mb-4">No articles found. Try adjusting your filters.</p>
                                         {totalCount === 0 && (
                                             <Link href="/admin/articles/new" className="text-gold font-medium hover:underline">
                                                 Write First Article
@@ -345,17 +345,17 @@ export default function AdminArticles() {
                                     const isPublished = !!article.published_at
                                     const dateStr = article.published_at || article.created_at || ''
                                     return (
-                                        <tr key={article.id} className={`transition-colors duration-150 ${selectedIds.has(article.id) ? 'bg-amber-50/40 dark:bg-amber-950/15' : 'hover:bg-slate-50/80 dark:hover:bg-slate-900/50'}`}>
+                                        <tr key={article.id} className={`transition-colors duration-150 ${selectedIds.has(article.id) ? 'bg-amber-50/40 dark:bg-amber-950/15' : 'hover:bg-slate-50/80 '}`}>
                                             <td className="px-6 py-4">
                                                 <input 
                                                     type="checkbox" 
-                                                    className="rounded border-slate-300 dark:border-slate-700 text-navy focus:ring-navy bg-white dark:bg-slate-950"
+                                                    className="rounded border-slate-300  text-slate-900 focus:ring-navy bg-slate-50/50 backdrop-blur-sm"
                                                     checked={selectedIds.has(article.id)}
                                                     onChange={() => toggleSelection(article.id)}
                                                 />
                                             </td>
                                             <td className="px-6 py-4">
-                                                <Link href={`/admin/articles/${article.id}/edit`} className="font-semibold text-navy dark:text-slate-200 hover:text-gold dark:hover:text-amber-400 transition-colors block max-w-[300px] truncate" title={article.title}>
+                                                <Link href={`/admin/articles/${article.id}/edit`} className="font-semibold text-slate-900  hover:text-gold dark:hover:text-amber-400 transition-colors block max-w-[300px] truncate" title={article.title}>
                                                     {article.title}
                                                 </Link>
                                             </td>
@@ -373,26 +373,26 @@ export default function AdminArticles() {
                                                     </span>
                                                 )}
                                             </td>
-                                            <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
+                                            <td className="px-6 py-4 text-slate-500">
                                                 {article.word_count || 0}
                                             </td>
-                                            <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
+                                            <td className="px-6 py-4 text-slate-500">
                                                 {formatDate(article.updated_at || article.created_at || '')}
                                             </td>
                                             <td className="px-6 py-4">
                                                 <input 
                                                     type="checkbox" 
-                                                    className="rounded border-slate-300 dark:border-slate-700 text-gold focus:ring-gold bg-white dark:bg-slate-950"
+                                                    className="rounded border-slate-300  text-gold focus:ring-gold bg-slate-50/50 backdrop-blur-sm"
                                                     checked={!!article.is_featured}
                                                     onChange={() => updateFeatured(article.id, !!article.is_featured)}
                                                 />
                                             </td>
                                             <td className="px-6 py-4 text-right">
                                                 <div className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 min-h-[44px]">
-                                                    <Link href={`/admin/articles/${article.id}/edit`} className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-navy dark:hover:text-slate-100 transition-colors px-2">
+                                                    <Link href={`/admin/articles/${article.id}/edit`} className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center text-sm font-medium text-slate-500  hover:text-slate-900 dark:hover:text-slate-900 transition-colors px-2">
                                                         Edit
                                                     </Link>
-                                                    <button type="button" onClick={() => setDeleteConfirm(article.id)} className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-red-650 transition-colors px-2">
+                                                    <button type="button" onClick={() => setDeleteConfirm(article.id)} className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center text-sm font-medium text-slate-500  hover:text-red-650 transition-colors px-2">
                                                         Delete
                                                     </button>
                                                 </div>
@@ -414,12 +414,12 @@ export default function AdminArticles() {
             {/* DELETE MODAL */}
             {deleteConfirm && (
                 <div
-                    className="fixed inset-0 bg-slate-900/50 backdrop-blur-[2px] flex items-center justify-center p-4 z-50 content-fade-in"
+                    className="fixed inset-0 bg-slate-100/50 backdrop-blur-[2px] flex items-center justify-center p-4 z-50 content-fade-in"
                     role="presentation"
                     onClick={() => setDeleteConfirm(null)}
                 >
                     <div
-                        className="bg-white dark:bg-slate-900 rounded-xl shadow-2xl max-w-sm w-full p-6 text-center border border-slate-200/80 dark:border-slate-800 ring-1 ring-slate-900/5"
+                        className="admin-card-glass shadow-2xl max-w-sm w-full p-6 text-center border border-white/60 ring-1 ring-slate-900/5"
                         role="dialog"
                         aria-modal="true"
                         aria-labelledby="delete-dialog-title"
@@ -428,10 +428,10 @@ export default function AdminArticles() {
                         <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-950/30 flex items-center justify-center mx-auto mb-4 text-red-600 dark:text-red-400">
                             <AlertTriangle className="w-6 h-6" aria-hidden />
                         </div>
-                        <h3 id="delete-dialog-title" className="font-heading font-bold text-xl text-navy dark:text-white mb-2">
+                        <h3 id="delete-dialog-title" className="font-heading font-bold text-xl text-slate-900 mb-2">
                             Delete article{deleteConfirm === 'bulk' ? 's' : ''}?
                         </h3>
-                        <p className="text-slate-500 dark:text-slate-400 mb-6 font-medium">
+                        <p className="text-slate-500  mb-6 font-medium">
                             {deleteConfirm === 'bulk' 
                                 ? `Are you sure you want to delete ${selectedIds.size} articles? This cannot be undone.`
                                 : `Are you sure you want to delete this article? This cannot be undone.`
@@ -442,7 +442,7 @@ export default function AdminArticles() {
                                 type="button"
                                 onClick={() => setDeleteConfirm(null)}
                                 disabled={deleting}
-                                className="px-4 py-2.5 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-50 dark:hover:bg-slate-850 transition-colors duration-200 disabled:opacity-50"
+                                className="px-4 py-2.5 border border-white/60 rounded-lg text-slate-700  font-medium hover:bg-slate-50  transition-colors duration-200 disabled:opacity-50"
                             >
                                 Cancel
                             </button>

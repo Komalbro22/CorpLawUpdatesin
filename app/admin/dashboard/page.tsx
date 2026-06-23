@@ -115,7 +115,7 @@ export default async function AdminDashboard() {
                         {firstDbError.message}
                         {firstDbError.hint ? ` — ${firstDbError.hint}` : ''}
                     </p>
-                    <p className="mt-2 text-red-400/80">
+                    <p className="mt-2 text-red-600/80">
                         Check <code className="rounded bg-red-500/20 px-1.5 py-0.5 text-xs text-red-200">NEXT_PUBLIC_SUPABASE_URL</code>,{' '}
                         <code className="rounded bg-red-500/20 px-1.5 py-0.5 text-xs text-red-200">NEXT_PUBLIC_SUPABASE_ANON_KEY</code>, and{' '}
                         <code className="rounded bg-red-500/20 px-1.5 py-0.5 text-xs text-red-200">SUPABASE_SERVICE_ROLE_KEY</code> in{' '}
@@ -125,11 +125,11 @@ export default async function AdminDashboard() {
             )}
 
             {/* WELCOME BANNER */}
-            <div className="admin-welcome-gradient rounded-2xl p-6 md:p-8">
-                <h1 className="admin-gradient-text text-2xl md:text-3xl font-heading font-extrabold">
+            <div className="admin-welcome-vibrant rounded-2xl p-6 md:p-8">
+                <h1 className="text-slate-900 text-2xl md:text-3xl font-heading font-extrabold">
                     Welcome back, Admin
                 </h1>
-                <p className="text-slate-400 mt-2 flex items-center gap-2 text-sm">
+                <p className="text-slate-600 mt-2 flex items-center gap-2 text-sm">
                     <CalendarDays className="w-4 h-4 text-slate-500" aria-hidden />
                     {todayFormatted}
                 </p>
@@ -138,53 +138,53 @@ export default async function AdminDashboard() {
             {/* STATS ROW */}
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6">
                 {/* Published Articles Card */}
-                <div className="admin-stat-amber rounded-2xl p-5 md:p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 group">
+                <div className="admin-stat-vibrant-amber rounded-2xl p-5 md:p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 group">
                     <div className="flex items-center gap-4 min-w-0">
-                        <div className="admin-icon-amber w-12 h-12 rounded-xl flex items-center justify-center shrink-0 animate-admin-float">
+                        <div className="admin-icon-vibrant-amber w-12 h-12 rounded-xl flex items-center justify-center shrink-0 animate-admin-float">
                             <FileText className="w-5 h-5" aria-hidden />
                         </div>
                         <div className="min-w-0">
-                            <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Published articles</p>
-                            <p className="text-white text-2xl font-heading font-extrabold tabular-nums mt-0.5">{publishedCount || 0}</p>
+                            <p className="text-slate-600 text-xs font-semibold uppercase tracking-wider">Published articles</p>
+                            <p className="text-slate-900 text-2xl font-heading font-extrabold tabular-nums mt-0.5">{publishedCount || 0}</p>
                         </div>
                     </div>
                 </div>
 
                 {/* Draft Articles Card */}
-                <div className="admin-stat-violet rounded-2xl p-5 md:p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 group">
+                <div className="admin-stat-vibrant-violet rounded-2xl p-5 md:p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 group">
                     <div className="flex items-center gap-4 min-w-0">
-                        <div className="admin-icon-violet w-12 h-12 rounded-xl flex items-center justify-center shrink-0 animate-admin-float">
+                        <div className="admin-icon-vibrant-violet w-12 h-12 rounded-xl flex items-center justify-center shrink-0 animate-admin-float">
                             <PenLine className="w-5 h-5" aria-hidden />
                         </div>
                         <div className="min-w-0">
-                            <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Draft articles</p>
-                            <p className="text-white text-2xl font-heading font-extrabold tabular-nums mt-0.5">{draftCount || 0}</p>
+                            <p className="text-slate-600 text-xs font-semibold uppercase tracking-wider">Draft articles</p>
+                            <p className="text-slate-900 text-2xl font-heading font-extrabold tabular-nums mt-0.5">{draftCount || 0}</p>
                         </div>
                     </div>
                 </div>
 
                 {/* Active Subscribers Card */}
-                <div className="admin-stat-emerald rounded-2xl p-5 md:p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 group">
+                <div className="admin-stat-vibrant-emerald rounded-2xl p-5 md:p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 group">
                     <div className="flex items-center gap-4 min-w-0">
-                        <div className="admin-icon-emerald w-12 h-12 rounded-xl flex items-center justify-center shrink-0 animate-admin-float">
+                        <div className="admin-icon-vibrant-emerald w-12 h-12 rounded-xl flex items-center justify-center shrink-0 animate-admin-float">
                             <Users className="w-5 h-5" aria-hidden />
                         </div>
                         <div className="min-w-0">
-                            <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Active subscribers</p>
-                            <p className="text-white text-2xl font-heading font-extrabold tabular-nums mt-0.5">{activeSubscribers || 0}</p>
+                            <p className="text-slate-600 text-xs font-semibold uppercase tracking-wider">Active subscribers</p>
+                            <p className="text-slate-900 text-2xl font-heading font-extrabold tabular-nums mt-0.5">{activeSubscribers || 0}</p>
                         </div>
                     </div>
                 </div>
 
                 {/* Document Gens Card */}
-                <div className="admin-stat-blue rounded-2xl p-5 md:p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 group">
+                <div className="admin-stat-vibrant-blue rounded-2xl p-5 md:p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 group">
                     <div className="flex items-center gap-4 min-w-0">
-                        <div className="admin-icon-blue w-12 h-12 rounded-xl flex items-center justify-center shrink-0 animate-admin-float">
+                        <div className="admin-icon-vibrant-blue w-12 h-12 rounded-xl flex items-center justify-center shrink-0 animate-admin-float">
                             <FileText className="w-5 h-5" aria-hidden />
                         </div>
                         <div className="min-w-0">
-                            <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Document Gens</p>
-                            <p className="text-white text-2xl font-heading font-extrabold tabular-nums mt-0.5">{gensCount || 0}</p>
+                            <p className="text-slate-600 text-xs font-semibold uppercase tracking-wider">Document Gens</p>
+                            <p className="text-slate-900 text-2xl font-heading font-extrabold tabular-nums mt-0.5">{gensCount || 0}</p>
                         </div>
                     </div>
                 </div>
@@ -194,10 +194,10 @@ export default async function AdminDashboard() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Recent Articles */}
                 <div className="lg:col-span-2">
-                    <h2 className="text-lg font-heading font-bold text-white mb-4">
-                        Recent <span className="admin-gradient-text">Articles</span>
+                    <h2 className="text-lg font-heading font-bold text-slate-900 mb-4">
+                        Recent <span className="text-amber-600">Articles</span>
                     </h2>
-                    <div className="admin-card overflow-hidden">
+                    <div className="admin-card-glass overflow-hidden">
                         <div className="overflow-x-auto">
                             <table className="admin-table w-full min-w-[520px] text-left text-sm">
                                 <thead>
@@ -217,24 +217,24 @@ export default async function AdminDashboard() {
                                     {recentArticles?.map(article => {
                                         const isPublished = !!article.published_at
                                         return (
-                                            <tr key={article.id} className="border-t border-white/[0.04] hover:bg-white/[0.03] transition-colors">
+                                            <tr key={article.id} className="border-t border-slate-100 hover:bg-white/60 transition-colors">
                                                 <td className="px-6 py-4">
-                                                    <Link href={`/admin/articles/${article.id}/edit`} className="font-semibold text-slate-200 hover:text-amber-400 transition-colors line-clamp-1 max-w-[200px] sm:max-w-[300px]">
+                                                    <Link href={`/admin/articles/${article.id}/edit`} className="font-semibold text-slate-800 hover:text-amber-700 transition-colors line-clamp-1 max-w-[200px] sm:max-w-[300px]">
                                                         {article.title}
                                                     </Link>
                                                 </td>
                                                 <td className="px-6 py-4 hidden sm:table-cell">
-                                                    <span className="bg-white/[0.06] text-slate-300 border border-white/[0.08] rounded-full px-2.5 py-0.5 text-xs">
+                                                    <span className="bg-slate-100 text-slate-700 border border-slate-200 rounded-full px-2.5 py-0.5 text-xs">
                                                         {article.category}
                                                     </span>
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     {isPublished ? (
-                                                        <span className="admin-badge-published glow-dot-emerald px-2.5 py-0.5 rounded-full text-xs font-semibold">
+                                                        <span className="admin-badge-published  px-2.5 py-0.5 rounded-full text-xs font-semibold">
                                                             Published
                                                         </span>
                                                     ) : (
-                                                        <span className="admin-badge-draft glow-dot-amber px-2.5 py-0.5 rounded-full text-xs font-semibold">
+                                                        <span className="admin-badge-draft  px-2.5 py-0.5 rounded-full text-xs font-semibold">
                                                             Draft
                                                         </span>
                                                     )}
@@ -249,10 +249,10 @@ export default async function AdminDashboard() {
                             </table>
                         </div>
                         {/* View All Link */}
-                        <div className="px-6 py-4 border-t border-white/[0.06]">
+                        <div className="px-6 py-4 border-t border-slate-200">
                             <Link
                                 href="/admin/articles"
-                                className="inline-flex items-center gap-1.5 text-sm font-semibold text-amber-400 hover:text-amber-300 transition-colors group/link"
+                                className="inline-flex items-center gap-1.5 text-sm font-semibold text-amber-700 hover:text-amber-300 transition-colors group/link"
                             >
                                 View All
                                 <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover/link:translate-x-0.5" aria-hidden />
@@ -264,8 +264,8 @@ export default async function AdminDashboard() {
                 {/* Recent Subscribers & Tool Usage Stats */}
                 <div className="space-y-6">
                     <div>
-                        <h2 className="text-lg font-heading font-bold text-white mb-4">Recent Subscribers</h2>
-                        <div className="admin-card p-3">
+                        <h2 className="text-lg font-heading font-bold text-slate-900 mb-4">Recent Subscribers</h2>
+                        <div className="admin-card-glass p-3">
                             {(!recentSubscribers || recentSubscribers.length === 0) && (
                                 <div className="p-4 text-center text-sm text-slate-500">No subscribers yet.</div>
                             )}
@@ -273,14 +273,14 @@ export default async function AdminDashboard() {
                                 {recentSubscribers?.map(sub => {
                                     const initial = sub.email ? sub.email.charAt(0).toUpperCase() : '?'
                                     return (
-                                        <li key={sub.id} className="p-3 flex items-center gap-3 text-sm hover:bg-white/[0.04] transition-all duration-200 rounded-xl">
+                                        <li key={sub.id} className="p-3 flex items-center gap-3 text-sm hover:bg-white/60 transition-all duration-200 rounded-xl">
                                             <div
                                                 className="admin-avatar shrink-0 flex items-center justify-center rounded-full text-xs font-bold"
                                                 style={{ width: 28, height: 28 }}
                                             >
                                                 {initial}
                                             </div>
-                                            <span className="font-semibold text-slate-200 truncate max-w-[140px]" title={sub.email}>{sub.email}</span>
+                                            <span className="font-semibold text-slate-800 truncate max-w-[140px]" title={sub.email}>{sub.email}</span>
                                             <span className="text-slate-500 text-xs ml-auto shrink-0">{formatDate(sub.subscribed_at)}</span>
                                         </li>
                                     )
@@ -291,43 +291,43 @@ export default async function AdminDashboard() {
 
                     {/* Tool Usage Analytics Card */}
                     <div>
-                        <h2 className="text-lg font-heading font-bold text-white mb-4">🛠️ Tool Usage (7 Days)</h2>
-                        <div className="admin-card p-5 space-y-5">
+                        <h2 className="text-lg font-heading font-bold text-slate-900 mb-4">🛠️ Tool Usage (7 Days)</h2>
+                        <div className="admin-card-glass p-5 space-y-5">
                             
                             {/* High-level summary */}
                             <div className="grid grid-cols-2 gap-3 mb-2">
-                                <div className="bg-white/[0.03] rounded-xl p-3 border border-white/[0.05]">
+                                <div className="bg-white/60 rounded-xl p-3 border border-slate-200">
                                     <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1">Total Runs</p>
-                                    <p className="text-xl text-white font-bold tabular-nums">{calcStats.length}</p>
+                                    <p className="text-xl text-slate-900 font-bold tabular-nums">{calcStats.length}</p>
                                 </div>
-                                <div className="bg-white/[0.03] rounded-xl p-3 border border-white/[0.05]">
+                                <div className="bg-white/60 rounded-xl p-3 border border-slate-200">
                                     <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1">Penalties Calc</p>
-                                    <p className="text-xl text-red-400 font-bold tabular-nums">₹{(totalProjectedPenalties/1000).toFixed(1)}k</p>
+                                    <p className="text-xl text-red-600 font-bold tabular-nums">₹{(totalProjectedPenalties/1000).toFixed(1)}k</p>
                                 </div>
                             </div>
 
                             {/* Top Forms */}
                             {topForms.length > 0 && (
                                 <div>
-                                    <p className="text-xs text-slate-400 font-semibold mb-2">MOST CALCULATED FORMS</p>
+                                    <p className="text-xs text-slate-600 font-semibold mb-2">MOST CALCULATED FORMS</p>
                                     <div className="flex flex-wrap gap-2">
                                         {topForms.map(([form, count]) => (
-                                            <div key={form} className="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2.5 py-1 rounded-md text-xs font-medium flex items-center gap-1.5">
-                                                {form} <span className="opacity-60 text-[10px] bg-blue-500/20 px-1 rounded">{count}</span>
+                                            <div key={form} className="bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1 rounded-md text-xs font-medium flex items-center gap-1.5">
+                                                {form} <span className="opacity-60 text-[10px] bg-blue-100 px-1 rounded">{count}</span>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
                             )}
 
-                            <div className="space-y-3 pt-2 border-t border-white/[0.06]">
-                                <p className="text-xs text-slate-400 font-semibold">BREAKDOWN BY TOOL</p>
+                            <div className="space-y-3 pt-2 border-t border-slate-200">
+                                <p className="text-xs text-slate-600 font-semibold">BREAKDOWN BY TOOL</p>
                                 {Object.entries(TYPE_LABELS).map(([type, label]) => {
                                     const count = statsMap[type] || 0
                                     return (
-                                        <div key={type} className="flex justify-between items-center py-2 border-b border-white/[0.04] last:border-0 text-sm">
-                                            <span className="text-slate-400 font-medium">{label}</span>
-                                            <span className="bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold px-2.5 py-0.5 rounded-lg text-xs">
+                                        <div key={type} className="flex justify-between items-center py-2 border-b border-slate-100 last:border-0 text-sm">
+                                            <span className="text-slate-600 font-medium">{label}</span>
+                                            <span className="bg-amber-50 text-amber-700 border border-amber-200 font-bold px-2.5 py-0.5 rounded-lg text-xs">
                                                 {count} runs
                                             </span>
                                         </div>
@@ -341,18 +341,18 @@ export default async function AdminDashboard() {
 
             {/* QUICK ACTIONS */}
             <div className="pt-2">
-                <h2 className="text-lg font-heading font-bold text-white mb-4">Quick Actions</h2>
+                <h2 className="text-lg font-heading font-bold text-slate-900 mb-4">Quick Actions</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     {/* New Article */}
                     <Link
                         href="/admin/articles/new"
-                        className="admin-card p-5 flex flex-col gap-3 hover:border-amber-500/20 transition-all duration-300 group"
+                        className="admin-card-glass p-5 flex flex-col gap-3 hover:border-amber-200 transition-all duration-300 group"
                     >
-                        <div className="admin-icon-amber w-10 h-10 rounded-xl flex items-center justify-center">
+                        <div className="admin-icon-vibrant-amber w-10 h-10 rounded-xl flex items-center justify-center">
                             <PenSquare className="w-4.5 h-4.5" aria-hidden />
                         </div>
                         <div>
-                            <p className="text-white font-heading font-bold text-sm">New Article</p>
+                            <p className="text-slate-900 font-heading font-bold text-sm">New Article</p>
                             <p className="text-slate-500 text-xs mt-0.5">Create and publish a new update</p>
                         </div>
                     </Link>
@@ -362,13 +362,13 @@ export default async function AdminDashboard() {
                         href="/updates"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="admin-card p-5 flex flex-col gap-3 hover:border-blue-500/20 transition-all duration-300 group"
+                        className="admin-card-glass p-5 flex flex-col gap-3 hover:border-blue-200 transition-all duration-300 group"
                     >
-                        <div className="admin-icon-blue w-10 h-10 rounded-xl flex items-center justify-center">
+                        <div className="admin-icon-vibrant-blue w-10 h-10 rounded-xl flex items-center justify-center">
                             <Eye className="w-4.5 h-4.5" aria-hidden />
                         </div>
                         <div>
-                            <p className="text-white font-heading font-bold text-sm">View Updates</p>
+                            <p className="text-slate-900 font-heading font-bold text-sm">View Updates</p>
                             <p className="text-slate-500 text-xs mt-0.5">Preview public-facing updates page</p>
                         </div>
                     </a>
@@ -376,13 +376,13 @@ export default async function AdminDashboard() {
                     {/* Export CSV */}
                     <a
                         href="/api/admin/subscribers?export=csv"
-                        className="admin-card p-5 flex flex-col gap-3 hover:border-emerald-500/20 transition-all duration-300 group"
+                        className="admin-card-glass p-5 flex flex-col gap-3 hover:border-emerald-500/20 transition-all duration-300 group"
                     >
-                        <div className="admin-icon-emerald w-10 h-10 rounded-xl flex items-center justify-center">
+                        <div className="admin-icon-vibrant-emerald w-10 h-10 rounded-xl flex items-center justify-center">
                             <Download className="w-4.5 h-4.5" aria-hidden />
                         </div>
                         <div>
-                            <p className="text-white font-heading font-bold text-sm">Export CSV</p>
+                            <p className="text-slate-900 font-heading font-bold text-sm">Export CSV</p>
                             <p className="text-slate-500 text-xs mt-0.5">Download subscriber list as CSV</p>
                         </div>
                     </a>

@@ -84,15 +84,15 @@ export default function AdminLogin() {
                         <Lock className="w-5 h-5" aria-hidden />
                     </div>
                     <h1 className="font-heading text-2xl md:text-3xl font-bold flex justify-center items-baseline gap-0.5 flex-wrap">
-                        <span className="text-white">CorpLawUpdates</span>
+                        <span className="text-slate-900">CorpLawUpdates</span>
                         <span className="admin-gradient-text">.in</span>
                     </h1>
-                    <p className="text-slate-400 text-sm mt-2 font-medium tracking-wide">Secure admin sign-in</p>
+                    <p className="text-slate-500 text-sm mt-2 font-medium tracking-wide">Secure admin sign-in</p>
                 </div>
 
                 {/* Divider + Input */}
                 <div className="border-t border-white/[0.06] pt-6">
-                    <label htmlFor="admin-password" className="block text-sm font-semibold text-slate-300 mb-2">
+                    <label htmlFor="admin-password" className="block text-sm font-semibold text-slate-700 mb-2">
                         Password
                     </label>
                     <div className="relative">
@@ -103,7 +103,7 @@ export default function AdminLogin() {
                             onChange={(e) => setPassword(e.target.value)}
                             onKeyDown={handleKeyDown}
                             autoComplete="current-password"
-                            className="w-full bg-white/[0.04] border border-white/[0.1] rounded-lg px-4 py-3 pr-12 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500/40 transition-all duration-200"
+                            className="w-full bg-white/[0.04] border border-white/[0.1] rounded-lg px-4 py-3 pr-12 text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500/40 transition-all duration-200"
                             placeholder="Enter admin password"
                             disabled={loading}
                         />
@@ -133,7 +133,7 @@ export default function AdminLogin() {
                     type="button"
                     onClick={handleSubmit}
                     disabled={loading || !password}
-                    className="mt-6 w-full bg-gradient-to-r from-amber-500 to-amber-600 text-navy font-bold py-3 px-4 rounded-xl admin-btn-shimmer hover:from-amber-400 hover:to-amber-500 hover:shadow-admin-glow-amber transition-all duration-200 disabled:opacity-40 disabled:pointer-events-none active:scale-[0.995]"
+                    className="mt-6 w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 font-bold py-3 px-4 rounded-xl admin-btn-shimmer hover:from-amber-400 hover:to-amber-500 hover:shadow-admin-glow-amber transition-all duration-200 disabled:opacity-40 disabled:pointer-events-none active:scale-[0.995]"
                 >
                     {loading ? (
                         <span className="inline-flex items-center justify-center gap-2">

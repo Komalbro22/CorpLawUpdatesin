@@ -8,7 +8,7 @@ export default function AdminMain({ children }: { children: React.ReactNode }) {
     return (
         <div
             key={pathname}
-            className="flex-1 overflow-y-auto overflow-x-hidden bg-[#0c1322] p-4 admin-main-fade admin-scrollbar sm:p-6 lg:p-8"
+            className="flex-1 overflow-y-auto overflow-x-hidden bg-slate-50 p-4 admin-main-fade admin-scrollbar sm:p-6 lg:p-8"
         >
             {children}
         </div>

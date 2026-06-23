@@ -183,7 +183,7 @@ export default function DocumentAnalyticsPage() {
         <p>{error || 'An unexpected error occurred.'}</p>
         <button
           onClick={() => fetchData()}
-          className="mt-4 inline-flex items-center gap-2 bg-slate-900 border border-slate-800 text-slate-200 px-4 py-2 rounded-lg text-sm hover:bg-slate-800"
+          className="mt-4 inline-flex items-center gap-2 bg-slate-100 border border-white/60 text-slate-800 px-4 py-2 rounded-lg text-sm hover:bg-slate-100"
         >
           <RefreshCw className="w-4 h-4" /> Retry
         </button>
@@ -194,15 +194,15 @@ export default function DocumentAnalyticsPage() {
   const pct = Math.min(100, Math.round((overview.dailyTokensConsumed / overview.dailyTokenQuota) * 100))
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-8 min-h-screen text-slate-100">
+    <div className="p-6 max-w-7xl mx-auto space-y-8 min-h-screen text-slate-900">
       
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-white font-heading">
+          <h1 className="text-3xl font-extrabold text-slate-900 font-heading">
             Document Generation & Token Monitor
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm text-slate-500 mt-1">
             Track real-time AI quota usage, client requests, rate-limiting, and whitelist configurations.
           </p>
         </div>
@@ -210,7 +210,7 @@ export default function DocumentAnalyticsPage() {
         <button
           onClick={() => fetchData(true)}
           disabled={refreshing}
-          className="inline-flex items-center gap-2 bg-slate-950 hover:bg-slate-900 border border-slate-850 text-slate-200 px-4 py-2 rounded-xl text-sm transition-all focus:outline-none disabled:opacity-60"
+          className="inline-flex items-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-850 text-slate-800 px-4 py-2 rounded-xl text-sm transition-all focus:outline-none disabled:opacity-60"
         >
           <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
           {refreshing ? 'Refreshing...' : 'Refresh Logs'}
@@ -221,20 +221,20 @@ export default function DocumentAnalyticsPage() {
       <div className="admin-card p-6 space-y-4">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
           <div>
-            <h2 className="text-lg font-bold text-white font-heading flex items-center gap-2">
+            <h2 className="text-lg font-bold text-slate-900 font-heading flex items-center gap-2">
               <Cpu className="w-5 h-5 text-amber-500" />
               Daily Gemini API Quota Usage
             </h2>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-500 mt-0.5">
               Reflects the accumulated prompt + completion tokens used by AI models today.
             </p>
           </div>
           
           <div className="text-right">
-            <span className="text-2xl font-bold text-white tabular-nums">
+            <span className="text-2xl font-bold text-slate-900 tabular-nums">
               {formatINR(overview.dailyTokensConsumed)}
             </span>
-            <span className="text-xs text-slate-400 ml-1">
+            <span className="text-xs text-slate-500 ml-1">
               / {formatINR(overview.dailyTokenQuota)} tokens ({pct}%)
             </span>
           </div>
@@ -245,7 +245,7 @@ export default function DocumentAnalyticsPage() {
           <progress
             value={overview.dailyTokensConsumed}
             max={overview.dailyTokenQuota}
-            className="w-full h-3 rounded-full overflow-hidden bg-slate-950 appearance-none [&::-webkit-progress-bar]:bg-slate-950 [&::-webkit-progress-value]:bg-amber-400 [&::-moz-progress-bar]:bg-amber-400"
+            className="w-full h-3 rounded-full overflow-hidden bg-slate-50 appearance-none [&::-webkit-progress-bar]:bg-slate-50 [&::-webkit-progress-value]:bg-amber-400 [&::-moz-progress-bar]:bg-amber-400"
             role="progressbar"
             aria-valuenow={overview.dailyTokensConsumed}
             aria-valuemin={0}
@@ -260,14 +260,14 @@ export default function DocumentAnalyticsPage() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-2">
-          <div className="bg-slate-950/40 p-3.5 rounded-xl border border-slate-850">
+          <div className="bg-slate-50/50 p-3.5 rounded-xl border border-slate-850">
             <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Remaining Tokens</span>
-            <p className="text-lg font-bold text-white mt-1 tabular-nums">
+            <p className="text-lg font-bold text-slate-900 mt-1 tabular-nums">
               {formatINR(overview.remainingTokens)}
             </p>
           </div>
           
-          <div className="bg-slate-950/40 p-3.5 rounded-xl border border-slate-850 flex flex-col justify-between">
+          <div className="bg-slate-50/50 p-3.5 rounded-xl border border-slate-850 flex flex-col justify-between">
             <div className="flex justify-between items-center">
               <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Quota Refresh In</span>
               <Clock className="w-3.5 h-3.5 text-amber-500/80" />
@@ -277,14 +277,14 @@ export default function DocumentAnalyticsPage() {
             </p>
           </div>
 
-          <div className="bg-slate-950/40 p-3.5 rounded-xl border border-slate-850">
+          <div className="bg-slate-50/50 p-3.5 rounded-xl border border-slate-850">
             <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">AI Generations</span>
             <p className="text-lg font-bold text-blue-400 mt-1 tabular-nums">
               {overview.aiDocsTodayCount}
             </p>
           </div>
 
-          <div className="bg-slate-950/40 p-3.5 rounded-xl border border-slate-850">
+          <div className="bg-slate-50/50 p-3.5 rounded-xl border border-slate-850">
             <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Standard Substitution</span>
             <p className="text-lg font-bold text-emerald-400 mt-1 tabular-nums">
               {overview.standardDocsTodayCount}
@@ -299,17 +299,17 @@ export default function DocumentAnalyticsPage() {
         {/* Left Side: Last Generation */}
         <div className="lg:col-span-5 admin-card p-6 flex flex-col justify-between">
           <div>
-            <h3 className="text-base font-bold font-heading text-white mb-4 flex items-center gap-2">
+            <h3 className="text-base font-bold font-heading text-slate-900 mb-4 flex items-center gap-2">
               <FileText className="w-5 h-5 text-blue-400" />
               Latest Generation Activity
             </h3>
             
             {lastGen ? (
               <div className="space-y-4">
-                <div className="bg-slate-950/50 p-4 rounded-xl border border-slate-850 space-y-3">
+                <div className="bg-slate-50/50 p-4 rounded-xl border border-slate-850 space-y-3">
                   <div>
                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Document Template</span>
-                    <span className="text-sm font-semibold text-slate-200">{lastGen.template_name}</span>
+                    <span className="text-sm font-semibold text-slate-800">{lastGen.template_name}</span>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
@@ -326,7 +326,7 @@ export default function DocumentAnalyticsPage() {
 
                     <div>
                       <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Tokens Used</span>
-                      <span className="text-sm font-bold text-white tabular-nums">
+                      <span className="text-sm font-bold text-slate-900 tabular-nums">
                         {lastGen.generation_type === 'ai' ? formatINR(lastGen.total_tokens) : '0 (Substitute)'}
                       </span>
                     </div>
@@ -334,7 +334,7 @@ export default function DocumentAnalyticsPage() {
 
                   <div>
                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Timestamp</span>
-                    <span className="text-xs text-slate-400 font-medium">
+                    <span className="text-xs text-slate-500 font-medium">
                       {new Date(lastGen.created_at).toLocaleString('en-IN', {
                         day: 'numeric',
                         month: 'short',
@@ -348,7 +348,7 @@ export default function DocumentAnalyticsPage() {
                 </div>
               </div>
             ) : (
-              <div className="bg-slate-950/30 border border-dashed border-slate-850 rounded-xl p-8 text-center text-slate-500 text-xs">
+              <div className="bg-slate-50/30 border border-dashed border-slate-850 rounded-xl p-8 text-center text-slate-500 text-xs">
                 No document generations logged yet.
               </div>
             )}
@@ -361,11 +361,11 @@ export default function DocumentAnalyticsPage() {
 
         {/* Right Side: Rate Limit Settings */}
         <div className="lg:col-span-7 admin-card p-6">
-          <h3 className="text-base font-bold font-heading text-white mb-2 flex items-center gap-2">
-            <ShieldAlert className="w-5 h-5 text-rose-400" />
+          <h3 className="text-base font-bold font-heading text-slate-900 mb-2 flex items-center gap-2">
+            <ShieldAlert className="w-5 h-5 text-rose-600" />
             IP Rate-Limiting & Whitelist
           </h3>
-          <p className="text-xs text-slate-400 mb-5">
+          <p className="text-xs text-slate-500 mb-5">
             Configure default request limits per IP to protect your rotated developer keys from quota abuse.
           </p>
 
@@ -381,7 +381,7 @@ export default function DocumentAnalyticsPage() {
                   min="1"
                   value={maxRequests}
                   onChange={e => setMaxRequests(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-white focus:outline-none focus:border-amber-500"
+                  className="w-full px-3 py-2 bg-slate-50 border border-white/60 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-amber-500"
                 />
               </div>
 
@@ -395,7 +395,7 @@ export default function DocumentAnalyticsPage() {
                   min="1"
                   value={maxTokens}
                   onChange={e => setMaxTokens(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-white focus:outline-none focus:border-amber-500"
+                  className="w-full px-3 py-2 bg-slate-50 border border-white/60 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-amber-500"
                 />
               </div>
             </div>
@@ -410,7 +410,7 @@ export default function DocumentAnalyticsPage() {
                 value={whitelistedIps}
                 onChange={e => setWhitelistedIps(e.target.value)}
                 placeholder="e.g. 127.0.0.1, 192.168.1.100"
-                className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-white focus:outline-none focus:border-amber-500 font-mono"
+                className="w-full px-3 py-2 bg-slate-50 border border-white/60 rounded-lg text-sm text-slate-900 focus:outline-none focus:border-amber-500 font-mono"
               />
               <span className="text-[10px] text-slate-500 mt-1 block leading-relaxed">
                 Provide a comma-separated list of client IP addresses. Useful for staging/verification tests.
@@ -421,7 +421,7 @@ export default function DocumentAnalyticsPage() {
               <button
                 type="submit"
                 disabled={savingSettings}
-                className="inline-flex items-center gap-1.5 bg-amber-500 hover:bg-amber-600 text-white font-bold px-4 py-2 rounded-lg text-xs shadow-md transition-all disabled:opacity-60"
+                className="inline-flex items-center gap-1.5 btn-vibrant-amber text-white font-bold px-4 py-2 rounded-lg text-xs shadow-md transition-all disabled:opacity-60"
               >
                 {savingSettings ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
                 {savingSettings ? 'Saving...' : 'Save Settings'}
@@ -436,20 +436,20 @@ export default function DocumentAnalyticsPage() {
         
         {/* Top Clients */}
         <div className="admin-card p-6">
-          <h3 className="text-base font-bold font-heading text-white mb-4 flex items-center gap-2">
-            <Users className="w-5 h-5 text-slate-400" />
+          <h3 className="text-base font-bold font-heading text-slate-900 mb-4 flex items-center gap-2">
+            <Users className="w-5 h-5 text-slate-500" />
             Top Active Clients (IP Addresses)
           </h3>
           
           {topClients.length === 0 ? (
-            <div className="bg-slate-950/30 border border-dashed border-slate-850 rounded-xl p-8 text-center text-slate-500 text-xs">
+            <div className="bg-slate-50/30 border border-dashed border-slate-850 rounded-xl p-8 text-center text-slate-500 text-xs">
               No client logs found.
             </div>
           ) : (
             <div className="overflow-hidden border border-slate-850 rounded-xl">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
-                  <tr className="bg-slate-950 border-b border-slate-850 text-slate-400 font-bold">
+                  <tr className="bg-slate-50 border-b border-slate-850 text-slate-500 font-bold">
                     <th className="p-3">Client IP</th>
                     <th className="p-3">Total Generates</th>
                     <th className="p-3 text-right">Tokens Consumed</th>
@@ -457,8 +457,8 @@ export default function DocumentAnalyticsPage() {
                 </thead>
                 <tbody className="divide-y divide-slate-850">
                   {topClients.map(client => (
-                    <tr key={client.ip} className="hover:bg-slate-900/40">
-                      <td className="p-3 font-mono text-slate-300">
+                    <tr key={client.ip} className="hover:bg-slate-100/40">
+                      <td className="p-3 font-mono text-slate-700">
                         {client.ip}
                         {whitelistedIps.split(',').map(s=>s.trim()).includes(client.ip) && (
                           <span className="ml-2 bg-emerald-950/50 text-emerald-400 border border-emerald-800/20 text-[9px] px-1.5 py-0.5 rounded font-sans font-bold">
@@ -467,7 +467,7 @@ export default function DocumentAnalyticsPage() {
                         )}
                       </td>
                       <td className="p-3 text-slate-350">{client.count} times</td>
-                      <td className="p-3 text-slate-200 text-right font-bold tabular-nums">
+                      <td className="p-3 text-slate-800 text-right font-bold tabular-nums">
                         {formatINR(client.tokens)}
                       </td>
                     </tr>
@@ -480,29 +480,29 @@ export default function DocumentAnalyticsPage() {
 
         {/* Top Templates */}
         <div className="admin-card p-6">
-          <h3 className="text-base font-bold font-heading text-white mb-4 flex items-center gap-2">
-            <FileText className="w-5 h-5 text-slate-400" />
+          <h3 className="text-base font-bold font-heading text-slate-900 mb-4 flex items-center gap-2">
+            <FileText className="w-5 h-5 text-slate-500" />
             Most Popular Document Templates
           </h3>
           
           {topTemplates.length === 0 ? (
-            <div className="bg-slate-950/30 border border-dashed border-slate-850 rounded-xl p-8 text-center text-slate-500 text-xs">
+            <div className="bg-slate-50/30 border border-dashed border-slate-850 rounded-xl p-8 text-center text-slate-500 text-xs">
               No document templates generated yet.
             </div>
           ) : (
             <div className="overflow-hidden border border-slate-850 rounded-xl">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
-                  <tr className="bg-slate-950 border-b border-slate-850 text-slate-400 font-bold">
+                  <tr className="bg-slate-50 border-b border-slate-850 text-slate-500 font-bold">
                     <th className="p-3">Template Name</th>
                     <th className="p-3 text-right">Volume</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-850">
                   {topTemplates.map(tpl => (
-                    <tr key={tpl.name} className="hover:bg-slate-900/40">
-                      <td className="p-3 text-slate-300 font-medium">{tpl.name}</td>
-                      <td className="p-3 text-slate-200 text-right font-bold tabular-nums">
+                    <tr key={tpl.name} className="hover:bg-slate-100/40">
+                      <td className="p-3 text-slate-700 font-medium">{tpl.name}</td>
+                      <td className="p-3 text-slate-800 text-right font-bold tabular-nums">
                         {tpl.count} drafts
                       </td>
                     </tr>

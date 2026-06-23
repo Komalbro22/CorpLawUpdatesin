@@ -94,7 +94,7 @@ export default function AdminRepoRatePage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] gap-3 text-slate-400">
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-3 text-slate-500">
         <Loader2 className="w-8 h-8 animate-spin text-amber-500" aria-hidden />
         <p className="text-sm font-medium">Loading repo rate data…</p>
       </div>
@@ -102,13 +102,13 @@ export default function AdminRepoRatePage() {
   }
 
   return (
-    <div className="space-y-8 max-w-5xl content-fade-in text-slate-200">
+    <div className="space-y-8 max-w-5xl content-fade-in text-slate-800">
       <div>
-        <h1 className="text-3xl font-heading font-extrabold text-white flex items-center gap-2">
+        <h1 className="text-3xl font-heading font-extrabold text-slate-900 flex items-center gap-2">
           <Landmark className="w-7 h-7 text-blue-400" aria-hidden />
           RBI Repo Rate Recorder
         </h1>
-        <p className="text-slate-400 text-sm mt-2 leading-relaxed">
+        <p className="text-slate-500 text-sm mt-2 leading-relaxed">
           Record each MPC outcome. The public repo-rate page and history update together.
         </p>
       </div>
@@ -133,79 +133,79 @@ export default function AdminRepoRatePage() {
 
       {/* UPDATE RATE FORM */}
       <div className="admin-card overflow-hidden">
-        <div className="bg-slate-950/40 border-b border-slate-800 px-6 py-4">
-          <h2 className="font-heading font-bold text-white">Record MPC Decision</h2>
-          <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+        <div className="bg-slate-50/50 border-b border-white/60 px-6 py-4">
+          <h2 className="font-heading font-bold text-slate-900">Record MPC Decision</h2>
+          <p className="text-xs text-slate-500 mt-1 leading-relaxed">
             Saves current settings to the live page and appends this meeting to history.
           </p>
         </div>
         <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-semibold text-slate-300 mb-1">New Repo Rate *</label>
+            <label className="block text-sm font-semibold text-slate-700 mb-1">New Repo Rate *</label>
             <input type="text" value={form.repo_rate}
               onChange={e => setForm(p => ({ ...p, repo_rate: e.target.value }))}
               placeholder="e.g. 5.00%"
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-white" />
+              className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900" />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-slate-300 mb-1">SDF Rate</label>
+            <label className="block text-sm font-semibold text-slate-700 mb-1">SDF Rate</label>
             <input type="text" value={form.sdf_rate}
               onChange={e => setForm(p => ({ ...p, sdf_rate: e.target.value }))}
               placeholder="e.g. 4.75%"
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-white" />
+              className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900" />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-slate-300 mb-1">MSF / Bank Rate</label>
+            <label className="block text-sm font-semibold text-slate-700 mb-1">MSF / Bank Rate</label>
             <input type="text" value={form.msf_rate}
               onChange={e => setForm(p => ({ ...p, msf_rate: e.target.value }))}
               placeholder="e.g. 5.25%"
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-white" />
+              className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900" />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-slate-300 mb-1">Policy Stance</label>
+            <label className="block text-sm font-semibold text-slate-700 mb-1">Policy Stance</label>
             <select value={form.stance}
               onChange={e => setForm(p => ({ ...p, stance: e.target.value }))}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-white">
-              <option className="bg-slate-900 text-white">Neutral</option>
-              <option className="bg-slate-900 text-white">Accommodative</option>
-              <option className="bg-slate-900 text-white">Withdrawal</option>
+              className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900">
+              <option className="bg-slate-100 text-white">Neutral</option>
+              <option className="bg-slate-100 text-white">Accommodative</option>
+              <option className="bg-slate-100 text-white">Withdrawal</option>
             </select>
           </div>
           <div>
-            <label className="block text-sm font-semibold text-slate-300 mb-1">MPC Meeting Name *</label>
+            <label className="block text-sm font-semibold text-slate-700 mb-1">MPC Meeting Name *</label>
             <input type="text" value={form.meeting_name}
               onChange={e => setForm(p => ({ ...p, meeting_name: e.target.value }))}
               placeholder="e.g. June 2026 (61st MPC)"
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-white" />
+              className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900" />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-slate-300 mb-1">Meeting Date *</label>
+            <label className="block text-sm font-semibold text-slate-700 mb-1">Meeting Date *</label>
             <input type="date" value={form.meeting_date}
               onChange={e => setForm(p => ({ ...p, meeting_date: e.target.value }))}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-white" />
+              className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900" />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-slate-300 mb-1">Rate Change</label>
+            <label className="block text-sm font-semibold text-slate-700 mb-1">Rate Change</label>
             <div className="flex gap-2">
               <select value={form.change_direction}
                 onChange={e => setForm(p => ({ ...p, change_direction: e.target.value }))}
-                className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-white">
-                <option className="bg-slate-900 text-white" value="unchanged">No Change</option>
-                <option className="bg-slate-900 text-white" value="cut">Rate Cut</option>
-                <option className="bg-slate-900 text-white" value="hike">Rate Hike</option>
+                className="bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900">
+                <option className="bg-slate-100 text-white" value="unchanged">No Change</option>
+                <option className="bg-slate-100 text-white" value="cut">Rate Cut</option>
+                <option className="bg-slate-100 text-white" value="hike">Rate Hike</option>
               </select>
               <input type="text" value={form.change_amount}
                 onChange={e => setForm(p => ({ ...p, change_amount: e.target.value }))}
                 placeholder="e.g. -0.25%"
-                className="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-white" />
+                className="flex-1 bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900" />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-semibold text-slate-300 mb-1">Next MPC Meeting Date</label>
+            <label className="block text-sm font-semibold text-slate-700 mb-1">Next MPC Meeting Date</label>
             <input type="text" value={form.next_mpc_date}
               onChange={e => setForm(p => ({ ...p, next_mpc_date: e.target.value }))}
               placeholder="e.g. August 5-7, 2026"
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-white" />
+              className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900" />
           </div>
         </div>
         <div className="px-6 pb-6">
@@ -214,7 +214,7 @@ export default function AdminRepoRatePage() {
             onClick={handleSaveNewRate}
             disabled={saving}
             className={`inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm transition-colors shadow-md ${
-              saved ? 'bg-emerald-600 text-white' : 'bg-amber-500 hover:bg-amber-600 text-white shadow-amber-500/10'
+              saved ? 'bg-emerald-600 text-white' : 'btn-vibrant-amber text-white shadow-amber-500/10'
             }`}
           >
             {saving ? (
@@ -236,14 +236,14 @@ export default function AdminRepoRatePage() {
 
       {/* HISTORY TABLE */}
       <div className="admin-card overflow-hidden">
-        <div className="bg-slate-950/40 border-b border-slate-800 px-6 py-4">
-          <h2 className="font-heading font-bold text-white">Rate History ({history.length})</h2>
-          <p className="text-xs text-slate-400 mt-1">All entries are shown on the public /rbi/repo-rate page</p>
+        <div className="bg-slate-50/50 border-b border-white/60 px-6 py-4">
+          <h2 className="font-heading font-bold text-slate-900">Rate History ({history.length})</h2>
+          <p className="text-xs text-slate-500 mt-1">All entries are shown on the public /rbi/repo-rate page</p>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left border-collapse">
             <thead>
-              <tr className="bg-slate-950 border-b border-slate-800 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              <tr className="bg-slate-50 border-b border-white/60 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 <th className="px-4 py-3">Meeting</th>
                 <th className="text-center px-4 py-3">Repo Rate</th>
                 <th className="text-center px-4 py-3">Change</th>
@@ -251,29 +251,29 @@ export default function AdminRepoRatePage() {
                 <th className="text-center px-4 py-3">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/40">
+            <tbody className="divide-y divide-slate-200/50">
               {history.map((entry, i) => (
-                <tr key={entry.id} className="hover:bg-slate-900/30 transition-colors">
-                  <td className="px-4 py-3 font-semibold text-slate-200">{entry.meeting_name}</td>
+                <tr key={entry.id} className="hover:bg-slate-100/50 transition-colors">
+                  <td className="px-4 py-3 font-semibold text-slate-800">{entry.meeting_name}</td>
                   <td className="px-4 py-3 text-center font-bold text-blue-400">{entry.repo_rate}</td>
-                  <td className="px-4 py-3 text-center text-slate-300">
+                  <td className="px-4 py-3 text-center text-slate-700">
                     <span className="inline-flex items-center justify-center gap-1 font-semibold">
                       {entry.change_direction === 'cut' ? (
                         <ArrowDown className="w-4 h-4 text-emerald-400" aria-hidden />
                       ) : entry.change_direction === 'hike' ? (
-                        <ArrowUp className="w-4 h-4 text-rose-400" aria-hidden />
+                        <ArrowUp className="w-4 h-4 text-rose-600" aria-hidden />
                       ) : (
                         <Minus className="w-4 h-4 text-slate-500" aria-hidden />
                       )}
                       <span>{entry.change_amount}</span>
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-slate-300">{entry.stance}</td>
+                  <td className="px-4 py-3 text-slate-700">{entry.stance}</td>
                   <td className="px-4 py-3 text-center">
                     <button
                       type="button"
                       onClick={() => handleDeleteEntry(entry.id)}
-                      className="text-rose-400 hover:text-rose-350 text-xs font-bold transition-colors"
+                      className="text-rose-600 hover:text-rose-350 text-xs font-bold transition-colors"
                     >
                       Delete
                     </button>

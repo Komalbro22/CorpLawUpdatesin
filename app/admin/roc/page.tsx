@@ -45,7 +45,7 @@ export default function AdminROCFormsPage() {
       <div className="flex items-center 
                       justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-navy">
+          <h1 className="text-2xl font-bold text-slate-900">
             ROC Forms Management
           </h1>
           <p className="text-slate-500 text-sm">
@@ -63,14 +63,13 @@ export default function AdminROCFormsPage() {
       <div className="space-y-4">
         {forms.map(form => (
           <div key={form.id}
-               className="bg-white border 
-                          border-slate-200 rounded-2xl 
+               className="admin-card-glass rounded-2xl 
                           overflow-hidden">
             <div className="p-4 flex items-center 
                             justify-between">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-navy">
+                  <span className="font-bold text-slate-900">
                     {form.form_code}
                   </span>
                   <span className={`text-xs px-2 py-0.5 
@@ -273,7 +272,7 @@ function EditFormPanel({ form, onSave, saving }: {
         onClick={() => onSave(values)}
         disabled={saving}
         className="bg-amber-400 hover:bg-amber-500 
-                   text-navy font-bold px-6 py-2.5 
+                   text-slate-900 font-bold px-6 py-2.5 
                    rounded-xl text-sm 
                    disabled:opacity-50">
         {saving ? 'Saving...' : '✅ Save Changes'}

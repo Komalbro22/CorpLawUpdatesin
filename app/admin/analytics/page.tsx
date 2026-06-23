@@ -97,7 +97,7 @@ export default function AnalyticsPage() {
       value: overview.totalArticles,
       Icon: FileText,
       color: 'admin-stat-blue',
-      text: 'text-white',
+      text: 'text-slate-900',
       iconBg: 'admin-icon-blue',
     },
     {
@@ -105,7 +105,7 @@ export default function AnalyticsPage() {
       value: overview.totalSubscribers,
       Icon: Mail,
       color: 'admin-stat-emerald',
-      text: 'text-white',
+      text: 'text-slate-900',
       iconBg: 'admin-icon-emerald',
     },
     {
@@ -113,7 +113,7 @@ export default function AnalyticsPage() {
       value: overview.totalViews.toLocaleString('en-IN'),
       Icon: Eye,
       color: 'admin-stat-violet',
-      text: 'text-white',
+      text: 'text-slate-900',
       iconBg: 'admin-icon-violet',
     },
     {
@@ -121,7 +121,7 @@ export default function AnalyticsPage() {
       value: (overview.activeUsers || 0).toLocaleString('en-IN'),
       Icon: Users,
       color: 'admin-stat-amber',
-      text: 'text-white',
+      text: 'text-slate-900',
       iconBg: 'admin-icon-amber',
     },
   ]
@@ -139,38 +139,38 @@ export default function AnalyticsPage() {
       label: 'New article',
       desc: 'Publish a regulatory update',
       Icon: PenSquare,
-      color: 'bg-slate-900/40 hover:bg-slate-800/40 border-amber-500/20 text-white hover:border-amber-500/40',
+      color: 'bg-slate-100/40 hover:bg-slate-200/50 border-amber-500/20 text-slate-900 hover:border-amber-500/40',
     },
     {
       href: '/admin/newsletter',
       label: 'Send newsletter',
       desc: `Reach ${overview.totalSubscribers} subscribers`,
       Icon: Mail,
-      color: 'bg-slate-900/40 hover:bg-slate-800/40 border-blue-500/20 text-white hover:border-blue-500/40',
+      color: 'bg-slate-100/40 hover:bg-slate-200/50 border-blue-500/20 text-slate-900 hover:border-blue-500/40',
     },
     {
       href: '/admin/settings',
       label: 'Site settings',
       desc: 'Social links, SEO, announcements',
       Icon: Settings,
-      color: 'bg-slate-900/40 hover:bg-slate-800/40 border-slate-800 text-white hover:border-slate-700',
+      color: 'bg-slate-100/40 hover:bg-slate-200/50 border-white/60 text-slate-900 hover:border-slate-700',
     },
     {
       href: '/api/feed.xml',
       label: 'RSS feed',
       desc: 'Open the public feed',
       Icon: Rss,
-      color: 'bg-slate-900/40 hover:bg-slate-800/40 border-violet-500/20 text-white hover:border-violet-500/40',
+      color: 'bg-slate-100/40 hover:bg-slate-200/50 border-violet-500/20 text-slate-900 hover:border-violet-500/40',
       target: '_blank',
     },
   ]
 
   return (
-    <div className="space-y-8 content-fade-in text-slate-100">
+    <div className="space-y-8 content-fade-in text-slate-900">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
         <div>
-          <h1 className="text-2xl font-heading font-bold text-white">Analytics</h1>
-          <p className="text-slate-400 text-sm mt-1.5 leading-relaxed">
+          <h1 className="text-2xl font-heading font-bold text-slate-900">Analytics</h1>
+          <p className="text-slate-500 text-sm mt-1.5 leading-relaxed">
             High-level traffic and content signals from your database.
           </p>
         </div>
@@ -200,7 +200,7 @@ export default function AnalyticsPage() {
               <div className={`text-2xl font-heading font-bold tabular-nums ${card.text}`}>
                 {card.value}
               </div>
-              <div className="text-sm text-slate-400 mt-1 font-medium">{card.label}</div>
+              <div className="text-sm text-slate-500 mt-1 font-medium">{card.label}</div>
             </div>
           )
         })}
@@ -208,12 +208,12 @@ export default function AnalyticsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="admin-card p-6">
-          <h2 className="font-heading font-bold text-white mb-4 flex items-center gap-2">
+          <h2 className="font-heading font-bold text-slate-900 mb-4 flex items-center gap-2">
             <Trophy className="w-5 h-5 text-amber-500" aria-hidden />
             Top articles by views
           </h2>
           {topArticles.length === 0 ? (
-            <p className="text-slate-400 text-sm">No views data yet.</p>
+            <p className="text-slate-500 text-sm">No views data yet.</p>
           ) : (
             <div className="space-y-3">
               {topArticles.map((article, i) => (
@@ -226,7 +226,7 @@ export default function AnalyticsPage() {
                       href={`/updates/${article.slug}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm font-semibold text-slate-200 hover:text-amber-400 line-clamp-2 transition-colors"
+                      className="text-sm font-semibold text-slate-800 hover:text-amber-400 line-clamp-2 transition-colors"
                     >
                       {article.title}
                     </Link>
@@ -234,7 +234,7 @@ export default function AnalyticsPage() {
                       <span className="text-[10px] uppercase tracking-wide font-bold bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-full px-2 py-0.5">
                         {article.category}
                       </span>
-                      <span className="text-xs text-slate-400">
+                      <span className="text-xs text-slate-500">
                         {(article.views || 0).toLocaleString('en-IN')} views
                       </span>
                     </div>
@@ -246,12 +246,12 @@ export default function AnalyticsPage() {
         </div>
 
         <div className="admin-card p-6">
-          <h2 className="font-heading font-bold text-white mb-4 flex items-center gap-2">
-            <BarChart2 className="w-5 h-5 text-slate-400" aria-hidden />
+          <h2 className="font-heading font-bold text-slate-900 mb-4 flex items-center gap-2">
+            <BarChart2 className="w-5 h-5 text-slate-500" aria-hidden />
             Articles by category
           </h2>
           {Object.keys(categoryBreakdown).length === 0 ? (
-            <p className="text-slate-400 text-sm">No published articles yet.</p>
+            <p className="text-slate-500 text-sm">No published articles yet.</p>
           ) : (
             <div className="space-y-3">
               {Object.entries(categoryBreakdown)
@@ -261,12 +261,12 @@ export default function AnalyticsPage() {
                   return (
                     <div key={cat}>
                       <div className="flex justify-between text-sm mb-1">
-                        <span className="font-semibold text-slate-200 uppercase">{cat}</span>
-                        <span className="text-slate-400 tabular-nums">
+                        <span className="font-semibold text-slate-800 uppercase">{cat}</span>
+                        <span className="text-slate-500 tabular-nums">
                           {count} · {pct}%
                         </span>
                       </div>
-                      <div className="w-full bg-slate-950 rounded-full h-2 overflow-hidden">
+                      <div className="w-full bg-slate-50 rounded-full h-2 overflow-hidden">
                         <div
                           className={`h-2 rounded-full transition-all duration-500 ${categoryColors[cat] || 'bg-slate-400'}`}
                           style={{ width: `${pct}%` }}
@@ -280,21 +280,21 @@ export default function AnalyticsPage() {
         </div>
 
         <div className="admin-card p-6">
-          <h2 className="font-heading font-bold text-white mb-4 flex items-center gap-2">
-            <Users className="w-5 h-5 text-slate-400" aria-hidden />
+          <h2 className="font-heading font-bold text-slate-900 mb-4 flex items-center gap-2">
+            <Users className="w-5 h-5 text-slate-500" aria-hidden />
             Recent subscribers
           </h2>
           {recentSubscribers.length === 0 ? (
-            <p className="text-slate-400 text-sm">No subscribers yet.</p>
+            <p className="text-slate-500 text-sm">No subscribers yet.</p>
           ) : (
             <div className="space-y-2">
               {recentSubscribers.map(sub => (
                 <div
                   key={sub.email}
-                  className="flex items-center justify-between py-2 border-b border-slate-800 last:border-0 gap-2"
+                  className="flex items-center justify-between py-2 border-b border-white/60 last:border-0 gap-2"
                 >
-                  <span className="text-sm text-slate-200 font-medium truncate">{sub.email}</span>
-                  <span className="text-xs text-slate-400 flex-shrink-0 tabular-nums">
+                  <span className="text-sm text-slate-800 font-medium truncate">{sub.email}</span>
+                  <span className="text-xs text-slate-500 flex-shrink-0 tabular-nums">
                     {new Date(sub.subscribed_at).toLocaleDateString('en-IN', {
                       day: 'numeric',
                       month: 'short',
@@ -315,7 +315,7 @@ export default function AnalyticsPage() {
         </div>
 
         <div className="admin-card p-6">
-          <h2 className="font-heading font-bold text-white mb-4">Quick actions</h2>
+          <h2 className="font-heading font-bold text-slate-900 mb-4">Quick actions</h2>
           <div className="space-y-2">
             {quickActions.map(action => {
               const Icon = action.Icon
@@ -327,14 +327,14 @@ export default function AnalyticsPage() {
                   rel={action.target === '_blank' ? 'noopener noreferrer' : undefined}
                   className={`flex items-center gap-3 p-3 rounded-xl border transition-colors duration-200 ${action.color}`}
                 >
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-950 border border-slate-800 text-slate-200">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-50 border border-white/60 text-slate-800">
                     <Icon className="w-5 h-5" aria-hidden />
                   </span>
                   <div className="min-w-0">
-                    <div className="font-semibold text-slate-200 text-sm">{action.label}</div>
-                    <div className="text-xs text-slate-400 leading-snug">{action.desc}</div>
+                    <div className="font-semibold text-slate-800 text-sm">{action.label}</div>
+                    <div className="text-xs text-slate-500 leading-snug">{action.desc}</div>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-slate-400 shrink-0 ml-auto" aria-hidden />
+                  <ArrowRight className="w-4 h-4 text-slate-500 shrink-0 ml-auto" aria-hidden />
                 </Link>
               )
             })}

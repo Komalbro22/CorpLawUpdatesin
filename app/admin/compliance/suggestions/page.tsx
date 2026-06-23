@@ -148,7 +148,7 @@ export default function AdminSuggestionsPage() {
 
   const tabClass = (t: TabFilter) =>
     `px-4 py-2 text-sm font-semibold rounded-lg transition-colors ${
-      tab === t ? 'bg-gold text-slate-950 shadow-md' : 'text-slate-400 hover:bg-slate-900 hover:text-slate-200'
+      tab === t ? 'bg-gold text-slate-950 shadow-md' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-800'
     }`
 
   const typeLabel = (type: string) => {
@@ -164,34 +164,34 @@ export default function AdminSuggestionsPage() {
       live:     'bg-green-500/10 text-green-400 border border-green-500/20',
       rejected: 'bg-red-500/10 text-red-400 border border-red-500/20',
     }
-    return `text-xs px-2.5 py-0.5 rounded-full font-semibold border ${map[status] || 'bg-slate-800 text-slate-400 border-slate-750'}`
+    return `text-xs px-2.5 py-0.5 rounded-full font-semibold border ${map[status] || 'bg-slate-100 text-slate-500 border-slate-750'}`
   }
 
   return (
-    <div className="p-6 max-w-5xl mx-auto text-slate-100">
+    <div className="p-6 max-w-5xl mx-auto text-slate-900">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-white">Community Suggestions</h1>
-          <p className="text-slate-400 text-sm mt-1">
+          <h1 className="text-2xl font-bold text-slate-900">Community Suggestions</h1>
+          <p className="text-slate-500 text-sm mt-1">
             Review and approve user-submitted compliance suggestions
           </p>
         </div>
         <Link
           href="/admin/compliance"
-          className="border border-slate-800 text-slate-300 px-4 py-2 rounded-lg text-sm bg-slate-900 hover:bg-slate-800 hover:text-white transition-colors"
+          className="border border-white/60 text-slate-700 px-4 py-2 rounded-lg text-sm bg-slate-100 hover:bg-slate-100 hover:text-slate-900 transition-colors"
         >
           ← Back to Entries
         </Link>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 mb-6 bg-slate-950 p-1 border border-slate-800 rounded-xl w-fit">
+      <div className="flex gap-2 mb-6 bg-slate-50 p-1 border border-white/60 rounded-xl w-fit">
         {(['all', 'pending', 'approved', 'rejected'] as TabFilter[]).map(t => (
           <button key={t} onClick={() => setTab(t)} className={tabClass(t)}>
             {t.charAt(0).toUpperCase() + t.slice(1)}
             {counts[t] > 0 && (
               <span className={`ml-1.5 text-xs px-1.5 py-0.5 rounded-full ${
-                t === 'pending' ? 'bg-red-500 text-white' : 'bg-slate-850 text-slate-350 border border-slate-750'
+                t === 'pending' ? 'bg-red-500 text-slate-900' : 'bg-slate-100 text-slate-350 border border-slate-750'
               }`}>
                 {counts[t]}
               </span>
@@ -208,66 +208,66 @@ export default function AdminSuggestionsPage() {
           <EmptyState
             icon={tab === 'pending' ? '✅' : tab === 'approved' ? '👍' : tab === 'rejected' ? '❌' : '📋'}
             title={tab === 'pending' ? 'No pending suggestions' : `No ${tab} suggestions`}
-            description={tab === 'pending' ? 'All community suggestions have been reviewed. Great work!' : `No suggestions currently match the "${tab}" filter status.`}
+            description={tab === 'pending' ? 'All community suggestions have been reviewed. Great work!' : `No suggestions currently match the"${tab}" filter status.`}
           />
         </div>
       ) : (
         <div className="space-y-3">
           {filtered.map(s => (
-            <div key={s.id} className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+            <div key={s.id} className="bg-slate-100 border border-white/60 rounded-2xl overflow-hidden shadow-sm">
 
               {/* Row summary */}
               <div
-                className="flex items-center justify-between p-4 cursor-pointer hover:bg-slate-850/60 transition-colors"
+                className="flex items-center justify-between p-4 cursor-pointer hover:bg-slate-100/60 transition-colors"
                 onClick={() => setExpanded(expanded === s.id ? null : s.id)}
               >
                 <div className="flex items-center gap-3 flex-wrap">
-                  <span className="text-sm font-semibold text-slate-200">
+                  <span className="text-sm font-semibold text-slate-800">
                     {typeLabel(s.suggestion_type)}
                   </span>
                   {s.form_name && (
-                    <span className="font-mono text-xs bg-slate-950 px-2 py-1 rounded text-slate-200 border border-slate-800 font-bold">
+                    <span className="font-mono text-xs bg-slate-50 px-2 py-1 rounded text-slate-800 border border-white/60 font-bold">
                       {s.form_name}
                     </span>
                   )}
                   {s.compliance_entries && (
-                    <span className="text-xs text-slate-400">
+                    <span className="text-xs text-slate-500">
                       re: {s.compliance_entries.form_name}
                     </span>
                   )}
                 </div>
                 <div className="flex items-center gap-3 flex-shrink-0">
-                  <span className="text-xs text-slate-400">
+                  <span className="text-xs text-slate-500">
                     {new Date(s.created_at).toLocaleDateString('en-IN')}
                   </span>
                   <span className={statusBadge(s.status)}>
                     {s.status.charAt(0).toUpperCase() + s.status.slice(1)}
                   </span>
-                  <span className="text-slate-400 text-sm">{expanded === s.id ? '▲' : '▼'}</span>
+                  <span className="text-slate-500 text-sm">{expanded === s.id ? '▲' : '▼'}</span>
                 </div>
               </div>
 
               {/* Expanded detail */}
               {expanded === s.id && (
-                <div className="border-t border-slate-800/80 p-4 space-y-4 bg-slate-950/20">
+                <div className="border-t border-white/60/80 p-4 space-y-4 bg-slate-50/20">
 
                   {/* Submitter info */}
-                  <div className="bg-slate-950 rounded-xl p-3 border border-slate-800 grid grid-cols-2 gap-2 text-sm">
+                  <div className="bg-slate-50 rounded-xl p-3 border border-white/60 grid grid-cols-2 gap-2 text-sm">
                     <div>
                       <span className="text-slate-500 text-xs">Name</span>
-                      <div className="font-semibold text-slate-200">{s.user_name || 'Anonymous'}</div>
+                      <div className="font-semibold text-slate-800">{s.user_name || 'Anonymous'}</div>
                     </div>
                     <div>
                       <span className="text-slate-500 text-xs">Profession</span>
-                      <div className="font-semibold text-slate-200">{s.user_profession || '—'}</div>
+                      <div className="font-semibold text-slate-800">{s.user_profession || '—'}</div>
                     </div>
                     <div>
                       <span className="text-slate-500 text-xs">Email</span>
-                      <div className="text-slate-300">{s.user_email}</div>
+                      <div className="text-slate-700">{s.user_email}</div>
                     </div>
                     <div>
                       <span className="text-slate-500 text-xs">City</span>
-                      <div className="text-slate-300">{s.user_city || '—'}</div>
+                      <div className="text-slate-700">{s.user_city || '—'}</div>
                     </div>
                     {s.user_linkedin && (
                       <div className="col-span-2">
@@ -326,24 +326,24 @@ export default function AdminSuggestionsPage() {
                         </div>
                         <div className="col-span-2">
                           <span className="text-emerald-450 text-xs uppercase font-semibold">Title</span>
-                          <div className="text-slate-200">{s.compliance_title}</div>
+                          <div className="text-slate-800">{s.compliance_title}</div>
                         </div>
                         <div>
                           <span className="text-emerald-450 text-xs uppercase font-semibold">Due Date</span>
-                          <div className="text-slate-200">{s.due_date}</div>
+                          <div className="text-slate-800">{s.due_date}</div>
                         </div>
                         <div>
                           <span className="text-emerald-450 text-xs uppercase font-semibold">Penalty</span>
-                          <div className="text-slate-200">{s.penalty || '—'}</div>
+                          <div className="text-slate-800">{s.penalty || '—'}</div>
                         </div>
                         <div className="col-span-2">
                           <span className="text-emerald-450 text-xs uppercase font-semibold">Applicable To</span>
-                          <div className="text-slate-200">{s.applicable_to}</div>
+                          <div className="text-slate-800">{s.applicable_to}</div>
                         </div>
                         {s.regulation_reference && (
                           <div className="col-span-2">
                             <span className="text-emerald-450 text-xs uppercase font-semibold">Regulation</span>
-                            <div className="text-slate-200">{s.regulation_reference}</div>
+                            <div className="text-slate-800">{s.regulation_reference}</div>
                           </div>
                         )}
                       </div>
@@ -358,79 +358,79 @@ export default function AdminSuggestionsPage() {
                           <h4 className="font-bold text-amber-400 text-sm">Preview & Edit before adding to Calendar</h4>
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <label className="text-xs text-slate-400">Regulator</label>
+                              <label className="text-xs text-slate-500">Regulator</label>
                               <select value={approvalForm.regulator}
                                 onChange={e => setApprovalForm(p => ({ ...p, regulator: e.target.value }))}
-                                className="w-full bg-slate-950 border border-slate-800 text-white rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500">
-                                <option value="mca" className="bg-slate-900">MCA</option>
-                                <option value="sebi" className="bg-slate-900">SEBI</option>
-                                <option value="rbi" className="bg-slate-900">RBI</option>
-                                <option value="fema" className="bg-slate-900">FEMA</option>
-                                <option value="income_tax" className="bg-slate-900">Income Tax</option>
-                                <option value="gst" className="bg-slate-900">GST</option>
-                                <option value="labor_law" className="bg-slate-900">Labor Law</option>
-                                <option value="nclt" className="bg-slate-900">NCLT</option>
-                                <option value="other" className="bg-slate-900">Other</option>
+                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500">
+                                <option value="mca" className="bg-slate-100">MCA</option>
+                                <option value="sebi" className="bg-slate-100">SEBI</option>
+                                <option value="rbi" className="bg-slate-100">RBI</option>
+                                <option value="fema" className="bg-slate-100">FEMA</option>
+                                <option value="income_tax" className="bg-slate-100">Income Tax</option>
+                                <option value="gst" className="bg-slate-100">GST</option>
+                                <option value="labor_law" className="bg-slate-100">Labor Law</option>
+                                <option value="nclt" className="bg-slate-100">NCLT</option>
+                                <option value="other" className="bg-slate-100">Other</option>
                               </select>
                             </div>
                             <div>
-                              <label className="text-xs text-slate-400">Form Name</label>
+                              <label className="text-xs text-slate-500">Form Name</label>
                               <input value={approvalForm.form_name}
                                 onChange={e => setApprovalForm(p => ({ ...p, form_name: e.target.value }))}
-                                className="w-full bg-slate-950 border border-slate-800 text-white rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
+                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
                             </div>
                             <div className="col-span-2">
-                              <label className="text-xs text-slate-400">Title</label>
+                              <label className="text-xs text-slate-500">Title</label>
                               <input value={approvalForm.compliance_title}
                                 onChange={e => setApprovalForm(p => ({ ...p, compliance_title: e.target.value }))}
-                                className="w-full bg-slate-950 border border-slate-800 text-white rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
+                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
                             </div>
                             <div>
-                              <label className="text-xs text-slate-400">Due Date</label>
+                              <label className="text-xs text-slate-500">Due Date</label>
                               <input value={approvalForm.due_date}
                                 onChange={e => setApprovalForm(p => ({ ...p, due_date: e.target.value }))}
-                                className="w-full bg-slate-950 border border-slate-800 text-white rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
+                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
                             </div>
                             <div>
-                              <label className="text-xs text-slate-400">Frequency</label>
+                              <label className="text-xs text-slate-500">Frequency</label>
                               <select value={approvalForm.frequency || 'annual'}
                                 onChange={e => setApprovalForm(p => ({ ...p, frequency: e.target.value }))}
-                                className="w-full bg-slate-950 border border-slate-800 text-white rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500">
+                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500">
                                 {FREQUENCIES.map(f => (
-                                  <option key={f.value} value={f.value} className="bg-slate-900">{f.label}</option>
+                                  <option key={f.value} value={f.value} className="bg-slate-100">{f.label}</option>
                                 ))}
                               </select>
                             </div>
                             <div className="col-span-2">
-                              <label className="text-xs text-slate-400">Applicable To</label>
+                              <label className="text-xs text-slate-500">Applicable To</label>
                               <input value={approvalForm.applicable_to}
                                 onChange={e => setApprovalForm(p => ({ ...p, applicable_to: e.target.value }))}
-                                className="w-full bg-slate-950 border border-slate-800 text-white rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
+                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
                             </div>
                             <div>
-                              <label className="text-xs text-slate-400">Penalty</label>
+                              <label className="text-xs text-slate-500">Penalty</label>
                               <input value={approvalForm.penalty}
                                 onChange={e => setApprovalForm(p => ({ ...p, penalty: e.target.value }))}
-                                className="w-full bg-slate-950 border border-slate-800 text-white rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
+                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
                             </div>
                             <div>
-                              <label className="text-xs text-slate-400">Regulation Reference</label>
+                              <label className="text-xs text-slate-500">Regulation Reference</label>
                               <input value={approvalForm.regulation_reference}
                                 onChange={e => setApprovalForm(p => ({ ...p, regulation_reference: e.target.value }))}
-                                className="w-full bg-slate-950 border border-slate-800 text-white rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
+                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
                             </div>
                             <div>
-                              <label className="text-xs text-slate-400">Official Link</label>
+                              <label className="text-xs text-slate-500">Official Link</label>
                               <input value={approvalForm.official_link || ''}
                                 onChange={e => setApprovalForm(p => ({ ...p, official_link: e.target.value }))}
                                 placeholder="https://mca.gov.in/..."
-                                className="w-full bg-slate-950 border border-slate-800 text-white rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
+                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
                             </div>
                             <div className="col-span-2">
-                              <label className="text-xs text-slate-400">Description (optional)</label>
+                              <label className="text-xs text-slate-500">Description (optional)</label>
                               <textarea rows={2} value={approvalForm.description || ''}
                                 onChange={e => setApprovalForm(p => ({ ...p, description: e.target.value }))}
-                                className="w-full bg-slate-950 border border-slate-800 text-white rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
+                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
                             </div>
                           </div>
                         </div>
@@ -446,7 +446,7 @@ export default function AdminSuggestionsPage() {
                           value={adminNote}
                           onChange={e => setAdminNote(e.target.value)}
                           placeholder="Optional note for approval, required for rejection..."
-                          className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 placeholder:text-slate-600"
+                          className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500/20 placeholder:text-slate-600"
                         />
                       </div>
                       <div className="flex gap-3">
@@ -479,7 +479,7 @@ export default function AdminSuggestionsPage() {
 
                   {/* Reviewed state */}
                   {s.status !== 'pending' && s.admin_note && (
-                    <div className="bg-slate-950 border border-slate-800 rounded-lg p-3 text-sm">
+                    <div className="bg-slate-50 border border-white/60 rounded-lg p-3 text-sm">
                       <span className="text-slate-500 text-xs font-semibold uppercase">Admin Note</span>
                       <div className="text-slate-350 mt-1">{s.admin_note}</div>
                     </div>

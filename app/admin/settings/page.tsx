@@ -163,7 +163,7 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4 text-slate-400">
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4 text-slate-500">
         <Loader2 className="w-8 h-8 animate-spin text-amber-500" aria-hidden />
         <p className="text-sm font-medium">Loading settings...</p>
       </div>
@@ -175,10 +175,10 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="space-y-8 max-w-3xl content-fade-in text-slate-200">
+    <div className="space-y-8 max-w-3xl content-fade-in text-slate-800">
       <div>
-        <h1 className="text-3xl font-heading font-extrabold text-white">System Settings</h1>
-        <p className="text-slate-400 text-sm mt-2 leading-relaxed">
+        <h1 className="text-3xl font-heading font-extrabold text-slate-900">System Settings</h1>
+        <p className="text-slate-500 text-sm mt-2 leading-relaxed">
           Social links, announcements, RBI rates, and SEO identifiers. Changes apply on save - no
           deployment required.
         </p>
@@ -188,13 +188,13 @@ export default function SettingsPage() {
         const GroupIcon = group.Icon
         return (
         <div key={group.id} className="admin-card overflow-hidden">
-          <div className="bg-slate-950/40 border-b border-slate-800 px-6 py-4 flex items-center gap-3">
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-900 border border-slate-800 text-slate-300 shrink-0">
+          <div className="bg-slate-50/50 border-b border-white/60 px-6 py-4 flex items-center gap-3">
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 border border-white/60 text-slate-700 shrink-0">
               <GroupIcon className="w-4 h-4" aria-hidden />
             </span>
-            <h2 className="font-heading font-bold text-white">{group.title}</h2>
+            <h2 className="font-heading font-bold text-slate-900">{group.title}</h2>
           </div>
-          <div className="divide-y divide-slate-800/40">
+          <div className="divide-y divide-slate-200/50">
             {group.keys.map((key) => {
               const setting = settings[key]
               if (!setting) return null
@@ -203,10 +203,10 @@ export default function SettingsPage() {
 
               return (
                 <div key={key} className="px-6 py-5">
-                  <label className="block text-sm font-semibold text-slate-200 mb-1">
+                  <label className="block text-sm font-semibold text-slate-800 mb-1">
                     {setting.label}
                   </label>
-                  <p className="text-xs text-slate-400 mb-3">
+                  <p className="text-xs text-slate-500 mb-3">
                     {setting.description}
                   </p>
                   <div className="flex items-start gap-3">
@@ -218,7 +218,7 @@ export default function SettingsPage() {
                             setValues(prev => ({ ...prev, [key]: e.target.value }))
                           }
                           rows={2}
-                          className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-shadow"
+                          className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-shadow"
                           placeholder={`Enter ${setting.label}...`}
                         />
                       ) : (
@@ -228,7 +228,7 @@ export default function SettingsPage() {
                           onChange={e =>
                             setValues(prev => ({ ...prev, [key]: e.target.value }))
                           }
-                          className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-shadow"
+                          className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-shadow"
                           placeholder={isUrl ? 'https://' : `Enter ${setting.label}...`}
                         />
                       )}
@@ -250,7 +250,7 @@ export default function SettingsPage() {
                       disabled={saving[key]}
                       className={`flex-shrink-0 px-4 py-2 rounded-lg text-sm font-bold transition-colors duration-200 min-w-[5.5rem] inline-flex items-center justify-center gap-1.5 ${saved[key]
                           ? 'bg-emerald-600 text-white'
-                          : 'bg-amber-500 hover:bg-amber-600 text-white shadow-md shadow-amber-500/10'
+                          : 'btn-vibrant-amber text-white shadow-md shadow-amber-500/10'
                         } disabled:opacity-60`}
                     >
                       {saving[key] ? (
@@ -275,14 +275,14 @@ export default function SettingsPage() {
 
       {/* IndexNow Section */}
       <div className="admin-card overflow-hidden">
-        <div className="bg-slate-950/40 border-b border-slate-800 px-6 py-4 flex items-center gap-3">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-900 border border-slate-800 text-slate-300 shrink-0">
+        <div className="bg-slate-50/50 border-b border-white/60 px-6 py-4 flex items-center gap-3">
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 border border-white/60 text-slate-700 shrink-0">
             <Search className="w-4 h-4" aria-hidden />
           </span>
-          <h2 className="font-heading font-bold text-white">IndexNow (Bing & Search Partners)</h2>
+          <h2 className="font-heading font-bold text-slate-900">IndexNow (Bing & Search Partners)</h2>
         </div>
         <div className="px-6 py-5 space-y-4">
-          <p className="text-sm text-slate-300 leading-relaxed">
+          <p className="text-sm text-slate-700 leading-relaxed">
             Submit published article URLs to Bing, Yandex, and other IndexNow participants for faster discovery.
           </p>
           <div className="flex flex-wrap items-center gap-3">
@@ -290,7 +290,7 @@ export default function SettingsPage() {
               type="button"
               onClick={handleIndexNowSubmit}
               disabled={indexNowLoading}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold disabled:opacity-50 transition-colors shadow-sm animate-none"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-slate-900 rounded-lg text-sm font-semibold disabled:opacity-50 transition-colors shadow-sm animate-none"
             >
               {indexNowLoading ? (
                 <>
@@ -321,7 +321,7 @@ export default function SettingsPage() {
       {/* ACCOUNT & SECURITY */}
       <div className="admin-card overflow-hidden border border-rose-500/20 bg-rose-500/[0.02]">
         <div className="bg-rose-950/40 border-b border-rose-500/20 px-6 py-4 flex items-center gap-3">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-900 border border-rose-500/30 text-rose-450 shrink-0">
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 border border-rose-500/30 text-rose-450 shrink-0">
             <Shield className="w-4 h-4" aria-hidden />
           </span>
           <h2 className="font-heading font-bold text-rose-450">Account & Security</h2>
@@ -329,8 +329,8 @@ export default function SettingsPage() {
         <div className="px-6 py-5 space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-semibold text-slate-200 text-sm">Admin Email</p>
-              <p className="text-xs text-slate-400">mail@corplawupdates.in</p>
+              <p className="font-semibold text-slate-800 text-sm">Admin Email</p>
+              <p className="text-xs text-slate-500">mail@corplawupdates.in</p>
             </div>
             <span className="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full font-bold">
               Active
@@ -338,8 +338,8 @@ export default function SettingsPage() {
           </div>
           <div className="flex items-center justify-between">
             <div>
-              <p className="font-semibold text-slate-200 text-sm">Change Admin Password</p>
-              <p className="text-xs text-slate-400">
+              <p className="font-semibold text-slate-800 text-sm">Change Admin Password</p>
+              <p className="text-xs text-slate-500">
                 Update ADMIN_PASSWORD in Vercel environment variables
               </p>
             </div>
@@ -347,7 +347,7 @@ export default function SettingsPage() {
               href="https://vercel.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-xs bg-slate-950 hover:bg-slate-850 text-slate-300 border border-slate-800 px-3 py-1.5 rounded-lg font-medium transition-colors"
+              className="inline-flex items-center gap-1 text-xs bg-slate-50 hover:bg-slate-100 text-slate-700 border border-white/60 px-3 py-1.5 rounded-lg font-medium transition-colors"
             >
               Open Vercel
               <ExternalLink className="w-3 h-3 opacity-70" aria-hidden />
