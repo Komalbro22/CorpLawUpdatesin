@@ -73,6 +73,17 @@ export default function LLPFeeCalc() {
       warningText
     })
     setModalOpen(true)
+
+    // Log tool usage asynchronously
+    fetch('/api/calculators/log', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'llp_late_fee',
+        input: { formId, llpType, contribution: c, delay: d, dpCount: dp },
+        result: { total: calcResult.totalPayable, normal: calcResult.normalFee, late: calcResult.lateFee }
+      })
+    }).catch(console.error)
   }
 
   return (

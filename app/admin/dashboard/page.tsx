@@ -42,7 +42,7 @@ export default async function AdminDashboard() {
         supabaseAdmin.from('generated_documents').select('*', { count: 'exact', head: true }),
         supabaseAdmin.from('updates').select('id, title, category, published_at, created_at').order('created_at', { ascending: false }).limit(5),
         supabaseAdmin.from('subscribers').select('id, email, subscribed_at').order('subscribed_at', { ascending: false }).limit(5),
-        supabaseAdmin.from('calculator_usage').select('calculator_type').gte('created_at', sevenDaysAgo)
+        supabaseAdmin.from('calculator_usage').select('calculator_type, input_data, result_data').gte('created_at', sevenDaysAgo)
     ])
 
     const publishedCount = publishedRes.count
@@ -64,10 +64,35 @@ export default async function AdminDashboard() {
 
     // Group calculator usage statistics
     const statsMap: Record<string, number> = {}
+    const formCounts: Record<string, number> = {}
+    let totalProjectedPenalties = 0
+
     calcStats.forEach(row => {
         const type = row.calculator_type || 'unknown'
         statsMap[type] = (statsMap[type] || 0) + 1
+
+        // Extract form name if available
+        if (type === 'mca_late_fee' && row.input_data?.formSlug) {
+            const formSlug = row.input_data.formSlug.toUpperCase()
+            formCounts[formSlug] = (formCounts[formSlug] || 0) + 1
+        } else if (type === 'llp_late_fee' && row.input_data?.formId) {
+            const formId = row.input_data.formId.toUpperCase()
+            formCounts[formId] = (formCounts[formId] || 0) + 1
+        }
+
+        // Aggregate penalties
+        if (type === 'mca_late_fee' && row.result_data?.lateFee) {
+            totalProjectedPenalties += Number(row.result_data.lateFee) || 0
+        } else if (type === 'llp_late_fee' && row.result_data?.late) {
+            totalProjectedPenalties += Number(row.result_data.late) || 0
+        } else if (type === 'msme_penalty' && row.result_data?.accruedInterest) {
+            totalProjectedPenalties += Number(row.result_data.accruedInterest) || 0
+        }
     })
+
+    const topForms = Object.entries(formCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3)
 
     const TYPE_LABELS: Record<string, string> = {
         mca_late_fee: 'MCA Late Fee Calculator',
@@ -267,8 +292,36 @@ export default async function AdminDashboard() {
                     {/* Tool Usage Analytics Card */}
                     <div>
                         <h2 className="text-lg font-heading font-bold text-white mb-4">🛠️ Tool Usage (7 Days)</h2>
-                        <div className="admin-card p-5 space-y-4">
-                            <div className="space-y-3">
+                        <div className="admin-card p-5 space-y-5">
+                            
+                            {/* High-level summary */}
+                            <div className="grid grid-cols-2 gap-3 mb-2">
+                                <div className="bg-white/[0.03] rounded-xl p-3 border border-white/[0.05]">
+                                    <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1">Total Runs</p>
+                                    <p className="text-xl text-white font-bold tabular-nums">{calcStats.length}</p>
+                                </div>
+                                <div className="bg-white/[0.03] rounded-xl p-3 border border-white/[0.05]">
+                                    <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1">Penalties Calc</p>
+                                    <p className="text-xl text-red-400 font-bold tabular-nums">₹{(totalProjectedPenalties/1000).toFixed(1)}k</p>
+                                </div>
+                            </div>
+
+                            {/* Top Forms */}
+                            {topForms.length > 0 && (
+                                <div>
+                                    <p className="text-xs text-slate-400 font-semibold mb-2">MOST CALCULATED FORMS</p>
+                                    <div className="flex flex-wrap gap-2">
+                                        {topForms.map(([form, count]) => (
+                                            <div key={form} className="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2.5 py-1 rounded-md text-xs font-medium flex items-center gap-1.5">
+                                                {form} <span className="opacity-60 text-[10px] bg-blue-500/20 px-1 rounded">{count}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="space-y-3 pt-2 border-t border-white/[0.06]">
+                                <p className="text-xs text-slate-400 font-semibold">BREAKDOWN BY TOOL</p>
                                 {Object.entries(TYPE_LABELS).map(([type, label]) => {
                                     const count = statsMap[type] || 0
                                     return (

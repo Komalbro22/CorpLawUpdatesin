@@ -41,6 +41,17 @@ export default function MSMEFeeCalc({ initialBankRate = '6.75' }: { initialBankR
     })
 
     setResult(calc)
+
+    // Log tool usage asynchronously
+    fetch('/api/calculators/log', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'msme_penalty',
+        input: { invoiceAmount: amt, bankRate: br, daysDelayed: calc.daysDelayed },
+        result: { accruedInterest: calc.accruedInterest, totalPayable: calc.totalPayable }
+      })
+    }).catch(console.error)
   }
 
   return (

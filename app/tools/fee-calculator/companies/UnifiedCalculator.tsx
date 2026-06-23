@@ -307,7 +307,19 @@ export default function UnifiedCalculator() {
       {/* Calculate Button (replaces live result section) */}
       <div className="mt-8">
         <button
-          onClick={() => setShowModal(true)}
+          onClick={() => {
+            setShowModal(true)
+            // Log tool usage asynchronously
+            fetch('/api/calculators/log', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                type: 'mca_late_fee',
+                input: { formSlug: selectedForm.slug, companyType, capital, delay, isRepeatOffender, newCapital, state, chargeAmount },
+                result: { baseFee: result.baseFee, lateFee: result.lateFee, stampDuty: result.stampDuty, adValoremFee: result.adValoremFee, total: result.total }
+              })
+            }).catch(console.error)
+          }}
           className="w-full bg-[#0a0a0a] hover:bg-black text-white font-bold py-4 px-6 rounded-[8px] transition-all flex items-center justify-center gap-2 text-lg shadow-md hover:shadow-xl"
         >
           Calculate Fee <span aria-hidden="true">→</span>
