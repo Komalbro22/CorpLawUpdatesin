@@ -1,15 +1,29 @@
 'use client'
 import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import DOMPurify from 'dompurify'
 import { useParams, useRouter } from 'next/navigation'
 import { useToast } from '@/components/Toast'
-import { FuzzyClarifier } from '@/components/documents/FuzzyClarifier'
-import { LegalBasisCard } from '@/components/documents/LegalBasisCard'
-import { ConflictAuditor } from '@/components/documents/ConflictAuditor'
 import { checkMissingClauses, checkLeaseClauses, getImportanceIcon, getImportanceLabel, formatTemplateSource, type ClauseCheck } from '@/lib/document-clause-checker'
-import { DocumentRetry } from '@/components/documents/DocumentRetry'
 import { markdownToHtml } from '@/lib/markdown'
+
+const FuzzyClarifier = dynamic(
+  () => import('@/components/documents/FuzzyClarifier').then(m => ({ default: m.FuzzyClarifier })),
+  { loading: () => null }
+)
+const LegalBasisCard = dynamic(
+  () => import('@/components/documents/LegalBasisCard').then(m => ({ default: m.LegalBasisCard })),
+  { loading: () => null }
+)
+const ConflictAuditor = dynamic(
+  () => import('@/components/documents/ConflictAuditor').then(m => ({ default: m.ConflictAuditor })),
+  { loading: () => null }
+)
+const DocumentRetry = dynamic(
+  () => import('@/components/documents/DocumentRetry').then(m => ({ default: m.DocumentRetry })),
+  { loading: () => null }
+)
 
 
 interface Field {

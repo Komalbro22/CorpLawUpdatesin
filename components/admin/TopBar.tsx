@@ -1,8 +1,9 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { ChevronRight, ExternalLink, PenSquare, Search } from 'lucide-react'
+import { ChevronRight, ExternalLink, PenSquare } from 'lucide-react'
 import Link from 'next/link'
+import AdminGlobalSearch from './AdminGlobalSearch'
 
 interface BreadcrumbSegment {
     label: string
@@ -22,7 +23,16 @@ function segmentsForPath(pathname: string): BreadcrumbSegment[] {
     if (pathname.startsWith('/admin/newsletter/history/')) return [base, { label: 'Newsletter', href: '/admin/newsletter' }, { label: 'History', href: '/admin/newsletter/history' }, { label: 'Campaign' }]
     if (pathname === '/admin/analytics') return [base, { label: 'Analytics' }]
     if (pathname === '/admin/analytics/articles') return [base, { label: 'Analytics', href: '/admin/analytics' }, { label: 'Article Stats' }]
+    if (pathname === '/admin/glossary') return [base, { label: 'Glossary' }]
+    if (pathname === '/admin/glossary/new') return [base, { label: 'Glossary', href: '/admin/glossary' }, { label: 'New Term' }]
+    if (pathname.startsWith('/admin/glossary/') && pathname.endsWith('/edit')) return [base, { label: 'Glossary', href: '/admin/glossary' }, { label: 'Edit Term' }]
+    if (pathname === '/admin/documents') return [base, { label: 'Documents' }]
+    if (pathname === '/admin/documents/analytics') return [base, { label: 'Documents', href: '/admin/documents' }, { label: 'AI Analytics' }]
     if (pathname === '/admin/repo-rate') return [base, { label: 'Repo Rate' }]
+    if (pathname === '/admin/rates') return [base, { label: 'Tool Rates' }]
+    if (pathname === '/admin/rule-engine') return [base, { label: 'Rule Engine' }]
+    if (pathname === '/admin/rule-learning') return [base, { label: 'Rule Learning' }]
+    if (pathname === '/admin/roc') return [base, { label: 'ROC Forms' }]
     if (pathname === '/admin/calendar') return [base, { label: 'Calendar' }]
     if (pathname === '/admin/compliance') return [base, { label: 'Compliance' }]
     if (pathname === '/admin/compliance/suggestions') return [base, { label: 'Compliance', href: '/admin/compliance' }, { label: 'Suggestions' }]
@@ -97,13 +107,8 @@ export default function TopBar() {
 
             {/* Right actions */}
             <div className="flex shrink-0 items-center gap-3">
-                {/* Search hint */}
-                <div className="hidden lg:flex items-center gap-1.5 bg-white/50 border border-white/60 backdrop-blur-sm rounded-lg px-2.5 py-1.5 cursor-pointer hover:bg-slate-100 transition-colors group">
-                    <Search className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" aria-hidden />
-                    <span className="text-[11px] text-slate-500 font-medium group-hover:text-slate-700 transition-colors">⌘K</span>
-                </div>
-
-                {/* Date badge */}
+                <AdminGlobalSearch />
+                
                 <span className="hidden sm:inline text-[11px] text-slate-600 font-medium px-2.5 py-1.5 bg-slate-50 rounded-lg border border-slate-200">
                     {todayLabel()}
                 </span>

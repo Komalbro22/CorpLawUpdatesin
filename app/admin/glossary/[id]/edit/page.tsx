@@ -591,7 +591,7 @@ export default function EditGlossaryTermPage({ params }: Props) {
                 <button 
                   type="button" 
                   onClick={() => setIsBulkOpen(!isBulkOpen)}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-slate-900 bg-slate-955 hover:bg-slate-100 px-3 py-2 rounded-lg transition-colors border border-slate-805"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-slate-900 bg-slate-900 hover:bg-slate-100 px-3 py-2 rounded-lg transition-colors border border-slate-805"
                 >
                   <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-500 animate-pulse" />
                   Bulk Import
@@ -663,7 +663,7 @@ export default function EditGlossaryTermPage({ params }: Props) {
             ) : (
               <div className="space-y-4">
                 {faqs.map((faq, i) => (
-                  <div key={i} className="p-4 border border-slate-850 rounded-xl bg-slate-955/40 space-y-3 relative">
+                  <div key={i} className="p-4 border border-slate-800 rounded-xl bg-slate-900/40 space-y-3 relative">
                     <button 
                       type="button"
                       onClick={() => handleRemoveFaq(i)}
@@ -797,7 +797,7 @@ export default function EditGlossaryTermPage({ params }: Props) {
               onChange={(e) => setSynonymInput(e.target.value)}
               onKeyDown={handleSynonymKeyDown}
               onPaste={handleSynonymPaste}
-              className="w-full px-4 py-2 bg-slate-955 border border-white/60 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-medium text-slate-900"
+              className="w-full px-4 py-2 bg-slate-900 border border-white/60 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-medium text-slate-900"
               placeholder="Add synonym (e.g. CoC, ADR) and press Enter"
             />
             
@@ -838,7 +838,7 @@ export default function EditGlossaryTermPage({ params }: Props) {
               onChange={(e) => setKeywordInput(e.target.value)}
               onKeyDown={handleKeywordKeyDown}
               onPaste={handleKeywordPaste}
-              className="w-full px-4 py-2 bg-slate-955 border border-white/60 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-medium text-slate-900"
+              className="w-full px-4 py-2 bg-slate-900 border border-white/60 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-medium text-slate-900"
               placeholder="Add keyword query (comma-separated also supported) and press Enter"
             />
             
@@ -877,7 +877,7 @@ export default function EditGlossaryTermPage({ params }: Props) {
               type="text" 
               value={relatedTerms}
               onChange={(e) => setRelatedTerms(e.target.value)}
-              className="w-full px-4 py-2 bg-slate-955 border border-slate-805 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-medium text-slate-900"
+              className="w-full px-4 py-2 bg-slate-900 border border-slate-805 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-medium text-slate-900"
               placeholder="e.g. CIRP, Insolvency (comma separated)"
             />
           </div>
@@ -913,7 +913,7 @@ export default function EditGlossaryTermPage({ params }: Props) {
                 value={seoTitle}
                 onChange={(e) => setSeoTitle(e.target.value)}
                 placeholder="Custom HTML page title for Google & AI search"
-                className="w-full px-4 py-2 bg-slate-955 border border-slate-805 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm text-slate-900"
+                className="w-full px-4 py-2 bg-slate-900 border border-slate-805 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm text-slate-900"
               />
             </div>
 
@@ -925,7 +925,7 @@ export default function EditGlossaryTermPage({ params }: Props) {
                 onChange={(e) => setSeoDescription(e.target.value)}
                 placeholder="Custom meta description for search snippets"
                 rows={3}
-                className="w-full px-4 py-2 bg-slate-955 border border-slate-805 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm resize-none text-slate-900 animate-none"
+                className="w-full px-4 py-2 bg-slate-900 border border-slate-805 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm resize-none text-slate-900 animate-none"
               />
             </div>
 
@@ -968,7 +968,7 @@ export default function EditGlossaryTermPage({ params }: Props) {
                       value={tldrInput}
                       onChange={(e) => setTldrInput(e.target.value)}
                       placeholder="Add key takeaway point..."
-                      className="flex-1 px-3 py-1.5 bg-slate-955 border border-white/60 rounded-lg text-xs text-slate-900"
+                      className="flex-1 px-3 py-1.5 bg-slate-900 border border-white/60 rounded-lg text-xs text-slate-900"
                       onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddTldrPoint(); } }}
                     />
                     <button 
@@ -981,7 +981,7 @@ export default function EditGlossaryTermPage({ params }: Props) {
                   </div>
 
                   {tldrPoints.length > 0 ? (
-                    <div className="space-y-2 bg-slate-50/50 p-2.5 rounded-xl border border-slate-850">
+                    <div className="space-y-2 bg-slate-50/50 p-2.5 rounded-xl border border-slate-800">
                       {tldrPoints.map((pt, idx) => (
                         <div key={idx} className="flex gap-2 items-start group">
                           <span className="text-amber-500 text-xs font-bold pt-0.5">•</span>
@@ -1013,7 +1013,7 @@ export default function EditGlossaryTermPage({ params }: Props) {
 
       {/* Live Preview Modal */}
       {isPreviewOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-955/80 backdrop-blur-sm flex justify-center p-4 sm:p-6 md:p-10">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/80 backdrop-blur-sm flex justify-center p-4 sm:p-6 md:p-10">
           <div className="relative w-full max-w-4xl bg-slate-50 rounded-3xl shadow-2xl border border-white/60 overflow-hidden flex flex-col my-auto max-h-[90vh]">
             
             {/* Modal Header */}
@@ -1078,10 +1078,10 @@ export default function EditGlossaryTermPage({ params }: Props) {
                     </div>
 
                     {synonyms.length > 0 && (
-                      <div className="mt-6 pt-4 border-t border-slate-850 flex flex-wrap gap-1.5 items-center">
+                      <div className="mt-6 pt-4 border-t border-slate-800 flex flex-wrap gap-1.5 items-center">
                         <span className="text-xs font-semibold text-slate-550 uppercase tracking-wider mr-1.5">Acronyms / Synonyms:</span>
                         {synonyms.map((syn) => (
-                          <span key={syn} className="inline-flex items-center px-2 py-0.5 rounded bg-slate-955 text-slate-700 text-xs font-semibold border border-slate-850">
+                          <span key={syn} className="inline-flex items-center px-2 py-0.5 rounded bg-slate-900 text-slate-700 text-xs font-semibold border border-slate-800">
                             {syn}
                           </span>
                         ))}
@@ -1092,7 +1092,7 @@ export default function EditGlossaryTermPage({ params }: Props) {
 
                 {/* Extended Note Section */}
                 {extendedNote && (
-                  <section className="mt-8 bg-slate-955 border border-white/60 rounded-2xl p-8 shadow-sm text-left">
+                  <section className="mt-8 bg-slate-900 border border-white/60 rounded-2xl p-8 shadow-sm text-left">
                     <h3 className="text-xl font-bold text-slate-900 mb-4 font-heading">Understanding {term || 'Term'}</h3>
                     <div className="prose prose-invert max-w-none text-slate-700">
                       <MarkdownRenderer content={extendedNote} />
@@ -1101,7 +1101,7 @@ export default function EditGlossaryTermPage({ params }: Props) {
                 )}
 
                 {/* FAQ Section */}
-                <section className="mt-8 bg-slate-955 border border-white/60 rounded-2xl p-8 shadow-sm text-left">
+                <section className="mt-8 bg-slate-900 border border-white/60 rounded-2xl p-8 shadow-sm text-left">
                   <h2 className="text-xl font-bold text-slate-900 mb-6 font-heading">Frequently Asked Questions</h2>
                   <div className="space-y-4">
                     {(faqs.length > 0 ? faqs.map(f => ({ q: f.q, a: f.a })) : [
@@ -1114,7 +1114,7 @@ export default function EditGlossaryTermPage({ params }: Props) {
                         a: `${term || 'Term'} is governed under Indian ${category} law. Understanding this concept is essential for ensuring regulatory compliance, avoiding penalties, and making corporate decisions in India.`
                       }
                     ]).map((faq, i) => (
-                      <div key={i} className="border border-slate-850 rounded-xl p-4 bg-slate-100/40">
+                      <div key={i} className="border border-slate-800 rounded-xl p-4 bg-slate-100/40">
                         <h4 className="font-semibold text-slate-900 flex items-center justify-between">
                           <span>{faq.q || 'Question...'}</span>
                           <span className="text-slate-550 text-[10px]">▼</span>
@@ -1129,13 +1129,13 @@ export default function EditGlossaryTermPage({ params }: Props) {
 
                 {/* Related Searches Section */}
                 {keywords.length > 0 && (
-                  <section className="mt-8 bg-slate-955 border border-white/60 rounded-2xl p-8 shadow-sm text-left">
+                  <section className="mt-8 bg-slate-900 border border-white/60 rounded-2xl p-8 shadow-sm text-left">
                     <h3 className="text-lg font-bold text-slate-900 mb-4 font-heading">Related Searches</h3>
                     <div className="flex flex-wrap gap-2">
                       {keywords.map((kw, i) => (
                         <span
                           key={i}
-                          className="text-sm bg-slate-50 text-slate-700 border border-slate-850 px-4 py-2 rounded-full font-medium shadow-sm flex items-center gap-1 cursor-pointer hover:bg-slate-100"
+                          className="text-sm bg-slate-50 text-slate-700 border border-slate-800 px-4 py-2 rounded-full font-medium shadow-sm flex items-center gap-1 cursor-pointer hover:bg-slate-100"
                         >
                           <span>{kw}</span>
                           <span className="text-slate-500 text-xs">↗</span>

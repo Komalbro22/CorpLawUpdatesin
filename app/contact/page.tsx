@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import type { LucideIcon } from 'lucide-react'
-import { Calendar, CheckCircle2, Clock, Lightbulb, Mail, Newspaper, Rss } from 'lucide-react'
+import { Calendar, CheckCircle2, Clock, Lightbulb, Loader2, Mail, Newspaper, Rss } from 'lucide-react'
 
 const contactCards: {
     Icon: LucideIcon
@@ -63,19 +63,31 @@ export default function ContactPage() {
     const [subject, setSubject] = useState('')
     const [message, setMessage] = useState('')
     const [submitted, setSubmitted] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState('')
 
-    function handleSubmit(e: React.FormEvent) {
+    async function handleSubmit(e: React.FormEvent) {
         e.preventDefault()
-        const sub = encodeURIComponent(
-            subject || 'Enquiry from CorpLawUpdates.in'
-        )
-        const body = encodeURIComponent(
-            `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
-        )
-        window.location.href =
-            `mailto:mail@corplawupdates.in` +
-            `?subject=${sub}&body=${body}`
-        setSubmitted(true)
+        setLoading(true)
+        setError('')
+
+        try {
+            const res = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, subject, message }),
+            })
+            const data = await res.json()
+            if (!res.ok) {
+                setError(data.error || 'Failed to send message')
+                return
+            }
+            setSubmitted(true)
+        } catch {
+            setError('Failed to send message. Please email mail@corplawupdates.in directly.')
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
@@ -196,10 +208,10 @@ export default function ContactPage() {
                                     <CheckCircle2 className="w-9 h-9" aria-hidden />
                                 </span>
                                 <h3 className="text-xl font-heading font-bold text-emerald-900">
-                                    Email app opened
+                                    Message sent
                                 </h3>
                                 <p className="text-emerald-800/90 text-sm max-w-xs leading-relaxed">
-                                    Your default email app should have opened with your message pre-filled. Send when you are ready.
+                                    Thank you for reaching out. We typically respond within 24–48 hours on working days.
                                 </p>
                                 <button
                                     type="button"
@@ -225,7 +237,7 @@ export default function ContactPage() {
                                         Send a Message
                                     </h2>
                                     <p className="text-slate-400 text-sm mt-1">
-                                        Fills your email app — no data sent to any server.
+                                        We read every message and reply within 24–48 hours.
                                     </p>
                                 </div>
 
@@ -298,17 +310,26 @@ export default function ContactPage() {
                                     />
                                 </div>
 
+                                {error && (
+                                    <p className="text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg px-3 py-2" role="alert">
+                                        {error}
+                                    </p>
+                                )}
+
                                 <button
                                     type="submit"
-                                    className="w-full bg-gold hover:bg-amber-400 text-navy font-bold py-3.5 rounded-lg transition-colors duration-200 text-sm shadow-sm"
+                                    disabled={loading}
+                                    className="w-full bg-gold hover:bg-amber-400 disabled:opacity-60 text-navy font-bold py-3.5 rounded-lg transition-colors duration-200 text-sm shadow-sm inline-flex items-center justify-center gap-2"
                                 >
-                                    Open email app to send
+                                    {loading && <Loader2 className="w-4 h-4 animate-spin" aria-hidden />}
+                                    {loading ? 'Sending...' : 'Send message'}
                                 </button>
 
                                 <p className="text-xs text-slate-400 text-center leading-relaxed">
-                                    Clicking will open your default email
-                                    app (Gmail, Outlook etc.) with your
-                                    message pre-filled. Just hit send!
+                                    Or email us directly at{' '}
+                                    <a href="mailto:mail@corplawupdates.in" className="text-amber-700 hover:underline font-medium">
+                                        mail@corplawupdates.in
+                                    </a>
                                 </p>
                             </form>
                         )}

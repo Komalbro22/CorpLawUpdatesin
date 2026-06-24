@@ -4,6 +4,7 @@ import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { invalidateCache } from '@/lib/redis-cache'
 import { revalidatePath } from 'next/cache'
+import { complianceSchema } from '@/lib/admin-schemas'
 
 export async function GET() {
 
@@ -46,7 +47,12 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
       }
 
-      const body = await request.json()
+      const rawBody = await request.json()
+      const parsed = complianceSchema.safeParse(rawBody)
+      if (!parsed.success) {
+        return NextResponse.json({ error: 'Invalid data', details: parsed.error.format() }, { status: 400 })
+      }
+      const body = parsed.data
 
       const { data, error } = await supabaseAdmin
         .from('compliance_entries')

@@ -1,21 +1,42 @@
 'use client'
 
-import { useState } from 'react'
-import { Check, Copy } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Check, Copy, Bookmark } from 'lucide-react'
 import DownloadPDFButton from '@/components/DownloadPDFButton'
+import { isBookmarked, saveBookmark, removeBookmark } from '@/lib/bookmarks'
 
 interface ArticleActionsProps {
     title: string
     url: string
+    slug?: string
     compact?: boolean
 }
 
 export default function ArticleActions({
     title,
     url,
+    slug,
     compact = false
 }: ArticleActionsProps) {
     const [copied, setCopied] = useState(false)
+    const [bookmarked, setBookmarked] = useState(false)
+
+    useEffect(() => {
+        if (slug) {
+            setBookmarked(isBookmarked(slug))
+        }
+    }, [slug])
+
+    const toggleBookmark = () => {
+        if (!slug) return
+        if (bookmarked) {
+            removeBookmark(slug)
+            setBookmarked(false)
+        } else {
+            saveBookmark({ slug, title, url })
+            setBookmarked(true)
+        }
+    }
 
     const encoded = {
         title: encodeURIComponent(title),
@@ -103,6 +124,19 @@ export default function ArticleActions({
                 </svg>
                 WhatsApp
             </a>
+
+            {/* Bookmark */}
+            {slug && (
+                <button
+                    onClick={toggleBookmark}
+                    className={`flex items-center gap-1.5 border ${bookmarked ? 'border-gold bg-amber-50 text-amber-700' : 'border-slate-300 text-slate-600'} rounded-lg hover:bg-slate-50 transition-colors ${
+                        compact ? 'px-2 py-1 text-xs' : 'px-3 py-2 text-sm'
+                    }`}
+                >
+                    <Bookmark className={compact ? 'h-3 w-3' : 'h-4 w-4'} aria-hidden fill={bookmarked ? 'currentColor' : 'none'} />
+                    {bookmarked ? 'Saved' : 'Save'}
+                </button>
+            )}
 
             {/* Copy Link */}
             <div className="relative">

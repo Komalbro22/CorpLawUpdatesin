@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { revalidatePath } from 'next/cache'
+import { glossarySchema } from '@/lib/admin-schemas'
 import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 
@@ -40,7 +41,12 @@ export async function PUT(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const body = await request.json()
+    const rawBody = await request.json()
+    const parsed = glossarySchema.safeParse(rawBody)
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Invalid data', details: parsed.error.format() }, { status: 400 })
+    }
+    const body = parsed.data
 
     const { data: oldTerm, error: fetchError } = await supabaseAdmin
       .from('glossary')
@@ -129,7 +135,12 @@ export async function PATCH(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const body = await request.json()
+    const rawBody = await request.json()
+    const parsed = glossarySchema.safeParse(rawBody)
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Invalid data', details: parsed.error.format() }, { status: 400 })
+    }
+    const body = parsed.data
 
     const { data, error } = await supabaseAdmin
       .from('glossary')

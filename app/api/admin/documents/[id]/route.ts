@@ -3,6 +3,7 @@ import { cookies } from 'next/headers'
 import { revalidatePath } from 'next/cache'
 import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
+import { documentTemplateSchema } from '@/lib/admin-schemas'
 
 export async function GET(
   _request: NextRequest,
@@ -41,7 +42,12 @@ export async function PUT(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const body = await request.json()
+    const rawBody = await request.json()
+    const parsed = documentTemplateSchema.safeParse(rawBody)
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Invalid data', details: parsed.error.format() }, { status: 400 })
+    }
+    const body = parsed.data
 
     const { data: oldTemplate, error: fetchError } = await supabaseAdmin
       .from('document_templates')
@@ -130,7 +136,12 @@ export async function PATCH(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const body = await request.json()
+    const rawBody = await request.json()
+    const parsed = documentTemplateSchema.safeParse(rawBody)
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Invalid data', details: parsed.error.format() }, { status: 400 })
+    }
+    const body = parsed.data
 
     const { data, error } = await supabaseAdmin
       .from('document_templates')

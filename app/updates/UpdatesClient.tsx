@@ -166,7 +166,7 @@ export default function UpdatesClient({
                                     key={tag}
                                     type="button"
                                     onClick={() => handleQuickFilter(tag)}
-                                    className="text-xs bg-slate-50 dark:bg-slate-800 hover:bg-amber-50 dark:hover:bg-amber-900/30 text-slate-600 dark:text-slate-350 hover:text-amber-900 dark:hover:text-amber-350 px-3 py-1.5 rounded-full border border-slate-200/90 dark:border-slate-700 hover:border-amber-200 transition-colors duration-200 motion-safe:active:scale-[0.98] min-h-[36px]"
+                                    className="text-xs bg-slate-50 dark:bg-slate-800 hover:bg-amber-50 dark:hover:bg-amber-900/30 text-slate-600 dark:text-slate-400 hover:text-amber-900 dark:hover:text-amber-400 px-3 py-1.5 rounded-full border border-slate-200/90 dark:border-slate-700 hover:border-amber-200 transition-colors duration-200 motion-safe:active:scale-[0.98] min-h-[36px]"
                                 >
                                     {tag}
                                 </button>
@@ -187,7 +187,7 @@ export default function UpdatesClient({
                                             className={`text-left whitespace-nowrap md:whitespace-normal px-3 py-3 min-h-[44px] rounded-lg text-sm w-full flex justify-between items-center gap-2 transition-colors duration-150 ${
                                                 isActive
                                                     ? 'bg-navy/5 dark:bg-slate-800 text-navy dark:text-slate-200 font-semibold ring-1 ring-gold/40 shadow-sm'
-                                                    : 'text-slate-600 dark:text-slate-350 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-navy dark:hover:text-white'
+                                                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-navy dark:hover:text-white'
                                             }`}
                                         >
                                             <span>{cat}</span>
@@ -210,7 +210,7 @@ export default function UpdatesClient({
             </aside>
 
             <div className="flex-grow min-w-0">
-                <div className="mb-6 flex flex-wrap items-baseline gap-2 text-slate-600 dark:text-slate-450 text-sm md:text-base">
+                <div className="mb-6 flex flex-wrap items-baseline gap-2 text-slate-600 dark:text-slate-400 text-sm md:text-base">
                     <span>
                         Showing{' '}
                         <span className="font-semibold text-navy dark:text-white tabular-nums">{totalFilteredCount}</span>

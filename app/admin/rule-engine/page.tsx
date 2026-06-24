@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react'
 import {
   BookOpen, Plus, Search, ChevronDown, ChevronUp,
   Zap, FileText, AlertCircle, CheckCircle2, X,
-  RefreshCw, Tag, Scale, Clock, Layers
+  RefreshCw, Tag, Scale, Clock, Layers, Edit, Trash2
 } from 'lucide-react'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -56,7 +56,7 @@ function HealthBadge({ accepted, rejected }: { accepted: number; rejected: numbe
 }
 
 // ─── Rule Card ────────────────────────────────────────────────────────────────
-function RuleCard({ rule }: { rule: Rule }) {
+function RuleCard({ rule, onEdit, onDelete }: { rule: Rule; onEdit: (rule: Rule) => void; onDelete: (id: string) => void }) {
   const [expanded, setExpanded] = useState(false)
   const vars = rule.clauses?.variables || {}
   const hasVars = Object.keys(vars).length > 0
@@ -64,36 +64,50 @@ function RuleCard({ rule }: { rule: Rule }) {
   return (
     <div className="admin-card rounded-xl overflow-hidden border border-white/[0.06] hover:border-amber-500/20 transition-all duration-200">
       {/* Card Header */}
-      <button
-        onClick={() => setExpanded(v => !v)}
-        className="w-full text-left p-4 flex items-start gap-3 hover:bg-white/[0.02] transition-colors"
-        aria-expanded={expanded}
-      >
-        <div className="admin-icon-amber w-9 h-9 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
-          <Zap className="w-4 h-4" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex flex-wrap items-center gap-2 mb-1">
-            <span className="text-slate-900 font-semibold text-sm font-mono">
-              {rule.intents?.name || 'Unknown Intent'}
-            </span>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 font-medium">
-              {rule.document_type}
-            </span>
-            {rule.clauses?.is_active ? (
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">Active</span>
-            ) : (
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400">Inactive</span>
-            )}
-            <HealthBadge accepted={rule.accepted_count} rejected={rule.rejected_count} />
+      <div className="w-full flex items-start p-4 hover:bg-white/[0.02] transition-colors relative group">
+        <button
+          onClick={() => setExpanded(v => !v)}
+          className="flex-1 flex items-start gap-3 text-left"
+          aria-expanded={expanded}
+        >
+          <div className="admin-icon-amber w-9 h-9 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+            <Zap className="w-4 h-4" />
           </div>
-          <p className="text-slate-500 text-xs line-clamp-1">{rule.intents?.description || '—'}</p>
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-wrap items-center gap-2 mb-1">
+              <span className="text-slate-900 font-semibold text-sm font-mono">
+                {rule.intents?.name || 'Unknown Intent'}
+              </span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 font-medium">
+                {rule.document_type}
+              </span>
+              {rule.clauses?.is_active ? (
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">Active</span>
+              ) : (
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400">Inactive</span>
+              )}
+              <HealthBadge accepted={rule.accepted_count} rejected={rule.rejected_count} />
+            </div>
+            <p className="text-slate-500 text-xs line-clamp-1">{rule.intents?.description || '—'}</p>
+          </div>
+        </button>
+        <div className="flex items-center gap-3 shrink-0 ml-4">
+          <span className="text-xs text-slate-500 hidden sm:inline-block">{rule.usage_count} uses</span>
+          
+          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button onClick={(e) => { e.stopPropagation(); onEdit(rule) }} className="p-1.5 text-slate-500 hover:text-amber-500 hover:bg-amber-500/10 rounded-lg transition-colors" title="Edit Rule">
+              <Edit className="w-3.5 h-3.5" />
+            </button>
+            <button onClick={(e) => { e.stopPropagation(); onDelete(rule.id) }} className="p-1.5 text-slate-500 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors" title="Delete Rule">
+              <Trash2 className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <button onClick={() => setExpanded(v => !v)} className="p-1 text-slate-500 hover:bg-slate-100 rounded">
+            {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </button>
         </div>
-        <div className="flex items-center gap-3 shrink-0">
-          <span className="text-xs text-slate-500">{rule.usage_count} uses</span>
-          {expanded ? <ChevronUp className="w-4 h-4 text-slate-500" /> : <ChevronDown className="w-4 h-4 text-slate-500" />}
-        </div>
-      </button>
+      </div>
 
       {/* Expanded Details */}
       {expanded && (
@@ -188,24 +202,24 @@ function RuleCard({ rule }: { rule: Rule }) {
 }
 
 // ─── Add Rule Modal ───────────────────────────────────────────────────────────
-function AddRuleModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void }) {
+function RuleModal({ rule, onClose, onSuccess }: { rule?: Rule; onClose: () => void; onSuccess: (msg?: string) => void }) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [form, setForm] = useState({
-    intent_name: '',
-    intent_description: '',
-    aliases: '',
-    document_type: 'BOARD_RESOLUTION',
-    clause_content: '',
-    clause_category: 'INSERT',
-    variables_raw: '',
-    placement_action: 'APPEND',
-    placement_anchor: '',
-    placement_anchor_type: 'REGEX',
-    placement_fallback: 'BOTTOM',
-    legal_basis: '',
-    related_forms_raw: '',
-    compliance_deadline: '',
+    intent_name: rule?.intents?.name || '',
+    intent_description: rule?.intents?.description || '',
+    aliases: '', // We don't fetch aliases in GET currently, so it might be empty on edit unless added to GET
+    document_type: rule?.document_type || 'BOARD_RESOLUTION',
+    clause_content: rule?.clauses?.content || '',
+    clause_category: rule?.clauses?.category || 'INSERT',
+    variables_raw: rule?.clauses?.variables ? JSON.stringify(rule.clauses.variables) : '',
+    placement_action: rule?.clauses?.placement_rules?.action || 'APPEND',
+    placement_anchor: rule?.clauses?.placement_rules?.anchor || '',
+    placement_anchor_type: rule?.clauses?.placement_rules?.anchor_type || 'REGEX',
+    placement_fallback: rule?.clauses?.placement_rules?.fallback || 'BOTTOM',
+    legal_basis: rule?.clauses?.legal_basis || '',
+    related_forms_raw: rule?.clauses?.related_forms?.join(', ') || '',
+    compliance_deadline: rule?.clauses?.compliance_deadline || '',
   })
 
   const set = (k: string, v: string) => setForm(f => ({ ...f, [k]: v }))
@@ -215,14 +229,17 @@ function AddRuleModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: 
     setSaving(true)
     setError('')
     try {
-      const res = await fetch('/api/admin/rules', {
-        method: 'POST',
+      const isEdit = !!rule
+      const url = isEdit ? `/api/admin/rules/${rule.id}` : '/api/admin/rules'
+      const method = isEdit ? 'PUT' : 'POST'
+      const res = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       })
       const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Failed to create rule')
-      onSuccess()
+      if (!res.ok) throw new Error(data.error || `Failed to ${isEdit ? 'update' : 'create'} rule`)
+      onSuccess(isEdit ? 'Rule updated successfully! ✅' : 'Rule created successfully! ✅')
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : 'Unknown error')
     } finally {
@@ -241,8 +258,8 @@ function AddRuleModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: 
               <Plus className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-slate-900 font-heading font-bold text-base">Add New Rule</h2>
-              <p className="text-slate-500 text-xs">Create intent + clause + rule in Supabase2</p>
+              <h2 className="text-slate-900 font-heading font-bold text-base">{rule ? 'Edit Rule' : 'Add New Rule'}</h2>
+              <p className="text-slate-500 text-xs">{rule ? 'Update intent and clause in Supabase' : 'Create intent + clause + rule in Supabase'}</p>
             </div>
           </div>
           <button onClick={onClose} className="text-slate-500 hover:text-slate-900 p-1 rounded-lg hover:bg-white/10 transition-colors">
@@ -410,8 +427,8 @@ function AddRuleModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: 
             disabled={saving}
             className="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-semibold text-sm rounded-lg transition-all disabled:opacity-60 disabled:cursor-not-allowed shadow-lg shadow-amber-500/20"
           >
-            {saving ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-            {saving ? 'Creating...' : 'Create Rule'}
+            {saving ? <RefreshCw className="w-4 h-4 animate-spin" /> : (rule ? <BookOpen className="w-4 h-4" /> : <Plus className="w-4 h-4" />)}
+            {saving ? (rule ? 'Saving...' : 'Creating...') : (rule ? 'Save Changes' : 'Create Rule')}
           </button>
         </div>
       </div>
@@ -427,6 +444,7 @@ export default function RuleEnginePage() {
   const [search, setSearch] = useState('')
   const [filterDoc, setFilterDoc] = useState('ALL')
   const [showAddModal, setShowAddModal] = useState(false)
+  const [editingRule, setEditingRule] = useState<Rule | undefined>()
   const [successMsg, setSuccessMsg] = useState('')
 
   const fetchRules = useCallback(async () => {
@@ -446,11 +464,36 @@ export default function RuleEnginePage() {
 
   useEffect(() => { fetchRules() }, [fetchRules])
 
-  const handleAddSuccess = () => {
+  const handleAddSuccess = (msg?: string) => {
     setShowAddModal(false)
-    setSuccessMsg('Rule created successfully! ✅')
+    setEditingRule(undefined)
+    setSuccessMsg(msg || 'Rule created successfully! ✅')
     fetchRules()
     setTimeout(() => setSuccessMsg(''), 4000)
+  }
+
+  const handleAddNew = () => {
+    setEditingRule(undefined)
+    setShowAddModal(true)
+  }
+
+  const handleEdit = (rule: Rule) => {
+    setEditingRule(rule)
+    setShowAddModal(true)
+  }
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this rule? This action cannot be undone.')) return
+    try {
+      const res = await fetch(`/api/admin/rules/${id}`, { method: 'DELETE' })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Failed to delete rule')
+      setSuccessMsg('Rule deleted successfully! ✅')
+      fetchRules()
+      setTimeout(() => setSuccessMsg(''), 4000)
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'Unknown error')
+    }
   }
 
   // Filter rules
@@ -478,7 +521,7 @@ export default function RuleEnginePage() {
           <p className="text-slate-500 text-sm mt-1">Manage intents, clauses and rules for all document types</p>
         </div>
         <button
-          onClick={() => setShowAddModal(true)}
+          onClick={handleAddNew}
           id="add-new-rule-btn"
           className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-semibold text-sm rounded-xl transition-all shadow-lg shadow-amber-500/20 shrink-0"
         >
@@ -562,13 +605,13 @@ export default function RuleEnginePage() {
       ) : (
         <div className="space-y-3">
           <p className="text-xs text-slate-500">Showing {filtered.length} of {rules.length} rules</p>
-          {filtered.map(rule => <RuleCard key={rule.id} rule={rule} />)}
+          {filtered.map(rule => <RuleCard key={rule.id} rule={rule} onEdit={handleEdit} onDelete={handleDelete} />)}
         </div>
       )}
 
-      {/* Add Modal */}
+      {/* Add/Edit Modal */}
       {showAddModal && (
-        <AddRuleModal onClose={() => setShowAddModal(false)} onSuccess={handleAddSuccess} />
+        <RuleModal rule={editingRule} onClose={() => { setShowAddModal(false); setEditingRule(undefined); }} onSuccess={handleAddSuccess} />
       )}
     </div>
   )

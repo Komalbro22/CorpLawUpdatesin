@@ -3,6 +3,30 @@ import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { invalidateCache } from '@/lib/redis-cache'
 
+const ALLOWED_SETTING_KEYS = new Set([
+  'whatsapp_channel',
+  'linkedin_url',
+  'twitter_url',
+  'instagram_url',
+  'site_tagline',
+  'contact_email',
+  'newsletter_footer',
+  'announcement_bar',
+  'announcement_bar_url',
+  'current_repo_rate',
+  'current_repo_rate_date',
+  'next_mpc_date',
+  'mpc_stance',
+  'sdf_rate',
+  'msf_rate',
+  'google_analytics_id',
+  'microsoft_clarity_id',
+  'google_search_console',
+  'max_requests_per_ip_daily',
+  'max_tokens_per_ip_daily',
+  'whitelisted_ips',
+])
+
 // GET — fetch all settings
 export async function GET() {
 
@@ -55,9 +79,9 @@ export async function POST(request: Request) {
       const body = await request.json()
       const { key, value } = body
 
-      if (!key) {
+      if (!key || !ALLOWED_SETTING_KEYS.has(key)) {
         return NextResponse.json(
-          { error: 'Key required' },
+          { error: 'Invalid or disallowed setting key' },
           { status: 400 }
         )
       }

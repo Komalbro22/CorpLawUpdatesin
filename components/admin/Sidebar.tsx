@@ -58,6 +58,7 @@ const sections: SidebarSection[] = [
         links: [
             { href: '/admin/analytics',           icon: BarChart3,   label: 'Analytics'       },
             { href: '/admin/analytics/articles',  icon: LineChart,   label: 'Article Stats'   },
+            { href: '/admin/analytics/tools',     icon: BarChart3,   label: 'Tool Usage'      },
             { href: '/admin/documents/analytics', icon: Cpu,         label: 'Doc AI Analytics'},
         ],
     },

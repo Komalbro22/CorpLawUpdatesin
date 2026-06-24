@@ -135,23 +135,33 @@ export default function ROCTrackerPage() {
       .finally(() => setFormsLoading(false))
   }, [])
 
-  // Load saved profile from localStorage on mount
+  // Load saved profile from localStorage or URL on mount
   useEffect(() => {
-    const saved = localStorage.getItem('roc_tracker_saved_profile')
-    if (saved) {
+    let parsed: any = null
+    const urlParams = new URLSearchParams(window.location.search)
+    if (urlParams.has('p')) {
       try {
-        const parsed = JSON.parse(saved)
-        if (parsed.incorporationDate) {
-          parsed.incorporationDate = new Date(parsed.incorporationDate)
-        }
-        if (parsed.agmDate) {
-          parsed.agmDate = new Date(parsed.agmDate)
-        }
-        setProfile(parsed)
-      } catch (e) {
-        console.error('Failed to parse saved profile', e)
+        parsed = JSON.parse(atob(urlParams.get('p')!))
+      } catch (e) {}
+    } else {
+      const saved = localStorage.getItem('roc_tracker_saved_profile')
+      if (saved) {
+        try {
+          parsed = JSON.parse(saved)
+        } catch (e) {}
       }
     }
+
+    if (parsed) {
+      if (parsed.incorporationDate) {
+        parsed.incorporationDate = new Date(parsed.incorporationDate)
+      }
+      if (parsed.agmDate) {
+        parsed.agmDate = new Date(parsed.agmDate)
+      }
+      setProfile(parsed)
+    }
+
     const savedSmall = localStorage.getItem('roc_tracker_small_manual')
     if (savedSmall) {
       try {
@@ -360,14 +370,18 @@ export default function ROCTrackerPage() {
   }
 
   function handleShare() {
+    const url = new URL(window.location.href)
+    url.searchParams.set('p', btoa(JSON.stringify(profile)))
+    const shareUrl = url.toString()
+
     if (navigator.share) {
       navigator.share({
         title: 'ROC Deadline Tracker',
         text: `Check ROC deadlines for ${profile.companyName || 'your company'} at CorpLawUpdates.in`,
-        url: window.location.href,
+        url: shareUrl,
       })
     } else {
-      navigator.clipboard.writeText(window.location.href)
+      navigator.clipboard.writeText(shareUrl)
       alert('Link copied!')
     }
   }

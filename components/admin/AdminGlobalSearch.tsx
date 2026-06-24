@@ -18,7 +18,7 @@ interface SearchResult {
   url: string
 }
 
-export default function GlobalSearch() {
+export default function AdminGlobalSearch() {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<SearchResult[]>([])
   const [loading, setLoading] = useState(false)
@@ -114,7 +114,7 @@ export default function GlobalSearch() {
           ...(category ? { category } : {}),
         })
         const res = await fetch(
-          `/api/search?${params}`
+          `/api/admin/search?${params}`
         )
         const data = await res.json()
         setResults(data.results || [])
@@ -196,12 +196,15 @@ export default function GlobalSearch() {
                 strokeWidth={2} 
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
-        <span className="hidden md:block text-slate-500">
+        <span className="hidden md:block">
           Search...
         </span>
-        <kbd className="hidden md:flex items-center gap-0.5 bg-white border border-slate-200 rounded px-1.5 py-0.5 font-mono text-[10px] text-slate-400 font-semibold shadow-sm">
-          <span>{isMac ? '⌘' : 'Ctrl'}</span>
-          <span>K</span>
+        <kbd className="hidden md:block text-xs 
+                        bg-white  
+                        border border-slate-200  
+                        rounded px-1.5 py-0.5 
+                        font-mono text-slate-500 ">
+          {isMac ? '⌘K' : 'Ctrl+K'}
         </kbd>
       </button>
 

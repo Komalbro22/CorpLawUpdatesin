@@ -3,6 +3,7 @@ import { cookies } from 'next/headers'
 import { revalidatePath } from 'next/cache'
 import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
+import { documentTemplateSchema } from '@/lib/admin-schemas'
 
 export async function GET() {
   try {
@@ -34,7 +35,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const body = await request.json()
+    const rawBody = await request.json()
+    const parsed = documentTemplateSchema.safeParse(rawBody)
+    if (!parsed.success) {
+      return NextResponse.json({ error: 'Invalid data', details: parsed.error.format() }, { status: 400 })
+    }
+    const body = parsed.data
 
     // Generate or clean slug from name if not provided
     if (!body.slug && body.name) {

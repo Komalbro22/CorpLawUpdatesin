@@ -12,7 +12,7 @@ import AnnouncementBar from '@/components/AnnouncementBar'
 import Script from 'next/script'
 import JsonLd from '@/components/JsonLd'
 import TrackingScripts from '@/components/TrackingScripts'
-import ClarityScript from '@/components/analytics/ClarityScript'
+
 
 import { themeScript } from '@/lib/theme-script'
 import './globals.css'
@@ -159,7 +159,6 @@ export default async function RootLayout({
         <HideOnAdmin>
           <Analytics />
           <SpeedInsights />
-          <ClarityScript />
         </HideOnAdmin>
         {/* Google Reader Revenue Manager - SWG */}
         <Script

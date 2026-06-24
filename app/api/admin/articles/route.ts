@@ -7,6 +7,7 @@ import { supabaseAdmin } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
 import { slugify, calculateReadingTime, extractFirstImage } from '@/lib/utils'
 import { submitArticleToIndexNow } from '@/lib/indexnow'
+import { articleSchema } from '@/lib/admin-schemas'
 
 export async function GET(request: NextRequest) {
     if (!verifyAdminSession()) {
@@ -81,7 +82,12 @@ export async function POST(request: NextRequest) {
     }
 
     try {
-        const body = await request.json()
+        const rawBody = await request.json()
+        const parsed = articleSchema.safeParse(rawBody)
+        if (!parsed.success) {
+            return NextResponse.json({ error: 'Invalid data', details: parsed.error.format() }, { status: 400 })
+        }
+        const body = parsed.data
         const { 
             title, slug, summary, content, category, tags, 
             source_url, source_name, sources,

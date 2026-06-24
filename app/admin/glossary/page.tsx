@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Plus, Edit2, Trash2, CheckCircle2, XCircle, Search, ExternalLink } from 'lucide-react'
+import { Plus, Edit2, Trash2, CheckCircle2, XCircle, Search, ExternalLink, Upload, Loader2 } from 'lucide-react'
 import { useToast } from '@/components/Toast'
 
 type GlossaryTerm = {
@@ -23,6 +23,7 @@ export default function AdminGlossaryPage() {
   const [terms, setTerms] = useState<GlossaryTerm[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [search, setSearch] = useState('')
+  const [isImporting, setIsImporting] = useState(false)
 
   useEffect(() => {
     fetchTerms()
@@ -74,6 +75,76 @@ export default function AdminGlossaryPage() {
     }
   }
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setIsImporting(true)
+    const reader = new FileReader()
+    reader.onload = async (event) => {
+      try {
+        const text = event.target?.result as string
+        if (!text) throw new Error('File is empty')
+
+        // Simple CSV parser (assumes standard CSV without escaped commas in fields for MVP)
+        const lines = text.split(/\r?\n/).filter(line => line.trim())
+        if (lines.length < 2) throw new Error('No data rows found')
+        
+        const headers = lines[0].split(',').map(h => h.trim().toLowerCase())
+        const termIdx = headers.indexOf('term')
+        const definitionIdx = headers.indexOf('definition')
+        
+        if (termIdx === -1 || definitionIdx === -1) {
+          throw new Error('CSV must contain "term" and "definition" columns')
+        }
+
+        const categoryIdx = headers.indexOf('category')
+        const slugIdx = headers.indexOf('slug')
+
+        const payload = lines.slice(1).map(line => {
+          // A very rudimentary split that respects quotes would be better, but for MVP simple split is fine.
+          // Let's use a regex split that handles quotes
+          const regex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/
+          const row = line.split(regex).map(cell => cell.replace(/^"(.*)"$/, '$1').trim())
+          
+          let term = row[termIdx] || ''
+          let slug = slugIdx !== -1 && row[slugIdx] ? row[slugIdx] : term.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+          
+          return {
+            term,
+            slug,
+            definition: row[definitionIdx] || '',
+            category: categoryIdx !== -1 && row[categoryIdx] ? row[categoryIdx] : 'General',
+            is_verified: true,
+            keywords: [],
+            related_terms: []
+          }
+        }).filter(item => item.term)
+
+        const res = await fetch('/api/admin/glossary/bulk', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+
+        if (!res.ok) {
+          const err = await res.json()
+          throw new Error(err.error || 'Failed to import')
+        }
+
+        showToast(`Successfully imported ${payload.length} terms`, 'success')
+        fetchTerms()
+      } catch (err: any) {
+        showToast('Import failed: ' + err.message, 'error')
+      } finally {
+        setIsImporting(false)
+        // reset input
+        e.target.value = ''
+      }
+    }
+    reader.readAsText(file)
+  }
+
   const filteredTerms = terms.filter(t => 
     (t.term || '').toLowerCase().includes(search.toLowerCase()) || 
     (t.category || '').toLowerCase().includes(search.toLowerCase())
@@ -86,13 +157,20 @@ export default function AdminGlossaryPage() {
           <h1 className="text-3xl font-extrabold text-slate-900 font-heading">Legal Glossary</h1>
           <p className="text-sm text-slate-500 mt-1">Manage dictionary terms and definitions.</p>
         </div>
-        <Link 
-          href="/admin/glossary/new"
-          className="inline-flex items-center gap-2 btn-vibrant-amber text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm"
-        >
-          <Plus className="w-4 h-4" />
-          Add Term
-        </Link>
+        <div className="flex items-center gap-3">
+          <label className="cursor-pointer inline-flex items-center gap-2 bg-slate-800 text-white px-4 py-2 rounded-lg font-medium transition-colors hover:bg-slate-700 shadow-sm opacity-90 hover:opacity-100">
+            {isImporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+            {isImporting ? 'Importing...' : 'Import CSV'}
+            <input type="file" accept=".csv" className="hidden" onChange={handleFileUpload} disabled={isImporting} />
+          </label>
+          <Link 
+            href="/admin/glossary/new"
+            className="inline-flex items-center gap-2 btn-vibrant-amber text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm"
+          >
+            <Plus className="w-4 h-4" />
+            Add Term
+          </Link>
+        </div>
       </div>
 
       <div className="admin-card overflow-hidden flex flex-col h-[calc(100vh-200px)]">

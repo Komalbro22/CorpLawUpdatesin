@@ -566,7 +566,7 @@ export default function NewGlossaryTermPage() {
             ) : (
               <div className="space-y-4">
                 {faqs.map((faq, i) => (
-                  <div key={i} className="p-4 border border-slate-850 rounded-xl bg-slate-50/50 space-y-3 relative">
+                  <div key={i} className="p-4 border border-slate-800 rounded-xl bg-slate-50/50 space-y-3 relative">
                     <button 
                       type="button"
                       onClick={() => handleRemoveFaq(i)}
@@ -627,7 +627,7 @@ export default function NewGlossaryTermPage() {
                 </div>
               </div>
             ) : (
-              <div className="p-4 bg-slate-50/45 border border-slate-850 rounded-xl mb-6">
+              <div className="p-4 bg-slate-50/45 border border-slate-800 rounded-xl mb-6">
                 <div className="flex gap-2">
                   <AlertTriangle className="w-5 h-5 text-slate-500 shrink-0" />
                   <div>
@@ -871,7 +871,7 @@ export default function NewGlossaryTermPage() {
                       value={tldrInput}
                       onChange={(e) => setTldrInput(e.target.value)}
                       placeholder="Add key takeaway point..."
-                      className="flex-1 px-3 py-1.5 bg-slate-955 border border-white/60 rounded-lg text-xs text-slate-900"
+                      className="flex-1 px-3 py-1.5 bg-slate-900 border border-white/60 rounded-lg text-xs text-slate-900"
                       onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddTldrPoint(); } }}
                     />
                     <button 
@@ -884,7 +884,7 @@ export default function NewGlossaryTermPage() {
                   </div>
 
                   {tldrPoints.length > 0 ? (
-                    <div className="space-y-2 bg-slate-50/50 p-2.5 rounded-xl border border-slate-850">
+                    <div className="space-y-2 bg-slate-50/50 p-2.5 rounded-xl border border-slate-800">
                       {tldrPoints.map((pt, idx) => (
                         <div key={idx} className="flex gap-2 items-start group">
                           <span className="text-amber-500 text-xs font-bold pt-0.5">•</span>
@@ -916,11 +916,11 @@ export default function NewGlossaryTermPage() {
 
       {/* Live Preview Modal */}
       {isPreviewOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-955/80 backdrop-blur-sm flex justify-center p-4 sm:p-6 md:p-10">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/80 backdrop-blur-sm flex justify-center p-4 sm:p-6 md:p-10">
           <div className="relative w-full max-w-4xl bg-slate-50 rounded-3xl shadow-2xl border border-white/60 overflow-hidden flex flex-col my-auto max-h-[90vh]">
             
             {/* Modal Header */}
-            <div className="flex justify-between items-center px-8 py-5 bg-slate-100 border-b border-slate-850 shrink-0">
+            <div className="flex justify-between items-center px-8 py-5 bg-slate-100 border-b border-slate-800 shrink-0">
               <div>
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">
                   <Eye className="w-3.5 h-3.5" />
@@ -953,7 +953,7 @@ export default function NewGlossaryTermPage() {
                 </nav>
 
                 {/* Main Card */}
-                <article className="bg-slate-50 border border-slate-805 rounded-2xl p-8 shadow-sm relative overflow-hidden text-left bg-slate-50">
+                <article className="bg-slate-50 border border-slate-800 rounded-2xl p-8 shadow-sm relative overflow-hidden text-left bg-slate-50">
                   {/* Decorative background letter */}
                   <div className="absolute top-0 right-0 p-8 opacity-[0.02] select-none pointer-events-none" aria-hidden="true">
                     <span className="text-9xl font-heading font-bold text-slate-900 leading-none">
@@ -984,7 +984,7 @@ export default function NewGlossaryTermPage() {
                       <div className="mt-6 pt-4 border-t border-white/60 flex flex-wrap gap-1.5 items-center">
                         <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider mr-1.5">Acronyms / Synonyms:</span>
                         {synonyms.map((syn) => (
-                          <span key={syn} className="inline-flex items-center px-2 py-0.5 rounded bg-slate-955 text-slate-700 text-xs font-semibold border border-slate-850">
+                          <span key={syn} className="inline-flex items-center px-2 py-0.5 rounded bg-slate-900 text-slate-700 text-xs font-semibold border border-slate-800">
                             {syn}
                           </span>
                         ))}
@@ -995,7 +995,7 @@ export default function NewGlossaryTermPage() {
 
                 {/* Extended Note Section */}
                 {extendedNote && (
-                  <section className="mt-8 bg-slate-955 border border-white/60 rounded-2xl p-8 shadow-sm text-left">
+                  <section className="mt-8 bg-slate-900 border border-white/60 rounded-2xl p-8 shadow-sm text-left">
                     <h3 className="text-xl font-bold text-slate-900 mb-4 font-heading">Understanding {term || 'Term'}</h3>
                     <div className="prose prose-invert max-w-none text-slate-700">
                       <MarkdownRenderer content={extendedNote} />
@@ -1004,7 +1004,7 @@ export default function NewGlossaryTermPage() {
                 )}
 
                 {/* FAQ Section */}
-                <section className="mt-8 bg-slate-955 border border-white/60 rounded-2xl p-8 shadow-sm text-left">
+                <section className="mt-8 bg-slate-900 border border-white/60 rounded-2xl p-8 shadow-sm text-left">
                   <h2 className="text-xl font-bold text-slate-900 mb-6 font-heading">Frequently Asked Questions</h2>
                   <div className="space-y-4">
                     {(faqs.length > 0 ? faqs.map(f => ({ q: f.q, a: f.a })) : [
@@ -1017,12 +1017,12 @@ export default function NewGlossaryTermPage() {
                         a: `${term || 'Term'} is governed under Indian ${category} law. Understanding this concept is essential for ensuring regulatory compliance, avoiding penalties, and making corporate decisions in India.`
                       }
                     ]).map((faq, i) => (
-                      <div key={i} className="border border-slate-850 rounded-xl p-4 bg-slate-100/40">
+                      <div key={i} className="border border-slate-800 rounded-xl p-4 bg-slate-100/40">
                         <h4 className="font-semibold text-slate-900 flex items-center justify-between">
                           <span>{faq.q || 'Question...'}</span>
                           <span className="text-slate-550 text-[10px]">▼</span>
                         </h4>
-                        <p className="mt-3 text-slate-700 text-sm leading-relaxed border-t border-slate-850/50 pt-3">
+                        <p className="mt-3 text-slate-700 text-sm leading-relaxed border-t border-slate-800/50 pt-3">
                           {faq.a || 'Answer will be displayed here...'}
                         </p>
                       </div>
@@ -1032,13 +1032,13 @@ export default function NewGlossaryTermPage() {
 
                 {/* Related Searches Section */}
                 {keywords.length > 0 && (
-                  <section className="mt-8 bg-slate-955 border border-white/60 rounded-2xl p-8 shadow-sm text-left">
+                  <section className="mt-8 bg-slate-900 border border-white/60 rounded-2xl p-8 shadow-sm text-left">
                     <h3 className="text-lg font-bold text-slate-900 mb-4 font-heading">Related Searches</h3>
                     <div className="flex flex-wrap gap-2">
                       {keywords.map((kw, i) => (
                         <span
                           key={i}
-                          className="text-sm bg-slate-50 text-slate-700 border border-slate-850 px-4 py-2 rounded-full font-medium shadow-sm flex items-center gap-1 cursor-pointer hover:bg-slate-100"
+                          className="text-sm bg-slate-50 text-slate-700 border border-slate-800 px-4 py-2 rounded-full font-medium shadow-sm flex items-center gap-1 cursor-pointer hover:bg-slate-100"
                         >
                           <span>{kw}</span>
                           <span className="text-slate-500 text-xs">↗</span>

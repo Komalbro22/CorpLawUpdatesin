@@ -4,6 +4,22 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { getSavedDocuments, deleteSavedDocument, SavedDocument } from '@/lib/saved-documents'
 
+function SavedDocsSkeleton() {
+  return (
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-12 px-4 animate-pulse">
+      <div className="max-w-4xl mx-auto space-y-6">
+        <div className="h-4 w-32 bg-slate-200 dark:bg-slate-800 rounded" />
+        <div className="h-8 w-64 bg-slate-200 dark:bg-slate-800 rounded" />
+        <div className="h-4 w-96 bg-slate-200 dark:bg-slate-800 rounded" />
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 space-y-4">
+          <div className="h-5 w-full bg-slate-200 dark:bg-slate-800 rounded" />
+          <div className="h-5 w-3/4 bg-slate-200 dark:bg-slate-800 rounded" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function SavedDocumentsPage() {
   const [documents, setDocuments] = useState<SavedDocument[]>([])
   const [isClient, setIsClient] = useState(false)
@@ -20,7 +36,7 @@ export default function SavedDocumentsPage() {
     }
   }
 
-  if (!isClient) return null // Avoid hydration mismatch
+  if (!isClient) return <SavedDocsSkeleton />
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-200 py-12 px-4">

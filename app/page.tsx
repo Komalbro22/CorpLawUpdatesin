@@ -7,6 +7,8 @@ import UpdateCard from '@/components/UpdateCard'
 import Link from 'next/link'
 import { Metadata } from 'next'
 import type { CSSProperties } from 'react'
+import HomeStats from '@/components/HomeStats'
+import HomeToolCard from '@/components/tools/HomeToolCard'
 import {
   ArrowRight,
   Building2,
@@ -58,7 +60,7 @@ export default async function HomePage({ searchParams }: { searchParams: { sort?
     latestQuery.order('published_at', { ascending: false })
   }
 
-  const [featuredRes, latestRes, popularRes] = await Promise.all([
+  const [featuredRes, latestRes, popularRes, updatesCountRes, viewsRes] = await Promise.all([
     supabase
       .from('updates')
       .select(UPDATE_LIST_COLUMNS)
@@ -76,11 +78,19 @@ export default async function HomePage({ searchParams }: { searchParams: { sort?
       .gte('published_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
       .order('views', { ascending: false })
       .limit(3),
+    supabase
+      .from('updates')
+      .select('*', { count: 'exact', head: true })
+      .not('published_at', 'is', null)
+      .lte('published_at', new Date().toISOString()),
+    supabase.from('updates').select('views').not('published_at', 'is', null),
   ])
 
   const featuredUpdates = featuredRes.data || []
   const latestUpdates = latestRes.data || []
   const popularUpdates = popularRes.data || []
+  const updatesCount = updatesCountRes.count || 0
+  const totalViews = (viewsRes.data || []).reduce((sum, row) => sum + (row.views || 0), 0)
   const hasUpdates = featuredUpdates.length > 0 || latestUpdates.length > 0
 
   return (
@@ -128,7 +138,7 @@ export default async function HomePage({ searchParams }: { searchParams: { sort?
               </Link>
               <Link
                 href="/tools"
-                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg border border-amber-400/30 bg-amber-450/10 px-8 py-4 text-sm font-bold text-amber-400 transition-colors hover:bg-amber-400/20 hover:border-amber-400/60 motion-safe:hover:scale-105"
+                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg border border-amber-400/30 bg-amber-400/10 px-8 py-4 text-sm font-bold text-amber-400 transition-colors hover:bg-amber-400/20 hover:border-amber-400/60 motion-safe:hover:scale-105"
               >
                 Explore tools
               </Link>
@@ -147,6 +157,11 @@ export default async function HomePage({ searchParams }: { searchParams: { sort?
                 </span>
               ))}
             </div>
+            {updatesCount > 0 && (
+              <div className="mt-10 w-full max-w-lg">
+                <HomeStats updatesCount={updatesCount} totalViews={totalViews} />
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -279,7 +294,7 @@ export default async function HomePage({ searchParams }: { searchParams: { sort?
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-600 dark:text-amber-500">Interactive Suite</p>
             <h2 className="mt-2 text-2xl md:text-3xl font-extrabold text-navy dark:text-white font-heading tracking-tight">
-              🛠️ Free Legal & Compliance Tools
+              Free Legal & Compliance Tools
             </h2>
             <p className="mt-2 text-slate-500 dark:text-slate-400 text-sm md:text-base">
               No login required. Self-service utilities for Company Secretaries, corporate lawyers, and compliance teams.
@@ -299,15 +314,15 @@ export default async function HomePage({ searchParams }: { searchParams: { sort?
               title: 'Document Generator',
               desc: 'Generate Board Resolutions, Director Appointment letters, Agreements, and corporate letters in seconds. AI-powered with ICSI SS-1 formatting.',
               badge: 'AI Powered',
-              badgeColor: 'bg-purple-100 text-purple-755 dark:bg-purple-950/50 dark:text-purple-300',
+              badgeColor: 'bg-purple-100 text-purple-700 dark:bg-purple-950/50 dark:text-purple-300',
             },
             {
-              href: '/tools/penalty-calculator',
+              href: '/tools/fee-calculator',
               icon: '🧮',
-              title: 'Penalty Calculator',
+              title: 'MCA & ROC Fee Calculator',
               desc: 'Calculate statutory filing fees, ROC late fees, adjudication penalties, and MSME payment interest.',
               badge: 'Free',
-              badgeColor: 'bg-green-100 text-green-755 dark:bg-green-950/50 dark:text-green-300',
+              badgeColor: 'bg-green-100 text-green-700 dark:bg-green-950/50 dark:text-green-300',
             },
             {
               href: '/calendar',
@@ -315,7 +330,7 @@ export default async function HomePage({ searchParams }: { searchParams: { sort?
               title: 'Compliance Calendar',
               desc: 'Track 50+ deadlines for MCA, SEBI, RBI, FEMA, and Tax compliance. Export events directly to Google Calendar.',
               badge: 'Community',
-              badgeColor: 'bg-blue-100 text-blue-755 dark:bg-blue-950/50 dark:text-blue-300',
+              badgeColor: 'bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300',
             },
             {
               href: '/rbi/repo-rate',
@@ -323,7 +338,7 @@ export default async function HomePage({ searchParams }: { searchParams: { sort?
               title: 'RBI Repo Rate Tracker',
               desc: 'Get the latest repo rate, change histories, next MPC schedule, and run home loan EMI impact calculations.',
               badge: 'Live Data',
-              badgeColor: 'bg-amber-100 text-amber-755 dark:bg-amber-950/50 dark:text-amber-300',
+              badgeColor: 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300',
             },
             {
               href: '/glossary',
@@ -331,7 +346,7 @@ export default async function HomePage({ searchParams }: { searchParams: { sort?
               title: 'Corporate Law Glossary',
               desc: 'Over 200+ complex corporate law, IBC, SEBI, and FEMA definitions explained in simplified, plain English.',
               badge: 'Free',
-              badgeColor: 'bg-teal-100 text-teal-755 dark:bg-teal-950/50 dark:text-teal-300',
+              badgeColor: 'bg-teal-100 text-teal-700 dark:bg-teal-950/50 dark:text-teal-300',
             },
             {
               href: '/tools',
@@ -339,30 +354,11 @@ export default async function HomePage({ searchParams }: { searchParams: { sort?
               title: 'Daily Corporate Law Quiz',
               desc: '5 daily quick MCQs covering Companies Act, SEBI guidelines, and RBI updates. Perfect for self-testing and mock practice.',
               badge: 'Coming Soon',
-              badgeColor: 'bg-slate-100 text-slate-550 dark:bg-slate-800 dark:text-slate-400',
+              badgeColor: 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400',
+              isLive: false,
             },
           ].map(tool => (
-            <Link key={tool.href} href={tool.href}
-                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 hover:border-amber-400 hover:shadow-md transition-all group flex flex-col justify-between animate-fade-up">
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-3xl bg-slate-50 dark:bg-slate-800 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800 group-hover:scale-105 transition-transform">{tool.icon}</span>
-                  <span className={`text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-md ${tool.badgeColor}`}>
-                    {tool.badge}
-                  </span>
-                </div>
-                <h3 className="font-bold text-navy dark:text-slate-100 text-base mb-1.5 group-hover:text-amber-600 transition-colors">
-                  {tool.title}
-                </h3>
-                <p className="text-slate-500 dark:text-slate-400 text-xs font-light leading-relaxed">{tool.desc}</p>
-              </div>
-              <div className="flex items-center justify-between mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/60">
-                <span className="text-xs text-slate-400 dark:text-slate-500">
-                  {tool.badge === 'Coming Soon' ? 'Coming Soon' : 'Explore Tool'}
-                </span>
-                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-amber-500 group-hover:translate-x-1 transition-all duration-200" />
-              </div>
-            </Link>
+            <HomeToolCard key={tool.title} tool={tool} />
           ))}
         </div>
       </section>
@@ -403,7 +399,7 @@ export default async function HomePage({ searchParams }: { searchParams: { sort?
               We simplify complex legal updates into easy-to-understand summaries with key insights and practical implications. 
               Our suite of interactive utilities, including the 
               <Link href="/documents" className="text-gold hover:underline font-medium mx-1 font-semibold">Legal Document Generator</Link>, 
-              <Link href="/tools/penalty-calculator" className="text-gold hover:underline font-medium mx-1 font-semibold">ROC Compliance Penalty Calculator</Link>, 
+              <Link href="/tools/fee-calculator" className="text-gold hover:underline font-medium mx-1 font-semibold">MCA & ROC Fee Calculator</Link>, 
               <Link href="/calendar" className="text-gold hover:underline font-medium mx-1 font-semibold">Compliance Calendar</Link>, 
               and 
               <Link href="/rbi/repo-rate" className="text-gold hover:underline font-medium mx-1 font-semibold">RBI Repo Rate Tracker</Link>, 

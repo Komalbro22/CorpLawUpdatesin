@@ -7,6 +7,7 @@ import { supabaseAdmin } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
 import { submitArticleToIndexNow } from '@/lib/indexnow'
 import { calculateReadingTime, extractFirstImage } from '@/lib/utils'
+import { articleSchema } from '@/lib/admin-schemas'
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
     if (!verifyAdminSession()) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -34,7 +35,12 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     }
 
     try {
-        const body = await request.json()
+        const rawBody = await request.json()
+        const parsed = articleSchema.safeParse(rawBody)
+        if (!parsed.success) {
+            return NextResponse.json({ error: 'Invalid data', details: parsed.error.format() }, { status: 400 })
+        }
+        const body = parsed.data
 
         const { data: oldArticle, error: fetchError } = await supabaseAdmin
             .from('updates').select('id, title, slug, summary, content, category, published_at, updated_at, is_featured, effective_date, featured_image_url, impact_level, source_name, source_url, sources, key_change, key_changes, tags, views, seo_title, seo_description, quick_answer, regulation_ref, last_verified, last_amended, key_takeaways, has_steps, steps_json')

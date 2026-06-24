@@ -29,7 +29,7 @@ export default function PrivacyPolicyPage() {
 
                 <section>
                     <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">1. Introduction</h2>
-                    <p className="text-slate-600 dark:text-slate-350 leading-relaxed">
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
                         CorpLawUpdates.in ("we", "our", "us") is committed to protecting your privacy. This Privacy Policy explains what data we collect, how we use it, and who we share it with when you visit https://www.corplawupdates.in.
                     </p>
                 </section>
@@ -41,15 +41,15 @@ export default function PrivacyPolicyPage() {
                     <div className="space-y-6">
                         <div>
                             <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">A. Newsletter Subscribers</h3>
-                            <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-350">
+                            <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-400">
                                 <li><strong>Email address</strong> — collected when you subscribe to our newsletter</li>
                                 <li><strong>IP address</strong> — collected at the time of subscription to prevent automated bot signups (rate-limiting). Stored temporarily in our database.</li>
                             </ul>
                         </div>
                         <div>
                             <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">B. Newsletter Interaction Data</h3>
-                            <p className="text-slate-600 dark:text-slate-350 mb-2">When we send you a newsletter, we track:</p>
-                            <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-350">
+                            <p className="text-slate-600 dark:text-slate-400 mb-2">When we send you a newsletter, we track:</p>
+                            <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-400">
                                 <li>Whether the email was <strong>delivered, opened, or clicked</strong></li>
                                 <li>Timestamps of open and click events</li>
                             </ul>
@@ -57,20 +57,20 @@ export default function PrivacyPolicyPage() {
                         </div>
                         <div>
                             <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">C. AI Document Generator Inputs & Logs</h3>
-                            <p className="text-slate-600 dark:text-slate-350 mb-2">When you use our AI Legal Document Generator, we process:</p>
-                            <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-350">
+                            <p className="text-slate-600 dark:text-slate-400 mb-2">When you use our AI Legal Document Generator, we process:</p>
+                            <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-400">
                                 <li><strong>Form Inputs</strong> — whatever details you fill (e.g. company names, director DINs, addresses, financial amounts, custom instructions). These are sent to the AI subprocessor to render the document.</li>
                                 <li><strong>Generation Metadata</strong> — we log document type, timestamp, IP address, and token usage to enforce rate limits and monitor server load.</li>
                             </ul>
                         </div>
                         <div>
                             <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">D. Article View Counts</h3>
-                            <p className="text-slate-600 dark:text-slate-350">We count the number of times each article is viewed. <strong>No personal identifiers (IP, name, email) are stored</strong> alongside view counts — only the article slug and a total count.</p>
+                            <p className="text-slate-600 dark:text-slate-400">We count the number of times each article is viewed. <strong>No personal identifiers (IP, name, email) are stored</strong> alongside view counts — only the article slug and a total count.</p>
                         </div>
                         <div>
                             <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">E. Website Analytics</h3>
-                            <p className="text-slate-600 dark:text-slate-350 mb-2">We use the following analytics tools that automatically collect visitor data:</p>
-                            <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-350">
+                            <p className="text-slate-600 dark:text-slate-400 mb-2">We use the following analytics tools that automatically collect visitor data:</p>
+                            <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-400">
                                 <li><strong>Vercel Analytics</strong> — collects anonymous page views, unique visitors, browser type, OS, and geographic region</li>
                                 <li><strong>Vercel Speed Insights</strong> — collects Core Web Vitals and page performance metrics</li>
                                 <li><strong>Google Analytics (GA4)</strong> — if enabled, collects sessions, interactions, and demographic data via cookies</li>
@@ -78,7 +78,7 @@ export default function PrivacyPolicyPage() {
                             </ul>
                         </div>
                     </div>
-                    <p className="text-slate-600 dark:text-slate-350 mt-4">We do <strong>not</strong> collect: your name, phone number, payment information, or create user accounts for public visitors.</p>
+                    <p className="text-slate-600 dark:text-slate-400 mt-4">We do <strong>not</strong> collect: your name, phone number, payment information, or create user accounts for public visitors.</p>
                 </section>
 
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
@@ -117,7 +117,7 @@ export default function PrivacyPolicyPage() {
                             </tbody>
                         </table>
                     </div>
-                    <p className="text-slate-600 dark:text-slate-350 mt-4">We <strong>never sell or rent</strong> your personal data to any third party.</p>
+                    <p className="text-slate-600 dark:text-slate-400 mt-4">We <strong>never sell or rent</strong> your personal data to any third party.</p>
                 </section>
 
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
@@ -169,13 +169,13 @@ export default function PrivacyPolicyPage() {
 
                 <section>
                     <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">5. Cookies</h2>
-                    <p className="text-slate-600 dark:text-slate-350 mb-3">We use cookies for the following purposes:</p>
-                    <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-350">
+                    <p className="text-slate-600 dark:text-slate-400 mb-3">We use cookies for the following purposes:</p>
+                    <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-400">
                         <li><strong>Session cookies</strong> — to maintain admin login state (admin-only; not set for public visitors)</li>
                         <li><strong>Google Analytics cookies</strong> — to track visitor sessions and page interactions (if GA4 is configured)</li>
                         <li><strong>Google SWG</strong> — may set cookies related to content access for Google News</li>
                     </ul>
-                    <p className="text-slate-600 dark:text-slate-350 mt-3 italic">You can disable cookies in your browser settings. Disabling analytics cookies will not affect your ability to read any content on this site.</p>
+                    <p className="text-slate-600 dark:text-slate-400 mt-3 italic">You can disable cookies in your browser settings. Disabling analytics cookies will not affect your ability to read any content on this site.</p>
                 </section>
 
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
@@ -191,26 +191,26 @@ export default function PrivacyPolicyPage() {
 
                 <section>
                     <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">7. Data Retention</h2>
-                    <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-350">
+                    <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-400">
                         <li><strong>Subscriber emails</strong> — retained until you unsubscribe. After unsubscribing, your email is marked inactive and deleted within 30 days upon written request.</li>
                         <li><strong>IP addresses (rate-limiting)</strong> — retained for a short rolling window only (used to detect abuse; not linked to your email)</li>
                         <li><strong>AI Generated Documents</strong> — saved draft contents are retained in our database for session retrieval and professional editing purposes. You can request immediate erasure of your documents by contacting us.</li>
                     </ul>
-                    <p className="text-slate-600 dark:text-slate-350 mt-3 italic">To request deletion of your data: legal@corplawupdates.in</p>
+                    <p className="text-slate-600 dark:text-slate-400 mt-3 italic">To request deletion of your data: legal@corplawupdates.in</p>
                 </section>
 
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
 
                 <section>
                     <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">8. Your Rights</h2>
-                    <p className="text-slate-600 dark:text-slate-350 mb-3">You have the right to:</p>
-                    <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-350">
+                    <p className="text-slate-600 dark:text-slate-400 mb-3">You have the right to:</p>
+                    <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-400">
                         <li>Access the personal data we hold about you</li>
                         <li>Correct inaccurate data</li>
                         <li>Request deletion of your data (Right to Erasure)</li>
                         <li>Withdraw consent (unsubscribe) at any time</li>
                     </ul>
-                    <p className="text-slate-600 dark:text-slate-350 mt-3 italic">To exercise any of these rights, email us at: legal@corplawupdates.in</p>
+                    <p className="text-slate-600 dark:text-slate-400 mt-3 italic">To exercise any of these rights, email us at: legal@corplawupdates.in</p>
                 </section>
 
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>

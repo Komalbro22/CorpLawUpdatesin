@@ -210,7 +210,7 @@ export default function DocumentAnalyticsPage() {
         <button
           onClick={() => fetchData(true)}
           disabled={refreshing}
-          className="inline-flex items-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-850 text-slate-800 px-4 py-2 rounded-xl text-sm transition-all focus:outline-none disabled:opacity-60"
+          className="inline-flex items-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-800 text-slate-800 px-4 py-2 rounded-xl text-sm transition-all focus:outline-none disabled:opacity-60"
         >
           <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
           {refreshing ? 'Refreshing...' : 'Refresh Logs'}
@@ -260,14 +260,14 @@ export default function DocumentAnalyticsPage() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-2">
-          <div className="bg-slate-50/50 p-3.5 rounded-xl border border-slate-850">
+          <div className="bg-slate-50/50 p-3.5 rounded-xl border border-slate-800">
             <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Remaining Tokens</span>
             <p className="text-lg font-bold text-slate-900 mt-1 tabular-nums">
               {formatINR(overview.remainingTokens)}
             </p>
           </div>
           
-          <div className="bg-slate-50/50 p-3.5 rounded-xl border border-slate-850 flex flex-col justify-between">
+          <div className="bg-slate-50/50 p-3.5 rounded-xl border border-slate-800 flex flex-col justify-between">
             <div className="flex justify-between items-center">
               <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Quota Refresh In</span>
               <Clock className="w-3.5 h-3.5 text-amber-500/80" />
@@ -277,14 +277,14 @@ export default function DocumentAnalyticsPage() {
             </p>
           </div>
 
-          <div className="bg-slate-50/50 p-3.5 rounded-xl border border-slate-850">
+          <div className="bg-slate-50/50 p-3.5 rounded-xl border border-slate-800">
             <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">AI Generations</span>
             <p className="text-lg font-bold text-blue-400 mt-1 tabular-nums">
               {overview.aiDocsTodayCount}
             </p>
           </div>
 
-          <div className="bg-slate-50/50 p-3.5 rounded-xl border border-slate-850">
+          <div className="bg-slate-50/50 p-3.5 rounded-xl border border-slate-800">
             <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Standard Substitution</span>
             <p className="text-lg font-bold text-emerald-400 mt-1 tabular-nums">
               {overview.standardDocsTodayCount}
@@ -306,7 +306,7 @@ export default function DocumentAnalyticsPage() {
             
             {lastGen ? (
               <div className="space-y-4">
-                <div className="bg-slate-50/50 p-4 rounded-xl border border-slate-850 space-y-3">
+                <div className="bg-slate-50/50 p-4 rounded-xl border border-slate-800 space-y-3">
                   <div>
                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Document Template</span>
                     <span className="text-sm font-semibold text-slate-800">{lastGen.template_name}</span>
@@ -348,13 +348,13 @@ export default function DocumentAnalyticsPage() {
                 </div>
               </div>
             ) : (
-              <div className="bg-slate-50/30 border border-dashed border-slate-850 rounded-xl p-8 text-center text-slate-500 text-xs">
+              <div className="bg-slate-50/30 border border-dashed border-slate-800 rounded-xl p-8 text-center text-slate-500 text-xs">
                 No document generations logged yet.
               </div>
             )}
           </div>
 
-          <div className="mt-6 pt-4 border-t border-slate-850 text-xs text-slate-500">
+          <div className="mt-6 pt-4 border-t border-slate-800 text-xs text-slate-500">
             * Standard substitutions bypass key limit checks and consume 0 tokens.
           </div>
         </div>
@@ -372,7 +372,7 @@ export default function DocumentAnalyticsPage() {
           <form onSubmit={handleSaveSettings} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-slate-350 mb-1.5">
+                <label className="block text-xs font-bold text-slate-400 mb-1.5">
                   Max AI Requests Per IP / Daily
                 </label>
                 <input
@@ -386,7 +386,7 @@ export default function DocumentAnalyticsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-350 mb-1.5">
+                <label className="block text-xs font-bold text-slate-400 mb-1.5">
                   Max AI Tokens Per IP / Daily
                 </label>
                 <input
@@ -401,7 +401,7 @@ export default function DocumentAnalyticsPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-350 mb-1.5 flex items-center gap-1">
+              <label className="block text-xs font-bold text-slate-400 mb-1.5 flex items-center gap-1">
                 Whitelisted Testing IPs
                 <span className="text-[10px] text-slate-500 font-normal uppercase">(exempt from rate limits)</span>
               </label>
@@ -442,14 +442,14 @@ export default function DocumentAnalyticsPage() {
           </h3>
           
           {topClients.length === 0 ? (
-            <div className="bg-slate-50/30 border border-dashed border-slate-850 rounded-xl p-8 text-center text-slate-500 text-xs">
+            <div className="bg-slate-50/30 border border-dashed border-slate-800 rounded-xl p-8 text-center text-slate-500 text-xs">
               No client logs found.
             </div>
           ) : (
-            <div className="overflow-hidden border border-slate-850 rounded-xl">
+            <div className="overflow-hidden border border-slate-800 rounded-xl">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
-                  <tr className="bg-slate-50 border-b border-slate-850 text-slate-500 font-bold">
+                  <tr className="bg-slate-50 border-b border-slate-800 text-slate-500 font-bold">
                     <th className="p-3">Client IP</th>
                     <th className="p-3">Total Generates</th>
                     <th className="p-3 text-right">Tokens Consumed</th>
@@ -466,7 +466,7 @@ export default function DocumentAnalyticsPage() {
                           </span>
                         )}
                       </td>
-                      <td className="p-3 text-slate-350">{client.count} times</td>
+                      <td className="p-3 text-slate-400">{client.count} times</td>
                       <td className="p-3 text-slate-800 text-right font-bold tabular-nums">
                         {formatINR(client.tokens)}
                       </td>
@@ -486,14 +486,14 @@ export default function DocumentAnalyticsPage() {
           </h3>
           
           {topTemplates.length === 0 ? (
-            <div className="bg-slate-50/30 border border-dashed border-slate-850 rounded-xl p-8 text-center text-slate-500 text-xs">
+            <div className="bg-slate-50/30 border border-dashed border-slate-800 rounded-xl p-8 text-center text-slate-500 text-xs">
               No document templates generated yet.
             </div>
           ) : (
-            <div className="overflow-hidden border border-slate-850 rounded-xl">
+            <div className="overflow-hidden border border-slate-800 rounded-xl">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
-                  <tr className="bg-slate-50 border-b border-slate-850 text-slate-500 font-bold">
+                  <tr className="bg-slate-50 border-b border-slate-800 text-slate-500 font-bold">
                     <th className="p-3">Template Name</th>
                     <th className="p-3 text-right">Volume</th>
                   </tr>

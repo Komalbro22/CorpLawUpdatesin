@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import FeeResultModal from './FeeResultModal'
 import { calculateLlpFee } from '@/lib/penaltyCalculator'
 
@@ -21,6 +21,32 @@ export default function LLPFeeCalc() {
   const [contribution, setContribution] = useState('1000000')
   const [delay, setDelay] = useState('0')
   const [dpCount, setDpCount] = useState('2')
+  const [copiedLink, setCopiedLink] = useState(false)
+
+
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      if (params.has('form')) setFormId(params.get('form') as 'Form-8' | 'Form-11')
+      if (params.has('type')) setLlpType(params.get('type') as 'Regular' | 'Small')
+      if (params.has('cap')) setContribution(params.get('cap')!)
+      if (params.has('dly')) setDelay(params.get('dly')!)
+      if (params.has('dp')) setDpCount(params.get('dp')!)
+    }
+  }, [])
+
+  const copyShareLink = () => {
+    const url = new URL(window.location.href)
+    url.searchParams.set('form', formId)
+    url.searchParams.set('type', llpType)
+    url.searchParams.set('cap', contribution)
+    url.searchParams.set('dly', delay)
+    url.searchParams.set('dp', dpCount)
+    navigator.clipboard.writeText(url.toString())
+    setCopiedLink(true)
+    setTimeout(() => setCopiedLink(false), 2000)
+  }
 
   const handleCalc = () => {
     const c = parseFloat(contribution) || 0
@@ -152,13 +178,22 @@ export default function LLPFeeCalc() {
         </div>
       </div>
 
-      <button 
-        onClick={handleCalc} 
-        className="w-full mt-6 py-3.5 px-6 bg-navy hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-navy font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2 group"
-      >
-        Calculate LLP Fee
-        <svg className="group-hover:translate-x-1 transition-transform" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-      </button>
+      <div className="mt-6 flex flex-col sm:flex-row gap-4">
+        <button 
+          onClick={handleCalc} 
+          className="flex-1 py-3.5 px-6 bg-navy hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-navy font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2 group"
+        >
+          Calculate LLP Fee
+          <svg className="group-hover:translate-x-1 transition-transform" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+        <button
+          onClick={copyShareLink}
+          className="sm:w-auto px-6 py-3.5 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm"
+        >
+          <svg className="w-5 h-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+          {copiedLink ? 'Link Copied!' : 'Copy Share Link'}
+        </button>
+      </div>
 
       <FeeResultModal 
         isOpen={modalOpen} 

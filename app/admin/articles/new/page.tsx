@@ -1,7 +1,7 @@
 /* eslint-disable */
 'use client'
 
-import { useState, useRef, KeyboardEvent } from 'react'
+import { useState, useRef, KeyboardEvent, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { PenSquare } from 'lucide-react'
@@ -77,6 +77,42 @@ export default function NewArticle() {
     } | null>(null)
 
     const fileInputRef = useRef<HTMLInputElement>(null)
+
+    const AUTOSAVE_KEY = 'article_autosave_new'
+    const [lastAutosaved, setLastAutosaved] = useState<Date | null>(null)
+
+    // Load from autosave on mount
+    useEffect(() => {
+        const saved = localStorage.getItem(AUTOSAVE_KEY)
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved)
+                if (confirm('A local draft was found. Do you want to restore it?')) {
+                    if (parsed.title) setTitle(parsed.title)
+                    if (parsed.slug) setSlug(parsed.slug)
+                    if (parsed.content) setContent(parsed.content)
+                    if (parsed.summary) setSummary(parsed.summary)
+                    if (parsed.category) setCategory(parsed.category)
+                    setLastAutosaved(new Date())
+                } else {
+                    localStorage.removeItem(AUTOSAVE_KEY)
+                }
+            } catch (e) {}
+        }
+    }, [])
+
+    // Autosave interval
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (title || content || summary) {
+                localStorage.setItem(AUTOSAVE_KEY, JSON.stringify({
+                    title, slug, content, summary, category
+                }))
+                setLastAutosaved(new Date())
+            }
+        }, 10000)
+        return () => clearInterval(interval)
+    }, [title, slug, content, summary, category])
 
     const handleTitleChange = (val: string) => {
         setTitle(val)
@@ -233,6 +269,9 @@ export default function NewArticle() {
             showToast('Image upload failed', 'error')
         } finally {
             setUploadingImage(false)
+            if (success) {
+                localStorage.removeItem(AUTOSAVE_KEY) // Clear autosave on successful save
+            }
             if (fileInputRef.current) fileInputRef.current.value = ''
         }
     }
@@ -284,6 +323,7 @@ export default function NewArticle() {
                 setSuccess(true)
                 showToast('Article created', 'success')
                 setLoading(false)
+                localStorage.removeItem(AUTOSAVE_KEY)
                 setTimeout(() => {
                     router.push('/admin/articles')
                 }, 2000)
@@ -308,7 +348,12 @@ export default function NewArticle() {
                 </h1>
 
                 {/* Mobile Tabs */}
-                <div className="flex lg:hidden bg-slate-200 rounded-lg p-1">
+                <div className="flex justify-end items-center gap-3 p-6 bg-slate-50/50  border-t border-slate-100 ">
+                    {lastAutosaved && (
+                        <span className="text-xs text-slate-400 mr-2">
+                            Saved to drafts at {lastAutosaved.toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit' })}
+                        </span>
+                    )}
                     <button
                         onClick={() => setActiveTab('write')}
                         className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${activeTab === 'write' ? 'bg-white text-slate-900 shadow' : 'text-slate-600'}`}
@@ -983,7 +1028,12 @@ export default function NewArticle() {
                     {success && <span className="text-emerald-600 text-sm font-medium">✨ Article {publishedAt ? 'published' : 'saved'} successfully! Redirecting...</span>}
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex gap-3 items-center">
+                    {lastAutosaved && (
+                        <span className="text-xs text-slate-400 mr-2 hidden sm:inline-block">
+                            Saved to drafts at {lastAutosaved.toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit' })}
+                        </span>
+                    )}
                     <button
                         onClick={() => handleSave(null)}
                         disabled={loading || success}

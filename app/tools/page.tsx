@@ -347,7 +347,7 @@ export default function ToolsPage() {
             <h2 className="text-2xl font-bold text-navy dark:text-white font-heading">
               Coming Soon
             </h2>
-            <span className="bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 dark:border dark:border-slate-750 text-xs font-bold px-2.5 py-1 rounded-full">
+            <span className="bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 dark:border dark:border-slate-700 text-xs font-bold px-2.5 py-1 rounded-full">
               {comingTools.length} In Development
             </span>
           </div>
@@ -355,7 +355,7 @@ export default function ToolsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {comingTools.map(tool => (
               <div key={tool.id}
-                   className="bg-white dark:bg-slate-900/40 border border-dashed border-slate-300 dark:border-slate-850 rounded-2xl p-5 opacity-80">
+                   className="bg-white dark:bg-slate-900/40 border border-dashed border-slate-300 dark:border-slate-800 rounded-2xl p-5 opacity-80">
                 <div className="flex items-start gap-4">
                   <span className="text-4xl flex-shrink-0 opacity-60">
                     {tool.icon}
@@ -369,13 +369,13 @@ export default function ToolsPage() {
                         Coming Soon
                       </span>
                     </div>
-                    <p className="text-slate-500 dark:text-slate-450 text-xs leading-relaxed">
+                    <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">
                       {tool.description}
                     </p>
                     <div className="flex flex-wrap gap-1 mt-2">
                       {tool.tags.slice(0, 3).map(tag => (
                         <span key={tag}
-                              className="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-450 px-2 py-0.5 rounded-full">
+                              className="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded-full">
                           {tag}
                         </span>
                       ))}

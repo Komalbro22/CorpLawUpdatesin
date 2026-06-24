@@ -291,7 +291,12 @@ export default async function AdminDashboard() {
 
                     {/* Tool Usage Analytics Card */}
                     <div>
-                        <h2 className="text-lg font-heading font-bold text-slate-900 mb-4">🛠️ Tool Usage (7 Days)</h2>
+                        <div className="flex items-center justify-between mb-4">
+                            <h2 className="text-lg font-heading font-bold text-slate-900">🛠️ Tool Usage (7 Days)</h2>
+                            <Link href="/admin/analytics/tools" className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1 group">
+                                View Logs <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                            </Link>
+                        </div>
                         <div className="admin-card-glass p-5 space-y-5">
                             
                             {/* High-level summary */}

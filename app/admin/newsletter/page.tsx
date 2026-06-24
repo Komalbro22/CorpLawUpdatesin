@@ -751,7 +751,7 @@ export default function NewsletterPage() {
                                             onChange={() => setTargetType('specific')}
                                             className="text-amber-500 focus:ring-amber-500 h-4 w-4"
                                         />
-                                        <span className="text-sm font-semibold text-slate-755">Specific Subscriber</span>
+                                        <span className="text-sm font-semibold text-slate-700">Specific Subscriber</span>
                                     </label>
                                 </div>
                                 {targetType === 'specific' && (
@@ -785,7 +785,7 @@ export default function NewsletterPage() {
                                             onChange={() => setIsScheduled(true)}
                                             className="text-amber-500 focus:ring-amber-500 h-4 w-4"
                                         />
-                                        <span className="text-sm font-semibold text-slate-755">Schedule Delivery</span>
+                                        <span className="text-sm font-semibold text-slate-700">Schedule Delivery</span>
                                     </label>
                                 </div>
                                 {isScheduled && (

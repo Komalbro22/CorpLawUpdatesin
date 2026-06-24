@@ -195,6 +195,52 @@ function googleCalendarUrl(entry: ComplianceEntry): string {
   return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&sf=true&output=xml`
 }
 
+function icsDownloadUrl(entry: ComplianceEntry): string {
+  const now = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
+  let date = '20260101' // fallback
+  try {
+    const months: Record<string, string> = {
+      'Jan': '01', 'Feb': '02', 'Mar': '03',
+      'Apr': '04', 'May': '05', 'Jun': '06',
+      'Jul': '07', 'Aug': '08', 'Sep': '09',
+      'Oct': '10', 'Nov': '11', 'Dec': '12',
+    }
+    const match = entry.due_date.match(/(\d{1,2})\s+([A-Za-z]{3})\s+(\d{4})/)
+    if (match) {
+      date = `${match[3]}${months[match[2]] || '01'}${match[1].padStart(2, '0')}`
+    }
+  } catch(e) {}
+
+  const uid = `${entry.id}@corplawupdates.in`
+  const title = `${entry.form_name} — ${entry.compliance_title}`
+  const desc = [
+    `Regulator: ${(entry.regulator || '').toUpperCase()}`,
+    `Applicable to: ${entry.applicable_to}`,
+    entry.penalty ? `Penalty: ${entry.penalty}` : '',
+    entry.regulation_reference ? `Law: ${entry.regulation_reference}` : '',
+    `Source: https://www.corplawupdates.in/calendar`,
+  ].filter(Boolean).join('\\n')
+
+  const ical = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//CorpLawUpdates.in//Compliance Calendar//EN',
+    'CALSCALE:GREGORIAN',
+    'BEGIN:VEVENT',
+    `UID:${uid}`,
+    `DTSTAMP:${now}`,
+    `DTSTART;VALUE=DATE:${date}`,
+    `DTEND;VALUE=DATE:${date}`,
+    `SUMMARY:📋 ${title}`,
+    `DESCRIPTION:${desc}`,
+    `URL:https://www.corplawupdates.in/calendar`,
+    'END:VEVENT',
+    'END:VCALENDAR',
+  ].join('\r\n')
+
+  return `data:text/calendar;charset=utf-8,${encodeURIComponent(ical)}`
+}
+
 function TableSection({
   title,
   color,
@@ -438,16 +484,27 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
       <span className="inline-flex flex-wrap items-center gap-1.5">
         {entry.form_name}
         <EntryBadges entry={entry} />
-        <a
-          href={googleCalendarUrl(entry)}
-          target="_blank"
-          rel="noopener noreferrer"
-          title="Add to Google Calendar"
-          onClick={(e) => e.stopPropagation()}
-          className="text-blue-500 hover:text-blue-700 text-xs px-1.5 py-0.5 rounded hover:bg-blue-50 transition-colors whitespace-nowrap"
-        >
-          📅+
-        </a>
+        <span className="inline-flex border border-slate-200 dark:border-slate-700 rounded overflow-hidden shadow-sm">
+          <a
+            href={googleCalendarUrl(entry)}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Add to Google Calendar"
+            onClick={(e) => e.stopPropagation()}
+            className="text-blue-500 hover:text-blue-700 text-xs px-2 py-0.5 bg-white hover:bg-blue-50 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors border-r border-slate-200 dark:border-slate-700 flex items-center justify-center"
+          >
+            📅
+          </a>
+          <a
+            href={icsDownloadUrl(entry)}
+            download={`${(entry.form_name || 'compliance').replace(/\\s+/g, '-').toLowerCase()}-deadline.ics`}
+            title="Download .ics File"
+            onClick={(e) => e.stopPropagation()}
+            className="text-slate-500 hover:text-slate-700 text-xs px-2 py-0.5 bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors flex items-center justify-center"
+          >
+            ⬇️
+          </a>
+        </span>
       </span>
     )
   }

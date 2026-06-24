@@ -433,7 +433,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                                 <div className="p-5 border-t border-slate-100 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm">
                                     <ul className="space-y-3.5 list-none pl-0 m-0" itemProp="abstract" data-ai-summary="true">
                                         {update.key_changes.map((kc: string, i: number) => (
-                                            <li key={i} className="flex items-start gap-3 text-sm text-slate-700 dark:text-slate-350 leading-relaxed font-medium">
+                                            <li key={i} className="flex items-start gap-3 text-sm text-slate-700 dark:text-slate-400 leading-relaxed font-medium">
                                                 <CheckCircle2 className={`h-4 w-4 mt-0.5 flex-shrink-0 ${cardStyles.iconColor}`} aria-hidden />
                                                 <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(kc) }} />
                                             </li>
@@ -474,6 +474,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                     <ArticleActions
                         title={update.title}
                         url={`${BASE_URL}/updates/${update.slug}`}
+                        slug={update.slug}
                         compact={true}
                     />
                 </div>
@@ -523,7 +524,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                         </span>
                     )}
                     {update.effective_date && (
-                        <span className="inline-flex items-center gap-1 rounded-md border border-green-100 dark:border-green-900/30 bg-green-50 dark:bg-green-950/20 px-2 py-1 text-xs font-medium text-green-755">
+                        <span className="inline-flex items-center gap-1 rounded-md border border-green-100 dark:border-green-900/30 bg-green-50 dark:bg-green-950/20 px-2 py-1 text-xs font-medium text-green-700">
                             <CalendarDays className="h-3.5 w-3.5" aria-hidden />
                             Effective: {formatDate(update.effective_date)}
                         </span>
@@ -627,6 +628,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                     <ArticleActions
                         title={update.title}
                         url={`${BASE_URL}/updates/${update.slug}`}
+                        slug={update.slug}
                     />
                 </div>
             </div>

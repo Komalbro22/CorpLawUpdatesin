@@ -43,6 +43,37 @@ export default function UnifiedCalculator() {
   const [isRepeatOffender, setIsRepeatOffender] = useState(false)
   const [chargeAmount, setChargeAmount] = useState<number>(1000000)
   const [showModal, setShowModal] = useState(false)
+  const [copiedLink, setCopiedLink] = useState(false)
+
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      if (params.has('form')) setSelectedSlug(params.get('form')!)
+      if (params.has('type')) setCompanyType(params.get('type')!)
+      if (params.has('cap')) setCapital(Number(params.get('cap')))
+      if (params.has('dly')) setDelay(Number(params.get('dly')))
+      if (params.has('ncap')) setNewCapital(Number(params.get('ncap')))
+      if (params.has('st')) setState(params.get('st')!)
+      if (params.has('rep')) setIsRepeatOffender(params.get('rep') === '1')
+      if (params.has('chg')) setChargeAmount(Number(params.get('chg')))
+    }
+  }, [])
+
+  const copyShareLink = () => {
+    const url = new URL(window.location.href)
+    url.searchParams.set('form', selectedSlug)
+    url.searchParams.set('type', companyType)
+    url.searchParams.set('cap', capital.toString())
+    url.searchParams.set('dly', delay.toString())
+    if (selectedSlug === 'sh-7') url.searchParams.set('ncap', newCapital.toString())
+    if (['sh-7', 'spice-plus', 'inc-32'].includes(selectedSlug)) url.searchParams.set('st', state)
+    if (['inc-22', 'pas-3'].includes(selectedSlug)) url.searchParams.set('rep', isRepeatOffender ? '1' : '0')
+    if (['chg-1', 'chg-4', 'chg-6', 'chg-9'].includes(selectedSlug)) url.searchParams.set('chg', chargeAmount.toString())
+    
+    navigator.clipboard.writeText(url.toString())
+    setCopiedLink(true)
+    setTimeout(() => setCopiedLink(false), 2000)
+  }
 
   const allForms = useMemo(() => {
     const combined = [...mcaForms, ...extraForms]
@@ -305,7 +336,7 @@ export default function UnifiedCalculator() {
       </div>
 
       {/* Calculate Button (replaces live result section) */}
-      <div className="mt-8">
+      <div className="mt-8 flex flex-col sm:flex-row gap-4">
         <button
           onClick={() => {
             setShowModal(true)
@@ -320,9 +351,16 @@ export default function UnifiedCalculator() {
               })
             }).catch(console.error)
           }}
-          className="w-full bg-[#0a0a0a] hover:bg-black text-white font-bold py-4 px-6 rounded-[8px] transition-all flex items-center justify-center gap-2 text-lg shadow-md hover:shadow-xl"
+          className="flex-1 bg-[#0a0a0a] hover:bg-black text-white font-bold py-4 px-6 rounded-[8px] transition-all flex items-center justify-center gap-2 text-lg shadow-md hover:shadow-xl"
         >
           Calculate Fee <span aria-hidden="true">→</span>
+        </button>
+        <button
+          onClick={copyShareLink}
+          className="sm:w-auto px-6 py-4 border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 font-bold rounded-[8px] transition-all flex items-center justify-center gap-2 shadow-sm"
+        >
+          <svg className="w-5 h-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+          {copiedLink ? 'Link Copied!' : 'Copy Share Link'}
         </button>
       </div>
 

@@ -77,6 +77,9 @@ export default function EditArticle({ params }: { params: { id: string } }) {
 
     const fileInputRef = useRef<HTMLInputElement>(null)
 
+    const AUTOSAVE_KEY = `article_autosave_${id}`
+    const [lastAutosaved, setLastAutosaved] = useState<Date | null>(null)
+
     useEffect(() => {
         const fetchArticle = async () => {
             try {
@@ -123,14 +126,49 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                     setPublishedAt(now.toISOString().slice(0, 16))
                 }
             } catch (err) {
-                setError('Error loading article')
+                console.error(err)
             } finally {
                 setPageLoading(false)
             }
         }
-
         fetchArticle()
     }, [id])
+
+    // Load from autosave after page loads
+    useEffect(() => {
+        if (pageLoading) return
+        const saved = localStorage.getItem(AUTOSAVE_KEY)
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved)
+                // Basic check if draft is newer than DB (for MVP we just ask)
+                if (confirm('A local draft was found. Do you want to restore it?')) {
+                    if (parsed.title) setTitle(parsed.title)
+                    if (parsed.slug) setSlug(parsed.slug)
+                    if (parsed.content) setContent(parsed.content)
+                    if (parsed.summary) setSummary(parsed.summary)
+                    if (parsed.category) setCategory(parsed.category)
+                    setLastAutosaved(new Date())
+                } else {
+                    localStorage.removeItem(AUTOSAVE_KEY)
+                }
+            } catch (e) {}
+        }
+    }, [pageLoading, AUTOSAVE_KEY])
+
+    // Autosave interval
+    useEffect(() => {
+        if (pageLoading) return
+        const interval = setInterval(() => {
+            if (title || content || summary) {
+                localStorage.setItem(AUTOSAVE_KEY, JSON.stringify({
+                    title, slug, content, summary, category
+                }))
+                setLastAutosaved(new Date())
+            }
+        }, 10000)
+        return () => clearInterval(interval)
+    }, [title, slug, content, summary, category, pageLoading, AUTOSAVE_KEY])
 
     const handleTitleChange = (val: string) => {
         setTitle(val)
@@ -1063,7 +1101,12 @@ export default function EditArticle({ params }: { params: { id: string } }) {
                     )}
                 </div>
 
-                <div className="flex gap-3 w-full sm:w-auto justify-end">
+                <div className="flex gap-3 w-full sm:w-auto justify-end items-center">
+                    {lastAutosaved && (
+                        <span className="text-xs text-slate-400 mr-2 hidden sm:inline-block">
+                            Saved to drafts at {lastAutosaved.toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit' })}
+                        </span>
+                    )}
                     <button
                         onClick={() => handleSave(null)}
                         disabled={saving || success}
