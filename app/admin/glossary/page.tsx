@@ -107,8 +107,8 @@ export default function AdminGlossaryPage() {
           const regex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/
           const row = line.split(regex).map(cell => cell.replace(/^"(.*)"$/, '$1').trim())
           
-          let term = row[termIdx] || ''
-          let slug = slugIdx !== -1 && row[slugIdx] ? row[slugIdx] : term.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+          const term = row[termIdx] || ''
+          const slug = slugIdx !== -1 && row[slugIdx] ? row[slugIdx] : term.toLowerCase().replace(/[^a-z0-9]+/g, '-')
           
           return {
             term,
