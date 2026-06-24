@@ -64,7 +64,7 @@ export default async function ToolUsagePage() {
                             </div>
                             <div>
                                 <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{TYPE_LABELS[type] || type}</p>
-                                <p className="text-2xl font-bold text-slate-900">{count}</p>
+                                <p className="text-2xl font-bold text-slate-900">{String(count)}</p>
                             </div>
                         </div>
                     </div>
