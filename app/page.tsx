@@ -7,7 +7,6 @@ import UpdateCard from '@/components/UpdateCard'
 import Link from 'next/link'
 import { Metadata } from 'next'
 import type { CSSProperties } from 'react'
-import HomeStats from '@/components/HomeStats'
 import HomeToolCard from '@/components/tools/HomeToolCard'
 import {
   ArrowRight,
@@ -157,11 +156,6 @@ export default async function HomePage({ searchParams }: { searchParams: { sort?
                 </span>
               ))}
             </div>
-            {updatesCount > 0 && (
-              <div className="mt-10 w-full max-w-lg">
-                <HomeStats updatesCount={updatesCount} totalViews={totalViews} />
-              </div>
-            )}
           </div>
         </div>
       </section>
