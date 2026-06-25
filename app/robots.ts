@@ -24,6 +24,9 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: 'cohere-ai', allow: '/' },
       { userAgent: 'CCBot', allow: '/' },
     ],
-    sitemap: 'https://www.corplawupdates.in/sitemap.xml',
+    sitemap: [
+      'https://www.corplawupdates.in/sitemap.xml',
+      'https://www.corplawupdates.in/news-sitemap.xml',
+    ],
   }
 }
