@@ -160,29 +160,7 @@ export default async function RootLayout({
           <Analytics />
           <SpeedInsights />
         </HideOnAdmin>
-        {/* Google Reader Revenue Manager - SWG */}
-        <Script
-          src="https://news.google.com/swg/js/v1/swg-basic.js"
-          strategy="lazyOnload"
-        />
-        <Script
-          id="swg-basic-init"
-          strategy="lazyOnload"
-          dangerouslySetInnerHTML={{
-            __html: `
-              (self.SWG_BASIC = self.SWG_BASIC || []).push(
-                basicSubscriptions => {
-                  basicSubscriptions.init({
-                    type: "NewsArticle",
-                    isPartOfType: ["Product"],
-                    isPartOfProductId: "CAow767GDA:openaccess",
-                    clientOptions: { theme: "light", lang: "en" },
-                  });
-                }
-              );
-            `,
-          }}
-        />
+
         <Script
           id="pwa-service-worker"
           strategy="lazyOnload"
