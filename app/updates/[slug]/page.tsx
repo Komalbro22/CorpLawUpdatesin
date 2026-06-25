@@ -775,28 +775,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
               ...(update.source_url ? { citation: { '@type': 'CreativeWork', name: update.source_name || 'Official Source', url: update.source_url } } : {}),
               ...(update.effective_date ? { temporal: update.effective_date } : {}),
             }} />
-            {/* Key changes as ItemList for AI indexing */}
-            {(update.key_change || (update.key_changes && update.key_changes.length > 0)) && (
-              <JsonLd data={{
-                '@context': 'https://schema.org',
-                '@type': 'ItemList',
-                name: `Key Changes — ${update.title}`,
-                description: `Key regulatory changes from: ${update.title}`,
-                numberOfItems: (update.key_change ? 1 : 0) + (update.key_changes?.length || 0),
-                itemListElement: [
-                  ...(update.key_change ? [{
-                    '@type': 'ListItem',
-                    position: 1,
-                    name: stripHtml(update.key_change)
-                  }] : []),
-                  ...(update.key_changes?.map((kc: string, i: number) => ({
-                    '@type': 'ListItem',
-                    position: (update.key_change ? 2 : 1) + i,
-                    name: stripHtml(kc),
-                  })) || [])
-                ],
-              }} />
-            )}
+
 
             {/* 10. FAQ SCHEMA — for Google Search Console Rich Results */}
             {faqs.length > 0 && (
