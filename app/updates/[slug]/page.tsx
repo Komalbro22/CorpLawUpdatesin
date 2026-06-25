@@ -741,10 +741,6 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
               headline: update.title,
               description: update.summary,
               abstract: update.summary,
-              speakable: {
-                '@type': 'SpeakableSpecification',
-                cssSelector: ['#article-title', '#article-summary']
-              },
               url: articleUrl,
               datePublished: toISTOffset(update.published_at),
               dateModified: toISTOffset(update.updated_at || update.published_at),
