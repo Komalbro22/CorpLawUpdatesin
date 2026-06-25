@@ -116,6 +116,18 @@ export async function generateMetadata(
   }
 }
 
+function toISTOffset(dateStr?: string | null) {
+  if (!dateStr) return undefined;
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    const istTime = d.getTime() + (5.5 * 60 * 60 * 1000);
+    return new Date(istTime).toISOString().split('.')[0] + '+05:30';
+  } catch {
+    return dateStr;
+  }
+}
+
 export default async function SingleUpdatePage({ params }: { params: { slug: string } }) {
     const { data: update } = await supabase
         .from('updates')
@@ -734,8 +746,8 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                 cssSelector: ['#article-title', '#article-summary']
               },
               url: articleUrl,
-              datePublished: update.published_at,
-              dateModified: update.updated_at || update.published_at,
+              datePublished: toISTOffset(update.published_at),
+              dateModified: toISTOffset(update.updated_at || update.published_at),
               author: { '@type': 'Organization', name: 'CorpLawUpdates.in', url: 'https://www.corplawupdates.in' },
               publisher: {
                 '@type': 'Organization',
@@ -754,7 +766,16 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
               ].join(', '),
               inLanguage: 'en-IN',
               isAccessibleForFree: true,
-              ...(imageUrl ? { image: { '@type': 'ImageObject', url: imageUrl } } : {}),
+              ...(imageUrl ? { 
+                image: [
+                  { 
+                    '@type': 'ImageObject', 
+                    url: imageUrl,
+                    width: 1200,
+                    height: 675
+                  }
+                ] 
+              } : {}),
               ...(update.source_url ? { citation: { '@type': 'CreativeWork', name: update.source_name || 'Official Source', url: update.source_url } } : {}),
               ...(update.effective_date ? { temporal: update.effective_date } : {}),
             }} />
