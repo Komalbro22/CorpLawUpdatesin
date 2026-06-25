@@ -45,16 +45,16 @@ export async function generateMetadata(
     .ilike('slug', decodedSlug)
     .single()
 
-  const canonicalUrl = `https://www.corplawupdates.in/updates/${params.slug.toLowerCase()}`
-
   if (!update) {
     return { 
       title: 'Article Not Found', 
       description: 'The article you are looking for does not exist.',
       robots: { index: false, follow: true },
-      alternates: { canonical: canonicalUrl }
+      alternates: { canonical: `https://www.corplawupdates.in/updates/${params.slug.toLowerCase()}` }
     }
   }
+
+  const canonicalUrl = `https://www.corplawupdates.in/updates/${update.slug}`
 
   const titleStr = update.seo_title || update.title
   const seoTitle = (t: string): string => t.length <= 100 ? t : t.slice(0, 97) + '...'
