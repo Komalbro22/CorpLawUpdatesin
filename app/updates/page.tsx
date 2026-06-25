@@ -6,6 +6,7 @@ import UpdatesClient from './UpdatesClient'
 import LoadingSkeleton from '@/components/LoadingSkeleton'
 import { Metadata } from 'next'
 import Link from 'next/link'
+import { unstable_cache } from 'next/cache'
 
 export const revalidate = 43200 // 12 hours
 
@@ -64,10 +65,63 @@ export default async function UpdatesPage({
     const category = searchParams?.category || ''
     const page = Math.max(1, parseInt(searchParams?.page || '1', 10))
     const ITEMS_PER_PAGE = 10
+    // Fetch dynamic counts by category using cache
+    const getCategoryCounts = unstable_cache(
+        async () => {
+            const { data } = await supabase.rpc('get_published_category_counts')
+            return data || []
+        },
+        ['category-counts'],
+        { revalidate: 43200, tags: ['updates'] }
+    )
 
-    // Fetch dynamic counts by category of all active updates (only select category column to keep it ultra lightweight)
-    // Use server-side RPC for efficient category aggregation (no full-table scan)
-    const { data: categoryRows } = await supabase.rpc('get_published_category_counts')
+    // Build paginated query using cache
+    const getUpdates = unstable_cache(
+        async (cat: string, q: string, p: number) => {
+            let query = supabase
+                .from('updates')
+                .select(UPDATE_LIST_COLUMNS, { count: 'exact' })
+                .not('published_at', 'is', null)
+                .lte('published_at', new Date().toISOString())
+                .order('published_at', { ascending: false })
+
+            if (cat && cat !== 'All') {
+                query = query.eq('category', cat)
+            }
+
+            if (q) {
+                const sanitizedSearch = q.replace(/[%_\\()\\.,]/g, '')
+                if (sanitizedSearch.trim()) {
+                    query = query.or(`title.ilike.%${sanitizedSearch}%,summary.ilike.%${sanitizedSearch}%`)
+                }
+            }
+
+            const from = (p - 1) * ITEMS_PER_PAGE
+            const to = from + ITEMS_PER_PAGE - 1
+            const { data, count } = await query.range(from, to)
+            return { data: data || [], count: count || 0 }
+        },
+        ['paginated-updates'],
+        { revalidate: 43200, tags: ['updates'] }
+    )
+
+    // Fetch top 5 updates using cache
+    const getTop5 = unstable_cache(
+        async () => {
+            const { data } = await supabase
+                .from('updates')
+                .select(UPDATE_LIST_COLUMNS)
+                .not('published_at', 'is', null)
+                .lte('published_at', new Date().toISOString())
+                .order('published_at', { ascending: false })
+                .limit(5)
+            return data || []
+        },
+        ['top-5-updates'],
+        { revalidate: 43200, tags: ['updates'] }
+    )
+
+    const categoryRows = await getCategoryCounts()
     const counts: Record<string, number> = {}
     let totalPublishedCount = 0
     ;(categoryRows || []).forEach((row: { category: string; count: number }) => {
@@ -75,43 +129,8 @@ export default async function UpdatesPage({
         totalPublishedCount += Number(row.count)
     })
 
-    // Build paginated query
-    let query = supabase
-        .from('updates')
-        .select(UPDATE_LIST_COLUMNS, { count: 'exact' })
-        .not('published_at', 'is', null)
-        .lte('published_at', new Date().toISOString())
-        .order('published_at', { ascending: false })
-
-    if (category && category !== 'All') {
-        query = query.eq('category', category)
-    }
-
-
-    if (search) {
-        // Sanitize search input: strip PostgREST-special characters to prevent filter injection
-        const sanitizedSearch = search.replace(/[%_\\()\.,]/g, '')
-        if (sanitizedSearch.trim()) {
-            query = query.or(`title.ilike.%${sanitizedSearch}%,summary.ilike.%${sanitizedSearch}%`)
-        }
-    }
-
-    const from = (page - 1) * ITEMS_PER_PAGE
-    const to = from + ITEMS_PER_PAGE - 1
-
-    const { data, count } = await query.range(from, to)
-    const paginatedUpdates = data || []
-    const totalFilteredCount = count || 0
-
-    // Fetch top 5 updates separately to guarantee stable metadata/schemas
-    const { data: top5Data } = await supabase
-        .from('updates')
-        .select(UPDATE_LIST_COLUMNS)
-        .not('published_at', 'is', null)
-        .lte('published_at', new Date().toISOString())
-        .order('published_at', { ascending: false })
-        .limit(5)
-    const top5 = top5Data || []
+    const { data: paginatedUpdates, count: totalFilteredCount } = await getUpdates(category, search, page)
+    const top5 = await getTop5()
     const lastModified = top5[0]?.published_at || new Date().toISOString()
 
     // JSON-LD Schemas
