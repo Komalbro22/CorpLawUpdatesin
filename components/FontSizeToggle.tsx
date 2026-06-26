@@ -25,10 +25,12 @@ export default function FontSizeToggle() {
 
   /* Load saved preference on mount */
   useEffect(() => {
-    const saved = (localStorage.getItem(STORAGE_KEY) as FontSize) || 'md'
-    if (sizes.includes(saved)) {
-      setSize(saved)
-    }
+    try {
+      const saved = (localStorage.getItem(STORAGE_KEY) as FontSize) || 'md'
+      if (sizes.includes(saved)) {
+        setSize(saved)
+      }
+    } catch { /* localStorage unavailable — use default font size */ }
   }, [])
 
   /* Apply class whenever size changes */
@@ -44,7 +46,9 @@ export default function FontSizeToggle() {
 
   function changeSize(s: FontSize) {
     setSize(s)
-    localStorage.setItem(STORAGE_KEY, s)
+    try {
+      localStorage.setItem(STORAGE_KEY, s)
+    } catch { /* localStorage unavailable — preference not persisted */ }
   }
 
   return (

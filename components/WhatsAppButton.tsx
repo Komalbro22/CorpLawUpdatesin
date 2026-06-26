@@ -24,7 +24,7 @@ export default function WhatsAppButton() {
       target="_blank"
       rel="noopener noreferrer"
       title="Join our WhatsApp Channel"
-      aria-label="Join CorpLawUpdates WhatsApp Channel"
+      aria-label="Chat on WhatsApp"
       className="fixed bottom-24 right-6 z-40
                  bg-green-500 hover:bg-green-600
                  text-white rounded-full shadow-lg shadow-green-900/10

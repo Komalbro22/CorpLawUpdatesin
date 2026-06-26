@@ -113,9 +113,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const articlePages = (articles || []).map(article => ({
     url: `${BASE_URL}/updates/${article.slug}`,
-    lastModified: new Date(article.updated_at || article.published_at!),
+    lastModified: new Date(article.updated_at || article.published_at || new Date().toISOString()),
     changeFrequency: 'weekly' as const,
-    priority: 0.6,
+    priority: 0.75,
   }))
 
   const CONTENT_QUALITY_THRESHOLD = 200
