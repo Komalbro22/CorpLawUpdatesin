@@ -3,8 +3,6 @@
 import React, { useState, useMemo } from 'react'
 import { mcaForms } from '@/data/mca-forms'
 import { calculateMCAFee, CalculatorParams } from '@/lib/calculatorUtils'
-import jsPDF from 'jspdf'
-import autoTable from 'jspdf-autotable'
 
 const extraForms = [
   { slug: 'inc-22', formNumber: 'INC-22', formName: 'Notice of change of registered office', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
@@ -126,7 +124,9 @@ export default function UnifiedCalculator() {
     }).filter(Boolean)
   }, [allForms, companyType, capital, delay, isRepeatOffender, newCapital, state, chargeAmount])
 
-  const generatePDF = () => {
+  const handleDownloadPDF = async () => {
+    const { default: jsPDF } = await import('jspdf')
+    const { default: autoTable } = await import('jspdf-autotable')
     const doc = new jsPDF()
     const pageWidth = doc.internal.pageSize.width
     
@@ -464,7 +464,7 @@ export default function UnifiedCalculator() {
               </p>
               
               <button 
-                onClick={generatePDF} 
+                onClick={handleDownloadPDF} 
                 className="w-full bg-white text-black font-bold py-3.5 px-4 rounded-[6px] hover:bg-slate-100 transition-colors flex items-center justify-center gap-2 shadow-lg"
               >
                  Download Detailed PDF <span aria-hidden="true">→</span>

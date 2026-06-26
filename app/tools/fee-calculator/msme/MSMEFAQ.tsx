@@ -16,7 +16,7 @@ export default function MSMEFAQ() {
     },
     {
       q: 'How is the MSME delayed payment interest calculated?',
-      a: 'If the buyer fails to pay within 45 days, they are liable to pay compound interest with monthly rests. The rate of interest is three times (3x) the bank rate notified by the Reserve Bank of India (RBI Repo Rate).'
+      a: 'If the buyer fails to pay within 45 days, they are liable to pay compound interest with monthly rests. The rate of interest is three times (3x) the bank rate notified by the Reserve Bank of India (RBI Bank Rate).'
     },
     {
       q: 'Can this interest be claimed as a tax deduction?',

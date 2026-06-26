@@ -26,7 +26,7 @@ const links = [
     { href: '/updates', label: 'Updates' },
     { href: '/documents', label: 'Documents', icon: FileText },
     { href: '/tools', label: 'Tools', icon: Wrench },
-    { href: '/bookmarks', label: 'Bookmarks' },
+    { href: '/bookmarks', label: 'Bookmarks', icon: Bookmark, hideIconOnDesktop: true },
     { href: '/about', label: 'About' },
     { href: '/newsletter', label: 'Newsletter' },
 ]
@@ -115,7 +115,7 @@ export default function Navbar() {
                                         : 'text-slate-600 dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
                                 }`}
                             >
-                                {'icon' in link && link.icon && (
+                                {'icon' in link && link.icon && !(link as any).hideIconOnDesktop && (
                                     <link.icon className="w-4 h-4 shrink-0" aria-hidden />
                                 )}
                                 {link.label}
@@ -177,15 +177,7 @@ export default function Navbar() {
                         </div>
                     </div>
 
-                    {/* Mobile menu button */}
                     <div className="flex items-center gap-1.5 md:hidden">
-                        <Link 
-                            href="/bookmarks" 
-                            className="inline-flex items-center justify-center p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gold/80 transition-all duration-200 text-slate-500 dark:text-slate-400 hover:text-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800" 
-                            aria-label="Bookmarks"
-                        >
-                            <Bookmark className="h-[18px] w-[18px]" />
-                        </Link>
                         <GlobalSearch />
                         <DarkModeToggle />
                         <button

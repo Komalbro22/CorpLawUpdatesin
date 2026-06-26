@@ -216,10 +216,8 @@ export function calculateMCAFee(params: CalculatorParams): CalculatorResult {
     return { baseFee, lateFee, stampDuty, adValoremFee, total: baseFee + lateFee, warningText };
   }
   if (formSlug === 'stk-2') {
-    baseFee = 5000; // technically 10000 in recent rules, but sticking to logic provided if not updated, let's keep 10000 which is accurate for 2024+
-    // Actually the aiaccountant script says: var fixedFees = { 'INC-1':1000, 'DIR-3':500, 'DIR-3-KYC': delayDays > 0 ? 5000 : 0, 'STK-2':5000 };
-    baseFee = 5000;
-    return { baseFee, lateFee, stampDuty, adValoremFee, total: baseFee, warningText: 'STK-2 has a fixed fee of ₹5,000.' };
+    baseFee = 10000;
+    return { baseFee, lateFee, stampDuty, adValoremFee, total: baseFee, warningText: 'STK-2 has a fixed fee of ₹10,000.' };
   }
   if (formSlug === 'dir-3') {
     baseFee = 500;
