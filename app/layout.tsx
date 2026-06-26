@@ -22,7 +22,7 @@ import TrackingScripts from '@/components/TrackingScripts'
 import { themeScript } from '@/lib/theme-script'
 import './globals.css'
 
-const lora = Lora({ subsets: ['latin'], variable: '--font-lora', display: 'swap' })
+const lora = Lora({ subsets: ['latin'], variable: '--font-lora', display: 'swap', preload: true })
 const sourceSans = Source_Sans_3({ subsets: ['latin'], variable: '--font-source-sans', display: 'swap' })
 const outfit = Outfit({ subsets: ['latin'], variable: '--font-outfit', display: 'swap' })
 

@@ -82,14 +82,14 @@ export default async function HomePage({ searchParams }: { searchParams: { sort?
       .select('*', { count: 'exact', head: true })
       .not('published_at', 'is', null)
       .lte('published_at', new Date().toISOString()),
-    supabase.from('updates').select('views').not('published_at', 'is', null),
+    supabase.rpc('get_total_views'),
   ])
 
   const featuredUpdates = featuredRes.data || []
   const latestUpdates = latestRes.data || []
   const popularUpdates = popularRes.data || []
   const updatesCount = updatesCountRes.count || 0
-  const totalViews = (viewsRes.data || []).reduce((sum, row) => sum + (row.views || 0), 0)
+  const totalViews = viewsRes.data || 0
   const hasUpdates = featuredUpdates.length > 0 || latestUpdates.length > 0
 
   return (
