@@ -464,6 +464,79 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
     return result;
   }, [entries, searchQuery, filterMode, doneVersion]);
 
+  function handleExportIcs() {
+    const now = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
+    const months: Record<string, string> = {
+      'Jan': '01', 'Feb': '02', 'Mar': '03',
+      'Apr': '04', 'May': '05', 'Jun': '06',
+      'Jul': '07', 'Aug': '08', 'Sep': '09',
+      'Oct': '10', 'Nov': '11', 'Dec': '12',
+    }
+
+    const events = filteredEntries.map(entry => {
+      let date = '20260101'
+      try {
+        const match = entry.due_date.match(/(\d{1,2})\s+([A-Za-z]{3})\s+(\d{4})/)
+        if (match) {
+          date = `${match[3]}${months[match[2]] || '01'}${match[1].padStart(2, '0')}`
+        }
+      } catch(e) {}
+
+      let endDate = date;
+      try {
+         const year = parseInt(date.substring(0,4));
+         const month = parseInt(date.substring(4,6)) - 1;
+         const day = parseInt(date.substring(6,8));
+         const nextDay = new Date(year, month, day + 1);
+         const m = (nextDay.getMonth() + 1).toString().padStart(2, '0');
+         const d = nextDay.getDate().toString().padStart(2, '0');
+         endDate = `${nextDay.getFullYear()}${m}${d}`;
+      } catch(e) {}
+
+      const uid = `${entry.id}@corplawupdates.in`
+      const title = `${entry.form_name} — ${entry.compliance_title}`
+      const desc = [
+        `Regulator: ${(entry.regulator || '').toUpperCase()}`,
+        `Applicable to: ${entry.applicable_to}`,
+        entry.penalty ? `Penalty: ${entry.penalty}` : '',
+        entry.regulation_reference ? `Law: ${entry.regulation_reference}` : '',
+        `Source: https://www.corplawupdates.in/calendar`,
+      ].filter(Boolean).join('\\n')
+
+      return [
+        'BEGIN:VEVENT',
+        `UID:${uid}`,
+        `DTSTAMP:${now}`,
+        `DTSTART;VALUE=DATE:${date}`,
+        `DTEND;VALUE=DATE:${endDate}`,
+        `SUMMARY:📋 ${title}`,
+        `DESCRIPTION:${desc}`,
+        `URL:https://www.corplawupdates.in/calendar`,
+        'END:VEVENT'
+      ].join('\r\n')
+    })
+
+    const ical = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//CorpLawUpdates//Compliance Calendar//EN',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH',
+      ...events,
+      'END:VCALENDAR'
+    ].join('\r\n')
+
+    const blob = new Blob([ical], { type: 'text/calendar;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'compliance-calendar.ics'
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
   const grouped = filteredEntries.reduce<Record<string, ComplianceEntry[]>>((acc, entry) => {
     const key = entry.regulator || 'other'
     if (!acc[key]) acc[key] = []
@@ -593,13 +666,12 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
             </p>
           </div>
           <div className="flex gap-2 flex-wrap">
-            <a 
-              href="/api/calendar/export"
-              download="compliance-calendar-2026.ics"
+            <button 
+              onClick={handleExportIcs}
               className="flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors"
             >
               ⬇️ Download .ics
-            </a>
+            </button>
             <a
               href="https://calendar.google.com/calendar/r?cid=https://www.corplawupdates.in/api/calendar/export"
               target="_blank"
