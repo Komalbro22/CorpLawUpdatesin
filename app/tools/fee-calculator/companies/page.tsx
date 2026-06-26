@@ -44,6 +44,51 @@ const companyJsonLd = {
         { '@type': 'ListItem', position: 3, name: 'Fee Calculator', item: 'https://www.corplawupdates.in/tools/fee-calculator' },
         { '@type': 'ListItem', position: 4, name: 'Company Fee Calculator', item: 'https://www.corplawupdates.in/tools/fee-calculator/companies' }
       ]
+    },
+    {
+      '@type': 'FAQPage',
+      'mainEntity': [
+        {
+          '@type': 'Question',
+          'name': 'What is the normal fee for filing Company ROC forms?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'For private and public companies, normal filing fees range from ₹200 to ₹600 depending on the authorized share capital. For OPCs and Small Companies, the fee is heavily subsidized, ranging from ₹50 to ₹200.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': 'How is the late fee calculated for AOC-4 and MGT-7?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Annual returns like AOC-4 and MGT-7 have an uncapped penalty of ₹100 per day. For example, if you are 30 days late, the penalty will be exactly ₹3,000 in addition to the normal filing fee.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': 'What happens if I delay filing general forms like ADT-1 or INC-22?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'General forms attract a multiplier-based penalty. If filed within 15-30 days of the due date, you pay 2x the normal fee. Delaying over 180 days attracts a penalty of 12x the normal fee. (Note: ADT-1 has a 15-day grace period where no penalty applies).'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': 'How is stamp duty calculated for Share Capital (SH-7)?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Stamp duty for increasing authorized share capital is determined by your state. For example, Maharashtra charges 0.2% subject to a cap of ₹50 Lakhs, while Delhi charges 0.15%. Our calculator provides an indicative estimate based on your selected state.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': 'What is the penalty for late filing of CHG-1?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'If CHG-1 (Creation of Charge) is delayed beyond 30 days, an ad valorem fee is charged. This fee is a percentage of the secured amount (0.05% for normal companies, up to a cap of ₹5,00,000) on top of the standard late fee multiplier.'
+          }
+        }
+      ]
     }
   ]
 }

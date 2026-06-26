@@ -44,6 +44,51 @@ const msmeJsonLd = {
         { '@type': 'ListItem', position: 3, name: 'Fee Calculator', item: 'https://www.corplawupdates.in/tools/fee-calculator' },
         { '@type': 'ListItem', position: 4, name: 'MSME Interest Calculator', item: 'https://www.corplawupdates.in/tools/fee-calculator/msme' }
       ]
+    },
+    {
+      '@type': 'FAQPage',
+      'mainEntity': [
+        {
+          '@type': 'Question',
+          'name': 'What is the MSME Samadhaan Scheme?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'MSME Samadhaan is a portal and scheme launched by the Ministry of Micro, Small and Medium Enterprises. It empowers micro and small entrepreneurs across the country to directly register their cases relating to delayed payments by Central Ministries/Departments/CPSEs/State Governments or any other buyer.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': 'What is the maximum time a buyer has to pay an MSME?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Under Section 15 of the MSMED Act, the buyer must make payment within the period agreed upon in writing. In no case should this period exceed 45 days from the day of acceptance of the goods/services. If there is no written agreement, the payment must be made within 15 days.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': 'How is the MSME delayed payment interest calculated?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'If the buyer fails to pay within 45 days, they are liable to pay compound interest with monthly rests. The rate of interest is three times (3x) the bank rate notified by the Reserve Bank of India (RBI Bank Rate).'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': 'Can this interest be claimed as a tax deduction?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'No, as per Section 23 of the MSMED Act, the interest paid or payable by a buyer for delayed payments to an MSME is NOT allowed as a deduction under the Income Tax Act, 1961. This adds an additional tax burden on the defaulting buyer.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': 'What happens if a company fails to report MSME dues in Form MSME-1?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Failure to file Form MSME-1 detailing outstanding dues to micro and small enterprises attracts penalties under Section 450 of the Companies Act, which can result in a fine of up to ₹10,000, and a further fine up to ₹1,000 for every day the default continues.'
+          }
+        }
+      ]
     }
   ]
 }
