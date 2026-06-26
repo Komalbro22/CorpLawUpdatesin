@@ -2,6 +2,7 @@
  * ROC Compliance Penalty Calculator Utility Library
  * pure client-side mathematical and date difference calculations
  */
+import { getCompanyStandardFee } from './fee-calculator-core';
 
 export function formatINR(amount: number): string {
   return new Intl.NumberFormat('en-IN', {
@@ -67,35 +68,7 @@ export function calculateCompanyFee(params: CompanyFeeParams): CompanyCalculatio
     normalFee = 0; // always 0 if on time
   } else {
     const isSmallOrOpc = companyType === 'OPC' || companyType === 'Small';
-    if (isSmallOrOpc) {
-      if (authorizedCapital < 100000) {
-        normalFee = 50;
-      } else if (authorizedCapital < 500000) {
-        normalFee = 100;
-      } else if (authorizedCapital < 2500000) {
-        normalFee = 150;
-      } else {
-        normalFee = 200;
-      }
-    } else {
-      if (authorizedCapital < 100000) {
-        normalFee = 200;
-      } else if (authorizedCapital < 500000) {
-        normalFee = 300;
-      } else if (authorizedCapital < 2500000) {
-        normalFee = 400;
-      } else if (authorizedCapital < 10000000) {
-        normalFee = 500;
-      } else {
-        normalFee = 600;
-      }
-    }
-
-    // Section 8 company discount: 1/3rd of fee, rounded to nearest 50
-    if (companyType === 'Section8') {
-      normalFee = Math.round(normalFee / 3 / 50) * 50;
-      if (normalFee < 50) normalFee = 50;
-    }
+    normalFee = getCompanyStandardFee(authorizedCapital, isSmallOrOpc, companyType === 'Section8');
   }
 
   // 2. Late Fee (Additional Fee)
