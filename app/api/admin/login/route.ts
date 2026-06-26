@@ -4,11 +4,24 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { safeCompare, createAdminSessionToken } from '@/lib/utils'
+import { redis } from '@/lib/redis-cache'
 
 export async function POST(request: NextRequest) {
     try {
-        const rawIp = request.headers.get('x-forwarded-for') || 'unknown'
+        const rawIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
         const clientIp = rawIp.split(',')[0].trim()
+        
+        const limitKey = `ratelimit:admin_login:${clientIp}`
+        if (redis) {
+            const count = await redis.incr(limitKey)
+            if (count === 1) {
+                await redis.expire(limitKey, 900)
+            }
+            if (count > 5) {
+                return NextResponse.json({ error: 'Too many login attempts. Please try again in 15 minutes.' }, { status: 429 })
+            }
+        }
+
         const rateLimitKey = `login:${clientIp}`
         
         const { data: row } = await supabaseAdmin
@@ -57,6 +70,9 @@ export async function POST(request: NextRequest) {
         }
 
         await supabaseAdmin.from('login_attempts').delete().eq('ip', rateLimitKey)
+        if (redis) {
+            await redis.del(limitKey)
+        }
 
         const response = NextResponse.json({ success: true })
         response.cookies.set('admin_session', createAdminSessionToken(), {
@@ -64,7 +80,7 @@ export async function POST(request: NextRequest) {
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
             maxAge: 60 * 60 * 24,
-            path: '/'
+            path: '/admin'
         })
         return response
 

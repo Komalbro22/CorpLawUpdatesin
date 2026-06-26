@@ -1,23 +1,7 @@
 import { supabase } from '@/lib/supabase'
 import { NextResponse } from 'next/server'
-import { Ratelimit } from '@upstash/ratelimit'
-import { Redis } from '@upstash/redis'
-
+import { redis } from '@/lib/redis-cache'
 // Initialize Upstash Redis and Ratelimit only if env vars are present (supports Vercel KV or direct Upstash)
-const redisUrl = process.env.KV_REST_API_URL || process.env.corplawupdates_KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL
-const redisToken = process.env.KV_REST_API_TOKEN || process.env.corplawupdates_KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN
-
-const hasUpstashConfig = redisUrl && redisToken
-const redis = hasUpstashConfig ? new Redis({ url: redisUrl, token: redisToken }) : null
-
-// Create a new ratelimiter that allows up to 30 search requests per minute per IP address
-const ratelimit = redis
-  ? new Ratelimit({
-      redis: redis,
-      limiter: Ratelimit.slidingWindow(30, '1 m'),
-      analytics: true,
-    })
-  : null
 
 interface UpdateRecord {
   id: string
@@ -63,12 +47,16 @@ interface UnifiedSearchResult {
 
 export async function GET(request: Request) {
   // Rate Limit check
-  if (ratelimit) {
+  if (redis) {
     const rawIp = request.headers.get('x-forwarded-for') || '127.0.0.1'
     const ip = rawIp.split(',')[0].trim()
-    const { success } = await ratelimit.limit(`search_${ip}`)
-    if (!success) {
-      return NextResponse.json({ error: 'Too many search requests. Please slow down.' }, { status: 429 })
+    const limitKey = `ratelimit:search:${ip}`
+    const count = await redis.incr(limitKey)
+    if (count === 1) {
+      await redis.expire(limitKey, 60)
+    }
+    if (count > 30) {
+      return NextResponse.json({ error: 'Search rate limit exceeded.' }, { status: 429 })
     }
   }
 

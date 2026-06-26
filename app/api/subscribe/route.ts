@@ -6,6 +6,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
+import { redis } from '@/lib/redis-cache'
 
 export async function POST(request: NextRequest) {
     try {
@@ -21,8 +22,20 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Invalid email' }, { status: 400 })
         }
 
-        const rawIp = request.headers.get('x-forwarded-for') || 'unknown'
+        const rawIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
         const clientIp = rawIp.split(',')[0].trim()
+        
+        const limitKey = `ratelimit:newsletter:${clientIp}`
+        if (redis) {
+            const count = await redis.incr(limitKey)
+            if (count === 1) {
+                await redis.expire(limitKey, 3600)
+            }
+            if (count > 3) {
+                return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
+            }
+        }
+
         const ipKey = `sub:${clientIp}`
 
         // Rate limiting logic
