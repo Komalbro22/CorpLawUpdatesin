@@ -7,8 +7,8 @@ import { supabase } from '@/lib/supabase'
 
 export const metadata: Metadata = {
   title: 'MSME Delayed Payment Interest Calculator | Section 16 MSMED Act',
-  description: 'Calculate compound interest on delayed payments to Micro and Small Enterprises exactly as per Section 16 of the MSMED Act (3x RBI Repo Rate).',
-  keywords: ['MSME interest calculator', 'MSMED Act Section 16', 'delayed payment calculator', 'MSME Samadhaan interest', '3x Repo Rate calculator'],
+  description: 'Calculate compound interest on delayed payments to Micro and Small Enterprises exactly as per Section 16 of the MSMED Act (3x RBI Bank Rate).',
+  keywords: ['MSME interest calculator', 'MSMED Act Section 16', 'delayed payment calculator', 'MSME Samadhaan interest', '3x Bank Rate calculator'],
   alternates: {
     canonical: 'https://www.corplawupdates.in/tools/fee-calculator/msme',
   },
@@ -31,7 +31,7 @@ const msmeJsonLd = {
       description: 'Calculate the exact delayed payment compound interest owed to MSMEs under Section 16 of the MSMED Act.',
       featureList: [
         'Section 16 MSMED Act Compliance',
-        '3x RBI Repo Rate Compound Interest',
+        '3x RBI Bank Rate Compound Interest',
         'Monthly Rest Calculation',
         'Principal + Interest Payable tracking'
       ]
@@ -71,7 +71,7 @@ function MSMESEO() {
         <div className="bg-red-50 dark:bg-red-900/10 p-6 rounded-2xl border border-red-200 dark:border-red-900/30 shadow-sm">
           <h3 className="font-bold text-red-800 dark:text-red-400 mb-2 flex items-center gap-2">
             <span className="w-6 h-6 rounded bg-red-100 dark:bg-red-900/50 flex items-center justify-center text-red-600 dark:text-red-400">📈</span>
-            3x Repo Rate Penalty
+            3x Bank Rate Penalty
           </h3>
           <p className="text-sm text-red-700 dark:text-red-300">
             If payment is delayed beyond 45 days, the buyer is legally obligated under Section 16 to pay compound interest with monthly rests at <strong>three times (3x) the bank rate</strong> notified by the RBI.

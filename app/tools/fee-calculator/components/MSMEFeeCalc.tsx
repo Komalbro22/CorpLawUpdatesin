@@ -138,7 +138,7 @@ export default function MSMEFeeCalc({ initialBankRate = '6.75' }: { initialBankR
             value={bankRate} 
             onChange={(e) => setBankRate(e.target.value)} 
           />
-          <p className="text-[10px] text-slate-500 mt-1">Current repo rate is used as RBI reference rate.</p>
+          <p className="text-[10px] text-slate-500 mt-1">Current bank rate is used as RBI reference rate.</p>
         </div>
       </div>
 
