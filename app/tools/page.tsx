@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import JsonLd from '@/components/JsonLd'
+import { FileText, Calculator, Calendar, CalendarDays, Landmark, BookOpen, Bot, CheckSquare, Target } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Free Corporate Law & Compliance Tools for Everyone | CorpLawUpdates.in',
@@ -103,7 +104,7 @@ const tools = [
   {
     id: 'documents',
     href: '/documents',
-    icon: '📄',
+    icon: <FileText size={24} />,
     label: 'Legal Document Generator',
     description: 'Generate board resolutions, agreements, appointment letters and more. AI-powered with ICSI SS-1 format.',
     badge: 'AI Powered',
@@ -117,7 +118,7 @@ const tools = [
   {
     id: 'fee-calculator',
     href: '/tools/fee-calculator',
-    icon: '🧮',
+    icon: <Calculator size={24} />,
     label: 'MCA & ROC Fee Calculator',
     description: 'Calculate statutory filing fees, ROC late fees, adjudication penalties, stamp duty and MSME delayed payment interest for Companies, LLPs, and MSMEs.',
     badge: 'Free',
@@ -131,7 +132,7 @@ const tools = [
   {
     id: 'roc-tracker',
     href: '/tools/roc-tracker',
-    icon: '📅',
+    icon: <CalendarDays size={24} />,
     label: 'ROC Deadline Tracker',
     description: 'Track personalized ROC deadlines (MGT-7, AOC-4, DIR-3 KYC etc.), estimate delay penalties, and calculate CCFS 2026 scheme savings.',
     badge: 'New',
@@ -145,7 +146,7 @@ const tools = [
   {
     id: 'calendar',
     href: '/calendar',
-    icon: '📅',
+    icon: <Calendar size={24} />,
     label: 'Compliance Calendar 2026',
     description: 'Complete compliance deadline calendar for MCA, SEBI, RBI, FEMA and Income Tax. Export to Google Calendar.',
     badge: 'Community',
@@ -159,7 +160,7 @@ const tools = [
   {
     id: 'repo-rate',
     href: '/rbi/repo-rate',
-    icon: '🏦',
+    icon: <Landmark size={24} />,
     label: 'RBI Repo Rate Tracker',
     description: 'Current RBI repo rate, rate history, next MPC meeting date and impact on home loans and EMIs.',
     badge: 'Live Data',
@@ -173,7 +174,7 @@ const tools = [
   {
     id: 'glossary',
     href: '/glossary',
-    icon: '📚',
+    icon: <BookOpen size={24} />,
     label: 'Corporate Law Glossary',
     description: 'Plain English definitions of 200+ corporate law terms. IBC, MCA, SEBI, RBI and FEMA terminology explained.',
     badge: 'Free',
@@ -187,7 +188,7 @@ const tools = [
   {
     id: 'circular-summarizer',
     href: '/tools/circular-summarizer',
-    icon: '🤖',
+    icon: <Bot size={24} />,
     label: 'AI Circular Summarizer',
     description: 'Paste any SEBI/MCA/RBI circular URL and get an instant plain-English summary with key changes and action items.',
     badge: 'Coming Soon',
@@ -201,7 +202,7 @@ const tools = [
   {
     id: 'checklist',
     href: '/tools/compliance-checklist',
-    icon: '✅',
+    icon: <CheckSquare size={24} />,
     label: 'Compliance Checklist Generator',
     description: 'Answer 5 questions about your company and get a personalized compliance checklist with all applicable deadlines.',
     badge: 'Coming Soon',
@@ -215,7 +216,7 @@ const tools = [
   {
     id: 'quiz',
     href: '/tools/cs-quiz',
-    icon: '🎯',
+    icon: <Target size={24} />,
     label: 'Daily Corporate Law Quiz',
     description: '5 quick MCQs every day on Companies Act, SEBI, RBI and business law. Perfect for students, professionals and curious minds. Build your streak!',
     badge: 'Coming Soon',
