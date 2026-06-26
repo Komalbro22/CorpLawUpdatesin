@@ -1,3 +1,5 @@
+import { getCompanyStandardFee } from './fee-calculator-core';
+
 export interface CalculatorParams {
   formSlug: string;
   companyType: string;
@@ -20,19 +22,7 @@ export interface CalculatorResult {
 }
 
 export function getNormalFee(capital: number, isSmallOrOpc: boolean): number {
-  if (capital < 0) return 0;
-  if (isSmallOrOpc) {
-    if (capital < 100000) return 50;
-    if (capital < 500000) return 100;
-    if (capital < 2500000) return 150;
-    return 200;
-  } else {
-    if (capital < 100000) return 200;
-    if (capital < 500000) return 300;
-    if (capital < 2500000) return 400;
-    if (capital < 10000000) return 500;
-    return 600;
-  }
+  return getCompanyStandardFee(capital, isSmallOrOpc, false);
 }
 
 export function getLateFeeMultiplier(days: number, isHigherFee: boolean, hasGracePeriod: boolean): number {

@@ -9,17 +9,22 @@ export interface CalculationResult {
   legalNotes?: string
 }
 
-const COMPANY_FEE_SLABS = [
-  { maxCapital: 100_000,    fee: 200 },
-  { maxCapital: 500_000,    fee: 300 },
-  { maxCapital: 2_500_000,  fee: 400 },
-  { maxCapital: 10_000_000, fee: 500 },
-  { maxCapital: Infinity,   fee: 600 },
-]
-
 export function getCompanyStandardFee(nominalCapital: number, isSmallOrOPC: boolean, isSection8: boolean = false): number {
-  const base = COMPANY_FEE_SLABS.find(s => nominalCapital <= s.maxCapital)!.fee
-  let fee = isSmallOrOPC ? Math.round(base * 0.5) : base // Statutory 50% discount
+  if (nominalCapital < 0) return 0;
+  
+  let fee = 0;
+  if (isSmallOrOPC) {
+    if (nominalCapital < 100000) fee = 50;
+    else if (nominalCapital < 500000) fee = 100;
+    else if (nominalCapital < 2500000) fee = 150;
+    else fee = 200;
+  } else {
+    if (nominalCapital < 100000) fee = 200;
+    else if (nominalCapital < 500000) fee = 300;
+    else if (nominalCapital < 2500000) fee = 400;
+    else if (nominalCapital < 10000000) fee = 500;
+    else fee = 600;
+  }
 
   if (isSection8) {
       fee = Math.round(fee / 3 / 50) * 50;
