@@ -18,8 +18,8 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: 'Unauthorized cron signature.' }, { status: 401 })
   }
 
-  let previousValue = 6.75
-  let fetchedValue = 6.75
+  let previousValue = 5.50
+  let fetchedValue = 5.50
   let changed = false
   let status = 'ok'
   let errorMessage: string | null = null
@@ -34,7 +34,7 @@ export async function GET(req: Request) {
       .single()
 
     if (previousRate) {
-      previousValue = Number(previousRate.rate_value) || 6.75
+      previousValue = Number(previousRate.rate_value) || 5.50
     }
 
     // 3. Automated fetch / scraping of RBI Bank Rate

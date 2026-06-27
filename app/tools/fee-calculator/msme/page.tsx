@@ -7,7 +7,7 @@ import { supabase } from '@/lib/supabase'
 
 export const metadata: Metadata = {
   title: 'MSME Delayed Payment Interest Calculator | Section 16 MSMED Act',
-  description: 'Calculate compound interest on delayed payments to Micro and Small Enterprises exactly as per Section 16 of the MSMED Act (3x RBI Bank Rate).',
+  description: 'Calculate indicative compound interest on delayed payments to Micro and Small Enterprises as per Section 16 of the MSMED Act (3x RBI Bank Rate).',
   keywords: ['MSME interest calculator', 'MSMED Act Section 16', 'delayed payment calculator', 'MSME Samadhaan interest', '3x Bank Rate calculator'],
   alternates: {
     canonical: 'https://www.corplawupdates.in/tools/fee-calculator/msme',
@@ -28,7 +28,7 @@ const msmeJsonLd = {
         price: '0',
         priceCurrency: 'INR'
       },
-      description: 'Calculate the exact delayed payment compound interest owed to MSMEs under Section 16 of the MSMED Act.',
+      description: 'Calculate indicative delayed payment compound interest owed to MSMEs under Section 16 of the MSMED Act.',
       featureList: [
         'Section 16 MSMED Act Compliance',
         '3x RBI Bank Rate Compound Interest',
@@ -137,13 +137,24 @@ function MSMESEO() {
 }
 
 async function getSettings() {
+  // Canonical key: compliance_rates.rbi_bank_rate
+  // The cron job (update-rbi-rates) writes to this same table and key.
   const { data } = await supabase
+    .from('compliance_rates')
+    .select('key, rate_value')
+    .in('key', ['rbi_bank_rate'])
+
+  // Also fetch next MPC date from site_settings
+  const { data: siteData } = await supabase
     .from('site_settings')
     .select('key, value')
-    .in('key', ['msf_rate', 'next_mpc_date'])
+    .in('key', ['next_mpc_date'])
 
   const settings: Record<string, string> = {}
   data?.forEach(row => {
+    settings[row.key] = String(row.rate_value ?? '')
+  })
+  siteData?.forEach(row => {
     settings[row.key] = row.value || ''
   })
   return settings
@@ -151,8 +162,10 @@ async function getSettings() {
 
 export default async function MSMEFeePage() {
   const settings = await getSettings()
-  // msf_rate is stored like "6.75%" so we parse it
-  const msfRateStr = settings.msf_rate ? settings.msf_rate.replace('%', '') : '6.75'
+  // rbi_bank_rate is stored as a numeric value (e.g. 5.50)
+  const bankRateStr = settings.rbi_bank_rate ? settings.rbi_bank_rate : '5.50'
+  const bankRateNum = parseFloat(bankRateStr) || 5.50
+  const msmeRateNum = bankRateNum * 3
   const nextMpcDate = settings.next_mpc_date || 'TBD'
 
   return (
@@ -170,17 +183,20 @@ export default async function MSMEFeePage() {
             MSME Interest Calculator
           </h1>
           <p className="text-slate-400 text-lg max-w-2xl mb-2">
-            Calculate the exact delayed payment compound interest owed to MSMEs under the MSME Samadhaan scheme.
+            Calculate the indicative delayed payment compound interest owed to MSMEs under the MSME Samadhaan scheme.
           </p>
           <p className="text-slate-500 text-sm">
-            Current RBI Bank Rate: <strong className="text-amber-400">{msfRateStr}%</strong> (Next MPC Date: {nextMpcDate})
+            Current RBI Bank Rate: <strong className="text-amber-400">{bankRateStr}%</strong> → MSME Rate: <strong className="text-amber-400">{msmeRateNum.toFixed(2)}%</strong> p.a. (Next MPC Date: {nextMpcDate})
           </p>
         </div>
       </div>
 
       <div className="max-w-4xl mx-auto px-4 -mt-6 relative z-10">
         <div className="bg-white dark:bg-slate-900 shadow-xl rounded-2xl border border-slate-200 dark:border-slate-800 p-4 md:p-8 mb-16">
-          <MSMEFeeCalc initialBankRate={msfRateStr} />
+          <MSMEFeeCalc initialBankRate={bankRateStr} />
+          <p className="mt-6 text-xs text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800 pt-4">
+            Interest calculated uses the current RBI Bank Rate. Historical calculations do not account for past rate changes and are indicative only.
+          </p>
         </div>
       </div>
 

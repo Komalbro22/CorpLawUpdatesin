@@ -82,7 +82,7 @@ const calculators = [
     href: '/tools/fee-calculator/msme',
     icon: '🏭',
     label: 'MSME Interest Calculator',
-    description: 'Calculate the exact delayed payment compound interest owed to MSMEs under Section 16 of the MSMED Act (3x Repo Rate).',
+    description: 'Calculate indicative delayed payment compound interest owed to MSMEs under Section 16 of the MSMED Act (3× RBI Bank Rate).',
     badge: 'Live',
     badgeColor: 'bg-green-100 text-green-700 dark:bg-green-950/50 dark:text-green-300',
     stats: 'Samadhaan Scheme',
@@ -112,19 +112,19 @@ function HubSEO() {
         Statutory Compliance & Tax Fee Calculators Hub
       </h2>
       <p className="text-slate-600 dark:text-slate-300 text-lg leading-relaxed">
-        Navigating the complex landscape of statutory compliance in India requires absolute precision. Whether you are dealing with the Ministry of Corporate Affairs (MCA) for company or LLP filings, calculating delayed payment interest under the MSMED Act, or managing GST late fees with the CBIC, our comprehensive hub provides exact, up-to-date calculation tools.
+        Navigating the complex landscape of statutory compliance in India requires careful attention to detail. Whether you are dealing with the Ministry of Corporate Affairs (MCA) for company or LLP filings, calculating delayed payment interest under the MSMED Act, or managing GST late fees with the CBIC, our comprehensive hub provides indicative, up-to-date calculation tools.
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-10 not-prose">
         <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
           <h3 className="font-bold text-slate-800 dark:text-slate-200 mb-2">Corporate Compliance (MCA)</h3>
           <p className="text-sm text-slate-600 dark:text-slate-400">
-            For Companies and LLPs, missing statutory deadlines (like AOC-4, MGT-7, or Form 11) results in compounding penalties. MCA late fees can range from standard multipliers (up to 12x) to strict ₹100 per day flat penalties. Select our Company or LLP calculator for exact fee breakdowns including state-wise stamp duty.
+            For Companies and LLPs, missing statutory deadlines (like AOC-4, MGT-7, or Form 11) results in compounding penalties. MCA late fees can range from standard multipliers (up to 12×) to strict ₹100 per day flat penalties. Select our Company or LLP calculator for indicative fee breakdowns including state-wise stamp duty.
           </p>
         </div>
         <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
           <h3 className="font-bold text-slate-800 dark:text-slate-200 mb-2">Taxation & MSME Rules</h3>
           <p className="text-sm text-slate-600 dark:text-slate-400">
-            Beyond MCA, strict rules govern delayed payments to MSMEs (attracting compound interest at 3 times the RBI Repo Rate) and late GST return filings. Use our specialized calculators to determine your exact liability under the MSMED Act and CGST Act.
+            Beyond MCA, strict rules govern delayed payments to MSMEs (attracting compound interest at 3 times the RBI Bank Rate) and late GST return filings. Use our specialised calculators for indicative liability estimates under the MSMED Act and CGST Act.
           </p>
         </div>
       </div>
@@ -334,6 +334,9 @@ export default function FeeCalculatorHub() {
         <HubGuides />
         <HubSEO />
         <HubFAQ />
+        <p className="text-xs text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800 pt-4 mt-8">
+          Fees shown are indicative based on the Companies (Registration Offices and Fees) Rules, 2014 as amended. Always verify on the MCA portal before filing. This tool does not account for state stamp duty or professional charges.
+        </p>
       </div>
     </div>
   )

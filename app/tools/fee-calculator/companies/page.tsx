@@ -28,7 +28,7 @@ const companyJsonLd = {
         price: '0',
         priceCurrency: 'INR'
       },
-      description: 'Calculate exact ROC filing fees, late penalties, and state-wise stamp duty for Private, Public, OPC and Small Companies.',
+      description: 'Calculate indicative ROC filing fees, late penalties, and state-wise stamp duty for Private, Public, OPC and Small Companies.',
       featureList: [
         'General Forms (ADT-1, INC-22) Penalty',
         'Annual Returns (AOC-4, MGT-7) Late Fee',
@@ -53,7 +53,7 @@ const companyJsonLd = {
           'name': 'What is the normal fee for filing Company ROC forms?',
           'acceptedAnswer': {
             '@type': 'Answer',
-            'text': 'For private and public companies, normal filing fees range from ₹200 to ₹600 depending on the authorized share capital. For OPCs and Small Companies, the fee is heavily subsidized, ranging from ₹50 to ₹200.'
+            'text': 'For all companies (Private, Public, OPC and Small Companies), normal filing fees range from ₹200 to ₹600 depending on the authorised share capital under items 5 & 6, Table A of the Companies (Registration Offices and Fees) Rules, 2014.'
           }
         },
         {
@@ -61,7 +61,7 @@ const companyJsonLd = {
           'name': 'How is the late fee calculated for AOC-4 and MGT-7?',
           'acceptedAnswer': {
             '@type': 'Answer',
-            'text': 'Annual returns like AOC-4 and MGT-7 have an uncapped penalty of ₹100 per day. For example, if you are 30 days late, the penalty will be exactly ₹3,000 in addition to the normal filing fee.'
+            'text': 'Annual returns like AOC-4 and MGT-7 have an uncapped penalty of ₹100 per day. For example, if you are 30 days late, the penalty will be ₹3,000 in addition to the normal filing fee.'
           }
         },
         {
@@ -69,7 +69,7 @@ const companyJsonLd = {
           'name': 'What happens if I delay filing general forms like ADT-1 or INC-22?',
           'acceptedAnswer': {
             '@type': 'Answer',
-            'text': 'General forms attract a multiplier-based penalty. If filed within 15-30 days of the due date, you pay 2x the normal fee. Delaying over 180 days attracts a penalty of 12x the normal fee. (Note: ADT-1 has a 15-day grace period where no penalty applies).'
+            'text': 'General forms attract a multiplier-based penalty under Table B, Rule 12. ADT-1 (Section 139) uses the same multiplier table: 1× for ≤15 days late, 2× for ≤30 days, up to 12× for ≤270 days. Beyond 270 days, condonation of delay is required under Section 403.'
           }
         },
         {
@@ -112,17 +112,16 @@ function CompanySEO() {
           <table className="w-full text-left text-sm">
             <thead className="bg-[#F1F5F9] dark:bg-slate-900/50 border-b border-[#E2E8F0] dark:border-slate-800">
               <tr>
-                <th className="px-4 py-3 font-semibold text-[#64748B] dark:text-slate-300">Authorized Capital (₹)</th>
-                <th className="px-4 py-3 font-semibold text-[#64748B] dark:text-slate-300">Normal Fee</th>
-                <th className="px-4 py-3 font-semibold text-[#64748B] dark:text-slate-300">OPC / Small</th>
+                <th className="px-4 py-3 font-semibold text-[#64748B] dark:text-slate-300">Authorised Capital (₹)</th>
+                <th className="px-4 py-3 font-semibold text-[#64748B] dark:text-slate-300">Normal Fee (All Companies)</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#E2E8F0] dark:divide-slate-800/50 bg-[#FFFFFF] dark:bg-slate-900">
-              <tr className="bg-[#FFFFFF] even:bg-[#F8FAFC] dark:even:bg-slate-800/50"><td className="px-4 py-3">Up to 1 Lakh</td><td className="px-4 py-3 font-medium">₹ 200</td><td className="px-4 py-3 text-[#16A34A] font-medium">₹ 50</td></tr>
-              <tr className="bg-[#FFFFFF] even:bg-[#F8FAFC] dark:even:bg-slate-800/50"><td className="px-4 py-3">1 Lakh to 5 Lakhs</td><td className="px-4 py-3 font-medium">₹ 300</td><td className="px-4 py-3 text-[#16A34A] font-medium">₹ 100</td></tr>
-              <tr className="bg-[#FFFFFF] even:bg-[#F8FAFC] dark:even:bg-slate-800/50"><td className="px-4 py-3">5 Lakhs to 25 Lakhs</td><td className="px-4 py-3 font-medium">₹ 400</td><td className="px-4 py-3 text-[#16A34A] font-medium">₹ 150</td></tr>
-              <tr className="bg-[#FFFFFF] even:bg-[#F8FAFC] dark:even:bg-slate-800/50"><td className="px-4 py-3">25 Lakhs to 1 Crore</td><td className="px-4 py-3 font-medium">₹ 500</td><td className="px-4 py-3 text-[#16A34A] font-medium">₹ 200</td></tr>
-              <tr className="bg-[#FFFFFF] even:bg-[#F8FAFC] dark:even:bg-slate-800/50"><td className="px-4 py-3">More than 1 Crore</td><td className="px-4 py-3 font-medium">₹ 600</td><td className="px-4 py-3 text-[#16A34A] font-medium">₹ 200</td></tr>
+              <tr className="bg-[#FFFFFF] even:bg-[#F8FAFC] dark:even:bg-slate-800/50"><td className="px-4 py-3">Up to ₹1 Lakh</td><td className="px-4 py-3 font-medium">₹ 200</td></tr>
+              <tr className="bg-[#FFFFFF] even:bg-[#F8FAFC] dark:even:bg-slate-800/50"><td className="px-4 py-3">₹1 Lakh to ₹5 Lakhs</td><td className="px-4 py-3 font-medium">₹ 300</td></tr>
+              <tr className="bg-[#FFFFFF] even:bg-[#F8FAFC] dark:even:bg-slate-800/50"><td className="px-4 py-3">₹5 Lakhs to ₹25 Lakhs</td><td className="px-4 py-3 font-medium">₹ 400</td></tr>
+              <tr className="bg-[#FFFFFF] even:bg-[#F8FAFC] dark:even:bg-slate-800/50"><td className="px-4 py-3">₹25 Lakhs to ₹1 Crore</td><td className="px-4 py-3 font-medium">₹ 500</td></tr>
+              <tr className="bg-[#FFFFFF] even:bg-[#F8FAFC] dark:even:bg-slate-800/50"><td className="px-4 py-3">More than ₹1 Crore</td><td className="px-4 py-3 font-medium">₹ 600</td></tr>
             </tbody>
           </table>
         </div>
@@ -154,7 +153,7 @@ export default function CompaniesFeePage() {
             Company ROC Fee & Penalty Calculators
           </h1>
           <p className="text-slate-400 text-base leading-relaxed max-w-2xl">
-            Select an MCA form below to calculate exact ROC filing fees, late penalties, and state-wise stamp duty. Our programmatic calculators are tailored to specific form rules, including the ₹100/day penalties for annual filings.
+            Select an MCA form below to calculate indicative ROC filing fees, late penalties, and state-wise stamp duty. Our programmatic calculators are tailored to specific form rules, including the ₹100/day penalties for annual filings.
           </p>
         </div>
       </div>
@@ -190,6 +189,9 @@ export default function CompaniesFeePage() {
       <div className="max-w-5xl mx-auto px-4">
         <CompanySEO />
         <CompanyFAQ />
+        <p className="text-xs text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800 pt-4 mt-8">
+          Fees shown are indicative based on the Companies (Registration Offices and Fees) Rules, 2014 as amended. Always verify on the MCA portal before filing. This tool does not account for state stamp duty or professional charges.
+        </p>
       </div>
     </div>
   )

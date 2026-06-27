@@ -2,7 +2,7 @@
  * ROC Compliance Penalty Calculator Utility Library
  * pure client-side mathematical and date difference calculations
  */
-import { getCompanyStandardFee } from './fee-calculator-core';
+import { getNormalFilingFee, getLLPNormalFee, getLLPAdditionalFee } from './fee-calculator-core';
 
 export function formatINR(amount: number): string {
   return new Intl.NumberFormat('en-IN', {
@@ -62,13 +62,12 @@ export function calculateCompanyFee(params: CompanyFeeParams): CompanyCalculatio
     isRepeatDefault,
   } = params;
 
-  // 1. Normal Filing Fee (based on authorized capital slab)
+  // 1. Normal Filing Fee (unified slab — same for all company types per items 5 & 6 Table A)
   let normalFee = 0;
   if (formId === 'DIR-3-KYC') {
     normalFee = 0; // always 0 if on time
   } else {
-    const isSmallOrOpc = companyType === 'OPC' || companyType === 'Small';
-    normalFee = getCompanyStandardFee(authorizedCapital, isSmallOrOpc, companyType === 'Section8');
+    normalFee = getNormalFilingFee(authorizedCapital);
   }
 
   // 2. Late Fee (Additional Fee)
@@ -83,6 +82,7 @@ export function calculateCompanyFee(params: CompanyFeeParams): CompanyCalculatio
     'AOC-4',
     'AOC-4-XBRL',
     'AOC-4-CFS',
+    'AOC-4-NBFC',
   ].includes(formId);
 
   if (daysDelayed > 0) {
@@ -92,9 +92,14 @@ export function calculateCompanyFee(params: CompanyFeeParams): CompanyCalculatio
       lateFee = 100 * daysDelayed; // ₹100/day, no cap — 2018 amendment
     } else {
       // General forms time-slab multiplier system (DIR-12, MGT-14, PAS-3, INC-22,
-      // CHG-1, CHG-4, ADT-1, INC-20A, etc.) — Companies (Reg Offices & Fees) Rules 2014
-      let multiplier = 1;
-      if (daysDelayed <= 30) {
+      // CHG-1, CHG-4, ADT-1, INC-20A, etc.) — Table B, Companies (Reg Offices & Fees) Rules 2014
+      // ADT-1 / Sec 139: first tier (≤15 days) = 1×, then escalates.
+      // Note: higher fees for repeat defaults (INC-22/PAS-3) are determined by the Registrar
+      // during processing and are NOT computable in advance.
+      let multiplier = 0;
+      if (daysDelayed <= 15) {
+        multiplier = 1;
+      } else if (daysDelayed <= 30) {
         multiplier = 2;
       } else if (daysDelayed <= 60) {
         multiplier = 4;
@@ -102,11 +107,13 @@ export function calculateCompanyFee(params: CompanyFeeParams): CompanyCalculatio
         multiplier = 6;
       } else if (daysDelayed <= 180) {
         multiplier = 10;
+      } else if (daysDelayed <= 270) {
+        multiplier = 12;
       } else {
-        // Beyond 180 days — PAS-3/INC-22 repeat default triggers 18× (Rule 12 proviso)
-        multiplier = isRepeatDefault && ['PAS-3', 'INC-22'].includes(formId) ? 18 : 12;
+        // Beyond 270 days: condonation required (Section 403 second proviso)
+        multiplier = 12; // cap at 12× for display; caller should show condonation note
       }
-      
+
       lateFee = normalFee * multiplier;
     }
   }
@@ -221,63 +228,23 @@ export function calculateLlpFee(params: LlpFeeParams): LlpCalculationResult {
     dpCount,
   } = params;
 
-  // 1. Normal Filing Fee (Contribution-based)
-  let normalFee = 0;
-  if (contribution <= 100000) {
-    normalFee = 50;
-  } else if (contribution <= 500000) {
-    normalFee = 100;
-  } else if (contribution <= 1000000) {
-    normalFee = 150;
-  } else if (contribution <= 2500000) {
-    normalFee = 200;
-  } else if (contribution <= 10000000) {
-    normalFee = 400;
-  } else {
-    normalFee = 600;
-  }
+  // 1. Normal Filing Fee (Contribution-based) — same for ALL LLPs including Small LLP.
+  // The concession for Small LLPs is only in the additional-fee (late-fee) multipliers.
+  let normalFee = getLLPNormalFee(contribution);
 
   const isSmallLlp = llpType === 'Small';
-  if (isSmallLlp) {
-    // Small LLP gets a 50% discount on normal filing fees, rounded to nearest 10
-    normalFee = Math.round(normalFee * 0.5 / 10) * 10;
-    if (normalFee < 50) normalFee = 50;
-  }
+  // No 50% discount on normal fee — removed per LLP Amendment Rules 2022.
 
   // 2. Additional Fee (Late Fee)
   // LLP 2nd Amendment Rules, 2022 (effective April 1, 2022) replaced the old flat ₹100/day
   // with a slab-multiplier system based on the normal filing fee and LLP type.
   // Source: Rule 36 & Annexure-A, LLP Rules 2009 as amended by LLP 2nd Amendment Rules 2022.
+  // 2. Additional Fee (Late Fee) — LLP 2nd Amendment Rules 2022 (effective 01.04.2022)
+  // Source: Rule 36 & Annexure-A, LLP Rules 2009 as amended by LLP 2nd Amendment Rules 2022.
+  // Beyond 360 days: hard cap (25× Small LLP / 50× other LLP). NOT a continuing per-day amount.
   let lateFee = 0;
   if (daysDelayed > 0) {
-    let multiplier = 0;
-    if (isSmallLlp) {
-      // Small LLP multipliers
-      if (daysDelayed <= 15)       multiplier = 1;
-      else if (daysDelayed <= 30)  multiplier = 2;
-      else if (daysDelayed <= 60)  multiplier = 4;
-      else if (daysDelayed <= 90)  multiplier = 6;
-      else if (daysDelayed <= 180) multiplier = 10;
-      else if (daysDelayed <= 360) multiplier = 15;
-      else multiplier = 15; // Beyond 360: 15x + ₹10/day (applied separately below)
-    } else {
-      // Other than Small LLP multipliers
-      if (daysDelayed <= 15)       multiplier = 1;
-      else if (daysDelayed <= 30)  multiplier = 4;
-      else if (daysDelayed <= 60)  multiplier = 8;
-      else if (daysDelayed <= 90)  multiplier = 12;
-      else if (daysDelayed <= 180) multiplier = 20;
-      else if (daysDelayed <= 360) multiplier = 30;
-      else multiplier = 30; // Beyond 360: 30x + ₹20/day (applied separately below)
-    }
-
-    lateFee = normalFee * multiplier;
-
-    // Beyond 360 days: add daily per-day surcharge on top of the 15x/30x base
-    if (daysDelayed > 360) {
-      const extraDays = daysDelayed - 360;
-      lateFee += isSmallLlp ? extraDays * 10 : extraDays * 20;
-    }
+    lateFee = getLLPAdditionalFee(daysDelayed, normalFee, isSmallLlp);
   }
 
   // 3. LLP Statutory Adjudication Penalty (ROC passes formal order under Sec 454)
@@ -353,23 +320,30 @@ export function calculateMsmeInterest(params: MsmeInterestParams): MsmeInterestR
     };
   }
 
-  // Step 1: Find Appointed Day
-  // If no written agreement: 15 days from date of acceptance
-  // If written agreement exists: Agreed date, but capped at 45 days from acceptance
+  // Step 1: Find Appointed Day (MSMED Act Section 2(b))
+  // If no written agreement: acceptanceDate + 15 days (acceptance = day 0)
+  // If written agreement: agreed date, but must not exceed 45 days from acceptance.
+  // Validation: agreed date cannot be before acceptance date.
   let appointedDayObj = new Date(acceptDateObj);
-  appointedDayObj.setDate(appointedDayObj.getDate() + 15);
+  appointedDayObj.setDate(appointedDayObj.getDate() + 15); // default: +15 days
 
   if (agreedPaymentDate) {
     const agreedDateObj = new Date(agreedPaymentDate);
     if (!isNaN(agreedDateObj.getTime())) {
-      // Find diff in days between agreed and acceptance
-      const diffDays = getDaysBetween(acceptanceDate, agreedPaymentDate);
-      if (diffDays > 45) {
-        // Cap at 45 days from acceptance
+      // Validate: agreed date must not be before acceptance date
+      if (agreedDateObj < acceptDateObj) {
+        // Invalid — fall back to 15-day default (caller should display an error)
         appointedDayObj = new Date(acceptDateObj);
-        appointedDayObj.setDate(appointedDayObj.getDate() + 45);
+        appointedDayObj.setDate(appointedDayObj.getDate() + 15);
       } else {
-        appointedDayObj = agreedDateObj;
+        const diffDays = getDaysBetween(acceptanceDate, agreedPaymentDate);
+        if (diffDays > 45) {
+          // Cap at 45 days from acceptance
+          appointedDayObj = new Date(acceptDateObj);
+          appointedDayObj.setDate(appointedDayObj.getDate() + 45);
+        } else {
+          appointedDayObj = agreedDateObj;
+        }
       }
     }
   }
@@ -378,49 +352,53 @@ export function calculateMsmeInterest(params: MsmeInterestParams): MsmeInterestR
   const daysDelayed = getDaysBetween(appointedDayObj, actualPaymentDate);
   const isOverdue = daysDelayed > 0;
 
-  // Step 3: Interest Rate = 3x Bank Rate
-  const interestRate = bankRate * 3; // e.g. 16.65% p.a.
-  const monthlyRate = interestRate / 100 / 12;
+  // Step 3: Interest Rate = 3× Bank Rate (MSMED Act Section 16)
+  const interestRate = bankRate * 3;
 
-  // Step 4: Compounding with monthly rests
+  // Step 4: Compounding with actual calendar monthly rests
+  // Each "month" ends on the same calendar day of the following month.
   let accruedInterest = 0;
   const schedule: CompoundingScheduleItem[] = [];
 
   if (isOverdue) {
-    const completeMonths = Math.floor(daysDelayed / 30);
-    const remainingDays = daysDelayed % 30;
-
-    // Calculate schedule month by month
+    const actualPayObj = new Date(actualPaymentDate);
+    const annualRate = interestRate / 100;
     let runningPrincipal = invoiceAmount;
     let runningInterest = 0;
+    let currentDate = new Date(appointedDayObj);
+    let monthCount = 0;
+    let totalDaysElapsed = 0;
 
-    for (let m = 1; m <= completeMonths; m++) {
-      const interestThisMonth = runningPrincipal * monthlyRate;
-      runningInterest += interestThisMonth;
-      runningPrincipal = invoiceAmount + runningInterest; // compound it
+    while (currentDate < actualPayObj) {
+      // Advance to end of this calendar month
+      const nextMonthDate = new Date(currentDate);
+      nextMonthDate.setMonth(nextMonthDate.getMonth() + 1);
 
-      schedule.push({
-        month: m,
-        daysElapsed: m * 30,
-        interestThisMonth,
-        cumulativeInterest: runningInterest,
-        totalPayable: runningPrincipal,
-      });
-    }
+      const periodEnd = nextMonthDate < actualPayObj ? nextMonthDate : actualPayObj;
+      const daysInPeriod = getDaysBetween(currentDate, periodEnd);
+      if (daysInPeriod <= 0) break;
 
-    // Add remaining days fraction
-    if (remainingDays > 0) {
-      const interestRemaining = runningPrincipal * (monthlyRate * remainingDays / 30);
-      runningInterest += interestRemaining;
+      // Days in the current calendar month (from currentDate)
+      const daysInMonth = getDaysBetween(currentDate, nextMonthDate);
+      const periodFraction = daysInPeriod / daysInMonth;
+      const monthlyRate = annualRate / 12;
+      const interestThisPeriod = runningPrincipal * monthlyRate * periodFraction;
+
+      runningInterest += interestThisPeriod;
       runningPrincipal = invoiceAmount + runningInterest;
+      totalDaysElapsed += daysInPeriod;
+      monthCount++;
 
       schedule.push({
-        month: completeMonths + 1,
-        daysElapsed: daysDelayed,
-        interestThisMonth: interestRemaining,
+        month: monthCount,
+        daysElapsed: totalDaysElapsed,
+        interestThisMonth: interestThisPeriod,
         cumulativeInterest: runningInterest,
         totalPayable: runningPrincipal,
       });
+
+      currentDate = nextMonthDate;
+      if (schedule.length >= 60) break; // safety cap at 60 periods
     }
 
     accruedInterest = runningInterest;
@@ -506,5 +484,67 @@ export function calculateMsme1Penalty(params: Msme1Params): Msme1Result {
     officerPenalty,
     totalPenaltyExposure: companyPenalty + officerPenalty,
     isSmallCompanyReliefApplied: isSmallCompany,
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Test-suite adapter exports
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface LLPPenaltyParams {
+  contribution: number;
+  delayDays: number;
+  isSmallLLP: boolean;
+  form: string;
+}
+
+export function calculateLLPPenalty(params: LLPPenaltyParams) {
+  const res = calculateLlpFee({
+    llpType: params.isSmallLLP ? 'Small' : 'Regular',
+    contribution: params.contribution,
+    formId: params.form === 'Form 8' ? 'Form-8' : 'Form-11',
+    dueDate: '',
+    actualDate: '',
+    daysDelayed: params.delayDays,
+    dpCount: 2,
+  });
+  return {
+    normalFee: res.normalFee,
+    additionalFee: res.lateFee,
+    total: res.totalPayable,
+    llpPenalty: res.llpPenalty,
+    dpPenalty: res.dpPenalty,
+    totalPenaltyExposure: res.totalPenaltyExposure,
+  };
+}
+
+export interface MSMEInterestTestParams {
+  invoiceAmount: number;
+  acceptanceDate: Date;
+  paymentDate: Date;
+  writtenAgreement: boolean;
+  agreedDate: Date | null;
+  bankRate?: number;
+}
+
+export function calculateMSMEInterest(params: MSMEInterestTestParams) {
+  const res = calculateMsmeInterest({
+    invoiceAmount: params.invoiceAmount,
+    acceptanceDate: params.acceptanceDate.toISOString(),
+    agreedPaymentDate: params.writtenAgreement && params.agreedDate ? params.agreedDate.toISOString() : '',
+    actualPaymentDate: params.paymentDate.toISOString(),
+    bankRate: params.bankRate ?? 5.5,
+  });
+  
+  let error = undefined;
+  if (params.writtenAgreement && params.agreedDate && params.agreedDate < params.acceptanceDate) {
+    error = "Agreed date cannot be before acceptance date";
+  }
+
+  return {
+    appointedDay: res.appointedDay ? new Date(res.appointedDay) : new Date(),
+    interest: res.accruedInterest,
+    annualRateUsed: res.interestRate,
+    error,
   };
 }

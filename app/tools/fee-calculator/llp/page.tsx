@@ -6,7 +6,7 @@ import LLPFAQ from './LLPFAQ'
 
 export const metadata: Metadata = {
   title: 'LLP Fee Calculator | Form 11 & Form 8 Penalty Calculator',
-  description: 'Calculate LLP filing fees and strict ₹100/day late penalties for Form 8, Form 11, Form 3, and DIR-3 KYC.',
+  description: 'Calculate indicative LLP filing fees and late filing penalties for Form 8, Form 11, Form 3, and DIR-3 KYC under the LLP Amendment Rules 2022.',
   keywords: ['LLP fee calculator', 'LLP late fee penalty', 'Form 11 penalty calculator', 'Form 8 late fee LLP', 'LLP filing fee'],
   alternates: {
     canonical: 'https://www.corplawupdates.in/tools/fee-calculator/llp',
@@ -54,7 +54,7 @@ function LLPSEO() {
         Understanding LLP Filing Fees and the ₹100/Day Penalty
       </h2>
       <p className="text-slate-600 dark:text-slate-300 text-lg leading-relaxed">
-        Limited Liability Partnerships (LLPs) are subject to some of the strictest late filing penalties under the Indian regulatory framework. While private limited companies enjoy a multiplier-based penalty cap for many forms, LLPs face an aggressive and uncapped penalty regime.
+        Limited Liability Partnerships (LLPs) are subject to strict late filing penalties under the Indian regulatory framework. Since 1 April 2022, the LLP 2nd Amendment Rules 2022 replaced the old flat ₹100/day penalty with a slab-multiplier system based on the total contribution and delay period.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-10 not-prose">
@@ -70,10 +70,10 @@ function LLPSEO() {
         <div className="bg-red-50 dark:bg-red-900/10 p-6 rounded-2xl border border-red-200 dark:border-red-900/30 shadow-sm">
           <h3 className="font-bold text-red-800 dark:text-red-400 mb-2 flex items-center gap-2">
             <span className="w-6 h-6 rounded bg-red-100 dark:bg-red-900/50 flex items-center justify-center text-red-600 dark:text-red-400">🚨</span>
-            The ₹100/Day Rule
+            Slab-Multiplier Late Fee (from 1 April 2022)
           </h3>
           <p className="text-sm text-red-700 dark:text-red-300">
-            Almost every statutory form, including the crucial Form 11 (Annual Return) and Form 8 (Statement of Accounts), attracts a flat, uncapped penalty of ₹100 per day. A delay of one year results in a massive ₹36,500 penalty per form.
+            Under LLP 2nd Amendment Rules 2022, Form 8 and Form 11 attract multiplier-based additional fees ranging from 1× to 50× (other LLP) or 25× (Small LLP) of the normal fee. Beyond 360 days, the fee is capped at a fixed amount.
           </p>
         </div>
       </div>
@@ -120,6 +120,9 @@ export default function LLPFeePage() {
       <div className="max-w-5xl mx-auto px-4">
         <LLPSEO />
         <LLPFAQ />
+        <p className="text-xs text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800 pt-4 mt-8">
+          Fees shown are indicative based on the Companies (Registration Offices and Fees) Rules, 2014 as amended. Always verify on the MCA portal before filing. This tool does not account for state stamp duty or professional charges.
+        </p>
       </div>
     </div>
   )
