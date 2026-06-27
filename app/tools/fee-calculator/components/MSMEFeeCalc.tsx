@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { calculateMsmeInterest, CompoundingScheduleItem } from '@/lib/penaltyCalculator'
+import { generateMsmePdf } from '@/lib/pdf/generateMsmePdf'
 
 export default function MSMEFeeCalc({ initialBankRate = '6.75' }: { initialBankRate?: string }) {
   const [invoiceAmount, setInvoiceAmount] = useState('100000')
@@ -78,6 +79,18 @@ export default function MSMEFeeCalc({ initialBankRate = '6.75' }: { initialBankR
         result: { accruedInterest: calc.accruedInterest, totalPayable: calc.totalPayable }
       })
     }).catch(console.error)
+  }
+
+  const handleDownloadPdf = () => {
+    if (!result) return;
+    generateMsmePdf({
+      invoiceAmount,
+      acceptanceDate,
+      agreedPaymentDate,
+      actualPaymentDate,
+      bankRate,
+      result
+    });
   }
 
   return (
@@ -161,7 +174,16 @@ export default function MSMEFeeCalc({ initialBankRate = '6.75' }: { initialBankR
 
       {result && (
         <div className="mt-8 p-6 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700">
-          <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 mb-4 font-heading">Calculation Summary</h3>
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 font-heading m-0">Calculation Summary</h3>
+            <button
+              onClick={handleDownloadPdf}
+              className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold rounded-lg transition-all flex items-center gap-2 shadow-sm"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+              Download PDF
+            </button>
+          </div>
           
           <div className="space-y-3">
             <div className="flex justify-between items-center text-sm">
