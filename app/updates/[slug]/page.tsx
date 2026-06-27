@@ -24,6 +24,7 @@ import { QuickAnswer } from '@/components/QuickAnswer'
 import { AlertCircle, BookOpen, CalendarDays, ChevronDown, Clock3, Eye, FileText, Lightbulb, Sparkles, CheckCircle2 } from 'lucide-react'
 import { sanitizeHtml } from '@/lib/sanitize'
 import { mcaForms } from '@/data/mca-forms'
+import ArticleContextTool from '@/components/ArticleContextTool'
 
 const stripHtml = (html: string) => html ? html.replace(/<[^>]*>/g, '').trim() : ''
 
@@ -305,6 +306,15 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
     return (
         <div className="min-h-screen bg-white dark:bg-slate-900">
+            <ArticleContextTool 
+                title={update.title}
+                summary={update.summary}
+                category={update.category}
+                published_at={update.published_at}
+                tags={tagsList}
+                slug={update.slug}
+                content={update.content}
+            />
             <article
               id="article-root"
               className="article-font-md mx-auto w-full max-w-4xl px-4 py-8 sm:py-12"

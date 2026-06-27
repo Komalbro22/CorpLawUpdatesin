@@ -57,6 +57,77 @@ export default function UnifiedCalculator() {
     }
   }, [])
 
+  // WebMCP — Imperative API
+  // Official docs: https://developer.chrome.com/docs/ai/webmcp/imperative-api
+  React.useEffect(() => {
+    if (!('modelContext' in document) || !document.modelContext) return;
+
+    document.modelContext.registerTool({
+      name: 'calculateMCALateFee',
+      description: 'Calculates MCA (Ministry of Corporate Affairs) late filing fee for Indian companies. Use this when a user asks about late fees, ROC filing penalties, or delay charges for MCA forms like MGT-7, AOC-4, DPT-3, DIR-3KYC, ADT-1, MGT-14, SH-7, PAS-3, CHG-1, or MSME-1.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          formSlug: {
+            type: 'string',
+            description: 'The MCA form slug. Examples: mgt-7, aoc-4, dpt-3, dir-3kyc, adt-1, mgt-14, sh-7, pas-3, chg-1, msme-1'
+          },
+          companyType: {
+            type: 'string',
+            enum: ['small', 'other', 'opc', 'llp'],
+            description: 'Type of company. Use: small (small company), opc (One Person Company), llp (LLP), other (all other companies)'
+          },
+          capital: {
+            type: 'number',
+            description: 'Paid-up share capital of the company in Indian Rupees'
+          },
+          delayDays: {
+            type: 'number',
+            description: 'Number of days delayed beyond the due date',
+            minimum: 1
+          },
+          isRepeatOffender: {
+            type: 'string',
+            enum: ['no', 'yes'],
+            description: 'Whether the company is a repeat offender (default: no)'
+          }
+        },
+        required: ['formSlug', 'delayDays']
+      },
+      execute: async (params) => {
+        try {
+          const calcParams: CalculatorParams = {
+            formSlug: String(params.formSlug || ''),
+            companyType: String(params.companyType || 'other') as CalculatorParams['companyType'],
+            capital: Number(params.capital || 0),
+            delayDays: Number(params.delayDays || 0),
+            isRepeatOffender: params.isRepeatOffender === 'yes',
+            newCapital: Number(params.newCapital || 0),
+            state: String(params.state || ''),
+            chargeAmount: Number(params.chargeAmount || 0),
+          };
+          const result = calculateMCAFee(calcParams);
+          if (!result) {
+            return 'Could not calculate fee. Please check the form type and parameters.';
+          }
+          return `MCA Late Fee Calculation for ${params.formSlug}:\n` +
+            `Delay: ${params.delayDays} days\n` +
+            `Normal Fee: ₹${result.baseFee?.toLocaleString('en-IN') ?? 'N/A'}\n` +
+            `Late Fee: ₹${result.lateFee?.toLocaleString('en-IN') ?? 'N/A'}\n` +
+            `Total Payable: ₹${result.total?.toLocaleString('en-IN') ?? 'N/A'}\n` +
+            (result.warningText ? `Note: ${result.warningText}` : '');
+        } catch (e) {
+          return 'Error calculating fee. Please verify the form type is correct.';
+        }
+      }
+    });
+
+    return () => {
+      if (!('modelContext' in document) || !document.modelContext) return;
+      document.modelContext.unregisterTool('calculateMCALateFee');
+    };
+  }, []);
+
   const copyShareLink = () => {
     const url = new URL(window.location.href)
     url.searchParams.set('form', selectedSlug)

@@ -178,6 +178,99 @@ export default function ROCTrackerPage() {
     }
   }, [])
 
+  // WebMCP — Imperative API
+  // Official docs: https://developer.chrome.com/docs/ai/webmcp/imperative-api
+  useEffect(() => {
+    if (!('modelContext' in document) || !document.modelContext) return;
+
+    document.modelContext.registerTool({
+      name: 'getROCDeadlines',
+      description: 'Calculates ROC (Registrar of Companies) filing deadlines for an Indian company based on its profile. Returns all applicable MCA annual filing due dates including MGT-7, AOC-4, ADT-1, and other forms. Use when a user asks about their specific company\'s ROC deadlines or annual filing schedule.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          companyType: {
+            type: 'string',
+            enum: ['private', 'public', 'opc', 'llp', 'small'],
+            description: 'Type of company'
+          },
+          financialYearEnd: {
+            type: 'string',
+            description: 'Financial year end date in YYYY-MM-DD format. Example: 2025-03-31'
+          },
+          paidUpCapital: {
+            type: 'number',
+            description: 'Paid-up share capital in Indian Rupees'
+          },
+          turnover: {
+            type: 'number',
+            description: 'Annual turnover in Indian Rupees'
+          },
+          isListed: {
+            type: 'string',
+            enum: ['true', 'false'],
+            description: 'Whether the company is listed on a stock exchange'
+          },
+          hasCS: {
+            type: 'string',
+            enum: ['true', 'false'],
+            description: 'Whether the company has a Company Secretary'
+          },
+          isXBRL: {
+            type: 'string',
+            enum: ['true', 'false'],
+            description: 'Whether XBRL filing is applicable'
+          },
+          directorCount: {
+            type: 'number',
+            description: 'Number of directors in the company'
+          }
+        },
+        required: ['companyType', 'financialYearEnd']
+      },
+      execute: async (params) => {
+        try {
+          const profile: CompanyProfile = {
+            companyName: 'Company',
+            companyType: String(params.companyType || 'private') as any,
+            incorporationDate: new Date('2020-01-01'),
+            financialYearEnd: 'march',
+            paidUpCapital: Number(params.paidUpCapital || 0),
+            turnover: Number(params.turnover || 0),
+            hasCS: params.hasCS === 'true',
+            agmDate: null,
+            directorCount: Number(params.directorCount || 2),
+            isXBRL: params.isXBRL === 'true',
+            isListed: params.isListed === 'true',
+            hasForeignShareholders: false,
+            hasDeposits: false,
+            auditDate: null,
+            filingYear: String(params.financialYearEnd || '2025-03-31').substring(0,4) + '-' + String(Number(String(params.financialYearEnd || '2025-03-31').substring(0,4))+1).substring(2,4)
+          };
+          
+          const deadlines = calculateDeadlinesFromDB(profile, dbForms);
+
+          if (!deadlines || deadlines.length === 0) {
+            return 'No ROC deadlines found for the given company profile.';
+          }
+
+          const lines = deadlines.map(d =>
+            `• ${d.formName} — Due: ${d.dueDate.toLocaleDateString('en-IN')}${d.description ? `\n  ${d.description}` : ''}`
+          );
+
+          return `ROC Filing Deadlines:\n\n${lines.join('\n\n')}\n\nFull tracker: https://corplawupdates.in/tools/roc-tracker`;
+        } catch (e) {
+          return 'Error calculating ROC deadlines. Please check the company parameters.';
+        }
+      }
+    });
+
+    return () => {
+      if (!('modelContext' in document) || !document.modelContext) return;
+      document.modelContext.unregisterTool('getROCDeadlines');
+    };
+  }, [dbForms]);
+
   function getFullProfile(): CompanyProfile {
     return {
       companyName: profile.companyName || '',

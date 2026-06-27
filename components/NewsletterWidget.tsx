@@ -81,12 +81,13 @@ export default function NewsletterWidget() {
                     </div>
                 </div>
             ) : (
-                <form onSubmit={handleSubmit} className="flex flex-col gap-3 mt-4">
+                <form toolname="subscribeNewsletter" tooldescription="Subscribe to daily Indian corporate law regulatory update emails." onSubmit={handleSubmit} className="flex flex-col gap-3 mt-4">
                     <div>
                         <label htmlFor="email" className="sr-only">
                             Email address
                         </label>
                         <input
+                            name="email"
                             id="email"
                             type="email"
                             value={email}

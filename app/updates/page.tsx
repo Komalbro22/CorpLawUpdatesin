@@ -7,6 +7,7 @@ import LoadingSkeleton from '@/components/LoadingSkeleton'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { unstable_cache } from 'next/cache'
+import ArticleSearchTool from '@/components/ArticleSearchTool'
 
 export const revalidate = 43200 // 12 hours
 
@@ -198,6 +199,7 @@ export default async function UpdatesPage({
 
     return (
         <div>
+            <ArticleSearchTool />
             {/* Hero */}
             <div className="relative bg-navy text-white overflow-hidden">
                 <div

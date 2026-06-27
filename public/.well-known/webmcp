@@ -1,0 +1,42 @@
+{
+  "name": "CorpLawUpdates.in",
+  "description": "Free Indian corporate law and regulatory intelligence platform. Same-day analysis of MCA, SEBI, RBI, IBBI, and FEMA circulars for Company Secretaries, Chartered Accountants, and compliance professionals.",
+  "version": "1.0.0",
+  "tools": [
+    {
+      "name": "subscribeNewsletter",
+      "description": "Subscribe to daily Indian corporate law regulatory update emails.",
+      "url": "https://corplawupdates.in"
+    },
+    {
+      "name": "calculateMCALateFee",
+      "description": "Calculate MCA late filing fees for Indian companies.",
+      "url": "https://corplawupdates.in/tools/fee-calculator/companies"
+    },
+    {
+      "name": "getComplianceDeadlines",
+      "description": "Get upcoming Indian corporate compliance filing deadlines.",
+      "url": "https://corplawupdates.in/calendar"
+    },
+    {
+      "name": "getROCDeadlines",
+      "description": "Calculate ROC annual filing deadlines for a specific Indian company.",
+      "url": "https://corplawupdates.in/tools/roc-tracker"
+    },
+    {
+      "name": "searchCorpLawArticles",
+      "description": "Search Indian corporate law regulatory update articles.",
+      "url": "https://corplawupdates.in/updates"
+    },
+    {
+      "name": "getCurrentArticle",
+      "description": "Get content of the currently viewed regulatory article.",
+      "url": "https://corplawupdates.in/updates"
+    },
+    {
+      "name": "generateLegalDocument",
+      "description": "Generate Indian corporate legal documents like board resolutions.",
+      "url": "https://corplawupdates.in/documents"
+    }
+  ]
+}
