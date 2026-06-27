@@ -230,7 +230,7 @@ export function calculateLlpFee(params: LlpFeeParams): LlpCalculationResult {
 
   // 1. Normal Filing Fee (Contribution-based) — same for ALL LLPs including Small LLP.
   // The concession for Small LLPs is only in the additional-fee (late-fee) multipliers.
-  let normalFee = getLLPNormalFee(contribution);
+  const normalFee = getLLPNormalFee(contribution);
 
   const isSmallLlp = llpType === 'Small';
   // No 50% discount on normal fee — removed per LLP Amendment Rules 2022.
