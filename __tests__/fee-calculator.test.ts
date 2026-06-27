@@ -552,9 +552,10 @@ describe("calculateSH7Fee — differential MOA method + Table C late fee", () =>
       delayMonths: 0,
       companyType: "private",
     });
-    expect(result.normalFee).toBe(30_000); 
+    // Differential MOA fee is ₹30,000 + E-form filing fee for ₹20L is ₹400 = ₹30,400
+    expect(result.normalFee).toBe(30_400); 
     expect(result.additionalFee).toBe(0);
-    expect(result.total).toBe(31_000); // 30,000 + 1,000 stamp duty
+    expect(result.total).toBe(31_400); // 30,400 + 1,000 stamp duty
   });
 
   test("₹10L → ₹20L, 3 months late", () => {
@@ -564,9 +565,9 @@ describe("calculateSH7Fee — differential MOA method + Table C late fee", () =>
       delayMonths: 3,
       companyType: "private",
     });
-    expect(result.normalFee).toBe(30_000);
-    expect(result.additionalFee).toBe(2_250); // 2.5% × 3 × 30,000
-    expect(result.total).toBe(33_250); // 30,000 + 2,250 + 1,000 stamp duty
+    expect(result.normalFee).toBe(30_400);
+    expect(result.additionalFee).toBe(2_250); // 2.5% × 3 × 30,000 (differential only)
+    expect(result.total).toBe(33_650); // 30,400 + 2,250 + 1,000 stamp duty
   });
 
   test("₹10L → ₹20L, 6 months late", () => {
@@ -577,7 +578,7 @@ describe("calculateSH7Fee — differential MOA method + Table C late fee", () =>
       companyType: "private",
     });
     expect(result.additionalFee).toBe(4_500); // 2.5% × 6 × 30,000
-    expect(result.total).toBe(35_500); // 30,000 + 4,500 + 1,000 stamp duty
+    expect(result.total).toBe(35_900); // 30,400 + 4,500 + 1,000 stamp duty
   });
 
   test("₹10L → ₹20L, 7 months late → switches to 3%/month from month 7", () => {
@@ -608,15 +609,17 @@ describe("calculateSH7Fee — differential MOA method + Table C late fee", () =>
   test("OPC, ₹5L → ₹15L, 2 months late", () => {
     const opcFeeNew = getOpcSmallIncorporationFee(15_00_000);
     const opcFeeOld = getOpcSmallIncorporationFee(5_00_000);
-    const normalFee = opcFeeNew - opcFeeOld;
+    const differentialFee = opcFeeNew - opcFeeOld;
+    const eformFee = 400; // Filing fee for ₹15L
+    
     const result = calculateSH7Fee({
       existingCapital: 5_00_000,
       newCapital: 15_00_000,
       delayMonths: 2,
       companyType: "opc",
     });
-    expect(result.normalFee).toBe(normalFee);
-    const expectedAdditional = Math.round(2 * 0.025 * normalFee);
+    expect(result.normalFee).toBe(differentialFee + eformFee);
+    const expectedAdditional = Math.round(2 * 0.025 * differentialFee);
     expect(result.additionalFee).toBe(expectedAdditional);
   });
 });
@@ -642,61 +645,66 @@ describe("calculateChargeFee — 90-day hard cap", () => {
     expect(result.total).toBe(500);
   });
 
-  test("CHG-1, 1 day late → 3× normal = ₹1,500 additional", () => {
+  test("CHG-1, 1 day late (Other) → 6× normal = ₹3,000 additional", () => {
     const result = calculateChargeFee({
       form: "CHG-1",
       capital: CAPITAL,
       chargeAmount: CHARGE_AMOUNT,
       delayDays: 1,
+      isSmallOrOpc: false, // Default
+    });
+    expect(result.additionalFee).toBe(3_000); // 6×500
+    expect(result.total).toBe(3_500);
+  });
+
+  test("CHG-1, 1 day late (Small/OPC) → 3× normal = ₹1,500 additional", () => {
+    const result = calculateChargeFee({
+      form: "CHG-1",
+      capital: CAPITAL,
+      chargeAmount: CHARGE_AMOUNT,
+      delayDays: 1,
+      isSmallOrOpc: true,
     });
     expect(result.additionalFee).toBe(1_500); // 3×500
     expect(result.total).toBe(2_000);
   });
 
-  test("CHG-1, 30 days late → 3× additional", () => {
+  test("CHG-1, 30 days late (Small/OPC) → 3× additional", () => {
     const result = calculateChargeFee({
       form: "CHG-1",
       capital: CAPITAL,
       chargeAmount: CHARGE_AMOUNT,
       delayDays: 30,
+      isSmallOrOpc: true,
     });
     expect(result.additionalFee).toBe(1_500);
   });
 
-  test("CHG-1, 31 days late → 6× normal OR 0.025% of charge, take higher", () => {
+  test("CHG-1, 31 days late (Small/OPC) → 3× normal PLUS 0.025% of charge", () => {
     const result = calculateChargeFee({
       form: "CHG-1",
       capital: CAPITAL,
       chargeAmount: CHARGE_AMOUNT,
       delayDays: 31,
+      isSmallOrOpc: true,
     });
-    const sixTimes = 6 * 500;         // ₹3,000
-    const adValorem = 0.00025 * CHARGE_AMOUNT; // ₹1,250
-    const expectedAdditional = Math.max(sixTimes, adValorem);
+    const threeTimes = 3 * 500;         // ₹1,500
+    const adValorem = Math.ceil(0.00025 * CHARGE_AMOUNT); // ₹1,250
+    const expectedAdditional = threeTimes + adValorem; // ₹2,750
     expect(result.additionalFee).toBe(expectedAdditional);
   });
 
-  test("CHG-1, 60 days late → higher of 6× or 0.025% applies", () => {
+  test("CHG-1, 31 days late (Other) → 6× normal PLUS 0.05% of charge", () => {
     const result = calculateChargeFee({
       form: "CHG-1",
       capital: CAPITAL,
       chargeAmount: CHARGE_AMOUNT,
-      delayDays: 60,
+      delayDays: 31,
+      isSmallOrOpc: false,
     });
-    expect(result.additionalFee).toBeGreaterThan(0);
-    expect(result.condonationRequired).toBeFalsy();
-  });
-
-  test("CHG-1, 61 days late → higher of 6× or 0.05% of charge", () => {
-    const result = calculateChargeFee({
-      form: "CHG-1",
-      capital: CAPITAL,
-      chargeAmount: CHARGE_AMOUNT,
-      delayDays: 61,
-    });
-    const sixTimes = 6 * 500;
-    const adValorem = 0.0005 * CHARGE_AMOUNT; // ₹2,500
-    const expectedAdditional = Math.max(sixTimes, adValorem);
+    const sixTimes = 6 * 500;         // ₹3,000
+    const adValorem = Math.ceil(0.0005 * CHARGE_AMOUNT); // ₹2,500
+    const expectedAdditional = sixTimes + adValorem; // ₹5,500
     expect(result.additionalFee).toBe(expectedAdditional);
   });
 
@@ -722,18 +730,7 @@ describe("calculateChargeFee — 90-day hard cap", () => {
     expect(result.total).toBe(0);
   });
 
-  test("CHG-1, 95 days late → condonation required", () => {
-    const result = calculateChargeFee({
-      form: "CHG-1",
-      capital: CAPITAL,
-      chargeAmount: CHARGE_AMOUNT,
-      delayDays: 95,
-    });
-    expect(result.condonationRequired).toBe(true);
-    expect(result.total).toBe(0);
-  });
-
-  test("CHG-1, 300 days late → condonation required (old 300-day warning is gone)", () => {
+  test("CHG-1, 300 days late → condonation required", () => {
     const result = calculateChargeFee({
       form: "CHG-1",
       capital: CAPITAL,
@@ -805,59 +802,56 @@ describe("getLLPAdditionalFee — LLP Amendment Rules 2022", () => {
       expect(getLLPAdditionalFee(15, NORMAL, false)).toBe(200);
     });
 
-    test("16 days late → 2× = ₹400", () => {
-      expect(getLLPAdditionalFee(16, NORMAL, false)).toBe(400);
+    test("16 days late → 4× = ₹800", () => {
+      expect(getLLPAdditionalFee(16, NORMAL, false)).toBe(800);
     });
 
-    test("30 days late → 2× = ₹400", () => {
-      expect(getLLPAdditionalFee(30, NORMAL, false)).toBe(400);
+    test("30 days late → 4× = ₹800", () => {
+      expect(getLLPAdditionalFee(30, NORMAL, false)).toBe(800);
     });
 
-    test("31 days late → 4× = ₹800", () => {
-      expect(getLLPAdditionalFee(31, NORMAL, false)).toBe(800);
+    test("31 days late → 8× = ₹1,600", () => {
+      expect(getLLPAdditionalFee(31, NORMAL, false)).toBe(1_600);
     });
 
-    test("60 days late → 4× = ₹800", () => {
-      expect(getLLPAdditionalFee(60, NORMAL, false)).toBe(800);
+    test("60 days late → 8× = ₹1,600", () => {
+      expect(getLLPAdditionalFee(60, NORMAL, false)).toBe(1_600);
     });
 
-    test("61 days late → 6× = ₹1,200", () => {
-      expect(getLLPAdditionalFee(61, NORMAL, false)).toBe(1_200);
+    test("61 days late → 12× = ₹2,400", () => {
+      expect(getLLPAdditionalFee(61, NORMAL, false)).toBe(2_400);
     });
 
-    test("90 days late → 6× = ₹1,200", () => {
-      expect(getLLPAdditionalFee(90, NORMAL, false)).toBe(1_200);
+    test("90 days late → 12× = ₹2,400", () => {
+      expect(getLLPAdditionalFee(90, NORMAL, false)).toBe(2_400);
     });
 
-    test("91 days late → 10× = ₹2,000", () => {
-      expect(getLLPAdditionalFee(91, NORMAL, false)).toBe(2_000);
+    test("91 days late → 20× = ₹4,000", () => {
+      expect(getLLPAdditionalFee(91, NORMAL, false)).toBe(4_000);
     });
 
-    test("180 days late → 10× = ₹2,000", () => {
-      expect(getLLPAdditionalFee(180, NORMAL, false)).toBe(2_000);
+    test("180 days late → 20× = ₹4,000", () => {
+      expect(getLLPAdditionalFee(180, NORMAL, false)).toBe(4_000);
     });
 
-    test("181 days late → 15× = ₹3,000", () => {
-      expect(getLLPAdditionalFee(181, NORMAL, false)).toBe(3_000);
+    test("181 days late → 30× = ₹6,000", () => {
+      expect(getLLPAdditionalFee(181, NORMAL, false)).toBe(6_000);
     });
 
-    test("360 days late → 15× = ₹3,000", () => {
-      expect(getLLPAdditionalFee(360, NORMAL, false)).toBe(3_000);
+    test("360 days late → 30× = ₹6,000", () => {
+      expect(getLLPAdditionalFee(360, NORMAL, false)).toBe(6_000);
     });
 
-    test("361 days late → hard cap 50× = ₹10,000", () => {
-      expect(getLLPAdditionalFee(361, NORMAL, false)).toBe(10_000);
+    test("361 days late → 30x + ₹20/day = ₹6,000 + ₹20 = ₹6,020", () => {
+      expect(getLLPAdditionalFee(361, NORMAL, false, true)).toBe(6_020);
     });
 
-    test("400 days late → SAME hard cap 50× = ₹10,000 (no further accumulation)", () => {
-      expect(getLLPAdditionalFee(400, NORMAL, false)).toBe(10_000);
-      expect(getLLPAdditionalFee(400, NORMAL, false)).toBe(
-        getLLPAdditionalFee(361, NORMAL, false)
-      );
+    test("400 days late → 30x + ₹20/day = ₹6,000 + ₹800 = ₹6,800", () => {
+      expect(getLLPAdditionalFee(400, NORMAL, false, true)).toBe(6_800);
     });
 
-    test("1000 days late → still 50× cap = ₹10,000", () => {
-      expect(getLLPAdditionalFee(1000, NORMAL, false)).toBe(10_000);
+    test("1000 days late (not Form 8/11) → still 50× cap = ₹10,000", () => {
+      expect(getLLPAdditionalFee(1000, NORMAL, false, false)).toBe(10_000);
     });
   });
 
@@ -867,32 +861,32 @@ describe("getLLPAdditionalFee — LLP Amendment Rules 2022", () => {
       expect(getLLPAdditionalFee(1, NORMAL, true)).toBe(200);
     });
 
-    test("16 days late → 1× = ₹200 (Small LLP: half of 2×)", () => {
-      expect(getLLPAdditionalFee(16, NORMAL, true)).toBe(200);
+    test("16 days late → 2× = ₹400", () => {
+      expect(getLLPAdditionalFee(16, NORMAL, true)).toBe(400);
     });
 
-    test("31 days late → 2× = ₹400 (Small LLP: half of 4×)", () => {
-      expect(getLLPAdditionalFee(31, NORMAL, true)).toBe(400);
+    test("31 days late → 4× = ₹800", () => {
+      expect(getLLPAdditionalFee(31, NORMAL, true)).toBe(800);
     });
 
-    test("61 days late → 3× = ₹600 (Small LLP: half of 6×)", () => {
-      expect(getLLPAdditionalFee(61, NORMAL, true)).toBe(600);
+    test("61 days late → 6× = ₹1,200", () => {
+      expect(getLLPAdditionalFee(61, NORMAL, true)).toBe(1_200);
     });
 
-    test("91 days late → 5× = ₹1,000 (Small LLP: half of 10×)", () => {
-      expect(getLLPAdditionalFee(91, NORMAL, true)).toBe(1_000);
+    test("91 days late → 10× = ₹2,000", () => {
+      expect(getLLPAdditionalFee(91, NORMAL, true)).toBe(2_000);
     });
 
-    test("181 days late → 7.5× = ₹1,500 (Small LLP: half of 15×)", () => {
-      expect(getLLPAdditionalFee(181, NORMAL, true)).toBe(1_500);
+    test("181 days late → 15× = ₹3,000", () => {
+      expect(getLLPAdditionalFee(181, NORMAL, true)).toBe(3_000);
     });
 
-    test("361 days late → hard cap 25× = ₹5,000", () => {
-      expect(getLLPAdditionalFee(361, NORMAL, true)).toBe(5_000);
+    test("361 days late → 15x + ₹10/day = ₹3,000 + ₹10 = ₹3,010", () => {
+      expect(getLLPAdditionalFee(361, NORMAL, true, true)).toBe(3_010);
     });
 
-    test("400 days late → SAME hard cap 25× = ₹5,000 (no further accumulation)", () => {
-      expect(getLLPAdditionalFee(400, NORMAL, true)).toBe(5_000);
+    test("400 days late → 15x + ₹10/day = ₹3,000 + ₹400 = ₹3,400", () => {
+      expect(getLLPAdditionalFee(400, NORMAL, true, true)).toBe(3_400);
     });
   });
 });
@@ -916,9 +910,10 @@ describe("calculateLLPPenalty — end-to-end", () => {
     // But ₹10L exactly → is it ₹150 or ₹200? Boundary: ₹10L = ₹10,00,000
     // Slab: "₹5L to ₹10L → ₹150" — if ₹10L is EXCLUSIVE upper bound, ₹10L → ₹200
     // Audit says ₹150 for ₹10L → so ₹10L falls in the ₹5L–₹10L band (inclusive upper)
-    expect(result.total).toBe(5_200);
+    // normalFee = ₹200; additional = 15x200 + 40 days*10 = 3000 + 400 = 3400
+    expect(result.total).toBe(3_600);
     expect(result.normalFee).toBe(200);
-    expect(result.additionalFee).toBe(5_000); // 25×200
+    expect(result.additionalFee).toBe(3_400);
   });
 
   test("Other LLP, ₹10L contribution, 400 days late → ₹7,650", () => {
@@ -928,9 +923,9 @@ describe("calculateLLPPenalty — end-to-end", () => {
       isSmallLLP: false,
       form: "Form 11",
     });
-    expect(result.total).toBe(10_200);
+    expect(result.total).toBe(7_000);
     expect(result.normalFee).toBe(200);
-    expect(result.additionalFee).toBe(10_000); // 50×200
+    expect(result.additionalFee).toBe(6_800); // 30x200 + 40 days*20
   });
 
   test("Other LLP, ₹25L contribution, 0 days late → ₹400 only", () => {
@@ -953,8 +948,8 @@ describe("calculateLLPPenalty — end-to-end", () => {
       form: "Form 11",
     });
     expect(result.normalFee).toBe(400);
-    expect(result.additionalFee).toBe(400); // 1× (Small LLP 16–30 day band)
-    expect(result.total).toBe(800);
+    expect(result.additionalFee).toBe(800); // 2× (Small LLP 16–30 day band)
+    expect(result.total).toBe(1_200);
   });
 
   // Old wrong value check
@@ -1131,15 +1126,14 @@ describe("Regression guard — old wrong values must NOT appear", () => {
     expect(getOtherCompanyIncorporationFee(20_00_000)).toBe(66_000);
     expect(getOtherCompanyIncorporationFee(20_00_000)).not.toBe(400);
   });
-
-  test("Small LLP 400 days late was ₹1,680 — must now be ₹3,900", () => {
+  test("Small LLP 400 days late was ₹1,680 — must now be ₹3,600", () => {
     const result = calculateLLPPenalty({
       contribution: 10_00_000,
       delayDays: 400,
       isSmallLLP: true,
       form: "Form 11",
     });
-    expect(result.total).toBe(5_200);
+    expect(result.total).toBe(3_600);
     expect(result.total).not.toBe(1_680);
   });
 

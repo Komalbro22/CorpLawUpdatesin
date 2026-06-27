@@ -1,3 +1,5 @@
+import { calculateMCAFee } from '../calculatorUtils';
+
 export interface CompanyProfile {
   companyName: string
   cin?: string
@@ -188,35 +190,20 @@ export function getNormalFeeForTracker(
 ): number {
   const code = formCode.toUpperCase().trim();
   
-  // Forms with zero normal fee
-  if (['DIR-3-KYC', 'DIR-3 KYC', 'RBI-FLA', 'FORM-3CD', 'ITR-6', 'BOARD-MEETINGS', 'MSME-1', 'MBP-1'].includes(code)) {
+  // Non-MCA forms with zero base fee
+  if (['RBI-FLA', 'FORM-3CD', 'ITR-6', 'BOARD-MEETINGS'].includes(code)) {
     return 0;
   }
 
-  // OPC / Small company concessional fee structure
-  const isSmallOrOpc = companyType === 'opc' || companyType === 'small';
-  
-  let normalFee = 0;
-  if (isSmallOrOpc) {
-    if (capital < 100000) normalFee = 50;
-    else if (capital < 500000) normalFee = 100;
-    else if (capital < 2500000) normalFee = 150;
-    else normalFee = 200;
-  } else {
-    if (capital < 100000) normalFee = 200;
-    else if (capital < 500000) normalFee = 300;
-    else if (capital < 2500000) normalFee = 400;
-    else if (capital < 10000000) normalFee = 500;
-    else normalFee = 600;
-  }
+  // Delegate to core fee engine for all MCA forms
+  const res = calculateMCAFee({
+    formSlug: formCode.toLowerCase().replace(/ /g, '-'),
+    companyType,
+    capital,
+    delayDays: 0
+  });
 
-  // Section 8 company discount: 1/3rd of the standard fee, rounded to nearest 50 (minimum 50)
-  if (companyType === 'section8') {
-    normalFee = Math.round(normalFee / 3 / 50) * 50;
-    if (normalFee < 50) normalFee = 50;
-  }
-
-  return normalFee;
+  return res.baseFee;
 }
 
 export function calculateLateFeeForTracker(
@@ -224,73 +211,35 @@ export function calculateLateFeeForTracker(
   daysOverdue: number,
   normalFee: number,
   turnover: number,
-  dbFlatFee?: number | null
+  dbFlatFee?: number | null,
+  companyType: string = 'private',
+  capital: number = 0
 ): number {
   if (daysOverdue <= 0) return 0;
 
   const code = formCode.toUpperCase().trim();
 
-  // 1. Annual returns & Financial statements have flat ₹100/day
-  if (['MGT-7', 'MGT-7A', 'AOC-4', 'AOC-4-CFS', 'AOC-4 CFS', 'AOC-4-XBRL', 'AOC-4 XBRL'].includes(code)) {
-    return daysOverdue * 100;
-  }
+  // Non-MCA forms with specific hardcoded late fee logic
+  if (code === 'RBI-FLA') return 7500;
+  if (code === 'FORM-3CD') return Math.min(Math.round(turnover * 0.005), 150000);
+  if (code === 'ITR-6') return 5000;
+  if (code === 'BOARD-MEETINGS') return 10000;
+  if (code === 'MSME-1') return 0; // Handled by adjudication
+  if (code === 'MBP-1') return 0;
 
-  // 2. DIR-3 KYC flat penalty
-  if (code === 'DIR-3-KYC' || code === 'DIR-3 KYC') {
-    return 5000;
-  }
-
-  // 3. RBI FLA Return flat late submission fee
-  if (code === 'RBI-FLA') {
-    return 7500;
-  }
-
-  // 4. Tax Audit Report (Form 3CD): 0.5% of turnover, max ₹1.5 Lakh
-  if (code === 'FORM-3CD') {
-    const calculatedPenalty = Math.round(turnover * 0.005);
-    return Math.min(calculatedPenalty, 150000);
-  }
-
-  // 5. Income Tax Return (ITR-6/ITR-7): Flat ₹5,000
-  if (code === 'ITR-6') {
-    return 5000;
-  }
-
-  // 6. Board Meetings Compliance: Flat ₹10,000
-  if (code === 'BOARD-MEETINGS') {
-    return 10000;
-  }
-
-  // 7. MSME-1 has no portal late fee
-  if (code === 'MSME-1') {
-    return 0;
-  }
-
-  // 8. MBP-1 has no portal late fee
-  if (code === 'MBP-1') {
-    return 0;
-  }
-
-  // 9. If database defines a flat late fee (e.g. STK-2 or other future forms), prioritize it
   if (dbFlatFee && dbFlatFee > 0) {
     return dbFlatFee;
   }
 
-  // 10. General forms use the multiplier system (2x to 12x of normal fee)
-  let multiplier = 1;
-  if (daysOverdue <= 30) {
-    multiplier = 2;
-  } else if (daysOverdue <= 60) {
-    multiplier = 4;
-  } else if (daysOverdue <= 90) {
-    multiplier = 6;
-  } else if (daysOverdue <= 180) {
-    multiplier = 10;
-  } else {
-    multiplier = 12;
-  }
+  // Delegate to core fee engine for MCA forms
+  const res = calculateMCAFee({
+    formSlug: formCode.toLowerCase().replace(/ /g, '-'),
+    companyType,
+    capital,
+    delayDays: daysOverdue
+  });
 
-  return normalFee * multiplier;
+  return res.lateFee;
 }
 
 export function calculateDeadlinesFromDB(
@@ -624,7 +573,9 @@ export function calculateDeadlinesFromDB(
       daysOverdue,
       normalFee,
       profile.turnover,
-      form.flat_late_fee
+      form.flat_late_fee,
+      profile.companyType,
+      profile.paidUpCapital
     )
 
     // CCFS calculation

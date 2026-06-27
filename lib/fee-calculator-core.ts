@@ -69,7 +69,7 @@ export function getLLPNormalFee(contribution: number): number {
   if (contribution < 1000000) return 150;  // ₹5L ≤ x < ₹10L
   if (contribution < 2500000) return 200;  // ₹10L ≤ x < ₹25L
   if (contribution < 10000000) return 400; // ₹25L ≤ x < ₹1Cr
-  return 600;                               // ≥ ₹1Cr
+  return 600;                               // > ₹1Cr
 }
 
 export interface CalculationResult {
@@ -177,7 +177,7 @@ export function calculateFees(
 
     let late = 0
     if (delay > 0) {
-      late = getLLPAdditionalFee(delay, normalFee, isSmallLLP)
+      late = getLLPAdditionalFee(delay, normalFee, isSmallLLP, true)
     }
 
     return {
@@ -239,33 +239,44 @@ export function calculateFees(
 
 /**
  * LLP additional fee (late fee) calculation per LLP Second Amendment Rules, 2022.
- * Beyond 360 days the fee is capped as a fixed amount — it does NOT continue to
- * accumulate per day after 360 days.
+ * Beyond 360 days, Forms 8 and 11 continue to accumulate a per-day fee, whereas
+ * other forms are capped at 25x or 50x.
  *
  * @param delayDays  Number of days past the due date
  * @param normalFee  Normal filing fee for this LLP
  * @param isSmallLLP Whether this LLP qualifies as a Small LLP
+ * @param isForm8or11 Whether the form is Form 8 or Form 11
  */
-export function getLLPAdditionalFee(delayDays: number, normalFee: number, isSmallLLP: boolean): number {
+export function getLLPAdditionalFee(delayDays: number, normalFee: number, isSmallLLP: boolean, isForm8or11: boolean = true): number {
   if (delayDays <= 0) return 0;
 
   if (isSmallLLP) {
-    if (delayDays <= 15)  return normalFee * 1;
-    if (delayDays <= 30)  return normalFee * 1;
-    if (delayDays <= 60)  return normalFee * 2;
-    if (delayDays <= 90)  return normalFee * 3;
-    if (delayDays <= 180) return normalFee * 5;
-    if (delayDays <= 360) return Math.round(normalFee * 7.5);
-    // Beyond 360 days — hard cap at 25× (fixed, not per-day)
-    return normalFee * 25;
-  } else {
     if (delayDays <= 15)  return normalFee * 1;
     if (delayDays <= 30)  return normalFee * 2;
     if (delayDays <= 60)  return normalFee * 4;
     if (delayDays <= 90)  return normalFee * 6;
     if (delayDays <= 180) return normalFee * 10;
     if (delayDays <= 360) return normalFee * 15;
-    // Beyond 360 days — hard cap at 50× (fixed, not per-day)
-    return normalFee * 50;
+    
+    // Beyond 360 days
+    if (isForm8or11) {
+       return (normalFee * 15) + ((delayDays - 360) * 10);
+    } else {
+       return normalFee * 25;
+    }
+  } else {
+    if (delayDays <= 15)  return normalFee * 1;
+    if (delayDays <= 30)  return normalFee * 4;
+    if (delayDays <= 60)  return normalFee * 8;
+    if (delayDays <= 90)  return normalFee * 12;
+    if (delayDays <= 180) return normalFee * 20;
+    if (delayDays <= 360) return normalFee * 30;
+    
+    // Beyond 360 days
+    if (isForm8or11) {
+       return (normalFee * 30) + ((delayDays - 360) * 20);
+    } else {
+       return normalFee * 50;
+    }
   }
 }

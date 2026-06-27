@@ -24,7 +24,7 @@ export default function MSMEFAQ() {
     },
     {
       q: 'What happens if a company fails to report MSME dues in Form MSME-1?',
-      a: 'Failure to file Form MSME-1 detailing outstanding dues to micro and small enterprises attracts penalties under Section 450 of the Companies Act, which can result in a fine of up to ₹10,000, and a further fine up to ₹1,000 for every day the default continues.'
+      a: 'Failure to file Form MSME-1 detailing outstanding dues attracts severe penalties under Section 405(4) of the Companies Act. The company and every officer in default are liable to a base penalty of ₹20,000 plus ₹1,000 for every day the default continues, subject to a maximum of ₹3,00,000.'
     }
   ]
 

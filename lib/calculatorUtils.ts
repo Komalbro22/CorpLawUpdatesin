@@ -189,6 +189,10 @@ export function calculateMCAFee(params: CalculatorParams): CalculatorResult {
       warningText = 'Stamp duty shown is indicative. The MCA portal calculates exact duty at time of filing.';
     }
 
+    // Add standard e-form filing fee to the differential MOA fee
+    const eformFee = getNormalFilingFee(newCapital);
+    baseFee += eformFee;
+
     return { baseFee, lateFee, stampDuty, adValoremFee, total: baseFee + lateFee + stampDuty, warningText };
   }
 
@@ -232,36 +236,37 @@ export function calculateMCAFee(params: CalculatorParams): CalculatorResult {
         stampDuty: 0,
         adValoremFee: 0,
         total: 0,
-        warningText: 'Condonation of delay under Section 87 required. Delay exceeds 90 days — cannot compute fee. Application must be made to the CLB/NCLT.',
+        warningText: 'Condonation of delay under Section 87 required. Delay exceeds 90 days — cannot compute fee. Application must be made to the Central Government.',
       };
     } else if (delayDays <= 30) {
-      // 1–30 days: 3× normal fee
-      lateFee = baseFee * 3;
-      warningText = `Charge filing delay ${delayDays} days (1–30 day window) — 3× normal fee = ${formatCurrency(lateFee)}.`;
-    } else if (delayDays <= 60) {
-      // 31–60 days: 6× normal fee OR 0.025% of charge amount (whichever is higher)
-      const multiplierFee = baseFee * 6;
-      if (hasAdValorem && chargeAmount > 0) {
-        adValoremFee = Math.ceil(chargeAmount * 0.00025);
-        lateFee = Math.max(multiplierFee, adValoremFee);
-        warningText = `Delay ${delayDays} days (31–60 day window). 6× fee = ${formatCurrency(multiplierFee)}; 0.025% of charge = ${formatCurrency(adValoremFee)}. Higher of the two applies: ${formatCurrency(lateFee)}.`;
-      } else {
-        lateFee = multiplierFee;
-        warningText = `Delay ${delayDays} days (31–60 day window) — 6× normal fee = ${formatCurrency(lateFee)}.`;
-      }
+      // Delay 1-30 days (Days 31-60 from creation)
+      const multiplier = isOpcSmall ? 3 : 6;
+      lateFee = baseFee * multiplier;
+      const typeStr = isOpcSmall ? 'Small/OPC' : 'Other';
+      warningText = `Charge filing delay ${delayDays} days (1–30 day window) — ${multiplier}× normal fee for ${typeStr} = ${formatCurrency(lateFee)}.`;
     } else {
-      // 61–90 days: 6× normal fee OR 0.05% of charge amount (whichever is higher)
-      const multiplierFee = baseFee * 6;
+      // Delay 31-90 days (Days 61-120 from creation)
+      const multiplier = isOpcSmall ? 3 : 6;
+      const multiplierFee = baseFee * multiplier;
+      
       if (hasAdValorem && chargeAmount > 0) {
-        adValoremFee = Math.ceil(chargeAmount * 0.0005);
-        lateFee = Math.max(multiplierFee, adValoremFee);
-        warningText = `Delay ${delayDays} days (61–90 day window). 6× fee = ${formatCurrency(multiplierFee)}; 0.05% of charge = ${formatCurrency(adValoremFee)}. Higher of the two applies: ${formatCurrency(lateFee)}.`;
+        const adValoremPercent = isOpcSmall ? 0.00025 : 0.0005; // 0.025% vs 0.05%
+        const maxCap = isOpcSmall ? 100000 : 500000;
+        
+        adValoremFee = Math.ceil(chargeAmount * adValoremPercent);
+        adValoremFee = Math.min(adValoremFee, maxCap); // Apply statutory cap
+        
+        lateFee = multiplierFee + adValoremFee;
+        
+        const typeStr = isOpcSmall ? 'Small/OPC' : 'Other';
+        warningText = `Delay ${delayDays} days (31–90 day window) for ${typeStr}. ${multiplier}× fee = ${formatCurrency(multiplierFee)} PLUS ad-valorem fee of ${adValoremPercent * 100}% = ${formatCurrency(adValoremFee)} (Cap: ${formatCurrency(maxCap)}). Total late fee: ${formatCurrency(lateFee)}.`;
       } else {
         lateFee = multiplierFee;
-        warningText = `Delay ${delayDays} days (61–90 day window) — 6× normal fee = ${formatCurrency(lateFee)}.`;
+        const typeStr = isOpcSmall ? 'Small/OPC' : 'Other';
+        warningText = `Delay ${delayDays} days (31–90 day window) for ${typeStr} — ${multiplier}× normal fee = ${formatCurrency(lateFee)}.`;
       }
     }
-    return { baseFee, lateFee, stampDuty, adValoremFee, total: baseFee + lateFee + adValoremFee, warningText };
+    return { baseFee, lateFee, stampDuty, adValoremFee, total: baseFee + lateFee, warningText };
   }
   // 4. Annual Returns & Financial Statements: ₹100/day (no Table B multiplier)
   //    Forms: MGT-7, MGT-7A, AOC-4, AOC-4 CFS, AOC-4 XBRL, AOC-4 NBFC (Ind AS)
@@ -428,13 +433,14 @@ export interface ChargeFeeParams {
   capital: number;
   delayDays: number;
   chargeAmount?: number;
+  isSmallOrOpc?: boolean;
 }
 
 export function calculateChargeFee(params: ChargeFeeParams) {
   const formSlug = params.form.toLowerCase().replace(/ /g, '-');
   const res = calculateMCAFee({
     formSlug,
-    companyType: 'private',
+    companyType: params.isSmallOrOpc ? 'small' : 'private',
     capital: params.capital,
     delayDays: params.delayDays,
     chargeAmount: params.chargeAmount || 0,

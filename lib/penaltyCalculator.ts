@@ -138,13 +138,14 @@ export function calculateCompanyFee(params: CompanyFeeParams): CompanyCalculatio
     'AOC-4-XBRL': { companyBase: 10000, companyPerDay: 100, companyMax: 200000, officerBase: 10000, officerPerDay: 100, officerMax: 50000 },
     'AOC-4-CFS': { companyBase: 10000, companyPerDay: 100, companyMax: 200000, officerBase: 10000, officerPerDay: 100, officerMax: 50000 },
     'DIR-3-KYC': { officerBase: 5000, officerMax: 5000 },
-    'DPT-3': { companyBase: 5000, companyPerDay: 500, officerBase: 5000, officerPerDay: 500 },
-    'BEN-2': { companyBase: 1000000, companyPerDay: 1000, companyMax: 5000000, officerBase: 1000000, officerPerDay: 1000, officerMax: 5000000 },
-    'INC-20A': { companyBase: 50000, companyMax: 50000, officerBase: 1000, officerPerDay: 1000, officerMax: 100000 },
+    'DIR-12': { companyBase: 50000, companyPerDay: 500, companyMax: 300000, officerBase: 50000, officerPerDay: 500, officerMax: 100000 },
+    'DPT-3': { companyBase: 10000, companyPerDay: 1000, companyMax: 200000, officerBase: 10000, officerPerDay: 1000, officerMax: 50000 },
+    'BEN-2': { companyBase: 100000, companyPerDay: 500, companyMax: 500000, officerBase: 25000, officerPerDay: 200, officerMax: 100000 },
+    'INC-20A': { companyBase: 50000, companyMax: 50000, officerBase: 0, officerPerDay: 1000, officerMax: 100000 },
     'INC-22': { companyBase: 1000, companyPerDay: 1000, companyMax: 100000, officerBase: 1000, officerPerDay: 1000, officerMax: 100000 },
-    'PAS-3': { companyBase: 1000, companyPerDay: 1000, companyMax: 100000, officerBase: 1000, officerPerDay: 1000, officerMax: 100000 },
-    'MGT-14': { companyBase: 100000, companyPerDay: 500, companyMax: 2500000, officerBase: 50000, officerPerDay: 500, officerMax: 500000 },
-    'MSME-1': { companyBase: 25000, companyPerDay: 500, companyMax: 300000, officerBase: 25000, officerPerDay: 500, officerMax: 300000 },
+    'PAS-3': { companyBase: 0, companyPerDay: 1000, companyMax: 100000, officerBase: 0, officerPerDay: 1000, officerMax: 100000 },
+    'MGT-14': { companyBase: 10000, companyPerDay: 100, companyMax: 200000, officerBase: 10000, officerPerDay: 100, officerMax: 50000 },
+    'MSME-1': { companyBase: 20000, companyPerDay: 1000, companyMax: 300000, officerBase: 20000, officerPerDay: 1000, officerMax: 300000 },
     'PAS-6': { companyBase: 10000, companyPerDay: 1000, companyMax: 200000, officerBase: 10000, officerPerDay: 1000, officerMax: 50000 },
     'SH-7': { companyBase: 1000, companyPerDay: 500, companyMax: 500000, officerBase: 1000, officerPerDay: 500, officerMax: 500000 },
     'ADT-3': { officerBase: 50000, officerPerDay: 500, officerMax: 200000 },
@@ -178,8 +179,8 @@ export function calculateCompanyFee(params: CompanyFeeParams): CompanyCalculatio
   // Section 446B small company / OPC / startup relief (50% penalty reduction)
   const isSmallCompanyReliefApplied = ['Small', 'OPC'].includes(companyType);
   if (isSmallCompanyReliefApplied) {
-    companyPenalty = Math.floor(companyPenalty / 2);
-    officerPenalty = Math.floor(officerPenalty / 2);
+    companyPenalty = Math.min(Math.floor(companyPenalty / 2), 200000);
+    officerPenalty = Math.min(Math.floor(officerPenalty / 2), 100000);
   }
 
   return {
@@ -472,8 +473,8 @@ export function calculateMsme1Penalty(params: Msme1Params): Msme1Result {
 
   // Section 446B relief
   if (isSmallCompany) {
-    companyPenalty = Math.floor(companyPenalty / 2);
-    officerPenalty = Math.floor(officerPenalty / 2);
+    companyPenalty = Math.min(Math.floor(companyPenalty / 2), 200000);
+    officerPenalty = Math.min(Math.floor(officerPenalty / 2), 100000);
   }
 
   return {

@@ -25,6 +25,22 @@ export default function CompanyFAQ() {
     {
       q: 'What is the penalty for late filing of CHG-1?',
       a: 'If CHG-1 (Creation of Charge) is delayed beyond 30 days, an ad valorem fee is charged. This fee is a percentage of the secured amount (0.05% for normal companies, up to a cap of ₹5,00,000) on top of the standard late fee multiplier.'
+    },
+    {
+      q: 'What are the penalties for late filing of MGT-14?',
+      a: 'Post the Companies (Amendment) Act, 2020, the penalty for MGT-14 under Section 117(2) was drastically reduced. The company faces a base penalty of ₹10,000 plus ₹100 per day (capped at ₹2,00,000). The officer in default also faces ₹10,000 plus ₹100 per day (capped at ₹50,000).'
+    },
+    {
+      q: 'What is the penalty for not filing DIR-12 on time?',
+      a: 'DIR-12 falls under the Chapter XI residuary penalty (Section 172). Both the company and the officer in default are liable to a base penalty of ₹50,000 plus ₹500 per day. The maximum cap is ₹3,00,000 for the company and ₹1,00,000 for the officer.'
+    },
+    {
+      q: 'How does the Section 446B halving relief work?',
+      a: 'Section 446B provides a massive 50% discount on statutory adjudication penalties (like Section 450) for Small Companies, One Person Companies (OPCs), and Startups. The maximum caps are also halved.'
+    },
+    {
+      q: 'What is the penalty for BEN-2 after the 2020 decriminalization?',
+      a: 'Under Section 90(11), the penalty for BEN-2 is a base of ₹1,00,000 plus ₹500/day for the company (max ₹5,00,000), and ₹25,000 plus ₹200/day for the officer in default (max ₹1,00,000).'
     }
   ]
 

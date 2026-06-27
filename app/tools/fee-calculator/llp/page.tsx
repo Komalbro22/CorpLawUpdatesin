@@ -73,7 +73,7 @@ function LLPSEO() {
             Slab-Multiplier Late Fee (from 1 April 2022)
           </h3>
           <p className="text-sm text-red-700 dark:text-red-300">
-            Under LLP 2nd Amendment Rules 2022, Form 8 and Form 11 attract multiplier-based additional fees ranging from 1× to 50× (other LLP) or 25× (Small LLP) of the normal fee. Beyond 360 days, the fee is capped at a fixed amount.
+            For <strong>Small LLPs</strong>, the late fee multipliers are significantly lower (1×, 2×, 4×, 6×, 10×, 15×). Beyond 360 days, Form 8 and 11 attract 15× normal fee plus ₹10 per day. For <strong>Other LLPs</strong>, the multipliers scale steeper (1×, 4×, 8×, 12×, 20×, 30×). Beyond 360 days, Form 8 and 11 attract 30× normal fee plus ₹20 per day. Note: The normal fee is <strong>not</strong> halved for Small LLPs.
           </p>
         </div>
       </div>

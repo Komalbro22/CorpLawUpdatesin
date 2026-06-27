@@ -7,20 +7,20 @@ export default function LLPFAQ() {
 
   const faqs = [
     {
-      q: 'What is the penalty for filing LLP Form 11 late?',
-      a: 'If an LLP fails to file Form 11 (Annual Return) by the due date (usually 30th May), a strict flat penalty of ₹100 per day is levied for every day of delay. There is no upper limit or cap to this penalty.'
+      q: 'What is the penalty for filing LLP Form 11 or Form 8 late?',
+      a: 'Since 1 April 2022, the flat ₹100/day penalty was abolished. LLPs now pay a multiplier-based additional fee (ranging from 1× to 30× the normal fee depending on the delay). For Form 8 and 11 specifically, if the delay exceeds 360 days, you pay the maximum multiplier PLUS a daily penalty (₹10/day for Small LLPs, ₹20/day for Other LLPs).'
     },
     {
-      q: 'How much is the penalty for late filing of LLP Form 8?',
-      a: 'Similar to Form 11, delayed filing of Form 8 (Statement of Account & Solvency) attracts a flat penalty of ₹100 per day. This applies uniformly to all LLPs regardless of their capital contribution.'
+      q: 'Are normal filing fees halved for Small LLPs?',
+      a: 'No, the normal filing fee for general forms like Form 8 and Form 11 is NOT halved for Small LLPs. It is based strictly on the contribution slab for all LLPs (ranging from ₹50 to ₹600). However, Small LLPs enjoy a much lower multiplier schedule for late fees.'
     },
     {
       q: 'Is there a maximum cap on LLP late filing penalties?',
-      a: 'No, unlike companies where general forms have a maximum multiplier cap (up to 12x), LLP late fees accumulate continuously at ₹100/day indefinitely.'
+      a: 'For forms other than Form 8 and Form 11, the late fee is capped at 25× the normal fee for Small LLPs and 50× for Other LLPs. However, for Form 8 and Form 11, the penalty accumulates daily without an upper cap beyond 360 days.'
     },
     {
-      q: 'Can the ROC waive the LLP late filing fee of ₹100 per day?',
-      a: 'The ₹100 per day additional fee is statutorily fixed under the LLP Act. The ROC does not have the discretionary power to waive this fee. Waivers are only possible if the government announces a special amnesty scheme like the LLP Settlement Scheme.'
+      q: 'How do I know if my LLP is a Small LLP?',
+      a: 'A Small LLP is one where the contribution does not exceed ₹25 Lakhs AND the turnover for the immediately preceding financial year does not exceed ₹40 Lakhs. If you meet both conditions, your late fee multipliers are significantly reduced.'
     },
     {
       q: 'What is the fee for DIR-3 KYC for Designated Partners?',

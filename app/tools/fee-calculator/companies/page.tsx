@@ -133,6 +133,27 @@ function CompanySEO() {
       <p className="text-[#64748B] dark:text-slate-300">
         Forms like AOC-4 (Financial Statements) and MGT-7 (Annual Return) do not follow the standard multiplier penalty. Instead, they attract an uncapped penalty of <strong>₹100 per day</strong>. A delay of one year can cost the company ₹36,500 in penalties alone per form.
       </p>
+
+      <h3 className="text-xl font-bold text-[#0F172A] dark:text-white mt-8 mb-4">
+        The 2020 Decriminalization & Statutory Penalties (MGT-14, DIR-12, BEN-2)
+      </h3>
+      <p className="text-[#64748B] dark:text-slate-300 mb-4">
+        Following the Companies (Amendment) Act, 2020, severe criminal fines were converted into civil adjudication penalties. Our engine calculates these exact statutory liabilities. For example:
+      </p>
+      <ul className="list-disc pl-6 space-y-2 text-[#64748B] dark:text-slate-300 mb-6">
+        <li><strong>MGT-14 (Resolutions):</strong> The devastating pre-2020 fines (up to ₹25 Lakhs) were slashed to a flat <strong>₹10,000 base + ₹100/day</strong> (capped at ₹2,00,000 for the company and ₹50,000 for the officer) under the amended Section 117(2).</li>
+        <li><strong>DIR-12 (Directors):</strong> Governed by the Chapter XI residuary penalty (Section 172), delays attract a base penalty of <strong>₹50,000 + ₹500/day</strong> for both the company and the officer in default.</li>
+        <li><strong>BEN-2 (Significant Beneficial Owner):</strong> Under Section 90(11), delays incur <strong>₹1,00,000 + ₹500/day</strong> for the company and <strong>₹25,000 + ₹200/day</strong> for the officer.</li>
+      </ul>
+
+      <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-900/30 border border-green-200 dark:border-green-800 rounded-xl p-6 mt-8 mb-8">
+        <h3 className="text-lg font-bold text-green-900 dark:text-green-300 mb-2 flex items-center gap-2">
+          <span className="text-2xl">🛡️</span> Section 446B Halving Relief
+        </h3>
+        <p className="text-green-800 dark:text-green-400 text-sm leading-relaxed">
+          The Companies Act provides immense relief to <strong>Small Companies, One Person Companies (OPCs), and Startups</strong> under Section 446B. If your company falls into these categories, any statutory adjudication penalty (e.g., Section 450 for DPT-3, Section 172 for DIR-12) is <strong>automatically slashed by 50%</strong>. Our calculator natively applies this 50% discount and halves the maximum penalty caps when you select "Small" or "OPC" as your company type.
+        </p>
+      </div>
     </article>
   )
 }
