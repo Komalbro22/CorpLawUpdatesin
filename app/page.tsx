@@ -43,21 +43,14 @@ const categoryMeta = [
   { id: 'FEMA', label: 'FEMA', Icon: Globe2, bg: 'from-teal-600 to-teal-700', ring: 'ring-teal-500/20', desc: 'Foreign Exchange Management' },
 ]
 
-export default async function HomePage({ searchParams }: { searchParams: { sort?: string } }) {
-  const sort = searchParams?.sort || 'newest'
-
+export default async function HomePage() {
   const latestQuery = supabase
     .from('updates')
     .select(UPDATE_LIST_COLUMNS)
     .not('published_at', 'is', null)
     .lte('published_at', new Date().toISOString())
+    .order('published_at', { ascending: false })
     .limit(9)
-
-  if (sort === 'views') {
-    latestQuery.order('views', { ascending: false }).order('published_at', { ascending: false })
-  } else {
-    latestQuery.order('published_at', { ascending: false })
-  }
 
   const [featuredRes, latestRes, popularRes, updatesCountRes, viewsRes] = await Promise.all([
     supabase
@@ -241,16 +234,7 @@ export default async function HomePage({ searchParams }: { searchParams: { sort?
         <section className="py-16 md:py-20 px-4 max-w-7xl mx-auto">
           <div className="mb-8 md:mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between" id="updates">
             <div>
-              <div className="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.18em]">
-                <Link href="/?sort=newest#updates" className={`transition-colors ${sort !== 'views' ? 'text-amber-600 dark:text-amber-500' : 'text-slate-400 hover:text-amber-600'}`}>
-                  Newest first
-                </Link>
-                <span className="text-slate-300 dark:text-slate-700">|</span>
-                <Link href="/?sort=views#updates" className={`transition-colors flex items-center gap-1 ${sort === 'views' ? 'text-amber-600 dark:text-amber-500' : 'text-slate-400 hover:text-amber-600'}`}>
-                  Most viewed
-                </Link>
-              </div>
-              <h2 className="mt-2 text-2xl md:text-3xl font-bold text-navy font-heading">
+              <h2 className="text-2xl md:text-3xl font-bold text-navy font-heading">
                 Latest updates
               </h2>
               <p className="mt-2 text-slate-500 text-sm md:text-base">
