@@ -83,15 +83,15 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
                 </h3>
 
                 {showExcerpt && (
-                    <p className="text-slate-500 dark:text-slate-400 text-sm mb-4 line-clamp-2 leading-relaxed">
+                    <p className="text-slate-500 dark:text-slate-500 text-sm mb-4 line-clamp-2 leading-relaxed">
                         {update.summary}
                     </p>
                 )}
 
-                <div className="mt-auto flex items-end justify-between gap-4 border-t border-slate-100/80 dark:border-slate-800 pt-3 text-xs text-slate-400 dark:text-slate-500">
+                <div className="mt-auto flex items-end justify-between gap-4 border-t border-slate-100/80 dark:border-slate-800 pt-3 text-xs text-slate-500 dark:text-slate-500">
                     <div className="min-w-0 flex flex-col gap-0.5">
                         {update.source_name && (
-                            <p className="truncate text-[11px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
+                            <p className="truncate text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-500">
                                 {update.source_name}
                             </p>
                         )}
@@ -105,15 +105,15 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
                                 </span>
                             )}
                             {(update.views || 0) > 0 && (
-                                <span className="text-[10px] text-slate-400 whitespace-nowrap">
+                                <span className="text-[10px] text-slate-500 whitespace-nowrap">
                                     {update.views!.toLocaleString('en-IN')} views
                                 </span>
                             )}
                         </div>
                     </div>
                     <div className="flex shrink-0 items-center gap-2">
-                        <span className="flex items-center gap-1 whitespace-nowrap rounded-md bg-slate-50 dark:bg-slate-800 px-2 py-1 text-[11px] font-medium text-slate-500 dark:text-slate-400">
-                            <Clock className="w-3 h-3 text-slate-400" aria-hidden />
+                        <span className="flex items-center gap-1 whitespace-nowrap rounded-md bg-slate-50 dark:bg-slate-800 px-2 py-1 text-[11px] font-medium text-slate-500 dark:text-slate-500">
+                            <Clock className="w-3 h-3 text-slate-500" aria-hidden />
                             {update.reading_time || calculateReadingTime(update.content || update.summary || '')} min
                         </span>
                         <span className="hidden h-7 w-7 items-center justify-center rounded-md bg-slate-900 dark:bg-slate-800 text-white dark:text-slate-200 transition-colors group-hover:bg-amber-500 dark:group-hover:bg-amber-500 sm:flex">

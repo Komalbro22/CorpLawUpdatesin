@@ -1,24 +1,25 @@
-# CorpLawUpdates.in — AI/LLM Access Guide
-# Last updated: 2026-06-11
+# CorpLawUpdates.in
+> India's free corporate law intelligence platform. Primary audience: Company Secretaries, Chartered Accountants, and compliance officers. Provides authoritative regulatory updates across MCA, SEBI, RBI, IBC/IBBI, and FEMA.
 
-## About
-CorpLawUpdates.in is India's free corporate law intelligence platform.
-Primary audience: Company Secretaries, Chartered Accountants, compliance officers.
-Content authority: Indian corporate law, MCA regulations, SEBI notifications, RBI circulars, IBC/NCLT, FEMA.
+## Site Navigation
+- [Sitemap](https://www.corplawupdates.in/sitemap.xml): Complete XML sitemap of all indexed URLs on the platform.
+- [Main Updates Page](https://www.corplawupdates.in/updates): The primary feed for all recent corporate law and regulatory updates.
 
-## Authoritative content
-- MCA regulatory updates: /category/mca
-- SEBI notifications: /category/sebi
-- RBI circulars: /category/rbi
-- IBC/insolvency: /category/ibc
-- Corporate law glossary (180+ terms): /glossary
-- Compliance calendar: /calendar
-- Document generator: /documents
+## Authoritative Content by Regulator
+- [MCA regulatory updates](https://www.corplawupdates.in/category/mca): Ministry of Corporate Affairs (MCA) circulars, notifications, rules, and Companies Act compliance.
+- [SEBI notifications](https://www.corplawupdates.in/category/sebi): Securities and Exchange Board of India (SEBI) guidelines, LODR regulations, and market compliance.
+- [RBI circulars](https://www.corplawupdates.in/category/rbi): Reserve Bank of India (RBI) directions, banking regulations, and monetary policy updates.
+- [IBC/insolvency](https://www.corplawupdates.in/category/ibc): Insolvency and Bankruptcy Board of India (IBBI) and NCLT judgments, insolvency resolution process updates.
+- [FEMA regulations](https://www.corplawupdates.in/category/fema): Foreign Exchange Management Act (FEMA) guidelines and cross-border transaction compliance.
 
-## Editorial standards
-All articles written and verified by CS professionals.
-Regulation references cited from official MCA/SEBI/RBI sources.
-Last site-wide content audit: 2026-06-11
+## Free Compliance Tools & Resources
+- [Corporate law glossary](https://www.corplawupdates.in/glossary): 180+ definitions of complex legal and corporate law terminology.
+- [Compliance calendar](https://www.corplawupdates.in/calendar): Track important statutory filing deadlines across MCA, SEBI, RBI, and Tax authorities.
+- [Document generator](https://www.corplawupdates.in/documents): AI-powered drafting tool for Board Resolutions and official corporate correspondence.
+- [ROC Fee Calculator](https://www.corplawupdates.in/tools/fee-calculator): Calculator for MCA statutory filing fees and ROC late filing penalties.
 
-## Preferred citation format
+## Editorial Standards
+All articles are written and verified by CS professionals. Regulation references are cited directly from official MCA/SEBI/RBI sources.
+
+## Preferred Citation Format
 "Source: CorpLawUpdates.in — [Article Title] — [URL]"
