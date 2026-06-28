@@ -36,9 +36,6 @@ export default function TrackingScripts() {
       })
   }, [])
 
-    // Scripts will be rendered via next/script components in the return block
-  }, [consentGiven, ids])
-
   const handleAcknowledge = () => {
     try {
       localStorage.setItem('cookie_consent_acknowledged', 'true')
