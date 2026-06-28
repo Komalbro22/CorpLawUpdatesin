@@ -274,14 +274,21 @@ export default function UnifiedCalculator() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6 mb-10">
+      {/* WebMCP Declarative Form Annotations (Draft Spec: https://webmachinelearning.github.io/webmcp/) */}
+      <form 
+        className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6 mb-10"
+        toolname="calculate_roc_fee"
+        tooldescription="Calculate Ministry of Corporate Affairs (MCA) statutory filing fees and ROC late filing penalties based on form type and delay days."
+      >
         {/* Basic Inputs */}
         <div className="flex flex-col">
           <label className="text-sm font-medium text-slate-700 mb-2">Form Type</label>
           <select
+            name="form_slug"
             value={selectedSlug}
             onChange={e => setSelectedSlug(e.target.value)}
             className="w-full border border-slate-300 bg-white text-slate-900 rounded-[4px] px-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm"
+            toolparamdescription="The MCA form slug. Examples: mgt-7, aoc-4, dpt-3, dir-3kyc, adt-1, mgt-14, sh-7, pas-3, chg-1, msme-1"
           >
             {allForms.map(form => (
               <option key={form.slug} value={form.slug}>
@@ -294,10 +301,12 @@ export default function UnifiedCalculator() {
         <div className="flex flex-col">
           <label className="text-sm font-medium text-slate-700 mb-2">Company Type</label>
           <select
+            name="company_type"
             value={companyType}
             onChange={e => setCompanyType(e.target.value)}
             disabled={isSpice || isDir3Kyc || isDir3 || isStk2}
             className="w-full border border-slate-300 bg-white text-slate-900 rounded-[4px] px-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm disabled:bg-slate-50 disabled:text-slate-400"
+            toolparamdescription="Type of company: private, public, opc (One Person Company), or small (Small Company)."
           >
             <option value="private">Private Limited Company</option>
             <option value="public">Public Limited Company</option>
@@ -312,11 +321,13 @@ export default function UnifiedCalculator() {
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-medium">₹</span>
             <input
               type="number"
+              name="capital"
               min="0"
               value={capital}
               onChange={e => setCapital(Number(e.target.value))}
               disabled={isDir3Kyc || isDir3 || isStk2}
               className="w-full border border-slate-300 bg-white text-slate-900 rounded-[4px] pl-8 pr-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm disabled:bg-slate-50 disabled:text-slate-400"
+              toolparamdescription="Paid-up share capital of the company in Indian Rupees."
             />
           </div>
         </div>
@@ -325,11 +336,13 @@ export default function UnifiedCalculator() {
           <label className="text-sm font-medium text-slate-700 mb-2">Delay in filing (days)</label>
           <input
             type="number"
+            name="delay_days"
             min="0"
             value={delay}
             onChange={e => setDelay(Number(e.target.value))}
             disabled={isSpice || isDir3 || isStk2}
             className="w-full border border-slate-300 bg-white text-slate-900 rounded-[4px] px-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm disabled:bg-slate-50 disabled:text-slate-400"
+            toolparamdescription="The number of days the filing is delayed beyond the due date. Enter 0 if filing on time."
           />
         </div>
 
@@ -396,15 +409,17 @@ export default function UnifiedCalculator() {
             <label className="flex items-center space-x-3 cursor-pointer p-2 rounded hover:bg-slate-50 transition-colors">
               <input
                 type="checkbox"
+                name="is_repeat_offender"
                 checked={isRepeatOffender}
                 onChange={e => setIsRepeatOffender(e.target.checked)}
                 className="w-5 h-5 text-blue-600 border-slate-300 rounded focus:ring-blue-600"
+                toolparamdescription="Whether the company is a repeat offender."
               />
               <span className="text-sm font-medium text-slate-700">Apply higher fee (Repeat delay)</span>
             </label>
           </div>
         )}
-      </div>
+      </form>
 
       {/* Calculate Button (replaces live result section) */}
       <div className="mt-8 flex flex-col sm:flex-row gap-4">

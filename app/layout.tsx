@@ -17,6 +17,7 @@ import AnnouncementBar from '@/components/AnnouncementBar'
 import Script from 'next/script'
 import JsonLd from '@/components/JsonLd'
 import TrackingScripts from '@/components/TrackingScripts'
+import WebMCPRegistry from '@/components/WebMCPRegistry'
 
 
 import { themeScript } from '@/lib/theme-script'
@@ -164,6 +165,7 @@ export default async function RootLayout({
         <HideOnAdmin>
           <Analytics />
           <SpeedInsights />
+          <WebMCPRegistry />
         </HideOnAdmin>
 
         <Script

@@ -118,13 +118,20 @@ export default function LLPFeeCalc() {
         <strong>LLP Slabs:</strong> LLP late filing penalties are computed using the **LLP (Second Amendment) Rules, 2022** slab multiplier system, replacing the old flat ₹100/day rate.
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      {/* WebMCP Declarative Form Annotations (Draft Spec: https://webmachinelearning.github.io/webmcp/) */}
+      <form 
+        className="grid grid-cols-1 md:grid-cols-2 gap-5"
+        toolname="calculate_llp_fee"
+        tooldescription="Calculate statutory filing fees and flat late filing penalties for Limited Liability Partnerships (Form 8, Form 11, etc)."
+      >
         <div className="space-y-1.5 md:col-span-2">
           <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Form Type</label>
           <select 
+            name="form_id"
             className="w-full p-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-navy focus:border-navy outline-none transition-all text-slate-900 dark:text-slate-100" 
             value={formId} 
             onChange={(e) => setFormId(e.target.value as 'Form-8' | 'Form-11')}
+            toolparamdescription="The LLP form type, such as Form-8 or Form-11."
           >
             <option value="Form-8">Form 8 — Statement of Account & Solvency</option>
             <option value="Form-11">Form 11 — Annual Return of LLP</option>
@@ -134,9 +141,11 @@ export default function LLPFeeCalc() {
         <div className="space-y-1.5">
           <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">LLP Classification</label>
           <select 
+            name="llp_type"
             className="w-full p-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-navy focus:border-navy outline-none transition-all text-slate-900 dark:text-slate-100" 
             value={llpType} 
             onChange={(e) => setLlpType(e.target.value as 'Regular' | 'Small')}
+            toolparamdescription="The classification of the LLP (Regular or Small)."
           >
             <option value="Regular">Regular LLP</option>
             <option value="Small">Small LLP (Contribution &le; ₹25L & Turnover &le; ₹40L)</option>
@@ -147,10 +156,12 @@ export default function LLPFeeCalc() {
           <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Number of Designated Partners (DPs)</label>
           <input 
             type="number" 
+            name="dp_count"
             min="2"
             className="w-full p-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-navy focus:border-navy outline-none transition-all text-slate-900 dark:text-slate-100" 
             value={dpCount} 
             onChange={(e) => setDpCount(e.target.value)} 
+            toolparamdescription="Number of designated partners (DPs) in the LLP."
           />
         </div>
 
@@ -158,10 +169,12 @@ export default function LLPFeeCalc() {
           <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Total Contribution of LLP (₹)</label>
           <input 
             type="number" 
+            name="contribution"
             min="0"
             className="w-full p-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-navy focus:border-navy outline-none transition-all text-slate-900 dark:text-slate-100" 
             value={contribution} 
             onChange={(e) => setContribution(e.target.value)} 
+            toolparamdescription="Total contribution amount of the LLP in Rupees."
           />
         </div>
 
@@ -169,14 +182,16 @@ export default function LLPFeeCalc() {
           <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Delay in Filing (Days)</label>
           <input 
             type="number" 
+            name="delay"
             min="0"
             className="w-full p-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-navy focus:border-navy outline-none transition-all text-slate-900 dark:text-slate-100" 
             value={delay} 
             onChange={(e) => setDelay(e.target.value)} 
+            toolparamdescription="Delay in filing in days past the statutory due date."
           />
           <p className="text-xs text-slate-500 mt-1">Days past the statutory due date (30th May for F-11, 30th Oct for F-8).</p>
         </div>
-      </div>
+      </form>
 
       <div className="mt-6 flex flex-col sm:flex-row gap-4">
         <button 

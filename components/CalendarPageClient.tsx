@@ -782,15 +782,24 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
             </button>
           </div>
           
-          <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 w-full sm:w-auto">
+          {/* WebMCP Declarative Form Annotations (Draft Spec: https://webmachinelearning.github.io/webmcp/) */}
+          <form 
+            onSubmit={(e) => e.preventDefault()}
+            className="flex flex-wrap sm:flex-nowrap items-center gap-3 w-full sm:w-auto"
+            toolname="search_compliance_calendar"
+            tooldescription="Search and filter the corporate compliance calendar by form name, regulator, or keyword."
+          >
             <input 
               type="text"
+              name="search_query"
               placeholder="Search forms or compliance..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="flex-1 sm:w-64 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-amber-400 outline-none"
+              toolparamdescription="Search keyword to filter compliance deadlines."
             />
             <button
+              type="button"
               onClick={() => setFilterMode(m => m === 'all' ? 'this_week' : 'all')}
               className={`px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition-colors ${
                 filterMode === 'this_week' ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'border border-slate-300 text-slate-600 hover:bg-slate-50'
@@ -798,7 +807,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
             >
               🔥 Due This Week
             </button>
-          </div>
+          </form>
         </div>
 
         {entries.length === 0 ? (

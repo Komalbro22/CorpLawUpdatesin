@@ -39,7 +39,13 @@ export default function DocumentIntentSearch() {
       
       {/* Search box */}
       <div className="relative">
-        <div className="flex gap-2">
+        {/* WebMCP Declarative Form Annotations (Draft Spec: https://webmachinelearning.github.io/webmcp/) */}
+        <form 
+          onSubmit={(e) => { e.preventDefault(); handleSearch(); }}
+          className="flex gap-2"
+          toolname="search_legal_document_templates"
+          tooldescription="Search and generate AI-powered legal document drafts, such as Board Resolutions or Commercial Agreements."
+        >
           <div className="flex-1 relative">
             <span className="absolute left-4 top-1/2 
                              -translate-y-1/2 text-xl">
@@ -47,6 +53,7 @@ export default function DocumentIntentSearch() {
             </span>
             <input
               type="text"
+              name="document_query"
               value={query}
               onChange={e => setQuery(e.target.value)}
               onKeyDown={e => {
@@ -60,6 +67,7 @@ export default function DocumentIntentSearch() {
                          text-sm focus:outline-none
                          focus:ring-2 focus:ring-amber-400
                          focus:border-transparent"
+              toolparamdescription="Describe the document you need, e.g., 'Board resolution for opening a bank account'."
             />
           </div>
           <button
@@ -81,7 +89,7 @@ export default function DocumentIntentSearch() {
               '→ Find'
             )}
           </button>
-        </div>
+        </form>
       </div>
 
       {/* Example queries */}

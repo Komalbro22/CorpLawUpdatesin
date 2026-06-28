@@ -130,21 +130,29 @@ export default function UpdatesClient({
                         <label htmlFor="search" className="block text-sm font-semibold text-navy dark:text-slate-200 mb-2">
                             Search
                         </label>
-                        <div className="relative mb-4">
+                        {/* WebMCP Declarative Form Annotations (Draft Spec: https://webmachinelearning.github.io/webmcp/) */}
+                        <form 
+                            onSubmit={(e) => e.preventDefault()}
+                            className="relative mb-4"
+                            toolname="filter_regulatory_updates"
+                            tooldescription="Filter corporate law regulatory updates by keywords or summary."
+                        >
                             <Search
                                 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none"
                                 aria-hidden
                             />
                             <input
                                 id="search"
+                                name="search_query"
                                 type="search"
                                 placeholder="Title or summary…"
                                 value={search}
                                 onChange={e => handleSearchInput(e.target.value)}
                                 autoComplete="off"
                                 className="w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold/30 text-sm text-navy dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-650 transition-shadow duration-200"
+                                toolparamdescription="Search keyword to filter updates."
                             />
-                        </div>
+                        </form>
                         <div className="flex flex-wrap gap-2 mb-2">
                             <span className="text-xs text-slate-500 dark:text-slate-400 self-center font-semibold uppercase tracking-wide w-full md:w-auto mb-1 md:mb-0">
                                 Quick filters
