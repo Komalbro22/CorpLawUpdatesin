@@ -20,7 +20,7 @@ import {
   TrendingUp,
 } from 'lucide-react'
 
-export const revalidate = 43200 // 12 hours
+export const revalidate = 86400 // 24 hours
 
 export const metadata: Metadata = {
   title: 'Corporate Law Updates India (2026) – SEBI, RBI, MCA Notifications & Circulars',

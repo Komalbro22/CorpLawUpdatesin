@@ -92,6 +92,8 @@ export default function SettingsPage() {
   const [error, setError] = useState('')
   const [indexNowLoading, setIndexNowLoading] = useState(false)
   const [indexNowResult, setIndexNowResult] = useState('')
+  const [revalidateLoading, setRevalidateLoading] = useState(false)
+  const [revalidateResult, setRevalidateResult] = useState('')
 
   async function handleIndexNowSubmit() {
     setIndexNowLoading(true)
@@ -116,6 +118,27 @@ export default function SettingsPage() {
       showToast('IndexNow submission failed', 'error')
     } finally {
       setIndexNowLoading(false)
+    }
+  }
+
+  async function handleRevalidateSubmit() {
+    setRevalidateLoading(true)
+    setRevalidateResult('')
+    try {
+      const res = await fetch('/api/admin/revalidate', { method: 'POST' })
+      const data = await res.json()
+      if (!res.ok) {
+        setRevalidateResult(data.error || 'Request failed')
+        showToast(data.error || 'Cache update failed', 'error')
+        return
+      }
+      setRevalidateResult('Popular section updated successfully!')
+      showToast('Homepage cache revalidated', 'success')
+    } catch {
+      setRevalidateResult('Failed - check console')
+      showToast('Cache revalidation failed', 'error')
+    } finally {
+      setRevalidateLoading(false)
     }
   }
 
@@ -272,6 +295,49 @@ export default function SettingsPage() {
         </div>
         )
       })}
+
+      {/* Homepage Cache Management */}
+      <div className="admin-card overflow-hidden">
+        <div className="bg-slate-50/50 border-b border-white/60 px-6 py-4 flex items-center gap-3">
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 border border-white/60 text-slate-700 shrink-0">
+            <Search className="w-4 h-4" aria-hidden />
+          </span>
+          <h2 className="font-heading font-bold text-slate-900">Homepage Cache Management</h2>
+        </div>
+        <div className="px-6 py-5 space-y-4">
+          <p className="text-sm text-slate-700 leading-relaxed">
+            Forces Next.js to recalculate and update the "Popular this week" section on the homepage based on current Supabase traffic metrics.
+          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={handleRevalidateSubmit}
+              disabled={revalidateLoading}
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-semibold disabled:opacity-50 transition-colors shadow-sm animate-none"
+            >
+              {revalidateLoading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" aria-hidden />
+                  Updating...
+                </>
+              ) : (
+                <>
+                  <Search className="w-4 h-4 opacity-90" aria-hidden />
+                  Update Popular Section
+                </>
+              )}
+            </button>
+            {revalidateResult && (
+              <span className={`text-sm font-bold ${revalidateResult.includes('failed') ? 'text-rose-500' : 'text-emerald-400'}`}>
+                {revalidateResult}
+              </span>
+            )}
+          </div>
+          <p className="text-xs text-slate-500">
+            The popular section updates automatically every 24 hours. Use this button to refresh the cache immediately after any traffic spikes or database updates.
+          </p>
+        </div>
+      </div>
 
       {/* IndexNow Section */}
       <div className="admin-card overflow-hidden">
