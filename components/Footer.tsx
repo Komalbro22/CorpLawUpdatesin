@@ -58,7 +58,7 @@ export default async function Footer() {
                             <h3 className="font-heading text-2xl font-bold text-white group-hover:text-white/90 transition-colors">
                                 CorpLawUpdates<span className="text-gold">.in</span>
                             </h3>
-                            <p className="text-[11px] font-bold text-slate-500 tracking-[0.2em] uppercase mt-1">
+                            <p className="text-[11px] font-bold text-slate-400 tracking-[0.2em] uppercase mt-1">
                                 Corporate Law Intelligence
                             </p>
                         </Link>
@@ -130,7 +130,7 @@ export default async function Footer() {
                             <p className="text-slate-400 text-xs leading-relaxed mb-4">
                                 Join {activeSubscribersCount.toLocaleString()}+ professionals receiving our weekly Monday digest.
                             </p>
-                            <Link href="/newsletter" className="flex items-center justify-between bg-gold text-navy text-[11px] font-bold px-4 py-2 rounded-lg hover:bg-amber-400 transition-all">
+                            <Link href="/newsletter" className="flex items-center justify-between bg-gold text-white text-[11px] font-bold px-4 py-2 rounded-lg hover:bg-amber-400 transition-all">
                                 SUBSCRIBE FREE
                                 <ArrowRight className="w-3 h-3" />
                             </Link>

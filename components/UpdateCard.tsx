@@ -55,10 +55,11 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
                     <Image
                         src={imageUrl}
                         alt={update.title}
-                        fill
+                        width={473}
+                        height={266}
                         priority={priority}
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        className="object-cover object-center motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, 473px"
+                        className="object-cover object-center w-full h-full motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105"
                     />
                 </div>
             )}

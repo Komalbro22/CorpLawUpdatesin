@@ -123,7 +123,7 @@ export default async function HomePage() {
             <div className="mt-10 flex flex-col gap-4 sm:flex-row justify-center items-center">
               <Link
                 href="/updates"
-                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-gold px-8 py-4 text-sm font-bold text-navy shadow-lg shadow-amber-900/20 transition-colors hover:bg-amber-400 motion-safe:hover:scale-105"
+                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-gold px-8 py-4 text-sm font-bold text-white shadow-lg shadow-amber-900/20 transition-colors hover:bg-amber-400 motion-safe:hover:scale-105"
               >
                 Browse updates
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden />
@@ -353,7 +353,7 @@ export default async function HomePage() {
           </p>
           <Link
             href="/newsletter"
-            className="inline-flex items-center gap-2 rounded-lg bg-gold px-8 py-3.5 font-bold text-navy transition-colors hover:bg-amber-400"
+            className="inline-flex items-center gap-2 rounded-lg bg-gold px-8 py-3.5 font-bold text-white transition-colors hover:bg-amber-400"
           >
             Subscribe free
             <ArrowRight className="w-4 h-4" aria-hidden />
