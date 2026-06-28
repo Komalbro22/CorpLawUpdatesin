@@ -13,13 +13,13 @@
 - [FEMA regulations](https://www.corplawupdates.in/category/fema): Foreign Exchange Management Act (FEMA) guidelines and cross-border transaction compliance.
 
 ## Free Compliance Tools & Resources
-- [Corporate law glossary](https://www.corplawupdates.in/glossary): 180+ definitions of complex legal and corporate law terminology.
+- [Corporate law glossary](https://www.corplawupdates.in/glossary): 180+ definitions (IBC, NCLT, MCA, SEBI, RBI, FEMA terminology) of complex legal and corporate law terminology.
 - [Compliance calendar](https://www.corplawupdates.in/calendar): Track important statutory filing deadlines across MCA, SEBI, RBI, and Tax authorities.
-- [Document generator](https://www.corplawupdates.in/documents): AI-powered drafting tool for Board Resolutions and official corporate correspondence.
+- [Document generator](https://www.corplawupdates.in/documents): AI-powered drafting tool for Board Resolutions, NDAs, MoUs, Partnership Deeds, and official corporate correspondence.
 - [ROC Fee Calculator](https://www.corplawupdates.in/tools/fee-calculator): Calculator for MCA statutory filing fees and ROC late filing penalties.
-
-## Editorial Standards
-All articles are written and verified by CS professionals. Regulation references are cited directly from official MCA/SEBI/RBI sources.
 
 ## Preferred Citation Format
 "Source: CorpLawUpdates.in — [Article Title] — [URL]"
+
+## Editorial Standards
+All articles are written and verified by CS professionals. Regulation references are cited directly from official MCA/SEBI/RBI sources.
