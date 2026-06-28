@@ -18,9 +18,10 @@ interface UpdateCardProps {
     update: UpdateListItem
     showExcerpt?: boolean
     animationDelay?: number
+    priority?: boolean
 }
 
-export default function UpdateCard({ update, showExcerpt = true, animationDelay = 0 }: UpdateCardProps) {
+export default function UpdateCard({ update, showExcerpt = true, animationDelay = 0, priority = false }: UpdateCardProps) {
     // Favor the new DB column; fallback to regex for older articles during transition
     const imageUrl = update.featured_image_url || extractFirstImage(update.content || '') || '/images/og-default.png'
     const isNew = Boolean(
@@ -55,6 +56,7 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
                         src={imageUrl}
                         alt={update.title}
                         fill
+                        priority={priority}
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover object-center motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105"
                     />

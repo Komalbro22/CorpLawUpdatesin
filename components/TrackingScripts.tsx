@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Script from 'next/script'
 
 export default function TrackingScripts() {
   const [showBanner, setShowBanner] = useState(false)
@@ -35,50 +36,7 @@ export default function TrackingScripts() {
       })
   }, [])
 
-  useEffect(() => {
-    if (!consentGiven || !ids) return
-
-    const { gaId, clarityId } = ids
-
-    // 1. Inject Google Analytics
-    if (gaId && gaId.startsWith('G-')) {
-      if (!document.getElementById('ga-external-script')) {
-        const gaScript = document.createElement('script')
-        gaScript.id = 'ga-external-script'
-        gaScript.async = true
-        gaScript.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`
-        document.head.appendChild(gaScript)
-
-        const gaInitScript = document.createElement('script')
-        gaInitScript.id = 'ga-init-script'
-        gaInitScript.innerHTML = `
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '${gaId}', {
-            cookie_flags: 'SameSite=None;Secure'
-          });
-        `
-        document.head.appendChild(gaInitScript)
-      }
-    }
-
-    // 2. Inject Microsoft Clarity
-    if (clarityId) {
-      if (!document.getElementById('clarity-script')) {
-        const clarityScript = document.createElement('script')
-        clarityScript.id = 'clarity-script'
-        clarityScript.innerHTML = `
-          (function(c,l,a,r,i,t,y){
-              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-          })(window, document, "clarity", "script", "${clarityId}");
-        `
-        document.head.appendChild(clarityScript)
-      }
-    }
-
+    // Scripts will be rendered via next/script components in the return block
   }, [consentGiven, ids])
 
   const handleAcknowledge = () => {
@@ -116,6 +74,38 @@ export default function TrackingScripts() {
             </button>
           </div>
         </div>
+      )}
+
+      {/* Analytics Scripts injected only after consent */}
+      {consentGiven && ids?.gaId && ids.gaId.startsWith('G-') && (
+        <>
+          <Script
+            src={`https://www.googletagmanager.com/gtag/js?id=${ids.gaId}`}
+            strategy="afterInteractive"
+          />
+          <Script id="ga-init-script" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${ids.gaId}', {
+                cookie_flags: 'SameSite=None;Secure'
+              });
+            `}
+          </Script>
+        </>
+      )}
+
+      {consentGiven && ids?.clarityId && (
+        <Script id="clarity-script" strategy="afterInteractive">
+          {`
+            (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "${ids.clarityId}");
+          `}
+        </Script>
       )}
     </>
   )
