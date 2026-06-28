@@ -36,10 +36,10 @@ export default function HomeToolCard({ tool }: { tool: HomeToolCardData }) {
         <p className="text-slate-500 dark:text-slate-400 text-xs font-light leading-relaxed">{tool.desc}</p>
       </div>
       <div className="flex items-center justify-between mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/60">
-        <span className="text-xs text-slate-400 dark:text-slate-500">
+        <span className="text-xs text-slate-500 dark:text-slate-400">
           {isComingSoon ? 'Coming Soon' : 'Explore Tool'}
         </span>
-        <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-amber-500 group-hover:translate-x-1 transition-all duration-200" />
+        <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-amber-500 group-hover:translate-x-1 transition-all duration-200" />
       </div>
     </>
   )

@@ -3,6 +3,10 @@ const nextConfig = {
   output: 'standalone',
   compress: true,
   poweredByHeader: false,
+  experimental: {
+    browsersListForSwc: true,
+    optimizeCss: true,
+  },
   images: {
     remotePatterns: [
       {

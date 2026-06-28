@@ -38,7 +38,7 @@ const config: Config = {
       },
       colors: {
         navy: '#0F172A',
-        gold: '#F59E0B',
+        gold: '#B45309',
         // Add dark mode specific colors
         'dark-bg': '#0A0F1E',
         'dark-surface': '#111827',

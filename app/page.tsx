@@ -117,7 +117,7 @@ export default async function HomePage() {
             <p className="mt-6 max-w-2xl text-base leading-8 text-slate-300 md:text-lg text-balance">
               CorpLawUpdates.in provides the latest corporate law updates and free compliance tools — including SEBI regulations, RBI notifications, MCA circulars, NCLT judgments, AI document generators, and fee calculators — simplified and beautifully structured for all professionals, corporates, and modern compliance leaders.
             </p>
-            <p className="mt-4 text-sm text-slate-400 font-medium italic">
+            <p className="mt-4 text-sm text-slate-500 font-medium italic">
               Updated daily with the latest updates and compliance tools.
             </p>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row justify-center items-center">
@@ -165,7 +165,7 @@ export default async function HomePage() {
         <section className="py-16 md:py-20 px-4 max-w-7xl mx-auto">
           <div className="mb-8 md:mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-600">Editor's desk</p>
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-700">Editor's desk</p>
               <h2 className="mt-2 text-2xl md:text-3xl font-bold text-navy font-heading">
                 Featured updates
               </h2>
@@ -270,7 +270,7 @@ export default async function HomePage() {
       <section className="py-16 md:py-20 px-4 max-w-7xl mx-auto border-t border-slate-200/80 dark:border-slate-800/85">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-600 dark:text-amber-500">Interactive Suite</p>
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-700 dark:text-amber-500">Interactive Suite</p>
             <h2 className="mt-2 text-2xl md:text-3xl font-extrabold text-navy dark:text-white font-heading tracking-tight">
               Free Legal & Compliance Tools
             </h2>
@@ -332,7 +332,7 @@ export default async function HomePage() {
               title: 'Daily Corporate Law Quiz',
               desc: '5 daily quick MCQs covering Companies Act, SEBI guidelines, and RBI updates. Perfect for self-testing and mock practice.',
               badge: 'Coming Soon',
-              badgeColor: 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400',
+              badgeColor: 'bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-400',
               isLive: false,
             },
           ].map(tool => (

@@ -140,7 +140,7 @@ export default async function Footer() {
 
                 {/* Bottom Bar */}
                 <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-slate-500 text-[11px] font-semibold uppercase tracking-widest">
+                    <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-slate-300 text-[11px] font-semibold uppercase tracking-widest">
                         <span>© 2026 CorpLawUpdates.in</span>
                         <Link href="/privacy-policy" className="hover:text-white transition-colors">Privacy</Link>
                         <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
@@ -149,7 +149,7 @@ export default async function Footer() {
                         </Link>
                     </div>
                     
-                    <div className="text-[10px] text-slate-500 italic text-center md:text-right max-w-xs">
+                    <div className="text-[10px] text-slate-300 italic text-center md:text-right max-w-xs">
                         Information provided is for educational purposes only and does not constitute legal advice.
                     </div>
                 </div>
