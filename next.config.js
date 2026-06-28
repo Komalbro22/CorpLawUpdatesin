@@ -4,7 +4,6 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   experimental: {
-    browsersListForSwc: true,
     optimizeCss: true,
   },
   images: {
