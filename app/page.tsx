@@ -80,9 +80,34 @@ export default async function HomePage() {
 
   const featuredUpdates = featuredRes.data || []
   const latestUpdates = latestRes.data || []
-  const popularUpdates = popularRes.data || []
+  let popularUpdates = popularRes.data || []
   const updatesCount = updatesCountRes.count || 0
   const totalViews = viewsRes.data || 0
+
+  // Fallback to top views overall if fewer than 3 updates this week
+  if (popularUpdates.length < 3) {
+    const excludedIds = popularUpdates.map((u: any) => u.id)
+    const fallbackLimit = 3 - popularUpdates.length
+    
+    let fallbackQuery = supabase
+      .from('updates')
+      .select(UPDATE_LIST_COLUMNS)
+      .not('published_at', 'is', null)
+      .lte('published_at', new Date().toISOString())
+      
+    if (excludedIds.length > 0) {
+      fallbackQuery = fallbackQuery.not('id', 'in', `(${excludedIds.join(',')})`)
+    }
+    
+    const fallbackRes = await fallbackQuery
+      .order('views', { ascending: false })
+      .limit(fallbackLimit)
+      
+    if (fallbackRes.data) {
+      popularUpdates = [...popularUpdates, ...fallbackRes.data]
+    }
+  }
+
   const hasUpdates = featuredUpdates.length > 0 || latestUpdates.length > 0
 
   return (

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Compliance Calendar Manager - Admin Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "status-high": "#dc2626",
+                        "on-secondary-fixed": "#2f1500",
+                        "on-background": "#1a1b21",
+                        "background": "#faf8ff",
+                        "tertiary-fixed": "#ffdbcb",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed": "#ffdcc3",
+                        "surface-dim": "#dad9e1",
+                        "secondary-fixed-dim": "#ffb77d",
+                        "inverse-on-surface": "#f1f0f7",
+                        "on-secondary-fixed-variant": "#6e3900",
+                        "secondary-container": "#fe932c",
+                        "surface-bright": "#faf8ff",
+                        "neutral-border": "#e2e8f0",
+                        "on-tertiary-fixed": "#341100",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#773205",
+                        "on-primary-container": "#90a8ff",
+                        "primary-container": "#1e3a8a",
+                        "surface-container-highest": "#e3e1e9",
+                        "outline": "#757682",
+                        "primary": "#00236f",
+                        "on-primary-fixed-variant": "#264191",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#444651",
+                        "on-secondary-container": "#663500",
+                        "tertiary-container": "#6e2c00",
+                        "on-primary-fixed": "#00164e",
+                        "on-surface": "#1a1b21",
+                        "neutral-surface": "#f8fafc",
+                        "primary-fixed": "#dce1ff",
+                        "regulator-mca": "#2563eb",
+                        "error": "#ba1a1a",
+                        "status-low": "#10b981",
+                        "inverse-primary": "#b6c4ff",
+                        "secondary": "#904d00",
+                        "outline-variant": "#c5c5d3",
+                        "tertiary-fixed-dim": "#ffb691",
+                        "regulator-sebi": "#059669",
+                        "tertiary": "#4b1c00",
+                        "surface-tint": "#4059aa",
+                        "surface-container-high": "#e9e7ef",
+                        "inverse-surface": "#2f3036",
+                        "regulator-nclt": "#ea580c",
+                        "surface-container-low": "#f4f3fa",
+                        "surface-container": "#eeedf4",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#faf8ff",
+                        "regulator-rbi": "#7c3aed",
+                        "primary-fixed-dim": "#b6c4ff",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "status-medium": "#f59e0b",
+                        "on-tertiary-container": "#f39461",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e3e1e9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "stack-md": "16px",
+                        "stack-lg": "32px",
+                        "stack-sm": "8px",
+                        "gutter": "24px",
+                        "section-gap": "80px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "meta-data": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "meta-data": ["13px", { "lineHeight": "1.2", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0px 4px 20px rgba(30, 58, 138, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-full flex flex-col p-4 bg-surface-container-low border-r border-outline-variant w-64 transition-all duration-200 ease-in-out z-50 hidden md:flex">
+<div class="mb-8">
+<h1 class="font-headline-md text-headline-md font-extrabold text-primary">Lexicon Editor</h1>
+<p class="font-meta-data text-meta-data text-on-surface-variant mt-1">Senior Compliance Officer</p>
+</div>
+<div class="flex-grow space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-all font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-all font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+                Research Hub
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-all font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="article">article</span>
+                Article Library
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary-container text-on-primary-container font-bold transition-all font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="gavel" data-weight="fill" style="font-variation-settings: 'FILL' 1;">gavel</span>
+                Compliance Feed
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-all font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                Team Access
+            </a>
+</div>
+<div class="mt-auto space-y-4">
+<button class="w-full py-3 bg-primary text-on-primary rounded-lg font-body-md text-body-md font-medium hover:bg-primary/90 transition-colors">
+                New Analysis
+            </button>
+<div class="border-t border-outline-variant pt-4 space-y-2">
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-all font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                    Help Center
+                </a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-all font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                    Log Out
+                </a>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 ml-0 md:ml-64 p-gutter md:p-section-gap min-h-screen max-w-container-max mx-auto w-full">
+<!-- Header & Top Tabs -->
+<div class="mb-stack-lg border-b border-neutral-border pb-4">
+<h2 class="font-headline-lg text-headline-lg md:text-display-lg font-display-lg text-on-surface mb-stack-md">Site Administration</h2>
+<div class="flex gap-6 overflow-x-auto">
+<button class="pb-2 border-b-2 border-primary text-primary font-body-md text-body-md font-semibold whitespace-nowrap">Compliance Calendar Manager</button>
+<button class="pb-2 border-b-2 border-transparent text-on-surface-variant hover:text-primary transition-colors font-body-md text-body-md whitespace-nowrap">General Settings</button>
+</div>
+</div>
+<div class="bento-grid">
+<!-- Left Column: Add New Event Form -->
+<div class="col-span-12 lg:col-span-4 space-y-stack-md">
+<div class="glass-card rounded-xl p-6">
+<h3 class="font-headline-md text-headline-md mb-stack-sm text-on-surface">New Deadline Event</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-stack-md">Configure a new regulatory filing deadline.</p>
+<form class="space-y-4">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Event Title</label>
+<input class="w-full bg-[#f1f5f9] border-transparent focus:border-primary focus:ring-0 rounded-lg p-3 font-body-md text-body-md text-on-surface transition-colors" placeholder="e.g., Annual Return Filing" type="text"/>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Regulator</label>
+<select class="w-full bg-[#f1f5f9] border-transparent focus:border-primary focus:ring-0 rounded-lg p-3 font-body-md text-body-md text-on-surface transition-colors">
+<option>MCA (Ministry of Corporate Affairs)</option>
+<option>RBI (Reserve Bank of India)</option>
+<option>SEBI (Securities and Exchange Board of India)</option>
+<option>NCLT</option>
+<option>IBC</option>
+<option>FEMA</option>
+</select>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Filing Form</label>
+<input class="w-full bg-[#f1f5f9] border-transparent focus:border-primary focus:ring-0 rounded-lg p-3 font-body-md text-body-md text-on-surface transition-colors" placeholder="e.g., AOC-4, MGT-7" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Due Date</label>
+<input class="w-full bg-[#f1f5f9] border-transparent focus:border-primary focus:ring-0 rounded-lg p-3 font-body-md text-body-md text-on-surface transition-colors" type="date"/>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Daily Penalty (₹)</label>
+<input class="w-full bg-[#f1f5f9] border-transparent focus:border-primary focus:ring-0 rounded-lg p-3 font-body-md text-body-md text-on-surface transition-colors" placeholder="100" type="number"/>
+</div>
+</div>
+<button class="w-full mt-4 bg-primary text-on-primary py-3 rounded-lg font-body-md text-body-md font-medium hover:bg-primary/90 transition-colors shadow-sm" type="button">
+                            Add Event
+                        </button>
+</form>
+</div>
+<!-- Quick Stats Widget -->
+<div class="glass-card rounded-xl p-6 bg-surface-container-low border-neutral-border">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md-mobile text-on-surface">Active Deadlines</h4>
+<p class="font-meta-data text-meta-data text-on-surface-variant">Next 30 days</p>
+</div>
+</div>
+<div class="text-display-lg font-display-lg text-primary">24</div>
+</div>
+</div>
+<!-- Right Column: Configured Events Table -->
+<div class="col-span-12 lg:col-span-8">
+<div class="glass-card rounded-xl p-6 overflow-hidden h-full flex flex-col">
+<div class="flex justify-between items-center mb-stack-md">
+<h3 class="font-headline-md text-headline-md text-on-surface">Configured Deadline Events</h3>
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 transform -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full bg-[#f1f5f9] border-transparent focus:border-primary focus:ring-0 rounded-full py-2 pl-10 pr-4 font-body-md text-body-md text-on-surface transition-colors" placeholder="Search events..." type="text"/>
+</div>
+</div>
+<div class="overflow-x-auto flex-grow">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-neutral-border">
+<th class="py-3 px-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Title &amp; Form</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Regulator</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Due Date</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Penalty</th>
+<th class="py-3 px-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-neutral-border font-body-md text-body-md text-on-surface">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-variant/30 transition-colors">
+<td class="py-4 px-4">
+<div class="font-medium">Filing of Financial Statements</div>
+<div class="text-meta-data font-meta-data text-on-surface-variant mt-1">Form AOC-4</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-regulator-mca/10 text-regulator-mca">
+                                            MCA
+                                        </span>
+</td>
+<td class="py-4 px-4">Oct 30, 2023</td>
+<td class="py-4 px-4">₹100/day</td>
+<td class="py-4 px-4 text-right">
+<button aria-label="Edit" class="text-on-surface-variant hover:text-primary transition-colors mr-2">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+</button>
+<button aria-label="Delete" class="text-on-surface-variant hover:text-status-high transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="delete">delete</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-variant/30 transition-colors">
+<td class="py-4 px-4">
+<div class="font-medium">Annual Return</div>
+<div class="text-meta-data font-meta-data text-on-surface-variant mt-1">Form MGT-7</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-regulator-mca/10 text-regulator-mca">
+                                            MCA
+                                        </span>
+</td>
+<td class="py-4 px-4">Nov 29, 2023</td>
+<td class="py-4 px-4">₹100/day</td>
+<td class="py-4 px-4 text-right">
+<button aria-label="Edit" class="text-on-surface-variant hover:text-primary transition-colors mr-2">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+</button>
+<button aria-label="Delete" class="text-on-surface-variant hover:text-status-high transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="delete">delete</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-variant/30 transition-colors">
+<td class="py-4 px-4">
+<div class="font-medium">Quarterly Compliance Report</div>
+<div class="text-meta-data font-meta-data text-on-surface-variant mt-1">LODR Reg 27(2)</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-regulator-sebi/10 text-regulator-sebi">
+                                            SEBI
+                                        </span>
+</td>
+<td class="py-4 px-4">Jan 21, 2024</td>
+<td class="py-4 px-4">Variable</td>
+<td class="py-4 px-4 text-right">
+<button aria-label="Edit" class="text-on-surface-variant hover:text-primary transition-colors mr-2">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+</button>
+<button aria-label="Delete" class="text-on-surface-variant hover:text-status-high transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="delete">delete</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-variant/30 transition-colors">
+<td class="py-4 px-4">
+<div class="font-medium">Foreign Liabilities and Assets</div>
+<div class="text-meta-data font-meta-data text-on-surface-variant mt-1">FLA Return</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-regulator-rbi/10 text-regulator-rbi">
+                                            RBI
+                                        </span>
+</td>
+<td class="py-4 px-4">Jul 15, 2024</td>
+<td class="py-4 px-4">₹7500/day</td>
+<td class="py-4 px-4 text-right">
+<button aria-label="Edit" class="text-on-surface-variant hover:text-primary transition-colors mr-2">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+</button>
+<button aria-label="Delete" class="text-on-surface-variant hover:text-status-high transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="delete">delete</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination (Simplified) -->
+<div class="flex items-center justify-between border-t border-neutral-border pt-4 mt-4">
+<span class="font-meta-data text-meta-data text-on-surface-variant">Showing 1 to 4 of 42 entries</span>
+<div class="flex gap-2">
+<button class="p-1 rounded text-outline hover:bg-surface-variant transition-colors disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="p-1 rounded text-on-surface hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating AI Assistant Widget -->
+<div class="fixed bottom-6 right-6 z-50">
+<button aria-label="AI Assistant" class="w-14 h-14 rounded-full bg-secondary-container text-on-secondary-container shadow-lg flex items-center justify-center hover:scale-105 transition-transform active:scale-95">
+<span class="material-symbols-outlined text-2xl" data-icon="smart_toy">smart_toy</span>
+</button>
+</div>
+</body></html>

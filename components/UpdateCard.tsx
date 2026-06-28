@@ -105,11 +105,7 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
                                     Eff. {formatDate(update.effective_date)}
                                 </span>
                             )}
-                            {(update.views || 0) > 0 && (
-                                <span className="text-[10px] text-slate-500 whitespace-nowrap">
-                                    {update.views!.toLocaleString('en-IN')} views
-                                </span>
-                            )}
+
                         </div>
                     </div>
                     <div className="flex shrink-0 items-center gap-2">

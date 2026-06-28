@@ -569,12 +569,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                             {update.impact_level === 'low'    && 'Low impact'}
                         </span>
                     )}
-                    {(update.views || 0) > 0 && (
-                        <span className="views-count inline-flex items-center gap-1.5 text-xs text-slate-400">
-                            <Eye className="h-3.5 w-3.5" aria-hidden />
-                            {update.views!.toLocaleString('en-IN')} views
-                        </span>
-                    )}
+
                 </div>
 
                 {/* Summary box */}
