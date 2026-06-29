@@ -50,7 +50,7 @@ export const mcaForms: MCAForm[] = [
     penaltyRate: '₹100 per day, no upper cap',
     normalFeeStructure: 'capital_slab',
     baseFeeSlab: 'standard_company_slab',
-    concessionApplies: true,
+    concessionApplies: false,
     filingGuides: [
       {
         title: "Complete MGT-7 Filing Guide — Step by Step for FY 2024-25",
@@ -93,7 +93,7 @@ export const mcaForms: MCAForm[] = [
     penaltyRate: '₹100 per day, no upper cap',
     normalFeeStructure: 'capital_slab',
     baseFeeSlab: 'standard_company_slab',
-    concessionApplies: true,
+    concessionApplies: false,
     filingGuides: [
       {
         title: "AOC-4 Filing Guide — Financial Statements for FY 2024-25",
@@ -204,7 +204,7 @@ export const mcaForms: MCAForm[] = [
     penaltyRate: '2x to 12x normal fee',
     normalFeeStructure: 'capital_slab',
     baseFeeSlab: 'standard_company_slab',
-    concessionApplies: true,
+    concessionApplies: false,
     metaTitle: 'ADT-1 Penalty & Fee Calculator | Auditor Appointment | CorpLawUpdates',
     metaDescription: 'Calculate MCA fees and late penalties for filing Form ADT-1 (Notice of appointment of auditor). Get exact multiplier-based late fee estimates.',
     ogDescription: 'Calculate MCA fees and late penalties for filing Form ADT-1 (Notice of appointment of auditor).',
@@ -238,7 +238,7 @@ export const mcaForms: MCAForm[] = [
     penaltyRate: '2x to 12x normal fee',
     normalFeeStructure: 'capital_slab',
     baseFeeSlab: 'standard_company_slab',
-    concessionApplies: true,
+    concessionApplies: false,
     metaTitle: 'INC-20A Fee & Penalty Calculator | Commencement of Business Form',
     metaDescription: 'Calculate the MCA fee and multiplier-based late penalties for filing INC-20A (Declaration for commencement of business).',
     ogDescription: 'Calculate the MCA fee and multiplier-based late penalties for filing INC-20A (Declaration for commencement of business).',
@@ -272,7 +272,7 @@ export const mcaForms: MCAForm[] = [
     penaltyRate: '2x to 12x normal fee',
     normalFeeStructure: 'capital_slab',
     baseFeeSlab: 'standard_company_slab',
-    concessionApplies: true,
+    concessionApplies: false,
     metaTitle: 'DIR-12 Fee & Penalty Calculator | ROC Director Appointment Fees',
     metaDescription: 'Instantly calculate filing fees and late penalties for Form DIR-12 (Appointment or Resignation of Directors and KMP).',
     ogDescription: 'Instantly calculate filing fees and late penalties for Form DIR-12 (Appointment or Resignation of Directors and KMP).',
@@ -306,7 +306,7 @@ export const mcaForms: MCAForm[] = [
     penaltyRate: '2x to 12x normal fee',
     normalFeeStructure: 'capital_slab',
     baseFeeSlab: 'standard_company_slab',
-    concessionApplies: true,
+    concessionApplies: false,
     metaTitle: 'PAS-3 Fee Calculator | Return of Allotment Penalty | CorpLawUpdates',
     metaDescription: 'Calculate exact ROC fees and late filing penalties for Form PAS-3 (Return of Allotment of Shares). Updated for FY 2026-27.',
     ogDescription: 'Calculate exact ROC fees and late filing penalties for Form PAS-3 (Return of Allotment of Shares).',

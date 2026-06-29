@@ -5,28 +5,28 @@ import { mcaForms } from '@/data/mca-forms'
 import { calculateMCAFee, CalculatorParams } from '@/lib/calculatorUtils'
 
 const extraForms = [
-  { slug: 'inc-22', formNumber: 'INC-22', formName: 'Notice of change of registered office', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
-  { slug: 'inc-24', formNumber: 'INC-24', formName: 'Application for change of name', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
-  { slug: 'inc-28', formNumber: 'INC-28', formName: 'Notice of order of Court/Tribunal', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
-  { slug: 'pas-4', formNumber: 'PAS-4', formName: 'Private Placement Offer Letter', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
-  { slug: 'sh-7', formNumber: 'SH-7', formName: 'Notice of alteration of share capital', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
-  { slug: 'chg-1', formNumber: 'CHG-1', formName: 'Creation of charge', penaltyType: 'multiplier', penaltyRate: '3x or 6x + Ad Valorem', normalFeeStructure: 'capital_slab', concessionApplies: true },
-  { slug: 'chg-4', formNumber: 'CHG-4', formName: 'Particulars for satisfaction of charge', penaltyType: 'multiplier', penaltyRate: '3x or 6x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
-  { slug: 'chg-9', formNumber: 'CHG-9', formName: 'Creation of charge (Debentures)', penaltyType: 'multiplier', penaltyRate: '3x or 6x + Ad Valorem', normalFeeStructure: 'capital_slab', concessionApplies: true },
+  { slug: 'inc-22', formNumber: 'INC-22', formName: 'Notice of change of registered office', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
+  { slug: 'inc-24', formNumber: 'INC-24', formName: 'Application for change of name', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
+  { slug: 'inc-28', formNumber: 'INC-28', formName: 'Notice of order of Court/Tribunal', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
+  { slug: 'pas-4', formNumber: 'PAS-4', formName: 'Private Placement Offer Letter', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
+  { slug: 'sh-7', formNumber: 'SH-7', formName: 'Notice of alteration of share capital', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
+  { slug: 'chg-1', formNumber: 'CHG-1', formName: 'Creation of charge', penaltyType: 'multiplier', penaltyRate: '3x or 6x + Ad Valorem', normalFeeStructure: 'capital_slab', concessionApplies: false },
+  { slug: 'chg-4', formNumber: 'CHG-4', formName: 'Particulars for satisfaction of charge', penaltyType: 'multiplier', penaltyRate: '3x or 6x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
+  { slug: 'chg-9', formNumber: 'CHG-9', formName: 'Creation of charge (Debentures)', penaltyType: 'multiplier', penaltyRate: '3x or 6x + Ad Valorem', normalFeeStructure: 'capital_slab', concessionApplies: false },
   { slug: 'dir-3', formNumber: 'DIR-3', formName: 'Application for allotment of DIN', penaltyType: 'nil', penaltyRate: 'N/A', normalFeeStructure: 'flat', concessionApplies: false },
   { slug: 'dir-3-kyc', formNumber: 'DIR-3-KYC', formName: 'Director KYC', penaltyType: 'flat', penaltyRate: '₹5000', normalFeeStructure: 'flat', concessionApplies: false },
   { slug: 'stk-2', formNumber: 'STK-2', formName: 'Strike off company', penaltyType: 'flat', penaltyRate: '₹5000', normalFeeStructure: 'flat', concessionApplies: false },
-  { slug: 'mgt-14', formNumber: 'MGT-14', formName: 'Filing of Resolutions and agreements', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
-  { slug: 'dpt-3', formNumber: 'DPT-3', formName: 'Return of Deposits', penaltyType: 'multiplier', penaltyRate: '1.2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
-  { slug: 'ben-2', formNumber: 'BEN-2', formName: 'Return of SBO Disclosures', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
-  { slug: 'pas-6', formNumber: 'PAS-6', formName: 'Reconciliation of share capital audit', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
+  { slug: 'mgt-14', formNumber: 'MGT-14', formName: 'Filing of Resolutions and agreements', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
+  { slug: 'dpt-3', formNumber: 'DPT-3', formName: 'Return of Deposits', penaltyType: 'multiplier', penaltyRate: '1.2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
+  { slug: 'ben-2', formNumber: 'BEN-2', formName: 'Return of SBO Disclosures', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
+  { slug: 'pas-6', formNumber: 'PAS-6', formName: 'Reconciliation of share capital audit', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
   { slug: 'adt-3', formNumber: 'ADT-3', formName: 'Notice of resignation by auditor', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
-  { slug: 'cra-2', formNumber: 'CRA-2', formName: 'Appointment of Cost Auditor Intimation', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
-  { slug: 'cra-4', formNumber: 'CRA-4', formName: 'Filing of Cost Audit Report', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
-  { slug: 'aoc-5', formNumber: 'AOC-5', formName: 'Notice of address for keeping books of account', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true },
+  { slug: 'cra-2', formNumber: 'CRA-2', formName: 'Appointment of Cost Auditor Intimation', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
+  { slug: 'cra-4', formNumber: 'CRA-4', formName: 'Filing of Cost Audit Report', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
+  { slug: 'aoc-5', formNumber: 'AOC-5', formName: 'Notice of address for keeping books of account', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
   { slug: 'mgt-15', formNumber: 'MGT-15', formName: 'AGM Report of listed company', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
   { slug: 'mbp-1', formNumber: 'MBP-1', formName: 'Disclosure of interest by directors', penaltyType: 'nil', penaltyRate: 'N/A (Physical)', normalFeeStructure: 'nil', concessionApplies: false },
-  { slug: 'other-general', formNumber: 'Other General Form', formName: 'Any standard event-based MCA form', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: true }
+  { slug: 'other-general', formNumber: 'Other General Form', formName: 'Any standard event-based MCA form', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false }
 ]
 
 export default function UnifiedCalculator() {
