@@ -25,7 +25,7 @@ export async function syncViewsAction() {
         const keys: string[] = []
         
         do {
-            const result = await redis.scan(cursor, { match: 'view_batch:*', count: 100 })
+            const result = await redis.scan(cursor, { match: 'view_batch:*', count: 100 }) as [number | string, string[]]
             cursor = result[0]
             keys.push(...result[1])
         } while (cursor !== 0 && cursor !== '0')
