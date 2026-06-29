@@ -16,7 +16,9 @@ import {
   Settings,
   Trophy,
   Users,
+  RefreshCw,
 } from 'lucide-react'
+import { syncViewsAction } from '@/app/actions/syncViews'
 
 interface AnalyticsData {
   overview: {
@@ -54,6 +56,7 @@ export default function AnalyticsPage() {
   const [data, setData] = useState<AnalyticsData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [isSyncing, setIsSyncing] = useState(false)
 
   useEffect(() => {
     fetch('/api/admin/analytics')
@@ -174,10 +177,29 @@ export default function AnalyticsPage() {
             High-level traffic and content signals from your database.
           </p>
         </div>
-        <Link
-          href="/admin/analytics/articles"
-          className="inline-flex items-center gap-2 bg-gold hover:bg-amber-400 text-slate-950 px-4 py-2.5 rounded-lg font-semibold text-sm shadow-sm transition-colors duration-200"
-        >
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            onClick={async () => {
+              setIsSyncing(true)
+              try {
+                const res = await syncViewsAction()
+                if (res.success) alert(`Success! Synced ${res.syncedCount} batched views to database. Homepage cache cleared.`)
+                else alert('Sync failed: ' + res.error)
+              } catch {
+                alert('Sync failed')
+              }
+              setIsSyncing(false)
+            }}
+            disabled={isSyncing}
+            className="inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-lg font-semibold text-sm transition-colors duration-200 disabled:opacity-50"
+          >
+            <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+            Sync Views
+          </button>
+          <Link
+            href="/admin/analytics/articles"
+            className="inline-flex items-center gap-2 bg-gold hover:bg-amber-400 text-slate-950 px-4 py-2.5 rounded-lg font-semibold text-sm shadow-sm transition-colors duration-200"
+          >
           <LineChart className="w-4 h-4" aria-hidden />
           Article performance
           <ArrowRight className="w-4 h-4 opacity-80" aria-hidden />

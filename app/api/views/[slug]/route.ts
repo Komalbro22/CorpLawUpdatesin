@@ -19,6 +19,22 @@ const ratelimit = redis
     })
   : null
 
+export async function GET(
+  request: Request,
+  { params }: { params: { slug: string } }
+) {
+  try {
+    const { slug } = params
+    if (!redis) {
+      return NextResponse.json({ success: true, batchViews: 0 })
+    }
+    const batchViews = await redis.get<number>(`view_batch:${slug}`)
+    return NextResponse.json({ success: true, batchViews: batchViews || 0 })
+  } catch (error) {
+    return NextResponse.json({ success: false, batchViews: 0 })
+  }
+}
+
 export async function POST(
   request: Request,
   { params }: { params: { slug: string } }
@@ -36,24 +52,32 @@ export async function POST(
       }
     }
 
-    // Increment view count using Postgres function to avoid race conditions
-    const { error } = await supabaseAdmin.rpc('increment_views', {
-      article_slug: slug,
-    })
+    if (redis) {
+      // Increment the batch count in Redis
+      await redis.incr(`view_batch:${slug}`)
+      
+      // Also increment a sorted set for popular articles
+      await redis.zincrby('popular_articles', 1, slug)
+    } else {
+      // Increment view count using Postgres function to avoid race conditions
+      const { error } = await supabaseAdmin.rpc('increment_views', {
+        article_slug: slug,
+      })
 
-    if (error) {
-      // Fallback: manual increment
-      const { data: article } = await supabaseAdmin
-        .from('updates')
-        .select('id, views')
-        .eq('slug', slug)
-        .single()
-
-      if (article) {
-        await supabaseAdmin
+      if (error) {
+        // Fallback: manual increment
+        const { data: article } = await supabaseAdmin
           .from('updates')
-          .update({ views: (article.views || 0) + 1 })
-          .eq('id', article.id)
+          .select('id, views')
+          .eq('slug', slug)
+          .single()
+
+        if (article) {
+          await supabaseAdmin
+            .from('updates')
+            .update({ views: (article.views || 0) + 1 })
+            .eq('id', article.id)
+        }
       }
     }
 
