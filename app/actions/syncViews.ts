@@ -11,8 +11,8 @@ const redisToken = process.env.KV_REST_API_TOKEN || process.env.corplawupdates_K
 const hasUpstashConfig = redisUrl && redisToken
 const redis = hasUpstashConfig ? new Redis({ url: redisUrl, token: redisToken }) : null
 
-export async function syncViewsAction() {
-    if (!verifyAdminSession()) {
+export async function syncViewsAction(isCron = false) {
+    if (!isCron && !verifyAdminSession()) {
         return { success: false, error: 'Unauthorized' }
     }
 
@@ -41,6 +41,7 @@ export async function syncViewsAction() {
                 if (batchViews > 0) {
                     const { error: rpcError } = await supabaseAdmin.rpc('increment_views', {
                         article_slug: slug,
+                        increment_by: batchViews,
                     })
                     
                     if (rpcError) {

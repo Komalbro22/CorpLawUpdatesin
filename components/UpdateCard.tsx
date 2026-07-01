@@ -109,10 +109,10 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
                         </div>
                     </div>
                     <div className="flex shrink-0 items-center gap-2">
-                        {(update.views || 0) > 0 && (
+                        {update.views !== undefined && (
                             <span className="flex items-center gap-1 whitespace-nowrap rounded-md bg-slate-50 dark:bg-slate-800 px-2 py-1 text-[11px] font-medium text-slate-500 dark:text-slate-500">
                                 <Eye className="w-3 h-3 text-slate-500" aria-hidden />
-                                {update.views?.toLocaleString('en-IN')}
+                                {update.views?.toLocaleString('en-IN') || '0'}
                             </span>
                         )}
                         <span className="flex items-center gap-1 whitespace-nowrap rounded-md bg-slate-50 dark:bg-slate-800 px-2 py-1 text-[11px] font-medium text-slate-500 dark:text-slate-500">
