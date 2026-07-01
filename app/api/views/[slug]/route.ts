@@ -88,7 +88,7 @@ export async function POST(
       throw error;
     }
 
-    console.error(`Failed to record view for ${slug}:`, error);
+    console.error(`Failed to record view for ${params.slug}:`, error);
     return NextResponse.json({ success: false })
   }
 }
