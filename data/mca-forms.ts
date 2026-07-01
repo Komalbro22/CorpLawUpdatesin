@@ -164,7 +164,7 @@ export const mcaForms: MCAForm[] = [
     aliases: ['dir3 kyc', 'director kyc', 'din kyc'],
     category: 'kyc',
     filedBy: ['Individual Directors'],
-    dueDate: '30th September every year',
+    dueDate: '30th June of applicable year',
     section: 'Rule 12A, Companies (Appointment and Qualification of Directors) Rules',
     penaltyType: 'flat',
     penaltyRate: 'Flat ₹5,000 penalty',
@@ -176,9 +176,9 @@ export const mcaForms: MCAForm[] = [
     ogDescription: 'Check the exact late fee penalty for delayed DIR-3 KYC filing. Know the ₹5000 penalty rules for deactivated DINs.',
     faqItems: [
       { question: 'What is DIR-3 KYC?', answer: 'DIR-3 KYC is a mandatory annual compliance form for all individuals holding a Director Identification Number (DIN) to verify their identity and contact details.' },
-      { question: 'What happens if I miss the DIR-3 KYC deadline?', answer: 'If you miss the 30th September deadline, your DIN will be marked as "Deactivated due to non-filing of DIR-3 KYC". You cannot file any MCA forms until it is reactivated.' },
+      { question: 'What happens if I miss the DIR-3 KYC deadline?', answer: 'If you miss the 30th June deadline, your DIN will be marked as "Deactivated due to non-filing of DIR-3 KYC". You cannot file any MCA forms until it is reactivated.' },
       { question: 'What is the penalty for filing DIR-3 KYC late?', answer: 'Filing DIR-3 KYC after the due date attracts a flat penalty of ₹5,000. There is no normal fee if filed on time.' },
-      { question: 'Who needs to file DIR-3 KYC?', answer: 'Every individual holding a DIN as of 31st March of a financial year must file DIR-3 KYC by 30th September of the next financial year.' },
+      { question: 'Who needs to file DIR-3 KYC?', answer: 'Every individual holding a DIN as of 31st March of a financial year must file DIR-3 KYC by 30th June of the next financial year.' },
       { question: 'Is web KYC sufficient?', answer: 'Yes, if your details (phone and email) have not changed from the previous year, you can simply complete DIR-3 KYC Web, which is a quicker OTP-based process.' }
     ],
     relatedForms: ['dir-12'],
@@ -186,9 +186,9 @@ export const mcaForms: MCAForm[] = [
     contentSections: {
       whatIsThisForm: '<p><strong>DIR-3 KYC</strong> is a critical compliance requirement designed by the MCA to maintain a clean, verified database of all company directors. Every individual who has been allotted a Director Identification Number (DIN) must submit this form annually to confirm their permanent address, mobile number, and email ID. This prevents the existence of shell company directors and identity fraud.</p>',
       whoMustFile: '<p>Every individual who has been allotted a DIN on or before the 31st of March of a financial year must submit DIR-3 KYC. This applies even if the individual is not currently holding a directorship in any active company.</p>',
-      dueDateExplained: '<p>The deadline to file DIR-3 KYC is strictly <strong>30th September</strong> of the immediate next financial year. For instance, for the financial year ending March 31, 2026, the KYC must be filed by September 30, 2026.</p>',
+      dueDateExplained: '<p>The deadline to file DIR-3 KYC is strictly <strong>30th June</strong> of the immediate next financial year. For instance, for the financial year ending March 31, 2026, the KYC must be filed by June 30, 2026.</p>',
       consequencesOfDelay: '<p>If DIR-3 KYC is not filed by the deadline, the MCA system automatically deactivates the DIN. A deactivated DIN prevents the director from signing any compliance documents or being appointed to a new company. To reactivate the DIN, the director must file the form along with a heavy, flat penalty of <strong>₹5,000</strong>.</p>',
-      workedExample: '<p><strong>Scenario:</strong> A director forgets to file DIR-3 KYC by 30th September and attempts to file on 5th October.</p><ul><li>Normal Filing Fee: ₹0</li><li>Late Penalty (Flat Reactivation Fee): ₹5,000</li><li><strong>Total Liability:</strong> <strong>₹5,000</strong></li></ul>'
+      workedExample: '<p><strong>Scenario:</strong> A director forgets to file DIR-3 KYC by 30th June and attempts to file on 5th July.</p><ul><li>Normal Filing Fee: ₹0</li><li>Late Penalty (Flat Reactivation Fee): ₹5,000</li><li><strong>Total Liability:</strong> <strong>₹5,000</strong></li></ul>'
     }
   },
   {
