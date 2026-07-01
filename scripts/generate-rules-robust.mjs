@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { createClient } from '@supabase/supabase-js';
 
-const GEMINI_API_KEY = "AIzaSyB3fQA0uaf-Vq7a97sm-q985wfLBiZ6o3E";
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 

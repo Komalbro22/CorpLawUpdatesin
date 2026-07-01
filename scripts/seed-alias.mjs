@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
-const SUPABASE2_URL = 'https://igglydprjtptmkzvfngg.supabase.co';
-const SUPABASE2_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlnZ2x5ZHByanRwdG1renZmbmdnIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDA2MjQwOSwiZXhwIjoyMDk1NjM4NDA5fQ.Gk1XM4Ss90UBJsjuK5zyTtSYLW8urCcDDqaJmJOnmw0';
-const GEMINI_API_KEY = 'AIzaSyB3fQA0uaf-Vq7a97sm-q985wfLBiZ6o3E';
+const SUPABASE2_URL = process.env.SUPABASE2_URL || 'https://igglydprjtptmkzvfngg.supabase.co';
+const SUPABASE2_KEY = process.env.SUPABASE2_KEY;
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 const supabase = createClient(SUPABASE2_URL, SUPABASE2_KEY);
 
