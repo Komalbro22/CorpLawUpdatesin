@@ -15,10 +15,6 @@
     {
       "path": "/api/cron/ping-secondary",
       "schedule": "0 9 */3 * *"
-    },
-    {
-      "path": "/api/cron/sync-views",
-      "schedule": "0 * * * *"
     }
   ]
 }
