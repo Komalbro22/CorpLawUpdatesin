@@ -20,7 +20,7 @@ import ViewCounter from '@/components/ViewCounter'
 import ArticleActions from '@/components/ArticleActions'
 import ReadingProgress from '@/components/ReadingProgress'
 import FontSizeToggle from '@/components/FontSizeToggle'
-import LiveViewCount from '@/components/LiveViewCount'
+
 import { QuickAnswer } from '@/components/QuickAnswer'
 import { AlertCircle, BookOpen, CalendarDays, ChevronDown, Clock3, Eye, FileText, Lightbulb, Sparkles, CheckCircle2 } from 'lucide-react'
 import { sanitizeHtml } from '@/lib/sanitize'
@@ -570,7 +570,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                             {update.impact_level === 'low'    && 'Low impact'}
                         </span>
                     )}
-                    <LiveViewCount slug={update.slug} initialViews={update.views} />
+
                 </div>
 
                 {/* Summary box */}
