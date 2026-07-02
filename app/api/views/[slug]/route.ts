@@ -41,10 +41,29 @@ export async function POST(
 ) {
   try {
     const { slug } = params
-    
-    // IP-based Rate Limiting (Server-Side)
+
+    // 1. Validate slug format — alphanumeric and hyphens only, max 200 chars
+    if (!slug || !/^[a-z0-9-]{1,200}$/.test(slug)) {
+      return NextResponse.json({ success: false, error: 'Invalid slug' }, { status: 400 })
+    }
+
+    // 2. Verify the article actually exists (lightweight check)
+    const { data: article, error: articleError } = await supabaseAdmin
+      .from('updates')
+      .select('id')
+      .eq('slug', slug)
+      .not('published_at', 'is', null)
+      .single()
+
+    if (articleError || !article) {
+      return NextResponse.json({ success: false, error: 'Article not found' }, { status: 404 })
+    }
+
+    // 3. IP-based Rate Limiting (Server-Side)
     if (ratelimit) {
-      const ip = request.headers.get('x-forwarded-for') || '127.0.0.1'
+      // Parse x-forwarded-for safely — take only the first IP from the list
+      const forwardedFor = request.headers.get('x-forwarded-for')
+      const ip = forwardedFor ? forwardedFor.split(',')[0].trim() : '127.0.0.1'
       const { success } = await ratelimit.limit(`views_${ip}_${slug}`)
       
       if (!success) {

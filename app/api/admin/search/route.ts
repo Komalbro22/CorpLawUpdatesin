@@ -1,6 +1,6 @@
 import { supabase } from '@/lib/supabase'
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
+import { verifyAdminSession } from '@/lib/admin-auth'
 
 interface UpdateRecord {
   id: string
@@ -45,9 +45,8 @@ interface UnifiedSearchResult {
 }
 
 export async function GET(request: Request) {
-  // Check admin session
-  const session = cookies().get('admin_session')
-  if (!session) {
+  // Verify real admin session (checks signature + expiry, not just cookie presence)
+  if (!verifyAdminSession()) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

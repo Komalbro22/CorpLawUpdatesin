@@ -7,14 +7,11 @@ export const maxDuration = 60 // Allow up to 60 seconds on Vercel
 export async function GET(req: Request) {
   const startTime = Date.now()
   
-  // 1. Authorize Cron trigger using the CRON_SECRET token
-  const { searchParams } = new URL(req.url)
+  // 1. Authorize Cron trigger — fail closed if CRON_SECRET is missing
   const authHeader = req.headers.get('Authorization')
-  const secret = searchParams.get('secret') || (authHeader ? authHeader.replace('Bearer ', '') : '')
-  
-  const cronSecret = process.env.CRON_SECRET || ''
+  const cronSecret = process.env.CRON_SECRET
 
-  if (cronSecret && secret !== cronSecret) {
+  if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: 'Unauthorized cron signature.' }, { status: 401 })
   }
 

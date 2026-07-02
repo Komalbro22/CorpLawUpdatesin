@@ -17,20 +17,18 @@ function parseDueDate(s: string): Date | null {
 
 export async function GET(request: Request) {
     try {
+        // 1. Strict security check — fail closed if CRON_SECRET is missing
+        const authHeader = request.headers.get('authorization')
+        const cronSecret = process.env.CRON_SECRET
+        if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+        }
+
         console.log('=== CRON: GENERATING WEEKLY COMPLIANCE DIGEST ===')
 
         const { searchParams } = new URL(request.url)
         const isForce = searchParams.get('force') === 'true'
         const testEmail = searchParams.get('testEmail')
-
-        // 1. Strict security check (Bearer token from Vercel Cron or local test)
-        const authHeader = request.headers.get('authorization')
-        const hasSecret = !!process.env.CRON_SECRET
-        const isAuthorized = !hasSecret || authHeader === `Bearer ${process.env.CRON_SECRET}`
-
-        if (hasSecret && !isAuthorized) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-        }
 
         // 2. Day check: Only execute on Mondays unless forced or testing
         const today = new Date()
