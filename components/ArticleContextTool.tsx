@@ -55,7 +55,7 @@ export default function ArticleContextTool({ title, summary, category, published
 
     return () => {
       if (!('modelContext' in document) || !document.modelContext) return;
-      document.modelContext.unregisterTool('getCurrentArticle');
+      document.modelContext.unregisterTool?.('getCurrentArticle');
     };
   }, [title, summary, category, published_at, tags, slug, content]);
 

@@ -58,7 +58,7 @@ export default function ArticleSearchTool() {
 
     return () => {
       if (!('modelContext' in document) || !document.modelContext) return;
-      document.modelContext.unregisterTool('searchCorpLawArticles');
+      document.modelContext.unregisterTool?.('searchCorpLawArticles');
     };
   }, []);
 

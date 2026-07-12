@@ -55,8 +55,8 @@ export default function WebMCPRegistry() {
 
     return () => {
       if (!('modelContext' in document) || !document.modelContext) return;
-      document.modelContext.unregisterTool('getRBIRepoRate');
-      document.modelContext.unregisterTool('getROCDeadline');
+      document.modelContext.unregisterTool?.('getRBIRepoRate');
+      document.modelContext.unregisterTool?.('getROCDeadline');
     };
   }, []);
 

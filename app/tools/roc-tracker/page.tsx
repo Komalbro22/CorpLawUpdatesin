@@ -267,7 +267,7 @@ export default function ROCTrackerPage() {
 
     return () => {
       if (!('modelContext' in document) || !document.modelContext) return;
-      document.modelContext.unregisterTool('getROCDeadlines');
+      document.modelContext.unregisterTool?.('getROCDeadlines');
     };
   }, [dbForms]);
 

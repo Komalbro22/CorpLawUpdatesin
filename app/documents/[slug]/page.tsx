@@ -779,7 +779,7 @@ export default function DocumentGeneratorPage() {
 
     return () => {
       if (!('modelContext' in document) || !document.modelContext) return;
-      document.modelContext.unregisterTool('generateLegalDocument');
+      document.modelContext.unregisterTool?.('generateLegalDocument');
     };
   }, [template]);
   const [chatHistory, setChatHistory] = useState<{ role: 'user' | 'ai'; text: string }[]>([])

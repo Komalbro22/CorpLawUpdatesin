@@ -124,7 +124,7 @@ export default function UnifiedCalculator() {
 
     return () => {
       if (!('modelContext' in document) || !document.modelContext) return;
-      document.modelContext.unregisterTool('calculateMCALateFee');
+      document.modelContext.unregisterTool?.('calculateMCALateFee');
     };
   }, []);
 

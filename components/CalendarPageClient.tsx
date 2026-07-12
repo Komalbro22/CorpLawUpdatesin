@@ -491,7 +491,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
 
     return () => {
       if (!('modelContext' in document) || !document.modelContext) return;
-      document.modelContext.unregisterTool('getComplianceDeadlines');
+      document.modelContext.unregisterTool?.('getComplianceDeadlines');
     };
   }, [entries]);
 
