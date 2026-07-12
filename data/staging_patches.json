@@ -1,0 +1,663 @@
+[
+  {
+    "section": "42(10)",
+    "old_value": {
+      "company_liability": {
+        "base_amount_min": 0,
+        "base_amount_max": 0,
+        "per_day_continuing": null,
+        "max_cap": 20000000,
+        "notes": "Amount raised or 2Cr whichever is lower"
+      },
+      "officer_liability": {
+        "base_amount_min": 0,
+        "base_amount_max": 0,
+        "per_day_continuing": null,
+        "max_cap": 20000000,
+        "notes": "Promoters and directors, amount raised or 2Cr whichever is lower"
+      },
+      "imprisonment": {
+        "applicable": false,
+        "min_years": null,
+        "max_years": null,
+        "applies_to": null
+      }
+    },
+    "new_value": {
+      "company_liability": {
+        "base_amount_min": 0,
+        "base_amount_max": 0,
+        "per_day_continuing": null,
+        "max_cap": 20000000,
+        "notes": "Amount raised or 2Cr whichever is lower"
+      },
+      "officer_liability": {
+        "base_amount_min": 0,
+        "base_amount_max": 0,
+        "per_day_continuing": null,
+        "max_cap": 20000000,
+        "notes": "Promoters and directors, amount raised or 2Cr whichever is lower"
+      },
+      "imprisonment": {
+        "applicable": false,
+        "min_years": null,
+        "max_years": null,
+        "applies_to": null
+      },
+      "dynamic_variable": true,
+      "custom_amount_label": "Amount raised through private placement (₹)",
+      "company_custom_multiplier": 1,
+      "company_custom_cap": 20000000,
+      "officer_custom_multiplier": 1,
+      "officer_custom_cap": 20000000
+    },
+    "source_page": 4,
+    "clause_paraphrase": "penalty which may extend to the amount raised through the private placement or two crore rupees, whichever is lower",
+    "manual_reconciliation": false
+  },
+  {
+    "section": "46(5)",
+    "old_value": {
+      "company_liability": {
+        "base_amount_min": 0,
+        "base_amount_max": 100000000,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": "5x to 10x face value of shares or 10Cr whichever is higher"
+      },
+      "officer_liability": {
+        "base_amount_min": null,
+        "base_amount_max": null,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": ""
+      },
+      "imprisonment": {
+        "applicable": false,
+        "min_years": null,
+        "max_years": null,
+        "applies_to": null
+      }
+    },
+    "new_value": {
+      "company_liability": {
+        "base_amount_min": null,
+        "base_amount_max": null,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": "5x to 10x face value of shares or 10Cr whichever is higher"
+      },
+      "officer_liability": {
+        "base_amount_min": null,
+        "base_amount_max": null,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": ""
+      },
+      "imprisonment": {
+        "applicable": false,
+        "min_years": null,
+        "max_years": null,
+        "applies_to": null
+      },
+      "dynamic_variable": true,
+      "custom_amount_label": "Face value of the shares involved (₹)",
+      "company_custom_multiplier": 10,
+      "company_custom_cap": null,
+      "officer_custom_multiplier": null,
+      "officer_custom_cap": null
+    },
+    "source_page": 4,
+    "clause_paraphrase": "fine which shall not be less than five times the face value of the shares involved ... but which may extend to ten times the face value of such shares or rupees ten crores whichever is higher",
+    "manual_reconciliation": false
+  },
+  {
+    "section": "46(5)",
+    "old_value": {
+      "company_liability": {
+        "base_amount_min": 0,
+        "base_amount_max": 100000000,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": "5x to 10x face value of shares or 10Cr whichever is higher"
+      },
+      "officer_liability": {
+        "base_amount_min": null,
+        "base_amount_max": null,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": ""
+      },
+      "imprisonment": {
+        "applicable": false,
+        "min_years": null,
+        "max_years": null,
+        "applies_to": null
+      }
+    },
+    "new_value": {
+      "company_liability": {
+        "base_amount_min": null,
+        "base_amount_max": null,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": "5x to 10x face value of shares or 10Cr whichever is higher"
+      },
+      "officer_liability": {
+        "base_amount_min": null,
+        "base_amount_max": null,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": ""
+      },
+      "imprisonment": {
+        "applicable": false,
+        "min_years": null,
+        "max_years": null,
+        "applies_to": null
+      },
+      "dynamic_variable": true,
+      "custom_amount_label": "Face value of the shares involved (₹)",
+      "company_custom_multiplier": 10,
+      "company_custom_cap": null,
+      "officer_custom_multiplier": null,
+      "officer_custom_cap": null
+    },
+    "source_page": 4,
+    "clause_paraphrase": "fine which shall not be less than five times the face value of the shares involved ... but which may extend to ten times the face value of such shares or rupees ten crores whichever is higher",
+    "manual_reconciliation": false
+  },
+  {
+    "section": "53(3)",
+    "old_value": {
+      "company_liability": {
+        "base_amount_min": 0,
+        "base_amount_max": 0,
+        "per_day_continuing": null,
+        "max_cap": 500000,
+        "notes": "Amount raised or 5 Lakhs whichever is less"
+      },
+      "officer_liability": {
+        "base_amount_min": 0,
+        "base_amount_max": 0,
+        "per_day_continuing": null,
+        "max_cap": 500000,
+        "notes": "Amount raised or 5 Lakhs whichever is less"
+      },
+      "imprisonment": {
+        "applicable": false,
+        "min_years": null,
+        "max_years": null,
+        "applies_to": null
+      }
+    },
+    "new_value": {
+      "company_liability": {
+        "base_amount_min": 0,
+        "base_amount_max": 0,
+        "per_day_continuing": null,
+        "max_cap": 500000,
+        "notes": "Amount raised or 5 Lakhs whichever is less"
+      },
+      "officer_liability": {
+        "base_amount_min": 0,
+        "base_amount_max": 0,
+        "per_day_continuing": null,
+        "max_cap": 500000,
+        "notes": "Amount raised or 5 Lakhs whichever is less"
+      },
+      "imprisonment": {
+        "applicable": false,
+        "min_years": null,
+        "max_years": null,
+        "applies_to": null
+      },
+      "dynamic_variable": true,
+      "custom_amount_label": "Amount raised through the issue of shares at a discount (₹)",
+      "company_custom_multiplier": 1,
+      "company_custom_cap": 500000,
+      "officer_custom_multiplier": 1,
+      "officer_custom_cap": 500000
+    },
+    "source_page": 4,
+    "clause_paraphrase": "penalty which may extend to an amount equal to the amount raised through the issue of shares at a discount or five lakh rupees, whichever is less",
+    "manual_reconciliation": false
+  },
+  {
+    "section": "76A",
+    "old_value": {
+      "company_liability": {
+        "base_amount_min": 10000000,
+        "base_amount_max": 100000000,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": "Min 1Cr or twice deposit (lower)"
+      },
+      "officer_liability": {
+        "base_amount_min": 2500000,
+        "base_amount_max": 20000000,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": "Also refers to 447 if done knowingly"
+      },
+      "imprisonment": {
+        "applicable": true,
+        "min_years": 0,
+        "max_years": 7,
+        "applies_to": "officer"
+      }
+    },
+    "new_value": {
+      "company_liability": {
+        "base_amount_min": 10000000,
+        "base_amount_max": 100000000,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": "Min 1Cr or twice deposit (lower)"
+      },
+      "officer_liability": {
+        "base_amount_min": 2500000,
+        "base_amount_max": 20000000,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": "Also refers to 447 if done knowingly"
+      },
+      "imprisonment": {
+        "applicable": true,
+        "min_years": 0,
+        "max_years": 7,
+        "applies_to": "officer"
+      }
+    },
+    "source_page": 6,
+    "clause_paraphrase": "The company shall be punishable with fine which shall not be less than one crore rupees or twice the amount of deposit accepted, whichever is lower, but which may extend to ten crore rupees; every officer in default shall be punishable with imprisonment up to seven years and fine not less than twenty-five lakh rupees but which may extend to two crore rupees.",
+    "manual_reconciliation": true,
+    "dynamic_variable": true,
+    "custom_amount_label": "Amount of Deposit (₹)",
+    "company_custom_multiplier": 2,
+    "company_custom_cap": null,
+    "officer_custom_multiplier": null,
+    "officer_custom_cap": null
+  },
+  {
+    "section": "102(5)",
+    "dynamic_variable": true,
+    "custom_amount_label": "Benefit Accruing (₹)",
+    "company_custom_multiplier": 0,
+    "company_custom_cap": 0,
+    "officer_custom_multiplier": 5,
+    "officer_custom_cap": 0
+  },
+  {
+    "section": "140(3)",
+    "old_value": {
+      "company_liability": {
+        "base_amount_min": null,
+        "base_amount_max": null,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": ""
+      },
+      "officer_liability": {
+        "base_amount_min": 50000,
+        "base_amount_max": 50000,
+        "per_day_continuing": 500,
+        "max_cap": 200000,
+        "notes": "50,000 or remuneration of auditor, whichever is less. Applies to auditor."
+      },
+      "imprisonment": {
+        "applicable": false,
+        "min_years": null,
+        "max_years": null,
+        "applies_to": null
+      }
+    },
+    "new_value": {
+      "company_liability": {
+        "base_amount_min": null,
+        "base_amount_max": null,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": ""
+      },
+      "officer_liability": {
+        "base_amount_min": 50000,
+        "base_amount_max": 50000,
+        "per_day_continuing": 500,
+        "max_cap": 200000,
+        "notes": "50,000 or remuneration of auditor, whichever is less. Applies to auditor."
+      },
+      "imprisonment": {
+        "applicable": false,
+        "min_years": null,
+        "max_years": null,
+        "applies_to": null
+      },
+      "dynamic_variable": {
+        "custom_amount_label": "Remuneration of the Auditor (₹)",
+        "company_custom_multiplier": null,
+        "company_custom_cap": null,
+        "officer_custom_multiplier": 1,
+        "officer_custom_cap": 50000
+      }
+    },
+    "source_page": 13,
+    "clause_paraphrase": "he or it shall be liable to a penalty of fifty thousand rupees or an amount equal to the remuneration of the auditor, whichever is less",
+    "manual_reconciliation": false
+  },
+  {
+    "section": "147(1) & (2)",
+    "old_value": {
+      "company_liability": {
+        "base_amount_min": 25000,
+        "base_amount_max": 500000,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": ""
+      },
+      "officer_liability": {
+        "base_amount_min": 10000,
+        "base_amount_max": 100000,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": "Auditor fine: min 25000, max 500000 or four times remuneration, whichever is less"
+      },
+      "imprisonment": {
+        "applicable": false,
+        "min_years": null,
+        "max_years": null,
+        "applies_to": null
+      }
+    },
+    "new_value": {
+      "company_liability": {
+        "base_amount_min": 25000,
+        "base_amount_max": 500000,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": ""
+      },
+      "officer_liability": {
+        "base_amount_min": 10000,
+        "base_amount_max": 100000,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": "Auditor fine: min 25000, max 500000 or four times remuneration, whichever is less"
+      },
+      "imprisonment": {
+        "applicable": false,
+        "min_years": null,
+        "max_years": null,
+        "applies_to": null
+      },
+      "dynamic_variable": {
+        "custom_amount_label": "Remuneration of the Auditor (₹)",
+        "company_custom_multiplier": null,
+        "company_custom_cap": null,
+        "officer_custom_multiplier": 4,
+        "officer_custom_cap": 500000
+      }
+    },
+    "source_page": 13,
+    "clause_paraphrase": "auditor shall be punishable with fine which shall not be less than twenty-five thousand rupees but which may extend to five lakh rupees or four times the remuneration of the auditor, whichever is less",
+    "manual_reconciliation": false
+  },
+  {
+    "section": "147(2)",
+    "old_value": {
+      "company_liability": null,
+      "officer_liability": {
+        "base_amount_min": 50000,
+        "base_amount_max": 2500000,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": "Or eight times the remuneration of the auditor, whichever is less."
+      },
+      "imprisonment": {
+        "applicable": true,
+        "min_years": 0,
+        "max_years": 1,
+        "applies_to": "officer"
+      }
+    },
+    "new_value": {
+      "company_liability": null,
+      "officer_liability": {
+        "base_amount_min": 50000,
+        "base_amount_max": 2500000,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": "Or eight times the remuneration of the auditor, whichever is less."
+      },
+      "imprisonment": {
+        "applicable": true,
+        "min_years": 0,
+        "max_years": 1,
+        "applies_to": "officer"
+      },
+      "dynamic_variable": {
+        "custom_amount_label": "Remuneration of the Auditor (₹)",
+        "company_custom_multiplier": null,
+        "company_custom_cap": null,
+        "officer_custom_multiplier": 8,
+        "officer_custom_cap": 2500000
+      }
+    },
+    "source_page": 14,
+    "clause_paraphrase": "punishable with imprisonment... and with fine which shall not be less than fifty thousand rupees but which may extend to twenty-five lakh rupees or eight times the remuneration of the auditor, whichever is less",
+    "manual_reconciliation": false
+  },
+  {
+    "section": "182(4)",
+    "old_value": {
+      "company_liability": {
+        "base_amount_min": 0,
+        "base_amount_max": null,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": "Fine which may extend to five times the amount so contributed"
+      },
+      "officer_liability": null,
+      "imprisonment": {
+        "applicable": false,
+        "min_years": null,
+        "max_years": null,
+        "applies_to": null
+      }
+    },
+    "new_value": {
+      "company_liability": {
+        "base_amount_min": 0,
+        "base_amount_max": 0,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": "Fine which may extend to five times the amount so contributed"
+      },
+      "officer_liability": null,
+      "imprisonment": {
+        "applicable": false,
+        "min_years": null,
+        "max_years": null,
+        "applies_to": null
+      }
+    },
+    "dynamic_variable": {
+      "custom_amount_label": "Amount Contributed (₹)",
+      "company_custom_multiplier": 5,
+      "company_custom_cap": null,
+      "officer_custom_multiplier": null,
+      "officer_custom_cap": null
+    },
+    "source_page": 16,
+    "clause_paraphrase": "If a company makes any contribution in contravention of the provisions of this section, the company shall be punishable with fine which may extend to five times the amount so contributed.",
+    "manual_reconciliation": false
+  },
+  {
+    "section": "378ZM(2)",
+    "dynamic_variable": true,
+    "custom_amount_label": "Turnover (₹)",
+    "company_custom_multiplier": null,
+    "company_custom_cap": null,
+    "officer_custom_multiplier": 0.05,
+    "officer_custom_cap": null,
+    "old_value": {
+      "company_liability": {
+        "base_amount_min": null,
+        "base_amount_max": null,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": ""
+      },
+      "officer_liability": {
+        "base_amount_min": null,
+        "base_amount_max": null,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": "Fine equivalent to 5% of the turnover of the Company during preceding financial year."
+      },
+      "imprisonment": {
+        "applicable": true,
+        "min_years": null,
+        "max_years": 0.5,
+        "applies_to": "officer"
+      }
+    },
+    "new_value": {
+      "company_liability": {
+        "base_amount_min": null,
+        "base_amount_max": null,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": ""
+      },
+      "officer_liability": {
+        "base_amount_min": null,
+        "base_amount_max": null,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": "Fine equivalent to 5% of the turnover of the Company during preceding financial year."
+      },
+      "imprisonment": {
+        "applicable": true,
+        "min_years": null,
+        "max_years": 0.5,
+        "applies_to": "officer"
+      }
+    },
+    "source_page": 25,
+    "clause_paraphrase": "fine equivalent to five per cent. of the turnover of that Company during the preceding financial year.",
+    "manual_reconciliation": false
+  },
+  {
+    "section": "378ZS(6)",
+    "dynamic_variable": true,
+    "custom_amount_label": "Number of Copies",
+    "company_custom_multiplier": 100,
+    "company_custom_cap": null,
+    "officer_custom_multiplier": 100,
+    "officer_custom_cap": null,
+    "old_value": {
+      "company_liability": {
+        "base_amount_min": 0,
+        "base_amount_max": 100,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": "Per copy in respect of which default is made."
+      },
+      "officer_liability": {
+        "base_amount_min": 0,
+        "base_amount_max": 100,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": "Per copy in respect of which default is made."
+      },
+      "imprisonment": {
+        "applicable": false,
+        "min_years": null,
+        "max_years": null,
+        "applies_to": null
+      }
+    },
+    "new_value": {
+      "company_liability": {
+        "base_amount_min": 0,
+        "base_amount_max": 0,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": "Fine may extend to ₹100 per copy."
+      },
+      "officer_liability": {
+        "base_amount_min": 0,
+        "base_amount_max": 0,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": "Fine may extend to ₹100 per copy."
+      },
+      "imprisonment": {
+        "applicable": false,
+        "min_years": null,
+        "max_years": null,
+        "applies_to": null
+      }
+    },
+    "source_page": 26,
+    "clause_paraphrase": "fine which may extend to one hundred rupees, for each copy in respect of which default is made.",
+    "manual_reconciliation": false
+  },
+  {
+    "section": "441(5)",
+    "dynamic_variable": true,
+    "custom_amount_label": "Corresponding Section Fine (₹)",
+    "company_custom_multiplier": null,
+    "company_custom_cap": null,
+    "officer_custom_multiplier": 2,
+    "officer_custom_cap": null,
+    "old_value": {
+      "company_liability": {
+        "base_amount_min": null,
+        "base_amount_max": null,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": ""
+      },
+      "officer_liability": {
+        "base_amount_min": null,
+        "base_amount_max": null,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": "Twice the amount provided in the corresponding section."
+      },
+      "imprisonment": {
+        "applicable": false,
+        "min_years": null,
+        "max_years": null,
+        "applies_to": null
+      }
+    },
+    "new_value": {
+      "company_liability": {
+        "base_amount_min": null,
+        "base_amount_max": null,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": ""
+      },
+      "officer_liability": {
+        "base_amount_min": null,
+        "base_amount_max": null,
+        "per_day_continuing": null,
+        "max_cap": null,
+        "notes": "Twice the amount provided in the corresponding section."
+      },
+      "imprisonment": {
+        "applicable": false,
+        "min_years": null,
+        "max_years": null,
+        "applies_to": null
+      }
+    },
+    "source_page": 27,
+    "clause_paraphrase": "maximum amount of fine for the offence proposed to be compounded under this section shall be twice the amount provided in the corresponding section",
+    "manual_reconciliation": false
+  }
+]

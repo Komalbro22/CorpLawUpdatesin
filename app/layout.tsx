@@ -154,7 +154,11 @@ export default async function RootLayout({
             Skip to main content
           </a>
           <HideOnAdmin><AnnouncementBar /></HideOnAdmin>
-          <HideOnAdmin><Navbar /></HideOnAdmin>
+          <HideOnAdmin>
+            <header>
+              <Navbar />
+            </header>
+          </HideOnAdmin>
           <main id="main-content" tabIndex={-1} className="flex-grow outline-none overflow-x-hidden">
             {children}
           </main>

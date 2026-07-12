@@ -42,3 +42,7 @@ next-env.d.ts
 
 # scratch files
 /scratch
+
+# agents and local tools
+.agents/
+seomator.toml

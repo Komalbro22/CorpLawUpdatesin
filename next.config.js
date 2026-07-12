@@ -106,13 +106,14 @@ const nextConfig = {
         destination: '/updates',
         permanent: true,
       },
+      // Redirect retired penalty-calculator routes to fee-calculator
       {
-        source: '/tools/penalty-calculator/:path*',
+        source: '/tools/penalty-calculator',
         destination: '/tools/fee-calculator',
         permanent: true,
       },
       {
-        source: '/tools/penalty-calculator',
+        source: '/tools/penalty-calculator/:path*',
         destination: '/tools/fee-calculator',
         permanent: true,
       },

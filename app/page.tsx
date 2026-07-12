@@ -201,7 +201,7 @@ export default async function HomePage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {featuredUpdates.map((update: any, i: number) => (
-              <UpdateCard key={update.id} update={update} animationDelay={i * 80} priority={i < 2} />
+              <UpdateCard key={update.id} update={update} animationDelay={i * 80} priority={i < 3} />
             ))}
           </div>
         </section>
@@ -276,7 +276,7 @@ export default async function HomePage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-10">
             {latestUpdates.map((update: any, i: number) => (
-              <UpdateCard key={update.id} update={update} animationDelay={i * 60} priority={featuredUpdates.length === 0 && i < 2} />
+              <UpdateCard key={update.id} update={update} animationDelay={i * 60} priority={featuredUpdates.length === 0 && i < 3} />
             ))}
           </div>
           <div className="text-center sm:hidden">

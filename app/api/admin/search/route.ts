@@ -2,6 +2,8 @@ import { supabase } from '@/lib/supabase'
 import { NextResponse } from 'next/server'
 import { verifyAdminSession } from '@/lib/admin-auth'
 
+export const dynamic = 'force-dynamic'
+
 interface UpdateRecord {
   id: string
   title: string

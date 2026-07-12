@@ -1,0 +1,669 @@
+[
+    {
+        "id":  "sec-352-8",
+        "sno":  121,
+        "section":  "352(8)",
+        "act_chapter":  "Chapter XX - Winding Up (Offences)",
+        "title":  "Company Liquidation Dividend and Undistributed Assets Account.",
+        "plain_summary":  "A liquidator retaining money instead of depositing it into the prescribed account must pay interest and an unspecified penalty.",
+        "penalty_type":  "no_fixed_amount",
+        "company_liability":  {
+                                  "base_amount_min":  null,
+                                  "base_amount_max":  null,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  ""
+                              },
+        "officer_liability":  {
+                                  "base_amount_min":  null,
+                                  "base_amount_max":  null,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  "Interest at 12% p.a. plus penalty as determined by Registrar."
+                              },
+        "imprisonment":  {
+                             "applicable":  false,
+                             "min_years":  null,
+                             "max_years":  null,
+                             "applies_to":  null
+                         },
+        "refers_to_section_447":  false,
+        "category":  "Winding Up",
+        "related_sections":  [
+
+                             ],
+        "source_page":  25,
+        "last_verified":  "2026-07-04",
+        "amendment_watch":  [
+
+                            ],
+        "flags":  [
+
+                  ],
+        "detailed_summary":  "Under **Section 352(8)** of the Companies Act, 2013, a liquidator retaining money instead of depositing it into the prescribed account must pay interest and an unspecified penalty.\n\n### Key Penalties\n* **Company Liability**: Penalty applicable.\n* **Officer in Default**: Penalty applicable.\n",
+        "eligible_for_446b":  true
+    },
+    {
+        "id":  "sec-378v-3",
+        "sno":  122,
+        "section":  "378V(3)",
+        "act_chapter":  "Chapter XXIA - Producer Companies",
+        "title":  "Failure to Issue Notice of Board Meeting (Producer Company)",
+        "plain_summary":  "If the Chief Executive fails to give the required 7 days prior notice for a board meeting, they are liable to a penalty.",
+        "penalty_type":  "penalty",
+        "company_liability":  {
+                                  "base_amount_min":  null,
+                                  "base_amount_max":  null,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  ""
+                              },
+        "officer_liability":  {
+                                  "base_amount_min":  5000,
+                                  "base_amount_max":  5000,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  "Applies to Chief Executive."
+                              },
+        "imprisonment":  {
+                             "applicable":  false,
+                             "min_years":  null,
+                             "max_years":  null,
+                             "applies_to":  null
+                         },
+        "refers_to_section_447":  false,
+        "category":  "Producer Company",
+        "related_sections":  [
+
+                             ],
+        "source_page":  25,
+        "last_verified":  "2026-07-04",
+        "amendment_watch":  [
+
+                            ],
+        "flags":  [
+
+                  ],
+        "detailed_summary":  "Under **Section 378V(3)** of the Companies Act, 2013, if the chief executive fails to give the required 7 days prior notice for a board meeting, they are liable to a penalty.\n\n### Key Penalties\n* **Company Liability**: Penalty applicable.\n* **Officer in Default**: Base penalty of **₹5,000**.\n",
+        "eligible_for_446b":  true
+    },
+    {
+        "id":  "sec-378x",
+        "sno":  123,
+        "section":  "378X",
+        "act_chapter":  "Chapter XXIA - Producer Companies",
+        "title":  "Failure to Appoint Whole Time Secretary (Producer Company)",
+        "plain_summary":  "Failure by a Producer Company with over INR 5 Crores turnover to appoint a whole-time secretary leads to per-day penalties.",
+        "penalty_type":  "penalty",
+        "company_liability":  {
+                                  "base_amount_min":  null,
+                                  "base_amount_max":  null,
+                                  "per_day_continuing":  100,
+                                  "max_cap":  100000,
+                                  "notes":  ""
+                              },
+        "officer_liability":  {
+                                  "base_amount_min":  null,
+                                  "base_amount_max":  null,
+                                  "per_day_continuing":  100,
+                                  "max_cap":  100000,
+                                  "notes":  ""
+                              },
+        "imprisonment":  {
+                             "applicable":  false,
+                             "min_years":  null,
+                             "max_years":  null,
+                             "applies_to":  null
+                         },
+        "refers_to_section_447":  false,
+        "category":  "Producer Company",
+        "related_sections":  [
+
+                             ],
+        "source_page":  25,
+        "last_verified":  "2026-07-04",
+        "amendment_watch":  [
+
+                            ],
+        "flags":  [
+
+                  ],
+        "detailed_summary":  "Under **Section 378X** of the Companies Act, 2013, failure by a producer company with over inr 5 crores turnover to appoint a whole-time secretary leads to per-day penalties.\n\n### Key Penalties\n* **Company Liability**: Penalty applicable plus **₹100 per day** for continuing default, capped at **₹1,00,000**.\n* **Officer in Default**: Penalty applicable plus **₹100 per day** for continuing default, capped at **₹1,00,000**.\n",
+        "eligible_for_446b":  true
+    },
+    {
+        "id":  "sec-378zm-1",
+        "sno":  124,
+        "section":  "378ZM(1)",
+        "act_chapter":  "Chapter XXIA - Producer Companies",
+        "title":  "Penalty for contravention",
+        "plain_summary":  "Any person carrying on business using \u0027Producer Company Limited\u0027 in their name without being registered as such is liable to a daily fine.",
+        "penalty_type":  "fine",
+        "company_liability":  {
+                                  "base_amount_min":  null,
+                                  "base_amount_max":  null,
+                                  "per_day_continuing":  10000,
+                                  "max_cap":  null,
+                                  "notes":  "Applies to any person/entity."
+                              },
+        "officer_liability":  {
+                                  "base_amount_min":  null,
+                                  "base_amount_max":  null,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  "Section 378ZM(3) lists a fine up to Rs 1 Lakh + Rs 10,000/day for failing to handover books or convene AGM."
+                              },
+        "imprisonment":  {
+                             "applicable":  false,
+                             "min_years":  null,
+                             "max_years":  null,
+                             "applies_to":  null
+                         },
+        "refers_to_section_447":  false,
+        "category":  "Producer Company",
+        "related_sections":  [
+
+                             ],
+        "source_page":  25,
+        "last_verified":  "2026-07-04",
+        "amendment_watch":  [
+
+                            ],
+        "flags":  [
+
+                  ],
+        "detailed_summary":  "Under **Section 378ZM(1)** of the Companies Act, 2013, any person carrying on business using \u0027producer company limited\u0027 in their name without being registered as such is liable to a daily fine.\n\n### Key Penalties\n* **Company Liability**: Penalty applicable plus **₹10,000 per day** for continuing default.\n* **Officer in Default**: Penalty applicable.\n",
+        "eligible_for_446b":  true
+    },
+    {
+        "id":  "sec-378zm-2",
+        "sno":  125,
+        "section":  "378ZM(2)",
+        "act_chapter":  "Chapter XXIA - Producer Companies",
+        "title":  "Penalty for contravention",
+        "plain_summary":  "Directors or officers of a Producer Company wilfully failing to furnish information face imprisonment and a fine based on turnover.",
+        "penalty_type":  "fine_and_imprisonment",
+        "company_liability":  {
+                                  "base_amount_min":  null,
+                                  "base_amount_max":  null,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  ""
+                              },
+        "officer_liability":  {
+                                  "base_amount_min":  null,
+                                  "base_amount_max":  null,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  "Fine equivalent to 5% of the turnover of the Company during preceding financial year."
+                              },
+        "imprisonment":  {
+                             "applicable":  true,
+                             "min_years":  null,
+                             "max_years":  0.5,
+                             "applies_to":  "officer"
+                         },
+        "refers_to_section_447":  false,
+        "category":  "Producer Company",
+        "related_sections":  [
+
+                             ],
+        "source_page":  25,
+        "last_verified":  "2026-07-04",
+        "amendment_watch":  [
+
+                            ],
+        "flags":  [
+
+                  ],
+        "detailed_summary":  "Under **Section 378ZM(2)** of the Companies Act, 2013, directors or officers of a producer company wilfully failing to furnish information face imprisonment and a fine based on turnover.\n\n### Key Penalties\n* **Company Liability**: Penalty applicable.\n* **Officer in Default**: Penalty applicable.\n\n### Imprisonment\n* ⚠ **Warning**: This provision also carries a risk of imprisonment for up to **0.5 years** for officer.\n",
+        "eligible_for_446b":  true,
+        "dynamic_variable":  true,
+        "officer_custom_multiplier":  0.05
+    },
+    {
+        "id":  "sec-378zs-6",
+        "sno":  126,
+        "section":  "378ZS(6)",
+        "act_chapter":  "Chapter XXIA - Producer Companies",
+        "title":  "Re-conversion of Producer Company to inter-State co-operative society.",
+        "plain_summary":  "Failing to comply with re-conversion provisions attracts a fine on the company and defaulting officers per copy defaulted.",
+        "penalty_type":  "fine",
+        "company_liability":  {
+                                  "base_amount_min":  0,
+                                  "base_amount_max":  100,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  "Per copy in respect of which default is made."
+                              },
+        "officer_liability":  {
+                                  "base_amount_min":  0,
+                                  "base_amount_max":  100,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  "Per copy in respect of which default is made."
+                              },
+        "imprisonment":  {
+                             "applicable":  false,
+                             "min_years":  null,
+                             "max_years":  null,
+                             "applies_to":  null
+                         },
+        "refers_to_section_447":  false,
+        "category":  "Producer Company",
+        "related_sections":  [
+
+                             ],
+        "source_page":  26,
+        "last_verified":  "2026-07-04",
+        "amendment_watch":  [
+
+                            ],
+        "flags":  [
+
+                  ],
+        "detailed_summary":  "Under **Section 378ZS(6)** of the Companies Act, 2013, failing to comply with re-conversion provisions attracts a fine on the company and defaulting officers per copy defaulted.\n\n### Key Penalties\n* **Company Liability**: Up to **₹100**.\n* **Officer in Default**: Up to **₹100**.\n",
+        "eligible_for_446b":  true,
+        "dynamic_variable":  true,
+        "company_custom_cap":  100,
+        "officer_custom_cap":  100
+    },
+    {
+        "id":  "sec-392",
+        "sno":  127,
+        "section":  "392",
+        "act_chapter":  "Chapter XXII - Companies Incorporated Outside India",
+        "title":  "Punishment for Contravention",
+        "plain_summary":  "Foreign companies contravening Chapter XXII provisions are liable to substantial fines, along with their defaulting officers.",
+        "penalty_type":  "fine",
+        "company_liability":  {
+                                  "base_amount_min":  100000,
+                                  "base_amount_max":  300000,
+                                  "per_day_continuing":  50000,
+                                  "max_cap":  null,
+                                  "notes":  ""
+                              },
+        "officer_liability":  {
+                                  "base_amount_min":  25000,
+                                  "base_amount_max":  500000,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  ""
+                              },
+        "imprisonment":  {
+                             "applicable":  false,
+                             "min_years":  null,
+                             "max_years":  null,
+                             "applies_to":  null
+                         },
+        "refers_to_section_447":  false,
+        "category":  "Miscellaneous",
+        "related_sections":  [
+
+                             ],
+        "source_page":  26,
+        "last_verified":  "2026-07-04",
+        "amendment_watch":  [
+
+                            ],
+        "flags":  [
+
+                  ],
+        "detailed_summary":  "Under **Section 392** of the Companies Act, 2013, foreign companies contravening chapter xxii provisions are liable to substantial fines, along with their defaulting officers.\n\n### Key Penalties\n* **Company Liability**: Up to **₹3,00,000** plus **₹50,000 per day** for continuing default.\n* **Officer in Default**: Up to **₹5,00,000**.\n",
+        "eligible_for_446b":  true
+    },
+    {
+        "id":  "sec-405-4",
+        "sno":  128,
+        "section":  "405(4)",
+        "act_chapter":  "Chapter XXVII",
+        "title":  "Failure to furnish information or statistics etc. by the companies required by the Central Government",
+        "plain_summary":  "Failure to furnish or providing incorrect information required by the Central Government makes the company and officers liable to a penalty.",
+        "penalty_type":  "penalty",
+        "company_liability":  {
+                                  "base_amount_min":  20000,
+                                  "base_amount_max":  20000,
+                                  "per_day_continuing":  1000,
+                                  "max_cap":  300000,
+                                  "notes":  ""
+                              },
+        "officer_liability":  {
+                                  "base_amount_min":  20000,
+                                  "base_amount_max":  20000,
+                                  "per_day_continuing":  1000,
+                                  "max_cap":  300000,
+                                  "notes":  ""
+                              },
+        "imprisonment":  {
+                             "applicable":  false,
+                             "min_years":  null,
+                             "max_years":  null,
+                             "applies_to":  null
+                         },
+        "refers_to_section_447":  false,
+        "category":  "Miscellaneous",
+        "related_sections":  [
+
+                             ],
+        "source_page":  26,
+        "last_verified":  "2026-07-04",
+        "amendment_watch":  [
+
+                            ],
+        "flags":  [
+
+                  ],
+        "detailed_summary":  "Under **Section 405(4)** of the Companies Act, 2013, failure to furnish or providing incorrect information required by the central government makes the company and officers liable to a penalty.\n\n### Key Penalties\n* **Company Liability**: Base penalty of **₹20,000** plus **₹1,000 per day** for continuing default, capped at **₹3,00,000**.\n* **Officer in Default**: Base penalty of **₹20,000** plus **₹1,000 per day** for continuing default, capped at **₹3,00,000**.\n",
+        "eligible_for_446b":  true
+    },
+    {
+        "id":  "sec-436-3",
+        "sno":  129,
+        "section":  "436(3)",
+        "act_chapter":  "Chapter XXVIII - Special Courts",
+        "title":  "Offences Triable by Special Courts.",
+        "plain_summary":  "Procedural limitation on summary trials by Special Courts dictating that no sentence of imprisonment exceeding one year shall be passed.",
+        "penalty_type":  "no_fixed_amount",
+        "company_liability":  {
+                                  "base_amount_min":  null,
+                                  "base_amount_max":  null,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  ""
+                              },
+        "officer_liability":  {
+                                  "base_amount_min":  null,
+                                  "base_amount_max":  null,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  ""
+                              },
+        "imprisonment":  {
+                             "applicable":  false,
+                             "min_years":  null,
+                             "max_years":  null,
+                             "applies_to":  null
+                         },
+        "refers_to_section_447":  false,
+        "category":  "Miscellaneous",
+        "related_sections":  [
+
+                             ],
+        "source_page":  26,
+        "last_verified":  "2026-07-04",
+        "amendment_watch":  [
+
+                            ],
+        "flags":  [
+
+                  ],
+        "detailed_summary":  "Under **Section 436(3)** of the Companies Act, 2013, procedural limitation on summary trials by special courts dictating that no sentence of imprisonment exceeding one year shall be passed.\n\n### Key Penalties\n* **Company Liability**: Penalty applicable.\n* **Officer in Default**: Penalty applicable.\n",
+        "eligible_for_446b":  true
+    },
+    {
+        "id":  "sec-441-1",
+        "sno":  130,
+        "section":  "441(1) \u0026 (6)",
+        "act_chapter":  "Chapter XXIX",
+        "title":  "Compounding of certain offences",
+        "plain_summary":  "Governs the procedure for compounding of offences not punishable with imprisonment only.",
+        "penalty_type":  "no_fixed_amount",
+        "company_liability":  {
+                                  "base_amount_min":  null,
+                                  "base_amount_max":  null,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  ""
+                              },
+        "officer_liability":  {
+                                  "base_amount_min":  null,
+                                  "base_amount_max":  null,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  ""
+                              },
+        "imprisonment":  {
+                             "applicable":  false,
+                             "min_years":  null,
+                             "max_years":  null,
+                             "applies_to":  null
+                         },
+        "refers_to_section_447":  false,
+        "category":  "Investigation \u0026 Fraud",
+        "related_sections":  [
+
+                             ],
+        "source_page":  27,
+        "last_verified":  "2026-07-04",
+        "amendment_watch":  [
+
+                            ],
+        "flags":  [
+
+                  ],
+        "detailed_summary":  "Under **Section 441(1) \u0026 (6)** of the Companies Act, 2013, governs the procedure for compounding of offences not punishable with imprisonment only.\n\n### Key Penalties\n* **Company Liability**: Penalty applicable.\n* **Officer in Default**: Penalty applicable.\n",
+        "eligible_for_446b":  true
+    },
+    {
+        "id":  "sec-441-5",
+        "sno":  131,
+        "section":  "441(5)",
+        "act_chapter":  "Chapter XXIX",
+        "title":  "Default in complying with the order of RD/NCLT for delivering document or return as per sub-section (4) of S.441",
+        "plain_summary":  "Non-compliance with an order made by Tribunal or RD results in a fine double the amount provided in the corresponding section.",
+        "penalty_type":  "fine",
+        "company_liability":  {
+                                  "base_amount_min":  null,
+                                  "base_amount_max":  null,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  ""
+                              },
+        "officer_liability":  {
+                                  "base_amount_min":  null,
+                                  "base_amount_max":  null,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  "Twice the amount provided in the corresponding section."
+                              },
+        "imprisonment":  {
+                             "applicable":  false,
+                             "min_years":  null,
+                             "max_years":  null,
+                             "applies_to":  null
+                         },
+        "refers_to_section_447":  false,
+        "category":  "Investigation \u0026 Fraud",
+        "related_sections":  [
+
+                             ],
+        "source_page":  27,
+        "last_verified":  "2026-07-04",
+        "amendment_watch":  [
+
+                            ],
+        "flags":  [
+
+                  ],
+        "detailed_summary":  "Under **Section 441(5)** of the Companies Act, 2013, non-compliance with an order made by tribunal or rd results in a fine double the amount provided in the corresponding section.\n\n### Key Penalties\n* **Company Liability**: Penalty applicable.\n* **Officer in Default**: Penalty applicable.\n",
+        "eligible_for_446b":  true,
+        "dynamic_variable":  true,
+        "officer_custom_cap":  2
+    },
+    {
+        "id":  "sec-447-1",
+        "sno":  132,
+        "section":  "447",
+        "act_chapter":  "Chapter XXIX",
+        "title":  "Punishment for fraud",
+        "plain_summary":  "Guilty of fraud involving at least ten lakh rupees or 1% of turnover implies heavy fine proportional to fraud amount and mandatory imprisonment.",
+        "penalty_type":  "fine_and_imprisonment",
+        "company_liability":  {
+                                  "base_amount_min":  null,
+                                  "base_amount_max":  null,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  ""
+                              },
+        "officer_liability":  {
+                                  "base_amount_min":  null,
+                                  "base_amount_max":  null,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  "Fine min amount involved, max 3 times amount involved."
+                              },
+        "imprisonment":  {
+                             "applicable":  true,
+                             "min_years":  0.5,
+                             "max_years":  10,
+                             "applies_to":  "officer"
+                         },
+        "refers_to_section_447":  true,
+        "category":  "Investigation \u0026 Fraud",
+        "related_sections":  [
+
+                             ],
+        "source_page":  27,
+        "last_verified":  "2026-07-04",
+        "amendment_watch":  [
+
+                            ],
+        "flags":  [
+
+                  ],
+        "detailed_summary":  "**Section 447** is the primary penal provision for Fraud under the Companies Act, 2013. It is a severe provision that overrides other sections and carries strict non-compoundable consequences.\n\n### Criteria for Severe Fraud\nIf the fraud involves an amount of **at least ₹10 Lakhs** OR **1% of the turnover of the company**, whichever is lower, the following applies:\n\n* **Imprisonment**: Minimum of **6 months**, extending up to **10 years**. \n* **Fine**: An amount not less than the amount involved in the fraud, extending up to **3 times** the amount involved.\n* **Public Interest Clause**: If the fraud involves \"public interest\", the minimum imprisonment term is elevated to **3 years**.\n\n*Because of the severity and the inclusion of imprisonment, Section 447 offenses cannot be adjudicated via the standard MCA penalty mechanism and must be tried in Special Courts.*",
+        "eligible_for_446b":  false
+    },
+    {
+        "id":  "sec-447-2",
+        "sno":  133,
+        "section":  "447",
+        "act_chapter":  "Chapter XXIX",
+        "title":  "Punishment for fraud",
+        "plain_summary":  "Guilty of fraud less than ten lakh rupees (and not involving public interest) is punishable with imprisonment or fine or both.",
+        "penalty_type":  "fine_or_imprisonment",
+        "company_liability":  {
+                                  "base_amount_min":  null,
+                                  "base_amount_max":  null,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  ""
+                              },
+        "officer_liability":  {
+                                  "base_amount_min":  0,
+                                  "base_amount_max":  5000000,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  "Or with both imprisonment and fine."
+                              },
+        "imprisonment":  {
+                             "applicable":  true,
+                             "min_years":  0,
+                             "max_years":  5,
+                             "applies_to":  "officer"
+                         },
+        "refers_to_section_447":  true,
+        "category":  "Investigation \u0026 Fraud",
+        "related_sections":  [
+
+                             ],
+        "source_page":  27,
+        "last_verified":  "2026-07-04",
+        "amendment_watch":  [
+
+                            ],
+        "flags":  [
+
+                  ],
+        "detailed_summary":  "Under **Section 447** of the Companies Act, 2013, guilty of fraud less than ten lakh rupees (and not involving public interest) is punishable with imprisonment or fine or both.\n\n### Key Penalties\n* **Company Liability**: Penalty applicable.\n* **Officer in Default**: Up to **₹50,00,000**.\n\n### Imprisonment\n* ⚠ **Warning**: This provision also carries a risk of imprisonment for up to **5 years** for officer.\n",
+        "eligible_for_446b":  false
+    },
+    {
+        "id":  "sec-448",
+        "sno":  134,
+        "section":  "448",
+        "act_chapter":  "Chapter XXIX",
+        "title":  "Punishment for false statement",
+        "plain_summary":  "Making a false statement or omitting a material fact knowingly in any return or document is punishable as fraud.",
+        "penalty_type":  "section_447_fraud",
+        "company_liability":  {
+                                  "base_amount_min":  null,
+                                  "base_amount_max":  null,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  ""
+                              },
+        "officer_liability":  {
+                                  "base_amount_min":  null,
+                                  "base_amount_max":  null,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  ""
+                              },
+        "imprisonment":  {
+                             "applicable":  false,
+                             "min_years":  null,
+                             "max_years":  null,
+                             "applies_to":  null
+                         },
+        "refers_to_section_447":  true,
+        "category":  "Investigation \u0026 Fraud",
+        "related_sections":  [
+
+                             ],
+        "source_page":  28,
+        "last_verified":  "2026-07-04",
+        "amendment_watch":  [
+
+                            ],
+        "flags":  [
+
+                  ],
+        "detailed_summary":  "Under **Section 448** of the Companies Act, 2013, making a false statement or omitting a material fact knowingly in any return or document is punishable as fraud.\n\n### Key Penalties\n* **Company Liability**: Penalty applicable.\n* **Officer in Default**: Penalty applicable.\n",
+        "eligible_for_446b":  true
+    },
+    {
+        "id":  "sec-449",
+        "sno":  135,
+        "section":  "449",
+        "act_chapter":  "Chapter XXIX",
+        "title":  "Punishment for false evidence",
+        "plain_summary":  "Intentionally giving false evidence under oath or in an affidavit is punishable with imprisonment and fine.",
+        "penalty_type":  "fine_and_imprisonment",
+        "company_liability":  {
+                                  "base_amount_min":  null,
+                                  "base_amount_max":  null,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  ""
+                              },
+        "officer_liability":  {
+                                  "base_amount_min":  0,
+                                  "base_amount_max":  1000000,
+                                  "per_day_continuing":  null,
+                                  "max_cap":  null,
+                                  "notes":  ""
+                              },
+        "imprisonment":  {
+                             "applicable":  true,
+                             "min_years":  3,
+                             "max_years":  7,
+                             "applies_to":  "officer"
+                         },
+        "refers_to_section_447":  false,
+        "category":  "Investigation \u0026 Fraud",
+        "related_sections":  [
+
+                             ],
+        "source_page":  28,
+        "last_verified":  "2026-07-04",
+        "amendment_watch":  [
+
+                            ],
+        "flags":  [
+
+                  ],
+        "detailed_summary":  "Under **Section 449** of the Companies Act, 2013, intentionally giving false evidence under oath or in an affidavit is punishable with imprisonment and fine.\n\n### Key Penalties\n* **Company Liability**: Penalty applicable.\n* **Officer in Default**: Up to **₹10,00,000**.\n\n### Imprisonment\n* ⚠ **Warning**: This provision also carries a risk of imprisonment for up to **7 years** for officer.\n",
+        "eligible_for_446b":  true
+    }
+]
