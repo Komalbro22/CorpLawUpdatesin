@@ -18,7 +18,7 @@
     },
     {
       "path": "/api/cron/sync-views",
-      "schedule": "*/15 * * * *"
+      "schedule": "0 5 * * *"
     }
   ]
 }
