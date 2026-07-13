@@ -343,7 +343,7 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
       className="article-font-md mx-auto w-full max-w-4xl px-4 py-8 sm:py-12"
     >
       {/* Breadcrumb */}
-      <nav className="mb-7 flex flex-wrap items-center gap-1.5 text-sm text-slate-400 print:hidden" aria-label="Breadcrumb">
+      <nav className="mb-7 flex flex-wrap items-center gap-1.5 text-sm text-slate-600 dark:text-slate-400 print:hidden" aria-label="Breadcrumb">
         <Link href="/" className="hover:text-gold transition-colors">Home</Link>
         <span className="text-slate-300">/</span>
         <Link href="/glossary" className="hover:text-gold transition-colors">Glossary</Link>

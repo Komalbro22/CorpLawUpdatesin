@@ -858,6 +858,10 @@ h2, h3, h4 {
   min-width: 100px;
 }
 
+.article-content table th {
+  color: #1e293b; /* Enforce high contrast text (#1e293b = slate-800) for headers in light mode */
+}
+
 /* Allow custom flex/grid containers in articles to scroll horizontally on mobile */
 .article-content div[style*="display: flex"],
 .article-content div[style*="display:flex"],
@@ -1477,5 +1481,10 @@ details[open] summary ~ * {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Adjust gold accent links for higher contrast on light/blue backgrounds */
+a.text-gold, .text-gold a {
+  color: #92400e; /* Darker amber/gold */
 }
 

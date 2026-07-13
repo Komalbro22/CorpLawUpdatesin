@@ -9,10 +9,10 @@ export function QuickAnswer({ answer }: { answer: string }) {
         <Lightbulb className="w-5 h-5" aria-hidden="true" />
       </div>
       <div className="flex-1">
-        <h4 className="text-[11px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5">
+        <h2 className="text-[11px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-500 mb-1.5 flex items-center gap-1.5">
           Quick Answer
           <span className="bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-400 px-1.5 py-0.5 rounded text-[9px] tracking-widest font-bold">AI</span>
-        </h4>
+        </h2>
         <p className="text-slate-700 dark:text-slate-300 text-[15px] leading-relaxed font-medium">
           {answer}
         </p>

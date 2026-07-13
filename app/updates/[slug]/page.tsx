@@ -331,7 +331,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
             ]} />
 
             {/* 1. BREADCRUMB NAV */}
-            <nav className="mb-7 flex flex-wrap items-center gap-1.5 text-sm text-slate-400 print:hidden" aria-label="Breadcrumb">
+            <nav className="mb-7 flex flex-wrap items-center gap-1.5 text-sm text-slate-600 dark:text-slate-400 print:hidden" aria-label="Breadcrumb">
                 <Link href="/" className="hover:text-gold transition-colors">Home</Link>
                 <span className="text-slate-300">/</span>
                 <Link href="/updates" className="hover:text-gold transition-colors">Updates</Link>
@@ -348,7 +348,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                         <CategoryBadge category={update.category as any} />
                         <Link 
                             href={`/category/${update.category.toLowerCase()}`}
-                            className="text-xs font-bold text-slate-400 hover:text-gold transition-colors uppercase tracking-widest"
+                            className="text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-gold transition-colors uppercase tracking-widest"
                         >
                             {update.category.toUpperCase()} updates
                         </Link>
@@ -484,10 +484,10 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                             </div>
                         </div>
                         <div className="flex flex-col items-end">
-                            <span className="flex items-center gap-1 font-semibold text-green-600 dark:text-green-500">
+                            <span className="flex items-center gap-1 font-semibold text-green-700 dark:text-green-400">
                                 <CheckCircle2 className="h-3.5 w-3.5" aria-hidden /> Verified for compliance
                             </span>
-                            <span className="text-slate-400">Last verified: {formatDate(geoData.last_verified)}</span>
+                            <span className="text-slate-600 dark:text-slate-400">Last verified: {formatDate(geoData.last_verified)}</span>
                         </div>
                     </div>
                 )}
@@ -592,10 +592,10 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                 {/* Key Takeaways */}
                 {geoData?.key_takeaways && Array.isArray(geoData.key_takeaways) && geoData.key_takeaways.length > 0 && (
                     <div className="mb-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 p-5 shadow-sm">
-                        <h3 className="mb-3 font-heading text-lg font-bold text-navy dark:text-white flex items-center gap-2">
+                        <h2 className="mb-3 font-heading text-lg font-bold text-navy dark:text-white flex items-center gap-2">
                             <Sparkles className="h-5 w-5 text-amber-500" aria-hidden />
                             Key Takeaways
-                        </h3>
+                        </h2>
                         <ul className="space-y-2 pl-2">
                             {geoData.key_takeaways.map((point: string, i: number) => (
                                 <li key={i} className="flex items-start gap-3 text-[15px] text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
@@ -689,7 +689,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
             {/* 5. TAGS */}
             {tagsList && tagsList.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-4 mb-6 print:hidden">
-                    <span className="text-xs text-slate-400 self-center mr-1 font-medium">Tags:</span>
+                    <span className="text-xs text-slate-600 dark:text-slate-400 self-center mr-1 font-medium">Tags:</span>
                     {tagsList.map((tag: string) => (
                         <Link
                             key={tag}
@@ -718,10 +718,10 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
             {/* 7. INTERNAL LINKS - SEO */}
             <div className="mt-8 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-5 print:hidden">
-                <h3 className="mb-3 flex items-center gap-2 text-sm font-bold text-navy dark:text-white">
+                <h2 className="mb-3 flex items-center gap-2 text-sm font-bold text-navy dark:text-white">
                     <BookOpen className="h-4 w-4 text-amber-600" aria-hidden />
                     Browse More {update.category.toUpperCase()} Updates
-                </h3>
+                </h2>
                 <div className="flex flex-wrap gap-2">
                     {[
                         { label: `All ${update.category.toUpperCase()} Updates`, href: `/category/${update.category.toLowerCase()}` },

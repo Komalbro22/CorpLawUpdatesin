@@ -114,7 +114,7 @@ export default function ArticleActions({
                 href={shareLinks.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`flex items-center gap-1.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors ${
+                className={`flex items-center gap-1.5 bg-green-700 text-white rounded-lg hover:bg-green-800 transition-colors ${
                     compact ? 'px-2 py-1 text-xs' : 'px-3 py-2 text-sm'
                 }`}
             >

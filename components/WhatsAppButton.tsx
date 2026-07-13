@@ -26,7 +26,7 @@ export default function WhatsAppButton() {
       title="Join our WhatsApp Channel"
       aria-label="Chat on WhatsApp"
       className="fixed bottom-24 right-6 z-40
-                 bg-green-500 hover:bg-green-600
+                 bg-green-700 hover:bg-green-800
                  text-white rounded-full shadow-lg shadow-green-900/10
                  flex items-center gap-2
                  px-4 py-2.5 text-sm font-semibold
