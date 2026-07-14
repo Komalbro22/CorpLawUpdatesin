@@ -754,32 +754,40 @@ export default function DocumentGeneratorPage() {
   useEffect(() => {
     if (!('modelContext' in document) || !document.modelContext) return;
 
-    document.modelContext.registerTool({
-      name: 'generateLegalDocument',
-      description: `Generate the current legal document template on this page. Current template: "${template?.name || 'Legal Document'}". Use when a user wants to generate, create, or draft this specific Indian corporate legal document.`,
-      inputSchema: {
-        type: 'object',
-        properties: {
-          intent: {
-            type: 'string',
-            description: 'Plain English description of what the document should contain. Example: "Board resolution to appoint Rahul Sharma as CFO effective 1 July 2026"'
-          }
+    try {
+      document.modelContext.registerTool({
+        name: 'generateLegalDocument',
+        description: `Generate the current legal document template on this page. Current template: "${template?.name || 'Legal Document'}". Use when a user wants to generate, create, or draft this specific Indian corporate legal document.`,
+        inputSchema: {
+          type: 'object',
+          properties: {
+            intent: {
+              type: 'string',
+              description: 'Plain English description of what the document should contain. Example: "Board resolution to appoint Rahul Sharma as CFO effective 1 July 2026"'
+            }
+          },
+          required: ['intent']
         },
-        required: ['intent']
-      },
-      execute: async (params) => {
-        // Do not auto-generate — just inform the agent what page this is
-        // and let the user review before generating
-        return `This page can generate a "${template?.name || 'legal document'}". ` +
-          `To generate, the user needs to fill in the required fields and click Generate. ` +
-          `The document will be available for download as Word or PDF after generation. ` +
-          `URL: ${window.location.href}`;
-      }
-    });
+        execute: async (params) => {
+          // Do not auto-generate — just inform the agent what page this is
+          // and let the user review before generating
+          return `This page can generate a "${template?.name || 'legal document'}". ` +
+            `To generate, the user needs to fill in the required fields and click Generate. ` +
+            `The document will be available for download as Word or PDF after generation. ` +
+            `URL: ${window.location.href}`;
+        }
+      });
+    } catch (err) {
+      console.warn("Failed to register tool 'generateLegalDocument':", err);
+    }
 
     return () => {
       if (!('modelContext' in document) || !document.modelContext) return;
-      document.modelContext.unregisterTool?.('generateLegalDocument');
+      try {
+        document.modelContext.unregisterTool?.('generateLegalDocument');
+      } catch (err) {
+        console.warn("Failed to unregister tool 'generateLegalDocument':", err);
+      }
     };
   }, [template]);
   const [chatHistory, setChatHistory] = useState<{ role: 'user' | 'ai'; text: string }[]>([])

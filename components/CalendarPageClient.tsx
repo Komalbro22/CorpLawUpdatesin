@@ -422,76 +422,84 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
   useEffect(() => {
     if (!('modelContext' in document) || !document.modelContext) return;
 
-    document.modelContext.registerTool({
-      name: 'getComplianceDeadlines',
-      description: 'Returns upcoming Indian corporate compliance deadlines and filing due dates from CorpLawUpdates.in. Covers MCA, SEBI, RBI, IBBI, and FEMA regulators. Use when a user asks about compliance calendar, filing deadlines, due dates, or regulatory schedule.',
-      inputSchema: {
-        type: 'object',
-        properties: {
-          search: {
-            type: 'string',
-            description: 'Search keyword to filter deadlines. Example: "MGT-7", "SEBI", "annual return"'
+    try {
+      document.modelContext.registerTool({
+        name: 'getComplianceDeadlines',
+        description: 'Returns upcoming Indian corporate compliance deadlines and filing due dates from CorpLawUpdates.in. Covers MCA, SEBI, RBI, IBBI, and FEMA regulators. Use when a user asks about compliance calendar, filing deadlines, due dates, or regulatory schedule.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            search: {
+              type: 'string',
+              description: 'Search keyword to filter deadlines. Example: "MGT-7", "SEBI", "annual return"'
+            },
+            regulator: {
+              type: 'string',
+              enum: ['MCA', 'SEBI', 'RBI', 'IBBI', 'FEMA', 'ALL'],
+              description: 'Filter by regulator (default: ALL)'
+            },
+            thisWeekOnly: {
+              type: 'string',
+              enum: ['true', 'false'],
+              description: 'If true, returns only deadlines due this week (default: false)'
+            }
           },
-          regulator: {
-            type: 'string',
-            enum: ['MCA', 'SEBI', 'RBI', 'IBBI', 'FEMA', 'ALL'],
-            description: 'Filter by regulator (default: ALL)'
-          },
-          thisWeekOnly: {
-            type: 'string',
-            enum: ['true', 'false'],
-            description: 'If true, returns only deadlines due this week (default: false)'
-          }
+          required: []
         },
-        required: []
-      },
-      execute: async (params) => {
-        try {
-          let filtered = [...entries];
+        execute: async (params) => {
+          try {
+            let filtered = [...entries];
 
-          if (params.search && String(params.search).trim()) {
-            const q = String(params.search).toLowerCase();
-            filtered = filtered.filter(e =>
-              e.compliance_title?.toLowerCase().includes(q) ||
-              e.applicable_to?.toLowerCase().includes(q) ||
-              e.form_name?.toLowerCase().includes(q)
+            if (params.search && String(params.search).trim()) {
+              const q = String(params.search).toLowerCase();
+              filtered = filtered.filter(e =>
+                e.compliance_title?.toLowerCase().includes(q) ||
+                e.applicable_to?.toLowerCase().includes(q) ||
+                e.form_name?.toLowerCase().includes(q)
+              );
+            }
+
+            if (params.regulator && params.regulator !== 'ALL') {
+              filtered = filtered.filter(e =>
+                e.regulator?.toUpperCase() === String(params.regulator).toUpperCase()
+              );
+            }
+
+            if (params.thisWeekOnly === 'true') {
+              const now = new Date();
+              const weekEnd = new Date(now);
+              weekEnd.setDate(now.getDate() + 7);
+              filtered = filtered.filter(e => {
+                const due = new Date(e.due_date);
+                return due >= now && due <= weekEnd;
+              });
+            }
+
+            if (filtered.length === 0) {
+              return 'No compliance deadlines found matching your criteria.';
+            }
+
+            const lines = filtered.slice(0, 20).map(e =>
+              `• ${e.compliance_title} — Due: ${e.due_date}${e.regulator ? ` [${e.regulator}]` : ''}${e.form_name ? ` (${e.form_name})` : ''}`
             );
+
+            return `Found ${filtered.length} compliance deadline(s)${filtered.length > 20 ? ' (showing first 20)' : ''}:\n\n${lines.join('\n')}\n\nFull calendar: https://corplawupdates.in/calendar`;
+          } catch (e) {
+            return 'Error fetching compliance deadlines.';
           }
-
-          if (params.regulator && params.regulator !== 'ALL') {
-            filtered = filtered.filter(e =>
-              e.regulator?.toUpperCase() === String(params.regulator).toUpperCase()
-            );
-          }
-
-          if (params.thisWeekOnly === 'true') {
-            const now = new Date();
-            const weekEnd = new Date(now);
-            weekEnd.setDate(now.getDate() + 7);
-            filtered = filtered.filter(e => {
-              const due = new Date(e.due_date);
-              return due >= now && due <= weekEnd;
-            });
-          }
-
-          if (filtered.length === 0) {
-            return 'No compliance deadlines found matching your criteria.';
-          }
-
-          const lines = filtered.slice(0, 20).map(e =>
-            `• ${e.compliance_title} — Due: ${e.due_date}${e.regulator ? ` [${e.regulator}]` : ''}${e.form_name ? ` (${e.form_name})` : ''}`
-          );
-
-          return `Found ${filtered.length} compliance deadline(s)${filtered.length > 20 ? ' (showing first 20)' : ''}:\n\n${lines.join('\n')}\n\nFull calendar: https://corplawupdates.in/calendar`;
-        } catch (e) {
-          return 'Error fetching compliance deadlines.';
         }
-      }
-    });
+      });
+    } catch (err) {
+      console.warn("Failed to register tool 'getComplianceDeadlines':", err);
+    }
 
     return () => {
       if (!('modelContext' in document) || !document.modelContext) return;
-      document.modelContext.unregisterTool?.('getComplianceDeadlines');
+      try {
+        document.modelContext.unregisterTool?.('getComplianceDeadlines');
+      } catch (err) {
+        console.warn("Failed to unregister tool 'getComplianceDeadlines':", err);
+      }
     };
   }, [entries]);
 
