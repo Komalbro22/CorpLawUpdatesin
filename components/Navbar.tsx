@@ -182,7 +182,7 @@ export default function Navbar() {
                         <DarkModeToggle />
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="inline-flex items-center justify-center p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gold/80 transition-all duration-200 text-slate-500 dark:text-slate-400 hover:text-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
+                            className="inline-flex items-center justify-center min-h-[44px] min-w-[44px] p-2.5 rounded-md focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gold/80 transition-all duration-200 text-slate-500 dark:text-slate-400 hover:text-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
                             aria-expanded={isOpen}
                             aria-label={isOpen ? 'Close menu' : 'Open main menu'}
                         >

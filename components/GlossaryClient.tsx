@@ -79,7 +79,7 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
           <input
             type="text"
             name="search_query"
-            className="block w-full pl-10 pr-3 py-4 border border-slate-200 rounded-xl leading-5 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition-shadow shadow-sm text-base"
+            className="block w-full pl-10 pr-3 py-4 border border-slate-200 dark:border-slate-800 rounded-xl leading-5 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition-shadow shadow-sm text-base"
             placeholder="Search for a legal term or definition..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -88,7 +88,7 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
         </form>
 
         {/* Category Tabs */}
-        <div className="flex flex-wrap gap-2 mb-8 justify-center border-b border-slate-100 pb-6">
+        <div className="flex flex-wrap gap-2 mb-8 justify-center border-b border-slate-100 dark:border-slate-800 pb-6">
           {categories.map((cat) => {
             const isActive = activeCategory === cat
             return (
@@ -98,7 +98,7 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
                 className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
                   isActive
                     ? 'bg-amber-500 text-white shadow-md shadow-amber-500/10'
-                    : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-navy border border-slate-200/50'
+                    : 'bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-navy dark:hover:text-white border border-slate-200/50 dark:border-slate-700/50'
                 }`}
               >
                 {cat}
@@ -116,14 +116,14 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
                 <a
                   key={letter}
                   href={`#letter-${letter}`}
-                  className="w-10 h-10 flex items-center justify-center rounded-lg bg-white border border-slate-200 text-navy font-bold hover:bg-amber-50 hover:text-amber-700 hover:border-amber-200 transition-colors shadow-sm"
+                  className="w-10 h-10 flex items-center justify-center rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-navy dark:text-slate-200 font-bold hover:bg-amber-50 dark:hover:bg-amber-950/30 hover:text-amber-700 dark:hover:text-amber-400 hover:border-amber-200 dark:hover:border-amber-800 transition-colors shadow-sm"
                 >
                   {letter}
                 </a>
               ) : (
                 <span
                   key={letter}
-                  className="w-10 h-10 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-100 text-slate-300 font-medium cursor-not-allowed"
+                  className="w-10 h-10 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 text-slate-300 dark:text-slate-700 font-medium cursor-not-allowed"
                 >
                   {letter}
                 </span>
@@ -135,15 +135,15 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
         {/* Terms List */}
         <div className="space-y-12">
           {letters.length === 0 ? (
-            <div className="text-center py-12 bg-white rounded-xl border border-slate-200 border-dashed">
-              <p className="text-slate-500">No legal terms found matching &quot;{search}&quot;</p>
+            <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 border-dashed">
+              <p className="text-slate-500 dark:text-slate-400">No legal terms found matching &quot;{search}&quot;</p>
             </div>
           ) : (
             letters.map((letter) => (
               <div key={letter} id={`letter-${letter}`} className="scroll-mt-24">
                 <div className="flex items-center gap-4 mb-6">
-                  <h2 className="text-3xl font-heading font-bold text-navy">{letter}</h2>
-                  <div className="h-px bg-slate-200 flex-grow"></div>
+                  <h2 className="text-3xl font-heading font-bold text-navy dark:text-white">{letter}</h2>
+                  <div className="h-px bg-slate-200 dark:bg-slate-800 flex-grow"></div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {groupedTerms[letter]
@@ -152,17 +152,17 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
                     <Link 
                       key={t.id} 
                       href={`/glossary/${t.slug}`}
-                      className="block group bg-white rounded-xl border border-slate-200 p-5 hover:border-amber-300 hover:shadow-card transition-all"
+                      className="block group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 hover:border-amber-300 dark:hover:border-amber-700 hover:shadow-card transition-all"
                     >
                       <div className="flex justify-between items-start mb-2">
-                        <h3 className="font-bold text-navy text-lg group-hover:text-amber-700 transition-colors">
+                        <h3 className="font-bold text-navy dark:text-white text-lg group-hover:text-amber-700 dark:group-hover:text-amber-400 transition-colors">
                           {t.term}
                         </h3>
-                        <span className="text-xs font-semibold px-2 py-1 rounded-md bg-slate-100 text-slate-600">
+                        <span className="text-xs font-semibold px-2 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
                           {t.category}
                         </span>
                       </div>
-                      <p className="text-slate-500 text-sm line-clamp-2 leading-relaxed">
+                      <p className="text-slate-500 dark:text-slate-400 text-sm line-clamp-2 leading-relaxed">
                         {stripHtml(t.definition)}
                       </p>
                     </Link>
@@ -177,7 +177,7 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
       {/* Desktop Sticky Sidebar Navigation */}
       {!search && (
         <div className="hidden lg:block w-12 flex-shrink-0">
-          <div className="sticky top-24 bg-white border border-slate-200 rounded-xl p-2 shadow-sm flex flex-col gap-1 items-center max-h-[calc(100vh-120px)] overflow-y-auto hide-scrollbar">
+          <div className="sticky top-24 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-2 shadow-sm flex flex-col gap-1 items-center max-h-[calc(100vh-120px)] overflow-y-auto hide-scrollbar">
             {alphabet.map((letter) => {
               const hasTerms = groupedTerms[letter]?.length > 0
               return hasTerms ? (

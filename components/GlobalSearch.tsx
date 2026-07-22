@@ -208,7 +208,7 @@ export default function GlobalSearch() {
       {/* Search modal */}
       {open && (
         <div
-          className="fixed inset-0 z-50 bg-black/40 flex items-start justify-center pt-20 px-4"
+          className="fixed inset-0 z-50 bg-black/40 flex items-start justify-center pt-3 sm:pt-20 px-3 sm:px-4"
           role="presentation"
           onClick={() => { setOpen(false); setQuery('') }}
         >
@@ -217,7 +217,7 @@ export default function GlobalSearch() {
             role="dialog"
             aria-modal="true"
             aria-label="Site search"
-            className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden animate-fade-in border border-transparent"
+            className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90dvh] overflow-hidden animate-fade-in border border-slate-200 dark:border-slate-800 flex flex-col"
             onClick={e => e.stopPropagation()}
           >
             

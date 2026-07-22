@@ -29,6 +29,15 @@
   --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --surface: #ffffff;
+  --surface-muted: #f1f5f9;
+  --border-subtle: #e2e8f0;
+  --ring-focus: rgba(245, 158, 11, 0.45);
+  --article-font-size: 18px;
+  --article-line-height: 1.85;
 }
 
 /* Dark mode overrides */
@@ -55,7 +64,6 @@
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
   
-  /* Additional tokens override for compatibility */
   --background: #040814;
   --foreground: #E2E8F0;
   --surface: #111827;
@@ -68,11 +76,19 @@
    Apply to root elements using variables
    ═══════════════════════════════════ */
 
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   transition: background-color 0.2s ease, 
               color 0.2s ease;
+  width: 100%;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -108,165 +124,278 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--text-muted) !important;
 }
 
-/* Navy color (your brand color) */
-.dark .text-navy {
-  color: var(--text-primary) !important;
+/* Dynamic text classes from MarkdownRenderer */
+.dynamic-text-dark {
+  color: #0F172A;
 }
 
-.dark .bg-navy {
-  background-color: #0A0F1E !important;
+.dark .dynamic-text-dark {
+  color: #CBD5E1 !important;
 }
 
-/* Borders */
-.dark .border-slate-200:not(.dark-override-exempt *) {
-  border-color: var(--border-default) !important;
+/* ============================================================
+   DYNAMIC CARD & CALLOUT BOX SYSTEM (Light & Dark Themes)
+   ============================================================ */
+
+/* Amber / Yellow Callout Cards */
+.dynamic-card-amber,
+.dynamic-card-yellow {
+  background-color: #FEF3C7 !important;
+  border: 1px solid #FDE68A !important;
+  border-left: 4px solid #F59E0B !important;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+.dynamic-card-amber p, .dynamic-card-yellow p,
+.dynamic-card-amber span, .dynamic-card-yellow span,
+.dynamic-card-amber li, .dynamic-card-yellow li,
+.dynamic-card-amber div, .dynamic-card-yellow div {
+  color: #92400E !important;
+}
+.dynamic-card-amber strong, .dynamic-card-yellow strong,
+.dynamic-card-amber b, .dynamic-card-yellow b,
+.dynamic-card-amber h1, .dynamic-card-yellow h1,
+.dynamic-card-amber h2, .dynamic-card-yellow h2,
+.dynamic-card-amber h3, .dynamic-card-yellow h3,
+.dynamic-card-amber h4, .dynamic-card-yellow h4 {
+  color: #78350F !important;
 }
 
-.dark .border-slate-100:not(.dark-override-exempt *) {
-  border-color: var(--border-light) !important;
+.dark .dynamic-card-amber,
+.dark .dynamic-card-yellow {
+  background-color: rgba(245, 158, 11, 0.12) !important;
+  border: 1px solid rgba(245, 158, 11, 0.35) !important;
+  border-left: 4px solid #F59E0B !important;
+}
+.dark .dynamic-card-amber p, .dark .dynamic-card-yellow p,
+.dark .dynamic-card-amber span, .dark .dynamic-card-yellow span,
+.dark .dynamic-card-amber li, .dark .dynamic-card-yellow li,
+.dark .dynamic-card-amber div, .dark .dynamic-card-yellow div {
+  color: #F3F4F6 !important;
+}
+.dark .dynamic-card-amber strong, .dark .dynamic-card-yellow strong,
+.dark .dynamic-card-amber b, .dark .dynamic-card-yellow b,
+.dark .dynamic-card-amber h1, .dark .dynamic-card-yellow h1,
+.dark .dynamic-card-amber h2, .dark .dynamic-card-yellow h2,
+.dark .dynamic-card-amber h3, .dark .dynamic-card-yellow h3,
+.dark .dynamic-card-amber h4, .dark .dynamic-card-yellow h4 {
+  color: #FDE68A !important;
 }
 
-/* Keep gold/amber as-is in dark mode */
-.dark .text-amber-600,
-.dark .text-amber-700,
-.dark .bg-amber-400,
-.dark .bg-amber-500 {
-  /* Keep unchanged — gold works on dark */
+/* Blue Callout Cards */
+.dynamic-card-blue {
+  background-color: #EFF6FF !important;
+  border: 1px solid #BFDBFE !important;
+  border-left: 4px solid #3B82F6 !important;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+.dynamic-card-blue p, .dynamic-card-blue span, .dynamic-card-blue li, .dynamic-card-blue div {
+  color: #1E40AF !important;
+}
+.dynamic-card-blue strong, .dynamic-card-blue b, .dynamic-card-blue h1, .dynamic-card-blue h2, .dynamic-card-blue h3, .dynamic-card-blue h4 {
+  color: #1E3A8A !important;
 }
 
-/* Input fields */
-.dark input,
-.dark textarea,
-.dark select {
-  background-color: var(--bg-secondary) !important;
-  border-color: var(--border-default) !important;
-  color: var(--text-primary) !important;
+.dark .dynamic-card-blue {
+  background-color: rgba(59, 130, 246, 0.12) !important;
+  border: 1px solid rgba(59, 130, 246, 0.35) !important;
+  border-left: 4px solid #3B82F6 !important;
+}
+.dark .dynamic-card-blue p, .dark .dynamic-card-blue span, .dark .dynamic-card-blue li, .dark .dynamic-card-blue div {
+  color: #F3F4F6 !important;
+}
+.dark .dynamic-card-blue strong, .dark .dynamic-card-blue b, .dark .dynamic-card-blue h1, .dark .dynamic-card-blue h2, .dark .dynamic-card-blue h3, .dark .dynamic-card-blue h4 {
+  color: #93C5FD !important;
 }
 
-.dark input::placeholder,
-.dark textarea::placeholder {
-  color: var(--text-subtle) !important;
+/* Green Callout Cards */
+.dynamic-card-green {
+  background-color: #F0FDF4 !important;
+  border: 1px solid #BBF7D0 !important;
+  border-left: 4px solid #22C55E !important;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+.dynamic-card-green p, .dynamic-card-green span, .dynamic-card-green li, .dynamic-card-green div {
+  color: #15803D !important;
+}
+.dynamic-card-green strong, .dynamic-card-green b, .dynamic-card-green h1, .dynamic-card-green h2, .dynamic-card-green h3, .dynamic-card-green h4 {
+  color: #14532D !important;
 }
 
-/* Tables */
-.dark table {
-  color: var(--text-secondary);
+.dark .dynamic-card-green {
+  background-color: rgba(34, 197, 94, 0.12) !important;
+  border: 1px solid rgba(34, 197, 94, 0.35) !important;
+  border-left: 4px solid #22C55E !important;
+}
+.dark .dynamic-card-green p, .dark .dynamic-card-green span, .dark .dynamic-card-green li, .dark .dynamic-card-green div {
+  color: #F3F4F6 !important;
+}
+.dark .dynamic-card-green strong, .dark .dynamic-card-green b, .dark .dynamic-card-green h1, .dark .dynamic-card-green h2, .dark .dynamic-card-green h3, .dark .dynamic-card-green h4 {
+  color: #86EFAC !important;
 }
 
-.dark thead {
-  background-color: #0A0F1E !important;
+/* Red Callout Cards */
+.dynamic-card-red {
+  background-color: #FEF2F2 !important;
+  border: 1px solid #FECACA !important;
+  border-left: 4px solid #EF4444 !important;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+.dynamic-card-red p, .dynamic-card-red span, .dynamic-card-red li, .dynamic-card-red div {
+  color: #991B1B !important;
+}
+.dynamic-card-red strong, .dynamic-card-red b, .dynamic-card-red h1, .dynamic-card-red h2, .dynamic-card-red h3, .dynamic-card-red h4 {
+  color: #7F1D1D !important;
 }
 
-.dark thead th {
+.dark .dynamic-card-red {
+  background-color: rgba(239, 68, 68, 0.12) !important;
+  border: 1px solid rgba(239, 68, 68, 0.35) !important;
+  border-left: 4px solid #EF4444 !important;
+}
+.dark .dynamic-card-red p, .dark .dynamic-card-red span, .dark .dynamic-card-red li, .dark .dynamic-card-red div {
+  color: #F3F4F6 !important;
+}
+.dark .dynamic-card-red strong, .dark .dynamic-card-red b, .dark .dynamic-card-red h1, .dark .dynamic-card-red h2, .dark .dynamic-card-red h3, .dark .dynamic-card-red h4 {
+  color: #FCA5A5 !important;
+}
+
+/* Purple Callout Cards */
+.dynamic-card-purple {
+  background-color: #F5F3FF !important;
+  border: 1px solid #DDD6FE !important;
+  border-left: 4px solid #8B5CF6 !important;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+.dynamic-card-purple p, .dynamic-card-purple span, .dynamic-card-purple li, .dynamic-card-purple div {
+  color: #6B21A8 !important;
+}
+.dynamic-card-purple strong, .dynamic-card-purple b, .dynamic-card-purple h1, .dynamic-card-purple h2, .dynamic-card-purple h3, .dynamic-card-purple h4 {
+  color: #4C1D95 !important;
+}
+
+.dark .dynamic-card-purple {
+  background-color: rgba(139, 92, 246, 0.12) !important;
+  border: 1px solid rgba(139, 92, 246, 0.35) !important;
+  border-left: 4px solid #8B5CF6 !important;
+}
+.dark .dynamic-card-purple p, .dark .dynamic-card-purple span, .dark .dynamic-card-purple li, .dark .dynamic-card-purple div {
+  color: #F3F4F6 !important;
+}
+.dark .dynamic-card-purple strong, .dark .dynamic-card-purple b, .dark .dynamic-card-purple h1, .dark .dynamic-card-purple h2, .dark .dynamic-card-purple h3, .dark .dynamic-card-purple h4 {
+  color: #C4B5FD !important;
+}
+
+/* Neutral Callout Cards */
+.dynamic-card-neutral {
+  background-color: #F8FAFC !important;
+  border: 1px solid #E2E8F0 !important;
+  border-left: 4px solid #64748B !important;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+.dynamic-card-neutral p, .dynamic-card-neutral span, .dynamic-card-neutral li, .dynamic-card-neutral div {
+  color: #334155 !important;
+}
+.dynamic-card-neutral strong, .dynamic-card-neutral b, .dynamic-card-neutral h1, .dynamic-card-neutral h2, .dynamic-card-neutral h3, .dynamic-card-neutral h4 {
+  color: #0F172A !important;
+}
+
+.dark .dynamic-card-neutral {
+  background-color: #0E1626 !important;
+  border: 1px solid #1E293B !important;
+  border-left: 4px solid #475569 !important;
+}
+.dark .dynamic-card-neutral p, .dark .dynamic-card-neutral span, .dark .dynamic-card-neutral li, .dark .dynamic-card-neutral div {
   color: #E2E8F0 !important;
 }
-
-.dark tbody tr:nth-child(even) {
-  background-color: var(--bg-secondary) !important;
+.dark .dynamic-card-neutral strong, .dark .dynamic-card-neutral b, .dark .dynamic-card-neutral h1, .dark .dynamic-card-neutral h2, .dark .dynamic-card-neutral h3, .dark .dynamic-card-neutral h4 {
+  color: #F8FAFC !important;
 }
 
-.dark tbody tr:nth-child(odd) {
-  background-color: var(--bg-card) !important;
-}
-
-.dark tbody td {
-  border-color: var(--border-default) !important;
-}
-
-/* Article content */
+/* Article content dark mode text override */
 .dark .article-content {
-  color: var(--text-secondary);
+  color: #CBD5E1 !important;
 }
 
 .dark .article-content h1,
 .dark .article-content h2,
 .dark .article-content h3,
-.dark .article-content h4 {
-  color: var(--text-primary) !important;
+.dark .article-content h4,
+.dark .article-content h5,
+.dark .article-content h6 {
+  color: #F8FAFC !important;
 }
 
-.dark .article-content p {
-  color: var(--text-secondary);
+.dark .article-content p:not([class*="dynamic-card"] *),
+.dark .article-content span:not([class*="badge"]):not([class*="bg-"]):not([class*="text-amber-"]):not([class*="text-gold"]):not([class*="dynamic-card"] *),
+.dark .article-content li:not([class*="dynamic-card"] *),
+.dark .article-content td:not([class*="dynamic-card"] *) {
+  color: #CBD5E1 !important;
 }
 
-.dark .article-content strong {
-  color: var(--text-primary);
+.dark .article-content strong:not([class*="dynamic-card"] *),
+.dark .article-content b:not([class*="dynamic-card"] *) {
+  color: #FDE68A !important;
 }
 
 .dark .article-content a {
   color: #F59E0B !important;
 }
 
-/* Code blocks */
-.dark pre,
-.dark code {
+/* Table Dark Mode Overrides */
+.dark .article-content table {
+  background-color: #0E1626 !important;
+  border-color: #1E293B !important;
+}
+
+.dark .article-content thead {
   background-color: #0A0F1E !important;
+}
+
+.dark .article-content th {
+  background-color: #0A0F1E !important;
+  color: #F8FAFC !important;
+  border-color: #1E293B !important;
+}
+
+.dark .article-content tr,
+.dark .article-content tr:nth-child(even),
+.dark .article-content tr:nth-child(odd) {
+  background-color: #0E1626 !important;
+}
+
+.dark .article-content tr:hover {
+  background-color: #1E293B !important;
+}
+
+.dark .article-content td {
+  background-color: transparent !important;
   color: #E2E8F0 !important;
-  border-color: var(--border-default) !important;
+  border-color: #1E293B !important;
 }
 
-/* Key change box (amber/yellow box) */
-.dark .bg-amber-50 {
-  background-color: rgba(245, 158, 11, 0.08) !important;
-  border-color: rgba(245, 158, 11, 0.3) !important;
-}
-
-.dark .text-amber-900 {
-  color: #FCD34D !important;
-}
-
-.dark .text-amber-800,
-.dark .text-amber-700 {
-  color: #FDE68A !important;
-}
-
-/* Summary box (blue box) */
-.dark .bg-blue-50 {
-  background-color: rgba(59, 130, 246, 0.08) !important;
-  border-color: rgba(59, 130, 246, 0.3) !important;
-}
-
-.dark .text-blue-900 {
-  color: #93C5FD !important;
-}
-
-.dark .text-blue-800,
-.dark .text-blue-700 {
-  color: #BFDBFE !important;
-}
-
-/* Green boxes */
-.dark .bg-green-50 {
-  background-color: rgba(34, 197, 94, 0.08) !important;
-  border-color: rgba(34, 197, 94, 0.3) !important;
-}
-
-.dark .text-green-800,
-.dark .text-green-700 {
-  color: #86EFAC !important;
-}
-
-/* Red boxes */
-.dark .bg-red-50 {
-  background-color: rgba(239, 68, 68, 0.08) !important;
-  border-color: rgba(239, 68, 68, 0.3) !important;
-}
-
-.dark .text-red-800,
-.dark .text-red-700 {
-  color: #FCA5A5 !important;
-}
-
-/* Bottom line dark box — keep as-is in dark */
-.dark div[style*="background:#0F172A"],
-.dark div[style*="background:#0f172a"] {
-  background-color: #000000 !important;
-}
-
-/* Navbar */
-.dark nav {
-  background-color: var(--bg-nav) !important;
-  border-bottom-color: var(--border-default) !important;
+.dark .article-content td p,
+.dark .article-content td span,
+.dark .article-content td div,
+.dark .article-content td strong {
+  color: #E2E8F0 !important;
 }
 
 /* Footer */
@@ -304,53 +433,6 @@ h1, h2, h3, h4, h5, h6 {
   background: #4A5568;
 }
 
-/* Transition for smooth theme switching */
-*, *::before, *::after {
-  transition: background-color 0.2s ease,
-              border-color 0.2s ease,
-              color 0.2s ease;
-}
-
-/* But NOT for animations that should be fast */
-.animate-spin,
-.animate-pulse,
-.animate-bounce {
-  transition: none !important;
-}
-
-/* ============================================================
-   DESIGN TOKENS
-   ============================================================ */
-:root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --surface: #ffffff;
-  --surface-muted: #f1f5f9;
-  --border-subtle: #e2e8f0;
-  --ring-focus: rgba(245, 158, 11, 0.45);
-  --article-font-size: 18px;
-  --article-line-height: 1.85;
-}
-
-/* ============================================================
-   FONT SMOOTHING & BASE
-   ============================================================ */
-html {
-  scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-}
-
-body {
-  color: #0F172A;
-  background: #F8FAFC;
-  width: 100%;
-}
-
-/* ============================================================
-   FOCUS RINGS
-   ============================================================ */
 @layer base {
   a:focus-visible,
   button:focus-visible {
@@ -360,9 +442,6 @@ body {
   }
 }
 
-/* ============================================================
-   SCROLL MARGIN FOR HEADINGS (sticky navbar offset)
-   ============================================================ */
 h2, h3, h4 {
   scroll-margin-top: 88px;
 }

@@ -110,8 +110,8 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
       aria-label="Table of contents"
       className={`hidden xl:block fixed right-6 top-24 w-60 max-h-[calc(100vh-7rem)] overflow-y-auto print:hidden z-30 transition-opacity duration-300 ${atFooter ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
     >
-      <div className="bg-white/95 backdrop-blur-sm rounded-lg border border-slate-200/80 shadow-card p-4">
-        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
+      <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-card p-4">
+        <p className="text-[11px] font-bold text-slate-400 dark:text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
           <List className="w-3.5 h-3.5" aria-hidden />
           Contents
         </p>
@@ -123,8 +123,8 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
                 className={`w-full text-left text-xs px-2.5 py-1.5 rounded-lg transition-all duration-200 leading-snug
                   ${heading.level === 3 ? 'pl-5' : ''}
                   ${activeId === heading.id
-                    ? 'bg-amber-50 text-amber-700 font-semibold border-l-2 border-amber-400 pl-[calc(0.625rem-2px)]'
-                    : 'text-slate-500 hover:text-navy hover:bg-slate-50'
+                    ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 font-semibold border-l-2 border-amber-400 pl-[calc(0.625rem-2px)]'
+                    : 'text-slate-500 dark:text-slate-400 hover:text-navy dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
                   }`}
               >
                 {heading.text}
@@ -141,31 +141,31 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
     <div className="xl:hidden my-6 print:hidden">
       <button
         onClick={() => setMobileOpen(prev => !prev)}
-        className="flex items-center gap-2 text-sm text-slate-500 hover:text-amber-600
-                   border border-slate-200 hover:border-amber-300
-                   bg-white hover:bg-amber-50
-                   px-4 py-2 rounded-lg transition-all duration-200 group w-full sm:w-auto"
+        className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400
+                   border border-slate-200 dark:border-slate-800 hover:border-amber-300 dark:hover:border-amber-700
+                   bg-white dark:bg-slate-900 hover:bg-amber-50 dark:hover:bg-amber-950/20
+                   px-4 py-2.5 min-h-[44px] rounded-lg transition-all duration-200 group w-full sm:w-auto"
       >
-        <List className="w-4 h-4" aria-hidden />
+        <List className="w-4 h-4 text-slate-400" aria-hidden />
         <span className="font-medium">
           {mobileOpen ? 'Hide' : 'Show'} Contents
         </span>
         <ChevronDown className={`ml-auto h-4 w-4 transition-transform duration-200 ${mobileOpen ? 'rotate-180' : ''}`} aria-hidden />
-        <span className="text-xs text-slate-400">({headings.length} sections)</span>
+        <span className="text-xs text-slate-400 dark:text-slate-400">({headings.length} sections)</span>
       </button>
 
       {mobileOpen && (
-        <div className="mt-3 bg-slate-50 border border-slate-200 rounded-lg p-4 animate-fade-in">
+        <div className="mt-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-4 animate-fade-in">
           <div className="flex flex-wrap gap-2">
             {headings.map((heading) => (
               <button
                 key={heading.id}
                 onClick={() => scrollToSection(heading.id)}
-                className={`text-sm px-3 py-1.5 rounded-full border transition-all duration-200 text-left
+                className={`text-sm px-3 py-1.5 rounded-full border transition-all duration-200 text-left min-h-[36px]
                   ${heading.level === 3 ? 'text-xs' : ''}
                   ${activeId === heading.id
                     ? 'bg-amber-400 border-amber-400 text-navy font-semibold shadow-sm'
-                    : 'bg-white border-slate-200 text-slate-600 hover:border-amber-300 hover:text-amber-700 hover:bg-amber-50'
+                    : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-amber-300 hover:text-amber-700 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/30'
                   }`}
               >
                 {heading.level === 3 && <CornerDownRight className="mr-1 inline h-3 w-3 text-slate-400" aria-hidden />}
@@ -175,7 +175,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
           </div>
           <button
             onClick={() => setMobileOpen(false)}
-            className="mt-4 text-xs text-slate-400 hover:text-slate-600 transition-colors flex items-center gap-1"
+            className="mt-4 text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors flex items-center gap-1 min-h-[36px]"
           >
             <X className="w-3 h-3" /> Close
           </button>

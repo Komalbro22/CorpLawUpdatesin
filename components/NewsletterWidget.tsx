@@ -52,16 +52,16 @@ export default function NewsletterWidget() {
     }
 
     return (
-        <div className="rounded-lg border border-slate-200/80 bg-white p-6 shadow-card ring-1 ring-slate-900/[0.02] transition-shadow duration-300 hover:shadow-card-hover md:p-7">
+        <div className="rounded-lg border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-card ring-1 ring-slate-900/[0.02] dark:ring-white/[0.02] transition-shadow duration-300 hover:shadow-card-hover md:p-7">
             <div className="flex items-start gap-3 mb-3">
-                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-navy/5 text-navy">
+                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-navy/5 dark:bg-white/10 text-navy dark:text-white">
                     <Mail className="h-5 w-5" aria-hidden />
                 </span>
                 <div>
-                    <h3 className="font-heading text-lg md:text-xl font-bold text-navy leading-snug">
+                    <h3 className="font-heading text-lg md:text-xl font-bold text-navy dark:text-white leading-snug">
                         Subscribe to corporate law updates
                     </h3>
-                    <p className="text-slate-600 text-sm mt-1 leading-relaxed">
+                    <p className="text-slate-600 dark:text-slate-300 text-sm mt-1 leading-relaxed">
                         MCA, SEBI, and RBI highlights in one place, without the clutter.
                     </p>
                 </div>

@@ -74,7 +74,7 @@ export default function ComplianceSuggestModal({
   }
 
   const inputClass =
-    'w-full border border-slate-200 bg-slate-50 focus:bg-white rounded-lg px-3 py-2.5 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition-all shadow-sm'
+    'w-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:bg-white dark:focus:bg-slate-900 rounded-lg px-3 py-2.5 text-sm text-navy dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition-all shadow-sm'
 
   return (
     <div
@@ -83,16 +83,16 @@ export default function ComplianceSuggestModal({
       }}
       className="fixed inset-0 bg-navy/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 sm:p-6 overflow-hidden"
     >
-      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full flex flex-col max-h-[90vh] overflow-hidden animate-in fade-in zoom-in-95 duration-200 relative">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl max-w-2xl w-full flex flex-col max-h-[90vh] overflow-hidden animate-in fade-in zoom-in-95 duration-200 relative border border-slate-200 dark:border-slate-800">
         
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50 flex-shrink-0">
-          <h2 className="text-xl font-heading font-bold text-navy flex items-center gap-2">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 flex-shrink-0">
+          <h2 className="text-xl font-heading font-bold text-navy dark:text-white flex items-center gap-2">
             {type === 'new_entry' ? '➕ Suggest New Compliance' : '⚠️ Report an Error'}
           </h2>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 bg-white hover:bg-slate-100 rounded-full w-8 h-8 flex items-center justify-center transition-colors shadow-sm border border-slate-200"
+            className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full w-8 h-8 flex items-center justify-center transition-colors shadow-sm border border-slate-200 dark:border-slate-700"
           >
             ✕
           </button>
@@ -426,11 +426,11 @@ export default function ComplianceSuggestModal({
             )}
 
             {/* Footer / Actions */}
-            <div className="p-6 border-t border-slate-100 bg-white flex justify-end gap-3 flex-shrink-0">
+            <div className="p-6 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 flex justify-end gap-3 flex-shrink-0">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-6 py-2.5 rounded-xl border border-slate-300 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition-colors shadow-sm"
+                className="px-6 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-sm"
               >
                 Cancel
               </button>

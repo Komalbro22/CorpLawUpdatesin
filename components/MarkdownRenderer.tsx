@@ -55,44 +55,63 @@ function processInlineStyles(styleObj: any, className: string = ''): { processed
         // Blue card detection
         if (
             bgValLower.includes('#eff6ff') || 
+            bgValLower.includes('#f0f9ff') ||
+            bgValLower.includes('#e0f2fe') ||
             bgValLower.includes('#bfdbfe') || 
             bgValLower.includes('rgb(239,246,255)') ||
+            bgValLower.includes('rgb(240,249,255)') ||
             bgValLower.includes('rgb(191,219,254)')
         ) {
             classes.push('dynamic-card-blue');
             delete processedStyle.background;
             delete processedStyle.backgroundColor;
+            delete processedStyle.borderColor;
+            delete processedStyle.borderLeft;
         }
         // Green card detection
         else if (
             bgValLower.includes('#f0fdf4') || 
+            bgValLower.includes('#dcfce7') ||
             bgValLower.includes('#bbf7d0') || 
+            bgValLower.includes('#052e16') ||
+            bgValLower.includes('#064e3b') ||
+            bgValLower.includes('#065f46') ||
+            bgValLower.includes('#047857') ||
             bgValLower.includes('rgb(240,253,244)') ||
             bgValLower.includes('rgb(187,247,208)')
         ) {
             classes.push('dynamic-card-green');
             delete processedStyle.background;
             delete processedStyle.backgroundColor;
+            delete processedStyle.borderColor;
+            delete processedStyle.borderLeft;
+            delete processedStyle.color;
         }
         // Yellow/Amber/Orange card detection
         else if (
             bgValLower.includes('#fff7ed') || 
             bgValLower.includes('#fffbeb') || 
+            bgValLower.includes('#fef3c7') ||
+            bgValLower.includes('#fef9c3') ||
             bgValLower.includes('#fed7aa') || 
             bgValLower.includes('#fffaf5') || 
             bgValLower.includes('#ffedd5') || 
             bgValLower.includes('rgb(255,247,237)') ||
             bgValLower.includes('rgb(255,251,235)') ||
+            bgValLower.includes('rgb(254,243,199)') ||
             bgValLower.includes('rgb(254,215,170)') ||
             bgValLower.includes('rgb(255,237,213)')
         ) {
-            classes.push('dynamic-card-yellow');
+            classes.push('dynamic-card-amber');
             delete processedStyle.background;
             delete processedStyle.backgroundColor;
+            delete processedStyle.borderColor;
+            delete processedStyle.borderLeft;
         }
         // Red/Rose card detection
         else if (
             bgValLower.includes('#fef2f2') || 
+            bgValLower.includes('#ffe4e6') ||
             bgValLower.includes('#fecaca') || 
             bgValLower.includes('rgb(254,242,242)') ||
             bgValLower.includes('rgb(254,202,202)')
@@ -100,6 +119,8 @@ function processInlineStyles(styleObj: any, className: string = ''): { processed
             classes.push('dynamic-card-red');
             delete processedStyle.background;
             delete processedStyle.backgroundColor;
+            delete processedStyle.borderColor;
+            delete processedStyle.borderLeft;
         }
         // Purple/Indigo card detection
         else if (
@@ -119,6 +140,8 @@ function processInlineStyles(styleObj: any, className: string = ''): { processed
             classes.push('dynamic-card-purple');
             delete processedStyle.background;
             delete processedStyle.backgroundColor;
+            delete processedStyle.borderColor;
+            delete processedStyle.borderLeft;
         }
         // Pink card detection
         else if (
@@ -130,6 +153,8 @@ function processInlineStyles(styleObj: any, className: string = ''): { processed
             classes.push('dynamic-card-pink');
             delete processedStyle.background;
             delete processedStyle.backgroundColor;
+            delete processedStyle.borderColor;
+            delete processedStyle.borderLeft;
         }
         // Neutral card detection (pure whites, light grays)
         else if (
@@ -147,6 +172,8 @@ function processInlineStyles(styleObj: any, className: string = ''): { processed
             classes.push('dynamic-card-neutral');
             delete processedStyle.background;
             delete processedStyle.backgroundColor;
+            delete processedStyle.borderColor;
+            delete processedStyle.borderLeft;
         }
     }
     
@@ -163,8 +190,17 @@ function processInlineStyles(styleObj: any, className: string = ''): { processed
             textValLower.includes('#374151') || 
             textValLower.includes('#455a64') ||
             textValLower.includes('#000000') ||
+            textValLower.includes('#111827') ||
+            textValLower.includes('#1f2937') ||
+            textValLower.includes('#111') ||
+            textValLower.includes('#222') ||
+            textValLower.includes('#333') ||
+            textValLower.includes('black') ||
             textValLower.includes('rgb(15,23,42)') ||
             textValLower.includes('rgb(30,41,59)') ||
+            textValLower.includes('rgb(51,65,85)') ||
+            textValLower.includes('rgb(17,24,39)') ||
+            textValLower.includes('rgb(31,41,55)') ||
             textValLower.includes('rgb(0,0,0)')
         ) {
             classes.push('dynamic-text-dark');
@@ -255,11 +291,11 @@ export default function MarkdownRenderer({ content }: { content: string }) {
 
     return (
         <div ref={ref} className={`
-          article-content prose prose-slate max-w-none
-          prose-headings:text-navy
-          prose-p:text-slate-700
-          prose-strong:text-inherit
-          prose-a:text-amber-600
+          article-content prose prose-slate dark:prose-invert max-w-none
+          prose-headings:text-navy dark:prose-headings:text-white
+          prose-p:text-slate-700 dark:prose-p:text-slate-300
+          prose-strong:text-inherit dark:prose-strong:text-amber-400
+          prose-a:text-amber-600 dark:prose-a:text-amber-400
           prose-table:text-inherit
           prose-td:text-inherit
           prose-th:text-inherit
@@ -273,7 +309,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
           [&_[style*='background:#0b1121']_div]:!text-slate-100
           [&_[style*='background:#0b1121']_strong]:!text-amber-400
           [&_[style*='background:#0b1121']_li]:!text-slate-100
-          prose-headings:font-heading prose-a:no-underline hover:prose-a:underline prose-code:bg-slate-100 prose-code:px-1 prose-code:rounded prose-img:max-w-full prose-img:h-auto prose-img:rounded-lg prose-img:mx-auto prose-img:block
+          prose-headings:font-heading prose-a:no-underline hover:prose-a:underline prose-code:bg-slate-100 dark:prose-code:bg-slate-800 dark:prose-code:text-slate-200 prose-code:px-1 prose-code:rounded prose-img:max-w-full prose-img:h-auto prose-img:rounded-lg prose-img:mx-auto prose-img:block
         `}>
             <ReactMarkdown
                 remarkPlugins={[remarkGfm, remarkBreaks]}
@@ -379,50 +415,56 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                     },
                     table: ({ node, style, className, children, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return (
-                            <div className="w-full overflow-x-auto my-6 border border-slate-200/80 rounded-xl shadow-sm scrollbar-thin">
-                                <table style={{ ...styleObj }} className={`w-full border-collapse ${className || ''}`} {...props}>
+                            <div className="w-full overflow-x-auto my-6 border border-slate-200/80 dark:border-slate-800 rounded-xl shadow-sm scrollbar-thin">
+                                <table style={processedStyle} className={`w-full border-collapse ${processedClassName}`} {...props}>
                                     {children}
                                 </table>
                             </div>
                         );
                     },
-                    thead: ({ node, style, children, ...props }: any) => {
+                    thead: ({ node, style, className, children, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return (
-                            <thead style={{ ...styleObj }} {...props}>
+                            <thead style={processedStyle} className={processedClassName} {...props}>
                                 {children}
                             </thead>
                         );
                     },
-                    tbody: ({ node, style, children, ...props }: any) => {
+                    tbody: ({ node, style, className, children, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return (
-                            <tbody style={{ ...styleObj }} {...props}>
+                            <tbody style={processedStyle} className={processedClassName} {...props}>
                                 {children}
                             </tbody>
                         );
                     },
-                    tr: ({ node, style, children, ...props }: any) => {
+                    tr: ({ node, style, className, children, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return (
-                            <tr style={{ ...styleObj }} {...props}>
+                            <tr style={processedStyle} className={processedClassName} {...props}>
                                 {children}
                             </tr>
                         );
                     },
                     th: ({ node, style, className, children, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return (
-                            <th style={{ ...styleObj }} className={`font-heading font-bold ${className || ''}`} {...props}>
+                            <th style={processedStyle} className={`font-heading font-bold ${processedClassName}`} {...props}>
                                 {children}
                             </th>
                         );
                     },
-                    td: ({ node, style, children, ...props }: any) => {
+                    td: ({ node, style, className, children, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return (
-                            <td style={{ ...styleObj }} {...props}>
+                            <td style={processedStyle} className={processedClassName} {...props}>
                                 {children}
                             </td>
                         );

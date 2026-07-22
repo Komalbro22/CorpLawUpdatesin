@@ -762,7 +762,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
               href="https://calendar.google.com/calendar/r?cid=https://www.corplawupdates.in/api/calendar/export"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 bg-white border border-blue-300 text-blue-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-55 transition-colors"
+              className="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-50 dark:hover:bg-slate-800 transition-colors"
             >
               + Subscribe in Google Calendar
             </a>
@@ -773,17 +773,23 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex gap-2">
             <button
+              type="button"
               onClick={() => setView('table')}
-              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
-                view === 'table' ? 'bg-navy text-white' : 'border border-slate-300 text-slate-600 hover:bg-slate-50'
+              className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${
+                view === 'table'
+                  ? 'bg-amber-400 text-navy shadow-md'
+                  : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
               }`}
             >
               📋 List View
             </button>
             <button
+              type="button"
               onClick={() => setView('calendar')}
-              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
-                view === 'calendar' ? 'bg-navy text-white' : 'border border-slate-300 text-slate-600 hover:bg-slate-50'
+              className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${
+                view === 'calendar'
+                  ? 'bg-amber-400 text-navy shadow-md'
+                  : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
               }`}
             >
               📅 Calendar View
@@ -1063,51 +1069,51 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
           }}
           className="fixed inset-0 bg-black/40 z-50 flex items-end sm:items-center justify-center p-4"
         >
-          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 relative">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl max-w-lg w-full p-6 relative">
             <button
               onClick={() => setSelectedEntry(null)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-2xl leading-none"
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-2xl leading-none"
             >×</button>
 
             <div className="mb-4">
-              <span className="text-xs font-bold uppercase bg-slate-100 text-slate-600 px-2 py-1 rounded">
+              <span className="text-xs font-bold uppercase bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-1 rounded">
                 {selectedEntry.regulator.toUpperCase()}
               </span>
               {selectedEntry.created_by?.startsWith('community:') && (
-                <span className="ml-2 text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">👥 Community</span>
+                <span className="ml-2 text-xs bg-green-100 dark:bg-green-950/40 text-green-700 dark:text-green-400 px-2 py-1 rounded-full">👥 Community</span>
               )}
               {!selectedEntry.is_verified && (
-                <span className="ml-2 text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full">⏳ Pending Verification</span>
+                <span className="ml-2 text-xs bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 px-2 py-1 rounded-full">⏳ Pending Verification</span>
               )}
             </div>
 
-            <h2 className="text-xl font-bold text-navy mb-1">{selectedEntry.form_name}</h2>
-            <p className="text-slate-600 text-sm mb-4">{selectedEntry.compliance_title}</p>
+            <h2 className="text-xl font-bold text-navy dark:text-white mb-1">{selectedEntry.form_name}</h2>
+            <p className="text-slate-600 dark:text-slate-300 text-sm mb-4">{selectedEntry.compliance_title}</p>
 
             <div className="grid grid-cols-2 gap-3 text-sm mb-4">
-              <div className="bg-slate-50 rounded-xl p-3">
-                <div className="text-xs text-slate-400 mb-1">Due Date</div>
-                <div className="font-bold text-navy">{selectedEntry.due_date}</div>
+              <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-3 border border-slate-100 dark:border-slate-700/50">
+                <div className="text-xs text-slate-400 dark:text-slate-400 mb-1">Due Date</div>
+                <div className="font-bold text-navy dark:text-amber-400">{selectedEntry.due_date}</div>
               </div>
-              <div className="bg-slate-50 rounded-xl p-3">
-                <div className="text-xs text-slate-400 mb-1">Frequency</div>
-                <div className="font-semibold text-slate-700 capitalize">
+              <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-3 border border-slate-100 dark:border-slate-700/50">
+                <div className="text-xs text-slate-400 dark:text-slate-400 mb-1">Frequency</div>
+                <div className="font-semibold text-slate-700 dark:text-slate-200 capitalize">
                   {selectedEntry.frequency.replace(/_/g, ' ')}
                 </div>
               </div>
-              <div className="bg-slate-50 rounded-xl p-3 col-span-2">
-                <div className="text-xs text-slate-400 mb-1">Applicable To</div>
-                <div className="text-slate-700">{selectedEntry.applicable_to}</div>
+              <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-3 col-span-2 border border-slate-100 dark:border-slate-700/50">
+                <div className="text-xs text-slate-400 dark:text-slate-400 mb-1">Applicable To</div>
+                <div className="text-slate-700 dark:text-slate-200">{selectedEntry.applicable_to}</div>
               </div>
               {selectedEntry.penalty && (
-                <div className="bg-red-50 rounded-xl p-3 col-span-2">
-                  <div className="text-xs text-red-400 mb-1">Penalty</div>
-                  <div className="text-red-700 font-semibold">{selectedEntry.penalty}</div>
+                <div className="bg-red-50 dark:bg-red-950/30 rounded-xl p-3 col-span-2 border border-red-100 dark:border-red-900/50">
+                  <div className="text-xs text-red-500 dark:text-red-400 mb-1">Penalty</div>
+                  <div className="text-red-700 dark:text-red-300 font-semibold">{selectedEntry.penalty}</div>
                 </div>
               )}
               {selectedEntry.regulation_reference && (
-                <div className="bg-slate-50 rounded-xl p-3 col-span-2">
-                  <div className="text-xs text-slate-400 mb-1">Regulation Reference</div>
+                <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-3 col-span-2 border border-slate-100 dark:border-slate-700/50">
+                  <div className="text-xs text-slate-400 dark:text-slate-400 mb-1">Regulation Reference</div>
                   <div className="text-slate-700">{selectedEntry.regulation_reference}</div>
                 </div>
               )}

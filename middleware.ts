@@ -22,13 +22,22 @@ function timingSafeEqualEdge(a: string, b: string): boolean {
 
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl
-    const isAdminRoute = pathname.startsWith('/admin')
-    const isLoginPage = pathname === '/admin/login'
+    const isAdminRoute = pathname.startsWith('/admin') || pathname.startsWith('/api/admin')
+    const isLoginPage = pathname === '/admin/login' || pathname === '/api/admin/login'
 
     if (isAdminRoute && !isLoginPage) {
         const session = request.cookies.get('admin_session')
-        if (!session) {
+        const isApi = pathname.startsWith('/api/')
+        
+        const unauthorizedResponse = () => {
+            if (isApi) {
+                return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+            }
             return NextResponse.redirect(new URL('/admin/login', request.url))
+        }
+
+        if (!session) {
+            return unauthorizedResponse()
         }
 
         const adminPassword = process.env.ADMIN_PASSWORD
@@ -38,12 +47,12 @@ export async function middleware(request: NextRequest) {
             console.error(
                 'CRITICAL: ADMIN_PASSWORD or ADMIN_SECRET_SALT missing from environment variables'
             )
-            return NextResponse.redirect(new URL('/admin/login', request.url))
+            return unauthorizedResponse()
         }
 
         const parts = session.value.split('.')
         if (parts.length !== 2) {
-            return NextResponse.redirect(new URL('/admin/login', request.url))
+            return unauthorizedResponse()
         }
 
         const [payloadB64, signature] = parts
@@ -51,16 +60,16 @@ export async function middleware(request: NextRequest) {
         
         // Timing-safe comparison to prevent timing attacks in Edge runtime
         if (!timingSafeEqualEdge(signature, expected)) {
-            return NextResponse.redirect(new URL('/admin/login', request.url))
+            return unauthorizedResponse()
         }
 
         try {
             const payload = JSON.parse(atob(payloadB64))
             if (!payload.exp || Date.now() > payload.exp) {
-                return NextResponse.redirect(new URL('/admin/login', request.url))
+                return unauthorizedResponse()
             }
         } catch (e) {
-            return NextResponse.redirect(new URL('/admin/login', request.url))
+            return unauthorizedResponse()
         }
     }
 
@@ -68,5 +77,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/admin/:path*'],
+    matcher: ['/admin/:path*', '/api/admin/:path*'],
 }

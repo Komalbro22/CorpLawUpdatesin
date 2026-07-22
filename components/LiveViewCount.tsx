@@ -33,10 +33,15 @@ export default function LiveViewCount({ slug, initialViews = 0 }: { slug: string
         return () => window.removeEventListener('article_viewed', handleView)
     }, [slug, initialViews])
 
+    const formattedViews = views >= 1000 ? `${(views / 1000).toFixed(1)}k` : views.toLocaleString('en-IN')
+
     return (
-        <span className="views-count inline-flex items-center gap-1.5 text-xs text-slate-400">
-            <Eye className="h-3.5 w-3.5" aria-hidden />
-            {views.toLocaleString('en-IN')} views
+        <span 
+          className="views-count inline-flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 font-medium"
+          aria-label={`${views.toLocaleString('en-IN')} article views`}
+        >
+            <Eye className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" aria-hidden />
+            <span>{formattedViews} views</span>
         </span>
     )
 }

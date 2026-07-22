@@ -71,9 +71,9 @@ export default function ArticleActions({
 
     return (
         <div className={`flex flex-wrap items-center gap-2 print:!hidden share-buttons ${
-            compact ? 'my-2.5 py-1 text-xs' : 'my-5 border-y border-slate-100 py-4 text-sm'
+            compact ? 'my-2.5 py-1 text-xs' : 'my-5 border-y border-slate-100 dark:border-slate-800 py-4 text-sm'
         }`}>
-            <span className={`font-semibold text-slate-500 ${compact ? 'text-xs mr-1' : 'text-sm mr-1'}`}>
+            <span className={`font-semibold text-slate-500 dark:text-slate-400 ${compact ? 'text-xs mr-1' : 'text-sm mr-1'}`}>
                 Share:
             </span>
 
@@ -129,7 +129,7 @@ export default function ArticleActions({
             {slug && (
                 <button
                     onClick={toggleBookmark}
-                    className={`flex items-center gap-1.5 border ${bookmarked ? 'border-gold bg-amber-50 text-amber-700' : 'border-slate-300 text-slate-600'} rounded-lg hover:bg-slate-50 transition-colors ${
+                    className={`flex items-center gap-1.5 border ${bookmarked ? 'border-gold bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400' : 'border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'} rounded-lg transition-colors ${
                         compact ? 'px-2 py-1 text-xs' : 'px-3 py-2 text-sm'
                     }`}
                 >
@@ -142,7 +142,7 @@ export default function ArticleActions({
             <div className="relative">
                 <button
                     onClick={copyLink}
-                    className={`flex items-center gap-1.5 border border-slate-300 text-slate-600 rounded-lg hover:bg-slate-50 transition-colors ${
+                    className={`flex items-center gap-1.5 border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors ${
                         compact ? 'px-2 py-1 text-xs' : 'px-3 py-2 text-sm'
                     }`}
                 >
