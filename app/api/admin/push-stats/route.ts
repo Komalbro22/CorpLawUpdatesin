@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { verifyAdminSession } from '@/lib/admin-auth'
-import { supabaseAdmin } from '@/lib/supabase-admin'
+import { supabaseAdmin } from '@/lib/supabase-server'
+
 
 export async function GET() {
   if (!verifyAdminSession()) {

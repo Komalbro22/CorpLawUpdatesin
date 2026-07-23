@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase-admin'
+import { supabaseAdmin } from '@/lib/supabase-server'
+
 
 function validateOrigin(request: Request): boolean {
   const origin = request.headers.get('origin')

@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server'
 import webpush from 'web-push'
 import { verifyAdminSession } from '@/lib/admin-auth'
-import { supabaseAdmin } from '@/lib/supabase-admin'
+import { supabaseAdmin } from '@/lib/supabase-server'
+
 
 // Initialize VAPID details once
 const publicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
