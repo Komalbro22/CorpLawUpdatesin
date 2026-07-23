@@ -181,14 +181,9 @@ export default function GlobalSearch() {
         }}
         aria-label="Open search"
         aria-haspopup="dialog"
-        className="flex items-center gap-2 
-                   text-sm text-slate-600 
-                   bg-slate-100 hover:bg-slate-200  
-                   border border-slate-200 
-                   rounded-xl px-3 py-2
-                   transition-colors"
+        className="flex items-center gap-2.5 text-xs font-medium text-slate-500 dark:text-slate-400 bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200/90 dark:hover:bg-slate-700/90 border border-slate-200/90 dark:border-slate-700/90 rounded-xl px-3 py-1.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400"
       >
-        <svg className="w-4 h-4 text-slate-500" fill="none" 
+        <svg className="w-3.5 h-3.5 text-slate-400 dark:text-slate-400" fill="none" 
              viewBox="0 0 24 24" 
              stroke="currentColor">
           <path strokeLinecap="round" 
@@ -196,10 +191,10 @@ export default function GlobalSearch() {
                 strokeWidth={2} 
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
-        <span className="hidden md:block text-slate-600">
+        <span className="hidden md:block text-slate-600 dark:text-slate-300 font-medium">
           Search...
         </span>
-        <kbd className="hidden md:flex items-center gap-0.5 bg-white border border-slate-200 rounded px-1.5 py-0.5 font-mono text-[10px] text-slate-400 font-semibold shadow-sm">
+        <kbd className="hidden md:flex items-center gap-0.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md px-1.5 py-0.5 font-mono text-[10px] text-slate-400 dark:text-slate-500 font-semibold shadow-xs">
           <span>{isMac ? '⌘' : 'Ctrl'}</span>
           <span>K</span>
         </kbd>

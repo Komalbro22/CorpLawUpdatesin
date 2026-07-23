@@ -61,8 +61,10 @@ export default function NewArticle() {
     const [keyTakeaways, setKeyTakeaways] = useState<string[]>([])
     const [hasSteps, setHasSteps] = useState(false)
     const [stepsJson, setStepsJson] = useState<{heading: string, description: string}[]>([])
+    const [sendPushNotification, setSendPushNotification] = useState(true)
 
     const [loading, setLoading] = useState(false)
+
     const [error, setError] = useState('')
     const [success, setSuccess] = useState(false)
     const [activeTab, setActiveTab] = useState<'write' | 'preview'>('write')
@@ -324,10 +326,26 @@ export default function NewArticle() {
                 showToast('Article created', 'success')
                 setLoading(false)
                 localStorage.removeItem(AUTOSAVE_KEY)
+
+                // Dispatch Web Push Notification if publishing now and toggle is active
+                if (publishedAtValue && sendPushNotification) {
+                    fetch('/api/notifications/send', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            title: `New ${category} Circular: ${title}`,
+                            body: summary,
+                            url: `/updates/${slug || slugify(title)}`,
+                            category: category.toLowerCase(),
+                        })
+                    }).catch(err => console.error('[Publish Push Error]', err))
+                }
+
                 setTimeout(() => {
                     router.push('/admin/articles')
                 }, 2000)
             } else {
+
                 setError(data.error || 'Failed to save article')
                 setLoading(false)
                 showToast(data.error || 'Failed to save article', 'error')
@@ -1034,6 +1052,16 @@ export default function NewArticle() {
                             Saved to drafts at {lastAutosaved.toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit' })}
                         </span>
                     )}
+                    <label className="hidden md:flex items-center gap-1.5 text-xs text-slate-600 font-medium cursor-pointer mr-2 select-none">
+                        <input
+                            type="checkbox"
+                            checked={sendPushNotification}
+                            onChange={(e) => setSendPushNotification(e.target.checked)}
+                            className="rounded border-slate-300 text-amber-500 focus:ring-amber-400"
+                        />
+                        <span>🔔 Send Web Push Alert</span>
+                    </label>
+
                     <button
                         onClick={() => handleSave(null)}
                         disabled={loading || success}
@@ -1041,6 +1069,7 @@ export default function NewArticle() {
                     >
                         Save Draft
                     </button>
+
                     <button
                         onClick={() => handleSave(publishedAt)}
                         disabled={loading || success}

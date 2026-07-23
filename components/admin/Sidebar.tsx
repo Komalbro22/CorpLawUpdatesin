@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
     BarChart3,
+    Bell,
     Calendar,
     FileText,
     Landmark,
@@ -49,10 +50,12 @@ const sections: SidebarSection[] = [
         label: 'Subscribers',
         links: [
             { href: '/admin/subscribers',         icon: Users,     label: 'Subscribers'  },
+            { href: '/admin/notifications',       icon: Bell,      label: 'Push Broadcast' },
             { href: '/admin/newsletter',           icon: Mail,      label: 'Newsletter'   },
             { href: '/admin/newsletter/history',   icon: ScrollText, label: 'Email History' },
         ],
     },
+
     {
         label: 'Analytics',
         links: [

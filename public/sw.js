@@ -115,3 +115,71 @@ self.addEventListener('fetch', (event) => {
     );
   }
 });
+
+// ════════════════════════════════════════════════════════════
+// WEB PUSH NOTIFICATION LISTENERS
+// ════════════════════════════════════════════════════════════
+
+// Handle incoming Web Push message
+self.addEventListener('push', (event) => {
+  if (!event.data) return;
+
+  try {
+    const data = event.data.json();
+    const title = data.title || 'CorpLawUpdates Alert';
+    const options = {
+      body: data.body || 'New corporate law circular update published.',
+      icon: data.icon || '/apple-icon.png',
+      badge: '/icon.png',
+      data: {
+        url: data.url || 'https://www.corplawupdates.in/updates',
+      },
+      tag: data.tag || 'corplaw-update',
+      renotify: true,
+      vibrate: [100, 50, 100],
+    };
+
+    event.waitUntil(
+      self.registration.showNotification(title, options)
+    );
+  } catch (err) {
+    console.error('[Service Worker] Error handling push payload:', err);
+  }
+});
+
+// Handle Notification click — open/focus article URL
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const targetUrl = event.notification.data?.url || '/updates';
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      for (const client of clientList) {
+        if (client.url.includes(targetUrl) && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      if (clients.openWindow) {
+        return clients.openWindow(targetUrl);
+      }
+    })
+  );
+});
+
+// Handle browser push subscription changes / rotation (Chrome/Firefox)
+self.addEventListener('pushsubscriptionchange', (event) => {
+  event.waitUntil(
+    self.registration.pushManager.subscribe(event.oldSubscription.options)
+      .then((subscription) => {
+        return fetch('/api/notifications/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(subscription),
+        });
+      })
+      .catch((err) => {
+        console.error('[Service Worker] Failed to renew push subscription:', err);
+      })
+  );
+});
+

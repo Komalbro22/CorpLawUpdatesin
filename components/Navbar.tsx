@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import GlobalSearch from './GlobalSearch'
 import DarkModeToggle from './DarkModeToggle'
+import NotificationBell from './NotificationBell'
+
 import {
     Building2,
     Calendar,
@@ -152,37 +154,52 @@ export default function Navbar() {
                                 <div
                                     role="menu"
                                     aria-label="Category navigation"
-                                    className="absolute top-full left-0 mt-2 w-60 bg-white/98 dark:bg-slate-900/98 backdrop-blur-md rounded-xl shadow-card-hover border border-slate-200/90 dark:border-slate-800/90 py-1.5 z-50 animate-fade-in"
+                                    className="absolute top-full right-0 md:left-0 mt-2 w-72 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-200/90 dark:border-slate-800/90 p-2 z-50 animate-fade-in"
                                 >
-                                    {categoryItems.map(({ href, label, Icon, color, bg }) => (
-                                        <Link
-                                            key={href}
-                                            href={href}
-                                            role="menuitem"
-                                            onClick={() => setCategoriesOpen(false)}
-                                            className={`flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors focus:outline-none focus:bg-amber-50/80 dark:focus:bg-slate-800/80 ${color} ${bg} dark:hover:bg-slate-800/50`}
-                                        >
-                                            <Icon className="w-4 h-4 shrink-0 opacity-80" aria-hidden />
-                                            {label}
-                                        </Link>
-                                    ))}
+                                    <div className="px-3 py-1.5 border-b border-slate-100 dark:border-slate-800 mb-1">
+                                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                                            Regulators & Quick Tools
+                                        </span>
+                                    </div>
+                                    <div className="grid grid-cols-1 gap-0.5">
+                                        {categoryItems.map(({ href, label, Icon, color, bg }) => (
+                                            <Link
+                                                key={href}
+                                                href={href}
+                                                role="menuitem"
+                                                onClick={() => setCategoriesOpen(false)}
+                                                className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 focus:outline-none focus:bg-amber-50/80 dark:focus:bg-slate-800/80 ${color} ${bg} dark:hover:bg-slate-800/60`}
+                                            >
+                                                <div className="flex items-center gap-2.5">
+                                                    <div className="p-1.5 rounded-lg bg-slate-100/80 dark:bg-slate-800/80 shrink-0">
+                                                        <Icon className="w-4 h-4" aria-hidden />
+                                                    </div>
+                                                    <span>{label}</span>
+                                                </div>
+                                                <span className="text-slate-300 dark:text-slate-600 text-xs">→</span>
+                                            </Link>
+                                        ))}
+                                    </div>
                                 </div>
                             )}
                         </div>
 
-                        {/* Search shortcut */}
+                        {/* Search shortcut & notifications */}
                         <div className="ml-2 flex items-center gap-2">
                             <GlobalSearch />
+                            <NotificationBell />
                             <DarkModeToggle />
                         </div>
                     </div>
 
                     <div className="flex items-center gap-1.5 md:hidden">
                         <GlobalSearch />
+                        <NotificationBell />
                         <DarkModeToggle />
                         <button
+
                             onClick={() => setIsOpen(!isOpen)}
-                            className="inline-flex items-center justify-center min-h-[44px] min-w-[44px] p-2.5 rounded-md focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gold/80 transition-all duration-200 text-slate-500 dark:text-slate-400 hover:text-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
+                            className="inline-flex items-center justify-center min-h-[44px] min-w-[44px] p-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400 transition-all duration-200 text-slate-600 dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
                             aria-expanded={isOpen}
                             aria-label={isOpen ? 'Close menu' : 'Open main menu'}
                         >
@@ -194,37 +211,42 @@ export default function Navbar() {
 
             {/* Mobile Nav */}
             {isOpen && (
-                <div className="md:hidden border-t border-slate-200 dark:border-slate-800 max-h-[80vh] overflow-y-auto bg-white/98 dark:bg-slate-900/98 backdrop-blur-md">
-                    <div className="pt-2 pb-4 space-y-0.5 px-3">
+                <div className="md:hidden border-t border-slate-200/80 dark:border-slate-800/80 max-h-[85vh] overflow-y-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl animate-fade-in">
+                    <div className="pt-3 pb-6 space-y-1 px-4">
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-3 py-1">
+                            Navigation
+                        </div>
                         {links.map((link) => (
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className={`block pl-3 pr-4 py-3 min-h-[44px] flex items-center gap-2 text-sm font-medium rounded-lg ${
+                                className={`flex items-center gap-3 px-3.5 py-3 min-h-[44px] text-sm font-medium rounded-xl transition-all ${
                                     isActive(link.href)
-                                        ? 'bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border-l-2 border-amber-400'
-                                        : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-navy dark:hover:text-white'
+                                        ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 font-semibold border-l-4 border-amber-500'
+                                        : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100/70 dark:hover:bg-slate-800/70'
                                 }`}
                                 onClick={() => setIsOpen(false)}
                             >
                                 {'icon' in link && link.icon && (
-                                    <link.icon className="w-4 h-4 shrink-0" aria-hidden />
+                                    <link.icon className="w-4 h-4 shrink-0 opacity-80" aria-hidden />
                                 )}
                                 {link.label}
                             </Link>
                         ))}
-                        <div className="pl-3 pr-4 py-2">
-                            <span className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide text-[11px]">Categories</span>
-                            <div className="mt-2 space-y-0.5">
+                        <div className="pt-4 border-t border-slate-100 dark:border-slate-800 mt-2">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-3 py-1">
+                                Regulator Direct Access
+                            </span>
+                            <div className="mt-2 grid grid-cols-2 gap-1.5">
                                 {categoryItems.map(({ href, label, Icon, color }) => (
                                     <Link
                                         key={href}
                                         href={href}
-                                        className={`flex min-h-[44px] items-center gap-2 py-2 px-2 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg ${color}`}
+                                        className={`flex items-center gap-2 p-2.5 text-xs font-semibold rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-amber-50 dark:hover:bg-slate-800 ${color}`}
                                         onClick={() => setIsOpen(false)}
                                     >
-                                        <Icon className="w-4 h-4 shrink-0 opacity-80" aria-hidden />
-                                        {label}
+                                        <Icon className="w-3.5 h-3.5 shrink-0 opacity-80" aria-hidden />
+                                        <span>{label}</span>
                                     </Link>
                                 ))}
                             </div>
