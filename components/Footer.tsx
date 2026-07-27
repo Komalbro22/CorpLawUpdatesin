@@ -102,8 +102,14 @@ export default async function Footer() {
                                     </Link>
                                 </li>
                             ))}
+                            <li>
+                                <Link href="/partners" className="text-slate-400 hover:text-gold transition-colors text-sm font-medium">
+                                    List Your Service
+                                </Link>
+                            </li>
                         </ul>
                     </div>
+
 
                     {/* Regulators */}
                     <div className="lg:col-span-2">

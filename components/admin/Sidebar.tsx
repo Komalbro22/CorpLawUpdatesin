@@ -22,6 +22,7 @@ import {
     BookOpen,
     Cpu,
     Brain,
+    Briefcase,
 } from 'lucide-react'
 
 interface SidebarLink {
@@ -47,14 +48,16 @@ const sections: SidebarSection[] = [
         ],
     },
     {
-        label: 'Subscribers',
+        label: 'Subscribers & Community',
         links: [
             { href: '/admin/subscribers',         icon: Users,     label: 'Subscribers'  },
+            { href: '/admin/partner-interests',   icon: Briefcase, label: 'Partner Interests' },
             { href: '/admin/notifications',       icon: Bell,      label: 'Push Broadcast' },
             { href: '/admin/newsletter',           icon: Mail,      label: 'Newsletter'   },
             { href: '/admin/newsletter/history',   icon: ScrollText, label: 'Email History' },
         ],
     },
+
 
     {
         label: 'Analytics',

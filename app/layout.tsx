@@ -174,21 +174,20 @@ export default async function RootLayout({
 
         <Script
           id="pwa-service-worker"
-          strategy="lazyOnload"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js').then(function(reg) {
-                    // PWA registered successfully
-                  }).catch(function(err) {
-                    console.error('PWA Service Worker registration failed:', err);
-                  });
+                navigator.serviceWorker.register('/sw.js').then(function(reg) {
+                  // Service worker registered
+                }).catch(function(err) {
+                  console.error('Service Worker registration failed:', err);
                 });
               }
             `,
           }}
         />
+
       </body>
     </html>
   )

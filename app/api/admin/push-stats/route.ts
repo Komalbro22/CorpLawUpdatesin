@@ -9,17 +9,25 @@ export async function GET() {
   }
 
   try {
-    const { count, error } = await supabaseAdmin
-      .from('push_subscriptions')
-      .select('*', { count: 'exact', head: true })
+    const [{ count, error: countErr }, { data: logs, error: logsErr }] = await Promise.all([
+      supabaseAdmin.from('push_subscriptions').select('*', { count: 'exact', head: true }),
+      supabaseAdmin.from('push_notification_logs').select('*').order('created_at', { ascending: false }).limit(10),
+    ])
 
-    if (error) {
-      console.error('[Push Stats API] Supabase count error:', error)
-      return NextResponse.json({ totalSubscribers: 0 })
+    if (countErr) {
+      console.error('[Push Stats API] Supabase count error:', countErr)
     }
 
-    return NextResponse.json({ totalSubscribers: count || 0 })
+    if (logsErr) {
+      console.error('[Push Stats API] Push logs error:', logsErr)
+    }
+
+    return NextResponse.json({
+      totalSubscribers: count || 0,
+      recentLogs: logs || [],
+    })
   } catch (err: any) {
-    return NextResponse.json({ totalSubscribers: 0, error: err.message })
+    return NextResponse.json({ totalSubscribers: 0, recentLogs: [], error: err.message })
   }
+
 }

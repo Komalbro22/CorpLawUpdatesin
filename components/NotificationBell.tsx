@@ -41,15 +41,24 @@ export default function NotificationBell() {
       return
     }
 
-    setPermission(Notification.permission)
+    const currentPerm = Notification.permission
+    setPermission(currentPerm)
 
-    // Check if subscription exists in service worker
-    navigator.serviceWorker.ready.then((registration) => {
-      registration.pushManager.getSubscription().then((sub) => {
-        setIsSubscribed(Boolean(sub))
+    // Ensure Service Worker is registered
+    navigator.serviceWorker.register('/sw.js').then((reg) => {
+      reg.pushManager.getSubscription().then((sub) => {
+        if (sub) {
+          setIsSubscribed(true)
+        } else if (currentPerm === 'granted') {
+          // Permission already granted in Chrome settings — auto-register token to Supabase
+          handleSubscribe()
+        }
       })
+    }).catch((err) => {
+      console.error('Service Worker registration error:', err)
     })
   }, [])
+
 
   async function handleSubscribe() {
     if (!VAPID_PUBLIC_KEY) {
@@ -75,13 +84,21 @@ export default function NotificationBell() {
       }
 
       if (resPermission === 'granted') {
-        const registration = await navigator.serviceWorker.ready
+        let registration = await navigator.serviceWorker.getRegistration('/sw.js')
+        if (!registration) {
+          registration = await navigator.serviceWorker.register('/sw.js')
+        }
+        await navigator.serviceWorker.ready
+
         const applicationServerKey = urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
 
-        const subscription = await registration.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey,
-        })
+        let subscription = await registration.pushManager.getSubscription()
+        if (!subscription) {
+          subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey,
+          })
+        }
 
         const subJson = subscription.toJSON()
 
@@ -106,6 +123,7 @@ export default function NotificationBell() {
       setLoading(false)
     }
   }
+
 
   async function handleUnsubscribe() {
     setLoading(true)

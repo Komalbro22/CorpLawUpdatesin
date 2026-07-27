@@ -127,16 +127,24 @@ self.addEventListener('push', (event) => {
   try {
     const data = event.data.json();
     const title = data.title || 'CorpLawUpdates Alert';
+    const targetUrl = data.url || '/updates';
+
     const options = {
       body: data.body || 'New corporate law circular update published.',
       icon: data.icon || '/apple-icon.png',
       badge: '/icon.png',
       data: {
-        url: data.url || 'https://www.corplawupdates.in/updates',
+        url: targetUrl,
+        timestamp: data.timestamp || Date.now(),
       },
-      tag: data.tag || 'corplaw-update',
+      tag: data.tag || `corplaw-update-${Date.now()}`,
       renotify: true,
-      vibrate: [100, 50, 100],
+      requireInteraction: true,
+      vibrate: [150, 50, 150, 50, 200],
+      actions: [
+        { action: 'open', title: '📖 Read Update' },
+        { action: 'dismiss', title: '✖ Dismiss' },
+      ],
     };
 
     event.waitUntil(
@@ -147,9 +155,14 @@ self.addEventListener('push', (event) => {
   }
 });
 
-// Handle Notification click — open/focus article URL
+// Handle Notification click — open/focus article URL or process action
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
+
+  if (event.action === 'dismiss') {
+    return;
+  }
+
   const targetUrl = event.notification.data?.url || '/updates';
 
   event.waitUntil(
@@ -165,6 +178,7 @@ self.addEventListener('notificationclick', (event) => {
     })
   );
 });
+
 
 // Handle browser push subscription changes / rotation (Chrome/Firefox)
 self.addEventListener('pushsubscriptionchange', (event) => {

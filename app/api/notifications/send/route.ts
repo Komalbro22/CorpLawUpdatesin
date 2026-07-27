@@ -120,6 +120,26 @@ export async function POST(request: Request) {
         .in('endpoint', staleEndpointsToDelete)
     }
 
+    // Save broadcast audit log (skip if test only)
+    if (!testOnly) {
+      try {
+        await supabaseAdmin.from('push_notification_logs').insert([
+          {
+            title: truncateString(title, 120),
+            body: truncateString(rawBody || '', 240),
+            url: url || '/updates',
+            category: category || 'all',
+            targeted_count: targetSubscribers.length,
+            sent_count: successCount,
+            failed_count: failureCount,
+            pruned_count: staleEndpointsToDelete.length,
+          },
+        ])
+      } catch (logErr) {
+        console.error('[Push Send API] Error recording broadcast log:', logErr)
+      }
+    }
+
     return NextResponse.json({
       success: true,
       totalTargeted: targetSubscribers.length,
@@ -132,3 +152,4 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: err.message || 'Internal server error' }, { status: 500 })
   }
 }
+
