@@ -475,6 +475,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                             <img
                                 src={src}
                                 alt={alt || ''}
+                                decoding="async"
                                 style={{
                                     maxWidth: '100%',
                                     height: 'auto',
@@ -487,6 +488,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                             />
                         );
                     },
+
                     style: ({ node, children, ...props }: any) => {
                         let cssContent = '';
                         if (node && node.children && node.children[0]) {

@@ -30,10 +30,11 @@ const outfit = Outfit({ subsets: ['latin'], variable: '--font-outfit', display: 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.corplawupdates.in'),
   title: {
-    default: 'CorpLawUpdates.in - Free Corporate Law Updates',
+    default: 'CorpLawUpdates.in - Free Corporate Law Intelligence',
     template: '%s | CorpLawUpdates.in',
   },
-  description: 'Free Indian corporate law updates - MCA, SEBI, RBI, NCLT, IBC and FEMA regulatory updates for professionals, corporate lawyers and compliance officers.',
+  description: 'Free Indian corporate law updates covering MCA, SEBI, RBI, NCLT, IBC and FEMA regulatory developments for legal & compliance professionals.',
+
 
   authors: [{ name: 'CorpLawUpdates.in' }],
   creator: 'CorpLawUpdates.in',
