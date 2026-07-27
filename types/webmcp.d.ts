@@ -19,14 +19,21 @@ interface WebMCPTool {
     properties: Record<string, any>;
     required?: string[];
   };
-  execute: (params: Record<string, any>) => Promise<string>;
+  execute: (params: Record<string, any>) => Promise<any> | any;
+}
+
+interface WebMCPToolOptions {
+  signal?: AbortSignal;
+  readOnlyHint?: boolean;
+  untrustedContentHint?: boolean;
 }
 
 interface ModelContext {
-  registerTool(tool: WebMCPTool): void;
+  registerTool(tool: WebMCPTool, options?: WebMCPToolOptions): void;
   unregisterTool?(name: string): void;
 }
 
 interface Document {
   modelContext?: ModelContext;
 }
+
