@@ -14,10 +14,14 @@ import BackToTop from '@/components/BackToTop'
 import WhatsAppButton from '@/components/WhatsAppButton'
 import HideOnAdmin from '@/components/HideOnAdmin'
 import AnnouncementBar from '@/components/AnnouncementBar'
+import dynamic from 'next/dynamic'
 import Script from 'next/script'
 import JsonLd from '@/components/JsonLd'
 import TrackingScripts from '@/components/TrackingScripts'
-import WebMCPRegistry from '@/components/WebMCPRegistry'
+
+const WebMCPRegistry = dynamic(() => import('@/components/WebMCPRegistry'), {
+  ssr: false,
+})
 
 
 import { themeScript } from '@/lib/theme-script'
@@ -166,6 +170,7 @@ export default async function RootLayout({
           <HideOnAdmin><Footer /></HideOnAdmin>
           <HideOnAdmin><BackToTop /></HideOnAdmin>
           <HideOnAdmin><WhatsAppButton /></HideOnAdmin>
+          <HideOnAdmin><WebMCPRegistry /></HideOnAdmin>
         </ToastProvider>
         <HideOnAdmin>
           <Analytics />

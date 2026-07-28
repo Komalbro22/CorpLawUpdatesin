@@ -68,6 +68,12 @@ function safeRegister(ctx: ModelContext, def: ToolDefinition, opts: ToolOptions)
 
 export default function WebMCPRegistry() {
   useEffect(() => {
+    // 1. Guard against non-browser environments
+    if (typeof window === 'undefined') return;
+
+    // 2. Guard against non-matching hostnames (e.g. apex domain corplawupdates.in, preview URLs, localhost)
+    if (window.location.hostname !== 'www.corplawupdates.in') return;
+
     const ctx = getModelContext();
     if (!ctx) return; // Browser doesn't support WebMCP — exit silently
 
