@@ -3,15 +3,16 @@ import Image from 'next/image'
 import { UpdateListItem } from '@/types'
 import { formatDate, calculateReadingTime, extractFirstImage } from '@/lib/utils'
 import CategoryBadge from '@/components/CategoryBadge'
+import GazetteLedgerRail from '@/components/shared/GazetteLedgerRail'
 import { ArrowUpRight, Clock, Eye } from 'lucide-react'
 
 const categoryBorderColor: Record<string, string> = {
-    MCA:  'border-t-blue-500',
-    SEBI: 'border-t-emerald-500',
-    RBI:  'border-t-violet-500',
-    NCLT: 'border-t-orange-500',
-    IBC:  'border-t-red-500',
-    FEMA: 'border-t-teal-500',
+    MCA:  'border-t-blue-600',
+    SEBI: 'border-t-emerald-600',
+    RBI:  'border-t-violet-600',
+    NCLT: 'border-t-orange-600',
+    IBC:  'border-t-red-600',
+    FEMA: 'border-t-teal-600',
 }
 
 interface UpdateCardProps {
@@ -30,12 +31,12 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
         3 * 24 * 60 * 60 * 1000
     )
 
-    const borderColor = categoryBorderColor[update.category as string] || 'border-t-slate-200'
+    const borderColor = categoryBorderColor[update.category as string] || 'border-t-slate-300'
 
     const impactStyles: Record<string, string> = {
-        high:   'bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-300',
-        medium: 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300',
-        low:    'bg-green-100 text-green-700 dark:bg-emerald-950/50 dark:text-emerald-300',
+        high:   'bg-red-100 text-red-800 dark:bg-red-950/50 dark:text-red-300 border border-red-200',
+        medium: 'bg-amber-100 text-amber-900 dark:bg-amber-950/50 dark:text-amber-300 border border-amber-300',
+        low:    'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border border-emerald-200',
     }
 
     const impactLabels: Record<string, string> = {
@@ -47,8 +48,8 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
     return (
         <Link
             href={`/updates/${update.slug}`}
-            style={{ '--delay': `${animationDelay}ms` } as React.CSSProperties}
-            className={`animate-fade-up group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200/80 dark:border-slate-800 border-t-[3px] bg-white dark:bg-slate-900 shadow-card ring-1 ring-slate-900/[0.03] dark:ring-white/[0.03] ${borderColor} transition-all duration-300 ease-spring motion-safe:hover:-translate-y-1 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-[0_20px_40px_-15px_rgba(201,168,76,0.12)]`}
+            style={{ '--delay': `${animationDelay}ms`, transform: 'translate3d(0, 0, 0)' } as React.CSSProperties}
+            className={`animate-fade-up group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 border-t-[3px] bg-white dark:bg-slate-900 shadow-card ring-1 ring-slate-900/[0.03] dark:ring-white/[0.03] ${borderColor} transition-all duration-200 ease-out will-change-transform focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 motion-safe:hover:-translate-y-1 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-xl`}
         >
             {imageUrl && (
                 <div className="relative w-full aspect-video overflow-hidden bg-slate-100 dark:bg-slate-800 flex-shrink-0">
@@ -65,15 +66,22 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
             )}
 
             <div className="p-5 flex flex-col flex-1">
+                {/* Signature Gazette Ledger Rail */}
+                <GazetteLedgerRail
+                    category={update.category}
+                    sectionRef={update.source_name || undefined}
+                    isMandatory={update.impact_level === 'high'}
+                />
+
                 <div className="mb-3 flex items-center gap-2 flex-wrap">
                     <CategoryBadge category={update.category} />
                     {isNew && (
-                        <span className="badge-pulse rounded-md bg-amber-100 dark:bg-amber-900/30 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-800 dark:text-amber-400 ring-1 ring-amber-200 dark:ring-amber-900/50">
+                        <span className="badge-pulse rounded-md bg-amber-100 dark:bg-amber-900/30 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-900 dark:text-amber-400 ring-1 ring-amber-300 dark:ring-amber-900/50">
                             New
                         </span>
                     )}
                     {update.impact_level && (
-                        <span className={`rounded-md px-2 py-0.5 text-[10px] font-semibold ${impactStyles[update.impact_level]}`}>
+                        <span className={`rounded-md px-2 py-0.5 text-[10px] font-bold uppercase ${impactStyles[update.impact_level]}`}>
                             {impactLabels[update.impact_level]}
                         </span>
                     )}
@@ -84,45 +92,44 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
                 </h3>
 
                 {showExcerpt && (
-                    <p className="text-slate-500 dark:text-slate-500 text-sm mb-4 line-clamp-2 leading-relaxed">
+                    <p className="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-2 leading-relaxed">
                         {update.summary}
                     </p>
                 )}
 
-                <div className="mt-auto flex items-end justify-between gap-4 border-t border-slate-100/80 dark:border-slate-800 pt-3 text-xs text-slate-500 dark:text-slate-500">
+                <div className="mt-auto flex items-end justify-between gap-4 border-t border-slate-100 dark:border-slate-800 pt-3 text-xs text-slate-500 dark:text-slate-400">
                     <div className="min-w-0 flex flex-col gap-0.5">
                         {update.source_name && (
-                            <p className="truncate text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-500">
+                            <p className="truncate text-[11px] font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-400">
                                 {update.source_name}
                             </p>
                         )}
                         <div className="flex items-center gap-2 flex-wrap">
                             {update.published_at && (
-                                <span>{formatDate(update.published_at)}</span>
+                                <span className="font-medium text-slate-600">{formatDate(update.published_at)}</span>
                             )}
                             {update.effective_date && (
-                                <span className="text-[10px] bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 px-2 py-0.5 rounded-md font-medium whitespace-nowrap border border-emerald-100 dark:border-emerald-900/30">
+                                <span className="text-[10px] bg-emerald-50 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-400 px-2 py-0.5 rounded-md font-bold whitespace-nowrap border border-emerald-200 dark:border-emerald-900/30">
                                     Eff. {formatDate(update.effective_date)}
                                 </span>
                             )}
-
                         </div>
                     </div>
                     <div className="flex shrink-0 items-center gap-1.5">
                         {typeof update.views === 'number' && update.views > 0 && (
                             <span 
-                              className="flex items-center gap-1 whitespace-nowrap rounded-md bg-slate-50 dark:bg-slate-800 px-2 py-1 text-[11px] font-medium text-slate-500 dark:text-slate-500"
+                              className="flex items-center gap-1 whitespace-nowrap rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-1 text-[11px] font-semibold text-slate-600 dark:text-slate-400"
                               aria-label={`${update.views.toLocaleString('en-IN')} article views`}
                             >
-                                <Eye className="w-3 h-3 text-slate-400" aria-hidden />
+                                <Eye className="w-3 h-3 text-slate-500" aria-hidden />
                                 {update.views >= 1000 ? `${(update.views / 1000).toFixed(1)}k` : update.views}
                             </span>
                         )}
-                        <span className="flex items-center gap-1 whitespace-nowrap rounded-md bg-slate-50 dark:bg-slate-800 px-2 py-1 text-[11px] font-medium text-slate-500 dark:text-slate-500">
+                        <span className="flex items-center gap-1 whitespace-nowrap rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-1 text-[11px] font-semibold text-slate-600 dark:text-slate-400">
                             <Clock className="w-3 h-3 text-slate-500" aria-hidden />
                             {update.reading_time || calculateReadingTime(update.content || update.summary || '')} min
                         </span>
-                        <span className="hidden h-7 w-7 items-center justify-center rounded-md bg-slate-900 dark:bg-slate-800 text-white dark:text-slate-200 transition-colors group-hover:bg-amber-500 dark:group-hover:bg-amber-500 sm:flex">
+                        <span className="hidden h-7 w-7 items-center justify-center rounded-md bg-navy dark:bg-slate-800 text-white dark:text-slate-200 transition-colors group-hover:bg-amber-600 dark:group-hover:bg-amber-500 sm:flex">
                             <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
                         </span>
                     </div>
@@ -131,3 +138,4 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
         </Link>
     )
 }
+
