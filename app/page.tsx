@@ -112,64 +112,62 @@ export default async function HomePage() {
 
   return (
     <div>
-      <section className="relative w-full overflow-hidden bg-slate-950">
-        {/* Soft glowing premium color orbs */}
+      {/* High-Trust Editorial Navy Hero Banner */}
+      <section className="relative w-full overflow-hidden bg-navy text-white py-16 md:py-24 border-b border-slate-800">
         <div
-          className="absolute -top-[40%] -left-[20%] w-[80%] h-[80%] rounded-full bg-gradient-to-br from-amber-500/15 to-transparent blur-[120px] pointer-events-none"
+          className="absolute -top-[40%] -left-[20%] w-[80%] h-[80%] rounded-full bg-amber-500/10 blur-[120px] pointer-events-none"
           aria-hidden
         />
         <div
-          className="absolute -bottom-[40%] -right-[20%] w-[80%] h-[80%] rounded-full bg-gradient-to-tl from-indigo-500/15 to-transparent blur-[120px] pointer-events-none"
+          className="absolute -bottom-[40%] -right-[20%] w-[80%] h-[80%] rounded-full bg-blue-500/10 blur-[120px] pointer-events-none"
           aria-hidden
         />
         <div
-          className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(15,23,42,0.95),rgba(15,23,42,0.98))]"
-          aria-hidden
-        />
-        <div
-          className="absolute inset-0 opacity-[0.05] bg-[linear-gradient(rgba(255,255,255,.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.1)_1px,transparent_1px)] bg-[size:72px_72px]"
+          className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(rgba(255,255,255,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.12)_1px,transparent_1px)] bg-[size:64px_64px]"
           aria-hidden
         />
 
-        <div className="relative z-10 mx-auto flex min-h-[60vh] max-w-4xl flex-col items-center justify-center px-4 py-16 text-center sm:px-6 md:py-24 lg:px-8">
+        <div className="relative z-10 mx-auto flex min-h-[50vh] max-w-4xl flex-col items-center justify-center px-4 py-8 text-center sm:px-6 md:py-12 lg:px-8">
           <div className="flex flex-col items-center">
-            <p className="mb-6 inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.06] px-3 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-gold">
-              MCA - SEBI - RBI - NCLT - IBC - FEMA
+            <p className="mb-6 inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-amber-300 backdrop-blur-md">
+              MCA • SEBI • RBI • NCLT • IBC • FEMA
             </p>
-            <h1 className="font-heading text-4xl font-bold leading-[1.1] text-white text-balance md:text-5xl lg:text-6xl">
-              Corporate Law Updates & Tools
+            <h1 className="font-heading text-4xl font-bold leading-[1.15] text-white text-balance md:text-5xl lg:text-6xl tracking-tight">
+              Corporate Law Updates & Compliance Tools
             </h1>
-            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-300 md:text-lg text-balance">
-              CorpLawUpdates.in provides the latest corporate law updates and free compliance tools — including SEBI regulations, RBI notifications, MCA circulars, NCLT judgments, AI document generators, and fee calculators — simplified and beautifully structured for all professionals, corporates, and modern compliance leaders.
+            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-200 md:text-lg text-balance font-normal">
+              CorpLawUpdates.in provides the latest corporate law updates and free compliance tools — including SEBI regulations, RBI notifications, MCA circulars, NCLT judgments, AI document generators, and fee calculators — simplified for Company Secretaries, CAs, and compliance leaders.
             </p>
-            <p className="mt-4 text-sm text-slate-500 font-medium italic">
-              Updated daily with the latest updates and compliance tools.
+            <p className="mt-4 text-sm text-slate-300 font-semibold">
+              Updated daily with statutory updates and self-service utilities.
             </p>
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row justify-center items-center">
+            
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row justify-center items-center w-full max-w-md">
               <Link
                 href="/updates"
-                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-gold px-8 py-4 text-sm font-bold text-white shadow-lg shadow-amber-900/20 transition-colors hover:bg-amber-400 motion-safe:hover:scale-105"
+                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-amber-600 px-8 py-3.5 text-sm font-bold text-white shadow-lg shadow-amber-900/30 transition-all hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 motion-safe:hover:scale-[1.02]"
               >
                 Browse updates
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden />
               </Link>
               <Link
                 href="/tools"
-                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg border border-amber-400/30 bg-amber-400/10 px-8 py-4 text-sm font-bold text-amber-400 transition-colors hover:bg-amber-400/20 hover:border-amber-400/60 motion-safe:hover:scale-105"
+                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg border border-amber-400/40 bg-white/10 px-8 py-3.5 text-sm font-bold text-amber-300 transition-all hover:bg-white/20 hover:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 motion-safe:hover:scale-[1.02]"
               >
                 Explore tools
               </Link>
               <Link
                 href="/newsletter"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg border border-white/15 bg-white/[0.06] px-8 py-4 text-sm font-bold text-white transition-colors hover:bg-white/[0.10] motion-safe:hover:scale-105"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg border border-white/20 bg-white/5 px-8 py-3.5 text-sm font-bold text-white transition-all hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 motion-safe:hover:scale-[1.02]"
               >
                 Subscribe free
               </Link>
             </div>
-            <div className="mt-12 flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm text-slate-300">
+
+            <div className="mt-12 flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm font-medium text-slate-200">
               {['No login required', 'Updated regularly', 'Built for Indian compliance'].map(item => (
                 <span key={item} className="inline-flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-gold" aria-hidden />
+                  <CheckCircle2 className="h-4 w-4 text-amber-400" aria-hidden />
                   {item}
                 </span>
               ))}
@@ -178,77 +176,79 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Main Landmark Container */}
+      <main id="main-content">
+        {!hasUpdates && (
+          <section className="py-20 text-center px-4">
+            <h2 className="text-2xl font-bold text-navy mb-4 font-heading">Updates coming soon</h2>
+            <p className="text-slate-600">Check back shortly.</p>
+          </section>
+        )}
 
-      {!hasUpdates && (
-        <section className="py-20 text-center px-4">
-          <h2 className="text-2xl font-bold text-navy mb-4 font-heading">Updates coming soon</h2>
-          <p className="text-slate-500">Check back shortly.</p>
-        </section>
-      )}
-
-      {featuredUpdates.length > 0 && (
-        <section className="py-16 md:py-20 px-4 max-w-7xl mx-auto">
-          <div className="mb-8 md:mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-700">Editor's desk</p>
-              <h2 className="mt-2 text-2xl md:text-3xl font-bold text-navy font-heading">
-                Featured updates
-              </h2>
-              <p className="mt-2 text-slate-500 text-sm md:text-base">
-                Hand-picked regulatory highlights worth reading first.
-              </p>
+        {featuredUpdates.length > 0 && (
+          <section className="py-16 md:py-20 px-4 max-w-7xl mx-auto">
+            <div className="mb-8 md:mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-800 dark:text-amber-400">Editor's desk</p>
+                <h2 className="mt-2 text-2xl md:text-3xl font-bold text-navy dark:text-white font-heading">
+                  Featured updates
+                </h2>
+                <p className="mt-2 text-slate-600 dark:text-slate-400 text-sm md:text-base">
+                  Hand-picked regulatory highlights worth reading first.
+                </p>
+              </div>
             </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {featuredUpdates.map((update: any, i: number) => (
-              <UpdateCard key={update.id} update={update} animationDelay={i * 80} priority={i < 3} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {popularUpdates.length > 0 && (
-        <section className="py-12 md:py-16 px-4 max-w-7xl mx-auto border-t border-slate-200/80 dark:border-slate-800/85">
-          <div className="mb-8 md:mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-red-600 dark:text-red-500 flex items-center gap-2">
-                <TrendingUp className="w-4 h-4" /> Trending
-              </p>
-              <h2 className="mt-2 text-2xl md:text-3xl font-bold text-navy dark:text-white font-heading">
-                Popular this week
-              </h2>
-              <p className="mt-2 text-slate-500 dark:text-slate-400 text-sm md:text-base">
-                The most read corporate law updates from the past 7 days.
-              </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+              {featuredUpdates.map((update: any, i: number) => (
+                <UpdateCard key={update.id} update={update} animationDelay={i * 80} priority={i < 3} />
+              ))}
             </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {popularUpdates.map((update: any, i: number) => (
-              <UpdateCard key={update.id} update={update} animationDelay={i * 80} />
-            ))}
-          </div>
-        </section>
-      )}
+          </section>
+        )}
 
-      <section className="py-14 px-4 w-full border-y border-slate-200/80 dark:border-slate-800 bg-gradient-to-b from-white to-slate-50/60 dark:from-slate-900 dark:to-slate-950/60">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-xl md:text-2xl font-bold text-navy dark:text-white mb-2 font-heading text-center">
-            Browse by regulator
-          </h2>
-          <p className="text-slate-500 dark:text-slate-400 text-center text-sm md:text-base mb-10 max-w-xl mx-auto">
-            Jump straight to updates from the authority you follow.
-          </p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
-            {categoryMeta.map(({ id, label, Icon, bg, ring, desc }, i) => (
-              <Link
-                key={id}
-                href={`/category/${id.toLowerCase()}`}
-                style={{ '--delay': `${i * 50}ms` } as CSSProperties}
-                className={`animate-fade-up group flex min-h-28 flex-col items-center justify-center gap-2 rounded-xl bg-gradient-to-br ${bg} p-4 text-center text-white shadow-md ${ring} ring-1 transition-all duration-300 ease-spring motion-safe:hover:-translate-y-1 hover:shadow-lg`}
-              >
-                <Icon className="w-6 h-6 opacity-90 motion-safe:transition-transform motion-safe:duration-200 motion-safe:group-hover:scale-110" aria-hidden />
-                <span className="font-bold text-base">{label}</span>
-                <span className="text-[10px] text-white/75 leading-tight hidden sm:block">{desc}</span>
+        {popularUpdates.length > 0 && (
+          <section className="py-12 md:py-16 px-4 max-w-7xl mx-auto border-t border-slate-200 dark:border-slate-800">
+            <div className="mb-8 md:mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-red-700 dark:text-red-500 flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4 text-red-600" /> Trending
+                </p>
+                <h2 className="mt-2 text-2xl md:text-3xl font-bold text-navy dark:text-white font-heading">
+                  Popular this week
+                </h2>
+                <p className="mt-2 text-slate-600 dark:text-slate-400 text-sm md:text-base">
+                  The most read corporate law updates from the past 7 days.
+                </p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+              {popularUpdates.map((update: any, i: number) => (
+                <UpdateCard key={update.id} update={update} animationDelay={i * 80} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Browse By Regulator */}
+        <section className="py-14 px-4 w-full border-y border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60">
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-xl md:text-2xl font-bold text-navy dark:text-white mb-2 font-heading text-center">
+              Browse by regulator
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400 text-center text-sm md:text-base mb-10 max-w-xl mx-auto">
+              Jump straight to updates from the authority you follow.
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+              {categoryMeta.map(({ id, label, Icon, bg, ring, desc }, i) => (
+                <Link
+                  key={id}
+                  href={`/category/${id.toLowerCase()}`}
+                  style={{ '--delay': `${i * 50}ms` } as CSSProperties}
+                  className={`animate-fade-up group flex min-h-[110px] flex-col items-center justify-center gap-2 rounded-xl bg-gradient-to-br ${bg} p-4 text-center text-white shadow-md ${ring} ring-1 transition-all duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 motion-safe:hover:-translate-y-1 hover:shadow-lg`}
+                >
+                  <Icon className="w-6 h-6 opacity-95 motion-safe:transition-transform motion-safe:duration-200 motion-safe:group-hover:scale-110" aria-hidden />
+                  <span className="font-bold text-base">{label}</span>
+                  <span className="text-[10px] text-white/90 font-medium leading-tight hidden sm:block">{desc}</span>
               </Link>
             ))}
           </div>
@@ -420,6 +420,7 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+      </main>
 
     </div>
   )
