@@ -79,7 +79,7 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
           <input
             type="text"
             name="search_query"
-            className="block w-full pl-10 pr-3 py-4 border border-slate-200 dark:border-slate-800 rounded-xl leading-5 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 transition-shadow shadow-sm text-base"
+            className="block w-full pl-10 pr-3 py-3.5 border border-slate-300 dark:border-slate-800 rounded-xl leading-5 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all shadow-sm text-base"
             placeholder="Search for a legal term or definition..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -88,17 +88,17 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
         </form>
 
         {/* Category Tabs */}
-        <div className="flex flex-wrap gap-2 mb-8 justify-center border-b border-slate-100 dark:border-slate-800 pb-6">
+        <div className="flex flex-wrap gap-2 mb-8 justify-center border-b border-slate-200 dark:border-slate-800 pb-6">
           {categories.map((cat) => {
             const isActive = activeCategory === cat
             return (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+                className={`min-h-[44px] px-4 py-2 rounded-xl text-sm font-bold transition-all focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
                   isActive
-                    ? 'bg-amber-500 text-white shadow-md shadow-amber-500/10'
-                    : 'bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-navy dark:hover:text-white border border-slate-200/50 dark:border-slate-700/50'
+                    ? 'bg-amber-600 text-white shadow-md shadow-amber-900/10'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-navy dark:hover:text-white border border-slate-200 dark:border-slate-700'
                 }`}
               >
                 {cat}

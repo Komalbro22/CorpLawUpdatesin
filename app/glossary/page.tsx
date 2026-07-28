@@ -52,16 +52,23 @@ export default async function GlossaryHubPage() {
 
   return (
     <>
-      <div className="bg-navy py-12 px-4 text-center">
-        <h1 className="text-4xl md:text-5xl font-heading font-bold text-white mb-4">
-          Legal Glossary — Indian Corporate Law Terms
-        </h1>
-        <p className="text-slate-300 max-w-2xl mx-auto text-lg">
-          {termCount}+ definitions for CS, CA, CMA professionals and law students
-        </p>
-      </div>
+      <main id="main-content">
+        <div className="bg-navy py-14 px-4 text-center border-b border-slate-800">
+          <div className="max-w-4xl mx-auto">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-300 mb-3">
+              Statutory Reference & Definitions
+            </p>
+            <h1 className="text-4xl md:text-5xl font-heading font-bold text-white mb-4 tracking-tight">
+              Legal Glossary — Indian Corporate Law Terms
+            </h1>
+            <p className="text-slate-200 max-w-2xl mx-auto text-base md:text-lg font-normal">
+              {termCount}+ plain-language definitions for CS, CA, CMA professionals and law students.
+            </p>
+          </div>
+        </div>
 
-      <GlossaryClient terms={terms || []} />
+        <GlossaryClient terms={terms || []} />
+      </main>
 
       {/* DefinedTermSet JSON-LD */}
       <script
