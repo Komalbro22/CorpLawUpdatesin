@@ -37,8 +37,10 @@ const config: Config = {
         },
       },
       colors: {
-        navy: '#0F172A',
-        gold: '#B45309',
+        navy: '#0B1F3A',
+        gold: '#B45309', // WCAG AA compliant gold text/border in light mode
+        'gold-accent': '#C9A84C', // Vibrant gold for fills/badges
+        'gold-hover': '#B8963B',
         // Add dark mode specific colors
         'dark-bg': '#0A0F1E',
         'dark-surface': '#111827',
@@ -47,21 +49,22 @@ const config: Config = {
         'dark-text': '#E2E8F0',
         'dark-text-muted': '#94A3B8',
         category: {
-          mca:  '#3B82F6',
-          sebi: '#10B981',
-          rbi:  '#8B5CF6',
-          nclt: '#F97316',
-          ibc:  '#EF4444',
-          fema: '#14B8A6',
+          mca:  '#2563EB',
+          sebi: '#059669',
+          rbi:  '#7C3AED',
+          nclt: '#EA580C',
+          ibc:  '#DC2626',
+          fema: '#0D9488',
         },
         brand: {
-          navy:       '#0B1F3A',  // Primary dark background
+          navy:       '#0B1F3A',  // Primary dark navy background
           'slate-blue': '#1E3A5F', // Secondary backgrounds, cards
           'mid-blue':   '#2E5F8A', // Interactive elements
           gold:         '#C9A84C', // Accent, CTAs, highlights
+          'gold-dark':  '#B45309', // Accessible text gold
           'gold-light': '#E8C97D', // Hover states for gold
           cream:        '#F5F0E8', // Light background
-          muted:        '#8B9BB4', // Secondary text on dark backgrounds
+          muted:        '#64748B', // Secondary text
         },
         status: {
           verified:  '#16A34A',  // Rate badge green
