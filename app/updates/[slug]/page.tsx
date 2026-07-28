@@ -10,6 +10,7 @@ import { UPDATE_DETAIL_COLUMNS, UPDATE_LIST_COLUMNS } from '@/lib/supabase-queri
 import Link from 'next/link'
 import Image from 'next/image'
 import CategoryBadge from '@/components/CategoryBadge'
+import GazetteLedgerRail from '@/components/shared/GazetteLedgerRail'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import TableOfContents from '@/components/TableOfContents'
@@ -344,12 +345,20 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
 
             {/* 2. ARTICLE HEADER */}
             <header className="mb-8">
+                {/* Signature Gazette Ledger Rail Accent */}
+                <GazetteLedgerRail
+                    category={update.category}
+                    sectionRef={update.source_name || undefined}
+                    isMandatory={update.impact_level === 'high'}
+                    className="mb-4"
+                />
+
                 <div className="mb-4 flex items-center justify-between flex-wrap gap-3">
                     <div className="flex items-center gap-3">
                         <CategoryBadge category={update.category as any} />
                         <Link 
                             href={`/category/${update.category.toLowerCase()}`}
-                            className="text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-gold transition-colors uppercase tracking-widest"
+                            className="text-xs font-bold text-slate-700 dark:text-slate-300 hover:text-amber-700 transition-colors uppercase tracking-widest"
                         >
                             {update.category.toUpperCase()} updates
                         </Link>
