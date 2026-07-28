@@ -469,19 +469,49 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                             </td>
                         );
                     },
+                    a: ({ node, href, children, ...props }: any) => {
+                        const isExternal = href && (href.startsWith('http://') || href.startsWith('https://'));
+                        return (
+                            <a
+                                href={href}
+                                target={isExternal ? '_blank' : undefined}
+                                rel={isExternal ? 'noopener noreferrer' : undefined}
+                                {...props}
+                            >
+                                {children}
+                            </a>
+                        );
+                    },
                     img: ({ node, style, src, alt, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
+                        let resolvedSrc = src || '';
+                        if (resolvedSrc && !resolvedSrc.startsWith('http://') && !resolvedSrc.startsWith('https://') && !resolvedSrc.startsWith('data:')) {
+                            if (!resolvedSrc.startsWith('/')) {
+                                resolvedSrc = '/' + resolvedSrc;
+                            }
+                        }
+
                         return (
                             <img
-                                src={src}
+                                src={resolvedSrc}
                                 alt={alt || ''}
+                                loading="lazy"
                                 decoding="async"
+                                referrerPolicy="no-referrer"
+                                onError={(e) => {
+                                    const target = e.currentTarget;
+                                    if (!target.dataset.hasFailed) {
+                                        target.dataset.hasFailed = 'true';
+                                        target.style.display = 'none';
+                                    }
+                                }}
                                 style={{
                                     maxWidth: '100%',
                                     height: 'auto',
                                     display: 'block',
                                     margin: '1.5rem auto',
-                                    borderRadius: '0.5rem',
+                                    borderRadius: '0.75rem',
+                                    boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.08)',
                                     ...styleObj
                                 }}
                                 {...props}
