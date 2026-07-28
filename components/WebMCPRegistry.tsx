@@ -37,11 +37,16 @@ type ToolOptions = WebMCPToolOptions;
 
 /** Returns the active modelContext, preferring document (Chrome 150+) over navigator (Chrome 149 legacy). */
 function getModelContext(): ModelContext | null {
-  if (typeof document !== 'undefined' && document.modelContext) return document.modelContext;
-  // navigator.modelContext is the deprecated Chrome 149 API — access via runtime cast to avoid TS lib conflict
-  if (typeof navigator !== 'undefined') {
-    const navLegacy = (navigator as unknown as Record<string, unknown>).modelContext;
-    if (navLegacy) return navLegacy as ModelContext;
+  try {
+    if (typeof document !== 'undefined' && 'modelContext' in document && document.modelContext) {
+      return document.modelContext;
+    }
+    if (typeof navigator !== 'undefined' && 'modelContext' in navigator) {
+      const navLegacy = (navigator as unknown as Record<string, unknown>).modelContext;
+      if (navLegacy) return navLegacy as ModelContext;
+    }
+  } catch {
+    // Fail silently if experimental feature flag throws IPC error
   }
   return null;
 }

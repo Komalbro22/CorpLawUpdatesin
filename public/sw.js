@@ -1,4 +1,4 @@
-const CACHE_NAME = 'corplaw-cache-v1';
+const CACHE_NAME = 'corplaw-cache-v2';
 const OFFLINE_URL = '/offline.html';
 
 const ASSETS_TO_CACHE = [
@@ -42,27 +42,30 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(event.request.url);
 
+  // Ignore non-http/https schemes (e.g. chrome-extension://, moz-extension://)
+  if (!url.protocol.startsWith('http')) return;
+
+  const acceptHeader = event.request.headers.get('accept') || '';
+  const isHtmlNavigation = event.request.mode === 'navigate' || acceptHeader.includes('text/html');
+
   // If this is a page navigation (HTML page)
-  if (event.request.mode === 'navigate' || event.request.headers.get('accept').includes('text/html')) {
+  if (isHtmlNavigation) {
     event.respondWith(
       fetch(event.request)
         .then((response) => {
-          // If response is valid, clone it and cache it
-          if (response.ok) {
+          if (response.ok && response.type === 'basic') {
             const copy = response.clone();
             caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, copy);
-            });
+              cache.put(event.request, copy).catch(() => {});
+            }).catch(() => {});
           }
           return response;
         })
         .catch(() => {
-          // Offline fallback
           return caches.match(event.request).then((cachedResponse) => {
             if (cachedResponse) {
               return cachedResponse;
             }
-            // If not cached, return offline.html page
             return caches.match(OFFLINE_URL);
           });
         })
