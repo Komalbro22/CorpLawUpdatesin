@@ -81,7 +81,13 @@ export default function NewsletterWidget() {
                     </div>
                 </div>
             ) : (
-                <form toolname="subscribeNewsletter" tooldescription="Subscribe to daily Indian corporate law regulatory update emails." onSubmit={handleSubmit} className="flex flex-col gap-3 mt-4">
+                <form 
+                  toolname="subscribe_newsletter" 
+                  tooldescription="Subscribe to weekly Indian corporate law regulatory update emails." 
+                  toolautosubmit
+                  onSubmit={handleSubmit} 
+                  className="flex flex-col gap-3 mt-4"
+                >
                     <div>
                         <label htmlFor="email" className="sr-only">
                             Email address
@@ -97,6 +103,7 @@ export default function NewsletterWidget() {
                             required
                             disabled={loading}
                             autoComplete="email"
+                            toolparamdescription="Subscriber email address to receive weekly MCA, SEBI, and RBI compliance updates."
                         />
                     </div>
                     
