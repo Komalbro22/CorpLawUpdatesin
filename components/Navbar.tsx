@@ -90,22 +90,29 @@ export default function Navbar() {
 
     const isCategoryActive = categoryItems.some(item => isActive(item.href))
 
-    const navHeight = scrolled ? 'h-14' : 'h-16'
     const navBg = scrolled
         ? 'bg-white/95 dark:bg-slate-900/95 shadow-nav backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800/80'
         : 'bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80'
 
     return (
-        <nav className={`sticky top-0 z-50 w-full transition-[background-color,backdrop-filter,box-shadow,border-color] duration-300 ease-in-out ${navBg}`}>
+        <nav className={`sticky top-0 z-50 w-full transition-[background-color,box-shadow,border-color] duration-200 ease-in-out ${navBg}`}>
+            {/* Accessible Skip Navigation Link */}
+            <a
+                href="#main-content"
+                className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-4 focus:z-[60] focus:px-4 focus:py-2 focus:bg-amber-700 focus:text-white focus:font-bold focus:rounded-lg focus:shadow-xl focus:outline-none"
+            >
+                Skip to main content
+            </a>
+
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className={`flex justify-between items-center transition-[height] duration-300 ease-in-out ${navHeight}`}>
+                <div className="flex justify-between items-center h-16">
 
                     {/* Logo */}
-                    <Link href="/" className="flex-shrink-0 flex flex-col justify-center group">
+                    <Link href="/" className="flex-shrink-0 flex flex-col justify-center group focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-md p-1">
                         <span className="font-heading text-xl font-bold navbar-logo-text leading-tight transition-colors duration-200 text-navy dark:text-white">
-                            CorpLawUpdates<span className="text-gold group-hover:text-amber-500 transition-colors">.in</span>
+                            CorpLawUpdates<span className="text-amber-700 dark:text-gold group-hover:text-amber-600 transition-colors">.in</span>
                         </span>
-                        <span className="hidden sm:block text-[10px] font-semibold tracking-[0.18em] uppercase mt-0.5 transition-colors duration-200 text-slate-400 dark:text-slate-500">
+                        <span className="hidden sm:block text-[10px] font-semibold tracking-[0.18em] uppercase mt-0.5 transition-colors duration-200 text-slate-500 dark:text-slate-400">
                             Corporate Law Intelligence
                         </span>
                     </Link>
@@ -116,10 +123,10 @@ export default function Navbar() {
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className={`relative inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md transition-all duration-200 ${
+                                className={`relative inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
                                     isActive(link.href)
-                                        ? 'text-amber-600 dark:text-amber-400 font-semibold'
-                                        : 'text-slate-600 dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
+                                        ? 'text-amber-700 dark:text-amber-400 font-semibold'
+                                        : 'text-slate-700 dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800'
                                 }`}
                             >
                                 {'icon' in link && link.icon && !(link as any).hideIconOnDesktop && (
@@ -128,7 +135,7 @@ export default function Navbar() {
                                 {link.label}
                                 {/* Animated underline for active */}
                                 {isActive(link.href) && (
-                                    <span className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-amber-400" />
+                                    <span className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-amber-600 dark:bg-amber-400" />
                                 )}
                             </Link>
                         ))}
@@ -144,12 +151,13 @@ export default function Navbar() {
                                     }
                                 }}
                                 aria-expanded={categoriesOpen}
+                                aria-controls="category-dropdown-menu"
                                 aria-haspopup="true"
-                                aria-label="Browse categories"
-                                className={`relative flex items-center gap-1 text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400/80 focus:ring-offset-2 rounded-md px-3 py-1.5 ${
+                                aria-label="Browse regulatory categories"
+                                className={`relative flex items-center gap-1 text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-md px-3 py-2 ${
                                     isCategoryActive
-                                        ? 'text-amber-600 dark:text-amber-400 font-semibold'
-                                        : 'text-slate-600 dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
+                                        ? 'text-amber-700 dark:text-amber-400 font-semibold'
+                                        : 'text-slate-700 dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800'
                                 }`}
                             >
                                 Categories
@@ -158,12 +166,13 @@ export default function Navbar() {
                                     aria-hidden
                                 />
                                 {isCategoryActive && (
-                                    <span className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-amber-400" />
+                                    <span className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-amber-600 dark:bg-amber-400" />
                                 )}
                             </button>
 
                             {categoriesOpen && (
                                 <div
+                                    id="category-dropdown-menu"
                                     role="menu"
                                     aria-label="Category navigation"
                                     className="absolute top-full right-0 md:left-0 mt-2 w-72 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-200/90 dark:border-slate-800/90 p-2 z-50 animate-fade-in"
