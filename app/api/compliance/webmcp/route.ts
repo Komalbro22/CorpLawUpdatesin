@@ -49,10 +49,7 @@ export async function GET(req: NextRequest) {
       'id, regulator, form_name, compliance_title, due_date, applicable_to, penalty, regulation_reference, frequency'
     )
     .eq('is_active', true)
-    .gte('due_date', fromDate)
-    .lte('due_date', toDate)
-    .order('due_date', { ascending: true })
-    .limit(20);
+    .limit(50);
 
   if (regulatorRaw && VALID_REGULATORS.includes(regulatorRaw)) {
     query = query.eq('regulator', regulatorRaw);
@@ -64,7 +61,22 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to fetch compliance data.' }, { status: 500 });
   }
 
-  const entries = (data ?? []).map((entry) => ({
+  // Optional month filtering by matching month name or number in text
+  const monthNames = [
+    'january', 'february', 'march', 'april', 'may', 'june',
+    'july', 'august', 'september', 'october', 'november', 'december'
+  ];
+  const targetMonthName = (month >= 1 && month <= 12) ? monthNames[month - 1] : null;
+
+  let filtered = data ?? [];
+  if (targetMonthName) {
+    filtered = filtered.filter(entry => {
+      const text = (entry.due_date || '').toLowerCase();
+      return text.includes(targetMonthName) || text.includes(String(month));
+    });
+  }
+
+  const entries = filtered.map((entry) => ({
     formName: entry.form_name,
     title: entry.compliance_title,
     dueDate: entry.due_date,

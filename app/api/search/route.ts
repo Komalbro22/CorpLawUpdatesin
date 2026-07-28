@@ -101,8 +101,8 @@ export async function GET(request: Request) {
 
     let articles = ftsArticles
 
-    // Fallback if migration is not run / column doesn't exist yet
-    if (error || !articles) {
+    // Fallback if FTS returns no results or search_vector column doesn't exist
+    if (error || !articles || articles.length === 0) {
       const escapedQ = q.replace(/[%_\\]/g, '\\$&')
       let fallbackQuery = supabase
         .from('updates')
