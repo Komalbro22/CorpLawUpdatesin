@@ -6,6 +6,7 @@ import { ChevronRight, Calendar, Clock, Eye, Share2, BookOpen } from 'lucide-rea
 import CategoryBadge from '@/components/CategoryBadge'
 import GazetteLedgerRail from '@/components/shared/GazetteLedgerRail'
 import { formatDate } from '@/lib/utils'
+import { Category } from '@/types'
 
 export interface ArticleLayoutProps {
   category: string
@@ -70,7 +71,7 @@ export function ArticleLayout({
 
             {/* Category & Metadata Header */}
             <div className="flex items-center gap-3 flex-wrap mb-4">
-              <CategoryBadge category={category} />
+              <CategoryBadge category={category as Category} />
               {publishedAt && (
                 <span className="inline-flex items-center gap-1 text-xs font-semibold text-slate-600 dark:text-slate-400">
                   <Calendar className="w-3.5 h-3.5" aria-hidden />
