@@ -71,7 +71,10 @@ export default function Navbar() {
         return () => document.removeEventListener('keydown', handleEscape)
     }, [])
 
-    const isActive = (path: string) => pathname === path
+    const isActive = (path: string) => {
+        if (path === '/') return pathname === '/'
+        return pathname === path || pathname.startsWith(path + '/')
+    }
 
     const categoryItems = [
         { href: '/glossary',       label: 'Legal Glossary',     Icon: GlossaryIcon, color: 'text-amber-600',  bg: 'hover:bg-amber-50'   },
@@ -84,6 +87,8 @@ export default function Navbar() {
         { href: '/rbi/repo-rate',  label: 'Current Repo Rate',  Icon: Landmark,  color: 'text-indigo-600',   bg: 'hover:bg-indigo-50'   },
         { href: '/calendar',       label: 'Compliance Calendar',Icon: Calendar,  color: 'text-cyan-600',     bg: 'hover:bg-cyan-50'     },
     ] as const
+
+    const isCategoryActive = categoryItems.some(item => isActive(item.href))
 
     const navHeight = scrolled ? 'h-14' : 'h-16'
     const navBg = scrolled
@@ -113,12 +118,12 @@ export default function Navbar() {
                                 href={link.href}
                                 className={`relative inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-md transition-all duration-200 ${
                                     isActive(link.href)
-                                        ? 'text-amber-600 dark:text-amber-400'
+                                        ? 'text-amber-600 dark:text-amber-400 font-semibold'
                                         : 'text-slate-600 dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
                                 }`}
                             >
                                 {'icon' in link && link.icon && !(link as any).hideIconOnDesktop && (
-                                    <link.icon className="w-4 h-4 shrink-0" aria-hidden />
+                                    <link.icon className="w-4 h-4 shrink-0 opacity-80" aria-hidden />
                                 )}
                                 {link.label}
                                 {/* Animated underline for active */}
@@ -141,13 +146,20 @@ export default function Navbar() {
                                 aria-expanded={categoriesOpen}
                                 aria-haspopup="true"
                                 aria-label="Browse categories"
-                                className="flex items-center gap-1 text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400/80 focus:ring-offset-2 rounded-md px-3 py-1.5 text-slate-600 dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
+                                className={`relative flex items-center gap-1 text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400/80 focus:ring-offset-2 rounded-md px-3 py-1.5 ${
+                                    isCategoryActive
+                                        ? 'text-amber-600 dark:text-amber-400 font-semibold'
+                                        : 'text-slate-600 dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
+                                }`}
                             >
                                 Categories
                                 <ChevronDown
                                     className={`w-3.5 h-3.5 transition-transform duration-200 ${categoriesOpen ? 'rotate-180' : ''}`}
                                     aria-hidden
                                 />
+                                {isCategoryActive && (
+                                    <span className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-amber-400" />
+                                )}
                             </button>
 
                             {categoriesOpen && (
