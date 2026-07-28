@@ -96,14 +96,6 @@ export default function Navbar() {
 
     return (
         <nav className={`sticky top-0 z-50 w-full transition-[background-color,box-shadow,border-color] duration-200 ease-in-out ${navBg}`}>
-            {/* Accessible Skip Navigation Link */}
-            <a
-                href="#main-content"
-                className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-4 focus:z-[60] focus:px-4 focus:py-2 focus:bg-amber-700 focus:text-white focus:font-bold focus:rounded-lg focus:shadow-xl focus:outline-none"
-            >
-                Skip to main content
-            </a>
-
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
 
