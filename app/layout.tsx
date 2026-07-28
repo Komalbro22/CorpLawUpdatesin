@@ -96,13 +96,6 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* WebMCP Origin Trial — enables document.modelContext for AI agent tool registration.
-            Token scoped to https://www.corplawupdates.in (with subdomains). Valid until 2026-11-17.
-            Apex (corplawupdates.in) 301-redirects to www, so the token origin always matches. */}
-        <meta
-          httpEquiv="origin-trial"
-          content="A/sAroVQuVB41DkT2dJW4cKZBtLfBg/Kub5Tsdn1TUQpPf8/EBgEWJY+8L7GnSPzHdTW7/DHlZisJL+jWSu0zAcAAAB8eyJvcmlnaW4iOiJodHRwczovL3d3dy5jb3JwbGF3dXBkYXRlcy5pbjo0NDMiLCJmZWF0dXJlIjoiV2ViTUNQIiwiZXhwaXJ5IjoxNzk0ODczNjAwLCJpc1N1YmRvbWFpbiI6dHJ1ZSwiaXNUaGlyZFBhcnR5Ijp0cnVlfQ=="
-        />
         {/* Anti-flash theme script — MUST be first */}
         <script
           dangerouslySetInnerHTML={{ __html: themeScript }}
@@ -177,7 +170,6 @@ export default async function RootLayout({
         <HideOnAdmin>
           <Analytics />
           <SpeedInsights />
-          <WebMCPRegistry />
         </HideOnAdmin>
 
         <Script
