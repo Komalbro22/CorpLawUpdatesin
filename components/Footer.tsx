@@ -16,6 +16,15 @@ const categories = [
     { id: 'FEMA', name: 'FEMA Updates' },
 ]
 
+const categoryBadges: Record<string, string> = {
+    MCA:  'bg-category-mca text-white',
+    SEBI: 'bg-category-sebi text-white',
+    RBI:  'bg-category-rbi text-white',
+    NCLT: 'bg-category-nclt text-white',
+    IBC:  'bg-category-ibc text-white',
+    FEMA: 'bg-category-fema text-white',
+}
+
 export default async function Footer() {
     const { data: settings } = await supabase
         .from('site_settings')
@@ -117,8 +126,11 @@ export default async function Footer() {
                         <ul className="space-y-3">
                             {categories.map(cat => (
                                 <li key={cat.id}>
-                                    <Link href={`/category/${cat.id.toLowerCase()}`} className="text-slate-400 hover:text-gold transition-colors text-sm font-medium">
-                                        {cat.id}
+                                    <Link href={`/category/${cat.id.toLowerCase()}`} className="inline-flex items-center gap-2 text-slate-400 hover:text-gold transition-colors text-sm font-medium">
+                                        <span className={`px-1.5 py-0.5 text-[10px] font-bold rounded ${categoryBadges[cat.id] || 'bg-slate-700 text-slate-200'}`}>
+                                            {cat.id}
+                                        </span>
+                                        <span>{cat.name}</span>
                                     </Link>
                                 </li>
                             ))}

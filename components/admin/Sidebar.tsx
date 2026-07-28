@@ -95,7 +95,16 @@ function isLinkActive(linkHref: string, pathname: string): boolean {
     if (linkHref === '/admin/compliance') {
         return pathname.startsWith('/admin/compliance') && !pathname.includes('/suggestions')
     }
-    return pathname === linkHref
+    if (linkHref === '/admin/newsletter') {
+        return pathname.startsWith('/admin/newsletter') && !pathname.includes('/history')
+    }
+    if (linkHref === '/admin/analytics') {
+        return pathname === '/admin/analytics'
+    }
+    if (linkHref === '/admin/documents') {
+        return pathname.startsWith('/admin/documents') && !pathname.includes('/analytics')
+    }
+    return pathname === linkHref || pathname.startsWith(linkHref + '/')
 }
 
 export default function Sidebar() {
@@ -171,7 +180,9 @@ export default function Sidebar() {
             const hasActive = section.links.some(l => isLinkActive(l.href, pathname))
             return (
                 <div key={section.label} className="mb-4">
-                    <p className="px-4 mb-2 text-[10px] font-bold tracking-wider uppercase text-slate-400">
+                    <p className={`px-4 mb-2 text-[10px] font-bold tracking-wider uppercase transition-colors ${
+                        hasActive ? 'text-amber-500 font-extrabold' : 'text-slate-400'
+                    }`}>
                         {section.label}
                     </p>
                     <div className="space-y-1">
