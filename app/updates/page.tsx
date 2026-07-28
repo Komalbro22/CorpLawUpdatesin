@@ -9,7 +9,7 @@ import Link from 'next/link'
 import { unstable_cache } from 'next/cache'
 import ArticleSearchTool from '@/components/ArticleSearchTool'
 
-export const revalidate = 43200 // 12 hours
+export const revalidate = 60 // 1 minute
 
 const CURRENT_YEAR = new Date().getFullYear()
 const CURRENT_MONTH = new Date().toLocaleString('en-IN', { month: 'long' })
@@ -73,7 +73,7 @@ export default async function UpdatesPage({
             return data || []
         },
         ['category-counts'],
-        { revalidate: 43200, tags: ['updates'] }
+        { revalidate: 60, tags: ['updates'] }
     )
 
     // Build paginated query using cache
@@ -103,7 +103,7 @@ export default async function UpdatesPage({
             return { data: data || [], count: count || 0 }
         },
         ['paginated-updates'],
-        { revalidate: 43200, tags: ['updates'] }
+        { revalidate: 60, tags: ['updates'] }
     )
 
     // Fetch top 5 updates using cache

@@ -4,7 +4,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { submitArticleToIndexNow } from '@/lib/indexnow'
 import { calculateReadingTime, extractFirstImage } from '@/lib/utils'
 import { articleSchema } from '@/lib/admin-schemas'
@@ -74,6 +74,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
             )
         }
 
+        try { revalidateTag('updates') } catch { /* ignore */ }
         revalidatePath('/', 'layout')
         revalidatePath('/updates', 'layout')
         revalidatePath('/sitemap.xml')
@@ -119,6 +120,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
             return NextResponse.json({ error: 'Article not found' }, { status: 404 })
         }
 
+        try { revalidateTag('updates') } catch { /* ignore */ }
         revalidatePath('/', 'layout')
         revalidatePath('/updates', 'layout')
         revalidatePath('/sitemap.xml')

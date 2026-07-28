@@ -4,7 +4,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { slugify, calculateReadingTime, extractFirstImage } from '@/lib/utils'
 import { submitArticleToIndexNow } from '@/lib/indexnow'
 import { articleSchema } from '@/lib/admin-schemas'
@@ -153,14 +153,13 @@ export async function POST(request: NextRequest) {
             .select()
             .single()
 
-        if (error) throw error
-
         if (createdArticle?.slug && createdArticle?.published_at) {
             submitArticleToIndexNow(createdArticle.slug).catch(
                 err => console.error('IndexNow submit failed:', err)
             )
         }
 
+        try { revalidateTag('updates') } catch { /* ignore */ }
         revalidatePath('/', 'layout')
         revalidatePath('/updates', 'layout')
         revalidatePath('/sitemap.xml')
