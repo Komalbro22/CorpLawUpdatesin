@@ -205,11 +205,8 @@ export default function UnifiedCalculator() {
         </p>
       </div>
 
-      {/* WebMCP Declarative Form Annotations (Draft Spec: https://webmachinelearning.github.io/webmcp/) */}
       <form 
         className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6 mb-10"
-        toolname="calculate_roc_fee"
-        tooldescription="Calculate Ministry of Corporate Affairs (MCA) statutory filing fees and ROC late filing penalties based on form type and delay days."
       >
         {/* Basic Inputs */}
         <div className="flex flex-col">

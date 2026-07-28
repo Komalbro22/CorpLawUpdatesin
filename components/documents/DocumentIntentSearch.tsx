@@ -39,12 +39,9 @@ export default function DocumentIntentSearch() {
       
       {/* Search box */}
       <div className="relative">
-        {/* WebMCP Declarative Form Annotations (Draft Spec: https://webmachinelearning.github.io/webmcp/) */}
         <form 
           onSubmit={(e) => { e.preventDefault(); handleSearch(); }}
           className="flex gap-2"
-          toolname="search_legal_document_templates"
-          tooldescription="Search and generate AI-powered legal document drafts, such as Board Resolutions or Commercial Agreements."
         >
           <div className="flex-1 relative">
             <span className="absolute left-4 top-1/2 

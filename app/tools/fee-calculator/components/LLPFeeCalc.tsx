@@ -118,11 +118,8 @@ export default function LLPFeeCalc() {
         <strong>LLP Slabs:</strong> LLP late filing penalties are computed using the **LLP (Second Amendment) Rules, 2022** slab multiplier system, replacing the old flat ₹100/day rate.
       </div>
 
-      {/* WebMCP Declarative Form Annotations (Draft Spec: https://webmachinelearning.github.io/webmcp/) */}
       <form 
         className="grid grid-cols-1 md:grid-cols-2 gap-5"
-        toolname="calculate_llp_fee"
-        tooldescription="Calculate statutory filing fees and flat late filing penalties for Limited Liability Partnerships (Form 8, Form 11, etc)."
       >
         <div className="space-y-1.5 md:col-span-2">
           <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Form Type</label>

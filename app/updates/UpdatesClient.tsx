@@ -130,12 +130,9 @@ export default function UpdatesClient({
                         <label htmlFor="search" className="block text-sm font-semibold text-navy dark:text-slate-200 mb-2">
                             Search
                         </label>
-                        {/* WebMCP Declarative Form Annotations (Draft Spec: https://webmachinelearning.github.io/webmcp/) */}
                         <form 
                             onSubmit={(e) => e.preventDefault()}
                             className="relative mb-4"
-                            toolname="filter_regulatory_updates"
-                            tooldescription="Filter corporate law regulatory updates by keywords or summary."
                         >
                             <Search
                                 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none"

@@ -82,9 +82,6 @@ export default function NewsletterWidget() {
                 </div>
             ) : (
                 <form 
-                  toolname="subscribe_newsletter" 
-                  tooldescription="Subscribe to weekly Indian corporate law regulatory update emails." 
-                  toolautosubmit
                   onSubmit={handleSubmit} 
                   className="flex flex-col gap-3 mt-4"
                 >

@@ -169,8 +169,6 @@ export default function PartnerInterestPage() {
             </div>
           ) : (
             <form 
-              toolname="register_partner_interest"
-              tooldescription="Submit partner interest application for legal professionals, CS, CA, and advocates to join the CorpLawUpdates directory."
               onSubmit={handleSubmit} 
               className="space-y-8"
             >

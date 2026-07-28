@@ -66,12 +66,9 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
     <div className="max-w-6xl mx-auto py-12 px-4 flex flex-col lg:flex-row gap-8 relative">
       <div className="flex-1 w-full max-w-4xl mx-auto">
         {/* Search Bar */}
-        {/* WebMCP Declarative Form Annotations (Draft Spec: https://webmachinelearning.github.io/webmcp/) */}
         <form 
           onSubmit={(e) => e.preventDefault()}
           className="relative mb-6"
-          toolname="search_legal_glossary"
-          tooldescription="Search for definitions of Indian corporate law terms (IBC, SEBI, MCA, RBI, FEMA)."
         >
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Search className="h-5 w-5 text-slate-400" />
