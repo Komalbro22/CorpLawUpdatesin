@@ -30,22 +30,22 @@ export default function HomeToolCard({ tool }: { tool: HomeToolCardData }) {
             {tool.badge}
           </span>
         </div>
-        <h3 className="font-bold text-navy dark:text-slate-100 text-base mb-1.5 group-hover:text-amber-600 transition-colors">
+        <h3 className="font-bold text-navy dark:text-slate-100 text-base mb-1.5 group-hover:text-amber-700 dark:group-hover:text-amber-400 transition-colors">
           {tool.title}
         </h3>
-        <p className="text-slate-500 dark:text-slate-400 text-xs font-light leading-relaxed">{tool.desc}</p>
+        <p className="text-slate-600 dark:text-slate-400 text-xs font-normal leading-relaxed">{tool.desc}</p>
       </div>
       <div className="flex items-center justify-between mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/60">
-        <span className="text-xs text-slate-500 dark:text-slate-400">
+        <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
           {isComingSoon ? 'Coming Soon' : 'Explore Tool'}
         </span>
-        <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-amber-500 group-hover:translate-x-1 transition-all duration-200" />
+        <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-amber-600 group-hover:translate-x-1 transition-all duration-200" />
       </div>
     </>
   )
 
   const className =
-    'bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-6 hover-card-lift hover:border-amber-400/80 hover:shadow-xl transition-all group flex flex-col justify-between animate-fade-up text-left w-full'
+    'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 hover-card-lift hover:border-amber-400/80 hover:shadow-xl transition-all group flex flex-col justify-between animate-fade-up text-left w-full focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2'
 
 
   if (isComingSoon) {

@@ -234,20 +234,20 @@ const comingTools = tools.filter(t => !t.isLive)
 
 export default function ToolsPage() {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
+    <main id="main-content" className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
       <JsonLd data={toolsJsonLd as any} />
 
-      {/* Hero */}
-      <div className="bg-navy py-14 px-4">
+      {/* Hero Banner */}
+      <div className="bg-navy py-16 px-4 border-b border-slate-800">
         <div className="max-w-5xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-amber-400/20 text-amber-400 text-xs font-bold px-3 py-1.5 rounded-full mb-5 uppercase tracking-wider">
-            🛠️ Free Tools · No Login · No Signup
+          <div className="inline-flex items-center gap-2 bg-amber-400/20 text-amber-300 text-xs font-bold px-3.5 py-1.5 rounded-full mb-5 uppercase tracking-wider border border-amber-400/30">
+            🛠️ Free Tools · No Login Required
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white font-heading mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-white font-heading mb-4 tracking-tight">
             Compliance Tools Hub
           </h1>
-          <p className="text-slate-400 text-lg max-w-2xl mx-auto mb-8">
-            Free interactive tools open to everyone — built for professionals, students, business owners, and anyone looking to simplify legal compliance.
+          <p className="text-slate-200 text-base md:text-lg max-w-2xl mx-auto mb-8 font-normal leading-relaxed">
+            Free interactive tools open to everyone — built for professionals, students, business owners, and compliance leaders.
           </p>
 
           {/* Stats row */}
@@ -262,7 +262,7 @@ export default function ToolsPage() {
                 <div className="text-3xl font-black text-amber-400">
                   {s.v}
                 </div>
-                <div className="text-slate-400 text-xs mt-0.5">
+                <div className="text-slate-300 text-xs mt-0.5 font-medium">
                   {s.l}
                 </div>
               </div>
@@ -402,6 +402,6 @@ export default function ToolsPage() {
           </Link>
         </div>
       </div>
-    </div>
+    </main>
   )
 }
