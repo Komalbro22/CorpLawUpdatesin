@@ -43,9 +43,34 @@ export default function GlobalSearch() {
     if (!open) return
     document.body.style.overflow = 'hidden'
     const timer = setTimeout(() => inputRef.current?.focus(), 50)
+
+    function handleTabKey(e: KeyboardEvent) {
+      if (e.key !== 'Tab' || !dialogRef.current) return
+      const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+      if (!focusable.length) return
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          last.focus()
+          e.preventDefault()
+        }
+      } else {
+        if (document.activeElement === last) {
+          first.focus()
+          e.preventDefault()
+        }
+      }
+    }
+
+    document.addEventListener('keydown', handleTabKey)
     return () => {
       document.body.style.overflow = ''
       clearTimeout(timer)
+      document.removeEventListener('keydown', handleTabKey)
     }
   }, [open])
 

@@ -33,9 +33,9 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
     const borderColor = categoryBorderColor[update.category as string] || 'border-t-slate-200'
 
     const impactStyles: Record<string, string> = {
-        high:   'bg-red-100 text-red-700',
-        medium: 'bg-amber-100 text-amber-700',
-        low:    'bg-green-100 text-green-700',
+        high:   'bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-300',
+        medium: 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300',
+        low:    'bg-green-100 text-green-700 dark:bg-emerald-950/50 dark:text-emerald-300',
     }
 
     const impactLabels: Record<string, string> = {
