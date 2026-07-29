@@ -43,6 +43,7 @@ export async function GET() {
 - National Company Law Tribunal (NCLT): ${BASE_URL}/category/nclt
 - Insolvency & Bankruptcy Code (IBC): ${BASE_URL}/category/ibc
 - Foreign Exchange Management Act (FEMA): ${BASE_URL}/category/fema
+- Competition Commission of India (CCI): ${BASE_URL}/category/cci
 
 ## Full Regulatory Articles & Updates (Latest 50)
 ${updatesList}

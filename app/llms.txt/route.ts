@@ -38,6 +38,7 @@ export async function GET() {
 - [RBI circulars](${BASE_URL}/category/rbi): Reserve Bank of India (RBI) directions, banking regulations, and monetary policy updates.
 - [IBC/insolvency](${BASE_URL}/category/ibc): Insolvency and Bankruptcy Board of India (IBBI) and NCLT judgments, insolvency resolution process updates.
 - [FEMA regulations](${BASE_URL}/category/fema): Foreign Exchange Management Act (FEMA) guidelines and cross-border transaction compliance.
+- [CCI regulations](${BASE_URL}/category/cci): Competition Commission of India (CCI) orders, merger control approvals, combination regulations, Section 3/4 anti-trust filings, and competition law updates.
 
 ## Recent Corporate Law Circulars & Updates
 ${updatesList}

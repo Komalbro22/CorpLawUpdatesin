@@ -17,6 +17,7 @@ export async function GET(request: NextRequest) {
         nclt: '#f97316',
         ibc: '#ef4444',
         fema: '#14b8a6',
+        cci: '#6366f1',
       }
 
       const categoryColor = categoryColors[category.toLowerCase()] || '#f59e0b'
@@ -157,7 +158,7 @@ export async function GET(request: NextRequest) {
                 display: 'flex',
                 gap: '8px',
               }}>
-                {['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA'].map((reg) => (
+                {['MCA', 'SEBI', 'RBI', 'CCI', 'NCLT', 'IBC', 'FEMA'].map((reg) => (
                   <div
                     key={reg}
                     style={{

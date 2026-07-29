@@ -95,8 +95,8 @@ export default function WebMCPRegistry() {
           },
           regulator: {
             type: 'string',
-            description: 'Filter by regulator: MCA, SEBI, RBI, NCLT, IBC, or FEMA',
-            enum: ['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA'],
+            description: 'Filter by regulator: MCA, SEBI, RBI, NCLT, IBC, FEMA, or CCI',
+            enum: ['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA', 'CCI'],
           },
           maxResults: {
             type: 'number',
@@ -247,8 +247,8 @@ export default function WebMCPRegistry() {
         properties: {
           regulator: {
             type: 'string',
-            description: 'Filter by regulator: mca, sebi, rbi, income_tax, gst, fema, nclt, ibc, labor_law, other',
-            enum: ['mca', 'sebi', 'rbi', 'income_tax', 'gst', 'fema', 'nclt', 'ibc', 'labor_law', 'other'],
+            description: 'Filter by regulator: mca, sebi, rbi, income_tax, gst, fema, cci, nclt, ibc, labor_law, other',
+            enum: ['mca', 'sebi', 'rbi', 'income_tax', 'gst', 'fema', 'cci', 'nclt', 'ibc', 'labor_law', 'other'],
           },
           month: {
             type: 'number',

@@ -46,7 +46,7 @@ export async function GET() {
   <channel>
     <title>CorpLawUpdates.in</title>
     <link>${BASE_URL}</link>
-    <description>India's Free Corporate Law Intelligence Platform — MCA, SEBI, RBI, NCLT, IBC and FEMA updates</description>
+    <description>India's Free Corporate Law Intelligence Platform — MCA, SEBI, RBI, CCI, NCLT, IBC and FEMA updates</description>
     <language>en-in</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <atom:link href="${BASE_URL}/api/feed.xml" 

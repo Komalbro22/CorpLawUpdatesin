@@ -446,6 +446,15 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                             iconColor: 'text-teal-500',
                             badgeBg: 'bg-teal-50 text-teal-700 border-teal-200/50',
                         };
+                    } else if (cat === 'CCI') {
+                        cardStyles = {
+                            borderColor: 'border-indigo-100',
+                            borderLeftColor: 'border-l-indigo-500',
+                            bgColor: 'bg-indigo-50/30',
+                            accentColor: 'text-indigo-600',
+                            iconColor: 'text-indigo-500',
+                            badgeBg: 'bg-indigo-50 text-indigo-700 border-indigo-200/50',
+                        };
                     }
 
                     return (

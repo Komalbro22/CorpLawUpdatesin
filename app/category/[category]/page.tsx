@@ -12,7 +12,7 @@ import EmptyState from '@/components/EmptyState'
 
 export const revalidate = 43200 // 12 hours
 
-const CATEGORIES = ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema']
+const CATEGORIES = ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci']
 
 const CATEGORY_FULL_NAMES: Record<string, string> = {
     mca: 'Ministry of Corporate Affairs',
@@ -21,6 +21,7 @@ const CATEGORY_FULL_NAMES: Record<string, string> = {
     nclt: 'National Company Law Tribunal',
     ibc: 'Insolvency and Bankruptcy Code',
     fema: 'Foreign Exchange Management Act',
+    cci: 'Competition Commission of India',
 }
 
 const OFFICIAL_URLS: Record<string, string> = {
@@ -30,6 +31,7 @@ const OFFICIAL_URLS: Record<string, string> = {
     nclt: 'https://nclt.gov.in',
     ibc: 'https://ibbi.gov.in',
     fema: 'https://rbi.org.in/Scripts/BS_FemaNotifications.aspx',
+    cci: 'https://cci.gov.in',
 }
 
 // Answer-First definition paragraphs for AI Overview + SEO
@@ -92,6 +94,17 @@ const ANSWER_FIRST: Record<string, { definition: string; facts: string[] }> = {
             'FEMA violations are civil offences unlike the erstwhile criminal offences under FERA.',
             'RBI issues FEMA Master Directions on FDI, ODI, ECB, and remittances.',
             'Enforcement Directorate (ED) investigates FEMA violations.',
+        ],
+    },
+    cci: {
+        definition:
+            'CCI Orders and Notifications are official directives issued by the Competition Commission of India under the Competition Act, 2002. They regulate merger control (combinations), prohibit anti-competitive agreements, prevent abuse of dominant position, and enforce fair market competition in India. This page tracks all latest CCI orders, combination approvals, regulations, and press releases.',
+        facts: [
+            'CCI enforces the Competition Act, 2002 to sustain fair market competition in India.',
+            'Section 3 prohibits anti-competitive agreements and cartel behavior.',
+            'Section 4 prohibits enterprise abuse of dominant market position.',
+            'Section 5 & 6 regulate combinations including mergers, acquisitions, and amalgamations.',
+            'Green Channel approval scheme provides automatic clearance for non-overlapping combination filings.',
         ],
     },
 }
@@ -220,6 +233,7 @@ export default async function CategoryPage({
         nclt: 'from-orange-500 to-orange-700',
         ibc: 'from-red-600 to-red-800',
         fema: 'from-teal-600 to-teal-800',
+        cci: 'from-indigo-600 to-indigo-800',
     }
 
     // ─── JSON-LD Schemas ───────────────────────────────────────────────────────

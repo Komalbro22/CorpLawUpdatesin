@@ -24,6 +24,7 @@ const REGULATOR_CATEGORIES = [
   { id: 'nclt', label: 'NCLT Orders' },
   { id: 'ibc', label: 'IBC Updates' },
   { id: 'fema', label: 'FEMA Guidelines' },
+  { id: 'cci', label: 'CCI Regulations' },
 ]
 
 export default function NotificationBell() {

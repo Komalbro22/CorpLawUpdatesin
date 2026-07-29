@@ -18,7 +18,7 @@ export async function generateMetadata(
   { searchParams }: { searchParams: { search?: string, category?: string } }
 ): Promise<Metadata> {
   const title = `Latest Corporate Law & Regulatory Updates ${CURRENT_YEAR} — MCA, SEBI, RBI Circulars India`
-  const description = `Browse all latest corporate law updates for ${CURRENT_YEAR}: MCA circulars today, SEBI notifications, RBI guidelines, NCLT orders, IBC updates and FEMA regulations. Updated daily for CS, CA & compliance professionals in India.`
+  const description = `Browse all latest corporate law updates for ${CURRENT_YEAR}: MCA circulars today, SEBI notifications, RBI guidelines, CCI orders, NCLT orders, IBC updates and FEMA regulations. Updated daily for CS, CA & compliance professionals in India.`
   return {
     title,
     description,

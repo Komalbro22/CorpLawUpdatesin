@@ -50,6 +50,7 @@ const categoryColors: Record<string, string> = {
   nclt: 'bg-orange-500',
   ibc: 'bg-red-500',
   fema: 'bg-teal-500',
+  cci: 'bg-indigo-500',
 }
 
 export default function AnalyticsPage() {

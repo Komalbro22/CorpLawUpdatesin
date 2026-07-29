@@ -215,6 +215,7 @@ export default async function GlossaryTermPage({ params }: Props) {
     'NCLT': 'adjudicated by the National Company Law Tribunal under the Companies Act, 2013 or IBC',
     'IBC': 'governed by the Insolvency and Bankruptcy Code, 2016 and regulated by IBBI',
     'FEMA': 'governed by the Foreign Exchange Management Act, 1999 and regulated by RBI',
+    'CCI': 'governed by the Competition Commission of India under the Competition Act, 2002',
   }
   const ctx = categoryContext[term.category] || `regulated under Indian ${term.category} law`
 
@@ -318,6 +319,14 @@ export default async function GlossaryTermPage({ params }: Props) {
       badgeBg: 'bg-teal-50 text-teal-855 border-teal-200/50',
       iconColor: 'text-teal-500',
       titleColor: 'text-teal-900',
+    };
+  } else if (cat === 'CCI') {
+    themeStyles = {
+      borderColor: 'border-indigo-100',
+      borderLeftColor: 'border-l-indigo-500',
+      badgeBg: 'bg-indigo-50 text-indigo-855 border-indigo-200/50',
+      iconColor: 'text-indigo-500',
+      titleColor: 'text-indigo-900',
     };
   }
 

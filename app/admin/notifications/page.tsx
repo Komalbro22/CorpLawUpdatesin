@@ -283,6 +283,7 @@ export default function AdminPushNotificationsPage() {
                 <option value="nclt">NCLT Orders Only</option>
                 <option value="ibc">IBC Updates Only</option>
                 <option value="fema">FEMA Guidelines Only</option>
+                <option value="cci">CCI Regulations Only</option>
               </select>
             </div>
           </div>

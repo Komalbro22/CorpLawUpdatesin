@@ -17,6 +17,7 @@ import {
     Landmark,
     Menu,
     Scale,
+    ShieldCheck,
     TrendingUp,
     Wrench,
     X,
@@ -84,6 +85,7 @@ export default function Navbar() {
         { href: '/category/nclt',  label: 'NCLT',               Icon: Scale,     color: 'text-orange-600',  bg: 'hover:bg-orange-50'  },
         { href: '/category/ibc',   label: 'IBC',                Icon: Gavel,     color: 'text-red-600',     bg: 'hover:bg-red-50'     },
         { href: '/category/fema',  label: 'FEMA',               Icon: Globe2,    color: 'text-teal-600',    bg: 'hover:bg-teal-50'    },
+        { href: '/category/cci',   label: 'CCI',                Icon: ShieldCheck, color: 'text-indigo-600', bg: 'hover:bg-indigo-50'  },
         { href: '/rbi/repo-rate',  label: 'Current Repo Rate',  Icon: Landmark,  color: 'text-indigo-600',   bg: 'hover:bg-indigo-50'   },
         { href: '/calendar',       label: 'Compliance Calendar',Icon: Calendar,  color: 'text-cyan-600',     bg: 'hover:bg-cyan-50'     },
     ] as const

@@ -19,6 +19,7 @@ const categoryColors: Record<string, string> = {
   nclt: '#F97316',
   ibc: '#EF4444',
   fema: '#14B8A6',
+  cci: '#6366F1',
   income_tax: '#F59E0B',
 }
 
@@ -29,6 +30,7 @@ const categoryLabels: Record<string, string> = {
   nclt: 'NCLT',
   ibc: 'IBC',
   fema: 'FEMA',
+  cci: 'CCI',
   income_tax: 'Income Tax',
 }
 

@@ -14,6 +14,7 @@ const categories = [
     { id: 'NCLT', name: 'NCLT Updates' },
     { id: 'IBC',  name: 'IBC Updates' },
     { id: 'FEMA', name: 'FEMA Updates' },
+    { id: 'CCI',  name: 'CCI Updates' },
 ]
 
 const categoryBadges: Record<string, string> = {
@@ -23,6 +24,7 @@ const categoryBadges: Record<string, string> = {
     NCLT: 'bg-category-nclt text-white',
     IBC:  'bg-category-ibc text-white',
     FEMA: 'bg-category-fema text-white',
+    CCI:  'bg-category-cci text-white',
 }
 
 export default async function Footer() {

@@ -17,7 +17,7 @@ import LinkChecker from '@/components/admin/LinkChecker'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 
-const CATEGORIES: Category[] = ['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA']
+const CATEGORIES: Category[] = ['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA', 'CCI']
 
 export default function NewArticle() {
     const router = useRouter()

@@ -7,6 +7,7 @@ const colorMap: Record<Category, string> = {
     NCLT: 'bg-orange-800',
     IBC: 'bg-red-700',
     FEMA: 'bg-teal-700',
+    CCI: 'bg-indigo-600',
 }
 
 export default function CategoryBadge({ category, className = '' }: { category: Category, className?: string }) {

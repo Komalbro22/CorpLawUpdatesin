@@ -23,6 +23,7 @@ colors:
   category-nclt: "#F97316"
   category-ibc: "#EF4444"
   category-fema: "#14B8A6"
+  category-cci: "#6366F1"
   dark-bg-primary: "#040814"
   dark-bg-card: "#0E1626"
   dark-bg-surface: "#111827"
@@ -64,6 +65,7 @@ CorpLawUpdates.in provides real-time corporate regulatory updates, circular brea
   - NCLT (National Company Law Tribunal): `#F97316` (Orange)
   - IBC (Insolvency and Bankruptcy Code): `#EF4444` (Red)
   - FEMA (Foreign Exchange Management Act): `#14B8A6` (Teal)
+  - CCI (Competition Commission of India): `#6366F1` (Indigo)
 
 ## Typography
 

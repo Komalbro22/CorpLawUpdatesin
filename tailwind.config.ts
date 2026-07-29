@@ -55,6 +55,7 @@ const config: Config = {
           nclt: '#EA580C',
           ibc:  '#DC2626',
           fema: '#0D9488',
+          cci:  '#6366F1',
         },
         brand: {
           navy:       '#0B1F3A',  // Primary dark navy background

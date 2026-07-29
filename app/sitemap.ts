@@ -67,8 +67,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ? new Date(compliance_entries[0].updated_at)
     : new Date('2026-05-14')
 
+  const ALL_CATEGORIES = ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci']
   const categoryDates: Record<string, Date> = {}
   let latestArticleDate = new Date('2026-05-14')
+
+  ALL_CATEGORIES.forEach(cat => {
+    categoryDates[cat] = latestArticleDate
+  })
   
   if (articles && articles.length > 0) {
     latestArticleDate = new Date(articles[0].published_at!)

@@ -17,18 +17,19 @@ import {
   Landmark,
   Newspaper,
   Scale,
+  ShieldCheck,
   TrendingUp,
 } from 'lucide-react'
 
-export const revalidate = 60 // 1 minute
+export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Corporate Law Updates India (2026) – SEBI, RBI, MCA Notifications & Circulars',
-  description: 'Get the latest corporate law updates in India including SEBI, RBI, MCA, NCLT, IBC and FEMA. Simplified and beautifully structured for all professionals, corporates, and modern compliance leaders.',
+  title: 'Corporate Law Updates India (2026) – MCA, SEBI, RBI, CCI Notifications & Circulars',
+  description: 'Get the latest corporate law updates in India including MCA, SEBI, RBI, CCI, NCLT, IBC and FEMA. Simplified and beautifully structured for all professionals, corporates, and modern compliance leaders.',
   alternates: { canonical: 'https://www.corplawupdates.in' },
   openGraph: {
-    title: 'Corporate Law Updates India (2026) – SEBI, RBI, MCA Notifications & Circulars',
-    description: 'Get the latest corporate law updates in India including SEBI, RBI, MCA, NCLT, IBC and FEMA. Updated daily.',
+    title: 'Corporate Law Updates India (2026) – MCA, SEBI, RBI, CCI Notifications & Circulars',
+    description: 'Get the latest corporate law updates in India including MCA, SEBI, RBI, CCI, NCLT, IBC and FEMA. Updated daily.',
     url: 'https://www.corplawupdates.in',
     images: [{ url: 'https://www.corplawupdates.in/api/og?title=Corporate+Law+Updates+India+2026&category=', width: 1200, height: 630 }],
   },
@@ -38,6 +39,7 @@ const categoryMeta = [
   { id: 'MCA', label: 'MCA', Icon: Building2, bg: 'from-blue-600 to-blue-700', ring: 'ring-blue-500/20', desc: 'Ministry of Corporate Affairs' },
   { id: 'SEBI', label: 'SEBI', Icon: TrendingUp, bg: 'from-emerald-600 to-emerald-700', ring: 'ring-emerald-500/20', desc: 'Securities & Exchange Board' },
   { id: 'RBI', label: 'RBI', Icon: Landmark, bg: 'from-violet-600 to-violet-700', ring: 'ring-violet-500/20', desc: 'Reserve Bank of India' },
+  { id: 'CCI', label: 'CCI', Icon: ShieldCheck, bg: 'from-indigo-600 to-indigo-700', ring: 'ring-indigo-500/20', desc: 'Competition Commission of India' },
   { id: 'NCLT', label: 'NCLT', Icon: Scale, bg: 'from-orange-600 to-orange-700', ring: 'ring-orange-500/20', desc: 'National Company Law Tribunal' },
   { id: 'IBC', label: 'IBC', Icon: Gavel, bg: 'from-red-600 to-red-700', ring: 'ring-red-500/20', desc: 'Insolvency & Bankruptcy Code' },
   { id: 'FEMA', label: 'FEMA', Icon: Globe2, bg: 'from-teal-600 to-teal-700', ring: 'ring-teal-500/20', desc: 'Foreign Exchange Management' },

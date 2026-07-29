@@ -4,14 +4,14 @@ import { supabase } from '@/lib/supabase'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'About — India\'s Free Corporate Law Platform',
-  description: 'Learn about CorpLawUpdates.in — India\'s free corporate law intelligence platform providing MCA, SEBI, RBI updates for professionals.',
+  title: 'About Us – CorpLawUpdates.in',
+  description: 'Learn about CorpLawUpdates.in — India\'s free corporate law intelligence platform providing MCA, SEBI, RBI, CCI updates for professionals.',
   alternates: {
     canonical: 'https://www.corplawupdates.in/about',
   },
   openGraph: {
-    title: 'About CorpLawUpdates.in — India\'s Free Corporate Law Intelligence Platform',
-    description: 'CorpLawUpdates.in publishes free, plain-English corporate law updates covering MCA, SEBI, RBI, NCLT and IBC for professionals, lawyers and compliance officers.',
+    title: 'About Us – CorpLawUpdates.in',
+    description: 'CorpLawUpdates.in publishes free, plain-English corporate law updates covering MCA, SEBI, RBI, CCI, NCLT and IBC for professionals, lawyers and compliance officers.',
     url: 'https://www.corplawupdates.in/about',
     images: [{ url: 'https://www.corplawupdates.in/api/og?title=About%20CorpLawUpdates&category=', width: 1200, height: 630 }],
   },
