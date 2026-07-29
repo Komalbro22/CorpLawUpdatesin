@@ -12,7 +12,7 @@ const supabase = createClient(
 );
 
 const VALID_REGULATORS = [
-  'mca', 'sebi', 'rbi', 'income_tax', 'fema', 'nclt', 'ibc', 'gst', 'labor_law', 'cci', 'other',
+  'mca', 'sebi', 'rbi', 'income_tax', 'fema', 'nclt', 'ibc', 'gst', 'labor_law', 'labour', 'cci', 'other',
 ];
 
 export async function GET(req: NextRequest) {

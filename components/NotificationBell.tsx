@@ -25,6 +25,7 @@ const REGULATOR_CATEGORIES = [
   { id: 'ibc', label: 'IBC Updates' },
   { id: 'fema', label: 'FEMA Guidelines' },
   { id: 'cci', label: 'CCI Regulations' },
+  { id: 'labour', label: 'Labour Law Updates' },
 ]
 
 export default function NotificationBell() {

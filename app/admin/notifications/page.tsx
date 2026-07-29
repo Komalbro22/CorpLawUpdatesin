@@ -284,6 +284,7 @@ export default function AdminPushNotificationsPage() {
                 <option value="ibc">IBC Updates Only</option>
                 <option value="fema">FEMA Guidelines Only</option>
                 <option value="cci">CCI Regulations Only</option>
+                <option value="labour">Labour Law Updates Only</option>
               </select>
             </div>
           </div>

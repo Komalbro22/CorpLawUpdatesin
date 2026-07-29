@@ -39,6 +39,7 @@ export async function GET() {
 - [IBC/insolvency](${BASE_URL}/category/ibc): Insolvency and Bankruptcy Board of India (IBBI) and NCLT judgments, insolvency resolution process updates.
 - [FEMA regulations](${BASE_URL}/category/fema): Foreign Exchange Management Act (FEMA) guidelines and cross-border transaction compliance.
 - [CCI regulations](${BASE_URL}/category/cci): Competition Commission of India (CCI) orders, merger control approvals, combination regulations, Section 3/4 anti-trust filings, and competition law updates.
+- [Labour Law updates](${BASE_URL}/category/labour): Ministry of Labour & Employment notifications, 4 Labour Codes implementation, EPF ECR filings, ESIC compliance, and statutory employment rules.
 
 ## Recent Corporate Law Circulars & Updates
 ${updatesList}

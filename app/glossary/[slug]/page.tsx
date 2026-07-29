@@ -216,6 +216,7 @@ export default async function GlossaryTermPage({ params }: Props) {
     'IBC': 'governed by the Insolvency and Bankruptcy Code, 2016 and regulated by IBBI',
     'FEMA': 'governed by the Foreign Exchange Management Act, 1999 and regulated by RBI',
     'CCI': 'governed by the Competition Commission of India under the Competition Act, 2002',
+    'LABOUR': 'governed by the Ministry of Labour & Employment under the Indian Labour Codes and statutory provisions',
   }
   const ctx = categoryContext[term.category] || `regulated under Indian ${term.category} law`
 
@@ -327,6 +328,14 @@ export default async function GlossaryTermPage({ params }: Props) {
       badgeBg: 'bg-indigo-50 text-indigo-855 border-indigo-200/50',
       iconColor: 'text-indigo-500',
       titleColor: 'text-indigo-900',
+    };
+  } else if (cat === 'LABOUR') {
+    themeStyles = {
+      borderColor: 'border-amber-100',
+      borderLeftColor: 'border-l-amber-500',
+      badgeBg: 'bg-amber-50 text-amber-855 border-amber-200/50',
+      iconColor: 'text-amber-500',
+      titleColor: 'text-amber-900',
     };
   }
 

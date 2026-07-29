@@ -19,17 +19,18 @@ import {
   Scale,
   ShieldCheck,
   TrendingUp,
+  Users,
 } from 'lucide-react'
 
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Corporate Law Updates India (2026) – MCA, SEBI, RBI, CCI Notifications & Circulars',
-  description: 'Get the latest corporate law updates in India including MCA, SEBI, RBI, CCI, NCLT, IBC and FEMA. Simplified and beautifully structured for all professionals, corporates, and modern compliance leaders.',
+  title: 'Corporate Law Updates India (2026) – MCA, SEBI, RBI, CCI & Labour Law Notifications',
+  description: 'Get the latest corporate law updates in India including MCA, SEBI, RBI, CCI, Labour Law, NCLT, IBC and FEMA. Simplified and beautifully structured for all professionals, corporates, and modern compliance leaders.',
   alternates: { canonical: 'https://www.corplawupdates.in' },
   openGraph: {
-    title: 'Corporate Law Updates India (2026) – MCA, SEBI, RBI, CCI Notifications & Circulars',
-    description: 'Get the latest corporate law updates in India including MCA, SEBI, RBI, CCI, NCLT, IBC and FEMA. Updated daily.',
+    title: 'Corporate Law Updates India (2026) – MCA, SEBI, RBI, CCI & Labour Law Notifications',
+    description: 'Get the latest corporate law updates in India including MCA, SEBI, RBI, CCI, Labour Law, NCLT, IBC and FEMA. Updated daily.',
     url: 'https://www.corplawupdates.in',
     images: [{ url: 'https://www.corplawupdates.in/api/og?title=Corporate+Law+Updates+India+2026&category=', width: 1200, height: 630 }],
   },
@@ -40,6 +41,7 @@ const categoryMeta = [
   { id: 'SEBI', label: 'SEBI', Icon: TrendingUp, bg: 'from-emerald-600 to-emerald-700', ring: 'ring-emerald-500/20', desc: 'Securities & Exchange Board' },
   { id: 'RBI', label: 'RBI', Icon: Landmark, bg: 'from-violet-600 to-violet-700', ring: 'ring-violet-500/20', desc: 'Reserve Bank of India' },
   { id: 'CCI', label: 'CCI', Icon: ShieldCheck, bg: 'from-indigo-600 to-indigo-700', ring: 'ring-indigo-500/20', desc: 'Competition Commission of India' },
+  { id: 'LABOUR', label: 'Labour Law', Icon: Users, bg: 'from-amber-600 to-amber-700', ring: 'ring-amber-500/20', desc: 'Labour Codes, EPF & ESIC' },
   { id: 'NCLT', label: 'NCLT', Icon: Scale, bg: 'from-orange-600 to-orange-700', ring: 'ring-orange-500/20', desc: 'National Company Law Tribunal' },
   { id: 'IBC', label: 'IBC', Icon: Gavel, bg: 'from-red-600 to-red-700', ring: 'ring-red-500/20', desc: 'Insolvency & Bankruptcy Code' },
   { id: 'FEMA', label: 'FEMA', Icon: Globe2, bg: 'from-teal-600 to-teal-700', ring: 'ring-teal-500/20', desc: 'Foreign Exchange Management' },
@@ -132,7 +134,7 @@ export default async function HomePage() {
         <div className="relative z-10 mx-auto flex min-h-[50vh] max-w-4xl flex-col items-center justify-center px-4 py-8 text-center sm:px-6 md:py-12 lg:px-8">
           <div className="flex flex-col items-center">
             <p className="mb-6 inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-amber-300 backdrop-blur-md">
-              MCA • SEBI • RBI • NCLT • IBC • FEMA
+              MCA • SEBI • RBI • CCI • NCLT • IBC • FEMA • LABOUR LAW
             </p>
             <h1 className="font-heading text-4xl font-bold leading-[1.15] text-white text-balance md:text-5xl lg:text-6xl tracking-tight">
               Corporate Law Updates & Compliance Tools
@@ -376,7 +378,7 @@ export default async function HomePage() {
             Weekly Corporate Law Digest
           </h2>
           <p className="text-slate-300/90 mb-8 max-w-xl mx-auto leading-relaxed">
-            One email on Mondays: MCA, SEBI, RBI, NCLT, IBC and FEMA. No spam. Unsubscribe anytime.
+            One email on Mondays: MCA, SEBI, RBI, CCI, NCLT, IBC, FEMA and Labour Law. No spam. Unsubscribe anytime.
           </p>
           <Link
             href="/newsletter"
@@ -398,6 +400,8 @@ export default async function HomePage() {
               <Link href="/category/sebi" className="text-gold hover:underline font-medium mx-1">SEBI updates</Link>, 
               <Link href="/category/rbi" className="text-gold hover:underline font-medium mx-1">RBI circular updates</Link>, 
               <Link href="/category/mca" className="text-gold hover:underline font-medium mx-1">MCA updates</Link>, 
+              <Link href="/category/cci" className="text-gold hover:underline font-medium mx-1">CCI updates</Link>, 
+              <Link href="/category/labour" className="text-gold hover:underline font-medium mx-1">Labour Law updates</Link>, 
               NCLT, IBC and FEMA regulations.
             </p>
             <p>

@@ -251,7 +251,7 @@ export default function AdminArticles() {
                             <option key={cat} value={cat}>{cat} ({count})</option>
                         ))}
                         {/* Fallback categories if empty initially */}
-                        {Object.keys(categoryCounts).length === 0 && ['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA', 'CCI'].map(cat => (
+                        {Object.keys(categoryCounts).length === 0 && ['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA', 'CCI', 'LABOUR'].map(cat => (
                             <option key={cat} value={cat}>{cat}</option>
                         ))}
                     </select>

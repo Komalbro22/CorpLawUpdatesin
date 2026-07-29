@@ -455,6 +455,15 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                             iconColor: 'text-indigo-500',
                             badgeBg: 'bg-indigo-50 text-indigo-700 border-indigo-200/50',
                         };
+                    } else if (cat === 'LABOUR' || cat === 'LABOUR_LAW' || cat === 'LABOUR LAW') {
+                        cardStyles = {
+                            borderColor: 'border-amber-100',
+                            borderLeftColor: 'border-l-amber-500',
+                            bgColor: 'bg-amber-50/30',
+                            accentColor: 'text-amber-600',
+                            iconColor: 'text-amber-500',
+                            badgeBg: 'bg-amber-50 text-amber-700 border-amber-200/50',
+                        };
                     }
 
                     return (

@@ -8,23 +8,25 @@ import { supabase } from '@/lib/supabase'
 export const revalidate = 3600
 
 const categories = [
-    { id: 'MCA',  name: 'MCA Updates' },
-    { id: 'SEBI', name: 'SEBI Updates' },
-    { id: 'RBI',  name: 'RBI Updates' },
-    { id: 'NCLT', name: 'NCLT Updates' },
-    { id: 'IBC',  name: 'IBC Updates' },
-    { id: 'FEMA', name: 'FEMA Updates' },
-    { id: 'CCI',  name: 'CCI Updates' },
+    { id: 'MCA',    name: 'MCA Updates' },
+    { id: 'SEBI',   name: 'SEBI Updates' },
+    { id: 'RBI',    name: 'RBI Updates' },
+    { id: 'NCLT',   name: 'NCLT Updates' },
+    { id: 'IBC',    name: 'IBC Updates' },
+    { id: 'FEMA',   name: 'FEMA Updates' },
+    { id: 'CCI',    name: 'CCI Updates' },
+    { id: 'LABOUR', name: 'Labour Law Updates' },
 ]
 
 const categoryBadges: Record<string, string> = {
-    MCA:  'bg-category-mca text-white',
-    SEBI: 'bg-category-sebi text-white',
-    RBI:  'bg-category-rbi text-white',
-    NCLT: 'bg-category-nclt text-white',
-    IBC:  'bg-category-ibc text-white',
-    FEMA: 'bg-category-fema text-white',
-    CCI:  'bg-category-cci text-white',
+    MCA:    'bg-category-mca text-white',
+    SEBI:   'bg-category-sebi text-white',
+    RBI:    'bg-category-rbi text-white',
+    NCLT:   'bg-category-nclt text-white',
+    IBC:    'bg-category-ibc text-white',
+    FEMA:   'bg-category-fema text-white',
+    CCI:    'bg-category-cci text-white',
+    LABOUR: 'bg-category-labour text-white',
 }
 
 export default async function Footer() {

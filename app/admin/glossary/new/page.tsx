@@ -10,7 +10,7 @@ import MarkdownRenderer from '@/components/MarkdownRenderer'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 
-const CATEGORIES = ['IBC', 'NCLT', 'MCA', 'SEBI', 'RBI', 'FEMA', 'CCI', 'GENERAL']
+const CATEGORIES = ['IBC', 'NCLT', 'MCA', 'SEBI', 'RBI', 'FEMA', 'CCI', 'LABOUR', 'GENERAL']
 
 export default function NewGlossaryTermPage() {
   const router = useRouter()

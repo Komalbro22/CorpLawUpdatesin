@@ -159,6 +159,7 @@ export default function GlobalSearch() {
     ibc: 'bg-red-100 text-red-700  ',
     fema: 'bg-teal-100 text-teal-700  ',
     cci: 'bg-indigo-100 text-indigo-700  ',
+    labour: 'bg-amber-100 text-amber-700  ',
     income_tax: 'bg-amber-100 text-amber-700  ',
   }
 
@@ -172,17 +173,18 @@ export default function GlobalSearch() {
       { value: 'ibc', label: 'IBC' },
       { value: 'fema', label: 'FEMA' },
       { value: 'cci', label: 'CCI' },
+      { value: 'labour', label: 'Labour Law' },
       { value: 'income_tax', label: 'Income Tax' },
     ]
 
     if (activeType === 'articles') {
-      return allOptions.filter(o => ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci'].includes(o.value))
+      return allOptions.filter(o => ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci', 'labour'].includes(o.value))
     }
     if (activeType === 'calendar') {
-      return allOptions.filter(o => ['mca', 'sebi', 'rbi', 'fema', 'cci', 'income_tax'].includes(o.value))
+      return allOptions.filter(o => ['mca', 'sebi', 'rbi', 'fema', 'cci', 'labour', 'income_tax'].includes(o.value))
     }
     if (activeType === 'glossary') {
-      return allOptions.filter(o => ['mca', 'sebi', 'rbi', 'ibc', 'fema', 'cci'].includes(o.value))
+      return allOptions.filter(o => ['mca', 'sebi', 'rbi', 'ibc', 'fema', 'cci', 'labour'].includes(o.value))
     }
     return allOptions
   }

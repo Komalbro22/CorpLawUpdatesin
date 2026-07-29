@@ -91,8 +91,8 @@ export function buildNewsletterTemplateHtml({
 
     // 2. Build stats counts
     const totalCount = articles.length
-    const categories = ['SEBI', 'MCA', 'RBI', 'NCLT', 'FEMA', 'IBC', 'CCI']
-    const catCounts: Record<string, number> = { SEBI: 0, MCA: 0, RBI: 0, NCLT: 0, FEMA: 0, IBC: 0, CCI: 0 }
+    const categories = ['SEBI', 'MCA', 'RBI', 'NCLT', 'FEMA', 'IBC', 'CCI', 'LABOUR']
+    const catCounts: Record<string, number> = { SEBI: 0, MCA: 0, RBI: 0, NCLT: 0, FEMA: 0, IBC: 0, CCI: 0, LABOUR: 0 }
     let highImpactCount = 0
 
     articles.forEach(art => {
@@ -122,6 +122,7 @@ export function buildNewsletterTemplateHtml({
             if (cat === 'IBC') color = '#EF4444'
             if (cat === 'FEMA') color = '#14B8A6'
             if (cat === 'CCI') color = '#6366F1'
+            if (cat === 'LABOUR') color = '#F59E0B'
 
             return `
                 <span style="background:${color}15; color:${color}; font-size:11px; font-weight:700; padding:4px 8px; border-radius:12px; margin-right:6px; display:inline-block; margin-bottom:4px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
@@ -147,6 +148,7 @@ export function buildNewsletterTemplateHtml({
             if (cat === 'IBC') color = '#EF4444'
             if (cat === 'FEMA') color = '#14B8A6'
             if (cat === 'CCI') color = '#6366F1'
+            if (cat === 'LABOUR') color = '#F59E0B'
 
             const articleUrl = `${SITE_URL}/updates/${article.slug}`
             const dateStr = article.published_at 

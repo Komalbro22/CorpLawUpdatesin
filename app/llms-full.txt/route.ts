@@ -44,6 +44,7 @@ export async function GET() {
 - Insolvency & Bankruptcy Code (IBC): ${BASE_URL}/category/ibc
 - Foreign Exchange Management Act (FEMA): ${BASE_URL}/category/fema
 - Competition Commission of India (CCI): ${BASE_URL}/category/cci
+- Labour Law (Ministry of Labour & Employment): ${BASE_URL}/category/labour
 
 ## Full Regulatory Articles & Updates (Latest 50)
 ${updatesList}

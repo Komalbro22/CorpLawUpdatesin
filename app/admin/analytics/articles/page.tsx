@@ -22,7 +22,7 @@ interface Article {
   published_at: string
 }
 
-const CATEGORIES = ['All', 'MCA', 'SEBI', 'RBI', 'IBC', 'FEMA', 'NCLT', 'CCI']
+const CATEGORIES = ['All', 'MCA', 'SEBI', 'RBI', 'IBC', 'FEMA', 'NCLT', 'CCI', 'LABOUR']
 
 export default function ArticleAnalyticsPage() {
   const [articles, setArticles] = useState<Article[]>([])
@@ -76,6 +76,7 @@ export default function ArticleAnalyticsPage() {
     fema: 'bg-teal-500/10 text-teal-400 border border-teal-500/20',
     nclt: 'bg-orange-500/10 text-orange-400 border border-orange-500/20',
     cci: 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20',
+    labour: 'bg-amber-500/10 text-amber-400 border border-amber-500/20',
   }
 
   if (loading) {

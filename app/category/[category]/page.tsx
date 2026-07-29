@@ -12,7 +12,7 @@ import EmptyState from '@/components/EmptyState'
 
 export const revalidate = 43200 // 12 hours
 
-const CATEGORIES = ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci']
+const CATEGORIES = ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci', 'labour', 'labour-law']
 
 const CATEGORY_FULL_NAMES: Record<string, string> = {
     mca: 'Ministry of Corporate Affairs',
@@ -22,6 +22,8 @@ const CATEGORY_FULL_NAMES: Record<string, string> = {
     ibc: 'Insolvency and Bankruptcy Code',
     fema: 'Foreign Exchange Management Act',
     cci: 'Competition Commission of India',
+    labour: 'Ministry of Labour & Employment',
+    'labour-law': 'Ministry of Labour & Employment',
 }
 
 const OFFICIAL_URLS: Record<string, string> = {
@@ -32,6 +34,8 @@ const OFFICIAL_URLS: Record<string, string> = {
     ibc: 'https://ibbi.gov.in',
     fema: 'https://rbi.org.in/Scripts/BS_FemaNotifications.aspx',
     cci: 'https://cci.gov.in',
+    labour: 'https://labour.gov.in',
+    'labour-law': 'https://labour.gov.in',
 }
 
 // Answer-First definition paragraphs for AI Overview + SEO
@@ -105,6 +109,26 @@ const ANSWER_FIRST: Record<string, { definition: string; facts: string[] }> = {
             'Section 4 prohibits enterprise abuse of dominant market position.',
             'Section 5 & 6 regulate combinations including mergers, acquisitions, and amalgamations.',
             'Green Channel approval scheme provides automatic clearance for non-overlapping combination filings.',
+        ],
+    },
+    labour: {
+        definition:
+            'Labour Law Updates & Circulars refer to notifications, rules, and statutory compliance directives issued under the Indian Labour Codes (Code on Wages, Industrial Relations Code, Code on Social Security, and OSHWC Code) and by the Ministry of Labour & Employment, EPFO, and ESIC. They govern minimum wages, provident fund (EPF ECR), employee state insurance, gratuity, and workplace safety in India. This page tracks all latest Labour Law circulars, statutory orders, EPFO directions, and ESIC notifications.',
+        facts: [
+            'The 4 Labour Codes consolidate 29 central labor enactments into a modern statutory framework.',
+            'EPFO regulates Employees Provident Fund (EPF) and Electronic Challan-cum-Return (ECR) monthly filings.',
+            'ESIC provides statutory social security and healthcare coverage for eligible employees.',
+            'The Code on Wages standardizes minimum wages, bonus payments, and timely salary disbursements across India.',
+        ],
+    },
+    'labour-law': {
+        definition:
+            'Labour Law Updates & Circulars refer to notifications, rules, and statutory compliance directives issued under the Indian Labour Codes (Code on Wages, Industrial Relations Code, Code on Social Security, and OSHWC Code) and by the Ministry of Labour & Employment, EPFO, and ESIC. They govern minimum wages, provident fund (EPF ECR), employee state insurance, gratuity, and workplace safety in India. This page tracks all latest Labour Law circulars, statutory orders, EPFO directions, and ESIC notifications.',
+        facts: [
+            'The 4 Labour Codes consolidate 29 central labor enactments into a modern statutory framework.',
+            'EPFO regulates Employees Provident Fund (EPF) and Electronic Challan-cum-Return (ECR) monthly filings.',
+            'ESIC provides statutory social security and healthcare coverage for eligible employees.',
+            'The Code on Wages standardizes minimum wages, bonus payments, and timely salary disbursements across India.',
         ],
     },
 }
@@ -234,6 +258,8 @@ export default async function CategoryPage({
         ibc: 'from-red-600 to-red-800',
         fema: 'from-teal-600 to-teal-800',
         cci: 'from-indigo-600 to-indigo-800',
+        labour: 'from-amber-600 to-amber-800',
+        'labour-law': 'from-amber-600 to-amber-800',
     }
 
     // ─── JSON-LD Schemas ───────────────────────────────────────────────────────

@@ -23,7 +23,7 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
   const [search, setSearch] = useState('')
   const [activeCategory, setActiveCategory] = useState('ALL')
 
-  const categories = ['ALL', 'MCA', 'SEBI', 'IBC', 'RBI', 'FEMA', 'NCLT', 'CCI']
+  const categories = ['ALL', 'MCA', 'SEBI', 'IBC', 'RBI', 'FEMA', 'NCLT', 'CCI', 'LABOUR']
 
   // Filter terms based on search input & category
   const filteredTerms = terms.filter(t => {

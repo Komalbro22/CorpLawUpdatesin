@@ -19,6 +19,7 @@ import {
     Scale,
     ShieldCheck,
     TrendingUp,
+    Users,
     Wrench,
     X,
     Bookmark,
@@ -86,6 +87,7 @@ export default function Navbar() {
         { href: '/category/ibc',   label: 'IBC',                Icon: Gavel,     color: 'text-red-600',     bg: 'hover:bg-red-50'     },
         { href: '/category/fema',  label: 'FEMA',               Icon: Globe2,    color: 'text-teal-600',    bg: 'hover:bg-teal-50'    },
         { href: '/category/cci',   label: 'CCI',                Icon: ShieldCheck, color: 'text-indigo-600', bg: 'hover:bg-indigo-50'  },
+        { href: '/category/labour',label: 'Labour Law',         Icon: Users,       color: 'text-amber-600',  bg: 'hover:bg-amber-50'   },
         { href: '/rbi/repo-rate',  label: 'Current Repo Rate',  Icon: Landmark,  color: 'text-indigo-600',   bg: 'hover:bg-indigo-50'   },
         { href: '/calendar',       label: 'Compliance Calendar',Icon: Calendar,  color: 'text-cyan-600',     bg: 'hover:bg-cyan-50'     },
     ] as const

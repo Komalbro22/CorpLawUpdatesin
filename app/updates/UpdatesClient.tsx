@@ -8,7 +8,7 @@ import Pagination from '@/components/Pagination'
 import { UpdateListItem } from '@/types'
 import EmptyState from '@/components/EmptyState'
 
-const CATEGORIES = ['All', 'MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA', 'CCI'] as const
+const CATEGORIES = ['All', 'MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA', 'CCI', 'LABOUR'] as const
 
 interface UpdatesClientProps {
     paginatedUpdates: UpdateListItem[]

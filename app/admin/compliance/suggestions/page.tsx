@@ -367,6 +367,7 @@ export default function AdminSuggestionsPage() {
                                 <option value="rbi" className="bg-slate-100">RBI</option>
                                 <option value="fema" className="bg-slate-100">FEMA</option>
                                 <option value="cci" className="bg-slate-100">CCI</option>
+                                <option value="labour" className="bg-slate-100">Labour Law</option>
                                 <option value="income_tax" className="bg-slate-100">Income Tax</option>
                                 <option value="gst" className="bg-slate-100">GST</option>
                                 <option value="labor_law" className="bg-slate-100">Labor Law</option>
