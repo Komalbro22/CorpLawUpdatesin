@@ -18,7 +18,7 @@ import UpdateCard from '@/components/UpdateCard'
 import { calculateReadingTime, formatDate, BASE_URL, extractFirstImage } from '@/lib/utils'
 import { linkGlossaryTerms } from '@/lib/glossaryLinker'
 import ViewCounter from '@/components/ViewCounter'
-import LiveViewCount from '@/components/LiveViewCount'
+// LiveViewCount import removed — display hidden, ViewCounter still tracks silently
 import ArticleActions from '@/components/ArticleActions'
 import ReadingProgress from '@/components/ReadingProgress'
 import FontSizeToggle from '@/components/FontSizeToggle'
@@ -544,7 +544,7 @@ export default async function SingleUpdatePage({ params }: { params: { slug: str
                         <CalendarDays className="h-4 w-4 text-slate-400" aria-hidden />
                         {formattedDate}
                     </time>
-                    <LiveViewCount slug={update.slug} initialViews={update.views || 0} />
+                    {/* LiveViewCount hidden from users — views still tracked via ViewCounter above */}
                     <span className="read-count inline-flex items-center gap-1.5">
                         <Clock3 className="h-4 w-4 text-slate-400" aria-hidden />
                         {readTime} min read

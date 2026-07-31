@@ -5,13 +5,13 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'About Us – CorpLawUpdates.in',
-  description: 'Learn about CorpLawUpdates.in — India\'s free corporate law intelligence platform providing MCA, SEBI, RBI, CCI updates for professionals.',
+  description: 'Learn about CorpLawUpdates.in — India\'s free corporate law intelligence platform providing MCA, SEBI, RBI, CCI, Labour Law updates for professionals.',
   alternates: {
     canonical: 'https://www.corplawupdates.in/about',
   },
   openGraph: {
     title: 'About Us – CorpLawUpdates.in',
-    description: 'CorpLawUpdates.in publishes free, plain-English corporate law updates covering MCA, SEBI, RBI, CCI, NCLT and IBC for professionals, lawyers and compliance officers.',
+    description: 'CorpLawUpdates.in publishes free, plain-English corporate law updates covering MCA, SEBI, RBI, CCI, Labour Law, NCLT, IBC and FEMA for professionals, lawyers and compliance officers.',
     url: 'https://www.corplawupdates.in/about',
     images: [{ url: 'https://www.corplawupdates.in/api/og?title=About%20CorpLawUpdates&category=', width: 1200, height: 630 }],
   },
@@ -97,6 +97,14 @@ export default async function AboutPage() {
                     <div className="bg-slate-50 p-6 rounded-xl border border-slate-100">
                         <h3 className="font-bold text-xl text-navy mb-2">FEMA</h3>
                         <p className="text-slate-600">Cross-border transactions and foreign investment updates</p>
+                    </div>
+                    <div className="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                        <h3 className="font-bold text-xl text-navy mb-2">CCI</h3>
+                        <p className="text-slate-600">Competition Commission of India — Anti-trust, merger control, and market dominance regulations</p>
+                    </div>
+                    <div className="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                        <h3 className="font-bold text-xl text-navy mb-2">Labour Law</h3>
+                        <p className="text-slate-600">Labour Codes, EPF ECR filings, ESIC notifications, and statutory employment compliance</p>
                     </div>
                 </div>
             </section>

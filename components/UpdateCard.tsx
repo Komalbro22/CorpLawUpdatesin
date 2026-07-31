@@ -4,7 +4,7 @@ import { UpdateListItem } from '@/types'
 import { formatDate, calculateReadingTime, extractFirstImage } from '@/lib/utils'
 import CategoryBadge from '@/components/CategoryBadge'
 import GazetteLedgerRail from '@/components/shared/GazetteLedgerRail'
-import { ArrowUpRight, Clock, Eye } from 'lucide-react'
+import { ArrowUpRight, Clock } from 'lucide-react'
 
 const categoryBorderColor: Record<string, string> = {
     MCA:  'border-t-blue-600',
@@ -116,15 +116,7 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
                         </div>
                     </div>
                     <div className="flex shrink-0 items-center gap-1.5">
-                        {typeof update.views === 'number' && update.views > 0 && (
-                            <span 
-                              className="flex items-center gap-1 whitespace-nowrap rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-1 text-[11px] font-semibold text-slate-600 dark:text-slate-400"
-                              aria-label={`${update.views.toLocaleString('en-IN')} article views`}
-                            >
-                                <Eye className="w-3 h-3 text-slate-500" aria-hidden />
-                                {update.views >= 1000 ? `${(update.views / 1000).toFixed(1)}k` : update.views}
-                            </span>
-                        )}
+                        {/* Views badge hidden from users — data still tracked for admin/popular section */}
                         <span className="flex items-center gap-1 whitespace-nowrap rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-1 text-[11px] font-semibold text-slate-600 dark:text-slate-400">
                             <Clock className="w-3 h-3 text-slate-500" aria-hidden />
                             {update.reading_time || calculateReadingTime(update.content || update.summary || '')} min
