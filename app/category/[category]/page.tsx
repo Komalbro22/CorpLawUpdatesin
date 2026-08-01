@@ -149,9 +149,9 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(
-    { params }: { params: { category: string } }
+    { params }: { params: Promise<{ category: string }> }
 ): Promise<Metadata> {
-    const cat = params.category.toLowerCase()
+    const cat = (await params).category.toLowerCase()
     const categoryName = cat.toUpperCase()
 
     const { data: latestUpdate } = await supabase
@@ -209,7 +209,7 @@ export default async function CategoryPage({
     params: { category: string },
     searchParams?: { [key: string]: string | string[] | undefined }
 }) {
-    const originalCat = params.category
+    const originalCat = (await params).category
     if (originalCat !== originalCat.toLowerCase()) {
         redirect(`/category/${originalCat.toLowerCase()}`)
     }

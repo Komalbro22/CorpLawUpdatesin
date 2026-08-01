@@ -8,7 +8,7 @@ import { Resend } from 'resend'
 import { generateUnsubscribeToken, BASE_URL } from '@/lib/utils'
 
 export async function POST(request: NextRequest) {
-    if (!verifyAdminSession()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    if (!await verifyAdminSession()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     const resend = new Resend(process.env.RESEND_API_KEY || 'dummy_key')
     const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'newsletter@corplawupdates.in'

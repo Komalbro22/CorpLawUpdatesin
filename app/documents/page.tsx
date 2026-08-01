@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { supabaseDocuments } from '@/lib/supabase-documents'
 import DocumentIntentSearch from '@/components/documents/DocumentIntentSearch'
 import { formatTemplateSource } from '@/lib/document-clause-checker'
+import { MVP_DOCUMENTS_META } from '@/lib/doc-generator/ai-engine'
 
 export const metadata: Metadata = {
   title: 'Free Legal Document Generator India — Board Resolutions, Agreements | CorpLawUpdates.in',
@@ -89,25 +90,20 @@ export default async function DocumentsPage() {
     templates = data || []
   }
 
-  // Group by category, and allow drafts to appear in multiple categories based on tags!
+  // Group by category
   const grouped = (templates || []).reduce(
     (acc, t) => {
-      // 1. Add to primary category
       if (!acc[t.category]) acc[t.category] = []
       acc[t.category].push(t)
 
-      // 2. Add to secondary categories based on tags or other logic
       if (t.tags && Array.isArray(t.tags)) {
-        // Group into banking & finance if it has banking related tags
         if (t.tags.some((tag: string) => tag.toLowerCase().includes('banking') || tag.toLowerCase().includes('finance') || tag.toLowerCase().includes('credit') || tag.toLowerCase().includes('guarantee'))) {
           if (!acc['banking_finance']) acc['banking_finance'] = []
-          // ensure we don't duplicate if primary category was already banking_finance
           if (t.category !== 'banking_finance') {
             acc['banking_finance'].push(t)
           }
         }
         
-        // Group into real estate if it has real estate related tags
         if (t.tags.some((tag: string) => tag.toLowerCase().includes('real estate') || tag.toLowerCase().includes('mortgage') || tag.toLowerCase().includes('property'))) {
           if (!acc['real_estate']) acc['real_estate'] = []
           if (t.category !== 'real_estate') {
@@ -116,7 +112,6 @@ export default async function DocumentsPage() {
         }
       }
 
-      // If it's an agreement, and not already in commercial_contracts, put it there too
       if (t.category === 'agreements' && t.category !== 'commercial_contracts') {
         if (!acc['commercial_contracts']) acc['commercial_contracts'] = []
         acc['commercial_contracts'].push(t)
@@ -160,10 +155,10 @@ export default async function DocumentsPage() {
           <div className="flex justify-center gap-8 
                           mb-8 flex-wrap">
             {[
-              { v: `${totalDocs}+`, l: 'Document Types' },
+              { v: `${totalDocs + 3}+`, l: 'Document Types' },
               { v: 'ICSI SS-1', l: 'Standard Format' },
               { v: 'Free', l: 'Always' },
-              { v: 'AI', l: 'Powered' },
+              { v: 'AI Studio', l: 'Multi-Turn' },
             ].map(s => (
               <div key={s.l} className="text-center">
                 <div className="text-2xl font-bold 
@@ -202,10 +197,70 @@ export default async function DocumentsPage() {
         </p>
       </div>
 
-      {/* Templates by category */}
-      <div className="max-w-6xl mx-auto px-4 
-                      py-12 space-y-12">
+      {/* Main Content Area */}
+      <div className="max-w-6xl mx-auto px-4 py-12 space-y-12">
         
+        {/* FEATURED: AI PARAMETRIC DOCUMENT GENERATOR STUDIO */}
+        <section className="bg-gradient-to-r from-slate-900 via-slate-850 to-blue-950 border border-blue-500/30 rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold uppercase tracking-wider mb-2">
+                ⚡ Featured AI Studio Generators
+              </div>
+              <h2 className="text-2xl md:text-3xl font-extrabold text-white">
+                Multi-Turn AI Document Generator Studio
+              </h2>
+              <p className="text-sm text-slate-300 mt-1">
+                Generate perfectly formatted Microsoft Word (<code className="text-amber-300">.docx</code>) compliance documents with dynamic agendas, statutory citations & Bookman Old Style 12pt legal layout.
+              </p>
+            </div>
+
+            <span className="text-xs font-semibold px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
+              ✓ DOCX Word Export Ready
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {MVP_DOCUMENTS_META.map((doc) => (
+              <div
+                key={doc.id}
+                className="bg-slate-900/90 hover:bg-slate-900 border border-slate-800 hover:border-blue-400/50 rounded-2xl p-5 flex flex-col justify-between transition-all duration-300 hover:shadow-xl group"
+              >
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-blue-400 bg-blue-950 px-2.5 py-0.5 rounded-full border border-blue-800/40">
+                      {doc.category}
+                    </span>
+                    <span className="text-xs text-slate-400">~{doc.estimatedMinutes} min</span>
+                  </div>
+
+                  <h3 className="text-lg font-bold text-white group-hover:text-blue-300 transition-colors">
+                    {doc.title}
+                  </h3>
+
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    {doc.shortDescription}
+                  </p>
+
+                  <p className="text-xs text-slate-400 font-mono truncate border-t border-slate-800 pt-2">
+                    📜 {doc.actReference}
+                  </p>
+                </div>
+
+                <div className="pt-4">
+                  <Link
+                    href={`/documents/generator/${doc.id}`}
+                    className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-md shadow-blue-600/30"
+                  >
+                    <span>Launch AI Generator →</span>
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Templates by category */}
         {Object.entries(categoryConfig).map(
           ([cat, config]) => {
             const catTemplates = grouped[cat] || []
@@ -248,108 +303,46 @@ export default async function DocumentsPage() {
                                  border-slate-200 dark:border-slate-800 
                                  rounded-2xl p-5 
                                  hover:border-amber-400 dark:hover:border-amber-500
-                                 hover:shadow-md
-                                 transition-all 
-                                 duration-200 group"
+                                 hover:shadow-md transition-all duration-200 
+                                 flex flex-col justify-between group"
                     >
-                      {/* Free badge */}
-                      <div className="flex justify-between 
-                                      items-start mb-3">
-                        {template.is_free ? (
-                          <span className="text-xs 
-                            bg-green-100 text-green-700 dark:bg-green-950/50 dark:text-green-300 
-                            font-bold px-2 py-0.5 
-                            rounded-full">
-                            FREE
+                      <div>
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-xs font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 uppercase tracking-wider">
+                            {template.category?.replace(/_/g, ' ')}
                           </span>
-                        ) : (
-                          <span className="text-xs 
-                            bg-purple-100 text-purple-700 dark:bg-purple-950/50 dark:text-purple-300 
-                            font-bold px-2 py-0.5 
-                            rounded-full">
-                            PRO
-                          </span>
-                        )}
-                        {template.usage_count > 0 && (
-                          <span className="text-xs 
-                                           text-slate-400 dark:text-slate-500">
-                            {template.usage_count} uses
-                          </span>
-                        )}
+                          {template.is_free && (
+                            <span className="text-xs text-emerald-600 dark:text-emerald-400 font-bold">
+                              FREE
+                            </span>
+                          )}
+                        </div>
+
+                        <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-amber-500 transition-colors mb-2">
+                          {template.name}
+                        </h3>
+
+                        <p className="text-slate-500 dark:text-slate-400 text-xs line-clamp-2 mb-4">
+                          {template.description}
+                        </p>
                       </div>
 
-                      {/* Name */}
-                      <h3 className="font-bold text-navy dark:text-slate-100 
-                                     text-sm mb-2 
-                                     group-hover:text-amber-705 dark:group-hover:text-amber-400
-                                     transition-colors
-                                     leading-snug">
-                        {template.name}
-                      </h3>
-
-                      {/* Description */}
-                      <p className="text-slate-500 dark:text-slate-400 
-                                    text-xs mb-3 
-                                    line-clamp-2">
-                        {template.description}
-                      </p>
-
-                      {/* Source + date */}
-                      <div className="flex items-center 
-                                      justify-between">
-                        <span className="text-xs 
-                                         text-slate-400 dark:text-slate-500">
-                          📚 {formatTemplateSource(template.slug, template.source, template.category)}
+                      <div className="border-t border-slate-100 dark:border-slate-800/80 pt-3 flex items-center justify-between text-xs text-slate-400">
+                        <span className="truncate max-w-[200px]">
+                          📜 {formatTemplateSource(template.slug || '', template.source || '', template.category || '')}
                         </span>
-                        {template.last_verified && (
-                          <span className="text-xs 
-                                           text-green-600 dark:text-green-455">
-                            ✓ Verified {new Date(
-                              template.last_verified
-                            ).toLocaleDateString('en-IN', {
-                              month: 'short',
-                              year: 'numeric'
-                            })}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Arrow */}
-                      <div className="mt-4 text-amber-500 
-                                      text-sm font-semibold
-                                      group-hover:translate-x-1
-                                      transition-transform">
-                        Generate Document →
+                        <span className="group-hover:translate-x-1 transition-transform font-bold text-amber-500">
+                          Draft →
+                        </span>
                       </div>
                     </Link>
                   ))}
-
-                  {/* Coming soon card */}
-                  <div className="bg-slate-50 dark:bg-slate-900/50 border 
-                                  border-dashed 
-                                  border-slate-300 dark:border-slate-800 
-                                  rounded-2xl p-5 
-                                  flex flex-col 
-                                  items-center 
-                                  justify-center 
-                                  text-center">
-                    <span className="text-3xl mb-2">
-                      ➕
-                    </span>
-                    <p className="text-sm font-semibold 
-                                  text-slate-500 dark:text-slate-450">
-                      More Coming Soon
-                    </p>
-                    <p className="text-xs text-slate-400 dark:text-slate-500 
-                                  mt-1">
-                      Suggest a document type
-                    </p>
-                  </div>
                 </div>
               </section>
             )
           }
         )}
+
       </div>
     </div>
   )

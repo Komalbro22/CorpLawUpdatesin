@@ -21,10 +21,10 @@ const ratelimit = redis
 
 export async function GET(
   request: Request,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = params
+    const { slug } = await params
     if (!redis) {
       return NextResponse.json({ success: true, batchViews: 0 })
     }
@@ -37,10 +37,10 @@ export async function GET(
 
 export async function POST(
   request: Request,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = params
+    const { slug } = await params
 
     // 1. Validate slug format — alphanumeric and hyphens only, max 200 chars
     if (!slug || !/^[a-z0-9-]{1,200}$/.test(slug)) {
@@ -107,7 +107,7 @@ export async function POST(
       throw error;
     }
 
-    console.error(`Failed to record view for ${params.slug}:`, error);
+    console.error(`Failed to record view for ${(await params).slug}:`, error);
     return NextResponse.json({ success: false })
   }
 }

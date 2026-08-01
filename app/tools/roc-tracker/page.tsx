@@ -2012,13 +2012,7 @@ export default function ROCTrackerPage() {
                                   )
                             )
                           }}
-                          className={`flex-1 py-2 
-                            rounded-xl text-sm 
-                            font-semibold border 
-                            transition-colors
-                            ${reminderDays.includes(days)
-                              ? 'bg-navy text-white border-navy dark:bg-amber-500 dark:border-amber-500'
-                              : 'bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-600'}`}>
+                          className={`flex-1 py-2 rounded-xl text-sm font-semibold border transition-colors ${reminderDays.includes(days) ? 'bg-navy text-white border-navy dark:bg-amber-500 dark:border-amber-500' : 'bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-600'}`}>
                           {days}d
                         </button>
                       ))}
@@ -2059,18 +2053,16 @@ export default function ROCTrackerPage() {
         </div>
       )}
 
-      {/* Print styles */}
-      <style jsx global>{`
+      {/* Print styles — styled-jsx replaced with standard style tag for Next.js 16 / Turbopack compatibility */}
+      <style dangerouslySetInnerHTML={{ __html: `
         @media print {
           .print\\:hidden { display: none !important; }
           .print\\:block { display: block !important; }
           body { background: white !important; }
-          * { color: black !important; 
-              background: white !important;
-              border-color: #ccc !important; }
+          * { color: black !important; background: white !important; border-color: #ccc !important; }
           a { text-decoration: none !important; }
         }
-      `}</style>
+      ` }} />
     </div>
   )
 }

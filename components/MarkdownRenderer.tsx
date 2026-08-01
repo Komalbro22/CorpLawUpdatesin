@@ -482,7 +482,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                             </a>
                         );
                     },
-                    img: ({ node, style, src, alt, ...props }: any) => {
+                    img: ({ node, style, src, alt, border, align, hspace, vspace, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
                         let resolvedSrc = src || '';
                         if (resolvedSrc && !resolvedSrc.startsWith('http://') && !resolvedSrc.startsWith('https://') && !resolvedSrc.startsWith('data:')) {

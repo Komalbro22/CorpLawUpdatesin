@@ -12,8 +12,9 @@ export function generateStaticParams() {
   }))
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const form = mcaForms.find(f => f.slug === params.slug)
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const form = mcaForms.find(f => f.slug === slug)
   if (!form) return { title: 'Not Found' }
 
   return {
@@ -32,8 +33,9 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   }
 }
 
-export default function FormSpecificPage({ params }: { params: { slug: string } }) {
-  const form = mcaForms.find(f => f.slug === params.slug)
+export default async function FormSpecificPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const form = mcaForms.find(f => f.slug === slug)
   
   if (!form) {
     notFound()

@@ -1903,7 +1903,7 @@ function normalizeAlias(alias: string): string {
 // ─────────────────────────────────────────────────────────────
 
 export async function POST() {
-  if (!verifyAdminSession()) {
+  if (!await verifyAdminSession()) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
   const results: Record<string, unknown>[] = [];

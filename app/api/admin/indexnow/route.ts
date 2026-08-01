@@ -6,7 +6,7 @@ import { submitToIndexNow } from '@/lib/indexnow'
 export async function POST() {
 
       try {
-        if (!verifyAdminSession()) {
+        if (!await verifyAdminSession()) {
         return NextResponse.json(
           { error: 'Unauthorized' }, 
           { status: 401 }

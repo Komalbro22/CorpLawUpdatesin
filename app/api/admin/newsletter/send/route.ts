@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
         console.log('=== NEWSLETTER SEND START ===')
 
         // 1. Verify session
-        const isValid = verifyAdminSession()
+        const isValid = await verifyAdminSession()
         if (!isValid) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }

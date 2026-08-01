@@ -8,15 +8,15 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 import { submitArticleToIndexNow } from '@/lib/indexnow'
 import { calculateReadingTime, extractFirstImage } from '@/lib/utils'
 import { articleSchema } from '@/lib/admin-schemas'
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
-    if (!verifyAdminSession()) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    if (!await verifyAdminSession()) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     try {
         const { data: article, error } = await supabaseAdmin
             .from('updates').select('id, title, slug, summary, content, category, published_at, updated_at, is_featured, effective_date, featured_image_url, impact_level, source_name, source_url, sources, key_change, key_changes, tags, views, seo_title, seo_description, quick_answer, regulation_ref, last_verified, last_amended, key_takeaways, has_steps, steps_json')
-            .eq('id', params.id)
+            .eq('id', (await params).id)
             .single()
 
         if (error || !article) {
@@ -29,8 +29,8 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     }
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
-    if (!verifyAdminSession()) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    if (!await verifyAdminSession()) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -44,7 +44,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
         const { data: oldArticle, error: fetchError } = await supabaseAdmin
             .from('updates').select('id, title, slug, summary, content, category, published_at, updated_at, is_featured, effective_date, featured_image_url, impact_level, source_name, source_url, sources, key_change, key_changes, tags, views, seo_title, seo_description, quick_answer, regulation_ref, last_verified, last_amended, key_takeaways, has_steps, steps_json')
-            .eq('id', params.id)
+            .eq('id', (await params).id)
             .single()
 
         if (fetchError || !oldArticle) {
@@ -62,7 +62,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
         const { data: updatedArticle, error: updateError } = await supabaseAdmin
             .from('updates')
             .update(updateData)
-            .eq('id', params.id)
+            .eq('id', (await params).id)
             .select()
             .single()
 
@@ -74,7 +74,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
             )
         }
 
-        try { revalidateTag('updates') } catch { /* ignore */ }
+        try { revalidateTag('updates', 'default') } catch { /* ignore */ }
         revalidatePath('/', 'layout')
         revalidatePath('/updates', 'layout')
         revalidatePath('/sitemap.xml')
@@ -103,8 +103,8 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
-    if (!verifyAdminSession()) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    if (!await verifyAdminSession()) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -112,7 +112,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
         const { data: deletedArticle, error } = await supabaseAdmin
             .from('updates')
             .delete()
-            .eq('id', params.id)
+            .eq('id', (await params).id)
             .select()
             .single()
 
@@ -120,7 +120,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
             return NextResponse.json({ error: 'Article not found' }, { status: 404 })
         }
 
-        try { revalidateTag('updates') } catch { /* ignore */ }
+        try { revalidateTag('updates', 'default') } catch { /* ignore */ }
         revalidatePath('/', 'layout')
         revalidatePath('/updates', 'layout')
         revalidatePath('/sitemap.xml')

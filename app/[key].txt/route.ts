@@ -1,8 +1,10 @@
+import { NextRequest } from 'next/server'
+
 export const dynamic = 'force-dynamic'
 
 export async function GET(
-  request: Request,
-  { params }: { params?: { key?: string } } = {}
+  request: NextRequest,
+  context: { params: Promise<{ key?: string }> }
 ) {
   const systemKey = process.env.INDEXNOW_KEY
 
@@ -11,7 +13,7 @@ export async function GET(
     return new Response('Verification key is not configured', { status: 500 })
   }
 
-  const key = params?.key
+  const { key } = await context.params
 
   // Next.js dynamic routing folder 'app/[key].txt' matches paths like /<any-key>.txt
   // and extracts the [key] dynamic segment.
@@ -26,3 +28,4 @@ export async function GET(
 
   return new Response('Not Found', { status: 404 })
 }
+

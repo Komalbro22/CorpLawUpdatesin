@@ -2,7 +2,7 @@
 'use client'
 
 import { useState, useRef, KeyboardEvent, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { FilePenLine } from 'lucide-react'
 import { slugify, calculateReadingTime, formatDate } from '@/lib/utils'
@@ -20,10 +20,11 @@ const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 
 const CATEGORIES: Category[] = ['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA', 'CCI', 'LABOUR']
 
-export default function EditArticle({ params }: { params: { id: string } }) {
+export default function EditArticle() {
     const router = useRouter()
+    const params = useParams()
+    const id = params.id as string
     const { showToast } = useToast()
-    const { id } = params
 
     const [title, setTitle] = useState('')
     const [slug, setSlug] = useState('')

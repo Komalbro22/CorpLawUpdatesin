@@ -12,7 +12,7 @@ const hasUpstashConfig = redisUrl && redisToken
 const redis = hasUpstashConfig ? new Redis({ url: redisUrl, token: redisToken }) : null
 
 export async function syncViewsAction(isCron = false) {
-    if (!isCron && !verifyAdminSession()) {
+    if (!isCron && !await verifyAdminSession()) {
         return { success: false, error: 'Unauthorized' }
     }
 

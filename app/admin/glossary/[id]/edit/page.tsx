@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { ArrowLeft, Save, Sparkles, CheckCircle2, AlertTriangle, HelpCircle, Plus, Trash2, X, Loader2, Eye } from 'lucide-react'
@@ -11,10 +11,6 @@ import MarkdownRenderer from '@/components/MarkdownRenderer'
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 
 const CATEGORIES = ['IBC', 'NCLT', 'MCA', 'SEBI', 'RBI', 'FEMA', 'CCI', 'LABOUR', 'GENERAL']
-
-type Props = {
-  params: { id: string }
-}
 
 const parseMetadata = (content: string) => {
   const match = content.match(/^\s*<!--\s*METADATA\s*([\s\S]*?)\s*METADATA\s*-->/)
@@ -42,8 +38,10 @@ const parseMetadata = (content: string) => {
   }
 }
 
-export default function EditGlossaryTermPage({ params }: Props) {
+export default function EditGlossaryTermPage() {
   const router = useRouter()
+  const params = useParams()
+  const id = params.id as string
   const { showToast } = useToast()
 
   const [isLoading, setIsLoading] = useState(true)
@@ -82,7 +80,7 @@ export default function EditGlossaryTermPage({ params }: Props) {
 
   const fetchTermDetails = useCallback(async () => {
     try {
-      const res = await fetch(`/api/admin/glossary/${params.id}`)
+      const res = await fetch(`/api/admin/glossary/${id}`)
       const json = await res.json()
 
       if (!res.ok) {
@@ -126,7 +124,7 @@ export default function EditGlossaryTermPage({ params }: Props) {
     } finally {
       setIsLoading(false)
     }
-  }, [params.id, router, showToast])
+  }, [id, router, showToast])
 
   // Fetch the term by ID on mount
   useEffect(() => {
@@ -400,7 +398,7 @@ export default function EditGlossaryTermPage({ params }: Props) {
     }
 
     try {
-      const res = await fetch(`/api/admin/glossary/${params.id}`, {
+      const res = await fetch(`/api/admin/glossary/${(await params).id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

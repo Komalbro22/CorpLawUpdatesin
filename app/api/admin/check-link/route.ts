@@ -51,7 +51,7 @@ function isSafeUrl(urlString: string): boolean {
 }
 
 export async function GET(request: Request) {
-  if (!verifyAdminSession()) {
+  if (!await verifyAdminSession()) {
     return NextResponse.json(
       { error: 'Unauthorized' }, { status: 401 }
     )

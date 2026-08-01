@@ -9,7 +9,7 @@ type PlacementDSL = { action: string; anchor: string; anchor_type: string; fallb
 
 export async function POST(request: Request) {
   try {
-    if (!verifyAdminSession()) {
+    if (!await verifyAdminSession()) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     const { queueItemId, proposed_intent, ai_clause_draft, variables_schema } = await request.json();

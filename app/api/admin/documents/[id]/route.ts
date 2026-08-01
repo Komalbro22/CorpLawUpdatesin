@@ -7,18 +7,18 @@ import { documentTemplateSchema } from '@/lib/admin-schemas'
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     void cookies()
-    if (!verifyAdminSession()) {
+    if (!await verifyAdminSession()) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     const { data, error } = await supabaseAdmin
       .from('document_templates')
       .select('*')
-      .eq('id', params.id)
+      .eq('id', (await params).id)
       .single()
 
     if (error || !data) {
@@ -34,11 +34,11 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     void cookies()
-    if (!verifyAdminSession()) {
+    if (!await verifyAdminSession()) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -52,7 +52,7 @@ export async function PUT(
     const { data: oldTemplate, error: fetchError } = await supabaseAdmin
       .from('document_templates')
       .select('slug')
-      .eq('id', params.id)
+      .eq('id', (await params).id)
       .single()
 
     if (fetchError || !oldTemplate) {
@@ -62,7 +62,7 @@ export async function PUT(
     const { data, error } = await supabaseAdmin
       .from('document_templates')
       .update(body)
-      .eq('id', params.id)
+      .eq('id', (await params).id)
       .select()
       .single()
 
@@ -90,24 +90,24 @@ export async function PUT(
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     void cookies()
-    if (!verifyAdminSession()) {
+    if (!await verifyAdminSession()) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     const { data: template } = await supabaseAdmin
       .from('document_templates')
       .select('slug')
-      .eq('id', params.id)
+      .eq('id', (await params).id)
       .single()
 
     const { error } = await supabaseAdmin
       .from('document_templates')
       .delete()
-      .eq('id', params.id)
+      .eq('id', (await params).id)
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 })
@@ -128,11 +128,11 @@ export async function DELETE(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     void cookies()
-    if (!verifyAdminSession()) {
+    if (!await verifyAdminSession()) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -146,7 +146,7 @@ export async function PATCH(
     const { data, error } = await supabaseAdmin
       .from('document_templates')
       .update(body)
-      .eq('id', params.id)
+      .eq('id', (await params).id)
       .select()
       .single()
 

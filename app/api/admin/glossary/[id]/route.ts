@@ -7,17 +7,17 @@ import { supabaseAdmin } from '@/lib/supabase-server'
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     void cookies()
-    if (!verifyAdminSession()) {
+    if (!await verifyAdminSession()) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     const { data, error } = await supabaseAdmin
       .from('glossary').select('id, term, slug, definition, category, keywords, synonyms, is_verified, created_at, updated_at')
-      .eq('id', params.id)
+      .eq('id', (await params).id)
       .single()
 
     if (error || !data) {
@@ -33,11 +33,11 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     void cookies()
-    if (!verifyAdminSession()) {
+    if (!await verifyAdminSession()) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -51,7 +51,7 @@ export async function PUT(
     const { data: oldTerm, error: fetchError } = await supabaseAdmin
       .from('glossary')
       .select('slug')
-      .eq('id', params.id)
+      .eq('id', (await params).id)
       .single()
 
     if (fetchError || !oldTerm) {
@@ -61,7 +61,7 @@ export async function PUT(
     const { data, error } = await supabaseAdmin
       .from('glossary')
       .update(body)
-      .eq('id', params.id)
+      .eq('id', (await params).id)
       .select()
       .single()
 
@@ -89,24 +89,24 @@ export async function PUT(
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     void cookies()
-    if (!verifyAdminSession()) {
+    if (!await verifyAdminSession()) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     const { data: term } = await supabaseAdmin
       .from('glossary')
       .select('slug')
-      .eq('id', params.id)
+      .eq('id', (await params).id)
       .single()
 
     const { error } = await supabaseAdmin
       .from('glossary')
       .delete()
-      .eq('id', params.id)
+      .eq('id', (await params).id)
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 })
@@ -127,11 +127,11 @@ export async function DELETE(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     void cookies()
-    if (!verifyAdminSession()) {
+    if (!await verifyAdminSession()) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -145,7 +145,7 @@ export async function PATCH(
     const { data, error } = await supabaseAdmin
       .from('glossary')
       .update(body)
-      .eq('id', params.id)
+      .eq('id', (await params).id)
       .select()
       .single()
 

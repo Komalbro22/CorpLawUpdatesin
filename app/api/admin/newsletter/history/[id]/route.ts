@@ -5,12 +5,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
-    if (!verifyAdminSession()) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    if (!await verifyAdminSession()) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { id } = params
+    const { id } = await params
     const { searchParams } = new URL(request.url)
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '20')

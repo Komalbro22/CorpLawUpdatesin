@@ -2,6 +2,20 @@
 // Secure server-side wrapper for Google Gemini models with key rotation.
 
 /**
+ * Sanitize user-controlled prompt input to prevent prompt injection attacks.
+ * Enforces a 2000-character max and rejects known injection patterns.
+ */
+function sanitizeUserPrompt(input: string, maxLength = 2000): string {
+  const trimmed = String(input ?? '').trim().slice(0, maxLength);
+  // Block known prompt injection patterns
+  const injectionPattern = /ignore (previous|all|above)|system\s*:|disregard (all|previous|instructions)|you are now|new instruction|forget (everything|all)|override (this|your)/i;
+  if (injectionPattern.test(trimmed)) {
+    throw new Error('Invalid prompt: contains disallowed instruction patterns.');
+  }
+  return trimmed;
+}
+
+/**
  * Helper to run API requests with automatic fallback/rotation across multiple Gemini API keys.
  */
 async function runWithKeyRotation<T>(
@@ -89,12 +103,13 @@ export async function extractVariables(
   clientPrompt: string, 
   history: any[] = []
 ): Promise<{ extracted: Record<string, string | null>; confidence: number }> {
+  const safePrompt = sanitizeUserPrompt(clientPrompt);
   return runWithKeyRotation(async (apiKey) => {
     const promptText = `
 You are a highly precise legal data extractor. Extract values for the requested variables based on the required fields schema and client text.
 
 Required fields schema: ${JSON.stringify(fieldsSchema)}
-Client's prompt input: "${clientPrompt}"
+Client's prompt input: "${safePrompt}"
 Previous conversation history context: "${JSON.stringify(history)}"
 
 Strict Extraction Rules:
@@ -149,13 +164,14 @@ export async function generateCustomDraft(
   history: any[] = [],
   currentDraft?: string
 ): Promise<string> {
+  const safePrompt = sanitizeUserPrompt(userPrompt);
   return runWithKeyRotation(async (apiKey) => {
     let promptText = "";
     if (currentDraft && currentDraft.length > 50) {
       promptText = `
 You are an expert Indian Corporate Lawyer. The user wants to modify their existing legal document draft.
 
-User's requested modification: "${userPrompt}"
+User's requested modification: "${safePrompt}"
 Previous conversation context: "${JSON.stringify(history)}"
 
 Here is the CURRENT legal document draft:
@@ -171,7 +187,7 @@ Strict Revision Guidelines:
 `;
     } else {
       promptText = `
-You are an expert Indian Corporate Lawyer. Draft a highly professional document in Markdown format for this user request: "${userPrompt}".
+You are an expert Indian Corporate Lawyer. Draft a highly professional document in Markdown format for this user request: "${safePrompt}".
 Previous conversation context: "${JSON.stringify(history)}".
 
 Strict Professional Guidelines:
@@ -208,6 +224,7 @@ export async function refineClauseContent(
   clauseText: string,
   userPrompt: string
 ): Promise<string> {
+  const safePrompt = sanitizeUserPrompt(userPrompt);
   return runWithKeyRotation(async (apiKey) => {
     const promptText = `
 You are a highly precise legal draftsman specializing in Indian corporate law.
@@ -217,7 +234,7 @@ ${clauseText}
 ---
 
 The user has provided this custom editing instruction/prompt:
-"${userPrompt}"
+"${safePrompt}"
 
 If the user's instruction specifies additional roles, names, custom limits, conditions, or specific nuances that are not fully reflected in the standardized clause, refine the clause text to incorporate those details.
 

@@ -14,8 +14,9 @@ export const metadata = {
     }
 }
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
-    const session = cookies().get('admin_session')
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+    const cookieStore = await cookies()
+    const session = cookieStore.get('admin_session')
 
     if (!session) {
         return <>{children}</>

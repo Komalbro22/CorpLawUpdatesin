@@ -5,11 +5,11 @@ import { supabaseAdmin } from '@/lib/supabase-server'
 // UNSUBSCRIBE — marks as inactive
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
 
       try {
-        if (!verifyAdminSession()) {
+        if (!await verifyAdminSession()) {
         return NextResponse.json(
           { error: 'Unauthorized' }, 
           { status: 401 }
@@ -22,7 +22,7 @@ export async function PATCH(
           is_active: false,
           unsubscribed_at: new Date().toISOString()
         })
-        .eq('id', params.id)
+        .eq('id', (await params).id)
 
       if (error) {
         console.error('Unsubscribe error:', error)
@@ -50,11 +50,11 @@ export async function PATCH(
 // DELETE — permanently removes subscriber
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
 
       try {
-        if (!verifyAdminSession()) {
+        if (!await verifyAdminSession()) {
         return NextResponse.json(
           { error: 'Unauthorized' }, 
           { status: 401 }
@@ -64,7 +64,7 @@ export async function DELETE(
       const { error } = await supabaseAdmin
         .from('subscribers')
         .delete()
-        .eq('id', params.id)
+        .eq('id', (await params).id)
 
       if (error) {
         console.error('Delete error:', error)

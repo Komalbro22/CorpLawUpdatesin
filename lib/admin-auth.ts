@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers'
 import { createHash, timingSafeEqual } from 'crypto'
 
-export function verifyAdminSession(): boolean {
+export async function verifyAdminSession(): Promise<boolean> {
     const adminPassword = process.env.ADMIN_PASSWORD
     const adminSalt = process.env.ADMIN_SECRET_SALT
     if (!adminPassword || !adminSalt) {
@@ -9,7 +9,7 @@ export function verifyAdminSession(): boolean {
         return false
     }
 
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const session = cookieStore.get('admin_session')
     if (!session) return false
 

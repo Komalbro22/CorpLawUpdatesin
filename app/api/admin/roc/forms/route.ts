@@ -3,7 +3,7 @@ import { supabaseDocumentsAdmin } from '@/lib/supabase-documents-server'
 import { verifyAdminSession } from '@/lib/admin-auth'
 
 export async function GET() {
-  if (!verifyAdminSession()) {
+  if (!await verifyAdminSession()) {
     return NextResponse.json(
       { error: 'Unauthorized' }, { status: 401 }
     )
@@ -32,7 +32,7 @@ export async function GET() {
 }
 
 export async function PUT(request: Request) {
-  if (!verifyAdminSession()) {
+  if (!await verifyAdminSession()) {
     return NextResponse.json(
       { error: 'Unauthorized' }, { status: 401 }
     )

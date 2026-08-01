@@ -48,7 +48,7 @@ interface UnifiedSearchResult {
 
 export async function GET(request: Request) {
   // Verify real admin session (checks signature + expiry, not just cookie presence)
-  if (!verifyAdminSession()) {
+  if (!await verifyAdminSession()) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

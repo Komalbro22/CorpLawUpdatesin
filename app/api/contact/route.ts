@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { supabaseAdmin } from '@/lib/supabase-server'
+import { redis } from '@/lib/redis-cache'
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
@@ -24,6 +25,19 @@ export async function POST(request: NextRequest) {
 
     const rawIp = request.headers.get('x-forwarded-for') || 'unknown'
     const clientIp = rawIp.split(',')[0].trim()
+
+    // Redis rate limiting — fast layer (5 messages per hour per IP)
+    if (redis) {
+      const redisKey = `ratelimit:contact:${clientIp}`
+      const count = await redis.incr(redisKey)
+      if (count === 1) {
+        await redis.expire(redisKey, 3600) // 1 hour window
+      }
+      if (count > 5) {
+        return NextResponse.json({ error: 'Too many messages. Please try again later.' }, { status: 429 })
+      }
+    }
+
     const ipKey = `contact:${clientIp}`
 
     const { data: attemptData } = await supabaseAdmin

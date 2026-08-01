@@ -4,15 +4,15 @@ import { supabaseAdmin } from '@/lib/supabase-server'
 import { verifyAdminSession } from '@/lib/admin-auth'
 
 // Authorization check helper
-function checkAdminAuth() {
-  if (!verifyAdminSession()) {
+async function checkAdminAuth() {
+  if (!await verifyAdminSession()) {
     throw new Error('Unauthorized administrative access.')
   }
 }
 
 export async function GET() {
   try {
-    checkAdminAuth()
+    await checkAdminAuth()
 
     const { data: rates, error } = await supabaseAdmin
       .from('compliance_rates')
@@ -35,7 +35,7 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    checkAdminAuth()
+    await checkAdminAuth()
     const { key, rate_value, text_value } = await req.json()
 
     if (!key) {

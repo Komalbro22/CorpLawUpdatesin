@@ -6,12 +6,12 @@ import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { Resend } from 'resend'
 
-export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
-    if (!verifyAdminSession()) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    if (!await verifyAdminSession()) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { id } = params
+    const { id } = await params
     const resend = new Resend(process.env.RESEND_API_KEY)
     const fromEmail = (process.env.RESEND_FROM_EMAIL || 'updates@mail.corplawupdates.in').trim().replace(/['"]/g, '')
 

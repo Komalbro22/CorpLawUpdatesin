@@ -8,12 +8,12 @@ import { complianceSchema } from '@/lib/admin-schemas'
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
 
       try {
         void cookies()
-      if (!verifyAdminSession()) {
+      if (!await verifyAdminSession()) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
       }
 
@@ -30,7 +30,7 @@ export async function PATCH(
           ...body,
           updated_at: new Date().toISOString(),
         })
-        .eq('id', params.id)
+        .eq('id', (await params).id)
         .select()
         .single()
 
@@ -60,12 +60,12 @@ export async function PATCH(
 
 export async function DELETE(
   _request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
 
       try {
         void cookies()
-      if (!verifyAdminSession()) {
+      if (!await verifyAdminSession()) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
       }
 
@@ -75,7 +75,7 @@ export async function DELETE(
           is_active: false,
           updated_at: new Date().toISOString(),
         })
-        .eq('id', params.id)
+        .eq('id', (await params).id)
 
       if (error) {
         return NextResponse.json({ error: error.message }, { status: 500 })

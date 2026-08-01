@@ -5,7 +5,7 @@ import { supabaseAdmin } from '@/lib/supabase-server'
 export async function GET() {
 
       try {
-        if (!verifyAdminSession()) {
+        if (!await verifyAdminSession()) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
       }
 
@@ -40,7 +40,7 @@ export async function GET() {
 export async function POST(request: Request) {
 
       try {
-        if (!verifyAdminSession()) {
+        if (!await verifyAdminSession()) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
       }
 

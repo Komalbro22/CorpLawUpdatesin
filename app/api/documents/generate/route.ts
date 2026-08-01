@@ -11,8 +11,18 @@ const GEMINI_KEYS = [
 function cleanGeneratedLegalContent(content: string): string {
   let text = content
 
-  // 1. Clean up party preamble details based on entity type (individual vs company/firm)
-  // Individual cleanup: remove CIN reference, age if empty, registered office reference
+  // 1. Fix duplicated "Account Account" or "Current Account Account" template bugs
+  text = text
+    .replace(/\b(Current|Savings|Cash Credit|Overdraft|Escrow|Fixed Deposit)\s+Account\s+Account\b/gi, '$1 Account')
+    .replace(/\bAccount\s+Account\b/gi, 'Account')
+
+  // 2. Fix duplicated prepositions (e.g. "at at registered office")
+  text = text
+    .replace(/\bat\s+at\b/gi, 'at')
+    .replace(/\bAT\s+AT\b/g, 'AT')
+    .replace(/\bat\s+registered\s+office\b/gi, 'at the Registered Office of the Company')
+
+  // 3. Clean up party preamble details based on entity type (individual vs company/firm)
   text = text
     .replace(/(an\s+individual,?\s+aged\s+\d+\s+years)\s*\/[^,]*CIN:[^,]*,\s*(residing\s+at\s*\/)?\s*having\s+(registered|residential)?\s*office\s+at/gi, '$1, residing at')
     .replace(/(an\s+individual,?\s+aged\s+\d+\s+years)\s*\/[^,]*CIN:\s*,?\s*(residing\s+at\s*\/)?\s*having\s+(registered|residential)?\s*office\s+at/gi, '$1, residing at')
@@ -21,33 +31,33 @@ function cleanGeneratedLegalContent(content: string): string {
     .replace(/an\s+individual,?\s+residing\s+at\s*\/[^,]*office\s+at/gi, 'an individual, residing at')
     .replace(/an\s+individual,?\s+residing\s+at\s*\/[^,]*address\s+at/gi, 'an individual, residing at')
 
-  // 2. Company / Firm / LLP cleanup: remove age reference, clean up registered office
+  // 4. Company / Firm / LLP cleanup: remove age reference, clean up registered office
   text = text
     .replace(/,\s*aged\s*\d*\s*years\s*\/(\s*CIN:\s*[A-Z0-9]+),?\s*(residing\s+at\s*\/)?\s*having\s+(registered|residential)?\s*office\s+at/gi, ', $1, having registered office at')
     .replace(/,\s*aged\s*\d*\s*years\s*\/(\s*CIN:\s*,?\s*),?\s*(residing\s+at\s*\/)?\s*having\s+(registered|residential)?\s*office\s+at/gi, ', having registered office at')
     .replace(/,\s*aged\s*\d*\s*years\s*,\s*(residing\s+at\s*\/)?\s*having\s+(registered|residential)?\s*office\s+at/gi, ', having registered office at')
 
-  // 3. Clean up slash choices in party descriptions if any are left
+  // 5. Clean up slash choices in party descriptions if any are left
   text = text
     .replace(/residing\s+at\s*\/\s*having\s+registered\s+office\s+at/gi, 'residing at')
     .replace(/residing\s+at\s*\/\s*having\s+its\s+registered\s+office\s+at/gi, 'residing at')
     .replace(/aged\s+\d+\s+years\s*\/\s*CIN:\s*,?\s*/gi, '')
 
-  // 4. Grammar and preposition cleanup
+  // 6. Grammar and preposition cleanup
   text = text
     .replace(/borne\s+by\s+shared\s+equally/gi, 'shared equally')
     .replace(/borne\s+by\s+shared/gi, 'shared')
 
-  // 5. Area description cleanups to avoid unit duplication (e.g. "1 Acre sq. ft. / sq. mtrs.")
+  // 7. Area description cleanups to avoid unit duplication
   text = text
     .replace(/(\d+)\s*(acre|acres|sq\.\s*ft|sq\s*ft|square\s*feet|sq\.\s*mtrs?|square\s*meters?)\.?\s*sq\.\s*ft\.?\s*\/\s*sq\.\s*mtrs?\.?/gi, '$1 $2')
 
-  // 6. Clean up trailing empty labels/sections at the end of the document
+  // 8. Clean up trailing empty labels/sections at the end of the document
   text = text
     .replace(/Notarized\/Registered\s+at:\s*$/gmi, '')
     .replace(/Registration\s+Office\s+Details:\s*$/gmi, '')
 
-  // 7. Common typo corrections in legal/currency text
+  // 9. Common typo corrections in legal/currency text
   text = text
     .replace(/\bthirt\b/gi, 'thirty')
     .replace(/\bfourty\b/gi, 'forty')
@@ -86,19 +96,36 @@ function formatDateToIndianLegal(dateStr: string): string {
 function formatTimeToIndianLegal(timeStr: string): string {
   if (!timeStr) return timeStr;
   let formatted = timeStr.trim();
-  // Format standard am/pm separators: 11.00 am -> 11:00 am
   formatted = formatted.replace(/(\d{1,2})\.(\d{2})/g, '$1:$2');
-  // Format standard am/pm case and spacing: 11:00 am -> 11:00 A.M.
   formatted = formatted.replace(/\b(am|pm)\b/gi, (match) => {
     return match.toUpperCase().split('').join('.') + '.';
   });
-  // Also catch generic AM / PM without word bounds or with periods already
   formatted = formatted.replace(/a\.?m\.?/gi, 'A.M.');
   formatted = formatted.replace(/p\.?m\.?/gi, 'P.M.');
-  // Ensure double periods aren't created (e.g. A.M.. -> A.M.)
   formatted = formatted.replace(/A\.M\.\./g, 'A.M.');
   formatted = formatted.replace(/P\.M\.\./g, 'P.M.');
   return formatted;
+}
+
+/**
+ * Pre-generation validation check for deterministic logic errors
+ */
+function validatePreGeneration(formData: Record<string, any>): string | null {
+  // Check Date Logic: Certification Date cannot be before Meeting Date
+  const meetingDateStr = formData.MEETING_DATE || formData.meeting_date || formData.date_of_meeting;
+  const certDateStr = formData.CERTIFICATION_DATE || formData.certification_date || formData.certified_date;
+
+  if (meetingDateStr && certDateStr) {
+    const dMeeting = new Date(meetingDateStr);
+    const dCert = new Date(certDateStr);
+    if (!isNaN(dMeeting.getTime()) && !isNaN(dCert.getTime())) {
+      if (dCert < dMeeting) {
+        return `Pre-Validation Error: Certification date (${certDateStr}) cannot be prior to the Board Meeting date (${meetingDateStr}).`;
+      }
+    }
+  }
+
+  return null;
 }
 
 export async function POST(request: Request) {
@@ -117,6 +144,15 @@ export async function POST(request: Request) {
       )
     }
 
+    // Run Pre-generation Validation Checklist
+    const preValidationError = validatePreGeneration(form_data || {});
+    if (preValidationError) {
+      return NextResponse.json(
+        { error: preValidationError },
+        { status: 422 }
+      )
+    }
+
     // Get template
     const { data: template, error } = await supabaseAdmin
       .from('document_templates')
@@ -131,8 +167,34 @@ export async function POST(request: Request) {
       )
     }
 
-    // Format dates to Indian legal format (e.g. 27th May, 2026) and format times (e.g. 11:00 A.M.)
+    // Sanitize account types and signing mode
     if (form_data && typeof form_data === 'object') {
+      // Fix account type duplication: e.g. "Current Account" -> "Current" if template appends " Account"
+      if (form_data.ACCOUNT_TYPE) {
+        form_data.ACCOUNT_TYPE = String(form_data.ACCOUNT_TYPE).replace(/\s+Account$/i, '');
+      }
+
+      // Deterministic Signing Mode phrase resolution
+      // If all signatories are set to SINGLY -> mode phrase is "severally"
+      // If all JOINTLY -> "jointly"
+      // If both -> "jointly or severally"
+      const sigModes = Object.keys(form_data)
+        .filter(k => k.includes('SIGN') && k.includes('MODE'))
+        .map(k => String(form_data[k]).toUpperCase());
+
+      if (sigModes.length > 0) {
+        const allSingly = sigModes.every(m => m.includes('SINGLY') || m.includes('SEVERALLY'));
+        const allJointly = sigModes.every(m => m.includes('JOINTLY'));
+        if (allSingly) {
+          form_data.SIGNING_MODE_PHRASE = 'severally';
+        } else if (allJointly) {
+          form_data.SIGNING_MODE_PHRASE = 'jointly';
+        } else {
+          form_data.SIGNING_MODE_PHRASE = 'jointly or severally';
+        }
+      }
+
+      // Format dates & times to Indian legal format
       if (template.fields && Array.isArray(template.fields)) {
         template.fields.forEach((f: any) => {
           if (f.type === 'date' && form_data[f.id]) {
@@ -148,11 +210,11 @@ export async function POST(request: Request) {
       });
     }
 
-    // Client IP Parsing (split proxy chains, take first value)
+    // Client IP Parsing
     const forwarded = request.headers.get('x-forwarded-for')
     const ip = forwarded ? forwarded.split(',')[0].trim() : request.headers.get('x-real-ip') ?? '127.0.0.1'
 
-    // Load rate limit and whitelist settings
+    // Load rate limit settings
     const { data: settingsData } = await supabaseAdmin
       .from('site_settings')
       .select('key, value')
@@ -218,23 +280,25 @@ export async function POST(request: Request) {
       const promptText = `Generate a complete ${template.name} using these details:
 
 ${fieldsSummary}
-${customInstructions ? `\nUser's Custom Instructions / Special Conditions / Reasons for Generation:\n${customInstructions}\n` : ''}
+${customInstructions ? `\nUser's Custom Instructions / Special Conditions:\n${customInstructions}\n` : ''}
 
 Base template format:
 ${template.template_content}
 
 Instructions:
-1. Fill all {{PLACEHOLDERS}} with provided data.
-2. CRITICAL FOR AI-ENHANCED GENERATION: Do not simply copy-paste raw user inputs from the form fields. Read, understand, and frame them in professional, polished Indian corporate legal terminology (e.g., if the user enters 'Rs. 10,000 per Board Meeting attended' in a remuneration field, frame it elegantly in the resolution: 'RESOLVED FURTHER THAT the sitting fees/remuneration payable to the Director shall be Rs. 10,000 (Rupees Ten Thousand only) per meeting of the Board attended by them...').
+1. Fill all {{PLACEHOLDERS}} with provided data. Ensure CIN (${form_data?.CIN || form_data?.cin || 'N/A'}) and Registered Office are prominently displayed in the document header block.
+2. CRITICAL FOR AI-ENHANCED GENERATION: Do not simply copy-paste raw user inputs from the form fields. Read, understand, and frame them in professional, polished Indian corporate legal terminology.
 3. Always spell out numeric amounts in words, like 'Rs. 10,000 (Rupees Ten Thousand only)'.
 4. Ensure all mandatory clauses per Companies Act / ICSI SS-1 / other applicable acts are present.
-5. If any field is empty, use appropriate placeholder text [TO BE FILLED]. If optional fields like Schedule I or Schedule II are empty, write '[None described / Not applicable]' or adjust based on the user's custom instructions.
-${customInstructions ? `6. Weave the user's custom instructions, reasons, and special conditions naturally and professionally into the draft's clauses.\n` : ''}7. Maintain exact formatting — do not add markdown wrapping or post-text notes.
-8. Output only the final document text, nothing else.
-9. CRITICAL DRAFTING STANDARDS:
-   (a) Do NOT include explanatory paragraphs or expository background text explaining the law or differences (such as 'It is noted that for a change of Registered Office...') inside the resolution itself. Any such notes belong in the Explanatory Statement or Board Notes, not the resolution text.
-   (b) For standard approvals of draft notices/agreements/resolutions, use direct approvals ('be and is hereby approved') rather than 'approved in principle'.
-   (c) Ensure all statutory filings mentioned have accurate timelines per the Companies Act, 2013 (e.g. Form INC-22 notice of change of registered office must be filed within 30 days of the change/registration of the RD order, NOT 60 days).`
+${customInstructions ? `5. CUSTOM INSTRUCTIONS DRAFTING RULE:
+   - Convert the user's custom instructions into one or more formal "RESOLVED FURTHER THAT [formal legal text]." clauses.
+   - Placement: Insert these clauses BEFORE the signature block ("FOR [Company Name]"), as the last "RESOLVED FURTHER THAT" clause inside the resolution body — NEVER place them after signatures or as raw bullet points.
+   - Drafting Register: Third-person, passive-formal ("be and is hereby authorized to..."), matching Indian board resolutions under Companies Act, 2013 / SS-1.
+   - Reuse the exact company name, bank name, account name, and signatory names defined earlier.
+   - Do NOT output bullet points, markdown, or emojis.
+   - Do NOT introduce scope creep or unrelated actions.
+` : ''}6. Maintain exact legal formatting — output only the final document text, nothing else.
+`
 
       // Attempt Gemini API call with key rotation
       let generationSuccess = false
@@ -278,7 +342,6 @@ ${customInstructions ? `6. Weave the user's custom instructions, reasons, and sp
             generationSuccess = true
             generationType = 'ai'
             
-            // Extract token usage metadata
             if (data.usageMetadata) {
               promptTokens = data.usageMetadata.promptTokenCount || 0
               completionTokens = data.usageMetadata.candidatesTokenCount || 0
@@ -304,7 +367,6 @@ ${customInstructions ? `6. Weave the user's custom instructions, reasons, and sp
       // Simple template substitution
       documentContent = template.template_content
 
-      // Build fields map for easy lookup of requirement status
       const fieldsMap = new Map<string, any>()
       if (template.fields && Array.isArray(template.fields)) {
         template.fields.forEach((f: any) => {
@@ -312,7 +374,6 @@ ${customInstructions ? `6. Weave the user's custom instructions, reasons, and sp
         })
       }
 
-      // First, substitute fields present in form_data
       Object.entries(form_data || {}).forEach(([key, value]) => {
         if (key === 'custom_instructions') return
 
@@ -330,7 +391,6 @@ ${customInstructions ? `6. Weave the user's custom instructions, reasons, and sp
         documentContent = documentContent.replace(regex, replacement)
       })
 
-      // Next, replace any defined fields that were not passed in form_data at all
       if (template.fields && Array.isArray(template.fields)) {
         template.fields.forEach((f: any) => {
           if (f.id === 'custom_instructions') return
@@ -343,40 +403,36 @@ ${customInstructions ? `6. Weave the user's custom instructions, reasons, and sp
         })
       }
       
-      // Replace any other remaining placeholders that are not in template fields
       documentContent = documentContent.replace(
         /{{[A-Z_]+}}/g,
         '[TO BE FILLED]'
       )
 
-      // Append custom instructions if present, so they are not ignored
+      // Append custom instructions as formal resolution clause before signature block
       const customInstructions = form_data?.custom_instructions || ''
       if (customInstructions && String(customInstructions).trim()) {
         const trimmedIns = String(customInstructions).trim()
-        const customBlock = `\n\nADDITIONAL CONDITIONS / SPECIAL CLAUSES:\n${trimmedIns}\n\n`
+        const customClause = `RESOLVED FURTHER THAT the Company be and is hereby authorized to ${trimmedIns}.`
+        const customBlock = `\n\n${customClause}\n\n`
         
-        if (documentContent.includes('IN WITNESS WHEREOF')) {
+        if (documentContent.includes('FOR ')) {
+          documentContent = documentContent.replace(/FOR\s+([A-Z0-9\s.()-]+)/i, `${customBlock}FOR $1`)
+        } else if (documentContent.includes('IN WITNESS WHEREOF')) {
           documentContent = documentContent.replace('IN WITNESS WHEREOF', `${customBlock}IN WITNESS WHEREOF`)
         } else {
           documentContent = documentContent + customBlock
         }
       }
 
-      // Post-process the text to clean up consecutive commas, spaces before commas, trailing commas, etc.
-      // caused by empty optional fields.
       documentContent = documentContent
-        // Replace multiple consecutive commas (with optional whitespace) with a single comma
         .replace(/,\s*(,\s*)+/g, ', ')
-        // Remove spaces before commas
         .replace(/\s+,\s*/g, ', ')
-        // Remove a comma right before a period (e.g. "something, .")
         .replace(/,\s*\./g, '.')
-        // Clean up a trailing comma right before the end of a line or paragraph
         .replace(/,\s*$/gm, '')
         .trim()
     }
 
-    // Post-process the generated text to clean up phrasing, slashes, prepositions, empty labels, and common spelling typos
+    // Post-process the generated text to clean up bugs
     documentContent = cleanGeneratedLegalContent(documentContent)
 
     // Save to database

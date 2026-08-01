@@ -7,7 +7,7 @@ export async function GET() {
 
       try {
         void cookies()
-      if (!verifyAdminSession()) {
+      if (!await verifyAdminSession()) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
       }
 

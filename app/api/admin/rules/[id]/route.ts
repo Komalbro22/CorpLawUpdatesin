@@ -8,14 +8,14 @@ const docDb = supabaseDocumentsAdmin || supabaseAdmin;
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    if (!verifyAdminSession()) {
+    if (!await verifyAdminSession()) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id: rule_id } = params;
+    const { id: rule_id } = await params;
     const body = await request.json();
     const {
       intent_name,
@@ -136,14 +136,14 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    if (!verifyAdminSession()) {
+    if (!await verifyAdminSession()) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { id: rule_id } = params;
+    const { id: rule_id } = await params;
 
     const { error } = await docDb
       .from('rules')

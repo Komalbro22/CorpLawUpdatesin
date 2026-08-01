@@ -6,7 +6,7 @@ import { supabaseAdmin } from '@/lib/supabase-server'
 import { BetaAnalyticsDataClient } from '@google-analytics/data'
 
 export async function GET() {
-  if (!verifyAdminSession()) {
+  if (!await verifyAdminSession()) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

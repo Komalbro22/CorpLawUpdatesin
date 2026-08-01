@@ -686,7 +686,7 @@ const AI_SUGGESTIONS: Record<string, {
 
 export default function DocumentGeneratorPage() {
   const params = useParams()
-  const slug = params.slug as string
+  const slug = params?.slug as string
   const isBorrowingDoc = slug === 'board-resolution-bank-loan' || slug.includes('borrowing-limit');
   const isStampDutyRequired = slug.includes('agreement') || slug.includes('deed') || slug.includes('mortgage') || slug.includes('understanding') || slug.includes('power-of-attorney') || slug.includes('transfer');
   const isOfficeShiftingDoc = slug === 'board-resolution-registered-office-change' || slug === 'special-resolution-registered-office-shifting';

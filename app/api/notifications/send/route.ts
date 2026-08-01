@@ -20,7 +20,7 @@ function truncateString(str: string, maxLen: number): string {
 
 export async function POST(request: Request) {
   // 1. Strict Admin Authentication Guard
-  if (!verifyAdminSession()) {
+  if (!await verifyAdminSession()) {
     return NextResponse.json({ error: 'Unauthorized: Admin authentication required' }, { status: 401 })
   }
 

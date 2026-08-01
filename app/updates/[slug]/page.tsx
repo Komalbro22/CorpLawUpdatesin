@@ -39,9 +39,9 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
-  const decodedSlug = decodeURIComponent(params.slug)
+  const decodedSlug = decodeURIComponent((await params).slug)
   
   const { data: update } = await supabase
     .from('updates')
@@ -54,7 +54,7 @@ export async function generateMetadata(
       title: 'Article Not Found', 
       description: 'The article you are looking for does not exist.',
       robots: { index: false, follow: true },
-      alternates: { canonical: `https://www.corplawupdates.in/updates/${params.slug.toLowerCase()}` }
+      alternates: { canonical: `https://www.corplawupdates.in/updates/${(await params).slug.toLowerCase()}` }
     }
   }
 
@@ -132,11 +132,11 @@ function toISTOffset(dateStr?: string | null) {
   }
 }
 
-export default async function SingleUpdatePage({ params }: { params: { slug: string } }) {
+export default async function SingleUpdatePage({ params }: { params: Promise<{ slug: string }> }) {
     const { data: update } = await supabase
         .from('updates')
         .select(UPDATE_DETAIL_COLUMNS)
-        .ilike('slug', decodeURIComponent(params.slug))
+        .ilike('slug', decodeURIComponent((await params).slug))
         .not('published_at', 'is', null)
         .lte('published_at', new Date().toISOString())
         .single()

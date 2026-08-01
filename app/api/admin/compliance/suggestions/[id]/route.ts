@@ -7,12 +7,12 @@ import { revalidatePath } from 'next/cache'
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
 
       try {
         void cookies()
-      if (!verifyAdminSession()) {
+      if (!await verifyAdminSession()) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
       }
 
@@ -23,7 +23,7 @@ export async function PATCH(
         const { data: suggestion, error: fetchError } = await supabaseAdmin
           .from('compliance_suggestions')
           .select('*')
-          .eq('id', params.id)
+          .eq('id', (await params).id)
           .single()
 
         if (fetchError || !suggestion) {
@@ -90,7 +90,7 @@ export async function PATCH(
             reviewed_at: new Date().toISOString(),
             reviewed_by: 'admin',
           })
-          .eq('id', params.id)
+          .eq('id', (await params).id)
 
         // Invalidate active calendar entries cache and revalidate pages
         await invalidateCache('compliance_entries:active')
@@ -109,7 +109,7 @@ export async function PATCH(
             reviewed_at: new Date().toISOString(),
             reviewed_by: 'admin',
           })
-          .eq('id', params.id)
+          .eq('id', (await params).id)
 
         if (error) {
           return NextResponse.json({ error: error.message }, { status: 500 })

@@ -14,15 +14,11 @@ import BackToTop from '@/components/BackToTop'
 import WhatsAppButton from '@/components/WhatsAppButton'
 import HideOnAdmin from '@/components/HideOnAdmin'
 import AnnouncementBar from '@/components/AnnouncementBar'
-import dynamic from 'next/dynamic'
 import Script from 'next/script'
 import JsonLd from '@/components/JsonLd'
 import TrackingScripts from '@/components/TrackingScripts'
 
-const WebMCPRegistry = dynamic(() => import('@/components/WebMCPRegistry'), {
-  ssr: false,
-})
-
+import WebMCPRegistry from '@/components/WebMCPRegistry'
 
 import { themeScript } from '@/lib/theme-script'
 import './globals.css'

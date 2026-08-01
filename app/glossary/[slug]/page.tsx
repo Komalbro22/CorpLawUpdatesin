@@ -87,7 +87,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { data: term } = await supabase
     .from('glossary')
     .select('term, slug, definition, extended_note')
-    .eq('slug', params.slug)
+    .eq('slug', (await params).slug)
     .single()
 
   if (!term) {
@@ -137,7 +137,7 @@ export default async function GlossaryTermPage({ params }: Props) {
   const { data: term } = await supabase
     .from('glossary')
     .select('term, slug, definition, category, keywords, extended_note, related_terms, created_at, is_verified, faqs, synonyms')
-    .eq('slug', params.slug)
+    .eq('slug', (await params).slug)
     .single()
 
   if (!term || !term.is_verified) {
@@ -152,7 +152,7 @@ export default async function GlossaryTermPage({ params }: Props) {
     .from('glossary')
     .select(GLOSSARY_LINK_COLUMNS)
     .eq('is_verified', true)
-    .neq('slug', params.slug)
+    .neq('slug', (await params).slug)
 
   // Pass current definitions/notes through the dynamic linker helper
   const processedDefinition = linkGlossaryTerms(term.definition || '', allOtherTerms || [])

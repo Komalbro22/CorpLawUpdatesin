@@ -17,7 +17,7 @@ export async function GET(request: Request) {
 
         // We bypass the admin check inside syncViewsAction for cron jobs
         // By modifying syncViewsAction, or simply mocking the session? 
-        // Wait, syncViewsAction uses `verifyAdminSession()`. If we call it here, it will fail because verifyAdminSession relies on cookies.
+        // Wait, syncViewsAction uses `await verifyAdminSession()`. If we call it here, it will fail because verifyAdminSession relies on cookies.
         // We should extract the core logic of syncViewsAction into a separate function that can be called without a session, or just copy the logic here.
         
         // Wait, I will just call syncViewsAction but I need to make sure verifyAdminSession doesn't block it.

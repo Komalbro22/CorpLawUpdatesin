@@ -10,7 +10,7 @@ export async function GET() {
 
       try {
         void cookies()
-      if (!verifyAdminSession()) {
+      if (!await verifyAdminSession()) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
       }
 
@@ -43,7 +43,7 @@ export async function POST(request: Request) {
 
       try {
         void cookies()
-      if (!verifyAdminSession()) {
+      if (!await verifyAdminSession()) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
       }
 

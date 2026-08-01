@@ -7,7 +7,7 @@ const docDb = supabaseDocumentsAdmin || supabaseAdmin;
 
 export async function POST(request: Request) {
   try {
-    if (!verifyAdminSession()) {
+    if (!await verifyAdminSession()) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     const { queueItemId } = await request.json();
