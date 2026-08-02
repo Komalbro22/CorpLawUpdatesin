@@ -96,6 +96,12 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5461025803834302"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         {/* Anti-flash theme script — MUST be first */}
         <script
           dangerouslySetInnerHTML={{ __html: themeScript }}
