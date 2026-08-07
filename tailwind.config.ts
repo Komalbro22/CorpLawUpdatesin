@@ -77,10 +77,10 @@ const config: Config = {
       },
       fontFamily: {
         heading: ['var(--font-outfit)', 'var(--font-lora)', 'sans-serif'],
-        body:    ['var(--font-source-sans)', 'Arial',            'sans-serif'],
-        sans:    ['var(--font-inter)', 'system-ui', 'sans-serif'],
-        serif:   ['var(--font-playfair)', 'Georgia', 'serif'],
-        mono:    ['var(--font-jetbrains-mono)', 'monospace'],
+        body:    ['var(--font-source-sans)', 'system-ui', 'sans-serif'],
+        sans:    ['var(--font-source-sans)', 'var(--font-outfit)', 'system-ui', 'sans-serif'],
+        serif:   ['var(--font-lora)', 'Georgia', 'serif'],
+        mono:    ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
       },
       transitionTimingFunction: {
         'spring': 'cubic-bezier(0.22, 0.68, 0, 1.2)',

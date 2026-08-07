@@ -16,6 +16,30 @@ function sanitizeUserPrompt(input: string, maxLength = 2000): string {
 }
 
 /**
+ * Sanitize conversation history entries to prevent prompt injection via history.
+ * Strips each entry's text content through the same injection guard.
+ */
+function sanitizeHistory(history: any[]): string {
+  if (!Array.isArray(history) || history.length === 0) return '[]';
+  const safe = history.map((entry: any) => {
+    if (typeof entry === 'string') {
+      try { return sanitizeUserPrompt(entry, 500); } catch { return '[redacted]'; }
+    }
+    if (entry && typeof entry === 'object') {
+      const safeEntry: Record<string, string> = {};
+      for (const [k, v] of Object.entries(entry)) {
+        if (typeof v === 'string') {
+          try { safeEntry[k] = sanitizeUserPrompt(v, 500); } catch { safeEntry[k] = '[redacted]'; }
+        }
+      }
+      return safeEntry;
+    }
+    return null;
+  }).filter(Boolean);
+  return JSON.stringify(safe);
+}
+
+/**
  * Helper to run API requests with automatic fallback/rotation across multiple Gemini API keys.
  */
 async function runWithKeyRotation<T>(
@@ -67,11 +91,12 @@ async function runWithKeyRotation<T>(
  */
 export async function getEmbedding(text: string): Promise<number[]> {
   return runWithKeyRotation(async (apiKey) => {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2:embedContent?key=${apiKey}`;
+    // API key passed via header — prevents exposure in server access logs
+    const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2:embedContent';
     
     const response = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
       body: JSON.stringify({
         content: {
           parts: [{ text }]
@@ -110,7 +135,7 @@ You are a highly precise legal data extractor. Extract values for the requested 
 
 Required fields schema: ${JSON.stringify(fieldsSchema)}
 Client's prompt input: "${safePrompt}"
-Previous conversation history context: "${JSON.stringify(history)}"
+Previous conversation history context: ${sanitizeHistory(history)}
 
 Strict Extraction Rules:
 1. Extract ONLY what is explicitly stated in the client's prompt or context. Never guess, infer, or hallucinate names, CINs, dates, or places.
@@ -126,11 +151,12 @@ Return ONLY a clean JSON object matching this structure:
 }
 `;
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    // API key passed via header — prevents exposure in server access logs
+    const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
     const response = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
       body: JSON.stringify({
         contents: [{ parts: [{ text: promptText }] }],
         generationConfig: {
@@ -172,7 +198,7 @@ export async function generateCustomDraft(
 You are an expert Indian Corporate Lawyer. The user wants to modify their existing legal document draft.
 
 User's requested modification: "${safePrompt}"
-Previous conversation context: "${JSON.stringify(history)}"
+Previous conversation context: ${sanitizeHistory(history)}
 
 Here is the CURRENT legal document draft:
 \`\`\`markdown
@@ -188,7 +214,7 @@ Strict Revision Guidelines:
     } else {
       promptText = `
 You are an expert Indian Corporate Lawyer. Draft a highly professional document in Markdown format for this user request: "${safePrompt}".
-Previous conversation context: "${JSON.stringify(history)}".
+Previous conversation context: ${sanitizeHistory(history)}.
 
 Strict Professional Guidelines:
 - Output the document using standard Indian legal headers, structure, and formal legal English.
@@ -197,11 +223,12 @@ Strict Professional Guidelines:
 `;
     }
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    // API key passed via header — prevents exposure in server access logs
+    const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
     const response = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
       body: JSON.stringify({
         contents: [{ parts: [{ text: promptText }] }]
       })
@@ -245,11 +272,12 @@ Strict Rules:
 4. Output ONLY the refined clause text. Do NOT include any conversational comments, greetings, markdown ticks, or explanations.
 `;
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    // API key passed via header — prevents exposure in server access logs
+    const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
     const response = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
       body: JSON.stringify({
         contents: [{ parts: [{ text: promptText }] }]
       })
@@ -303,11 +331,12 @@ Strict Rules:
 3. Output ONLY the final updated document text. Do NOT include any conversational introductions, markdown code block backticks (like \`\`\`markdown), or explanations.
 `;
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    // API key passed via header — prevents exposure in server access logs
+    const url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
     const response = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
       body: JSON.stringify({
         contents: [{ parts: [{ text: promptText }] }]
       })
@@ -323,7 +352,7 @@ Strict Rules:
     // Clean up potential markdown wrapper code ticks if Gemini fails to follow instructions
     let cleaned = result.trim();
     if (cleaned.startsWith('```')) {
-      cleaned = cleaned.replace(/^```[a-zA-Z]*\n/, '').replace(/\\n\`\`\`$/, '').replace(/\n\`\`\`$/, '');
+      cleaned = cleaned.replace(/^```[a-zA-Z]*\n/, '').replace(/\n```$/, '');
     }
     return cleaned.trim();
   });

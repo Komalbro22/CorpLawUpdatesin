@@ -248,7 +248,7 @@ const comingTools = tools.filter(t => !t.isLive)
 
 export default function ToolsPage() {
   return (
-    <main id="main-content" className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
+    <div id="tools-page-content" className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
       <JsonLd data={toolsJsonLd as any} />
 
       {/* Hero Banner */}
@@ -416,6 +416,6 @@ export default function ToolsPage() {
           </Link>
         </div>
       </div>
-    </main>
+    </div>
   )
 }

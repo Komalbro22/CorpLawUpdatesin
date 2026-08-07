@@ -14,7 +14,8 @@ export function markdownToHtml(markdown: string): string {
     html = html.replace(/\*(.+?)\*/g, '<em>$1</em>')
     html = html.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" style="color:#F59E0B">$1</a>')
     html = html.replace(/^- (.+)$/gm, '<li>$1</li>')
-    html = html.replace(/(<li>[\s\S]*?<\/li>)/, '<ul>$1</ul>')
+    // Fix: use global flag so ALL consecutive li groups are wrapped, not just the first
+    html = html.replace(/(<li>(?:(?!<li>|<\/ul>)[\s\S])*?<\/li>(?:\s*<li>(?:(?!<li>|<\/ul>)[\s\S])*?<\/li>)*)/g, '<ul>$1</ul>')
     html = html.replace(/\n\n/g, '</p><p>')
     html = '<p>' + html + '</p>'
     html = html.replace(/<p><\/p>/g, '')
@@ -34,9 +35,9 @@ export function buildEmailHtml({ subject, previewText, bodyHtml, unsubscribeUrl 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  ${previewText ? `<div style="display:none;max-height:0;overflow:hidden">${previewText}</div>` : ''}
 </head>
 <body style="margin:0;padding:0;background:#f8fafc;font-family:Georgia,serif">
+  ${previewText ? `<div style="display:none;max-height:0;overflow:hidden;font-size:0;line-height:0;color:#f8fafc">${previewText}</div>` : ''}
   <div style="max-width:600px;margin:0 auto;background:#ffffff">
     <div style="background:#0F172A;padding:24px 32px">
       <div style="color:#F59E0B;font-size:20px;font-weight:bold">
@@ -51,7 +52,17 @@ export function buildEmailHtml({ subject, previewText, bodyHtml, unsubscribeUrl 
       <hr style="border:none;border-top:1px solid #E2E8F0;margin:20px 0">
     </div>
     <div style="padding:0 32px 28px;color:#334155;font-size:15px;line-height:1.7">
-      ${bodyHtml}
+      ${sanitizeHtml(bodyHtml, {
+        allowedTags: ['p','br','strong','em','b','i','h1','h2','h3','ul','ol','li','a','table','thead','tbody','tr','th','td','hr','blockquote','code','pre'],
+        allowedAttributes: {
+          'a': ['href', 'style'],
+          'table': ['style', 'width', 'border'],
+          'td': ['style', 'width'],
+          'th': ['style', 'width'],
+          '*': ['style'],
+        },
+        allowedSchemes: ['http', 'https', 'mailto'],
+      })}
     </div>
     <div style="background:#F8FAFC;padding:20px 32px;border-top:1px solid #E2E8F0">
       <p style="color:#94A3B8;font-size:12px;margin:0">

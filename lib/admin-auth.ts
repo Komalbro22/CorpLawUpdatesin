@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers'
-import { createHash, timingSafeEqual } from 'crypto'
+import { createHmac, timingSafeEqual } from 'crypto'
 
 export async function verifyAdminSession(): Promise<boolean> {
     const adminPassword = process.env.ADMIN_PASSWORD
@@ -18,8 +18,9 @@ export async function verifyAdminSession(): Promise<boolean> {
 
     const [payloadB64, signature] = parts
 
-    const expectedSignature = createHash('sha256')
-        .update(payloadB64 + adminPassword + adminSalt)
+    const secretKey = adminPassword + adminSalt
+    const expectedSignature = createHmac('sha256', secretKey)
+        .update(payloadB64)
         .digest('hex')
 
     // Timing-safe comparison of signatures

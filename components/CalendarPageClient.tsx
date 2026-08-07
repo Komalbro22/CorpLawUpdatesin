@@ -9,374 +9,21 @@ import NewsletterWidget from '@/components/NewsletterWidget'
 import JsonLd from '@/components/JsonLd'
 import EmptyState from '@/components/EmptyState'
 
+import { ComplianceEntry } from './calendar/types'
+import ComplianceCalendarView from './calendar/ComplianceCalendarView'
+import { TableSection } from './calendar/ComplianceListView'
+import { EntryBadges, googleCalendarUrl, icsDownloadUrl } from './calendar/ComplianceHelpers'
+import ComplianceDetailModal from './calendar/ComplianceDetailModal'
+
+export type { ComplianceEntry }
+
 const ComplianceSuggestModal = dynamic(
   () => import('@/components/ComplianceSuggestModal'),
   { ssr: false }
 )
 
-export interface ComplianceEntry {
-  id: string
-  regulator: string
-  form_name: string
-  compliance_title: string
-  due_date: string
-  applicable_to: string
-  penalty: string | null
-  regulation_reference: string | null
-  is_active: boolean
-  is_verified: boolean
-  created_by: string | null
-  contributor_name: string | null
-  contributor_profession: string | null
-  correction_count: number
-  frequency: string
-  display_order: number
-  updated_at?: string
-}
-
 interface CalendarPageClientProps {
   entries: ComplianceEntry[]
-}
-
-const REGULATOR_COLORS: Record<string, string> = {
-  mca: 'bg-blue-100 text-blue-800 border-blue-200',
-  sebi: 'bg-purple-100 text-purple-800 border-purple-200',
-  rbi: 'bg-green-100 text-green-800 border-green-200',
-  income_tax: 'bg-orange-100 text-orange-800 border-orange-200',
-  fema: 'bg-teal-100 text-teal-800 border-teal-200',
-  nclt: 'bg-red-100 text-red-800 border-red-200',
-  ibc: 'bg-pink-100 text-pink-800 border-pink-200',
-  gst: 'bg-cyan-100 text-cyan-800 border-cyan-200',
-  labor_law: 'bg-indigo-100 text-indigo-800 border-indigo-200',
-  other: 'bg-slate-100 text-slate-700 border-slate-200',
-}
-
-function ComplianceCalendarView({
-  entries,
-  onEntryClick,
-}: {
-  entries: ComplianceEntry[]
-  onEntryClick: (entry: ComplianceEntry) => void
-}) {
-  const today = new Date()
-  const [currentMonth, setCurrentMonth] = useState(today.getMonth())
-  const [currentYear, setCurrentYear] = useState(today.getFullYear())
-  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December']
-
-  function parseDueDate(s: string): Date | null {
-    try {
-      const d = new Date(s)
-      if (!isNaN(d.getTime())) return d
-      const p = new Date(s.replace(/(\d+)\s+(\w+)\s+(\d+)/, '$2 $1, $3'))
-      return isNaN(p.getTime()) ? null : p
-    } catch { return null }
-  }
-
-  const dayMap: Record<number, ComplianceEntry[]> = {}
-  entries.forEach(e => {
-    const d = parseDueDate(e.due_date)
-    if (d && d.getMonth() === currentMonth && d.getFullYear() === currentYear) {
-      const day = d.getDate()
-      if (!dayMap[day]) dayMap[day] = []
-      dayMap[day].push(e)
-    }
-  })
-
-  const upcoming = entries
-    .map(e => ({ entry: e, date: parseDueDate(e.due_date) }))
-    .filter(({ date }) => { if (!date) return false; const diff = date.getTime() - today.getTime(); return diff >= 0 && diff <= 30 * 24 * 60 * 60 * 1000 })
-    .sort((a, b) => (a.date?.getTime() || 0) - (b.date?.getTime() || 0))
-
-  const firstDay = new Date(currentYear, currentMonth, 1).getDay()
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
-  const cells = Array.from({ length: firstDay + daysInMonth }, (_, i) => i < firstDay ? null : i - firstDay + 1)
-
-  const isToday = (day: number) => day === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()
-  const isPast  = (day: number) => new Date(currentYear, currentMonth, day) < new Date(today.getFullYear(), today.getMonth(), today.getDate())
-
-  function prevMonth() { if (currentMonth === 0) { setCurrentMonth(11); setCurrentYear(y => y - 1) } else setCurrentMonth(m => m - 1) }
-  function nextMonth() { if (currentMonth === 11) { setCurrentMonth(0); setCurrentYear(y => y + 1) } else setCurrentMonth(m => m + 1) }
-
-  return (
-    <div className="space-y-6">
-      {upcoming.length > 0 && (
-        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
-          <h3 className="font-bold text-amber-800 text-sm mb-3">⏰ Upcoming in next 30 days ({upcoming.length})</h3>
-          <div className="flex gap-2 overflow-x-auto pb-1">
-            {upcoming.map(({ entry, date }) => (
-              <button key={entry.id} onClick={() => onEntryClick(entry)}
-                className="flex-shrink-0 bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/50 rounded-xl p-3 text-left hover:border-amber-400 dark:hover:border-amber-500 transition-colors min-w-[160px]">
-                <div className="text-xs text-amber-600 dark:text-amber-500 font-bold mb-1">{date?.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</div>
-                <div className="text-xs font-bold text-navy dark:text-white leading-tight">{entry.form_name}</div>
-                <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">{entry.compliance_title}</div>
-                <div className={`text-xs mt-1 px-1.5 py-0.5 rounded border w-fit ${REGULATOR_COLORS[entry.regulator] || REGULATOR_COLORS['other']}`}>{entry.regulator.toUpperCase()}</div>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
-          <button onClick={prevMonth} className="text-slate-400 hover:text-navy dark:hover:text-white p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">◀</button>
-          <h2 className="font-bold text-navy dark:text-white text-lg">{MONTHS[currentMonth]} {currentYear}</h2>
-          <button onClick={nextMonth} className="text-slate-400 hover:text-navy dark:hover:text-white p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">▶</button>
-        </div>
-        <div className="grid grid-cols-7 border-b border-slate-100 dark:border-slate-800">
-          {['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d => (
-            <div key={d} className="text-center text-xs font-semibold text-slate-400 py-2">{d}</div>
-          ))}
-        </div>
-        <div className="grid grid-cols-7 divide-x divide-y divide-slate-100 dark:divide-slate-800">
-          {cells.map((day, idx) => (
-            <div key={idx} className={`min-h-[80px] p-1 ${day === null ? 'bg-slate-50 dark:bg-slate-800/50' : isPast(day) ? 'bg-white dark:bg-slate-900 opacity-60' : 'bg-white dark:bg-slate-900'}`}>
-              {day !== null && (
-                <>
-                  <div className={`text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full mb-1 ${isToday(day) ? 'bg-amber-400 text-navy' : 'text-slate-600 dark:text-slate-400'}`}>{day}</div>
-                  <div className="space-y-0.5">
-                    {(dayMap[day] || []).slice(0, 2).map(entry => (
-                      <button key={entry.id} onClick={() => onEntryClick(entry)}
-                        className={`w-full text-left text-xs px-1 py-0.5 rounded border truncate font-semibold ${REGULATOR_COLORS[entry.regulator] || REGULATOR_COLORS['other']}`}>
-                        {entry.form_name}
-                      </button>
-                    ))}
-                    {(dayMap[day] || []).length > 2 && (
-                      <div className="text-xs text-slate-400 pl-1">+{(dayMap[day] || []).length - 2} more</div>
-                    )}
-                  </div>
-                </>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="flex flex-wrap gap-2">
-        {Object.entries(REGULATOR_COLORS).map(([reg, cls]) => (
-          <span key={reg} className={`text-xs px-2 py-1 rounded border font-semibold ${cls}`}>{reg.toUpperCase()}</span>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function EntryBadges({ entry }: { entry: ComplianceEntry }) {
-  return (
-    <>
-      {entry.created_by?.startsWith('community:') && (
-        <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full ml-1">
-          👥 Community
-        </span>
-      )}
-      {!entry.is_verified && (
-        <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full ml-1">
-          ⏳ Pending Verification
-        </span>
-      )}
-      {entry.contributor_name && entry.is_verified && (
-        <span className="text-xs text-green-600 ml-1">
-          ✓ {entry.contributor_name}
-          {entry.contributor_profession ? `, ${entry.contributor_profession}` : ''}
-        </span>
-      )}
-    </>
-  )
-}
-
-function googleCalendarUrl(entry: ComplianceEntry): string {
-  const title = encodeURIComponent(
-    `📋 ${entry.form_name} — ${entry.compliance_title}`
-  )
-  const details = encodeURIComponent(
-    `Applicable to: ${entry.applicable_to || '—'}\n` +
-    (entry.penalty 
-      ? `Penalty: ${entry.penalty}\n` 
-      : '') +
-    `Source: https://www.corplawupdates.in/calendar`
-  )
-  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&sf=true&output=xml`
-}
-
-function icsDownloadUrl(entry: ComplianceEntry): string {
-  const now = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
-  let date = '20260101' // fallback
-  try {
-    const months: Record<string, string> = {
-      'Jan': '01', 'Feb': '02', 'Mar': '03',
-      'Apr': '04', 'May': '05', 'Jun': '06',
-      'Jul': '07', 'Aug': '08', 'Sep': '09',
-      'Oct': '10', 'Nov': '11', 'Dec': '12',
-    }
-    const match = entry.due_date.match(/(\d{1,2})\s+([A-Za-z]{3})\s+(\d{4})/)
-    if (match) {
-      date = `${match[3]}${months[match[2]] || '01'}${match[1].padStart(2, '0')}`
-    }
-  } catch(e) {}
-
-  const uid = `${entry.id}@corplawupdates.in`
-  const title = `${entry.form_name} — ${entry.compliance_title}`
-  const desc = [
-    `Regulator: ${(entry.regulator || '').toUpperCase()}`,
-    `Applicable to: ${entry.applicable_to}`,
-    entry.penalty ? `Penalty: ${entry.penalty}` : '',
-    entry.regulation_reference ? `Law: ${entry.regulation_reference}` : '',
-    `Source: https://www.corplawupdates.in/calendar`,
-  ].filter(Boolean).join('\\n')
-
-  const ical = [
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'PRODID:-//CorpLawUpdates.in//Compliance Calendar//EN',
-    'CALSCALE:GREGORIAN',
-    'BEGIN:VEVENT',
-    `UID:${uid}`,
-    `DTSTAMP:${now}`,
-    `DTSTART;VALUE=DATE:${date}`,
-    `DTEND;VALUE=DATE:${date}`,
-    `SUMMARY:📋 ${title}`,
-    `DESCRIPTION:${desc}`,
-    `URL:https://www.corplawupdates.in/calendar`,
-    'END:VEVENT',
-    'END:VCALENDAR',
-  ].join('\r\n')
-
-  return `data:text/calendar;charset=utf-8,${encodeURIComponent(ical)}`
-}
-
-function TableSection({
-  title,
-  color,
-  dot,
-  headers,
-  rows,
-  entryIds,
-  entryNames,
-  rowDates,
-  rowIds,
-  onReport,
-  onRowClick,
-}: {
-  title: string
-  color: string
-  dot: string
-  headers: string[]
-  rows: React.ReactNode[][]
-  entryIds?: string[]
-  entryNames?: string[]
-  rowDates?: string[]
-  rowIds?: string[]
-  onReport?: (id: string, name: string) => void
-  onRowClick?: (id: string) => void
-}) {
-  const displayHeaders = onReport ? ['Done', ...headers, ''] : ['Done', ...headers]
-
-  return (
-    <section>
-      <h2 className="text-2xl font-heading font-bold text-navy dark:text-white mb-4 flex items-center gap-2">
-        <span className={`w-3 h-3 rounded-full ${dot} inline-block`} />
-        {title}
-      </h2>
-      <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-        <table className="w-full text-sm min-w-[640px]">
-          <thead>
-            <tr className={color}>
-              {displayHeaders.map((h, idx) => (
-                <th key={idx} className="text-left px-4 py-3 font-semibold text-white">
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row, i) => {
-              const dateStr = rowDates?.[i] || ''
-              let rowBg = i % 2 === 0 ? 'bg-white dark:bg-slate-900' : 'bg-slate-50 dark:bg-slate-800/50'
-              
-              const entryId   = entryIds?.[i] || ''
-              const entryName = entryNames?.[i] || ''
-              
-              let urgencyBorder = 'border-l-4 border-slate-300'
-              if (dateStr) {
-                try {
-                  const d = new Date(dateStr)
-                  if (isNaN(d.getTime())) {
-                    const p = new Date(dateStr.replace(/(\d+)\s+(\w+)\s+(\d+)/, '$2 $1, $3'))
-                    if (!isNaN(p.getTime())) {
-                      const diff = p.getTime() - new Date().getTime()
-                      const days = diff / (1000 * 3600 * 24)
-                      if (days < 0) urgencyBorder = 'border-l-4 border-red-500'
-                      else if (days <= 7) urgencyBorder = 'border-l-4 border-amber-500'
-                      else urgencyBorder = 'border-l-4 border-green-500'
-                    }
-                  } else {
-                      const diff = d.getTime() - new Date().getTime()
-                      const days = diff / (1000 * 3600 * 24)
-                      if (days < 0) urgencyBorder = 'border-l-4 border-red-500'
-                      else if (days <= 7) urgencyBorder = 'border-l-4 border-amber-500'
-                      else urgencyBorder = 'border-l-4 border-green-500'
-                  }
-                } catch(e) {}
-              }
-              
-              const isDone = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('compliance_done') || '{}')[entryId] : false;
-              if (isDone) {
-                 rowBg = 'bg-slate-100 dark:bg-slate-800 opacity-60';
-                 urgencyBorder = 'border-l-4 border-slate-300 dark:border-slate-700';
-              }
-              return (
-                <tr
-                  key={entryId || i}
-                  id={rowIds?.[i]}
-                  data-entry-id={entryId}
-                  className={`${rowBg} ${urgencyBorder} ${onRowClick ? 'cursor-pointer hover:bg-amber-50 transition-colors' : ''}`}
-                  onClick={onRowClick && entryId ? () => onRowClick(entryId) : undefined}
-                >
-                  <td className="px-4 py-3">
-                    <input 
-                      type="checkbox" 
-                      className="w-4 h-4 cursor-pointer"
-                      checked={isDone}
-                      onClick={(e) => {
-                         e.stopPropagation();
-                         if (typeof window !== 'undefined') {
-                           const current = JSON.parse(localStorage.getItem('compliance_done') || '{}');
-                           current[entryId] = !current[entryId];
-                           localStorage.setItem('compliance_done', JSON.stringify(current));
-                           window.dispatchEvent(new Event('compliance_done_updated'));
-                         }
-                      }}
-                    />
-                  </td>
-                  {row.map((cell, j) => (
-                    <td
-                      key={j}
-                      className={`px-4 py-3 ${
-                        j === 0
-                          ? 'font-semibold text-blue-700 dark:text-blue-400 whitespace-nowrap'
-                          : j === row.length - 1 && headers.includes('Penalty')
-                          ? 'text-red-600 dark:text-red-400 font-medium whitespace-nowrap'
-                          : 'text-slate-700 dark:text-slate-300'
-                      }`}
-                    >
-                      {cell}
-                    </td>
-                  ))}
-                  {onReport && (
-                    <td className="px-3 py-3 text-center">
-                      <button
-                        onClick={(e) => { e.stopPropagation(); onReport(entryId, entryName) }}
-                        className="text-xs text-slate-400 hover:text-red-500 border border-slate-200 hover:border-red-300 rounded px-2 py-1 transition-colors whitespace-nowrap"
-                      >
-                        ⚠️ Report
-                      </button>
-                    </td>
-                  )}
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      </div>
-    </section>
-  )
 }
 
 export default function CalendarPageClient({ entries }: CalendarPageClientProps) {
@@ -387,7 +34,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
   const [view, setView] = useState<'table' | 'calendar'>('table')
   const [searchQuery, setSearchQuery] = useState('')
   const [filterMode, setFilterMode] = useState<'all' | 'this_week'>('all')
-  const [doneVersion, setDoneVersion] = useState(0) // used to trigger re-renders on checkbox toggle
+  const [doneVersion, setDoneVersion] = useState(0)
   const searchParams = useSearchParams()
 
   useEffect(() => {
@@ -416,8 +63,6 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
       }
     }
   }, [searchParams, entries])
-
-
 
   function openReportError(entryId: string, entryName: string) {
     setSelectedEntryId(entryId)
@@ -584,49 +229,42 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
     )
   }
 
-  // MCA — Form | Compliance | Due Date | Applicable To | Penalty
   const mcaRows   = mcaEntries.map(e => [makeFormCell(e), e.compliance_title, e.due_date, e.applicable_to || '—', e.penalty || '—'])
   const mcaIds    = mcaEntries.map(e => e.id)
   const mcaNames  = mcaEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
   const mcaDates  = mcaEntries.map(e => e.due_date)
   const mcaRowIds = mcaEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
 
-  // SEBI — Form | Compliance | Regulation | Due Date | Applicable To
   const sebiRows  = sebiEntries.map(e => [makeFormCell(e), e.compliance_title, e.regulation_reference || '—', e.due_date, e.applicable_to || '—'])
   const sebiIds   = sebiEntries.map(e => e.id)
   const sebiNames = sebiEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
   const sebiDates = sebiEntries.map(e => e.due_date)
   const sebiRowIds = sebiEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
 
-  // FEMA — Form | Compliance | Due Date | Applicable To
   const femaRows  = femaEntries.map(e => [makeFormCell(e), e.compliance_title, e.due_date, e.applicable_to || '—'])
   const femaIds   = femaEntries.map(e => e.id)
   const femaNames = femaEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
   const femaDates = femaEntries.map(e => e.due_date)
   const femaRowIds = femaEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
 
-  // RBI — Form | Compliance | Due Date | Applicable To
   const rbiRows   = rbiEntries.map(e => [makeFormCell(e), e.compliance_title, e.due_date, e.applicable_to || '—'])
   const rbiIds    = rbiEntries.map(e => e.id)
   const rbiNames  = rbiEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
   const rbiDates  = rbiEntries.map(e => e.due_date)
   const rbiRowIds = rbiEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
 
-  // Income Tax — Form | Compliance | Due Date | Applicable To | Penalty
   const taxRows   = taxEntries.map(e => [makeFormCell(e), e.compliance_title, e.due_date, e.applicable_to || '—', e.penalty || '—'])
   const taxIds    = taxEntries.map(e => e.id)
   const taxNames  = taxEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
   const taxDates  = taxEntries.map(e => e.due_date)
   const taxRowIds = taxEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
 
-  // GST — Form | Compliance | Due Date | Applicable To | Penalty
   const gstRows   = gstEntries.map(e => [makeFormCell(e), e.compliance_title, e.due_date, e.applicable_to || '—', e.penalty || '—'])
   const gstIds    = gstEntries.map(e => e.id)
   const gstNames  = gstEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
   const gstDates  = gstEntries.map(e => e.due_date)
   const gstRowIds = gstEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
 
-  // Labor Law — Form | Compliance | Due Date | Applicable To | Penalty
   const laborRows   = laborEntries.map(e => [makeFormCell(e), e.compliance_title, e.due_date, e.applicable_to || '—', e.penalty || '—'])
   const laborIds    = laborEntries.map(e => e.id)
   const laborNames  = laborEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
@@ -975,89 +613,11 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
 
       {/* DETAIL PANEL */}
       {selectedEntry && (
-        <div
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setSelectedEntry(null)
-          }}
-          className="fixed inset-0 bg-black/40 z-50 flex items-end sm:items-center justify-center p-4"
-        >
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl max-w-lg w-full p-6 relative">
-            <button
-              onClick={() => setSelectedEntry(null)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-2xl leading-none"
-            >×</button>
-
-            <div className="mb-4">
-              <span className="text-xs font-bold uppercase bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-1 rounded">
-                {selectedEntry.regulator.toUpperCase()}
-              </span>
-              {selectedEntry.created_by?.startsWith('community:') && (
-                <span className="ml-2 text-xs bg-green-100 dark:bg-green-950/40 text-green-700 dark:text-green-400 px-2 py-1 rounded-full">👥 Community</span>
-              )}
-              {!selectedEntry.is_verified && (
-                <span className="ml-2 text-xs bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 px-2 py-1 rounded-full">⏳ Pending Verification</span>
-              )}
-            </div>
-
-            <h2 className="text-xl font-bold text-navy dark:text-white mb-1">{selectedEntry.form_name}</h2>
-            <p className="text-slate-600 dark:text-slate-300 text-sm mb-4">{selectedEntry.compliance_title}</p>
-
-            <div className="grid grid-cols-2 gap-3 text-sm mb-4">
-              <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-3 border border-slate-100 dark:border-slate-700/50">
-                <div className="text-xs text-slate-400 dark:text-slate-400 mb-1">Due Date</div>
-                <div className="font-bold text-navy dark:text-amber-400">{selectedEntry.due_date}</div>
-              </div>
-              <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-3 border border-slate-100 dark:border-slate-700/50">
-                <div className="text-xs text-slate-400 dark:text-slate-400 mb-1">Frequency</div>
-                <div className="font-semibold text-slate-700 dark:text-slate-200 capitalize">
-                  {selectedEntry.frequency.replace(/_/g, ' ')}
-                </div>
-              </div>
-              <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-3 col-span-2 border border-slate-100 dark:border-slate-700/50">
-                <div className="text-xs text-slate-400 dark:text-slate-400 mb-1">Applicable To</div>
-                <div className="text-slate-700 dark:text-slate-200">{selectedEntry.applicable_to}</div>
-              </div>
-              {selectedEntry.penalty && (
-                <div className="bg-red-50 dark:bg-red-950/30 rounded-xl p-3 col-span-2 border border-red-100 dark:border-red-900/50">
-                  <div className="text-xs text-red-500 dark:text-red-400 mb-1">Penalty</div>
-                  <div className="text-red-700 dark:text-red-300 font-semibold">{selectedEntry.penalty}</div>
-                </div>
-              )}
-              {selectedEntry.regulation_reference && (
-                <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-3 col-span-2 border border-slate-100 dark:border-slate-700/50">
-                  <div className="text-xs text-slate-400 dark:text-slate-400 mb-1">Regulation Reference</div>
-                  <div className="text-slate-700">{selectedEntry.regulation_reference}</div>
-                </div>
-              )}
-            </div>
-
-            {selectedEntry.contributor_name && selectedEntry.is_verified && (
-              <div className="text-xs text-green-600 mb-4">
-                ✓ Verified correction by {selectedEntry.contributor_name}
-                {selectedEntry.contributor_profession ? `, ${selectedEntry.contributor_profession}` : ''}
-              </div>
-            )}
-
-            <div className="flex gap-3">
-              <button
-                onClick={() => {
-                  const e = selectedEntry
-                  setSelectedEntry(null)
-                  openReportError(e.id, `${e.form_name} — ${e.compliance_title}`)
-                }}
-                className="flex-1 border border-red-200 text-red-500 hover:bg-red-50 py-2 rounded-lg text-sm font-semibold"
-              >
-                ⚠️ Report Error
-              </button>
-              <button
-                onClick={() => setSelectedEntry(null)}
-                className="flex-1 bg-navy text-white py-2 rounded-lg text-sm font-semibold"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
+        <ComplianceDetailModal
+          selectedEntry={selectedEntry}
+          onClose={() => setSelectedEntry(null)}
+          onReportError={openReportError}
+        />
       )}
     </div>
   )

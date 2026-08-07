@@ -80,6 +80,23 @@ export async function GET(request: Request) {
             ? `Stay compliant! This week has ${weeklyDeadlines.length} key statutory due dates across MCA, GST, SEBI & Income Tax.`
             : `Enjoy a peaceful week! No major corporate or tax compliance due dates are scheduled this week.`
 
+        const sendNow = searchParams.get('sendNow') === 'true'
+
+        // Safeguard: Do NOT automatically send emails to all active subscribers unless explicitly requested via sendNow=true or testEmail
+        if (!sendNow && !testEmail) {
+            return NextResponse.json({
+                success: true,
+                message: 'Automatic Monday email broadcasting is disabled. To send the weekly digest to all active subscribers, use the Admin Panel Newsletter page and click "Send Newsletter", or pass ?sendNow=true.',
+                week: {
+                    start: startDateStr,
+                    end: endDateStr,
+                },
+                deadlinesCount: weeklyDeadlines.length,
+                subject,
+                previewText
+            })
+        }
+
         // Support direct testing to a single administrator email if provided in params
         const targetEmails = testEmail ? [testEmail.trim()] : undefined
 

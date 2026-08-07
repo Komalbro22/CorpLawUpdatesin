@@ -1,19 +1,16 @@
 // src/app/api/cron/update-rbi-rates/route.ts
 import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
+import { validateCronAuth } from '@/lib/cron-auth'
 
 export const maxDuration = 60 // Allow up to 60 seconds on Vercel
 
 export async function GET(req: Request) {
   const startTime = Date.now()
   
-  // 1. Authorize Cron trigger — fail closed if CRON_SECRET is missing
-  const authHeader = req.headers.get('Authorization')
-  const cronSecret = process.env.CRON_SECRET
-
-  if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
-    return NextResponse.json({ error: 'Unauthorized cron signature.' }, { status: 401 })
-  }
+  // 1. Authorize Cron trigger via shared helper (fails closed if CRON_SECRET missing)
+  const authError = validateCronAuth(req)
+  if (authError) return authError
 
   let previousValue = 5.50
   let fetchedValue = 5.50

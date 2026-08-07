@@ -17,13 +17,7 @@
 // - Glossary term pages cache 24h; hub caches 1h
 // - No real-time subscriptions on public pages
 
-import { createClient } from '@supabase/supabase-js'
+import { getSupabaseAnonClient } from '@/lib/supabase-factory'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+export const supabase = getSupabaseAnonClient()
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase public environment variables (NEXT_PUBLIC_SUPABASE_URL and/or NEXT_PUBLIC_SUPABASE_ANON_KEY)');
-}
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);

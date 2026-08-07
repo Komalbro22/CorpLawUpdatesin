@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server'
 import { supabaseDocumentsAdmin } from '@/lib/supabase-documents-server'
 import { supabase } from '@/lib/supabase'
+import { validateCronAuth } from '@/lib/cron-auth'
 
 export async function GET(request: Request) {
-  const authHeader = request.headers.get('authorization')
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  const authError = validateCronAuth(request)
+  if (authError) return authError
+
   try {
     // Ping SECONDARY
     if (!supabaseDocumentsAdmin) throw new Error('Supabase Documents Admin client not initialized')

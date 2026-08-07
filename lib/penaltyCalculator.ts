@@ -176,11 +176,16 @@ export function calculateCompanyFee(params: CompanyFeeParams): CompanyCalculatio
     }
   }
 
-  // Section 446B small company / OPC / startup relief (50% penalty reduction)
+  // Section 446B small company / OPC / startup relief (50% penalty reduction & statutory caps per officer)
   const isSmallCompanyReliefApplied = ['Small', 'OPC'].includes(companyType);
   if (isSmallCompanyReliefApplied) {
     companyPenalty = Math.min(Math.floor(companyPenalty / 2), 200000);
-    officerPenalty = Math.min(Math.floor(officerPenalty / 2), 100000);
+    // Statutory Section 446B caps officer penalty at ₹1,00,000 PER OFFICER in default
+    const rawPerOfficer = (rules.officerBase || 0) + (rules.officerPerDay || 0) * daysDelayed;
+    const cappedPerOfficer = rules.officerMax !== undefined ? Math.min(rawPerOfficer, rules.officerMax) : rawPerOfficer;
+    const halvedPerOfficer = Math.floor(cappedPerOfficer / 2);
+    const perOfficerPenalty = Math.min(halvedPerOfficer, 100000);
+    officerPenalty = perOfficerPenalty * officersCount;
   }
 
   return {
@@ -371,9 +376,11 @@ export function calculateMsmeInterest(params: MsmeInterestParams): MsmeInterestR
     let totalDaysElapsed = 0;
 
     while (currentDate < actualPayObj) {
-      // Advance to end of this calendar month
-      const nextMonthDate = new Date(currentDate);
-      nextMonthDate.setMonth(nextMonthDate.getMonth() + 1);
+      // Advance to end of this calendar month with day-of-month clamping (prevents Jan 31 -> Mar 3 rollover)
+      const targetMonth = (currentDate.getMonth() + 1) % 12;
+      const targetYear = currentDate.getFullYear() + Math.floor((currentDate.getMonth() + 1) / 12);
+      const maxDays = new Date(targetYear, targetMonth + 1, 0).getDate();
+      const nextMonthDate = new Date(targetYear, targetMonth, Math.min(currentDate.getDate(), maxDays));
 
       const periodEnd = nextMonthDate < actualPayObj ? nextMonthDate : actualPayObj;
       const daysInPeriod = getDaysBetween(currentDate, periodEnd);

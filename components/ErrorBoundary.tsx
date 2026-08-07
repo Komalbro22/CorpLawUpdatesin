@@ -2,6 +2,7 @@
 
 import React, { Component, ErrorInfo, ReactNode } from 'react'
 import Link from 'next/link'
+import { logError, getSanitizedErrorMessage } from '@/lib/error-logger'
 
 interface Props {
     children?: ReactNode
@@ -22,7 +23,7 @@ export default class ErrorBoundary extends Component<Props, State> {
     }
 
     public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-        console.error('Uncaught error:', error, errorInfo)
+        logError(error, { component: 'ErrorBoundary', metadata: { componentStack: errorInfo.componentStack } })
     }
 
     public render() {
@@ -36,7 +37,7 @@ export default class ErrorBoundary extends Component<Props, State> {
                     </div>
                     <h2 className="font-heading text-2xl font-bold text-navy mb-2">Something went wrong loading this content</h2>
                     <p className="text-slate-600 mb-8 max-w-md">
-                        {this.state.error?.message || 'An unexpected error occurred while rendering the page.'}
+                        {getSanitizedErrorMessage(this.state.error, 'An unexpected error occurred while rendering the page.')}
                     </p>
                     <div className="flex items-center gap-4">
                         <button

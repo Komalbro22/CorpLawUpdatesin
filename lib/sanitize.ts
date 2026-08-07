@@ -8,7 +8,7 @@ const ALLOWED_TAGS = [
   'thead', 'tbody', 'tr', 'th', 'td',
   'div', 'span', 'blockquote', 'code',
   'pre', 'hr', 's', 'del', 'sup', 'sub',
-  'style', 'section',
+  'section',
 ]
 
 const ALLOWED_ATTR = [
@@ -24,7 +24,8 @@ export function sanitizeHtml(html: string): string {
     return sanitizeHtmlLib(html, {
       allowedTags: ALLOWED_TAGS,
       allowedAttributes: {
-        '*': ['style', 'class', 'id'],
+        // 'style' attribute removed globally — use class-based styling instead
+        '*': ['class', 'id'],
         'a': ['href', 'target', 'rel', 'title'],
         'img': ['src', 'alt', 'title', 'width', 'height'],
         'td': ['style', 'width', 'height', 'border'],
@@ -33,7 +34,7 @@ export function sanitizeHtml(html: string): string {
       },
       allowedSchemes: ['http', 'https', 'mailto'],
       disallowedTagsMode: 'discard',
-      allowVulnerableTags: true,
+      // allowVulnerableTags removed — never allow <script>/<style> server-side
     })
   }
   

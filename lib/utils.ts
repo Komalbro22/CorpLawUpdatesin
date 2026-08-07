@@ -1,4 +1,4 @@
-import { createHash, timingSafeEqual } from 'crypto'
+import { createHash, createHmac, timingSafeEqual } from 'crypto'
 
 export const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.corplawupdates.in'
 
@@ -25,12 +25,9 @@ export function formatDate(dateString: string): string {
 }
 
 export function generateUnsubscribeToken(email: string): string {
-    const adminSalt = process.env.ADMIN_SECRET_SALT
-    if (!adminSalt) {
-        throw new Error('ADMIN_SECRET_SALT is not configured')
-    }
-    return createHash('sha256')
-        .update(email + adminSalt)
+    const adminSalt = process.env.ADMIN_SECRET_SALT || process.env.ADMIN_PASSWORD || 'corplawupdates-unsubscribe-salt-2026'
+    return createHmac('sha256', adminSalt)
+        .update(email.toLowerCase().trim())
         .digest('hex')
 }
 
@@ -46,8 +43,9 @@ export function createAdminSessionToken(): string {
     })
 
     const payloadB64 = Buffer.from(payload).toString('base64')
-    const signature = createHash('sha256')
-        .update(payloadB64 + adminPassword + adminSalt)
+    const secretKey = adminPassword + adminSalt
+    const signature = createHmac('sha256', secretKey)
+        .update(payloadB64)
         .digest('hex')
 
     return `${payloadB64}.${signature}`
@@ -63,8 +61,9 @@ export function extractFirstImage(content: string): string | null {
     if (!content) return null
     const mdMatch = content.match(/!\[.*?\]\((.*?)\)/)
     if (mdMatch && mdMatch[1]) return mdMatch[1]
-    const htmlMatch = content.match(/<img.*?src=["'](.*?)["']/)
-    if (htmlMatch && htmlMatch[1]) return htmlMatch[1]
+    // Use backreference \1 to ensure opening and closing quotes match (prevents partial match on mismatched quotes)
+    const htmlMatch = content.match(/<img[^>]*?src=(["'])(.*?)\1/)
+    if (htmlMatch && htmlMatch[2]) return htmlMatch[2]
     return null
 }
 

@@ -7,7 +7,8 @@ export type FormType = 'AOC-4' | 'MGT-7' | 'DIR-3-KYC' | 'DPT-3' | 'LLP-11' | 'L
 // Zero-fee provision (SPICe+ only, post-26.01.2018): capital ≤ ₹10L → ₹0.
 // Above ₹10L: base ₹2,000 + ₹200 per ₹10,000 or part thereof above ₹10L.
 // ─────────────────────────────────────────────────────────────────────────────
-export function getOpcSmallIncorporationFee(capital: number): number {
+export function getOpcSmallIncorporationFee(capital: number, isSpicePlus = false): number {
+  if (isSpicePlus && capital <= 1000000) return 0;
   if (capital <= 1000000) return 2000;
   return 2000 + Math.ceil((capital - 1000000) / 10000) * 200;
 }
@@ -24,7 +25,8 @@ export function getOpcSmallIncorporationFee(capital: number): number {
 //   Tier 4  above ₹1Cr   : ₹75  per ₹10K
 // Hard cap: total additional fees ≤ ₹2,50,00,000.
 // ─────────────────────────────────────────────────────────────────────────────
-export function getOtherCompanyIncorporationFee(capital: number): number {
+export function getOtherCompanyIncorporationFee(capital: number, isSpicePlus = false): number {
+  if (isSpicePlus && capital <= 1000000) return 0;
   if (capital <= 100000) return 5000;
 
   let additionalFee = 0;

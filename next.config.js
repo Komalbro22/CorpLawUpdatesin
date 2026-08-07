@@ -31,12 +31,13 @@ const nextConfig = {
     formats: ['image/webp', 'image/avif'],
     minimumCacheTTL: 86400,
     dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'none'; script-src 'none'; sandbox",
     unoptimized: true,
   },
   async headers() {
     const isDev = process.env.NODE_ENV !== 'production'
     const scriptSrcEval = isDev ? " 'unsafe-eval'" : ""
-    const cspHeader = `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.cloudflareinsights.com https://www.googletagmanager.com https://va.vercel-scripts.com https://*.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' blob: data: https: http: https://i.ibb.co https://images.unsplash.com https://*.clarity.ms; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' blob: data: https: http: https://i.ibb.co https://images.unsplash.com https://analytics.google.com https://stats.g.doubleclick.net https://www.googletagmanager.com https://static.cloudflareinsights.com https://*.supabase.co wss://*.supabase.co https://vitals.vercel-insights.com https://*.clarity.ms; frame-src 'self'; object-src 'none'; base-uri 'self';`
+    const cspHeader = `default-src 'self'; script-src 'self' 'unsafe-inline'${scriptSrcEval} https://static.cloudflareinsights.com https://www.googletagmanager.com https://va.vercel-scripts.com https://*.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' blob: data: https: http: https://i.ibb.co https://images.unsplash.com https://*.clarity.ms; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' blob: data: https: http: https://i.ibb.co https://images.unsplash.com https://analytics.google.com https://stats.g.doubleclick.net https://www.googletagmanager.com https://static.cloudflareinsights.com https://*.supabase.co wss://*.supabase.co https://vitals.vercel-insights.com https://*.clarity.ms; frame-src 'self'; object-src 'none'; base-uri 'self';`
 
     return [
       {
@@ -65,6 +66,11 @@ const nextConfig = {
           {
             key: 'Content-Security-Policy',
             value: cspHeader,
+          },
+          {
+            // HSTS: enforce HTTPS for 1 year including subdomains
+            key: 'Strict-Transport-Security',
+            value: 'max-age=31536000; includeSubDomains',
           },
         ],
       },
@@ -116,8 +122,9 @@ const nextConfig = {
         permanent: true,
       },
       {
+        // Preserves sub-path: /tools/penalty-calculator/foo → /tools/fee-calculator/foo
         source: '/tools/penalty-calculator/:path*',
-        destination: '/tools/fee-calculator',
+        destination: '/tools/fee-calculator/:path*',
         permanent: true,
       },
       {

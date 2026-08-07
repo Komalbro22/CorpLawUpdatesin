@@ -169,7 +169,8 @@ export async function executeRule(
       normalizedValue = val.toUpperCase().replace(/AM\.?\s*$/, 'A.M.').replace(/PM\.?\s*$/, 'P.M.').replace(/A\.M\.\./g, 'A.M.').replace(/P\.M\.\./g, 'P.M.');
     }
 
-    interpolatedClause = interpolatedClause.replace(new RegExp(`{{${key}}}`, 'g'), normalizedValue);
+    const safeKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    interpolatedClause = interpolatedClause.replace(new RegExp(`{{${safeKey}}}`, 'g'), () => normalizedValue);
   });
 
   // 3b. AI-Enhanced Clause Refinement (Optional - to capture custom nuances from the user prompt)
@@ -219,11 +220,11 @@ export async function executeRule(
 
     if (isMatch) {
       if (placement.action === 'INSERT_AFTER') {
-        lines.splice(i + 1, 0, '\n' + interpolatedClause + '\n');
+        lines.splice(i + 1, 0, interpolatedClause);
         injected = true;
         break;
       } else if (placement.action === 'INSERT_BEFORE') {
-        lines.splice(i, 0, '\n' + interpolatedClause + '\n');
+        lines.splice(i, 0, interpolatedClause);
         injected = true;
         break;
       } else if (placement.action === 'REPLACE') {
@@ -234,7 +235,8 @@ export async function executeRule(
             targetBlock.toLowerCase().trim(),
             (clause.content || '').toLowerCase().trim().slice(0, targetBlock.length)
           );
-          const similarity = 1 - editDistance / Math.max(targetBlock.length, 30);
+          const rawSim = 1 - editDistance / Math.max(targetBlock.length, 30);
+          const similarity = Math.max(0, Math.min(1, rawSim));
           if (similarity < 0.85) {
             // Block appears heavily modified — route to Gemini for smart merge instead
             throw new Error('CUSTOM_MODIFIED_BLOCK_DETECTED');
@@ -244,7 +246,7 @@ export async function executeRule(
         injected = true;
         break;
       } else if (placement.action === 'APPEND') {
-        lines.splice(i + 1, 0, '\n' + interpolatedClause + '\n');
+        lines.splice(i + 1, 0, interpolatedClause);
         injected = true;
         break;
       }

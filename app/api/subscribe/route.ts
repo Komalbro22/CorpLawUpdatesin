@@ -96,43 +96,51 @@ export async function POST(request: NextRequest) {
 
         // Send Welcome Email (Non-fatal)
         try {
-            const { generateWelcomeEmail } = await import('@/lib/email-templates/welcome')
-            const { generateUnsubscribeToken } = await import('@/lib/utils')
+            const resendApiKey = process.env.RESEND_API_KEY
+            if (!resendApiKey) {
+                console.warn('[Subscribe] RESEND_API_KEY is missing. Skipping welcome email.')
+            } else {
+                const { generateWelcomeEmail } = await import('@/lib/email-templates/welcome')
+                const { generateUnsubscribeToken } = await import('@/lib/utils')
 
-            const { data: recentArticles } = await supabaseAdmin
-                .from('updates')
-                .select('title, slug, summary, category, published_at')
-                .not('published_at', 'is', null)
-                .lte('published_at', new Date().toISOString())
-                .order('published_at', { ascending: false })
-                .limit(5)
+                const { data: recentArticles } = await supabaseAdmin
+                    .from('updates')
+                    .select('title, slug, summary, category, published_at')
+                    .not('published_at', 'is', null)
+                    .lte('published_at', new Date().toISOString())
+                    .order('published_at', { ascending: false })
+                    .limit(5)
 
-                        const token = generateUnsubscribeToken(email)
-            const welcomeHtml = generateWelcomeEmail({
-                email,
-                unsubscribeToken: token,
-                recentArticles: recentArticles || [],
-            })
+                const token = generateUnsubscribeToken(email)
+                const welcomeHtml = generateWelcomeEmail({
+                    email,
+                    unsubscribeToken: token,
+                    recentArticles: recentArticles || [],
+                })
 
-            const { Resend } = await import('resend')
-            const resend = new Resend(process.env.RESEND_API_KEY)
+                const { Resend } = await import('resend')
+                const resend = new Resend(resendApiKey)
+                const fromEmail = (process.env.RESEND_FROM_EMAIL || 'updates@mail.corplawupdates.in').trim().replace(/['"]/g, '')
 
-            const { error: emailError } = await resend.emails.send({
-                from: process.env.RESEND_FROM_EMAIL || 'updates@mail.corplawupdates.in',
-                to: email,
-                subject: '🎉 Welcome to CorpLawUpdates.in — Your Free Corporate Law Digest',
-                html: welcomeHtml,
-                headers: {
-                    'List-Unsubscribe': `<https://www.corplawupdates.in/api/unsubscribe?email=${encodeURIComponent(email)}&token=${token}>`,
-                    'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
-                },
-            })
+                const { data: emailRes, error: emailError } = await resend.emails.send({
+                    from: fromEmail,
+                    to: email,
+                    subject: '🎉 Welcome to CorpLawUpdates.in — Your Free Corporate Law Digest',
+                    html: welcomeHtml,
+                    headers: {
+                        'List-Unsubscribe': `<https://www.corplawupdates.in/api/unsubscribe?email=${encodeURIComponent(email)}&token=${token}>`,
+                        'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+                    },
+                })
 
-            if (emailError) {
-                console.error('Welcome email failed:', emailError)
+                if (emailError) {
+                    console.error('[Subscribe] Welcome email delivery error:', emailError)
+                } else {
+                    console.log(`[Subscribe] Welcome email sent successfully to ${email} (ID: ${emailRes?.id})`)
+                }
             }
-        } catch (welcomeErr) {
-            console.error('Welcome email error (non-fatal):', welcomeErr)
+        } catch (welcomeErr: any) {
+            console.error('[Subscribe] Welcome email exception:', welcomeErr.message || welcomeErr)
         }
 
         return NextResponse.json({ 

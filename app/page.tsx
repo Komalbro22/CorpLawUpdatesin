@@ -181,7 +181,7 @@ export default async function HomePage() {
       </section>
 
       {/* Main Landmark Container */}
-      <main id="main-content">
+      <div id="content-section">
         {!hasUpdates && (
           <section className="py-20 text-center px-4">
             <h2 className="text-2xl font-bold text-navy mb-4 font-heading">Updates coming soon</h2>
@@ -426,7 +426,7 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-      </main>
+      </div>
 
     </div>
   )

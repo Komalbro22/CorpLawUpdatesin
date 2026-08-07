@@ -2,8 +2,9 @@ import { MetadataRoute } from 'next'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { mcaForms } from '@/data/mca-forms'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+// Sitemap uses ISR: rebuilt at most once per hour, not on every request.
+// This prevents a full DB scan per sitemap hit. Increase for larger sites.
+export const revalidate = 3600
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const BASE_URL = 'https://www.corplawupdates.in'

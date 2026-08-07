@@ -1,20 +1,14 @@
 import { NextResponse } from 'next/server'
 import { syncViewsAction } from '@/app/actions/syncViews'
+import { validateCronAuth } from '@/lib/cron-auth'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
-    try {
-        const authHeader = request.headers.get('authorization')
-        
-        // Vercel Cron Authentication — Fail Closed
-        if (
-            !process.env.CRON_SECRET || 
-            authHeader !== `Bearer ${process.env.CRON_SECRET}`
-        ) {
-            return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
-        }
+    const authError = validateCronAuth(request)
+    if (authError) return authError
 
+    try {
         // We bypass the admin check inside syncViewsAction for cron jobs
         // By modifying syncViewsAction, or simply mocking the session? 
         // Wait, syncViewsAction uses `await verifyAdminSession()`. If we call it here, it will fail because verifyAdminSession relies on cookies.

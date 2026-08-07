@@ -1,11 +1,18 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-async function hashSHA256(str: string): Promise<string> {
+async function hashHMACSHA256(data: string, secret: string): Promise<string> {
     const encoder = new TextEncoder()
-    const data = encoder.encode(str)
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data)
-    const hashArray = Array.from(new Uint8Array(hashBuffer))
+    const keyData = encoder.encode(secret)
+    const key = await crypto.subtle.importKey(
+        'raw',
+        keyData,
+        { name: 'HMAC', hash: 'SHA-256' },
+        false,
+        ['sign']
+    )
+    const signatureBuffer = await crypto.subtle.sign('HMAC', key, encoder.encode(data))
+    const hashArray = Array.from(new Uint8Array(signatureBuffer))
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
 }
 
@@ -24,6 +31,17 @@ export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl
     const isAdminRoute = pathname.startsWith('/admin') || pathname.startsWith('/api/admin')
     const isLoginPage = pathname === '/admin/login' || pathname === '/api/admin/login'
+
+    // CSRF Check on state-changing requests to admin API routes
+    if (pathname.startsWith('/api/admin') && !isLoginPage && ['POST', 'PUT', 'DELETE', 'PATCH'].includes(request.method.toUpperCase())) {
+        const origin = request.headers.get('origin') || request.headers.get('referer')
+        if (origin) {
+            const host = request.headers.get('host') || 'www.corplawupdates.in'
+            if (!origin.toLowerCase().includes(host.toLowerCase()) && !origin.toLowerCase().includes('localhost')) {
+                return NextResponse.json({ error: 'CSRF Origin check failed' }, { status: 403 })
+            }
+        }
+    }
 
     if (isAdminRoute && !isLoginPage) {
         const session = request.cookies.get('admin_session')
@@ -56,7 +74,7 @@ export async function middleware(request: NextRequest) {
         }
 
         const [payloadB64, signature] = parts
-        const expected = await hashSHA256(payloadB64 + adminPassword + adminSalt)
+        const expected = await hashHMACSHA256(payloadB64, adminPassword + adminSalt)
         
         // Timing-safe comparison to prevent timing attacks in Edge runtime
         if (!timingSafeEqualEdge(signature, expected)) {

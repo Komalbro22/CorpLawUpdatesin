@@ -1,13 +1,3 @@
-import { createClient } from '@supabase/supabase-js'
+import { getSupabaseDocumentsClient } from '@/lib/supabase-factory'
 
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-if (!url || !key) {
-  console.warn('Supabase env vars not set')
-}
-
-export const supabaseDocuments = url && key 
-  ? createClient(url, key)
-  : null
-
+export const supabaseDocuments = getSupabaseDocumentsClient()

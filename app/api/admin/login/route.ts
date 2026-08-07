@@ -1,24 +1,29 @@
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { safeCompare, createAdminSessionToken } from '@/lib/utils'
 import { redis } from '@/lib/redis-cache'
+import { Ratelimit } from '@upstash/ratelimit'
 
 export async function POST(request: NextRequest) {
     try {
         const rawIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
         const clientIp = rawIp.split(',')[0].trim()
         
-        const limitKey = `ratelimit:admin_login:${clientIp}`
+        // Atomic sliding-window rate limit: max 5 attempts per 15 minutes per IP
+        // Uses @upstash/ratelimit (atomic MULTI/EXEC) — no race condition between incr+expire
         if (redis) {
-            const count = await redis.incr(limitKey)
-            if (count === 1) {
-                await redis.expire(limitKey, 900)
-            }
-            if (count > 5) {
-                return NextResponse.json({ error: 'Too many login attempts. Please try again in 15 minutes.' }, { status: 429 })
+            const ratelimit = new Ratelimit({
+                redis,
+                limiter: Ratelimit.slidingWindow(5, '15 m'),
+                prefix: 'ratelimit:admin_login',
+                analytics: false,
+            })
+            const { success, remaining } = await ratelimit.limit(clientIp)
+            if (!success) {
+                return NextResponse.json(
+                    { error: `Too many login attempts. Please try again later. (${remaining} attempts remaining)` },
+                    { status: 429 }
+                )
             }
         }
 
@@ -69,10 +74,9 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Invalid password' }, { status: 401 })
         }
 
+        // On successful login: clear the DB rate limit record
         await supabaseAdmin.from('login_attempts').delete().eq('ip', rateLimitKey)
-        if (redis) {
-            await redis.del(limitKey)
-        }
+        // Note: @upstash/ratelimit sliding window resets automatically; no manual del needed
 
         const response = NextResponse.json({ success: true })
         response.cookies.set('admin_session', createAdminSessionToken(), {
