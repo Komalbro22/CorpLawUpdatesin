@@ -22,6 +22,7 @@ import ViewCounter from '@/components/ViewCounter'
 import ArticleActions from '@/components/ArticleActions'
 import ReadingProgress from '@/components/ReadingProgress'
 import FontSizeToggle from '@/components/FontSizeToggle'
+import ArticleImage from '@/components/ArticleImage'
 
 import { QuickAnswer } from '@/components/QuickAnswer'
 import { AlertCircle, BookOpen, CalendarDays, ChevronDown, Clock3, Eye, FileText, Lightbulb, Sparkles, CheckCircle2 } from 'lucide-react'
@@ -365,6 +366,16 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                     </div>
                     {/* Font size toggle - client island */}
                     <FontSizeToggle />
+                </div>
+
+                {/* Hero Article Image */}
+                <div className="mb-6 w-full aspect-video rounded-2xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-800">
+                    <ArticleImage
+                        src={imageUrl}
+                        alt={update.title}
+                        category={update.category}
+                        priority={true}
+                    />
                 </div>
 
 

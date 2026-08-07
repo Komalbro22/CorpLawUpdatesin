@@ -5,7 +5,8 @@ import { UpdateListItem } from '@/types'
 import { formatDate, calculateReadingTime, extractFirstImage } from '@/lib/utils'
 import CategoryBadge from '@/components/CategoryBadge'
 import GazetteLedgerRail from '@/components/shared/GazetteLedgerRail'
-import { ArrowUpRight, Clock, Newspaper } from 'lucide-react'
+import ArticleImage from '@/components/ArticleImage'
+import { ArrowUpRight, Clock } from 'lucide-react'
 
 const categoryBorderColor: Record<string, string> = {
   MCA: 'border-t-blue-600',
@@ -52,29 +53,13 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
       style={{ '--delay': `${animationDelay}ms`, transform: 'translate3d(0, 0, 0)' } as React.CSSProperties}
       className={`animate-fade-up group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 border-t-[3px] bg-white dark:bg-slate-900 shadow-card ring-1 ring-slate-900/[0.03] dark:ring-white/[0.03] ${borderColor} transition-all duration-200 ease-out will-change-transform focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 motion-safe:hover:-translate-y-1 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-xl`}
     >
-      <div className="relative w-full aspect-video overflow-hidden bg-slate-100 dark:bg-slate-800 flex-shrink-0 flex items-center justify-center">
-        {imageUrl ? (
-          <img
-            src={imageUrl}
-            alt={update.title}
-            loading={priority ? 'eager' : 'lazy'}
-            decoding="async"
-            referrerPolicy="no-referrer"
-            onError={(e) => {
-              // Fallback to og-default image if specific URL fails
-              const target = e.currentTarget
-              if (target.src !== '/images/og-default.png') {
-                target.src = '/images/og-default.png'
-              }
-            }}
-            className="object-cover object-center w-full h-full motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105"
-          />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-navy via-slate-900 to-slate-950 flex flex-col items-center justify-center p-4 text-center">
-            <Newspaper className="w-8 h-8 text-amber-400 mb-2 opacity-80" />
-            <span className="text-xs font-bold text-slate-200 uppercase tracking-widest">{update.category || 'CORPORATE LAW'}</span>
-          </div>
-        )}
+      <div className="relative w-full aspect-video overflow-hidden bg-slate-100 dark:bg-slate-800 flex-shrink-0">
+        <ArticleImage
+          src={imageUrl}
+          alt={update.title}
+          category={update.category}
+          priority={priority}
+        />
       </div>
 
       <div className="p-5 flex flex-col flex-1">
@@ -99,12 +84,12 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
           )}
         </div>
 
-        <h3 className="font-heading text-[1.08rem] font-bold text-navy dark:text-white mb-2 line-clamp-2 group-hover:text-amber-700 dark:group-hover:text-amber-400 transition-colors leading-snug">
+        <h3 className="font-heading text-[1.08rem] font-bold text-navy dark:text-white mb-2 line-clamp-2 group-hover:text-amber-700 dark:group-hover:text-amber-400 transition-colors leading-snug text-balance">
           {update.title}
         </h3>
 
         {showExcerpt && (
-          <p className="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-2 leading-relaxed">
+          <p className="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-2 leading-relaxed text-pretty">
             {update.summary}
           </p>
         )}
