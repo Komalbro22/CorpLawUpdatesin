@@ -12,7 +12,7 @@
  *
  * API reference: https://developer.chrome.com/docs/ai/webmcp/imperative-api
  *
- * Tool inventory (8 tools):
+ * Tool inventory (9 tools):
  *   1. search_legal_updates     — Search MCA/SEBI/RBI/NCLT circulars & updates
  *   2. calculate_llp_late_fee   — LLP Form 8 / Form 11 late fee calculation
  *   3. calculate_roc_late_fee   — Company ROC form late fee + penalty exposure
@@ -21,9 +21,11 @@
  *   6. get_article_summary      — Structured summary for a specific article slug
  *   7. get_rbi_rates            — Current RBI repo rate, SDF, MSF, MPC stance
  *   8. get_roc_deadline         — ROC deadline for a named form
+ *   9. decode_company_cin       — Decode 21-digit Corporate Identification Number (CIN)
  */
 
 import { useEffect } from 'react';
+import { decodeCIN } from '@/lib/cin-decoder';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Type shim — WebMCP is not yet in the standard TypeScript lib
@@ -72,7 +74,7 @@ export default function WebMCPRegistry() {
     if (typeof window === 'undefined') return;
 
     // 2. Guard against non-matching hostnames (e.g. apex domain corplawupdates.in, preview URLs, localhost)
-    if (window.location.hostname !== 'www.corplawupdates.in') return;
+    if (window.location.hostname !== 'www.corplawupdates.in' && window.location.hostname !== 'localhost') return;
 
     const ctx = getModelContext();
     if (!ctx) return; // Browser doesn't support WebMCP — exit silently
@@ -411,9 +413,40 @@ export default function WebMCPRegistry() {
       },
     }, { signal, readOnlyHint: true });
 
-    // Cleanup — AbortController is the correct lifecycle mechanism (there is no unregisterTool)
+    // ── Tool 9: decode_company_cin ───────────────────────────────────────────
+    safeRegister(ctx, {
+      name: 'decode_company_cin',
+      description:
+        'Decode any 21-character Indian Corporate Identification Number (CIN) into 6 official statutory dimensions: ' +
+        'listing status (Listed/Unlisted), 5-digit NIC industry classification, state RoC jurisdiction, incorporation year, ' +
+        'ownership class (PLC/PTC/FLC/GOI/NPL), and RoC registration serial number.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          cin: {
+            type: 'string',
+            description: '21-character Corporate Identification Number (e.g. L21091MH1945PLC004520)',
+          },
+        },
+        required: ['cin'],
+      },
+      execute: async (args) => {
+        const cinStr = String(args.cin ?? '').trim().toUpperCase();
+        const breakdown = decodeCIN(cinStr);
+        if (!breakdown) {
+          return { error: 'Invalid CIN format. Must be a 21-character Indian Corporate Identification Number.' };
+        }
+        return breakdown;
+      },
+    }, { signal, readOnlyHint: true });
+
+    // Cleanup — AbortController is the correct lifecycle mechanism
     return () => {
-      controller.abort();
+      try {
+        controller.abort('WebMCPRegistry unmounted');
+      } catch {
+        // Silently ignore abort signal errors on unmount
+      }
     };
   }, []);
 

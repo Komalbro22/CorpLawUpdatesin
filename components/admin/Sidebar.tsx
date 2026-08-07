@@ -23,6 +23,7 @@ import {
     Cpu,
     Brain,
     Briefcase,
+    Building2,
 } from 'lucide-react'
 
 interface SidebarLink {
@@ -57,8 +58,6 @@ const sections: SidebarSection[] = [
             { href: '/admin/newsletter/history',   icon: ScrollText, label: 'Email History' },
         ],
     },
-
-
     {
         label: 'Analytics',
         links: [
@@ -69,8 +68,9 @@ const sections: SidebarSection[] = [
         ],
     },
     {
-        label: 'Tools',
+        label: 'Tools & Compliance Data',
         links: [
+            { href: '/admin/company-data',         icon: Building2,    label: 'Company Data' },
             { href: '/admin/repo-rate',            icon: Landmark,     label: 'Repo Rate'   },
             { href: '/admin/rates',                icon: Settings,     label: 'Tool Rates & Waiver' },
             { href: '/admin/compliance',           icon: Calendar,     label: 'Compliance Calendar' },

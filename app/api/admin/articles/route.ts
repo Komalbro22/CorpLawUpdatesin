@@ -163,6 +163,7 @@ export async function POST(request: NextRequest) {
         revalidatePath('/', 'layout')
         revalidatePath('/updates', 'layout')
         revalidatePath('/sitemap.xml')
+        revalidatePath('/news-sitemap.xml')
         if (category) {
             revalidatePath(`/category/${category.toLowerCase()}`)
         }

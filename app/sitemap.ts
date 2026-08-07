@@ -1,9 +1,9 @@
 import { MetadataRoute } from 'next'
 import { supabaseAdmin } from '@/lib/supabase-server'
-import { supabaseDocumentsAdmin } from '@/lib/supabase-documents-server'
 import { mcaForms } from '@/data/mca-forms'
 
-export const revalidate = 86400 // 24 hours
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const BASE_URL = 'https://www.corplawupdates.in'
@@ -21,15 +21,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   // Fetch published articles (paginated to handle > 1000 items)
+  // Include 10-minute buffer for local timezone skew
+  const nowWithBuffer = new Date(Date.now() + 10 * 60 * 1000).toISOString()
   const articles: SitemapArticle[] = []
   let articlePage = 0
   const pageSize = 1000
+
   while (true) {
     const { data, error } = await supabaseAdmin
       .from('updates')
       .select('slug, published_at, updated_at, category')
       .not('published_at', 'is', null)
-      .lte('published_at', new Date().toISOString())
+      .lte('published_at', nowWithBuffer)
       .order('published_at', { ascending: false })
       .range(articlePage * pageSize, (articlePage + 1) * pageSize - 1)
 
@@ -96,6 +99,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/documents`, lastModified: latestArticleDate, changeFrequency: 'monthly' as const, priority: 0.7 },
 
     { url: `${BASE_URL}/tools`, lastModified: latestArticleDate, changeFrequency: 'monthly' as const, priority: 0.9 },
+    { url: `${BASE_URL}/tools/cin-decoder`, lastModified: latestArticleDate, changeFrequency: 'daily' as const, priority: 0.95 },
+    { url: `${BASE_URL}/company-search`, lastModified: latestArticleDate, changeFrequency: 'daily' as const, priority: 0.9 },
     { url: `${BASE_URL}/tools/fee-calculator`, lastModified: latestArticleDate, changeFrequency: 'monthly' as const, priority: 0.9 },
     { url: `${BASE_URL}/tools/fee-calculator/companies`, lastModified: latestArticleDate, changeFrequency: 'monthly' as const, priority: 0.9 },
     { url: `${BASE_URL}/tools/fee-calculator/llp`, lastModified: latestArticleDate, changeFrequency: 'monthly' as const, priority: 0.9 },
@@ -122,8 +127,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: 'weekly' as const,
     priority: 0.75,
   }))
-
-  const CONTENT_QUALITY_THRESHOLD = 200
 
   const glossaryPages = (glossaryTerms || []).map(term => ({
     url: `${BASE_URL}/glossary/${term.slug}`,

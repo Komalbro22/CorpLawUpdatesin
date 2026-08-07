@@ -59,3 +59,15 @@ export async function submitArticleToIndexNow(
   ]
   return submitToIndexNow(urls)
 }
+
+export async function submitCompanyToIndexNow(
+  cin: string
+): Promise<boolean> {
+  const urls = [
+    `${BASE_URL}/company/${cin}`,
+    `${BASE_URL}/company-search`,
+    `${BASE_URL}`,
+  ]
+  return submitToIndexNow(urls)
+}
+

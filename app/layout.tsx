@@ -35,7 +35,6 @@ export const metadata: Metadata = {
   },
   description: 'Free Indian corporate law updates covering MCA, SEBI, RBI, CCI, Labour Law, NCLT, IBC and FEMA regulatory developments for legal & compliance professionals.',
 
-
   authors: [{ name: 'CorpLawUpdates.in' }],
   creator: 'CorpLawUpdates.in',
   publisher: 'CorpLawUpdates.in',
@@ -96,13 +95,9 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Anti-flash theme script with explicit React 19 ID attribute in head */}
         <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5461025803834302"
-          crossOrigin="anonymous"
-        />
-        {/* Anti-flash theme script — MUST be first */}
-        <script
+          id="theme-script"
           dangerouslySetInnerHTML={{ __html: themeScript }}
         />
         <link rel="llms" href="/llms.txt" />

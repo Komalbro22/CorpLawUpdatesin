@@ -78,6 +78,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         revalidatePath('/', 'layout')
         revalidatePath('/updates', 'layout')
         revalidatePath('/sitemap.xml')
+        revalidatePath('/news-sitemap.xml')
 
         if (updatedArticle?.category) {
             revalidatePath(`/category/${updatedArticle.category.toLowerCase()}`)
@@ -124,6 +125,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         revalidatePath('/', 'layout')
         revalidatePath('/updates', 'layout')
         revalidatePath('/sitemap.xml')
+        revalidatePath('/news-sitemap.xml')
         if (deletedArticle?.category) {
             revalidatePath(`/category/${deletedArticle.category.toLowerCase()}`)
         }

@@ -2,6 +2,7 @@ import { supabaseAdmin } from '@/lib/supabase-server'
 import { NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export async function GET() {
   const BASE_URL = 'https://www.corplawupdates.in'
@@ -10,12 +11,15 @@ export async function GET() {
   const fortyEightHoursAgo = new Date()
   fortyEightHoursAgo.setHours(fortyEightHoursAgo.getHours() - 48)
   
+  // Add 10-minute buffer for local clock skew
+  const nowWithBuffer = new Date(Date.now() + 10 * 60 * 1000).toISOString()
+
   const { data: articles, error } = await supabaseAdmin
     .from('updates')
     .select('slug, title, published_at')
     .not('published_at', 'is', null)
     .gte('published_at', fortyEightHoursAgo.toISOString())
-    .lte('published_at', new Date().toISOString())
+    .lte('published_at', nowWithBuffer)
     .order('published_at', { ascending: false })
     .limit(1000)
 
@@ -70,8 +74,7 @@ export async function GET() {
   return new NextResponse(xml, {
     headers: {
       'Content-Type': 'application/xml',
-      // Cache for 5 minutes at edge to prevent DB spam while keeping news fresh
-      'Cache-Control': 'public, max-age=300, s-maxage=300, stale-while-revalidate=600',
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
     },
   })
 }
