@@ -1,4 +1,4 @@
-const CACHE_NAME = 'corplaw-cache-v2';
+const CACHE_NAME = 'corplaw-cache-v3';
 const OFFLINE_URL = '/offline.html';
 
 const ASSETS_TO_CACHE = [
@@ -44,6 +44,9 @@ self.addEventListener('fetch', (event) => {
 
   // Ignore non-http/https schemes (e.g. chrome-extension://, moz-extension://)
   if (!url.protocol.startsWith('http')) return;
+
+  // Let browser fetch external third-party origins (ImgBB, Cloudflare, Google Analytics, Extensions) directly
+  if (url.origin !== location.origin) return;
 
   const acceptHeader = event.request.headers.get('accept') || '';
   const isHtmlNavigation = event.request.mode === 'navigate' || acceptHeader.includes('text/html');
