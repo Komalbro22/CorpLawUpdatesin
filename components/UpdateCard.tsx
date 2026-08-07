@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import { UpdateListItem } from '@/types'
 import { formatDate, calculateReadingTime, extractFirstImage } from '@/lib/utils'
