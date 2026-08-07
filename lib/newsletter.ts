@@ -53,15 +53,21 @@ export function buildEmailHtml({ subject, previewText, bodyHtml, unsubscribeUrl 
     </div>
     <div style="padding:0 32px 28px;color:#334155;font-size:15px;line-height:1.7">
       ${sanitizeHtml(bodyHtml, {
-        allowedTags: ['p','br','strong','em','b','i','h1','h2','h3','ul','ol','li','a','table','thead','tbody','tr','th','td','hr','blockquote','code','pre'],
+        allowedTags: ['p','br','strong','em','b','i','u','s','h1','h2','h3','h4','h5','h6','ul','ol','li','a','table','thead','tbody','tr','th','td','hr','blockquote','code','pre','div','span','img'],
         allowedAttributes: {
-          'a': ['href', 'style'],
-          'table': ['style', 'width', 'border'],
-          'td': ['style', 'width'],
-          'th': ['style', 'width'],
-          '*': ['style'],
+          'a': ['href', 'style', 'target', 'class'],
+          'img': ['src', 'alt', 'width', 'height', 'style', 'class'],
+          'table': ['style', 'width', 'border', 'class', 'cellpadding', 'cellspacing'],
+          'td': ['style', 'width', 'class', 'colspan', 'rowspan'],
+          'th': ['style', 'width', 'class', 'colspan', 'rowspan'],
+          '*': ['style', 'class', 'id'],
         },
-        allowedSchemes: ['http', 'https', 'mailto'],
+        allowedStyles: {
+          '*': {
+            '.*': [/^\s*[\s\S]+$/]
+          }
+        },
+        allowedSchemes: ['http', 'https', 'mailto', 'data'],
       })}
     </div>
     <div style="background:#F8FAFC;padding:20px 32px;border-top:1px solid #E2E8F0">
