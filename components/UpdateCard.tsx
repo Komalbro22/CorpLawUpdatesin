@@ -1,8 +1,4 @@
-'use client'
-
-import { useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { UpdateListItem } from '@/types'
 import { formatDate, calculateReadingTime, extractFirstImage } from '@/lib/utils'
 import CategoryBadge from '@/components/CategoryBadge'
@@ -26,9 +22,7 @@ interface UpdateCardProps {
 }
 
 export default function UpdateCard({ update, showExcerpt = true, animationDelay = 0, priority = false }: UpdateCardProps) {
-  const initialImageUrl = update.featured_image_url || extractFirstImage(update.content || '') || '/images/og-default.png'
-  const [imgSrc, setImgSrc] = useState<string>(initialImageUrl)
-  const [hasError, setHasError] = useState<boolean>(false)
+  const imageUrl = update.featured_image_url || extractFirstImage(update.content || '')
 
   const isNew = Boolean(
     update.published_at &&
@@ -57,18 +51,19 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
       className={`animate-fade-up group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 border-t-[3px] bg-white dark:bg-slate-900 shadow-card ring-1 ring-slate-900/[0.03] dark:ring-white/[0.03] ${borderColor} transition-all duration-200 ease-out will-change-transform focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 motion-safe:hover:-translate-y-1 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-xl`}
     >
       <div className="relative w-full aspect-video overflow-hidden bg-slate-100 dark:bg-slate-800 flex-shrink-0 flex items-center justify-center">
-        {!hasError && imgSrc ? (
-          <Image
-            src={imgSrc}
+        {imageUrl ? (
+          <img
+            src={imageUrl}
             alt={update.title}
-            width={473}
-            height={266}
-            priority={priority}
-            unoptimized
+            loading={priority ? 'eager' : 'lazy'}
+            decoding="async"
             referrerPolicy="no-referrer"
-            onError={() => {
-              setHasError(true)
-              setImgSrc('/images/og-default.png')
+            onError={(e) => {
+              // Fallback to og-default image if specific URL fails
+              const target = e.currentTarget
+              if (target.src !== '/images/og-default.png') {
+                target.src = '/images/og-default.png'
+              }
             }}
             className="object-cover object-center w-full h-full motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105"
           />
