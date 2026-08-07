@@ -21,15 +21,14 @@ const REGULATOR_THEMES: Record<string, { bg: string; icon: any; label: string }>
 }
 
 export default function ArticleImage({ src, alt, category, priority = false, className = '' }: ArticleImageProps) {
-  const [hasError, setHasError] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
   const catKey = (category || 'MCA').toUpperCase()
   const theme = REGULATOR_THEMES[catKey] || { bg: 'from-navy via-slate-900 to-slate-950', icon: Newspaper, label: 'Corporate Law Update' }
   const IconComponent = theme.icon
 
-  // If no image URL provided or image failed to load, render sleek branded poster banner
-  if (!src || hasError) {
+  // Only render category poster banner if there is NO image URL at all in database
+  if (!src) {
     return (
       <div className={`w-full h-full bg-gradient-to-br ${theme.bg} flex flex-col items-center justify-center p-6 text-center select-none relative overflow-hidden ${className}`}>
         <div className="absolute inset-0 bg-slate-900/30 backdrop-blur-[1px]" />
@@ -50,9 +49,9 @@ export default function ArticleImage({ src, alt, category, priority = false, cla
 
   return (
     <div className={`relative w-full h-full bg-slate-100 dark:bg-slate-900 overflow-hidden ${className}`}>
-      {/* Subtle loading skeleton background */}
+      {/* Subtle loading skeleton background while image is loading */}
       {isLoading && (
-        <div className="absolute inset-0 bg-slate-200 dark:bg-slate-800 animate-pulse" />
+        <div className="absolute inset-0 bg-slate-200 dark:bg-slate-800 animate-pulse z-10" />
       )}
 
       <img
@@ -62,12 +61,17 @@ export default function ArticleImage({ src, alt, category, priority = false, cla
         decoding="async"
         referrerPolicy="no-referrer"
         onLoad={() => setIsLoading(false)}
-        onError={() => {
+        onError={(e) => {
           setIsLoading(false)
-          setHasError(true)
+          // Soft fallback to og-default image if specific external image fails
+          const target = e.currentTarget
+          if (target && !target.dataset.hasFalledBack) {
+            target.dataset.hasFalledBack = 'true'
+            target.src = '/images/og-default.png'
+          }
         }}
-        className={`w-full h-full object-cover object-center transition-opacity duration-300 ${
-          isLoading ? 'opacity-0' : 'opacity-100'
+        className={`w-full h-full object-cover object-center motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105 ${
+          isLoading ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'
         }`}
       />
     </div>
