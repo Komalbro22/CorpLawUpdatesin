@@ -120,7 +120,8 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
             <li key={heading.id}>
               <button
                 onClick={() => scrollToSection(heading.id)}
-                className={`w-full text-left text-xs px-2.5 py-1.5 rounded-lg transition-all duration-200 leading-snug
+                aria-current={activeId === heading.id ? 'location' : undefined}
+                className={`w-full text-left text-xs px-2.5 py-1.5 rounded-lg transition-all duration-200 leading-snug focus:outline-none focus:ring-2 focus:ring-amber-400
                   ${heading.level === 3 ? 'pl-5' : ''}
                   ${activeId === heading.id
                     ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 font-semibold border-l-2 border-amber-400 pl-[calc(0.625rem-2px)]'
@@ -141,10 +142,12 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
     <div className="xl:hidden my-6 print:hidden">
       <button
         onClick={() => setMobileOpen(prev => !prev)}
+        aria-expanded={mobileOpen}
+        aria-controls="mobile-toc-panel"
         className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400
                    border border-slate-200 dark:border-slate-800 hover:border-amber-300 dark:hover:border-amber-700
                    bg-white dark:bg-slate-900 hover:bg-amber-50 dark:hover:bg-amber-950/20
-                   px-4 py-2.5 min-h-[44px] rounded-lg transition-all duration-200 group w-full sm:w-auto"
+                   px-4 py-2.5 min-h-[44px] rounded-lg transition-all duration-200 group w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-amber-400"
       >
         <List className="w-4 h-4 text-slate-400" aria-hidden />
         <span className="font-medium">
@@ -155,13 +158,14 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
       </button>
 
       {mobileOpen && (
-        <div className="mt-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-4 animate-fade-in">
+        <div id="mobile-toc-panel" className="mt-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-4 animate-fade-in">
           <div className="flex flex-wrap gap-2">
             {headings.map((heading) => (
               <button
                 key={heading.id}
                 onClick={() => scrollToSection(heading.id)}
-                className={`text-sm px-3 py-1.5 rounded-full border transition-all duration-200 text-left min-h-[36px]
+                aria-current={activeId === heading.id ? 'location' : undefined}
+                className={`text-sm px-3 py-1.5 rounded-full border transition-all duration-200 text-left min-h-[36px] focus:outline-none focus:ring-2 focus:ring-amber-400
                   ${heading.level === 3 ? 'text-xs' : ''}
                   ${activeId === heading.id
                     ? 'bg-amber-400 border-amber-400 text-navy font-semibold shadow-sm'
@@ -175,9 +179,9 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
           </div>
           <button
             onClick={() => setMobileOpen(false)}
-            className="mt-4 text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors flex items-center gap-1 min-h-[36px]"
+            className="mt-4 text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors flex items-center gap-1 min-h-[36px] focus:outline-none focus:ring-2 focus:ring-amber-400 rounded-md px-2"
           >
-            <X className="w-3 h-3" /> Close
+            <X className="w-3 h-3" aria-hidden /> Close
           </button>
         </div>
       )}

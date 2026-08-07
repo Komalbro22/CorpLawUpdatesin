@@ -51,11 +51,18 @@ export default function FontSizeToggle() {
     } catch { /* localStorage unavailable — preference not persisted */ }
   }
 
+  const buttonLabels: Record<FontSize, string> = {
+    sm: 'Small font size',
+    md: 'Medium font size',
+    lg: 'Large font size',
+  }
+
   return (
     <div
+      role="group"
       className="inline-flex items-center gap-1 print:hidden"
       title="Adjust article font size"
-      aria-label="Article font size"
+      aria-label="Adjust article font size"
     >
       <span className="text-xs text-slate-400 mr-0.5 hidden sm:inline">Text</span>
       {sizes.map((s) => (
@@ -63,7 +70,8 @@ export default function FontSizeToggle() {
           key={s}
           onClick={() => changeSize(s)}
           aria-pressed={size === s}
-          className={`w-7 h-7 rounded-md text-xs font-semibold transition-all duration-200 border
+          aria-label={buttonLabels[s]}
+          className={`w-7 h-7 rounded-md text-xs font-semibold transition-all duration-200 border focus:outline-none focus:ring-2 focus:ring-amber-400
             ${size === s
               ? 'bg-amber-400 text-navy border-amber-400 shadow-sm shadow-amber-200'
               : 'bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:border-amber-300 hover:text-amber-700 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-slate-800'

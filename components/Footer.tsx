@@ -171,7 +171,7 @@ export default async function Footer() {
                         </Link>
                     </div>
                     
-                    <div className="text-[10px] text-slate-300 italic text-center md:text-right max-w-xs">
+                    <div className="text-xs text-slate-300 italic text-center md:text-right max-w-sm">
                         Information provided is for educational purposes only and does not constitute legal advice.
                     </div>
                 </div>

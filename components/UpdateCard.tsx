@@ -118,7 +118,7 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
             )}
             <div className="flex items-center gap-2 flex-wrap">
               {update.published_at && (
-                <span className="font-medium text-slate-600">{formatDate(update.published_at)}</span>
+                <span className="font-medium text-slate-600 dark:text-slate-400">{formatDate(update.published_at)}</span>
               )}
               {update.effective_date && (
                 <span className="text-[10px] bg-emerald-50 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-400 px-2 py-0.5 rounded-md font-bold whitespace-nowrap border border-emerald-200 dark:border-emerald-900/30">
@@ -129,7 +129,7 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
           </div>
           <div className="flex shrink-0 items-center gap-1.5">
             <span className="flex items-center gap-1 whitespace-nowrap rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-1 text-[11px] font-semibold text-slate-600 dark:text-slate-400">
-              <Clock className="w-3 h-3 text-slate-500" aria-hidden />
+              <Clock className="w-3 h-3 text-slate-500 dark:text-slate-400" aria-hidden />
               {update.reading_time || calculateReadingTime(update.content || update.summary || '')} min
             </span>
             <span className="hidden h-7 w-7 items-center justify-center rounded-md bg-navy dark:bg-slate-800 text-white dark:text-slate-200 transition-colors group-hover:bg-amber-600 dark:group-hover:bg-amber-500 sm:flex">

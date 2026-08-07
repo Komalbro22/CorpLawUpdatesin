@@ -64,6 +64,18 @@ export default function Navbar() {
         return () => document.removeEventListener('mousedown', handleClickOutside)
     }, [])
 
+    /* Prevent background scrolling when mobile menu is open */
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden'
+        } else {
+            document.body.style.overflow = ''
+        }
+        return () => {
+            document.body.style.overflow = ''
+        }
+    }, [isOpen])
+
     /* Close on Escape key */
     useEffect(() => {
         function handleEscape(e: KeyboardEvent) {
