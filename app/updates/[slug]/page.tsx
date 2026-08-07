@@ -368,16 +368,6 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                     <FontSizeToggle />
                 </div>
 
-                {/* Hero Article Image */}
-                <div className="mb-6 w-full aspect-video rounded-2xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-800">
-                    <ArticleImage
-                        src={imageUrl}
-                        alt={update.title}
-                        category={update.category}
-                        priority={true}
-                    />
-                </div>
-
 
 
                 {/* Key change banner */}
