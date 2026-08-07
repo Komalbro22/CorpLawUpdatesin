@@ -30,8 +30,8 @@ const nextConfig = {
     ],
     formats: ['image/webp', 'image/avif'],
     minimumCacheTTL: 86400,
-    dangerouslyAllowSVG: false,
-    unoptimized: process.env.NODE_ENV !== 'production',
+    dangerouslyAllowSVG: true,
+    unoptimized: true,
   },
   async headers() {
     const isDev = process.env.NODE_ENV !== 'production'
@@ -110,7 +110,6 @@ const nextConfig = {
         destination: '/updates',
         permanent: true,
       },
-      // Redirect retired penalty-calculator routes to fee-calculator
       {
         source: '/tools/penalty-calculator',
         destination: '/tools/fee-calculator',
