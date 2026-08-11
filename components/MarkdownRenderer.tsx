@@ -47,12 +47,12 @@ function processInlineStyles(styleObj: any, className: string = ''): { processed
     const processedStyle = { ...styleObj };
     const classes = className ? className.split(' ') : [];
     
-    // 1. Detect background color or gradient
+    // Detect background colors for callout card themes (without deleting raw inline styles)
     const bgVal = styleObj.background || styleObj.backgroundColor;
     if (bgVal && typeof bgVal === 'string') {
         const bgValLower = bgVal.toLowerCase().replace(/\s+/g, '');
         
-        // Blue card detection
+        // Callout card theme detection
         if (
             bgValLower.includes('#eff6ff') || 
             bgValLower.includes('#f0f9ff') ||
@@ -63,31 +63,16 @@ function processInlineStyles(styleObj: any, className: string = ''): { processed
             bgValLower.includes('rgb(191,219,254)')
         ) {
             classes.push('dynamic-card-blue');
-            delete processedStyle.background;
-            delete processedStyle.backgroundColor;
-            delete processedStyle.borderColor;
-            delete processedStyle.borderLeft;
         }
-        // Green card detection
         else if (
             bgValLower.includes('#f0fdf4') || 
             bgValLower.includes('#dcfce7') ||
             bgValLower.includes('#bbf7d0') || 
-            bgValLower.includes('#052e16') ||
-            bgValLower.includes('#064e3b') ||
-            bgValLower.includes('#065f46') ||
-            bgValLower.includes('#047857') ||
             bgValLower.includes('rgb(240,253,244)') ||
             bgValLower.includes('rgb(187,247,208)')
         ) {
             classes.push('dynamic-card-green');
-            delete processedStyle.background;
-            delete processedStyle.backgroundColor;
-            delete processedStyle.borderColor;
-            delete processedStyle.borderLeft;
-            delete processedStyle.color;
         }
-        // Yellow/Amber/Orange card detection
         else if (
             bgValLower.includes('#fff7ed') || 
             bgValLower.includes('#fffbeb') || 
@@ -103,12 +88,7 @@ function processInlineStyles(styleObj: any, className: string = ''): { processed
             bgValLower.includes('rgb(255,237,213)')
         ) {
             classes.push('dynamic-card-amber');
-            delete processedStyle.background;
-            delete processedStyle.backgroundColor;
-            delete processedStyle.borderColor;
-            delete processedStyle.borderLeft;
         }
-        // Red/Rose card detection
         else if (
             bgValLower.includes('#fef2f2') || 
             bgValLower.includes('#ffe4e6') ||
@@ -117,12 +97,7 @@ function processInlineStyles(styleObj: any, className: string = ''): { processed
             bgValLower.includes('rgb(254,202,202)')
         ) {
             classes.push('dynamic-card-red');
-            delete processedStyle.background;
-            delete processedStyle.backgroundColor;
-            delete processedStyle.borderColor;
-            delete processedStyle.borderLeft;
         }
-        // Purple/Indigo card detection
         else if (
             bgValLower.includes('#f5f3ff') || 
             bgValLower.includes('#faf8ff') || 
@@ -138,12 +113,7 @@ function processInlineStyles(styleObj: any, className: string = ''): { processed
             bgValLower.includes('rgb(238,242,255)')
         ) {
             classes.push('dynamic-card-purple');
-            delete processedStyle.background;
-            delete processedStyle.backgroundColor;
-            delete processedStyle.borderColor;
-            delete processedStyle.borderLeft;
         }
-        // Pink card detection
         else if (
             bgValLower.includes('#fdf2f8') || 
             bgValLower.includes('#fbcfe8') || 
@@ -151,84 +121,6 @@ function processInlineStyles(styleObj: any, className: string = ''): { processed
             bgValLower.includes('rgb(251,207,232)')
         ) {
             classes.push('dynamic-card-pink');
-            delete processedStyle.background;
-            delete processedStyle.backgroundColor;
-            delete processedStyle.borderColor;
-            delete processedStyle.borderLeft;
-        }
-        // Neutral card detection (pure whites, light grays)
-        else if (
-            bgValLower.includes('#ffffff') || 
-            bgValLower.includes('#f8fafc') || 
-            bgValLower.includes('#f9fafb') || 
-            bgValLower.includes('#f1f5f9') || 
-            bgValLower.includes('#fafafa') ||
-            bgValLower.includes('#e2e8f0') ||
-            bgValLower.includes('rgb(255,255,255)') ||
-            bgValLower.includes('rgb(248,250,252)') ||
-            bgValLower.includes('rgb(249,250,251)') ||
-            bgValLower.includes('rgb(241,245,249)')
-        ) {
-            classes.push('dynamic-card-neutral');
-            delete processedStyle.background;
-            delete processedStyle.backgroundColor;
-            delete processedStyle.borderColor;
-            delete processedStyle.borderLeft;
-        }
-    }
-    
-    // 2. Detect text colors
-    const textVal = styleObj.color;
-    if (textVal && typeof textVal === 'string') {
-        const textValLower = textVal.toLowerCase().replace(/\s+/g, '');
-        
-        if (
-            textValLower.includes('#0f172a') || 
-            textValLower.includes('#1e293b') || 
-            textValLower.includes('#334155') || 
-            textValLower.includes('#4b5563') || 
-            textValLower.includes('#374151') || 
-            textValLower.includes('#455a64') ||
-            textValLower.includes('#000000') ||
-            textValLower.includes('#111827') ||
-            textValLower.includes('#1f2937') ||
-            textValLower.includes('#111') ||
-            textValLower.includes('#222') ||
-            textValLower.includes('#333') ||
-            textValLower.includes('black') ||
-            textValLower.includes('rgb(15,23,42)') ||
-            textValLower.includes('rgb(30,41,59)') ||
-            textValLower.includes('rgb(51,65,85)') ||
-            textValLower.includes('rgb(17,24,39)') ||
-            textValLower.includes('rgb(31,41,55)') ||
-            textValLower.includes('rgb(0,0,0)')
-        ) {
-            classes.push('dynamic-text-dark');
-            delete processedStyle.color;
-        }
-        else if (textValLower.includes('#1e40af') || textValLower.includes('#1e3a8a') || textValLower.includes('#1d4ed8') || textValLower.includes('rgb(30,64,175)')) {
-            classes.push('dynamic-text-blue-heading');
-            delete processedStyle.color;
-        }
-        else if (textValLower.includes('#14532d') || textValLower.includes('#15803d') || textValLower.includes('#166534') || textValLower.includes('rgb(20,83,45)')) {
-            classes.push('dynamic-text-green-heading');
-            delete processedStyle.color;
-        }
-        else if (textValLower.includes('#92400e') || textValLower.includes('#9a3412') || textValLower.includes('#b45309') || textValLower.includes('rgb(146,64,14)')) {
-            classes.push('dynamic-text-yellow-heading');
-            delete processedStyle.color;
-        }
-        else if (textValLower.includes('#991b1b') || textValLower.includes('#b91c1c') || textValLower.includes('#dc2626') || textValLower.includes('rgb(153,27,27)')) {
-            classes.push('dynamic-text-red-heading');
-            delete processedStyle.color;
-        }
-        else if (textValLower.includes('#4c1d95') || textValLower.includes('#312e81') || textValLower.includes('#4338ca') || textValLower.includes('rgb(76,29,149)')) {
-            classes.push('dynamic-text-purple-heading');
-            delete processedStyle.color;
-        }
-        else if (textValLower.includes('#9d174d') || textValLower.includes('#be185d') || textValLower.includes('#db2777') || textValLower.includes('rgb(157,23,77)')) {
-            classes.push('dynamic-text-pink-heading');
-            delete processedStyle.color;
         }
     }
     
