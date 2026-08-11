@@ -9,7 +9,7 @@ const ALLOWED_TAGS = [
   'div', 'span', 'blockquote', 'code', 'pre', 'hr',
   'section', 'article', 'header', 'footer', 'nav', 'aside', 'main',
   'figure', 'figcaption', 'details', 'summary', 'mark', 'small', 'center',
-  'iframe',
+  'iframe', 'style',
   // SVG elements for inline charts, badges, and visual diagrams
   'svg', 'path', 'g', 'rect', 'circle', 'ellipse', 'polyline',
   'polygon', 'line', 'text', 'tspan', 'use', 'defs',
@@ -52,6 +52,18 @@ export function sanitizeHtml(html: string): string {
       },
       allowedSchemes: ['http', 'https', 'mailto', 'data'],
       disallowedTagsMode: 'discard',
+      nonTextTags: ['script', 'textarea', 'option'], // Allow <style> text content
+      allowVulnerableTags: true,
+      transformTags: {
+        'a': (tagName, attribs) => {
+          if (attribs.href) attribs.href = attribs.href.trim();
+          return { tagName, attribs };
+        },
+        'img': (tagName, attribs) => {
+          if (attribs.src) attribs.src = attribs.src.trim();
+          return { tagName, attribs };
+        }
+      }
     })
   }
 
@@ -59,7 +71,7 @@ export function sanitizeHtml(html: string): string {
   return DOMPurify.sanitize(html, {
     ALLOWED_TAGS,
     ALLOWED_ATTR,
-    ADD_TAGS: ['svg', 'path', 'g', 'rect', 'circle', 'polyline', 'polygon', 'line', 'text', 'tspan', 'use', 'defs', 'linearGradient', 'stop', 'clipPath', 'mask', 'foreignObject', 'iframe'],
+    ADD_TAGS: ['style', 'svg', 'path', 'g', 'rect', 'circle', 'polyline', 'polygon', 'line', 'text', 'tspan', 'use', 'defs', 'linearGradient', 'stop', 'clipPath', 'mask', 'foreignObject', 'iframe'],
     ADD_ATTR: ['style', 'class', 'id', 'target', 'rel', 'viewBox', 'fill', 'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'd', 'cx', 'cy', 'r', 'rx', 'ry', 'x', 'y', 'x1', 'y1', 'x2', 'y2', 'points', 'transform', 'xmlns', 'aria-hidden'],
     ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|data):|[^a-z]|[a-z+.-]+(?:[^a-z+.:-]|$))/i,
     FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover'],

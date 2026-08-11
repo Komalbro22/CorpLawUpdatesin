@@ -37,14 +37,14 @@ export const metadata: Metadata = {
 }
 
 const categoryMeta = [
-  { id: 'MCA', label: 'MCA', Icon: Building2, bg: 'from-blue-600 to-blue-700', ring: 'ring-blue-500/20', desc: 'Ministry of Corporate Affairs' },
-  { id: 'SEBI', label: 'SEBI', Icon: TrendingUp, bg: 'from-emerald-600 to-emerald-700', ring: 'ring-emerald-500/20', desc: 'Securities & Exchange Board' },
-  { id: 'RBI', label: 'RBI', Icon: Landmark, bg: 'from-violet-600 to-violet-700', ring: 'ring-violet-500/20', desc: 'Reserve Bank of India' },
-  { id: 'CCI', label: 'CCI', Icon: ShieldCheck, bg: 'from-indigo-600 to-indigo-700', ring: 'ring-indigo-500/20', desc: 'Competition Commission of India' },
-  { id: 'LABOUR', label: 'Labour Law', Icon: Users, bg: 'from-amber-600 to-amber-700', ring: 'ring-amber-500/20', desc: 'Labour Codes, EPF & ESIC' },
-  { id: 'NCLT', label: 'NCLT', Icon: Scale, bg: 'from-orange-600 to-orange-700', ring: 'ring-orange-500/20', desc: 'National Company Law Tribunal' },
-  { id: 'IBC', label: 'IBC', Icon: Gavel, bg: 'from-red-600 to-red-700', ring: 'ring-red-500/20', desc: 'Insolvency & Bankruptcy Code' },
-  { id: 'FEMA', label: 'FEMA', Icon: Globe2, bg: 'from-teal-600 to-teal-700', ring: 'ring-teal-500/20', desc: 'Foreign Exchange Management' },
+  { id: 'MCA', label: 'MCA', Icon: Building2, bg: 'bg-blue-700', ring: 'ring-blue-500/20', desc: 'Ministry of Corporate Affairs' },
+  { id: 'SEBI', label: 'SEBI', Icon: TrendingUp, bg: 'bg-emerald-700', ring: 'ring-emerald-500/20', desc: 'Securities & Exchange Board' },
+  { id: 'RBI', label: 'RBI', Icon: Landmark, bg: 'bg-violet-700', ring: 'ring-violet-500/20', desc: 'Reserve Bank of India' },
+  { id: 'CCI', label: 'CCI', Icon: ShieldCheck, bg: 'bg-indigo-700', ring: 'ring-indigo-500/20', desc: 'Competition Commission of India' },
+  { id: 'LABOUR', label: 'Labour Law', Icon: Users, bg: 'bg-amber-700', ring: 'ring-amber-500/20', desc: 'Labour Codes, EPF & ESIC' },
+  { id: 'NCLT', label: 'NCLT', Icon: Scale, bg: 'bg-orange-700', ring: 'ring-orange-500/20', desc: 'National Company Law Tribunal' },
+  { id: 'IBC', label: 'IBC', Icon: Gavel, bg: 'bg-red-700', ring: 'ring-red-500/20', desc: 'Insolvency & Bankruptcy Code' },
+  { id: 'FEMA', label: 'FEMA', Icon: Globe2, bg: 'bg-teal-700', ring: 'ring-teal-500/20', desc: 'Foreign Exchange Management' },
 ]
 
 export default async function HomePage() {
@@ -117,7 +117,7 @@ export default async function HomePage() {
   return (
     <div>
       {/* High-Trust Editorial Navy Hero Banner */}
-      <section className="relative w-full overflow-hidden bg-navy text-white py-16 md:py-24 border-b border-slate-800">
+      <section className="relative w-full overflow-hidden bg-navy text-white py-14 md:py-20 border-b border-slate-800">
         <div
           className="absolute -top-[40%] -left-[20%] w-[80%] h-[80%] rounded-full bg-amber-500/10 blur-[120px] pointer-events-none"
           aria-hidden
@@ -131,7 +131,7 @@ export default async function HomePage() {
           aria-hidden
         />
 
-        <div className="relative z-10 mx-auto flex min-h-[50vh] max-w-4xl flex-col items-center justify-center px-4 py-8 text-center sm:px-6 md:py-12 lg:px-8">
+        <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center justify-center px-4 py-8 text-center sm:px-6 md:py-10 lg:px-8">
           <div className="flex flex-col items-center">
             <p className="mb-6 inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-amber-300 backdrop-blur-md">
               MCA • SEBI • RBI • CCI • NCLT • IBC • FEMA • LABOUR LAW
@@ -248,7 +248,7 @@ export default async function HomePage() {
                   key={id}
                   href={`/category/${id.toLowerCase()}`}
                   style={{ '--delay': `${i * 50}ms` } as CSSProperties}
-                  className={`animate-fade-up group flex min-h-[110px] flex-col items-center justify-center gap-2 rounded-xl bg-gradient-to-br ${bg} p-4 text-center text-white shadow-md ${ring} ring-1 transition-all duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 motion-safe:hover:-translate-y-1 hover:shadow-lg`}
+                  className={`animate-fade-up group flex min-h-[110px] flex-col items-center justify-center gap-2 rounded-xl ${bg} p-4 text-center text-white shadow-md ${ring} ring-1 transition-[transform,box-shadow] duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 motion-safe:hover:-translate-y-1 hover:shadow-lg`}
                 >
                   <Icon className="w-6 h-6 opacity-95 motion-safe:transition-transform motion-safe:duration-200 motion-safe:group-hover:scale-110" aria-hidden />
                   <span className="font-bold text-base">{label}</span>

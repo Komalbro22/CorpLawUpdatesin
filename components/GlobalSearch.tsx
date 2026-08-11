@@ -210,7 +210,7 @@ export default function GlobalSearch() {
         }}
         aria-label="Open search"
         aria-haspopup="dialog"
-        className="flex items-center gap-2.5 text-xs font-medium text-slate-500 dark:text-slate-400 bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200/90 dark:hover:bg-slate-700/90 border border-slate-200/90 dark:border-slate-700/90 rounded-xl px-3 py-1.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400"
+        className="flex min-h-[44px] items-center gap-2.5 text-xs font-medium text-slate-500 dark:text-slate-400 bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200/90 dark:hover:bg-slate-700/90 border border-slate-200/90 dark:border-slate-700/90 rounded-xl px-3 py-1.5 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400"
       >
         <svg className="w-3.5 h-3.5 text-slate-400 dark:text-slate-400" fill="none" 
              viewBox="0 0 24 24" 

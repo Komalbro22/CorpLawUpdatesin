@@ -455,7 +455,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return (
-                            <th style={processedStyle} className={`font-heading font-bold ${processedClassName}`} {...props}>
+                            <th style={processedStyle} className={`px-4 py-3 bg-slate-50 dark:bg-slate-800/80 text-left font-heading font-bold text-xs uppercase tracking-wider text-navy dark:text-slate-200 border-b border-slate-200 dark:border-slate-700 ${processedClassName}`} {...props}>
                                 {children}
                             </th>
                         );
@@ -464,16 +464,17 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return (
-                            <td style={processedStyle} className={processedClassName} {...props}>
+                            <td style={processedStyle} className={`px-4 py-3 text-sm text-slate-700 dark:text-slate-300 border-b border-slate-100 dark:border-slate-800/80 align-top ${processedClassName}`} {...props}>
                                 {children}
                             </td>
                         );
                     },
                     a: ({ node, href, children, ...props }: any) => {
-                        const isExternal = href && (href.startsWith('http://') || href.startsWith('https://'));
+                        const cleanHref = typeof href === 'string' ? href.trim() : href;
+                        const isExternal = cleanHref && (cleanHref.startsWith('http://') || cleanHref.startsWith('https://'));
                         return (
                             <a
-                                href={href}
+                                href={cleanHref}
                                 target={isExternal ? '_blank' : undefined}
                                 rel={isExternal ? 'noopener noreferrer' : undefined}
                                 {...props}
@@ -484,7 +485,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                     },
                     img: ({ node, style, src, alt, border, align, hspace, vspace, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
-                        let resolvedSrc = src || '';
+                        let resolvedSrc = typeof src === 'string' ? src.trim() : (src || '');
                         if (resolvedSrc && !resolvedSrc.startsWith('http://') && !resolvedSrc.startsWith('https://') && !resolvedSrc.startsWith('data:')) {
                             if (!resolvedSrc.startsWith('/')) {
                                 resolvedSrc = '/' + resolvedSrc;

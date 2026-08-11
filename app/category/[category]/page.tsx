@@ -151,7 +151,8 @@ export async function generateStaticParams() {
 export async function generateMetadata(
     { params }: { params: Promise<{ category: string }> }
 ): Promise<Metadata> {
-    const cat = (await params).category.toLowerCase()
+    const resolvedParams = await params
+    const cat = resolvedParams.category.toLowerCase()
     const categoryName = cat.toUpperCase()
 
     const { data: latestUpdate } = await supabase
@@ -206,10 +207,13 @@ export default async function CategoryPage({
     params,
     searchParams
 }: {
-    params: { category: string },
-    searchParams?: { [key: string]: string | string[] | undefined }
+    params: Promise<{ category: string }>,
+    searchParams?: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
-    const originalCat = (await params).category
+    const resolvedParams = await params
+    const resolvedSearchParams = searchParams ? await searchParams : {}
+
+    const originalCat = resolvedParams.category
     if (originalCat !== originalCat.toLowerCase()) {
         redirect(`/category/${originalCat.toLowerCase()}`)
     }
@@ -219,8 +223,10 @@ export default async function CategoryPage({
         notFound()
     }
 
-    const page = searchParams?.page && typeof searchParams.page === 'string' ? parseInt(searchParams.page, 10) : 1
-    const currentPage = Math.max(1, page)
+    const rawPage = resolvedSearchParams.page
+    const pageStr = Array.isArray(rawPage) ? rawPage[0] : rawPage
+    const page = pageStr ? parseInt(pageStr, 10) : 1
+    const currentPage = Math.max(1, isNaN(page) ? 1 : page)
     const ITEMS_PER_PAGE = 12
 
     const now = new Date().toISOString()

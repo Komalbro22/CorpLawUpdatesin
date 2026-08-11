@@ -209,7 +209,7 @@ export default function NotificationBell() {
             : 'Get instant alerts for new circulars'
         }
         aria-label="Web Push Notifications"
-        className={`relative flex items-center justify-center p-2 rounded-xl border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400 ${
+        className={`relative flex size-11 items-center justify-center rounded-xl border transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400 ${
           permission === 'denied'
             ? 'bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 border-red-200 dark:border-red-800'
             : isSubscribed

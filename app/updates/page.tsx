@@ -15,8 +15,9 @@ const CURRENT_YEAR = new Date().getFullYear()
 const CURRENT_MONTH = new Date().toLocaleString('en-IN', { month: 'long' })
 
 export async function generateMetadata(
-  { searchParams }: { searchParams: { search?: string, category?: string } }
+  { searchParams }: { searchParams: Promise<{ search?: string, category?: string }> }
 ): Promise<Metadata> {
+  const sParams = await searchParams
   const title = `Latest Corporate Law & Regulatory Updates ${CURRENT_YEAR} — MCA, SEBI, RBI Circulars India`
   const description = `Browse all latest corporate law updates for ${CURRENT_YEAR}: MCA circulars today, SEBI notifications, RBI guidelines, CCI orders, NCLT orders, IBC updates and FEMA regulations. Updated daily for CS, CA & compliance professionals in India.`
   return {
@@ -39,7 +40,7 @@ export async function generateMetadata(
       'CS professional updates India',
     ],
     alternates: { canonical: 'https://www.corplawupdates.in/updates' },
-    robots: searchParams.search || searchParams.category
+    robots: sParams?.search || sParams?.category
       ? { index: false, follow: true }
       : { index: true, follow: true },
     openGraph: {
@@ -60,11 +61,12 @@ export async function generateMetadata(
 export default async function UpdatesPage({
     searchParams,
 }: {
-    searchParams: { search?: string; category?: string; page?: string }
+    searchParams: Promise<{ search?: string; category?: string; page?: string }>
 }) {
-    const search = searchParams?.search || ''
-    const category = searchParams?.category || ''
-    const page = Math.max(1, parseInt(searchParams?.page || '1', 10))
+    const sParams = await searchParams
+    const search = sParams?.search || ''
+    const category = sParams?.category || ''
+    const page = Math.max(1, parseInt(sParams?.page || '1', 10))
     const ITEMS_PER_PAGE = 10
     // Fetch dynamic counts by category using cache
     const getCategoryCounts = unstable_cache(
@@ -76,35 +78,36 @@ export default async function UpdatesPage({
         { revalidate: 60, tags: ['updates'] }
     )
 
-    // Build paginated query using cache
-    const getUpdates = unstable_cache(
-        async (cat: string, q: string, p: number) => {
-            let query = supabase
-                .from('updates')
-                .select(UPDATE_LIST_COLUMNS, { count: 'exact' })
-                .not('published_at', 'is', null)
-                .lte('published_at', new Date().toISOString())
-                .order('published_at', { ascending: false })
+    // Build paginated query using cache dynamically keyed by parameters
+    const getUpdates = (cat: string, q: string, p: number) =>
+        unstable_cache(
+            async () => {
+                let query = supabase
+                    .from('updates')
+                    .select(UPDATE_LIST_COLUMNS, { count: 'exact' })
+                    .not('published_at', 'is', null)
+                    .lte('published_at', new Date().toISOString())
+                    .order('published_at', { ascending: false })
 
-            if (cat && cat !== 'All') {
-                query = query.eq('category', cat)
-            }
-
-            if (q) {
-                const sanitizedSearch = q.replace(/[%_\\()\\.,]/g, '')
-                if (sanitizedSearch.trim()) {
-                    query = query.or(`title.ilike.%${sanitizedSearch}%,summary.ilike.%${sanitizedSearch}%`)
+                if (cat && cat !== 'All') {
+                    query = query.eq('category', cat)
                 }
-            }
 
-            const from = (p - 1) * ITEMS_PER_PAGE
-            const to = from + ITEMS_PER_PAGE - 1
-            const { data, count } = await query.range(from, to)
-            return { data: data || [], count: count || 0 }
-        },
-        ['paginated-updates'],
-        { revalidate: 60, tags: ['updates'] }
-    )
+                if (q) {
+                    const sanitizedSearch = q.replace(/[%_\\()\\.,]/g, '')
+                    if (sanitizedSearch.trim()) {
+                        query = query.or(`title.ilike.%${sanitizedSearch}%,summary.ilike.%${sanitizedSearch}%`)
+                    }
+                }
+
+                const from = (p - 1) * ITEMS_PER_PAGE
+                const to = from + ITEMS_PER_PAGE - 1
+                const { data, count } = await query.range(from, to)
+                return { data: data || [], count: count || 0 }
+            },
+            ['paginated-updates', cat, q, String(p)],
+            { revalidate: 60, tags: ['updates'] }
+        )()
 
     // Fetch top 5 updates using cache
     const getTop5 = unstable_cache(

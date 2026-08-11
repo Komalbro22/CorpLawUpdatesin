@@ -294,17 +294,36 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
     // Find if this article is mapped to any form's filingGuides
     const relatedForm = mcaForms.find(f => f.filingGuides && f.filingGuides.some(g => g.slug.includes(update.slug)))
 
-    if (relatedForm && update.content) {
-        const pTags = update.content.split('</p>')
-        if (pTags.length > 3) {
-            contentPart1 = pTags.slice(0, 3).join('</p>') + '</p>'
-            contentPart2 = pTags.slice(3).join('</p>')
-        } else {
-            const mdParas = update.content.split(/\n\n+/)
-            if (mdParas.length > 3) {
-                contentPart1 = mdParas.slice(0, 3).join('\n\n') + '\n\n'
-                contentPart2 = mdParas.slice(3).join('\n\n')
+    if (update.content) {
+        let fullContent = update.content
+        
+        // Extract embedded <style> blocks so they apply globally across all parts of the article
+        const styleMatches = fullContent.match(/<style[\s\S]*?<\/style>/gi)
+        let extractedStyles = ''
+        if (styleMatches) {
+            extractedStyles = styleMatches.join('\n')
+            fullContent = fullContent.replace(/<style[\s\S]*?<\/style>/gi, '')
+        }
+        
+        if (relatedForm) {
+            // Strip outer wrapper <div class="..."> if present to avoid breaking HTML tree across split parts
+            const cleanContent = fullContent.replace(/^\s*<div\b[^>]*>/i, '').replace(/<\/div>\s*$/i, '')
+            
+            const pTags = cleanContent.split('</p>')
+            if (pTags.length > 3) {
+                contentPart1 = (extractedStyles ? extractedStyles + '\n' : '') + pTags.slice(0, 3).join('</p>') + '</p>'
+                contentPart2 = (extractedStyles ? extractedStyles + '\n' : '') + pTags.slice(3).join('</p>')
+            } else {
+                const mdParas = cleanContent.split(/\n\n+/)
+                if (mdParas.length > 3) {
+                    contentPart1 = (extractedStyles ? extractedStyles + '\n' : '') + mdParas.slice(0, 3).join('\n\n') + '\n\n'
+                    contentPart2 = (extractedStyles ? extractedStyles + '\n' : '') + mdParas.slice(3).join('\n\n')
+                } else {
+                    contentPart1 = (extractedStyles ? extractedStyles + '\n' : '') + cleanContent
+                }
             }
+        } else {
+            contentPart1 = (extractedStyles ? extractedStyles + '\n' : '') + fullContent
         }
     }
 
