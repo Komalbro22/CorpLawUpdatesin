@@ -780,102 +780,50 @@ h2, h3, h4 {
 }
 .badge-pulse { animation: badge-pulse 2s ease-in-out infinite; }
 
-/* Count-up fade */
-@keyframes count-up-fade {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0);   }
-}
-.animate-count-up { animation: count-up-fade 0.5s ease-out both; }
-
-/* Slide-in from left */
-@keyframes slide-in-left {
-  from { opacity: 0; transform: translateX(-16px); }
-  to   { opacity: 1; transform: translateX(0);      }
-}
-.animate-slide-in-left {
-  animation: slide-in-left 0.3s cubic-bezier(0.22, 0.68, 0, 1.2) both;
-  animation-delay: var(--delay, 0ms);
-}
-
-/* Toasts */
-@keyframes slide-in-right {
-  from { opacity: 0; transform: translateX(12px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-.animate-slide-in-right {
-  animation: slide-in-right 0.3s ease-out both;
-}
-
-/* Reading progress glow tip */
-@keyframes progress-glow {
-  0%,100% { box-shadow: 2px 0 12px 2px rgba(245,158,11,0.7); }
-  50%      { box-shadow: 2px 0 20px 4px rgba(245,158,11,0.9); }
-}
-.progress-tip { animation: progress-glow 1.5s ease-in-out infinite; }
-
-/* Reduced motion overrides */
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .admin-main-fade,
-  .content-fade-in,
-  .animate-fade-up,
-  .animate-fade-in,
-  .animate-orb-1,
-  .animate-orb-2,
-  .badge-pulse,
-  .animate-count-up,
-  .animate-slide-in-left,
-  .animate-slide-in-right,
-  .progress-tip { animation: none !important; }
-  .skeleton-shimmer::after { animation: none; }
-}
-
 /* ============================================================
-   ARTICLE CONTENT - READING EXPERIENCE
+   ARTICLE CONTENT - READING EXPERIENCE & DYNAMIC FONT SIZING
    ============================================================ */
-.article-content {
-  font-size: var(--article-font-size, 17px);
-  line-height: var(--article-line-height, 1.82);
-  color: #1e293b;
-}
 
 /* Article font size variants (toggled via FontSizeToggle) */
-.article-font-sm .article-content { --article-font-size: 15px; --article-line-height: 1.72; }
-.article-font-md .article-content { --article-font-size: 18px; --article-line-height: 1.82; }
-.article-font-lg .article-content { --article-font-size: 21px; --article-line-height: 1.88; }
+.article-font-sm .article-content { --article-font-size: 14.5px; --article-line-height: 1.68; }
+.article-font-md .article-content { --article-font-size: 17.5px; --article-line-height: 1.82; }
+.article-font-lg .article-content { --article-font-size: 21.5px; --article-line-height: 1.92; }
 
-/* Article headings - gold accent borders */
-.article-content h2 {
-  font-family: var(--font-lora), Georgia, serif;
-  font-size: 1.45em;
-  font-weight: 700;
-  color: #0F172A;
-  border-left: 3px solid #F59E0B;
-  padding-left: 0.75em;
-  margin-top: 2.2em;
-  margin-bottom: 0.8em;
-}
-
-.article-content h3 {
-  font-family: var(--font-lora), Georgia, serif;
-  font-size: 1.2em;
-  font-weight: 600;
+.article-content {
+  font-size: var(--article-font-size, 17.5px) !important;
+  line-height: var(--article-line-height, 1.82) !important;
   color: #1e293b;
-  padding-left: 0.5em;
-  border-left: 2px solid #e2e8f0;
-  margin-top: 1.8em;
-  margin-bottom: 0.6em;
-  transition: border-color 0.2s;
 }
 
-.article-content h3:hover {
-  border-left-color: #F59E0B;
+/* Enforce font size scaling on all text children inside article-content */
+.article-content p,
+.article-content li,
+.article-content td,
+.article-content th,
+.article-content blockquote,
+.article-content span:not([class*="badge"]):not([class*="btn"]):not([class*="icon"]),
+.article-content div.ps-detail,
+.article-content div.example-calc,
+.article-content div.faq-a,
+.article-content div.timeline-label {
+  font-size: var(--article-font-size, 17.5px) !important;
+  line-height: var(--article-line-height, 1.82) !important;
 }
 
-/* Article paragraph spacing */
-.article-content p {
-  margin-bottom: 1.25em;
-}
+/* Headings scale proportionally with article font size */
+.article-font-sm .article-content h1 { font-size: 1.75rem !important; }
+.article-font-sm .article-content h2 { font-size: 1.35rem !important; }
+.article-font-sm .article-content h3 { font-size: 1.15rem !important; }
+
+.article-font-md .article-content h1 { font-size: 2.2rem !important; }
+.article-font-md .article-content h2 { font-size: 1.65rem !important; }
+.article-font-md .article-content h3 { font-size: 1.3rem !important; }
+
+.article-font-lg .article-content h1 { font-size: 2.65rem !important; }
+.article-font-lg .article-content h2 { font-size: 2.05rem !important; }
+.article-font-lg .article-content h3 { font-size: 1.55rem !important; }
+
+
 
 /* Article links */
 .article-content a {
