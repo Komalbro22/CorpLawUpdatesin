@@ -3,12 +3,12 @@ import { supabaseAdmin } from '@/lib/supabase-server'
 
 interface LayoutProps {
   children: React.ReactNode
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export async function generateMetadata({ params }: LayoutProps): Promise<Metadata> {
-  // Extract slug - handle Next.js 13/14 App Router param types
-  const slug = params?.slug
+  const resolvedParams = await params
+  const slug = resolvedParams?.slug
 
   if (!slug) {
     return {

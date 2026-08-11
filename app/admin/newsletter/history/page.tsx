@@ -4,14 +4,17 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { BarChart3, Users, Mail, MousePointerClick, RefreshCw, Eye, Trash2, Calendar, Clock } from 'lucide-react'
 import { useToast } from '@/components/Toast'
 
-export default function HistoryDashboard({ searchParams }: { searchParams: { page?: string } }) {
+export default function HistoryDashboard() {
+    const searchParams = useSearchParams()
     const { showToast } = useToast()
-    const page = parseInt(searchParams.page || '1')
+    const pageStr = searchParams?.get('page')
+    const page = pageStr ? parseInt(pageStr, 10) : 1
     const limit = 10
     
     const [data, setData] = useState<any>(null)
