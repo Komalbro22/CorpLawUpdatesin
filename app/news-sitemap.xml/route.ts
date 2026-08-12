@@ -10,16 +10,12 @@ export async function GET() {
   // Google News requires articles published strictly within the last 48 hours
   const fortyEightHoursAgo = new Date()
   fortyEightHoursAgo.setHours(fortyEightHoursAgo.getHours() - 48)
-  
-  // Add 10-minute buffer for local clock skew
-  const nowWithBuffer = new Date(Date.now() + 10 * 60 * 1000).toISOString()
 
   const { data: articles, error } = await supabaseAdmin
     .from('updates')
     .select('slug, title, published_at')
     .not('published_at', 'is', null)
     .gte('published_at', fortyEightHoursAgo.toISOString())
-    .lte('published_at', nowWithBuffer)
     .order('published_at', { ascending: false })
     .limit(1000)
 

@@ -2,9 +2,9 @@ import { MetadataRoute } from 'next'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { mcaForms } from '@/data/mca-forms'
 
-// Sitemap uses ISR: rebuilt at most once per hour, not on every request.
-// This prevents a full DB scan per sitemap hit. Increase for larger sites.
-export const revalidate = 3600
+// Dynamic generation so new articles immediately reflect in sitemap without static ISR delays
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const BASE_URL = 'https://www.corplawupdates.in'
@@ -16,14 +16,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     category: string | null
   }
 
-  interface SitemapGlossaryTerm {
-    slug: string
-    created_at: string
-  }
-
   // Fetch published articles (paginated to handle > 1000 items)
-  // Include 10-minute buffer for local timezone skew
-  const nowWithBuffer = new Date(Date.now() + 10 * 60 * 1000).toISOString()
   const articles: SitemapArticle[] = []
   let articlePage = 0
   const pageSize = 1000
@@ -33,7 +26,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .from('updates')
       .select('slug, published_at, updated_at, category')
       .not('published_at', 'is', null)
-      .lte('published_at', nowWithBuffer)
       .order('published_at', { ascending: false })
       .range(articlePage * pageSize, (articlePage + 1) * pageSize - 1)
 
@@ -50,22 +42,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .eq('is_active', true)
     .order('updated_at', { ascending: false })
     .limit(1)
-
-  // Fetch glossary terms (paginated to handle > 1000 items)
-  const glossaryTerms: SitemapGlossaryTerm[] = []
-  let glossaryPage = 0
-  while (true) {
-    const { data, error } = await supabaseAdmin
-      .from('glossary')
-      .select('slug, created_at')
-      .eq('is_verified', true)
-      .range(glossaryPage * pageSize, (glossaryPage + 1) * pageSize - 1)
-
-    if (error || !data || data.length === 0) break
-    glossaryTerms.push(...(data as SitemapGlossaryTerm[]))
-    if (data.length < pageSize) break
-    glossaryPage++
-  }
 
   const latestCalendarDate = compliance_entries?.[0]?.updated_at 
     ? new Date(compliance_entries[0].updated_at)
@@ -129,13 +105,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.75,
   }))
 
-  const glossaryPages = (glossaryTerms || []).map(term => ({
-    url: `${BASE_URL}/glossary/${term.slug}`,
-    lastModified: new Date(term.created_at),
-    changeFrequency: 'yearly' as const,
-    priority: 0.4,
-  }))
-
   // Fetch active document templates for sitemap SEO indexing
   let docTemplates: any[] = []
   if (supabaseAdmin) {
@@ -160,5 +129,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }))
 
-  return [...staticPages, ...categoryPages, ...articlePages, ...glossaryPages, ...documentPages, ...companyFormPages]
+  return [...staticPages, ...categoryPages, ...articlePages, ...documentPages, ...companyFormPages]
 }
+
