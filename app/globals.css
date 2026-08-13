@@ -823,8 +823,6 @@ h2, h3, h4 {
 .article-font-lg .article-content h2 { font-size: 2.05rem !important; }
 .article-font-lg .article-content h3 { font-size: 1.55rem !important; }
 
-
-
 /* Article links */
 .article-content a {
   color: #d97706;
@@ -887,19 +885,45 @@ h2, h3, h4 {
 }
 
 .article-content table th {
-  color: #1e293b; /* Enforce high contrast text (#1e293b = slate-800) for headers in light mode */
+  color: #0f172a !important;
+  font-weight: 700;
 }
 
-/* Allow custom flex/grid containers in articles to scroll horizontally on mobile */
-.article-content div[style*="display: flex"],
-.article-content div[style*="display:flex"],
-.article-content div[style*="display: grid"],
-.article-content div[style*="display:grid"],
-.article-content .flex,
-.article-content .grid {
-  max-width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+.article-content table th p,
+.article-content table th span,
+.article-content table th strong,
+.article-content table th b {
+  color: #0f172a !important;
+}
+
+/* Fix inline yellow highlights / mark tags in light mode */
+.article-content mark,
+.article-content [style*="background:#fef08a"],
+.article-content [style*="background:#FEF08A"],
+.article-content [style*="background:#fef3c7"],
+.article-content [style*="background:#FEF3C7"],
+.article-content [style*="background:#fff3cd"],
+.article-content [style*="background:#FFF3CD"],
+.article-content [style*="background:yellow"],
+.article-content [style*="background: yellow"],
+.article-content [style*="background-color:yellow"],
+.article-content [style*="background-color: yellow"],
+.article-content [style*="background-color:#fef08a"],
+.article-content [style*="background-color:#fef3c7"] {
+  color: #78350f !important;
+  font-weight: 700;
+}
+
+.article-content mark *,
+.article-content [style*="background:#fef08a"] *,
+.article-content [style*="background:#FEF08A"] *,
+.article-content [style*="background:#fef3c7"] *,
+.article-content [style*="background:#FEF3C7"] *,
+.article-content [style*="background:#fff3cd"] *,
+.article-content [style*="background:#FFF3CD"] *,
+.article-content [style*="background:yellow"] *,
+.article-content [style*="background: yellow"] * {
+  color: #78350f !important;
 }
 
 /* ============================================================
@@ -1162,6 +1186,47 @@ h2, h3, h4 {
   .flex, .grid { display: block !important; }
 }
 
+@keyframes float-subtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+.animate-float-subtle {
+  animation: float-subtle 4s ease-in-out infinite;
+}
+
+/* 4. Glowing dot layout indicator classes */
+.glow-dot-emerald {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.glow-dot-emerald::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  background-color: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #10b981, 0 0 12px #10b981;
+  animation: pulse-subtle 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.glow-dot-amber {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.glow-dot-amber::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  background-color: #f59e0b;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #f59e0b, 0 0 12px #f59e0b;
+  animation: pulse-subtle 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 /* ============================================================
    PREMIUM QUALITY OF LIFE (QoL) UX ENHANCEMENTS
    ============================================================ */
@@ -1285,7 +1350,6 @@ details[open] summary ~ * {
   animation: pulse-subtle 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-
 /* ============================================================
    RESPONSIVE MOBILE OVERRIDES FOR DYNAMIC HTML (GRIDS & TABLES)
    ============================================================ */
@@ -1301,22 +1365,92 @@ details[open] summary ~ * {
     gap: 16px !important;
   }
 
-  /* 2. Enforce readable min-width on dynamic tables to prevent text squishing and enable scroll */
-  .article-content table {
-    min-width: 650px !important;
+  /* 2. Key-Value Metadata Tables (.article-details): Transform into clean stacked card blocks on small screens */
+  .article-content .article-details,
+  .article-content table.article-details {
+    display: block !important;
     width: 100% !important;
-    display: table !important; /* Ensure it remains a table */
+    min-width: 0 !important;
+    border-radius: 0.75rem !important;
+    overflow: hidden !important;
+    border: 1px solid #e2e8f0 !important;
+  }
+  .dark .article-content .article-details,
+  .dark .article-content table.article-details {
+    border-color: #1e293b !important;
+  }
+  .article-content .article-details tbody,
+  .article-content table.article-details tbody {
+    display: block !important;
+    width: 100% !important;
+  }
+  .article-content .article-details tr,
+  .article-content table.article-details tr {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 0.85rem 1rem !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    gap: 0.25rem !important;
+    background-color: #ffffff !important;
+  }
+  .article-content .article-details tr:nth-child(odd),
+  .article-content table.article-details tr:nth-child(odd) {
+    background-color: #f8fafc !important;
+  }
+  .dark .article-content .article-details tr,
+  .dark .article-content table.article-details tr {
+    border-bottom-color: #1e293b !important;
+    background-color: #0e1626 !important;
+  }
+  .dark .article-content .article-details tr:nth-child(odd),
+  .dark .article-content table.article-details tr:nth-child(odd) {
+    background-color: rgba(15, 23, 42, 0.6) !important;
+  }
+  .article-content .article-details td,
+  .article-content table.article-details td {
+    display: block !important;
+    width: 100% !important;
+    padding: 0.15rem 0 !important;
+    border-bottom: none !important;
+    box-sizing: border-box !important;
+    line-height: 1.55 !important;
+    word-break: break-word !important;
+  }
+  .article-content .article-details td:first-child,
+  .article-content table.article-details td:first-child {
+    width: 100% !important;
+    min-width: 0 !important;
+    font-size: 0.725rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.06em !important;
+    color: #64748b !important;
+    background-color: transparent !important;
+  }
+  .dark .article-content .article-details td:first-child,
+  .dark .article-content table.article-details td:first-child {
+    color: #94a3b8 !important;
+    background-color: transparent !important;
+  }
+
+  /* 3. Enforce readable min-width on standard data tables so columns never squish */
+  .article-content table:not(.article-details),
+  .article-content .data-table,
+  .article-content .comparison-table,
+  .article-content .late-fee-table {
+    min-width: 580px !important;
+    width: 100% !important;
+    display: table !important;
   }
 
   /* Ensure smooth inertial scrolling on mobile devices */
   .article-content div.overflow-x-auto {
     -webkit-overflow-scrolling: touch;
     width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 }
-
-
-
 
 /* ============================================================
    PREMIUM VIBRANT LIGHT DESIGN SYSTEM
@@ -2031,4 +2165,309 @@ a.text-gold, .text-gold a {
 }
 
 
+/* ================================================================
+   ADMIN PANEL QoL IMPROVEMENTS — EXTENDED DESIGN SYSTEM
+   ================================================================ */
+
+/* ── Collapsible Sidebar ──────────────────────────────────────── */
+.admin-sidebar-collapsible {
+  transition: width 0.28s cubic-bezier(0.22, 0.68, 0, 1.2);
+  will-change: width;
+  overflow: visible;
+}
+
+/* Tooltip for collapsed sidebar icon links */
+.admin-nav-tooltip {
+  position: relative;
+}
+.admin-nav-tooltip .admin-tooltip-label {
+  position: absolute;
+  left: calc(100% + 14px);
+  top: 50%;
+  transform: translateY(-50%) translateX(-4px);
+  background: #1e293b;
+  color: #f1f5f9;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 200;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.admin-nav-tooltip .admin-tooltip-label::before {
+  content: '';
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 5px solid transparent;
+  border-right-color: #1e293b;
+}
+.admin-nav-tooltip:hover .admin-tooltip-label {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* Sidebar collapse toggle button */
+.admin-collapse-btn {
+  position: absolute;
+  top: 68px;
+  right: -12px;
+  width: 24px;
+  height: 24px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+  z-index: 20;
+}
+.admin-collapse-btn:hover {
+  background: #fff7ed;
+  border-color: #fdba74;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+}
+
+/* ── Sticky Topbar Enhancement ────────────────────────────────── */
+.admin-topbar-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  transition: box-shadow 0.2s ease;
+}
+.admin-topbar-sticky.scrolled {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06), 0 1px 0 rgba(0, 0, 0, 0.04);
+}
+
+/* ── Progress Bars ────────────────────────────────────────────── */
+.admin-progress-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.admin-progress-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 1s cubic-bezier(0.22, 0.68, 0, 1.2);
+}
+.admin-progress-fill.amber   { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+.admin-progress-fill.violet  { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
+.admin-progress-fill.emerald { background: linear-gradient(90deg, #10b981, #34d399); }
+.admin-progress-fill.blue    { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+
+/* ── Trend Indicator ──────────────────────────────────────────── */
+.admin-trend-up {
+  color: #059669;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.admin-trend-neutral {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* ── Skeleton Loader ──────────────────────────────────────────── */
+.admin-skeleton {
+  border-radius: 8px;
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: admin-shimmer 1.8s ease-in-out infinite;
+}
+
+/* ── Toast Notifications ──────────────────────────────────────── */
+.admin-toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+.admin-toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  min-width: 280px;
+  max-width: 360px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: admin-toast-in 0.3s cubic-bezier(0.22, 0.68, 0, 1.2) both;
+}
+.admin-toast.exiting {
+  animation: admin-toast-out 0.25s ease-in forwards;
+}
+.admin-toast.success {
+  background: rgba(236, 253, 245, 0.95);
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+}
+.admin-toast.error {
+  background: rgba(254, 242, 242, 0.95);
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+}
+.admin-toast.info {
+  background: rgba(239, 246, 255, 0.95);
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+}
+@keyframes admin-toast-in {
+  from { opacity: 0; transform: translateX(24px) scale(0.95); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes admin-toast-out {
+  from { opacity: 1; transform: translateX(0) scale(1); }
+  to   { opacity: 0; transform: translateX(24px) scale(0.95); }
+}
+
+/* ── Keyboard Shortcut Badge ─────────────────────────────────── */
+.admin-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1px 5px;
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+  font-family: ui-monospace, monospace;
+  line-height: 1.4;
+}
+
+/* ── Enhanced Table Zebra Stripes ─────────────────────────────── */
+.admin-table tbody tr:nth-child(even) {
+  background: rgba(248, 250, 252, 0.6);
+}
+
+/* ── Improved Sidebar Section Label ──────────────────────────── */
+.admin-section-label-active   { color: #d97706; }
+.admin-section-label-inactive { color: #94a3b8; }
+
+/* ── Stat card top bar always-on ──────────────────────────────── */
+.admin-stat-vibrant-amber::before,
+.admin-stat-vibrant-violet::before,
+.admin-stat-vibrant-emerald::before,
+.admin-stat-vibrant-blue::before {
+  opacity: 0.35;
+}
+.admin-stat-vibrant-amber:hover::before,
+.admin-stat-vibrant-violet:hover::before,
+.admin-stat-vibrant-emerald:hover::before,
+.admin-stat-vibrant-blue:hover::before {
+  opacity: 1;
+}
+
+/* ── Empty State ─────────────────────────────────────────────── */
+.admin-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  text-align: center;
+  color: #94a3b8;
+}
+.admin-empty-icon {
+  width: 48px;
+  height: 48px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+  color: #cbd5e1;
+}
+
+/* ── Published Badge Pulse Dot ───────────────────────────────── */
+@keyframes admin-badge-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.5); opacity: 0.6; }
+}
+.admin-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  display: inline-block;
+  margin-right: 5px;
+  flex-shrink: 0;
+  animation: admin-badge-pulse 2.5s ease-in-out infinite;
+}
+
+/* ── Sidebar Pinned Action ───────────────────────────────────── */
+.admin-pinned-action {
+  background: linear-gradient(135deg, #fff7ed, #fef3c7);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 10px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #b45309;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+.admin-pinned-action:hover {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border-color: rgba(245, 158, 11, 0.4);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
+  transform: translateY(-1px);
+}
+
+/* ── Tool Usage Bar ──────────────────────────────────────────── */
+.admin-tool-bar-track {
+  flex: 1;
+  height: 5px;
+  background: #f1f5f9;
+  border-radius: 99px;
+  overflow: hidden;
+}
+.admin-tool-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #f59e0b, #fb923c);
+  transition: width 0.8s cubic-bezier(0.22, 0.68, 0, 1.2);
+}
+
+/* ── Contextual Action Btn ───────────────────────────────────── */
+.admin-ctx-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
 

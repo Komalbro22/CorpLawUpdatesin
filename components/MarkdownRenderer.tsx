@@ -47,13 +47,57 @@ function processInlineStyles(styleObj: any, className: string = ''): { processed
     const processedStyle = { ...styleObj };
     const classes = className ? className.split(' ') : [];
     
-    // Detect background colors for callout card themes (without deleting raw inline styles)
     const bgVal = styleObj.background || styleObj.backgroundColor;
+    const colorVal = styleObj.color;
+    
     if (bgVal && typeof bgVal === 'string') {
         const bgValLower = bgVal.toLowerCase().replace(/\s+/g, '');
-        
-        // Callout card theme detection
-        if (
+        const isYellowAmberBg = 
+            bgValLower.includes('#fff7ed') || 
+            bgValLower.includes('#fffbeb') || 
+            bgValLower.includes('#fef3c7') ||
+            bgValLower.includes('#fef9c3') ||
+            bgValLower.includes('#fef08a') ||
+            bgValLower.includes('#fff3cd') ||
+            bgValLower.includes('#fed7aa') || 
+            bgValLower.includes('#fffaf5') || 
+            bgValLower.includes('#ffedd5') || 
+            bgValLower.includes('yellow') ||
+            bgValLower.includes('rgb(255,247,237)') ||
+            bgValLower.includes('rgb(255,251,235)') ||
+            bgValLower.includes('rgb(254,243,199)') ||
+            bgValLower.includes('rgb(254,240,138)') ||
+            bgValLower.includes('rgb(254,215,170)');
+
+        const isDarkBg = 
+            bgValLower.includes('#0f172a') || 
+            bgValLower.includes('#0f2342') ||
+            bgValLower.includes('#0b1121') ||
+            bgValLower.includes('#1e293b') ||
+            bgValLower.includes('#1e3a5f') ||
+            bgValLower.includes('#070c18') ||
+            bgValLower.includes('#000000') ||
+            bgValLower.includes('black') ||
+            bgValLower.includes('rgb(15,23,42)') ||
+            bgValLower.includes('rgb(15,35,66)') ||
+            bgValLower.includes('rgb(30,41,59)');
+
+        if (isYellowAmberBg) {
+            classes.push('dynamic-card-amber');
+            if (!colorVal || typeof colorVal !== 'string' || 
+                colorVal.toLowerCase().includes('white') || 
+                colorVal.toLowerCase().includes('#fff') ||
+                colorVal.toLowerCase().includes('#f8fafc') ||
+                colorVal.toLowerCase().includes('#e2e8f0') ||
+                colorVal.toLowerCase().includes('#cbd5e1') ||
+                colorVal.toLowerCase().includes('#94a3b8') ||
+                colorVal.toLowerCase().includes('rgb(255,255,255)')
+            ) {
+                processedStyle.color = '#78350F';
+                processedStyle.fontWeight = '700';
+            }
+        }
+        else if (
             bgValLower.includes('#eff6ff') || 
             bgValLower.includes('#f0f9ff') ||
             bgValLower.includes('#e0f2fe') ||
@@ -72,22 +116,6 @@ function processInlineStyles(styleObj: any, className: string = ''): { processed
             bgValLower.includes('rgb(187,247,208)')
         ) {
             classes.push('dynamic-card-green');
-        }
-        else if (
-            bgValLower.includes('#fff7ed') || 
-            bgValLower.includes('#fffbeb') || 
-            bgValLower.includes('#fef3c7') ||
-            bgValLower.includes('#fef9c3') ||
-            bgValLower.includes('#fed7aa') || 
-            bgValLower.includes('#fffaf5') || 
-            bgValLower.includes('#ffedd5') || 
-            bgValLower.includes('rgb(255,247,237)') ||
-            bgValLower.includes('rgb(255,251,235)') ||
-            bgValLower.includes('rgb(254,243,199)') ||
-            bgValLower.includes('rgb(254,215,170)') ||
-            bgValLower.includes('rgb(255,237,213)')
-        ) {
-            classes.push('dynamic-card-amber');
         }
         else if (
             bgValLower.includes('#fef2f2') || 
@@ -121,6 +149,28 @@ function processInlineStyles(styleObj: any, className: string = ''): { processed
             bgValLower.includes('rgb(251,207,232)')
         ) {
             classes.push('dynamic-card-pink');
+        }
+
+        if (!isDarkBg && colorVal && typeof colorVal === 'string') {
+            const cLower = colorVal.toLowerCase().replace(/\s+/g, '');
+            if (
+                cLower === 'white' || cLower === '#fff' || cLower === '#ffffff' ||
+                cLower === '#f8fafc' || cLower === '#f1f5f9' || cLower === '#e2e8f0' ||
+                cLower === '#cbd5e1' || cLower === '#94a3b8' ||
+                cLower.includes('rgb(255,255,255)') || cLower.includes('rgba(255,255,255')
+            ) {
+                processedStyle.color = '#0F172A';
+            }
+        }
+    } else if (colorVal && typeof colorVal === 'string') {
+        const cLower = colorVal.toLowerCase().replace(/\s+/g, '');
+        if (
+            cLower === 'white' || cLower === '#fff' || cLower === '#ffffff' ||
+            cLower === '#f8fafc' || cLower === '#f1f5f9' || cLower === '#e2e8f0' ||
+            cLower === '#cbd5e1' || cLower === '#94a3b8' ||
+            cLower.includes('rgb(255,255,255)') || cLower.includes('rgba(255,255,255')
+        ) {
+            processedStyle.color = '#0F172A';
         }
     }
     
@@ -171,7 +221,18 @@ export default function MarkdownRenderer({ content }: { content: string }) {
             })
         })
 
+        // Wrap any unwrapped table (e.g. raw HTML tables) in a scrollable overflow container
+        const allTables = ref.current.querySelectorAll('table')
+        allTables.forEach((table) => {
+            if (!table.closest('.overflow-x-auto')) {
+                const wrapper = document.createElement('div')
+                wrapper.className = 'w-full overflow-x-auto my-6 border border-slate-200/80 dark:border-slate-800 rounded-xl shadow-sm scrollbar-thin'
+                table.parentNode?.insertBefore(wrapper, table)
+                wrapper.appendChild(table)
+            }
+        })
     }, [content])
+
 
     // Preprocess content to strip leading indentation from lines starting with HTML tags or comments.
     // This prevents standard CommonMark parser from treating indented HTML blocks as code blocks.
@@ -359,6 +420,15 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                             <td style={processedStyle} className={`px-4 py-3 text-sm text-slate-700 dark:text-slate-300 border-b border-slate-100 dark:border-slate-800/80 align-top ${processedClassName}`} {...props}>
                                 {children}
                             </td>
+                        );
+                    },
+                    mark: ({ node, style, className, children, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        return (
+                            <mark style={{ backgroundColor: '#FEF08A', color: '#78350F', fontWeight: 700, padding: '0.1em 0.35em', borderRadius: '0.25rem', ...processedStyle }} className={processedClassName} {...props}>
+                                {children}
+                            </mark>
                         );
                     },
                     a: ({ node, href, children, ...props }: any) => {

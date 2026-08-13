@@ -110,9 +110,9 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
       aria-label="Table of contents"
       className={`hidden xl:block fixed right-6 top-24 w-60 max-h-[calc(100vh-7rem)] overflow-y-auto print:hidden z-30 transition-opacity duration-300 ${atFooter ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
     >
-      <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-card p-4">
-        <p className="text-[11px] font-bold text-slate-400 dark:text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
-          <List className="w-3.5 h-3.5" aria-hidden />
+      <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm rounded-lg border border-slate-200/90 dark:border-slate-800 shadow-card p-4">
+        <p className="text-[11px] font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-widest mb-3 flex items-center gap-1.5">
+          <List className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" aria-hidden />
           Contents
         </p>
         <ol className="space-y-0.5">
@@ -124,8 +124,8 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
                 className={`w-full text-left text-xs px-2.5 py-1.5 rounded-lg transition-all duration-200 leading-snug focus:outline-none focus:ring-2 focus:ring-amber-400
                   ${heading.level === 3 ? 'pl-5' : ''}
                   ${activeId === heading.id
-                    ? 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 font-semibold border-l-2 border-amber-400 pl-[calc(0.625rem-2px)]'
-                    : 'text-slate-500 dark:text-slate-400 hover:text-navy dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
+                    ? 'bg-amber-100/70 dark:bg-amber-950/50 text-amber-900 dark:text-amber-300 font-bold border-l-2 border-amber-500 pl-[calc(0.625rem-2px)] shadow-xs'
+                    : 'text-slate-700 dark:text-slate-300 hover:text-amber-800 dark:hover:text-white hover:bg-amber-50/60 dark:hover:bg-slate-800 font-medium'
                   }`}
               >
                 {heading.text}
