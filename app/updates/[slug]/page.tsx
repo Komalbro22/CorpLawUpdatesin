@@ -21,7 +21,9 @@ import ViewCounter from '@/components/ViewCounter'
 // LiveViewCount import removed — display hidden, ViewCounter still tracks silently
 import ArticleActions from '@/components/ArticleActions'
 import ReadingProgress from '@/components/ReadingProgress'
+import MobileReadingBar from '@/components/MobileReadingBar'
 import FontSizeToggle from '@/components/FontSizeToggle'
+
 import ArticleImage from '@/components/ArticleImage'
 
 import { QuickAnswer } from '@/components/QuickAnswer'

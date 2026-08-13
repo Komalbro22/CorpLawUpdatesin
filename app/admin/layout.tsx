@@ -2,6 +2,7 @@ import { cookies } from 'next/headers'
 import Sidebar from '@/components/admin/Sidebar'
 import TopBar from '@/components/admin/TopBar'
 import AdminMain from '@/components/admin/AdminMain'
+import { AdminToastProvider } from '@/components/admin/AdminToast'
 
 export const metadata = {
     robots: {
@@ -23,12 +24,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     }
 
     return (
-        <div className="flex h-screen flex-col overflow-hidden lg:flex-row admin-mesh-bg">
-            <Sidebar />
-            <div className="flex-1 flex flex-col overflow-hidden min-w-0">
-                <TopBar />
-                <AdminMain>{children}</AdminMain>
+        <AdminToastProvider>
+            <div className="flex h-screen flex-col lg:flex-row admin-mesh-bg" style={{ overflow: 'hidden' }}>
+                <Sidebar />
+                <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+                    <TopBar />
+                    <AdminMain>{children}</AdminMain>
+                </div>
             </div>
-        </div>
+        </AdminToastProvider>
     )
 }
