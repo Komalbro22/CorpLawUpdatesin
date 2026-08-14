@@ -179,7 +179,7 @@ export default function UpdatesClient({
                         </div>
                     </div>
                     <div>
-                        <h3 className="block text-sm font-semibold text-navy dark:text-slate-200 mb-3">Categories</h3>
+                        <h2 className="block text-sm font-semibold text-navy dark:text-slate-200 mb-3">Categories</h2>
                         <ul className="flex flex-row md:flex-col gap-1.5 overflow-x-auto pb-2 md:pb-0">
                             {CATEGORIES.map(cat => {
                                 const count = cat === 'All' ? totalPublishedCount : counts[cat] || 0
@@ -200,7 +200,7 @@ export default function UpdatesClient({
                                                 className={`tabular-nums py-0.5 px-2 rounded-md text-xs font-medium ${
                                                     isActive
                                                         ? 'bg-white dark:bg-slate-900 text-navy dark:text-slate-200 ring-1 ring-slate-200/80 dark:ring-slate-800'
-                                                        : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                                                        : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
                                                 }`}
                                             >
                                                 {count}

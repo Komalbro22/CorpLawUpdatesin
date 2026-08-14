@@ -49,14 +49,14 @@ const config: Config = {
         'dark-text': '#E2E8F0',
         'dark-text-muted': '#94A3B8',
         category: {
-          mca:  '#2563EB',
-          sebi: '#059669',
-          rbi:  '#7C3AED',
-          nclt: '#EA580C',
-          ibc:  '#DC2626',
-          fema: '#0D9488',
-          cci:  '#6366F1',
-          labour: '#F59E0B',
+          mca:  '#1D4ED8',
+          sebi: '#047857',
+          rbi:  '#6D28D9',
+          nclt: '#C2410C',
+          ibc:  '#B91C1C',
+          fema: '#0F766E',
+          cci:  '#4338CA',
+          labour: '#B45309',
         },
         brand: {
           navy:       '#0B1F3A',  // Primary dark navy background

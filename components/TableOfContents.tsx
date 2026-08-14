@@ -78,11 +78,8 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        // If the footer is visible OR if the sentinel is in the upper part of viewport
         const footerVisible = entries.find(e => e.target.tagName === 'FOOTER')?.isIntersecting
         const sentinelVisible = entries.find(e => e.target.id === 'article-end')?.isIntersecting
-        
-        // We hide if footer is visible OR if we've scrolled well past the sentinel
         setAtFooter(!!footerVisible || (!!sentinelVisible && entries.find(e => e.target.id === 'article-end')!.boundingClientRect.top < 200))
       },
       { threshold: 0 }
@@ -104,28 +101,33 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
 
   if (headings.length < 3) return null
 
-  /* Desktop sticky sidebar */
+  /* Desktop sticky sidebar — matches live website clean design */
   const Sidebar = (
     <nav
       aria-label="Table of contents"
-      className={`hidden xl:block fixed right-6 top-24 w-60 max-h-[calc(100vh-7rem)] overflow-y-auto print:hidden z-30 transition-opacity duration-300 ${atFooter ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+      className={`hidden xl:block fixed right-6 top-24 w-64 max-h-[calc(100vh-7rem)] overflow-y-auto pr-1 print:hidden z-30 transition-opacity duration-300 scrollbar-thin ${atFooter ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
     >
-      <div className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm rounded-lg border border-slate-200/90 dark:border-slate-800 shadow-card p-4">
-        <p className="text-[11px] font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-widest mb-3 flex items-center gap-1.5">
-          <List className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" aria-hidden />
-          Contents
+      <div className="p-2">
+        <p className="text-[12px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-widest mb-3 flex items-center gap-1.5 font-sans">
+          <List className="w-4 h-4 text-amber-600 dark:text-amber-400" aria-hidden />
+          CONTENTS
         </p>
-        <ol className="space-y-0.5">
+        <ol className="space-y-1">
           {headings.map((heading) => (
             <li key={heading.id}>
               <button
                 onClick={() => scrollToSection(heading.id)}
                 aria-current={activeId === heading.id ? 'location' : undefined}
-                className={`w-full text-left text-xs px-2.5 py-1.5 rounded-lg transition-all duration-200 leading-snug focus:outline-none focus:ring-2 focus:ring-amber-400
-                  ${heading.level === 3 ? 'pl-5' : ''}
+                className={`w-full text-left transition-colors duration-150 leading-snug focus:outline-none focus:underline
+                  ${heading.level === 3 
+                    ? 'pl-3.5 text-[12px] py-0.5' 
+                    : 'text-[13px] py-1 font-normal'
+                  }
                   ${activeId === heading.id
-                    ? 'bg-amber-100/70 dark:bg-amber-950/50 text-amber-900 dark:text-amber-300 font-bold border-l-2 border-amber-500 pl-[calc(0.625rem-2px)] shadow-xs'
-                    : 'text-slate-700 dark:text-slate-300 hover:text-amber-800 dark:hover:text-white hover:bg-amber-50/60 dark:hover:bg-slate-800 font-medium'
+                    ? 'text-amber-700 dark:text-amber-400 font-semibold'
+                    : heading.level === 3
+                      ? 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+                      : 'text-slate-700 dark:text-slate-300 hover:text-navy dark:hover:text-white'
                   }`}
               >
                 {heading.text}
@@ -149,12 +151,12 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
                    bg-white dark:bg-slate-900 hover:bg-amber-50 dark:hover:bg-amber-950/20
                    px-4 py-2.5 min-h-[44px] rounded-lg transition-all duration-200 group w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-amber-400"
       >
-        <List className="w-4 h-4 text-slate-400" aria-hidden />
-        <span className="font-medium">
-          {mobileOpen ? 'Hide' : 'Show'} Contents
+        <List className="w-4 h-4 text-amber-600 dark:text-amber-400" aria-hidden />
+        <span className="font-medium text-amber-800 dark:text-amber-400">
+          {mobileOpen ? 'Hide' : 'Show'} CONTENTS
         </span>
         <ChevronDown className={`ml-auto h-4 w-4 transition-transform duration-200 ${mobileOpen ? 'rotate-180' : ''}`} aria-hidden />
-        <span className="text-xs text-slate-400 dark:text-slate-400">({headings.length} sections)</span>
+        <span className="text-xs text-slate-400">({headings.length} sections)</span>
       </button>
 
       {mobileOpen && (
@@ -168,7 +170,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
                 className={`text-sm px-3 py-1.5 rounded-full border transition-all duration-200 text-left min-h-[36px] focus:outline-none focus:ring-2 focus:ring-amber-400
                   ${heading.level === 3 ? 'text-xs' : ''}
                   ${activeId === heading.id
-                    ? 'bg-amber-400 border-amber-400 text-navy font-semibold shadow-sm'
+                    ? 'bg-amber-100 dark:bg-amber-950/50 border-amber-400 text-amber-900 dark:text-amber-300 font-semibold'
                     : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-amber-300 hover:text-amber-700 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/30'
                   }`}
               >

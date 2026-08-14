@@ -663,7 +663,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
             <div className="mb-12">
                 {update.content && <TableOfContents content={update.content} />}
                 <ErrorBoundary>
-                    <div className="article-content">
+                    <div className="article-content" suppressHydrationWarning>
                         <MarkdownRenderer content={contentPart1} />
                         
                         {relatedForm && (

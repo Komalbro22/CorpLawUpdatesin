@@ -152,7 +152,7 @@ export default async function Footer() {
                             <p className="text-slate-300 text-xs leading-relaxed mb-4">
                                 Join {activeSubscribersCount.toLocaleString()}+ professionals receiving our weekly Monday digest.
                             </p>
-                            <Link href="/newsletter" className="flex items-center justify-between bg-amber-600 text-white text-[11px] font-bold px-4 py-2.5 rounded-lg hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-400 transition-all">
+                            <Link href="/newsletter" className="flex items-center justify-between bg-amber-500 hover:bg-amber-400 text-navy text-[11px] font-bold px-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 transition-all">
                                 SUBSCRIBE FREE
                                 <ArrowRight className="w-3.5 h-3.5" />
                             </Link>

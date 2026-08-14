@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// Triggering new build fix
 /* eslint-disable react/no-unescaped-entities */
 import { supabase } from '@/lib/supabase'
 import { UPDATE_LIST_COLUMNS } from '@/lib/supabase-queries'
@@ -149,7 +148,7 @@ export default async function HomePage() {
             <div className="mt-10 flex flex-col gap-4 sm:flex-row justify-center items-center w-full max-w-md">
               <Link
                 href="/updates"
-                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-amber-600 px-8 py-3.5 text-sm font-bold text-white shadow-lg shadow-amber-900/30 transition-all hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 motion-safe:hover:scale-[1.02]"
+                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-amber-700 px-8 py-3.5 text-sm font-bold text-white shadow-lg shadow-amber-950/40 transition-all hover:bg-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 motion-safe:hover:scale-[1.02]"
               >
                 Browse updates
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden />
@@ -253,181 +252,180 @@ export default async function HomePage() {
                   <Icon className="w-6 h-6 opacity-95 motion-safe:transition-transform motion-safe:duration-200 motion-safe:group-hover:scale-110" aria-hidden />
                   <span className="font-bold text-base">{label}</span>
                   <span className="text-[10px] text-white/90 font-medium leading-tight hidden sm:block">{desc}</span>
-              </Link>
-            ))}
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {latestUpdates.length > 0 && (
-        <section className="py-16 md:py-20 px-4 max-w-7xl mx-auto">
-          <div className="mb-8 md:mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between" id="updates">
+        {latestUpdates.length > 0 && (
+          <section className="py-16 md:py-20 px-4 max-w-7xl mx-auto">
+            <div className="mb-8 md:mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between" id="updates">
+              <div>
+                <h2 className="text-2xl md:text-3xl font-bold text-navy font-heading">
+                  Latest updates
+                </h2>
+                <p className="mt-2 text-slate-500 text-sm md:text-base">
+                  New and recent briefs from Indian regulators.
+                </p>
+              </div>
+              <Link
+                href="/updates"
+                className="hidden sm:inline-flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 text-sm font-semibold text-navy dark:text-slate-100 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-800"
+              >
+                View all
+                <ArrowRight className="w-4 h-4" aria-hidden />
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-10">
+              {latestUpdates.map((update: any, i: number) => (
+                <UpdateCard key={update.id} update={update} animationDelay={i * 60} priority={featuredUpdates.length === 0 && i < 3} />
+              ))}
+            </div>
+            <div className="text-center sm:hidden">
+              <Link
+                href="/updates"
+                className="inline-flex items-center gap-2 text-navy font-semibold hover:text-amber-700 transition-colors text-base group"
+              >
+                View all updates
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden />
+              </Link>
+            </div>
+          </section>
+        )}
+
+        {/* Free Compliance & Legal Tools Section */}
+        <section className="py-16 md:py-20 px-4 max-w-7xl mx-auto border-t border-slate-200/80 dark:border-slate-800/85">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-navy font-heading">
-                Latest updates
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-700 dark:text-amber-500">Interactive Suite</p>
+              <h2 className="mt-2 text-2xl md:text-3xl font-extrabold text-navy dark:text-white font-heading tracking-tight">
+                Free Legal & Compliance Tools
               </h2>
-              <p className="mt-2 text-slate-500 text-sm md:text-base">
-                New and recent briefs from Indian regulators.
+              <p className="mt-2 text-slate-500 dark:text-slate-400 text-sm md:text-base">
+                No login required. Self-service utilities for Company Secretaries, corporate lawyers, and compliance teams.
               </p>
             </div>
+            <Link href="/tools"
+                  className="inline-flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 text-sm font-semibold text-navy dark:text-slate-100 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-800 whitespace-nowrap self-start md:self-end">
+              View All Tools <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                href: '/documents',
+                icon: '📄',
+                title: 'Document Generator',
+                desc: 'Generate Board Resolutions, Director Appointment letters, Agreements, and corporate letters in seconds. AI-powered with ICSI SS-1 formatting.',
+                badge: 'AI Powered',
+                badgeColor: 'bg-purple-100 text-purple-700 dark:bg-purple-950/50 dark:text-purple-300',
+              },
+              {
+                href: '/tools/fee-calculator',
+                icon: '🧮',
+                title: 'MCA & ROC Fee Calculator',
+                desc: 'Calculate statutory filing fees, ROC late fees, adjudication penalties, and MSME payment interest.',
+                badge: 'Free',
+                badgeColor: 'bg-green-100 text-green-700 dark:bg-green-950/50 dark:text-green-300',
+              },
+              {
+                href: '/calendar',
+                icon: '📅',
+                title: 'Compliance Calendar',
+                desc: 'Track 50+ deadlines for MCA, SEBI, RBI, FEMA, and Tax compliance. Export events directly to Google Calendar.',
+                badge: 'Community',
+                badgeColor: 'bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300',
+              },
+              {
+                href: '/rbi/repo-rate',
+                icon: '🏦',
+                title: 'RBI Repo Rate Tracker',
+                desc: 'Get the latest repo rate, change histories, next MPC schedule, and run home loan EMI impact calculations.',
+                badge: 'Live Data',
+                badgeColor: 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300',
+              },
+              {
+                href: '/glossary',
+                icon: '📚',
+                title: 'Corporate Law Glossary',
+                desc: 'Over 200+ complex corporate law, IBC, SEBI, and FEMA definitions explained in simplified, plain English.',
+                badge: 'Free',
+                badgeColor: 'bg-teal-100 text-teal-700 dark:bg-teal-950/50 dark:text-teal-300',
+              },
+              {
+                href: '/tools',
+                icon: '🎯',
+                title: 'Daily Corporate Law Quiz',
+                desc: '5 daily quick MCQs covering Companies Act, SEBI guidelines, and RBI updates. Perfect for self-testing and mock practice.',
+                badge: 'Coming Soon',
+                badgeColor: 'bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-400',
+                isLive: false,
+              },
+            ].map(tool => (
+              <HomeToolCard key={tool.title} tool={tool} />
+            ))}
+          </div>
+        </section>
+
+        <section className="w-full bg-navy dark:bg-slate-950 py-16 md:py-20 px-4 text-center relative overflow-hidden border-t border-slate-800">
+          <div className="absolute inset-0 opacity-[0.08] bg-[linear-gradient(rgba(255,255,255,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.12)_1px,transparent_1px)] bg-[size:72px_72px]" aria-hidden />
+          <div className="max-w-3xl mx-auto flex flex-col items-center relative z-10">
+            <Newspaper className="mb-4 h-8 w-8 text-gold" aria-hidden />
+            <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-3">
+              Weekly Corporate Law Digest
+            </h2>
+            <p className="text-slate-300/90 mb-8 max-w-xl mx-auto leading-relaxed">
+              One email on Mondays: MCA, SEBI, RBI, CCI, NCLT, IBC, FEMA and Labour Law. No spam. Unsubscribe anytime.
+            </p>
             <Link
-              href="/updates"
-              className="hidden sm:inline-flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 text-sm font-semibold text-navy dark:text-slate-100 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-800"
+              href="/newsletter"
+              className="inline-flex items-center gap-2 rounded-lg bg-gold px-8 py-3.5 font-bold text-white transition-colors hover:bg-amber-400"
             >
-              View all
+              Subscribe free
               <ArrowRight className="w-4 h-4" aria-hidden />
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-10">
-            {latestUpdates.map((update: any, i: number) => (
-              <UpdateCard key={update.id} update={update} animationDelay={i * 60} priority={featuredUpdates.length === 0 && i < 3} />
-            ))}
-          </div>
-          <div className="text-center sm:hidden">
-            <Link
-              href="/updates"
-              className="inline-flex items-center gap-2 text-navy font-semibold hover:text-amber-700 transition-colors text-base group"
-            >
-              View all updates
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden />
-            </Link>
+        </section>
+
+        {/* Subtle SEO Context at Bottom */}
+        <section className="max-w-7xl mx-auto px-4 py-16 border-t border-slate-100 dark:border-slate-800 mt-10">
+          <div className="bg-slate-50/50 dark:bg-slate-900/50 rounded-2xl border border-slate-200/60 dark:border-slate-800 p-8 shadow-sm text-center">
+            <h2 className="text-xl font-bold text-navy dark:text-white mb-4 font-heading">Latest Corporate Law Updates & Compliance Tools</h2>
+            <div className="max-w-3xl mx-auto text-sm text-slate-500 leading-relaxed space-y-4">
+              <p>
+                CorpLawUpdates.in provides the <strong>latest corporate law updates</strong> and <strong>free compliance tools</strong> covering 
+                <Link href="/category/sebi" className="text-gold hover:underline font-medium mx-1">SEBI updates</Link>, 
+                <Link href="/category/rbi" className="text-gold hover:underline font-medium mx-1">RBI circular updates</Link>, 
+                <Link href="/category/mca" className="text-gold hover:underline font-medium mx-1">MCA updates</Link>, 
+                <Link href="/category/cci" className="text-gold hover:underline font-medium mx-1">CCI updates</Link>, 
+                <Link href="/category/labour" className="text-gold hover:underline font-medium mx-1">Labour Law updates</Link>, 
+                NCLT, IBC and FEMA regulations.
+              </p>
+              <p>
+                We simplify complex legal updates into easy-to-understand summaries with key insights and practical implications. 
+                Our suite of interactive utilities, including the 
+                <Link href="/documents" className="text-gold hover:underline font-medium mx-1 font-semibold">Legal Document Generator</Link>, 
+                <Link href="/tools/fee-calculator" className="text-gold hover:underline font-medium mx-1 font-semibold">MCA & ROC Fee Calculator</Link>, 
+                <Link href="/calendar" className="text-gold hover:underline font-medium mx-1 font-semibold">Compliance Calendar</Link>, 
+                and 
+                <Link href="/rbi/repo-rate" className="text-gold hover:underline font-medium mx-1 font-semibold">RBI Repo Rate Tracker</Link>, 
+                helps you stay ahead with all aspects of <strong>corporate law and compliance</strong>.
+              </p>
+              <p className="pt-4 flex flex-wrap items-center justify-center gap-4 text-sm font-semibold">
+                <Link href="/updates" className="text-gold hover:text-amber-700 transition-colors underline decoration-gold/30 underline-offset-4 font-heading">
+                  👉 Browse all updates
+                </Link>
+                <span className="text-slate-300 dark:text-slate-700 hidden sm:inline">|</span>
+                <Link href="/tools" className="text-gold hover:text-amber-700 transition-colors underline decoration-gold/30 underline-offset-4 font-heading">
+                  👉 Explore compliance tools
+                </Link>
+              </p>
+            </div>
           </div>
         </section>
-      )}
-
-      {/* Free Compliance & Legal Tools Section */}
-      <section className="py-16 md:py-20 px-4 max-w-7xl mx-auto border-t border-slate-200/80 dark:border-slate-800/85">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-700 dark:text-amber-500">Interactive Suite</p>
-            <h2 className="mt-2 text-2xl md:text-3xl font-extrabold text-navy dark:text-white font-heading tracking-tight">
-              Free Legal & Compliance Tools
-            </h2>
-            <p className="mt-2 text-slate-500 dark:text-slate-400 text-sm md:text-base">
-              No login required. Self-service utilities for Company Secretaries, corporate lawyers, and compliance teams.
-            </p>
-          </div>
-          <Link href="/tools"
-                className="inline-flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 text-sm font-semibold text-navy dark:text-slate-100 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-800 whitespace-nowrap self-start md:self-end">
-            View All Tools <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[
-            {
-              href: '/documents',
-              icon: '📄',
-              title: 'Document Generator',
-              desc: 'Generate Board Resolutions, Director Appointment letters, Agreements, and corporate letters in seconds. AI-powered with ICSI SS-1 formatting.',
-              badge: 'AI Powered',
-              badgeColor: 'bg-purple-100 text-purple-700 dark:bg-purple-950/50 dark:text-purple-300',
-            },
-            {
-              href: '/tools/fee-calculator',
-              icon: '🧮',
-              title: 'MCA & ROC Fee Calculator',
-              desc: 'Calculate statutory filing fees, ROC late fees, adjudication penalties, and MSME payment interest.',
-              badge: 'Free',
-              badgeColor: 'bg-green-100 text-green-700 dark:bg-green-950/50 dark:text-green-300',
-            },
-            {
-              href: '/calendar',
-              icon: '📅',
-              title: 'Compliance Calendar',
-              desc: 'Track 50+ deadlines for MCA, SEBI, RBI, FEMA, and Tax compliance. Export events directly to Google Calendar.',
-              badge: 'Community',
-              badgeColor: 'bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300',
-            },
-            {
-              href: '/rbi/repo-rate',
-              icon: '🏦',
-              title: 'RBI Repo Rate Tracker',
-              desc: 'Get the latest repo rate, change histories, next MPC schedule, and run home loan EMI impact calculations.',
-              badge: 'Live Data',
-              badgeColor: 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300',
-            },
-            {
-              href: '/glossary',
-              icon: '📚',
-              title: 'Corporate Law Glossary',
-              desc: 'Over 200+ complex corporate law, IBC, SEBI, and FEMA definitions explained in simplified, plain English.',
-              badge: 'Free',
-              badgeColor: 'bg-teal-100 text-teal-700 dark:bg-teal-950/50 dark:text-teal-300',
-            },
-            {
-              href: '/tools',
-              icon: '🎯',
-              title: 'Daily Corporate Law Quiz',
-              desc: '5 daily quick MCQs covering Companies Act, SEBI guidelines, and RBI updates. Perfect for self-testing and mock practice.',
-              badge: 'Coming Soon',
-              badgeColor: 'bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-400',
-              isLive: false,
-            },
-          ].map(tool => (
-            <HomeToolCard key={tool.title} tool={tool} />
-          ))}
-        </div>
-      </section>
-
-      <section className="w-full bg-navy dark:bg-slate-950 py-16 md:py-20 px-4 text-center relative overflow-hidden border-t border-slate-800">
-        <div className="absolute inset-0 opacity-[0.08] bg-[linear-gradient(rgba(255,255,255,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.12)_1px,transparent_1px)] bg-[size:72px_72px]" aria-hidden />
-        <div className="max-w-3xl mx-auto flex flex-col items-center relative z-10">
-          <Newspaper className="mb-4 h-8 w-8 text-gold" aria-hidden />
-          <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-3">
-            Weekly Corporate Law Digest
-          </h2>
-          <p className="text-slate-300/90 mb-8 max-w-xl mx-auto leading-relaxed">
-            One email on Mondays: MCA, SEBI, RBI, CCI, NCLT, IBC, FEMA and Labour Law. No spam. Unsubscribe anytime.
-          </p>
-          <Link
-            href="/newsletter"
-            className="inline-flex items-center gap-2 rounded-lg bg-gold px-8 py-3.5 font-bold text-white transition-colors hover:bg-amber-400"
-          >
-            Subscribe free
-            <ArrowRight className="w-4 h-4" aria-hidden />
-          </Link>
-        </div>
-      </section>
-
-      {/* Subtle SEO Context at Bottom */}
-      <section className="max-w-7xl mx-auto px-4 py-16 border-t border-slate-100 dark:border-slate-800 mt-10">
-        <div className="bg-slate-50/50 dark:bg-slate-900/50 rounded-2xl border border-slate-200/60 dark:border-slate-800 p-8 shadow-sm text-center">
-          <h2 className="text-xl font-bold text-navy dark:text-white mb-4 font-heading">Latest Corporate Law Updates & Compliance Tools</h2>
-          <div className="max-w-3xl mx-auto text-sm text-slate-500 leading-relaxed space-y-4">
-            <p>
-              CorpLawUpdates.in provides the <strong>latest corporate law updates</strong> and <strong>free compliance tools</strong> covering 
-              <Link href="/category/sebi" className="text-gold hover:underline font-medium mx-1">SEBI updates</Link>, 
-              <Link href="/category/rbi" className="text-gold hover:underline font-medium mx-1">RBI circular updates</Link>, 
-              <Link href="/category/mca" className="text-gold hover:underline font-medium mx-1">MCA updates</Link>, 
-              <Link href="/category/cci" className="text-gold hover:underline font-medium mx-1">CCI updates</Link>, 
-              <Link href="/category/labour" className="text-gold hover:underline font-medium mx-1">Labour Law updates</Link>, 
-              NCLT, IBC and FEMA regulations.
-            </p>
-            <p>
-              We simplify complex legal updates into easy-to-understand summaries with key insights and practical implications. 
-              Our suite of interactive utilities, including the 
-              <Link href="/documents" className="text-gold hover:underline font-medium mx-1 font-semibold">Legal Document Generator</Link>, 
-              <Link href="/tools/fee-calculator" className="text-gold hover:underline font-medium mx-1 font-semibold">MCA & ROC Fee Calculator</Link>, 
-              <Link href="/calendar" className="text-gold hover:underline font-medium mx-1 font-semibold">Compliance Calendar</Link>, 
-              and 
-              <Link href="/rbi/repo-rate" className="text-gold hover:underline font-medium mx-1 font-semibold">RBI Repo Rate Tracker</Link>, 
-              helps you stay ahead with all aspects of <strong>corporate law and compliance</strong>.
-            </p>
-            <p className="pt-4 flex flex-wrap items-center justify-center gap-4 text-sm font-semibold">
-              <Link href="/updates" className="text-gold hover:text-amber-700 transition-colors underline decoration-gold/30 underline-offset-4 font-heading">
-                👉 Browse all updates
-              </Link>
-              <span className="text-slate-300 dark:text-slate-700 hidden sm:inline">|</span>
-              <Link href="/tools" className="text-gold hover:text-amber-700 transition-colors underline decoration-gold/30 underline-offset-4 font-heading">
-                👉 Explore compliance tools
-              </Link>
-            </p>
-          </div>
-        </div>
-      </section>
       </div>
-
     </div>
   )
 }

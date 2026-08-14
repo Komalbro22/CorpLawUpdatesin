@@ -402,7 +402,10 @@ export default async function CategoryPage({
             {/* Content Area */}
             <div className="max-w-7xl mx-auto py-10 px-4">
                 {pageUpdates.length > 0 ? (
-                    <>
+                    <section aria-labelledby="category-updates-heading">
+                        <h2 id="category-updates-heading" className="sr-only">
+                            All {cat.toUpperCase()} Regulatory Updates and Circulars
+                        </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12">
                             {pageUpdates.map((update: any, i: number) => (
                                 <UpdateCard
@@ -419,7 +422,7 @@ export default async function CategoryPage({
                                 basePath={`/category/${cat}`}
                             />
                         )}
-                    </>
+                    </section>
                 ) : (
                     <div className="bg-white rounded-2xl border border-slate-200/80 shadow-card ring-1 ring-slate-900/[0.02]">
                         <EmptyState
@@ -448,11 +451,11 @@ export default async function CategoryPage({
                                 <div key={u.id} className={`${idx !== top5Updates.length - 1 ? 'border-b border-slate-100 pb-6' : ''}`}>
                                     <div className="flex items-center gap-2 mb-2">
                                         {u.update_type && (
-                                            <span className="text-xs font-semibold bg-slate-100 text-slate-600 px-2 py-0.5 rounded">
+                                            <span className="text-xs font-semibold bg-slate-100 text-slate-700 px-2 py-0.5 rounded">
                                                 {UPDATE_TYPE_LABELS[u.update_type] || u.update_type}
                                             </span>
                                         )}
-                                        <time dateTime={u.published_at} className="text-xs text-slate-400">
+                                        <time dateTime={u.published_at} className="text-xs font-medium text-slate-600">
                                             {new Date(u.published_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
                                         </time>
                                     </div>
@@ -462,7 +465,7 @@ export default async function CategoryPage({
                                         </Link>
                                     </h3>
                                     {u.excerpt && (
-                                        <p className="text-sm text-slate-500 line-clamp-2">{u.excerpt}</p>
+                                        <p className="text-sm text-slate-600 line-clamp-2">{u.excerpt}</p>
                                     )}
                                 </div>
                             ))}

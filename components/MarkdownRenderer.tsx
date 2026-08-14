@@ -243,7 +243,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
     const sanitizedContent = sanitizeHtml(processedContent)
 
     return (
-        <div ref={ref} className={`
+        <div ref={ref} suppressHydrationWarning className={`
           article-content prose prose-slate dark:prose-invert max-w-none
           prose-headings:text-navy dark:prose-headings:text-white
           prose-p:text-slate-700 dark:prose-p:text-slate-300
@@ -272,7 +272,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return (
-                            <p style={{ marginBottom: '1rem', marginTop: '0.5rem', ...processedStyle }} className={processedClassName} {...props}>
+                            <p suppressHydrationWarning style={{ marginBottom: '1rem', marginTop: '0.5rem', ...processedStyle }} className={processedClassName} {...props}>
                                 {children}
                             </p>
                         );
@@ -281,7 +281,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return (
-                            <div style={processedStyle} className={processedClassName} {...props}>
+                            <div suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
                                 {children}
                             </div>
                         );
@@ -290,7 +290,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return (
-                            <section style={processedStyle} className={processedClassName} {...props}>
+                            <section suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
                                 {children}
                             </section>
                         );
@@ -299,7 +299,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return (
-                            <span style={processedStyle} className={processedClassName} {...props}>
+                            <span suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
                                 {children}
                             </span>
                         );
@@ -308,7 +308,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return (
-                            <li style={processedStyle} className={processedClassName} {...props}>
+                            <li suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
                                 {children}
                             </li>
                         );
@@ -317,7 +317,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return (
-                            <ul style={processedStyle} className={processedClassName} {...props}>
+                            <ul suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
                                 {children}
                             </ul>
                         );
@@ -326,7 +326,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return (
-                            <ol style={processedStyle} className={processedClassName} {...props}>
+                            <ol suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
                                 {children}
                             </ol>
                         );
@@ -334,44 +334,44 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                     h1: ({ node, style, children, className, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
-                        return <h1 style={processedStyle} className={processedClassName} {...props}>{children}</h1>;
+                        return <h1 suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>{children}</h1>;
                     },
                     h2: ({ node, style, children, className, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
-                        return <h2 style={processedStyle} className={processedClassName} {...props}>{children}</h2>;
+                        return <h2 suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>{children}</h2>;
                     },
                     h3: ({ node, style, children, className, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
-                        return <h3 style={processedStyle} className={processedClassName} {...props}>{children}</h3>;
+                        return <h3 suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>{children}</h3>;
                     },
                     h4: ({ node, style, children, className, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
-                        return <h4 style={processedStyle} className={processedClassName} {...props}>{children}</h4>;
+                        return <h4 suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>{children}</h4>;
                     },
                     h5: ({ node, style, children, className, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
-                        return <h5 style={processedStyle} className={processedClassName} {...props}>{children}</h5>;
+                        return <h5 suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>{children}</h5>;
                     },
                     h6: ({ node, style, children, className, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
-                        return <h6 style={processedStyle} className={processedClassName} {...props}>{children}</h6>;
+                        return <h6 suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>{children}</h6>;
                     },
                     strong: ({ node, style, children, className, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
-                        return <strong style={processedStyle} className={processedClassName} {...props}>{children}</strong>;
+                        return <strong suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>{children}</strong>;
                     },
                     table: ({ node, style, className, children, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return (
-                            <div className="w-full overflow-x-auto my-6 border border-slate-200/80 dark:border-slate-800 rounded-xl shadow-sm scrollbar-thin">
-                                <table style={processedStyle} className={`w-full border-collapse ${processedClassName}`} {...props}>
+                            <div suppressHydrationWarning className="w-full overflow-x-auto my-6 border border-slate-200/80 dark:border-slate-800 rounded-xl shadow-sm scrollbar-thin">
+                                <table suppressHydrationWarning style={processedStyle} className={`w-full border-collapse ${processedClassName}`} {...props}>
                                     {children}
                                 </table>
                             </div>
@@ -381,7 +381,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return (
-                            <thead style={processedStyle} className={processedClassName} {...props}>
+                            <thead suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
                                 {children}
                             </thead>
                         );
@@ -390,7 +390,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return (
-                            <tbody style={processedStyle} className={processedClassName} {...props}>
+                            <tbody suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
                                 {children}
                             </tbody>
                         );
@@ -399,7 +399,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return (
-                            <tr style={processedStyle} className={processedClassName} {...props}>
+                            <tr suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
                                 {children}
                             </tr>
                         );
@@ -408,7 +408,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return (
-                            <th style={processedStyle} className={`px-4 py-3 bg-slate-50 dark:bg-slate-800/80 text-left font-heading font-bold text-xs uppercase tracking-wider text-navy dark:text-slate-200 border-b border-slate-200 dark:border-slate-700 ${processedClassName}`} {...props}>
+                            <th suppressHydrationWarning style={processedStyle} className={`px-4 py-3 bg-slate-50 dark:bg-slate-800/80 text-left font-heading font-bold text-xs uppercase tracking-wider text-navy dark:text-slate-200 border-b border-slate-200 dark:border-slate-700 ${processedClassName}`} {...props}>
                                 {children}
                             </th>
                         );
@@ -417,7 +417,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return (
-                            <td style={processedStyle} className={`px-4 py-3 text-sm text-slate-700 dark:text-slate-300 border-b border-slate-100 dark:border-slate-800/80 align-top ${processedClassName}`} {...props}>
+                            <td suppressHydrationWarning style={processedStyle} className={`px-4 py-3 text-sm text-slate-700 dark:text-slate-300 border-b border-slate-100 dark:border-slate-800/80 align-top ${processedClassName}`} {...props}>
                                 {children}
                             </td>
                         );
