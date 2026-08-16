@@ -20,11 +20,11 @@ export const metadata: Metadata = {
 }
 
 type Props = {
-  searchParams: Promise<{ cin?: string }> | { cin?: string }
+  searchParams: Promise<{ cin?: string }>
 }
 
 export default async function CinDecoderToolPage({ searchParams }: Props) {
-  const resolvedParams = await Promise.resolve(searchParams)
+  const resolvedParams = await searchParams
   const inputCin = (resolvedParams?.cin || 'L21091MH1945PLC004520').trim().toUpperCase()
   const breakdown = decodeCIN(inputCin)
 

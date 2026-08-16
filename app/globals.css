@@ -7,6 +7,11 @@
    ═══════════════════════════════════ */
 
 :root {
+  /* Typography Fonts */
+  --font-lora: 'Lora', Georgia, serif;
+  --font-source-sans: 'Source Sans 3', 'Source Sans Pro', system-ui, -apple-system, sans-serif;
+  --font-outfit: 'Outfit', system-ui, -apple-system, sans-serif;
+
   /* Light mode (default) */
   --bg-primary: #F8FAFC;
   --bg-secondary: #FFFFFF;

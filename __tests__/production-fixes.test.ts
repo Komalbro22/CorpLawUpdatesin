@@ -1,4 +1,4 @@
-import { sanitizeForWinAnsi } from '@/app/api/documents/download/route'
+import { sanitizeForWinAnsi } from '@/lib/pdf-sanitizer'
 
 describe('Production Fixes & Regression Test Suite', () => {
   describe('PDF WinAnsi Unicode Sanitizer (Issue #3)', () => {

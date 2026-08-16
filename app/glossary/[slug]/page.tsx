@@ -11,7 +11,7 @@ import { BookOpen, Link2, Search, FileText, HelpCircle, Sparkles, Clock } from '
 export const revalidate = false
 
 type Props = {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 function parseMetadata(content: string) {

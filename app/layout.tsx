@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from 'next'
-import { Lora, Source_Sans_3, Outfit } from 'next/font/google'
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -22,10 +21,6 @@ import WebMCPRegistry from '@/components/WebMCPRegistry'
 
 import { themeScript } from '@/lib/theme-script'
 import './globals.css'
-
-const lora = Lora({ subsets: ['latin'], variable: '--font-lora', display: 'swap', preload: true })
-const sourceSans = Source_Sans_3({ subsets: ['latin'], variable: '--font-source-sans', display: 'swap' })
-const outfit = Outfit({ subsets: ['latin'], variable: '--font-outfit', display: 'swap' })
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.corplawupdates.in'),
@@ -100,6 +95,13 @@ export default async function RootLayout({
           id="theme-script"
           dangerouslySetInnerHTML={{ __html: themeScript }}
         />
+        {/* Google Fonts: Lora (serif), Source Sans 3 (body/reading), Outfit (headings/nav) */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Outfit:wght@400..700&family=Source+Sans+3:ital,wght@0,300..800;1,300..800&display=swap"
+          rel="stylesheet"
+        />
         <link rel="llms" href="/llms.txt" />
         <meta name="theme-color" content="#0F172A" />
         <meta name="mobile-web-app-capable" content="yes" />
@@ -143,7 +145,7 @@ export default async function RootLayout({
           },
         }} />
       </head>
-      <body className={`${lora.variable} ${sourceSans.variable} ${outfit.variable} font-body bg-slate-50 text-navy antialiased min-h-screen flex flex-col selection:bg-amber-200/50 selection:text-navy break-words`}>
+      <body className="font-body bg-slate-50 text-navy antialiased min-h-screen flex flex-col selection:bg-amber-200/50 selection:text-navy break-words">
         <ToastProvider>
           <HideOnAdmin>
             <TrackingScripts />
