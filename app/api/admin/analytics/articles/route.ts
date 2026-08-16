@@ -57,7 +57,6 @@ export async function GET() {
             },
           },
         },
-        limit: 1000,
       })
 
       if (articlesReport.rows) {
