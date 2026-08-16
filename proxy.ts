@@ -27,7 +27,7 @@ function timingSafeEqualEdge(a: string, b: string): boolean {
     return result === 0
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl
     const isAdminRoute = pathname.startsWith('/admin') || pathname.startsWith('/api/admin')
     const isLoginPage = pathname === '/admin/login' || pathname === '/api/admin/login'
@@ -76,7 +76,7 @@ export async function middleware(request: NextRequest) {
         const [payloadB64, signature] = parts
         const expected = await hashHMACSHA256(payloadB64, adminPassword + adminSalt)
         
-        // Timing-safe comparison to prevent timing attacks in Edge runtime
+        // Timing-safe comparison to prevent timing attacks
         if (!timingSafeEqualEdge(signature, expected)) {
             return unauthorizedResponse()
         }
