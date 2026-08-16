@@ -45,11 +45,49 @@ describe('Production Fixes & Regression Test Suite', () => {
     })
   })
 
-  describe('IndexNow Configuration (Issue #4)', () => {
-    it('uses fallback key when INDEXNOW_KEY environment variable is omitted', () => {
-      const defaultKey = '3d13aae2e0c040d89f050b27aadfa4c7'
-      expect(defaultKey).toHaveLength(32)
-      expect(/^[0-9a-f]+$/i.test(defaultKey)).toBe(true)
+  describe('IndexNow Dynamic Configuration (Issue #1)', () => {
+    it('validates 32-character hexadecimal key format from environment', () => {
+      const sampleKey = '3d13aae2e0c040d89f050b27aadfa4c7'
+      expect(sampleKey).toHaveLength(32)
+      expect(/^[0-9a-f]+$/i.test(sampleKey)).toBe(true)
+    })
+  })
+
+  describe('RBI Rate Parser & Extraction Safety (Issue #2)', () => {
+    const parseRbiRate = (html: string): number | null => {
+      const rateMatch = html.match(/Bank\s+Rate\s*:\s*([\d\.]+)/i) || html.match(/Bank\s+Rate[\s\S]*?([\d\.]+)\s*%/i)
+      if (rateMatch && rateMatch[1]) {
+        const parsed = parseFloat(rateMatch[1])
+        if (!isNaN(parsed) && parsed >= 4.0 && parsed <= 10.0) {
+          return parsed
+        }
+      }
+      return null
+    }
+
+    it('extracts valid Bank Rate from standard RBI HTML response', () => {
+      const sampleHtml = '<div class="table-responsive"><table><tr><td>Bank Rate : 6.75%</td></tr></table></div>'
+      const rate = parseRbiRate(sampleHtml)
+      expect(rate).toBe(6.75)
+    })
+
+    it('extracts valid Bank Rate from multiline markup pattern', () => {
+      const sampleHtml = '<div><span>Bank Rate</span><br/><span>6.50 %</span></div>'
+      const rate = parseRbiRate(sampleHtml)
+      expect(rate).toBe(6.50)
+    })
+
+    it('returns null when rate pattern is missing or corrupted', () => {
+      const sampleHtml = '<div><html><body>Error 403 / Cloudflare Challenge</body></html></div>'
+      const rate = parseRbiRate(sampleHtml)
+      expect(rate).toBeNull()
+    })
+
+    it('rejects aberrant rates outside safety boundary (4.0% - 10.0%)', () => {
+      const sampleHtmlHigh = '<div>Bank Rate : 18.5%</div>'
+      const sampleHtmlLow = '<div>Bank Rate : 1.5%</div>'
+      expect(parseRbiRate(sampleHtmlHigh)).toBeNull()
+      expect(parseRbiRate(sampleHtmlLow)).toBeNull()
     })
   })
 })

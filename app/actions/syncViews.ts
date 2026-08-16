@@ -35,7 +35,8 @@ export async function syncViewsAction(isCron = false) {
         if (keys.length > 0) {
             for (const key of keys) {
                 const slug = key.replace('view_batch:', '')
-                const batchViewsStr = await redis.get<number | string>(key)
+                // Atomically extract and reset the batch counter in a single command
+                const batchViewsStr = await redis.getset<number | string>(key, 0)
                 const batchViews = parseInt(String(batchViewsStr || '0'), 10)
 
                 if (batchViews > 0) {
@@ -45,22 +46,17 @@ export async function syncViewsAction(isCron = false) {
                     })
                     
                     if (rpcError) {
-                        const { data: article } = await supabaseAdmin
-                            .from('updates')
-                            .select('id, views')
-                            .eq('slug', slug)
-                            .single()
-
-                        if (article) {
-                            await supabaseAdmin
-                                .from('updates')
-                                .update({ views: (article.views || 0) + batchViews })
-                                .eq('id', article.id)
+                        console.error(`[SyncViews] RPC increment_views failed for ${slug}:`, rpcError.message)
+                        // Safely restore the views back to Redis so counts are never lost
+                        await redis.incrby(key, batchViews)
+                    } else {
+                        syncedCount++
+                        // Clean up key if it remains 0 (no new concurrent pageviews arrived during sync)
+                        const remaining = await redis.get<number | string>(key)
+                        if (parseInt(String(remaining || '0'), 10) === 0) {
+                            await redis.del(key)
                         }
                     }
-
-                    await redis.decrby(key, batchViews)
-                    syncedCount++
                 } else {
                     await redis.del(key)
                 }

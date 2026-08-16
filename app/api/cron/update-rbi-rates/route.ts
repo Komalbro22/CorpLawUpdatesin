@@ -37,9 +37,10 @@ export async function GET(req: Request) {
       console.warn('[RBI Cron] Exception reading previous rate:', readErr?.message || readErr)
     }
 
+    let isExtractionSuccessful = false
+    let extractedRate: number | null = null
+
     // 3. Automated fetch / scraping of RBI Bank Rate
-    // To prevent scraping blocks, we call an open proxy or fallback to scraping the main RBI page,
-    // and finally fallback to maintaining the previous rate if both fail.
     try {
       const response = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://www.rbi.org.in/'), {
         signal: AbortSignal.timeout(15000) // 15s timeout
@@ -53,26 +54,35 @@ export async function GET(req: Request) {
         const rateMatch = html.match(/Bank\s+Rate\s*:\s*([\d\.]+)/i) || html.match(/Bank\s+Rate[\s\S]*?([\d\.]+)\s*%/i)
         
         if (rateMatch && rateMatch[1]) {
-          fetchedValue = parseFloat(rateMatch[1])
+          const parsed = parseFloat(rateMatch[1])
+          if (!isNaN(parsed)) {
+            if (parsed >= 4.0 && parsed <= 10.0) {
+              isExtractionSuccessful = true
+              extractedRate = parsed
+              fetchedValue = parsed
+            } else {
+              errorMessage = `Extracted rate ${parsed}% fell outside safety bounds (4.0% - 10.0%). Verification required.`
+            }
+          }
+        } else {
+          errorMessage = 'Pattern match failed: Bank Rate not found in RBI response markup.'
         }
+      } else {
+        errorMessage = `Proxy HTTP error: status ${response.status}`
       }
     } catch (scrapeErr: any) {
-      console.warn('[RBI Cron] Scraping RBI homepage directly failed, utilizing fallback rate:', scrapeErr?.message || scrapeErr)
-      // Fallback to trusted DB rate
-      fetchedValue = previousValue
+      console.warn('[RBI Cron] Scraping RBI homepage failed:', scrapeErr?.message || scrapeErr)
+      errorMessage = `Extraction network error: ${scrapeErr?.message || 'Unknown network error'}`
     }
 
-    // Sanity checks on fetched value (RBI bank rates fluctuate strictly between 4.0% and 10.0%)
-    if (fetchedValue < 4 || fetchedValue > 10) {
-      status = 'skipped'
-      errorMessage = `Fetched value of ${fetchedValue}% fell outside safety parameters (4.0% - 10.0%). Verification required.`
-      fetchedValue = previousValue
-    } else {
+    // 4. Process update only if extraction was positively verified
+    if (isExtractionSuccessful && extractedRate !== null) {
+      status = 'ok'
       if (fetchedValue !== previousValue) {
         changed = true
       }
 
-      // 4. Update or upsert the compliance_rates table cache
+      // Update or upsert the compliance_rates table cache
       const { error: upsertError } = await supabaseAdmin
         .from('compliance_rates')
         .upsert(
@@ -93,6 +103,11 @@ export async function GET(req: Request) {
         }
         throw upsertError
       }
+    } else {
+      // Extraction failed or out-of-bounds: do NOT bump last_successful_fetch
+      status = errorMessage?.includes('safety bounds') ? 'skipped' : 'failed'
+      fetchedValue = previousValue
+      console.warn(`[RBI Cron] Rate update skipped. Status: ${status}. Reason: ${errorMessage}`)
     }
 
   } catch (err: any) {

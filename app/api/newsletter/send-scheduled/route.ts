@@ -2,19 +2,19 @@
 import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { sendNewsletterEmails } from '@/lib/newsletter'
+import { validateCronAuth } from '@/lib/cron-auth'
+
+export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
-    // Strict security check — fail closed if CRON_SECRET is missing
-    const authHeader = request.headers.get('authorization')
-    const cronSecret = process.env.CRON_SECRET
-    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    // 1. Authorize Cron trigger via shared helper (fails closed if CRON_SECRET missing)
+    const authError = validateCronAuth(request)
+    if (authError) return authError
 
     try {
         console.log('=== CRON: CHECKING SCHEDULED NEWSLETTERS ===')
         
-        // 1. Fetch pending newsletters where scheduled_at <= now()
+        // 2. Fetch pending newsletters where scheduled_at <= now()
         const { data: pending, error: fetchError } = await supabaseAdmin
             .from('scheduled_newsletters')
             .select('id, subject, preview_text, body, scheduled_at, status')
@@ -26,19 +26,32 @@ export async function GET(request: Request) {
             return NextResponse.json({ message: 'No pending newsletters to send' })
         }
 
-        console.log(`Found ${pending.length} newsletters to send`)
+        console.log(`Found ${pending.length} candidate pending newsletters`)
 
         const results = []
 
         for (const newsletter of pending) {
+            // 3. Atomically claim the newsletter row to prevent race conditions & duplicate sending
+            const { data: claimed, error: claimError } = await supabaseAdmin
+                .from('scheduled_newsletters')
+                .update({ status: 'processing' })
+                .eq('id', newsletter.id)
+                .eq('status', 'pending')
+                .select('id')
+
+            if (claimError || !claimed || claimed.length === 0) {
+                console.log(`[Newsletter Cron] Newsletter ${newsletter.id} was already claimed by another worker. Skipping.`)
+                continue
+            }
+
             try {
-                console.log(`Sending newsletter: ${newsletter.id} - ${newsletter.subject}`)
+                console.log(`Sending claimed newsletter: ${newsletter.id} - ${newsletter.subject}`)
                 
                 const result = await sendNewsletterEmails({
                     subject: newsletter.subject,
                     previewText: newsletter.preview_text,
                     body: newsletter.body,
-                    mode: 'markdown', // Assuming markdown for scheduled
+                    mode: 'markdown',
                 })
 
                 let finalStatus = 'sent'
@@ -48,7 +61,7 @@ export async function GET(request: Request) {
                     finalStatus = 'partially_sent'
                 }
 
-                // 2. Update status
+                // 4. Update status upon completion
                 await supabaseAdmin
                     .from('scheduled_newsletters')
                     .update({ status: finalStatus })
@@ -59,7 +72,7 @@ export async function GET(request: Request) {
             } catch (sendErr: any) {
                 console.error(`Failed to send newsletter ${newsletter.id}:`, sendErr)
                 
-                // 3. Update status to 'failed'
+                // 5. Update status to 'failed' on error
                 await supabaseAdmin
                     .from('scheduled_newsletters')
                     .update({ status: 'failed' })
@@ -76,3 +89,4 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: err.message }, { status: 500 })
     }
 }
+

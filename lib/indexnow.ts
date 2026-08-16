@@ -1,13 +1,11 @@
-const DEFAULT_INDEXNOW_KEY = '3d13aae2e0c040d89f050b27aadfa4c7'
-const INDEXNOW_KEY = process.env.INDEXNOW_KEY || DEFAULT_INDEXNOW_KEY
 const BASE_URL = 'https://www.corplawupdates.in'
 
 export async function submitToIndexNow(
   urls: string[]
 ): Promise<boolean> {
-  const keyToUse = process.env.INDEXNOW_KEY || DEFAULT_INDEXNOW_KEY
-  if (!keyToUse) {
-    console.warn('IndexNow: INDEXNOW_KEY not set')
+  const indexNowKey = process.env.INDEXNOW_KEY
+  if (!indexNowKey) {
+    console.warn('IndexNow: INDEXNOW_KEY environment variable not set. Skipping submission.')
     return false
   }
 
@@ -23,8 +21,8 @@ export async function submitToIndexNow(
         },
         body: JSON.stringify({
           host: 'www.corplawupdates.in',
-          key: INDEXNOW_KEY,
-          keyLocation: `${BASE_URL}/${INDEXNOW_KEY}.txt`,
+          key: indexNowKey,
+          keyLocation: `${BASE_URL}/${indexNowKey}.txt`,
           urlList: urls,
         }),
       }
