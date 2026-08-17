@@ -17,10 +17,34 @@ import Script from 'next/script'
 import JsonLd from '@/components/JsonLd'
 import TrackingScripts from '@/components/TrackingScripts'
 
+import { Lora, Outfit, Source_Sans_3 } from 'next/font/google'
 import WebMCPRegistry from '@/components/WebMCPRegistry'
 
 import { themeScript } from '@/lib/theme-script'
 import './globals.css'
+
+const lora = Lora({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  style: ['normal', 'italic'],
+  variable: '--font-lora',
+  display: 'swap',
+})
+
+const outfit = Outfit({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-outfit',
+  display: 'swap',
+})
+
+const sourceSans = Source_Sans_3({
+  subsets: ['latin'],
+  weight: ['300', '400', '600', '700', '800'],
+  style: ['normal', 'italic'],
+  variable: '--font-source-sans',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.corplawupdates.in'),
@@ -88,19 +112,12 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={`${lora.variable} ${outfit.variable} ${sourceSans.variable}`} suppressHydrationWarning>
       <head>
         {/* Anti-flash theme script with explicit React 19 ID attribute in head */}
         <script
           id="theme-script"
           dangerouslySetInnerHTML={{ __html: themeScript }}
-        />
-        {/* Google Fonts: Lora (serif), Source Sans 3 (body/reading), Outfit (headings/nav) */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Outfit:wght@400..700&family=Source+Sans+3:ital,wght@0,300..800;1,300..800&display=swap"
-          rel="stylesheet"
         />
         <link rel="llms" href="/llms.txt" />
         <meta name="theme-color" content="#0F172A" />

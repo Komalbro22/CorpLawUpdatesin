@@ -73,14 +73,14 @@ export default function TrackingScripts() {
         </div>
       )}
 
-      {/* Analytics Scripts injected only after consent */}
+      {/* Analytics Scripts injected only after consent with lazyOnload strategy */}
       {consentGiven && ids?.gaId && ids.gaId.startsWith('G-') && (
         <>
           <Script
             src={`https://www.googletagmanager.com/gtag/js?id=${ids.gaId}`}
-            strategy="afterInteractive"
+            strategy="lazyOnload"
           />
-          <Script id="ga-init-script" strategy="afterInteractive">
+          <Script id="ga-init-script" strategy="lazyOnload">
             {`
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
@@ -94,7 +94,7 @@ export default function TrackingScripts() {
       )}
 
       {consentGiven && ids?.clarityId && (
-        <Script id="clarity-script" strategy="afterInteractive">
+        <Script id="clarity-script" strategy="lazyOnload">
           {`
             (function(c,l,a,r,i,t,y){
                 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
