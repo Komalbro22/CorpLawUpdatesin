@@ -36,14 +36,14 @@ export const metadata: Metadata = {
 }
 
 const categoryMeta = [
-  { id: 'MCA', label: 'MCA', Icon: Building2, bg: 'bg-blue-700', ring: 'ring-blue-500/20', desc: 'Ministry of Corporate Affairs' },
-  { id: 'SEBI', label: 'SEBI', Icon: TrendingUp, bg: 'bg-emerald-700', ring: 'ring-emerald-500/20', desc: 'Securities & Exchange Board' },
-  { id: 'RBI', label: 'RBI', Icon: Landmark, bg: 'bg-violet-700', ring: 'ring-violet-500/20', desc: 'Reserve Bank of India' },
-  { id: 'CCI', label: 'CCI', Icon: ShieldCheck, bg: 'bg-indigo-700', ring: 'ring-indigo-500/20', desc: 'Competition Commission of India' },
-  { id: 'LABOUR', label: 'Labour Law', Icon: Users, bg: 'bg-amber-700', ring: 'ring-amber-500/20', desc: 'Labour Codes, EPF & ESIC' },
-  { id: 'NCLT', label: 'NCLT', Icon: Scale, bg: 'bg-orange-700', ring: 'ring-orange-500/20', desc: 'National Company Law Tribunal' },
-  { id: 'IBC', label: 'IBC', Icon: Gavel, bg: 'bg-red-700', ring: 'ring-red-500/20', desc: 'Insolvency & Bankruptcy Code' },
-  { id: 'FEMA', label: 'FEMA', Icon: Globe2, bg: 'bg-teal-700', ring: 'ring-teal-500/20', desc: 'Foreign Exchange Management' },
+  { id: 'MCA', label: 'MCA', Icon: Building2, bg: 'bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-400 border border-blue-200/70 dark:border-blue-800/40 hover:bg-blue-100/60 dark:hover:bg-blue-900/40', desc: 'Ministry of Corporate Affairs' },
+  { id: 'SEBI', label: 'SEBI', Icon: TrendingUp, bg: 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200/70 dark:border-emerald-800/40 hover:bg-emerald-100/60 dark:hover:bg-emerald-900/40', desc: 'Securities & Exchange Board' },
+  { id: 'RBI', label: 'RBI', Icon: Landmark, bg: 'bg-purple-50 dark:bg-purple-950/30 text-purple-700 dark:text-purple-400 border border-purple-200/70 dark:border-purple-800/40 hover:bg-purple-100/60 dark:hover:bg-purple-900/40', desc: 'Reserve Bank of India' },
+  { id: 'CCI', label: 'CCI', Icon: ShieldCheck, bg: 'bg-indigo-50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-400 border border-indigo-200/70 dark:border-indigo-800/40 hover:bg-indigo-100/60 dark:hover:bg-indigo-900/40', desc: 'Competition Commission' },
+  { id: 'LABOUR', label: 'Labour Law', Icon: Users, bg: 'bg-amber-50 dark:bg-amber-950/30 text-amber-800 dark:text-amber-400 border border-amber-200/70 dark:border-amber-800/40 hover:bg-amber-100/60 dark:hover:bg-amber-900/40', desc: 'Labour Codes & EPF' },
+  { id: 'NCLT', label: 'NCLT', Icon: Scale, bg: 'bg-orange-50 dark:bg-orange-950/30 text-orange-700 dark:text-orange-400 border border-orange-200/70 dark:border-orange-800/40 hover:bg-orange-100/60 dark:hover:bg-orange-900/40', desc: 'Company Law Tribunal' },
+  { id: 'IBC', label: 'IBC', Icon: Gavel, bg: 'bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-400 border border-red-200/70 dark:border-red-800/40 hover:bg-red-100/60 dark:hover:bg-red-900/40', desc: 'Insolvency & Bankruptcy' },
+  { id: 'FEMA', label: 'FEMA', Icon: Globe2, bg: 'bg-teal-50 dark:bg-teal-950/30 text-teal-700 dark:text-teal-400 border border-teal-200/70 dark:border-teal-800/40 hover:bg-teal-100/60 dark:hover:bg-teal-900/40', desc: 'Foreign Exchange' },
 ]
 
 export default async function HomePage() {
@@ -233,7 +233,7 @@ export default async function HomePage() {
         )}
 
         {/* Browse By Regulator */}
-        <section className="py-14 px-4 w-full border-y border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60">
+        <section className="py-14 px-4 w-full border-y border-slate-200/80 dark:border-slate-800/80 bg-white/70 dark:bg-slate-900/40">
           <div className="max-w-7xl mx-auto">
             <h2 className="text-xl md:text-2xl font-bold text-navy dark:text-white mb-2 font-heading text-center">
               Browse by regulator
@@ -241,17 +241,19 @@ export default async function HomePage() {
             <p className="text-slate-600 dark:text-slate-400 text-center text-sm md:text-base mb-10 max-w-xl mx-auto">
               Jump straight to updates from the authority you follow.
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
-              {categoryMeta.map(({ id, label, Icon, bg, ring, desc }, i) => (
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 md:gap-4">
+              {categoryMeta.map(({ id, label, Icon, bg, desc }, i) => (
                 <Link
                   key={id}
                   href={`/category/${id.toLowerCase()}`}
-                  style={{ '--delay': `${i * 50}ms` } as CSSProperties}
-                  className={`animate-fade-up group flex min-h-[110px] flex-col items-center justify-center gap-2 rounded-xl ${bg} p-4 text-center text-white shadow-md ${ring} ring-1 transition-[transform,box-shadow] duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 motion-safe:hover:-translate-y-1 hover:shadow-lg`}
+                  style={{ '--delay': `${i * 40}ms` } as CSSProperties}
+                  className={`animate-fade-up group flex min-h-[115px] flex-col items-center justify-center gap-2 rounded-xl ${bg} p-3.5 text-center shadow-sm transition-[transform,box-shadow,background-color] duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 motion-safe:hover:-translate-y-1 hover:shadow-md`}
                 >
-                  <Icon className="w-6 h-6 opacity-95 motion-safe:transition-transform motion-safe:duration-200 motion-safe:group-hover:scale-110" aria-hidden />
-                  <span className="font-bold text-base">{label}</span>
-                  <span className="text-[10px] text-white/90 font-medium leading-tight hidden sm:block">{desc}</span>
+                  <Icon className="w-6 h-6 opacity-90 transition-transform duration-200 group-hover:scale-110" aria-hidden />
+                  <div className="flex flex-col items-center">
+                    <span className="font-bold text-sm md:text-base leading-tight">{label}</span>
+                    <span className="text-[10px] opacity-75 font-medium leading-tight mt-1 line-clamp-1 hidden sm:block">{desc}</span>
+                  </div>
                 </Link>
               ))}
             </div>
