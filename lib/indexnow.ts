@@ -1,9 +1,16 @@
-const BASE_URL = 'https://www.corplawupdates.in'
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.corplawupdates.in'
+const HOST = (() => {
+  try {
+    return new URL(BASE_URL).hostname
+  } catch {
+    return 'www.corplawupdates.in'
+  }
+})()
 
 export async function submitToIndexNow(
   urls: string[]
 ): Promise<boolean> {
-  const indexNowKey = process.env.INDEXNOW_KEY
+  const indexNowKey = process.env.INDEXNOW_KEY || process.env.INDEXNOW_API_KEY
   if (!indexNowKey) {
     console.warn('IndexNow: INDEXNOW_KEY environment variable not set. Skipping submission.')
     return false
@@ -20,7 +27,7 @@ export async function submitToIndexNow(
           'Content-Type': 'application/json; charset=utf-8',
         },
         body: JSON.stringify({
-          host: 'www.corplawupdates.in',
+          host: HOST,
           key: indexNowKey,
           keyLocation: `${BASE_URL}/${indexNowKey}.txt`,
           urlList: urls,

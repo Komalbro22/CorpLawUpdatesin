@@ -6,7 +6,7 @@ export async function GET(
   request: NextRequest,
   context: { params: Promise<{ key?: string }> }
 ) {
-  const systemKey = process.env.INDEXNOW_KEY
+  const systemKey = process.env.INDEXNOW_KEY || process.env.INDEXNOW_API_KEY
 
   if (!systemKey) {
     console.warn('[IndexNow] INDEXNOW_KEY environment variable is not configured')
