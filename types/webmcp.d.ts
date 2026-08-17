@@ -29,8 +29,8 @@ interface WebMCPToolOptions {
 }
 
 interface ModelContext {
-  registerTool(tool: WebMCPTool, options?: WebMCPToolOptions): void;
-  unregisterTool?(name: string): void;
+  registerTool(tool: WebMCPTool, options?: WebMCPToolOptions): void | Promise<void>;
+  unregisterTool?(name: string): void | Promise<void>;
 }
 
 interface Document {

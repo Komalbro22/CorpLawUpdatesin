@@ -11,31 +11,13 @@
  * document.modelContext it exits silently — zero impact on regular users.
  *
  * API reference: https://developer.chrome.com/docs/ai/webmcp/imperative-api
- *
- * Tool inventory (9 tools):
- *   1. search_legal_updates     — Search MCA/SEBI/RBI/NCLT circulars & updates
- *   2. calculate_llp_late_fee   — LLP Form 8 / Form 11 late fee calculation
- *   3. calculate_roc_late_fee   — Company ROC form late fee + penalty exposure
- *   4. get_compliance_calendar  — Upcoming statutory due dates
- *   5. subscribe_newsletter     — Subscribe an email to weekly compliance digest
- *   6. get_article_summary      — Structured summary for a specific article slug
- *   7. get_rbi_rates            — Current RBI repo rate, SDF, MSF, MPC stance
- *   8. get_roc_deadline         — ROC deadline for a named form
- *   9. decode_company_cin       — Decode 21-digit Corporate Identification Number (CIN)
  */
 
 import { useEffect } from 'react';
 import { decodeCIN } from '@/lib/cin-decoder';
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Type shim — WebMCP is not yet in the standard TypeScript lib
-// Uses global WebMCP types defined in types/webmcp.d.ts
 type ToolDefinition = WebMCPTool;
 type ToolOptions = WebMCPToolOptions;
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Helpers
-// ─────────────────────────────────────────────────────────────────────────────
 
 /** Returns the active modelContext, preferring document (Chrome 150+) over navigator (Chrome 149 legacy). */
 function getModelContext(): ModelContext | null {
@@ -53,34 +35,46 @@ function getModelContext(): ModelContext | null {
   return null;
 }
 
-function safeRegister(ctx: ModelContext, def: ToolDefinition, opts: ToolOptions): void {
+function safeRegister(ctx: ModelContext, def: ToolDefinition, opts?: ToolOptions): void {
   try {
-    ctx.registerTool(def, opts);
-  } catch (err) {
-    // Non-fatal — silently skip if a tool fails to register (e.g. schema validation error)
-    if (process.env.NODE_ENV === 'development') {
-      console.warn(`[WebMCP] Failed to register tool "${def.name}":`, err);
+    const res = ctx.registerTool(def, opts);
+    if (res && typeof (res as Promise<unknown>).then === 'function') {
+      (res as Promise<unknown>).catch(() => {
+        // Silently swallow duplicate tool name and other experimental WebMCP rejection errors
+      });
     }
+  } catch {
+    // Silently ignore duplicate tool registration or unsupported option synchronous errors
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Component
-// ─────────────────────────────────────────────────────────────────────────────
-
 export default function WebMCPRegistry() {
   useEffect(() => {
-    // 1. Guard against non-browser environments
     if (typeof window === 'undefined') return;
+    if ((window as unknown as Record<string, unknown>).__webmcp_registered) return;
 
-    // 2. Guard against non-matching hostnames (e.g. apex domain corplawupdates.in, preview URLs, localhost)
     if (window.location.hostname !== 'www.corplawupdates.in' && window.location.hostname !== 'localhost') return;
 
     const ctx = getModelContext();
-    if (!ctx) return; // Browser doesn't support WebMCP — exit silently
+    if (!ctx) return;
 
-    const controller = new AbortController();
-    const { signal } = controller;
+    // Mark as registered to ensure idempotent registration across StrictMode & client navigation
+    (window as unknown as Record<string, unknown>).__webmcp_registered = true;
+
+    const handleWebMCPRejection = (e: PromiseRejectionEvent) => {
+      const msg = e?.reason?.message || String(e?.reason || '');
+      const name = e?.reason?.name || '';
+      if (
+        msg.includes('Duplicate tool name') ||
+        msg.includes('aborted') ||
+        name === 'AbortError' ||
+        name === 'InvalidStateError'
+      ) {
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener('unhandledrejection', handleWebMCPRejection);
 
     // ── Tool 1: search_legal_updates ─────────────────────────────────────────
     safeRegister(ctx, {
@@ -108,32 +102,36 @@ export default function WebMCPRegistry() {
         required: ['query'],
       },
       execute: async (args) => {
-        const params = new URLSearchParams();
-        params.set('q', String(args.query ?? ''));
-        if (args.regulator) params.set('category', String(args.regulator));
-        params.set('type', 'articles');
-        params.set('limit', String(Math.min(Math.max(Number(args.maxResults) || 5, 1), 10)));
+        try {
+          const params = new URLSearchParams();
+          params.set('q', String(args.query ?? ''));
+          if (args.regulator) params.set('category', String(args.regulator));
+          params.set('type', 'articles');
+          params.set('limit', String(Math.min(Math.max(Number(args.maxResults) || 5, 1), 10)));
 
-        const res = await fetch(`/api/search?${params}`);
-        if (!res.ok) return { error: 'Search failed. Please try again.' };
-        const data = await res.json();
+          const res = await fetch(`/api/search?${params}`);
+          if (!res.ok) return { error: 'Search failed. Please try again.' };
+          const data = await res.json();
 
-        const results = (data.results ?? []).slice(0, Number(args.maxResults) || 5);
-        if (!results.length) return { found: 0, message: 'No results found for your query.' };
+          const results = (data.results ?? []).slice(0, Number(args.maxResults) || 5);
+          if (!results.length) return { found: 0, message: 'No results found for your query.' };
 
-        return {
-          found: results.length,
-          query: args.query,
-          results: results.map((r: Record<string, unknown>) => ({
-            title: r.title,
-            summary: r.summary,
-            category: r.category,
-            date: r.date,
-            url: r.url ?? `https://www.corplawupdates.in/updates/${r.slug}`,
-          })),
-        };
+          return {
+            found: results.length,
+            query: args.query,
+            results: results.map((r: Record<string, unknown>) => ({
+              title: r.title,
+              summary: r.summary,
+              category: r.category,
+              date: r.date,
+              url: r.url ?? `https://www.corplawupdates.in/updates/${r.slug}`,
+            })),
+          };
+        } catch {
+          return { error: 'Search request could not be completed.' };
+        }
       },
-    }, { signal, readOnlyHint: true, untrustedContentHint: true });
+    }, { readOnlyHint: true, untrustedContentHint: true });
 
     // ── Tool 2: calculate_llp_late_fee ───────────────────────────────────────
     safeRegister(ctx, {
@@ -170,22 +168,26 @@ export default function WebMCPRegistry() {
         required: ['formId', 'llpType', 'contributionRupees', 'delayDays'],
       },
       execute: async (args) => {
-        const params = new URLSearchParams({
-          form: String(args.formId ?? 'Form-11'),
-          type: String(args.llpType ?? 'Regular'),
-          contribution: String(Number(args.contributionRupees) || 0),
-          delay: String(Number(args.delayDays) || 0),
-          dp: String(Number(args.designatedPartners) || 2),
-        });
+        try {
+          const params = new URLSearchParams({
+            form: String(args.formId ?? 'Form-11'),
+            type: String(args.llpType ?? 'Regular'),
+            contribution: String(Number(args.contributionRupees) || 0),
+            delay: String(Number(args.delayDays) || 0),
+            dp: String(Number(args.designatedPartners) || 2),
+          });
 
-        const res = await fetch(`/api/calculators/webmcp-llp?${params}`);
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}));
-          return { error: (err as { error?: string }).error ?? 'Calculation failed.' };
+          const res = await fetch(`/api/calculators/webmcp-llp?${params}`);
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            return { error: (err as { error?: string }).error ?? 'Calculation failed.' };
+          }
+          return res.json();
+        } catch {
+          return { error: 'LLP fee calculation could not be completed.' };
         }
-        return res.json();
       },
-    }, { signal, readOnlyHint: true });
+    }, { readOnlyHint: true });
 
     // ── Tool 3: calculate_roc_late_fee ───────────────────────────────────────
     safeRegister(ctx, {
@@ -221,22 +223,26 @@ export default function WebMCPRegistry() {
         required: ['formCode', 'companyType', 'authorizedCapitalRupees', 'delayDays'],
       },
       execute: async (args) => {
-        const params = new URLSearchParams({
-          form: String(args.formCode ?? ''),
-          type: String(args.companyType ?? 'Pvt'),
-          capital: String(Number(args.authorizedCapitalRupees) || 0),
-          delay: String(Number(args.delayDays) || 0),
-          officers: String(Number(args.officersCount) || 3),
-        });
+        try {
+          const params = new URLSearchParams({
+            form: String(args.formCode ?? ''),
+            type: String(args.companyType ?? 'Pvt'),
+            capital: String(Number(args.authorizedCapitalRupees) || 0),
+            delay: String(Number(args.delayDays) || 0),
+            officers: String(Number(args.officersCount) || 3),
+          });
 
-        const res = await fetch(`/api/calculators/webmcp?${params}`);
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}));
-          return { error: (err as { error?: string }).error ?? 'Calculation failed.' };
+          const res = await fetch(`/api/calculators/webmcp?${params}`);
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            return { error: (err as { error?: string }).error ?? 'Calculation failed.' };
+          }
+          return res.json();
+        } catch {
+          return { error: 'ROC fee calculation could not be completed.' };
         }
-        return res.json();
       },
-    }, { signal, readOnlyHint: true });
+    }, { readOnlyHint: true });
 
     // ── Tool 4: get_compliance_calendar ─────────────────────────────────────
     safeRegister(ctx, {
@@ -264,16 +270,20 @@ export default function WebMCPRegistry() {
         required: [],
       },
       execute: async (args) => {
-        const params = new URLSearchParams();
-        if (args.regulator) params.set('regulator', String(args.regulator));
-        if (args.month) params.set('month', String(args.month));
-        if (args.year) params.set('year', String(args.year));
+        try {
+          const params = new URLSearchParams();
+          if (args.regulator) params.set('regulator', String(args.regulator));
+          if (args.month) params.set('month', String(args.month));
+          if (args.year) params.set('year', String(args.year));
 
-        const res = await fetch(`/api/compliance/webmcp?${params}`);
-        if (!res.ok) return { error: 'Failed to fetch compliance calendar.' };
-        return res.json();
+          const res = await fetch(`/api/compliance/webmcp?${params}`);
+          if (!res.ok) return { error: 'Failed to fetch compliance calendar.' };
+          return res.json();
+        } catch {
+          return { error: 'Compliance calendar request could not be completed.' };
+        }
       },
-    }, { signal, readOnlyHint: true });
+    }, { readOnlyHint: true });
 
     // ── Tool 5: subscribe_newsletter ─────────────────────────────────────────
     safeRegister(ctx, {
@@ -292,24 +302,28 @@ export default function WebMCPRegistry() {
         required: ['email'],
       },
       execute: async (args) => {
-        const email = String(args.email ?? '').trim();
-        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-          return { success: false, message: 'Please provide a valid email address.' };
+        try {
+          const email = String(args.email ?? '').trim();
+          if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            return { success: false, message: 'Please provide a valid email address.' };
+          }
+
+          const res = await fetch('/api/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email }),
+          });
+
+          const data = await res.json().catch(() => ({ message: 'Unknown error.' }));
+          return {
+            success: res.ok,
+            message: (data as { message?: string }).message ?? (res.ok ? 'Subscribed successfully.' : 'Subscription failed.'),
+          };
+        } catch {
+          return { success: false, message: 'Subscription request could not be completed.' };
         }
-
-        const res = await fetch('/api/subscribe', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email }),
-        });
-
-        const data = await res.json().catch(() => ({ message: 'Unknown error.' }));
-        return {
-          success: res.ok,
-          message: (data as { message?: string }).message ?? (res.ok ? 'Subscribed successfully.' : 'Subscription failed.'),
-        };
       },
-    }, { signal, readOnlyHint: false });
+    }, { readOnlyHint: false });
 
     // ── Tool 6: get_article_summary ──────────────────────────────────────────
     safeRegister(ctx, {
@@ -328,15 +342,19 @@ export default function WebMCPRegistry() {
         required: ['slug'],
       },
       execute: async (args) => {
-        const slug = String(args.slug ?? '').trim().toLowerCase();
-        const res = await fetch(`/api/articles/webmcp?slug=${encodeURIComponent(slug)}`);
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}));
-          return { error: (err as { error?: string }).error ?? `Article "${slug}" not found.` };
+        try {
+          const slug = String(args.slug ?? '').trim().toLowerCase();
+          const res = await fetch(`/api/articles/webmcp?slug=${encodeURIComponent(slug)}`);
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            return { error: (err as { error?: string }).error ?? `Article "${slug}" not found.` };
+          }
+          return res.json();
+        } catch {
+          return { error: 'Article summary request could not be completed.' };
         }
-        return res.json();
       },
-    }, { signal, readOnlyHint: true, untrustedContentHint: true });
+    }, { readOnlyHint: true, untrustedContentHint: true });
 
     // ── Tool 7: get_rbi_rates ────────────────────────────────────────────────
     safeRegister(ctx, {
@@ -350,11 +368,15 @@ export default function WebMCPRegistry() {
         required: [],
       },
       execute: async () => {
-        const res = await fetch('/api/rbi/webmcp');
-        if (!res.ok) return { error: 'Failed to fetch RBI rate data.' };
-        return res.json();
+        try {
+          const res = await fetch('/api/rbi/webmcp');
+          if (!res.ok) return { error: 'Failed to fetch RBI rate data.' };
+          return res.json();
+        } catch {
+          return { error: 'RBI rates request could not be completed.' };
+        }
       },
-    }, { signal, readOnlyHint: true });
+    }, { readOnlyHint: true });
 
     // ── Tool 8: get_roc_deadline ─────────────────────────────────────────────
     safeRegister(ctx, {
@@ -411,7 +433,7 @@ export default function WebMCPRegistry() {
           };
         }
       },
-    }, { signal, readOnlyHint: true });
+    }, { readOnlyHint: true });
 
     // ── Tool 9: decode_company_cin ───────────────────────────────────────────
     safeRegister(ctx, {
@@ -431,23 +453,18 @@ export default function WebMCPRegistry() {
         required: ['cin'],
       },
       execute: async (args) => {
-        const cinStr = String(args.cin ?? '').trim().toUpperCase();
-        const breakdown = decodeCIN(cinStr);
-        if (!breakdown) {
-          return { error: 'Invalid CIN format. Must be a 21-character Indian Corporate Identification Number.' };
+        try {
+          const cinStr = String(args.cin ?? '').trim().toUpperCase();
+          const breakdown = decodeCIN(cinStr);
+          if (!breakdown) {
+            return { error: 'Invalid CIN format. Must be a 21-character Indian Corporate Identification Number.' };
+          }
+          return breakdown;
+        } catch {
+          return { error: 'CIN decoding could not be completed.' };
         }
-        return breakdown;
       },
-    }, { signal, readOnlyHint: true });
-
-    // Cleanup — AbortController is the correct lifecycle mechanism
-    return () => {
-      try {
-        controller.abort('WebMCPRegistry unmounted');
-      } catch {
-        // Silently ignore abort signal errors on unmount
-      }
-    };
+    }, { readOnlyHint: true });
   }, []);
 
   return null; // Renders nothing — purely a side-effect component
