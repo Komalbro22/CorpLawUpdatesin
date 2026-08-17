@@ -1639,9 +1639,12 @@ export default function DocumentGeneratorPage() {
     }
   }
 
+  const fallbackDocName = slug ? slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : 'Legal Document'
+
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex flex-col items-center justify-center p-4">
+        <h1 className="sr-only">{fallbackDocName} Format Generator</h1>
         <div className="text-center">
           <div className="w-10 h-10 border-4 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-slate-500 text-sm">
@@ -1658,8 +1661,9 @@ export default function DocumentGeneratorPage() {
 
   if (!template) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-slate-500">
-        Template not found
+      <div className="min-h-screen flex flex-col items-center justify-center text-slate-500 p-4">
+        <h1 className="text-xl font-bold text-navy mb-2">Template Not Found</h1>
+        <p className="text-sm">The requested document template could not be located.</p>
       </div>
     )
   }

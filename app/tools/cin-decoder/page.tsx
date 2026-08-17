@@ -5,6 +5,8 @@ import { Binary, Sparkles, FileText, HelpCircle, ShieldCheck, MapPin, Calendar, 
 
 export const dynamic = 'force-dynamic'
 
+const ogImageUrl = 'https://www.corplawupdates.in/api/og?title=Free+Corporate+Identification+Number+(CIN)+Decoder&category=Tools'
+
 export const metadata: Metadata = {
   title: 'Free Corporate Identification Number (CIN) Decoder & Analyzer | MCA CIN Lookup Tool',
   description: 'Instantly decode any 21-digit Indian Corporate Identification Number (CIN). Analyze listing status, 5-digit NIC industry classification, state RoC jurisdiction, incorporation year, ownership type, and statutory compliance rules.',
@@ -12,10 +14,25 @@ export const metadata: Metadata = {
     canonical: 'https://www.corplawupdates.in/tools/cin-decoder',
   },
   openGraph: {
-    title: 'Free Corporate Identification Number (CIN) Decoder & Structure Analyzer',
+    title: 'Free Corporate Identification Number (CIN) Decoder & Structure Analyzer | CorpLawUpdates.in',
     description: 'Decode 21-digit MCA CIN numbers into 6 statutory corporate dimensions including NIC industry codes, RoC state jurisdiction, and ownership classification.',
     url: 'https://www.corplawupdates.in/tools/cin-decoder',
     type: 'website',
+    siteName: 'CorpLawUpdates.in',
+    images: [
+      {
+        url: ogImageUrl,
+        width: 1200,
+        height: 630,
+        alt: 'Free Corporate Identification Number (CIN) Decoder',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Free Corporate Identification Number (CIN) Decoder & Structure Analyzer | CorpLawUpdates.in',
+    description: 'Decode 21-digit MCA CIN numbers into 6 statutory corporate dimensions.',
+    images: [ogImageUrl],
   },
 }
 

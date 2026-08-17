@@ -31,7 +31,18 @@ export const metadata: Metadata = {
     title: 'Corporate Law Updates India (2026) – MCA, SEBI, RBI, CCI & Labour Law Notifications',
     description: 'Get the latest corporate law updates in India including MCA, SEBI, RBI, CCI, Labour Law, NCLT, IBC and FEMA. Updated daily.',
     url: 'https://www.corplawupdates.in',
+    type: 'website',
+    siteName: 'CorpLawUpdates.in',
+    locale: 'en_IN',
     images: [{ url: 'https://www.corplawupdates.in/api/og?title=Corporate+Law+Updates+India+2026&category=', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@corplawupdates',
+    creator: '@corplawupdates',
+    title: 'Corporate Law Updates India (2026) – MCA, SEBI, RBI, CCI & Labour Law Notifications',
+    description: 'Get the latest corporate law updates in India including MCA, SEBI, RBI, CCI, Labour Law, NCLT, IBC and FEMA.',
+    images: ['https://www.corplawupdates.in/api/og?title=Corporate+Law+Updates+India+2026&category='],
   },
 }
 

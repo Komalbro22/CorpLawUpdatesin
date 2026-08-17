@@ -88,7 +88,7 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         {/* Anti-flash theme script with explicit React 19 ID attribute in head */}
         <script
@@ -119,6 +119,16 @@ export default async function RootLayout({
           sameAs: [
             'https://x.com/CorpLawUpdates',
             'https://www.linkedin.com/company/corplawupdates/',
+          ],
+          knowsAbout: [
+            'Corporate Law in India',
+            'Companies Act 2013',
+            'Ministry of Corporate Affairs (MCA)',
+            'Securities and Exchange Board of India (SEBI)',
+            'Reserve Bank of India (RBI)',
+            'Insolvency and Bankruptcy Code (IBC)',
+            'National Company Law Tribunal (NCLT)',
+            'Foreign Exchange Management Act (FEMA)'
           ],
           contactPoint: {
             '@type': 'ContactPoint',

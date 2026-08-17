@@ -3,11 +3,34 @@ import Link from 'next/link'
 import JsonLd from '@/components/JsonLd'
 import { FileText, Calculator, Calendar, CalendarDays, Landmark, BookOpen, Bot, CheckSquare, Target } from 'lucide-react'
 
+const ogImageUrl = 'https://www.corplawupdates.in/api/og?title=Free+Corporate+Law+%26+Compliance+Tools&category=Tools'
+
 export const metadata: Metadata = {
-  title: 'Free Corporate Law & Compliance Tools for Everyone | CorpLawUpdates.in',
-  description: 'Free interactive compliance and corporate law tools open to everyone. Access our AI document generator, MCA late fee calculator, compliance calendar, repo rate tracker, and glossary. No login required.',
+  title: 'Free Corporate Law & Compliance Tools',
+  description: 'Free interactive compliance and corporate law tools. Access our AI document generator, MCA late fee calculator, CIN decoder, compliance calendar, and repo rate tracker.',
   alternates: {
     canonical: 'https://www.corplawupdates.in/tools',
+  },
+  openGraph: {
+    title: 'Free Corporate Law & Compliance Tools | CorpLawUpdates.in',
+    description: 'Free interactive compliance and corporate law tools. Access our AI document generator, MCA late fee calculator, CIN decoder, and compliance calendar.',
+    url: 'https://www.corplawupdates.in/tools',
+    type: 'website',
+    siteName: 'CorpLawUpdates.in',
+    images: [
+      {
+        url: ogImageUrl,
+        width: 1200,
+        height: 630,
+        alt: 'Free Corporate Law & Compliance Tools',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Free Corporate Law & Compliance Tools | CorpLawUpdates.in',
+    description: 'Free interactive compliance and corporate law tools for legal and compliance professionals.',
+    images: [ogImageUrl],
   },
 }
 

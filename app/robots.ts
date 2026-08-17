@@ -19,6 +19,9 @@ export default function robots(): MetadataRoute.Robots {
     'Meta-ExternalAgent',
     'CCBot',
     'Googlebot-Image',
+    'Bytespider',
+    'FacebookBot',
+    'Amazonbot',
   ]
 
   const aiRules = aiBots.map(bot => ({

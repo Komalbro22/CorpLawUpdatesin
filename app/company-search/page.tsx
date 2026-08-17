@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
 export const metadata: Metadata = {
-  title: 'Company Search Tool — MCA CIN Lookup & Structure Analyzer | CorpLawUpdates.in',
+  title: 'Company Search Tool — MCA CIN Lookup & Structure Analyzer',
   description: 'Search and decode any Indian company CIN string into listing status, NIC industry code, state RoC office, incorporation year, and ownership classification.',
   alternates: {
     canonical: 'https://www.corplawupdates.in/tools/cin-decoder',
