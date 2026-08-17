@@ -33,6 +33,16 @@ export const metadata: Metadata = {
   authors: [{ name: 'CorpLawUpdates.in' }],
   creator: 'CorpLawUpdates.in',
   publisher: 'CorpLawUpdates.in',
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: '32x32' },
+      { url: '/icon.png', sizes: '192x192', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
   robots: {
     index: true,
     follow: true,
