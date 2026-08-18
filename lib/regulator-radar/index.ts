@@ -11,7 +11,7 @@ import {
 import { RadarResponse, RegulatorUpdate, SourceCheckResult, RegulatorKey } from './types'
 
 export async function runRegulatorRadar(
-  filterHours = 48,
+  filterHours = 72,
   enabledRegulators?: RegulatorKey[]
 ): Promise<RadarResponse> {
   const sources: SourceCheckResult[] = []

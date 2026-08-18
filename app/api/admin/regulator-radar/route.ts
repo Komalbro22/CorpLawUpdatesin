@@ -15,7 +15,7 @@ export async function GET(request: Request) {
   }
 
   const { searchParams } = new URL(request.url)
-  const hours = parseInt(searchParams.get('hours') || '48', 10)
+  const hours = parseInt(searchParams.get('hours') || '72', 10)
   const isFresh = searchParams.get('fresh') === 'true'
   const enabledParam = searchParams.get('enabled')
   const enabledRegulators = enabledParam 
