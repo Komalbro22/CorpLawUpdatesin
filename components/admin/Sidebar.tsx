@@ -17,6 +17,7 @@ import {
     Mail,
     Menu,
     PenSquare,
+    Radio,
     ScrollText,
     Settings,
     Users,
@@ -43,11 +44,12 @@ const sections: SidebarSection[] = [
     {
         label: 'Content',
         links: [
-            { href: '/admin/dashboard',      icon: LayoutDashboard, label: 'Dashboard'    },
-            { href: '/admin/articles/new',   icon: PenSquare,       label: 'New Article'  },
-            { href: '/admin/articles',       icon: FileText,        label: 'All Articles' },
-            { href: '/admin/glossary',       icon: BookOpen,        label: 'Glossary'     },
-            { href: '/admin/documents',      icon: ScrollText,      label: 'Documents'    },
+            { href: '/admin/dashboard',      icon: LayoutDashboard, label: 'Dashboard'       },
+            { href: '/admin/radar',          icon: Radio,           label: 'Regulator Radar' },
+            { href: '/admin/articles/new',   icon: PenSquare,       label: 'New Article'     },
+            { href: '/admin/articles',       icon: FileText,        label: 'All Articles'    },
+            { href: '/admin/glossary',       icon: BookOpen,        label: 'Glossary'        },
+            { href: '/admin/documents',      icon: ScrollText,      label: 'Documents'       },
         ],
     },
     {

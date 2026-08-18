@@ -175,7 +175,7 @@ export default function AdminRepoRatePage() {
             <label className="block text-sm font-semibold text-slate-700 mb-1">MPC Meeting Name *</label>
             <input type="text" value={form.meeting_name}
               onChange={e => setForm(p => ({ ...p, meeting_name: e.target.value }))}
-              placeholder="e.g. June 2026 (61st MPC)"
+              placeholder="e.g. August 2026 (62nd MPC)"
               className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900" />
           </div>
           <div>

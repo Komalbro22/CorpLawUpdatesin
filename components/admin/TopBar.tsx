@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { ChevronRight, Download, ExternalLink, Home, PenSquare, TrendingUp, Users } from 'lucide-react'
+import { ChevronRight, Download, ExternalLink, Home, PenSquare, Radio, TrendingUp, Users } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import AdminGlobalSearch from './AdminGlobalSearch'
@@ -15,6 +15,7 @@ function segmentsForPath(pathname: string): BreadcrumbSegment[] {
     const base: BreadcrumbSegment = { label: 'Admin', href: '/admin/dashboard' }
 
     if (pathname === '/admin/dashboard') return [base, { label: 'Dashboard' }]
+    if (pathname === '/admin/radar') return [base, { label: 'Regulator Radar' }]
     if (pathname === '/admin/articles/new') return [base, { label: 'Articles', href: '/admin/articles' }, { label: 'New Article' }]
     if (pathname === '/admin/articles') return [base, { label: 'Articles' }]
     if (pathname.startsWith('/admin/articles/') && pathname.endsWith('/edit')) return [base, { label: 'Articles', href: '/admin/articles' }, { label: 'Edit Article' }]
@@ -86,6 +87,7 @@ export default function TopBar() {
     const segments = segmentsForPath(pathname)
     const greeting = getGreeting()
     const ctxAction = getContextualAction(pathname)
+    const isRadarActive = pathname === '/admin/radar'
     const [time, setTime] = useState('')
     const [dateLabel, setDateLabel] = useState('')
     const [scrolled, setScrolled] = useState(false)
@@ -172,6 +174,20 @@ export default function TopBar() {
                         {dateLabel}
                     </span>
                 </div>
+
+                {/* Regulator Radar Link */}
+                <Link
+                    href="/admin/radar"
+                    className={`inline-flex items-center gap-1.5 admin-ctx-btn transition-all duration-200 shadow-sm ${
+                        isRadarActive
+                            ? 'bg-amber-500 text-white font-bold shadow-amber-500/20'
+                            : 'text-amber-900 bg-amber-100/90 hover:bg-amber-200 border border-amber-300'
+                    }`}
+                    title="Open dedicated Regulator Radar page"
+                >
+                    <Radio className={`w-3.5 h-3.5 ${isRadarActive ? 'text-white' : 'text-amber-600 animate-pulse'}`} aria-hidden />
+                    <span className="font-bold">Radar</span>
+                </Link>
 
                 {/* Contextual action (page-aware) — shown on sm+, falls back to New Article */}
                 {ctxAction ? (

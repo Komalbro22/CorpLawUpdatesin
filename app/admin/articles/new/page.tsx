@@ -83,8 +83,30 @@ export default function NewArticle() {
     const AUTOSAVE_KEY = 'article_autosave_new'
     const [lastAutosaved, setLastAutosaved] = useState<Date | null>(null)
 
-    // Load from autosave on mount
+    // Load from Regulator Radar prefill or local autosave on mount
     useEffect(() => {
+        try {
+            const radarPrefill = sessionStorage.getItem('corplaw_radar_prefill')
+            if (radarPrefill) {
+                const parsed = JSON.parse(radarPrefill)
+                if (parsed.title) setTitle(parsed.title)
+                if (parsed.title) setSlug(slugify(parsed.title))
+                if (parsed.category) setCategory(parsed.category)
+                if (parsed.sourceName) setSourceName(parsed.sourceName)
+                if (parsed.sourceUrl) setSourceUrl(parsed.sourceUrl)
+                if (parsed.summary) setSummary(parsed.summary)
+                if (parsed.keyChanges && Array.isArray(parsed.keyChanges)) setKeyChanges(parsed.keyChanges)
+                if (parsed.regulationRef) setRegulationRef(parsed.regulationRef)
+                if (parsed.effectiveDate) setEffectiveDate(parsed.effectiveDate)
+                if (parsed.publishedAt) setPublishedAt(parsed.publishedAt)
+                sessionStorage.removeItem('corplaw_radar_prefill')
+                showToast('Pre-filled from Regulator Radar!', 'success')
+                return
+            }
+        } catch (e) {
+            console.warn('Error reading radar prefill:', e)
+        }
+
         const saved = localStorage.getItem(AUTOSAVE_KEY)
         if (saved) {
             try {

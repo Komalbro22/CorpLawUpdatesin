@@ -10,9 +10,11 @@ import {
     FileText,
     PenLine,
     PenSquare,
+    Radio,
     TrendingUp,
     Users,
 } from 'lucide-react'
+import DashboardRadarCard from '@/components/admin/DashboardRadarCard'
 
 export const dynamic = 'force-dynamic'
 
@@ -421,7 +423,10 @@ export default async function AdminDashboard() {
             {/* QUICK ACTIONS */}
             <div className="pt-2">
                 <h2 className="text-base font-heading font-bold text-slate-900 mb-4">Quick Actions</h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                    {/* Regulator Radar */}
+                    <DashboardRadarCard />
+
                     {/* New Article */}
                     <Link
                         href="/admin/articles/new"
