@@ -2,58 +2,126 @@ const sharp = require('sharp');
 const fs = require('fs');
 const path = require('path');
 
+const rootDir = path.join(__dirname, '..');
+
+// Exact Classic Original Gavel (High-Precision Vector)
+const classicGavelSvg = `
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Deep Navy Squircle Container -->
+  <rect width="512" height="512" rx="112" fill="#002147"/>
+
+  <!-- Solid Golden Gavel (Iconic Classic) -->
+  <!-- Left Cap -->
+  <path d="M168 116 C158 116, 150 126, 150 140 L150 208 C150 222, 158 232, 168 232 L198 232 L198 116 Z" fill="#F4B400"/>
+
+  <!-- Left Ring -->
+  <rect x="204" y="128" width="16" height="92" rx="2" fill="#F4B400"/>
+
+  <!-- Main Block -->
+  <rect x="224" y="128" width="64" height="92" rx="4" fill="#F4B400"/>
+
+  <!-- Right Ring -->
+  <rect x="292" y="140" width="16" height="68" rx="2" fill="#F4B400"/>
+
+  <!-- Right Cap -->
+  <rect x="312" y="128" width="36" height="92" rx="6" fill="#F4B400"/>
+
+  <!-- Handle Collar -->
+  <path d="M236 220 L276 220 L270 240 L242 240 Z" fill="#F4B400"/>
+
+  <!-- Handle Tapered Shaft -->
+  <path d="M248 240 L264 240 L274 416 L238 416 Z" fill="#F4B400"/>
+
+  <!-- Handle Base Pommel -->
+  <rect x="230" y="416" width="52" height="18" rx="6" fill="#F4B400"/>
+</svg>
+`;
+
 async function generateFavicons() {
-  const sourceImage = path.join(__dirname, '..', 'public', 'icon-512.png');
-  
-  if (!fs.existsSync(sourceImage)) {
-    console.error('Source image not found at', sourceImage);
-    process.exit(1);
-  }
+  console.log('Generating Classic Golden Gavel icons and favicons...');
 
-  console.log('Generating true icons from:', sourceImage);
+  const svgBuffer = Buffer.from(classicGavelSvg);
 
-  // 1. app/icon.png (192x192 PNG)
-  await sharp(sourceImage)
-    .resize(192, 192)
-    .ensureAlpha()
+  // 1. public/icon-512.png (512x512)
+  await sharp(svgBuffer)
+    .resize(512, 512)
     .png()
-    .toFile(path.join(__dirname, '..', 'app', 'icon.png'));
-  console.log('✅ Created app/icon.png (192x192 PNG)');
+    .toFile(path.join(rootDir, 'public', 'icon-512.png'));
+  console.log('✅ Created public/icon-512.png');
 
-  // 2. app/apple-icon.png (180x180 PNG)
-  await sharp(sourceImage)
+  // 2. public/icon-512-maskable.png (512x512 with safe area margin)
+  await sharp(svgBuffer)
+    .resize(420, 420)
+    .extend({
+      top: 46,
+      bottom: 46,
+      left: 46,
+      right: 46,
+      background: { r: 0, g: 33, b: 71, alpha: 1 }
+    })
+    .png()
+    .toFile(path.join(rootDir, 'public', 'icon-512-maskable.png'));
+  console.log('✅ Created public/icon-512-maskable.png');
+
+  // 3. public/icon-192.png (192x192)
+  await sharp(svgBuffer)
+    .resize(192, 192)
+    .png()
+    .toFile(path.join(rootDir, 'public', 'icon-192.png'));
+  console.log('✅ Created public/icon-192.png');
+
+  // 4. public/icon-192-maskable.png (192x192 with safe area margin)
+  await sharp(svgBuffer)
+    .resize(158, 158)
+    .extend({
+      top: 17,
+      bottom: 17,
+      left: 17,
+      right: 17,
+      background: { r: 0, g: 33, b: 71, alpha: 1 }
+    })
+    .png()
+    .toFile(path.join(rootDir, 'public', 'icon-192-maskable.png'));
+  console.log('✅ Created public/icon-192-maskable.png');
+
+  // 5. public/icon.png (192x192)
+  await sharp(svgBuffer)
+    .resize(192, 192)
+    .png()
+    .toFile(path.join(rootDir, 'public', 'icon.png'));
+  console.log('✅ Created public/icon.png');
+
+  // 6. app/icon.png (192x192)
+  await sharp(svgBuffer)
+    .resize(192, 192)
+    .png()
+    .toFile(path.join(rootDir, 'app', 'icon.png'));
+  console.log('✅ Created app/icon.png');
+
+  // 7. app/apple-icon.png (180x180)
+  await sharp(svgBuffer)
     .resize(180, 180)
-    .ensureAlpha()
     .png()
-    .toFile(path.join(__dirname, '..', 'app', 'apple-icon.png'));
-  console.log('✅ Created app/apple-icon.png (180x180 PNG)');
+    .toFile(path.join(rootDir, 'app', 'apple-icon.png'));
+  console.log('✅ Created app/apple-icon.png');
 
-  // 3. public/icon.png (192x192 PNG)
-  await sharp(sourceImage)
-    .resize(192, 192)
-    .ensureAlpha()
-    .png()
-    .toFile(path.join(__dirname, '..', 'public', 'icon.png'));
-  console.log('✅ Created public/icon.png (192x192 PNG)');
-
-  // 4. Generate standard 32-bit RGBA BMP DIB ICO (compatible with all Rust image-rs & browser decoders)
-  const icoBuffer = await createStandardIco(sourceImage, [32, 48]);
-  fs.writeFileSync(path.join(__dirname, '..', 'app', 'favicon.ico'), icoBuffer);
-  fs.writeFileSync(path.join(__dirname, '..', 'public', 'favicon.ico'), icoBuffer);
-  console.log('✅ Created app/favicon.ico & public/favicon.ico (Standard 32-bit RGBA ICO)');
+  // 8. Multi-resolution 32-bit RGBA BMP DIB ICO (16, 32, 48)
+  const icoBuffer = await createStandardIco(svgBuffer, [16, 32, 48]);
+  fs.writeFileSync(path.join(rootDir, 'app', 'favicon.ico'), icoBuffer);
+  fs.writeFileSync(path.join(rootDir, 'public', 'favicon.ico'), icoBuffer);
+  console.log('✅ Created app/favicon.ico & public/favicon.ico (Multi-resolution 16/32/48 ICO)');
 }
 
-async function createStandardIco(srcPath, sizes = [32, 48]) {
+async function createStandardIco(svgBuffer, sizes = [16, 32, 48]) {
   const images = [];
 
   for (const size of sizes) {
-    const raw = await sharp(srcPath)
+    const raw = await sharp(svgBuffer)
       .resize(size, size)
       .ensureAlpha()
       .raw()
-      .toBuffer(); // raw RGBA buffer
+      .toBuffer();
 
-    // Convert raw RGBA to 32-bit BGRA bottom-up DIB BMP format (standard ICO format)
     const dibHeaderSize = 40;
     const pixelArraySize = size * size * 4;
     const maskRowSize = Math.floor((size + 31) / 32) * 4;
@@ -63,17 +131,17 @@ async function createStandardIco(srcPath, sizes = [32, 48]) {
     const imgBuffer = Buffer.alloc(totalImageSize);
 
     // BITMAPINFOHEADER
-    imgBuffer.writeUInt32LE(dibHeaderSize, 0);       // biSize
-    imgBuffer.writeInt32LE(size, 4);                 // biWidth
-    imgBuffer.writeInt32LE(size * 2, 8);             // biHeight (doubled for ICO XOR + AND masks)
-    imgBuffer.writeUInt16LE(1, 12);                  // biPlanes
-    imgBuffer.writeUInt16LE(32, 14);                 // biBitCount (32-bit RGBA)
-    imgBuffer.writeUInt32LE(0, 16);                  // biCompression (BI_RGB)
-    imgBuffer.writeUInt32LE(pixelArraySize + maskSize, 20); // biSizeImage
-    imgBuffer.writeInt32LE(0, 24);                   // biXPelsPerMeter
-    imgBuffer.writeInt32LE(0, 28);                   // biYPelsPerMeter
-    imgBuffer.writeUInt32LE(0, 32);                  // biClrUsed
-    imgBuffer.writeUInt32LE(0, 36);                  // biClrImportant
+    imgBuffer.writeUInt32LE(dibHeaderSize, 0);
+    imgBuffer.writeInt32LE(size, 4);
+    imgBuffer.writeInt32LE(size * 2, 8); // doubled for ICO XOR + AND masks
+    imgBuffer.writeUInt16LE(1, 12);
+    imgBuffer.writeUInt16LE(32, 14);     // 32-bit RGBA
+    imgBuffer.writeUInt32LE(0, 16);      // BI_RGB
+    imgBuffer.writeUInt32LE(pixelArraySize + maskSize, 20);
+    imgBuffer.writeInt32LE(0, 24);
+    imgBuffer.writeInt32LE(0, 28);
+    imgBuffer.writeUInt32LE(0, 32);
+    imgBuffer.writeUInt32LE(0, 36);
 
     // Write pixels bottom-up BGRA
     let destOffset = dibHeaderSize;
@@ -85,16 +153,13 @@ async function createStandardIco(srcPath, sizes = [32, 48]) {
         const b = raw[srcOffset + 2];
         const a = raw[srcOffset + 3];
 
-        imgBuffer[destOffset] = b;     // B
-        imgBuffer[destOffset + 1] = g; // G
-        imgBuffer[destOffset + 2] = r; // R
-        imgBuffer[destOffset + 3] = a; // A
+        imgBuffer[destOffset] = b;
+        imgBuffer[destOffset + 1] = g;
+        imgBuffer[destOffset + 2] = r;
+        imgBuffer[destOffset + 3] = a;
         destOffset += 4;
       }
     }
-
-    // Mask is all zeros (transparent via 32-bit alpha channel)
-    // imgBuffer is already zero-filled for the mask section
 
     images.push({
       width: size,
@@ -105,23 +170,23 @@ async function createStandardIco(srcPath, sizes = [32, 48]) {
 
   // ICO header: 6 bytes
   const header = Buffer.alloc(6);
-  header.writeUInt16LE(0, 0); // Reserved
-  header.writeUInt16LE(1, 2); // Type (1 = ICO)
-  header.writeUInt16LE(images.length, 4); // Count
+  header.writeUInt16LE(0, 0);
+  header.writeUInt16LE(1, 2);
+  header.writeUInt16LE(images.length, 4);
 
   const dirEntries = [];
   let offset = 6 + images.length * 16;
 
   for (const img of images) {
     const entry = Buffer.alloc(16);
-    entry.writeUInt8(img.width >= 256 ? 0 : img.width, 0);   // Width
-    entry.writeUInt8(img.height >= 256 ? 0 : img.height, 1); // Height
-    entry.writeUInt8(0, 2);                                  // Colors (0 if >= 8bpp)
-    entry.writeUInt8(0, 3);                                  // Reserved
-    entry.writeUInt16LE(1, 4);                               // Color planes
-    entry.writeUInt16LE(32, 6);                              // Bits per pixel
-    entry.writeUInt32LE(img.data.length, 8);                 // Size in bytes
-    entry.writeUInt32LE(offset, 12);                         // Offset
+    entry.writeUInt8(img.width >= 256 ? 0 : img.width, 0);
+    entry.writeUInt8(img.height >= 256 ? 0 : img.height, 1);
+    entry.writeUInt8(0, 2);
+    entry.writeUInt8(0, 3);
+    entry.writeUInt16LE(1, 4);
+    entry.writeUInt16LE(32, 6);
+    entry.writeUInt32LE(img.data.length, 8);
+    entry.writeUInt32LE(offset, 12);
     dirEntries.push(entry);
     offset += img.data.length;
   }

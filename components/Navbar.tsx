@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import GlobalSearch from './GlobalSearch'
 import DarkModeToggle from './DarkModeToggle'
@@ -117,13 +118,25 @@ export default function Navbar() {
                 <div className="flex justify-between items-center h-16">
 
                     {/* Logo */}
-                    <Link href="/" className="flex-shrink-0 flex flex-col justify-center group focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-md p-1">
-                        <span className="font-heading text-xl font-bold navbar-logo-text leading-tight transition-colors duration-200 text-navy dark:text-white">
-                            CorpLawUpdates<span className="text-amber-700 dark:text-gold group-hover:text-amber-600 transition-colors">.in</span>
-                        </span>
-                        <span className="hidden sm:block text-[10px] font-semibold tracking-[0.18em] uppercase mt-0.5 transition-colors duration-200 text-slate-500 dark:text-slate-400">
-                            Corporate Law Intelligence
-                        </span>
+                    <Link href="/" className="flex-shrink-0 flex items-center gap-2.5 sm:gap-3 group focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-md p-1">
+                        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden shadow-sm ring-1 ring-amber-500/20 group-hover:ring-amber-500/50 transition-all shrink-0 bg-slate-900">
+                            <Image
+                                src="/icon-192.png"
+                                alt="CorpLawUpdates Logo"
+                                width={40}
+                                height={40}
+                                className="w-full h-full object-cover"
+                                priority
+                            />
+                        </div>
+                        <div className="flex flex-col justify-center">
+                            <span className="font-heading text-xl font-bold navbar-logo-text leading-tight transition-colors duration-200 text-navy dark:text-white">
+                                CorpLawUpdates<span className="text-amber-700 dark:text-gold group-hover:text-amber-600 transition-colors">.in</span>
+                            </span>
+                            <span className="hidden sm:block text-[10px] font-semibold tracking-[0.18em] uppercase mt-0.5 transition-colors duration-200 text-slate-500 dark:text-slate-400">
+                                Corporate Law Intelligence
+                            </span>
+                        </div>
                     </Link>
 
                     {/* Desktop Nav */}

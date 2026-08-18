@@ -2,6 +2,7 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Link from 'next/link'
+import Image from 'next/image'
 import { Calendar, Rss, ArrowRight, Mail } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
@@ -67,13 +68,24 @@ export default async function Footer() {
                     
                     {/* Brand Info */}
                     <div className="lg:col-span-5">
-                        <Link href="/" className="inline-block group mb-6 focus:outline-none focus:ring-2 focus:ring-amber-500 rounded-md p-1">
-                            <h3 className="font-heading text-2xl font-bold text-white group-hover:text-white/90 transition-colors">
-                                CorpLawUpdates<span className="text-amber-500">.in</span>
-                            </h3>
-                            <p className="text-[11px] font-bold text-slate-300 tracking-[0.2em] uppercase mt-1">
-                                Corporate Law Intelligence
-                            </p>
+                        <Link href="/" className="inline-flex items-center gap-3.5 group mb-6 focus:outline-none focus:ring-2 focus:ring-amber-500 rounded-md p-1">
+                            <div className="w-10 h-10 rounded-xl overflow-hidden shadow-sm ring-1 ring-white/15 group-hover:ring-amber-500/50 transition-all shrink-0 bg-slate-900">
+                                <Image
+                                    src="/icon-192.png"
+                                    alt="CorpLawUpdates Logo"
+                                    width={40}
+                                    height={40}
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                            <div>
+                                <h3 className="font-heading text-2xl font-bold text-white group-hover:text-white/90 transition-colors">
+                                    CorpLawUpdates<span className="text-amber-500">.in</span>
+                                </h3>
+                                <p className="text-[11px] font-bold text-slate-300 tracking-[0.2em] uppercase mt-0.5">
+                                    Corporate Law Intelligence
+                                </p>
+                            </div>
                         </Link>
                         <p className="text-slate-300 text-base leading-relaxed max-w-md mb-8">
                             India's first free-to-access intelligence platform for regulatory updates. 
