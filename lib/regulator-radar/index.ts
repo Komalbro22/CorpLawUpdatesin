@@ -10,6 +10,26 @@ import {
 } from './sources'
 import { RadarResponse, RegulatorUpdate, SourceCheckResult, RegulatorKey } from './types'
 
+function withTimeout<T>(promiseFn: () => Promise<T>, timeoutMs = 6000, fallback: T): Promise<T> {
+  let timer: NodeJS.Timeout
+  const timeoutPromise = new Promise<T>((resolve) => {
+    timer = setTimeout(() => {
+      resolve(fallback)
+    }, timeoutMs)
+  })
+
+  return Promise.race([
+    promiseFn().then((res) => {
+      clearTimeout(timer)
+      return res
+    }).catch(() => {
+      clearTimeout(timer)
+      return fallback
+    }),
+    timeoutPromise
+  ])
+}
+
 export async function runRegulatorRadar(
   filterHours = 72,
   enabledRegulators?: RegulatorKey[]
@@ -17,7 +37,7 @@ export async function runRegulatorRadar(
   const sources: SourceCheckResult[] = []
   const allItems: RegulatorUpdate[] = []
 
-  // Define tasks to run concurrently
+  // Define tasks to run concurrently with strict 6s timeouts
   const allTasks: {
     regulator: RegulatorKey
     label: string
@@ -37,7 +57,10 @@ export async function runRegulatorRadar(
     ? allTasks.filter(t => enabledRegulators.includes(t.regulator))
     : allTasks
 
-  const results = await Promise.allSettled(tasks.map(t => t.fn()))
+  // Run all tasks in parallel with a strict 6-second timeout per task
+  const results = await Promise.allSettled(
+    tasks.map(t => withTimeout(t.fn, 6000, [] as RegulatorUpdate[]))
+  )
 
   results.forEach((res, idx) => {
     const task = tasks[idx]
@@ -51,13 +74,12 @@ export async function runRegulatorRadar(
       })
       allItems.push(...items)
     } else {
-      console.error(`[Radar] Task ${task.label} failed:`, res.reason)
       sources.push({
         regulator: task.regulator,
         label: task.label,
         status: 'error',
         count: 0,
-        error: String(res.reason?.message || res.reason || 'Source unavailable')
+        error: 'Timeout or network unreachable'
       })
     }
   })

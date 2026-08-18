@@ -5,7 +5,7 @@ import { runRegulatorRadar } from '@/lib/regulator-radar'
 import { getCached, setCached } from '@/lib/redis-cache'
 import { RadarResponse } from '@/lib/regulator-radar/types'
 
-export const maxDuration = 30 // Allow up to 30s on Vercel Pro, standard 10s on Hobby
+export const maxDuration = 60
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
@@ -28,7 +28,7 @@ export async function GET(request: Request) {
   if (!isFresh) {
     try {
       const cached = await getCached<RadarResponse>(cacheKey)
-      if (cached) {
+      if (cached && Array.isArray(cached.items) && cached.items.length > 0) {
         return NextResponse.json({ ...cached, cached: true })
       }
     } catch (e) {
@@ -36,15 +36,30 @@ export async function GET(request: Request) {
     }
   }
 
-  // 2. Fetch fresh updates from enabled regulators
+  // 2. Fetch fresh updates with strict 8.5s maximum execution budget
   try {
-    const radarData = await runRegulatorRadar(hours, enabledRegulators)
+    const radarPromise = runRegulatorRadar(hours, enabledRegulators)
+    const timeoutFallback: RadarResponse = {
+      status: 'partial',
+      checkedAt: new Date().toISOString(),
+      filterHours: hours,
+      totalFound: 0,
+      sources: [],
+      items: []
+    }
 
-    // Cache results for 15 minutes (900s) to keep Vercel execution & government server load minimal
-    try {
-      await setCached(cacheKey, radarData, 900)
-    } catch (e) {
-      console.warn('[Radar API] Redis set failed:', e)
+    const radarData = await Promise.race([
+      radarPromise,
+      new Promise<RadarResponse>((resolve) => setTimeout(() => resolve(timeoutFallback), 8500))
+    ])
+
+    // Cache results for 10 minutes (600s)
+    if (radarData.items && radarData.items.length > 0) {
+      try {
+        await setCached(cacheKey, radarData, 600)
+      } catch (e) {
+        console.warn('[Radar API] Redis set failed:', e)
+      }
     }
 
     return NextResponse.json({ ...radarData, cached: false })
@@ -58,7 +73,7 @@ export async function GET(request: Request) {
         sources: [],
         items: []
       },
-      { status: 500 }
+      { status: 200 } // Return 200 with empty items so client doesn't crash on 500/504
     )
   }
 }
