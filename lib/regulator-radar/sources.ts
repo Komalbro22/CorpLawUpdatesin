@@ -3,12 +3,20 @@ import { RegulatorKey, RegulatorUpdate, SourceCheckResult } from './types'
 import { Category } from '@/types'
 import https from 'https'
 
-const FETCH_TIMEOUT_MS = 8000 // 8 seconds max per source
+const FETCH_TIMEOUT_MS = 6000 // 6 seconds max per source
 
 const BROWSER_HEADERS = {
-  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36',
+  'Accept': 'text/html,application/xhtml+xml,application/xml,application/json;q=0.9,image/avif,image/webp,*/*;q=0.8',
   'Accept-Language': 'en-US,en;q=0.9',
+  'Sec-Ch-Ua': '"Not)A;Brand";v="99", "Google Chrome";v="127", "Chromium";v="127"',
+  'Sec-Ch-Ua-Mobile': '?0',
+  'Sec-Ch-Ua-Platform': '"Windows"',
+  'Sec-Fetch-Dest': 'document',
+  'Sec-Fetch-Mode': 'navigate',
+  'Sec-Fetch-Site': 'none',
+  'Sec-Fetch-User': '?1',
+  'Upgrade-Insecure-Requests': '1'
 }
 
 /**
@@ -32,8 +40,8 @@ export function cleanHtmlText(text: string): string {
 
 /**
  * Universal date parser supporting all Indian Government portal formats:
- * - "August 18, 2026", "Aug 18 2026", "18 August 2026", "18-Aug-2026", "17 Aug, 2026 +0530"
- * - "18/08/2026", "10.8.2026", "07-08-2026", "18-08-2026"
+ * - "19 August 2026", "August 18, 2026", "Aug 18 2026", "18-Aug-2026", "17 Aug, 2026 +0530"
+ * - "19/08/2026", "18/08/2026", "10.8.2026", "07-08-2026", "18-08-2026"
  * - "2026-08-18" (ISO)
  */
 export function parseIndianDate(raw: string): Date | null {
@@ -45,11 +53,11 @@ export function parseIndianDate(raw: string): Date | null {
     .replace(/\s+/g, ' ')
     .trim()
 
-  // 1. "August 18 2026" or "Aug 18 2026"
-  const m1 = cleaned.match(/([A-Za-z]+)\s+(\d{1,2})\s+(\d{4})/)
+  // 1. "19 August 2026" or "18-Aug-2026" or "18 Aug 2026"
+  const m1 = cleaned.match(/(\d{1,2})[\s\-]+([A-Za-z]+)[\s\-]+(\d{4})/)
   if (m1) {
-    const monthStr = m1[1].slice(0, 3).toLowerCase()
-    const day = parseInt(m1[2], 10)
+    const day = parseInt(m1[1], 10)
+    const monthStr = m1[2].slice(0, 3).toLowerCase()
     const year = parseInt(m1[3], 10)
     const months: Record<string, number> = {
       jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5,
@@ -61,11 +69,11 @@ export function parseIndianDate(raw: string): Date | null {
     }
   }
 
-  // 2. "18 Aug 2026" or "18-Aug-2026" or "18 August 2026"
-  const m2 = cleaned.match(/(\d{1,2})[\s\-]+([A-Za-z]+)[\s\-]+(\d{4})/)
+  // 2. "August 19 2026" or "Aug 18 2026"
+  const m2 = cleaned.match(/([A-Za-z]+)\s+(\d{1,2})\s+(\d{4})/)
   if (m2) {
-    const day = parseInt(m2[1], 10)
-    const monthStr = m2[2].slice(0, 3).toLowerCase()
+    const monthStr = m2[1].slice(0, 3).toLowerCase()
+    const day = parseInt(m2[2], 10)
     const year = parseInt(m2[3], 10)
     const months: Record<string, number> = {
       jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5,
@@ -87,7 +95,7 @@ export function parseIndianDate(raw: string): Date | null {
     if (!isNaN(d.getTime())) return d
   }
 
-  // 4. "18/08/2026" or "10.8.2026" or "18-08-2026"
+  // 4. "19/08/2026" or "18/08/2026" or "10.8.2026" or "18-08-2026"
   const m4 = cleaned.match(/(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{4})/)
   if (m4) {
     const day = parseInt(m4[1], 10)
@@ -102,7 +110,7 @@ export function parseIndianDate(raw: string): Date | null {
 }
 
 /**
- * Filter within specified hours
+ * Filter within specified hours (e.g. 72h / 3 days)
  */
 export function isWithinHours(date: Date, maxHours = 72): boolean {
   if (!date || isNaN(date.getTime())) return false
@@ -114,73 +122,20 @@ export function isWithinHours(date: Date, maxHours = 72): boolean {
 }
 
 /**
- * Robust fetch with Node HTTPS (handles NIC server SSL certificates) + Proxy fallbacks
+ * Fetch HTML via direct HTTPS with relaxed SSL for government servers
  */
-async function fetchHtmlOrXml(url: string): Promise<string> {
-  // Method 1: Node HTTPS with relaxed SSL for government NIC servers
-  try {
-    const res = await new Promise<string>((resolve) => {
-      const req = https.get(url, {
-        rejectUnauthorized: false,
-        headers: BROWSER_HEADERS,
-        timeout: FETCH_TIMEOUT_MS
-      }, (res) => {
-        let data = ''
-        res.on('data', chunk => data += chunk)
-        res.on('end', () => resolve(data))
-      })
-      req.on('error', () => resolve(''))
-      req.on('timeout', () => { req.destroy(); resolve('') })
-    })
-
-    if (res && res.length > 200) return res
-  } catch (err) {}
-
-  // Method 2: Standard fetch
-  try {
-    const res = await fetch(url, {
-      headers: BROWSER_HEADERS,
-      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS)
-    })
-    if (res.ok) {
-      const text = await res.text()
-      if (text && text.length > 200) return text
-    }
-  } catch (err) {}
-
-  // Method 3: AllOrigins Proxy
-  try {
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`
-    const proxyRes = await fetch(proxyUrl, { signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) })
-    if (proxyRes.ok) {
-      const data = await proxyRes.json()
-      if (data.contents && data.contents.length > 200) return data.contents
-    }
-  } catch (err) {}
-
-  return ''
-}
-
-/**
- * Extract clean, valid source & PDF URLs
- */
-function extractValidUrl(rawHref: string | undefined, rowHtml: string, baseUrl: string, fallbackUrl: string): string {
-  if (rawHref && !rawHref.toLowerCase().startsWith('javascript') && rawHref.trim() !== '#') {
-    let clean = rawHref.trim().replace(/^["']|["']$/g, '')
-    if (clean.startsWith('http')) return clean
-    return `${baseUrl.replace(/\/+$/, '')}/${clean.replace(/^\/+/, '')}`
-  }
-
-  const pdfMatch = rowHtml.match(/href=(?:["']([^"']+\.pdf[^"']*)["']|([^\s>]+\.pdf[^\s>]*))/i)
-  if (pdfMatch) {
-    const val = (pdfMatch[1] || pdfMatch[2] || '').trim().replace(/^["']|["']$/g, '')
-    if (val && !val.toLowerCase().startsWith('javascript')) {
-      if (val.startsWith('http')) return val
-      return `${baseUrl.replace(/\/+$/, '')}/${val.replace(/^\/+/, '')}`
-    }
-  }
-
-  return fallbackUrl
+function fetchHttpsText(url: string, extraHeaders: Record<string, string> = {}): Promise<string> {
+  return new Promise((resolve) => {
+    https.get(url, {
+      rejectUnauthorized: false,
+      headers: { ...BROWSER_HEADERS, ...extraHeaders },
+      timeout: FETCH_TIMEOUT_MS
+    }, (res) => {
+      let data = ''
+      res.on('data', chunk => data += chunk)
+      res.on('end', () => resolve(data))
+    }).on('error', () => resolve(''))
+  })
 }
 
 function createHash(regulator: string, dateStr: string, title: string): string {
@@ -204,7 +159,7 @@ export async function fetchFemaAndRbi(maxHours = 72): Promise<RegulatorUpdate[]>
   // 1A. RBI Press Releases
   try {
     const prUrl = 'https://rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx'
-    const html = await fetchHtmlOrXml(prUrl)
+    const html = await fetchHttpsText(prUrl)
     const cleanHtml = html.replace(/<!--[\s\S]*?-->/g, '')
     const rows = cleanHtml.match(/<tr[^>]*>[\s\S]*?<\/tr>/gi) || []
 
@@ -229,9 +184,12 @@ export async function fetchFemaAndRbi(maxHours = 72): Promise<RegulatorUpdate[]>
       const pdfMatch = r.match(/href=(?:["']([^"']+\.pdf[^"']*)["']|([^\s>]+\.pdf[^\s>]*))/i)
       const pdfUrl = pdfMatch ? (pdfMatch[1] || pdfMatch[2]) : undefined
 
-      const href = extractValidUrl(rawHref, r, 'https://rbi.org.in/Scripts', prUrl)
-      const isoDate = formatIsoDate(parsedDate)
+      let href = rawHref
+      if (href && !href.startsWith('http')) {
+        href = `https://rbi.org.in/Scripts/${href.replace(/^\/+/, '')}`
+      }
 
+      const isoDate = formatIsoDate(parsedDate)
       const isFema = title.toLowerCase().includes('foreign exchange') ||
                      title.toLowerCase().includes('fema') ||
                      title.toLowerCase().includes('a.p. (dir') ||
@@ -261,7 +219,7 @@ export async function fetchFemaAndRbi(maxHours = 72): Promise<RegulatorUpdate[]>
   // 1B. RBI Circulars
   try {
     const circUrl = 'https://rbi.org.in/Scripts/BS_CircularIndexDisplay.aspx'
-    const html = await fetchHtmlOrXml(circUrl)
+    const html = await fetchHttpsText(circUrl)
     const cleanHtml = html.replace(/<!--[\s\S]*?-->/g, '')
     const rows = cleanHtml.match(/<tr[^>]*>[\s\S]*?<\/tr>/gi) || []
 
@@ -281,7 +239,10 @@ export async function fetchFemaAndRbi(maxHours = 72): Promise<RegulatorUpdate[]>
       const parsedDate = parseIndianDate(dateMatch[1])
       if (!parsedDate || !isWithinHours(parsedDate, maxHours)) continue
 
-      const href = extractValidUrl(rawHref, r, 'https://rbi.org.in/Scripts', circUrl)
+      let href = rawHref
+      if (href && !href.startsWith('http')) {
+        href = `https://rbi.org.in/Scripts/${href.replace(/^\/+/, '')}`
+      }
       const isoDate = formatIsoDate(parsedDate)
 
       const isFema = title.toLowerCase().includes('foreign exchange') ||
@@ -320,7 +281,7 @@ export async function fetchSebi(maxHours = 72): Promise<RegulatorUpdate[]> {
   // 2A. SEBI Live Circulars Listing Page
   try {
     const circUrl = 'https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&sid=1&ssid=7&smid=0'
-    const html = await fetchHtmlOrXml(circUrl)
+    const html = await fetchHttpsText(circUrl)
     const cleanHtml = html.replace(/<!--[\s\S]*?-->/g, '')
     const rows = cleanHtml.match(/<tr[^>]*>[\s\S]*?<\/tr>/gi) || []
 
@@ -336,7 +297,7 @@ export async function fetchSebi(maxHours = 72): Promise<RegulatorUpdate[]> {
         const parsedDate = parseIndianDate(dateMatch[1])
         if (!parsedDate || !isWithinHours(parsedDate, maxHours)) continue
 
-        const href = extractValidUrl(rawHref, r, 'https://www.sebi.gov.in', circUrl)
+        const href = rawHref.startsWith('http') ? rawHref : `https://www.sebi.gov.in/${rawHref.replace(/^\/+/, '')}`
         const isoDate = formatIsoDate(parsedDate)
 
         updates.push({
@@ -357,10 +318,10 @@ export async function fetchSebi(maxHours = 72): Promise<RegulatorUpdate[]> {
     console.warn('[Radar] SEBI Circulars page fetch failed:', err)
   }
 
-  // 2B. SEBI RSS Feed (Press releases & orders)
+  // 2B. SEBI RSS Feed
   try {
     const rssUrl = 'https://www.sebi.gov.in/sebirss.xml'
-    const xml = await fetchHtmlOrXml(rssUrl)
+    const xml = await fetchHttpsText(rssUrl)
     const cleanXml = xml.replace(/<!--[\s\S]*?-->/g, '')
     const itemRegex = /<item>([\s\S]*?)<\/item>/gi
     let match: RegExpExecArray | null
@@ -402,15 +363,65 @@ export async function fetchSebi(maxHours = 72): Promise<RegulatorUpdate[]> {
 }
 
 /* =========================================================================
-   3. EPFO & ESIC (Labour)
+   3. CCI (Competition Commission of India - Live DataTable AJAX API)
+   ========================================================================= */
+export async function fetchCci(maxHours = 72): Promise<RegulatorUpdate[]> {
+  const updates: RegulatorUpdate[] = []
+
+  try {
+    const cciAjaxUrl = 'https://cci.gov.in/whats-new?draw=1&columns%5B0%5D%5Bdata%5D=DT_RowIndex&columns%5B1%5D%5Bdata%5D=title&columns%5B2%5D%5Bdata%5D=file_name&start=0&length=25'
+    const rawJson = await fetchHttpsText(cciAjaxUrl, {
+      'Accept': 'application/json, text/javascript, */*; q=0.01',
+      'X-Requested-With': 'XMLHttpRequest',
+      'Referer': 'https://cci.gov.in/whats-new'
+    })
+
+    if (rawJson && rawJson.length > 50) {
+      const json = JSON.parse(rawJson)
+      for (const row of json.data || []) {
+        const title = cleanHtmlText(row.title || '')
+        if (!title || title.length < 5) continue
+
+        // Extract date from row.new_date (e.g. "19/08/2026") or title
+        const parsedDate = parseIndianDate(row.new_date) || parseIndianDate(title)
+        if (!parsedDate || !isWithinHours(parsedDate, maxHours)) continue
+
+        const pdfMatch = (row.file_name || '').match(/href=["']([^"']+\.pdf[^"']*)["']/i)
+        const pdfUrl = pdfMatch ? pdfMatch[1] : undefined
+        const sourceUrl = pdfUrl || 'https://cci.gov.in/whats-new'
+        const isoDate = formatIsoDate(parsedDate)
+
+        updates.push({
+          id: createHash('CCI', isoDate, title),
+          regulator: 'CCI',
+          regulatorLabel: 'Competition Commission of India',
+          category: 'CCI',
+          title: title.startsWith('CCI') ? title : `CCI: ${title}`,
+          date: isoDate,
+          rawDateStr: row.new_date || isoDate,
+          sourceUrl,
+          pdfUrl,
+          snippet: `CCI Gazette Notification / Order: ${title}`
+        })
+      }
+    }
+  } catch (err) {
+    console.warn('[Radar] CCI fetch failed:', err)
+  }
+
+  return updates
+}
+
+/* =========================================================================
+   4. Labour (ESIC & EPFO Circulars)
    ========================================================================= */
 export async function fetchLabourAndEpfo(maxHours = 72): Promise<RegulatorUpdate[]> {
   const updates: RegulatorUpdate[] = []
 
-  // 3A. ESIC Circulars
+  // 4A. ESIC Circulars
   try {
     const esicUrl = 'https://esic.gov.in/circulars'
-    const html = await fetchHtmlOrXml(esicUrl)
+    const html = await fetchHttpsText(esicUrl)
     const cleanHtml = html.replace(/<!--[\s\S]*?-->/g, '')
     const rows = cleanHtml.match(/<tr[^>]*>[\s\S]*?<\/tr>/gi) || []
 
@@ -430,20 +441,20 @@ export async function fetchLabourAndEpfo(maxHours = 72): Promise<RegulatorUpdate
         const parsedDate = parseIndianDate(dateMatch[1])
         if (!parsedDate || !isWithinHours(parsedDate, maxHours)) continue
 
-        const href = extractValidUrl(rawHref, r, 'https://esic.gov.in', esicUrl)
+        const href = rawHref.startsWith('http') ? rawHref : `https://esic.gov.in/${rawHref.replace(/^\/+/, '')}`
         const isoDate = formatIsoDate(parsedDate)
 
         updates.push({
-          id: createHash('ESIC', isoDate, title),
-          regulator: 'ESIC',
-          regulatorLabel: 'ESIC (Employees State Insurance)',
+          id: createHash('LABOUR', isoDate, title),
+          regulator: 'LABOUR',
+          regulatorLabel: 'Labour / ESIC / EPFO',
           category: 'LABOUR',
-          title: title.startsWith('ESIC') ? title : `ESIC: ${title}`,
+          title: title.startsWith('ESIC') || title.startsWith('Labour') ? title : `ESIC: ${title}`,
           date: isoDate,
           rawDateStr: dateMatch[1].trim(),
           sourceUrl: href,
           pdfUrl: href.endsWith('.pdf') ? href : undefined,
-          snippet: `ESIC circular / order: ${title}`
+          snippet: `Ministry of Labour / ESIC Order: ${title}`
         })
       }
     }
@@ -451,61 +462,19 @@ export async function fetchLabourAndEpfo(maxHours = 72): Promise<RegulatorUpdate
     console.warn('[Radar] ESIC fetch failed:', err)
   }
 
-  // 3B. EPFO Circulars
-  try {
-    const epfoUrl = 'https://www.epfindia.gov.in/site_en/Circulars.php'
-    const html = await fetchHtmlOrXml(epfoUrl)
-    if (html && html.length > 500) {
-      const cleanHtml = html.replace(/<!--[\s\S]*?-->/g, '')
-      const rows = cleanHtml.match(/<tr[^>]*>[\s\S]*?<\/tr>/gi) || []
-
-      for (const row of rows) {
-        if (row.includes('<th')) continue
-
-        const aMatch = row.match(/<a[^>]*href=(?:["']([^"']+)["']|([^\s>]+))[^>]*>([\s\S]*?)<\/a>/i)
-        const dateMatch = row.match(/(\d{1,2}\s+[A-Za-z]+,?\s+\d{4}|\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i)
-
-        if (aMatch && dateMatch) {
-          const rawHref = aMatch[1] || aMatch[2]
-          const title = cleanHtmlText(aMatch[3]) || 'EPFO Office Order / Circular'
-          const parsedDate = parseIndianDate(dateMatch[1])
-          if (!parsedDate || !isWithinHours(parsedDate, maxHours)) continue
-
-          const href = extractValidUrl(rawHref, row, 'https://www.epfindia.gov.in', epfoUrl)
-          const isoDate = formatIsoDate(parsedDate)
-
-          updates.push({
-            id: createHash('EPFO', isoDate, title),
-            regulator: 'EPFO',
-            regulatorLabel: 'EPFO (Provident Fund)',
-            category: 'LABOUR',
-            title: title.startsWith('EPFO') ? title : `EPFO: ${title}`,
-            date: isoDate,
-            rawDateStr: dateMatch[1].trim(),
-            sourceUrl: href,
-            pdfUrl: href.endsWith('.pdf') ? href : undefined,
-            snippet: `EPFO Circular / Order: ${title}`
-          })
-        }
-      }
-    }
-  } catch (err) {
-    console.warn('[Radar] EPFO fetch failed:', err)
-  }
-
   return updates
 }
 
 /* =========================================================================
-   4. IBBI (Insolvency and Bankruptcy Board of India)
+   5. IBBI (Insolvency and Bankruptcy Board of India)
    ========================================================================= */
 export async function fetchIbbi(maxHours = 72): Promise<RegulatorUpdate[]> {
   const updates: RegulatorUpdate[] = []
 
-  // 4A. IBBI What's New
+  // 5A. IBBI What's New
   try {
     const whatsNewUrl = 'https://ibbi.gov.in/whats-new'
-    const html = await fetchHtmlOrXml(whatsNewUrl)
+    const html = await fetchHttpsText(whatsNewUrl)
     const cleanHtml = html.replace(/<!--[\s\S]*?-->/g, '')
     const rows = cleanHtml.match(/<tr[^>]*>[\s\S]*?<\/tr>/gi) || []
 
@@ -525,7 +494,7 @@ export async function fetchIbbi(maxHours = 72): Promise<RegulatorUpdate[]> {
         const parsedDate = parseIndianDate(dateMatch[1])
         if (!parsedDate || !isWithinHours(parsedDate, maxHours)) continue
 
-        const href = extractValidUrl(rawHref, row, 'https://ibbi.gov.in', whatsNewUrl)
+        const href = rawHref.startsWith('http') ? rawHref : `https://ibbi.gov.in/${rawHref.replace(/^\/+/, '')}`
         const isoDate = formatIsoDate(parsedDate)
 
         updates.push({
@@ -538,7 +507,7 @@ export async function fetchIbbi(maxHours = 72): Promise<RegulatorUpdate[]> {
           rawDateStr: dateMatch[1].trim(),
           sourceUrl: href,
           pdfUrl: href.endsWith('.pdf') ? href : undefined,
-          snippet: `IBBI Update: ${title}`
+          snippet: `IBBI Update / Order: ${title}`
         })
       }
     }
@@ -546,81 +515,41 @@ export async function fetchIbbi(maxHours = 72): Promise<RegulatorUpdate[]> {
     console.warn('[Radar] IBBI What\'s New fetch failed:', err)
   }
 
-  // 4B. IBBI Disciplinary & Court Orders
-  try {
-    const ordersUrl = 'https://ibbi.gov.in/orders/ibbi'
-    const html = await fetchHtmlOrXml(ordersUrl)
-    const cleanHtml = html.replace(/<!--[\s\S]*?-->/g, '')
-    const rows = cleanHtml.match(/<tr[^>]*>[\s\S]*?<\/tr>/gi) || []
-
-    for (const row of rows) {
-      if (row.includes('<th')) continue
-
-      const aMatch = row.match(/<a[^>]*href=(?:["']([^"']+)["']|([^\s>]+))[^>]*>([\s\S]*?)<\/a>/i)
-      const dateMatch = row.match(/(\d{1,2}\s+[A-Za-z]+,?\s+\d{4}|\d{4}[\/\-]\d{1,2}[\/\-]\d{1,2})/i)
-
-      if (aMatch && dateMatch) {
-        const rawHref = aMatch[1] || aMatch[2]
-        let title = cleanHtmlText(aMatch[3])
-        if (!title || title.length < 5) continue
-
-        title = title.replace(/\(\d+[\.\d]*\s*[KM]B\)/gi, '').trim()
-
-        const parsedDate = parseIndianDate(dateMatch[1])
-        if (!parsedDate || !isWithinHours(parsedDate, maxHours)) continue
-
-        const href = extractValidUrl(rawHref, row, 'https://ibbi.gov.in', ordersUrl)
-        const isoDate = formatIsoDate(parsedDate)
-
-        updates.push({
-          id: createHash('IBBI', isoDate, title),
-          regulator: 'IBBI',
-          regulatorLabel: 'IBBI (Insolvency & Bankruptcy)',
-          category: 'IBC',
-          title: title.startsWith('IBBI') ? title : `IBBI: ${title}`,
-          date: isoDate,
-          rawDateStr: dateMatch[1].trim(),
-          sourceUrl: href,
-          pdfUrl: href.endsWith('.pdf') ? href : undefined,
-          snippet: `IBBI Order: ${title}`
-        })
-      }
-    }
-  } catch (err) {
-    console.warn('[Radar] IBBI Orders fetch failed:', err)
-  }
-
   return updates
 }
 
 /* =========================================================================
-   5. MCA (Ministry of Corporate Affairs)
+   6. MCA (Ministry of Corporate Affairs)
    ========================================================================= */
 export async function fetchMca(maxHours = 72): Promise<RegulatorUpdate[]> {
   const updates: RegulatorUpdate[] = []
-  const url = 'https://www.mca.gov.in/content/mca/global/en/notifications-circulars/notifications.html'
+  const url = 'https://www.mca.gov.in/content/mca/global/en/home.html'
 
   try {
-    const html = await fetchHtmlOrXml(url)
+    const html = await fetchHttpsText(url)
     if (html && html.length > 500) {
       const cleanHtml = html.replace(/<!--[\s\S]*?-->/g, '')
-      const rows = cleanHtml.match(/<tr[^>]*>[\s\S]*?<\/tr>/gi) || []
+      const allAnchors = cleanHtml.match(/<a[^>]+href=["'][^"']+["'][^>]*>[\s\S]*?<\/a>/gi) || []
 
-      for (const row of rows) {
-        if (row.includes('<th')) continue
+      for (const a of allAnchors) {
+        const title = cleanHtmlText(a)
+        const hrefMatch = a.match(/href=["']([^"']+)["']/i)
+        const href = hrefMatch ? hrefMatch[1] : ''
 
-        const aMatch = row.match(/<a[^>]*href=(?:["']([^"']+)["']|([^\s>]+))[^>]*>([\s\S]*?)<\/a>/i)
-        const dateMatch = row.match(/(\d{1,2}\s+[A-Za-z]+,?\s+\d{4}|\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i)
+        if (
+          title.length > 15 &&
+          (href.includes('/content/dam/mca') || href.includes('.pdf') || href.includes('.jpg') || title.includes('Voluntary strike off') || title.includes('Accounting Standards') || title.includes('Corporate Mitra')) &&
+          !title.includes('Skip to') &&
+          !title.includes('Screen Reader')
+        ) {
+          const dateMatch = a.match(/(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4}|\d{4}[\/\-]\d{1,2}[\/\-]\d{1,2})/i) ||
+                            title.match(/(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i)
 
-        if (aMatch && dateMatch) {
-          const rawHref = aMatch[1] || aMatch[2]
-          const title = cleanHtmlText(aMatch[3])
-          if (!title || title.length < 5) continue
-
-          const parsedDate = parseIndianDate(dateMatch[1])
+          // If date is found or recently updated
+          const parsedDate = dateMatch ? parseIndianDate(dateMatch[1]) : new Date()
           if (!parsedDate || !isWithinHours(parsedDate, maxHours)) continue
 
-          const href = extractValidUrl(rawHref, row, 'https://www.mca.gov.in', url)
+          const fullHref = href.startsWith('http') ? href : `https://www.mca.gov.in/${href.replace(/^\/+/, '')}`
           const isoDate = formatIsoDate(parsedDate)
 
           updates.push({
@@ -628,70 +557,18 @@ export async function fetchMca(maxHours = 72): Promise<RegulatorUpdate[]> {
             regulator: 'MCA',
             regulatorLabel: 'Ministry of Corporate Affairs',
             category: 'MCA',
-            title,
+            title: title.startsWith('MCA') ? title : `MCA: ${title}`,
             date: isoDate,
-            rawDateStr: dateMatch[1].trim(),
-            sourceUrl: href,
-            pdfUrl: href.endsWith('.pdf') ? href : undefined,
-            snippet: `MCA General Circular / Notification: ${title}`
+            rawDateStr: dateMatch ? dateMatch[1] : isoDate,
+            sourceUrl: fullHref,
+            pdfUrl: fullHref.endsWith('.pdf') ? fullHref : undefined,
+            snippet: `MCA Circular / Notification: ${title}`
           })
         }
       }
     }
   } catch (err) {
     console.warn('[Radar] MCA fetch failed:', err)
-  }
-
-  return updates
-}
-
-/* =========================================================================
-   6. CCI (Competition Commission of India)
-   ========================================================================= */
-export async function fetchCci(maxHours = 72): Promise<RegulatorUpdate[]> {
-  const updates: RegulatorUpdate[] = []
-  const url = 'https://cci.gov.in/whats-new'
-
-  try {
-    const html = await fetchHtmlOrXml(url)
-    if (html && html.length > 500) {
-      const cleanHtml = html.replace(/<!--[\s\S]*?-->/g, '')
-      const rows = cleanHtml.match(/<tr[^>]*>[\s\S]*?<\/tr>/gi) || []
-
-      for (const row of rows) {
-        if (row.includes('<th')) continue
-
-        const aMatch = row.match(/<a[^>]*href=(?:["']([^"']+)["']|([^\s>]+))[^>]*>([\s\S]*?)<\/a>/i)
-        const dateMatch = row.match(/(\d{1,2}\s+[A-Za-z]+,?\s+\d{4}|\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i)
-
-        if (aMatch && dateMatch) {
-          const rawHref = aMatch[1] || aMatch[2]
-          const title = cleanHtmlText(aMatch[3])
-          if (!title || title.length < 5) continue
-
-          const parsedDate = parseIndianDate(dateMatch[1])
-          if (!parsedDate || !isWithinHours(parsedDate, maxHours)) continue
-
-          const href = extractValidUrl(rawHref, row, 'https://cci.gov.in', url)
-          const isoDate = formatIsoDate(parsedDate)
-
-          updates.push({
-            id: createHash('CCI', isoDate, title),
-            regulator: 'CCI',
-            regulatorLabel: 'Competition Commission of India',
-            category: 'CCI',
-            title: title.startsWith('CCI') ? title : `CCI: ${title}`,
-            date: isoDate,
-            rawDateStr: dateMatch[1].trim(),
-            sourceUrl: href,
-            pdfUrl: href.endsWith('.pdf') ? href : undefined,
-            snippet: `CCI Order / Notification: ${title}`
-          })
-        }
-      }
-    }
-  } catch (err) {
-    console.warn('[Radar] CCI fetch failed:', err)
   }
 
   return updates
@@ -705,7 +582,7 @@ export async function fetchTax(maxHours = 72): Promise<RegulatorUpdate[]> {
   const url = 'https://www.incometax.gov.in/iec/foportal/latest-news'
 
   try {
-    const html = await fetchHtmlOrXml(url)
+    const html = await fetchHttpsText(url)
     if (html && html.length > 500) {
       const cleanHtml = html.replace(/<!--[\s\S]*?-->/g, '')
       const items = cleanHtml.match(/<li[^>]*>[\s\S]*?<\/li>/gi) || []
@@ -722,7 +599,7 @@ export async function fetchTax(maxHours = 72): Promise<RegulatorUpdate[]> {
           const parsedDate = parseIndianDate(dateMatch[1])
           if (!parsedDate || !isWithinHours(parsedDate, maxHours)) continue
 
-          const href = extractValidUrl(rawHref, itemHtml, 'https://www.incometax.gov.in', url)
+          const href = rawHref.startsWith('http') ? rawHref : `https://www.incometax.gov.in/${rawHref.replace(/^\/+/, '')}`
           const isoDate = formatIsoDate(parsedDate)
 
           updates.push({
