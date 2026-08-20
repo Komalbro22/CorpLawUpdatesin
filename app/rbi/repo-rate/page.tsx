@@ -158,6 +158,8 @@ export default async function RepoRatePage() {
     name: 'Reserve Bank of India (RBI) Policy Repo Rate & Monetary Policy History',
     description: 'Official historical policy interest rates, meeting dates, stance, and macroeconomic forecasts published by the Reserve Bank of India Monetary Policy Committee.',
     url: 'https://www.corplawupdates.in/rbi/repo-rate',
+    license: 'https://creativecommons.org/licenses/by/4.0/',
+    isAccessibleForFree: true,
     creator: {
       '@type': 'Organization',
       name: 'Reserve Bank of India',
@@ -525,21 +527,27 @@ export default async function RepoRatePage() {
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {/* Upcoming Minutes Card */}
-            <div className="p-4 rounded-xl bg-white border border-amber-200/80 shadow-sm space-y-2">
-              <div className="flex items-center justify-between gap-2">
-                <span className="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-200">
-                  Upcoming Detailed Article
-                </span>
-                <span className="text-[11px] font-semibold text-slate-500">Minutes: Aug 19, 2026</span>
+            {/* Latest August 2026 MPC Meeting Analysis Card */}
+            <Link
+              href="/updates/rbi-monetary-policy-august-2026-repo-rate-unchanged"
+              className="p-4 rounded-xl bg-white border border-amber-300 hover:border-amber-500 hover:shadow-md transition-all group flex flex-col justify-between space-y-2 relative overflow-hidden"
+            >
+              <div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-900 border border-emerald-200 flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+                    Latest MPC Analysis (62nd)
+                  </span>
+                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-amber-600 group-hover:translate-x-0.5 transition-all" />
+                </div>
+                <p className="font-heading font-bold text-sm text-slate-900 group-hover:text-amber-600 transition-colors mt-1.5">
+                  RBI MPC August 2026 Meeting — Detailed Analysis (62nd MPC)
+                </p>
+                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                  Full member-wise voting breakdown, GDP & inflation trajectory, neutral policy stance analysis, and borrower EMI impacts.
+                </p>
               </div>
-              <p className="font-heading font-bold text-sm text-slate-900">
-                RBI MPC August 2026 Meeting — Detailed Analysis (62nd MPC)
-              </p>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Full member-wise commentary, liquidity assessment, and inflation trajectory analysis will be published once official minutes are released on August 19.
-              </p>
-            </div>
+            </Link>
 
             {/* Past MPC Analysis */}
             <Link
