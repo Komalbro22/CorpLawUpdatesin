@@ -43,14 +43,33 @@ function parseStyle(styleInput: any, node?: any): React.CSSProperties {
     return {};
 }
 
-function processInlineStyles(styleObj: any, className: string = ''): { processedStyle: any; processedClassName: string } {
+function processInlineStyles(styleObj: any, className: string = '', isContainer: boolean = false): { processedStyle: any; processedClassName: string } {
     const processedStyle = { ...styleObj };
     const classes = className ? className.split(' ') : [];
     
     const bgVal = styleObj.background || styleObj.backgroundColor;
     const colorVal = styleObj.color;
     
-    if (bgVal && typeof bgVal === 'string') {
+    // Detect progress bars, meters, tracks, pills, badges, or small components
+    const heightStr = styleObj.height ? styleObj.height.toString().toLowerCase().trim() : '';
+    const isSmallHeight = heightStr && (
+        heightStr === '100%' ||
+        (heightStr.endsWith('px') && parseFloat(heightStr) <= 60) ||
+        (heightStr.endsWith('rem') && parseFloat(heightStr) <= 4) ||
+        (heightStr.endsWith('em') && parseFloat(heightStr) <= 4) ||
+        (heightStr.endsWith('vh') && parseFloat(heightStr) <= 10)
+    );
+    
+    const isInlineOrBadge = 
+        styleObj.display === 'inline' || 
+        styleObj.display === 'inline-block' || 
+        styleObj.display === 'inline-flex';
+        
+    const isProgressBarOrComponent = isSmallHeight || isInlineOrBadge || styleObj.maxHeight || (styleObj.overflow === 'hidden' && styleObj.height);
+    
+    // Only apply dynamic card callout styling to container boxes (div/section)
+    // NEVER to progress bar tracks/fills, meters, badges, or inline elements
+    if (isContainer && !isProgressBarOrComponent && bgVal && typeof bgVal === 'string') {
         const bgValLower = bgVal.toLowerCase().replace(/\s+/g, '');
         const isYellowAmberBg = 
             bgValLower.includes('#fff7ed') || 
@@ -118,8 +137,9 @@ function processInlineStyles(styleObj: any, className: string = ''): { processed
             classes.push('dynamic-card-green');
         }
         else if (
+            bgValLower.includes('#fff5f5') ||
             bgValLower.includes('#fef2f2') || 
-            bgValLower.includes('#ffe4e6') ||
+            bgValLower.includes('#ffe4e6') || 
             bgValLower.includes('#fecaca') || 
             bgValLower.includes('rgb(254,242,242)') ||
             bgValLower.includes('rgb(254,202,202)')
@@ -279,7 +299,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                     },
                     div: ({ node, style, children, className, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
-                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className, true);
                         return (
                             <div suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
                                 {children}
@@ -288,7 +308,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                     },
                     section: ({ node, style, children, className, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
-                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className, true);
                         return (
                             <section suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
                                 {children}
