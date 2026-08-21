@@ -138,7 +138,7 @@ function HubFAQ() {
   const faqs = [
     {
       q: 'Are these fee calculators updated for the current financial year?',
-      a: 'Yes, all our calculators (Company, LLP, and MSME) are strictly updated with the latest MCA notifications, Companies (Registration Offices and Fees) Rules, and current RBI repo rates for FY 2026-27.'
+      a: 'Yes, all our calculators (Company, LLP, and MSME) are strictly updated with the latest MCA notifications, Companies (Registration Offices and Fees) Rules, and current RBI Bank Rate (for MSME delayed payments) for FY 2026-27.'
     },
     {
       q: 'Which calculator should I use for AOC-4 and MGT-7 late fees?',

@@ -33,7 +33,39 @@ import {
 import {
   calculateLLPPenalty,
   calculateMSMEInterest,
+  calculateMsmeInterest,
+  evaluateSupplierEligibility,
+  resolveAcceptanceDate,
+  VERIFIED_RBI_BANK_RATE_DATASET,
+  EARLIEST_SUPPORTED_MSME_DATE,
 } from "../lib/penaltyCalculator";
+
+import { generateMsmePdf } from "../lib/pdf/generateMsmePdf";
+
+jest.mock('jspdf', () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      internal: {
+        pageSize: { width: 210, height: 297 },
+        getNumberOfPages: () => 2,
+      },
+      setFont: jest.fn(),
+      setFontSize: jest.fn(),
+      setTextColor: jest.fn(),
+      text: jest.fn(),
+      splitTextToSize: (text: string) => [text],
+      setPage: jest.fn(),
+      save: jest.fn(),
+      lastAutoTable: { finalY: 100 },
+    };
+  });
+});
+
+jest.mock('jspdf-autotable', () => {
+  return jest.fn((doc: any, options: any) => {
+    doc.lastAutoTable = { finalY: (options?.startY || 50) + 30 };
+  });
+});
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SECTION 1 — getNormalFilingFee
@@ -965,146 +997,376 @@ describe("calculateLLPPenalty — end-to-end", () => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// SECTION 11 — MSME Interest Calculator
-// MSMED Act Sections 15–16, compound interest with monthly rests
+// SECTION 11 — MSME Interest Calculator (MSMED Act, 2006)
 // ─────────────────────────────────────────────────────────────────────────────
 
-describe("calculateMSMEInterest — appointed day and compounding", () => {
-  // Appointed day rules
-  test("No written agreement: appointed day = acceptance date + 15 days", () => {
-    const acceptance = new Date("2024-01-01");
-    const result = calculateMSMEInterest({
+describe("MSME Delayed Payment Interest — [VERIFIED STATUTORY RULES]", () => {
+  // Appointed Day: Section 2(b) & Section 9 General Clauses Act
+  // Acceptance = Day 0, Days 1-15 = Statutory Period, Day 16 = Appointed Day
+  test("[VERIFIED STATUTORY RULE] Appointed Day: Jan 1 -> Appointed Day Jan 17 (Day 16), Due Date Jan 16 (Day 15)", () => {
+    const calc = calculateMsmeInterest({
       invoiceAmount: 1_00_000,
-      acceptanceDate: acceptance,
-      paymentDate: new Date("2024-03-01"),
-      writtenAgreement: false,
-      agreedDate: null,
-      bankRate: 5.5,
+      deliveryDate: "2024-01-01",
+      actualPaymentDate: "2024-03-01",
+      bankRateOverride: 5.50
     });
-    // Appointed day should be 2024-01-16 (acceptance + 15 days)
-    expect(result.appointedDay).toEqual(new Date("2024-01-16"));
+    expect(calc.appointedDay).toBe("2024-01-17");
+    expect(calc.dueDate).toBe("2024-01-16");
+    expect(calc.interestStartDate).toBe("2024-01-17");
   });
 
-  test("Written agreement: appointed day = agreed date (≤45 days from acceptance)", () => {
-    const acceptance = new Date("2024-01-01");
-    const agreedDate = new Date("2024-01-30"); // 29 days — within 45-day limit
-    const result = calculateMSMEInterest({
+  test("[VERIFIED STATUTORY RULE] Appointed Day: Jan 15 -> Appointed Day Jan 31 (Day 16), Due Date Jan 30 (Day 15)", () => {
+    const calc = calculateMsmeInterest({
       invoiceAmount: 1_00_000,
-      acceptanceDate: acceptance,
-      paymentDate: new Date("2024-03-01"),
-      writtenAgreement: true,
-      agreedDate,
-      bankRate: 5.5,
+      deliveryDate: "2024-01-15",
+      actualPaymentDate: "2024-03-01",
+      bankRateOverride: 5.50
     });
-    expect(result.appointedDay).toEqual(agreedDate);
+    expect(calc.appointedDay).toBe("2024-01-31");
+    expect(calc.dueDate).toBe("2024-01-30");
+    expect(calc.interestStartDate).toBe("2024-01-31");
   });
 
-  test("Agreed date > 45 days from acceptance → error or cap at 45 days", () => {
-    const acceptance = new Date("2024-01-01");
-    const agreedDate = new Date("2024-03-01"); // 60 days — exceeds 45-day cap
-    const result = calculateMSMEInterest({
+  test("[VERIFIED STATUTORY RULE] Appointed Day: Feb 1 Leap Year -> Appointed Day Feb 17 (Day 16), Due Date Feb 16 (Day 15)", () => {
+    const calc = calculateMsmeInterest({
       invoiceAmount: 1_00_000,
-      acceptanceDate: acceptance,
-      paymentDate: new Date("2024-04-01"),
-      writtenAgreement: true,
-      agreedDate,
-      bankRate: 5.5,
+      deliveryDate: "2024-02-01",
+      actualPaymentDate: "2024-04-01",
+      bankRateOverride: 5.50
     });
-    // Either error or capped at acceptance + 45 days
-    expect(
-      result.error !== undefined ||
-      result.appointedDay <= new Date("2024-02-15")
-    ).toBe(true);
+    expect(calc.appointedDay).toBe("2024-02-17");
+    expect(calc.dueDate).toBe("2024-02-16");
+    expect(calc.interestStartDate).toBe("2024-02-17");
   });
 
-  test("Agreed date before acceptance date → validation error", () => {
-    const acceptance = new Date("2024-01-15");
-    const agreedDate = new Date("2024-01-10"); // before acceptance
-    const result = calculateMSMEInterest({
+  test("[VERIFIED STATUTORY RULE] Appointed Day: Feb 15 Leap Year (29 days) -> Appointed Day Mar 2 (Day 16), Due Date Mar 1 (Day 15)", () => {
+    const calc = calculateMsmeInterest({
       invoiceAmount: 1_00_000,
-      acceptanceDate: acceptance,
-      paymentDate: new Date("2024-03-01"),
-      writtenAgreement: true,
-      agreedDate,
-      bankRate: 5.5,
+      deliveryDate: "2024-02-15",
+      actualPaymentDate: "2024-04-01",
+      bankRateOverride: 5.50
     });
-    expect(result.error).toBeTruthy();
+    expect(calc.appointedDay).toBe("2024-03-02");
+    expect(calc.dueDate).toBe("2024-03-01");
+    expect(calc.interestStartDate).toBe("2024-03-02");
   });
 
-  // Rate: 3 × bank rate (compound, monthly rests)
-  test("MSME rate = 3 × bank rate", () => {
-    const result = calculateMSMEInterest({
+  test("[VERIFIED STATUTORY RULE] Appointed Day: Feb 15 Non-Leap Year (28 days) -> Appointed Day Mar 3 (Day 16), Due Date Mar 2 (Day 15)", () => {
+    const calc = calculateMsmeInterest({
       invoiceAmount: 1_00_000,
-      acceptanceDate: new Date("2024-01-01"),
-      paymentDate: new Date("2024-04-01"),
-      writtenAgreement: false,
-      agreedDate: null,
-      bankRate: 5.5,
+      deliveryDate: "2023-02-15",
+      actualPaymentDate: "2023-04-01",
+      bankRateOverride: 5.50
     });
-    expect(result.annualRateUsed).toBeCloseTo(16.5, 1); // 3 × 5.5%
+    expect(calc.appointedDay).toBe("2023-03-03");
+    expect(calc.dueDate).toBe("2023-03-02");
+    expect(calc.interestStartDate).toBe("2023-03-03");
   });
 
-  // Old wrong appointment day (off by 1)
-  test("Appointed day is acceptance + 15, NOT acceptance + 14", () => {
-    const acceptance = new Date("2024-06-01");
-    const result = calculateMSMEInterest({
+  test("[VERIFIED STATUTORY RULE] Appointed Day: Dec 20 -> Appointed Day Jan 5 (Day 16), Due Date Jan 4 (Day 15)", () => {
+    const calc = calculateMsmeInterest({
       invoiceAmount: 1_00_000,
-      acceptanceDate: acceptance,
-      paymentDate: new Date("2024-09-01"),
-      writtenAgreement: false,
-      agreedDate: null,
-      bankRate: 5.5,
+      deliveryDate: "2023-12-20",
+      actualPaymentDate: "2024-02-01",
+      bankRateOverride: 5.50
     });
-    const expected = new Date("2024-06-16"); // +15 days
-    const wrong = new Date("2024-06-15");    // +14 days (old bug)
-    expect(result.appointedDay).toEqual(expected);
-    expect(result.appointedDay).not.toEqual(wrong);
+    expect(calc.appointedDay).toBe("2024-01-05");
+    expect(calc.dueDate).toBe("2024-01-04");
+    expect(calc.interestStartDate).toBe("2024-01-05");
   });
 
-  // Payment before appointed day → zero interest
-  test("Payment on or before appointed day → ₹0 interest", () => {
-    const acceptance = new Date("2024-01-01");
-    const result = calculateMSMEInterest({
+  test("[VERIFIED STATUTORY RULE] Payment on or before Day 15 (Due Date) -> ₹0 interest", () => {
+    const calc = calculateMsmeInterest({
       invoiceAmount: 1_00_000,
-      acceptanceDate: acceptance,
-      paymentDate: new Date("2024-01-16"), // exactly on appointed day
-      writtenAgreement: false,
-      agreedDate: null,
-      bankRate: 5.5,
+      deliveryDate: "2024-01-01",
+      actualPaymentDate: "2024-01-16", // Day 15
+      bankRateOverride: 5.50
     });
-    expect(result.interest).toBe(0);
+    expect(calc.accruedInterest).toBe(0);
+    expect(calc.totalPayable).toBe(1_00_000);
+    expect(calc.isOverdue).toBe(false);
+  });
+
+  test("[VERIFIED STATUTORY RULE] Written Agreement ≤ 45 days: Due date = Agreed date, interest starts next day", () => {
+    const calc = calculateMsmeInterest({
+      invoiceAmount: 1_00_000,
+      deliveryDate: "2024-01-01",
+      hasAgreement: true,
+      agreedPaymentDate: "2024-01-30", // 29 days from delivery
+      actualPaymentDate: "2024-03-01",
+      bankRateOverride: 5.50
+    });
+    expect(calc.dueDate).toBe("2024-01-30");
+    expect(calc.interestStartDate).toBe("2024-01-31");
+    expect(calc.statutoryCapApplied).toBe(false);
+  });
+
+  test("[VERIFIED STATUTORY RULE] Written Agreement > 45 days: Due date capped at Day 45 (Section 15 proviso), interest starts Day 46", () => {
+    const calc = calculateMsmeInterest({
+      invoiceAmount: 1_00_000,
+      deliveryDate: "2024-01-01",
+      hasAgreement: true,
+      agreedPaymentDate: "2024-03-01", // 60 days
+      actualPaymentDate: "2024-04-01",
+      bankRateOverride: 5.50
+    });
+    expect(calc.dueDate).toBe("2024-02-15"); // Day 45
+    expect(calc.interestStartDate).toBe("2024-02-16"); // Day 46
+    expect(calc.statutoryCapApplied).toBe(true);
+  });
+
+  test("[VERIFIED STATUTORY RULE] Agreed date before delivery date -> Warning & default to statutory 15 days", () => {
+    const calc = calculateMsmeInterest({
+      invoiceAmount: 1_00_000,
+      deliveryDate: "2024-01-15",
+      hasAgreement: true,
+      agreedPaymentDate: "2024-01-10",
+      actualPaymentDate: "2024-03-01",
+      bankRateOverride: 5.50
+    });
+    expect(calc.dueDate).toBe("2024-01-30"); // fallback to 15 days
+    expect(calc.warnings.length).toBeGreaterThan(0);
+  });
+
+  test("[VERIFIED STATUTORY RULE] Timely objection (within 15 days) shifts acceptance to resolution date", () => {
+    const res = resolveAcceptanceDate("2024-01-01", true, "2024-01-08", "2024-01-20");
+    expect(res.modality).toBe("objection_resolved");
+    expect(res.effectiveAcceptanceDate).toBe("2024-01-20");
+    expect(res.isObjectionValid).toBe(true);
+  });
+
+  test("[VERIFIED STATUTORY RULE] Late objection (>15 days) is legally ineffective -> Deemed acceptance remains delivery date", () => {
+    const res = resolveAcceptanceDate("2024-01-01", true, "2024-01-25", "2024-02-05");
+    expect(res.modality).toBe("ineffective_late_objection");
+    expect(res.effectiveAcceptanceDate).toBe("2024-01-01");
+    expect(res.isObjectionValid).toBe(false);
   });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// SECTION 12 — RBI Rate wiring
-// The MSME page must read from compliance_rates.rbi_bank_rate
+// SECTION 12 — Verified RBI Bank Rate Dataset & Rate Wiring
 // ─────────────────────────────────────────────────────────────────────────────
 
-describe("RBI rate key — compliance_rates.rbi_bank_rate", () => {
-  test("MSME rate = bankRate × 3, not hardcoded 20.25", () => {
-    // Simulate what the page does after the fix
-    const bankRate = 5.5;
-    const msmeRate = bankRate * 3;
-    expect(msmeRate).toBeCloseTo(16.5, 1);
-    expect(msmeRate).not.toBe(20.25);
+describe("Verified RBI Bank Rate Dataset — [VERIFIED RATE DATA]", () => {
+  test("[VERIFIED RATE DATA] RBI Dataset gapless & non-overlapping integrity test (2016-04-05 onward)", () => {
+    const dataset = [...VERIFIED_RBI_BANK_RATE_DATASET].reverse(); // chronological order
+
+    expect(dataset[0].effectiveFrom).toBe(EARLIEST_SUPPORTED_MSME_DATE);
+
+    for (let i = 0; i < dataset.length; i++) {
+      const entry = dataset[i];
+      // effectiveFrom <= effectiveTo
+      expect(entry.effectiveFrom <= entry.effectiveTo).toBe(true);
+      // Statutory rate must exactly equal 3x bank rate
+      expect(entry.statutoryRate).toBeCloseTo(entry.bankRate * 3, 2);
+      expect(entry.rbiNotificationReference).toBeTruthy();
+      expect(entry.sourceUrl).toMatch(/^https?:\/\//);
+
+      if (i < dataset.length - 1) {
+        const nextEntry = dataset[i + 1];
+        const currentEnd = new Date(entry.effectiveTo);
+        const nextStart = new Date(nextEntry.effectiveFrom);
+        
+        // Next effectiveFrom must be exactly 1 day after current effectiveTo (no gaps, no overlaps)
+        const diffMs = nextStart.getTime() - currentEnd.getTime();
+        const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+        expect(diffDays).toBe(1);
+      } else {
+        // Last active entry must extend to 9999-12-31
+        expect(entry.effectiveTo).toBe("9999-12-31");
+        expect(entry.bankRate).toBe(5.50);
+        expect(entry.statutoryRate).toBe(16.50);
+      }
+    }
   });
 
-  test("Fallback bank rate is 5.50, not 6.75 (old wrong fallback)", () => {
-    // This tests the constant/default in the file
-    // Import or read the default export from the rate config
-    // If the function accepts a fallback parameter:
-    const result = calculateMSMEInterest({
+  test("[VERIFIED RATE DATA] Exactly one applicable rate for every supported date (2016-04-05 to present)", () => {
+    const start = new Date("2016-04-05T00:00:00.000Z");
+    const end = new Date("2026-08-21T00:00:00.000Z");
+    
+    // Sample step across the 10-year span
+    for (let d = new Date(start.getTime()); d <= end; d.setUTCDate(d.getUTCDate() + 15)) {
+      const iso = d.toISOString().split('T')[0];
+      const matches = VERIFIED_RBI_BANK_RATE_DATASET.filter(
+        (r) => iso >= r.effectiveFrom && iso <= r.effectiveTo
+      );
+      expect(matches.length).toBe(1);
+    }
+  });
+
+  test("[VERIFIED RATE DATA] Dynamic fallback rate is 5.50% (MSME rate 16.50%)", () => {
+    const calc = calculateMsmeInterest({
       invoiceAmount: 1_00_000,
-      acceptanceDate: new Date("2024-01-01"),
-      paymentDate: new Date("2024-04-01"),
-      writtenAgreement: false,
-      agreedDate: null,
-      bankRate: undefined, // trigger fallback
+      deliveryDate: "2026-01-01",
+      actualPaymentDate: "2026-04-01"
     });
-    // Fallback should be 5.50, so annual rate = 16.50
-    expect(result.annualRateUsed).toBeCloseTo(16.5, 1);
-    expect(result.annualRateUsed).not.toBeCloseTo(20.25, 1);
+    expect(calc.appliedBankRate).toBe(5.50);
+    expect(calc.appliedStatutoryRate).toBe(16.50);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 12B — Methodologies, Validation & Legal Exceptions
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("Calculation Methodologies & Input Validation — [VERIFIED & LEGAL CHECKS]", () => {
+  // Principal validation tests
+  test("[VERIFIED STATUTORY RULE] Negative principal amount is rejected with validation error", () => {
+    const calc = calculateMsmeInterest({
+      invoiceAmount: -50_000,
+      deliveryDate: "2024-01-01",
+      actualPaymentDate: "2024-03-01"
+    });
+    expect(calc.principal).toBe(0);
+    expect(calc.accruedInterest).toBe(0);
+    expect(calc.totalPayable).toBe(0);
+    expect(calc.error).toBe("Invoice/principal amount must be greater than ₹0.");
+    expect(calc.warnings).toContain("Invoice/principal amount must be greater than ₹0.");
+  });
+
+  test("[VERIFIED STATUTORY RULE] Zero principal amount is rejected with validation error", () => {
+    const calc = calculateMsmeInterest({
+      invoiceAmount: 0,
+      deliveryDate: "2024-01-01",
+      actualPaymentDate: "2024-03-01"
+    });
+    expect(calc.principal).toBe(0);
+    expect(calc.accruedInterest).toBe(0);
+    expect(calc.totalPayable).toBe(0);
+    expect(calc.error).toBe("Invoice/principal amount must be greater than ₹0.");
+  });
+
+  test("[VERIFIED STATUTORY RULE] Valid positive principal amount is accepted", () => {
+    const calc = calculateMsmeInterest({
+      invoiceAmount: 1_00_000,
+      deliveryDate: "2024-01-01",
+      actualPaymentDate: "2024-03-01"
+    });
+    expect(calc.principal).toBe(1_00_000);
+    expect(calc.accruedInterest).toBeGreaterThan(0);
+    expect(calc.error).toBeUndefined();
+  });
+
+  test("[VERIFIED STATUTORY RULE] NaN / Infinity principal is rejected with validation error", () => {
+    const calcNaN = calculateMsmeInterest({
+      invoiceAmount: NaN,
+      deliveryDate: "2024-01-01",
+      actualPaymentDate: "2024-03-01"
+    });
+    expect(calcNaN.principal).toBe(0);
+    expect(calcNaN.error).toBe("Invoice/principal amount must be greater than ₹0.");
+
+    const calcInf = calculateMsmeInterest({
+      invoiceAmount: Infinity,
+      deliveryDate: "2024-01-01",
+      actualPaymentDate: "2024-03-01"
+    });
+    expect(calcInf.principal).toBe(0);
+    expect(calcInf.error).toBe("Invoice/principal amount must be greater than ₹0.");
+  });
+
+  // Distinct day metrics tests
+  test("[VERIFIED STATUTORY RULE] Distinctly calculates daysPastDueDate vs interestBearingDays", () => {
+    // Delivery: Jan 1, Due: Jan 16 (Day 15), Int Start: Jan 17 (Day 16), Pay: Jan 18
+    const calc = calculateMsmeInterest({
+      invoiceAmount: 1_00_000,
+      deliveryDate: "2024-01-01",
+      actualPaymentDate: "2024-01-18",
+      bankRateOverride: 5.50
+    });
+    expect(calc.dueDate).toBe("2024-01-16");
+    expect(calc.appointedDay).toBe("2024-01-17");
+    expect(calc.interestStartDate).toBe("2024-01-17");
+    expect(calc.daysPastDueDate).toBe(2); // Jan 16 to Jan 18 = 2 days
+    expect(calc.interestBearingDays).toBe(1); // Jan 17 to Jan 18 = 1 day
+    expect(calc.interestAccrualPeriod).toEqual({
+      from: "2024-01-17",
+      to: "2024-01-18"
+    });
+  });
+
+  test("[VERIFIED STATUTORY RULE] Default calculation strategy is rest_anchor with methodologyStatus = VERIFIED_SECTION_16_MONTHLY_REST_METHOD", () => {
+    const calc = calculateMsmeInterest({
+      invoiceAmount: 1_00_000,
+      deliveryDate: "2024-01-01",
+      actualPaymentDate: "2024-04-01"
+    });
+    expect(calc.rateAudit.strategyUsed).toBe('rest_anchor');
+    expect(calc.methodologyStatus).toBe('VERIFIED_SECTION_16_MONTHLY_REST_METHOD');
+    expect(calc.rateAudit.methodologyStatus).toBe('VERIFIED_SECTION_16_MONTHLY_REST_METHOD');
+  });
+
+  test("[ILLUSTRATIVE METHODOLOGY] Anchor preservation eliminates month-end date drift (Jan 31 -> Feb 28 -> Mar 31)", () => {
+    const calc = calculateMsmeInterest({
+      invoiceAmount: 1_00_000,
+      deliveryDate: "2024-01-15", // Appointed Day = Jan 31 (anchor day 31)
+      actualPaymentDate: "2024-05-15",
+      bankRateOverride: 5.50
+    });
+
+    expect(calc.schedule.length).toBeGreaterThanOrEqual(3);
+    // Month 1 ends at Feb 29 (leap year), Month 2 must end at Mar 31 (anchor preserved, NOT Mar 29)
+    expect(calc.schedule[0].periodEnd).toBe("2024-02-29");
+    expect(calc.schedule[1].periodEnd).toBe("2024-03-31");
+    expect(calc.schedule[2].periodEnd).toBe("2024-04-30");
+  });
+
+  test("[ILLUSTRATIVE METHODOLOGY] daily_prorated returns methodologyStatus = ILLUSTRATIVE_METHOD with transition disclaimer", () => {
+    // Spanning RBI rate change on 2023-02-08
+    const calc = calculateMsmeInterest({
+      invoiceAmount: 1_00_000,
+      deliveryDate: "2023-01-15", // Appointed Day = 2023-01-31
+      actualPaymentDate: "2023-03-15",
+      rateStrategy: 'daily_prorated'
+    });
+
+    expect(calc.rateAudit.strategyUsed).toBe('daily_prorated');
+    expect(calc.methodologyStatus).toBe('ILLUSTRATIVE_METHOD');
+    expect(calc.rateAudit.isHistoricalMultiRate).toBe(true);
+    expect(calc.rateAudit.isSubjectToLegalVerification).toBe(true);
+    expect(calc.rateAudit.statusDisclaimer).toContain('Illustrative calculation under Daily-Prorated Rate Strategy');
+  });
+
+  test("[LEGAL VERIFICATION REQUIRED] Date before 2016-04-05 triggers boundary warning and methodologyStatus = LEGAL_VERIFICATION_REQUIRED", () => {
+    const calc = calculateMsmeInterest({
+      invoiceAmount: 1_00_000,
+      deliveryDate: "2015-01-01",
+      actualPaymentDate: "2015-06-01"
+    });
+    expect(calc.methodologyStatus).toBe('LEGAL_VERIFICATION_REQUIRED');
+    expect(calc.warnings.some(w => w.includes('Verified RBI Bank Rate Dataset'))).toBe(true);
+  });
+
+  test("[LEGAL VERIFICATION REQUIRED] Medium Enterprise is evaluated as INELIGIBLE under Chapter V", () => {
+    const evalResult = evaluateSupplierEligibility({
+      enterpriseCategory: 'medium',
+      majorActivity: 'manufacturing',
+      registrationType: 'udyam'
+    });
+    expect(evalResult.status).toBe('INELIGIBLE');
+    expect(evalResult.statusBadge).toBe('red');
+  });
+
+  test("[LEGAL VERIFICATION REQUIRED] Retail / Wholesale Trader returns 'ELIGIBILITY REQUIRES VERIFICATION'", () => {
+    const evalResult = evaluateSupplierEligibility({
+      enterpriseCategory: 'micro',
+      majorActivity: 'trading_retail_wholesale',
+      registrationType: 'udyam'
+    });
+    expect(evalResult.status).toBe('ELIGIBILITY REQUIRES VERIFICATION');
+    expect(evalResult.statusBadge).toBe('amber');
+  });
+
+  test("[LEGAL VERIFICATION REQUIRED] Post-supply Udyam registration returns 'ELIGIBILITY REQUIRES VERIFICATION' under Silpi Industries", () => {
+    const evalResult = evaluateSupplierEligibility({
+      enterpriseCategory: 'micro',
+      majorActivity: 'manufacturing',
+      registrationType: 'udyam',
+      registrationDate: '2024-06-01',
+      relevantTransactionDate: '2024-01-01'
+    });
+    expect(evalResult.status).toBe('ELIGIBILITY REQUIRES VERIFICATION');
+    expect(evalResult.statusBadge).toBe('amber');
   });
 });
 
@@ -1204,5 +1466,109 @@ describe("Regression guard — old wrong values must NOT appear", () => {
     // Old wrong 3× would give 1,500
     expect(result.additionalFee).toBe(1_000);
     expect(result.additionalFee).not.toBe(1_500);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 14 — PDF Generation Report Tests (Non-Audit Estimation Scope)
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("MSME PDF Generation Report Tests — [ESTIMATION & NON-AUDIT SCOPE]", () => {
+  test("PDF Scenario 1: Normal on-time case generates clean calculation report", () => {
+    const result = calculateMsmeInterest({
+      invoiceAmount: 1_00_000,
+      deliveryDate: "2024-01-01",
+      actualPaymentDate: "2024-01-10"
+    });
+    const eligibility = evaluateSupplierEligibility({
+      enterpriseCategory: 'micro',
+      majorActivity: 'services',
+      registrationType: 'udyam'
+    });
+
+    expect(() => {
+      generateMsmePdf({
+        invoiceAmount: "100000",
+        deliveryDate: "2024-01-01",
+        actualPaymentDate: "2024-01-10",
+        eligibility,
+        result
+      });
+    }).not.toThrow();
+  });
+
+  test("PDF Scenario 2: Overdue multi-month case generates report with compounding schedule", () => {
+    const result = calculateMsmeInterest({
+      invoiceAmount: 5_00_000,
+      deliveryDate: "2024-01-01",
+      actualPaymentDate: "2024-06-01"
+    });
+
+    expect(() => {
+      generateMsmePdf({
+        invoiceAmount: "500000",
+        deliveryDate: "2024-01-01",
+        actualPaymentDate: "2024-06-01",
+        result
+      });
+    }).not.toThrow();
+  });
+
+  test("PDF Scenario 3: Historical-rate multi-period case generates calculation report", () => {
+    const result = calculateMsmeInterest({
+      invoiceAmount: 2_50_000,
+      deliveryDate: "2018-05-01",
+      actualPaymentDate: "2019-01-01"
+    });
+
+    expect(() => {
+      generateMsmePdf({
+        invoiceAmount: "250000",
+        deliveryDate: "2018-05-01",
+        actualPaymentDate: "2019-01-01",
+        result
+      });
+    }).not.toThrow();
+  });
+
+  test("PDF Scenario 4: Trader / eligibility-warning case reflects verification status", () => {
+    const result = calculateMsmeInterest({
+      invoiceAmount: 1_00_000,
+      deliveryDate: "2024-01-01",
+      actualPaymentDate: "2024-03-01"
+    });
+    const eligibility = evaluateSupplierEligibility({
+      enterpriseCategory: 'micro',
+      majorActivity: 'trading_retail_wholesale',
+      registrationType: 'udyam'
+    });
+
+    expect(() => {
+      generateMsmePdf({
+        invoiceAmount: "100000",
+        deliveryDate: "2024-01-01",
+        actualPaymentDate: "2024-03-01",
+        eligibility,
+        result
+      });
+    }).not.toThrow();
+  });
+
+  test("PDF Scenario 5: Daily-prorated illustrative case renders methodology note", () => {
+    const result = calculateMsmeInterest({
+      invoiceAmount: 1_00_000,
+      deliveryDate: "2023-01-15",
+      actualPaymentDate: "2023-03-15",
+      rateStrategy: 'daily_prorated'
+    });
+
+    expect(() => {
+      generateMsmePdf({
+        invoiceAmount: "100000",
+        deliveryDate: "2023-01-15",
+        actualPaymentDate: "2023-03-15",
+        result
+      });
+    }).not.toThrow();
   });
 });

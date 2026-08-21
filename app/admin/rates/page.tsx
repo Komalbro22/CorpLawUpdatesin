@@ -11,7 +11,7 @@ export default function AdminRatesOverridePage() {
   const [savingKey, setSavingKey] = useState<string | null>(null)
 
   // Settings states matching DB compliance_rates
-  const [bankRate, setBankRate] = useState('6.75')
+  const [bankRate, setBankRate] = useState('5.50')
   const [whatsappCount, setWhatsappCount] = useState('12000')
   const [isAmnestyActive, setIsAmnestyActive] = useState('false')
   const [schemeName, setSchemeName] = useState('')
@@ -26,7 +26,7 @@ export default function AdminRatesOverridePage() {
           const list = d.rates || []
           
           const br = list.find((r: any) => r.key === 'rbi_bank_rate')
-          if (br) setBankRate(String(br.rate_value || '6.75'))
+          if (br) setBankRate(String(br.rate_value || '5.50'))
 
           const wa = list.find((r: any) => r.key === 'whatsapp_member_count')
           if (wa) setWhatsappCount(String(wa.text_value || '12000'))

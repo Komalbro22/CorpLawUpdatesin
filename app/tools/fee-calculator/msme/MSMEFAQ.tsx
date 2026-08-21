@@ -8,23 +8,27 @@ export default function MSMEFAQ() {
   const faqs = [
     {
       q: 'What is the MSME Samadhaan Scheme?',
-      a: 'MSME Samadhaan is a portal and scheme launched by the Ministry of Micro, Small and Medium Enterprises. It empowers micro and small entrepreneurs across the country to directly register their cases relating to delayed payments by Central Ministries/Departments/CPSEs/State Governments or any other buyer.'
+      a: 'MSME Samadhaan is a statutory portal established under the MSMED Act, 2006. It empowers registered Micro and Small entrepreneurs across India to directly register delayed payment cases against buyers before the State Micro and Small Enterprises Facilitation Council (MSEFC).'
     },
     {
       q: 'What is the maximum time a buyer has to pay an MSME?',
-      a: 'Under Section 15 of the MSMED Act, the buyer must make payment within the period agreed upon in writing. In no case should this period exceed 45 days from the day of acceptance of the goods/services. If there is no written agreement, the payment must be made within 15 days.'
+      a: 'Under Section 15 of the MSMED Act, the buyer must make payment within the period agreed upon in writing, which cannot exceed 45 days from the day of acceptance or deemed acceptance. If there is no written agreement, payment must be made before the Appointed Day (within 15 days of acceptance).'
+    },
+    {
+      q: 'What is the Appointed Day under Section 2(b)?',
+      a: 'Under Section 2(b) of the MSMED Act, the Appointed Day is the day following immediately after the expiry of the period of 15 days from the day of acceptance or deemed acceptance (i.e. Day 16). In the absence of a written agreement, interest begins to accrue from the Appointed Day.'
     },
     {
       q: 'How is the MSME delayed payment interest calculated?',
-      a: 'If the buyer fails to pay within 45 days, they are liable to pay compound interest with monthly rests. The rate of interest is three times (3x) the bank rate notified by the Reserve Bank of India (RBI Bank Rate).'
+      a: 'Under Section 16 of the MSMED Act, defaulting buyers are legally obligated to pay compound interest with monthly rests at three times (3x) the Bank Rate notified by the Reserve Bank of India.'
     },
     {
       q: 'Can this interest be claimed as a tax deduction?',
-      a: 'No, as per Section 23 of the MSMED Act, the interest paid or payable by a buyer for delayed payments to an MSME is NOT allowed as a deduction under the Income Tax Act, 1961. This adds an additional tax burden on the defaulting buyer.'
+      a: 'No. As per Section 23 of the MSMED Act, interest paid or payable by a buyer for delayed payments to an MSME is expressly disallowed as an expenditure/deduction under the Income Tax Act, 1961.'
     },
     {
-      q: 'What happens if a company fails to report MSME dues in Form MSME-1?',
-      a: 'Failure to file Form MSME-1 detailing outstanding dues attracts severe penalties under Section 405(4) of the Companies Act. The company and every officer in default are liable to a base penalty of ₹20,000 plus ₹1,000 for every day the default continues, subject to a maximum of ₹3,00,000.'
+      q: 'What are the reporting requirements under Form MSME-1?',
+      a: 'Under Section 405(4) of the Companies Act, 2013, specified companies having outstanding dues to Micro and Small enterprises exceeding 45 days must file a half-yearly return in Form MSME-1 with the ROC detailing all outstanding amounts and reasons for delay.'
     }
   ]
 
