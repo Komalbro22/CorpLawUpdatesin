@@ -7,6 +7,30 @@ export interface LlpPdfPayload {
   result: LlpCalculationResult;
 }
 
+/**
+ * Clean text for standard jsPDF helvetica font (ASCII-safe encoding).
+ * Converts Unicode symbols (Rupee, inequality, arrows, dashes) to clean ASCII text.
+ */
+function cleanPdfText(text: string | null | undefined): string {
+  if (!text) return '';
+  return text
+    .replace(/₹/g, 'Rs. ')
+    .replace(/≤/g, '<= ')
+    .replace(/≥/g, '>= ')
+    .replace(/→/g, ' -> ')
+    .replace(/←/g, ' <- ')
+    .replace(/—/g, ' - ')
+    .replace(/–/g, ' - ')
+    .replace(/−/g, '-')
+    .replace(/[“”]/g, '"')
+    .replace(/[‘’]/g, "'")
+    .replace(/×/g, 'x')
+    .replace(/✓/g, '[Y]')
+    .replace(/•/g, '-')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export function generateLlpPdf(data: LlpPdfPayload) {
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.width;
@@ -62,20 +86,20 @@ export function generateLlpPdf(data: LlpPdfPayload) {
   doc.text('1. Entity & Filing Overview', 14, startY);
 
   const overviewRows = [
-    ['Filing Form:', data.result.formName],
-    ['Statutory Authority:', data.result.statutoryAuthority],
+    ['Filing Form:', cleanPdfText(data.result.formName)],
+    ['Statutory Authority:', cleanPdfText(data.result.statutoryAuthority)],
     ['Total Contribution:', `Rs. ${data.params.contribution.toLocaleString('en-IN')}`],
-    ['Small LLP Assessment:', data.result.smallLlpAssessmentBasis],
+    ['Small LLP Assessment:', cleanPdfText(data.result.smallLlpAssessmentBasis)],
   ];
 
   if (data.params.turnover !== undefined && data.params.turnover !== null) {
     overviewRows.push(['Preceding FY Turnover:', `Rs. ${data.params.turnover.toLocaleString('en-IN')}`]);
   }
   if (data.result.dueDateFormatted) {
-    overviewRows.push(['Statutory Due Date:', data.result.dueDateFormatted]);
+    overviewRows.push(['Statutory Due Date:', cleanPdfText(data.result.dueDateFormatted)]);
   }
   if (data.result.filingDateFormatted && data.result.filingDateFormatted !== 'Not Specified') {
-    overviewRows.push(['Actual Filing Date:', data.result.filingDateFormatted]);
+    overviewRows.push(['Actual Filing Date:', cleanPdfText(data.result.filingDateFormatted)]);
   }
   overviewRows.push(['Days Delayed Past Due Date:', `${data.result.days} Days`]);
 
@@ -99,14 +123,14 @@ export function generateLlpPdf(data: LlpPdfPayload) {
   doc.text('2. Fee & Statutory Penalty Breakdown', 14, startY);
 
   const feeTableRows: any[] = [
-    ['Tier 1: Normal Base Filing Fee', data.result.whyExplanation.baseFeeDescription, `Rs. ${data.result.normalFee.toLocaleString('en-IN')}`],
-    ['Tier 2: Additional Filing Fee (Late Filing)', data.result.whyExplanation.multiplierDescription, `Rs. ${data.result.lateFee.toLocaleString('en-IN')}`],
+    ['Tier 1: Normal Base Filing Fee', cleanPdfText(data.result.whyExplanation.baseFeeDescription), `Rs. ${data.result.normalFee.toLocaleString('en-IN')}`],
+    ['Tier 2: Additional Filing Fee (Late Filing)', cleanPdfText(data.result.whyExplanation.multiplierDescription), `Rs. ${data.result.lateFee.toLocaleString('en-IN')}`],
   ];
 
   if (data.result.incrementalFee > 0) {
     feeTableRows.push([
       'Tier 3: Incremental Registration Fee',
-      data.result.whyExplanation.incrementalFeeDescription || 'Incremental fee for contribution increase',
+      cleanPdfText(data.result.whyExplanation.incrementalFeeDescription || 'Incremental fee for contribution increase'),
       `Rs. ${data.result.incrementalFee.toLocaleString('en-IN')}`
     ]);
   }
@@ -141,8 +165,8 @@ export function generateLlpPdf(data: LlpPdfPayload) {
     doc.text('3. Indicative Statutory Adjudication Penalty Exposure', 14, startY);
 
     const penaltyRows: any[] = [
-      ['LLP Entity Penalty Exposure:', `Rs. ${data.result.llpPenalty.toLocaleString('en-IN')} (Section 34(5)/35(2) - Rs. 100/day, cap Rs. 1,00,000)`],
-      ['Designated Partners Exposure:', `Rs. ${data.result.dpPenalty.toLocaleString('en-IN')} (Rs. 100/day per DP, cap Rs. 50,000 each)`],
+      ['LLP Entity Penalty Exposure:', `Rs. ${data.result.llpPenalty.toLocaleString('en-IN')} (Section 34(5)/35(2) - Rs. ${data.result.isSmallLlp ? '50' : '100'}/day, cap Rs. 1,00,000)`],
+      ['Designated Partners Exposure:', `Rs. ${data.result.dpPenalty.toLocaleString('en-IN')} (Rs. ${data.result.isSmallLlp ? '50' : '100'}/day per DP, cap Rs. 50,000 each)`],
       ['Total Adjudication Exposure:', `Rs. ${data.result.totalPenaltyExposure.toLocaleString('en-IN')} (NOT included in MCA portal payable amount)`],
     ];
 
@@ -164,7 +188,7 @@ export function generateLlpPdf(data: LlpPdfPayload) {
     doc.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
     doc.setFont('helvetica', 'normal');
     const noticeLines = doc.splitTextToSize(
-      `Notice: ${data.result.penaltyNotice} Statutory penalties are quasi-judicial civil liabilities determined via ROC adjudication under Section 76A and are separate from portal filing fees.`,
+      cleanPdfText(`Notice: ${data.result.penaltyNotice} Statutory penalties are quasi-judicial civil liabilities determined via ROC adjudication under Section 76A and are separate from portal filing fees.`),
       pageWidth - 28
     );
     doc.text(noticeLines, 14, startY);
@@ -181,7 +205,7 @@ export function generateLlpPdf(data: LlpPdfPayload) {
     doc.setFontSize(7.5);
     doc.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
     doc.setFont('helvetica', 'normal');
-    const procLines = doc.splitTextToSize(data.result.proceduralNotes, pageWidth - 28);
+    const procLines = doc.splitTextToSize(cleanPdfText(data.result.proceduralNotes), pageWidth - 28);
     doc.text(procLines, 14, startY + 4);
   }
 
@@ -193,7 +217,7 @@ export function generateLlpPdf(data: LlpPdfPayload) {
     doc.setTextColor(gray[0], gray[1], gray[2]);
     doc.setFont('helvetica', 'normal');
     doc.text(
-      'Generated by CorpLawUpdates.in — Informational calculation estimate only. Official fees subject to MCA21 validation.',
+      'Generated by CorpLawUpdates.in - Informational calculation estimate only. Official fees subject to MCA21 validation.',
       14,
       doc.internal.pageSize.height - 8
     );

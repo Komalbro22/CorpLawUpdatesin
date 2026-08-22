@@ -12,6 +12,26 @@ export interface MsmePdfPayload {
   result: MsmeInterestResult;
 }
 
+function cleanPdfText(text: string | null | undefined): string {
+  if (!text) return '';
+  return text
+    .replace(/₹/g, 'Rs. ')
+    .replace(/≤/g, '<= ')
+    .replace(/≥/g, '>= ')
+    .replace(/→/g, ' -> ')
+    .replace(/←/g, ' <- ')
+    .replace(/—/g, ' - ')
+    .replace(/–/g, ' - ')
+    .replace(/−/g, '-')
+    .replace(/[“”]/g, '"')
+    .replace(/[‘’]/g, "'")
+    .replace(/×/g, 'x')
+    .replace(/✓/g, '[Y]')
+    .replace(/•/g, '-')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export function generateMsmePdf(data: MsmePdfPayload) {
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.width;
