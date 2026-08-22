@@ -68,8 +68,8 @@ const calculators = [
     id: 'llp',
     href: '/tools/fee-calculator/llp',
     icon: '🤝',
-    label: 'LLP Fee & Penalty Calculator',
-    description: 'Calculate statutory filing fees and flat ₹100/day late filing penalties for Limited Liability Partnerships (Form 8, Form 11, etc).',
+    label: 'LLP Fee & Late Filing Calculator',
+    description: 'Calculate statutory filing fees, Section 69 late filing multipliers, and indicative penalties for Form 8, Form 11, Form 3, Form 4, and Form 24.',
     badge: 'Live',
     badgeColor: 'bg-green-100 text-green-700 dark:bg-green-950/50 dark:text-green-300',
     stats: 'All LLPs',
@@ -118,7 +118,7 @@ function HubSEO() {
         <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
           <h3 className="font-bold text-slate-800 dark:text-slate-200 mb-2">Corporate Compliance (MCA)</h3>
           <p className="text-sm text-slate-600 dark:text-slate-400">
-            For Companies and LLPs, missing statutory deadlines (like AOC-4, MGT-7, or Form 11) results in compounding penalties. MCA late fees can range from standard multipliers (up to 12×) to strict ₹100 per day flat penalties. Select our Company or LLP calculator for indicative fee breakdowns including state-wise stamp duty.
+            For Companies and LLPs, missing statutory deadlines (like AOC-4, MGT-7, or Form 11) results in compounding penalties. MCA late fees follow distinct multiplier schedules under the Companies Rules and LLP 2nd Amendment Rules. Select our Company or LLP calculator for indicative fee breakdowns.
           </p>
         </div>
         <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
@@ -138,7 +138,7 @@ function HubFAQ() {
   const faqs = [
     {
       q: 'Are these fee calculators updated for the current financial year?',
-      a: 'Yes, all our calculators (Company, LLP, and MSME) are strictly updated with the latest MCA notifications, Companies (Registration Offices and Fees) Rules, and current RBI Bank Rate (for MSME delayed payments) for FY 2026-27.'
+      a: 'Yes, all our calculators (Company, LLP, and MSME) are strictly updated with the latest MCA notifications, Companies (Registration Offices and Fees) Rules, LLP (2nd Amendment) Rules, and current RBI Bank Rate (for MSME delayed payments) for FY 2026-27.'
     },
     {
       q: 'Which calculator should I use for AOC-4 and MGT-7 late fees?',
@@ -146,7 +146,7 @@ function HubFAQ() {
     },
     {
       q: 'Why are LLPs and Companies calculated differently?',
-      a: 'The Limited Liability Partnership Act prescribes a flat ₹100 per day late fee for almost all forms (like Form 8 and Form 11) without any upper cap. In contrast, the Companies Act generally uses a multiplier system (up to 12x normal fee) for general forms, reserving the flat ₹100/day penalty strictly for annual returns.'
+      a: 'LLPs and Companies are governed by separate statutory enactments and fee schedules. For LLPs, late filing fees at the MCA portal follow the LLP (Second Amendment) Rules, 2022 slab multipliers (with uncapped ₹10/₹20 daily rates beyond 360 days for Forms 8 & 11), while statutory penalties under Section 34(5)/35(2) require separate ROC adjudication. Companies follow the Companies (Registration Offices and Fees) Rules, 2014.'
     },
     {
       q: 'Is the GST Calculator available?',

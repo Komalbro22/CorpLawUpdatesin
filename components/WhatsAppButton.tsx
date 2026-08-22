@@ -7,9 +7,16 @@ export default function WhatsAppButton() {
 
   useEffect(() => {
     fetch('/api/settings/whatsapp')
-      .then(r => r.json())
-      .then(d => {
-        if (d.url && d.url.startsWith('https://')) {
+      .then(async (r) => {
+        if (!r.ok) return null
+        const contentType = r.headers.get('content-type')
+        if (contentType && contentType.includes('application/json')) {
+          return r.json()
+        }
+        return null
+      })
+      .then((d) => {
+        if (d && d.url && d.url.startsWith('https://')) {
           setUrl(d.url)
         }
       })

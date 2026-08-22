@@ -24,15 +24,24 @@ export default function TrackingScripts() {
 
     // Fetch tracker IDs dynamically at runtime
     fetch('/api/settings/trackers')
-      .then(res => res.json())
-      .then(data => {
-        setIds({
-          gaId: data.gaId || null,
-          clarityId: data.clarityId || null,
-        })
+      .then(async (res) => {
+        if (!res.ok) return null
+        const contentType = res.headers.get('content-type')
+        if (contentType && contentType.includes('application/json')) {
+          return res.json()
+        }
+        return null
       })
-      .catch(err => {
-        console.error('Failed to load tracker settings:', err)
+      .then((data) => {
+        if (data) {
+          setIds({
+            gaId: data.gaId || null,
+            clarityId: data.clarityId || null,
+          })
+        }
+      })
+      .catch((err) => {
+        console.warn('Tracker settings unavailable:', err)
       })
   }, [])
 

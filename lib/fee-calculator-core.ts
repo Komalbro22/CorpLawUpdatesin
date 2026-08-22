@@ -66,12 +66,48 @@ export function getOtherCompanyIncorporationFee(capital: number, isSpicePlus = f
 //   < ₹25L → ₹200 |  < ₹1Cr → ₹400 |  ≥ ₹1Cr → ₹600
 // ─────────────────────────────────────────────────────────────────────────────
 export function getLLPNormalFee(contribution: number): number {
+  if (contribution < 0) return 50;
   if (contribution < 100000)  return 50;   // < ₹1L
   if (contribution < 500000)  return 100;  // ₹1L ≤ x < ₹5L
   if (contribution < 1000000) return 150;  // ₹5L ≤ x < ₹10L
   if (contribution < 2500000) return 200;  // ₹10L ≤ x < ₹25L
   if (contribution < 10000000) return 400; // ₹25L ≤ x < ₹1Cr
-  return 600;                               // > ₹1Cr
+  return 600;                               // ≥ ₹1Cr
+}
+
+/**
+ * Discrete base fee for Form 3 (LLP Agreement) per Annexure-A Item 3, LLP Rules 2009.
+ */
+export function getLLPForm3BaseFee(contribution: number): number {
+  if (contribution < 0) return 500;
+  if (contribution <= 100000)   return 500;   // ≤ ₹1L
+  if (contribution <= 500000)   return 2000;  // ₹1L < x ≤ ₹5L
+  if (contribution <= 1000000)  return 4000;  // ₹5L < x ≤ ₹10L
+  if (contribution <= 2500000)  return 5000;  // ₹10L < x ≤ ₹25L
+  if (contribution <= 10000000) return 10000; // ₹25L < x ≤ ₹1Cr
+  return 25000;                               // > ₹1Cr
+}
+
+/**
+ * Discrete base fee for Form 4 (Partner/DP change) per Annexure-A Item 2, LLP Rules 2009.
+ */
+export function getLLPForm4BaseFee(isSmallLLP: boolean): number {
+  return isSmallLLP ? 50 : 150;
+}
+
+/**
+ * Discrete application fee for Form 24 (Strike-off) per Annexure-A Item 5, LLP Rules 2009.
+ */
+export function getLLPForm24BaseFee(isSmallLLP: boolean): number {
+  return isSmallLLP ? 500 : 1000;
+}
+
+/**
+ * Discrete base fee for Form 8 Charge (Registration/Modification/Satisfaction)
+ * per Annexure-A Items 4 & 5, LLP Rules 2009 & MCA Form 8 Instruction Kit Part B.
+ */
+export function getLLPChargeBaseFee(): number {
+  return 1000;
 }
 
 export interface CalculationResult {

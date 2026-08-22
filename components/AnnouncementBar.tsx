@@ -22,9 +22,18 @@ export default function AnnouncementBar() {
     } catch { /* localStorage unavailable — show the bar */ }
 
     fetch('/api/settings/announcement')
-      .then(r => r.json())
-      .then(d => {
-        setData(d)
+      .then(async (r) => {
+        if (!r.ok) return null
+        const contentType = r.headers.get('content-type')
+        if (contentType && contentType.includes('application/json')) {
+          return r.json()
+        }
+        return null
+      })
+      .then((d) => {
+        if (d) {
+          setData(d)
+        }
         setLoading(false)
       })
       .catch(() => {

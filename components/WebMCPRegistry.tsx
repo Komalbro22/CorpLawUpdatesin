@@ -111,7 +111,7 @@ export default function WebMCPRegistry() {
 
           const res = await fetch(`/api/search?${params}`);
           if (!res.ok) return { error: 'Search failed. Please try again.' };
-          const data = await res.json();
+          const data = await res.json().catch(() => ({}));
 
           const results = (data.results ?? []).slice(0, Number(args.maxResults) || 5);
           if (!results.length) return { found: 0, message: 'No results found for your query.' };
@@ -182,7 +182,7 @@ export default function WebMCPRegistry() {
             const err = await res.json().catch(() => ({}));
             return { error: (err as { error?: string }).error ?? 'Calculation failed.' };
           }
-          return res.json();
+          return res.json().catch(() => ({}));
         } catch {
           return { error: 'LLP fee calculation could not be completed.' };
         }
@@ -237,7 +237,7 @@ export default function WebMCPRegistry() {
             const err = await res.json().catch(() => ({}));
             return { error: (err as { error?: string }).error ?? 'Calculation failed.' };
           }
-          return res.json();
+          return res.json().catch(() => ({}));
         } catch {
           return { error: 'ROC fee calculation could not be completed.' };
         }
@@ -278,7 +278,7 @@ export default function WebMCPRegistry() {
 
           const res = await fetch(`/api/compliance/webmcp?${params}`);
           if (!res.ok) return { error: 'Failed to fetch compliance calendar.' };
-          return res.json();
+          return res.json().catch(() => ({}));
         } catch {
           return { error: 'Compliance calendar request could not be completed.' };
         }
@@ -349,7 +349,7 @@ export default function WebMCPRegistry() {
             const err = await res.json().catch(() => ({}));
             return { error: (err as { error?: string }).error ?? `Article "${slug}" not found.` };
           }
-          return res.json();
+          return res.json().catch(() => ({}));
         } catch {
           return { error: 'Article summary request could not be completed.' };
         }
@@ -371,7 +371,7 @@ export default function WebMCPRegistry() {
         try {
           const res = await fetch('/api/rbi/webmcp');
           if (!res.ok) return { error: 'Failed to fetch RBI rate data.' };
-          return res.json();
+          return res.json().catch(() => ({}));
         } catch {
           return { error: 'RBI rates request could not be completed.' };
         }
@@ -403,7 +403,7 @@ export default function WebMCPRegistry() {
             `/api/compliance/webmcp?regulator=mca&q=${encodeURIComponent(formName)}`
           );
           if (!res.ok) throw new Error('fetch failed');
-          const data = await res.json() as { entries?: Array<Record<string, unknown>> };
+          const data = (await res.json().catch(() => ({}))) as { entries?: Array<Record<string, unknown>> };
           const match = (data.entries ?? []).find(
             (e) =>
               String(e.formName ?? '').toLowerCase().includes(formName.toLowerCase()) ||

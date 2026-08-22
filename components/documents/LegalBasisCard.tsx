@@ -24,8 +24,16 @@ export function LegalBasisCard({ clauseId, isOpen, onClose }: LegalBasisCardProp
     if (!clauseId || !isOpen) return;
     setLoading(true);
     fetch(`/api/rule-engine/clause-metadata?id=${clauseId}`)
-      .then(r => r.json())
-      .then(d => { setMetadata(d); setLoading(false); })
+      .then(async (r) => {
+        if (!r.ok) return null;
+        const ct = r.headers.get('content-type');
+        if (ct && ct.includes('application/json')) return r.json();
+        return null;
+      })
+      .then(d => {
+        if (d) setMetadata(d);
+        setLoading(false);
+      })
       .catch(() => setLoading(false));
   }, [clauseId, isOpen]);
 

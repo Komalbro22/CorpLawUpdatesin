@@ -19,10 +19,19 @@ export function DocumentBundlePanel({ currentDocType, onAddToBundle }: DocumentB
   const [dismissed, setDismissed] = useState<string[]>([]);
 
   useEffect(() => {
-    if (!currentDocType) return;
     fetch(`/api/rule-engine/bundle-recommendations?docType=${encodeURIComponent(currentDocType)}`)
-      .then(r => r.json())
-      .then(d => setRecommendations(d.recommendations || []));
+      .then(async (r) => {
+        if (!r.ok) return null;
+        const ct = r.headers.get('content-type');
+        if (ct && ct.includes('application/json')) return r.json();
+        return null;
+      })
+      .then(d => {
+        if (d && Array.isArray(d.recommendations)) {
+          setRecommendations(d.recommendations);
+        }
+      })
+      .catch(() => {});
   }, [currentDocType]);
 
   const visible = recommendations.filter(r => !dismissed.includes(r.slug));

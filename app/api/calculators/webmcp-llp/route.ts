@@ -1,99 +1,110 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { calculateLlpFee } from '@/lib/penaltyCalculator';
+import { calculateLlpFee, LlpFormId, Form3Modality, Form8ChargeModality, Form15Scenario } from '@/lib/penaltyCalculator';
 
 // GET /api/calculators/webmcp-llp
 // WebMCP tool: calculate_llp_late_fee
-// Thin wrapper over the canonical calculateLlpFee() in lib/penaltyCalculator.ts
-// — single source of truth for all LLP fee schedule logic (LLP 2nd Amendment Rules 2022).
+// Multi-form statutory calculation engine for LLP compliance under LLP Rules 2009 & 2022 amendments.
 
-const VALID_LLP_TYPES = ['Regular', 'Small'] as const;
-type LlpType = typeof VALID_LLP_TYPES[number];
-
-const VALID_FORMS = ['Form-8', 'Form-11'] as const;
-type LlpFormId = typeof VALID_FORMS[number];
+const VALID_FORMS = [
+  'Form-8-Annual',
+  'Form-8-Charge',
+  'Form-11',
+  'Form-3',
+  'Form-4',
+  'Form-5',
+  'Form-15',
+  'Form-24',
+  'Form-8', // Legacy alias
+] as const;
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
 
   const formRaw = searchParams.get('form') ?? 'Form-11';
-  const llpTypeRaw = searchParams.get('type') ?? '';
-  const contributionRaw = searchParams.get('contribution') ?? '';
-  const delayRaw = searchParams.get('delay') ?? '';
-  const dpCountRaw = searchParams.get('dp') ?? '2';
+  const llpTypeRaw = searchParams.get('type') as 'Regular' | 'Small' | null;
+  const contributionRaw = searchParams.get('contribution') ?? '0';
+  const turnoverRaw = searchParams.get('turnover');
+  const delayRaw = searchParams.get('delay');
+  const actualDateRaw = searchParams.get('fileDate') ?? searchParams.get('actualDate') ?? '';
+  const eventDateRaw = searchParams.get('eventDate') ?? searchParams.get('event') ?? '';
+  const fyRaw = searchParams.get('fy') ?? searchParams.get('financialYear') ?? '2025-26';
+  const dpCountRaw = searchParams.get('dp') ?? searchParams.get('dpCount') ?? '2';
+  const form3ModalityRaw = (searchParams.get('form3Modality') ?? 'initial') as Form3Modality;
+  const cNewRaw = searchParams.get('cNew');
+  const form8ChargeModalityRaw = (searchParams.get('form8ChargeModality') ?? 'creation') as Form8ChargeModality;
+  const form15ScenarioRaw = (searchParams.get('form15Scenario') ?? 'within_local_limits') as Form15Scenario;
 
-  // --- Input validation ---
-  // Normalize form name: accept "form-8", "Form8", "8" → "Form-8"
+  // Normalize form name
   const normalizeForm = (raw: string): string => {
     const cleaned = raw.replace(/\s/g, '').toUpperCase();
-    if (cleaned === '8' || cleaned === 'FORM8' || cleaned === 'FORM-8') return 'Form-8';
+    if (cleaned === '8' || cleaned === 'FORM8' || cleaned === 'FORM-8') return 'Form-8-Annual';
+    if (cleaned === '8-ANNUAL' || cleaned === 'FORM-8-ANNUAL' || cleaned === 'FORM8ANNUAL') return 'Form-8-Annual';
+    if (cleaned === '8-CHARGE' || cleaned === 'FORM-8-CHARGE' || cleaned === 'FORM8CHARGE') return 'Form-8-Charge';
     if (cleaned === '11' || cleaned === 'FORM11' || cleaned === 'FORM-11') return 'Form-11';
+    if (cleaned === '3' || cleaned === 'FORM3' || cleaned === 'FORM-3') return 'Form-3';
+    if (cleaned === '4' || cleaned === 'FORM4' || cleaned === 'FORM-4') return 'Form-4';
+    if (cleaned === '5' || cleaned === 'FORM5' || cleaned === 'FORM-5') return 'Form-5';
+    if (cleaned === '15' || cleaned === 'FORM15' || cleaned === 'FORM-15') return 'Form-15';
+    if (cleaned === '24' || cleaned === 'FORM24' || cleaned === 'FORM-24') return 'Form-24';
     return raw;
   };
 
-  const form = normalizeForm(formRaw) as LlpFormId;
-  if (!VALID_FORMS.includes(form)) {
-    return NextResponse.json(
-      { error: 'Invalid form. Must be Form-8 (Annual Statement) or Form-11 (Annual Return).' },
-      { status: 400 }
-    );
-  }
+  const form = normalizeForm(formRaw);
 
-  if (!VALID_LLP_TYPES.includes(llpTypeRaw as LlpType)) {
-    return NextResponse.json(
-      { error: 'Invalid llpType. Must be Regular or Small.' },
-      { status: 400 }
-    );
-  }
-
-  const contribution = parseInt(contributionRaw, 10);
+  const contribution = parseFloat(contributionRaw);
   if (isNaN(contribution) || contribution < 0) {
     return NextResponse.json(
-      { error: 'Invalid contribution: must be a non-negative integer in rupees (e.g. 500000 for ₹5L).' },
+      { error: 'Invalid contribution: must be a non-negative number in rupees.' },
       { status: 400 }
     );
   }
 
-  const daysDelayed = parseInt(delayRaw, 10);
-  if (isNaN(daysDelayed) || daysDelayed < 0) {
-    return NextResponse.json(
-      { error: 'Invalid delay: must be a non-negative integer (days).' },
-      { status: 400 }
-    );
-  }
-
+  const turnover = turnoverRaw ? parseFloat(turnoverRaw) : undefined;
   const dpCount = Math.max(1, Math.min(parseInt(dpCountRaw, 10) || 2, 100));
+  const cNew = cNewRaw ? parseFloat(cNewRaw) : undefined;
+  const explicitDelay = delayRaw ? parseInt(delayRaw, 10) : undefined;
 
   const result = calculateLlpFee({
-    llpType: llpTypeRaw as LlpType,
-    contribution,
     formId: form,
-    dueDate: '',
-    actualDate: '',
-    daysDelayed,
+    contribution,
+    turnover,
+    llpType: llpTypeRaw || undefined,
+    financialYear: fyRaw,
+    eventDate: eventDateRaw || undefined,
+    actualDate: actualDateRaw || undefined,
+    daysDelayed: explicitDelay,
     dpCount,
+    form3Modality: form3ModalityRaw,
+    cNew,
+    form8ChargeModality: form8ChargeModalityRaw,
+    form15Scenario: form15ScenarioRaw,
   });
 
-  const formDescription = form === 'Form-8'
-    ? 'Statement of Account & Solvency (Form 8)'
-    : 'Annual Return of LLP (Form 11)';
-
   return NextResponse.json({
-    form,
-    formDescription,
-    llpType: llpTypeRaw,
-    contributionRupees: contribution,
-    daysDelayed,
-    designatedPartners: dpCount,
-    normalFee: result.normalFee,
-    lateFee: result.lateFee,
-    totalPayable: result.totalPayable,
-    llpEntityPenalty: result.llpPenalty,
-    designatedPartnersPenalty: result.dpPenalty,
-    totalPenaltyExposure: result.totalPenaltyExposure,
+    form: result.formId,
+    formName: result.formName,
     isSmallLlp: result.isSmallLlp,
-    legalBasis: 'LLP Rules 2009, Rule 36 & Annexure-A as amended by LLP 2nd Amendment Rules 2022 (w.e.f. 01.04.2022)',
-    legalNote: daysDelayed > 360
-      ? 'Delay exceeds 360 days. Late fee is capped at the maximum multiplier. Condonation before ROC may be required.'
-      : null,
+    smallLlpAssessmentBasis: result.smallLlpAssessmentBasis,
+    contributionRupees: contribution,
+    turnoverRupees: turnover,
+    daysDelayed: result.days,
+    designatedPartners: dpCount,
+    dueDate: result.dueDate,
+    actualDate: result.actualDate,
+    tier1NormalFee: result.normalFee,
+    tier2AdditionalFee: result.lateFee,
+    tier3IncrementalFee: result.incrementalFee,
+    totalMcaPortalPayable: result.totalPayable,
+    tier4StatutoryPenaltyExposure: {
+      llpEntityPenalty: result.llpPenalty,
+      designatedPartnersPenalty: result.dpPenalty,
+      totalAdjudicationExposure: result.totalPenaltyExposure,
+      notice: result.penaltyNotice,
+    },
+    statutoryAuthority: result.statutoryAuthority,
+    whyExplanation: result.whyExplanation,
+    proceduralNotes: result.proceduralNotes,
+    legalDisclaimer:
+      'Calculator-generated estimate under the Limited Liability Partnership Act, 2008 & LLP Rules, 2009. Does not constitute an audit, certification, or legal opinion. Official fees are determined by the MCA portal.',
   });
 }

@@ -1,8 +1,12 @@
-/**
- * ROC Compliance Penalty Calculator Utility Library
- * pure client-side mathematical and date difference calculations
- */
-import { getNormalFilingFee, getLLPNormalFee, getLLPAdditionalFee } from './fee-calculator-core';
+import {
+  getNormalFilingFee,
+  getLLPNormalFee,
+  getLLPAdditionalFee,
+  getLLPForm3BaseFee,
+  getLLPForm4BaseFee,
+  getLLPForm24BaseFee,
+  getLLPChargeBaseFee,
+} from './fee-calculator-core';
 
 export function formatINR(amount: number): string {
   return new Intl.NumberFormat('en-IN', {
@@ -199,74 +203,452 @@ export function calculateCompanyFee(params: CompanyFeeParams): CompanyCalculatio
 }
 
 // -------------------------------------------------------------
-// LLP CALCULATOR
+// LLP CALCULATOR — Form-Specific Compliance & Fee Engine
 // -------------------------------------------------------------
 
+export type LlpFormId =
+  | 'Form-8-Annual'
+  | 'Form-8-Charge'
+  | 'Form-11'
+  | 'Form-3'
+  | 'Form-4'
+  | 'Form-5'
+  | 'Form-15'
+  | 'Form-24'
+  // Legacy aliases
+  | 'Form-8'
+  | 'Form-11';
+
+export type Form3Modality =
+  | 'initial'
+  | 'modification_no_contrib'
+  | 'modification_with_contrib';
+
+export type Form8ChargeModality =
+  | 'creation'
+  | 'modification'
+  | 'satisfaction';
+
+export type Form15Scenario =
+  | 'within_local_limits'
+  | 'outside_local_limits_within_state'
+  | 'interstate_change_roc';
+
 export interface LlpFeeParams {
-  llpType: 'Regular' | 'Small';
+  formId: LlpFormId | string;
   contribution: number;
-  formId: 'Form-8' | 'Form-11';
-  dueDate: string;
-  actualDate: string;
-  daysDelayed: number;
-  dpCount: number;
+  turnover?: number;
+  llpType?: 'Regular' | 'Small'; // manual override or backward-compat fallback
+  financialYear?: string;        // e.g. '2025-26' for Form 8 / 11
+  eventDate?: string;            // 'YYYY-MM-DD' for event forms
+  dueDate?: string;              // 'YYYY-MM-DD' (optional, auto-derived if omitted)
+  actualDate?: string;           // 'YYYY-MM-DD' (optional filing date)
+  daysDelayed?: number;          // explicit delay days
+  dpCount?: number;              // default 2
+  form3Modality?: Form3Modality;
+  cNew?: number;                 // new contribution amount for Form 3 contribution increase
+  form8ChargeModality?: Form8ChargeModality;
+  form15Scenario?: Form15Scenario;
 }
 
 export interface LlpCalculationResult {
-  normalFee: number;
-  lateFee: number;
-  totalPayable: number;
-  llpPenalty: number;
-  dpPenalty: number;
-  totalPenaltyExposure: number;
-  isSmallLlp: boolean;
-  days: number;
+  formId: string;
+  formName: string;
+  normalFee: number;                // Tier 1 Base Normal Filing Fee
+  lateFee: number;                  // Tier 2 Additional Filing Fee (Section 69 / Table B)
+  incrementalFee: number;           // Tier 3 Incremental Registration Fee (Form 3)
+  totalPayable: number;             // Total MCA Portal Amount = Tier 1 + Tier 2 + Tier 3
+  llpPenalty: number;               // Statutory Penalty for LLP Entity
+  dpPenalty: number;                // Statutory Penalty for Designated Partners
+  totalPenaltyExposure: number;     // Tier 4 Indicative Statutory Penalty Exposure
+  isSmallLlp: boolean;              // Assessed Small LLP status
+  smallLlpAssessmentBasis: string;  // Assessment explanation
+  days: number;                     // Days delayed after statutory due date
+  dueDate: string;                  // 'YYYY-MM-DD'
+  actualDate: string;               // 'YYYY-MM-DD'
+  dueDateFormatted: string;         // e.g. "30 Oct 2026"
+  filingDateFormatted: string;      // e.g. "15 Dec 2026"
+  statutoryAuthority: string;       // Primary legal citation
+  penaltyNotice: string;            // Section 76A Notice
+  proceduralNotes?: string;         // e.g. Form 24 / Charge procedural notes
+  whyExplanation: {
+    baseFeeDescription: string;
+    multiplierDescription: string;
+    incrementalFeeDescription?: string;
+    penaltyDescription: string;
+  };
+}
+
+/**
+ * Automatically derive statutory due date based on form, FY, and event parameters
+ */
+export function getLlpStatutoryDueDate(
+  formId: string,
+  financialYear?: string,
+  eventDate?: string,
+  form15Scenario?: Form15Scenario
+): { dueDateStr: string; formatted: string } {
+  const normForm = formId === 'Form-8' ? 'Form-8-Annual' : formId;
+
+  if (normForm === 'Form-11') {
+    // FY close is March 31. T + 60 days -> 30 May of following year.
+    let targetYear = 2026;
+    if (financialYear) {
+      const match = financialYear.match(/(\d{4})-(\d{2,4})/);
+      if (match) {
+        // e.g. "2025-26" -> closing year is 2026
+        targetYear = parseInt(match[1]) + 1;
+      } else {
+        const singleYear = parseInt(financialYear);
+        if (!isNaN(singleYear)) targetYear = singleYear + 1;
+      }
+    }
+    return {
+      dueDateStr: `${targetYear}-05-30`,
+      formatted: `30 May ${targetYear}`,
+    };
+  }
+
+  if (normForm === 'Form-8-Annual') {
+    // FY close March 31. End of 6 months = Sept 30. T + 30 days -> 30 October of following year.
+    let targetYear = 2026;
+    if (financialYear) {
+      const match = financialYear.match(/(\d{4})-(\d{2,4})/);
+      if (match) {
+        targetYear = parseInt(match[1]) + 1;
+      } else {
+        const singleYear = parseInt(financialYear);
+        if (!isNaN(singleYear)) targetYear = singleYear + 1;
+      }
+    }
+    return {
+      dueDateStr: `${targetYear}-10-30`,
+      formatted: `30 Oct ${targetYear}`,
+    };
+  }
+
+  if (eventDate) {
+    const ev = new Date(eventDate);
+    if (!isNaN(ev.getTime())) {
+      const due = new Date(ev.getTime() + 30 * 24 * 60 * 60 * 1000);
+      const y = due.getFullYear();
+      const m = String(due.getMonth() + 1).padStart(2, '0');
+      const d = String(due.getDate()).padStart(2, '0');
+      return {
+        dueDateStr: `${y}-${m}-${d}`,
+        formatted: due.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+      };
+    }
+  }
+
+  // Fallback
+  return {
+    dueDateStr: '2026-05-30',
+    formatted: '30 May 2026',
+  };
+}
+
+/**
+ * Objective Small LLP Evaluator per Section 2(ta) of LLP Act, 2008
+ */
+export function evaluateSmallLlpStatus(
+  contribution: number,
+  turnover?: number,
+  llpTypeOverride?: 'Regular' | 'Small'
+): { isSmallLlp: boolean; assessmentBasis: string } {
+  if (turnover !== undefined && turnover !== null && !isNaN(turnover)) {
+    const meetsContribution = contribution <= 2500000;
+    const meetsTurnover = turnover <= 4000000;
+    const isSmall = meetsContribution && meetsTurnover;
+    const assessmentBasis = isSmall
+      ? 'Qualified as Small LLP (Contribution ≤ ₹25 Lakhs & Turnover ≤ ₹40 Lakhs)'
+      : !meetsContribution && !meetsTurnover
+      ? 'Regular LLP (Both Contribution > ₹25 Lakhs and Turnover > ₹40 Lakhs)'
+      : !meetsContribution
+      ? 'Regular LLP (Contribution exceeds statutory threshold of ₹25 Lakhs)'
+      : 'Regular LLP (Turnover exceeds statutory threshold of ₹40 Lakhs)';
+    return { isSmallLlp: isSmall, assessmentBasis };
+  }
+
+  // Fallback to manual selection or contribution threshold
+  if (llpTypeOverride) {
+    const isSmall = llpTypeOverride === 'Small';
+    return {
+      isSmallLlp: isSmall,
+      assessmentBasis: isSmall
+        ? 'Small LLP assessment based on information provided'
+        : 'Regular LLP assessment based on information provided',
+    };
+  }
+
+  const isSmall = contribution <= 2500000;
+  return {
+    isSmallLlp: isSmall,
+    assessmentBasis: isSmall
+      ? 'Assessed as Small LLP based on Contribution ≤ ₹25 Lakhs'
+      : 'Regular LLP (Contribution > ₹25 Lakhs)',
+  };
 }
 
 export function calculateLlpFee(params: LlpFeeParams): LlpCalculationResult {
   const {
-    llpType,
-    contribution,
     formId,
-    daysDelayed,
-    dpCount,
+    contribution = 0,
+    turnover,
+    llpType,
+    financialYear = '2025-26',
+    eventDate,
+    dueDate: customDueDate,
+    actualDate,
+    daysDelayed: explicitDaysDelayed,
+    dpCount = 2,
+    form3Modality = 'initial',
+    cNew,
+    form8ChargeModality = 'creation',
+    form15Scenario = 'within_local_limits',
   } = params;
 
-  // 1. Normal Filing Fee (Contribution-based) — same for ALL LLPs including Small LLP.
-  // The concession for Small LLPs is only in the additional-fee (late-fee) multipliers.
-  const normalFee = getLLPNormalFee(contribution);
+  // 1. Determine Small LLP Status
+  const { isSmallLlp, assessmentBasis } = evaluateSmallLlpStatus(contribution, turnover, llpType);
 
-  const isSmallLlp = llpType === 'Small';
-  // No 50% discount on normal fee — removed per LLP Amendment Rules 2022.
-
-  // 2. Additional Fee (Late Fee)
-  // LLP 2nd Amendment Rules, 2022 (effective April 1, 2022) replaced the old flat ₹100/day
-  // with a slab-multiplier system based on the normal filing fee and LLP type.
-  // Source: Rule 36 & Annexure-A, LLP Rules 2009 as amended by LLP 2nd Amendment Rules 2022.
-  // 2. Additional Fee (Late Fee) — LLP 2nd Amendment Rules 2022 (effective 01.04.2022)
-  // Source: Rule 36 & Annexure-A, LLP Rules 2009 as amended by LLP 2nd Amendment Rules 2022.
-  // Beyond 360 days: hard cap (25× Small LLP / 50× other LLP). NOT a continuing per-day amount.
-  let lateFee = 0;
-  if (daysDelayed > 0) {
-    lateFee = getLLPAdditionalFee(daysDelayed, normalFee, isSmallLlp);
+  // 2. Determine Due Date and Days Delayed
+  let derivedDueDateStr = customDueDate;
+  let formattedDueDate = customDueDate || '';
+  if (!derivedDueDateStr) {
+    const dueInfo = getLlpStatutoryDueDate(formId, financialYear, eventDate, form15Scenario);
+    derivedDueDateStr = dueInfo.dueDateStr;
+    formattedDueDate = dueInfo.formatted;
   }
 
-  // 3. LLP Statutory Adjudication Penalty (ROC passes formal order under Sec 454)
-  // LLP Amendment Act 2021, effective April 1, 2022 — Section 34(4) / 35(3):
-  // LLP entity:         ₹100/day, maximum cap ₹1,00,000
-  // Each Designated Partner: ₹100/day, maximum cap ₹50,000 per DP
-  const llpPenalty = daysDelayed > 0 ? Math.min(100 * daysDelayed, 100000) : 0;
-  const dpPenalty  = daysDelayed > 0 ? Math.min(100 * daysDelayed, 50000) * dpCount : 0;
+  let delayDays = 0;
+  if (explicitDaysDelayed !== undefined && explicitDaysDelayed !== null && !isNaN(explicitDaysDelayed)) {
+    delayDays = Math.max(0, explicitDaysDelayed);
+  } else if (actualDate && derivedDueDateStr) {
+    const dDue = new Date(derivedDueDateStr);
+    const dAct = new Date(actualDate);
+    if (!isNaN(dDue.getTime()) && !isNaN(dAct.getTime())) {
+      dDue.setHours(0, 0, 0, 0);
+      dAct.setHours(0, 0, 0, 0);
+      delayDays = Math.max(0, Math.ceil((dAct.getTime() - dDue.getTime()) / (1000 * 60 * 60 * 24)));
+    }
+  }
+
+  const formattedFilingDate = actualDate
+    ? new Date(actualDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+    : 'Not Specified';
+
+  // 3. Normalize Form Type
+  const normForm = (formId === 'Form-8' ? 'Form-8-Annual' : formId) as LlpFormId;
+
+  // Initialize Tier Results
+  let normalFee = 0;
+  let lateFee = 0;
+  let incrementalFee = 0;
+  let llpPenalty = 0;
+  let dpPenalty = 0;
+  let formName = '';
+  let statutoryAuthority = '';
+  let proceduralNotes: string | undefined = undefined;
+  let baseFeeDesc = '';
+  let multiplierDesc = '';
+  let incrementalFeeDesc: string | undefined = undefined;
+
+  const section76aProvisoNotice =
+    'Section 76A contains a proviso relating to penalty for specified defaults under Sections 34(3)/35(1) where the default is rectified before or within 30 days of the adjudicating officer\'s notice, subject to statutory conditions.';
+
+  switch (normForm) {
+    case 'Form-8-Annual': {
+      formName = 'Form 8 — Statement of Account & Solvency (Annual Filing)';
+      statutoryAuthority = 'Section 34(2) & Section 69, LLP Act, 2008 read with Rule 24 and Annexure-A, LLP Rules, 2009';
+      normalFee = getLLPNormalFee(contribution);
+      lateFee = getLLPAdditionalFee(delayDays, normalFee, isSmallLlp, true);
+      baseFeeDesc = `Normal Base Filing Fee (Annexure A Table A Item 1 for contribution ₹${contribution.toLocaleString('en-IN')})`;
+
+      if (delayDays > 0) {
+        if (delayDays <= 360) {
+          multiplierDesc = `Additional Filing Fee under Section 69 / Table B Item 2 (${delayDays} days delay)`;
+        } else {
+          multiplierDesc = `Additional Filing Fee beyond 360 days: ${isSmallLlp ? '15× + ₹10/day' : '30× + ₹20/day'} uncapped daily rate`;
+        }
+        const dailyPenaltyRate = isSmallLlp ? 50 : 100; // Section 76A(3) one-half relief for Small LLPs
+        llpPenalty = Math.min(dailyPenaltyRate * delayDays, 100000);
+        dpPenalty = Math.min(dailyPenaltyRate * delayDays, 50000) * dpCount;
+      } else {
+        multiplierDesc = 'On-time filing (0 days delay) — ₹0 additional fee';
+      }
+      break;
+    }
+
+    case 'Form-8-Charge': {
+      formName = 'Form 8 — Registration / Modification / Satisfaction of Charge';
+      statutoryAuthority = 'Section 36 & Section 69, LLP Act, 2008 read with Annexure-A Items 4 & 5 and Table B Item 1, LLP Rules, 2009';
+      normalFee = getLLPChargeBaseFee(); // Flat ₹1,000 per document
+      lateFee = getLLPAdditionalFee(delayDays, normalFee, isSmallLlp, false);
+      baseFeeDesc = 'Flat document filing fee under Annexure A Items 4 & 5 (₹1,000 per document)';
+      
+      if (delayDays > 0) {
+        multiplierDesc = delayDays <= 360
+          ? `Additional Filing Fee under Table B Item 1 (${delayDays} days delay)`
+          : `Additional Filing Fee capped at ${isSmallLlp ? '25× (₹25,000)' : '50× (₹50,000)'} for general forms`;
+      } else {
+        multiplierDesc = 'On-time filing (0 days delay) — ₹0 additional fee';
+      }
+
+      proceduralNotes =
+        'Notice: Charge filings beyond the statutory 30-day window attract additional filing fees under Annexure A Table B; filings requiring registration under extended periods or rectifications require verification against applicable ROC/RD procedural guidelines.';
+      break;
+    }
+
+    case 'Form-11': {
+      formName = 'Form 11 — Annual Return of LLP';
+      statutoryAuthority = 'Section 35(1) & Section 69, LLP Act, 2008 read with Rule 25(1) and Annexure-A, LLP Rules, 2009';
+      normalFee = getLLPNormalFee(contribution);
+      lateFee = getLLPAdditionalFee(delayDays, normalFee, isSmallLlp, true);
+      baseFeeDesc = `Normal Base Filing Fee (Annexure A Table A Item 1 for contribution ₹${contribution.toLocaleString('en-IN')})`;
+
+      if (delayDays > 0) {
+        if (delayDays <= 360) {
+          multiplierDesc = `Additional Filing Fee under Section 69 / Table B Item 2 (${delayDays} days delay)`;
+        } else {
+          multiplierDesc = `Additional Filing Fee beyond 360 days: ${isSmallLlp ? '15× + ₹10/day' : '30× + ₹20/day'} uncapped daily rate`;
+        }
+        const dailyPenaltyRate = isSmallLlp ? 50 : 100; // Section 76A(3) one-half relief for Small LLPs
+        llpPenalty = Math.min(dailyPenaltyRate * delayDays, 100000);
+        dpPenalty = Math.min(dailyPenaltyRate * delayDays, 50000) * dpCount;
+      } else {
+        multiplierDesc = 'On-time filing (0 days delay) — ₹0 additional fee';
+      }
+      break;
+    }
+
+    case 'Form-3': {
+      formName = 'Form 3 — Information with Respect to LLP Agreement and Changes Therein';
+      statutoryAuthority = 'Section 23(2) & Section 69, LLP Act, 2008 read with Rule 21(1) and Annexure-A Items 1 & 3, LLP Rules, 2009';
+
+      if (form3Modality === 'initial') {
+        normalFee = getLLPForm3BaseFee(contribution);
+        lateFee = getLLPAdditionalFee(delayDays, normalFee, isSmallLlp, false);
+        baseFeeDesc = `Initial LLP Agreement filing fee (Annexure A Item 3 for contribution ₹${contribution.toLocaleString('en-IN')})`;
+      } else if (form3Modality === 'modification_no_contrib') {
+        normalFee = getLLPNormalFee(contribution);
+        lateFee = getLLPAdditionalFee(delayDays, normalFee, isSmallLlp, false);
+        baseFeeDesc = `Agreement modification filing fee (Annexure A Table A Item 1 for contribution ₹${contribution.toLocaleString('en-IN')})`;
+      } else {
+        // modification_with_contrib
+        normalFee = getLLPNormalFee(contribution);
+        const newContrib = cNew || contribution;
+        incrementalFee = Math.max(0, getLLPForm3BaseFee(newContrib) - getLLPForm3BaseFee(contribution));
+        lateFee = getLLPAdditionalFee(delayDays, normalFee, isSmallLlp, false);
+        baseFeeDesc = `Agreement modification base document fee (Annexure A Table A Item 1)`;
+        incrementalFeeDesc = `Incremental registration fee differential for contribution increase (₹${contribution.toLocaleString('en-IN')} → ₹${newContrib.toLocaleString('en-IN')} under Annexure A Item 3)`;
+      }
+
+      multiplierDesc = delayDays > 0
+        ? (delayDays <= 360
+            ? `Additional Filing Fee under Table B Item 1 (${delayDays} days delay)`
+            : `Additional Filing Fee capped at ${isSmallLlp ? '25×' : '50×'} for general forms`)
+        : 'On-time filing (0 days delay) — ₹0 additional fee';
+      break;
+    }
+
+    case 'Form-4': {
+      formName = 'Form 4 — Notice of Appointment, Cessation & Partner/DP Particulars';
+      statutoryAuthority = 'Section 25(2) & Section 69, LLP Act, 2008 read with Rule 10(8) & Rule 21(2) and Annexure-A Item 2, LLP Rules, 2009';
+      normalFee = getLLPForm4BaseFee(isSmallLlp);
+      lateFee = getLLPAdditionalFee(delayDays, normalFee, isSmallLlp, false);
+      baseFeeDesc = `Flat base fee for Form 4 under Annexure A Item 2 (${isSmallLlp ? 'Small LLP: ₹50' : 'Other LLP: ₹150'})`;
+      multiplierDesc = delayDays > 0
+        ? (delayDays <= 360
+            ? `Additional Filing Fee under Table B Item 1 (${delayDays} days delay)`
+            : `Additional Filing Fee capped at ${isSmallLlp ? '25× (₹1,250)' : '50× (₹7,500)'}`)
+        : 'On-time filing (0 days delay) — ₹0 additional fee';
+      break;
+    }
+
+    case 'Form-5': {
+      formName = 'Form 5 — Notice for Change of Name';
+      statutoryAuthority = 'Section 19 & Section 69, LLP Act, 2008 read with Rule 20 and Annexure-A Table A Item 1, LLP Rules, 2009';
+      normalFee = getLLPNormalFee(contribution);
+      lateFee = getLLPAdditionalFee(delayDays, normalFee, isSmallLlp, false);
+      baseFeeDesc = `Normal Base Filing Fee (Annexure A Table A Item 1 for contribution ₹${contribution.toLocaleString('en-IN')})`;
+      multiplierDesc = delayDays > 0
+        ? (delayDays <= 360
+            ? `Additional Filing Fee under Table B Item 1 (${delayDays} days delay)`
+            : `Additional Filing Fee capped at ${isSmallLlp ? '25×' : '50×'} for general forms`)
+        : 'On-time filing (0 days delay) — ₹0 additional fee';
+      break;
+    }
+
+    case 'Form-15': {
+      formName = 'Form 15 — Notice for Change of Place of Registered Office';
+      statutoryAuthority = 'Section 13 & Section 69, LLP Act, 2008 read with Rule 17 and Annexure-A Table A Item 1, LLP Rules, 2009';
+      normalFee = getLLPNormalFee(contribution);
+      lateFee = getLLPAdditionalFee(delayDays, normalFee, isSmallLlp, false);
+      baseFeeDesc = `Normal Base Filing Fee (Annexure A Table A Item 1 for contribution ₹${contribution.toLocaleString('en-IN')})`;
+      multiplierDesc = delayDays > 0
+        ? (delayDays <= 360
+            ? `Additional Filing Fee under Table B Item 1 (${delayDays} days delay)`
+            : `Additional Filing Fee capped at ${isSmallLlp ? '25×' : '50×'} for general forms`)
+        : 'On-time filing (0 days delay) — ₹0 additional fee';
+      break;
+    }
+
+    case 'Form-24': {
+      formName = 'Form 24 — Application for Striking off the Name of LLP';
+      statutoryAuthority = 'Section 75, LLP Act, 2008 read with Rule 37(1) and Annexure-A Item 5, LLP Rules, 2009';
+      normalFee = getLLPForm24BaseFee(isSmallLlp);
+      lateFee = 0; // Strike off application not subject to late filing multipliers
+      baseFeeDesc = `Discrete strike-off application fee under Annexure A Item 5 (${isSmallLlp ? 'Small LLP: ₹500' : 'Other LLP: ₹1,000'})`;
+      multiplierDesc = 'Additional Filing Fee is N/A for voluntary strike-off applications';
+      proceduralNotes =
+        'Form 24 Prerequisites: Must have ceased commercial activity for at least 1 year; no active assets, liabilities, or open charges; up-to-date filing of Form 8 and Form 11 completed up to the financial year of cessation; CA-certified Statement of Account within 30 days of application.';
+      break;
+    }
+
+    default: {
+      formName = 'LLP General Form';
+      statutoryAuthority = 'Limited Liability Partnership Act, 2008 & LLP Rules, 2009';
+      normalFee = getLLPNormalFee(contribution);
+      lateFee = getLLPAdditionalFee(delayDays, normalFee, isSmallLlp, false);
+      baseFeeDesc = `Normal Base Filing Fee (Annexure A Table A Item 1)`;
+      multiplierDesc = delayDays > 0 ? `Additional Fee (${delayDays} days delay)` : 'On-time filing — ₹0';
+      break;
+    }
+  }
+
+  const penaltyDesc = (llpPenalty > 0 || dpPenalty > 0)
+    ? `Indicative statutory adjudication penalty under Section 34(5)/35(2): ₹${llpPenalty.toLocaleString('en-IN')} for LLP Entity + ₹${dpPenalty.toLocaleString('en-IN')} for ${dpCount} Designated Partner(s). Requires formal adjudication under Section 76A.`
+    : 'No statutory adjudication penalty exposure.';
+
+  const totalPayable = normalFee + lateFee + incrementalFee;
+  const totalPenaltyExposure = llpPenalty + dpPenalty;
 
   return {
+    formId: normForm,
+    formName,
     normalFee,
     lateFee,
-    totalPayable: normalFee + lateFee,
+    incrementalFee,
+    totalPayable,
     llpPenalty,
     dpPenalty,
-    totalPenaltyExposure: llpPenalty + dpPenalty,
+    totalPenaltyExposure,
     isSmallLlp,
-    days: daysDelayed,
+    smallLlpAssessmentBasis: assessmentBasis,
+    days: delayDays,
+    dueDate: derivedDueDateStr,
+    actualDate: actualDate || derivedDueDateStr,
+    dueDateFormatted: formattedDueDate,
+    filingDateFormatted: formattedFilingDate,
+    statutoryAuthority,
+    penaltyNotice: section76aProvisoNotice,
+    proceduralNotes,
+    whyExplanation: {
+      baseFeeDescription: baseFeeDesc,
+      multiplierDescription: multiplierDesc,
+      incrementalFeeDescription: incrementalFeeDesc,
+      penaltyDescription: penaltyDesc,
+    },
   };
 }
 

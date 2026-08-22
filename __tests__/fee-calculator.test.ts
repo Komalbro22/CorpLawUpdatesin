@@ -21,6 +21,10 @@ import {
   getOtherCompanyIncorporationFee,
   getLLPNormalFee,
   getLLPAdditionalFee,
+  getLLPForm3BaseFee,
+  getLLPForm4BaseFee,
+  getLLPForm24BaseFee,
+  getLLPChargeBaseFee,
 } from "../lib/fee-calculator-core";
 
 import {
@@ -32,6 +36,9 @@ import {
 
 import {
   calculateLLPPenalty,
+  calculateLlpFee,
+  evaluateSmallLlpStatus,
+  getLlpStatutoryDueDate,
   calculateMSMEInterest,
   calculateMsmeInterest,
   evaluateSupplierEligibility,
@@ -811,6 +818,92 @@ describe("getLLPNormalFee — contribution slab (all LLPs)", () => {
   });
 });
 
+describe("getLLPForm3BaseFee — Annexure A Item 3 slabs", () => {
+  test("contribution ≤ ₹1L → ₹500", () => {
+    expect(getLLPForm3BaseFee(50_000)).toBe(500);
+    expect(getLLPForm3BaseFee(1_00_000)).toBe(500);
+  });
+
+  test("contribution ₹1L to ₹5L → ₹2,000", () => {
+    expect(getLLPForm3BaseFee(1_00_001)).toBe(2000);
+    expect(getLLPForm3BaseFee(5_00_000)).toBe(2000);
+  });
+
+  test("contribution ₹5L to ₹10L → ₹4,000", () => {
+    expect(getLLPForm3BaseFee(5_00_001)).toBe(4000);
+    expect(getLLPForm3BaseFee(10_00_000)).toBe(4000);
+  });
+
+  test("contribution ₹10L to ₹25L → ₹5,000", () => {
+    expect(getLLPForm3BaseFee(10_00_001)).toBe(5000);
+    expect(getLLPForm3BaseFee(25_00_000)).toBe(5000);
+  });
+
+  test("contribution ₹25L to ₹1Cr → ₹10,000", () => {
+    expect(getLLPForm3BaseFee(25_00_001)).toBe(10000);
+    expect(getLLPForm3BaseFee(1_00_00_000)).toBe(10000);
+  });
+
+  test("contribution > ₹1Cr → ₹25,000", () => {
+    expect(getLLPForm3BaseFee(1_00_00_001)).toBe(25000);
+  });
+});
+
+describe("getLLPForm4BaseFee, getLLPForm24BaseFee & getLLPChargeBaseFee", () => {
+  test("Form 4 base fee: Small LLP → ₹50, Other LLP → ₹150", () => {
+    expect(getLLPForm4BaseFee(true)).toBe(50);
+    expect(getLLPForm4BaseFee(false)).toBe(150);
+  });
+
+  test("Form 24 application fee: Small LLP → ₹500, Other LLP → ₹1,000", () => {
+    expect(getLLPForm24BaseFee(true)).toBe(500);
+    expect(getLLPForm24BaseFee(false)).toBe(1000);
+  });
+
+  test("Form 8 Charge base fee: Flat ₹1,000 per document", () => {
+    expect(getLLPChargeBaseFee()).toBe(1000);
+  });
+});
+
+describe("evaluateSmallLlpStatus — objective assessment", () => {
+  test("meets both criteria (Contrib ≤ ₹25L & Turnover ≤ ₹40L) → Small LLP", () => {
+    const res = evaluateSmallLlpStatus(10_00_000, 20_00_000);
+    expect(res.isSmallLlp).toBe(true);
+    expect(res.assessmentBasis).toContain("Qualified as Small LLP");
+  });
+
+  test("contribution > ₹25L → Regular LLP", () => {
+    const res = evaluateSmallLlpStatus(30_00_000, 20_00_000);
+    expect(res.isSmallLlp).toBe(false);
+    expect(res.assessmentBasis).toContain("Contribution exceeds statutory threshold");
+  });
+
+  test("turnover > ₹40L → Regular LLP", () => {
+    const res = evaluateSmallLlpStatus(10_00_000, 50_00_000);
+    expect(res.isSmallLlp).toBe(false);
+    expect(res.assessmentBasis).toContain("Turnover exceeds statutory threshold");
+  });
+});
+
+describe("getLlpStatutoryDueDate — automated derivation", () => {
+  test("Form 11 for FY 2025-26 → 30 May 2026", () => {
+    const due = getLlpStatutoryDueDate("Form-11", "2025-26");
+    expect(due.dueDateStr).toBe("2026-05-30");
+    expect(due.formatted).toBe("30 May 2026");
+  });
+
+  test("Form 8 Annual for FY 2025-26 → 30 Oct 2026", () => {
+    const due = getLlpStatutoryDueDate("Form-8-Annual", "2025-26");
+    expect(due.dueDateStr).toBe("2026-10-30");
+    expect(due.formatted).toBe("30 Oct 2026");
+  });
+
+  test("Event form (e.g. Form 4) with event date 2026-01-01 → 30 days later", () => {
+    const due = getLlpStatutoryDueDate("Form-4", undefined, "2026-01-01");
+    expect(due.dueDateStr).toBe("2026-01-31");
+  });
+});
+
 // ─────────────────────────────────────────────────────────────────────────────
 // SECTION 9 — getLLPAdditionalFee
 // Post LLP Amendment Rules 2022 (effective 01.04.2022)
@@ -993,6 +1086,139 @@ describe("calculateLLPPenalty — end-to-end", () => {
       form: "Form 11",
     });
     expect(result.total).not.toBe(1_680);
+  });
+});
+
+describe("calculateLlpFee — Multi-Form Compliance & Fee Engine", () => {
+  test("Form 8 Charge — Flat ₹1,000 document fee, 20 days delay (Small: 2× = ₹2,000) → Total ₹3,000", () => {
+    const res = calculateLlpFee({
+      formId: "Form-8-Charge",
+      contribution: 10_00_000,
+      turnover: 20_00_000,
+      daysDelayed: 20,
+    });
+    expect(res.normalFee).toBe(1000);
+    expect(res.lateFee).toBe(2000);
+    expect(res.totalPayable).toBe(3000);
+    expect(res.proceduralNotes).toBeDefined();
+  });
+
+  test("Form 8 Charge — Delay > 360 days capped at 25× (Small: ₹25,000) → Total ₹26,000", () => {
+    const res = calculateLlpFee({
+      formId: "Form-8-Charge",
+      contribution: 10_00_000,
+      turnover: 20_00_000,
+      daysDelayed: 400,
+    });
+    expect(res.normalFee).toBe(1000);
+    expect(res.lateFee).toBe(25000); // 25x cap
+    expect(res.totalPayable).toBe(26000);
+  });
+
+  test("Form 3 Initial Agreement — ₹10L contribution → ₹5,000 base fee, on-time → ₹5,000 total", () => {
+    const res = calculateLlpFee({
+      formId: "Form-3",
+      form3Modality: "initial",
+      contribution: 10_00_000,
+      turnover: 20_00_000,
+      daysDelayed: 0,
+    });
+    expect(res.normalFee).toBe(4000); // <= 10L is 4000
+    expect(res.lateFee).toBe(0);
+    expect(res.incrementalFee).toBe(0);
+    expect(res.totalPayable).toBe(4000);
+  });
+
+  test("Form 3 Contribution Increase — ₹10L to ₹50L → ₹200 base + ₹6,000 incremental = ₹6,200", () => {
+    // Old 10L slab: 4000. New 50L slab: 10000. Differential: 6000. Base: 200 (Table A for 10L)
+    const res = calculateLlpFee({
+      formId: "Form-3",
+      form3Modality: "modification_with_contrib",
+      contribution: 10_00_000,
+      cNew: 50_00_000,
+      turnover: 20_00_000,
+      daysDelayed: 0,
+    });
+    expect(res.normalFee).toBe(200);
+    expect(res.incrementalFee).toBe(6000); // 10000 - 4000
+    expect(res.totalPayable).toBe(6200);
+  });
+
+  test("Form 4 — Small LLP (₹50 base), 20 days delay (2× = ₹100) → Total ₹150", () => {
+    const res = calculateLlpFee({
+      formId: "Form-4",
+      contribution: 10_00_000,
+      turnover: 20_00_000,
+      daysDelayed: 20,
+    });
+    expect(res.normalFee).toBe(50);
+    expect(res.lateFee).toBe(100);
+    expect(res.totalPayable).toBe(150);
+  });
+
+  test("Form 4 — Other LLP (₹150 base), 20 days delay (4× = ₹600) → Total ₹750", () => {
+    const res = calculateLlpFee({
+      formId: "Form-4",
+      contribution: 30_00_000, // > 25L -> Other LLP
+      turnover: 50_00_000,
+      daysDelayed: 20,
+    });
+    expect(res.normalFee).toBe(150);
+    expect(res.lateFee).toBe(600);
+    expect(res.totalPayable).toBe(750);
+  });
+
+  test("Form 24 Strike-off — Small LLP (₹500), 100 days delay → late fee is ₹0, Total ₹500", () => {
+    const res = calculateLlpFee({
+      formId: "Form-24",
+      contribution: 10_00_000,
+      turnover: 20_00_000,
+      daysDelayed: 100,
+    });
+    expect(res.normalFee).toBe(500);
+    expect(res.lateFee).toBe(0);
+    expect(res.totalPayable).toBe(500);
+    expect(res.proceduralNotes).toContain("Form 24 Prerequisites");
+  });
+
+  test("Statutory penalty separation — Small LLP (Sec 76A(3) ₹50/day) not included in totalPayable", () => {
+    const res = calculateLlpFee({
+      formId: "Form-11",
+      contribution: 10_00_000,
+      turnover: 20_00_000, // Small LLP
+      daysDelayed: 40,
+      dpCount: 2,
+    });
+    // 40 days delay -> 4x normal fee = 800. Normal = 200. Total = 1000.
+    expect(res.normalFee).toBe(200);
+    expect(res.lateFee).toBe(800);
+    expect(res.totalPayable).toBe(1000);
+    // Statutory Penalty under Sec 76A(3): LLP = 40 * 50 = 2000, DP = 40 * 50 * 2 = 4000. Total exposure = 6000.
+    expect(res.llpPenalty).toBe(2000);
+    expect(res.dpPenalty).toBe(4000);
+    expect(res.totalPenaltyExposure).toBe(6000);
+    // Crucial check: totalPayable does NOT include the 6000 adjudication exposure!
+    expect(res.totalPayable).not.toBe(7000);
+    expect(res.totalPayable).toBe(1000);
+  });
+
+  test("Statutory penalty separation — Other LLP (Sec 35(2) ₹100/day) not included in totalPayable", () => {
+    const res = calculateLlpFee({
+      formId: "Form-11",
+      contribution: 30_00_000, // > 25L -> Other LLP
+      turnover: 50_00_000,
+      daysDelayed: 40,
+      dpCount: 2,
+    });
+    // 40 days delay -> 8x normal fee = 3200. Normal = 400. Total = 3600.
+    expect(res.normalFee).toBe(400);
+    expect(res.lateFee).toBe(3200);
+    expect(res.totalPayable).toBe(3600);
+    // Statutory Penalty: LLP = 40 * 100 = 4000, DP = 40 * 100 * 2 = 8000. Total exposure = 12000.
+    expect(res.llpPenalty).toBe(4000);
+    expect(res.dpPenalty).toBe(8000);
+    expect(res.totalPenaltyExposure).toBe(12000);
+    expect(res.totalPayable).toBe(3600);
   });
 });
 
