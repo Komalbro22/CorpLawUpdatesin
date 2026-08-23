@@ -163,15 +163,19 @@ export function calculateCompanyFee(params: CompanyFeeParams): CompanyCalculatio
   if (daysDelayed > 0) {
     const rules = formPenaltyRules[formId];
     if (rules) {
+      // For Section 92 (MGT-7/7A) and Section 137 (AOC-4 family), the ₹100/day applies after the first day
+      const isSec92or137 = ['MGT-7', 'MGT-7A', 'AOC-4', 'AOC-4-XBRL', 'AOC-4-CFS'].includes(formId);
+      const multDays = isSec92or137 ? Math.max(0, daysDelayed - 1) : daysDelayed;
+
       if (rules.companyBase !== undefined || rules.companyPerDay !== undefined) {
-        let compPenalty = (rules.companyBase || 0) + (rules.companyPerDay || 0) * daysDelayed;
+        let compPenalty = (rules.companyBase || 0) + (rules.companyPerDay || 0) * multDays;
         if (rules.companyMax !== undefined) {
           compPenalty = Math.min(compPenalty, rules.companyMax);
         }
         companyPenalty = compPenalty;
       }
       if (rules.officerBase !== undefined || rules.officerPerDay !== undefined) {
-        let offPenalty = (rules.officerBase || 0) + (rules.officerPerDay || 0) * daysDelayed;
+        let offPenalty = (rules.officerBase || 0) + (rules.officerPerDay || 0) * multDays;
         if (rules.officerMax !== undefined) {
           offPenalty = Math.min(offPenalty, rules.officerMax);
         }
@@ -180,13 +184,13 @@ export function calculateCompanyFee(params: CompanyFeeParams): CompanyCalculatio
     }
   }
 
-  // Section 446B small company / OPC / startup relief (50% penalty reduction & statutory caps per officer)
-  const isSmallCompanyReliefApplied = ['Small', 'OPC'].includes(companyType);
+  // Section 446B small company / OPC / startup / producer relief (50% penalty reduction & statutory caps per officer)
+  const isSmallCompanyReliefApplied = ['Small', 'OPC', 'Startup', 'Producer'].includes(companyType);
   if (isSmallCompanyReliefApplied) {
-    companyPenalty = Math.min(Math.floor(companyPenalty / 2), 200000);
-    // Statutory Section 446B caps officer penalty at ₹1,00,000 PER OFFICER in default
+    companyPenalty = Math.min(Math.floor(companyPenalty / 2), 100000);
+    // Statutory Section 446B caps officer penalty at ₹1,00,000 per officer in default
     const perOfficer = officersCount > 0 ? Math.floor(officerPenalty / officersCount) : 0;
-    const halvedAndCapped = Math.min(Math.floor(perOfficer / 2), 100000);
+    const halvedAndCapped = Math.min(Math.floor(perOfficer / 2), 25000);
     officerPenalty = halvedAndCapped * officersCount;
   }
 

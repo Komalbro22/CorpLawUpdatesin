@@ -43,41 +43,84 @@ export const mcaForms: MCAForm[] = [
     formName: 'Annual Return',
     aliases: ['annual return', 'mgt7', 'MGT 7', 'annual filing'],
     category: 'annual',
-    filedBy: ['Private Limited', 'Public Limited', 'OPC', 'Small Company'],
+    filedBy: ['Private Limited (Non-Small)', 'Public Limited (Unlisted & Listed)', 'Section 8 Company', 'Producer Company'],
     dueDate: 'Within 60 days of AGM',
-    section: 'Section 92, Companies Act 2013',
+    section: 'Section 92(1), Companies Act 2013 read with Rule 11(1)',
     penaltyType: 'per_day',
-    penaltyRate: '₹100 per day, no upper cap',
+    penaltyRate: '₹100 per day additional filing fee',
     normalFeeStructure: 'capital_slab',
     baseFeeSlab: 'standard_company_slab',
     concessionApplies: false,
     filingGuides: [
       {
-        title: "Complete MGT-7 Filing Guide — Step by Step for FY 2024-25",
-        slug: "/updates/mgt-7-filing-guide-fy-2024-25",
-        publishedDate: "2025-03-15",
-        summary: "Step-by-step walkthrough of filing MGT-7 Annual Return, including attachments, certification requirements, and common errors.",
+        title: "Complete MGT-7 Annual Return Filing Guide for FY 2025-26 — Due Dates, MCA V3 & Small Co Limits",
+        slug: "/updates/mgt-7-annual-return-filing-guide-fy-2025-26-due-date-mca-v3-small-company-limits-ccfs2026",
+        publishedDate: "2026-03-15",
+        summary: "Step-by-step walkthrough of filing MGT-7 Annual Return on MCA V3, including attachments, certification requirements, updated Small Company thresholds, and penalty rules.",
         isOfficial: true
       }
     ],
-    metaTitle: 'MGT-7 Late Filing Fee Calculator 2026-27 | Annual Return Penalty | CorpLawUpdates.in',
-    metaDescription: 'Calculate exact MGT-7 late filing fees and ₹100/day penalties for Annual Return. Free calculator updated for FY 2026-27. Covers Private, Public, OPC companies.',
-    ogDescription: 'Use our free interactive calculator to determine exact late fees and ROC penalties for filing MGT-7 Annual Returns.',
+    metaTitle: 'Form MGT-7 Fee Calculator: Annual Return Filing Fee & Penalty | CorpLawUpdates.in',
+    metaDescription: 'Calculate exact Form MGT-7 normal filing fees (₹200–₹600), ₹100/day additional filing fee, and Section 92(5) statutory penalty exposure for FY 2026-27.',
+    ogDescription: 'Professional institutional calculator for Form MGT-7 normal fees, ₹100/day additional filing fee, and Section 92(5) statutory penalty exposure.',
     faqItems: [
-      { question: 'What is the penalty for filing MGT-7 late?', answer: 'The penalty for filing MGT-7 late is a strict, uncapped fee of ₹100 per day for every day of delay beyond the due date (usually 60 days from the AGM).' },
-      { question: 'Is there any maximum cap on the MGT-7 late fee?', answer: 'No, there is no maximum upper cap on the late fee for MGT-7. The ₹100 per day penalty accumulates continuously until the form is filed.' },
-      { question: 'Who is required to file Form MGT-7?', answer: 'Every registered company in India, including Private Limited, Public Limited, and One Person Companies (OPCs), must file their annual return via Form MGT-7 or MGT-7A (for OPCs/Small companies).' },
-      { question: 'Can the ROC waive the MGT-7 late fee?', answer: 'The ₹100 per day additional fee is statutorily fixed under the Companies Act. The ROC does not have discretionary power to waive this fee unless under a specific government amnesty scheme like the CFSS.' },
-      { question: 'What is the due date for MGT-7?', answer: 'MGT-7 must be filed within 60 days from the date the Annual General Meeting (AGM) is held.' }
+      { question: 'What is the fee for filing Form MGT-7 late?', answer: 'Filing Form MGT-7 late incurs a statutory additional filing fee of ₹100 per day under Table B of the Companies (Registration Offices and Fees) Rules, 2014. This is paid on the MCA21 portal upon filing.' },
+      { question: 'What is the statutory penalty under Section 92(5)?', answer: 'Under Section 92(5), default in filing annual returns attracts an adjudication penalty of ₹10,000 plus ₹100 per day after the first day of continuing default, subject to a maximum cap of ₹2,00,000 for the company and ₹50,000 per officer in default. This is separate from the MCA portal filing fee.' },
+      { question: 'Who is required to file Form MGT-7?', answer: 'All companies other than One Person Companies (OPCs) and Small Companies must file Form MGT-7. OPCs and Small Companies file Form MGT-7A (Abridged Annual Return) under Rule 11.' },
+      { question: 'What is the due date for filing Form MGT-7?', answer: 'Form MGT-7 must be filed within 60 days from the date of the Annual General Meeting (AGM), or within 60 days from the date the AGM ought to have been held if no AGM was conducted.' },
+      { question: 'Does Section 446B relief apply to MGT-7 filings?', answer: 'Yes, if the filing company is a DPIIT-recognized Start-up Company or a Producer Company filing Form MGT-7, Section 446B halves the indicative statutory adjudication penalty exposure under Section 92(5).' }
     ],
-    relatedForms: ['aoc-4', 'dir-12'],
+    relatedForms: ['mgt-7a', 'aoc-4', 'dir-12'],
     filedTogetherWith: ['aoc-4'],
     contentSections: {
-      whatIsThisForm: '<p>Form MGT-7 is an electronic form provided by the Ministry of Corporate Affairs (MCA) to all incorporated companies in India for filing their <strong>Annual Return</strong>. It contains comprehensive details regarding the company’s shareholding structure, changes in directorships, details of meetings held during the financial year, and remuneration paid to key managerial personnel. Filing this form is a mandatory statutory requirement under Section 92 of the Companies Act, 2013. Maintaining transparency with the Registrar of Companies (ROC) through this form ensures the company remains active and compliant.</p>',
-      whoMustFile: '<p>Every company registered under the Companies Act, 2013 (or previous acts) is obligated to file Form MGT-7 annually. This includes Private Limited Companies, Public Limited Companies, Section 8 Companies, and wholly-owned subsidiaries. However, One Person Companies (OPCs) and Small Companies are permitted to file an abridged version of the form known as <strong>Form MGT-7A</strong>.</p>',
-      dueDateExplained: '<p>The statutory due date for filing Form MGT-7 is strictly <strong>within 60 days from the date of the Annual General Meeting (AGM)</strong> of the company. Since the AGM must generally be held on or before September 30th of the financial year, the standard deadline for filing MGT-7 naturally falls on or around <strong>November 29th</strong> each year.</p>',
-      consequencesOfDelay: '<p>Delaying the filing of MGT-7 attracts severe statutory penalties. Unlike general event-based forms which follow a multiplier cap (e.g., 2x to 12x the normal fee), MGT-7 attracts a strict, uncapped penalty of <strong>₹100 per day</strong> for every single day of default. Furthermore, continuous non-filing for consecutive years can lead to the directors being disqualified under Section 164(2) and the company being struck off the register by the ROC.</p>',
-      workedExample: '<p><strong>Scenario:</strong> A Private Limited Company with an authorized capital of ₹5,00,000 files its MGT-7 45 days after the due date.</p><ul><li>Normal Filing Fee (Slab based): ₹400</li><li>Late Penalty: 45 days × ₹100 = ₹4,500</li><li><strong>Total Liability:</strong> ₹400 + ₹4,500 = <strong>₹4,900</strong></li></ul>'
+      whatIsThisForm: '<p>Form MGT-7 is the electronic annual return prescribed by the Ministry of Corporate Affairs (MCA) under Section 92 of the Companies Act, 2013 and Rule 11 of the Companies (Management and Administration) Rules, 2014. It captures comprehensive corporate information including shareholding patterns, indebtedness, board composition, director details, remuneration, and compliance certifications.</p>',
+      whoMustFile: '<p>Every company registered under the Companies Act, 2013—including standard Private Limited Companies, Public Limited Companies (unlisted and listed), Section 8 Companies, and Producer Companies—must file Form MGT-7. However, One Person Companies (OPCs) and Small Companies are exempt from MGT-7 and file <strong>Form MGT-7A</strong>.</p>',
+      dueDateExplained: '<p>Under Section 92(4), Form MGT-7 must be filed <strong>within 60 days from the date of the Annual General Meeting (AGM)</strong>. For a standard subsequent AGM with a 31st March financial year-end (AGM deadline 30th September), the statutory due date is typically <strong>29th November</strong>. If the company holds its first AGM (9 months limit) or obtains an approved ROC extension under Section 96(1), the 60-day period runs from that actual/extended date.</p>',
+      consequencesOfDelay: '<p>Delayed filing of Form MGT-7 has two distinct legal consequences: (1) An <strong>Additional Filing Fee of ₹100 per day</strong> payable immediately on the MCA21 portal under Section 403, and (2) <strong>Statutory Adjudication Penalty exposure under Section 92(5)</strong> of ₹10,000 + ₹100/day after the first day (capped at ₹2,00,000 for the company and ₹50,000 per officer in default).</p>',
+      workedExample: '<p><strong>Scenario:</strong> A Private Limited Company with nominal share capital of ₹5,00,000 files Form MGT-7 45 days after the due date.</p><ul><li>Normal Filing Fee (Table A, Item 5): ₹400</li><li>Additional Filing Fee (45 days × ₹100/day): ₹4,500</li><li><strong>Total MCA Portal Payable:</strong> ₹400 + ₹4,500 = <strong>₹4,900</strong></li><li><strong>Indicative Section 92(5) Penalty Exposure:</strong> ₹10,000 + (44 days × ₹100) = ₹14,400 for Company + ₹14,400 per Officer (Adjudication Required).</li></ul>'
+    }
+  },
+  {
+    slug: 'mgt-7a',
+    formNumber: 'MGT-7A',
+    formName: 'Abridged Annual Return for OPCs and Small Companies',
+    aliases: ['mgt 7a', 'mgt7a', 'small company annual return', 'opc annual return', 'abridged annual return'],
+    category: 'annual',
+    filedBy: ['One Person Company (OPC)', 'Small Company'],
+    dueDate: 'Within 60 days of AGM (or within 60 days of standard due date for OPC)',
+    section: 'Section 92(1) Proviso, Companies Act 2013 read with Rule 11',
+    penaltyType: 'per_day',
+    penaltyRate: '₹100 per day additional filing fee',
+    normalFeeStructure: 'capital_slab',
+    baseFeeSlab: 'standard_company_slab',
+    concessionApplies: true,
+    filingGuides: [
+      {
+        title: "Complete MGT-7A Annual Return Filing Guide for Small Companies and OPCs (FY 2025-26)",
+        slug: "/updates/mgt-7-annual-return-filing-guide-fy-2025-26-due-date-mca-v3-small-company-limits-ccfs2026",
+        publishedDate: "2026-03-15",
+        summary: "Step-by-step guide to filing Form MGT-7A on MCA V3, covering abridged disclosures, exemption from PCS certification, updated Small Company thresholds, and Section 446B relief.",
+        isOfficial: true
+      }
+    ],
+    metaTitle: 'Form MGT-7A Fee Calculator: Small Company & OPC Annual Return | CorpLawUpdates.in',
+    metaDescription: 'Calculate Form MGT-7A normal filing fees, ₹100/day additional filing fee, and Section 446B lesser penalty ceilings for OPCs and Small Companies (FY 2026-27).',
+    ogDescription: 'Calculate Form MGT-7A filing fees and Section 446B penalty relief ceilings for One Person Companies and Small Companies under current 2025-26 rules.',
+    faqItems: [
+      { question: 'Who is eligible to file Form MGT-7A?', answer: 'One Person Companies (OPCs) under Section 2(62) and Small Companies under Section 2(85) are required to file Form MGT-7A instead of Form MGT-7 from FY 2020-21 onwards (MCA Notification G.S.R. 159(E)).' },
+      { question: 'What are the current Small Company thresholds for MGT-7A eligibility?', answer: 'Under MCA Notification G.S.R. 880(E) dated 01.12.2025, a private company qualifies as a Small Company if its paid-up share capital does not exceed ₹10 Crore and its turnover for the immediately preceding financial year does not exceed ₹100 Crore (and it is not a holding/subsidiary, Section 8, or special Act company).' },
+      { question: 'What is the filing fee for Form MGT-7A?', answer: 'The normal filing fee for Form MGT-7A is computed under Table A, Item 5 based on Nominal Share Capital (<₹1L: ₹200, ₹1L–₹5L: ₹300, ₹5L–₹25L: ₹400, ₹25L–₹1Cr: ₹500, ≥₹1Cr: ₹600). Delayed filings attract an additional filing fee of ₹100 per day.' },
+      { question: 'Does Section 446B penalty relief apply to MGT-7A filers?', answer: 'Yes. All OPCs and Small Companies filing Form MGT-7A are entitled to Section 446B relief on statutory Section 92(5) adjudication penalties (penalties cannot exceed 50% of the statutory amount, with ceilings of ₹1,00,000 for the company and ₹25,000 per officer in default).' },
+      { question: 'Is certification by a Company Secretary in Practice required for MGT-7A?', answer: 'No. Form MGT-7A is statutorily exempted from certification by a Company Secretary in Practice (PCS). It can be signed by the Director alone in case of an OPC, or by a Director and Company Secretary in case of a Small Company.' }
+    ],
+    relatedForms: ['mgt-7', 'aoc-4', 'dir-12'],
+    filedTogetherWith: ['aoc-4'],
+    contentSections: {
+      whatIsThisForm: '<p>Form MGT-7A is an abridged electronic annual return introduced by the Ministry of Corporate Affairs through the Companies (Management and Administration) Amendment Rules, 2021 (G.S.R. 159(E) dated 05.03.2021) specifically for <strong>One Person Companies (OPCs) and Small Companies</strong>. It contains streamlined reporting requirements compared to the full Form MGT-7.</p>',
+      whoMustFile: '<p>Form MGT-7A is filed exclusively by: (1) One Person Companies (OPCs) as defined under Section 2(62), and (2) Small Companies as defined under Section 2(85). Non-small private companies, public companies, and Section 8 companies must file Form MGT-7.</p>',
+      dueDateExplained: '<p>For Small Companies, Form MGT-7A must be filed <strong>within 60 days from the AGM date</strong> (standard due date: 29th November for FY ending 31st March). For One Person Companies (which are exempt from holding an AGM under Section 122(1)), the filing due date is 60 days from the statutory period within which financial statements are adopted.</p>',
+      consequencesOfDelay: '<p>Late filing of Form MGT-7A attracts an <strong>Additional Filing Fee of ₹100 per day</strong> under Table B of the Fees Rules. In case of formal adjudication by the ROC, Section 446B applies to cap the Section 92(5) penalty exposure to a maximum of 50% (ceiling ₹1,00,000 for company and ₹25,000 per officer in default).</p>',
+      workedExample: '<p><strong>Scenario:</strong> A Small Company with nominal share capital of ₹2,00,00,000 (₹2 Crore) files Form MGT-7A 30 days late.</p><ul><li>Normal Filing Fee (Table A, Item 5): ₹600</li><li>Additional Filing Fee (30 days × ₹100/day): ₹3,000</li><li><strong>Total MCA Portal Payable:</strong> ₹600 + ₹3,000 = <strong>₹3,600</strong></li><li><strong>Section 92(5) Penalty before 446B:</strong> ₹10,000 + (29 × ₹100) = ₹12,900 for Company + ₹12,900 per Officer.</li><li><strong>Indicative Max Penalty after Section 446B:</strong> ₹6,450 for Company + ₹6,450 per Officer (Adjudication Required).</li></ul>'
     }
   },
   {

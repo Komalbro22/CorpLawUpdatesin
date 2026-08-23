@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { calculateCompanyFee } from '@/lib/penaltyCalculator';
+import { calculateMgt7Compliance } from '@/lib/rule-engine/mgt7-engine';
 
 // GET /api/calculators/webmcp
 // WebMCP tool: calculate_roc_late_fee
 // Thin wrapper over the canonical calculateCompanyFee() in lib/penaltyCalculator.ts
+// and calculateMgt7Compliance() in lib/rule-engine/mgt7-engine.ts
 // — single source of truth for all fee schedule logic.
 
-const VALID_COMPANY_TYPES = ['Pvt', 'Public', 'OPC', 'Small', 'Section8'] as const;
+const VALID_COMPANY_TYPES = ['Pvt', 'Public', 'OPC', 'Small', 'Section8', 'Producer', 'Startup'] as const;
 type CompanyType = typeof VALID_COMPANY_TYPES[number];
 
 const ANNUAL_FORMS = ['MGT-7', 'MGT-7A', 'AOC-4', 'AOC-4-XBRL', 'AOC-4-CFS', 'AOC-4-NBFC'];
@@ -26,6 +28,15 @@ export async function GET(req: NextRequest) {
   const capitalRaw = searchParams.get('capital') ?? '';
   const delayRaw = searchParams.get('delay') ?? '';
   const officersRaw = searchParams.get('officers') ?? '3';
+
+  // Optional fact parameters for Section 92 / Section 2(85)
+  const fyEndRaw = searchParams.get('fyEnd') ?? '2026-03-31';
+  const turnoverRaw = searchParams.get('turnover') ?? '';
+  const agmTypeRaw = (searchParams.get('agmType') ?? 'subsequent') as 'first' | 'subsequent';
+  const agmStatusRaw = (searchParams.get('agmStatus') ?? 'held') as 'held' | 'extended_and_held' | 'not_held';
+  const isHolding = searchParams.get('isHolding') === 'true';
+  const isSubsidiary = searchParams.get('isSubsidiary') === 'true';
+  const isSection8 = searchParams.get('isSection8') === 'true' || companyTypeRaw === 'Section8';
 
   // --- Input validation ---
   if (!form) {
@@ -56,8 +67,67 @@ export async function GET(req: NextRequest) {
   }
   const officers = Math.max(1, Math.min(parseInt(officersRaw, 10) || 3, 50));
 
+  // Dedicated branch for MGT-7 / MGT-7A
+  if (form === 'MGT-7' || form === 'MGT-7A') {
+    const fyEnd = new Date(fyEndRaw);
+    const turnover = turnoverRaw ? parseInt(turnoverRaw, 10) : 0;
+    const isOpc = companyTypeRaw === 'OPC';
+    const isPrivate = companyTypeRaw === 'Pvt' || companyTypeRaw === 'Small' || companyTypeRaw === 'OPC';
+    const isStartup = companyTypeRaw === 'Startup';
+    const isProducer = companyTypeRaw === 'Producer';
+
+    const filingDate = new Date();
+    // Simulate filing date from delay
+    const standardDueDate = new Date(fyEnd);
+    standardDueDate.setMonth(standardDueDate.getMonth() + 6);
+    standardDueDate.setDate(standardDueDate.getDate() + 60);
+    const actualFilingDate = new Date(standardDueDate);
+    actualFilingDate.setDate(actualFilingDate.getDate() + daysDelayed);
+
+    const mgtResult = calculateMgt7Compliance({
+      formCode: form as 'MGT-7' | 'MGT-7A',
+      nominalCapital: capital,
+      hasShareCapital: true,
+      financialYearEnd: isNaN(fyEnd.getTime()) ? new Date('2026-03-31') : fyEnd,
+      agmType: agmTypeRaw,
+      agmStatus: agmStatusRaw,
+      actualAgmDate: new Date(fyEnd.getFullYear(), fyEnd.getMonth() + 6, 30),
+      actualFilingDate,
+      officerCount: officers,
+      isPrivateCompany: isPrivate,
+      isHoldingCompany: isHolding,
+      isSubsidiaryCompany: isSubsidiary,
+      isSection8Company: isSection8,
+      isOnePersonCompany: isOpc,
+      isStartupCompany: isStartup,
+      isProducerCompany: isProducer,
+      turnoverPrecedingFY: isNaN(turnover) ? 0 : turnover,
+      paidUpCapital: capital
+    });
+
+    return NextResponse.json({
+      form,
+      companyType: companyTypeRaw,
+      authorizedCapitalRupees: capital,
+      daysDelayed,
+      officersCount: officers,
+      normalFee: mgtResult.mcaPortalPayable.normalFilingFee,
+      lateFee: mgtResult.mcaPortalPayable.additionalFilingFee,
+      totalPayable: mgtResult.mcaPortalPayable.totalPortalPayable,
+      companyPenalty: mgtResult.statutoryPenaltyExposure.companyIndicativeMaximumExposure,
+      officerPenalty: mgtResult.statutoryPenaltyExposure.officersIndicativeMaximumExposure,
+      totalPenaltyExposure: mgtResult.statutoryPenaltyExposure.totalIndicativeMaximumExposure,
+      smallCompanyReliefApplied: mgtResult.metadata.section446BEligible,
+      smallCompanyAssessment: mgtResult.smallCompanyAssessment,
+      pcsCertification: mgtResult.pcsCertification,
+      formRoutingRecommendation: mgtResult.metadata.formRoutingRecommendation ?? null,
+      legalNote: 'MCA21 portal payable consists of Normal Fee + Additional Fee. Section 92(5) statutory penalty exposure requires formal adjudication under Section 454.',
+      unknownFormWarning: null
+    });
+  }
+
   const result = calculateCompanyFee({
-    companyType: companyTypeRaw as CompanyType,
+    companyType: (['Pvt', 'Public', 'OPC', 'Small', 'Section8'].includes(companyTypeRaw) ? companyTypeRaw : 'Pvt') as any,
     authorizedCapital: capital,
     formId: form,
     dueDate: '',

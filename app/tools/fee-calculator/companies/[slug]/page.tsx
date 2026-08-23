@@ -176,17 +176,17 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
                 <table className="w-full text-left text-sm">
                   <thead className="bg-slate-50 dark:bg-slate-800/50">
                     <tr>
-                      <th className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-300">Capital Slab</th>
-                      <th className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-300">Normal Fee</th>
-                      {form.concessionApplies && <th className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-300">OPC/Small</th>}
+                      <th className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-300">Nominal Capital Bracket</th>
+                      <th className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-300">Normal Filing Fee</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                    <tr><td className="px-4 py-3">Up to 1 Lakh</td><td className="px-4 py-3 font-medium">₹200</td>{form.concessionApplies && <td className="px-4 py-3 text-green-600">₹50</td>}</tr>
-                    <tr><td className="px-4 py-3">1L to 5L</td><td className="px-4 py-3 font-medium">₹300</td>{form.concessionApplies && <td className="px-4 py-3 text-green-600">₹100</td>}</tr>
-                    <tr><td className="px-4 py-3">5L to 25L</td><td className="px-4 py-3 font-medium">₹400</td>{form.concessionApplies && <td className="px-4 py-3 text-green-600">₹150</td>}</tr>
-                    <tr><td className="px-4 py-3">25L to 1Cr</td><td className="px-4 py-3 font-medium">₹500</td>{form.concessionApplies && <td className="px-4 py-3 text-green-600">₹200</td>}</tr>
-                    <tr><td className="px-4 py-3">Above 1Cr</td><td className="px-4 py-3 font-medium">₹600</td>{form.concessionApplies && <td className="px-4 py-3 text-green-600">₹200</td>}</tr>
+                    <tr><td className="px-4 py-3">Less than ₹1,00,000</td><td className="px-4 py-3 font-medium">₹200</td></tr>
+                    <tr><td className="px-4 py-3">₹1,00,000 or more but less than ₹5,00,000</td><td className="px-4 py-3 font-medium">₹300</td></tr>
+                    <tr><td className="px-4 py-3">₹5,00,000 or more but less than ₹25,00,000</td><td className="px-4 py-3 font-medium">₹400</td></tr>
+                    <tr><td className="px-4 py-3">₹25,00,000 or more but less than ₹1 crore</td><td className="px-4 py-3 font-medium">₹500</td></tr>
+                    <tr><td className="px-4 py-3">₹1 crore or more</td><td className="px-4 py-3 font-medium">₹600</td></tr>
+                    <tr><td className="px-4 py-3 text-slate-500 italic">Company not having share capital</td><td className="px-4 py-3 font-medium">₹200</td></tr>
                   </tbody>
                 </table>
               ) : (
