@@ -17,6 +17,7 @@ import {
   Trophy,
   Users,
   RefreshCw,
+  Sparkles,
 } from 'lucide-react'
 import { syncViewsAction } from '@/app/actions/syncViews'
 
@@ -27,6 +28,8 @@ interface AnalyticsData {
     totalViews: number
     articlesThisWeek: number
     activeUsers?: number
+    totalPreferredClicks?: number
+    preferredClicksThisWeek?: number
     source?: string
   }
   topArticles: {
@@ -129,6 +132,14 @@ export default function AnalyticsPage() {
       text: 'text-slate-900',
       iconBg: 'admin-icon-amber',
     },
+    {
+      label: 'Google Preferred clicks',
+      value: (overview.totalPreferredClicks || 0).toLocaleString('en-IN'),
+      Icon: Sparkles,
+      color: 'admin-stat-amber',
+      text: 'text-slate-900',
+      iconBg: 'admin-icon-amber',
+    },
   ]
 
   const quickActions: {
@@ -209,7 +220,7 @@ export default function AnalyticsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {overviewCards.map(card => {
           const Icon = card.Icon
           return (

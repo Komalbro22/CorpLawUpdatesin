@@ -20,6 +20,7 @@ import { linkGlossaryTerms } from '@/lib/glossaryLinker'
 import ViewCounter from '@/components/ViewCounter'
 // LiveViewCount import removed — display hidden, ViewCounter still tracks silently
 import ArticleActions from '@/components/ArticleActions'
+import GooglePreferredSourceButton from '@/components/GooglePreferredSourceButton'
 import ReadingProgress from '@/components/ReadingProgress'
 import MobileReadingBar from '@/components/MobileReadingBar'
 import FontSizeToggle from '@/components/FontSizeToggle'
@@ -754,6 +755,11 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
             )}
 
             <div id="article-end" className="h-4" aria-hidden />
+
+            {/* Google Preferred Source Callout Banner */}
+            <div className="my-8 print:hidden">
+                <GooglePreferredSourceButton variant="banner" location="article_bottom_banner" slug={update.slug} />
+            </div>
 
             {/* 6. RELATED UPDATES */}
             {related.length > 0 && (

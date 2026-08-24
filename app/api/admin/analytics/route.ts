@@ -82,6 +82,7 @@ export async function GET() {
     subscribersResult,
     recentSubscribersResult,
     weekArticlesResult,
+    preferredSourceClicksResult,
   ] = await Promise.all([
     // All published articles
     supabaseAdmin
@@ -109,9 +110,19 @@ export async function GET() {
       .select('*', { count: 'exact', head: true })
       .not('published_at', 'is', null)
       .gte('published_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()),
+
+    // Preferred Source Clicks (All time)
+    supabaseAdmin
+      .from('preferred_source_clicks')
+      .select('id, location, created_at'),
   ])
 
   const publishedArticles = articlesResult.data || []
+  const preferredClicks = (preferredSourceClicksResult as any)?.data || []
+
+  const totalPreferredClicks = preferredClicks.length
+  const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+  const preferredClicksThisWeek = preferredClicks.filter((c: any) => new Date(c.created_at) >= oneWeekAgo).length
 
   // Calculate category breakdown
   const categoryCount: Record<string, number> = {}
@@ -142,7 +153,9 @@ export async function GET() {
       totalSubscribers: subscribersResult.count || 0,
       totalViews: finalTotalViews,
       articlesThisWeek: weekArticlesResult.count || 0,
-      activeUsers: gaActiveUsers, // new field
+      activeUsers: gaActiveUsers,
+      totalPreferredClicks,
+      preferredClicksThisWeek,
       source: gaTotalViews > 0 ? 'Google Analytics' : 'Database',
     },
     topArticles,

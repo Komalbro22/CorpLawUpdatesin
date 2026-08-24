@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Check, Copy, Bookmark } from 'lucide-react'
 import DownloadPDFButton from '@/components/DownloadPDFButton'
+import GooglePreferredSourceButton from '@/components/GooglePreferredSourceButton'
 import { isBookmarked, saveBookmark, removeBookmark } from '@/lib/bookmarks'
 
 interface ArticleActionsProps {
@@ -170,6 +171,9 @@ export default function ArticleActions({
 
             {/* PDF Download */}
             <DownloadPDFButton compact={compact} />
+
+            {/* Google Preferred Source Button */}
+            <GooglePreferredSourceButton variant="compact" location="article_top_bar" slug={slug} />
         </div>
     )
 }
