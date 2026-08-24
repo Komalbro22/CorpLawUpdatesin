@@ -871,35 +871,20 @@ export async function sendNewsletterEmails({
         )
     }
 
-    // --- Serverless timeout safety guard ---
-    // Vercel functions have hard execution limits (10s free, 60s Pro).
-    // At 500ms/email, 50 emails ≈ 25 seconds — safe for Pro tier.
-    // If more subscribers exist, we process only the first batch and return
-    // a continuation flag so the caller can trigger follow-up batches.
-    const SAFE_BATCH_SIZE = 50
-    let hasMore = false
-    let remainingEmails: string[] = []
-    if (subscribers.length > SAFE_BATCH_SIZE) {
-        console.warn(
-            `[Newsletter] ${subscribers.length} subscribers exceed safe batch size of ${SAFE_BATCH_SIZE}. ` +
-            `Processing first ${SAFE_BATCH_SIZE} in this invocation.`
-        )
-        remainingEmails = subscribers.slice(SAFE_BATCH_SIZE).map((s: any) => s.email)
-        subscribers = subscribers.slice(0, SAFE_BATCH_SIZE)
-        hasMore = true
-    }
+    // Batch Sending using Resend Batch API
+    console.log(`[Newsletter] Sending to ${subscribers.length} subscriber(s) using Resend batch API in chunks of 100.`)
 
-    console.log(`[Newsletter] Sending to ${subscribers.length} subscriber(s) sequentially (500ms delay between each).`)
-
+    const BATCH_CHUNK_SIZE = 100
     let sent = 0
     let failed = 0
     const successList: string[] = []
     const failedList: string[] = []
     const recipientsToInsert: any[] = [] // eslint-disable-line @typescript-eslint/no-explicit-any
 
-    // Sequential send — one email at a time, 500ms apart to stay under Resend's free tier cap
-    for (const sub of subscribers) {
-        try {
+    for (let i = 0; i < subscribers.length; i += BATCH_CHUNK_SIZE) {
+        const chunk = subscribers.slice(i, i + BATCH_CHUNK_SIZE)
+
+        const batchPayload = chunk.map((sub: any) => {
             const token = generateUnsubscribeToken(sub.email)
             const unsubUrl = `${BASE_URL}/api/unsubscribe?email=${encodeURIComponent(sub.email)}&token=${token}`
 
@@ -912,42 +897,104 @@ export async function sendNewsletterEmails({
                     unsubscribeUrl: unsubUrl
                   })
 
-            const r = await resend.emails.send({
+            return {
                 from: fromEmail,
                 to: sub.email,
                 subject,
                 html,
-            })
+            }
+        })
 
-            if (r.error) throw new Error(r.error.message)
+        try {
+            const batchResult = await resend.batch.send(batchPayload)
 
-            sent++
-            successList.push(sub.email)
-            if (campaignId) {
-                recipientsToInsert.push({
-                    campaign_id: campaignId,
-                    email: sub.email,
-                    status: 'sent',
-                    resend_email_id: (r.data as any)?.id || null, // eslint-disable-line @typescript-eslint/no-explicit-any
-                    sent_at: new Date().toISOString()
+            if (batchResult.error) {
+                console.error(`[Newsletter] Batch API error for chunk ${i}-${i + chunk.length}:`, batchResult.error)
+                // Fallback to individual sends for this chunk if batch call fails
+                for (const sub of chunk) {
+                    try {
+                        const token = generateUnsubscribeToken(sub.email)
+                        const unsubUrl = `${BASE_URL}/api/unsubscribe?email=${encodeURIComponent(sub.email)}&token=${token}`
+                        const html = customHtmlBuilder 
+                            ? customHtmlBuilder(unsubUrl)
+                            : buildEmailHtml({
+                                subject,
+                                previewText: previewText || '',
+                                bodyHtml,
+                                unsubscribeUrl: unsubUrl
+                              })
+
+                        const singleRes = await resend.emails.send({
+                            from: fromEmail,
+                            to: sub.email,
+                            subject,
+                            html
+                        })
+
+                        if (singleRes.error) throw new Error(singleRes.error.message)
+
+                        sent++
+                        successList.push(sub.email)
+                        if (campaignId) {
+                            recipientsToInsert.push({
+                                campaign_id: campaignId,
+                                email: sub.email,
+                                status: 'sent',
+                                resend_email_id: singleRes.data?.id || null,
+                                sent_at: new Date().toISOString()
+                            })
+                        }
+                    } catch (singleErr: any) {
+                        failed++
+                        failedList.push(sub.email)
+                        if (campaignId) {
+                            recipientsToInsert.push({
+                                campaign_id: campaignId,
+                                email: sub.email,
+                                status: 'failed',
+                                error_message: singleErr?.message || batchResult.error.message || 'Send failed'
+                            })
+                        }
+                    }
+                    await new Promise(resolve => setTimeout(resolve, 300))
+                }
+            } else {
+                const responseData = (batchResult.data as any)?.data || (Array.isArray(batchResult.data) ? batchResult.data : [])
+                chunk.forEach((sub: any, idx: number) => {
+                    const item = responseData[idx]
+                    sent++
+                    successList.push(sub.email)
+                    if (campaignId) {
+                        recipientsToInsert.push({
+                            campaign_id: campaignId,
+                            email: sub.email,
+                            status: 'sent',
+                            resend_email_id: item?.id || null,
+                            sent_at: new Date().toISOString()
+                        })
+                    }
                 })
             }
-        } catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
-            console.error(`[Newsletter] Failed to send to ${sub.email}:`, err)
-            failed++
-            failedList.push(sub.email)
-            if (campaignId) {
-                recipientsToInsert.push({
-                    campaign_id: campaignId,
-                    email: sub.email,
-                    status: 'failed',
-                    error_message: err?.message || 'Failed to send'
-                })
+        } catch (err: any) {
+            console.error(`[Newsletter] Batch send exception for chunk ${i}-${i + chunk.length}:`, err)
+            for (const sub of chunk) {
+                failed++
+                failedList.push(sub.email)
+                if (campaignId) {
+                    recipientsToInsert.push({
+                        campaign_id: campaignId,
+                        email: sub.email,
+                        status: 'failed',
+                        error_message: err?.message || 'Batch send failed'
+                    })
+                }
             }
         }
 
-        // 500ms delay → max 2 emails/sec, safely within Resend free-tier limit
-        await new Promise(resolve => setTimeout(resolve, 500))
+        // Delay between batch calls to stay within Resend rate limits
+        if (i + BATCH_CHUNK_SIZE < subscribers.length) {
+            await new Promise(resolve => setTimeout(resolve, 600))
+        }
     }
 
     if (campaignId && recipientsToInsert.length > 0) {
@@ -975,5 +1022,5 @@ export async function sendNewsletterEmails({
         }
     }
 
-    return { sent, failed, total: subscribers.length, successList, failedList, hasMore, remainingEmails }
+    return { sent, failed, total: subscribers.length, successList, failedList, hasMore: false, remainingEmails: [] }
 }

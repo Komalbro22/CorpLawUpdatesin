@@ -6,7 +6,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { ArrowLeft, Download, RefreshCw, Mail, AlertCircle, CheckCircle2, Search, Filter } from 'lucide-react'
+import { ArrowLeft, Download, RefreshCw, Mail, AlertCircle, CheckCircle2, Search, Filter, Rocket } from 'lucide-react'
 import { useToast } from '@/components/Toast'
 import { sanitizeHtml } from '@/lib/sanitize'
 
@@ -21,6 +21,7 @@ export default function CampaignDetails() {
     const [search, setSearch] = useState('')
     const [searchInput, setSearchInput] = useState('')
     const [retrying, setRetrying] = useState(false)
+    const [sendingRemaining, setSendingRemaining] = useState(false)
 
     const limit = 20
 
@@ -69,6 +70,26 @@ export default function CampaignDetails() {
         }
     }
 
+    const handleSendRemaining = async () => {
+        const remaining = data?.unsentCount || (data?.campaign?.total_recipients - (data?.statusCounts?.delivered + data?.statusCounts?.opened + data?.statusCounts?.clicked)) || 0
+        if (!confirm(`Send this campaign to the remaining ${remaining} subscriber(s)?`)) return
+        setSendingRemaining(true)
+        try {
+            const res = await fetch(`/api/admin/newsletter/history/${id}/send-remaining`, { method: 'POST' })
+            const d = await res.json()
+            if (res.ok) {
+                showToast(d.message || 'Sent to remaining subscribers successfully!', 'success')
+                fetchDetails()
+            } else {
+                showToast(d.error || 'Failed to send to remaining subscribers', 'error')
+            }
+        } catch (e: any) {
+            showToast(e.message || 'Failed to send remaining', 'error')
+        } finally {
+            setSendingRemaining(false)
+        }
+    }
+
     if (loading && !data) {
         return (
             <div className="flex justify-center py-20 text-slate-500">
@@ -81,8 +102,9 @@ export default function CampaignDetails() {
         return <div className="text-rose-500 text-center py-10">Error loading campaign details</div>
     }
 
-    const { campaign, recipients, total, statusCounts } = data
+    const { campaign, recipients, total, statusCounts, unsentCount } = data
     const totalPages = Math.ceil(total / limit)
+    const effectiveUnsent = unsentCount !== undefined ? unsentCount : Math.max(0, (campaign.total_recipients || 0) - (statusCounts.delivered + statusCounts.opened + statusCounts.clicked + statusCounts.failed + statusCounts.bounced))
 
     const statusBadge = (status: string) => {
         switch(status) {
@@ -116,7 +138,17 @@ export default function CampaignDetails() {
                         </p>
                     </div>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex flex-wrap items-center gap-3">
+                    {effectiveUnsent > 0 && (
+                        <button 
+                            onClick={handleSendRemaining} 
+                            disabled={sendingRemaining}
+                            className="flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold rounded-lg text-sm transition-colors shadow-sm disabled:opacity-50"
+                        >
+                            {sendingRemaining ? <RefreshCw size={16} className="animate-spin" /> : <Rocket size={16} />}
+                            {sendingRemaining ? 'Sending Remaining...' : `Send to Remaining (${effectiveUnsent})`}
+                        </button>
+                    )}
                     {(statusCounts.failed > 0 || statusCounts.bounced > 0) && (
                         <button 
                             onClick={handleRetry} 
@@ -132,6 +164,33 @@ export default function CampaignDetails() {
                     </a>
                 </div>
             </div>
+
+            {/* Unsent Warning Banner */}
+            {effectiveUnsent > 0 && (
+                <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2.5 bg-amber-500/20 rounded-lg text-amber-600">
+                            <AlertCircle size={22} />
+                        </div>
+                        <div>
+                            <div className="font-bold text-slate-900 text-base">
+                                {effectiveUnsent} active subscriber{effectiveUnsent > 1 ? 's have' : ' has'} not received this campaign yet
+                            </div>
+                            <p className="text-xs text-slate-600 mt-0.5">
+                                Only {statusCounts.delivered + statusCounts.opened + statusCounts.clicked} out of {campaign.total_recipients || 0} recipients were sent during previous execution. Click below to deliver to the remaining {effectiveUnsent} subscribers.
+                            </p>
+                        </div>
+                    </div>
+                    <button
+                        onClick={handleSendRemaining}
+                        disabled={sendingRemaining}
+                        className="flex items-center gap-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold rounded-lg text-sm transition-colors shadow-sm disabled:opacity-50 whitespace-nowrap"
+                    >
+                        {sendingRemaining ? <RefreshCw size={16} className="animate-spin" /> : <Rocket size={16} />}
+                        {sendingRemaining ? 'Sending Remaining...' : `Send to Remaining (${effectiveUnsent})`}
+                    </button>
+                </div>
+            )}
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Main Content Area */}

@@ -71,11 +71,39 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
             }
         })
 
+        // Calculate active subscribers and unsent count for this campaign
+        let activeSubscribersCount = 0
+        try {
+            const { count: activeCount, error: subErr } = await supabaseAdmin
+                .from('subscribers')
+                .select('id', { count: 'exact', head: true })
+                .eq('confirmed', true)
+                .eq('is_active', true)
+            
+            if (subErr) {
+                const { count: fallbackActive } = await supabaseAdmin
+                    .from('subscribers')
+                    .select('id', { count: 'exact', head: true })
+                    .eq('is_active', true)
+                activeSubscribersCount = fallbackActive || 0
+            } else {
+                activeSubscribersCount = activeCount || 0
+            }
+        } catch {
+            activeSubscribersCount = campaign.total_recipients || 0
+        }
+
+        const totalAttempted = allStatuses.length
+        const totalTarget = Math.max(campaign.total_recipients || 0, activeSubscribersCount)
+        const unsentCount = Math.max(0, totalTarget - totalAttempted)
+
         return NextResponse.json({
             campaign,
             recipients,
             total: count || 0,
-            statusCounts
+            statusCounts,
+            activeSubscribersCount,
+            unsentCount
         })
 
     } catch (err: any) {

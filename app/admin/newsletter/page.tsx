@@ -3,6 +3,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import {
     AlertTriangle,
@@ -373,7 +374,13 @@ export default function NewsletterPage() {
                         </div>
                     )}
 
-                    <div className="mt-8">
+                    <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+                        <Link
+                            href="/admin/newsletter/history"
+                            className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold rounded-xl transition-colors shadow-sm text-sm"
+                        >
+                            View Campaign History
+                        </Link>
                         <button
                             type="button"
                             onClick={() => {
@@ -388,7 +395,7 @@ export default function NewsletterPage() {
                                 setCustomSelectedIds([])
                                 setIntroMessage('')
                             }}
-                            className="px-6 py-3 bg-gold text-slate-900 font-semibold rounded-xl hover:bg-amber-400 transition-colors shadow-sm animate-pulse"
+                            className="px-6 py-3 bg-gold text-slate-900 font-semibold rounded-xl hover:bg-amber-400 transition-colors shadow-sm text-sm"
                         >
                             Compose another send
                         </button>

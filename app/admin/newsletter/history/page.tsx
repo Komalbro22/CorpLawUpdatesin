@@ -234,9 +234,16 @@ export default function HistoryDashboard() {
                                             {campaign.total_recipients || 0}
                                         </td>
                                         <td className="p-4">
-                                            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                                                {campaign.sent_count || 0}
-                                            </span>
+                                            <div className="flex items-center gap-1.5">
+                                                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
+                                                    {campaign.sent_count || 0}
+                                                </span>
+                                                {campaign.total_recipients > (campaign.sent_count || 0) && (
+                                                    <span className="text-[11px] font-semibold text-amber-700 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20" title={`${campaign.total_recipients - (campaign.sent_count || 0)} unsent recipients remaining`}>
+                                                        +{campaign.total_recipients - (campaign.sent_count || 0)} unsent
+                                                    </span>
+                                                )}
+                                            </div>
                                         </td>
                                         <td className="p-4">
                                             <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold ${campaign.failed_count > 0 ? 'bg-rose-500/10 text-rose-600 border border-rose-500/20' : 'bg-slate-100 text-slate-500 border border-slate-700'}`}>
@@ -249,7 +256,7 @@ export default function HistoryDashboard() {
                                                 className="inline-flex items-center justify-center px-3 py-1.5 text-sm font-medium bg-slate-50 border border-slate-850 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition-colors"
                                             >
                                                 <Eye size={16} className="mr-1.5" />
-                                                View
+                                                {campaign.total_recipients > (campaign.sent_count || 0) ? 'Send Remaining' : 'View'}
                                             </Link>
                                         </td>
                                     </tr>
