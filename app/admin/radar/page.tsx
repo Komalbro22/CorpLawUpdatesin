@@ -80,7 +80,15 @@ export default function RegulatorRadarPage() {
       if (storedEnabled) {
         const parsed = JSON.parse(storedEnabled)
         if (Array.isArray(parsed) && parsed.length > 0) {
-          setEnabledRegulators(parsed)
+          const validKeys = ALL_REGULATORS.map((r) => r.key)
+          const filtered = parsed.filter((k: any) => validKeys.includes(k))
+          // Automatically merge any newly added defaultOn regulators (e.g. NCLT, NCLAT)
+          const newDefaultKeys = ALL_REGULATORS.filter((r) => r.defaultOn && !filtered.includes(r.key)).map((r) => r.key)
+          const merged = Array.from(new Set([...filtered, ...newDefaultKeys]))
+          setEnabledRegulators(merged)
+          try {
+            localStorage.setItem(LOCAL_STORAGE_ENABLED_KEY, JSON.stringify(merged))
+          } catch (e) {}
         }
       }
     } catch (e) {

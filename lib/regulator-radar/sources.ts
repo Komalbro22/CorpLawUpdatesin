@@ -630,6 +630,8 @@ export async function fetchTax(maxHours = 72): Promise<RegulatorUpdate[]> {
 export async function fetchNclt(maxHours = 72): Promise<RegulatorUpdate[]> {
   const updates: RegulatorUpdate[] = []
   const url = 'https://ibbi.gov.in/orders/nclt'
+  // Judicial tribunals issue orders in periodic batches; allow at least a 15-day lookback
+  const lookbackHours = Math.max(maxHours, 360)
 
   try {
     const html = await fetchHttpsText(url)
@@ -651,7 +653,7 @@ export async function fetchNclt(maxHours = 72): Promise<RegulatorUpdate[]> {
           title = title.replace(/\(\d+[\.\d]*\s*[KM]B\)/gi, '').trim()
 
           const parsedDate = parseIndianDate(dateMatch[1])
-          if (!parsedDate || !isWithinHours(parsedDate, maxHours)) continue
+          if (!parsedDate || !isWithinHours(parsedDate, lookbackHours)) continue
 
           const tdMatches = row.match(/<td[^>]*>([\s\S]*?)<\/td>/gi) || []
           let orderType = ''
@@ -694,6 +696,8 @@ export async function fetchNclt(maxHours = 72): Promise<RegulatorUpdate[]> {
 export async function fetchNclat(maxHours = 72): Promise<RegulatorUpdate[]> {
   const updates: RegulatorUpdate[] = []
   const url = 'https://ibbi.gov.in/orders/nclat'
+  // Judicial appellate orders are batch uploaded; allow at least a 20-day lookback
+  const lookbackHours = Math.max(maxHours, 480)
 
   try {
     const html = await fetchHttpsText(url)
@@ -715,7 +719,7 @@ export async function fetchNclat(maxHours = 72): Promise<RegulatorUpdate[]> {
           title = title.replace(/\(\d+[\.\d]*\s*[KM]B\)/gi, '').trim()
 
           const parsedDate = parseIndianDate(dateMatch[1])
-          if (!parsedDate || !isWithinHours(parsedDate, maxHours)) continue
+          if (!parsedDate || !isWithinHours(parsedDate, lookbackHours)) continue
 
           const tdMatches = row.match(/<td[^>]*>([\s\S]*?)<\/td>/gi) || []
           let orderType = ''
