@@ -623,3 +623,132 @@ export async function fetchTax(maxHours = 72): Promise<RegulatorUpdate[]> {
 
   return updates
 }
+
+/* =========================================================================
+   8. NCLT (National Company Law Tribunal - Judgments & Orders)
+   ========================================================================= */
+export async function fetchNclt(maxHours = 72): Promise<RegulatorUpdate[]> {
+  const updates: RegulatorUpdate[] = []
+  const url = 'https://ibbi.gov.in/orders/nclt'
+
+  try {
+    const html = await fetchHttpsText(url)
+    if (html && html.length > 500) {
+      const cleanHtml = html.replace(/<!--[\s\S]*?-->/g, '')
+      const rows = cleanHtml.match(/<tr[^>]*>[\s\S]*?<\/tr>/gi) || []
+
+      for (const row of rows) {
+        if (row.includes('<th')) continue
+
+        const aMatch = row.match(/<a[^>]*href=(?:["']([^"']+)["']|([^\s>]+))[^>]*>([\s\S]*?)<\/a>/i)
+        const dateMatch = row.match(/(\d{4}[\/\-]\d{1,2}[\/\-]\d{1,2}|\d{1,2}\s+[A-Za-z]+,?\s+\d{4}|\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i)
+
+        if (aMatch && dateMatch) {
+          const rawHref = (aMatch[1] || aMatch[2] || '').replace(/['"]/g, '').trim()
+          let title = cleanHtmlText(aMatch[3])
+          if (!title || title.length < 5) continue
+
+          title = title.replace(/\(\d+[\.\d]*\s*[KM]B\)/gi, '').trim()
+
+          const parsedDate = parseIndianDate(dateMatch[1])
+          if (!parsedDate || !isWithinHours(parsedDate, maxHours)) continue
+
+          const tdMatches = row.match(/<td[^>]*>([\s\S]*?)<\/td>/gi) || []
+          let orderType = ''
+          if (tdMatches.length >= 4) {
+            orderType = cleanHtmlText(tdMatches[3])
+          }
+
+          const pdfUrl = rawHref.startsWith('http')
+            ? rawHref
+            : `https://ibbi.gov.in/${rawHref.replace(/^\/+/, '')}`
+          const isoDate = formatIsoDate(parsedDate)
+          const displayTitle = title.startsWith('NCLT') ? title : `NCLT: ${title}`
+
+          updates.push({
+            id: createHash('NCLT', isoDate, title),
+            regulator: 'NCLT',
+            regulatorLabel: 'NCLT (National Company Law Tribunal)',
+            category: 'NCLT',
+            title: displayTitle,
+            date: isoDate,
+            rawDateStr: dateMatch[1].trim(),
+            sourceUrl: 'https://ibbi.gov.in/orders/nclt',
+            pdfUrl: pdfUrl.endsWith('.pdf') ? pdfUrl : undefined,
+            circularNo: orderType || 'NCLT Order',
+            snippet: orderType ? `Order Classification: ${orderType} | ${title}` : `NCLT Case Order: ${title}`
+          })
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('[Radar] NCLT fetch failed:', err)
+  }
+
+  return updates
+}
+
+/* =========================================================================
+   9. NCLAT (National Company Law Appellate Tribunal - Judgments)
+   ========================================================================= */
+export async function fetchNclat(maxHours = 72): Promise<RegulatorUpdate[]> {
+  const updates: RegulatorUpdate[] = []
+  const url = 'https://ibbi.gov.in/orders/nclat'
+
+  try {
+    const html = await fetchHttpsText(url)
+    if (html && html.length > 500) {
+      const cleanHtml = html.replace(/<!--[\s\S]*?-->/g, '')
+      const rows = cleanHtml.match(/<tr[^>]*>[\s\S]*?<\/tr>/gi) || []
+
+      for (const row of rows) {
+        if (row.includes('<th')) continue
+
+        const aMatch = row.match(/<a[^>]*href=(?:["']([^"']+)["']|([^\s>]+))[^>]*>([\s\S]*?)<\/a>/i)
+        const dateMatch = row.match(/(\d{4}[\/\-]\d{1,2}[\/\-]\d{1,2}|\d{1,2}\s+[A-Za-z]+,?\s+\d{4}|\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i)
+
+        if (aMatch && dateMatch) {
+          const rawHref = (aMatch[1] || aMatch[2] || '').replace(/['"]/g, '').trim()
+          let title = cleanHtmlText(aMatch[3])
+          if (!title || title.length < 5) continue
+
+          title = title.replace(/\(\d+[\.\d]*\s*[KM]B\)/gi, '').trim()
+
+          const parsedDate = parseIndianDate(dateMatch[1])
+          if (!parsedDate || !isWithinHours(parsedDate, maxHours)) continue
+
+          const tdMatches = row.match(/<td[^>]*>([\s\S]*?)<\/td>/gi) || []
+          let orderType = ''
+          if (tdMatches.length >= 4) {
+            orderType = cleanHtmlText(tdMatches[3])
+          }
+
+          const pdfUrl = rawHref.startsWith('http')
+            ? rawHref
+            : `https://ibbi.gov.in/${rawHref.replace(/^\/+/, '')}`
+          const isoDate = formatIsoDate(parsedDate)
+          const displayTitle = title.startsWith('NCLAT') ? title : `NCLAT: ${title}`
+
+          updates.push({
+            id: createHash('NCLAT', isoDate, title),
+            regulator: 'NCLAT',
+            regulatorLabel: 'NCLAT (Appellate Tribunal)',
+            category: 'NCLT',
+            title: displayTitle,
+            date: isoDate,
+            rawDateStr: dateMatch[1].trim(),
+            sourceUrl: 'https://ibbi.gov.in/orders/nclat',
+            pdfUrl: pdfUrl.endsWith('.pdf') ? pdfUrl : undefined,
+            circularNo: orderType || 'NCLAT Appellate Order',
+            snippet: orderType ? `Appellate Order: ${orderType} | ${title}` : `NCLAT Appellate Judgment: ${title}`
+          })
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('[Radar] NCLAT fetch failed:', err)
+  }
+
+  return updates
+}
+

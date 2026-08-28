@@ -8,6 +8,8 @@ export type RegulatorKey =
   | 'LABOUR'
   | 'CCI'
   | 'IBBI'
+  | 'NCLT'
+  | 'NCLAT'
   | 'MCA'
   | 'SEBI'
   | 'RBI'

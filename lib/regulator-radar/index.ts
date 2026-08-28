@@ -6,7 +6,9 @@ import {
   fetchMca,
   fetchCci,
   fetchIbbi,
-  fetchTax
+  fetchTax,
+  fetchNclt,
+  fetchNclat
 } from './sources'
 import { RadarResponse, RegulatorUpdate, SourceCheckResult, RegulatorKey } from './types'
 
@@ -45,6 +47,8 @@ export async function runRegulatorRadar(
   }[] = [
     { regulator: 'FEMA', label: 'RBI FEMA / FED', fn: () => fetchFemaAndRbi(filterHours) },
     { regulator: 'SEBI', label: 'SEBI Circulars & PR', fn: () => fetchSebi(filterHours) },
+    { regulator: 'NCLT', label: 'NCLT Orders & Judgments', fn: () => fetchNclt(filterHours) },
+    { regulator: 'NCLAT', label: 'NCLAT Appellate Judgments', fn: () => fetchNclat(filterHours) },
     { regulator: 'LABOUR', label: 'Labour / EPFO / ESIC', fn: () => fetchLabourAndEpfo(filterHours) },
     { regulator: 'MCA', label: 'MCA General Circulars', fn: () => fetchMca(filterHours) },
     { regulator: 'CCI', label: 'Competition Commission', fn: () => fetchCci(filterHours) },

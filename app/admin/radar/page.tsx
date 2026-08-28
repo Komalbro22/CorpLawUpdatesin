@@ -38,6 +38,8 @@ const ALL_REGULATORS: { key: RegulatorKey; label: string; desc: string; defaultO
   { key: 'RBI', label: 'RBI Banking', desc: 'Commercial Banking & NBFCs', defaultOn: true },
   { key: 'CCI', label: 'CCI', desc: 'Competition Commission Orders & PR', defaultOn: true },
   { key: 'IBBI', label: 'IBBI', desc: 'Insolvency & Bankruptcy Circulars', defaultOn: true },
+  { key: 'NCLT', label: 'NCLT Orders', desc: 'National Company Law Tribunal Benches & Orders', defaultOn: true },
+  { key: 'NCLAT', label: 'NCLAT Appeals', desc: 'Company Law & IBC Appellate Judgments', defaultOn: true },
   { key: 'TAX', label: 'Tax (CBDT/CBIC)', desc: 'Income Tax & GST Notifications', defaultOn: false },
 ]
 
@@ -120,7 +122,7 @@ export default function RegulatorRadarPage() {
 
   // Toggle all on/off
   const setAllRegulators = (enableAll: boolean) => {
-    const next = enableAll ? ALL_REGULATORS.map((r) => r.key) : ['MCA', 'SEBI', 'RBI'] as RegulatorKey[]
+    const next = enableAll ? ALL_REGULATORS.map((r) => r.key) : ['MCA', 'SEBI', 'RBI', 'NCLT', 'NCLAT'] as RegulatorKey[]
     setEnabledRegulators(next)
     try {
       localStorage.setItem(LOCAL_STORAGE_ENABLED_KEY, JSON.stringify(next))
@@ -224,7 +226,7 @@ export default function RegulatorRadarPage() {
 
   // Count by regulator for badges
   const regulatorCounts = useMemo(() => {
-    const counts: Record<string, number> = { ALL: 0, FEMA: 0, LABOUR: 0, MCA: 0, SEBI: 0, RBI: 0, CCI: 0, IBBI: 0, TAX: 0 }
+    const counts: Record<string, number> = { ALL: 0, FEMA: 0, LABOUR: 0, MCA: 0, SEBI: 0, RBI: 0, CCI: 0, IBBI: 0, NCLT: 0, NCLAT: 0, TAX: 0 }
     if (!data?.items) return counts
 
     data.items.forEach((item) => {
@@ -239,31 +241,43 @@ export default function RegulatorRadarPage() {
         else if (item.regulator === 'RBI') counts.RBI++
         else if (item.regulator === 'CCI') counts.CCI++
         else if (item.regulator === 'IBBI') counts.IBBI++
+        else if (item.regulator === 'NCLT') counts.NCLT++
+        else if (item.regulator === 'NCLAT') counts.NCLAT++
         else if (item.regulator === 'TAX') counts.TAX++
       }
     })
     return counts
   }, [data, seenHashes, enabledRegulators])
 
-  // 1-Click Create Article Action
+  // 1-Click Create Article Action (Intelligently structured for Case Laws vs Circulars)
   const handleCreateArticle = (item: RegulatorUpdate) => {
     markAsSeen(item.id)
 
+    const isJudicial = item.regulator === 'NCLT' || item.regulator === 'NCLAT'
+
     const prefill = {
       title: item.title,
-      category: item.category,
+      category: item.category || (isJudicial ? 'NCLT' : 'MCA'),
       sourceName: item.regulatorLabel,
       sourceUrl: item.sourceUrl,
       pdfUrl: item.pdfUrl,
       publishedAt: item.date,
       effectiveDate: item.date,
-      regulationRef: item.circularNo || item.regulatorLabel,
-      summary: `The ${item.regulatorLabel} has issued a recent notification regarding: ${item.title}.`,
-      keyChanges: [
-        `${item.regulatorLabel} notification issued on ${item.date}.`,
-        `Subject matter: ${item.title}.`,
-        `Applicable to corporate and compliance entities.`
-      ]
+      regulationRef: item.circularNo || (isJudicial ? 'Judicial Ruling' : item.regulatorLabel),
+      summary: isJudicial
+        ? `The ${item.regulatorLabel} has delivered a notable order regarding ${item.title}. This explainer provides a simplified breakdown of the dispute, key legal provisions under the Companies Act / IBC, the tribunal's decision, and practical takeaways for businesses and practitioners.`
+        : `The ${item.regulatorLabel} has issued a recent notification regarding: ${item.title}.`,
+      keyChanges: isJudicial
+        ? [
+            `Judicial Order delivered on ${item.date}.`,
+            `Order Type: ${item.circularNo || 'Tribunal Judgment'}.`,
+            `Significant practical takeaways for corporate boards, creditors, and insolvency professionals.`
+          ]
+        : [
+            `${item.regulatorLabel} notification issued on ${item.date}.`,
+            `Subject matter: ${item.title}.`,
+            `Applicable to corporate and compliance entities.`
+          ]
     }
 
     try {
