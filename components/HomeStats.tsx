@@ -59,19 +59,19 @@ export default function HomeStats({ updatesCount, totalViews }: HomeStatsProps) 
   return (
     <div
       ref={ref}
-      className="grid grid-cols-2 gap-8 border-t border-white/15 pt-10"
+      className="grid grid-cols-2 gap-8 border-t border-white/15 pt-10 mt-10 w-full max-w-lg mx-auto"
     >
-      <div className="text-center">
-        <div className="text-3xl md:text-4xl text-white font-bold mb-1 tracking-tight tabular-nums animate-count-up">
+      <div className="text-center group">
+        <div className="text-3xl md:text-4xl text-white font-bold mb-1 tracking-tight tabular-nums animate-count-up font-heading">
           {visible ? formatNumber(count1) : '-'}
         </div>
-        <div className="text-slate-400 text-sm font-medium">Articles published</div>
+        <div className="text-slate-300 text-xs sm:text-sm font-semibold uppercase tracking-wider">Articles published</div>
       </div>
-      <div className="text-center">
-        <div className="text-3xl md:text-4xl text-white font-bold mb-1 tracking-tight tabular-nums animate-count-up">
+      <div className="text-center group">
+        <div className="text-3xl md:text-4xl text-amber-300 font-bold mb-1 tracking-tight tabular-nums animate-count-up font-heading">
           {visible ? formatNumber(count2) : '-'}
         </div>
-        <div className="text-slate-400 text-sm font-medium">All-time reads</div>
+        <div className="text-slate-300 text-xs sm:text-sm font-semibold uppercase tracking-wider">All-time reads</div>
       </div>
     </div>
   )

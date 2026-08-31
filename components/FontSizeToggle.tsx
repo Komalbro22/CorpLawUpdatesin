@@ -64,17 +64,17 @@ export default function FontSizeToggle() {
       title="Adjust article font size"
       aria-label="Adjust article font size"
     >
-      <span className="text-xs text-slate-400 mr-0.5 hidden sm:inline">Text</span>
+      <span className="text-xs text-slate-500 dark:text-slate-400 mr-0.5 hidden sm:inline font-medium">Text:</span>
       {sizes.map((s) => (
         <button
           key={s}
           onClick={() => changeSize(s)}
           aria-pressed={size === s}
           aria-label={buttonLabels[s]}
-          className={`size-11 rounded-md text-xs font-semibold transition-colors duration-200 border focus:outline-none focus:ring-2 focus:ring-amber-400
+          className={`min-w-[34px] h-8 sm:h-9 px-2 rounded-md text-xs font-bold transition-all duration-150 border focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 active:scale-95
             ${size === s
-              ? 'bg-amber-400 text-navy border-amber-400 shadow-sm shadow-amber-200'
-              : 'bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:border-amber-300 hover:text-amber-700 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-slate-800'
+              ? 'bg-amber-500 dark:bg-amber-400 text-slate-950 font-extrabold border-amber-500 dark:border-amber-400 shadow-sm'
+              : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:border-amber-300 hover:text-amber-700 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-slate-800'
             }`}
         >
           {labels[s]}

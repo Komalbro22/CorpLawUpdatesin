@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ChevronDown, CornerDownRight, List, X } from 'lucide-react'
 
 interface Heading {
@@ -18,6 +18,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
   const [activeId, setActiveId] = useState<string>('')
   const [mobileOpen, setMobileOpen] = useState(false)
   const [atFooter, setAtFooter] = useState(false)
+  const sidebarNavRef = useRef<HTMLElement>(null)
 
   /* Extract headings from DOM after render */
   useEffect(() => {
@@ -90,6 +91,30 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
     return () => observer.disconnect()
   }, [])
 
+  /* Auto-scroll TOC sidebar to keep active section centered and visible */
+  useEffect(() => {
+    if (!activeId || !sidebarNavRef.current) return
+    const container = sidebarNavRef.current
+    const activeButton = container.querySelector<HTMLElement>(`[data-toc-id="${activeId}"]`)
+    if (activeButton) {
+      const containerRect = container.getBoundingClientRect()
+      const buttonRect = activeButton.getBoundingClientRect()
+
+      const isAbove = buttonRect.top < containerRect.top + 40
+      const isBelow = buttonRect.bottom > containerRect.bottom - 40
+
+      if (isAbove || isBelow) {
+        const targetScrollTop =
+          activeButton.offsetTop - (container.clientHeight / 2) + (activeButton.clientHeight / 2)
+        
+        container.scrollTo({
+          top: Math.max(0, targetScrollTop),
+          behavior: 'smooth',
+        })
+      }
+    }
+  }, [activeId])
+
   function scrollToSection(id: string) {
     const el = document.getElementById(id)
     if (!el) return
@@ -104,6 +129,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
   /* Desktop sticky sidebar — matches live website clean design */
   const Sidebar = (
     <nav
+      ref={sidebarNavRef}
       aria-label="Table of contents"
       className={`hidden xl:block fixed right-6 top-24 w-64 max-h-[calc(100vh-7rem)] overflow-y-auto pr-1 print:hidden z-30 transition-opacity duration-300 scrollbar-thin ${atFooter ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
     >
@@ -112,19 +138,20 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
           <List className="w-4 h-4 text-amber-600 dark:text-amber-400" aria-hidden />
           CONTENTS
         </p>
-        <ol className="space-y-1">
+        <ol className="space-y-1 border-l border-slate-200 dark:border-slate-800 ml-1">
           {headings.map((heading) => (
-            <li key={heading.id}>
+            <li key={heading.id} className="relative">
               <button
+                data-toc-id={heading.id}
                 onClick={() => scrollToSection(heading.id)}
                 aria-current={activeId === heading.id ? 'location' : undefined}
-                className={`w-full text-left transition-colors duration-150 leading-snug focus:outline-none focus:underline
+                className={`w-full text-left transition-all duration-150 leading-snug focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 rounded-sm -ml-[1px]
                   ${heading.level === 3 
-                    ? 'pl-3.5 text-[12px] py-0.5' 
-                    : 'text-[13px] py-1 font-normal'
+                    ? 'pl-4 text-[12px] py-0.5' 
+                    : 'pl-3 text-[13px] py-1 font-normal'
                   }
                   ${activeId === heading.id
-                    ? 'text-amber-700 dark:text-amber-400 font-semibold'
+                    ? 'border-l-2 border-amber-600 dark:border-amber-400 text-amber-700 dark:text-amber-400 font-semibold'
                     : heading.level === 3
                       ? 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
                       : 'text-slate-700 dark:text-slate-300 hover:text-navy dark:hover:text-white'

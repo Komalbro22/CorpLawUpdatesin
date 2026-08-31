@@ -56,29 +56,30 @@ export default function TermsPage() {
                     <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">
                         2. Nature of Content
                     </h2>
-                    <p className="text-slate-600 dark:text-slate-355 leading-relaxed mb-3">
-                        CorpLawUpdates.in publishes summaries, analyses, and updates related to Indian corporate laws and regulations issued by MCA, SEBI, RBI, NCLT, and other regulatory bodies. This content is:
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+                        CorpLawUpdates.in publishes summaries, analyses, and statutory briefs related to Indian corporate laws and regulations issued by MCA, SEBI, RBI, CCI, NCLT, IBBI, and other statutory bodies. This content is:
                     </p>
                     <ul className="list-disc list-inside space-y-2 text-slate-600 dark:text-slate-400">
-                        <li>For informational purposes only</li>
-                        <li>Not a substitute for professional legal advice or formal consults</li>
-                        <li>Not an official publication of any government body</li>
-                        <li>Subject to change as regulations and notifications evolve</li>
+                        <li>For informational and educational purposes only</li>
+                        <li>Not a substitute for professional legal advice, audit verification, or formal consultation</li>
+                        <li>Not an official publication of any government body or regulatory authority</li>
+                        <li>Subject to change without notice as regulations, master circulars, and judicial precedents evolve</li>
                     </ul>
                 </section>
 
                 {/* SECTION 2A */}
                 <section className="border-t border-slate-100 dark:border-slate-800/80 pt-8">
                     <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">
-                        2A. Document Generator & Calculators Disclaimer
+                        2A. Compliance Tools, Calculators & Document Generator Disclaimer
                     </h2>
-                    <p className="text-slate-600 dark:text-slate-355 leading-relaxed mb-3">
-                        Our AI Document Generator and statutory calculators (ROC late fee calculator, MSME interest calculator) are reference aids:
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+                        Our suite of self-service utilities — including the <strong>AI Legal Document Generator, MCA & ROC Fee Calculator, CIN Decoder, Company Search, ROC Compliance Tracker, Compliance Calendar, and RBI Repo Rate Tracker</strong> — are provided strictly as reference aids:
                     </p>
                     <ul className="list-disc list-inside space-y-2 text-slate-600 dark:text-slate-400">
-                        <li><strong>Draft Templates:</strong> AI-generated files are drafts. They may contain legal mistakes, typographical issues, or omissions. They must be reviewed by a professional before signing.</li>
-                        <li><strong>Calculator Estimates:</strong> Penalty calculations are estimates. While we try to keep schedules updated (such as MSME Section 16 Bank Rates), actual filing fees and penalties depend on ROC discretion and official MCA v3 systems.</li>
-                        <li><strong>Limitation of Liability:</strong> We hold no liability for any rejected filings, statutory defaults, or financial losses caused by reliance on generated drafts or calculator outputs.</li>
+                        <li><strong>Draft Templates:</strong> AI-generated files and document drafts must be reviewed and certified by a qualified Company Secretary, Advocate, or Chartered Accountant before execution or filing.</li>
+                        <li><strong>Calculator & Fee Estimates:</strong> Statutory fees, additional filing fees, and adjudication penalty estimates are computed based on published statutory schedules. Actual fees depend on MCA V3 system validations and ROC discretion.</li>
+                        <li><strong>Public Data & CIN Lookup:</strong> Company search and CIN decoding utilize public corporate records. Users must cross-verify master data on the official MCA portal (<a href="https://www.mca.gov.in" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 hover:underline">mca.gov.in</a>).</li>
+                        <li><strong>Limitation of Tool Liability:</strong> We accept no liability for any rejected statutory filings, compliance defaults, or financial losses arising from reliance on tool outputs or generated draft templates.</li>
                     </ul>
                 </section>
 
@@ -87,23 +88,23 @@ export default function TermsPage() {
                     <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">
                         3. Accuracy of Information
                     </h2>
-                    <p className="text-slate-600 dark:text-slate-355 leading-relaxed mb-3">
-                        We strive to publish accurate and timely information. However:
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+                        We strive to publish accurate, verified, and timely information. However:
                     </p>
                     <ul className="list-disc list-inside space-y-2 text-slate-600 dark:text-slate-400">
-                        <li>Regulatory laws change frequently — always verify with official sources (MCA, SEBI, RBI portals)</li>
-                        <li>We are not liable for any actions taken based on content published on this site</li>
-                        <li>Errors or omissions may occur and we reserve the right to correct them without notice</li>
+                        <li>Regulatory frameworks change frequently — always verify notifications with official regulator portals</li>
+                        <li>We are not liable for any actions taken or omitted based on content published on this site</li>
+                        <li>Errors, typographical variations, or omissions may occur and we reserve the right to rectify them</li>
                     </ul>
                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed mt-3">
-                        For official and binding information, always refer to:
-                        <a href="https://www.mca.gov.in" target="_blank" rel="noopener noreferrer" className="text-amber-500 hover:underline mx-1">
+                        For official, legally binding text, always refer to:
+                        <a href="https://www.mca.gov.in" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 hover:underline mx-1">
                             MCA Portal
                         </a>·
-                        <a href="https://www.sebi.gov.in" target="_blank" rel="noopener noreferrer" className="text-amber-500 hover:underline mx-1">
+                        <a href="https://www.sebi.gov.in" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 hover:underline mx-1">
                             SEBI Portal
                         </a>·
-                        <a href="https://www.rbi.org.in" target="_blank" rel="noopener noreferrer" className="text-amber-500 hover:underline mx-1">
+                        <a href="https://www.rbi.org.in" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 hover:underline mx-1">
                             RBI Portal
                         </a>
                     </p>
@@ -137,16 +138,16 @@ export default function TermsPage() {
                 {/* SECTION 6 */}
                 <section className="border-t border-slate-100 dark:border-slate-800/80 pt-8">
                     <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">
-                        6. Prohibited Use
+                        6. Prohibited Use & Intermediary Guidelines
                     </h2>
-                    <p className="text-slate-600 dark:text-slate-355 leading-relaxed mb-3">
-                        Users must not:
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+                        In accordance with the <strong>Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021</strong>, users agree not to host, display, upload, modify, or transmit any content or use our AI tools to:
                     </p>
                     <ul className="list-disc list-inside space-y-2 text-slate-600 dark:text-slate-400">
-                        <li>Attempt to hack, disrupt, or damage the Site or its databases.</li>
-                        <li>Use the AI Document Generator to generate fraudulent documents, fake board resolutions, or impersonate other persons/companies.</li>
-                        <li>Use automated scrapers to extract articles in bulk.</li>
-                        <li>Use the Site for any unlawful purpose under Indian law.</li>
+                        <li>Attempt to hack, disrupt, probe, or damage the Site, APIs, or underlying databases.</li>
+                        <li>Generate fraudulent corporate instruments, forged board resolutions, unauthorized power of attorney drafts, or impersonate legal entities.</li>
+                        <li>Engage in automated bulk scraping or extraction of articles without prior written authorization.</li>
+                        <li>Violate any law for the time being in force in the Republic of India.</li>
                     </ul>
                 </section>
 
@@ -155,86 +156,77 @@ export default function TermsPage() {
                     <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">
                         6A. Analytics & Tracking Technologies
                     </h2>
-                    <p className="text-slate-600 dark:text-slate-355 leading-relaxed mb-3">
-                        We use the following analytics tools on this Site:
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+                        We use the following privacy-conscious analytics tools on this Site:
                     </p>
                     <ul className="list-disc list-inside space-y-2 text-slate-600 dark:text-slate-400">
-                        <li>Vercel Analytics and Vercel Speed Insights — anonymous visitor and performance data</li>
-                        <li>Google Analytics (GA4) — visitor sessions and interaction data via cookies (if configured)</li>
-                        <li>Google Reader Revenue Manager — Google News compatibility signals</li>
+                        <li>Vercel Analytics and Vercel Speed Insights — aggregated anonymous visitor and web performance data</li>
+                        <li>Google Analytics (GA4) — visitor session metrics via cookies (if configured)</li>
+                        <li>Google Reader Revenue Manager — Google News publication compatibility signals</li>
                     </ul>
                 </section>
 
                 {/* SECTION 7 */}
                 <section className="border-t border-slate-100 dark:border-slate-800/80 pt-8">
                     <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">
-                        7. External Links
+                        7. External Links & Statutory Portals
                     </h2>
                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                        Our articles contain links to official government portals (MCA, SEBI, RBI) and other external sites. We are not responsible for the content, privacy, or availability of external websites.
+                        Our updates contain direct citations and links to official government portals (MCA, SEBI, RBI, CCI, IBBI) and judicial gazettes. We are not responsible for the server availability, technical changes, or content modifications on third-party government websites.
                     </p>
                 </section>
 
                 {/* SECTION 8 */}
                 <section className="border-t border-slate-100 dark:border-slate-800/80 pt-8">
                     <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">
-                        8. Limitation of Liability
+                        8. Limitation of Liability & Intermediary Safe Harbor
                     </h2>
                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                        CorpLawUpdates.in and its operators shall not be liable for any direct, indirect, incidental, special, or consequential damages arising from your use of this Site, reliance on its content, or reliance on generated document drafts. Your use of this Site is entirely at your own risk.
+                        As an informational corporate intelligence platform, CorpLawUpdates.in claims intermediary safe-harbor protection under <strong>Section 79 of the Information Technology Act, 2000</strong>. CorpLawUpdates.in, its founders, and operators shall not be liable for any direct, indirect, incidental, special, punitive, or consequential damages resulting from reliance on article commentaries, automated calculation models, or AI draft outputs. Your use of this platform is entirely at your own risk.
                     </p>
                 </section>
 
                 {/* SECTION 9 */}
                 <section className="border-t border-slate-100 dark:border-slate-800/80 pt-8">
                     <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">
-                        9. Governing Law
+                        9. Governing Law & Dispute Resolution
                     </h2>
-                    <p className="text-slate-600 dark:text-slate-355 leading-relaxed">
-                        These Terms of Service shall be governed by and construed in accordance with the laws of India. Any disputes arising from use of this Site shall be subject to the exclusive jurisdiction of the competent courts in India.
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                        These Terms of Service shall be governed by, interpreted, and construed in accordance with the substantive laws of India. Any legal dispute or proceeding arising out of or in connection with the Site shall be subject to the exclusive jurisdiction of the competent courts in India.
                     </p>
                 </section>
 
                 {/* SECTION 10 */}
                 <section className="border-t border-slate-100 dark:border-slate-800/80 pt-8">
                     <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">
-                        10. Changes to These Terms
+                        10. Modifications to Terms
                     </h2>
-                    <p className="text-slate-600 dark:text-slate-355 leading-relaxed">
-                        We reserve the right to modify these Terms of Service at any time. We will update the "Last updated" date at the top of this page. Continued use of the Site after any changes constitutes your acceptance of the new Terms.
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                        We reserve the right to amend these Terms of Service at any time to reflect legislative updates or platform improvements. The "Last updated" date will indicate the latest revision. Continued use of the Site signifies your binding acceptance of the updated Terms.
                     </p>
                 </section>
 
                 {/* SECTION 11 */}
                 <section className="border-t border-slate-100 dark:border-slate-800/80 pt-8">
                     <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">
-                        11. Contact
+                        11. Contact & Legal Enquiries
                     </h2>
-                    <p className="text-slate-600 dark:text-slate-355 leading-relaxed">
-                        For questions about these Terms of Service:
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                        For questions or communications regarding these Terms of Service:
                     </p>
-                    <div className="mt-3 space-y-1">
-                        <p className="text-slate-600 dark:text-slate-400">
-                            📧 Email:{' '}
-                            <a href="mailto:legal@corplawupdates.in" className="text-amber-505 text-amber-500 hover:underline">
-                                legal@corplawupdates.in
-                            </a>
-                        </p>
-                        <p className="text-slate-600 dark:text-slate-400">
-                            🌐 Website:{' '}
-                            <a href="https://www.corplawupdates.in" className="text-amber-550 text-amber-500 hover:underline">
-                                corplawupdates.in
-                            </a>
-                        </p>
+                    <div className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-xl text-slate-600 dark:text-slate-300 space-y-1 text-sm">
+                        <p><strong>Platform:</strong> CorpLawUpdates.in</p>
+                        <p><strong>Email:</strong> <a href="mailto:legal@corplawupdates.in" className="text-amber-600 dark:text-amber-400 hover:underline">legal@corplawupdates.in</a></p>
+                        <p><strong>Website:</strong> <a href="https://www.corplawupdates.in" className="text-amber-600 dark:text-amber-400 hover:underline">www.corplawupdates.in</a></p>
                     </div>
                 </section>
 
                 {/* BOTTOM LINKS */}
                 <div className="border-t border-slate-100 dark:border-slate-800/80 pt-8 flex gap-4 flex-wrap">
-                    <Link href="/" className="text-amber-500 hover:underline text-sm">
+                    <Link href="/" className="text-amber-600 dark:text-amber-400 hover:underline text-sm font-medium">
                         ← Back to Home
                     </Link>
-                    <Link href="/privacy-policy" className="text-amber-500 hover:underline text-sm">
+                    <Link href="/privacy-policy" className="text-amber-600 dark:text-amber-400 hover:underline text-sm font-medium">
                         Privacy Policy →
                     </Link>
                 </div>

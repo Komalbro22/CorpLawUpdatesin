@@ -353,16 +353,21 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
             <BreadcrumbJsonLd items={[
               { name: 'Home',    url: 'https://www.corplawupdates.in' },
               { name: 'Updates', url: 'https://www.corplawupdates.in/updates' },
+              { name: `${update.category.toUpperCase()} Updates`, url: `https://www.corplawupdates.in/category/${update.category.toLowerCase()}` },
               { name: update.title, url: articleUrl },
             ]} />
 
             {/* 1. BREADCRUMB NAV */}
             <nav className="mb-7 flex flex-wrap items-center gap-1.5 text-sm text-slate-600 dark:text-slate-400 print:hidden" aria-label="Breadcrumb">
-                <Link href="/" className="hover:text-gold transition-colors">Home</Link>
-                <span className="text-slate-300">/</span>
-                <Link href="/updates" className="hover:text-gold transition-colors">Updates</Link>
-                <span className="text-slate-300">/</span>
-                <span className="text-navy dark:text-slate-200 font-medium truncate max-w-[220px]">
+                <Link href="/" className="hover:text-amber-700 dark:hover:text-amber-400 transition-colors font-medium">Home</Link>
+                <span className="text-slate-300 dark:text-slate-700">/</span>
+                <Link href="/updates" className="hover:text-amber-700 dark:hover:text-amber-400 transition-colors font-medium">Updates</Link>
+                <span className="text-slate-300 dark:text-slate-700">/</span>
+                <Link href={`/category/${update.category.toLowerCase()}`} className="hover:text-amber-700 dark:hover:text-amber-400 transition-colors font-medium">
+                    {update.category.toUpperCase()}
+                </Link>
+                <span className="text-slate-300 dark:text-slate-700">/</span>
+                <span className="text-navy dark:text-slate-200 font-medium truncate max-w-[240px]">
                     {update.title.length > 45 ? update.title.substring(0, 45) + '...' : update.title}
                 </span>
             </nav>

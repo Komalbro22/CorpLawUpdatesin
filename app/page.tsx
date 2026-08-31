@@ -3,6 +3,7 @@
 import { supabase } from '@/lib/supabase'
 import { UPDATE_LIST_COLUMNS } from '@/lib/supabase-queries'
 import UpdateCard from '@/components/UpdateCard'
+import JsonLd from '@/components/JsonLd'
 import Link from 'next/link'
 import { Metadata } from 'next'
 import type { CSSProperties } from 'react'
@@ -69,7 +70,7 @@ export default async function HomePage() {
     .order('published_at', { ascending: false })
     .limit(9)
 
-  const [featuredRes, latestRes, popularRes, updatesCountRes, viewsRes] = await Promise.all([
+  const [featuredRes, latestRes, popularRes] = await Promise.all([
     supabase
       .from('updates')
       .select(UPDATE_LIST_COLUMNS)
@@ -87,19 +88,11 @@ export default async function HomePage() {
       .gte('published_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
       .order('views', { ascending: false })
       .limit(3),
-    supabase
-      .from('updates')
-      .select('*', { count: 'exact', head: true })
-      .not('published_at', 'is', null)
-      .lte('published_at', new Date().toISOString()),
-    supabase.rpc('get_total_views'),
   ])
 
   const featuredUpdates = featuredRes.data || []
   const latestUpdates = latestRes.data || []
   let popularUpdates = popularRes.data || []
-  const updatesCount = updatesCountRes.count || 0
-  const totalViews = viewsRes.data || 0
 
   // Fallback to top views overall if fewer than 3 updates this week
   if (popularUpdates.length < 3) {
@@ -146,42 +139,44 @@ export default async function HomePage() {
 
         <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center justify-center px-4 py-8 text-center sm:px-6 md:py-10 lg:px-8">
           <div className="flex flex-col items-center">
-            <p className="mb-6 inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-amber-300 backdrop-blur-md">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-amber-300 backdrop-blur-md">
+              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
               MCA • SEBI • RBI • CCI • NCLT • IBC • FEMA • LABOUR LAW
-            </p>
+            </div>
             <h1 className="font-heading text-4xl font-bold leading-[1.15] text-white text-balance md:text-5xl lg:text-6xl tracking-tight">
               Corporate Law Updates & Compliance Tools
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-slate-200 md:text-lg text-balance font-normal">
-              CorpLawUpdates.in provides the latest corporate law updates and free compliance tools — including SEBI regulations, RBI notifications, MCA circulars, NCLT judgments, AI document generators, and fee calculators — simplified for Company Secretaries, CAs, and compliance leaders.
+              CorpLawUpdates.in provides daily corporate law updates and free compliance tools — including SEBI regulations, RBI notifications, MCA circulars, NCLT judgments, AI document generators, and fee calculators — simplified for Company Secretaries, CAs, and compliance leaders.
             </p>
-            <p className="mt-4 text-sm text-slate-300 font-semibold">
+            <p className="mt-3 text-xs sm:text-sm text-slate-300 font-semibold flex items-center gap-2">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
               Updated daily with statutory updates and self-service utilities.
             </p>
             
             <div className="mt-10 flex flex-col gap-4 sm:flex-row justify-center items-center w-full max-w-md">
               <Link
                 href="/updates"
-                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-amber-700 px-8 py-3.5 text-sm font-bold text-white shadow-lg shadow-amber-950/40 transition-all hover:bg-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 motion-safe:hover:scale-[1.02]"
+                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-amber-600 px-8 py-3.5 text-sm font-bold text-white shadow-lg shadow-amber-950/40 transition-all hover:bg-amber-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 motion-safe:hover:scale-[1.02] active:scale-[0.98]"
               >
                 Browse updates
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden />
               </Link>
               <Link
                 href="/tools"
-                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg border border-amber-400/40 bg-white/10 px-8 py-3.5 text-sm font-bold text-amber-300 transition-all hover:bg-white/20 hover:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 motion-safe:hover:scale-[1.02]"
+                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg border border-amber-400/40 bg-white/10 px-8 py-3.5 text-sm font-bold text-amber-300 transition-all hover:bg-white/20 hover:border-amber-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 motion-safe:hover:scale-[1.02] active:scale-[0.98]"
               >
                 Explore tools
               </Link>
               <Link
                 href="/newsletter"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg border border-white/20 bg-white/5 px-8 py-3.5 text-sm font-bold text-white transition-all hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 motion-safe:hover:scale-[1.02]"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg border border-white/20 bg-white/5 px-8 py-3.5 text-sm font-bold text-white transition-all hover:bg-white/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 motion-safe:hover:scale-[1.02] active:scale-[0.98]"
               >
                 Subscribe free
               </Link>
             </div>
 
-            <div className="mt-12 flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm font-medium text-slate-200">
+            <div className="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm font-medium text-slate-200">
               {['No login required', 'Updated regularly', 'Built for Indian compliance'].map(item => (
                 <span key={item} className="inline-flex items-center gap-2">
                   <CheckCircle2 className="h-4 w-4 text-amber-400" aria-hidden />
@@ -438,6 +433,22 @@ export default async function HomePage() {
             </p>
           </div>
         </section>
+
+        {/* Homepage ItemList Schema for AI Search & Google indexing */}
+        {latestUpdates.length > 0 && (
+          <JsonLd data={{
+            '@context': 'https://schema.org',
+            '@type': 'ItemList',
+            name: 'Latest Corporate Law Updates India 2026',
+            description: 'Latest statutory regulatory circulars, notifications, and compliance updates for India.',
+            itemListElement: latestUpdates.map((u: any, idx: number) => ({
+              '@type': 'ListItem',
+              position: idx + 1,
+              name: u.title,
+              url: `https://www.corplawupdates.in/updates/${u.slug}`,
+            })),
+          }} />
+        )}
       </div>
     </div>
   )

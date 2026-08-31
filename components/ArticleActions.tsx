@@ -133,7 +133,7 @@ export default function ArticleActions({
             {slug && (
                 <button
                     onClick={toggleBookmark}
-                    className={`flex items-center gap-1.5 border ${bookmarked ? 'border-gold bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400' : 'border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'} rounded-lg transition-colors ${
+                    className={`flex items-center gap-1.5 border ${bookmarked ? 'border-gold bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400' : 'border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'} rounded-lg transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 active:scale-[0.98] ${
                         compact ? 'px-2 py-1 text-xs' : 'px-3 py-2 text-sm'
                     }`}
                 >
@@ -146,7 +146,7 @@ export default function ArticleActions({
             <div className="relative">
                 <button
                     onClick={copyLink}
-                    className={`flex items-center gap-1.5 border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors ${
+                    className={`flex items-center gap-1.5 border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 active:scale-[0.98] ${
                         compact ? 'px-2 py-1 text-xs' : 'px-3 py-2 text-sm'
                     }`}
                 >

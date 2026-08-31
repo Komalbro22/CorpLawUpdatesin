@@ -28,9 +28,9 @@ export default function PrivacyPolicyPage() {
                 </p>
 
                 <section>
-                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">1. Introduction</h2>
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">1. Introduction & Statutory Framework</h2>
                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                        CorpLawUpdates.in ("we", "our", "us") is committed to protecting your privacy. This Privacy Policy explains what data we collect, how we use it, and who we share it with when you visit https://www.corplawupdates.in.
+                        CorpLawUpdates.in ("we", "our", "us") is committed to protecting your privacy and handling your data in accordance with the <strong>Digital Personal Data Protection (DPDP) Act, 2023</strong> and the <strong>Information Technology (Reasonable Security Practices and Procedures and Sensitive Personal Data or Information) Rules, 2011</strong>. This Privacy Policy explains what data we collect, how we use it, your rights, and who we share it with when you visit https://www.corplawupdates.in.
                     </p>
                 </section>
 
@@ -124,7 +124,7 @@ export default function PrivacyPolicyPage() {
 
                 <section>
                     <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">4. Third-Party Data Processors</h2>
-                    <p className="text-slate-600 dark:text-slate-355 mb-4">We share data with the following services, each operating under their own privacy policy:</p>
+                    <p className="text-slate-600 dark:text-slate-400 mb-4">We share data with the following services, each operating under their own privacy policy:</p>
                     <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
                         <table className="w-full text-sm text-left border-collapse">
                             <thead>
@@ -182,7 +182,7 @@ export default function PrivacyPolicyPage() {
 
                 <section>
                     <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">6. Newsletter Tracking</h2>
-                    <p className="text-slate-600 dark:text-slate-355 leading-relaxed">
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
                         Our newsletters contain standard tracking technology (provided by Resend) that detects when an email is opened and when links are clicked. This is used solely for internal performance metrics and is never shared with or sold to any third party. If you do not wish to be tracked, you may unsubscribe at any time.
                     </p>
                 </section>
@@ -217,7 +217,7 @@ export default function PrivacyPolicyPage() {
 
                 <section>
                     <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">9. Children's Privacy</h2>
-                    <p className="text-slate-600 dark:text-slate-355 leading-relaxed">
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
                         This site is not intended for persons under 18 years of age. We do not knowingly collect data from minors.
                     </p>
                 </section>
@@ -226,7 +226,7 @@ export default function PrivacyPolicyPage() {
 
                 <section>
                     <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">10. Changes to This Policy</h2>
-                    <p className="text-slate-600 dark:text-slate-355 leading-relaxed">
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
                         We may update this Privacy Policy from time to time. The "Last updated" date at the top of this page will reflect any changes. For significant changes, we will notify newsletter subscribers via email.
                     </p>
                 </section>
@@ -235,7 +235,7 @@ export default function PrivacyPolicyPage() {
 
                 <section>
                     <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">11. Contact & Grievance Officer</h2>
-                    <p className="text-slate-600 dark:text-slate-355 leading-relaxed mb-4">
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
                         For privacy-related queries or to exercise your rights under the Digital Personal Data Protection (DPDP) Act 2023, please contact our designated Grievance Officer:
                     </p>
                     <div className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl text-slate-600 dark:text-slate-300 space-y-1">
