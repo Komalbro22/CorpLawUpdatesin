@@ -16,6 +16,7 @@ import ErrorBoundary from '@/components/ErrorBoundary'
 import TableOfContents from '@/components/TableOfContents'
 import UpdateCard from '@/components/UpdateCard'
 import { calculateReadingTime, formatDate, BASE_URL, extractFirstImage } from '@/lib/utils'
+import { EDITORIAL_AUTHOR, getArticleAuthorSchema } from '@/lib/editorial'
 import { linkGlossaryTerms } from '@/lib/glossaryLinker'
 import ViewCounter from '@/components/ViewCounter'
 // LiveViewCount import removed — display hidden, ViewCounter still tracks silently
@@ -91,7 +92,7 @@ export async function generateMetadata(
       'compliance India',
       update.category + ' circular 2026',
     ],
-    authors: [{ name: 'CorpLawUpdates.in' }],
+    authors: [{ name: EDITORIAL_AUTHOR.name, url: EDITORIAL_AUTHOR.url }],
     alternates: { canonical: canonicalUrl },
     robots: {
       index: true,
@@ -524,24 +525,26 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                     {update.title}
                 </h1>
                 
-                {/* 3.1 About this article / Editorial team */}
-                {geoData?.last_verified && (
-                    <div className="mb-4 flex flex-wrap items-center justify-between gap-4 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-3 text-xs">
-                        <div className="flex items-center gap-3">
-                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-navy text-white font-bold">CL</div>
-                            <div>
-                                <p className="font-bold text-slate-700 dark:text-slate-300">Editorial team</p>
-                                <p className="text-slate-500">CorpLawUpdates.in · Professionals & compliance specialists</p>
-                            </div>
-                        </div>
-                        <div className="flex flex-col items-end">
+                {/* Editorial byline */}
+                <div className="mb-4 flex flex-wrap items-center justify-between gap-4 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-3 text-xs">
+                    <span className="flex items-center gap-3">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-navy text-white font-bold shrink-0">CL</span>
+                        <span className="block">
+                            <Link href="/editorial-policy" className="font-bold text-slate-700 dark:text-slate-300 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+                                {EDITORIAL_AUTHOR.name}
+                            </Link>
+                            <span className="block text-slate-500">{EDITORIAL_AUTHOR.jobTitle}</span>
+                        </span>
+                    </span>
+                    {geoData?.last_verified && (
+                        <span className="flex flex-col items-end">
                             <span className="flex items-center gap-1 font-semibold text-green-700 dark:text-green-400">
                                 <CheckCircle2 className="h-3.5 w-3.5" aria-hidden /> Verified for compliance
                             </span>
                             <span className="text-slate-600 dark:text-slate-400">Last verified: {formatDate(geoData.last_verified)}</span>
-                        </div>
-                    </div>
-                )}
+                        </span>
+                    )}
+                </div>
 
                 {/* Top compact share actions */}
                 <div className="mb-4">
@@ -811,7 +814,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
               url: articleUrl,
               datePublished: toISTOffset(update.published_at),
               dateModified: toISTOffset(update.updated_at || update.published_at),
-              author: { '@type': 'Organization', name: 'CorpLawUpdates.in', url: 'https://www.corplawupdates.in' },
+              author: getArticleAuthorSchema(),
               publisher: {
                 '@type': 'Organization',
                 name: 'CorpLawUpdates.in',

@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { supabase } from '@/lib/supabase'
 import { GLOSSARY_INDEX_COLUMNS } from '@/lib/supabase-queries'
 import GlossaryClient from '@/components/GlossaryClient'
+import HubExploreLinks from '@/components/HubExploreLinks'
 
 export const revalidate = 3600
 
@@ -68,6 +69,19 @@ export default async function GlossaryHubPage() {
         </div>
 
         <GlossaryClient terms={terms || []} />
+
+        <div className="max-w-7xl mx-auto px-4 pb-12">
+          <HubExploreLinks
+            title="Related Resources"
+            links={[
+              { href: '/updates', label: 'Latest Updates', desc: 'Daily regulatory briefs' },
+              { href: '/category', label: 'Browse by Regulator', desc: 'MCA, SEBI, RBI & more' },
+              { href: '/tools', label: 'Compliance Tools', desc: 'Calculators & generators' },
+              { href: '/tools/cin-decoder', label: 'CIN Decoder', desc: 'Decode company CINs' },
+              { href: '/editorial-policy', label: 'Editorial Policy', desc: 'How we verify content' },
+            ]}
+          />
+        </div>
       </main>
 
       {/* DefinedTermSet JSON-LD */}

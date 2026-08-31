@@ -45,15 +45,19 @@ export default function TrackingScripts() {
       })
   }, [])
 
-  const handleAcknowledge = () => {
+  const setConsent = (accepted: boolean) => {
     try {
-      localStorage.setItem('cookie_consent_acknowledged', 'true')
+      localStorage.setItem('cookie_consent_acknowledged', accepted ? 'true' : 'false')
     } catch (e) {
       console.warn('Failed to write to LocalStorage:', e)
     }
-    setConsentGiven(true)
+    setConsentGiven(accepted)
     setShowBanner(false)
+    window.dispatchEvent(new Event('cookie-consent-change'))
   }
+
+  const handleAcknowledge = () => setConsent(true)
+  const handleReject = () => setConsent(false)
 
   return (
     <>
@@ -71,12 +75,18 @@ export default function TrackingScripts() {
               </a>.
             </p>
           </div>
-          <div className="flex items-center justify-end">
+          <div className="flex items-center justify-end gap-2">
+            <button
+              onClick={handleReject}
+              className="text-xs font-semibold text-slate-400 hover:text-white px-4 py-2.5 rounded-xl transition-colors"
+            >
+              Decline
+            </button>
             <button
               onClick={handleAcknowledge}
               className="text-xs font-bold bg-amber-400 text-slate-950 hover:bg-amber-500 px-6 py-2.5 rounded-xl transition-all shadow-md shadow-amber-400/10"
             >
-              Got it, thanks!
+              Accept
             </button>
           </div>
         </div>

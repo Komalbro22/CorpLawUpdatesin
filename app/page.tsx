@@ -24,12 +24,14 @@ import {
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Corporate Law Updates India (2026) – MCA, SEBI, RBI, CCI & Labour Law Notifications',
-  description: 'Get the latest corporate law updates in India including MCA, SEBI, RBI, CCI, Labour Law, NCLT, IBC and FEMA. Simplified and beautifully structured for all professionals, corporates, and modern compliance leaders.',
+  title: 'Corporate Law Updates India 2026',
+  description:
+    'Daily MCA, SEBI, RBI, CCI, NCLT, IBC and Labour Law updates for CS, CA and compliance professionals. Free compliance tools included.',
   alternates: { canonical: 'https://www.corplawupdates.in' },
   openGraph: {
-    title: 'Corporate Law Updates India (2026) – MCA, SEBI, RBI, CCI & Labour Law Notifications',
-    description: 'Get the latest corporate law updates in India including MCA, SEBI, RBI, CCI, Labour Law, NCLT, IBC and FEMA. Updated daily.',
+    title: 'Corporate Law Updates India 2026 | CorpLawUpdates.in',
+    description:
+      'Daily MCA, SEBI, RBI, CCI, NCLT, IBC and Labour Law updates for CS, CA and compliance professionals.',
     url: 'https://www.corplawupdates.in',
     type: 'website',
     siteName: 'CorpLawUpdates.in',
@@ -40,8 +42,9 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@corplawupdates',
     creator: '@corplawupdates',
-    title: 'Corporate Law Updates India (2026) – MCA, SEBI, RBI, CCI & Labour Law Notifications',
-    description: 'Get the latest corporate law updates in India including MCA, SEBI, RBI, CCI, Labour Law, NCLT, IBC and FEMA.',
+    title: 'Corporate Law Updates India 2026 | CorpLawUpdates.in',
+    description:
+      'Daily MCA, SEBI, RBI, CCI, NCLT, IBC and Labour Law updates for CS, CA and compliance professionals.',
     images: ['https://www.corplawupdates.in/api/og?title=Corporate+Law+Updates+India+2026&category='],
   },
 }
@@ -360,6 +363,22 @@ export default async function HomePage() {
                 badgeColor: 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300',
               },
               {
+                href: '/tools/cin-decoder',
+                icon: '🔍',
+                title: 'CIN Decoder',
+                desc: 'Decode any 21-character CIN to reveal company type, state code, incorporation year, and ROC jurisdiction.',
+                badge: 'Free',
+                badgeColor: 'bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300',
+              },
+              {
+                href: '/company-search',
+                icon: '🏢',
+                title: 'Company Search',
+                desc: 'Search 15+ lakh registered Indian companies by CIN or name. View compliance snapshot and AGM due dates.',
+                badge: 'New',
+                badgeColor: 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300',
+              },
+              {
                 href: '/glossary',
                 icon: '📚',
                 title: 'Corporate Law Glossary',
@@ -402,40 +421,21 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* Subtle SEO Context at Bottom */}
-        <section className="max-w-7xl mx-auto px-4 py-16 border-t border-slate-100 dark:border-slate-800 mt-10">
-          <div className="bg-slate-50/50 dark:bg-slate-900/50 rounded-2xl border border-slate-200/60 dark:border-slate-800 p-8 shadow-sm text-center">
-            <h2 className="text-xl font-bold text-navy dark:text-white mb-4 font-heading">Latest Corporate Law Updates & Compliance Tools</h2>
-            <div className="max-w-3xl mx-auto text-sm text-slate-500 leading-relaxed space-y-4">
-              <p>
-                CorpLawUpdates.in provides the <strong>latest corporate law updates</strong> and <strong>free compliance tools</strong> covering 
-                <Link href="/category/sebi" className="text-gold hover:underline font-medium mx-1">SEBI updates</Link>, 
-                <Link href="/category/rbi" className="text-gold hover:underline font-medium mx-1">RBI circular updates</Link>, 
-                <Link href="/category/mca" className="text-gold hover:underline font-medium mx-1">MCA updates</Link>, 
-                <Link href="/category/cci" className="text-gold hover:underline font-medium mx-1">CCI updates</Link>, 
-                <Link href="/category/labour" className="text-gold hover:underline font-medium mx-1">Labour Law updates</Link>, 
-                NCLT, IBC and FEMA regulations.
-              </p>
-              <p>
-                We simplify complex legal updates into easy-to-understand summaries with key insights and practical implications. 
-                Our suite of interactive utilities, including the 
-                <Link href="/documents" className="text-gold hover:underline font-medium mx-1 font-semibold">Legal Document Generator</Link>, 
-                <Link href="/tools/fee-calculator" className="text-gold hover:underline font-medium mx-1 font-semibold">MCA & ROC Fee Calculator</Link>, 
-                <Link href="/calendar" className="text-gold hover:underline font-medium mx-1 font-semibold">Compliance Calendar</Link>, 
-                and 
-                <Link href="/rbi/repo-rate" className="text-gold hover:underline font-medium mx-1 font-semibold">RBI Repo Rate Tracker</Link>, 
-                helps you stay ahead with all aspects of <strong>corporate law and compliance</strong>.
-              </p>
-              <p className="pt-4 flex flex-wrap items-center justify-center gap-4 text-sm font-semibold">
-                <Link href="/updates" className="text-gold hover:text-amber-700 transition-colors underline decoration-gold/30 underline-offset-4 font-heading">
-                  👉 Browse all updates
-                </Link>
-                <span className="text-slate-300 dark:text-slate-700 hidden sm:inline">|</span>
-                <Link href="/tools" className="text-gold hover:text-amber-700 transition-colors underline decoration-gold/30 underline-offset-4 font-heading">
-                  👉 Explore compliance tools
-                </Link>
-              </p>
-            </div>
+        {/* Trimmed site context — keeps internal links without keyword stuffing */}
+        <section className="max-w-7xl mx-auto px-4 py-10 border-t border-slate-100 dark:border-slate-800">
+          <div className="max-w-3xl mx-auto text-center text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+            <p>
+              CorpLawUpdates.in covers{' '}
+              <Link href="/category/mca" className="text-gold hover:underline font-medium">MCA</Link>,{' '}
+              <Link href="/category/sebi" className="text-gold hover:underline font-medium">SEBI</Link>,{' '}
+              <Link href="/category/rbi" className="text-gold hover:underline font-medium">RBI</Link>,{' '}
+              <Link href="/category/cci" className="text-gold hover:underline font-medium">CCI</Link>, and{' '}
+              <Link href="/category/labour" className="text-gold hover:underline font-medium">Labour Law</Link>{' '}
+              updates with free tools including the{' '}
+              <Link href="/documents" className="text-gold hover:underline font-medium">Document Generator</Link>,{' '}
+              <Link href="/tools/fee-calculator" className="text-gold hover:underline font-medium">ROC Fee Calculator</Link>, and{' '}
+              <Link href="/calendar" className="text-gold hover:underline font-medium">Compliance Calendar</Link>.
+            </p>
           </div>
         </section>
       </div>

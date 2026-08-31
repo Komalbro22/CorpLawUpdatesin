@@ -70,7 +70,7 @@ export default async function Footer() {
                     {/* Brand Info */}
                     <div className="lg:col-span-5">
                         <Link href="/" className="inline-flex items-center gap-3.5 group mb-6 focus:outline-none focus:ring-2 focus:ring-amber-500 rounded-md p-1">
-                            <div className="w-10 h-10 rounded-xl overflow-hidden shadow-sm ring-1 ring-white/15 group-hover:ring-amber-500/50 transition-all shrink-0 bg-slate-900">
+                            <span className="block w-10 h-10 rounded-xl overflow-hidden shadow-sm ring-1 ring-white/15 group-hover:ring-amber-500/50 transition-all shrink-0 bg-slate-900">
                                 <Image
                                     src="/icon-192.png"
                                     alt="CorpLawUpdates Logo"
@@ -78,15 +78,15 @@ export default async function Footer() {
                                     height={40}
                                     className="w-full h-full object-cover"
                                 />
-                            </div>
-                            <div>
-                                <h3 className="font-heading text-2xl font-bold text-white group-hover:text-white/90 transition-colors">
+                            </span>
+                            <span className="block">
+                                <span className="block font-heading text-2xl font-bold text-white group-hover:text-white/90 transition-colors">
                                     CorpLawUpdates<span className="text-amber-500">.in</span>
-                                </h3>
-                                <p className="text-[11px] font-bold text-slate-300 tracking-[0.2em] uppercase mt-0.5">
+                                </span>
+                                <span className="block text-[11px] font-bold text-slate-300 tracking-[0.2em] uppercase mt-0.5">
                                     Corporate Law Intelligence
-                                </p>
-                            </div>
+                                </span>
+                            </span>
                         </Link>
                         <p className="text-slate-300 text-base leading-relaxed max-w-md mb-8">
                             India's first free-to-access intelligence platform for regulatory updates. 
@@ -179,6 +179,7 @@ export default async function Footer() {
                     <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-slate-300 text-[11px] font-semibold uppercase tracking-widest">
                         <span>© 2026 CorpLawUpdates.in</span>
                         <Link href="/privacy-policy" className="hover:text-white focus:outline-none focus:underline transition-colors">Privacy</Link>
+                        <Link href="/editorial-policy" className="hover:text-white focus:outline-none focus:underline transition-colors">Editorial</Link>
                         <Link href="/terms" className="hover:text-white focus:outline-none focus:underline transition-colors">Terms</Link>
                         <Link href="/api/feed.xml" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-white focus:outline-none focus:underline transition-colors" prefetch={false}>
                             <Rss className="w-3 h-3 text-amber-400" /> RSS

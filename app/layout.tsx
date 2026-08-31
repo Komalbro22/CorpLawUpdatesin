@@ -4,8 +4,6 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
 }
-import { Analytics } from '@vercel/analytics/react'
-import { SpeedInsights } from '@vercel/speed-insights/next'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { ToastProvider } from '@/components/Toast'
@@ -16,10 +14,12 @@ import AnnouncementBar from '@/components/AnnouncementBar'
 import Script from 'next/script'
 import JsonLd from '@/components/JsonLd'
 import TrackingScripts from '@/components/TrackingScripts'
+import ConsentGatedAnalytics from '@/components/ConsentGatedAnalytics'
 
 import WebMCPRegistry from '@/components/WebMCPRegistry'
 
 import { themeScript } from '@/lib/theme-script'
+import { fontVariables } from '@/lib/fonts'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -98,19 +98,12 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
+    <html lang="en" data-scroll-behavior="smooth" className={fontVariables} suppressHydrationWarning>
       <head>
         {/* Anti-flash theme script with explicit React 19 ID attribute in head */}
         <script
           id="theme-script"
           dangerouslySetInnerHTML={{ __html: themeScript }}
-        />
-        {/* Google Fonts with preconnect */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Outfit:wght@400..700&family=Source+Sans+3:ital,wght@0,300..800;1,300..800&display=swap"
-          rel="stylesheet"
         />
         <link rel="llms" href="/llms.txt" />
         <meta name="theme-color" content="#0F172A" />
@@ -191,8 +184,7 @@ export default async function RootLayout({
           <HideOnAdmin><WebMCPRegistry /></HideOnAdmin>
         </ToastProvider>
         <HideOnAdmin>
-          <Analytics />
-          <SpeedInsights />
+          <ConsentGatedAnalytics />
         </HideOnAdmin>
 
         <Script

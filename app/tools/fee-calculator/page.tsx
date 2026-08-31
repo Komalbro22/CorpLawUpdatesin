@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import JsonLd from '@/components/JsonLd'
 import HubSearch from './HubSearch'
+import HubExploreLinks from '@/components/HubExploreLinks'
 import { mcaForms } from '@/data/mca-forms'
 
 const hubJsonLd = {
@@ -334,6 +335,17 @@ export default function FeeCalculatorHub() {
         <HubGuides />
         <HubSEO />
         <HubFAQ />
+        <HubExploreLinks
+          title="Explore More Tools"
+          links={[
+            { href: '/tools/fee-calculator/companies', label: 'MCA Form Calculators', desc: 'MGT-7, AOC-4, DIR-3 & more' },
+            { href: '/tools/cin-decoder', label: 'CIN Decoder', desc: 'Decode company CINs' },
+            { href: '/tools/roc-tracker', label: 'ROC Deadline Tracker', desc: 'Track filing deadlines' },
+            { href: '/documents', label: 'Document Generator', desc: 'AI-powered drafts' },
+            { href: '/updates', label: 'Latest Updates', desc: 'Daily regulatory briefs' },
+          ]}
+          className="mb-8"
+        />
         <p className="text-xs text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800 pt-4 mt-8">
           Fees shown are indicative based on the Companies (Registration Offices and Fees) Rules, 2014 as amended. Always verify on the MCA portal before filing. This tool does not account for state stamp duty or professional charges.
         </p>

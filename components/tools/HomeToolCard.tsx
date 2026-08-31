@@ -21,26 +21,26 @@ export default function HomeToolCard({ tool }: { tool: HomeToolCardData }) {
 
   const inner = (
     <>
-      <div>
-        <div className="flex items-center justify-between mb-4">
+      <span className="block">
+        <span className="flex items-center justify-between mb-4">
           <span className="text-3xl bg-slate-50 dark:bg-slate-800 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800 group-hover:scale-105 transition-transform">
             {tool.icon}
           </span>
           <span className={`text-[10px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-md ${tool.badgeColor}`}>
             {tool.badge}
           </span>
-        </div>
+        </span>
         <h3 className="font-bold text-navy dark:text-slate-100 text-base mb-1.5 group-hover:text-amber-700 dark:group-hover:text-amber-400 transition-colors">
           {tool.title}
         </h3>
         <p className="text-slate-600 dark:text-slate-400 text-xs font-normal leading-relaxed">{tool.desc}</p>
-      </div>
-      <div className="flex items-center justify-between mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/60">
+      </span>
+      <span className="flex items-center justify-between mt-5 pt-4 border-t border-slate-100 dark:border-slate-800/60">
         <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
           {isComingSoon ? 'Coming Soon' : 'Explore Tool'}
         </span>
         <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-amber-600 group-hover:translate-x-1 transition-all duration-200" />
-      </div>
+      </span>
     </>
   )
 

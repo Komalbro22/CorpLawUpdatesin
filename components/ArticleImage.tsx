@@ -1,7 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { Building2, ShieldCheck, Landmark, Scale, AlertTriangle, Globe, Newspaper } from 'lucide-react'
+import { canOptimizeImage } from '@/lib/image-utils'
 
 interface ArticleImageProps {
   src?: string | null
@@ -11,7 +13,7 @@ interface ArticleImageProps {
   className?: string
 }
 
-const REGULATOR_THEMES: Record<string, { bg: string; icon: any; label: string }> = {
+const REGULATOR_THEMES: Record<string, { bg: string; icon: typeof Building2; label: string }> = {
   MCA: { bg: 'from-blue-900 via-slate-900 to-slate-950', icon: Building2, label: 'Ministry of Corporate Affairs' },
   SEBI: { bg: 'from-emerald-900 via-slate-900 to-slate-950', icon: ShieldCheck, label: 'Securities and Exchange Board' },
   RBI: { bg: 'from-violet-900 via-slate-900 to-slate-950', icon: Landmark, label: 'Reserve Bank of India' },
@@ -22,13 +24,13 @@ const REGULATOR_THEMES: Record<string, { bg: string; icon: any; label: string }>
 
 export default function ArticleImage({ src, alt, category, priority = false, className = '' }: ArticleImageProps) {
   const [isLoading, setIsLoading] = useState(true)
+  const [imageSrc, setImageSrc] = useState(src)
 
   const catKey = (category || 'MCA').toUpperCase()
   const theme = REGULATOR_THEMES[catKey] || { bg: 'from-navy via-slate-900 to-slate-950', icon: Newspaper, label: 'Corporate Law Update' }
   const IconComponent = theme.icon
 
-  // Only render category poster banner if there is NO image URL at all in database
-  if (!src) {
+  if (!imageSrc) {
     return (
       <div className={`w-full h-full bg-gradient-to-br ${theme.bg} flex flex-col items-center justify-center p-6 text-center select-none relative overflow-hidden ${className}`}>
         <div className="absolute inset-0 bg-slate-900/30 backdrop-blur-[1px]" />
@@ -47,30 +49,30 @@ export default function ArticleImage({ src, alt, category, priority = false, cla
     )
   }
 
+  const optimizable = canOptimizeImage(imageSrc)
+
   return (
     <div className={`relative w-full h-full bg-slate-100 dark:bg-slate-900 overflow-hidden ${className}`}>
-      {/* Subtle loading skeleton background while image is loading */}
       {isLoading && (
         <div className="absolute inset-0 bg-slate-200 dark:bg-slate-800 animate-pulse z-10" />
       )}
 
-      <img
-        src={src}
+      <Image
+        src={imageSrc}
         alt={alt}
-        loading={priority ? 'eager' : 'lazy'}
-        decoding="async"
+        fill
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        priority={priority}
+        unoptimized={!optimizable}
         referrerPolicy="no-referrer"
         onLoad={() => setIsLoading(false)}
-        onError={(e) => {
+        onError={() => {
           setIsLoading(false)
-          // Soft fallback to og-default image if specific external image fails
-          const target = e.currentTarget
-          if (target && !target.dataset.hasFalledBack) {
-            target.dataset.hasFalledBack = 'true'
-            target.src = '/images/og-default.png'
+          if (imageSrc !== '/images/og-default.png') {
+            setImageSrc('/images/og-default.png')
           }
         }}
-        className={`w-full h-full object-cover object-center motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105 ${
+        className={`object-cover object-center motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105 ${
           isLoading ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'
         }`}
       />

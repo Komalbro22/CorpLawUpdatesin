@@ -83,6 +83,7 @@ export default function ArticleActions({
                 href={shareLinks.twitter}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Share on X (Twitter)"
                 className={`flex items-center gap-1.5 bg-black text-white rounded-lg hover:bg-slate-800 transition-colors ${
                     compact ? 'px-2 py-1 text-xs' : 'px-3 py-2 text-sm'
                 }`}
@@ -99,6 +100,7 @@ export default function ArticleActions({
                 href={shareLinks.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Share on LinkedIn"
                 className={`flex items-center gap-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors ${
                     compact ? 'px-2 py-1 text-xs' : 'px-3 py-2 text-sm'
                 }`}
@@ -115,6 +117,7 @@ export default function ArticleActions({
                 href={shareLinks.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="Share on WhatsApp"
                 className={`flex items-center gap-1.5 bg-green-700 text-white rounded-lg hover:bg-green-800 transition-colors ${
                     compact ? 'px-2 py-1 text-xs' : 'px-3 py-2 text-sm'
                 }`}

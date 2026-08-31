@@ -1,7 +1,8 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import JsonLd from '@/components/JsonLd'
-import { FileText, Calculator, Calendar, CalendarDays, Landmark, BookOpen, Bot, CheckSquare, Target } from 'lucide-react'
+import HubExploreLinks from '@/components/HubExploreLinks'
+import { FileText, Calculator, Calendar, CalendarDays, Landmark, BookOpen, Bot, CheckSquare, Target, Search } from 'lucide-react'
 
 const ogImageUrl = 'https://www.corplawupdates.in/api/og?title=Free+Corporate+Law+%26+Compliance+Tools&category=Tools'
 
@@ -109,6 +110,28 @@ const toolsJsonLd = {
             price: '0',
             priceCurrency: 'INR',
           }
+        },
+        {
+          '@type': 'WebApplication',
+          name: 'CIN Decoder',
+          url: 'https://www.corplawupdates.in/tools/cin-decoder',
+          applicationCategory: 'BusinessApplication',
+          offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'INR',
+          }
+        },
+        {
+          '@type': 'WebApplication',
+          name: 'Company Search',
+          url: 'https://www.corplawupdates.in/company-search',
+          applicationCategory: 'BusinessApplication',
+          offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'INR',
+          }
         }
       ]
     },
@@ -193,6 +216,20 @@ const tools = [
     tags: ['Repo Rate', 'RBI MPC', 'Interest Rate', 'Home Loan'],
     color: 'border-amber-200 hover:border-amber-400 dark:border-slate-800 dark:hover:border-amber-900/50',
     headerBg: 'from-amber-500 to-amber-700',
+  },
+  {
+    id: 'cin-decoder',
+    href: '/tools/cin-decoder',
+    icon: <Search size={24} />,
+    label: 'CIN Decoder',
+    description: 'Decode any 21-character Corporate Identification Number (CIN) to reveal company type, state code, year of incorporation, and ROC jurisdiction.',
+    badge: 'Free',
+    badgeColor: 'bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300',
+    stats: 'Instant decode',
+    isLive: true,
+    tags: ['CIN Lookup', 'ROC Code', 'Company Type', 'State Code'],
+    color: 'border-blue-200 hover:border-blue-400 dark:border-slate-800 dark:hover:border-blue-900/50',
+    headerBg: 'from-blue-600 to-blue-800',
   },
   {
     id: 'company-search',
@@ -327,52 +364,52 @@ export default function ToolsPage() {
               <Link
                 key={tool.id}
                 href={tool.href}
-                className={`group bg-white dark:bg-slate-900 border-2 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-200 ${tool.color}`}
+                className={`group bg-white dark:bg-slate-900 border-2 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-200 flex flex-col ${tool.color}`}
               >
                 {/* Card header */}
-                <div className={`bg-gradient-to-r ${tool.headerBg} p-5 flex items-center gap-4`}>
-                  <span className="text-5xl">
-                    {tool.icon}
-                  </span>
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${tool.badgeColor}`}>
-                        {tool.badge}
+                <span className={`block bg-gradient-to-r ${tool.headerBg} p-5`}>
+                  <span className="flex items-center gap-4">
+                    <span className="text-5xl shrink-0">{tool.icon}</span>
+                    <span className="block min-w-0">
+                      <span className="flex items-center gap-2 mb-1">
+                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${tool.badgeColor}`}>
+                          {tool.badge}
+                        </span>
                       </span>
-                    </div>
-                    <h3 className="text-white font-bold text-lg leading-snug">
-                      {tool.label}
-                    </h3>
-                    <p className="text-white/60 text-xs mt-0.5">
-                      {tool.stats}
-                    </p>
-                  </div>
-                </div>
+                      <span className="block text-white font-bold text-lg leading-snug">
+                        {tool.label}
+                      </span>
+                      <span className="block text-white/60 text-xs mt-0.5">
+                        {tool.stats}
+                      </span>
+                    </span>
+                  </span>
+                </span>
 
                 {/* Card body */}
-                <div className="p-5">
-                  <p className="text-slate-600 dark:text-slate-300 text-sm mb-4 leading-relaxed">
+                <span className="block p-5 flex-1">
+                  <span className="block text-slate-600 dark:text-slate-300 text-sm mb-4 leading-relaxed">
                     {tool.description}
-                  </p>
+                  </span>
 
                   {/* Tags */}
-                  <div className="flex flex-wrap gap-1.5 mb-4">
+                  <span className="flex flex-wrap gap-1.5 mb-4">
                     {tool.tags.map(tag => (
                       <span key={tag} className="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded-full">
                         {tag}
                       </span>
                     ))}
-                  </div>
+                  </span>
 
-                  <div className="flex items-center justify-between">
+                  <span className="flex items-center justify-between">
                     <span className="text-xs text-green-600 dark:text-green-400 font-semibold">
                       ● Live Now
                     </span>
                     <span className="text-navy dark:text-amber-400 font-bold text-sm group-hover:translate-x-1 transition-transform inline-block">
                       Open Tool →
                     </span>
-                  </div>
-                </div>
+                  </span>
+                </span>
               </Link>
             ))}
           </div>
@@ -424,6 +461,19 @@ export default function ToolsPage() {
             ))}
           </div>
         </div>
+
+        <HubExploreLinks
+          title="More on CorpLawUpdates"
+          links={[
+            { href: '/updates', label: 'Latest Updates', desc: 'Daily regulatory briefs' },
+            { href: '/category', label: 'Browse by Regulator', desc: 'MCA, SEBI, RBI & more' },
+            { href: '/tools/fee-calculator/companies', label: 'MCA Form Calculators', desc: 'MGT-7, AOC-4, DIR-3 & more' },
+            { href: '/tools/doc-generator', label: 'AI Doc Generator', desc: 'Board resolutions & letters' },
+            { href: '/partners', label: 'List Your Service', desc: 'For CS, CA & Advocates' },
+            { href: '/editorial-policy', label: 'Editorial Policy', desc: 'How we verify content' },
+          ]}
+          className="mb-12"
+        />
 
         {/* Newsletter CTA */}
         <div className="mt-12 bg-navy rounded-3xl p-8 text-center">

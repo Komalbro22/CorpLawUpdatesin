@@ -53,16 +53,16 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
       style={{ '--delay': `${animationDelay}ms`, transform: 'translate3d(0, 0, 0)' } as React.CSSProperties}
       className={`animate-fade-up group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 border-t-[3px] bg-white dark:bg-slate-900 shadow-card ring-1 ring-slate-900/[0.03] dark:ring-white/[0.03] ${borderColor} transition-[transform,box-shadow,border-color] duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 motion-safe:hover:-translate-y-1 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-xl`}
     >
-      <div className="relative w-full aspect-video overflow-hidden bg-slate-100 dark:bg-slate-800 flex-shrink-0">
+      <span className="relative block w-full aspect-video overflow-hidden bg-slate-100 dark:bg-slate-800 flex-shrink-0">
         <ArticleImage
           src={imageUrl}
           alt={update.title}
           category={update.category}
           priority={priority}
         />
-      </div>
+      </span>
 
-      <div className="p-5 flex flex-col flex-1">
+      <span className="block p-5 flex flex-col flex-1">
         {/* Signature Gazette Ledger Rail */}
         <GazetteLedgerRail
           category={update.category}
@@ -70,7 +70,7 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
           isMandatory={update.impact_level === 'high'}
         />
 
-        <div className="mb-3 flex items-center gap-2 flex-wrap">
+        <span className="mb-3 flex items-center gap-2 flex-wrap">
           <CategoryBadge category={update.category} />
           {isNew && (
             <span className="badge-pulse rounded-md bg-amber-100 dark:bg-amber-900/30 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-900 dark:text-amber-400 ring-1 ring-amber-300 dark:ring-amber-900/50">
@@ -82,7 +82,7 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
               {impactLabels[update.impact_level]}
             </span>
           )}
-        </div>
+        </span>
 
         <h3 className="font-heading text-[1.08rem] font-bold text-navy dark:text-white mb-2 line-clamp-2 group-hover:text-amber-700 dark:group-hover:text-amber-400 transition-colors leading-snug text-balance">
           {update.title}
@@ -94,14 +94,14 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
           </p>
         )}
 
-        <div className="mt-auto flex items-end justify-between gap-4 border-t border-slate-100 dark:border-slate-800 pt-3 text-xs text-slate-500 dark:text-slate-400">
-          <div className="min-w-0 flex flex-col gap-0.5">
+        <span className="mt-auto flex items-end justify-between gap-4 border-t border-slate-100 dark:border-slate-800 pt-3 text-xs text-slate-500 dark:text-slate-400">
+          <span className="min-w-0 flex flex-col gap-0.5">
             {update.source_name && (
               <p className="truncate text-[11px] font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-400">
                 {update.source_name}
               </p>
             )}
-            <div className="flex items-center gap-2 flex-wrap">
+            <span className="flex items-center gap-2 flex-wrap">
               {update.published_at && (
                 <span className="font-medium text-slate-600 dark:text-slate-400">{formatDate(update.published_at)}</span>
               )}
@@ -110,9 +110,9 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
                   Eff. {formatDate(update.effective_date)}
                 </span>
               )}
-            </div>
-          </div>
-          <div className="flex shrink-0 items-center gap-1.5">
+            </span>
+          </span>
+          <span className="flex shrink-0 items-center gap-1.5">
             <span className="flex items-center gap-1 whitespace-nowrap rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-1 text-[11px] font-semibold text-slate-600 dark:text-slate-400">
               <Clock className="w-3 h-3 text-slate-500 dark:text-slate-400" aria-hidden />
               {update.reading_time || calculateReadingTime(update.content || update.summary || '')} min
@@ -120,9 +120,9 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
             <span className="hidden h-7 w-7 items-center justify-center rounded-md bg-navy dark:bg-slate-800 text-white dark:text-slate-200 transition-colors group-hover:bg-amber-600 dark:group-hover:bg-amber-500 sm:flex">
               <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
             </span>
-          </div>
-        </div>
-      </div>
+          </span>
+        </span>
+      </span>
     </Link>
   )
 }
