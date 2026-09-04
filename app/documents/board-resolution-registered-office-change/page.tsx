@@ -1,25 +1,4 @@
-import Link from 'next/link'
-import {
-  ShieldCheck,
-  CheckCircle2,
-  AlertTriangle,
-  HelpCircle,
-  ExternalLink,
-  Scale,
-  Building2,
-  FileCheck2,
-  Download,
-  Calendar,
-  Layers,
-  MapPin,
-  Landmark,
-  FileText,
-  Compass,
-  ArrowRight,
-  BookOpen,
-  Newspaper,
-  Camera,
-} from 'lucide-react'
+import { HelpCircle, Camera, Landmark } from 'lucide-react'
 import RegisteredOfficeClient from './RegisteredOfficeClient'
 
 const pageUrl =
