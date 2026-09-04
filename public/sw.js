@@ -1,4 +1,4 @@
-const CACHE_NAME = 'corplaw-cache-v4';
+const CACHE_NAME = 'corplaw-cache-v6';
 const OFFLINE_URL = '/offline.html';
 
 const ASSETS_TO_CACHE = [

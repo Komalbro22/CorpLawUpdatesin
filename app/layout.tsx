@@ -189,11 +189,18 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/sw.js').then(function(reg) {
-                  // Service worker registered
-                }).catch(function(err) {
-                  console.error('Service Worker registration failed:', err);
-                });
+                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                  navigator.serviceWorker.getRegistrations().then(function(regs) {
+                    for (var r of regs) { r.unregister(); }
+                  });
+                  if ('caches' in window) {
+                    caches.keys().then(function(keys) {
+                      for (var k of keys) { caches.delete(k); }
+                    });
+                  }
+                } else {
+                  navigator.serviceWorker.register('/sw.js').catch(function() {});
+                }
               }
             `,
           }}
