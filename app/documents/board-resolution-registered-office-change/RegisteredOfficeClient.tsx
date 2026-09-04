@@ -34,7 +34,9 @@ const SCOPE_CONFIG: Record<
     approvalNeeded: string
     formsNeeded: string
     desc: string
-    icon: string
+    icon: React.ComponentType<{ className?: string }>
+    iconBg: string
+    iconColor: string
   }
 > = {
   same_city: {
@@ -44,7 +46,9 @@ const SCOPE_CONFIG: Record<
     approvalNeeded: 'Board Resolution only',
     formsNeeded: 'e-Form INC-22 (within 30 days)',
     desc: 'Simple shifting within municipal limits. No shareholders meeting, no Regional Director approval.',
-    icon: '🏙️',
+    icon: Building2,
+    iconBg: 'bg-indigo-100 dark:bg-indigo-950/80',
+    iconColor: 'text-indigo-600 dark:text-indigo-400',
   },
   outside_local: {
     label: 'Outside Local Limits (Same RoC & State)',
@@ -53,7 +57,9 @@ const SCOPE_CONFIG: Record<
     approvalNeeded: 'Board Resolution + Special Resolution (Shareholders)',
     formsNeeded: 'e-Form MGT-14 + INC-22',
     desc: 'Shifting to another town or city in the same State under the same RoC. Requires 75% shareholder majority at EGM.',
-    icon: '🗺️',
+    icon: MapPin,
+    iconBg: 'bg-blue-100 dark:bg-blue-950/80',
+    iconColor: 'text-blue-600 dark:text-blue-400',
   },
   different_roc: {
     label: 'Different RoC (Within Same State)',
@@ -62,7 +68,9 @@ const SCOPE_CONFIG: Record<
     approvalNeeded: 'Board Res. + Special Res. + Regional Director (RD) Confirmation',
     formsNeeded: 'MGT-14 + INC-23 (RD) + INC-28 + INC-22',
     desc: 'Applicable in Maharashtra (Mumbai ↔ Pune) or Tamil Nadu (Chennai ↔ Coimbatore). Mandates RD petition & newspaper notice.',
-    icon: '🏛️',
+    icon: Landmark,
+    iconBg: 'bg-amber-100 dark:bg-amber-950/80',
+    iconColor: 'text-amber-600 dark:text-amber-400',
   },
   different_state: {
     label: 'From One State to Another (Inter-State)',
@@ -71,7 +79,9 @@ const SCOPE_CONFIG: Record<
     approvalNeeded: 'Board Res. + Special Res. (MOA Alteration) + Central Govt / RD Order',
     formsNeeded: 'MGT-14 + INC-23 + INC-28 + INC-22 (New CIN)',
     desc: 'Shifting across state borders requires altering Clause II of MOA, list of creditors affidavit, Form INC-26 newspaper ads, and RD confirmation.',
-    icon: '🇮🇳',
+    icon: Compass,
+    iconBg: 'bg-emerald-100 dark:bg-emerald-950/80',
+    iconColor: 'text-emerald-600 dark:text-emerald-400',
   },
 }
 
@@ -353,16 +363,16 @@ ${dir}, Director (DIN: ${din})`
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* 1. Header Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-8 md:p-10 shadow-2xl border border-indigo-800/40">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white p-8 md:p-10 shadow-2xl border border-indigo-900/60">
         <div className="relative z-10 max-w-4xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/20 text-amber-300 text-xs font-semibold border border-amber-500/30">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/15 text-amber-300 text-xs font-semibold border border-amber-500/30">
             <ShieldCheck className="w-4 h-4 text-amber-400" />
             <span>Statutory Shifting Engine • Companies Act, 2013 (Sec 12 & 13)</span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
             Registered Office Shifting{' '}
-            <span className="bg-gradient-to-r from-amber-300 via-amber-200 to-yellow-400 bg-clip-text text-transparent">
+            <span className="text-amber-400 font-extrabold block sm:inline">
               Master Suite & Resolution Generator
             </span>
           </h1>
@@ -386,9 +396,6 @@ ${dir}, Director (DIN: ${din})`
             </span>
           </div>
         </div>
-
-        {/* Decorative background glow */}
-        <div className="absolute -right-20 -bottom-20 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
       </div>
 
       {/* 2. Interactive 4-Way Shifting Scope Switcher */}
@@ -424,11 +431,13 @@ ${dir}, Director (DIN: ${din})`
                     : 'bg-slate-50/70 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-100/50'
                 }`}
               >
-                <div className="space-y-2">
+                <div className="space-y-2.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-2xl">{config.icon}</span>
+                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${config.iconBg}`}>
+                      <config.icon className={`w-5 h-5 ${config.iconColor}`} />
+                    </div>
                     {isSelected ? (
-                      <span className="px-2 py-0.5 bg-indigo-600 text-white text-[10px] font-bold rounded-full">
+                      <span className="px-2.5 py-0.5 bg-indigo-600 text-white text-[10px] font-bold rounded-full shadow-sm tracking-wide">
                         ACTIVE
                       </span>
                     ) : (
@@ -473,7 +482,7 @@ ${dir}, Director (DIN: ${din})`
           <div className="flex items-center gap-2">
             <span className="text-amber-400 text-sm font-bold">1-Click Statutory Downloads</span>
             <span className="text-xs bg-slate-800 px-2 py-0.5 rounded text-slate-300 font-mono">
-              v2.15.0
+              v2.15.3
             </span>
           </div>
           <p className="text-xs text-slate-400">
