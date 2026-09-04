@@ -18,7 +18,7 @@ import ConsentGatedAnalytics from '@/components/ConsentGatedAnalytics'
 
 import WebMCPRegistry from '@/components/WebMCPRegistry'
 
-import { themeScript } from '@/lib/theme-script'
+import ThemeScript from '@/components/ThemeScript'
 import { fontVariables } from '@/lib/fonts'
 import './globals.css'
 
@@ -100,11 +100,7 @@ export default async function RootLayout({
   return (
     <html lang="en" data-scroll-behavior="smooth" className={fontVariables} suppressHydrationWarning>
       <head>
-        {/* Anti-flash theme script with explicit React 19 ID attribute in head */}
-        <script
-          id="theme-script"
-          dangerouslySetInnerHTML={{ __html: themeScript }}
-        />
+        <ThemeScript />
         <link rel="llms" href="/llms.txt" />
         <meta name="theme-color" content="#0F172A" />
         <meta name="mobile-web-app-capable" content="yes" />

@@ -17,7 +17,7 @@ export default function AdminMain({ children }: { children: React.ReactNode }) {
             id="admin-main-scroll"
             ref={scrollRef}
             key={pathname}
-            className="flex-1 overflow-y-auto overflow-x-hidden bg-transparent p-4 admin-main-fade admin-scrollbar sm:p-6 lg:p-8"
+            className="flex-1 overflow-y-auto overflow-x-hidden bg-transparent p-4 pb-24 sm:p-6 sm:pb-24 lg:p-8 lg:pb-8 admin-main-fade admin-scrollbar"
         >
             {children}
         </div>

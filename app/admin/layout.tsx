@@ -15,6 +15,8 @@ export const metadata = {
     }
 }
 
+import AdminMobileBottomNav from '@/components/admin/AdminMobileBottomNav'
+
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
     const cookieStore = await cookies()
     const session = cookieStore.get('admin_session')
@@ -27,9 +29,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <AdminToastProvider>
             <div className="flex h-screen flex-col lg:flex-row admin-mesh-bg" style={{ overflow: 'hidden' }}>
                 <Sidebar />
-                <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+                <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
                     <TopBar />
                     <AdminMain>{children}</AdminMain>
+                    <AdminMobileBottomNav />
                 </div>
             </div>
         </AdminToastProvider>

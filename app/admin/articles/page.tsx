@@ -297,14 +297,15 @@ export default function AdminArticles() {
 
             {/* ARTICLES TABLE */}
             <div className="admin-card-glass border border-white/60 overflow-hidden ring-1 ring-slate-900/[0.02]">
-                <div className="overflow-x-auto">
+                {/* DESKTOP TABLE VIEW (md:block) */}
+                <div className="hidden md:block overflow-x-auto">
                     <table className="w-full text-left text-sm whitespace-nowrap">
-                        <thead className="sticky top-0 z-10 bg-slate-50/95  text-slate-600  border-b border-slate-100 /80 backdrop-blur-sm shadow-sm">
+                        <thead className="sticky top-0 z-10 bg-slate-50/95 text-slate-600 border-b border-slate-100 backdrop-blur-sm shadow-sm">
                             <tr>
                                 <th className="px-6 py-4 w-12">
                                     <input 
                                         type="checkbox" 
-                                        className="rounded border-slate-300  text-slate-900 focus:ring-navy bg-slate-50/50 backdrop-blur-sm" 
+                                        className="rounded border-slate-300 text-slate-900 focus:ring-navy bg-slate-50/50 backdrop-blur-sm cursor-pointer" 
                                         checked={articles.length > 0 && selectedIds.size === articles.length}
                                         onChange={toggleAll}
                                     />
@@ -318,23 +319,23 @@ export default function AdminArticles() {
                                 <th className="px-6 py-4 font-medium text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100 dark:divide-slate-200/50">
+                        <tbody className="divide-y divide-slate-100">
                             {loading ? (
                                 <>
                                     {Array.from({ length: 6 }).map((_, i) => (
                                         <tr key={i} className="animate-pulse">
-                                            <td colSpan={7} className="px-6 py-4">
-                                                <div className="h-4 bg-slate-100  rounded w-2/3 max-w-md" />
+                                            <td colSpan={8} className="px-6 py-4">
+                                                <div className="h-4 bg-slate-100 rounded w-2/3 max-w-md" />
                                             </td>
                                         </tr>
                                     ))}
                                 </>
                             ) : articles.length === 0 ? (
                                 <tr>
-                                    <td colSpan={7} className="px-6 py-12 text-center">
-                                        <p className="text-slate-500  mb-4">No articles found. Try adjusting your filters.</p>
+                                    <td colSpan={8} className="px-6 py-12 text-center">
+                                        <p className="text-slate-500 mb-4">No articles found. Try adjusting your filters.</p>
                                         {totalCount === 0 && (
-                                            <Link href="/admin/articles/new" className="text-gold font-medium hover:underline">
+                                            <Link href="/admin/articles/new" className="text-amber-600 font-medium hover:underline">
                                                 Write First Article
                                             </Link>
                                         )}
@@ -343,19 +344,18 @@ export default function AdminArticles() {
                             ) : (
                                 articles.map(article => {
                                     const isPublished = !!article.published_at
-                                    const dateStr = article.published_at || article.created_at || ''
                                     return (
-                                        <tr key={article.id} className={`transition-colors duration-150 ${selectedIds.has(article.id) ? 'bg-amber-50/40 dark:bg-amber-950/15' : 'hover:bg-slate-50/80 '}`}>
+                                        <tr key={article.id} className={`transition-colors duration-150 ${selectedIds.has(article.id) ? 'bg-amber-50/40' : 'hover:bg-slate-50/80'}`}>
                                             <td className="px-6 py-4">
                                                 <input 
                                                     type="checkbox" 
-                                                    className="rounded border-slate-300  text-slate-900 focus:ring-navy bg-slate-50/50 backdrop-blur-sm"
+                                                    className="rounded border-slate-300 text-slate-900 focus:ring-navy bg-slate-50/50 backdrop-blur-sm cursor-pointer"
                                                     checked={selectedIds.has(article.id)}
                                                     onChange={() => toggleSelection(article.id)}
                                                 />
                                             </td>
                                             <td className="px-6 py-4">
-                                                <Link href={`/admin/articles/${article.id}/edit`} className="font-semibold text-slate-900  hover:text-gold dark:hover:text-amber-400 transition-colors block max-w-[300px] truncate" title={article.title}>
+                                                <Link href={`/admin/articles/${article.id}/edit`} className="font-semibold text-slate-900 hover:text-amber-600 transition-colors block max-w-[300px] truncate" title={article.title}>
                                                     {article.title}
                                                 </Link>
                                             </td>
@@ -364,11 +364,11 @@ export default function AdminArticles() {
                                             </td>
                                             <td className="px-6 py-4">
                                                 {isPublished ? (
-                                                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border dark:border-emerald-900/30">
+                                                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
                                                         Published
                                                     </span>
                                                 ) : (
-                                                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border dark:border-amber-900/30">
+                                                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
                                                         Draft
                                                     </span>
                                                 )}
@@ -376,23 +376,23 @@ export default function AdminArticles() {
                                             <td className="px-6 py-4 text-slate-500">
                                                 {article.word_count || 0}
                                             </td>
-                                            <td className="px-6 py-4 text-slate-500">
+                                            <td className="px-6 py-4 text-slate-500 text-xs">
                                                 {formatDate(article.updated_at || article.created_at || '')}
                                             </td>
                                             <td className="px-6 py-4">
                                                 <input 
                                                     type="checkbox" 
-                                                    className="rounded border-slate-300  text-gold focus:ring-gold bg-slate-50/50 backdrop-blur-sm"
+                                                    className="rounded border-slate-300 text-amber-500 focus:ring-amber-400 bg-slate-50/50 backdrop-blur-sm cursor-pointer"
                                                     checked={!!article.is_featured}
                                                     onChange={() => updateFeatured(article.id, !!article.is_featured)}
                                                 />
                                             </td>
                                             <td className="px-6 py-4 text-right">
-                                                <div className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 min-h-[44px]">
-                                                    <Link href={`/admin/articles/${article.id}/edit`} className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center text-sm font-medium text-slate-500  hover:text-slate-900 dark:hover:text-slate-900 transition-colors px-2">
+                                                <div className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1">
+                                                    <Link href={`/admin/articles/${article.id}/edit`} className="text-xs font-semibold text-slate-600 hover:text-amber-700 px-2 py-1 rounded hover:bg-slate-100 transition-colors">
                                                         Edit
                                                     </Link>
-                                                    <button type="button" onClick={() => setDeleteConfirm(article.id)} className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center text-sm font-medium text-slate-500  hover:text-red-650 transition-colors px-2">
+                                                    <button type="button" onClick={() => setDeleteConfirm(article.id)} className="text-xs font-semibold text-red-500 hover:text-red-700 px-2 py-1 rounded hover:bg-red-50 transition-colors">
                                                         Delete
                                                     </button>
                                                 </div>
@@ -403,6 +403,76 @@ export default function AdminArticles() {
                             )}
                         </tbody>
                     </table>
+                </div>
+
+                {/* MOBILE CARD VIEW (md:hidden) — No horizontal overflow */}
+                <div className="md:hidden divide-y divide-slate-100">
+                    {loading ? (
+                        <div className="p-6 text-center text-slate-400 animate-pulse text-sm">
+                            Loading articles…
+                        </div>
+                    ) : articles.length === 0 ? (
+                        <div className="p-6 text-center text-slate-500 text-sm">
+                            No articles found. Try adjusting your search or filters.
+                        </div>
+                    ) : (
+                        articles.map(article => {
+                            const isPublished = !!article.published_at
+                            return (
+                                <div
+                                    key={article.id}
+                                    className={`p-4 space-y-2.5 transition-colors ${selectedIds.has(article.id) ? 'bg-amber-50/40' : 'hover:bg-slate-50/50'}`}
+                                >
+                                    <div className="flex items-center justify-between gap-2">
+                                        <div className="flex items-center gap-2">
+                                            <input 
+                                                type="checkbox" 
+                                                className="rounded border-slate-300 text-slate-900 focus:ring-navy"
+                                                checked={selectedIds.has(article.id)}
+                                                onChange={() => toggleSelection(article.id)}
+                                            />
+                                            <CategoryBadge category={article.category} className="!text-[11px]" />
+                                        </div>
+                                        {isPublished ? (
+                                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                                Published
+                                            </span>
+                                        ) : (
+                                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200">
+                                                Draft
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    <Link
+                                        href={`/admin/articles/${article.id}/edit`}
+                                        className="font-bold text-slate-900 text-sm line-clamp-2 block hover:text-amber-700"
+                                    >
+                                        {article.title}
+                                    </Link>
+
+                                    <div className="flex items-center justify-between text-xs text-slate-500 pt-1 border-t border-slate-100">
+                                        <span>{formatDate(article.updated_at || article.created_at || '')}</span>
+                                        <div className="flex items-center gap-3">
+                                            <Link
+                                                href={`/admin/articles/${article.id}/edit`}
+                                                className="font-semibold text-amber-700 hover:underline text-xs"
+                                            >
+                                                Edit
+                                            </Link>
+                                            <button
+                                                type="button"
+                                                onClick={() => setDeleteConfirm(article.id)}
+                                                className="font-semibold text-red-500 hover:text-red-700 text-xs"
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        })
+                    )}
                 </div>
             </div>
 

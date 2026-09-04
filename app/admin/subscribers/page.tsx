@@ -7,6 +7,7 @@ import { CalendarDays, Download, Search, Trash2, UserMinus, Users } from 'lucide
 import Pagination from '@/components/Pagination'
 import { formatDate } from '@/lib/utils'
 import { useToast } from '@/components/Toast'
+import { CopyEmailButton } from '@/components/admin/DashboardClientComponents'
 
 interface Subscriber {
     id: string
@@ -230,11 +231,12 @@ export default function AdminSubscribers() {
                 </div>
             </div>
 
-            {/* SUBSCRIBERS TABLE */}
+            {/* SUBSCRIBERS TABLE & MOBILE CARDS */}
             <div className="admin-card-glass border border-white/60 overflow-hidden ring-1 ring-slate-900/[0.02]">
-                <div className="overflow-x-auto">
+                {/* DESKTOP TABLE VIEW (hidden on mobile, visible on md+) */}
+                <div className="hidden md:block overflow-x-auto">
                     <table className="w-full text-left text-sm whitespace-nowrap">
-                        <thead className="bg-slate-50/95  text-slate-600  border-b border-slate-100">
+                        <thead className="bg-slate-50/95 text-slate-600 border-b border-slate-100">
                             <tr>
                                 <th className="px-6 py-4 font-medium w-12">
                                     <input 
@@ -244,7 +246,7 @@ export default function AdminSubscribers() {
                                             if (e.target.checked) setSelected(subscribers.map(s => s.id))
                                             else setSelected([])
                                         }}
-                                        className="rounded border-slate-300  bg-slate-50/50 backdrop-blur-sm text-slate-900 dark:text-amber-500 focus:ring-gold"
+                                        className="rounded border-slate-300 bg-slate-50/50 backdrop-blur-sm text-slate-900 focus:ring-gold cursor-pointer"
                                     />
                                 </th>
                                 <th className="px-6 py-4 font-medium w-[40%]">Email Address</th>
@@ -254,13 +256,13 @@ export default function AdminSubscribers() {
                                 <th className="px-6 py-4 font-medium text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100 dark:divide-slate-200/50">
+                        <tbody className="divide-y divide-slate-100">
                             {loading ? (
                                 <>
                                     {Array.from({ length: 5 }).map((_, i) => (
                                         <tr key={i} className="animate-pulse">
                                             <td colSpan={6} className="px-6 py-4">
-                                                <div className="h-4 bg-slate-100  rounded w-1/2 max-w-sm" />
+                                                <div className="h-4 bg-slate-100 rounded w-1/2 max-w-sm" />
                                             </td>
                                         </tr>
                                     ))}
@@ -273,7 +275,7 @@ export default function AdminSubscribers() {
                                 </tr>
                             ) : (
                                 subscribers.map(sub => (
-                                    <tr key={sub.id} className="hover:bg-slate-50/80  transition-colors duration-150">
+                                    <tr key={sub.id} className="hover:bg-slate-50/80 transition-colors duration-150">
                                         <td className="px-6 py-4">
                                             <input
                                                 type="checkbox"
@@ -287,50 +289,121 @@ export default function AdminSubscribers() {
                                                         )
                                                     }
                                                 }}
-                                                className="rounded border-slate-300  bg-slate-50/50 backdrop-blur-sm text-slate-900 dark:text-amber-500 focus:ring-gold"
+                                                className="rounded border-slate-300 bg-slate-50/50 backdrop-blur-sm text-slate-900 focus:ring-gold cursor-pointer"
                                             />
                                         </td>
                                         <td className="px-6 py-4 font-medium text-slate-900">
-                                            {sub.email}
+                                            <div className="flex items-center gap-2">
+                                                <span>{sub.email}</span>
+                                                <CopyEmailButton email={sub.email} />
+                                            </div>
                                         </td>
                                         <td className="px-6 py-4">
                                             {sub.is_active ? (
-                                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400">
+                                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-emerald-50 text-emerald-600">
                                                     Active
                                                 </span>
                                             ) : (
-                                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100  text-slate-500">
+                                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-500">
                                                     Unsubscribed
                                                 </span>
                                             )}
                                         </td>
-                                        <td className="px-6 py-4 text-slate-500">
+                                        <td className="px-6 py-4 text-slate-500 text-xs">
                                             {formatDate(sub.subscribed_at)}
                                         </td>
-                                        <td className="px-6 py-4 text-slate-500">
+                                        <td className="px-6 py-4 text-slate-500 text-xs">
                                             {sub.unsubscribed_at ? formatDate(sub.unsubscribed_at) : '-'}
                                         </td>
-                                            <td className="px-6 py-4 text-right space-x-3">
-                                                {sub.is_active && (
-                                                    <button
-                                                        onClick={() => handleUnsubscribe(sub.id)}
-                                                        className="text-amber-600 dark:text-amber-500 hover:text-amber-700 dark:hover:text-amber-400 text-sm font-medium"
-                                                    >
-                                                        Unsubscribe
-                                                    </button>
-                                                )}
+                                        <td className="px-6 py-4 text-right space-x-3">
+                                            {sub.is_active && (
                                                 <button
-                                                    onClick={() => handleDelete(sub.id, sub.email)}
-                                                    className="text-red-500 hover:text-red-650 text-sm font-medium ml-3"
+                                                    onClick={() => handleUnsubscribe(sub.id)}
+                                                    className="text-amber-600 hover:text-amber-700 text-xs font-semibold"
                                                 >
-                                                    Delete
+                                                    Unsubscribe
                                                 </button>
-                                            </td>
+                                            )}
+                                            <button
+                                                onClick={() => handleDelete(sub.id, sub.email)}
+                                                className="text-red-500 hover:text-red-700 text-xs font-semibold ml-3"
+                                            >
+                                                Delete
+                                            </button>
+                                        </td>
                                     </tr>
                                 ))
                             )}
                         </tbody>
                     </table>
+                </div>
+
+                {/* MOBILE CARD VIEW (visible on mobile, hidden on md+) */}
+                <div className="md:hidden divide-y divide-slate-100">
+                    {loading ? (
+                        <div className="p-6 text-center text-slate-400 text-sm animate-pulse">
+                            Loading subscribers…
+                        </div>
+                    ) : subscribers.length === 0 ? (
+                        <div className="p-6 text-center text-slate-500 text-sm">
+                            No subscribers found.
+                        </div>
+                    ) : (
+                        subscribers.map(sub => (
+                            <div key={sub.id} className="p-4 space-y-2.5">
+                                <div className="flex items-center justify-between gap-2">
+                                    <div className="flex items-center gap-2">
+                                        <input
+                                            type="checkbox"
+                                            checked={selected.includes(sub.id)}
+                                            onChange={e => {
+                                                if (e.target.checked) {
+                                                    setSelected(prev => [...prev, sub.id])
+                                                } else {
+                                                    setSelected(prev => prev.filter(id => id !== sub.id))
+                                                }
+                                            }}
+                                            className="rounded border-slate-300 text-slate-900"
+                                        />
+                                        {sub.is_active ? (
+                                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-50 text-emerald-600">
+                                                Active
+                                            </span>
+                                        ) : (
+                                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-slate-100 text-slate-500">
+                                                Unsubscribed
+                                            </span>
+                                        )}
+                                    </div>
+                                    <CopyEmailButton email={sub.email} />
+                                </div>
+
+                                <p className="font-semibold text-slate-900 text-sm truncate" title={sub.email}>
+                                    {sub.email}
+                                </p>
+
+                                <div className="flex items-center justify-between text-xs text-slate-500 pt-1 border-t border-slate-100">
+                                    <span>Joined {formatDate(sub.subscribed_at)}</span>
+                                    <div className="flex items-center gap-3">
+                                        {sub.is_active && (
+                                            <button
+                                                onClick={() => handleUnsubscribe(sub.id)}
+                                                className="text-amber-600 font-semibold text-xs"
+                                            >
+                                                Unsub
+                                            </button>
+                                        )}
+                                        <button
+                                            onClick={() => handleDelete(sub.id, sub.email)}
+                                            className="text-red-500 font-semibold text-xs"
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    )}
                 </div>
             </div>
 
