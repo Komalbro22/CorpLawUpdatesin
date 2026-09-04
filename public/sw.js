@@ -1,4 +1,4 @@
-const CACHE_NAME = 'corplaw-cache-v3';
+const CACHE_NAME = 'corplaw-cache-v4';
 const OFFLINE_URL = '/offline.html';
 
 const ASSETS_TO_CACHE = [
@@ -41,6 +41,9 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
   const url = new URL(event.request.url);
+
+  // In development (localhost), bypass service worker to ensure fresh HMR and Next.js chunks
+  if (url.hostname === 'localhost' || url.hostname === '127.0.0.1') return;
 
   // Ignore non-http/https schemes (e.g. chrome-extension://, moz-extension://)
   if (!url.protocol.startsWith('http')) return;

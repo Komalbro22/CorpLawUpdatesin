@@ -684,9 +684,15 @@ const AI_SUGGESTIONS: Record<string, {
   ],
 }
 
-export default function DocumentGeneratorPage() {
+export default function DocumentGeneratorPage({ slugOverride }: { slugOverride?: string } = {}) {
   const params = useParams()
-  const slug = params?.slug as string
+  const routeSlug = typeof params?.slug === 'string' ? params.slug : ''
+  // A dedicated document route may reuse this client component. In that case
+  // Next does not expose a dynamic `slug` param, so derive it safely from the URL.
+  const pathnameSlug = typeof window === 'undefined'
+    ? ''
+    : window.location.pathname.split('/').filter(Boolean).at(-1) ?? ''
+  const slug = slugOverride || routeSlug || pathnameSlug
   const isBorrowingDoc = slug === 'board-resolution-bank-loan' || slug.includes('borrowing-limit');
   const isStampDutyRequired = slug.includes('agreement') || slug.includes('deed') || slug.includes('mortgage') || slug.includes('understanding') || slug.includes('power-of-attorney') || slug.includes('transfer');
   const isOfficeShiftingDoc = slug === 'board-resolution-registered-office-change' || slug === 'special-resolution-registered-office-shifting';
@@ -1675,7 +1681,7 @@ export default function DocumentGeneratorPage() {
     bg-white`
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div id="generator" className="min-h-screen bg-slate-50">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -3637,7 +3643,7 @@ export default function DocumentGeneratorPage() {
             </div>
             <div>
               <h3 className="font-semibold text-lg text-slate-800">Is the generated document legally valid in India?</h3>
-              <p className="text-slate-600 mt-2">Yes, the generated {template.name} is drafted in compliance with the {template.regulation_reference}. However, we always recommend getting the final draft reviewed by a qualified legal professional before execution.</p>
+              <p className="text-slate-600 mt-2">The generated {template.name} is an editable working draft built around the stated reference. Its suitability and legal effect depend on the transaction, applicable law and correct execution, so have the final draft reviewed by a qualified professional before use.</p>
             </div>
             <div>
               <h3 className="font-semibold text-lg text-slate-800">Can I download the {template.name} as a PDF?</h3>
