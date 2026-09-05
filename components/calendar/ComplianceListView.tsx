@@ -91,13 +91,13 @@ export function TableSection({
                   key={entryId || i}
                   id={rowIds?.[i]}
                   data-entry-id={entryId}
-                  className={`${rowBg} ${urgencyBorder} ${onRowClick ? 'cursor-pointer hover:bg-amber-50 transition-colors' : ''}`}
+                  className={`${rowBg} ${urgencyBorder} ${onRowClick ? 'cursor-pointer hover:bg-amber-50/60 dark:hover:bg-slate-700/50 transition-colors' : ''}`}
                   onClick={onRowClick && entryId ? () => onRowClick(entryId) : undefined}
                 >
                   <td className="px-4 py-3">
                     <input 
                       type="checkbox" 
-                      className="w-4 h-4 cursor-pointer"
+                      className="size-4 cursor-pointer"
                       checked={isDone}
                       onClick={(e) => {
                          e.stopPropagation();
@@ -128,7 +128,7 @@ export function TableSection({
                     <td className="px-3 py-3 text-center">
                       <button
                         onClick={(e) => { e.stopPropagation(); onReport(entryId, entryName) }}
-                        className="text-xs text-slate-400 hover:text-red-500 border border-slate-200 hover:border-red-300 rounded px-2 py-1 transition-colors whitespace-nowrap"
+                        className="text-xs text-slate-400 hover:text-red-500 dark:hover:text-red-400 border border-slate-200 dark:border-slate-700 hover:border-red-300 dark:hover:border-red-500/50 rounded px-2 py-1 transition-colors whitespace-nowrap"
                       >
                         ⚠️ Report
                       </button>

@@ -263,7 +263,7 @@ export default async function UpdatesPage({
                     </nav>
                     <div className="flex items-center gap-2 mb-3">
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[11px] font-bold uppercase tracking-wider">
-                            <Sparkles className="w-3.5 h-3.5 text-amber-300" aria-hidden />
+                            <Sparkles className="size-3.5 text-amber-300" aria-hidden="true" />
                             Live Regulatory Feed {CURRENT_YEAR}
                         </span>
                     </div>
@@ -271,7 +271,7 @@ export default async function UpdatesPage({
                         <h1 id="updates-overview-heading" className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-balance">
                             Latest Corporate Law & Regulatory Updates {CURRENT_YEAR}
                         </h1>
-                        <span className="inline-flex items-center w-fit bg-white/10 text-white font-semibold py-2 px-4 rounded-lg text-sm ring-1 ring-white/15 backdrop-blur-sm shadow-sm">
+                        <span className="inline-flex items-center w-fit bg-white/10 text-white font-semibold py-2 px-4 rounded-lg text-sm ring-1 ring-white/15 backdrop-blur-sm shadow-sm tabular-nums">
                             {totalPublishedCount} articles published
                         </span>
                     </div>
@@ -283,7 +283,7 @@ export default async function UpdatesPage({
                     {top10[0] && (
                         <p className="text-slate-300 text-xs mt-3 flex items-center gap-1.5">
                             <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden />
-                            Last updated: <time dateTime={top10[0].published_at} className="font-medium text-white">
+                            Last updated: <time dateTime={top10[0].published_at} className="font-medium text-white tabular-nums">
                                 {new Date(top10[0].published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
                             </time>
                         </p>
@@ -293,9 +293,10 @@ export default async function UpdatesPage({
 
             {/* Main Content Area */}
             <div className="max-w-7xl mx-auto px-4 pb-16 pt-8 md:pt-10">
+                <h2 className="sr-only">Corporate Law & Regulatory Circulars Directory</h2>
                 {totalPublishedCount === 0 ? (
                     <div className="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-12 text-center shadow-card">
-                        <h2 className="font-heading text-xl font-bold text-navy dark:text-white">No updates published yet</h2>
+                        <h3 className="font-heading text-xl font-bold text-navy dark:text-white">No updates published yet</h3>
                         <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-slate-500 dark:text-slate-400">
                             Published regulatory updates will appear here once they are available.
                         </p>
@@ -322,7 +323,7 @@ export default async function UpdatesPage({
             <section className="max-w-7xl mx-auto px-4 pb-12">
                 <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 md:p-8 shadow-sm">
                     <div className="flex items-center gap-2 mb-3">
-                        <BookOpen className="w-5 h-5 text-amber-700 dark:text-amber-400" />
+                        <BookOpen className="size-5 text-amber-700 dark:text-amber-400" aria-hidden="true" />
                         <h2 className="text-xl font-bold text-navy dark:text-white font-heading">
                             Indian Regulatory Authorities & Statutory Coverage
                         </h2>
@@ -361,7 +362,7 @@ export default async function UpdatesPage({
             <section id="faq-section" aria-label="Frequently Asked Questions" className="max-w-7xl mx-auto px-4 pb-16">
                 <div className="bg-slate-50/60 dark:bg-slate-900/60 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 md:p-8">
                     <div className="flex items-center gap-2 mb-2">
-                        <HelpCircle className="w-5 h-5 text-amber-700 dark:text-amber-400" />
+                        <HelpCircle className="size-5 text-amber-700 dark:text-amber-400" aria-hidden="true" />
                         <h2 className="text-xl font-bold text-navy dark:text-white font-heading">
                             Frequently Asked Questions: Latest Corporate Law Updates
                         </h2>
@@ -379,10 +380,10 @@ export default async function UpdatesPage({
                             >
                                 <summary className="cursor-pointer font-semibold text-navy dark:text-slate-100 flex justify-between items-center list-none [&::-webkit-details-marker]:hidden focus:outline-none text-sm md:text-base">
                                     <span className="flex items-center gap-2.5">
-                                        <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+                                        <CheckCircle2 className="size-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" aria-hidden="true" />
                                         {faq.question}
                                     </span>
-                                    <ChevronDown className="h-4 w-4 text-slate-400 transition-transform duration-300 group-open:rotate-180 flex-shrink-0 ml-2" />
+                                    <ChevronDown className="size-4 text-slate-400 transition-transform duration-300 group-open:rotate-180 flex-shrink-0 ml-2" aria-hidden="true" />
                                 </summary>
                                 <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-sm text-slate-600 dark:text-slate-300 leading-relaxed pl-6">
                                     {faq.answer}

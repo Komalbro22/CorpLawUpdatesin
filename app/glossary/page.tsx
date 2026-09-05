@@ -53,7 +53,7 @@ export default async function GlossaryHubPage() {
 
   return (
     <>
-      <main id="main-content">
+      <div className="w-full">
         <div className="bg-navy py-14 px-4 text-center border-b border-slate-800">
           <div className="max-w-4xl mx-auto">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-300 mb-3">
@@ -82,7 +82,7 @@ export default async function GlossaryHubPage() {
             ]}
           />
         </div>
-      </main>
+      </div>
 
       {/* DefinedTermSet JSON-LD */}
       <script

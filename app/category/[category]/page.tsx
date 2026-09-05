@@ -349,14 +349,14 @@ export default async function CategoryPage({
     }
 
     return (
-        <div>
+        <div className="min-h-dvh bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
             {/* Category Hero */}
             <div className={`relative bg-gradient-to-br ${bgColors[cat]} text-white overflow-hidden`}>
                 <div
                     className="absolute inset-0 opacity-[0.05] bg-[linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] bg-[size:72px_72px]"
-                    aria-hidden
+                    aria-hidden="true"
                 />
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_80%_at_100%_0%,rgba(255,255,255,0.05),transparent_60%)]" aria-hidden />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_80%_at_100%_0%,rgba(255,255,255,0.05),transparent_60%)]" aria-hidden="true" />
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 relative">
                     {/* Breadcrumb */}
@@ -371,12 +371,12 @@ export default async function CategoryPage({
                             Regulator
                         </span>
                         <span className="text-white/60 text-sm">·</span>
-                        <span className="text-white/80 text-sm font-medium">{totalCount || 0} articles</span>
+                        <span className="text-white/80 text-sm font-medium tabular-nums">{totalCount || 0} articles</span>
                         {latestUpdate && (
                             <>
                                 <span className="text-white/60 text-sm">·</span>
                                 <span className="text-white/70 text-xs">
-                                    Last updated: <time dateTime={latestUpdate.published_at}>
+                                    Last updated: <time dateTime={latestUpdate.published_at} className="tabular-nums">
                                         {new Date(latestUpdate.published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                                     </time>
                                 </span>
@@ -424,7 +424,7 @@ export default async function CategoryPage({
                         )}
                     </section>
                 ) : (
-                    <div className="bg-white rounded-2xl border border-slate-200/80 shadow-card ring-1 ring-slate-900/[0.02]">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-card ring-1 ring-slate-900/[0.02] dark:ring-white/[0.02]">
                         <EmptyState
                             icon="📋"
                             title={`No ${cat.toUpperCase()} updates yet`}
@@ -439,33 +439,33 @@ export default async function CategoryPage({
             {/* Dynamic Latest Circulars & Notifications (Bottom — FAQ-style for AI) */}
             {top5Updates.length > 0 && (
                 <section className="max-w-7xl mx-auto px-4 py-8 mb-4">
-                    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-8">
-                        <h2 className="text-2xl font-bold text-navy mb-2 font-heading">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 md:p-8">
+                        <h2 className="text-2xl font-bold text-navy dark:text-white mb-2 font-heading">
                             Latest {cat.toUpperCase()} Circulars & Notifications
                         </h2>
-                        <p className="text-sm text-slate-500 mb-6">
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
                             {new Date().toLocaleString('en-IN', { month: 'long', year: 'numeric' })} · Auto-updated with every new publication
                         </p>
                         <div className="space-y-6">
                             {top5Updates.map((u: any, idx: number) => (
-                                <div key={u.id} className={`${idx !== top5Updates.length - 1 ? 'border-b border-slate-100 pb-6' : ''}`}>
+                                <div key={u.id} className={`${idx !== top5Updates.length - 1 ? 'border-b border-slate-100 dark:border-slate-800 pb-6' : ''}`}>
                                     <div className="flex items-center gap-2 mb-2">
                                         {u.update_type && (
-                                            <span className="text-xs font-semibold bg-slate-100 text-slate-700 px-2 py-0.5 rounded">
+                                            <span className="text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded">
                                                 {UPDATE_TYPE_LABELS[u.update_type] || u.update_type}
                                             </span>
                                         )}
-                                        <time dateTime={u.published_at} className="text-xs font-medium text-slate-600">
+                                        <time dateTime={u.published_at} className="text-xs font-medium text-slate-600 dark:text-slate-400 tabular-nums">
                                             {new Date(u.published_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
                                         </time>
                                     </div>
-                                    <h3 className="text-base font-semibold text-slate-800 mb-1 leading-snug">
+                                    <h3 className="text-base font-semibold text-slate-800 dark:text-slate-100 mb-1 leading-snug">
                                         <Link href={`/updates/${u.slug}`} className="hover:text-gold transition-colors">
                                             {u.title}
                                         </Link>
                                     </h3>
                                     {u.excerpt && (
-                                        <p className="text-sm text-slate-600 line-clamp-2">{u.excerpt}</p>
+                                        <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">{u.excerpt}</p>
                                     )}
                                 </div>
                             ))}
@@ -475,13 +475,13 @@ export default async function CategoryPage({
             )}
 
             {/* Professional SEO Knowledge Footer — "About" Section */}
-            <section className="max-w-7xl mx-auto px-4 py-10 border-t border-slate-100">
-                <div className="bg-slate-50/50 rounded-2xl border border-slate-200/60 p-8 shadow-sm">
+            <section className="max-w-7xl mx-auto px-4 py-10 border-t border-slate-100 dark:border-slate-800">
+                <div className="bg-slate-50/50 dark:bg-slate-900/60 rounded-2xl border border-slate-200/60 dark:border-slate-800 p-8 shadow-sm">
                     {/* Key Facts List */}
-                    <h2 className="text-xl font-bold text-navy mb-4 font-heading">
+                    <h2 className="text-xl font-bold text-navy dark:text-white mb-4 font-heading">
                         About {CATEGORY_FULL_NAMES[cat]} ({cat.toUpperCase()}) — Regulatory Guide
                     </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 text-sm text-slate-500 leading-relaxed">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                         <div className="space-y-4">
                             <p>
                                 Stay updated with the <strong>latest {cat.toUpperCase()} circulars today</strong>,

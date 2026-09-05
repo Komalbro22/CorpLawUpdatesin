@@ -202,7 +202,7 @@ export default function RegisteredOfficePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <main className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-20">
+      <div className="min-h-dvh bg-slate-50 dark:bg-slate-950 pb-20">
         {/* Interactive Client Component */}
         <RegisteredOfficeClient />
 
@@ -365,7 +365,7 @@ export default function RegisteredOfficePage() {
             </div>
           </div>
         </section>
-      </main>
+      </div>
     </>
   )
 }

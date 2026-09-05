@@ -210,6 +210,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
             target="_blank"
             rel="noopener noreferrer"
             title="Add to Google Calendar"
+            aria-label={`Add ${entry.form_name || 'deadline'} to Google Calendar`}
             onClick={(e) => e.stopPropagation()}
             className="text-blue-500 hover:text-blue-700 text-xs px-2 py-0.5 bg-white hover:bg-blue-50 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors border-r border-slate-200 dark:border-slate-700 flex items-center justify-center"
           >
@@ -219,6 +220,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
             href={icsDownloadUrl(entry)}
             download={`${(entry.form_name || 'compliance').replace(/\\s+/g, '-').toLowerCase()}-deadline.ics`}
             title="Download .ics File"
+            aria-label={`Download .ics file for ${entry.form_name || 'deadline'}`}
             onClick={(e) => e.stopPropagation()}
             className="text-slate-500 hover:text-slate-700 text-xs px-2 py-0.5 bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors flex items-center justify-center"
           >
@@ -296,12 +298,12 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
       <div className="max-w-6xl mx-auto px-4 py-10 space-y-10">
 
         {/* EXPORT COMPLIANCE CALENDAR */}
-        <div className="flex flex-wrap items-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+        <div className="flex flex-wrap items-center gap-3 p-4 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800/40 rounded-xl">
           <div className="flex-1">
-            <p className="font-semibold text-blue-900 text-sm">
+            <p className="font-semibold text-blue-900 dark:text-blue-200 text-sm">
               📅 Export Compliance Calendar
             </p>
-            <p className="text-blue-700 text-xs mt-0.5">
+            <p className="text-blue-700 dark:text-blue-300 text-xs mt-0.5">
               Subscribe to get deadline reminders in Google Calendar, Outlook or Apple Calendar
             </p>
           </div>
@@ -366,7 +368,9 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
               type="button"
               onClick={() => setFilterMode(m => m === 'all' ? 'this_week' : 'all')}
               className={`px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition-colors ${
-                filterMode === 'this_week' ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'border border-slate-300 text-slate-600 hover:bg-slate-50'
+                filterMode === 'this_week'
+                  ? 'bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-700/50'
+                  : 'border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
               }`}
             >
               🔥 Due This Week
@@ -388,15 +392,15 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
           <>
             {/* DISCLAIMER */}
             <div className="space-y-2">
-              <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3 items-start">
-                <span className="text-xl flex-shrink-0">⚠️</span>
-                <p className="text-amber-800 text-sm leading-relaxed">
+              <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/40 rounded-xl p-4 flex gap-3 items-start">
+                <span className="text-xl flex-shrink-0" aria-hidden="true">⚠️</span>
+                <p className="text-amber-800 dark:text-amber-300 text-sm leading-relaxed">
                   <strong>Disclaimer:</strong> All dates are indicative and subject to regulatory extensions,
                   amendments or circulars issued by MCA, SEBI, GSTN, EPFO or RBI from time to time. Always verify with
                   official government portals before acting on any deadline. This is not legal advice.
                 </p>
               </div>
-              <p className="text-xs text-slate-400 text-right">
+              <p className="text-xs text-slate-400 dark:text-slate-500 text-right">
                 Last verified: May 2026 | Source: MCA, SEBI, GSTN, EPFO, RBI official portals
               </p>
             </div>
@@ -404,20 +408,20 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
             {/* QUICK LINKS */}
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
               {[
-                { label: 'Income Tax', href: '#incometax', color: 'bg-orange-50 border-orange-200 text-orange-700', icon: '📊' },
-                { label: 'GST',        href: '#gst',       color: 'bg-cyan-50 border-cyan-200 text-cyan-700',       icon: '🧾' },
-                { label: 'ROC / MCA',  href: '#mca',       color: 'bg-blue-50 border-blue-200 text-blue-700',       icon: '🏛️' },
-                { label: 'SEBI LODR',  href: '#sebi',      color: 'bg-green-50 border-green-200 text-green-700',    icon: '📈' },
-                { label: 'Labor Laws', href: '#labor',     color: 'bg-indigo-50 border-indigo-200 text-indigo-700', icon: '👷' },
-                { label: 'RBI',        href: '#rbi',       color: 'bg-purple-50 border-purple-200 text-purple-700', icon: '🏦' },
-                { label: 'FEMA',       href: '#fema',      color: 'bg-teal-50 border-teal-200 text-teal-700',       icon: '🌐' },
+                { label: 'Income Tax', href: '#incometax', color: 'bg-orange-50 dark:bg-orange-950/30 border-orange-200 dark:border-orange-800/40 text-orange-700 dark:text-orange-400', icon: '📊' },
+                { label: 'GST',        href: '#gst',       color: 'bg-cyan-50 dark:bg-cyan-950/30 border-cyan-200 dark:border-cyan-800/40 text-cyan-700 dark:text-cyan-400',       icon: '🧾' },
+                { label: 'ROC / MCA',  href: '#mca',       color: 'bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800/40 text-blue-700 dark:text-blue-400',       icon: '🏛️' },
+                { label: 'SEBI LODR',  href: '#sebi',      color: 'bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-800/40 text-green-700 dark:text-green-400',    icon: '📈' },
+                { label: 'Labor Laws', href: '#labor',     color: 'bg-indigo-50 dark:bg-indigo-950/30 border-indigo-200 dark:border-indigo-800/40 text-indigo-700 dark:text-indigo-400', icon: '👷' },
+                { label: 'RBI',        href: '#rbi',       color: 'bg-purple-50 dark:bg-purple-950/30 border-purple-200 dark:border-purple-800/40 text-purple-700 dark:text-purple-400', icon: '🏦' },
+                { label: 'FEMA',       href: '#fema',      color: 'bg-teal-50 dark:bg-teal-950/30 border-teal-200 dark:border-teal-800/40 text-teal-700 dark:text-teal-400',       icon: '🌐' },
               ].map((item) => (
                 <Link
                   key={item.label}
                   href={item.href}
                   className={`flex flex-col items-center justify-center gap-2 p-4 rounded-xl border font-medium text-sm text-center hover:shadow-md transition-shadow ${item.color}`}
                 >
-                  <span className="text-2xl">{item.icon}</span>
+                  <span className="text-2xl" aria-hidden="true">{item.icon}</span>
                   {item.label}
                 </Link>
               ))}

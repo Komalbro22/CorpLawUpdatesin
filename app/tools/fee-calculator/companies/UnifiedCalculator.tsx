@@ -193,14 +193,14 @@ export default function UnifiedCalculator() {
   }
 
   return (
-    <div className="bg-white rounded-[16px] shadow-[0_1px_3px_rgba(0,0,0,0.1),0_1px_2px_-1px_rgba(0,0,0,0.1)] border border-slate-200 p-8 w-full max-w-4xl mx-auto mb-16 relative overflow-hidden font-inter">
-      <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-full pointer-events-none" />
+    <div className="bg-white dark:bg-slate-900 rounded-[16px] shadow-sm border border-slate-200 dark:border-slate-800 p-8 w-full max-w-4xl mx-auto mb-16 relative overflow-hidden font-inter transition-colors duration-200">
+      <div className="absolute top-0 right-0 size-32 bg-blue-50 dark:bg-blue-950/20 rounded-bl-full pointer-events-none" aria-hidden="true" />
       
       <div className="mb-8">
-        <h2 className="text-3xl font-bold text-slate-900 mb-2 tracking-tight">
+        <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 tracking-tight">
           MCA Fee Calculator
         </h2>
-        <p className="text-base text-slate-500">
+        <p className="text-base text-slate-500 dark:text-slate-400">
           Professional institutional calculator for precise MCA filing fees and penalties.
         </p>
       </div>
@@ -210,13 +210,13 @@ export default function UnifiedCalculator() {
       >
         {/* Basic Inputs */}
         <div className="flex flex-col">
-          <label className="text-sm font-medium text-slate-700 mb-2">Form Type</label>
+          <label htmlFor="mca-form-select" className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Form Type</label>
           <select
+            id="mca-form-select"
             name="form_slug"
             value={selectedSlug}
             onChange={e => setSelectedSlug(e.target.value)}
-            className="w-full border border-slate-300 bg-white text-slate-900 rounded-[4px] px-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm"
-            toolparamdescription="The MCA form slug. Examples: mgt-7, aoc-4, dpt-3, dir-3kyc, adt-1, mgt-14, sh-7, pas-3, chg-1, msme-1"
+            className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-[4px] px-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm"
           >
             {allForms.map(form => (
               <option key={form.slug} value={form.slug}>
@@ -227,14 +227,14 @@ export default function UnifiedCalculator() {
         </div>
 
         <div className="flex flex-col">
-          <label className="text-sm font-medium text-slate-700 mb-2">Company Type</label>
+          <label htmlFor="mca-company-type-select" className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Company Type</label>
           <select
+            id="mca-company-type-select"
             name="company_type"
             value={companyType}
             onChange={e => setCompanyType(e.target.value)}
             disabled={isSpice || isDir3Kyc || isDir3 || isStk2}
-            className="w-full border border-slate-300 bg-white text-slate-900 rounded-[4px] px-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm disabled:bg-slate-50 disabled:text-slate-400"
-            toolparamdescription="Type of company: private, public, opc (One Person Company), or small (Small Company)."
+            className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-[4px] px-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm disabled:bg-slate-50 dark:disabled:bg-slate-800/40 disabled:text-slate-400 dark:disabled:text-slate-500"
           >
             <option value="private">Private Limited Company</option>
             <option value="public">Public Limited Company</option>
@@ -244,33 +244,33 @@ export default function UnifiedCalculator() {
         </div>
 
         <div className="flex flex-col">
-          <label className="text-sm font-medium text-slate-700 mb-2">Authorized Capital (₹)</label>
+          <label htmlFor="mca-capital-input" className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Authorized Capital (₹)</label>
           <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-medium">₹</span>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 font-medium select-none" aria-hidden="true">₹</span>
             <input
+              id="mca-capital-input"
               type="number"
               name="capital"
               min="0"
               value={capital}
               onChange={e => setCapital(Number(e.target.value))}
               disabled={isDir3Kyc || isDir3 || isStk2}
-              className="w-full border border-slate-300 bg-white text-slate-900 rounded-[4px] pl-8 pr-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm disabled:bg-slate-50 disabled:text-slate-400"
-              toolparamdescription="Paid-up share capital of the company in Indian Rupees."
+              className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-[4px] pl-8 pr-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm disabled:bg-slate-50 dark:disabled:bg-slate-800/40 disabled:text-slate-400 dark:disabled:text-slate-500 tabular-nums"
             />
           </div>
         </div>
 
         <div className="flex flex-col">
-          <label className="text-sm font-medium text-slate-700 mb-2">Delay in filing (days)</label>
+          <label htmlFor="mca-delay-input" className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Delay in filing (days)</label>
           <input
+            id="mca-delay-input"
             type="number"
             name="delay_days"
             min="0"
             value={delay}
             onChange={e => setDelay(Number(e.target.value))}
             disabled={isSpice || isDir3 || isStk2}
-            className="w-full border border-slate-300 bg-white text-slate-900 rounded-[4px] px-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm disabled:bg-slate-50 disabled:text-slate-400"
-            toolparamdescription="The number of days the filing is delayed beyond the due date. Enter 0 if filing on time."
+            className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-[4px] px-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm disabled:bg-slate-50 dark:disabled:bg-slate-800/40 disabled:text-slate-400 dark:disabled:text-slate-500 tabular-nums"
           />
         </div>
 
@@ -279,25 +279,27 @@ export default function UnifiedCalculator() {
           <>
             {isSH7 && (
               <div className="flex flex-col">
-                <label className="text-sm font-medium text-slate-700 mb-2">New Capital (₹)</label>
+                <label htmlFor="mca-new-capital-input" className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">New Capital (₹)</label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-medium">₹</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 font-medium select-none" aria-hidden="true">₹</span>
                   <input
+                    id="mca-new-capital-input"
                     type="number"
                     min="0"
                     value={newCapital}
                     onChange={e => setNewCapital(Number(e.target.value))}
-                    className="w-full border border-slate-300 bg-white text-slate-900 rounded-[4px] pl-8 pr-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm"
+                    className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-[4px] pl-8 pr-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm tabular-nums"
                   />
                 </div>
               </div>
             )}
             <div className="flex flex-col">
-              <label className="text-sm font-medium text-slate-700 mb-2">Registered State</label>
+              <label htmlFor="mca-state-select" className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Registered State</label>
               <select
+                id="mca-state-select"
                 value={state}
                 onChange={e => setState(e.target.value)}
-                className="w-full border border-slate-300 bg-white text-slate-900 rounded-[4px] px-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm"
+                className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-[4px] px-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm"
               >
                 <option value="andhrapradesh">Andhra Pradesh</option>
                 <option value="bihar">Bihar</option>
@@ -318,15 +320,16 @@ export default function UnifiedCalculator() {
 
         {isCharge && (
           <div className="flex flex-col">
-            <label className="text-sm font-medium text-slate-700 mb-2">Amount Secured (₹)</label>
+            <label htmlFor="mca-charge-amount-input" className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Amount Secured (₹)</label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-medium">₹</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 font-medium select-none" aria-hidden="true">₹</span>
               <input
+                id="mca-charge-amount-input"
                 type="number"
                 min="0"
                 value={chargeAmount}
                 onChange={e => setChargeAmount(Number(e.target.value))}
-                className="w-full border border-slate-300 bg-white text-slate-900 rounded-[4px] pl-8 pr-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm"
+                className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-[4px] pl-8 pr-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm tabular-nums"
               />
             </div>
           </div>
@@ -334,16 +337,16 @@ export default function UnifiedCalculator() {
 
         {isInc22Pas3 && (
           <div className="flex flex-col justify-end">
-            <label className="flex items-center space-x-3 cursor-pointer p-2 rounded hover:bg-slate-50 transition-colors">
+            <label htmlFor="mca-repeat-offender" className="flex items-center space-x-3 cursor-pointer p-2 rounded hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
               <input
+                id="mca-repeat-offender"
                 type="checkbox"
                 name="is_repeat_offender"
                 checked={isRepeatOffender}
                 onChange={e => setIsRepeatOffender(e.target.checked)}
-                className="w-5 h-5 text-blue-600 border-slate-300 rounded focus:ring-blue-600"
-                toolparamdescription="Whether the company is a repeat offender."
+                className="size-5 text-blue-600 border-slate-300 dark:border-slate-700 rounded focus:ring-blue-600 dark:bg-slate-800"
               />
-              <span className="text-sm font-medium text-slate-700">Apply higher fee (Repeat delay)</span>
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Apply higher fee (Repeat delay)</span>
             </label>
           </div>
         )}
@@ -365,48 +368,49 @@ export default function UnifiedCalculator() {
               })
             }).catch(console.error)
           }}
-          className="flex-1 bg-[#0a0a0a] hover:bg-black text-white font-bold py-4 px-6 rounded-[8px] transition-all flex items-center justify-center gap-2 text-lg shadow-md hover:shadow-xl"
+          className="flex-1 bg-navy hover:bg-slate-800 dark:bg-amber-500 dark:hover:bg-amber-400 text-white dark:text-slate-950 font-bold py-4 px-6 rounded-xl transition-all flex items-center justify-center gap-2 text-lg shadow-md hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
         >
           Calculate Fee <span aria-hidden="true">→</span>
         </button>
         <button
           onClick={copyShareLink}
-          className="sm:w-auto px-6 py-4 border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 font-bold rounded-[8px] transition-all flex items-center justify-center gap-2 shadow-sm"
+          aria-label="Copy share link to clipboard"
+          className="sm:w-auto px-6 py-4 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
         >
-          <svg className="w-5 h-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+          <svg className="size-5 text-slate-500 dark:text-slate-400" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
           {copiedLink ? 'Link Copied!' : 'Copy Share Link'}
         </button>
       </div>
 
       {/* Quick Compare 9 Common Forms */}
-      <div className="mt-12 pt-8 border-t border-slate-200">
-        <h3 className="text-xl font-bold text-slate-900 mb-2">Quick Compare: 9 Common Forms</h3>
-        <p className="text-sm text-slate-500 mb-6">See how your current inputs (Company Type, Capital, Delay) affect the 9 most frequently filed MCA forms simultaneously.</p>
-        <div className="overflow-x-auto rounded-[8px] border border-slate-200 shadow-sm">
+      <div className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800">
+        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Quick Compare: 9 Common Forms</h3>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">See how your current inputs (Company Type, Capital, Delay) affect the 9 most frequently filed MCA forms simultaneously.</p>
+        <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
           <table className="w-full text-left text-sm whitespace-nowrap">
-            <thead className="bg-slate-50 border-b border-slate-200">
+            <thead className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
               <tr>
-                <th className="px-4 py-3 font-semibold text-slate-700">Form</th>
-                <th className="px-4 py-3 font-semibold text-slate-700">Normal Fee</th>
-                <th className="px-4 py-3 font-semibold text-slate-700">Late Penalty</th>
-                <th className="px-4 py-3 font-semibold text-slate-700">Other (Stamp Duty / Ad Valorem)</th>
-                <th className="px-4 py-3 font-bold text-slate-900 text-right">Total Payable</th>
+                <th className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-300">Form</th>
+                <th className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-300">Normal Fee</th>
+                <th className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-300">Late Penalty</th>
+                <th className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-300">Other (Stamp Duty / Ad Valorem)</th>
+                <th className="px-4 py-3 font-bold text-slate-900 dark:text-white text-right">Total Payable</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {commonForms.map((item: any) => (
-                <tr key={item.form.slug} className="hover:bg-slate-50 transition-colors">
-                  <td className="px-4 py-3 font-bold text-blue-700">{item.form.formNumber}</td>
-                  <td className="px-4 py-3 text-slate-600 font-tabular-nums">₹{item.result.baseFee.toLocaleString()}</td>
-                  <td className={`px-4 py-3 font-tabular-nums ${item.result.lateFee > 0 ? 'text-red-600 font-bold' : 'text-slate-600'}`}>
+                <tr key={item.form.slug} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                  <td className="px-4 py-3 font-bold text-blue-700 dark:text-blue-400">{item.form.formNumber}</td>
+                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300 tabular-nums">₹{item.result.baseFee.toLocaleString()}</td>
+                  <td className={`px-4 py-3 tabular-nums ${item.result.lateFee > 0 ? 'text-red-600 dark:text-red-400 font-bold' : 'text-slate-600 dark:text-slate-300'}`}>
                     ₹{item.result.lateFee.toLocaleString()}
                   </td>
-                  <td className="px-4 py-3 text-slate-600 font-tabular-nums">
+                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300 tabular-nums">
                     {(item.result.stampDuty > 0 || item.result.adValoremFee > 0) 
                       ? `₹${(item.result.stampDuty + item.result.adValoremFee).toLocaleString()}` 
                       : '-'}
                   </td>
-                  <td className="px-4 py-3 font-bold text-slate-900 text-right font-tabular-nums">₹{item.result.total.toLocaleString()}</td>
+                  <td className="px-4 py-3 font-bold text-slate-900 dark:text-white text-right tabular-nums">₹{item.result.total.toLocaleString()}</td>
                 </tr>
               ))}
             </tbody>
@@ -417,59 +421,67 @@ export default function UnifiedCalculator() {
       {/* Modal Overlay */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white rounded-xl shadow-2xl flex flex-col md:flex-row w-full max-w-3xl overflow-hidden relative animate-in zoom-in-95 duration-200">
+          <div className="bg-white dark:bg-slate-900 rounded-xl shadow-2xl flex flex-col md:flex-row w-full max-w-3xl overflow-hidden relative animate-in zoom-in-95 duration-200 border border-slate-200 dark:border-slate-800">
             
             {/* Mobile Close Button */}
-            <button onClick={() => setShowModal(false)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 z-10 p-1 md:hidden bg-white rounded-full shadow-sm">
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            <button
+              onClick={() => setShowModal(false)}
+              aria-label="Close modal"
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 z-10 p-1 md:hidden bg-white dark:bg-slate-800 rounded-full shadow-sm"
+            >
+              <svg className="size-6" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
 
             {/* Left side - Breakdown */}
             <div className="flex-1 p-8 md:p-10">
-              <h3 className="text-xs font-bold text-slate-500 tracking-wider mb-6">FEE BREAKDOWN</h3>
+              <h3 className="text-xs font-bold text-slate-500 dark:text-slate-400 tracking-wider mb-6">FEE BREAKDOWN</h3>
               
-              <p className="text-sm text-slate-500 mb-1 font-medium">Total Payable</p>
-              <div className="text-[2.75rem] font-bold text-slate-900 mb-10 font-tabular-nums flex items-baseline leading-none">
-                <span className="text-[1.5rem] mr-1 text-slate-400 font-medium">₹</span>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-1 font-medium">Total Payable</p>
+              <div className="text-[2.75rem] font-bold text-slate-900 dark:text-white mb-10 tabular-nums flex items-baseline leading-none">
+                <span className="text-[1.5rem] mr-1 text-slate-400 dark:text-slate-500 font-medium">₹</span>
                 {result.total.toLocaleString()}
               </div>
 
-              <div className="flex justify-between py-4 border-b border-slate-100 text-sm">
-                <span className="text-slate-600 font-medium">Normal filing fee</span>
-                <span className="font-bold text-slate-900 font-tabular-nums">₹ {result.baseFee.toLocaleString()}</span>
+              <div className="flex justify-between py-4 border-b border-slate-100 dark:border-slate-800 text-sm">
+                <span className="text-slate-600 dark:text-slate-400 font-medium">Normal filing fee</span>
+                <span className="font-bold text-slate-900 dark:text-white tabular-nums">₹ {result.baseFee.toLocaleString()}</span>
               </div>
               
               {result.lateFee > 0 && (
-                <div className="flex justify-between py-4 border-b border-slate-100 text-sm">
-                  <span className="text-slate-600 font-medium">Additional fee (late filing)</span>
-                  <span className="font-bold text-slate-900 font-tabular-nums">₹ {result.lateFee.toLocaleString()}</span>
+                <div className="flex justify-between py-4 border-b border-slate-100 dark:border-slate-800 text-sm">
+                  <span className="text-slate-600 dark:text-slate-400 font-medium">Additional fee (late filing)</span>
+                  <span className="font-bold text-slate-900 dark:text-white tabular-nums">₹ {result.lateFee.toLocaleString()}</span>
                 </div>
               )}
 
               {(result.stampDuty > 0 || result.adValoremFee > 0) && (
-                <div className="flex justify-between py-4 border-b border-slate-100 text-sm">
-                  <span className="text-slate-600 font-medium">{result.stampDuty > 0 ? 'Estimated Stamp Duty' : 'Ad Valorem Fee'}</span>
-                  <span className="font-bold text-slate-900 font-tabular-nums">₹ {(result.stampDuty || result.adValoremFee).toLocaleString()}</span>
+                <div className="flex justify-between py-4 border-b border-slate-100 dark:border-slate-800 text-sm">
+                  <span className="text-slate-600 dark:text-slate-400 font-medium">{result.stampDuty > 0 ? 'Estimated Stamp Duty' : 'Ad Valorem Fee'}</span>
+                  <span className="font-bold text-slate-900 dark:text-white tabular-nums">₹ {(result.stampDuty || result.adValoremFee).toLocaleString()}</span>
                 </div>
               )}
 
               {result.warningText && (
-                <div className="mt-8 bg-[#FFFBF0] border border-[#FDE68A] rounded-[8px] p-4 flex gap-3 text-sm text-[#92400E]">
-                  <span className="text-amber-500">⚠️</span>
+                <div className="mt-8 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 rounded-[8px] p-4 flex gap-3 text-sm text-amber-900 dark:text-amber-200">
+                  <span className="text-amber-500 select-none" aria-hidden="true">⚠️</span>
                   <span dangerouslySetInnerHTML={{__html: result.warningText}} className="font-medium leading-relaxed"></span>
                 </div>
               )}
             </div>
 
             {/* Right side - Black Callout Box */}
-            <div className="w-full md:w-[320px] bg-[#0a0a0a] p-8 md:p-10 text-white flex flex-col justify-center relative">
+            <div className="w-full md:w-[320px] bg-[#0a0a0a] dark:bg-slate-950 p-8 md:p-10 text-white flex flex-col justify-center relative border-t md:border-t-0 md:border-l border-slate-800">
               {/* Desktop Close Button */}
-              <button onClick={() => setShowModal(false)} className="absolute top-4 right-4 text-slate-400 hover:text-white z-10 p-1 rounded-full hidden md:block transition-colors">
-                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              <button
+                onClick={() => setShowModal(false)}
+                aria-label="Close modal"
+                className="absolute top-4 right-4 text-slate-400 hover:text-white z-10 p-1 rounded-full hidden md:block transition-colors"
+              >
+                 <svg className="size-6" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
               
               <h4 className="text-[1.35rem] font-bold mb-5 leading-snug">
-                Your filing is now ₹{result.total.toLocaleString()}
+                Your filing is now <span className="tabular-nums">₹{result.total.toLocaleString()}</span>
                 {result.lateFee > 0 && selectedForm.penaltyType === 'per_day' ? ', and growing by ₹100 every day.' : '.'}
               </h4>
               
@@ -479,7 +491,7 @@ export default function UnifiedCalculator() {
               
               <button 
                 onClick={handleDownloadPDF} 
-                className="w-full bg-white text-black font-bold py-3.5 px-4 rounded-[6px] hover:bg-slate-100 transition-colors flex items-center justify-center gap-2 shadow-lg"
+                className="w-full bg-white text-black font-bold py-3.5 px-4 rounded-[6px] hover:bg-slate-100 transition-colors flex items-center justify-center gap-2 shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
               >
                  Download Detailed PDF <span aria-hidden="true">→</span>
               </button>

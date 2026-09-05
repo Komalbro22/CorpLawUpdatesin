@@ -102,7 +102,7 @@ const categories = [
 
 export default function CategoryIndexPage() {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+    <div className="min-h-dvh bg-slate-50 dark:bg-slate-950">
       <JsonLd
         data={{
           '@context': 'https://schema.org',
@@ -140,14 +140,14 @@ export default function CategoryIndexPage() {
               className={`group flex flex-col gap-3 rounded-xl p-5 shadow-sm transition-[transform,box-shadow] duration-200 motion-safe:hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${bg}`}
             >
               <div className="flex items-center gap-2.5">
-                <Icon className="w-5 h-5 opacity-90" aria-hidden />
+                <Icon className="size-5 opacity-90" aria-hidden="true" />
                 <span className="font-bold text-base">{label}</span>
               </div>
               <p className="text-xs font-medium opacity-80 leading-snug">{fullName}</p>
               <p className="text-xs opacity-70 leading-relaxed flex-grow">{description}</p>
               <span className="inline-flex items-center gap-1 text-xs font-bold opacity-80 group-hover:opacity-100 transition-opacity">
                 View updates
-                <ArrowRight className="w-3.5 h-3.5" aria-hidden />
+                <ArrowRight className="size-3.5" aria-hidden="true" />
               </span>
             </Link>
           ))}

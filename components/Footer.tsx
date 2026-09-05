@@ -159,16 +159,16 @@ export default async function Footer() {
                     <div className="lg:col-span-3">
                          <div className="bg-white/5 border border-white/10 rounded-2xl p-6 relative group overflow-hidden">
                             <div className="absolute -top-10 -right-10 w-24 h-24 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/20 transition-all duration-500" aria-hidden />
-                            <h4 className="font-heading text-base font-bold text-white mb-2 flex items-center gap-2">
-                                <Mail className="w-4 h-4 text-amber-400" />
+                             <h4 className="font-heading text-base font-bold text-white mb-2 flex items-center gap-2">
+                                <Mail className="size-4 text-amber-400" aria-hidden="true" />
                                 Stay Informed
                             </h4>
                             <p className="text-slate-300 text-xs leading-relaxed mb-4">
-                                Join {activeSubscribersCount.toLocaleString()}+ professionals receiving our weekly Monday digest.
+                                Join <span className="tabular-nums font-semibold">{activeSubscribersCount.toLocaleString()}</span>+ professionals receiving our weekly Monday digest.
                             </p>
                             <Link href="/newsletter" className="flex items-center justify-between bg-amber-500 hover:bg-amber-400 text-navy text-[11px] font-bold px-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 transition-all">
                                 SUBSCRIBE FREE
-                                <ArrowRight className="w-3.5 h-3.5" />
+                                <ArrowRight className="size-3.5" aria-hidden="true" />
                             </Link>
                          </div>
                     </div>
@@ -182,7 +182,7 @@ export default async function Footer() {
                         <Link href="/editorial-policy" className="hover:text-white focus:outline-none focus:underline transition-colors">Editorial</Link>
                         <Link href="/terms" className="hover:text-white focus:outline-none focus:underline transition-colors">Terms</Link>
                         <Link href="/api/feed.xml" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-white focus:outline-none focus:underline transition-colors" prefetch={false}>
-                            <Rss className="w-3 h-3 text-amber-400" /> RSS
+                            <Rss className="size-3 text-amber-400" aria-hidden="true" /> RSS
                         </Link>
                     </div>
                     

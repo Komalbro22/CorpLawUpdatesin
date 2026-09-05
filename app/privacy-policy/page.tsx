@@ -18,7 +18,7 @@ export const metadata = {
 
 export default function PrivacyPolicyPage() {
     return (
-        <div className="bg-white dark:bg-slate-950 transition-colors duration-200">
+        <div className="min-h-dvh bg-white dark:bg-slate-950 transition-colors duration-200">
             <div className="max-w-3xl mx-auto px-4 py-12">
                 <h1 className="text-3xl font-heading font-bold text-navy dark:text-slate-100 mb-2">
                     Privacy Policy

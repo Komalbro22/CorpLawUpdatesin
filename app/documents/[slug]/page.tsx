@@ -1649,7 +1649,7 @@ export default function DocumentGeneratorPage({ slugOverride }: { slugOverride?:
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4">
+      <div className="min-h-dvh flex flex-col items-center justify-center p-4">
         <h1 className="sr-only">{fallbackDocName} Format Generator</h1>
         <div className="text-center">
           <div className="w-10 h-10 border-4 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
@@ -1667,7 +1667,7 @@ export default function DocumentGeneratorPage({ slugOverride }: { slugOverride?:
 
   if (!template) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center text-slate-500 p-4">
+      <div className="min-h-dvh flex flex-col items-center justify-center text-slate-500 p-4">
         <h1 className="text-xl font-bold text-navy mb-2">Template Not Found</h1>
         <p className="text-sm">The requested document template could not be located.</p>
       </div>
@@ -1681,7 +1681,7 @@ export default function DocumentGeneratorPage({ slugOverride }: { slugOverride?:
     bg-white`
 
   return (
-    <div id="generator" className="min-h-screen bg-slate-50">
+    <div id="generator" className="min-h-dvh bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

@@ -54,8 +54,8 @@ export default function NewsletterWidget() {
     return (
         <div className="rounded-lg border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-card ring-1 ring-slate-900/[0.02] dark:ring-white/[0.02] transition-shadow duration-300 hover:shadow-card-hover md:p-7">
             <div className="flex items-start gap-3 mb-3">
-                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-navy/5 dark:bg-white/10 text-navy dark:text-white">
-                    <Mail className="h-5 w-5" aria-hidden />
+                <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg bg-navy/5 dark:bg-white/10 text-navy dark:text-white">
+                    <Mail className="size-5" aria-hidden="true" />
                 </span>
                 <div>
                     <h3 className="font-heading text-lg md:text-xl font-bold text-navy dark:text-white leading-snug">
@@ -68,13 +68,13 @@ export default function NewsletterWidget() {
             </div>
 
             {success ? (
-                <div className="mt-4 flex items-start gap-3 rounded-lg border border-emerald-100 bg-emerald-50 p-4 text-emerald-800">
-                    <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5" aria-hidden />
+                <div className="mt-4 flex items-start gap-3 rounded-lg border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/40 p-4 text-emerald-800 dark:text-emerald-300">
+                    <CheckCircle2 className="size-5 shrink-0 mt-0.5" aria-hidden="true" />
                     <div>
-                        <p className="font-bold text-emerald-900">
-                            ✅ You're subscribed!
+                        <p className="font-bold text-emerald-900 dark:text-emerald-200">
+                            You're subscribed!
                         </p>
-                        <p className="text-emerald-700 text-sm mt-1">
+                        <p className="text-emerald-700 dark:text-emerald-300 text-sm mt-1">
                             Check your inbox — we just sent you a welcome email with recent articles.
                             (Check spam if not found in 2 minutes)
                         </p>
@@ -96,11 +96,12 @@ export default function NewsletterWidget() {
                             value={email}
                             onChange={e => setEmail(e.target.value)}
                             placeholder="you@company.com"
-                            className="w-full px-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/45 focus:border-gold/35 text-navy text-sm transition-shadow duration-200 placeholder:text-slate-400"
+                            aria-invalid={Boolean(error)}
+                            aria-describedby={error ? "newsletter-email-error" : undefined}
+                            className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 dark:bg-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/45 focus:border-gold/35 text-navy dark:text-white text-sm transition-shadow duration-200 placeholder:text-slate-400"
                             required
                             disabled={loading}
                             autoComplete="email"
-                            toolparamdescription="Subscriber email address to receive weekly MCA, SEBI, and RBI compliance updates."
                         />
                     </div>
                     
@@ -110,11 +111,11 @@ export default function NewsletterWidget() {
                             type="checkbox"
                             checked={consent}
                             onChange={e => setConsent(e.target.checked)}
-                            className="mt-1 h-4 w-4 rounded border-slate-300 text-navy focus:ring-navy cursor-pointer"
+                            className="mt-1 size-4 rounded border-slate-300 dark:border-slate-700 dark:bg-slate-800 text-navy focus:ring-navy dark:focus:ring-amber-500 cursor-pointer"
                             required
                             disabled={loading}
                         />
-                        <label htmlFor="consent" className="text-xs text-slate-500 leading-normal select-none cursor-pointer">
+                        <label htmlFor="consent" className="text-xs text-slate-500 dark:text-slate-400 leading-normal select-none cursor-pointer">
                             I consent to receive weekly updates and agree to the{' '}
                             <Link href="/privacy-policy" target="_blank" className="text-amber-500 hover:underline">
                                 Privacy Policy
@@ -124,18 +125,18 @@ export default function NewsletterWidget() {
                     </div>
 
                     {error && (
-                        <p className="text-red-600 text-sm font-medium" role="alert">
+                        <p id="newsletter-email-error" className="text-red-600 dark:text-red-400 text-sm font-medium" role="alert">
                             {error}
                         </p>
                     )}
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-navy text-white font-semibold py-3 px-4 rounded-lg hover:bg-slate-800 transition-colors duration-200 disabled:opacity-65 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-md shadow-slate-900/10"
+                        className="w-full bg-navy dark:bg-amber-500 text-white dark:text-slate-950 font-semibold py-3 px-4 rounded-lg hover:bg-slate-800 dark:hover:bg-amber-400 transition-colors duration-200 disabled:opacity-65 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-md shadow-slate-900/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
                     >
                         {loading ? (
                             <>
-                                <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
+                                <Loader2 className="size-5 animate-spin" aria-hidden="true" />
                                 Subscribing...
                             </>
                         ) : (

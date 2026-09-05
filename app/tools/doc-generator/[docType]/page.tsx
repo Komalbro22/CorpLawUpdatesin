@@ -206,7 +206,7 @@ export default function DocumentGeneratorWizardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-dvh bg-slate-950 text-slate-100 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Navigation Topbar */}
         <div className="flex items-center justify-between border-b border-slate-800 pb-4">

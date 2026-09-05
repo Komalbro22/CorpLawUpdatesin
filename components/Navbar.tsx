@@ -215,11 +215,11 @@ export default function Navbar() {
                                             >
                                                 <div className="flex items-center gap-2.5">
                                                     <div className="p-1.5 rounded-lg bg-slate-100/80 dark:bg-slate-800/80 shrink-0">
-                                                        <Icon className="w-4 h-4" aria-hidden />
+                                                        <Icon className="size-4" aria-hidden="true" />
                                                     </div>
                                                     <span>{label}</span>
                                                 </div>
-                                                <span className="text-slate-300 dark:text-slate-600 text-xs">→</span>
+                                                <span className="text-slate-300 dark:text-slate-600 text-xs" aria-hidden="true">→</span>
                                             </Link>
                                         ))}
                                     </div>
@@ -240,13 +240,12 @@ export default function Navbar() {
                         <NotificationBell />
                         <DarkModeToggle />
                         <button
-
                             onClick={() => setIsOpen(!isOpen)}
                             className="inline-flex items-center justify-center min-h-[44px] min-w-[44px] p-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400 transition-all duration-200 text-slate-600 dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
                             aria-expanded={isOpen}
                             aria-label={isOpen ? 'Close menu' : 'Open main menu'}
                         >
-                            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                            {isOpen ? <X className="size-5" aria-hidden="true" /> : <Menu className="size-5" aria-hidden="true" />}
                         </button>
                     </div>
                 </div>
@@ -254,7 +253,7 @@ export default function Navbar() {
 
             {/* Mobile Nav */}
             {isOpen && (
-                <div className="md:hidden border-t border-slate-200/80 dark:border-slate-800/80 max-h-[85vh] overflow-y-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl animate-fade-in">
+                <div className="md:hidden border-t border-slate-200/80 dark:border-slate-800/80 max-h-[85dvh] overflow-y-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl animate-fade-in">
                     <div className="pt-3 pb-6 space-y-1 px-4">
                         <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-3 py-1">
                             Navigation
@@ -271,7 +270,7 @@ export default function Navbar() {
                                 onClick={() => setIsOpen(false)}
                             >
                                 {'icon' in link && link.icon && (
-                                    <link.icon className="w-4 h-4 shrink-0 opacity-80" aria-hidden />
+                                    <link.icon className="size-4 shrink-0 opacity-80" aria-hidden="true" />
                                 )}
                                 {link.label}
                             </Link>

@@ -160,7 +160,7 @@ export default async function HomePage() {
                 className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-amber-600 px-8 py-3.5 text-sm font-bold text-white shadow-lg shadow-amber-950/40 transition-all hover:bg-amber-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 motion-safe:hover:scale-[1.02] active:scale-[0.98]"
               >
                 Browse updates
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden />
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </Link>
               <Link
                 href="/tools"
@@ -179,7 +179,7 @@ export default async function HomePage() {
             <div className="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm font-medium text-slate-200">
               {['No login required', 'Updated regularly', 'Built for Indian compliance'].map(item => (
                 <span key={item} className="inline-flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-amber-400" aria-hidden />
+                  <CheckCircle2 className="size-4 text-amber-400" aria-hidden="true" />
                   {item}
                 </span>
               ))}
@@ -223,7 +223,7 @@ export default async function HomePage() {
             <div className="mb-8 md:mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.18em] text-red-700 dark:text-red-500 flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-red-600" /> Trending
+                  <TrendingUp className="size-4 text-red-600 dark:text-red-500" aria-hidden="true" /> Trending
                 </p>
                 <h2 className="mt-2 text-2xl md:text-3xl font-bold text-navy dark:text-white font-heading">
                   Popular this week
@@ -258,7 +258,7 @@ export default async function HomePage() {
                   style={{ '--delay': `${i * 40}ms` } as CSSProperties}
                   className={`animate-fade-up group flex min-h-[115px] flex-col items-center justify-center gap-2 rounded-xl ${bg} p-3.5 text-center shadow-sm transition-[transform,box-shadow,background-color] duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 motion-safe:hover:-translate-y-1 hover:shadow-md`}
                 >
-                  <Icon className="w-6 h-6 opacity-90 transition-transform duration-200 group-hover:scale-110" aria-hidden />
+                  <Icon className="size-6 opacity-90 transition-transform duration-200 group-hover:scale-110" aria-hidden="true" />
                   <div className="flex flex-col items-center">
                     <span className="font-bold text-sm md:text-base leading-tight">{label}</span>
                     <span className="text-[10px] opacity-75 font-medium leading-tight mt-1 line-clamp-1 hidden sm:block">{desc}</span>
@@ -273,10 +273,10 @@ export default async function HomePage() {
           <section className="py-16 md:py-20 px-4 max-w-7xl mx-auto">
             <div className="mb-8 md:mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between" id="updates">
               <div>
-                <h2 className="text-2xl md:text-3xl font-bold text-navy font-heading">
+                <h2 className="text-2xl md:text-3xl font-bold text-navy dark:text-white font-heading">
                   Latest updates
                 </h2>
-                <p className="mt-2 text-slate-500 text-sm md:text-base">
+                <p className="mt-2 text-slate-500 dark:text-slate-400 text-sm md:text-base">
                   New and recent briefs from Indian regulators.
                 </p>
               </div>
@@ -285,7 +285,7 @@ export default async function HomePage() {
                 className="hidden sm:inline-flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 text-sm font-semibold text-navy dark:text-slate-100 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-800"
               >
                 View all
-                <ArrowRight className="w-4 h-4" aria-hidden />
+                <ArrowRight className="size-4" aria-hidden="true" />
               </Link>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-10">
@@ -296,10 +296,10 @@ export default async function HomePage() {
             <div className="text-center sm:hidden">
               <Link
                 href="/updates"
-                className="inline-flex items-center gap-2 text-navy font-semibold hover:text-amber-700 transition-colors text-base group"
+                className="inline-flex items-center gap-2 text-navy dark:text-slate-200 font-semibold hover:text-amber-700 dark:hover:text-amber-400 transition-colors text-base group"
               >
                 View all updates
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden />
+                <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
               </Link>
             </div>
           </section>
@@ -319,7 +319,7 @@ export default async function HomePage() {
             </div>
             <Link href="/tools"
                   className="inline-flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 text-sm font-semibold text-navy dark:text-slate-100 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-800 whitespace-nowrap self-start md:self-end">
-              View All Tools <ArrowRight className="w-4 h-4" />
+              View All Tools <ArrowRight className="size-4" aria-hidden="true" />
             </Link>
           </div>
 
@@ -397,9 +397,9 @@ export default async function HomePage() {
         </section>
 
         <section className="w-full bg-navy dark:bg-slate-950 py-16 md:py-20 px-4 text-center relative overflow-hidden border-t border-slate-800">
-          <div className="absolute inset-0 opacity-[0.08] bg-[linear-gradient(rgba(255,255,255,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.12)_1px,transparent_1px)] bg-[size:72px_72px]" aria-hidden />
+          <div className="absolute inset-0 opacity-[0.08] bg-[linear-gradient(rgba(255,255,255,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.12)_1px,transparent_1px)] bg-[size:72px_72px]" aria-hidden="true" />
           <div className="max-w-3xl mx-auto flex flex-col items-center relative z-10">
-            <Newspaper className="mb-4 h-8 w-8 text-gold" aria-hidden />
+            <Newspaper className="mb-4 size-8 text-gold" aria-hidden="true" />
             <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-3">
               Weekly Corporate Law Digest
             </h2>
@@ -408,10 +408,10 @@ export default async function HomePage() {
             </p>
             <Link
               href="/newsletter"
-              className="inline-flex items-center gap-2 rounded-lg bg-gold px-8 py-3.5 font-bold text-white transition-colors hover:bg-amber-400"
+              className="inline-flex items-center gap-2 rounded-lg bg-gold px-8 py-3.5 font-bold text-navy shadow-md transition-colors hover:bg-amber-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
             >
               Subscribe free
-              <ArrowRight className="w-4 h-4" aria-hidden />
+              <ArrowRight className="size-4" aria-hidden="true" />
             </Link>
           </div>
         </section>

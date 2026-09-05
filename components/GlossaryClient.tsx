@@ -71,7 +71,7 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
           className="relative mb-6"
         >
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search className="h-5 w-5 text-slate-400" />
+            <Search className="size-5 text-slate-400" aria-hidden="true" />
           </div>
           <input
             type="text"
@@ -174,14 +174,14 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
       {/* Desktop Sticky Sidebar Navigation */}
       {!search && (
         <div className="hidden lg:block w-12 flex-shrink-0">
-          <div className="sticky top-24 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-2 shadow-sm flex flex-col gap-1 items-center max-h-[calc(100vh-120px)] overflow-y-auto hide-scrollbar">
+          <div className="sticky top-24 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-2 shadow-sm flex flex-col gap-1 items-center max-h-[calc(100dvh-120px)] overflow-y-auto hide-scrollbar">
             {alphabet.map((letter) => {
               const hasTerms = groupedTerms[letter]?.length > 0
               return hasTerms ? (
                 <a
                   key={letter}
                   href={`#letter-${letter}`}
-                  className="w-8 h-8 flex items-center justify-center rounded-lg text-sm font-bold text-navy hover:bg-amber-50 hover:text-amber-700 transition-colors"
+                  className="w-8 h-8 flex items-center justify-center rounded-lg text-sm font-bold text-navy dark:text-slate-200 hover:bg-amber-50 dark:hover:bg-amber-950/40 hover:text-amber-700 dark:hover:text-amber-400 transition-colors"
                   title={`Jump to ${letter}`}
                 >
                   {letter}
@@ -189,7 +189,7 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
               ) : (
                 <span
                   key={letter}
-                  className="w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium text-slate-300 cursor-not-allowed"
+                  className="w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium text-slate-300 dark:text-slate-700 cursor-not-allowed"
                 >
                   {letter}
                 </span>

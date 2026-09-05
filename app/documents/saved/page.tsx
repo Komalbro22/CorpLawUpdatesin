@@ -6,7 +6,7 @@ import { getSavedDocuments, deleteSavedDocument, SavedDocument } from '@/lib/sav
 
 function SavedDocsSkeleton() {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-12 px-4 animate-pulse">
+    <div className="min-h-dvh bg-slate-50 dark:bg-slate-950 py-12 px-4 animate-pulse">
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="h-4 w-32 bg-slate-200 dark:bg-slate-800 rounded" />
         <div className="h-8 w-64 bg-slate-200 dark:bg-slate-800 rounded" />
@@ -39,7 +39,7 @@ export default function SavedDocumentsPage() {
   if (!isClient) return <SavedDocsSkeleton />
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-200 py-12 px-4">
+    <div className="min-h-dvh bg-slate-50 dark:bg-slate-950 transition-colors duration-200 py-12 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
           <Link href="/documents" className="text-amber-600 dark:text-amber-400 text-sm font-medium hover:underline mb-4 inline-block">

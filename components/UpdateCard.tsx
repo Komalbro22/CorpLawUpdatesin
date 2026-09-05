@@ -15,6 +15,8 @@ const categoryBorderColor: Record<string, string> = {
   NCLT: 'border-t-orange-600',
   IBC: 'border-t-red-600',
   FEMA: 'border-t-teal-600',
+  CCI: 'border-t-indigo-600',
+  LABOUR: 'border-t-amber-600',
 }
 
 interface UpdateCardProps {
@@ -103,10 +105,10 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
             )}
             <span className="flex items-center gap-2 flex-wrap">
               {update.published_at && (
-                <span className="font-medium text-slate-600 dark:text-slate-400">{formatDate(update.published_at)}</span>
+                <span className="font-medium text-slate-600 dark:text-slate-400 tabular-nums">{formatDate(update.published_at)}</span>
               )}
               {update.effective_date && (
-                <span className="text-[10px] bg-emerald-50 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-400 px-2 py-0.5 rounded-md font-bold whitespace-nowrap border border-emerald-200 dark:border-emerald-900/30">
+                <span className="text-[10px] bg-emerald-50 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-400 px-2 py-0.5 rounded-md font-bold whitespace-nowrap border border-emerald-200 dark:border-emerald-900/30 tabular-nums">
                   Eff. {formatDate(update.effective_date)}
                 </span>
               )}
@@ -114,11 +116,11 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
           </span>
           <span className="flex shrink-0 items-center gap-1.5">
             <span className="flex items-center gap-1 whitespace-nowrap rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-1 text-[11px] font-semibold text-slate-600 dark:text-slate-400">
-              <Clock className="w-3 h-3 text-slate-500 dark:text-slate-400" aria-hidden />
-              {update.reading_time || calculateReadingTime(update.content || update.summary || '')} min
+              <Clock className="size-3 text-slate-500 dark:text-slate-400" aria-hidden="true" />
+              <span className="tabular-nums">{update.reading_time || calculateReadingTime(update.content || update.summary || '')}</span> min
             </span>
-            <span className="hidden h-7 w-7 items-center justify-center rounded-md bg-navy dark:bg-slate-800 text-white dark:text-slate-200 transition-colors group-hover:bg-amber-600 dark:group-hover:bg-amber-500 sm:flex">
-              <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
+            <span className="hidden size-7 items-center justify-center rounded-md bg-navy dark:bg-slate-800 text-white dark:text-slate-200 transition-colors group-hover:bg-amber-600 dark:group-hover:bg-amber-500 sm:flex">
+              <ArrowUpRight className="size-3.5" aria-hidden="true" />
             </span>
           </span>
         </span>

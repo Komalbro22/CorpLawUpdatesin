@@ -175,7 +175,7 @@ export default async function RepoRatePage() {
   }
 
   return (
-    <div>
+    <div className="min-h-dvh bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200">
       {/* Schema.org Structured Data Injection */}
       <script
         type="application/ld+json"
@@ -188,15 +188,15 @@ export default async function RepoRatePage() {
 
       {/* HERO SECTION */}
       <div className="bg-navy py-12 px-4 text-center relative overflow-hidden border-b border-navy-700">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#f59e0b_1px,transparent_1px)] [background-size:16px_16px]" />
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#f59e0b_1px,transparent_1px)] [background-size:16px_16px]" aria-hidden="true" />
         
         <div className="max-w-4xl mx-auto relative z-10 space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 mb-1">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            <span className="size-2 rounded-full bg-emerald-400 animate-ping" aria-hidden="true" />
             Official Benchmark Policy Rate
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-heading font-black text-white tracking-tight">
+          <h1 className="text-5xl md:text-7xl font-heading font-black text-white tracking-tight tabular-nums">
             {repoRate}
           </h1>
 
@@ -215,17 +215,17 @@ export default async function RepoRatePage() {
         {/* 4 KEY RATE BADGES */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { label: 'Policy Repo Rate', value: repoRate, desc: 'Lending rate to banks', color: 'bg-blue-50 border-blue-200 text-blue-800', badge: 'Key Benchmark' },
-            { label: 'Standing Deposit (SDF)', value: sdfRate, desc: 'Absorption floor rate', color: 'bg-emerald-50 border-emerald-200 text-emerald-800', badge: 'Floor Rate' },
-            { label: 'MSF / Bank Rate', value: msfRate, desc: 'Emergency ceiling rate', color: 'bg-purple-50 border-purple-200 text-purple-800', badge: 'Ceiling Rate' },
-            { label: 'Policy Stance', value: stance, desc: 'Growth-inflation calibrated', color: 'bg-amber-50 border-amber-200 text-amber-800', badge: 'Unanimous' },
+            { label: 'Policy Repo Rate', value: repoRate, desc: 'Lending rate to banks', color: 'bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800/40 text-blue-800 dark:text-blue-300', badge: 'Key Benchmark' },
+            { label: 'Standing Deposit (SDF)', value: sdfRate, desc: 'Absorption floor rate', color: 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800/40 text-emerald-800 dark:text-emerald-300', badge: 'Floor Rate' },
+            { label: 'MSF / Bank Rate', value: msfRate, desc: 'Emergency ceiling rate', color: 'bg-purple-50 dark:bg-purple-950/30 border-purple-200 dark:border-purple-800/40 text-purple-800 dark:text-purple-300', badge: 'Ceiling Rate' },
+            { label: 'Policy Stance', value: stance, desc: 'Growth-inflation calibrated', color: 'bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800/40 text-amber-800 dark:text-amber-300', badge: 'Unanimous' },
           ].map(stat => (
             <div key={stat.label} className={`rounded-2xl border p-5 text-center shadow-sm relative flex flex-col justify-between ${stat.color}`}>
               <div>
-                <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md bg-white/80 border border-current/10">
+                <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md bg-white/80 dark:bg-slate-900/80 border border-current/10">
                   {stat.badge}
                 </span>
-                <div className="text-3xl font-heading font-black mt-2">{stat.value}</div>
+                <div className="text-3xl font-heading font-black mt-2 tabular-nums">{stat.value}</div>
               </div>
               <div>
                 <p className="text-xs font-bold mt-2">{stat.label}</p>
@@ -236,18 +236,18 @@ export default async function RepoRatePage() {
         </div>
 
         {/* 62nd MPC MEETING SUMMARY & OFFICIAL RATIONALE BANNER */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
             <div>
               <div className="flex items-center gap-2">
-                <span className="p-1.5 rounded-lg bg-amber-100 text-amber-800">
-                  <Landmark className="w-5 h-5" />
+                <span className="p-1.5 rounded-lg bg-amber-100 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300">
+                  <Landmark className="size-5" aria-hidden="true" />
                 </span>
-                <h2 className="text-xl font-heading font-bold text-slate-900">
+                <h2 className="text-xl font-heading font-bold text-slate-900 dark:text-white">
                   62nd MPC Meeting Key Decisions & Official Resolution (August 2026)
                 </h2>
               </div>
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                 Resolution of the Monetary Policy Committee published via RBI Press Release No. 2026-2027/809 on August 5, 2026.
               </p>
             </div>
@@ -255,47 +255,47 @@ export default async function RepoRatePage() {
               href="https://rbidocs.rbi.org.in/rdocs/PressRelease/PDFs/PR80907599DE5FD164918A49085C9D6270116.PDF"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors shrink-0 self-start sm:self-auto"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors shrink-0 self-start sm:self-auto"
             >
-              <FileText className="w-3.5 h-3.5 text-red-600" />
+              <FileText className="size-3.5 text-red-600 dark:text-red-400" aria-hidden="true" />
               <span>Official RBI PDF (310 KB)</span>
-              <ExternalLink className="w-3 h-3 text-slate-400" />
+              <ExternalLink className="size-3 text-slate-400" aria-hidden="true" />
             </a>
           </div>
 
           {/* KEY PROJECTIONS GRID */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-5 rounded-xl bg-blue-50/70 border border-blue-200/80 space-y-2">
+            <div className="p-5 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200/80 dark:border-blue-800/40 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-blue-900 uppercase tracking-wider">Real GDP Growth (2026-27)</span>
-                <span className="text-lg font-heading font-black text-blue-800">6.7% Projected</span>
+                <span className="text-xs font-bold text-blue-900 dark:text-blue-300 uppercase tracking-wider">Real GDP Growth (2026-27)</span>
+                <span className="text-lg font-heading font-black text-blue-800 dark:text-blue-200 tabular-nums">6.7% Projected</span>
               </div>
-              <p className="text-xs text-blue-900/80 leading-relaxed">
-                Projected quarterly trajectory: <strong>Q1: 7.0%</strong> | <strong>Q2: 6.4%</strong> | <strong>Q3: 6.5%</strong> | <strong>Q4: 6.8%</strong>. Projected at <strong>7.3%</strong> for Q1:2027-28.
+              <p className="text-xs text-blue-900/80 dark:text-blue-200/80 leading-relaxed">
+                Projected quarterly trajectory: <strong className="tabular-nums">Q1: 7.0%</strong> | <strong className="tabular-nums">Q2: 6.4%</strong> | <strong className="tabular-nums">Q3: 6.5%</strong> | <strong className="tabular-nums">Q4: 6.8%</strong>. Projected at <strong className="tabular-nums">7.3%</strong> for Q1:2027-28.
               </p>
-              <p className="text-[11px] text-blue-700">
+              <p className="text-[11px] text-blue-700 dark:text-blue-300">
                 Driven by resilient private consumption, robust services momentum, buoyant capital goods investment, and healthy bank credit flow.
               </p>
             </div>
 
-            <div className="p-5 rounded-xl bg-amber-50/70 border border-amber-200/80 space-y-2">
+            <div className="p-5 rounded-xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/40 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-amber-900 uppercase tracking-wider">CPI Inflation (2026-27)</span>
-                <span className="text-lg font-heading font-black text-amber-800">5.0% Projected</span>
+                <span className="text-xs font-bold text-amber-900 dark:text-amber-300 uppercase tracking-wider">CPI Inflation (2026-27)</span>
+                <span className="text-lg font-heading font-black text-amber-800 dark:text-amber-200 tabular-nums">5.0% Projected</span>
               </div>
-              <p className="text-xs text-amber-900/80 leading-relaxed">
-                Projected quarterly trajectory: <strong>Q2: 4.7%</strong> | <strong>Q3: 5.9% (Peak)</strong> | <strong>Q4: 5.5%</strong>. Projected at <strong>5.3%</strong> for Q1:2027-28.
+              <p className="text-xs text-amber-900/80 dark:text-amber-200/80 leading-relaxed">
+                Projected quarterly trajectory: <strong className="tabular-nums">Q2: 4.7%</strong> | <strong className="tabular-nums">Q3: 5.9% (Peak)</strong> | <strong className="tabular-nums">Q4: 5.5%</strong>. Projected at <strong className="tabular-nums">5.3%</strong> for Q1:2027-28.
               </p>
-              <p className="text-[11px] text-amber-800">
+              <p className="text-[11px] text-amber-800 dark:text-amber-300">
                 Headline inflation rose to 4.4% in June due to food and retail fuel price revisions, while Core Inflation (ex-food/fuel) remained low at 3.9%.
               </p>
             </div>
           </div>
 
           {/* RATIONALE TEXT */}
-          <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 text-xs text-slate-700 space-y-2 leading-relaxed">
-            <p className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
+          <div className="bg-slate-50 dark:bg-slate-800/40 rounded-xl p-4 border border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 space-y-2 leading-relaxed">
+            <p className="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-1.5">
+              <ShieldCheck className="size-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
               Why the MPC Voted to Keep Rates Unchanged with a Neutral Stance:
             </p>
             <p>
@@ -316,21 +316,21 @@ export default async function RepoRatePage() {
         </section>
 
         {/* COMPLETE RBI BENCHMARK POLICY RATES TABLE */}
-        <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
+        <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <h2 className="text-xl font-heading font-bold text-slate-900 flex items-center gap-2">
-                <Layers className="w-5 h-5 text-amber-500" />
+              <h2 className="text-xl font-heading font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Layers className="size-5 text-amber-500" aria-hidden="true" />
                 Complete RBI Policy & Reserve Ratios Matrix (2026)
               </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 All benchmark interest rates and statutory reserve requirements determined under the RBI Act and BR Act.
               </p>
             </div>
-            <span className="text-xs font-semibold text-slate-400">Updated: August 2026</span>
+            <span className="text-xs font-semibold text-slate-400 dark:text-slate-500">Updated: August 2026</span>
           </div>
 
-          <div className="overflow-x-auto rounded-xl border border-slate-200">
+          <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
             <table className="w-full text-xs sm:text-sm">
               <thead className="bg-navy text-white text-left">
                 <tr>
@@ -340,51 +340,51 @@ export default async function RepoRatePage() {
                   <th className="px-4 py-3 font-bold text-white">Purpose / Operational Role</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
-                <tr className="bg-amber-50/50 hover:bg-amber-50">
-                  <td className="px-4 py-3 font-bold text-slate-900 flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-amber-500" />
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                <tr className="bg-amber-50/50 dark:bg-amber-950/20 hover:bg-amber-50 dark:hover:bg-amber-950/30">
+                  <td className="px-4 py-3 font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                    <span className="size-2 rounded-full bg-amber-500" aria-hidden="true" />
                     Policy Repo Rate
                   </td>
-                  <td className="px-4 py-3 text-center font-extrabold text-blue-700">{repoRate}</td>
-                  <td className="px-4 py-3 text-center text-slate-500">5.25%</td>
-                  <td className="px-4 py-3 text-slate-600">Rate at which RBI injects liquidity to commercial banks against securities.</td>
+                  <td className="px-4 py-3 text-center font-extrabold text-blue-700 dark:text-blue-400 tabular-nums">{repoRate}</td>
+                  <td className="px-4 py-3 text-center text-slate-500 dark:text-slate-400 tabular-nums">5.25%</td>
+                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300">Rate at which RBI injects liquidity to commercial banks against securities.</td>
                 </tr>
-                <tr className="hover:bg-slate-50">
-                  <td className="px-4 py-3 font-semibold text-slate-800">Standing Deposit Facility (SDF)</td>
-                  <td className="px-4 py-3 text-center font-extrabold text-emerald-700">{sdfRate}</td>
-                  <td className="px-4 py-3 text-center text-slate-500">5.00%</td>
-                  <td className="px-4 py-3 text-slate-600">Floor rate for absorbing uncollateralised surplus liquidity from banks.</td>
+                <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                  <td className="px-4 py-3 font-semibold text-slate-800 dark:text-slate-200">Standing Deposit Facility (SDF)</td>
+                  <td className="px-4 py-3 text-center font-extrabold text-emerald-700 dark:text-emerald-400 tabular-nums">{sdfRate}</td>
+                  <td className="px-4 py-3 text-center text-slate-500 dark:text-slate-400 tabular-nums">5.00%</td>
+                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300">Floor rate for absorbing uncollateralised surplus liquidity from banks.</td>
                 </tr>
-                <tr className="hover:bg-slate-50">
-                  <td className="px-4 py-3 font-semibold text-slate-800">Marginal Standing Facility (MSF)</td>
-                  <td className="px-4 py-3 text-center font-extrabold text-purple-700">{msfRate}</td>
-                  <td className="px-4 py-3 text-center text-slate-500">5.50%</td>
-                  <td className="px-4 py-3 text-slate-600">Penal ceiling rate for emergency overnight borrowing by banks.</td>
+                <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                  <td className="px-4 py-3 font-semibold text-slate-800 dark:text-slate-200">Marginal Standing Facility (MSF)</td>
+                  <td className="px-4 py-3 text-center font-extrabold text-purple-700 dark:text-purple-400 tabular-nums">{msfRate}</td>
+                  <td className="px-4 py-3 text-center text-slate-500 dark:text-slate-400 tabular-nums">5.50%</td>
+                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300">Penal ceiling rate for emergency overnight borrowing by banks.</td>
                 </tr>
-                <tr className="hover:bg-slate-50">
-                  <td className="px-4 py-3 font-semibold text-slate-800">Bank Rate</td>
-                  <td className="px-4 py-3 text-center font-extrabold text-purple-700">{msfRate}</td>
-                  <td className="px-4 py-3 text-center text-slate-500">5.50%</td>
-                  <td className="px-4 py-3 text-slate-600">Standard rate for long-term lending & statutory penalty calculations.</td>
+                <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                  <td className="px-4 py-3 font-semibold text-slate-800 dark:text-slate-200">Bank Rate</td>
+                  <td className="px-4 py-3 text-center font-extrabold text-purple-700 dark:text-purple-400 tabular-nums">{msfRate}</td>
+                  <td className="px-4 py-3 text-center text-slate-500 dark:text-slate-400 tabular-nums">5.50%</td>
+                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300">Standard rate for long-term lending & statutory penalty calculations.</td>
                 </tr>
-                <tr className="hover:bg-slate-50">
-                  <td className="px-4 py-3 font-semibold text-slate-800">Fixed Reverse Repo Rate</td>
-                  <td className="px-4 py-3 text-center font-bold text-slate-700">3.35%</td>
-                  <td className="px-4 py-3 text-center text-slate-500">3.35%</td>
-                  <td className="px-4 py-3 text-slate-600">Legacy facility under LAF (largely superseded by the SDF window).</td>
+                <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                  <td className="px-4 py-3 font-semibold text-slate-800 dark:text-slate-200">Fixed Reverse Repo Rate</td>
+                  <td className="px-4 py-3 text-center font-bold text-slate-700 dark:text-slate-300 tabular-nums">3.35%</td>
+                  <td className="px-4 py-3 text-center text-slate-500 dark:text-slate-400 tabular-nums">3.35%</td>
+                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300">Legacy facility under LAF (largely superseded by the SDF window).</td>
                 </tr>
-                <tr className="hover:bg-slate-50">
-                  <td className="px-4 py-3 font-semibold text-slate-800">Cash Reserve Ratio (CRR)</td>
-                  <td className="px-4 py-3 text-center font-bold text-slate-700">4.50%</td>
-                  <td className="px-4 py-3 text-center text-slate-500">4.50%</td>
-                  <td className="px-4 py-3 text-slate-600">Mandatory cash balance banks must maintain with the RBI as % of NDTL.</td>
+                <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                  <td className="px-4 py-3 font-semibold text-slate-800 dark:text-slate-200">Cash Reserve Ratio (CRR)</td>
+                  <td className="px-4 py-3 text-center font-bold text-slate-700 dark:text-slate-300 tabular-nums">4.50%</td>
+                  <td className="px-4 py-3 text-center text-slate-500 dark:text-slate-400 tabular-nums">4.50%</td>
+                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300">Mandatory cash balance banks must maintain with the RBI as % of NDTL.</td>
                 </tr>
-                <tr className="hover:bg-slate-50">
-                  <td className="px-4 py-3 font-semibold text-slate-800">Statutory Liquidity Ratio (SLR)</td>
-                  <td className="px-4 py-3 text-center font-bold text-slate-700">18.00%</td>
-                  <td className="px-4 py-3 text-center text-slate-500">18.00%</td>
-                  <td className="px-4 py-3 text-slate-600">Mandatory reserve invested in approved gold, cash, and G-Secs.</td>
+                <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                  <td className="px-4 py-3 font-semibold text-slate-800 dark:text-slate-200">Statutory Liquidity Ratio (SLR)</td>
+                  <td className="px-4 py-3 text-center font-bold text-slate-700 dark:text-slate-300 tabular-nums">18.00%</td>
+                  <td className="px-4 py-3 text-center text-slate-500 dark:text-slate-400 tabular-nums">18.00%</td>
+                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300">Mandatory reserve invested in approved gold, cash, and G-Secs.</td>
                 </tr>
               </tbody>
             </table>
@@ -392,14 +392,14 @@ export default async function RepoRatePage() {
         </section>
 
         {/* MAJOR BANKS REPO-LINKED HOME LOAN RATES (EBLR) */}
-        <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
+        <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-4">
           <div>
-            <h2 className="text-xl font-heading font-bold text-slate-900 flex items-center gap-2">
-              <Building2 className="w-5 h-5 text-blue-600" />
+            <h2 className="text-xl font-heading font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <Building2 className="size-5 text-blue-600 dark:text-blue-400" aria-hidden="true" />
               Major Banks Repo-Linked Lending Rates (EBLR & RLLR)
             </h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Current floating home loan interest rate bands across top Indian lenders linked to the {repoRate} Repo Rate.
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              Current floating home loan interest rate bands across top Indian lenders linked to the <span className="tabular-nums font-semibold">{repoRate}</span> Repo Rate.
             </p>
           </div>
 
@@ -412,33 +412,33 @@ export default async function RepoRatePage() {
               { bank: 'Bank of Baroda (BoB)', type: 'BRLLR', band: '8.40% – 9.05%', spread: 'Repo + 3.15% onwards' },
               { bank: 'Axis Bank', type: 'Repo Linked EBLR', band: '8.65% – 9.35%', spread: 'Repo + 3.40% onwards' },
             ].map(b => (
-              <div key={b.bank} className="p-4 rounded-xl border border-slate-200/80 bg-slate-50/50 hover:bg-slate-50 transition-colors space-y-1.5">
-                <p className="font-heading font-bold text-sm text-slate-900">{b.bank}</p>
+              <div key={b.bank} className="p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-slate-50 dark:hover:bg-slate-800/70 transition-colors space-y-1.5">
+                <p className="font-heading font-bold text-sm text-slate-900 dark:text-white">{b.bank}</p>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-slate-500">{b.type}</span>
-                  <span className="font-heading font-extrabold text-sm text-blue-700">{b.band}</span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400">{b.type}</span>
+                  <span className="font-heading font-extrabold text-sm text-blue-700 dark:text-blue-400 tabular-nums">{b.band}</span>
                 </div>
-                <p className="text-[11px] text-slate-400">{b.spread}</p>
+                <p className="text-[11px] text-slate-400 dark:text-slate-500">{b.spread}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* RATE HISTORY TABLE */}
-        <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-4">
+        <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <h2 className="text-xl font-heading font-bold text-navy flex items-center gap-2">
-                <Percent className="w-5 h-5 text-amber-500" />
+              <h2 className="text-xl font-heading font-bold text-navy dark:text-white flex items-center gap-2">
+                <Percent className="size-5 text-amber-500" aria-hidden="true" />
                 RBI Repo Rate History — Multi-Year Track Record
               </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 Chronological record of Monetary Policy Committee decisions, rate changes, and policy stances.
               </p>
             </div>
           </div>
 
-          <div className="overflow-x-auto rounded-xl border border-slate-200">
+          <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-navy text-white">
@@ -448,34 +448,34 @@ export default async function RepoRatePage() {
                   <th className="text-left px-4 py-3 font-semibold text-white">Policy Stance</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {history.map((entry: any, i: number) => (
-                  <tr key={entry.id} className={i % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
-                    <td className="px-4 py-3 font-medium text-navy">{entry.meeting_name?.replace(/62st/gi, '62nd')}</td>
-                    <td className="px-4 py-3 text-center font-bold text-blue-700">{entry.repo_rate}</td>
-                    <td className="px-4 py-3 text-center text-slate-700">
+                  <tr key={entry.id} className={i % 2 === 0 ? 'bg-white dark:bg-slate-900' : 'bg-slate-50 dark:bg-slate-800/50'}>
+                    <td className="px-4 py-3 font-medium text-navy dark:text-slate-200">{entry.meeting_name?.replace(/62st/gi, '62nd')}</td>
+                    <td className="px-4 py-3 text-center font-bold text-blue-700 dark:text-blue-400 tabular-nums">{entry.repo_rate}</td>
+                    <td className="px-4 py-3 text-center text-slate-700 dark:text-slate-300">
                       {entry.change_direction === 'cut' ? '⬇️' : entry.change_direction === 'hike' ? '⬆️' : '⏸'} {entry.change_amount || 'Unchanged'}
                     </td>
-                    <td className="px-4 py-3 text-slate-600">{entry.stance}</td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-slate-400">{entry.stance}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p className="text-xs text-slate-400 mt-2">
+          <p className="text-xs text-slate-400 dark:text-slate-500 mt-2">
             * Historical rates compiled from official RBI Monetary Policy statements and gazettes.
           </p>
         </section>
 
         {/* FREQUENTLY ASKED QUESTIONS (FAQ) */}
-        <section className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6">
           <div>
-            <h2 className="text-2xl font-heading font-bold text-navy flex items-center gap-2">
-              <HelpCircle className="w-6 h-6 text-amber-500" />
+            <h2 className="text-2xl font-heading font-bold text-navy dark:text-white flex items-center gap-2">
+              <HelpCircle className="size-6 text-amber-500" aria-hidden="true" />
               Frequently Asked Questions (FAQ)
             </h2>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
               Common questions answered regarding RBI repo rates, MPC meeting schedules, and home loan impacts.
             </p>
           </div>
@@ -507,22 +507,22 @@ export default async function RepoRatePage() {
                 a: 'For FY 2026-27, the RBI MPC projected real GDP growth at 6.7% (Q1: 7.0%, Q2: 6.4%, Q3: 6.5%, Q4: 6.8%) and headline CPI inflation at 5.0% (Q2: 4.7%, Q3: 5.9%, Q4: 5.5%).',
               }
             ].map((faq, i) => (
-              <div key={i} className="border border-slate-200 rounded-xl p-5 hover:border-amber-300 transition-colors">
-                <p className="font-heading font-bold text-slate-900 text-sm mb-2">Q: {faq.q}</p>
-                <p className="text-slate-600 text-sm leading-relaxed">A: {faq.a}</p>
+              <div key={i} className="border border-slate-200 dark:border-slate-800 rounded-xl p-5 hover:border-amber-300 dark:hover:border-amber-700/50 bg-slate-50/30 dark:bg-slate-800/20 transition-colors">
+                <p className="font-heading font-bold text-slate-900 dark:text-white text-sm mb-2">Q: {faq.q}</p>
+                <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">A: {faq.a}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* RELATED ARTICLES & ANALYSIS */}
-        <section className="bg-slate-50 rounded-2xl border border-slate-200 p-6 space-y-4">
+        <section className="bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-heading font-bold text-navy text-base flex items-center gap-2">
-              <FileText className="w-4 h-4 text-amber-600" />
+            <h3 className="font-heading font-bold text-navy dark:text-white text-base flex items-center gap-2">
+              <FileText className="size-4 text-amber-600 dark:text-amber-400" aria-hidden="true" />
               In-Depth RBI Analysis & Related Coverage
             </h3>
-            <Link href="/category/rbi" className="text-xs font-bold text-amber-600 hover:underline">
+            <Link href="/category/rbi" className="text-xs font-bold text-amber-600 dark:text-amber-400 hover:underline">
               View All RBI Updates →
             </Link>
           </div>
@@ -530,20 +530,20 @@ export default async function RepoRatePage() {
             {/* Latest August 2026 MPC Meeting Analysis Card */}
             <Link
               href="/updates/rbi-monetary-policy-august-2026-repo-rate-unchanged"
-              className="p-4 rounded-xl bg-white border border-amber-300 hover:border-amber-500 hover:shadow-md transition-all group flex flex-col justify-between space-y-2 relative overflow-hidden"
+              className="p-4 rounded-xl bg-white dark:bg-slate-800 border border-amber-300 dark:border-amber-700/60 hover:border-amber-500 dark:hover:border-amber-500 hover:shadow-md transition-all group flex flex-col justify-between space-y-2 relative overflow-hidden"
             >
               <div>
                 <div className="flex items-center justify-between gap-2">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-900 border border-emerald-200 flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+                  <span className="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1.5">
+                    <span className="size-1.5 rounded-full bg-emerald-600 animate-pulse" aria-hidden="true" />
                     Latest MPC Analysis (62nd)
                   </span>
-                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-amber-600 group-hover:translate-x-0.5 transition-all" />
+                  <ArrowRight className="size-4 text-slate-400 group-hover:text-amber-600 dark:group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all" aria-hidden="true" />
                 </div>
-                <p className="font-heading font-bold text-sm text-slate-900 group-hover:text-amber-600 transition-colors mt-1.5">
+                <p className="font-heading font-bold text-sm text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors mt-1.5">
                   RBI MPC August 2026 Meeting — Detailed Analysis (62nd MPC)
                 </p>
-                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
                   Full member-wise voting breakdown, GDP & inflation trajectory, neutral policy stance analysis, and borrower EMI impacts.
                 </p>
               </div>
@@ -552,19 +552,19 @@ export default async function RepoRatePage() {
             {/* Past MPC Analysis */}
             <Link
               href="/updates/rbi-mpc-repo-rate-june-2026"
-              className="p-4 rounded-xl bg-white border border-slate-200/80 hover:border-amber-400 hover:shadow-sm transition-all group flex flex-col justify-between space-y-2"
+              className="p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 hover:border-amber-400 dark:hover:border-amber-500 hover:shadow-sm transition-all group flex flex-col justify-between space-y-2"
             >
               <div>
                 <div className="flex items-center justify-between gap-2">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider bg-blue-100 text-blue-900">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider bg-blue-100 dark:bg-blue-950/60 text-blue-900 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
                     Previous MPC Review
                   </span>
-                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-amber-600 group-hover:translate-x-0.5 transition-all" />
+                  <ArrowRight className="size-4 text-slate-400 group-hover:text-amber-600 dark:group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all" aria-hidden="true" />
                 </div>
-                <p className="font-heading font-bold text-sm text-slate-900 group-hover:text-amber-600 transition-colors mt-1.5">
+                <p className="font-heading font-bold text-sm text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors mt-1.5">
                   RBI MPC June 2026 Meeting Analysis (61st MPC)
                 </p>
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                   Review the previous June 2026 policy statement, neutral stance decision, and liquidity outlook.
                 </p>
               </div>
@@ -573,7 +573,7 @@ export default async function RepoRatePage() {
         </section>
 
         {/* DISCLAIMER & OFFICIAL ATTRIBUTION */}
-        <div className="text-center text-xs text-slate-400 space-y-1 pt-4 border-t border-slate-200">
+        <div className="text-center text-xs text-slate-400 dark:text-slate-500 space-y-1 pt-4 border-t border-slate-200 dark:border-slate-800">
           <p>
             Last updated: {cleanRateDate} · Official Source: Reserve Bank of India Press Release No. 2026-2027/809
           </p>

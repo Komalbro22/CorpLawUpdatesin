@@ -136,25 +136,27 @@ export default function MobileReadingBar({ title }: { title?: string }) {
         <>
             {/* ── TOC Drawer (Mobile Bottom Sheet) ───────────────── */}
             {tocOpen && (
-                <div className="fixed inset-0 z-[90] md:hidden">
+                <div className="fixed inset-0 z-50 md:hidden">
                     <div
                         className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm animate-fade-in"
                         onClick={() => setTocOpen(false)}
+                        aria-hidden="true"
                     />
-                    <div className="absolute bottom-0 left-0 right-0 max-h-[75vh] bg-white dark:bg-slate-900 rounded-t-2xl shadow-2xl border-t border-slate-200 dark:border-slate-800 flex flex-col p-4 animate-slide-up">
+                    <div className="absolute bottom-0 left-0 right-0 max-h-[75dvh] bg-white dark:bg-slate-900 rounded-t-2xl shadow-2xl border-t border-slate-200 dark:border-slate-800 flex flex-col p-4 animate-slide-up">
                         <div className="w-12 h-1.5 bg-slate-300 dark:bg-slate-700 rounded-full mx-auto mb-3" />
                         <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
                             <div className="flex items-center gap-2">
-                                <List className="w-4 h-4 text-amber-500" />
+                                <List className="size-4 text-amber-500" aria-hidden="true" />
                                 <span className="font-heading font-bold text-sm text-slate-900 dark:text-white">
                                     Table of Contents ({headings.length})
                                 </span>
                             </div>
                             <button
                                 onClick={() => setTocOpen(false)}
-                                className="p-1 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                                className="p-1 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+                                aria-label="Close table of contents"
                             >
-                                <X className="w-5 h-5" />
+                                <X className="size-5" aria-hidden="true" />
                             </button>
                         </div>
                         <div className="flex-1 overflow-y-auto py-3 space-y-1.5 scrollbar-thin">
@@ -185,7 +187,7 @@ export default function MobileReadingBar({ title }: { title?: string }) {
 
             {/* ── Font Size Drawer Popover ────────────────────────── */}
             {fontSizeOpen && (
-                <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-[85] md:hidden animate-fade-up">
+                <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 md:hidden animate-fade-up">
                     <div className="bg-slate-900/95 dark:bg-slate-800/95 backdrop-blur-md text-white border border-slate-700/60 rounded-2xl shadow-xl px-4 py-3 flex items-center gap-3">
                         <span className="text-xs text-slate-400 font-medium">Text Size:</span>
                         <div className="flex items-center gap-1">
@@ -193,6 +195,7 @@ export default function MobileReadingBar({ title }: { title?: string }) {
                                 <button
                                     key={s}
                                     onClick={() => changeFontSize(s)}
+                                    aria-label={`Set font size to ${s === 'sm' ? 'small' : s === 'md' ? 'medium' : 'large'}`}
                                     className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                                         fontSize === s
                                             ? 'bg-amber-500 text-slate-950 shadow-md scale-105'
@@ -209,7 +212,7 @@ export default function MobileReadingBar({ title }: { title?: string }) {
 
             {/* ── Floating Mobile Reading Bar ─────────────────────── */}
             <div
-                className={`fixed bottom-4 left-1/2 -translate-x-1/2 z-[80] md:hidden transition-all duration-300 ${
+                className={`fixed bottom-4 left-1/2 -translate-x-1/2 z-40 md:hidden transition-all duration-300 ${
                     visible ? 'translate-y-0 opacity-100' : 'translate-y-16 opacity-0 pointer-events-none'
                 }`}
             >
@@ -220,9 +223,10 @@ export default function MobileReadingBar({ title }: { title?: string }) {
                         className={`p-2 rounded-full transition-colors ${
                             fontSizeOpen ? 'bg-amber-500 text-slate-950' : 'text-slate-300 hover:text-white'
                         }`}
+                        aria-label="Adjust font size"
                         title="Adjust Font Size"
                     >
-                        <Type className="w-4 h-4" />
+                        <Type className="size-4" aria-hidden="true" />
                     </button>
 
                     <div className="w-px h-4 bg-slate-800" />
@@ -234,10 +238,11 @@ export default function MobileReadingBar({ title }: { title?: string }) {
                             className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
                                 tocOpen ? 'bg-amber-500 text-slate-950 font-bold' : 'text-slate-300 hover:text-white'
                             }`}
+                            aria-label="Toggle table of contents"
                         >
-                            <List className="w-4 h-4 text-amber-400" />
+                            <List className="size-4 text-amber-400" aria-hidden="true" />
                             <span>TOC</span>
-                            <span className="bg-slate-800 text-slate-300 text-[10px] px-1.5 py-0.5 rounded-full font-bold">
+                            <span className="bg-slate-800 text-slate-300 text-[10px] px-1.5 py-0.5 rounded-full font-bold tabular-nums">
                                 {headings.length}
                             </span>
                         </button>
@@ -249,19 +254,21 @@ export default function MobileReadingBar({ title }: { title?: string }) {
                     <button
                         onClick={shareWhatsApp}
                         className="p-2 rounded-full text-emerald-400 hover:text-emerald-300 transition-colors"
+                        aria-label="Share on WhatsApp"
                         title="Share on WhatsApp"
                     >
-                        <MessageCircle className="w-4 h-4 fill-emerald-400/20" />
+                        <MessageCircle className="size-4 fill-emerald-400/20" aria-hidden="true" />
                     </button>
 
                     {/* Scroll to top with progress ring */}
                     <button
                         onClick={scrollToTop}
                         className="relative p-2 rounded-full text-amber-400 hover:text-amber-300 transition-colors flex items-center justify-center"
+                        aria-label="Scroll to top"
                         title="Scroll to Top"
                     >
-                        <ArrowUp className="w-4 h-4" />
-                        <span className="text-[9px] font-mono font-bold ml-0.5 text-slate-300">
+                        <ArrowUp className="size-4" aria-hidden="true" />
+                        <span className="text-[9px] font-mono tabular-nums font-bold ml-0.5 text-slate-300">
                             {Math.round(progress)}%
                         </span>
                     </button>

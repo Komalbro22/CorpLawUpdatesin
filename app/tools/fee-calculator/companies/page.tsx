@@ -160,7 +160,7 @@ function CompanySEO() {
 
 export default function CompaniesFeePage() {
   return (
-    <div className="min-h-screen bg-[#F8FAFC] dark:bg-slate-950 transition-colors duration-200 pb-20">
+    <div className="min-h-dvh bg-[#F8FAFC] dark:bg-slate-950 transition-colors duration-200 pb-20">
       <JsonLd data={companyJsonLd as any} />
       <div className="bg-[#0F172A] py-12 px-4 border-b border-slate-800">
         <div className="max-w-5xl mx-auto">

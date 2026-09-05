@@ -176,7 +176,7 @@ function LLPSEO() {
 
 export default function LLPFeePage() {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-200 pb-20">
+    <div className="min-h-dvh bg-slate-50 dark:bg-slate-950 transition-colors duration-200 pb-20">
       <JsonLd data={llpJsonLd as any} />
       
       {/* Banner */}

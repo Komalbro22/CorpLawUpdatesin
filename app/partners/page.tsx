@@ -124,16 +124,16 @@ export default function PartnerInterestPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 pb-16">
+    <div className="min-h-dvh bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200 pb-16">
       {/* HEADER HERO */}
       <section className="bg-navy text-white py-14 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         <div
           className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"
-          aria-hidden
+          aria-hidden="true"
         />
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-gold text-xs font-semibold uppercase tracking-wider mb-4 border border-white/10">
-            <Briefcase className="w-3.5 h-3.5" /> Professional Network
+            <Briefcase className="size-3.5" aria-hidden="true" /> Professional Network
           </div>
           <h1 className="font-heading text-3xl sm:text-4xl font-bold tracking-tight text-white mb-3">
             List Your Services on CorpLawUpdates<span className="text-gold">.in</span>
@@ -146,24 +146,24 @@ export default function PartnerInterestPage() {
 
       {/* FORM CONTAINER */}
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
-        <div className="bg-white rounded-2xl shadow-xl border border-slate-200/80 p-6 sm:p-10">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200/80 dark:border-slate-800 p-6 sm:p-10">
           {submitted ? (
             <div className="text-center py-12 space-y-4">
-              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto text-emerald-600">
-                <CheckCircle className="w-10 h-10" />
+              <div className="size-16 bg-emerald-100 dark:bg-emerald-950/60 rounded-full flex items-center justify-center mx-auto text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+                <CheckCircle className="size-10" aria-hidden="true" />
               </div>
-              <h2 className="font-heading text-2xl font-bold text-slate-900">
+              <h2 className="font-heading text-2xl font-bold text-slate-900 dark:text-white">
                 Thanks — we&apos;ll review and reach out
               </h2>
-              <p className="text-slate-600 max-w-md mx-auto text-sm leading-relaxed">
+              <p className="text-slate-600 dark:text-slate-300 max-w-md mx-auto text-sm leading-relaxed">
                 Your interest submission has been received. Our team will review your practice details and get in touch with next steps.
               </p>
               <div className="pt-6">
                 <Link
                   href="/"
-                  className="inline-flex items-center gap-2 bg-navy text-white px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-slate-800 transition-colors"
+                  className="inline-flex items-center gap-2 bg-navy dark:bg-amber-400 text-white dark:text-navy px-6 py-2.5 rounded-lg text-sm font-semibold hover:bg-slate-800 dark:hover:bg-amber-500 transition-colors"
                 >
-                  Return to Home <ChevronRight className="w-4 h-4" />
+                  Return to Home <ChevronRight className="size-4" aria-hidden="true" />
                 </Link>
               </div>
             </div>
@@ -173,21 +173,21 @@ export default function PartnerInterestPage() {
               className="space-y-8"
             >
               {errorMsg && (
-                <div className="p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm font-medium">
+                <div className="p-4 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 text-red-700 dark:text-red-400 text-sm font-medium" role="alert">
                   {errorMsg}
                 </div>
               )}
 
               {/* SECTION 1: BASIC DETAILS */}
               <div className="space-y-5">
-                <h3 className="font-heading text-lg font-bold text-navy flex items-center gap-2 border-b border-slate-100 pb-2">
-                  <Building2 className="w-5 h-5 text-gold" />
+                <h3 className="font-heading text-lg font-bold text-navy dark:text-white flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-2">
+                  <Building2 className="size-5 text-gold" aria-hidden="true" />
                   Practice & Professional Details
                 </h3>
 
                 {/* Name */}
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
                     Firm or Individual Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -196,34 +196,34 @@ export default function PartnerInterestPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. Apex Corporate Solutions / CS R. Sharma"
-                    className="w-full px-4 py-2.5 rounded-lg border border-slate-300 text-slate-900 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
+                    className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
                   />
                 </div>
 
                 {/* Qualification & Experience */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
                       Qualification <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <select
                         value={qualification}
                         onChange={(e) => setQualification(e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-slate-300 text-slate-900 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all bg-white appearance-none"
+                        className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all bg-white dark:bg-slate-800 appearance-none"
                       >
                         {QUALIFICATIONS.map((q) => (
-                          <option key={q} value={q}>
+                          <option key={q} value={q} className="dark:bg-slate-800 dark:text-slate-100">
                             {q}
                           </option>
                         ))}
                       </select>
-                      <Award className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                      <Award className="size-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" aria-hidden="true" />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
                       Years of Experience
                     </label>
                     <input
@@ -233,14 +233,14 @@ export default function PartnerInterestPage() {
                       value={experienceYears}
                       onChange={(e) => setExperienceYears(e.target.value)}
                       placeholder="e.g. 8"
-                      className="w-full px-4 py-2.5 rounded-lg border border-slate-300 text-slate-900 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
+                      className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
                     />
                   </div>
                 </div>
 
                 {/* Website */}
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
                     Website <span className="text-slate-400 font-normal">(Optional)</span>
                   </label>
                   <div className="relative">
@@ -249,20 +249,20 @@ export default function PartnerInterestPage() {
                       value={website}
                       onChange={(e) => setWebsite(e.target.value)}
                       placeholder="e.g. https://www.yourfirm.com"
-                      className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 text-slate-900 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
+                      className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
                     />
-                    <Globe className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <Globe className="size-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true" />
                   </div>
                 </div>
               </div>
 
               {/* SECTION 2: SERVICES OFFERED */}
               <div className="space-y-4 pt-2">
-                <h3 className="font-heading text-lg font-bold text-navy flex items-center gap-2 border-b border-slate-100 pb-2">
-                  <User className="w-5 h-5 text-gold" />
+                <h3 className="font-heading text-lg font-bold text-navy dark:text-white flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-2">
+                  <User className="size-5 text-gold" aria-hidden="true" />
                   Services Offered <span className="text-red-500 text-sm">*</span>
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   Select key regulatory and compliance areas you handle:
                 </p>
 
@@ -277,8 +277,8 @@ export default function PartnerInterestPage() {
                         onClick={() => toggleService(service)}
                         className={`text-xs font-semibold px-3 py-1.5 rounded-full transition-all border ${
                           active
-                            ? 'bg-navy text-white border-navy shadow-sm'
-                            : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                            ? 'bg-navy dark:bg-amber-400 text-white dark:text-navy border-navy dark:border-amber-400 shadow-sm'
+                            : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
                         }`}
                       >
                         {active ? '✓ ' : '+ '}
@@ -290,7 +290,7 @@ export default function PartnerInterestPage() {
 
                 {/* Custom Tag Input */}
                 <div className="pt-2">
-                  <label className="block text-xs font-medium text-slate-600 mb-1">
+                  <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
                     Add specific service / filing type
                   </label>
                   <div className="flex gap-2">
@@ -300,29 +300,29 @@ export default function PartnerInterestPage() {
                       onChange={(e) => setCustomService(e.target.value)}
                       onKeyDown={handleAddCustomService}
                       placeholder="e.g. DIR-3 KYC, MGT-14, Secretarial Audit"
-                      className="flex-1 px-4 py-2 rounded-lg border border-slate-300 text-slate-900 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
+                      className="flex-1 px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
                     />
                     <button
                       type="button"
                       onClick={handleAddCustomService}
-                      className="px-4 py-2 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-lg text-sm font-semibold inline-flex items-center gap-1 transition-colors"
+                      className="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg text-sm font-semibold inline-flex items-center gap-1 transition-colors"
                     >
-                      <Plus className="w-4 h-4" /> Add
+                      <Plus className="size-4" aria-hidden="true" /> Add
                     </button>
                   </div>
                 </div>
 
                 {/* Selected Tags Display */}
                 {selectedServices.length > 0 && (
-                  <div className="p-3 bg-amber-50/60 rounded-xl border border-amber-200/70">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-amber-800 block mb-2">
+                  <div className="p-3 bg-amber-50/60 dark:bg-amber-950/30 rounded-xl border border-amber-200/70 dark:border-amber-900/40">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300 block mb-2">
                       Selected Services ({selectedServices.length}):
                     </span>
                     <div className="flex flex-wrap gap-1.5">
                       {selectedServices.map((service) => (
                         <span
                           key={service}
-                          className="inline-flex items-center gap-1 bg-white text-navy border border-amber-300 text-xs font-semibold px-2.5 py-1 rounded-md shadow-xs"
+                          className="inline-flex items-center gap-1 bg-white dark:bg-slate-800 text-navy dark:text-white border border-amber-300 dark:border-amber-500/50 text-xs font-semibold px-2.5 py-1 rounded-md shadow-xs"
                         >
                           {service}
                           <button
@@ -330,7 +330,7 @@ export default function PartnerInterestPage() {
                             onClick={() => removeService(service)}
                             className="hover:text-red-500 transition-colors"
                           >
-                            <X className="w-3.5 h-3.5" />
+                            <X className="size-3.5" aria-hidden="true" />
                           </button>
                         </span>
                       ))}
@@ -341,23 +341,23 @@ export default function PartnerInterestPage() {
 
               {/* SECTION 3: CONTACT & PREFERENCES */}
               <div className="space-y-5 pt-2">
-                <h3 className="font-heading text-lg font-bold text-navy flex items-center gap-2 border-b border-slate-100 pb-2">
-                  <MessageSquare className="w-5 h-5 text-gold" />
+                <h3 className="font-heading text-lg font-bold text-navy dark:text-white flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-2">
+                  <MessageSquare className="size-5 text-gold" aria-hidden="true" />
                   Contact Preference
                 </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
                       Preferred Contact Method
                     </label>
                     <select
                       value={contactPreference}
                       onChange={(e) => setContactPreference(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-lg border border-slate-300 text-slate-900 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all bg-white"
+                      className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all bg-white dark:bg-slate-800"
                     >
                       {CONTACT_METHODS.map((m) => (
-                        <option key={m.value} value={m.value}>
+                        <option key={m.value} value={m.value} className="dark:bg-slate-800 dark:text-slate-100">
                           {m.label}
                         </option>
                       ))}
@@ -365,7 +365,7 @@ export default function PartnerInterestPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
                       Contact Details
                     </label>
                     <input
@@ -376,14 +376,14 @@ export default function PartnerInterestPage() {
                         CONTACT_METHODS.find((m) => m.value === contactPreference)?.placeholder ||
                         'Enter contact value'
                       }
-                      className="w-full px-4 py-2.5 rounded-lg border border-slate-300 text-slate-900 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
+                      className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
                     />
                   </div>
                 </div>
 
                 {/* Additional Notes */}
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
                     Additional Notes <span className="text-slate-400 font-normal">(Optional)</span>
                   </label>
                   <textarea
@@ -391,13 +391,13 @@ export default function PartnerInterestPage() {
                     value={additionalNotes}
                     onChange={(e) => setAdditionalNotes(e.target.value)}
                     placeholder="Tell us more about your practice focus, cities served, or specialized regulatory domain..."
-                    className="w-full px-4 py-2.5 rounded-lg border border-slate-300 text-slate-900 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
+                    className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
                   />
                 </div>
               </div>
 
               {/* SUBMIT BUTTON */}
-              <div className="pt-4 border-t border-slate-100">
+              <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
                 <button
                   type="submit"
                   disabled={loading}

@@ -152,15 +152,15 @@ export default function GlobalSearch() {
   }, [query, category, type])
 
   const categoryColors: Record<string, string> = {
-    mca: 'bg-blue-100 text-blue-700  ',
-    sebi: 'bg-green-100 text-green-700  ',
-    rbi: 'bg-purple-100 text-purple-700  ',
-    nclt: 'bg-orange-100 text-orange-700  ',
-    ibc: 'bg-red-100 text-red-700  ',
-    fema: 'bg-teal-100 text-teal-700  ',
-    cci: 'bg-indigo-100 text-indigo-700  ',
-    labour: 'bg-amber-100 text-amber-700  ',
-    income_tax: 'bg-amber-100 text-amber-700  ',
+    mca: 'bg-blue-100 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/40',
+    sebi: 'bg-green-100 dark:bg-emerald-950/50 text-green-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/40',
+    rbi: 'bg-purple-100 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 border border-purple-200/60 dark:border-purple-800/40',
+    nclt: 'bg-orange-100 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 border border-orange-200/60 dark:border-orange-800/40',
+    ibc: 'bg-red-100 dark:bg-red-950/50 text-red-700 dark:text-red-300 border border-red-200/60 dark:border-red-800/40',
+    fema: 'bg-teal-100 dark:bg-teal-950/50 text-teal-700 dark:text-teal-300 border border-teal-200/60 dark:border-teal-800/40',
+    cci: 'bg-indigo-100 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/40',
+    labour: 'bg-amber-100 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/40',
+    income_tax: 'bg-amber-100 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/40',
   }
 
   // Get categories options dynamically based on search type
@@ -212,7 +212,7 @@ export default function GlobalSearch() {
         aria-haspopup="dialog"
         className="flex min-h-[44px] items-center gap-2.5 text-xs font-medium text-slate-500 dark:text-slate-400 bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200/90 dark:hover:bg-slate-700/90 border border-slate-200/90 dark:border-slate-700/90 rounded-xl px-3 py-1.5 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400"
       >
-        <svg className="w-3.5 h-3.5 text-slate-400 dark:text-slate-400" fill="none" 
+        <svg className="size-3.5 text-slate-400 dark:text-slate-400" aria-hidden="true" fill="none" 
              viewBox="0 0 24 24" 
              stroke="currentColor">
           <path strokeLinecap="round" 
@@ -247,7 +247,7 @@ export default function GlobalSearch() {
             
             {/* Search input */}
             <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-200 dark:border-slate-800">
-              <svg className="w-5 h-5 text-slate-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="size-5 text-slate-400 flex-shrink-0" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               <input
@@ -260,7 +260,7 @@ export default function GlobalSearch() {
                 autoComplete="off"
               />
               {loading && (
-                <div className="w-4 h-4 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
+                <div className="size-4 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" aria-hidden="true" />
               )}
               <button
                 type="button"

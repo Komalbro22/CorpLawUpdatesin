@@ -332,7 +332,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
     }
 
     return (
-        <div className="min-h-screen bg-white dark:bg-slate-900">
+        <div className="min-h-dvh bg-white dark:bg-slate-900">
             <ArticleContextTool 
                 title={update.title}
                 summary={update.summary}
@@ -500,21 +500,21 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                             <details open className={`group overflow-hidden rounded-xl border ${cardStyles.borderColor} dark:border-slate-800 border-l-[4px] ${cardStyles.borderLeftColor} ${cardStyles.bgColor} shadow-sm transition-all duration-200`}>
                                 <summary className="cursor-pointer p-4 font-bold text-navy dark:text-slate-100 flex justify-between items-center bg-white dark:bg-slate-900 hover:bg-slate-50/80 dark:hover:bg-slate-800/80 transition-colors list-none [&::-webkit-details-marker]:hidden focus:outline-none">
                                     <div className="flex items-center gap-2">
-                                        <Sparkles className={`h-5 w-5 ${cardStyles.iconColor} animate-pulse`} aria-hidden />
+                                        <Sparkles className={`size-5 ${cardStyles.iconColor} animate-pulse`} aria-hidden="true" />
                                         <span className="font-heading text-base font-bold text-navy dark:text-white tracking-tight">TL;DR — Executive Summary</span>
                                     </div>
                                     <div className="flex items-center gap-3">
                                         <span className={`hidden sm:inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${cardStyles.badgeBg}`}>
                                             ⚡ Key Takeaways
                                         </span>
-                                        <ChevronDown className="h-4 w-4 text-slate-400 transition-transform duration-300 group-open:rotate-180" aria-hidden />
+                                        <ChevronDown className="size-4 text-slate-400 transition-transform duration-300 group-open:rotate-180" aria-hidden="true" />
                                     </div>
                                 </summary>
                                 <div className="p-5 border-t border-slate-100 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm">
                                     <ul className="space-y-3.5 list-none pl-0 m-0" itemProp="abstract" data-ai-summary="true">
                                         {update.key_changes.map((kc: string, i: number) => (
                                             <li key={i} className="flex items-start gap-3 text-sm text-slate-700 dark:text-slate-400 leading-relaxed font-medium">
-                                                <CheckCircle2 className={`h-4 w-4 mt-0.5 flex-shrink-0 ${cardStyles.iconColor}`} aria-hidden />
+                                                <CheckCircle2 className={`size-4 mt-0.5 shrink-0 ${cardStyles.iconColor}`} aria-hidden="true" />
                                                 <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(kc) }} />
                                             </li>
                                         ))}
@@ -533,7 +533,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                 {/* Editorial byline */}
                 <div className="mb-4 flex flex-wrap items-center justify-between gap-4 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-3 text-xs">
                     <span className="flex items-center gap-3">
-                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-navy text-white font-bold shrink-0">CL</span>
+                        <span className="flex size-8 items-center justify-center rounded-full bg-navy text-white font-bold shrink-0">CL</span>
                         <span className="block">
                             <Link href="/editorial-policy" className="font-bold text-slate-700 dark:text-slate-300 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
                                 {EDITORIAL_AUTHOR.name}
@@ -544,9 +544,9 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                     {geoData?.last_verified && (
                         <span className="flex flex-col items-end">
                             <span className="flex items-center gap-1 font-semibold text-green-700 dark:text-green-400">
-                                <CheckCircle2 className="h-3.5 w-3.5" aria-hidden /> Verified for compliance
+                                <CheckCircle2 className="size-3.5" aria-hidden="true" /> Verified for compliance
                             </span>
-                            <span className="text-slate-600 dark:text-slate-400">Last verified: {formatDate(geoData.last_verified)}</span>
+                            <span className="text-slate-600 dark:text-slate-400">Last verified: <span className="tabular-nums">{formatDate(geoData.last_verified)}</span></span>
                         </span>
                     )}
                 </div>

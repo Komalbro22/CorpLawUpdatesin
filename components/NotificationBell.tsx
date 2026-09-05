@@ -218,17 +218,17 @@ export default function NotificationBell() {
         }`}
       >
         {permission === 'denied' ? (
-          <BellOff className="w-4 h-4 text-red-500" />
+          <BellOff className="size-4 text-red-500" aria-hidden="true" />
         ) : isSubscribed ? (
           <>
-            <Bell className="w-4 h-4 fill-amber-400 text-amber-500" />
-            <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+            <Bell className="size-4 fill-amber-400 text-amber-500" aria-hidden="true" />
+            <span className="absolute -top-1 -right-1 flex size-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
+              <span className="relative inline-flex rounded-full size-2.5 bg-amber-500"></span>
             </span>
           </>
         ) : (
-          <Bell className="w-4 h-4" />
+          <Bell className="size-4" aria-hidden="true" />
         )}
       </button>
 
@@ -237,10 +237,14 @@ export default function NotificationBell() {
         <div className="absolute right-0 top-full mt-2 w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl p-3 z-50 animate-fade-in">
           <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2 mb-2">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-              <Settings2 className="w-3.5 h-3.5 text-amber-500" /> Alert Preferences
+              <Settings2 className="size-3.5 text-amber-500" aria-hidden="true" /> Alert Preferences
             </span>
-            <button onClick={() => setDropdownOpen(false)} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
-              <X className="w-4 h-4" />
+            <button
+              onClick={() => setDropdownOpen(false)}
+              aria-label="Close notification preferences"
+              className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-md"
+            >
+              <X className="size-4" aria-hidden="true" />
             </button>
           </div>
 
@@ -258,7 +262,7 @@ export default function NotificationBell() {
                   }`}
                 >
                   <span>{cat.label}</span>
-                  {checked && <Check className="w-3.5 h-3.5 text-amber-500" />}
+                  {checked && <Check className="size-3.5 text-amber-500" aria-hidden="true" />}
                 </button>
               )
             })}

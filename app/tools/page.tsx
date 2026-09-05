@@ -308,7 +308,7 @@ const comingTools = tools.filter(t => !t.isLive)
 
 export default function ToolsPage() {
   return (
-    <div id="tools-page-content" className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
+    <div id="tools-page-content" className="min-h-dvh bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
       <JsonLd data={toolsJsonLd as any} />
 
       {/* Hero Banner */}
@@ -333,7 +333,7 @@ export default function ToolsPage() {
               { v: '0', l: 'Login Required' },
             ].map(s => (
               <div key={s.l} className="text-center">
-                <div className="text-3xl font-black text-amber-400">
+                <div className="text-3xl font-black text-amber-400 tabular-nums">
                   {s.v}
                 </div>
                 <div className="text-slate-300 text-xs mt-0.5 font-medium">
@@ -350,11 +350,11 @@ export default function ToolsPage() {
         {/* Live Tools */}
         <div className="mb-12">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse" />
+            <div className="size-2.5 bg-green-500 rounded-full animate-pulse" aria-hidden="true" />
             <h2 className="text-2xl font-bold text-navy dark:text-white font-heading">
               Live Tools
             </h2>
-            <span className="bg-green-100 text-green-700 dark:bg-green-950/50 dark:text-green-300 dark:border dark:border-green-900/30 text-xs font-bold px-2.5 py-1 rounded-full">
+            <span className="bg-green-100 text-green-700 dark:bg-green-950/50 dark:text-green-300 dark:border dark:border-green-900/30 text-xs font-bold px-2.5 py-1 rounded-full tabular-nums">
               {liveTools.length} Available Now
             </span>
           </div>
@@ -364,12 +364,14 @@ export default function ToolsPage() {
               <Link
                 key={tool.id}
                 href={tool.href}
-                className={`group bg-white dark:bg-slate-900 border-2 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-200 flex flex-col ${tool.color}`}
+                className="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-amber-500/50 dark:hover:border-amber-500/40 transition-all duration-200 flex flex-col"
               >
                 {/* Card header */}
-                <span className={`block bg-gradient-to-r ${tool.headerBg} p-5`}>
+                <span className="block bg-navy dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 p-5">
                   <span className="flex items-center gap-4">
-                    <span className="text-5xl shrink-0">{tool.icon}</span>
+                    <span className="size-12 rounded-xl bg-white/10 dark:bg-slate-800 flex items-center justify-center text-amber-400 shrink-0">
+                      {tool.icon}
+                    </span>
                     <span className="block min-w-0">
                       <span className="flex items-center gap-2 mb-1">
                         <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${tool.badgeColor}`}>
@@ -379,7 +381,7 @@ export default function ToolsPage() {
                       <span className="block text-white font-bold text-lg leading-snug">
                         {tool.label}
                       </span>
-                      <span className="block text-white/60 text-xs mt-0.5">
+                      <span className="block text-slate-300 dark:text-slate-400 text-xs mt-0.5">
                         {tool.stats}
                       </span>
                     </span>
@@ -402,11 +404,12 @@ export default function ToolsPage() {
                   </span>
 
                   <span className="flex items-center justify-between">
-                    <span className="text-xs text-green-600 dark:text-green-400 font-semibold">
-                      ● Live Now
+                    <span className="text-xs text-green-600 dark:text-green-400 font-semibold flex items-center gap-1.5">
+                      <span className="size-1.5 rounded-full bg-green-500" aria-hidden="true" />
+                      Live Now
                     </span>
-                    <span className="text-navy dark:text-amber-400 font-bold text-sm group-hover:translate-x-1 transition-transform inline-block">
-                      Open Tool →
+                    <span className="text-navy dark:text-amber-400 font-bold text-sm group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                      Open Tool <span aria-hidden="true">→</span>
                     </span>
                   </span>
                 </span>

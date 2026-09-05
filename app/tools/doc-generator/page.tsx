@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function AIDocGeneratorIndexPage() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-dvh bg-slate-950 text-slate-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Header Hero Section */}
         <div className="text-center space-y-4 max-w-3xl mx-auto">

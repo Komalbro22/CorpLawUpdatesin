@@ -173,14 +173,15 @@ function HubFAQ() {
               }`}
             >
               <button
-                className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 focus:outline-none"
+                className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+                aria-expanded={isOpen}
                 onClick={() => setOpenIndex(isOpen ? null : index)}
               >
                 <span className={`font-semibold text-lg ${isOpen ? 'text-navy dark:text-white' : 'text-slate-800 dark:text-slate-200'}`}>
                   {faq.q}
                 </span>
                 <span className={`shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180 text-navy dark:text-white' : 'text-slate-400'}`}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <polyline points="6 9 12 15 18 9"></polyline>
                   </svg>
                 </span>
@@ -233,7 +234,7 @@ function HubGuides() {
 
 export default function FeeCalculatorHub() {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-200 pb-20">
+    <div className="min-h-dvh bg-slate-50 dark:bg-slate-950 transition-colors duration-200 pb-20">
       <JsonLd data={hubJsonLd as any} />
 
       <div className="bg-navy py-16 px-4 border-b border-slate-800">

@@ -324,7 +324,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .dark .dynamic-card-neutral {
-  background-color: #0E1626 !important;
+  background: #0B132B !important;
+  background-color: #0B132B !important;
   border: 1px solid #1E293B !important;
   border-left: 4px solid #475569 !important;
 }
@@ -333,6 +334,89 @@ h1, h2, h3, h4, h5, h6 {
 }
 .dark .dynamic-card-neutral strong, .dark .dynamic-card-neutral b, .dark .dynamic-card-neutral h1, .dark .dynamic-card-neutral h2, .dark .dynamic-card-neutral h3, .dark .dynamic-card-neutral h4 {
   color: #F8FAFC !important;
+}
+
+/* Neutral Content Boxes / Cards without left accent border (Quick Answer, stat cards, grid items) */
+.dynamic-box-neutral {
+  background-color: #F8FAFC !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 0.75rem;
+}
+.dynamic-box-neutral p,
+.dynamic-box-neutral span,
+.dynamic-box-neutral li,
+.dynamic-box-neutral div {
+  color: #334155 !important;
+}
+.dynamic-box-neutral strong,
+.dynamic-box-neutral b,
+.dynamic-box-neutral h1,
+.dynamic-box-neutral h2,
+.dynamic-box-neutral h3,
+.dynamic-box-neutral h4 {
+  color: #0F172A !important;
+}
+
+.dark .dynamic-box-neutral {
+  background: #0B132B !important;
+  background-color: #0B132B !important;
+  border-color: #1E293B !important;
+}
+.dark .dynamic-box-neutral p,
+.dark .dynamic-box-neutral span,
+.dark .dynamic-box-neutral li,
+.dark .dynamic-box-neutral div {
+  color: #CBD5E1 !important;
+}
+.dark .dynamic-box-neutral strong,
+.dark .dynamic-box-neutral b {
+  color: #FDE68A !important;
+}
+.dark .dynamic-box-neutral h1,
+.dark .dynamic-box-neutral h2,
+.dark .dynamic-box-neutral h3,
+.dark .dynamic-box-neutral h4 {
+  color: #F8FAFC !important;
+}
+.dark .dynamic-box-neutral a {
+  color: #F59E0B !important;
+}
+
+/* Dark Container Cards */
+.dynamic-card-dark {
+  background-color: #0F172A !important;
+  border: 1px solid #1E293B !important;
+  border-radius: 0.75rem;
+  color: #F1F5F9 !important;
+}
+.dynamic-card-dark p,
+.dynamic-card-dark span,
+.dynamic-card-dark li,
+.dynamic-card-dark div {
+  color: #F1F5F9 !important;
+}
+.dynamic-card-dark strong,
+.dynamic-card-dark b {
+  color: #F59E0B !important;
+}
+.dynamic-card-dark h1,
+.dynamic-card-dark h2,
+.dynamic-card-dark h3,
+.dynamic-card-dark h4 {
+  color: #F59E0B !important;
+}
+.dark .dynamic-card-dark {
+  background: #0B132B !important;
+  background-color: #0B132B !important;
+  border-color: #1E293B !important;
+}
+
+/* Adaptive inline text */
+.dynamic-text-adaptive {
+  color: #1E293B;
+}
+.dark .dynamic-text-adaptive {
+  color: #E2E8F0 !important;
 }
 
 /* Article content dark mode text override */
@@ -349,20 +433,91 @@ h1, h2, h3, h4, h5, h6 {
   color: #F8FAFC !important;
 }
 
-.dark .article-content p:not([class*="dynamic-card"] *),
-.dark .article-content span:not([class*="badge"]):not([class*="bg-"]):not([class*="text-amber-"]):not([class*="text-gold"]):not([class*="dynamic-card"] *),
-.dark .article-content li:not([class*="dynamic-card"] *),
-.dark .article-content td:not([class*="dynamic-card"] *) {
+.dark .article-content p:not([class*="dynamic-card"] *):not([class*="dynamic-box"] *),
+.dark .article-content span:not([class*="badge"]):not([class*="bg-"]):not([class*="text-amber-"]):not([class*="text-gold"]):not([class*="dynamic-card"] *):not([class*="dynamic-box"] *),
+.dark .article-content li:not([class*="dynamic-card"] *):not([class*="dynamic-box"] *),
+.dark .article-content td:not([class*="dynamic-card"] *):not([class*="dynamic-box"] *) {
   color: #CBD5E1 !important;
 }
 
-.dark .article-content strong:not([class*="dynamic-card"] *),
-.dark .article-content b:not([class*="dynamic-card"] *) {
+.dark .article-content strong:not([class*="dynamic-card"] *):not([class*="dynamic-box"] *),
+.dark .article-content b:not([class*="dynamic-card"] *):not([class*="dynamic-box"] *) {
   color: #FDE68A !important;
 }
 
 .dark .article-content a {
   color: #F59E0B !important;
+}
+
+/* Direct inline style overrides in dark mode to prevent any white-card bleeding */
+.dark .article-content [style*="background:#f8fafc"]:not([class*="badge"]),
+.dark .article-content [style*="background: #f8fafc"]:not([class*="badge"]),
+.dark .article-content [style*="background:#fff"]:not([class*="badge"]):not(img),
+.dark .article-content [style*="background: #fff"]:not([class*="badge"]):not(img),
+.dark .article-content [style*="background:#ffffff"]:not([class*="badge"]):not(img),
+.dark .article-content [style*="background: #ffffff"]:not([class*="badge"]):not(img),
+.dark .article-content [style*="background:#f0f4ff"]:not([class*="badge"]),
+.dark .article-content [style*="background: #f0f4ff"]:not([class*="badge"]),
+.dark .article-content [style*="background:#eff6ff"]:not([class*="badge"]),
+.dark .article-content [style*="background: #eff6ff"]:not([class*="badge"]),
+.dark .article-content [style*="background:#f1f5f9"]:not([class*="badge"]),
+.dark .article-content [style*="background: #f1f5f9"]:not([class*="badge"]),
+.dark .article-content [style*="background:#f9fafb"]:not([class*="badge"]),
+.dark .article-content [style*="background: #f9fafb"]:not([class*="badge"]),
+.dark .article-content [style*="background:#dbe3ef"]:not([class*="badge"]),
+.dark .article-content [style*="background: #dbe3ef"]:not([class*="badge"]) {
+  background: #0B132B !important;
+  background-color: #0B132B !important;
+  border-color: #1E293B !important;
+}
+
+/* Color adaptations for dark inline text in dark mode */
+.dark .article-content [style*="color:#1e3a5f"],
+.dark .article-content [style*="color: #1e3a5f"],
+.dark .article-content [style*="color:#1a1a2e"],
+.dark .article-content [style*="color: #1a1a2e"],
+.dark .article-content [style*="color:#0f172a"],
+.dark .article-content [style*="color: #0f172a"],
+.dark .article-content [style*="color:#111827"],
+.dark .article-content [style*="color: #111827"],
+.dark .article-content [style*="color:#1e293b"],
+.dark .article-content [style*="color: #1e293b"],
+.dark .article-content [style*="color:#000000"],
+.dark .article-content [style*="color: #000000"],
+.dark .article-content [style*="color:#000"],
+.dark .article-content [style*="color: #000"],
+.dark .article-content [style*="color:#333"],
+.dark .article-content [style*="color: #333"] {
+  color: #E2E8F0 !important;
+}
+
+/* Specific semantic accents in dark mode */
+.dark .article-content [style*="color:#15803d"],
+.dark .article-content [style*="color: #15803d"],
+.dark .article-content [style*="color:#16a34a"],
+.dark .article-content [style*="color: #16a34a"] {
+  color: #4ADE80 !important;
+}
+
+.dark .article-content [style*="color:#b91c1c"],
+.dark .article-content [style*="color: #b91c1c"],
+.dark .article-content [style*="color:#dc2626"],
+.dark .article-content [style*="color: #dc2626"] {
+  color: #F87171 !important;
+}
+
+.dark .article-content [style*="color:#0369a1"],
+.dark .article-content [style*="color: #0369a1"],
+.dark .article-content [style*="color:#0284c7"],
+.dark .article-content [style*="color: #0284c7"] {
+  color: #38BDF8 !important;
+}
+
+.dark .article-content [style*="color:#1d4ed8"],
+.dark .article-content [style*="color: #1d4ed8"],
+.dark .article-content [style*="color:#2563eb"],
+.dark .article-content [style*="color: #2563eb"] {
+  color: #60A5FA !important;
 }
 
 /* Table Dark Mode Overrides */

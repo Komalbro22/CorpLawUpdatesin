@@ -673,7 +673,7 @@ export default function ROCTrackerPage() {
     focus:ring-amber-400`
 
   return (
-    <div className="min-h-screen bg-slate-50 
+    <div className="min-h-dvh bg-slate-50 
                     dark:bg-slate-950 
                     print:bg-white transition-colors duration-200">
       

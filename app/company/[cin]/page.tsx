@@ -194,7 +194,7 @@ export default async function CompanyProfilePage({ params }: Props) {
   }
 
   return (
-    <article className="min-h-screen bg-slate-50 dark:bg-slate-950 py-8 px-4 sm:px-6 transition-colors duration-200">
+    <article className="min-h-dvh bg-slate-50 dark:bg-slate-950 py-8 px-4 sm:px-6 transition-colors duration-200">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph) }}
@@ -220,7 +220,7 @@ export default async function CompanyProfilePage({ params }: Props) {
               <CompanyStatusBadge status={company.company_status} size="lg" />
               {company.is_manually_corrected && (
                 <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-950 dark:text-amber-300">
-                  <ShieldCheck className="w-3.5 h-3.5" /> Manually Verified
+                  <ShieldCheck className="size-3.5" aria-hidden="true" /> Manually Verified
                 </span>
               )}
             </div>
@@ -230,7 +230,7 @@ export default async function CompanyProfilePage({ params }: Props) {
                 type="submit"
                 className="inline-flex items-center gap-2 bg-navy hover:bg-slate-800 text-white dark:bg-amber-400 dark:hover:bg-amber-500 dark:text-navy font-bold px-4 py-2 rounded-xl text-xs md:text-sm transition-all shadow-sm active:scale-95"
               >
-                <FileText className="w-4 h-4" /> Download PDF Report
+                <FileText className="size-4" aria-hidden="true" /> Download PDF Report
               </button>
             </form>
           </div>
@@ -240,18 +240,18 @@ export default async function CompanyProfilePage({ params }: Props) {
           </h1>
 
           <p className="text-xs md:text-sm font-mono text-slate-500 dark:text-slate-400 flex flex-wrap items-center gap-3">
-            <span>CIN: <strong className="text-slate-700 dark:text-slate-200">{company.cin}</strong></span>
+            <span>CIN: <strong className="text-slate-700 dark:text-slate-200 tabular-nums">{company.cin}</strong></span>
             <span>•</span>
             <span>ROC: <strong className="text-slate-700 dark:text-slate-200">{company.roc_office || 'N/A'}</strong></span>
             <span>•</span>
-            <span>Incorporated: <strong className="text-slate-700 dark:text-slate-200">{incDate}</strong></span>
+            <span>Incorporated: <strong className="text-slate-700 dark:text-slate-200 tabular-nums">{incDate}</strong></span>
           </p>
         </header>
 
         {/* 3. Quick Answer Box (AI-SEO GEO Summary) */}
         <section className="bg-gradient-to-br from-amber-500/10 via-amber-400/5 to-transparent rounded-2xl p-5 md:p-6 border border-amber-300/40 dark:border-amber-500/20 shadow-sm relative">
           <div className="flex items-center gap-2 mb-2">
-            <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400 animate-pulse" />
+            <Sparkles className="size-4 text-amber-600 dark:text-amber-400 animate-pulse" aria-hidden="true" />
             <h2 className="text-xs font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400">
               Quick AI Summary & Practitioner Overview
             </h2>
@@ -265,20 +265,20 @@ export default async function CompanyProfilePage({ params }: Props) {
         {cinDecoded && (
           <section className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4">
             <div className="flex items-center gap-2">
-              <Binary className="w-5 h-5 text-amber-500" />
+              <Binary className="size-5 text-amber-500" aria-hidden="true" />
               <h2 className="text-xl font-bold text-navy dark:text-white font-heading">
                 CIN Decoder & Structure Breakdown
               </h2>
             </div>
             <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400">
-              Decoded breakdown of Corporate Identification Number <strong>{company.cin}</strong>:
+              Decoded breakdown of Corporate Identification Number <strong className="tabular-nums">{company.cin}</strong>:
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-2">
               {/* 1. Listing Status */}
               <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60">
                 <div className="flex items-center gap-2 text-xs font-bold text-amber-600 dark:text-amber-400 mb-1">
-                  <Award className="w-4 h-4" /> 1. Listing Status ({cinDecoded.listingStatus.code})
+                  <Award className="size-4" aria-hidden="true" /> 1. Listing Status ({cinDecoded.listingStatus.code})
                 </div>
                 <div className="font-bold text-sm text-navy dark:text-white mb-1">{cinDecoded.listingStatus.label}</div>
                 <div className="text-xs text-slate-500 dark:text-slate-400">{cinDecoded.listingStatus.description}</div>
@@ -287,7 +287,7 @@ export default async function CompanyProfilePage({ params }: Props) {
               {/* 2. NIC Industry Code */}
               <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60">
                 <div className="flex items-center gap-2 text-xs font-bold text-emerald-600 dark:text-emerald-400 mb-1">
-                  <Briefcase className="w-4 h-4" /> 2. NIC Code ({cinDecoded.nicCode.code})
+                  <Briefcase className="size-4" aria-hidden="true" /> 2. NIC Code ({cinDecoded.nicCode.code})
                 </div>
                 <div className="font-bold text-sm text-navy dark:text-white mb-1">Industrial Activity</div>
                 <div className="text-xs text-slate-500 dark:text-slate-400">{cinDecoded.nicCode.industry}</div>
@@ -296,7 +296,7 @@ export default async function CompanyProfilePage({ params }: Props) {
               {/* 3. State & RoC */}
               <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60">
                 <div className="flex items-center gap-2 text-xs font-bold text-blue-600 dark:text-blue-400 mb-1">
-                  <MapPin className="w-4 h-4" /> 3. State ({cinDecoded.state.code})
+                  <MapPin className="size-4" aria-hidden="true" /> 3. State ({cinDecoded.state.code})
                 </div>
                 <div className="font-bold text-sm text-navy dark:text-white mb-1">{cinDecoded.state.name}</div>
                 <div className="text-xs text-slate-500 dark:text-slate-400">Jurisdiction: {cinDecoded.state.rocOffice}</div>
@@ -305,7 +305,7 @@ export default async function CompanyProfilePage({ params }: Props) {
               {/* 4. Incorporation Year */}
               <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60">
                 <div className="flex items-center gap-2 text-xs font-bold text-purple-600 dark:text-purple-400 mb-1">
-                  <Calendar className="w-4 h-4" /> 4. Year ({cinDecoded.incorporationYear})
+                  <Calendar className="size-4" aria-hidden="true" /> 4. Year ({cinDecoded.incorporationYear})
                 </div>
                 <div className="font-bold text-sm text-navy dark:text-white mb-1">Incorporated {cinDecoded.incorporationYear}</div>
                 <div className="text-xs text-slate-500 dark:text-slate-400">Year of registration under MCA.</div>
@@ -314,7 +314,7 @@ export default async function CompanyProfilePage({ params }: Props) {
               {/* 5. Company Class / Type */}
               <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60">
                 <div className="flex items-center gap-2 text-xs font-bold text-indigo-600 dark:text-indigo-400 mb-1">
-                  <Building2 className="w-4 h-4" /> 5. Ownership ({cinDecoded.companyType.code})
+                  <Building2 className="size-4" aria-hidden="true" /> 5. Ownership ({cinDecoded.companyType.code})
                 </div>
                 <div className="font-bold text-sm text-navy dark:text-white mb-1">{cinDecoded.companyType.label}</div>
                 <div className="text-xs text-slate-500 dark:text-slate-400">{cinDecoded.companyType.description}</div>
@@ -323,7 +323,7 @@ export default async function CompanyProfilePage({ params }: Props) {
               {/* 6. Registration Serial No */}
               <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60">
                 <div className="flex items-center gap-2 text-xs font-bold text-rose-600 dark:text-rose-400 mb-1">
-                  <ShieldCheck className="w-4 h-4" /> 6. Serial No ({cinDecoded.registrationNumber})
+                  <ShieldCheck className="size-4" aria-hidden="true" /> 6. Serial No ({cinDecoded.registrationNumber})
                 </div>
                 <div className="font-bold text-sm text-navy dark:text-white mb-1">RoC Serial Number</div>
                 <div className="text-xs text-slate-500 dark:text-slate-400">Unique 6-digit registration serial code.</div>
@@ -338,13 +338,13 @@ export default async function CompanyProfilePage({ params }: Props) {
           {/* Registered Details Card */}
           <section className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-sm">
             <h2 className="text-lg font-bold text-navy dark:text-white font-heading mb-4 flex items-center gap-2">
-              <Building2 className="w-5 h-5 text-amber-500" /> Registered Details
+              <Building2 className="size-5 text-amber-500" aria-hidden="true" /> Registered Details
             </h2>
 
             <dl className="divide-y divide-slate-100 dark:divide-slate-800/80 text-xs md:text-sm">
               <div className="py-2.5 flex justify-between gap-4">
                 <dt className="text-slate-500 dark:text-slate-400 font-medium">Registration Date</dt>
-                <dd className="font-semibold text-navy dark:text-slate-200">{incDate}</dd>
+                <dd className="font-semibold text-navy dark:text-slate-200 tabular-nums">{incDate}</dd>
               </div>
               <div className="py-2.5 flex justify-between gap-4">
                 <dt className="text-slate-500 dark:text-slate-400 font-medium">Company Class</dt>
@@ -370,17 +370,17 @@ export default async function CompanyProfilePage({ params }: Props) {
           {/* Capital Structure Card */}
           <section className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-sm">
             <h2 className="text-lg font-bold text-navy dark:text-white font-heading mb-4 flex items-center gap-2">
-              <Landmark className="w-5 h-5 text-emerald-500" /> Capital Structure
+              <Landmark className="size-5 text-emerald-500" aria-hidden="true" /> Capital Structure
             </h2>
 
             <dl className="divide-y divide-slate-100 dark:divide-slate-800/80 text-xs md:text-sm">
               <div className="py-2.5 flex justify-between gap-4">
                 <dt className="text-slate-500 dark:text-slate-400 font-medium">Authorised Capital</dt>
-                <dd className="font-bold text-navy dark:text-white">₹{authCapCr} Crore</dd>
+                <dd className="font-bold text-navy dark:text-white"><span className="tabular-nums">₹{authCapCr}</span> Crore</dd>
               </div>
               <div className="py-2.5 flex justify-between gap-4">
                 <dt className="text-slate-500 dark:text-slate-400 font-medium">Paid-Up Capital</dt>
-                <dd className="font-bold text-emerald-600 dark:text-emerald-400">₹{paidUpCr} Crore</dd>
+                <dd className="font-bold text-emerald-600 dark:text-emerald-400"><span className="tabular-nums">₹{paidUpCr}</span> Crore</dd>
               </div>
               <div className="py-2.5 flex justify-between gap-4">
                 <dt className="text-slate-500 dark:text-slate-400 font-medium">Small Company Eligibility</dt>
@@ -409,7 +409,7 @@ export default async function CompanyProfilePage({ params }: Props) {
         <section className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-6">
           <div>
             <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 text-xs font-bold px-3 py-1 rounded-full mb-2">
-              <ShieldCheck className="w-3.5 h-3.5" /> Differentiator Feature
+              <ShieldCheck className="size-3.5" aria-hidden="true" /> Differentiator Feature
             </div>
             <h2 className="text-xl md:text-2xl font-bold text-navy dark:text-white font-heading">
               Phase 1 Compliance Snapshot & Statutory Flags
@@ -428,7 +428,7 @@ export default async function CompanyProfilePage({ params }: Props) {
           {/* Turnover Placeholder Toggle */}
           <div className="mt-6 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/60 flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <Lock className="w-4 h-4 text-slate-400 shrink-0" />
+              <Lock className="size-4 text-slate-400 shrink-0" aria-hidden="true" />
               <span className="text-xs md:text-sm font-semibold text-slate-600 dark:text-slate-300">
                 Is Turnover above ₹50 Crore? (CARO, Secretarial Audit & XBRL Flags)
               </span>
@@ -448,7 +448,7 @@ export default async function CompanyProfilePage({ params }: Props) {
         {relatedArticles && relatedArticles.length > 0 && (
           <section className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-sm">
             <h3 className="text-lg font-bold text-navy dark:text-white font-heading mb-4 flex items-center gap-2">
-              <FileText className="w-5 h-5 text-amber-500" /> Contextual Compliance Articles
+              <FileText className="size-5 text-amber-500" aria-hidden="true" /> Contextual Compliance Articles
             </h3>
             <div className="space-y-3">
               {relatedArticles.map((art) => (
@@ -467,7 +467,7 @@ export default async function CompanyProfilePage({ params }: Props) {
         {/* 12. Auto-Generated FAQ Accordion */}
         <section className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-200/80 dark:border-slate-800 shadow-sm">
           <h3 className="text-xl font-bold text-navy dark:text-white font-heading mb-6 flex items-center gap-2">
-            <HelpCircle className="w-5 h-5 text-amber-500" /> Frequently Asked Questions
+            <HelpCircle className="size-5 text-amber-500" aria-hidden="true" /> Frequently Asked Questions
           </h3>
 
           <div className="space-y-3">

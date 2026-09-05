@@ -203,7 +203,7 @@ const jsonLd = {
 
 export default function ShareTransferDeedPage() {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-20 transition-colors">
+    <div className="min-h-dvh bg-slate-50 dark:bg-slate-950 pb-20 transition-colors">
       {/* Breadcrumbs Navigation */}
       <div className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
         <div className="mx-auto max-w-6xl px-4 py-3 sm:px-6">

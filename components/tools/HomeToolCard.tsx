@@ -39,7 +39,7 @@ export default function HomeToolCard({ tool }: { tool: HomeToolCardData }) {
         <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
           {isComingSoon ? 'Coming Soon' : 'Explore Tool'}
         </span>
-        <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-amber-600 group-hover:translate-x-1 transition-all duration-200" />
+        <ArrowRight className="size-4 text-slate-400 dark:text-slate-500 group-hover:text-amber-600 dark:group-hover:text-amber-400 group-hover:translate-x-1 transition-all duration-200" aria-hidden="true" />
       </span>
     </>
   )

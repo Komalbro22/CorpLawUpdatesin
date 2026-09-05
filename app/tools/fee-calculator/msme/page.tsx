@@ -374,7 +374,7 @@ export default async function MSMEFeePage() {
   const nextMpcDate = settings.next_mpc_date || 'Scheduled MPC'
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-200 pb-20">
+    <div className="min-h-dvh bg-slate-50 dark:bg-slate-950 transition-colors duration-200 pb-20">
       <JsonLd data={msmeJsonLd as any} />
       <div className="bg-navy py-12 px-4 border-b border-slate-800">
         <div className="max-w-4xl mx-auto">

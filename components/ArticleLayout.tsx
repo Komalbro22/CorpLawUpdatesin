@@ -34,7 +34,7 @@ export function ArticleLayout({
   sidebar,
 }: ArticleLayoutProps) {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-6 pb-16">
+    <div className="min-h-dvh bg-slate-50 dark:bg-slate-950 pt-6 pb-16">
       {/* Breadcrumb Navigation */}
       <nav aria-label="Breadcrumb" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
         <ol className="flex items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400">
@@ -44,7 +44,7 @@ export function ArticleLayout({
             </Link>
           </li>
           <li>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-400" aria-hidden />
+            <ChevronRight className="size-3.5 text-slate-400" aria-hidden="true" />
           </li>
           <li>
             <Link href="/updates" className="hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
@@ -52,7 +52,7 @@ export function ArticleLayout({
             </Link>
           </li>
           <li>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-400" aria-hidden />
+            <ChevronRight className="size-3.5 text-slate-400" aria-hidden="true" />
           </li>
           <li className="truncate max-w-[200px] sm:max-w-xs text-navy dark:text-white font-bold" aria-current="page">
             {category}
@@ -74,20 +74,20 @@ export function ArticleLayout({
               <CategoryBadge category={category as Category} />
               {publishedAt && (
                 <span className="inline-flex items-center gap-1 text-xs font-semibold text-slate-600 dark:text-slate-400">
-                  <Calendar className="w-3.5 h-3.5" aria-hidden />
+                  <Calendar className="size-3.5" aria-hidden="true" />
                   {formatDate(publishedAt)}
                 </span>
               )}
               {readingTime && (
                 <span className="inline-flex items-center gap-1 text-xs font-semibold text-slate-600 dark:text-slate-400">
-                  <Clock className="w-3.5 h-3.5" aria-hidden />
-                  {readingTime} min read
+                  <Clock className="size-3.5" aria-hidden="true" />
+                  <span className="tabular-nums">{readingTime}</span> min read
                 </span>
               )}
               {typeof views === 'number' && views > 0 && (
                 <span className="inline-flex items-center gap-1 text-xs font-semibold text-slate-600 dark:text-slate-400">
-                  <Eye className="w-3.5 h-3.5" aria-hidden />
-                  {views.toLocaleString('en-IN')} views
+                  <Eye className="size-3.5" aria-hidden="true" />
+                  <span className="tabular-nums">{views.toLocaleString('en-IN')}</span> views
                 </span>
               )}
             </div>

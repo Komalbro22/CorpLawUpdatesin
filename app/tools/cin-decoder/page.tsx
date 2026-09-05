@@ -125,7 +125,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
   }
 
   return (
-    <article className="min-h-screen bg-slate-50 dark:bg-slate-950 py-8 px-4 sm:px-6 transition-colors duration-200">
+    <article className="min-h-dvh bg-slate-50 dark:bg-slate-950 py-8 px-4 sm:px-6 transition-colors duration-200">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph) }}
@@ -146,7 +146,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
         <header className="bg-gradient-to-br from-navy via-slate-900 to-slate-950 text-white rounded-3xl p-6 md:p-10 shadow-xl relative overflow-hidden">
           <div className="max-w-2xl space-y-3 relative z-10">
             <div className="inline-flex items-center gap-2 bg-amber-500/20 text-amber-300 px-3 py-1 rounded-full text-xs font-bold border border-amber-500/30">
-              <Binary className="w-3.5 h-3.5" /> 100% Free Statutory MCA Decoder
+              <Binary className="size-3.5" aria-hidden="true" /> 100% Free Statutory MCA Decoder
             </div>
             <h1 className="text-2xl md:text-4xl font-heading font-bold text-white leading-snug">
               Corporate Identification Number (CIN) Decoder
@@ -158,7 +158,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
             {/* Input Form */}
             <form action="/tools/cin-decoder" method="GET" className="pt-3 flex flex-col sm:flex-row gap-2">
               <div className="relative flex-1">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
+                <Search className="size-4 text-slate-400 absolute left-3.5 top-3.5 pointer-events-none" aria-hidden="true" />
                 <input
                   type="text"
                   name="cin"
@@ -196,7 +196,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
         {/* AI-SEO / GEO Summary Box */}
         <section className="bg-gradient-to-br from-amber-500/10 via-amber-400/5 to-transparent rounded-2xl p-5 md:p-6 border border-amber-300/40 dark:border-amber-500/20 shadow-sm">
           <div className="flex items-center gap-2 mb-2">
-            <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400 animate-pulse" />
+            <Sparkles className="size-4 text-amber-600 dark:text-amber-400 animate-pulse" aria-hidden="true" />
             <h2 className="text-xs font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400">
               AI Summary & Practitioner Overview
             </h2>
@@ -215,7 +215,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
                   Decoded CIN Structure Analysis
                 </h2>
                 <p className="text-xs font-mono text-slate-500 dark:text-slate-400 mt-0.5">
-                  Extracted 6 statutory dimensions for CIN <strong className="text-navy dark:text-white">{breakdown.cin}</strong>
+                  Extracted 6 statutory dimensions for CIN <strong className="text-navy dark:text-white tabular-nums">{breakdown.cin}</strong>
                 </p>
               </div>
 
@@ -226,7 +226,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
                 download={`CIN_Breakdown_${breakdown.cin}.pdf`}
                 className="inline-flex items-center gap-2 bg-navy hover:bg-slate-800 text-white dark:bg-amber-400 dark:hover:bg-amber-500 dark:text-navy font-bold px-4 py-2 rounded-xl text-xs md:text-sm transition-all shadow-sm active:scale-95"
               >
-                <Download className="w-4 h-4" /> Download PDF Certificate
+                <Download className="size-4" aria-hidden="true" /> Download PDF Certificate
               </a>
             </div>
 
@@ -235,7 +235,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
               {/* 1. Listing Status */}
               <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
                 <div className="flex items-center gap-2 text-xs font-bold text-amber-600 dark:text-amber-400 mb-1">
-                  <Award className="w-4 h-4" /> 1. Listing Status ({breakdown.listingStatus.code})
+                  <Award className="size-4" aria-hidden="true" /> 1. Listing Status ({breakdown.listingStatus.code})
                 </div>
                 <div className="font-bold text-base text-navy dark:text-white mb-1">{breakdown.listingStatus.label}</div>
                 <div className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{breakdown.listingStatus.description}</div>
@@ -244,7 +244,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
               {/* 2. NIC Industry Code */}
               <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
                 <div className="flex items-center gap-2 text-xs font-bold text-emerald-600 dark:text-emerald-400 mb-1">
-                  <Briefcase className="w-4 h-4" /> 2. NIC Code ({breakdown.nicCode.code})
+                  <Briefcase className="size-4" aria-hidden="true" /> 2. NIC Code (<span className="tabular-nums">{breakdown.nicCode.code}</span>)
                 </div>
                 <div className="font-bold text-sm text-emerald-700 dark:text-emerald-400 mb-0.5">{breakdown.nicCode.sectorGroup}</div>
                 <div className="font-semibold text-xs text-navy dark:text-slate-200">{breakdown.nicCode.industry}</div>
@@ -253,7 +253,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
               {/* 3. State & RoC Office */}
               <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
                 <div className="flex items-center gap-2 text-xs font-bold text-blue-600 dark:text-blue-400 mb-1">
-                  <MapPin className="w-4 h-4" /> 3. State ({breakdown.state.code})
+                  <MapPin className="size-4" aria-hidden="true" /> 3. State ({breakdown.state.code})
                 </div>
                 <div className="font-bold text-base text-navy dark:text-white mb-1">{breakdown.state.name}</div>
                 <div className="text-xs text-slate-500 dark:text-slate-400">Jurisdiction: {breakdown.state.rocOffice}</div>
@@ -262,16 +262,16 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
               {/* 4. Incorporation Year */}
               <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
                 <div className="flex items-center gap-2 text-xs font-bold text-purple-600 dark:text-purple-400 mb-1">
-                  <Calendar className="w-4 h-4" /> 4. Year ({breakdown.incorporationYear})
+                  <Calendar className="size-4" aria-hidden="true" /> 4. Year (<span className="tabular-nums">{breakdown.incorporationYear}</span>)
                 </div>
-                <div className="font-bold text-base text-navy dark:text-white mb-1">Incorporated {breakdown.incorporationYear}</div>
+                <div className="font-bold text-base text-navy dark:text-white mb-1">Incorporated <span className="tabular-nums">{breakdown.incorporationYear}</span></div>
                 <div className="text-xs text-slate-500 dark:text-slate-400">Year of statutory registration under MCA.</div>
               </div>
 
               {/* 5. Ownership Class */}
               <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
                 <div className="flex items-center gap-2 text-xs font-bold text-indigo-600 dark:text-indigo-400 mb-1">
-                  <Building2 className="w-4 h-4" /> 5. Ownership ({breakdown.companyType.code})
+                  <Building2 className="size-4" aria-hidden="true" /> 5. Ownership ({breakdown.companyType.code})
                 </div>
                 <div className="font-bold text-base text-navy dark:text-white mb-1">{breakdown.companyType.label}</div>
                 <div className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{breakdown.companyType.description}</div>
@@ -280,7 +280,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
               {/* 6. RoC Registration Serial No */}
               <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
                 <div className="flex items-center gap-2 text-xs font-bold text-rose-600 dark:text-rose-400 mb-1">
-                  <ShieldCheck className="w-4 h-4" /> 6. Serial No ({breakdown.registrationNumber})
+                  <ShieldCheck className="size-4" aria-hidden="true" /> 6. Serial No (<span className="tabular-nums font-mono">{breakdown.registrationNumber}</span>)
                 </div>
                 <div className="font-bold text-base text-navy dark:text-white mb-1">RoC Serial Number</div>
                 <div className="text-xs text-slate-500 dark:text-slate-400">Unique 6-digit registration serial code.</div>
@@ -289,7 +289,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
           </div>
         ) : (
           <div className="p-8 text-center bg-white dark:bg-slate-900 rounded-3xl border border-rose-200 dark:border-rose-900 text-rose-600 dark:text-rose-400">
-            <AlertCircle className="w-8 h-8 mx-auto mb-2" />
+            <AlertCircle className="size-8 mx-auto mb-2" aria-hidden="true" />
             <h3 className="text-lg font-bold">Invalid CIN Format</h3>
             <p className="text-xs mt-1 text-slate-500">Please enter a valid 21-character Corporate Identification Number (e.g. L21091MH1945PLC004520).</p>
           </div>
@@ -298,7 +298,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
         {/* FAQs */}
         <section className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-200/80 dark:border-slate-800 shadow-sm">
           <h3 className="text-xl font-bold text-navy dark:text-white font-heading mb-6 flex items-center gap-2">
-            <HelpCircle className="w-5 h-5 text-amber-500" /> Frequently Asked Questions
+            <HelpCircle className="size-5 text-amber-500" aria-hidden="true" /> Frequently Asked Questions
           </h3>
 
           <div className="space-y-3">

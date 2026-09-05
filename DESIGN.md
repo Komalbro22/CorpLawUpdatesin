@@ -102,9 +102,18 @@ CorpLawUpdates.in provides real-time corporate regulatory updates, circular brea
 ### Do's
 - Maintain high contrast ratios for statutory text and regulatory circular code snippets (minimum 4.5:1 WCAG AA).
 - Preserve category badge color mappings consistently across all list cards, article pages, and search filters.
-- Ensure all interactive elements retain focus outline rings (`outline-2 outline-offset-2 outline-[var(--ring-focus)]`).
+- Ensure all interactive elements retain focus outline rings (`focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2`).
+- Use dynamic viewport height units (`min-h-dvh`, `h-dvh`, `max-h-[75dvh]`) instead of `vh`/`screen` to prevent iOS/Android address bar jumping.
+- Use `tabular-nums` on all numbers, currency values, dates, percentages, and counters to maintain vertical column alignment.
+- Use `size-*` utilities (e.g., `size-4`, `size-5`, `size-10`) for all square icons and avatars.
+- Ensure all icon-only buttons have an explicit, descriptive `aria-label`.
+- Ensure all decorative SVGs/icons have `aria-hidden="true"`.
+- Ensure every page maintains a single `<main id="main-content">` landmark without duplicate IDs.
 
 ### Don'ts
-- Do not mix arbitrary ad-hoc Tailwind colors (e.g. `bg-amber-300`, `text-indigo-400`) outside the defined category and brand color tokens.
-- Do not remove semantic HTML headers (`<h1>` per page, hierarchical `<h2>`, `<h3>`).
+- Do not mix arbitrary ad-hoc Tailwind colors or saturated gradients (`from-purple-600 to-purple-800`) on tool card headers. Institutional platforms prioritize calm, solid editorial surfaces with refined accent borders.
+- Do not skip semantic heading levels (e.g. going from `<h1>` directly to `<h3>`).
+- Do not use arbitrary z-indices (e.g. `z-[90]`, `z-[85]`); rely on standardized layers (`z-40`, `z-50`).
+- Do not use unassociated `<label>` elements; always link with `htmlFor="input-id"` matching the input's `id`.
 - Do not add heavy JavaScript animation libraries; stick to CSS transitions and hardware-accelerated transforms.
+

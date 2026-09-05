@@ -76,7 +76,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
+    <div className="min-h-dvh bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
       <JsonLd data={breadcrumbSchema as any} />
       <JsonLd data={faqSchema as any} />
       <JsonLd data={webAppSchema as any} />

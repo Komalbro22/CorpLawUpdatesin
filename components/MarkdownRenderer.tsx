@@ -67,130 +67,183 @@ function processInlineStyles(styleObj: any, className: string = '', isContainer:
         
     const isProgressBarOrComponent = isSmallHeight || isInlineOrBadge || styleObj.maxHeight || (styleObj.overflow === 'hidden' && styleObj.height);
     
-    // Only apply dynamic card callout styling to container boxes (div/section)
-    // NEVER to progress bar tracks/fills, meters, badges, or inline elements
-    if (isContainer && !isProgressBarOrComponent && bgVal && typeof bgVal === 'string') {
-        const bgValLower = bgVal.toLowerCase().replace(/\s+/g, '');
+    if (bgVal && typeof bgVal === 'string') {
+        const bgLower = bgVal.toLowerCase().replace(/\s+/g, '');
+        
         const isYellowAmberBg = 
-            bgValLower.includes('#fff7ed') || 
-            bgValLower.includes('#fffbeb') || 
-            bgValLower.includes('#fef3c7') ||
-            bgValLower.includes('#fef9c3') ||
-            bgValLower.includes('#fef08a') ||
-            bgValLower.includes('#fff3cd') ||
-            bgValLower.includes('#fed7aa') || 
-            bgValLower.includes('#fffaf5') || 
-            bgValLower.includes('#ffedd5') || 
-            bgValLower.includes('yellow') ||
-            bgValLower.includes('rgb(255,247,237)') ||
-            bgValLower.includes('rgb(255,251,235)') ||
-            bgValLower.includes('rgb(254,243,199)') ||
-            bgValLower.includes('rgb(254,240,138)') ||
-            bgValLower.includes('rgb(254,215,170)');
+            bgLower.includes('#fff7ed') || 
+            bgLower.includes('#fffbeb') || 
+            bgLower.includes('#fef3c7') ||
+            bgLower.includes('#fef9c3') ||
+            bgLower.includes('#fef08a') ||
+            bgLower.includes('#fff3cd') ||
+            bgLower.includes('#fed7aa') || 
+            bgLower.includes('#fffaf5') || 
+            bgLower.includes('#ffedd5') || 
+            bgLower.includes('#fefce8') || 
+            bgLower.includes('yellow') ||
+            bgLower.includes('rgb(255,247,237)') ||
+            bgLower.includes('rgb(255,251,235)') ||
+            bgLower.includes('rgb(254,243,199)') ||
+            bgLower.includes('rgb(254,240,138)') ||
+            bgLower.includes('rgb(254,215,170)');
+
+        const isBlueBg =
+            bgLower.includes('#eff6ff') || 
+            bgLower.includes('#f0f4ff') ||
+            bgLower.includes('#f0f5ff') ||
+            bgLower.includes('#f0f6ff') ||
+            bgLower.includes('#f0f9ff') ||
+            bgLower.includes('#e0f2fe') ||
+            bgLower.includes('#bfdbfe') || 
+            bgLower.includes('#e0e7ff') || 
+            bgLower.includes('#eef2ff') || 
+            bgLower.includes('#dbeafe') || 
+            bgLower.includes('#e6e8ff') || 
+            bgLower.includes('#e8eeff') || 
+            bgLower.includes('#ecfeff') || 
+            bgLower.includes('rgb(239,246,255)') ||
+            bgLower.includes('rgb(240,249,255)') ||
+            bgLower.includes('rgb(191,219,254)');
+
+        const isGreenBg =
+            bgLower.includes('#f0fdf4') || 
+            bgLower.includes('#dcfce7') ||
+            bgLower.includes('#bbf7d0') || 
+            bgLower.includes('#ecfdf3') || 
+            bgLower.includes('#ecfdf5') || 
+            bgLower.includes('#f0fdfa') || 
+            bgLower.includes('#d1fae5') || 
+            bgLower.includes('#d4edd9') || 
+            bgLower.includes('#e8f5e9') || 
+            bgLower.includes('#f3fdf7') || 
+            bgLower.includes('rgb(240,253,244)') ||
+            bgLower.includes('rgb(187,247,208)');
+
+        const isRedBg =
+            bgLower.includes('#fff5f5') ||
+            bgLower.includes('#fef2f2') || 
+            bgLower.includes('#ffe4e6') || 
+            bgLower.includes('#fecaca') || 
+            bgLower.includes('#faf4f4') || 
+            bgLower.includes('#f5dada') || 
+            bgLower.includes('rgb(254,242,242)') ||
+            bgLower.includes('rgb(254,202,202)');
+
+        const isPinkBg =
+            bgLower.includes('#fdf2f8') || 
+            bgLower.includes('#fbcfe8') || 
+            bgLower.includes('rgb(253,242,248)') ||
+            bgLower.includes('rgb(251,207,232)');
+
+        const isPurpleBg =
+            bgLower.includes('#f5f3ff') || 
+            bgLower.includes('#faf8ff') || 
+            bgLower.includes('#ddd6fe') || 
+            bgLower.includes('#c7d2fe') || 
+            bgLower.includes('#f5f0ff') || 
+            bgLower.includes('#faf5ff') || 
+            bgLower.includes('rgb(245,243,255)') ||
+            bgLower.includes('rgb(250,248,255)');
 
         const isDarkBg = 
-            bgValLower.includes('#0f172a') || 
-            bgValLower.includes('#0f2342') ||
-            bgValLower.includes('#0b1121') ||
-            bgValLower.includes('#1e293b') ||
-            bgValLower.includes('#1e3a5f') ||
-            bgValLower.includes('#070c18') ||
-            bgValLower.includes('#000000') ||
-            bgValLower.includes('black') ||
-            bgValLower.includes('rgb(15,23,42)') ||
-            bgValLower.includes('rgb(15,35,66)') ||
-            bgValLower.includes('rgb(30,41,59)');
+            bgLower.includes('#0f172a') || 
+            bgLower.includes('#0f2342') ||
+            bgLower.includes('#0b1121') ||
+            bgLower.includes('#1e293b') ||
+            bgLower.includes('#1e3a5f') ||
+            bgLower.includes('#070c18') ||
+            bgLower.includes('#000000') ||
+            bgLower === 'black' ||
+            bgLower.includes('rgb(15,23,42)') ||
+            bgLower.includes('rgb(15,35,66)') ||
+            bgLower.includes('rgb(30,41,59)');
 
-        if (isYellowAmberBg) {
-            classes.push('dynamic-card-amber');
-            if (!colorVal || typeof colorVal !== 'string' || 
-                colorVal.toLowerCase().includes('white') || 
-                colorVal.toLowerCase().includes('#fff') ||
-                colorVal.toLowerCase().includes('#f8fafc') ||
-                colorVal.toLowerCase().includes('#e2e8f0') ||
-                colorVal.toLowerCase().includes('#cbd5e1') ||
-                colorVal.toLowerCase().includes('#94a3b8') ||
-                colorVal.toLowerCase().includes('rgb(255,255,255)')
-            ) {
-                processedStyle.color = '#78350F';
-                processedStyle.fontWeight = '700';
+        const isNeutralLightBg =
+            bgLower.includes('#ffffff') ||
+            bgLower.includes('#fff') ||
+            bgLower === 'white' ||
+            bgLower.includes('#f8fafc') ||
+            bgLower.includes('#f1f5f9') ||
+            bgLower.includes('#f9fafb') ||
+            bgLower.includes('#f3f4f6') ||
+            bgLower.includes('#e2e8f0') ||
+            bgLower.includes('#dbe3ef') ||
+            bgLower.includes('#e8edf4') ||
+            bgLower.includes('#eef1f6') ||
+            bgLower.includes('#f7f7f7') ||
+            bgLower.includes('#f7f8fa') ||
+            bgLower.includes('#f7f9fc') ||
+            bgLower.includes('#f8f4ee') ||
+            bgLower.includes('#f9f7f3') ||
+            bgLower.includes('#ddd8cc') ||
+            bgLower.includes('rgb(255,255,255)') ||
+            bgLower.includes('rgb(248,250,252)') ||
+            bgLower.includes('rgb(241,245,249)') ||
+            bgLower.includes('rgb(249,250,251)');
+
+        if (!isProgressBarOrComponent) {
+            if (isYellowAmberBg) {
+                classes.push('dynamic-card-amber');
+                delete processedStyle.background;
+                delete processedStyle.backgroundColor;
+            } else if (isBlueBg) {
+                classes.push('dynamic-card-blue');
+                delete processedStyle.background;
+                delete processedStyle.backgroundColor;
+            } else if (isGreenBg) {
+                classes.push('dynamic-card-green');
+                delete processedStyle.background;
+                delete processedStyle.backgroundColor;
+            } else if (isRedBg) {
+                classes.push('dynamic-card-red');
+                delete processedStyle.background;
+                delete processedStyle.backgroundColor;
+            } else if (isPinkBg) {
+                classes.push('dynamic-card-pink');
+                delete processedStyle.background;
+                delete processedStyle.backgroundColor;
+            } else if (isPurpleBg) {
+                classes.push('dynamic-card-purple');
+                delete processedStyle.background;
+                delete processedStyle.backgroundColor;
+            } else if (isNeutralLightBg) {
+                if (processedStyle.borderLeft || styleObj.borderLeft) {
+                    classes.push('dynamic-card-neutral');
+                } else {
+                    classes.push('dynamic-box-neutral');
+                }
+                delete processedStyle.background;
+                delete processedStyle.backgroundColor;
+                delete processedStyle.borderColor;
+            } else if (isDarkBg) {
+                classes.push('dynamic-card-dark');
+                if (processedStyle.color && typeof processedStyle.color === 'string') {
+                    const c = processedStyle.color.toLowerCase().replace(/\s+/g, '');
+                    if (c === '#0f172a' || c === '#1a1a2e' || c === '#1e3a5f' || c === '#000' || c === '#000000') {
+                        delete processedStyle.color;
+                    }
+                }
             }
         }
-        else if (
-            bgValLower.includes('#eff6ff') || 
-            bgValLower.includes('#f0f9ff') ||
-            bgValLower.includes('#e0f2fe') ||
-            bgValLower.includes('#bfdbfe') || 
-            bgValLower.includes('rgb(239,246,255)') ||
-            bgValLower.includes('rgb(240,249,255)') ||
-            bgValLower.includes('rgb(191,219,254)')
-        ) {
-            classes.push('dynamic-card-blue');
-        }
-        else if (
-            bgValLower.includes('#f0fdf4') || 
-            bgValLower.includes('#dcfce7') ||
-            bgValLower.includes('#bbf7d0') || 
-            bgValLower.includes('rgb(240,253,244)') ||
-            bgValLower.includes('rgb(187,247,208)')
-        ) {
-            classes.push('dynamic-card-green');
-        }
-        else if (
-            bgValLower.includes('#fff5f5') ||
-            bgValLower.includes('#fef2f2') || 
-            bgValLower.includes('#ffe4e6') || 
-            bgValLower.includes('#fecaca') || 
-            bgValLower.includes('rgb(254,242,242)') ||
-            bgValLower.includes('rgb(254,202,202)')
-        ) {
-            classes.push('dynamic-card-red');
-        }
-        else if (
-            bgValLower.includes('#f5f3ff') || 
-            bgValLower.includes('#faf8ff') || 
-            bgValLower.includes('#ddd6fe') || 
-            bgValLower.includes('#e0e7ff') || 
-            bgValLower.includes('#c7d2fe') || 
-            bgValLower.includes('#eef2ff') || 
-            bgValLower.includes('rgb(245,243,255)') ||
-            bgValLower.includes('rgb(250,248,255)') ||
-            bgValLower.includes('rgb(221,214,254)') ||
-            bgValLower.includes('rgb(224,231,255)') ||
-            bgValLower.includes('rgb(199,210,254)') ||
-            bgValLower.includes('rgb(238,242,255)')
-        ) {
-            classes.push('dynamic-card-purple');
-        }
-        else if (
-            bgValLower.includes('#fdf2f8') || 
-            bgValLower.includes('#fbcfe8') || 
-            bgValLower.includes('rgb(253,242,248)') ||
-            bgValLower.includes('rgb(251,207,232)')
-        ) {
-            classes.push('dynamic-card-pink');
-        }
+    }
 
-        if (!isDarkBg && colorVal && typeof colorVal === 'string') {
-            const cLower = colorVal.toLowerCase().replace(/\s+/g, '');
-            if (
-                cLower === 'white' || cLower === '#fff' || cLower === '#ffffff' ||
-                cLower === '#f8fafc' || cLower === '#f1f5f9' || cLower === '#e2e8f0' ||
-                cLower === '#cbd5e1' || cLower === '#94a3b8' ||
-                cLower.includes('rgb(255,255,255)') || cLower.includes('rgba(255,255,255')
-            ) {
-                processedStyle.color = '#0F172A';
-            }
-        }
-    } else if (colorVal && typeof colorVal === 'string') {
+    // Handle dark text color on canvas/containers in dark mode
+    if (colorVal && typeof colorVal === 'string') {
         const cLower = colorVal.toLowerCase().replace(/\s+/g, '');
         if (
-            cLower === 'white' || cLower === '#fff' || cLower === '#ffffff' ||
-            cLower === '#f8fafc' || cLower === '#f1f5f9' || cLower === '#e2e8f0' ||
-            cLower === '#cbd5e1' || cLower === '#94a3b8' ||
-            cLower.includes('rgb(255,255,255)') || cLower.includes('rgba(255,255,255')
+            cLower === '#1a1a2e' ||
+            cLower === '#1e3a5f' ||
+            cLower === '#0f172a' ||
+            cLower === '#111827' ||
+            cLower === '#1e293b' ||
+            cLower === '#000' ||
+            cLower === '#000000' ||
+            cLower === '#333' ||
+            cLower === '#222'
         ) {
-            processedStyle.color = '#0F172A';
+            classes.push('dynamic-text-adaptive');
+            delete processedStyle.color;
         }
     }
     
@@ -315,6 +368,69 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                             </section>
                         );
                     },
+                    article: ({ node, style, children, className, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className, true);
+                        return (
+                            <article suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
+                                {children}
+                            </article>
+                        );
+                    },
+                    aside: ({ node, style, children, className, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className, true);
+                        return (
+                            <aside suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
+                                {children}
+                            </aside>
+                        );
+                    },
+                    header: ({ node, style, children, className, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className, true);
+                        return (
+                            <header suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
+                                {children}
+                            </header>
+                        );
+                    },
+                    footer: ({ node, style, children, className, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className, true);
+                        return (
+                            <footer suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
+                                {children}
+                            </footer>
+                        );
+                    },
+                    blockquote: ({ node, style, children, className, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className, true);
+                        return (
+                            <blockquote suppressHydrationWarning style={processedStyle} className={`border-l-4 border-amber-500 pl-4 my-4 italic text-slate-700 dark:text-slate-300 ${processedClassName}`} {...props}>
+                                {children}
+                            </blockquote>
+                        );
+                    },
+                    details: ({ node, style, children, className, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className, true);
+                        return (
+                            <details suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
+                                {children}
+                            </details>
+                        );
+                    },
+                    summary: ({ node, style, children, className, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        return (
+                            <summary suppressHydrationWarning style={processedStyle} className={`cursor-pointer font-bold ${processedClassName}`} {...props}>
+                                {children}
+                            </summary>
+                        );
+                    },
                     span: ({ node, style, children, className, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
@@ -385,6 +501,21 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return <strong suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>{children}</strong>;
+                    },
+                    b: ({ node, style, children, className, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        return <strong suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>{children}</strong>;
+                    },
+                    em: ({ node, style, children, className, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        return <em suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>{children}</em>;
+                    },
+                    i: ({ node, style, children, className, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        return <i suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>{children}</i>;
                     },
                     table: ({ node, style, className, children, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
