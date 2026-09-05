@@ -175,7 +175,7 @@ export default async function HomePage() {
               href="/newsletter"
               className="mt-3 inline-flex items-center justify-center gap-1.5 text-xs text-amber-300 hover:text-amber-200 hover:underline transition-colors"
             >
-              <span>📬</span> Subscribe free for daily morning briefings
+              <span>📬</span> Subscribe free for weekly Monday morning briefings
             </Link>
 
             <div className="mt-5 flex flex-wrap justify-center items-center gap-x-4 gap-y-1.5 text-[11px] sm:text-xs font-medium text-slate-300">
