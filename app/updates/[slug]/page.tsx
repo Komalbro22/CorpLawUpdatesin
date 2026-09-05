@@ -382,18 +382,20 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                     className="mb-4"
                 />
 
-                <div className="mb-4 flex items-center justify-between flex-wrap gap-3">
-                    <div className="flex items-center gap-3">
+                <div className="mb-4 flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 min-w-0">
                         <CategoryBadge category={update.category as any} />
                         <Link 
                             href={`/category/${update.category.toLowerCase()}`}
-                            className="text-xs font-bold text-slate-700 dark:text-slate-300 hover:text-amber-700 transition-colors uppercase tracking-widest"
+                            className="text-xs font-bold text-slate-700 dark:text-slate-300 hover:text-amber-700 transition-colors uppercase tracking-wider truncate"
                         >
                             {update.category.toUpperCase()} updates
                         </Link>
                     </div>
                     {/* Font size toggle - client island */}
-                    <FontSizeToggle />
+                    <div className="shrink-0">
+                        <FontSizeToggle />
+                    </div>
                 </div>
 
 
@@ -526,28 +528,28 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                 })()}
 
                 {/* Title */}
-                <h1 id="article-title" className="font-heading text-3xl md:text-[2.2rem] text-navy dark:text-slate-50 font-bold mb-4 leading-snug break-words">
+                <h1 id="article-title" className="font-heading text-xl sm:text-2xl md:text-[2.2rem] text-navy dark:text-slate-50 font-bold mb-3 sm:mb-4 leading-snug break-words text-balance">
                     {update.title}
                 </h1>
                 
                 {/* Editorial byline */}
-                <div className="mb-4 flex flex-wrap items-center justify-between gap-4 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-3 text-xs">
-                    <span className="flex items-center gap-3">
-                        <span className="flex size-8 items-center justify-center rounded-full bg-navy text-white font-bold shrink-0">CL</span>
-                        <span className="block">
-                            <Link href="/editorial-policy" className="font-bold text-slate-700 dark:text-slate-300 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+                <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4 rounded-xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 p-3 text-xs">
+                    <div className="flex items-center gap-2.5">
+                        <span className="flex size-8 items-center justify-center rounded-full bg-navy dark:bg-slate-800 text-white font-bold text-xs shrink-0 border border-slate-700">CL</span>
+                        <div className="min-w-0">
+                            <Link href="/editorial-policy" className="font-bold text-slate-800 dark:text-slate-200 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
                                 {EDITORIAL_AUTHOR.name}
                             </Link>
-                            <span className="block text-slate-500">{EDITORIAL_AUTHOR.jobTitle}</span>
-                        </span>
-                    </span>
+                            <span className="block text-[11px] text-slate-500 truncate">{EDITORIAL_AUTHOR.jobTitle}</span>
+                        </div>
+                    </div>
                     {geoData?.last_verified && (
-                        <span className="flex flex-col items-end">
-                            <span className="flex items-center gap-1 font-semibold text-green-700 dark:text-green-400">
-                                <CheckCircle2 className="size-3.5" aria-hidden="true" /> Verified for compliance
+                        <div className="flex flex-col sm:items-end border-t sm:border-t-0 border-slate-200/60 dark:border-slate-800/60 pt-2 sm:pt-0">
+                            <span className="flex items-center gap-1 font-semibold text-emerald-700 dark:text-emerald-400 text-[11px] sm:text-xs">
+                                <CheckCircle2 className="size-3.5 text-emerald-500" aria-hidden="true" /> Verified for compliance
                             </span>
-                            <span className="text-slate-600 dark:text-slate-400">Last verified: <span className="tabular-nums">{formatDate(geoData.last_verified)}</span></span>
-                        </span>
+                            <span className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400">Last verified: <span className="tabular-nums font-medium">{formatDate(geoData.last_verified)}</span></span>
+                        </div>
                     )}
                 </div>
 

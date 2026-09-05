@@ -235,28 +235,41 @@ export default function Navbar() {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-1.5 sm:gap-2 md:hidden">
+                    {/* Mobile header controls */}
+                    <div className="flex items-center gap-2 md:hidden">
                         <GlobalSearch />
-                        <NotificationBell />
-                        <DarkModeToggle />
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="inline-flex items-center gap-1.5 min-h-[40px] px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-200/90 dark:border-slate-700/90 bg-slate-100/90 dark:bg-slate-800/90 text-slate-800 dark:text-white font-bold text-xs shadow-sm hover:bg-slate-200 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-400 transition-all"
+                            className="flex size-10 items-center justify-center rounded-xl border border-slate-200/90 dark:border-slate-800/90 bg-slate-100/90 dark:bg-slate-800/90 text-slate-800 dark:text-white shadow-sm hover:bg-slate-200 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-400 transition-all"
                             aria-expanded={isOpen}
                             aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
                         >
-                            {isOpen ? <X className="size-4 text-amber-600 dark:text-amber-400" aria-hidden="true" /> : <Menu className="size-4 text-amber-600 dark:text-amber-400" aria-hidden="true" />}
-                            <span>{isOpen ? 'Close' : 'Menu'}</span>
+                            {isOpen ? (
+                                <X className="size-5 text-amber-600 dark:text-amber-400" aria-hidden="true" />
+                            ) : (
+                                <Menu className="size-5 text-slate-700 dark:text-slate-200" aria-hidden="true" />
+                            )}
                         </button>
                     </div>
                 </div>
             </div>
 
-            {/* Mobile Nav */}
+            {/* Mobile Nav Drawer */}
             {isOpen && (
                 <div className="md:hidden border-t border-slate-200/80 dark:border-slate-800/80 max-h-[85dvh] overflow-y-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl animate-fade-in">
-                    <div className="pt-3 pb-6 space-y-1 px-4">
-                        <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-3 py-1">
+                    <div className="p-4 space-y-3">
+                        {/* Mobile Quick Utility Strip */}
+                        <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-100/80 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60">
+                            <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">
+                                Alerts &amp; Theme
+                            </span>
+                            <div className="flex items-center gap-2">
+                                <NotificationBell />
+                                <DarkModeToggle />
+                            </div>
+                        </div>
+
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-3 pt-1">
                             Navigation
                         </div>
                         {links.map((link) => (

@@ -140,23 +140,23 @@ export default async function HomePage() {
 
         <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center justify-center px-4 py-4 text-center sm:px-6 md:py-6 lg:px-8">
           <div className="flex flex-col items-center">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-500/10 px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-amber-300 backdrop-blur-md">
-              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-              MCA • SEBI • RBI • CCI • NCLT • IBC • FEMA • LABOUR LAW
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-500/10 px-3 py-1 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-amber-300 backdrop-blur-md max-w-full">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+              <span className="truncate">MCA • SEBI • RBI • CCI • NCLT • IBC • FEMA</span>
             </div>
-            <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.15] text-white text-balance tracking-tight">
-              Corporate Law Updates & Compliance Tools
+            <h1 className="font-heading text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight sm:leading-[1.15] text-white text-balance tracking-tight">
+              Corporate Law Updates &amp; Compliance Tools
             </h1>
-            <p className="mt-3.5 max-w-2xl text-base sm:text-lg leading-relaxed text-slate-200 text-balance font-normal">
+            <p className="mt-3 max-w-2xl text-sm sm:text-base leading-relaxed text-slate-200 text-pretty font-normal">
               Daily regulatory circulars, SEBI regulations, and verified compliance tools — engineered for Company Secretaries, Chartered Accountants, and legal leaders.
             </p>
             
             {/* Clear CTA Hierarchy */}
-            <div className="mt-7 flex flex-wrap justify-center items-center gap-3 w-full max-w-lg">
+            <div className="mt-6 flex flex-col sm:flex-row justify-center items-center gap-2.5 sm:gap-3 w-full max-w-md">
               {/* 1. Standout Primary CTA */}
               <Link
                 href="/updates"
-                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 px-7 py-3 text-sm font-bold shadow-lg shadow-amber-500/20 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 motion-safe:hover:scale-[1.02] active:scale-[0.98]"
+                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 px-6 py-3 text-sm font-bold shadow-lg shadow-amber-500/20 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 motion-safe:hover:scale-[1.02] active:scale-[0.98]"
               >
                 Browse updates
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
@@ -164,23 +164,24 @@ export default async function HomePage() {
               {/* 2. Distinct Secondary CTA */}
               <Link
                 href="/tools"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-slate-600 hover:border-slate-400 bg-slate-800/80 hover:bg-slate-700/80 px-6 py-3 text-sm font-semibold text-slate-200 hover:text-white transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-slate-700 hover:border-slate-500 bg-slate-800/80 hover:bg-slate-700/80 px-6 py-3 text-sm font-semibold text-slate-200 hover:text-white transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
               >
                 Explore tools
               </Link>
-              {/* 3. Subtle Tertiary CTA */}
-              <Link
-                href="/newsletter"
-                className="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs sm:text-sm font-medium text-amber-300 hover:text-amber-200 hover:underline transition-colors"
-              >
-                <span>📬</span> Subscribe free
-              </Link>
             </div>
 
-            <div className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs sm:text-sm font-medium text-slate-300">
+            {/* 3. Subtle Tertiary CTA */}
+            <Link
+              href="/newsletter"
+              className="mt-3 inline-flex items-center justify-center gap-1.5 text-xs text-amber-300 hover:text-amber-200 hover:underline transition-colors"
+            >
+              <span>📬</span> Subscribe free for daily morning briefings
+            </Link>
+
+            <div className="mt-5 flex flex-wrap justify-center items-center gap-x-4 gap-y-1.5 text-[11px] sm:text-xs font-medium text-slate-300">
               {['No login required', 'Updated daily', 'Built for Indian compliance'].map(item => (
-                <span key={item} className="inline-flex items-center gap-1.5">
-                  <CheckCircle2 className="size-3.5 text-amber-400" aria-hidden="true" />
+                <span key={item} className="inline-flex items-center gap-1">
+                  <CheckCircle2 className="size-3 text-amber-400 shrink-0" aria-hidden="true" />
                   {item}
                 </span>
               ))}

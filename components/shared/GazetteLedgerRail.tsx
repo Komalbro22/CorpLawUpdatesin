@@ -30,14 +30,14 @@ export function GazetteLedgerRail({
   const theme = regulatorColors[upperCat] || regulatorColors.MCA
 
   return (
-    <div className={`flex items-center justify-between w-full mb-3 gap-2 ${className}`}>
-      <div className="flex items-center gap-2">
+    <div className={`flex flex-wrap items-center justify-between w-full mb-3 gap-2 ${className}`}>
+      <div className="flex items-center gap-2 min-w-0 flex-1">
         {/* Signature 4px vertical Gazette rail */}
         <span className={`w-1 h-5 rounded-full ${theme.rail} shrink-0`} aria-hidden />
 
         {/* Monospaced Section / Circular Reference Tag */}
         {sectionRef ? (
-          <span className="font-mono text-xs font-semibold tracking-tight text-slate-700 dark:text-slate-300 truncate max-w-[200px]">
+          <span className="font-mono text-xs font-semibold tracking-tight text-slate-700 dark:text-slate-300 break-words line-clamp-1 sm:line-clamp-none">
             {sectionRef}
           </span>
         ) : (

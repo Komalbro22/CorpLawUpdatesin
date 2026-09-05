@@ -74,26 +74,27 @@ export default function TrackingScripts() {
 
   return (
     <>
-      {/* Non-blocking Slim Cookie Bar */}
+      {/* Non-blocking Slim Low-Profile Cookie Bar */}
       {showBanner && (
-        <div className="fixed bottom-0 inset-x-0 z-[9999] bg-slate-950/95 backdrop-blur-md border-t border-slate-800/90 py-2.5 px-4 sm:px-6 shadow-2xl animate-fade-in text-white">
-          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
-            <p className="text-xs text-slate-300 leading-relaxed max-w-3xl">
-              🍪 We use cookies to analyze traffic and enhance your compliance tools experience. Read our{' '}
-              <a href="/privacy-policy" className="text-amber-400 hover:underline font-semibold">
+        <div className="fixed bottom-0 inset-x-0 z-[9999] bg-slate-950/95 backdrop-blur-md border-t border-slate-800/90 py-2 px-3 sm:px-6 shadow-2xl animate-fade-in text-white">
+          <div className="max-w-7xl mx-auto flex items-center justify-between gap-2.5 text-left">
+            <p className="text-[11px] sm:text-xs text-slate-300 leading-snug line-clamp-2 sm:line-clamp-none">
+              🍪 We use cookies to improve your compliance tools experience.{' '}
+              <a href="/privacy-policy" className="text-amber-400 hover:underline font-semibold underline underline-offset-2">
                 Privacy Policy
-              </a>.
+              </a>
             </p>
-            <div className="flex items-center gap-2 shrink-0">
+            <div className="flex items-center gap-1.5 shrink-0">
               <button
                 onClick={handleReject}
-                className="text-xs font-semibold text-slate-400 hover:text-white px-3.5 py-1.5 rounded-lg border border-slate-700/80 hover:border-slate-600 transition-colors"
+                className="text-[11px] sm:text-xs font-medium text-slate-400 hover:text-white px-2.5 py-1 rounded-lg border border-slate-800 hover:border-slate-700 transition-colors"
+                aria-label="Decline cookies"
               >
                 Decline
               </button>
               <button
                 onClick={handleAcknowledge}
-                className="text-xs font-bold bg-amber-400 text-slate-950 hover:bg-amber-300 px-4 py-1.5 rounded-lg transition-all shadow-sm"
+                className="text-[11px] sm:text-xs font-bold bg-amber-400 text-slate-950 hover:bg-amber-300 px-3 py-1 rounded-lg transition-all shadow-sm"
               >
                 Accept
               </button>
