@@ -235,17 +235,18 @@ export default function Navbar() {
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-1.5 md:hidden">
+                    <div className="flex items-center gap-1.5 sm:gap-2 md:hidden">
                         <GlobalSearch />
                         <NotificationBell />
                         <DarkModeToggle />
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="inline-flex items-center justify-center min-h-[44px] min-w-[44px] p-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-400 transition-all duration-200 text-slate-600 dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
+                            className="inline-flex items-center gap-1.5 min-h-[40px] px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-200/90 dark:border-slate-700/90 bg-slate-100/90 dark:bg-slate-800/90 text-slate-800 dark:text-white font-bold text-xs shadow-sm hover:bg-slate-200 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-400 transition-all"
                             aria-expanded={isOpen}
-                            aria-label={isOpen ? 'Close menu' : 'Open main menu'}
+                            aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
                         >
-                            {isOpen ? <X className="size-5" aria-hidden="true" /> : <Menu className="size-5" aria-hidden="true" />}
+                            {isOpen ? <X className="size-4 text-amber-600 dark:text-amber-400" aria-hidden="true" /> : <Menu className="size-4 text-amber-600 dark:text-amber-400" aria-hidden="true" />}
+                            <span>{isOpen ? 'Close' : 'Menu'}</span>
                         </button>
                     </div>
                 </div>

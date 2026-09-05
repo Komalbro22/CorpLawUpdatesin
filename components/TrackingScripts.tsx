@@ -9,17 +9,26 @@ export default function TrackingScripts() {
   const [ids, setIds] = useState<{ gaId: string | null; clarityId: string | null } | null>(null)
 
   useEffect(() => {
+    // Check consent with slight delay or scroll to avoid blocking initial CTA
+    let timer: NodeJS.Timeout
     try {
       const acknowledged = localStorage.getItem('cookie_consent_acknowledged')
       if (acknowledged === 'true') {
         setConsentGiven(true)
-      } else {
-        setShowBanner(true)
+      } else if (acknowledged !== 'false') {
+        // Show after 2.5s or after first scroll
+        timer = setTimeout(() => setShowBanner(true), 2500)
+        const onScroll = () => {
+          if (window.scrollY > 120) {
+            setShowBanner(true)
+            window.removeEventListener('scroll', onScroll)
+          }
+        }
+        window.addEventListener('scroll', onScroll, { passive: true })
       }
     } catch (e) {
       console.warn('LocalStorage is blocked or unavailable:', e)
-      // Fallback: show banner if we cannot read/verify consent state
-      setShowBanner(true)
+      timer = setTimeout(() => setShowBanner(true), 2500)
     }
 
     // Fetch tracker IDs dynamically at runtime
@@ -43,6 +52,10 @@ export default function TrackingScripts() {
       .catch((err) => {
         console.warn('Tracker settings unavailable:', err)
       })
+
+    return () => {
+      if (timer) clearTimeout(timer)
+    }
   }, [])
 
   const setConsent = (accepted: boolean) => {
@@ -61,33 +74,30 @@ export default function TrackingScripts() {
 
   return (
     <>
-      {/* Cookie Notice Banner */}
+      {/* Non-blocking Slim Cookie Bar */}
       {showBanner && (
-        <div className="fixed bottom-4 right-4 left-4 md:left-auto md:max-w-md bg-slate-900/95 backdrop-blur-md border border-slate-700/50 rounded-2xl p-5 shadow-2xl z-[9999] animate-fade-in flex flex-col gap-4 text-white">
-          <div className="space-y-1.5">
-            <h4 className="font-bold text-sm text-amber-400 flex items-center gap-1.5">
-              🍪 Cookie Notice
-            </h4>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              We use cookies to analyze site traffic and enhance your document generation experience. By continuing to browse our site, you consent to our use of cookies as detailed in our{' '}
+        <div className="fixed bottom-0 inset-x-0 z-[9999] bg-slate-950/95 backdrop-blur-md border-t border-slate-800/90 py-2.5 px-4 sm:px-6 shadow-2xl animate-fade-in text-white">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+            <p className="text-xs text-slate-300 leading-relaxed max-w-3xl">
+              🍪 We use cookies to analyze traffic and enhance your compliance tools experience. Read our{' '}
               <a href="/privacy-policy" className="text-amber-400 hover:underline font-semibold">
                 Privacy Policy
               </a>.
             </p>
-          </div>
-          <div className="flex items-center justify-end gap-2">
-            <button
-              onClick={handleReject}
-              className="text-xs font-semibold text-slate-400 hover:text-white px-4 py-2.5 rounded-xl transition-colors"
-            >
-              Decline
-            </button>
-            <button
-              onClick={handleAcknowledge}
-              className="text-xs font-bold bg-amber-400 text-slate-950 hover:bg-amber-500 px-6 py-2.5 rounded-xl transition-all shadow-md shadow-amber-400/10"
-            >
-              Accept
-            </button>
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                onClick={handleReject}
+                className="text-xs font-semibold text-slate-400 hover:text-white px-3.5 py-1.5 rounded-lg border border-slate-700/80 hover:border-slate-600 transition-colors"
+              >
+                Decline
+              </button>
+              <button
+                onClick={handleAcknowledge}
+                className="text-xs font-bold bg-amber-400 text-slate-950 hover:bg-amber-300 px-4 py-1.5 rounded-lg transition-all shadow-sm"
+              >
+                Accept
+              </button>
+            </div>
           </div>
         </div>
       )}
