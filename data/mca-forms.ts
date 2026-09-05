@@ -238,34 +238,124 @@ export const mcaForms: MCAForm[] = [
     slug: 'adt-1',
     formNumber: 'ADT-1',
     formName: 'Auditor Appointment',
-    aliases: ['adt1', 'auditor appointment', 'ADT 1'],
+    aliases: [
+      'adt 1 late fees',
+      'adt 1 late fees calculator',
+      'adt-1 late fees calculator',
+      'adt1 late fees',
+      'adt-1 late fees',
+      'adt-1 fees calculator',
+      'adt-1 due date and penalty',
+      'late fee for adt 1',
+      'late fees for adt 1',
+      'adt 1 penalty',
+      'adt 1 late filing fees',
+      'adt 1 filing fees',
+      'adt1 due date',
+      'adt-1 late filing fees',
+      'adt-1 penalty',
+      'adt 1 fees calculator',
+      'penalty for late filing of adt 1',
+      'adt 1 due date',
+      'adt 1 fees',
+      'adt-1 fees',
+      'adt-1 due date',
+      'adt1 fees',
+      'adt 1 late fee',
+      'adt 1 fee',
+      'penalty for late filing of adt-1',
+      'adt-1 filing fees',
+      'adt-1 late fee',
+      'auditor appointment fees',
+      'adt 1 form fees',
+      'auditor appointment late fees',
+      'fees for filing adt 1',
+      'adt-1 additional fees',
+      'adt 1 penalty calculator',
+      'adt 1 additional fees',
+      'adt 1 due date and penalty',
+      'casual vacancy adt-1',
+      'adt-1 calculator',
+      'auditor appointment'
+    ],
     category: 'event',
-    filedBy: ['Private Limited', 'Public Limited', 'OPC'],
-    dueDate: 'Within 15 days of AGM',
-    section: 'Section 139(1), Companies Act 2013',
+    filedBy: ['Private Limited', 'Public Limited (Unlisted & Listed)', 'One Person Company (OPC)', 'Section 8 Company', 'Producer Company'],
+    dueDate: 'Within 15 days of AGM / Appointment Meeting',
+    section: 'Section 139(1), Companies Act 2013 read with Rule 4(2)',
     penaltyType: 'multiplier',
-    penaltyRate: '2x to 12x normal fee',
+    penaltyRate: '1x to 12x normal fee (Table B, Rule 12)',
     normalFeeStructure: 'capital_slab',
     baseFeeSlab: 'standard_company_slab',
     concessionApplies: false,
-    metaTitle: 'ADT-1 Penalty & Fee Calculator | Auditor Appointment | CorpLawUpdates',
-    metaDescription: 'Calculate MCA fees and late penalties for filing Form ADT-1 (Notice of appointment of auditor). Get exact multiplier-based late fee estimates.',
-    ogDescription: 'Calculate MCA fees and late penalties for filing Form ADT-1 (Notice of appointment of auditor).',
+    metaTitle: 'ADT-1 Late Fees Calculator (FY 2026-27) — Due Date, Multiplier Slabs & Penalty | CorpLawUpdates',
+    metaDescription: 'Calculate MCA fees and late penalties for Form ADT-1 (Auditor Appointment). Get exact Table B multiplier fees (1x to 12x), 15-day statutory due date calculation from AGM/EGM, capital slabs, casual vacancy rules, and Section 403 condonation guidance.',
+    ogDescription: 'Calculate MCA fees and late penalties for Form ADT-1 (Notice of appointment of auditor) with Table B multiplier slabs and 15-day statutory due date engine.',
     faqItems: [
-      { question: 'What is Form ADT-1?', answer: 'Form ADT-1 is filed by a company to notify the Registrar of Companies (ROC) about the appointment of its statutory auditor.' },
-      { question: 'What is the due date for ADT-1?', answer: 'It must be filed within 15 days from the date of the Annual General Meeting (AGM) where the auditor was appointed.' },
-      { question: 'Does ADT-1 have an uncapped penalty like AOC-4?', answer: 'No, ADT-1 is an event-based form. Its late fee is calculated using a multiplier slab (up to 12x the normal fee), not a per-day penalty.' },
-      { question: 'Who is exempt from filing ADT-1?', answer: 'Generally, no active company is exempt. Even newly incorporated companies must appoint an auditor within 30 days and file ADT-1.' },
-      { question: 'Can an auditor be appointed for 5 years?', answer: 'Yes, statutory auditors are typically appointed for a term of 5 consecutive years, requiring ADT-1 to be filed upon that 5-year appointment.' }
+      {
+        question: 'What is the statutory due date for filing Form ADT-1?',
+        answer: 'Pursuant to Section 139(1) of the Companies Act, 2013 read with Rule 4(2) of the Companies (Audit and Auditors) Rules, 2014, Form ADT-1 must be filed with the Registrar of Companies (ROC) strictly within 15 days from the date of the meeting (AGM, EGM, or Board Meeting) in which the statutory auditor was appointed.'
+      },
+      {
+        question: 'How is late fee calculated for Form ADT-1 under MCA Table B?',
+        answer: 'Form ADT-1 is an event-based form governed by Table B of the Companies (Registration Offices and Fees) Rules, 2014. If delayed, additional fees escalate as a multiple of the normal filing fee: up to 15 days delay = 1x; 16 to 30 days = 2x; 31 to 60 days = 4x; 61 to 90 days = 6x; 91 to 180 days = 10x; beyond 180 days = 12x normal fee.'
+      },
+      {
+        question: 'Does Form ADT-1 have a ₹100 per day penalty like AOC-4 or MGT-7?',
+        answer: 'No. The flat ₹100 per day additional fee introduced by the Companies (Registration Offices and Fees) Second Amendment Rules, 2018 applies exclusively to annual statutory returns (Form AOC-4, AOC-4 CFS, AOC-4 XBRL, MGT-7, and MGT-7A). Form ADT-1 is governed by the time-slab multiplier system under Table B and is capped at 12 times the base fee for delays up to 270 days.'
+      },
+      {
+        question: 'Is Form ADT-1 mandatory for the appointment of the First Auditor?',
+        answer: 'Under Section 139(6), the First Auditor of a non-government company is appointed by the Board of Directors within 30 days of incorporation. While Rule 4(2) explicitly references Section 139(1) (subsequent appointment at AGM), filing Form ADT-1 for the first auditor within 15 days of the Board Meeting is widely accepted and recommended by ROCs and ICAI to officially record the auditor’s PAN and details on the MCA21 portal.'
+      },
+      {
+        question: 'What is the due date and procedure for filing ADT-1 in case of a Casual Vacancy?',
+        answer: 'Under Section 139(8), a casual vacancy caused by death or disqualification must be filled by the Board within 30 days. If caused by resignation, the Board’s recommendation must also be approved by members at an EGM convened within 3 months. In both instances, Form ADT-1 must be filed with the ROC within 15 days of the meeting where the appointment was effected.'
+      },
+      {
+        question: 'Can a statutory auditor be appointed for 5 consecutive years? Is annual ratification required?',
+        answer: 'Yes. Individual auditors can be appointed for one term of 5 consecutive years, and audit firms for two terms of 5 consecutive years (subject to rotation under Section 139(2)). Form ADT-1 is filed once upon the 5-year appointment. Following the Companies (Amendment) Act, 2017, the earlier requirement of annual ratification of auditor appointment at every AGM has been deleted.'
+      },
+      {
+        question: 'What happens if Form ADT-1 is delayed beyond 180 days or 270 days?',
+        answer: 'For delays between 181 and 270 days, the maximum Table B additional fee of 12 times the normal fee is payable. If the delay exceeds 270 days, under the second proviso to Section 403(1) of the Companies Act, 2013, the form cannot be processed normally without obtaining prior condonation of delay from the Central Government (Regional Director) by filing Form CG-1.'
+      },
+      {
+        question: 'What are the normal filing fees for Form ADT-1 based on authorized share capital?',
+        answer: 'Under Table A (Items 5 & 6) of Rule 12 Annexure: Nominal capital < ₹1 Lakh = ₹200; ₹1 Lakh to < ₹5 Lakhs = ₹300; ₹5 Lakhs to < ₹25 Lakhs = ₹400; ₹25 Lakhs to < ₹1 Crore = ₹500; ₹1 Crore or more = ₹600; Companies not having share capital = ₹200.'
+      },
+      {
+        question: 'Is there any concessional fee in Form ADT-1 for Small Companies or OPCs?',
+        answer: 'No. The concessional fee schedule for One Person Companies (OPC) and Small Companies under Table A applies only to initial incorporation documents (SPICe+ / MOA registration). Normal post-incorporation filing fees (Items 5 & 6) and Table B late fee multipliers apply uniformly to all companies, including OPCs and Small Companies.'
+      },
+      {
+        question: 'What mandatory documents must be attached to Form ADT-1 on MCA V3?',
+        answer: 'The mandatory attachments on MCA V3 are: (1) Written consent of the auditor in terms of Section 139(1); (2) Certificate of eligibility under Section 141 confirming they are not disqualified and within statutory ceiling limits; (3) Certified true copy of the Board or AGM / EGM resolution; and (4) Intimation letter sent by the company to the appointed auditor.'
+      },
+      {
+        question: 'What is the statutory penalty for non-filing of Form ADT-1 under Section 147?',
+        answer: 'If a company fails to appoint an auditor or contravenes Section 139, the company is punishable with a fine of not less than ₹25,000 which may extend to ₹5,00,000, and every officer in default is punishable with fine of not less than ₹10,000 which may extend to ₹1,00,000 under Section 147(1).'
+      },
+      {
+        question: 'Can late fees for Form ADT-1 be waived under MCA immunity or amnesty schemes?',
+        answer: 'MCA occasional amnesty schemes (such as the earlier CFSS 2020 or LLP Settlement Scheme) periodically grant immunity from additional filing fees for belated returns. However, in standard operational periods on MCA V3, the portal automatically calculates and levies the non-waivable Table B additional fee at checkout.'
+      },
+      {
+        question: 'How to calculate the 15-day deadline if the AGM was held on 30th September?',
+        answer: 'Day 0 is the date of the meeting (30th September). The 15-day statutory window begins the next day (1st October). Therefore, Day 15 falls on 15th October. Any filing on or before 15th October attracts ₹0 late fee. Filing on 16th October constitutes a 1-day delay and attracts a 1x additional filing fee.'
+      },
+      {
+        question: 'What if the statutory auditor resigns before completing their 5-year tenure?',
+        answer: 'The resigning auditor must file Form ADT-3 with the ROC and the company within 30 days of resignation stating reasons. The company must then fill the casual vacancy under Section 139(8) by holding a Board Meeting within 30 days and EGM within 3 months, followed by filing a fresh Form ADT-1 for the incoming auditor within 15 days of appointment.'
+      }
     ],
-    relatedForms: ['aoc-4', 'mgt-7'],
+    relatedForms: ['aoc-4', 'mgt-7', 'dir-12'],
     filedTogetherWith: [],
     contentSections: {
-      whatIsThisForm: '<p><strong>Form ADT-1</strong> is a mandatory notice filed with the Ministry of Corporate Affairs to officially declare the appointment of a statutory auditor. By filing this form, a company informs the government and public stakeholders that an independent chartered accountant has been assigned to audit its financial records, ensuring corporate transparency.</p>',
-      whoMustFile: '<p>Every company registered under the Companies Act—whether private, public, OPC, or Section 8—must file ADT-1 whenever they appoint or re-appoint a statutory auditor at an Annual General Meeting (AGM) or Extraordinary General Meeting (EGM).</p>',
-      dueDateExplained: '<p>The form must be filed strictly <strong>within 15 days</strong> of the meeting in which the auditor was appointed. If the auditor was appointed at the AGM on September 30th, ADT-1 must be filed by October 15th.</p>',
-      consequencesOfDelay: '<p>Since ADT-1 is an event-based form, delaying its filing triggers a multiplier penalty rather than a daily penalty. If you file 30 days late, you pay 2 times the normal fee. If you delay beyond 180 days, you are penalized with a massive <strong>12 times (12x)</strong> the normal filing fee.</p>',
-      workedExample: '<p><strong>Scenario:</strong> A standard Private Company with ₹5 Lakhs capital files ADT-1 exactly 45 days after the due date.</p><ul><li>Normal Filing Fee: ₹300</li><li>Late Penalty (31 to 60 days delay = 4x fee): ₹1,200</li><li><strong>Total Liability:</strong> ₹300 + ₹1,200 = <strong>₹1,500</strong></li></ul>'
+      whatIsThisForm: '<p><strong>Form ADT-1</strong> is the statutory notice mandated under <strong>Section 139(1) of the Companies Act, 2013</strong> read with <strong>Rule 4(2) of the Companies (Audit and Auditors) Rules, 2014</strong>, filed with the Ministry of Corporate Affairs (MCA) to officially intimate the Registrar of Companies (ROC) regarding the appointment of a statutory auditor.</p><p>By submitting Form ADT-1 on the MCA V3 portal, the company enters the auditor’s Permanent Account Number (PAN), ICAI Firm Registration Number (FRN), membership number, tenure of appointment, and registered office details into the official public records, ensuring corporate transparency and compliance with Section 139 standards.</p>',
+      whoMustFile: '<p>Every company incorporated under the Companies Act, 2013 or previous company laws must file Form ADT-1 upon appointing or re-appointing a statutory auditor. This includes:</p><ul><li><strong>Private Limited Companies</strong> (Standard & Small Companies)</li><li><strong>Public Limited Companies</strong> (Unlisted and Listed)</li><li><strong>One Person Companies (OPC)</strong></li><li><strong>Section 8 Companies</strong> (Non-profit organizations)</li><li><strong>Producer Companies</strong></li></ul><p>Form ADT-1 is required for:</p><ol><li><strong>Subsequent Auditor Appointment at AGM:</strong> Appointed for a term of up to 5 consecutive years under Section 139(1).</li><li><strong>Casual Vacancy Appointment:</strong> Filling a vacancy caused by death, disqualification, or resignation under Section 139(8).</li><li><strong>First Auditor Appointment:</strong> Appointed by the Board within 30 days of incorporation under Section 139(6) to ensure the auditor profile is formally activated on MCA V3.</li></ol>',
+      dueDateExplained: '<p>Unlike most general ROC forms that allow a 30-day window, Form ADT-1 has an aggressive statutory deadline of <strong>strictly within 15 days</strong> from the date of the meeting at which the auditor was appointed:</p><ul><li><strong>Standard AGM Scenario:</strong> If the Annual General Meeting is held on <strong>30th September</strong>, the 15-day statutory window expires on <strong>15th October</strong>.</li><li><strong>Casual Vacancy Scenario:</strong> If the Board appoints an auditor on <strong>10th November</strong> to fill a vacancy, Form ADT-1 must be filed on or before <strong>25th November</strong>.</li><li><strong>Filing Day Calculation:</strong> The day of the meeting is excluded (Day 0), and counting starts the following day. Filing on Day 16 triggers an immediate delay classification under MCA rules.</li></ul>',
+      consequencesOfDelay: '<p>Delay in filing Form ADT-1 triggers two separate levels of statutory exposure:</p><h3>1. Table B Additional Filing Fee Multipliers (Rule 12 Annexure)</h3><p>Unlike annual financial returns (AOC-4 and MGT-7) which attract an uncapped ₹100 per day late fee, Form ADT-1 is an event-based form governed by <strong>Table B</strong>. The additional fee escalates based on the duration of delay as a direct multiplier of the normal base fee:</p><ul><li><strong>Delay up to 15 days:</strong> 1 time the normal filing fee (1x)</li><li><strong>Delay 16 to 30 days:</strong> 2 times the normal filing fee (2x)</li><li><strong>Delay 31 to 60 days:</strong> 4 times the normal filing fee (4x)</li><li><strong>Delay 61 to 90 days:</strong> 6 times the normal filing fee (6x)</li><li><strong>Delay 91 to 180 days:</strong> 10 times the normal filing fee (10x)</li><li><strong>Delay beyond 180 days:</strong> 12 times the normal filing fee (12x)</li></ul><h3>2. Section 403 Condonation Requirement (> 270 Days Delay)</h3><p>Under the second proviso to Section 403(1), if Form ADT-1 is delayed <strong>beyond 270 days</strong> from the statutory due date, the company cannot directly file the form through self-service checkout on MCA V3. The company must file an application in Form CG-1 with the Regional Director for <strong>Condonation of Delay</strong> before the ROC accepts the belated ADT-1.</p><h3>3. Statutory Adjudication Penalties (Section 147)</h3><p>Failure to appoint an auditor or contravention of Section 139 renders the company liable to a fine of <strong>₹25,000 up to ₹5,00,000</strong>, and every officer in default liable to a fine of <strong>₹10,000 up to ₹1,00,000</strong>.</p>',
+      workedExample: '<p><strong>Real-World Illustration:</strong> A Private Limited Company with an authorized nominal capital of <strong>₹10 Lakhs</strong> holds its AGM on <strong>30th September 2026</strong> and appoints ABC & Associates, Chartered Accountants, for a 5-year term.</p><ul><li><strong>Statutory Due Date:</strong> 15th October 2026 (15 days from AGM).</li><li><strong>Nominal Capital Bracket:</strong> ₹5 Lakhs to < ₹25 Lakhs $\\rightarrow$ Normal Base Filing Fee = <strong>₹400</strong>.</li></ul><h4>Scenario A — Timely Filing (on or before 15th October 2026):</h4><ul><li>Normal Filing Fee: ₹400</li><li>Additional Late Fee: ₹0</li><li><strong>Total MCA Challan: ₹400</strong></li></ul><h4>Scenario B — Delayed by 20 Days (Filing on 4th November 2026):</h4><ul><li>Delay Bracket: 16 to 30 days $\\rightarrow$ Multiplier = <strong>2x normal fee</strong></li><li>Additional Late Fee: ₹400 × 2 = ₹800</li><li><strong>Total MCA Challan: ₹400 + ₹800 = ₹1,200</strong></li></ul><h4>Scenario C — Delayed by 75 Days (Filing on 29th December 2026):</h4><ul><li>Delay Bracket: 61 to 90 days $\\rightarrow$ Multiplier = <strong>6x normal fee</strong></li><li>Additional Late Fee: ₹400 × 6 = ₹2,400</li><li><strong>Total MCA Challan: ₹400 + ₹2,400 = ₹2,800</strong></li></ul><h4>Scenario D — Delayed by 200 Days (Filing in May 2027):</h4><ul><li>Delay Bracket: Beyond 180 days (≤ 270 days) $\\rightarrow$ Multiplier = <strong>12x normal fee</strong></li><li>Additional Late Fee: ₹400 × 12 = ₹4,800</li><li><strong>Total MCA Challan: ₹400 + ₹4,800 = ₹5,200</strong></li></ul>'
     }
   },
   {

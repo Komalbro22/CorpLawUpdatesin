@@ -75,11 +75,51 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
     description: form.metaDescription
   }
 
+  const howToSchema = form.slug === 'adt-1' ? {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How to Calculate Form ADT-1 Filing Fees & Late Penalties on MCA V3',
+    description: 'Step-by-step guide to calculating normal filing fees, Table B late fee multipliers, and statutory deadlines for Form ADT-1 auditor appointment.',
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Determine the Meeting & Appointment Date',
+        text: 'Identify the date of the meeting where the auditor was appointed (AGM, EGM, or Board Meeting for first auditor/casual vacancy).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Calculate the 15-Day Statutory Due Date',
+        text: 'Form ADT-1 must be filed within 15 calendar days from the meeting date pursuant to Section 139(1) and Rule 4(2).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Check Nominal Share Capital Bracket',
+        text: 'Determine the normal base fee (₹200 to ₹600) based on authorized capital under Table A Items 5 & 6.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: 'Apply Table B Delay Multiplier',
+        text: 'If delayed, apply the Table B multiplier (1x for ≤15d, 2x for ≤30d, 4x for ≤60d, 6x for ≤90d, 10x for ≤180d, 12x for ≤270d).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 5,
+        name: 'Verify Section 403 Condonation Requirement',
+        text: 'If the delay exceeds 270 days, obtain prior Condonation of Delay from the Regional Director via Form CG-1 before filing on MCA V3.'
+      }
+    ]
+  } : null
+
   return (
     <div className="min-h-dvh bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
       <JsonLd data={breadcrumbSchema as any} />
       <JsonLd data={faqSchema as any} />
       <JsonLd data={webAppSchema as any} />
+      {howToSchema && <JsonLd data={howToSchema as any} />}
 
       {/* 4A - Breadcrumb */}
       <div className="bg-navy pt-6 px-4">
@@ -112,10 +152,14 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </span>
           </div>
           <h1 className="text-[2.25rem] font-bold font-serif text-white mb-4">
-            {form.formNumber} — {form.formName} Fee & Penalty Calculator (2026-27)
+            {form.slug === 'adt-1'
+              ? 'ADT-1 Late Fees & Penalty Calculator (FY 2026-27) — Auditor Appointment'
+              : `${form.formNumber} — ${form.formName} Fee & Penalty Calculator (2026-27)`}
           </h1>
           <p className="text-slate-400 text-lg max-w-3xl mx-auto mb-8">
-            Calculate exact normal filing fees and late penalties for {form.formNumber} ({form.formName}) based on authorized capital and delay.
+            {form.slug === 'adt-1'
+              ? 'Calculate statutory normal filing fees, 15-day due date from AGM/EGM, and Table B late fee multipliers (1× to 12×) for Form ADT-1 on MCA V3.'
+              : `Calculate exact normal filing fees and late penalties for ${form.formNumber} (${form.formName}) based on authorized capital and delay.`}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <div className="bg-slate-800/50 border border-slate-700 rounded-full px-4 py-2 text-sm text-slate-300">
