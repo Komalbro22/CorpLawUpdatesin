@@ -8,7 +8,7 @@ import { linkGlossaryTerms } from '@/lib/glossaryLinker'
 import TableOfContents from '@/components/TableOfContents'
 import { BookOpen, Link2, Search, FileText, HelpCircle, Sparkles, Clock } from 'lucide-react'
 
-export const revalidate = false
+export const revalidate = 86400 // Revalidate daily per Supabase egress budget
 
 type Props = {
   params: Promise<{ slug: string }>
