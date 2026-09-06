@@ -655,6 +655,219 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
           </div>
         )}
 
+        {/* DPT-3 Dedicated Statutory Master Tables */}
+        {form.slug === 'dpt-3' && (
+          <div className="space-y-12 mb-16">
+            {/* Table 1: Normal Fees */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>📋</span> Table A: Normal Base Filing Fee Schedule (Items 5 & 6)
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Statutory base fee payable upon filing Form DPT-3 on MCA21 V3 portal based on authorized nominal share capital under the Companies (Registration Offices and Fees) Rules, 2014.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Nominal / Authorized Capital Bracket</th>
+                      <th className="px-4 py-3 font-semibold">Normal Filing Fee</th>
+                      <th className="px-4 py-3 font-semibold">Statutory Reference & Nuance</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr><td className="px-4 py-3 font-medium">Less than ₹1,00,000</td><td className="px-4 py-3 font-bold text-blue-600">₹200</td><td className="px-4 py-3 text-slate-500">Table A, Item 5, Fees Rules 2014</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">₹1,00,000 to ₹4,99,999</td><td className="px-4 py-3 font-bold text-blue-600">₹300</td><td className="px-4 py-3 text-slate-500">Table A, Item 5, Fees Rules 2014</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">₹5,00,000 to ₹24,99,999</td><td className="px-4 py-3 font-bold text-blue-600">₹400</td><td className="px-4 py-3 text-slate-500">Table A, Item 5, Fees Rules 2014 (Most standard private companies)</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">₹25,00,000 to ₹99,99,999</td><td className="px-4 py-3 font-bold text-blue-600">₹500</td><td className="px-4 py-3 text-slate-500">Table A, Item 5, Fees Rules 2014</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">₹1,00,00,000 or more (≥ ₹1 Crore)</td><td className="px-4 py-3 font-bold text-blue-600">₹600</td><td className="px-4 py-3 text-slate-500">Table A, Item 5, Fees Rules 2014 (Maximum base tier)</td></tr>
+                    <tr className="bg-slate-50/50 dark:bg-slate-800/30"><td className="px-4 py-3 font-medium italic">Company not having share capital</td><td className="px-4 py-3 font-bold text-blue-600">₹200</td><td className="px-4 py-3 text-slate-500">Table A, Item 6, Fees Rules 2014 (Flat fee for guarantee companies)</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p className="text-[11px] text-slate-500 mt-3 italic">
+                *Note: Companies incorporated post 26 January 2018 with capital ≤ ₹10 Lakhs had zero incorporation fees; however, this exemption does not apply to recurring annual forms like DPT-3.
+              </p>
+            </div>
+
+            {/* Table 2: Table B Multiplier Matrix */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>⏱️</span> Table B: Additional Late Fee Multiplier Matrix (2× to 12×)
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Unlike AOC-4 and MGT-7 (which charge flat ₹100/day), Form DPT-3 delay fees are calculated strictly as multipliers of the Table A normal fee under Item B of the Fees Rules.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Period of Delay</th>
+                      <th className="px-4 py-3 font-semibold">Table B Multiplier</th>
+                      <th className="px-4 py-3 font-semibold">Total Fee: ₹10L Capital</th>
+                      <th className="px-4 py-3 font-semibold">Total Fee: ≥ ₹1Cr Capital</th>
+                      <th className="px-4 py-3 font-semibold">Statutory Risk & Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr><td className="px-4 py-3 font-medium">0 Days (Timely on or before 30 June)</td><td className="px-4 py-3 font-bold text-green-600">0× (No Late Fee)</td><td className="px-4 py-3">₹400</td><td className="px-4 py-3">₹600</td><td className="px-4 py-3 text-slate-500">Fully compliant with Rule 16</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">Up to 30 Days Delay</td><td className="px-4 py-3 font-bold text-amber-600">2× Normal Fee</td><td className="px-4 py-3">₹400 + ₹800 = <strong>₹1,200</strong></td><td className="px-4 py-3">₹600 + ₹1,200 = <strong>₹1,800</strong></td><td className="px-4 py-3 text-slate-500">Standard initial late slab</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">31 to 60 Days Delay</td><td className="px-4 py-3 font-bold text-amber-600">4× Normal Fee</td><td className="px-4 py-3">₹400 + ₹1,600 = <strong>₹2,000</strong></td><td className="px-4 py-3">₹600 + ₹2,400 = <strong>₹3,000</strong></td><td className="px-4 py-3 text-slate-500">Second tier delay</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">61 to 90 Days Delay</td><td className="px-4 py-3 font-bold text-amber-600">6× Normal Fee</td><td className="px-4 py-3">₹400 + ₹2,400 = <strong>₹2,800</strong></td><td className="px-4 py-3">₹600 + ₹3,600 = <strong>₹4,200</strong></td><td className="px-4 py-3 text-slate-500">Escalating compliance warning</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">91 to 180 Days Delay</td><td className="px-4 py-3 font-bold text-red-600">10× Normal Fee</td><td className="px-4 py-3">₹400 + ₹4,000 = <strong>₹4,400</strong></td><td className="px-4 py-3">₹600 + ₹6,000 = <strong>₹6,600</strong></td><td className="px-4 py-3 text-slate-500">Substantial delay (3–6 months)</td></tr>
+                    <tr className="bg-red-50/40 dark:bg-red-950/20"><td className="px-4 py-3 font-medium text-red-700 dark:text-red-400">More than 180 Days Delay</td><td className="px-4 py-3 font-bold text-red-600">12× Normal Fee</td><td className="px-4 py-3 text-red-700 dark:text-red-300">₹400 + ₹4,800 = <strong>₹5,200</strong></td><td className="px-4 py-3 text-red-700 dark:text-red-300">₹600 + ₹7,200 = <strong>₹7,800</strong></td><td className="px-4 py-3 text-red-600">Max multiplier; &gt;270d needs Sec 403 condonation</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 3: Rule 21 Procedural Fine vs Section 76A Substantive Penalties */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>⚖️</span> Rule 21 Procedural Fines vs Section 76A Substantive Penalties
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Comparison between procedural penalties for missing the DPT-3 filing and criminal/substantive penalties for unauthorized public deposits.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Statutory Dimension</th>
+                      <th className="px-4 py-3 font-semibold text-amber-600 dark:text-amber-400">Rule 21 Procedural Fine</th>
+                      <th className="px-4 py-3 font-semibold text-red-600 dark:text-red-400">Section 76A Substantive Penalty</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-navy dark:text-white">Governing Law</td>
+                      <td className="px-4 py-3">Rule 21, Deposits Rules, 2014</td>
+                      <td className="px-4 py-3 font-medium">Section 76A, Companies Act, 2013</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-navy dark:text-white">When Triggered?</td>
+                      <td className="px-4 py-3">Failure or delay in filing Form DPT-3 (even for exempt director loans)</td>
+                      <td className="px-4 py-3">Accepting deposits in violation of Sec 73/76 or default in repayment</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-navy dark:text-white">Company Liability</td>
+                      <td className="px-4 py-3">Fine up to ₹5,000</td>
+                      <td className="px-4 py-3 font-bold text-red-600">₹1 Crore to ₹10 Crore (or 2× deposit amount)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-navy dark:text-white">Officers in Default Liability</td>
+                      <td className="px-4 py-3">Fine up to ₹5,000 per officer</td>
+                      <td className="px-4 py-3 font-bold text-red-600">Imprisonment up to 7 yrs AND/OR ₹25 Lakh to ₹2 Crore</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-navy dark:text-white">Continuing Default Rate</td>
+                      <td className="px-4 py-3">₹500 per day throughout the failure</td>
+                      <td className="px-4 py-3">Additional fine extending to ₹10 Crore + 18% penal interest</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-navy dark:text-white">Adjudication Authority</td>
+                      <td className="px-4 py-3">Registrar of Companies (ROC) under Section 454</td>
+                      <td className="px-4 py-3">Special Court / NCLT Criminal Prosecution</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 4: Circular 02/2026 Waiver Matrix */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>🏛️</span> MCA General Circular No. 02/2026 Fee Waiver & Date Arithmetic (FY 2025-26)
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Relief issued by the Ministry of Corporate Affairs on 19 June 2026 following the fire at the MCA Data Centre on 5 June 2026.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Filing Date Window</th>
+                      <th className="px-4 py-3 font-semibold">Circular 02/2026 Status</th>
+                      <th className="px-4 py-3 font-semibold">Table B Multiplier</th>
+                      <th className="px-4 py-3 font-semibold">Late Fee Payable</th>
+                      <th className="px-4 py-3 font-semibold">Statutory Date Arithmetic Rule</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-medium">On or before 30 June 2026</td>
+                      <td className="px-4 py-3 font-bold text-green-600">Timely Filing</td>
+                      <td className="px-4 py-3">0×</td>
+                      <td className="px-4 py-3 font-bold text-green-600">₹0</td>
+                      <td className="px-4 py-3 text-slate-500">Within standard 90-day window under Rule 16</td>
+                    </tr>
+                    <tr className="bg-amber-50/50 dark:bg-amber-950/30">
+                      <td className="px-4 py-3 font-medium text-amber-900 dark:text-amber-200">1 July 2026 to 31 July 2026</td>
+                      <td className="px-4 py-3 font-bold text-amber-700 dark:text-amber-300">Fee Waiver Active</td>
+                      <td className="px-4 py-3 font-bold">0× (Waived)</td>
+                      <td className="px-4 py-3 font-bold text-green-600">₹0</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-300">Additional late fee completely waived by Circular 02/2026; pay normal fee only</td>
+                    </tr>
+                    <tr className="bg-red-50/40 dark:bg-red-950/20">
+                      <td className="px-4 py-3 font-medium text-red-700 dark:text-red-400">On or after 1 August 2026</td>
+                      <td className="px-4 py-3 font-bold text-red-700 dark:text-red-400">Post-Waiver Delayed</td>
+                      <td className="px-4 py-3 font-bold text-red-600">2× to 12× Normal Fee</td>
+                      <td className="px-4 py-3 font-bold text-red-600">Standard Table B Slabs</td>
+                      <td className="px-4 py-3 text-red-700 dark:text-red-300">
+                        <strong>Crucial Nuance:</strong> Delay is counted from the <strong>original due date (30 June / 1 July 2026)</strong>, NOT from 31 July! E.g. filing on 1 Aug = 32 days delay = 4× multiplier.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 5: Rule 2(1)(c) Master Excluded Receipts */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>📑</span> Rule 2(1)(c) Master Registry: 18 Categories of Excluded Receipts
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                These transactions are statutorily excluded from the definition of "deposit", yet <strong>MUST be reported in Form DPT-3 under Rule 16A</strong>. Auditor\'s certificate is NOT required for these 18 categories.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">#</th>
+                      <th className="px-4 py-3 font-semibold">Sub-Clause</th>
+                      <th className="px-4 py-3 font-semibold">Excluded Transaction Title</th>
+                      <th className="px-4 py-3 font-semibold">Statutory Conditions & Compliance Rules</th>
+                      <th className="px-4 py-3 font-semibold">Auditor Cert?</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr><td className="px-4 py-2.5 font-bold">1</td><td className="px-4 py-2.5 font-mono text-xs">2(1)(c)(i)</td><td className="px-4 py-2.5 font-medium">Government / Statutory Receipts</td><td className="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-400">Received from Central/State Govt, local or statutory authorities.</td><td className="px-4 py-2.5 text-xs font-bold text-emerald-600">No</td></tr>
+                    <tr><td className="px-4 py-2.5 font-bold">2</td><td className="px-4 py-2.5 font-mono text-xs">2(1)(c)(ii)</td><td className="px-4 py-2.5 font-medium">Foreign Governments / Banks</td><td className="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-400">Foreign bodies, international banks, export credit agencies per FEMA.</td><td className="px-4 py-2.5 text-xs font-bold text-emerald-600">No</td></tr>
+                    <tr><td className="px-4 py-2.5 font-bold">3</td><td className="px-4 py-2.5 font-mono text-xs">2(1)(c)(iii)</td><td className="px-4 py-2.5 font-medium">Bank & FI Borrowings</td><td className="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-400">Loans/facilities from banks, SBI, RRBs, or notified Public FIs.</td><td className="px-4 py-2.5 text-xs font-bold text-emerald-600">No</td></tr>
+                    <tr><td className="px-4 py-2.5 font-bold">4</td><td className="px-4 py-2.5 font-mono text-xs">2(1)(c)(vi)</td><td className="px-4 py-2.5 font-medium">Inter-Corporate Borrowings</td><td className="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-400">Amounts received by a company from another company under Section 186.</td><td className="px-4 py-2.5 text-xs font-bold text-emerald-600">No</td></tr>
+                    <tr><td className="px-4 py-2.5 font-bold">5</td><td className="px-4 py-2.5 font-mono text-xs">2(1)(c)(viii)</td><td className="px-4 py-2.5 font-medium">Director Loans</td><td className="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-400">Mandatory written declaration that loan is out of own (non-borrowed) funds.</td><td className="px-4 py-2.5 text-xs font-bold text-emerald-600">No</td></tr>
+                    <tr><td className="px-4 py-2.5 font-bold">6</td><td className="px-4 py-2.5 font-mono text-xs">2(1)(c)(viii) Pr</td><td className="px-4 py-2.5 font-medium">Relative of Director (Pvt Co)</td><td className="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-400">Private companies only. Relative furnishes non-borrowed funds declaration.</td><td className="px-4 py-2.5 text-xs font-bold text-emerald-600">No</td></tr>
+                    <tr><td className="px-4 py-2.5 font-bold">7</td><td className="px-4 py-2.5 font-mono text-xs">2(1)(c)(xviia)</td><td className="px-4 py-2.5 font-medium">Startup Convertible Notes</td><td className="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-400">≥ ₹25L in single tranche by DPIIT startup; convertible/repayable up to 10 yrs.</td><td className="px-4 py-2.5 text-xs font-bold text-emerald-600">No</td></tr>
+                    <tr><td className="px-4 py-2.5 font-bold">8</td><td className="px-4 py-2.5 font-mono text-xs">2(1)(c)(iv)</td><td className="px-4 py-2.5 font-medium">Commercial Paper (CP)</td><td className="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-400">Issued pursuant to Reserve Bank of India money market guidelines.</td><td className="px-4 py-2.5 text-xs font-bold text-emerald-600">No</td></tr>
+                    <tr><td className="px-4 py-2.5 font-bold">9</td><td className="px-4 py-2.5 font-mono text-xs">2(1)(c)(ixa)</td><td className="px-4 py-2.5 font-medium">Secured Bonds & Debentures</td><td className="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-400">Secured by first charge on tangible assets of equal value; tenor ≤ 10 yrs.</td><td className="px-4 py-2.5 text-xs font-bold text-emerald-600">No</td></tr>
+                    <tr><td className="px-4 py-2.5 font-bold">10</td><td className="px-4 py-2.5 font-mono text-xs">2(1)(c)(ixb)</td><td className="px-4 py-2.5 font-medium">Compulsorily Convertible Debentures</td><td className="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-400">Unsecured debentures compulsorily convertible into equity within 10 yrs.</td><td className="px-4 py-2.5 text-xs font-bold text-emerald-600">No</td></tr>
+                    <tr><td className="px-4 py-2.5 font-bold">11</td><td className="px-4 py-2.5 font-mono text-xs">2(1)(c)(vii)</td><td className="px-4 py-2.5 font-medium">Share Application Money</td><td className="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-400">Allotment within 60 days, else refund in 15 days (becomes deposit on 75th day).</td><td className="px-4 py-2.5 text-xs font-bold text-emerald-600">No</td></tr>
+                    <tr><td className="px-4 py-2.5 font-bold">12</td><td className="px-4 py-2.5 font-mono text-xs">2(1)(c)(xii)(a)</td><td className="px-4 py-2.5 font-medium">Customer Advances for Goods/Services</td><td className="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-400">Must be appropriated against supply of goods/services within 365 days.</td><td className="px-4 py-2.5 text-xs font-bold text-emerald-600">No</td></tr>
+                    <tr><td className="px-4 py-2.5 font-bold">13</td><td className="px-4 py-2.5 font-mono text-xs">2(1)(c)(xii)(b)</td><td className="px-4 py-2.5 font-medium">Security Deposits / Performance Guarantees</td><td className="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-400">Security deposits received for performance of contracts for supply/services.</td><td className="px-4 py-2.5 text-xs font-bold text-emerald-600">No</td></tr>
+                    <tr><td className="px-4 py-2.5 font-bold">14</td><td className="px-4 py-2.5 font-mono text-xs">2(1)(c)(xii)(d)</td><td className="px-4 py-2.5 font-medium">Advance for Immovable Assets</td><td className="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-400">Advance against written agreement for consideration of immovable property.</td><td className="px-4 py-2.5 text-xs font-bold text-emerald-600">No</td></tr>
+                    <tr><td className="px-4 py-2.5 font-bold">15</td><td className="px-4 py-2.5 font-mono text-xs">2(1)(c)(xiii)</td><td className="px-4 py-2.5 font-medium">Promoter Subordinated Loans</td><td className="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-400">Brought pursuant to lending bank/FI stipulation until facility is repaid.</td><td className="px-4 py-2.5 text-xs font-bold text-emerald-600">No</td></tr>
+                    <tr><td className="px-4 py-2.5 font-bold">16</td><td className="px-4 py-2.5 font-mono text-xs">2(1)(c)(xiv)</td><td className="px-4 py-2.5 font-medium">Nidhi Company Member Receipts</td><td className="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-400">Accepted by declared Nidhi company under Section 406.</td><td className="px-4 py-2.5 text-xs font-bold text-emerald-600">No</td></tr>
+                    <tr><td className="px-4 py-2.5 font-bold">17</td><td className="px-4 py-2.5 font-mono text-xs">2(1)(c)(x)</td><td className="px-4 py-2.5 font-medium">Employee Security Deposits</td><td className="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-400">Non-interest-bearing deposit not exceeding annual salary under contract.</td><td className="px-4 py-2.5 text-xs font-bold text-emerald-600">No</td></tr>
+                    <tr><td className="px-4 py-2.5 font-bold">18</td><td className="px-4 py-2.5 font-mono text-xs">2(1)(c)(xi)</td><td className="px-4 py-2.5 font-medium">Trust & Mutual Fund Receipts</td><td className="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-400">Held in trust or subscriptions to SEBI-approved mutual funds / CIS.</td><td className="px-4 py-2.5 text-xs font-bold text-emerald-600">No</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+
         {/* 4F - Worked Example */}
         <div className="bg-blue-50 dark:bg-blue-900/10 border-l-4 border-blue-600 p-6 md:p-8 rounded-r-2xl mb-16">
           <h2 className="text-2xl font-bold text-navy dark:text-white mb-4">Fee Calculation Example</h2>
