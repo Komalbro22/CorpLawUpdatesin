@@ -828,7 +828,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
                 <span>📑</span> Rule 2(1)(c) Master Registry: 18 Categories of Excluded Receipts
               </h3>
               <p className="text-xs text-slate-500 mb-4">
-                These transactions are statutorily excluded from the definition of "deposit", yet <strong>MUST be reported in Form DPT-3 under Rule 16A</strong>. Auditor\'s certificate is NOT required for these 18 categories.
+                These transactions are statutorily excluded from the definition of &quot;deposit&quot;, yet <strong>MUST be reported in Form DPT-3 under Rule 16A</strong>. Auditor&apos;s certificate is NOT required for these 18 categories.
               </p>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm text-left">

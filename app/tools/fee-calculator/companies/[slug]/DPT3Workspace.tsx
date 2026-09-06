@@ -568,7 +568,7 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
                     ) : (
                       <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
                     )}
-                    <span>Auditor\'s Certificate: {result.auditorCertificate.statusBadge}</span>
+                    <span>Auditor&apos;s Certificate: {result.auditorCertificate.statusBadge}</span>
                   </div>
                   <p className="text-[11px] text-slate-300">
                     {result.auditorCertificate.ruleExplanation}
