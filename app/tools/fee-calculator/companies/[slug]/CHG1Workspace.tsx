@@ -62,17 +62,17 @@ const STATUTORY_TIERS: TimelineTier[] = [
   },
   {
     tier: 'Tier 3: Second Extension + Ad Valorem',
-    creationWindow: 'Days 61 to 90',
-    delayWindow: '31 to 60 days delay',
+    creationWindow: 'Days 61 to 120',
+    delayWindow: '31 to 90 days delay',
     smallOpcMultiplier: '3× Normal Fee + 0.025% Ad Valorem (Max ₹1 Lakh)',
     otherMultiplier: '6× Normal Fee + 0.05% Ad Valorem (Max ₹5 Lakhs)',
     adValoremRule: '0.025% (Small/OPC) or 0.05% (Other)',
-    rocAuthority: 'ROC Registration with Ad Valorem Fee (Section 77(1) Proviso)'
+    rocAuthority: 'ROC Registration with Ad Valorem Fee (Section 77(1) Second Proviso)'
   },
   {
     tier: 'Tier 4: Statutory Hard Stop',
-    creationWindow: 'Beyond 90 Days',
-    delayWindow: 'More than 60 days delay',
+    creationWindow: 'Beyond 120 Days',
+    delayWindow: 'More than 90 days delay',
     smallOpcMultiplier: 'Section 87 Condonation Required',
     otherMultiplier: 'Section 87 Condonation Required',
     adValoremRule: 'Subject to RD Penalty Order',
@@ -157,7 +157,7 @@ export default function CHG1Workspace({ form }: CHG1WorkspaceProps) {
         tierIdx = 0
       } else if (delay <= 30) {
         tierIdx = 1
-      } else if (delay <= 60) {
+      } else if (delay <= 90) {
         tierIdx = 2
       } else {
         tierIdx = 3
@@ -197,9 +197,9 @@ export default function CHG1Workspace({ form }: CHG1WorkspaceProps) {
     const ext1 = new Date(creation)
     ext1.setDate(ext1.getDate() + 60)
 
-    // Final ROC cutoff (90 days from creation)
+    // Final ROC cutoff (120 days from creation: 60 days initial window + 60 days second extension)
     const ext2 = new Date(creation)
-    ext2.setDate(ext2.getDate() + 90)
+    ext2.setDate(ext2.getDate() + 120)
 
     const filing = filingDate ? new Date(filingDate) : new Date()
 
@@ -219,7 +219,7 @@ export default function CHG1Workspace({ form }: CHG1WorkspaceProps) {
       tierIdx = 0
     } else if (diffFromCreationDays <= 60 || delay <= 30) {
       tierIdx = 1
-    } else if (diffFromCreationDays <= 90 || delay <= 60) {
+    } else if (diffFromCreationDays <= 120 || delay <= 90) {
       tierIdx = 2
     } else {
       tierIdx = 3
@@ -291,7 +291,7 @@ export default function CHG1Workspace({ form }: CHG1WorkspaceProps) {
       }
     }
 
-    // Days 61 to 90 from creation (31 to 60 days delay)
+    // Days 61 to 120 from creation (31 to 90 days delay)
     const mult = isSmallOrOpc ? 3 : 6
     const multFee = normalFee * mult
     const percent = isSmallOrOpc ? 0.00025 : 0.0005 // 0.025% vs 0.05%
@@ -342,7 +342,7 @@ export default function CHG1Workspace({ form }: CHG1WorkspaceProps) {
     let feeBreakdownStr = ''
     if (isCondonation) {
       feeBreakdownStr = `⚠️ SECTION 87 CONDONATION REQUIRED:
-• Delay exceeds 90 days from creation of charge.
+• Delay exceeds 120 days from creation of charge (more than 90 days delay).
 • Under Section 77(1) proviso, ROC CANNOT register Form CHG-1 directly.
 • Action Required: Submit petition in Form CHG-8 to Regional Director (Central Govt).
 • Government Fee: Subject to penalty ordered by Regional Director.`
@@ -581,17 +581,17 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
                     </button>
                     <button
                       type="button"
-                      onClick={() => handleSetPresetCreation(75)}
+                      onClick={() => handleSetPresetCreation(90)}
                       className="text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-rose-100 dark:hover:bg-rose-900/40"
                     >
-                      75d (Tier 3)
+                      90d (Tier 3)
                     </button>
                     <button
                       type="button"
-                      onClick={() => handleSetPresetCreation(110)}
+                      onClick={() => handleSetPresetCreation(130)}
                       className="text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-red-200 dark:hover:bg-red-900/60 text-red-600"
                     >
-                      110d (Condonation)
+                      130d (Condonation)
                     </button>
                   </div>
                 </div>
@@ -636,7 +636,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
                       <p className="text-xs font-extrabold text-amber-900 dark:text-amber-200">{formatDateDisplay(firstExtensionDate)}</p>
                     </div>
                     <div className="bg-rose-50 dark:bg-rose-950/30 p-2 rounded-lg border border-rose-200 dark:border-rose-800">
-                      <p className="text-[10px] text-rose-700 dark:text-rose-400 font-bold uppercase">90-Day ROC Stop</p>
+                      <p className="text-[10px] text-rose-700 dark:text-rose-400 font-bold uppercase">120-Day ROC Stop</p>
                       <p className="text-xs font-extrabold text-rose-900 dark:text-rose-200">{formatDateDisplay(finalRocExtensionDate)}</p>
                     </div>
                   </div>
@@ -658,14 +658,14 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
                 <input
                   type="range"
                   min="0"
-                  max="120"
+                  max="140"
                   step="1"
                   value={directDelayDays}
                   onChange={(e) => setDirectDelayDays(parseInt(e.target.value) || 0)}
                   className="w-full accent-blue-600"
                 />
                 <div className="flex flex-wrap gap-2 pt-1">
-                  {[0, 15, 30, 45, 60, 75, 95].map((d) => (
+                  {[0, 15, 30, 45, 60, 90, 105].map((d) => (
                     <button
                       key={d}
                       type="button"
@@ -676,7 +676,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
                           : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300'
                       }`}
                     >
-                      {d === 0 ? '0 Days (On-Time)' : d > 60 ? `${d}d (>90d Condonation)` : `${d} Days`}
+                      {d === 0 ? '0 Days (On-Time)' : d > 90 ? `${d}d (>120d Condonation)` : `${d} Days`}
                     </button>
                   ))}
                 </div>
@@ -829,7 +829,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
                 </div>
                 <p className="text-xs text-slate-400 mt-1">
                   {isCondonation
-                    ? 'Exceeds 90 days. Direct ROC fee payment blocked under Section 77 proviso.'
+                    ? 'Exceeds 120 days from creation (delay > 90 days). Direct ROC fee payment blocked under Section 77 proviso.'
                     : `Payable online via Bharatkosh gateway upon Form CHG-1 submission`}
                 </p>
               </div>
@@ -870,7 +870,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
                       <span className="text-slate-200 font-semibold">{formatDateDisplay(statutoryDueDate)}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>90-Day Absolute ROC Cutoff:</span>
+                      <span>120-Day Absolute ROC Cutoff:</span>
                       <span className="text-rose-400 font-semibold">{formatDateDisplay(finalRocExtensionDate)}</span>
                     </div>
                     <div className="flex justify-between">
@@ -889,7 +889,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
                     Section 87 Regional Director Condonation Required
                   </div>
                   <p className="text-[11px] leading-relaxed text-red-300">
-                    More than 90 days have elapsed since the charge was created. Under the Section 77(1) proviso, the Registrar of Companies (ROC) has NO power to register the charge or collect late fees.
+                    More than 120 days have elapsed since the charge was created (delay exceeds 90 days). Under the Section 77(1) proviso, the Registrar of Companies (ROC) has NO power to register the charge or collect late fees.
                   </p>
                   <p className="text-[11px] leading-relaxed text-red-300 mt-1">
                     <strong>Statutory Roadmap:</strong> File Form CHG-8 with the Regional Director &rarr; Obtain Condonation Order &rarr; File Form INC-28 &rarr; File Form CHG-1 with ROC.
@@ -1144,7 +1144,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
                     <td className="p-2 font-bold text-slate-900">{formatDateDisplay(statutoryDueDate)}</td>
                   </tr>
                   <tr className="border-b border-slate-200">
-                    <td className="p-2 font-bold bg-slate-50 border-r border-slate-200">ROC Absolute Cutoff (90 Days)</td>
+                    <td className="p-2 font-bold bg-slate-50 border-r border-slate-200">ROC Absolute Cutoff (120 Days)</td>
                     <td className="p-2 font-bold text-rose-700">{formatDateDisplay(finalRocExtensionDate)}</td>
                   </tr>
                   <tr className="border-b border-slate-200">
@@ -1157,7 +1157,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
                 <td className="p-2 font-bold bg-slate-50 border-r border-slate-200">Delay Assessment</td>
                 <td className="p-2 font-bold">
                   {isCondonation ? (
-                    <span className="text-red-700">HARD STOP: Delay exceeds 90 days. ROC registration barred without Section 87 RD Condonation.</span>
+                    <span className="text-red-700">HARD STOP: Delay exceeds 90 days (120 days from creation). ROC registration barred without Section 87 RD Condonation.</span>
                   ) : calculatedDelayDays === 0 ? (
                     <span className="text-emerald-700">COMPLIANT — Timely Filing (Within initial 30 days)</span>
                   ) : (
@@ -1234,15 +1234,15 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
             <div className="border border-slate-200 rounded p-2 bg-slate-50">
               <p className="font-bold text-slate-900 mb-0.5">Section 77 Proviso (Post-2018 Law):</p>
               <p className="text-slate-600 leading-snug">
-                Charges must be registered within 30 days (normal fee), or up to 60 days with additional fee, or up to 90 days with ad valorem fee. Beyond 90 days, ROC registration is barred.
+                Charges must be registered within 30 days (normal fee), or up to 60 days with additional fee (3×/6×), or up to 120 days with ad valorem fee. Beyond 120 days (delay &gt; 90 days), ROC registration is barred.
               </p>
             </div>
             <div className="border border-slate-200 rounded p-2 bg-slate-50">
               <p className="font-bold text-slate-900 mb-0.5">Section 87 Condonation Roadmap:</p>
               <p className="text-slate-600 leading-snug">
                 {isCondonation
-                  ? 'CRITICAL: Delay exceeds 90 days. Prior condonation approval from Regional Director via Form CHG-8 is mandatory before Form CHG-1 can be filed.'
-                  : 'COMPLIANT: Within the 90-day statutory window. Form CHG-1 is eligible for direct ROC registration upon payment of prescribed challan.'}
+                  ? 'CRITICAL: Delay exceeds 90 days (120 days from creation). Prior condonation approval from Regional Director via Form CHG-8 is mandatory before Form CHG-1 can be filed.'
+                  : 'COMPLIANT: Within the 120-day statutory window. Form CHG-1 is eligible for direct ROC registration upon payment of prescribed challan.'}
               </p>
             </div>
           </div>

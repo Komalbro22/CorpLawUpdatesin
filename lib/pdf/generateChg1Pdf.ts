@@ -96,7 +96,7 @@ export function generateChg1Pdf(data: Chg1PdfData): jsPDF {
     parameterRows.push(
       ['Date of Charge Creation', data.creationDate || '—', 'Day 0 of Chapter VI statutory timeline'],
       ['Initial Due Date (30 Days)', data.statutoryDueDate || '—', 'Normal fee window under Section 77(1)'],
-      ['ROC Final Cutoff (90 Days)', data.finalRocExtensionDate || '—', 'Absolute statutory limit for ROC registration without RD order'],
+      ['ROC Final Cutoff (120 Days)', data.finalRocExtensionDate || '—', 'Absolute statutory limit for ROC registration without RD order'],
       ['Actual / Planned Filing Date', data.actualFilingDate || '—', 'Benchmark date considered for fee computation']
     )
   }
@@ -105,9 +105,9 @@ export function generateChg1Pdf(data: Chg1PdfData): jsPDF {
   let delaySubtext = 'Eligible for base filing fee only'
   if (data.isCondonation) {
     delayStatusText = 'HARD STOP — SECTION 87 CONDONATION REQUIRED'
-    delaySubtext = 'Exceeds 90 days from creation. ROC direct filing barred. Requires Form CHG-8 to RD.'
+    delaySubtext = 'Exceeds 120 days from creation (delay > 90 days). ROC direct filing barred. Requires Form CHG-8 to RD.'
   } else if (data.calculatedDelayDays > 30) {
-    delayStatusText = `DELAYED by ${data.calculatedDelayDays} day(s) (Days 61–90 Window)`
+    delayStatusText = `DELAYED by ${data.calculatedDelayDays} day(s) (Days 61–120 Window)`
     delaySubtext = `Attracts ${data.multiplier}x normal fee + ${(data.adValoremPercent * 100).toFixed(3)}% ad-valorem fee`
   } else if (data.calculatedDelayDays > 0) {
     delayStatusText = `DELAYED by ${data.calculatedDelayDays} day(s) (Days 31–60 Window)`
@@ -217,13 +217,13 @@ export function generateChg1Pdf(data: Chg1PdfData): jsPDF {
   const guidanceRows: any[] = [
     [
       'Section 77 Timeline Framework',
-      'Charges created on/after 02.11.2018 have a strict 3-tier timeline: (1) Days 0–30: Normal fee; (2) Days 31–60: 3x/6x fee; (3) Days 61–90: 3x/6x + Ad Valorem (0.025%/0.05% capped at 1L/5L). Beyond 90 days, ROC has NO jurisdiction to register.'
+      'Charges created on/after 02.11.2018 have a strict 3-tier timeline: (1) Days 0–30: Normal fee; (2) Days 31–60: 3x/6x fee; (3) Days 61–120: 3x/6x + Ad Valorem (0.025%/0.05% capped at 1L/5L). Beyond 120 days (delay > 90 days), ROC has NO jurisdiction to register.'
     ],
     [
       'Section 87 Condonation Warning',
       data.isCondonation
-        ? 'CRITICAL NOTICE: The statutory 90-day ROC window has expired. The company cannot file Form CHG-1 directly on MCA V3. An application in Form CHG-8 must be submitted to the Regional Director. After the RD condonation order is granted, it must be filed with the ROC in Form INC-28 before CHG-1 can be filed.'
-        : 'COMPLIANT WINDOW: The charge is within the permissible 90-day ROC window. ROC approval can be obtained upon payment of the calculated challan without RD condonation.'
+        ? 'CRITICAL NOTICE: The statutory 120-day ROC window has expired (delay exceeds 90 days). The company cannot file Form CHG-1 directly on MCA V3. An application in Form CHG-8 must be submitted to the Regional Director. After the RD condonation order is granted, it must be filed with the ROC in Form INC-28 before CHG-1 can be filed.'
+        : 'COMPLIANT WINDOW: The charge is within the permissible 120-day ROC window. ROC approval can be obtained upon payment of the calculated challan without RD condonation.'
     ],
     [
       'Section 78 Charge-Holder Filing Right',

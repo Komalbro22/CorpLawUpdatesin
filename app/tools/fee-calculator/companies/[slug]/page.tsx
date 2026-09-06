@@ -139,14 +139,14 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
       {
         '@type': 'HowToStep',
         position: 4,
-        name: 'Calculate the Second Extension Ad Valorem Fee (Days 61 to 90)',
-        text: 'If delayed between 31 and 60 days, pay 3×/6× normal fee PLUS an Ad Valorem fee: 0.025% of secured amount (capped at ₹1,00,000) for Small/OPC or 0.05% of secured amount (capped at ₹5,00,000) for Others.'
+        name: 'Calculate the Second Extension Ad Valorem Fee (Days 61 to 120)',
+        text: 'If delayed between 31 and 90 days, pay 3×/6× normal fee PLUS an Ad Valorem fee: 0.025% of secured amount (capped at ₹1,00,000) for Small/OPC or 0.05% of secured amount (capped at ₹5,00,000) for Others.'
       },
       {
         '@type': 'HowToStep',
         position: 5,
-        name: 'Comply with Section 87 Hard Stop (> 90 Days from Creation)',
-        text: 'If delayed beyond 90 days from creation, direct ROC registration is legally barred. The company must file Form CHG-8 with the Regional Director for condonation of delay.'
+        name: 'Comply with Section 87 Hard Stop (> 120 Days from Creation)',
+        text: 'If delayed beyond 120 days from creation (delay exceeds 90 days), direct ROC registration is legally barred under Section 77. The company must file Form CHG-8 with the Regional Director for condonation of delay.'
       }
     ]
   } : null
@@ -199,7 +199,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             {form.slug === 'adt-1'
               ? 'Calculate statutory normal filing fees, 15-day due date from AGM/EGM, and Table B late fee multipliers (1× to 12×) for Form ADT-1 on MCA V3.'
               : form.slug === 'chg-1'
-              ? 'Calculate exact normal filing fees, 30-60-90 day Section 77 timelines, 3×/6× extension multipliers, and ad valorem penalties (up to ₹5 Lakhs) for Form CHG-1 on MCA V3.'
+              ? 'Calculate exact normal filing fees, 30-60-120 day Section 77 timelines, 3×/6× extension multipliers, and ad valorem penalties (up to ₹5 Lakhs) for Form CHG-1 on MCA V3.'
               : `Calculate exact normal filing fees and late penalties for ${form.formNumber} (${form.formName}) based on authorized capital and delay.`}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
