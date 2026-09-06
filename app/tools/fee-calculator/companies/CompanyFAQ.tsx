@@ -16,7 +16,7 @@ export default function CompanyFAQ() {
     },
     {
       q: 'What happens if I delay filing general forms like ADT-1 or INC-22?',
-      a: 'General forms attract a multiplier-based penalty. If filed within 15-30 days of the due date, you pay 2x the normal fee. Delaying over 180 days attracts a penalty of 12x the normal fee. (Note: ADT-1 has a 15-day grace period where no penalty applies).'
+      a: 'General forms attract a multiplier-based penalty under Table B (Rule 12). For Form ADT-1, you have 15 days from the meeting appointing the auditor to file with normal fee. If delayed, additional fee starts immediately: 1× normal fee for up to 15 days delay, 2× for 16–30 days delay, up to 12× for delays beyond 180 days (capped up to 270 days). Beyond 270 days, prior condonation of delay under Section 403 via Form CG-1 is mandatory. (Note: ADT-1 does NOT attract ₹100/day penalty).'
     },
     {
       q: 'How is stamp duty calculated for Share Capital (SH-7)?',
@@ -24,7 +24,7 @@ export default function CompanyFAQ() {
     },
     {
       q: 'What is the penalty for late filing of CHG-1?',
-      a: 'If CHG-1 (Creation of Charge) is delayed beyond 30 days, an ad valorem fee is charged. This fee is a percentage of the secured amount (0.05% for normal companies, up to a cap of ₹5,00,000) on top of the standard late fee multiplier.'
+      a: 'If Form CHG-1 is delayed within 30 days past the initial 30-day window (Days 31–60 from creation), an additional fee of 3× normal fee (Small/OPC) or 6× normal fee (Other) applies. The ad valorem fee (0.025% max ₹1L for Small/OPC, 0.05% max ₹5L for Other) activates only for delays between 31 and 90 days (Days 61–120 from creation). Beyond 120 days, direct ROC filing is barred and Section 87 condonation from the Regional Director (Form CHG-8) is mandatory.'
     },
     {
       q: 'What are the penalties for late filing of MGT-14?',
