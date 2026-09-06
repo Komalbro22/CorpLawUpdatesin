@@ -458,7 +458,7 @@ export default function UnifiedCalculator() {
         )}
 
         {/* Dedicated Workspace Cross-Link if applicable */}
-        {(selectedForm.slug === 'mgt-7' || selectedForm.slug === 'mgt-7a' || selectedForm.slug === 'aoc-4' || selectedForm.slug === 'dpt-3' || selectedForm.slug === 'adt-1' || selectedForm.slug === 'chg-1') && (
+        {(selectedForm.slug === 'mgt-7' || selectedForm.slug === 'mgt-7a' || selectedForm.slug === 'aoc-4' || selectedForm.slug === 'dpt-3' || selectedForm.slug === 'dir-3-kyc' || selectedForm.slug === 'adt-1' || selectedForm.slug === 'chg-1') && (
           <div className="mt-4 pt-3 border-t border-blue-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs bg-white/70 dark:bg-slate-900/70 p-3 rounded-lg border border-blue-200/60 dark:border-slate-800">
             <div className="flex items-center gap-2">
               <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -466,6 +466,7 @@ export default function UnifiedCalculator() {
                 {selectedForm.slug.startsWith('mgt-7') && 'Need 60-day AGM calendar date engine, Small Co evaluation (G.S.R. 880(E)) & MGT-8 check?'}
                 {selectedForm.slug === 'aoc-4' && 'Need 30-day AGM vs 180-day OPC engine, Small Co cash flow exemption & Section 137(3) penalty calculator?'}
                 {selectedForm.slug === 'dpt-3' && 'Need Circular 02/2026 fee waiver check, 18 Rule 2(1)(c) exclusions & Rule 21 penalty calculator?'}
+                {selectedForm.slug === 'dir-3-kyc' && 'Need triennial cycle calculator (G.S.R. 943(E)), 30-day change tracker & DIN reactivation memo?'}
                 {selectedForm.slug === 'adt-1' && 'Need 15-day auditor appointment calculator & printable ROC fee report?'}
                 {selectedForm.slug === 'chg-1' && 'Need 30-60-120 day ad-valorem matrices & Regional Director condonation check?'}
               </span>
@@ -501,7 +502,7 @@ export default function UnifiedCalculator() {
                   <td className="px-4 py-3 font-bold text-blue-700 dark:text-blue-400">
                     <Link href={`/tools/fee-calculator/companies/${item.form.slug}`} className="hover:underline inline-flex items-center gap-1.5">
                       <span>{item.form.formNumber}</span>
-                      {['mgt-7', 'mgt-7a', 'aoc-4', 'dpt-3', 'adt-1', 'chg-1'].includes(item.form.slug) && (
+                      {['mgt-7', 'mgt-7a', 'aoc-4', 'dpt-3', 'dir-3-kyc', 'adt-1', 'chg-1'].includes(item.form.slug) && (
                         <span className="text-[10px] bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 px-1.5 py-0.5 rounded font-medium">Dedicated</span>
                       )}
                     </Link>

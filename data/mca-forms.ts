@@ -263,35 +263,70 @@ export const mcaForms: MCAForm[] = [
   {
     slug: 'dir-3-kyc',
     formNumber: 'DIR-3 KYC',
-    formName: 'Director KYC',
-    aliases: ['dir3 kyc', 'director kyc', 'din kyc'],
+    formName: 'Director KYC Web (Triennial Cycle & Change Update)',
+    aliases: ['dir3 kyc', 'director kyc', 'din kyc', 'dir 3 kyc', 'dir-3 kyc web', 'triennial kyc', 'din reactivation fee', 'rule 12a'],
     category: 'kyc',
-    filedBy: ['Individual Directors'],
-    dueDate: '30th June of applicable year',
-    section: 'Rule 12A, Companies (Appointment and Qualification of Directors) Rules',
+    filedBy: ['Individual DIN Holders (Active & Disqualified)', 'Company Directors', 'Designated Partners (LLP)'],
+    dueDate: '30th June of every 3rd Financial Year (or within 30 days of change in details)',
+    section: 'Rule 12A(1) & 12A(2), Companies (Appointment and Qualification of Directors) Rules, 2014 (G.S.R. 943(E))',
     penaltyType: 'flat',
-    penaltyRate: 'Flat ₹5,000 penalty',
+    penaltyRate: 'NIL on-time; ₹500 for change update; ₹5,000 for late / DIN reactivation',
     normalFeeStructure: 'nil',
     baseFeeSlab: 'nil',
     concessionApplies: false,
-    metaTitle: 'DIR-3 KYC Penalty Calculator | Director KYC Late Fee | CorpLawUpdates',
-    metaDescription: 'Check the exact late fee penalty for delayed DIR-3 KYC filing. Know the ₹5000 penalty rules for deactivated DINs.',
-    ogDescription: 'Check the exact late fee penalty for delayed DIR-3 KYC filing. Know the ₹5000 penalty rules for deactivated DINs.',
+    metaTitle: 'DIR-3 KYC Due Date & Penalty Calculator (FY 2026-27) | Triennial Rules (G.S.R. 943(E))',
+    metaDescription: 'Check exact DIR-3 KYC triennial due date, Rule 12A(2) 30-day change rules, and G.S.R. 300(E) fee schedule (₹0 on-time / ₹500 change / ₹5,000 reactivation).',
+    ogDescription: 'Authoritative DIR-3 KYC Due Date & Fee Calculator. Determine your triennial cycle anchor, check 30-day update rules, and calculate DIN reactivation fees on MCA V3.',
     faqItems: [
-      { question: 'What is DIR-3 KYC?', answer: 'DIR-3 KYC is a mandatory annual compliance form for all individuals holding a Director Identification Number (DIN) to verify their identity and contact details.' },
-      { question: 'What happens if I miss the DIR-3 KYC deadline?', answer: 'If you miss the 30th June deadline, your DIN will be marked as "Deactivated due to non-filing of DIR-3 KYC". You cannot file any MCA forms until it is reactivated.' },
-      { question: 'What is the penalty for filing DIR-3 KYC late?', answer: 'Filing DIR-3 KYC after the due date attracts a flat penalty of ₹5,000. There is no normal fee if filed on time.' },
-      { question: 'Who needs to file DIR-3 KYC?', answer: 'Every individual holding a DIN as of 31st March of a financial year must file DIR-3 KYC by 30th June of the next financial year.' },
-      { question: 'Is web KYC sufficient?', answer: 'Yes, if your details (phone and email) have not changed from the previous year, you can simply complete DIR-3 KYC Web, which is a quicker OTP-based process.' }
+      {
+        question: 'What is the new Triennial DIR-3 KYC regime under G.S.R. 943(E)?',
+        answer: 'By notification G.S.R. 943(E) dated 31 December 2025 (effective 31 March 2026), the MCA replaced the old annual September filing with a triennial (every 3 consecutive financial years) filing cycle. Routine KYC is now due on or before 30 June of the year following every third financial year. Additionally, the old e-form and web service have been unified into a single Form DIR-3 KYC Web.'
+      },
+      {
+        question: 'Do I need to file DIR-3 KYC in FY 2026-27 if I filed in FY 2025-26?',
+        answer: 'No. For directors who held a DIN on or before 31 March 2025 and completed their KYC for FY 2025-26, no routine filing is required in FY 2026-27. Under the transitional triennial rules, your next routine KYC compliance window will open in April – June 2028. You only need to file in FY 2026-27 if your mobile number, email, or address changes.'
+      },
+      {
+        question: 'How is the triennial 3-year cycle calculated for new DIN allotments?',
+        answer: 'The cycle is anchored strictly to the financial year in which the DIN was allotted (NOT the date of last filing). A DIN allotted during FY 2025-26 is due in April–June 2029. A DIN allotted during FY 2026-27 is due in April–June 2030.'
+      },
+      {
+        question: 'What is the 30-day event-based update rule under Rule 12A(2)?',
+        answer: 'Under Rule 12A(2), whenever there is any change in personal particulars (mobile number, email address, residential address, nationality, or PAN details), the DIN holder MUST file Form DIR-3 KYC Web within 30 days of such change, accompanied by a fee of ₹500.'
+      },
+      {
+        question: 'Does filing an event-based update reset or extend the 3-year triennial cycle?',
+        answer: 'No. This is the single biggest misconception. Filing a change update under Rule 12A(2) keeps your contact details current, but DOES NOT reset or postpone the 3-year clock. Your next routine triennial KYC remains strictly anchored to your original DIN allotment year.'
+      },
+      {
+        question: 'What is the government fee schedule for Form DIR-3 KYC Web under G.S.R. 300(E)?',
+        answer: 'Under G.S.R. 300(E) dated 21 April 2026 (Item VII of Fees Rules Annexure): (1) Routine triennial filing on time: ₹0 (NIL); (2) Event-based update under Rule 12A(2): ₹500 per filing; (3) Delayed routine filing or DIN reactivation: Flat ₹5,000 fee.'
+      },
+      {
+        question: 'Does the ₹5,000 late fee compound with days or months of delay?',
+        answer: 'No. Unlike Form AOC-4 (which charges ₹100 per day without limit) or Table B multiplier forms (DPT-3/ADT-1), the ₹5,000 fee for DIR-3 KYC is a flat, non-compounding fee. Whether you file 1 day late or 4 years late, the portal fee is ₹5,000.'
+      },
+      {
+        question: 'What are the legal consequences if my DIN is deactivated for non-filing?',
+        answer: 'A deactivated DIN cannot be used to sign any electronic form on MCA V3, and the individual cannot be appointed to any new board. More critically, one deactivated DIN can freeze the entire filing pipeline of a company, preventing it from filing annual returns (MGT-7) and financial statements (AOC-4).'
+      },
+      {
+        question: 'Can DIN deactivation lead to Section 164(2) director disqualification?',
+        answer: 'Yes, through a dangerous cascading effect. While KYC non-filing does not directly trigger disqualification, a deactivated DIN prevents the company from submitting annual returns. If the company fails to file financial statements or annual returns for continuous 3 years as a result, ALL directors face automatic 5-year disqualification under Section 164(2).'
+      },
+      {
+        question: 'Is professional certification by CA/CS/CMA mandatory for DIR-3 KYC Web?',
+        answer: 'Yes. Every Form DIR-3 KYC Web must be digitally signed by the DIN holder and certified by a practicing Chartered Accountant (CA), Company Secretary (CS), or Cost Accountant (CMA). Providing false statements attracts criminal liability and up to 3 years imprisonment under Sections 448 and 449 of the Companies Act, 2013.'
+      }
     ],
-    relatedForms: ['dir-12'],
+    relatedForms: ['dir-12', 'aoc-4', 'mgt-7'],
     filedTogetherWith: [],
     contentSections: {
-      whatIsThisForm: '<p><strong>DIR-3 KYC</strong> is a critical compliance requirement designed by the MCA to maintain a clean, verified database of all company directors. Every individual who has been allotted a Director Identification Number (DIN) must submit this form annually to confirm their permanent address, mobile number, and email ID. This prevents the existence of shell company directors and identity fraud.</p>',
-      whoMustFile: '<p>Every individual who has been allotted a DIN on or before the 31st of March of a financial year must submit DIR-3 KYC. This applies even if the individual is not currently holding a directorship in any active company.</p>',
-      dueDateExplained: '<p>The deadline to file DIR-3 KYC is strictly <strong>30th June</strong> of the immediate next financial year. For instance, for the financial year ending March 31, 2026, the KYC must be filed by June 30, 2026.</p>',
-      consequencesOfDelay: '<p>If DIR-3 KYC is not filed by the deadline, the MCA system automatically deactivates the DIN. A deactivated DIN prevents the director from signing any compliance documents or being appointed to a new company. To reactivate the DIN, the director must file the form along with a heavy, flat penalty of <strong>₹5,000</strong>.</p>',
-      workedExample: '<p><strong>Scenario:</strong> A director forgets to file DIR-3 KYC by 30th June and attempts to file on 5th July.</p><ul><li>Normal Filing Fee: ₹0</li><li>Late Penalty (Flat Reactivation Fee): ₹5,000</li><li><strong>Total Liability:</strong> <strong>₹5,000</strong></li></ul>'
+      whatIsThisForm: '<p><strong>Form DIR-3 KYC Web</strong> is the unified electronic return prescribed under <strong>Rule 12A of the Companies (Appointment and Qualification of Directors) Rules, 2014</strong>. Effective <strong>31 March 2026</strong> via MCA Notification <strong>G.S.R. 943(E)</strong>, the MCA merged the legacy DIR-3 KYC e-form and web service into a single web form and transitioned corporate India from an annual filing obligation to a <strong>triennial (every 3 consecutive financial years) compliance cycle</strong>.</p><p>The return verifies director identity, mobile number, email address, residential address, and active DIN status across the MCA21 database to prevent fraudulent appointments and maintain statutory transparency.</p>',
+      whoMustFile: '<p>Every individual who has been allotted a <strong>Director Identification Number (DIN)</strong> on or before the 31st of March of a financial year must comply with Rule 12A. This obligation attaches to the <strong>DIN itself</strong>, meaning it applies regardless of whether the individual is actively serving on a board, is currently inactive, or has been disqualified under Section 164.</p><p><strong>Exemption:</strong> Only DIN holders who have validly surrendered their DIN under Section 153 or whose DIN has been officially cancelled by the Central Government are exempt.</p>',
+      dueDateExplained: '<p>Under G.S.R. 943(E), compliance operates under two distinct statutory tracks:</p><ol><li><strong>Track 1 — Routine Triennial KYC (Rule 12A(1)):</strong> Due once every 3 consecutive financial years, on or before <strong>30th June</strong> of the applicable year. The cycle is anchored strictly to the financial year of DIN allotment. For example, directors holding DINs prior to 31 March 2025 who filed for FY 2025-26 are next due in <strong>April – June 2028</strong>.</li><li><strong>Track 2 — Event-Based Updates (Rule 12A(2)):</strong> Any change in mobile number, email address, or residential address must be filed <strong>within 30 days</strong> of the change with a fee of ₹500. <em>Crucially, filing a change update does NOT reset or extend the 3-year triennial cycle.</em></li></ol>',
+      consequencesOfDelay: '<p>Failing to file Form DIR-3 KYC Web carries immediate operational and legal consequences:</p><ul><li><strong>Immediate DIN Deactivation:</strong> On 1st July following the due date, the MCA21 system automatically marks the DIN as <em>"Deactivated due to non-filing of DIR-3 KYC"</em>.</li><li><strong>Complete Filing Freeze:</strong> A deactivated DIN cannot sign any MCA form digitally and blocks the company from filing its mandatory Annual Returns (MGT-7/7A) and Financial Statements (AOC-4).</li><li><strong>Flat Reactivation Fee of ₹5,000:</strong> Reactivation requires submitting Form DIR-3 KYC Web along with a flat ₹5,000 fee prescribed under G.S.R. 300(E). Approvals are processed on Straight-Through-Process (STP) basis.</li><li><strong>Cascading Disqualification Risk (Section 164(2)):</strong> If unfiled company returns accumulate for 3 continuous financial years due to a director\'s deactivated DIN, all board members face statutory 5-year disqualification across all Indian entities.</li><li><strong>False Statement Sanctions (Sections 448 & 449):</strong> Certifying false or manipulated contact details exposes both the director and the certifying CA/CS/CMA to criminal prosecution and up to 3 years imprisonment.</li></ul>',
+      workedExample: '<div class="space-y-4"><p><strong>Scenario 1: Active Director (DIN allotted June 2024, KYC filed for FY 2025-26)</strong></p><ul><li>Filing obligation in FY 2026-27: <strong>None (Compliant)</strong></li><li>Next Triennial Compliance Window: <strong>April – 30 June 2028</strong></li><li>Government Fee Payable: <strong>₹0 (NIL)</strong></li></ul><p><strong>Scenario 2: Director Changes Residential Address in August 2026</strong></p><ul><li>Statutory Rule: Rule 12A(2) (Event-based update)</li><li>Statutory Deadline: Within 30 days of relocation</li><li>Government Fee Payable (Item VII): <strong>₹500 flat</strong></li><li>Impact on Triennial Clock: <strong>None</strong> (Next routine KYC remains due in April–June 2028).</li></ul><p><strong>Scenario 3: Director Missed Previous Filings (DIN Deactivated)</strong></p><ul><li>Action Required: Immediate filing of Form DIR-3 KYC Web</li><li>Statutory Fee Payable (G.S.R. 300(E)): <strong>₹5,000 flat fee</strong></li><li>Approval Mode: Automatic reactivation via MCA21 V3 STP</li></ul></div>'
     }
   },
   {

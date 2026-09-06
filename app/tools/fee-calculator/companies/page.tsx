@@ -528,6 +528,27 @@ export default function CompaniesFeePage() {
           </Link>
 
           <Link
+            href="/tools/fee-calculator/companies/dir-3-kyc"
+            className="p-5 rounded-xl border border-sky-200 dark:border-sky-900/60 bg-sky-50/50 dark:bg-sky-950/20 hover:border-sky-500 transition-all group flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-sky-600 text-white">DIR-3 KYC</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">Director Verification</span>
+              </div>
+              <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors mb-1">
+                Form DIR-3 KYC Workspace
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Triennial cycle checker (G.S.R. 943(E)), 30-day event update tracker (Rule 12A(2)), and STP DIN reactivation calculator.
+              </p>
+            </div>
+            <span className="text-xs font-bold text-sky-600 dark:text-sky-400 mt-4 flex items-center gap-1">
+              Open Dedicated Workspace →
+            </span>
+          </Link>
+
+          <Link
             href="/tools/fee-calculator/companies/adt-1"
             className="p-5 rounded-xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/50 dark:bg-emerald-950/20 hover:border-emerald-500 transition-all group flex flex-col justify-between"
           >

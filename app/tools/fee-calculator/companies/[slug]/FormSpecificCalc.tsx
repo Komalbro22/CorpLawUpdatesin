@@ -15,6 +15,7 @@ import CHG1Workspace from './CHG1Workspace'
 import MGT7Workspace from './MGT7Workspace'
 import AOC4Workspace from './AOC4Workspace'
 import DPT3Workspace from './DPT3Workspace'
+import DIR3KYCWorkspace from './DIR3KYCWorkspace'
 
 interface ResultRow {
   component: string
@@ -67,6 +68,10 @@ export default function FormSpecificCalc({ form }: { form: MCAForm }) {
 
   if (form.slug === 'aoc-4' || form.slug.startsWith('aoc-4')) {
     return <AOC4Workspace form={form} />
+  }
+
+  if (form.slug === 'dir-3-kyc' || form.slug === 'dir-3') {
+    return <DIR3KYCWorkspace form={form} />
   }
 
   const isMgt7Family = form.slug === 'mgt-7' || form.slug === 'mgt-7a'

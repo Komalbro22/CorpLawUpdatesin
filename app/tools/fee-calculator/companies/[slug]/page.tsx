@@ -75,7 +75,44 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
     description: form.metaDescription
   }
 
-  const howToSchema = form.slug === 'adt-1' ? {
+  const howToSchema = form.slug === 'dir-3-kyc' ? {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How to Check DIR-3 KYC Due Date & File Form DIR-3 KYC Web on MCA V3',
+    description: 'Step-by-step guide to verifying your triennial KYC compliance cycle under Rule 12A(1), meeting the 30-day change update deadline under Rule 12A(2), and reactivating a deactivated DIN.',
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Determine Triennial Cycle Anchor Financial Year',
+        text: 'Identify the financial year in which your DIN was allotted. Routine triennial KYC is due once every 3 consecutive financial years, on or before 30 June of the year immediately following the third financial year.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Verify Current DIN Status on MCA21 Portal',
+        text: 'Log into MCA Services to confirm whether your DIN is "Active" or marked as "Deactivated due to non-filing of DIR-3 KYC". If deactivated, immediate reactivation with a flat ₹5,000 fee is required.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Comply with Rule 12A(2) Event-Based 30-Day Window',
+        text: 'If your mobile number, email address, or residential address has changed, file Form DIR-3 KYC Web within 30 days of the change with a fee of ₹500. Note that this change filing does NOT reset your 3-year triennial clock.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: 'Complete OTP Verification & Professional Certification',
+        text: 'Verify mobile and email OTPs, upload identity and address proofs, and have the form digitally certified by a practicing CA, CS, or CMA under Section 448 & 449.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 5,
+        name: 'Remit Prescribed Government Fee for STP Auto-Approval',
+        text: 'Pay the applicable government fee (NIL for on-time routine filing, ₹500 for change update, or ₹5,000 for reactivation) via MCA21 V3 e-Challan. System auto-approves the filing on Straight-Through-Process (STP) basis.'
+      }
+    ]
+  } : form.slug === 'adt-1' ? {
     '@context': 'https://schema.org',
     '@type': 'HowTo',
     name: 'How to Calculate Form ADT-1 Filing Fees & Late Penalties on MCA V3',
@@ -306,7 +343,9 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </span>
           </div>
           <h1 className="text-[2.25rem] font-bold font-serif text-white mb-4">
-            {form.slug === 'dpt-3'
+            {form.slug === 'dir-3-kyc'
+              ? 'DIR-3 KYC Due Date & Penalty Calculator (FY 2026-27) — Triennial Rules'
+              : form.slug === 'dpt-3'
               ? 'DPT-3 Late Fees & Return of Deposits Calculator (FY 2026-27)'
               : form.slug === 'adt-1'
               ? 'ADT-1 Late Fees & Penalty Calculator (FY 2026-27) — Auditor Appointment'
@@ -321,7 +360,9 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               : `${form.formNumber} — ${form.formName} Fee & Penalty Calculator (2026-27)`}
           </h1>
           <p className="text-slate-400 text-lg max-w-3xl mx-auto mb-8">
-            {form.slug === 'dpt-3'
+            {form.slug === 'dir-3-kyc'
+              ? 'Determine your triennial routine KYC cycle (Rule 12A(1)), 30-day event-based change rules (Rule 12A(2)), and G.S.R. 300(E) fee schedule (₹0 on-time / ₹500 change / ₹5,000 reactivation) on MCA21 V3.'
+              : form.slug === 'dpt-3'
               ? 'Calculate statutory normal filing fees, 30 June due date, Circular 02/2026 fee waiver, Table B delay multipliers (2× to 12×), and Rule 21 penalties on MCA V3.'
               : form.slug === 'adt-1'
               ? 'Calculate statutory normal filing fees, 15-day due date from AGM/EGM, and Table B late fee multipliers (1× to 12×) for Form ADT-1 on MCA V3.'
@@ -351,6 +392,24 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
 
       <div className="max-w-5xl mx-auto px-4 -mt-8 relative z-10 mb-16">
         {/* Princeton GEO Direct Answer Block (58 Words) */}
+        {form.slug === 'dir-3-kyc' && (
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 border-l-4 border-l-blue-600 rounded-2xl shadow-sm">
+            <div className="flex items-center gap-2 mb-2 text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+              <span>⚡</span> Fast Statutory Summary • G.S.R. 943(E) &amp; G.S.R. 300(E)
+            </div>
+            <p className="text-slate-800 dark:text-slate-200 text-sm md:text-base leading-relaxed font-medium">
+              Form DIR-3 KYC Web is the statutory return governed by Rule 12A of the Appointment of Directors Rules. Effective 31 March 2026, routine filing is triennial (every 3 consecutive financial years) due on 30 June with ₹0 fee. Changes in mobile, email, or address require filing within 30 days (₹500 fee). Delayed filings or DIN reactivation require a flat ₹5,000 fee.
+            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-3">
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Routine Triennial KYC: ₹0 (NIL)</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ 30-Day Change Rule: ₹500 Fee</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ DIN Reactivation: ₹5,000 Flat</span>
+            </div>
+          </div>
+        )}
+
         {form.slug === 'dpt-3' && (
           <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/50 border-l-4 border-l-amber-600 rounded-2xl shadow-sm">
             <div className="flex items-center gap-2 mb-2 text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
@@ -860,6 +919,294 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
                     <tr><td className="px-4 py-2.5 font-bold">16</td><td className="px-4 py-2.5 font-mono text-xs">2(1)(c)(xiv)</td><td className="px-4 py-2.5 font-medium">Nidhi Company Member Receipts</td><td className="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-400">Accepted by declared Nidhi company under Section 406.</td><td className="px-4 py-2.5 text-xs font-bold text-emerald-600">No</td></tr>
                     <tr><td className="px-4 py-2.5 font-bold">17</td><td className="px-4 py-2.5 font-mono text-xs">2(1)(c)(x)</td><td className="px-4 py-2.5 font-medium">Employee Security Deposits</td><td className="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-400">Non-interest-bearing deposit not exceeding annual salary under contract.</td><td className="px-4 py-2.5 text-xs font-bold text-emerald-600">No</td></tr>
                     <tr><td className="px-4 py-2.5 font-bold">18</td><td className="px-4 py-2.5 font-mono text-xs">2(1)(c)(xi)</td><td className="px-4 py-2.5 font-medium">Trust & Mutual Fund Receipts</td><td className="px-4 py-2.5 text-xs text-slate-600 dark:text-slate-400">Held in trust or subscriptions to SEBI-approved mutual funds / CIS.</td><td className="px-4 py-2.5 text-xs font-bold text-emerald-600">No</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ═══════════════════════════════════════════════════════════════════ */}
+        {/* STATUTORY MASTER TABLES FOR FORM DIR-3 KYC (G.S.R. 943(E) & 300(E))  */}
+        {/* ═══════════════════════════════════════════════════════════════════ */}
+        {form.slug === 'dir-3-kyc' && (
+          <div className="space-y-8 mb-16">
+            {/* Table 1: Triennial Schedule */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>📅</span> Master Schedule: Triennial Routine KYC Cycle (Rule 12A(1))
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Routine KYC is anchored strictly to the <strong>financial year of DIN allotment</strong> under G.S.R. 943(E). Directors who filed for FY 2025-26 have no routine filing due until 2028.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">DIN Allotment Period</th>
+                      <th className="px-4 py-3 font-semibold">Compliance Block</th>
+                      <th className="px-4 py-3 font-semibold">Filing Due in FY 2026-27?</th>
+                      <th className="px-4 py-3 font-semibold">Next Routine Due Window</th>
+                      <th className="px-4 py-3 font-semibold">Statutory Deadline</th>
+                      <th className="px-4 py-3 font-semibold">On-Time Fee</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr className="bg-emerald-50/40 dark:bg-emerald-950/10">
+                      <td className="px-4 py-3 font-semibold text-slate-900 dark:text-white">Allotted on or before 31 March 2025</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">FY 2025-26 to FY 2027-28</td>
+                      <td className="px-4 py-3 font-bold text-emerald-600">NO (Compliant)</td>
+                      <td className="px-4 py-3 font-medium text-blue-600 dark:text-blue-400">April – 30 June 2028</td>
+                      <td className="px-4 py-3 font-mono text-xs">30 June 2028</td>
+                      <td className="px-4 py-3 font-bold text-emerald-600">₹0 (NIL)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-semibold text-slate-900 dark:text-white">Allotted during FY 2025-26 (1 Apr 25 – 31 Mar 26)</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">FY 2026-27 to FY 2028-29</td>
+                      <td className="px-4 py-3 font-bold text-emerald-600">NO (Compliant)</td>
+                      <td className="px-4 py-3 font-medium text-blue-600 dark:text-blue-400">April – 30 June 2029</td>
+                      <td className="px-4 py-3 font-mono text-xs">30 June 2029</td>
+                      <td className="px-4 py-3 font-bold text-emerald-600">₹0 (NIL)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-semibold text-slate-900 dark:text-white">Allotted during FY 2026-27 (Current FY)</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">FY 2027-28 to FY 2029-30</td>
+                      <td className="px-4 py-3 font-bold text-emerald-600">NO (Compliant)</td>
+                      <td className="px-4 py-3 font-medium text-blue-600 dark:text-blue-400">April – 30 June 2030</td>
+                      <td className="px-4 py-3 font-mono text-xs">30 June 2030</td>
+                      <td className="px-4 py-3 font-bold text-emerald-600">₹0 (NIL)</td>
+                    </tr>
+                    <tr className="bg-rose-50/40 dark:bg-rose-950/10">
+                      <td className="px-4 py-3 font-semibold text-slate-900 dark:text-white">Prior Default (DIN Deactivated)</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Pre-2026 Annual Defaults</td>
+                      <td className="px-4 py-3 font-bold text-rose-600">YES (Immediate)</td>
+                      <td className="px-4 py-3 font-medium text-rose-600">Immediate STP Filing</td>
+                      <td className="px-4 py-3 font-mono text-xs">Overdue</td>
+                      <td className="px-4 py-3 font-bold text-rose-600">₹5,000</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 2: Fee Schedule under G.S.R. 300(E) */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>💰</span> Statutory Fee Schedule: Form DIR-3 KYC Web (G.S.R. 300(E), Item VII)
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Substituted by G.S.R. 300(E) effective 21 April 2026. Fees are flat and do NOT compound per day.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Filing Scenario</th>
+                      <th className="px-4 py-3 font-semibold">Statutory Authority</th>
+                      <th className="px-4 py-3 font-semibold">Trigger / Compliance Window</th>
+                      <th className="px-4 py-3 font-semibold">Government Fee</th>
+                      <th className="px-4 py-3 font-semibold">Delay / Compounding Impact</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-semibold text-slate-900 dark:text-white">Routine Triennial KYC</td>
+                      <td className="px-4 py-3 font-mono text-xs">Rule 12A(1)</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">April 1 to June 30 of due year</td>
+                      <td className="px-4 py-3 font-bold text-emerald-600">₹0 (NIL)</td>
+                      <td className="px-4 py-3 text-xs text-slate-500">Zero additional fee if filed within window.</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-semibold text-slate-900 dark:text-white">Event-Based Update</td>
+                      <td className="px-4 py-3 font-mono text-xs">Rule 12A(2)</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Within 30 days of contact/address change</td>
+                      <td className="px-4 py-3 font-bold text-blue-600">₹500 per filing</td>
+                      <td className="px-4 py-3 text-xs text-slate-500">Flat fee. Does NOT reset or extend 3-year clock.</td>
+                    </tr>
+                    <tr className="bg-rose-50/40 dark:bg-rose-950/10">
+                      <td className="px-4 py-3 font-semibold text-slate-900 dark:text-white">Delayed Filing / DIN Reactivation</td>
+                      <td className="px-4 py-3 font-mono text-xs">Item VII, Annexure</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Filed after 30 June or for deactivated DIN</td>
+                      <td className="px-4 py-3 font-bold text-rose-600">₹5,000 flat</td>
+                      <td className="px-4 py-3 text-xs text-slate-500">Non-compounding flat fee. STP auto-approval.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 3: Old vs New Regime Comparison */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>⚖️</span> Old Annual Regime vs New Triennial Regime Comparison
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Comparison of the pre-31 March 2026 framework with the new G.S.R. 943(E) and G.S.R. 300(E) regulations.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Regulatory Parameter</th>
+                      <th className="px-4 py-3 font-semibold">Old Regime (Pre-31 March 2026)</th>
+                      <th className="px-4 py-3 font-semibold text-blue-600 dark:text-blue-400">New Triennial Regime (Post-31 March 2026)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">Filing Frequency</td>
+                      <td className="px-4 py-2.5 text-slate-500">Every Financial Year (Annual)</td>
+                      <td className="px-4 py-2.5 font-bold text-emerald-600">Once every 3 consecutive Financial Years</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">Routine Due Date</td>
+                      <td className="px-4 py-2.5 text-slate-500">30th September annually</td>
+                      <td className="px-4 py-2.5 font-bold text-blue-600">30th June of the year following third FY</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">Form Structure</td>
+                      <td className="px-4 py-2.5 text-slate-500">Two forms: DIR-3 KYC (e-form) &amp; DIR-3 KYC-Web</td>
+                      <td className="px-4 py-2.5 font-bold text-slate-900 dark:text-white">Single Form: DIR-3 KYC Web (Unified)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">Altered Particulars</td>
+                      <td className="px-4 py-2.5 text-slate-500">Updated in annual e-form cycle</td>
+                      <td className="px-4 py-2.5 font-bold text-amber-600">Mandatory filing within 30 days (Rule 12A(2))</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">Effect of Update on Clock</td>
+                      <td className="px-4 py-2.5 text-slate-500">N/A (Annual)</td>
+                      <td className="px-4 py-2.5 font-bold text-rose-600">Does NOT reset the 3-year triennial cycle</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">On-Time Filing Fee</td>
+                      <td className="px-4 py-2.5 text-slate-500">₹0 (NIL)</td>
+                      <td className="px-4 py-2.5 font-bold text-emerald-600">₹0 (NIL)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">Change Update Fee</td>
+                      <td className="px-4 py-2.5 text-slate-500">Standard filing fee</td>
+                      <td className="px-4 py-2.5 font-bold text-blue-600">₹500 per filing (Item VII)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">Late / Reactivation Fee</td>
+                      <td className="px-4 py-2.5 text-slate-500">₹5,000 flat fee</td>
+                      <td className="px-4 py-2.5 font-bold text-rose-600">₹5,000 flat fee (Item VII)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">Pending Draft Forms</td>
+                      <td className="px-4 py-2.5 text-slate-500">Could be resumed</td>
+                      <td className="px-4 py-2.5 font-bold text-rose-600">Auto-cancelled as on 31 March 2026</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 4: DIN Deactivation vs Section 164 Disqualification */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>🛡️</span> DIN Deactivation vs Director Disqualification (Section 164)
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Understanding the legal differences between a procedural KYC deactivation and a substantive statutory disqualification.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Aspect</th>
+                      <th className="px-4 py-3 font-semibold text-amber-600">DIN Deactivation (KYC Default)</th>
+                      <th className="px-4 py-3 font-semibold text-rose-600">Director Disqualification (Section 164(2))</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">Trigger / Cause</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Non-filing of Form DIR-3 KYC Web by 30 June.</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Company failure to file Financial Statements or Annual Returns for 3 continuous years.</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">Direct Impact</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Cannot sign MCA forms; cannot be appointed to new boards.</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Cannot act as director in ANY company for 5 years; must vacate all board seats (Sec 167).</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">Remedy / Cure</td>
+                      <td className="px-4 py-2.5 font-bold text-emerald-600">Pay ₹5,000 fee on MCA V3 &rarr; Auto-reactivated via STP.</td>
+                      <td className="px-4 py-2.5 font-bold text-rose-600">Cannot be cured by paying a fee; requires High Court writ petition or NCLT compounding.</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">MCA Portal Status</td>
+                      <td className="px-4 py-2.5 font-mono text-xs text-amber-600">&quot;Deactivated due to non-filing of DIR-3 KYC&quot;</td>
+                      <td className="px-4 py-2.5 font-mono text-xs text-rose-600">&quot;Disqualified under Section 164(2)&quot;</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">The Cascading Risk</td>
+                      <td className="px-4 py-2.5 text-xs text-slate-500" colSpan={2}>
+                        <strong>Danger:</strong> A deactivated DIN blocks the company from filing Form AOC-4/MGT-7. If that blockage continues for 3 continuous financial years, it directly causes <strong>Section 164(2) Disqualification</strong> for ALL directors on the board!
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 5: Step-by-Step Filing Checklist */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>📝</span> Step-by-Step Filing Checklist: Form DIR-3 KYC Web on MCA21 V3
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Follow this 6-step compliance protocol for seamless Straight-Through-Processing (STP) auto-approval.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Step #</th>
+                      <th className="px-4 py-3 font-semibold">Stage on MCA V3</th>
+                      <th className="px-4 py-3 font-semibold">Required Action &amp; Prerequisites</th>
+                      <th className="px-4 py-3 font-semibold">Statutory Verification</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-2.5 font-bold">Step 1</td>
+                      <td className="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">Portal Authentication</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Log into MCA21 V3 portal with Registered / Business User credentials.</td>
+                      <td className="px-4 py-2.5 text-xs text-slate-500">Access MCA Services &rarr; DIR-3 KYC Web.</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-bold">Step 2</td>
+                      <td className="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">DIN Data Retrieval</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Enter the 8-digit DIN. System auto-populates name, father&apos;s name, and DOB.</td>
+                      <td className="px-4 py-2.5 text-xs text-slate-500">Cross-verify against PAN records.</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-bold">Step 3</td>
+                      <td className="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">Dual OTP Verification</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Generate OTPs to active Indian Mobile number and personal Email ID.</td>
+                      <td className="px-4 py-2.5 text-xs text-slate-500">Both OTPs must be submitted within validity window.</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-bold">Step 4</td>
+                      <td className="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">Attachments &amp; Address Proof</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Upload self-attested PAN card and residential address proof (Aadhaar/utility bill &le; 2 mos).</td>
+                      <td className="px-4 py-2.5 text-xs text-slate-500">Mandatory for address updates or routine verification.</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-bold">Step 5</td>
+                      <td className="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">Digital Signatures</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Attach Class 3 DSC of DIN holder + DSC of certifying CA, CS, or CMA in practice.</td>
+                      <td className="px-4 py-2.5 text-xs text-slate-500">Sections 448 &amp; 449 liability applies.</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-bold">Step 6</td>
+                      <td className="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">Payment &amp; STP Auto-Approval</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Pay challan (₹0 / ₹500 / ₹5,000) via Bharatkosh online gateway.</td>
+                      <td className="px-4 py-2.5 text-xs font-bold text-emerald-600">Instant STP approval. DIN marked Active immediately.</td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
