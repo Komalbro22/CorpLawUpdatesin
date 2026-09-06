@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: process.env.DOCKER_BUILD === '1' ? 'standalone' : undefined,
+  // Keep Turbopack anchored to the project that owns package.json and node_modules.
+  turbopack: {
+    root: __dirname,
+  },
   compress: true,
   poweredByHeader: false,
   experimental: {
