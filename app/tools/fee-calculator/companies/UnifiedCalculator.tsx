@@ -107,7 +107,7 @@ export default function UnifiedCalculator() {
   }, [selectedForm, companyType, capital, delay, isRepeatOffender, newCapital, state, chargeAmount])
 
   const commonForms = useMemo(() => {
-    const commonSlugs = ['aoc-4', 'mgt-7', 'adt-1', 'inc-22', 'dir-12', 'dir-3-kyc', 'chg-1', 'inc-20a', 'mgt-14']
+    const commonSlugs = ['aoc-4', 'mgt-7', 'dpt-3', 'adt-1', 'chg-1', 'inc-22', 'dir-12', 'dir-3-kyc', 'inc-20a', 'mgt-14']
     return commonSlugs.map(slug => {
       const form = allForms.find(f => f.slug === slug)
       if (!form) return null
@@ -458,12 +458,14 @@ export default function UnifiedCalculator() {
         )}
 
         {/* Dedicated Workspace Cross-Link if applicable */}
-        {(selectedForm.slug === 'mgt-7' || selectedForm.slug === 'mgt-7a' || selectedForm.slug === 'adt-1' || selectedForm.slug === 'chg-1') && (
+        {(selectedForm.slug === 'mgt-7' || selectedForm.slug === 'mgt-7a' || selectedForm.slug === 'aoc-4' || selectedForm.slug === 'dpt-3' || selectedForm.slug === 'adt-1' || selectedForm.slug === 'chg-1') && (
           <div className="mt-4 pt-3 border-t border-blue-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs bg-white/70 dark:bg-slate-900/70 p-3 rounded-lg border border-blue-200/60 dark:border-slate-800">
             <div className="flex items-center gap-2">
               <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
               <span className="text-slate-700 dark:text-slate-300 font-medium">
                 {selectedForm.slug.startsWith('mgt-7') && 'Need 60-day AGM calendar date engine, Small Co evaluation (G.S.R. 880(E)) & MGT-8 check?'}
+                {selectedForm.slug === 'aoc-4' && 'Need 30-day AGM vs 180-day OPC engine, Small Co cash flow exemption & Section 137(3) penalty calculator?'}
+                {selectedForm.slug === 'dpt-3' && 'Need Circular 02/2026 fee waiver check, 18 Rule 2(1)(c) exclusions & Rule 21 penalty calculator?'}
                 {selectedForm.slug === 'adt-1' && 'Need 15-day auditor appointment calculator & printable ROC fee report?'}
                 {selectedForm.slug === 'chg-1' && 'Need 30-60-120 day ad-valorem matrices & Regional Director condonation check?'}
               </span>
@@ -478,10 +480,10 @@ export default function UnifiedCalculator() {
         )}
       </div>
 
-      {/* Quick Compare 9 Common Forms */}
+      {/* Quick Compare Common Forms */}
       <div className="mt-8 pt-8 border-t border-slate-200 dark:border-slate-800">
-        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Quick Compare: 9 Common Forms</h3>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">See how your current inputs (Company Type, Capital, Delay) affect the 9 most frequently filed MCA forms simultaneously.</p>
+        <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Quick Compare: Common Company Forms</h3>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">See how your current inputs (Company Type, Capital, Delay) affect the most frequently filed MCA forms simultaneously.</p>
         <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
           <table className="w-full text-left text-sm whitespace-nowrap">
             <thead className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
@@ -499,7 +501,7 @@ export default function UnifiedCalculator() {
                   <td className="px-4 py-3 font-bold text-blue-700 dark:text-blue-400">
                     <Link href={`/tools/fee-calculator/companies/${item.form.slug}`} className="hover:underline inline-flex items-center gap-1.5">
                       <span>{item.form.formNumber}</span>
-                      {['mgt-7', 'adt-1', 'chg-1'].includes(item.form.slug) && (
+                      {['mgt-7', 'mgt-7a', 'aoc-4', 'dpt-3', 'adt-1', 'chg-1'].includes(item.form.slug) && (
                         <span className="text-[10px] bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 px-1.5 py-0.5 rounded font-medium">Dedicated</span>
                       )}
                     </Link>

@@ -179,243 +179,292 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
   const isFY202526 = selectedFY === '2025-26'
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl overflow-hidden print:border-none print:shadow-none">
-      
-      {/* ── 1. Top Header Banner ── */}
-      <div className="p-6 bg-gradient-to-r from-slate-900 via-navy to-slate-900 text-white border-b border-slate-800 print:hidden">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="space-y-8">
+      {/* ── 1. Main Workspace Card (Matching ADT-1 and AOC-4 UI Standard) ── */}
+      <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 p-6 md:p-8 print:hidden">
+        
+        {/* Header Ribbon */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-slate-800 mb-8">
           <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="bg-amber-400 text-slate-950 text-[11px] font-black px-2.5 py-0.5 rounded uppercase tracking-wider">
-                V3 Portal Engine
+            <div className="flex items-center gap-2.5">
+              <span className="bg-amber-600 text-white font-bold text-xs uppercase px-3 py-1 rounded-md tracking-wider">
+                DPT-3 Master Engine
               </span>
-              <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-semibold px-2.5 py-0.5 rounded">
-                Rule 16 / 16A Deposit Return
+              <span className="text-xs font-semibold text-slate-500">
+                Rule 16 &amp; 16A Deposit Return • Circular 02/2026 Compliant
               </span>
-              {isFY202526 && (
-                <span className="bg-blue-500/20 text-blue-300 border border-blue-500/40 text-xs font-semibold px-2.5 py-0.5 rounded">
-                  Circular 02/2026 Compliant
-                </span>
-              )}
             </div>
-            <h2 className="text-xl md:text-2xl font-bold font-serif">
-              Form DPT-3 Fee & Return of Deposits Calculator
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mt-1.5 flex items-center gap-2">
+              <Scale className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+              Return of Deposits &amp; Exempted Receipts Calculator
             </h2>
-            <p className="text-slate-400 text-xs md:text-sm mt-1">
-              Table A Base Fees, Table B Multipliers (2× to 12×), Circular 02/2026 Date Arithmetic, and Dual Penalties (Rule 21 vs Section 76A).
-            </p>
           </div>
 
-          <div className="flex items-center gap-2 flex-wrap">
+          {/* Mode Switcher Tabs */}
+          <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
             <button
-              onClick={handleCopySummary}
-              className="flex items-center gap-1.5 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white rounded-lg text-xs font-semibold transition-all border border-slate-700"
-              title="Copy Assessment Summary"
+              type="button"
+              onClick={() => setCalcMode('date')}
+              className={`px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition-all flex items-center gap-2 ${
+                calcMode === 'date'
+                  ? 'bg-white dark:bg-slate-900 text-amber-600 dark:text-amber-400 shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
             >
-              <Copy className="size-3.5" />
-              Copy Memo
+              <Calendar className="w-4 h-4" />
+              Date-Based (30 June Rule)
             </button>
             <button
-              onClick={handlePrint}
-              className="flex items-center gap-1.5 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white rounded-lg text-xs font-semibold transition-all border border-slate-700"
-              title="Print Clean 1-Page Summary"
+              type="button"
+              onClick={() => setCalcMode('days')}
+              className={`px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition-all flex items-center gap-2 ${
+                calcMode === 'days'
+                  ? 'bg-white dark:bg-slate-900 text-amber-600 dark:text-amber-400 shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
             >
-              <Printer className="size-3.5" />
-              Print
-            </button>
-            <button
-              onClick={handleDownloadPdf}
-              disabled={isGeneratingPdf}
-              className="flex items-center gap-1.5 px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg text-xs font-bold transition-all shadow-md shadow-amber-500/20 disabled:opacity-50"
-            >
-              <Download className="size-3.5" />
-              {isGeneratingPdf ? 'Generating...' : 'Download PDF'}
+              <Clock className="w-4 h-4" />
+              Direct Delay Days
             </button>
           </div>
         </div>
-      </div>
 
-      {/* ── 2. Screen Interactive Workspace (Hidden during print) ── */}
-      <div className="p-6 lg:p-8 space-y-8 print:hidden">
-
-        {/* Circular 02/2026 Relief Banner */}
-        {isFY202526 && (
-          <div className="p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 rounded-xl flex items-start gap-3">
-            <Info className="size-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-            <div className="text-xs md:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-              <strong className="text-amber-800 dark:text-amber-300">MCA General Circular No. 02/2026 Relief Active:</strong> For FY 2025-26, the MCA waived additional filing fees for Form DPT-3 filed up to <strong>31 July 2026</strong> due to the Data Centre fire on 5 June 2026. 
-              <span className="block mt-1 font-semibold text-amber-900 dark:text-amber-200">
-                Statutory Calculation Rule: For filings on or after 1 August 2026, Table B delay multipliers are calculated from the original due date of 30 June 2026 (1 July 2026), NOT from 31 July 2026.
-              </span>
-            </div>
-          </div>
-        )}
-
-        {/* Section 1: Filing Configuration Bar */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200/80 dark:border-slate-800">
+        {/* Input Parameters & Scoreboard Grid (7 cols / 5 cols) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
-          {/* Filing Purpose */}
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">
-              1. Return Purpose (Filing Category)
-            </label>
-            <select
-              value={filingPurpose}
-              onChange={e => setFilingPurpose(e.target.value as Dpt3FilingPurpose)}
-              className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:ring-2 focus:ring-amber-500"
-            >
-              <option value="exempted">Exempted Receipts Only (Rule 2(1)(c)) — 90%+ Cos</option>
-              <option value="deposits">Return of Deposits (Section 73/76)</option>
-              <option value="both">Both Deposits & Exempted Receipts</option>
-              <option value="one_time_loan">One-time Return for outstanding loan (Rule 16A(3))</option>
-              <option value="nil">Nil Return (No Outstanding Receipts)</option>
-            </select>
-            <p className="text-[11px] text-slate-500 mt-1">
-              {filingPurpose === 'exempted'
-                ? '✓ Loans from directors, customer advances, inter-corporate borrowings.'
-                : filingPurpose === 'deposits'
-                ? '⚠️ Requires mandatory Auditor\'s Certificate attachment.'
-                : filingPurpose === 'both'
-                ? '⚠️ Requires mandatory Auditor\'s Certificate attachment.'
-                : filingPurpose === 'one_time_loan'
-                ? '✓ Historic one-time disclosure of 2014-2019 outstanding borrowings.'
-                : '✓ Best governance practice if no receipts outstanding on 31 March.'}
-            </p>
-          </div>
-
-          {/* Financial Year */}
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">
-              2. Financial Year Reported
-            </label>
-            <select
-              value={selectedFY}
-              onChange={e => setSelectedFY(e.target.value)}
-              className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:ring-2 focus:ring-amber-500"
-            >
-              <option value="2025-26">FY 2025-26 (Due: 30 June 2026 / Waived to 31 July 2026)</option>
-              <option value="2024-25">FY 2024-25 (Due: 30 June 2025)</option>
-              <option value="2026-27">FY 2026-27 (Due: 30 June 2027)</option>
-            </select>
-            <p className="text-[11px] text-slate-500 mt-1">
-              Outstanding position as on 31st March of the selected financial year.
-            </p>
-          </div>
-
-          {/* Calculation Mode */}
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">
-              3. Calculation Mode
-            </label>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => setCalcMode('date')}
-                className={`px-3 py-2 text-xs font-bold rounded-lg border transition-all ${
-                  calcMode === 'date'
-                    ? 'bg-navy text-white border-navy dark:bg-amber-500 dark:text-slate-950 dark:border-amber-500 shadow'
-                    : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700'
-                }`}
-              >
-                Date-Based
-              </button>
-              <button
-                type="button"
-                onClick={() => setCalcMode('days')}
-                className={`px-3 py-2 text-xs font-bold rounded-lg border transition-all ${
-                  calcMode === 'days'
-                    ? 'bg-navy text-white border-navy dark:bg-amber-500 dark:text-slate-950 dark:border-amber-500 shadow'
-                    : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700'
-                }`}
-              >
-                Direct Delay Days
-              </button>
-            </div>
-            <p className="text-[11px] text-slate-500 mt-1">
-              {calcMode === 'date' ? 'Pick exact calendar filing date' : 'Enter days of delay directly'}
-            </p>
-          </div>
-        </div>
-
-        {/* Section 2: Inputs Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          
-          {/* Left Column: Entity & Capital Inputs */}
-          <div className="space-y-5">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
-              <Scale className="size-4 text-amber-500" />
-              Nominal Share Capital & Entity Profile
-            </h3>
-
-            {/* Company Name */}
+          {/* Left Column: Form Controls (7 cols) */}
+          <div className="lg:col-span-7 space-y-6">
+            
+            {/* Optional Company Name */}
             <div>
-              <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
-                Company / Entity Name (Optional — for PDF & Memorandum)
+              <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">
+                Company Name (Optional — for client intimations &amp; PDF)
               </label>
               <input
                 type="text"
+                placeholder="e.g., Acme Innovations Private Limited"
                 value={companyName}
-                onChange={e => setCompanyName(e.target.value)}
-                placeholder="e.g. Acme Innovations Private Limited"
-                className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                onChange={(e) => setCompanyName(e.target.value)}
+                className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
               />
             </div>
 
-            {/* Has Share Capital Toggle */}
-            <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">
-              <div>
-                <span className="text-sm font-medium text-slate-800 dark:text-slate-200">Company Has Share Capital?</span>
-                <p className="text-xs text-slate-500">Companies without share capital pay flat ₹200 Table A fee (Item 6)</p>
+            {/* Return Purpose Category Picker */}
+            <div>
+              <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">
+                1. Return Purpose (Filing Category under Rule 16 / 16A)
+              </label>
+              <select
+                value={filingPurpose}
+                onChange={(e) => setFilingPurpose(e.target.value as Dpt3FilingPurpose)}
+                className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl p-3 text-sm font-semibold focus:ring-2 focus:ring-amber-500 transition-colors"
+              >
+                <option value="exempted">Exempted Receipts Only (Rule 2(1)(c)) — Over 90% of Companies</option>
+                <option value="deposits">Return of Deposits (Section 73/76) [Auditor Cert Mandatory]</option>
+                <option value="both">Both Deposits &amp; Exempted Receipts [Auditor Cert Mandatory]</option>
+                <option value="one_time_loan">One-time Return for outstanding loan (Rule 16A(3))</option>
+                <option value="nil">Nil Return (No Outstanding Receipts as on 31 March)</option>
+              </select>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1.5 pl-1">
+                {filingPurpose === 'exempted' && '✓ Covers director loans, customer advances, inter-corporate borrowings. Auditor certificate NOT mandatory.'}
+                {filingPurpose === 'deposits' && '⚠️ Mandatory Auditor\'s Certificate attachment certifying deposit figures and conditions.'}
+                {filingPurpose === 'both' && '⚠️ Mandatory Auditor\'s Certificate attachment certifying deposit figures.'}
+                {filingPurpose === 'one_time_loan' && '✓ Historic one-time disclosure of 2014–2019 borrowings.'}
+                {filingPurpose === 'nil' && '✓ Recommended governance practice if no receipts are outstanding as on 31 March.'}
+              </p>
+            </div>
+
+            {/* Financial Year & Date Timelines */}
+            <div className="bg-slate-50 dark:bg-slate-800/40 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 space-y-5">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <Calendar className="w-4 h-4" />
+                  Statutory Filing Timelines
+                </span>
+                <span className="text-[11px] font-semibold text-slate-500 bg-white dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
+                  Rule 16: On or before 30th June
+                </span>
               </div>
-              <input
-                type="checkbox"
-                checked={hasShareCapital}
-                onChange={e => setHasShareCapital(e.target.checked)}
-                className="size-4 text-amber-500 rounded border-slate-300 focus:ring-amber-500 cursor-pointer"
-              />
-            </div>
 
-            {/* Capital Amount with Presets */}
-            {hasShareCapital && (
-              <div className="space-y-2">
-                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300">
-                  Authorized (Nominal) Share Capital
+              {/* Financial Year Selector */}
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                  Financial Year Reported (As on 31st March)
                 </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-2.5 text-sm text-slate-400 font-semibold">₹</span>
+                <select
+                  value={selectedFY}
+                  onChange={(e) => setSelectedFY(e.target.value)}
+                  className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl p-2.5 text-sm font-medium focus:ring-2 focus:ring-amber-500 transition-colors"
+                >
+                  <option value="2025-26">FY 2025-26 (Due: 30 June 2026 / Waived to 31 July 2026)</option>
+                  <option value="2024-25">FY 2024-25 (Due: 30 June 2025)</option>
+                  <option value="2026-27">FY 2026-27 (Due: 30 June 2027)</option>
+                </select>
+              </div>
+
+              {/* Date-Based Mode Inputs */}
+              {calcMode === 'date' ? (
+                <div className="space-y-4 pt-1">
+                  
+                  {/* Circular 02/2026 Callout if FY 2025-26 */}
+                  {isFY202526 && (
+                    <div className="p-3.5 bg-amber-50/80 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 rounded-xl text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                      <strong className="text-amber-800 dark:text-amber-300">MCA Circular 02/2026 Relief:</strong> Filings up to <strong>31 July 2026</strong> enjoy complete fee waiver (₹0 late fee). For filings on/after <strong>1 August 2026</strong>, delay multipliers are calculated from the original due date of <strong>30 June 2026</strong>!
+                    </div>
+                  )}
+
+                  {/* Quick Preset Date Buttons */}
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                        Actual / Planned Filing Date
+                      </label>
+                      <div className="flex items-center gap-1 flex-wrap">
+                        {isFY202526 && (
+                          <>
+                            <button
+                              type="button"
+                              onClick={() => setFilingDate('2026-06-30')}
+                              className="text-[11px] px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 hover:bg-amber-200 font-medium transition-colors"
+                            >
+                              30 June (Std Due)
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setFilingDate('2026-07-31')}
+                              className="text-[11px] px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 hover:bg-blue-200 font-medium transition-colors"
+                            >
+                              31 July (Waiver End)
+                            </button>
+                          </>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => setFilingDate(new Date().toISOString().slice(0, 10))}
+                          className="text-[11px] px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 font-medium transition-colors"
+                        >
+                          Today
+                        </button>
+                      </div>
+                    </div>
+                    <input
+                      type="date"
+                      value={filingDate}
+                      onChange={(e) => setFilingDate(e.target.value)}
+                      className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl p-2.5 text-sm font-semibold focus:ring-2 focus:ring-amber-500 transition-colors"
+                    />
+                  </div>
+                </div>
+              ) : (
+                /* Direct Delay Days Mode */
+                <div className="space-y-4 pt-1">
+                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
+                    Delay Beyond Statutory Due Date (in Calendar Days)
+                  </label>
                   <input
                     type="number"
                     min="0"
-                    step="50000"
-                    value={nominalCapital || ''}
-                    onChange={e => setNominalCapital(Number(e.target.value))}
-                    className="w-full pl-8 pr-4 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-sm text-slate-800 dark:text-slate-200 font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    value={directDelayDays}
+                    onChange={(e) => setDirectDelayDays(Math.max(0, parseInt(e.target.value) || 0))}
+                    className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl p-3 text-lg font-bold focus:ring-2 focus:ring-amber-500 transition-colors"
                   />
+                  
+                  {/* Quick Delay Chips */}
+                  <div>
+                    <span className="text-[11px] font-semibold text-slate-500 block mb-2">Quick Delay Presets:</span>
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        { label: '0 Days (On-Time)', val: 0 },
+                        { label: '15 Days (2×)', val: 15 },
+                        { label: '30 Days (2×)', val: 30 },
+                        { label: '45 Days (4×)', val: 45 },
+                        { label: '75 Days (6×)', val: 75 },
+                        { label: '120 Days (10×)', val: 120 },
+                        { label: '200 Days (12×)', val: 200 }
+                      ].map((chip) => (
+                        <button
+                          key={chip.val}
+                          type="button"
+                          onClick={() => setDirectDelayDays(chip.val)}
+                          className={`text-xs px-2.5 py-1 rounded-lg border font-medium transition-all ${
+                            directDelayDays === chip.val
+                              ? 'bg-amber-600 text-white border-amber-600 shadow-sm'
+                              : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-amber-400'
+                          }`}
+                        >
+                          {chip.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
+              )}
+            </div>
 
-                {/* Capital Quick Presets */}
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {DPT3_CAPITAL_PRESETS.map((p, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => setNominalCapital(p.value)}
-                      className={`text-xs px-2.5 py-1 rounded-md border transition-all ${
-                        nominalCapital === p.value
-                          ? 'bg-amber-500 text-slate-950 font-bold border-amber-500'
-                          : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:border-slate-400'
-                      }`}
-                    >
-                      {p.label} (₹{p.fee})
-                    </button>
-                  ))}
-                </div>
+            {/* Share Capital Selection */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
+                  Nominal / Authorized Share Capital
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={!hasShareCapital}
+                    onChange={(e) => setHasShareCapital(!e.target.checked)}
+                    className="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 border-slate-300"
+                  />
+                  <span className="text-xs text-slate-600 dark:text-slate-400">
+                    Company without Share Capital (Flat ₹200)
+                  </span>
+                </label>
               </div>
-            )}
 
-            {/* Officers Count */}
+              {hasShareCapital && (
+                <>
+                  {/* Preset Buttons */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
+                    {DPT3_CAPITAL_PRESETS.map((preset) => {
+                      const isCurrent = nominalCapital === preset.value
+                      return (
+                        <button
+                          key={preset.label}
+                          type="button"
+                          onClick={() => setNominalCapital(preset.value)}
+                          className={`p-2.5 rounded-xl border text-center transition-all ${
+                            isCurrent
+                              ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-600 text-amber-800 dark:text-amber-300 font-bold ring-2 ring-amber-500/20 shadow-sm'
+                              : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300 font-medium'
+                          }`}
+                        >
+                          <div className="text-xs">{preset.label}</div>
+                          <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                            Fee: ₹{preset.fee}
+                          </div>
+                        </button>
+                      )
+                    })}
+                  </div>
+
+                  {/* Custom Number Input */}
+                  <div className="relative">
+                    <span className="absolute left-3 top-3 text-slate-400 font-semibold text-sm">₹</span>
+                    <input
+                      type="number"
+                      min="0"
+                      value={nominalCapital}
+                      onChange={(e) => setNominalCapital(Math.max(0, parseInt(e.target.value) || 0))}
+                      placeholder="Custom Authorized Capital in INR"
+                      className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl p-3 pl-8 text-sm focus:ring-2 focus:ring-amber-500 transition-colors font-semibold"
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Officers in Default for Rule 21 */}
             <div>
-              <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+              <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2">
                 Number of Officers in Default (Directors) — for Rule 21 Fine
               </label>
               <input
@@ -423,339 +472,187 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
                 min="1"
                 max="15"
                 value={officersCount}
-                onChange={e => setOfficersCount(Math.max(1, Number(e.target.value)))}
-                className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                onChange={(e) => setOfficersCount(Math.max(1, parseInt(e.target.value) || 1))}
+                className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-500 transition-colors font-semibold"
               />
-              <p className="text-[11px] text-slate-500 mt-1">
-                Rule 21 fine levies up to ₹5,000 on the company + ₹5,000 on each officer in default.
+              <p className="text-[11px] text-slate-500 mt-1 pl-1">
+                Rule 21 fine applies up to ₹5,000 on the company + ₹5,000 on each officer in default + ₹500/day.
               </p>
             </div>
+
           </div>
 
-          {/* Right Column: Deadlines & Delay Calculator */}
-          <div className="space-y-5">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
-              <Calendar className="size-4 text-blue-500" />
-              Statutory Deadlines & Delay Calculation
-            </h3>
+          {/* Right Column: Live Computation Scoreboard Sidebar (5 cols) */}
+          <div className="lg:col-span-5 space-y-6">
+            
+            {/* The Big Results Card */}
+            <div className="bg-gradient-to-b from-slate-900 to-slate-950 text-white rounded-3xl p-6 shadow-2xl border border-slate-800 relative overflow-hidden">
+              
+              {/* Subtle accent glow */}
+              <div className="absolute top-0 right-0 w-40 h-40 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
 
-            {calcMode === 'date' ? (
-              <div className="space-y-4">
-                <div className="p-3 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 rounded-lg">
-                  <div className="flex items-center justify-between text-xs text-slate-700 dark:text-slate-300 mb-1">
-                    <span>Statutory Due Date (Section 73 / Rule 16):</span>
-                    <strong className="text-blue-700 dark:text-blue-300 text-sm">{result.metadata.statutoryDueDate}</strong>
-                  </div>
-                  {result.metadata.waiverEndDate && (
-                    <div className="flex items-center justify-between text-xs text-amber-800 dark:text-amber-300 pt-1 border-t border-blue-200/60 dark:border-blue-900/50">
-                      <span>Circular 02/2026 Fee Waiver Deadline:</span>
-                      <strong className="text-amber-900 dark:text-amber-200 font-bold">{result.metadata.waiverEndDate}</strong>
-                    </div>
+              <div className="relative z-10 space-y-6">
+                
+                {/* Header Status Badge */}
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    FEE COMPUTATION RESULT
+                  </span>
+                  {result.metadata.effectiveDelayDays === 0 ? (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      {result.metadata.isWaivedUnderCircular ? 'CIR 02/2026 WAIVED' : 'ON-TIME FILING'}
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs font-bold">
+                      <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />
+                      DELAYED ({result.metadata.effectiveDelayDays}d)
+                    </span>
                   )}
                 </div>
 
+                {/* Total Fee Big Number */}
                 <div>
-                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
-                    Actual / Anticipated Date of Filing on MCA21 V3
-                  </label>
-                  <input
-                    type="date"
-                    value={filingDate}
-                    onChange={e => setFilingDate(e.target.value)}
-                    className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-slate-200 font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500"
-                  />
+                  <span className="text-xs text-slate-400 block mb-1">Total MCA21 Portal Challan</span>
+                  <div className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight flex items-baseline gap-1">
+                    <span className="text-2xl sm:text-3xl text-slate-400 font-medium">₹</span>
+                    {result.mcaPortalPayable.totalPortalPayable.toLocaleString('en-IN')}
+                  </div>
+                  <p className="text-xs text-slate-400 mt-1.5">
+                    Governed by Table A &amp; Table B Multipliers (Fees Rules, 2014)
+                  </p>
                 </div>
-              </div>
-            ) : (
-              <div>
-                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
-                  Days of Delay Beyond Statutory Due Date
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  value={directDelayDays}
-                  onChange={e => setDirectDelayDays(Math.max(0, Number(e.target.value)))}
-                  className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-slate-200 font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500"
-                />
-              </div>
-            )}
 
-            {/* Delay & Waiver Status Badge */}
-            <div className="p-4 rounded-xl border bg-slate-50 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800">
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-500 uppercase font-bold tracking-wider">Delay Status</span>
-                {result.metadata.effectiveDelayDays === 0 ? (
-                  <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-100 dark:bg-emerald-950/60 px-2.5 py-1 rounded-full">
-                    <CheckCircle2 className="size-3.5" />
-                    {result.metadata.isWaivedUnderCircular ? 'Fee Waived (Circular 02/2026)' : 'Timely / No Delay'}
-                  </span>
-                ) : (
-                  <span className="inline-flex items-center gap-1 text-xs font-bold text-red-600 bg-red-100 dark:bg-red-950/60 px-2.5 py-1 rounded-full">
-                    <AlertTriangle className="size-3.5" />
-                    {result.metadata.effectiveDelayDays} Day(s) Delay
-                  </span>
-                )}
-              </div>
+                {/* Breakdown Details Box */}
+                <div className="bg-slate-800/60 rounded-2xl p-4 border border-slate-700/60 space-y-3">
+                  
+                  {/* Normal Base Fee */}
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-slate-300">Table A Normal Base Fee:</span>
+                    <span className="font-bold text-white">
+                      ₹ {result.mcaPortalPayable.normalFilingFee.toLocaleString('en-IN')}
+                    </span>
+                  </div>
 
-              {result.metadata.effectiveDelayDays > 0 && (
-                <div className="mt-2 text-xs text-slate-600 dark:text-slate-400">
-                  Falls into Table B Slab: <strong className="text-slate-900 dark:text-white">{result.mcaPortalPayable.tableBSlabRange}</strong> ({result.mcaPortalPayable.tableBMultiplier}× Normal Fee).
-                </div>
-              )}
-            </div>
+                  {/* Delay Multiplier Fee */}
+                  <div className="flex justify-between items-center text-sm pt-2 border-t border-slate-700/60">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-slate-300">Table B Late Fee:</span>
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">
+                        {result.mcaPortalPayable.tableBMultiplier}× Multiplier
+                      </span>
+                    </div>
+                    <span className={`font-bold ${result.mcaPortalPayable.additionalLateFee > 0 ? 'text-amber-400' : 'text-slate-300'}`}>
+                      ₹ {result.mcaPortalPayable.additionalLateFee.toLocaleString('en-IN')}
+                    </span>
+                  </div>
 
-            {/* Auditor Certificate Badge */}
-            <div className={`p-4 rounded-xl border ${
-              result.auditorCertificate.isMandatory
-                ? 'bg-amber-50 dark:bg-amber-950/30 border-amber-300 dark:border-amber-800 text-amber-900 dark:text-amber-200'
-                : 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200'
-            }`}>
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider mb-1">
-                {result.auditorCertificate.isMandatory ? <ShieldAlert className="size-4 text-amber-600" /> : <ShieldCheck className="size-4 text-emerald-600" />}
-                Auditor\'s Certificate Requirement
-              </div>
-              <p className="text-xs leading-relaxed">
-                {result.auditorCertificate.ruleExplanation}
-              </p>
-            </div>
-
-          </div>
-        </div>
-
-        {/* Section 3: Results Scoreboard (Challan vs Penalties) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-slate-200 dark:border-slate-800">
-          
-          {/* Card 1: Normal Base Fee */}
-          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/60">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Table A Base Fee</span>
-            <div className="text-2xl lg:text-3xl font-bold font-serif text-slate-900 dark:text-white mt-1">
-              ₹ {result.mcaPortalPayable.normalFilingFee.toLocaleString('en-IN')}
-            </div>
-            <p className="text-[11px] text-slate-500 mt-2">
-              {result.mcaPortalPayable.normalFeeBasis}
-            </p>
-          </div>
-
-          {/* Card 2: Additional Late Fee */}
-          <div className="p-5 rounded-2xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/40">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">
-                Table B Late Fee
-              </span>
-              <span className="text-xs font-extrabold text-amber-800 dark:text-amber-300 bg-amber-200/70 dark:bg-amber-900/50 px-2 py-0.5 rounded">
-                {result.mcaPortalPayable.tableBMultiplier}× Multiplier
-              </span>
-            </div>
-            <div className="text-2xl lg:text-3xl font-bold font-serif text-amber-950 dark:text-amber-200 mt-1">
-              ₹ {result.mcaPortalPayable.additionalLateFee.toLocaleString('en-IN')}
-            </div>
-            <p className="text-[11px] text-amber-700/80 dark:text-amber-400 mt-2">
-              {result.mcaPortalPayable.additionalFeeBasis}
-            </p>
-          </div>
-
-          {/* Card 3: Total MCA21 Portal Payable */}
-          <div className="p-5 rounded-2xl bg-gradient-to-br from-navy to-slate-900 text-white border border-slate-800 shadow-lg">
-            <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">
-              Total MCA21 e-Challan
-            </span>
-            <div className="text-2xl lg:text-3xl font-bold font-serif text-white mt-1">
-              ₹ {result.mcaPortalPayable.totalPortalPayable.toLocaleString('en-IN')}
-            </div>
-            <p className="text-[11px] text-slate-300 mt-2">
-              {result.mcaPortalPayable.challanTimingNotice}
-            </p>
-          </div>
-        </div>
-
-        {/* Section 4: Dual Penalties Breakdown (Rule 21 vs Section 76A) */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
-          
-          {/* Rule 21 Procedural Fine */}
-          <div className={`p-5 rounded-2xl border ${
-            result.rule21ProceduralFine.totalRule21Exposure > 0
-              ? 'bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-900/40'
-              : 'bg-slate-50 dark:bg-slate-800/30 border-slate-200 dark:border-slate-800'
-          }`}>
-            <div className="flex items-center gap-2 text-sm font-bold text-red-700 dark:text-red-400 mb-2">
-              <AlertTriangle className="size-4" />
-              Rule 21 Procedural Fine (Non-Filing / Delay)
-            </div>
-            <div className="text-2xl font-bold font-serif text-red-950 dark:text-red-300">
-              ₹ {result.rule21ProceduralFine.totalRule21Exposure.toLocaleString('en-IN')}
-            </div>
-            <div className="text-xs text-red-700 dark:text-red-400 mt-2 space-y-1">
-              <div>• Company Fine: ₹ {result.rule21ProceduralFine.companyBaseFine.toLocaleString('en-IN')}</div>
-              <div>• {result.metadata.officerCount} Officers in Default: ₹ {result.rule21ProceduralFine.officersBaseFine.toLocaleString('en-IN')}</div>
-              <div>• Continuing Default ({result.metadata.effectiveDelayDays}d @ ₹500/d): ₹ {result.rule21ProceduralFine.continuingFineTotal.toLocaleString('en-IN')}</div>
-            </div>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-3 pt-2 border-t border-red-200 dark:border-red-900/40">
-              {result.rule21ProceduralFine.adjudicationNote}
-            </p>
-          </div>
-
-          {/* Section 76A Substantive Penalty Exposure */}
-          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/30 border border-slate-200 dark:border-slate-800">
-            <div className="flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-white mb-2">
-              <ShieldAlert className="size-4 text-amber-500" />
-              Section 76A Deposit Contravention Exposure
-            </div>
-            <div className="text-xs text-slate-700 dark:text-slate-300 space-y-2 mt-2">
-              <div className="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/60">
-                <span className="font-semibold text-slate-900 dark:text-white">Company Penalty: </span>
-                {result.section76ASubstantivePenalty.companyMinFine} up to {result.section76ASubstantivePenalty.companyMaxFine}
-              </div>
-              <div className="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/60">
-                <span className="font-semibold text-slate-900 dark:text-white">Officers in Default: </span>
-                {result.section76ASubstantivePenalty.officersImprisonment} AND/OR {result.section76ASubstantivePenalty.officersFine}
-              </div>
-              <p className="text-[11px] text-slate-500 pt-1">
-                {result.section76ASubstantivePenalty.conditionNote}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Section 5: Net Worth & Deposit Ceiling Advisor (Expandable) */}
-        <div className="border border-slate-200 dark:border-slate-800 rounded-2xl p-5 bg-white dark:bg-slate-900">
-          <button
-            type="button"
-            onClick={() => setShowCeilingAdvisor(!showCeilingAdvisor)}
-            className="w-full flex items-center justify-between text-left"
-          >
-            <div className="flex items-center gap-2">
-              <Building2 className="size-4 text-blue-500" />
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-                Statutory Deposit Acceptance Ceilings & Net Worth Advisor (Sections 73 & 76)
-              </h3>
-            </div>
-            <span className="text-xs text-blue-600 dark:text-blue-400 font-semibold flex items-center gap-1">
-              {showCeilingAdvisor ? 'Hide Advisor' : 'Check Statutory Deposit Limits'}
-              <ChevronDown className={`size-4 transition-transform ${showCeilingAdvisor ? 'rotate-180' : ''}`} />
-            </span>
-          </button>
-
-          {showCeilingAdvisor && (
-            <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                
-                {/* Company Type */}
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                    Company Type
-                  </label>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setIsPrivateCo(true)}
-                      className={`px-3 py-1.5 text-xs font-bold rounded-lg border ${
-                        isPrivateCo ? 'bg-blue-600 text-white border-blue-600' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-transparent'
-                      }`}
-                    >
-                      Private Ltd
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setIsPrivateCo(false)}
-                      className={`px-3 py-1.5 text-xs font-bold rounded-lg border ${
-                        !isPrivateCo ? 'bg-blue-600 text-white border-blue-600' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-transparent'
-                      }`}
-                    >
-                      Public Ltd
-                    </button>
+                  {/* Total e-Challan */}
+                  <div className="flex justify-between items-center text-sm pt-2 border-t border-slate-700 font-bold">
+                    <span className="text-white">Total e-Challan:</span>
+                    <span className="text-amber-400 text-base">
+                      ₹ {result.mcaPortalPayable.totalPortalPayable.toLocaleString('en-IN')}
+                    </span>
                   </div>
                 </div>
 
-                {/* Specific Status */}
-                {isPrivateCo ? (
-                  <>
-                    <div className="flex items-center gap-2 pt-6">
-                      <input
-                        type="checkbox"
-                        id="startup-check"
-                        checked={isStartup}
-                        onChange={e => setIsStartup(e.target.checked)}
-                        className="size-4 text-blue-600 rounded border-slate-300"
-                      />
-                      <label htmlFor="startup-check" className="text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
-                        DPIIT Startup (≤ 10 Years)
-                      </label>
-                    </div>
-                    <div className="flex items-center gap-2 pt-6">
-                      <input
-                        type="checkbox"
-                        id="cond-check"
-                        checked={meets3Conditions}
-                        onChange={e => setMeets3Conditions(e.target.checked)}
-                        className="size-4 text-blue-600 rounded border-slate-300"
-                      />
-                      <label htmlFor="cond-check" className="text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
-                        Meets 3 Conditions Exemption
-                      </label>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                        Net Worth (₹ Crores)
-                      </label>
-                      <input
-                        type="number"
-                        min="0"
-                        value={netWorthCr}
-                        onChange={e => setNetWorthCr(Number(e.target.value))}
-                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                        Turnover (₹ Crores)
-                      </label>
-                      <input
-                        type="number"
-                        min="0"
-                        value={turnoverCr}
-                        onChange={e => setTurnoverCr(Number(e.target.value))}
-                        className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs"
-                      />
-                    </div>
-                  </>
-                )}
-              </div>
-
-              {/* Ceiling Advice Card */}
-              <div className="p-3.5 bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 rounded-xl">
-                <div className="text-xs font-bold text-blue-900 dark:text-blue-300 mb-1 flex items-center gap-1.5">
-                  <Sparkles className="size-3.5" />
-                  Statutory Deposit Limit Determination:
+                {/* Auditor Certificate Badge Card */}
+                <div className={`p-3.5 rounded-2xl border text-xs leading-relaxed ${
+                  result.auditorCertificate.isMandatory
+                    ? 'bg-amber-500/10 border-amber-500/30 text-amber-200'
+                    : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-200'
+                }`}>
+                  <div className="flex items-center gap-2 font-bold mb-1">
+                    {result.auditorCertificate.isMandatory ? (
+                      <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0" />
+                    ) : (
+                      <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                    )}
+                    <span>Auditor\'s Certificate: {result.auditorCertificate.statusBadge}</span>
+                  </div>
+                  <p className="text-[11px] text-slate-300">
+                    {result.auditorCertificate.ruleExplanation}
+                  </p>
                 </div>
-                <p className="text-xs text-slate-800 dark:text-slate-200 leading-relaxed font-medium">
-                  {ceilingAdvice.statutoryLimitDescription}
-                </p>
-                <p className="text-[11px] text-blue-800 dark:text-blue-400 mt-2 font-semibold">
-                  📌 {ceilingAdvice.netWorthBasisNote}
-                </p>
+
+                {/* Rule 21 Procedural Fine Exposure */}
+                {result.rule21ProceduralFine.totalRule21Exposure > 0 && (
+                  <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-200 text-xs">
+                    <div className="flex items-center gap-1.5 font-bold mb-1 text-rose-300">
+                      <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+                      <span>Rule 21 Procedural Fine Exposure</span>
+                    </div>
+                    <div className="text-lg font-bold text-white mb-1">
+                      ₹ {result.rule21ProceduralFine.totalRule21Exposure.toLocaleString('en-IN')}
+                    </div>
+                    <p className="text-[11px] text-slate-400">
+                      Company: ₹5,000 | {result.metadata.officerCount} Officers: ₹{(result.metadata.officerCount * 5000).toLocaleString('en-IN')} | Continuing ({result.metadata.effectiveDelayDays}d @ ₹500/d): ₹{(result.metadata.effectiveDelayDays * 500).toLocaleString('en-IN')}
+                    </p>
+                  </div>
+                )}
+
+                {/* Action Buttons */}
+                <div className="pt-2 space-y-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={handleCopySummary}
+                      className="w-full py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 border border-slate-700"
+                    >
+                      <Copy className="w-3.5 h-3.5" />
+                      Copy Memo
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handlePrint}
+                      className="w-full py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 border border-slate-700"
+                    >
+                      <Printer className="w-3.5 h-3.5" />
+                      Print Sheet
+                    </button>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleDownloadPdf}
+                    disabled={isGeneratingPdf}
+                    className="w-full py-3 px-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-sm transition-all shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+                  >
+                    <Download className="w-4 h-4" />
+                    {isGeneratingPdf ? 'Generating PDF...' : 'Download Official PDF Report'}
+                  </button>
+                </div>
+
               </div>
             </div>
-          )}
+
+          </div>
+
         </div>
 
-        {/* Section 6: Table B Delay Slabs Comparison Matrix */}
-        <div className="space-y-4">
-          <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-            <Clock className="size-4 text-blue-500" />
-            Statutory Table B Delay Slabs & Multipliers (Fee Rules, 2014)
-          </h3>
-          <div className="overflow-x-auto border border-slate-200 dark:border-slate-800 rounded-xl">
+      </div>
+
+      {/* ── 2. Lower Dedicated Sections ── */}
+      <div className="space-y-8 print:hidden">
+        
+        {/* Section A: Table B Delay Slabs Comparison Matrix */}
+        <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 p-6 md:p-8 space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <Clock className="w-5 h-5 text-amber-500" />
+              Statutory Table B Additional Fee Slabs (Fee Rules, 2014)
+            </h3>
+            <span className="text-xs text-slate-500">Based on Authorized Capital of ₹{nominalCapital.toLocaleString('en-IN')}</span>
+          </div>
+
+          <div className="overflow-x-auto border border-slate-200 dark:border-slate-800 rounded-2xl">
             <table className="w-full text-xs text-left">
               <thead className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold uppercase tracking-wider">
                 <tr>
                   <th className="px-4 py-3">Delay Period Beyond Due Date</th>
-                  <th className="px-4 py-3">Additional Fee Multiplier</th>
-                  <th className="px-4 py-3">Fee for ₹{nominalCapital.toLocaleString('en-IN')} Capital</th>
-                  <th className="px-4 py-3">Statutory Basis & Notes</th>
+                  <th className="px-4 py-3">Table B Multiplier</th>
+                  <th className="px-4 py-3">Fee for Your Capital</th>
+                  <th className="px-4 py-3">Statutory Basis &amp; Guidance</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
@@ -786,44 +683,171 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
           </div>
         </div>
 
-        {/* Section 7: Interactive 18 Exclusions Matrix under Rule 2(1)(c) */}
-        <div className="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        {/* Section B: Net Worth & Deposit Ceilings Advisor (Sections 73 & 76) */}
+        <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 p-6 md:p-8 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
             <div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <FileText className="size-4 text-emerald-500" />
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Building2 className="w-5 h-5 text-blue-600" />
+                Statutory Deposit Acceptance Ceilings &amp; Net Worth Advisor (Sections 73 &amp; 76)
+              </h3>
+              <p className="text-xs text-slate-500 mt-1">
+                Determine whether your company is permitted to accept deposits from members/public and calculate allowable limits.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowCeilingAdvisor(!showCeilingAdvisor)}
+              className="text-xs font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1 hover:underline"
+            >
+              {showCeilingAdvisor ? 'Collapse Advisor' : 'Configure Parameters'}
+              <ChevronDown className={`w-4 h-4 transition-transform ${showCeilingAdvisor ? 'rotate-180' : ''}`} />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+            {/* Company Type Selector */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                Company Constitution
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsPrivateCo(true)}
+                  className={`px-3 py-2 text-xs font-bold rounded-xl border transition-all ${
+                    isPrivateCo
+                      ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-transparent'
+                  }`}
+                >
+                  Private Limited
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsPrivateCo(false)}
+                  className={`px-3 py-2 text-xs font-bold rounded-xl border transition-all ${
+                    !isPrivateCo
+                      ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-transparent'
+                  }`}
+                >
+                  Public Limited
+                </button>
+              </div>
+            </div>
+
+            {/* Constitution Details */}
+            {isPrivateCo ? (
+              <>
+                <div className="flex items-center gap-2 pt-6">
+                  <input
+                    type="checkbox"
+                    id="startup-check-adv"
+                    checked={isStartup}
+                    onChange={(e) => setIsStartup(e.target.checked)}
+                    className="w-4 h-4 text-blue-600 rounded border-slate-300"
+                  />
+                  <label htmlFor="startup-check-adv" className="text-xs font-medium text-slate-700 dark:text-slate-300 cursor-pointer">
+                    DPIIT Recognized Startup (≤ 10 Yrs)
+                  </label>
+                </div>
+                <div className="flex items-center gap-2 pt-6">
+                  <input
+                    type="checkbox"
+                    id="cond-check-adv"
+                    checked={meets3Conditions}
+                    onChange={(e) => setMeets3Conditions(e.target.checked)}
+                    className="w-4 h-4 text-blue-600 rounded border-slate-300"
+                  />
+                  <label htmlFor="cond-check-adv" className="text-xs font-medium text-slate-700 dark:text-slate-300 cursor-pointer">
+                    Meets 3 Conditions (G.S.R. 464(E))
+                  </label>
+                </div>
+              </>
+            ) : (
+              <>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                    Net Worth (₹ Crores)
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={netWorthCr}
+                    onChange={(e) => setNetWorthCr(Number(e.target.value))}
+                    className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-semibold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                    Annual Turnover (₹ Crores)
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={turnoverCr}
+                    onChange={(e) => setTurnoverCr(Number(e.target.value))}
+                    className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs font-semibold"
+                  />
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Ceiling Advice Card */}
+          <div className="p-4 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 rounded-2xl">
+            <div className="text-xs font-bold text-blue-900 dark:text-blue-300 mb-1 flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4 text-blue-600" />
+              Statutory Deposit Limit Determination:
+            </div>
+            <p className="text-xs text-slate-800 dark:text-slate-200 leading-relaxed font-medium">
+              {ceilingAdvice.statutoryLimitDescription}
+            </p>
+            <p className="text-[11px] text-blue-800 dark:text-blue-400 mt-2 font-semibold">
+              📌 {ceilingAdvice.netWorthBasisNote}
+            </p>
+          </div>
+        </div>
+
+        {/* Section C: Interactive Rule 2(1)(c) 18 Exclusions Explorer */}
+        <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 p-6 md:p-8 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
+            <div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <FileText className="w-5 h-5 text-emerald-500" />
                 Rule 2(1)(c) Excluded Receipts Reference (18 Categories)
               </h3>
               <p className="text-xs text-slate-500 mt-0.5">
                 Amounts that are NOT deposits under the Act but MUST still be reported in Form DPT-3.
               </p>
             </div>
-            <div className="relative w-full sm:w-72">
-              <Search className="size-3.5 absolute left-3 top-2.5 text-slate-400" />
+            <div className="relative w-full sm:w-80">
+              <Search className="w-4 h-4 absolute left-3 top-2.5 text-slate-400" />
               <input
                 type="text"
                 value={exclusionSearch}
-                onChange={e => setExclusionSearch(e.target.value)}
-                placeholder="Search 18 categories or clauses..."
-                className="w-full pl-8 pr-3 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                onChange={(e) => setExclusionSearch(e.target.value)}
+                placeholder="Search categories or clauses..."
+                className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 font-medium"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-96 overflow-y-auto pr-1">
-            {filteredExclusions.map(ex => (
+            {filteredExclusions.map((ex) => (
               <div
                 key={ex.id}
-                className="p-3 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-amber-300 dark:hover:border-amber-700 transition-colors"
+                className="p-3.5 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-200 dark:border-slate-800 hover:border-amber-300 dark:hover:border-amber-700 transition-colors"
               >
-                <div className="flex items-center justify-between gap-2 mb-1">
+                <div className="flex items-center justify-between gap-2 mb-1.5">
                   <div className="flex items-center gap-2">
                     <span className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 text-[10px] font-bold flex items-center justify-center shrink-0">
                       {ex.id}
                     </span>
                     <h4 className="text-xs font-bold text-slate-900 dark:text-white">{ex.title}</h4>
                   </div>
-                  <span className="text-[10px] font-mono text-slate-500 bg-slate-200/60 dark:bg-slate-800 px-1.5 py-0.5 rounded">
+                  <span className="text-[10px] font-mono text-slate-500 bg-slate-200/60 dark:bg-slate-800 px-2 py-0.5 rounded font-bold">
                     {ex.subClause}
                   </span>
                 </div>
@@ -838,11 +862,11 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
           </div>
         </div>
 
-        {/* Section 8: Important Practical Guidance & Reminders */}
-        <div className="p-5 bg-slate-50 dark:bg-slate-800/30 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+        {/* Section D: Important Practical Compliance Notes */}
+        <div className="bg-slate-50 dark:bg-slate-800/30 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 space-y-3">
           <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
-            <Sparkles className="size-4 text-amber-500" />
-            Statutory Directives & Important Practical Directives
+            <Sparkles className="w-4 h-4 text-amber-500" />
+            Statutory Directives &amp; Compliance Safeguards
           </h4>
           <ul className="text-xs text-slate-600 dark:text-slate-400 space-y-2 list-disc pl-5 leading-relaxed">
             <li>
@@ -870,7 +894,7 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
           <div className="flex justify-between items-start">
             <div>
               <h1 className="text-xl font-bold uppercase tracking-tight text-slate-950">CorpLawUpdates.in</h1>
-              <p className="text-[10px] text-slate-600">India\'s Free Corporate Law Intelligence & Statutory Compliance Platform</p>
+              <p className="text-[10px] text-slate-600">India\'s Free Corporate Law Intelligence &amp; Statutory Compliance Platform</p>
             </div>
             <div className="text-right">
               <span className="inline-block bg-slate-100 border border-slate-300 text-slate-800 text-[10px] font-bold px-2 py-0.5 rounded">
@@ -882,14 +906,14 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
             </div>
           </div>
           <div className="mt-2 text-xs font-bold text-slate-800">
-            FORM DPT-3 — STATUTORY RETURN OF DEPOSITS & FEE ASSESSMENT MEMORANDUM
+            FORM DPT-3 — STATUTORY RETURN OF DEPOSITS &amp; FEE ASSESSMENT MEMORANDUM
           </div>
         </div>
 
         {/* Section 1: Entity Profile Table */}
         <div className="mb-4">
           <h2 className="text-xs font-bold uppercase tracking-wider text-slate-800 bg-slate-100 px-2 py-1 mb-2 border-l-2 border-slate-900">
-            1. Company & Filing Profile
+            1. Company &amp; Filing Profile
           </h2>
           <table className="w-full text-xs border-collapse">
             <tbody>
@@ -981,7 +1005,7 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
             <thead>
               <tr className="border-b-2 border-slate-300 text-left font-bold text-slate-700">
                 <th className="py-1">Statutory Provision</th>
-                <th className="py-1">Description & Formula</th>
+                <th className="py-1">Description &amp; Formula</th>
                 <th className="py-1 text-right">Indicative Risk</th>
               </tr>
             </thead>

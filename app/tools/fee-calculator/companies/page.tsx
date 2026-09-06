@@ -463,7 +463,7 @@ export default function CompaniesFeePage() {
           </h2>
           <span className="text-xs text-blue-600 dark:text-blue-400 font-semibold">Deep Date Engines &amp; PDF Generators</span>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <Link
             href="/tools/fee-calculator/companies/mgt-7"
             className="p-5 rounded-xl border border-blue-200 dark:border-blue-900/60 bg-blue-50/50 dark:bg-blue-950/20 hover:border-blue-500 transition-all group flex flex-col justify-between"
@@ -481,6 +481,48 @@ export default function CompaniesFeePage() {
               </p>
             </div>
             <span className="text-xs font-bold text-blue-600 dark:text-blue-400 mt-4 flex items-center gap-1">
+              Open Dedicated Workspace →
+            </span>
+          </Link>
+
+          <Link
+            href="/tools/fee-calculator/companies/aoc-4"
+            className="p-5 rounded-xl border border-indigo-200 dark:border-indigo-900/60 bg-indigo-50/50 dark:bg-indigo-950/20 hover:border-indigo-500 transition-all group flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-indigo-600 text-white">AOC-4 Family</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">Financial Statements</span>
+              </div>
+              <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors mb-1">
+                Form AOC-4 Workspace
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                30-day AGM &amp; 180-day OPC engine, Small Co cash flow exemption, XBRL eligibility, and Section 137(3) penalty calculator.
+              </p>
+            </div>
+            <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 mt-4 flex items-center gap-1">
+              Open Dedicated Workspace →
+            </span>
+          </Link>
+
+          <Link
+            href="/tools/fee-calculator/companies/dpt-3"
+            className="p-5 rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50/50 dark:bg-amber-950/20 hover:border-amber-500 transition-all group flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-amber-600 text-white">DPT-3</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">Return of Deposits</span>
+              </div>
+              <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors mb-1">
+                Form DPT-3 Workspace
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Circular 02/2026 fee waiver check, Table B delay multipliers (2× to 12×), 18 Rule 2(1)(c) exclusions, and Rule 21 penalty advisor.
+              </p>
+            </div>
+            <span className="text-xs font-bold text-amber-600 dark:text-amber-400 mt-4 flex items-center gap-1">
               Open Dedicated Workspace →
             </span>
           </Link>
