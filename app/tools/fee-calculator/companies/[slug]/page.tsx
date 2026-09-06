@@ -112,6 +112,43 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         text: 'If the delay exceeds 270 days, obtain prior Condonation of Delay from the Regional Director via Form CG-1 before filing on MCA V3.'
       }
     ]
+  } : form.slug === 'chg-1' ? {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How to Calculate Form CHG-1 Filing Fees & Ad Valorem Late Penalties on MCA V3',
+    description: 'Step-by-step guide to calculating normal filing fees, Table B multipliers (3x/6x), ad valorem fees (0.025%/0.05% capped at ₹1L/₹5L), and Section 87 condonation for Form CHG-1 charge registration.',
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Identify the Date of Charge Creation or Modification',
+        text: 'Determine the execution date of the sanction letter, loan agreement, or deed of hypothecation/mortgage (Day 0 of Chapter VI timeline).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Verify the Initial 30-Day Statutory Window',
+        text: 'Form CHG-1 filed within 30 days of creation attracts only the normal base filing fee (₹200 to ₹600) under Table A based on authorized share capital.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Calculate the First Extension Window (Days 31 to 60)',
+        text: 'If delayed between 1 and 30 days beyond due date, pay the additional fee: 3× normal fee for Small Companies/OPCs or 6× normal fee for Other Companies.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: 'Calculate the Second Extension Ad Valorem Fee (Days 61 to 90)',
+        text: 'If delayed between 31 and 60 days, pay 3×/6× normal fee PLUS an Ad Valorem fee: 0.025% of secured amount (capped at ₹1,00,000) for Small/OPC or 0.05% of secured amount (capped at ₹5,00,000) for Others.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 5,
+        name: 'Comply with Section 87 Hard Stop (> 90 Days from Creation)',
+        text: 'If delayed beyond 90 days from creation, direct ROC registration is legally barred. The company must file Form CHG-8 with the Regional Director for condonation of delay.'
+      }
+    ]
   } : null
 
   return (
@@ -154,11 +191,15 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
           <h1 className="text-[2.25rem] font-bold font-serif text-white mb-4">
             {form.slug === 'adt-1'
               ? 'ADT-1 Late Fees & Penalty Calculator (FY 2026-27) — Auditor Appointment'
+              : form.slug === 'chg-1'
+              ? 'CHG-1 Late Fees & Ad Valorem Calculator (FY 2026-27) — Charge Creation'
               : `${form.formNumber} — ${form.formName} Fee & Penalty Calculator (2026-27)`}
           </h1>
           <p className="text-slate-400 text-lg max-w-3xl mx-auto mb-8">
             {form.slug === 'adt-1'
               ? 'Calculate statutory normal filing fees, 15-day due date from AGM/EGM, and Table B late fee multipliers (1× to 12×) for Form ADT-1 on MCA V3.'
+              : form.slug === 'chg-1'
+              ? 'Calculate exact normal filing fees, 30-60-90 day Section 77 timelines, 3×/6× extension multipliers, and ad valorem penalties (up to ₹5 Lakhs) for Form CHG-1 on MCA V3.'
               : `Calculate exact normal filing fees and late penalties for ${form.formNumber} (${form.formName}) based on authorized capital and delay.`}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">

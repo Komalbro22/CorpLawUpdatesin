@@ -475,35 +475,110 @@ export const mcaForms: MCAForm[] = [
   {
     slug: 'chg-1',
     formNumber: 'CHG-1',
-    formName: 'Charge Creation',
-    aliases: ['chg1', 'creation of charge', 'bank loan form'],
+    formName: 'Creation or Modification of Charge',
+    aliases: [
+      'chg 1',
+      'chg-1',
+      'chg1',
+      'form chg 1',
+      'creation of charge',
+      'modification of charge',
+      'chg 1 late fees',
+      'chg 1 late fees calculator',
+      'chg-1 late fees calculator',
+      'chg-1 fees calculator',
+      'chg 1 ad valorem fee',
+      'charge creation fee calculator',
+      'chg 1 penalty calculator',
+      'chg 1 due date',
+      'chg-1 due date and penalty',
+      'section 77 charge timeline',
+      'chg 1 condonation chg 8',
+      'small company chg 1 late fee',
+      'bank loan charge registration'
+    ],
     category: 'charge',
-    filedBy: ['Private Limited', 'Public Limited'],
-    dueDate: 'Within 30 days of charge creation',
-    section: 'Section 77, Companies Act 2013',
-    penaltyType: 'multiplier', // Technically has an ad-valorem component too
-    penaltyRate: 'Ad valorem up to ₹5L + Multiplier',
+    filedBy: ['Private Limited', 'Public Limited', 'One Person Company (OPC)', 'Section 8 Company'],
+    dueDate: 'Within 30 days of charge creation / modification',
+    section: 'Section 77, 78 & 79, Companies Act 2013 read with Rules 3, 4 & 12',
+    penaltyType: 'multiplier',
+    penaltyRate: '3×/6× Normal Fee + Ad Valorem up to ₹5 Lakhs (Hard Stop at 90 Days)',
     normalFeeStructure: 'capital_slab',
     baseFeeSlab: 'standard_company_slab',
-    concessionApplies: false, // charges usually don't have OPC concessions in the same way, but let's keep true for standard logic
-    metaTitle: 'CHG-1 Fee & Penalty Calculator | Creation of Charge MCA Tool',
-    metaDescription: 'Calculate the complex ad valorem penalty and normal fees for delayed filing of CHG-1 (Creation or Modification of Charge).',
-    ogDescription: 'Calculate the complex ad valorem penalty and normal fees for delayed filing of CHG-1 (Creation or Modification of Charge).',
+    concessionApplies: true,
+    metaTitle: 'CHG-1 Late Fees & Ad Valorem Calculator (FY 2026-27) — Section 77 Charge Creation | CorpLawUpdates',
+    metaDescription: 'Calculate statutory normal filing fees, Table B multipliers (3x/6x), and ad valorem penalties (0.025%/0.05% capped at ₹1L/₹5L) for Form CHG-1 on MCA V3. Features exact 30-60-90 day statutory timelines, Small Company concessions, and Section 87 condonation roadmap.',
+    ogDescription: 'Instant statutory calculation of Form CHG-1 filing fees, 30-60-90 day deadlines, extension multipliers, and ad valorem penalties under Section 77 of the Companies Act, 2013.',
     faqItems: [
-      { question: 'What is CHG-1 used for?', answer: 'CHG-1 is used to register a charge (like a mortgage or lien) created on the assets of the company in favor of a bank or financial institution.' },
-      { question: 'What is the due date for CHG-1?', answer: 'It must be filed within 30 days of the creation or modification of the charge instrument.' },
-      { question: 'What is the ad valorem penalty for CHG-1?', answer: 'If CHG-1 is delayed beyond 30 days, an additional ad valorem fee is charged. This is usually 0.05% of the charge amount, capped at ₹5,00,000.' },
-      { question: 'Can CHG-1 be filed after 120 days?', answer: 'If delayed beyond 120 days from creation, you must apply to the Central Government for condonation of delay using Form CHG-8 before CHG-1 can be approved.' },
-      { question: 'Who pays the fee for CHG-1?', answer: 'The company creating the charge pays the fee. If the company fails, the charge-holder (bank) can file it and recover the fee from the company.' }
+      {
+        question: 'What is the statutory due date for filing Form CHG-1?',
+        answer: 'Pursuant to Section 77(1) of the Companies Act, 2013, Form CHG-1 must be filed within 30 calendar days from the date of creation or modification of the charge (i.e. the date when the loan agreement, sanction letter, or deed of hypothecation/mortgage is executed).'
+      },
+      {
+        question: 'What is the normal government filing fee for Form CHG-1?',
+        answer: 'The normal filing fee is governed by Table A (Items 5 & 6) of the Companies (Registration Offices and Fees) Rules, 2014 based on authorized share capital: ₹200 (capital < ₹1 Lakh or companies without share capital), ₹300 (₹1L to ₹5L), ₹400 (₹5L to ₹25L), ₹500 (₹25L to ₹1 Crore), and ₹600 (₹1 Crore or more).'
+      },
+      {
+        question: 'What are the late fees for filing CHG-1 between 31 and 60 days from creation (First Extension)?',
+        answer: 'Under Section 77(1) first proviso, the ROC may permit registration within an additional 30 days (Days 31 to 60 from creation) upon payment of additional fees: Small Companies and OPCs pay 3× the normal filing fee, while Other Companies pay 6× the normal filing fee. No ad valorem fee applies in this first extension window.'
+      },
+      {
+        question: 'What is the ad valorem fee for CHG-1 filed between 61 and 90 days from creation (Second Extension)?',
+        answer: 'Under Section 77(1) second proviso, if filed within a further period of 30 days (Days 61 to 90 from creation), the company must pay the extension multiplier (3× for Small/OPC, 6× for Others) PLUS an Ad Valorem fee based on the secured loan amount: 0.025% of the charge amount for Small Companies/OPCs (capped at ₹1,00,000) or 0.05% of the charge amount for Other Companies (capped at ₹5,00,000).'
+      },
+      {
+        question: 'What are the statutory caps on the ad valorem fee for CHG-1?',
+        answer: 'The ad valorem additional fee is subject to strict statutory ceilings under the 2019 Amendment Rules: ₹1,00,000 maximum for Small Companies and One Person Companies (0.025%), and ₹5,00,000 maximum for all other companies (0.05%).'
+      },
+      {
+        question: 'What happens if Form CHG-1 is not filed within 90 days of charge creation?',
+        answer: 'Beyond 90 days from the date of charge creation, there is an absolute statutory hard stop under Section 77. The Registrar of Companies (ROC) has NO legal jurisdiction to register the charge or accept late fees. Filing Form CHG-1 directly on the MCA portal is blocked.'
+      },
+      {
+        question: 'Can the ROC condone a delay beyond 90 days for Form CHG-1?',
+        answer: 'No. The ROC\'s discretionary extension power is capped at 60 additional days (total 90 days from creation). Beyond 90 days, only the Regional Director (delegated by the Central Government) under Section 87 has the legal authority to condone the delay upon hearing a formal petition.'
+      },
+      {
+        question: 'What is the procedure for Section 87 Condonation of Delay via Form CHG-8?',
+        answer: 'To condone delay exceeding 90 days: (1) File a petition with affidavit before the Regional Director (RD) in Form CHG-8; (2) Serve notice to the ROC and charge-holder bank; (3) Attend the hearing and obtain a formal Condonation Order; (4) File the RD Order with the ROC in Form INC-28 within 30 days; (5) File Form CHG-1 attaching the SRN of approved INC-28.'
+      },
+      {
+        question: 'Can the lending bank or charge-holder file Form CHG-1 if the company defaults (Section 78)?',
+        answer: 'Yes. Under Section 78, if the company fails to register the charge within the initial 30 days, the bank or financial institution can apply to the ROC for registration along with the instrument. The ROC serves a 14-day notice to the company. If the company fails to show cause, the ROC registers the charge, and the bank is legally entitled to recover the entire filing fees and costs from the company.'
+      },
+      {
+        question: 'Does the daily penalty of ₹100 per day apply to Form CHG-1?',
+        answer: 'No. The ₹100 per day penalty under Section 403 applies exclusively to Annual Returns (MGT-7/7A) and Financial Statements (AOC-4). Form CHG-1 is governed strictly by the Chapter VI charge timeline (30-60-90 days) and ad-valorem fee structure.'
+      },
+      {
+        question: 'What is the difference between Creation and Modification of Charge in CHG-1?',
+        answer: 'Creation of charge refers to registering a fresh security interest created in favor of a lender for a new loan facility. Modification of charge refers to recording changes in existing terms—such as an enhancement or reduction of loan limits, change in interest rate, release or substitution of mortgaged property, or addition of new consortium lenders.'
+      },
+      {
+        question: 'What documents must be attached to Form CHG-1 on MCA V3?',
+        answer: 'Mandatory attachments include: (1) Certified true copy of the instrument creating/modifying the charge (Sanction Letter, Deed of Hypothecation, Mortgage Deed); (2) Certified Board Resolution under Section 179(3)(d); (3) Special Resolution under Section 180(1)(a)/(c) if borrowing limits exceed capital; (4) NOC from existing charge-holders if pari-passu; and (5) Certification by a practicing CA, CS, or CMA.'
+      },
+      {
+        question: 'Is Form CHG-1 required for vehicle loans, unsecured loans, or personal guarantees?',
+        answer: 'CHG-1 is required for vehicle loans if the vehicle is registered in the name of the company and hypothecated to the financier. It is NOT required for purely unsecured loans, clean overdrafts, or personal guarantees given by directors in their individual capacities where no corporate assets are hypothecated.'
+      },
+      {
+        question: 'What are the legal consequences of non-registration of a charge under Section 77(3)?',
+        answer: 'Under Section 77(3), an unregistered charge is completely VOID against the liquidator and any other creditors of the company in the event of winding up. The lending bank loses its secured creditor status and becomes an ordinary unsecured creditor. However, the underlying debt contract remains valid, and the loan becomes immediately repayable.'
+      },
+      {
+        question: 'Is Form CHG-1 processed under Straight Through Process (STP) or ROC Approval?',
+        answer: 'Form CHG-1 is NOT processed under Straight Through Process (STP). It is routed to the jurisdictional Registrar of Companies (ROC) for manual verification and scrutiny of the attached loan instruments. Once approved by the ROC, an official Certificate of Registration of Charge (Form CHG-2 for creation or Form CHG-3 for modification) is issued electronically.'
+      }
     ],
-    relatedForms: ['aoc-4'],
+    relatedForms: ['aoc-4', 'mgt-7', 'adt-1'],
     filedTogetherWith: [],
     contentSections: {
-      whatIsThisForm: '<p><strong>Form CHG-1</strong> is filed to register the creation or modification of a "Charge" (a lien, mortgage, or security interest) on the assets of a company. When a company takes a loan from a bank and pledges its property or assets as collateral, registering this charge via CHG-1 provides public notice of the bank\'s secured interest.</p>',
-      whoMustFile: '<p>Every company that secures a loan by pledging its tangible or intangible assets must file this form to protect the interests of the lending institution.</p>',
-      dueDateExplained: '<p>The form must be filed <strong>within 30 days</strong> from the date the loan agreement or instrument creating the charge was officially signed.</p>',
-      consequencesOfDelay: '<p>CHG-1 has one of the most punitive delay mechanics. Missing the 30-day window triggers an <strong>Ad Valorem fee</strong> (a percentage based on the loan amount, usually 0.05% capped at ₹5 Lakhs) on top of standard multiplier penalties. A delay beyond 120 days requires a complex Central Government condonation process.</p>',
-      workedExample: '<p><strong>Scenario:</strong> A company with ₹10 Lakhs capital delays a CHG-1 filing for a ₹1 Crore loan by 40 days.</p><ul><li>Normal Filing Fee: ₹400</li><li>Ad Valorem Additional Fee (0.05% of 1 Cr): ₹5,000</li><li><strong>Total Liability:</strong> <strong>₹5,400</strong></li></ul>'
+      whatIsThisForm: '<p><strong>Form CHG-1</strong> is a statutory application filed under Section 77 and Section 79 of the Companies Act, 2013 read with Rule 3 of the Companies (Registration of Charges) Rules, 2014 for the registration of <strong>creation or modification of a charge</strong> (other than debentures, which are filed in Form CHG-9).</p><p>Under Section 2(16) of the Act, a "charge" means an interest or lien created on the property or assets of a company or any of its undertakings or both as security, and includes a mortgage. When a company secures credit facilities, working capital, or term loans from banks, financial institutions, or NBFCs, registering the charge on the MCA21 portal creates a public notice of the lender\'s priority interest in the company\'s assets.</p>',
+      whoMustFile: '<p>Every company—including <strong>Private Limited, Public Limited, One Person Companies (OPC), and Section 8 companies</strong>—that creates a charge on its assets (tangible, intangible, movable, or immovable, situated in India or abroad) must file Form CHG-1.</p><p>Under <strong>Section 78</strong>, if the company fails to register the charge within the initial 30 days, the <strong>charge-holder (the lending bank or financial institution)</strong> has the statutory right to apply directly to the ROC for registration and recover the filing fees from the defaulting company.</p>',
+      dueDateExplained: '<p>For charges created or modified on or after <strong>2nd November 2018</strong>, Chapter VI enforces an aggressive, non-negotiable 3-tier statutory timeline:</p><ol><li><strong>Tier 1 — Statutory Window (Days 0 to 30 from Creation):</strong> Must be filed within 30 days from the date of execution of the charge instrument. Attracts only normal government filing fees under Table A (₹200 to ₹600).</li><li><strong>Tier 2 — First Extension Window (Days 31 to 60 from Creation / 1–30 Days Delay):</strong> The ROC may allow filing within an additional 30 days upon payment of prescribed additional fees (3× normal fee for Small/OPC; 6× normal fee for Other companies).</li><li><strong>Tier 3 — Second Extension Window (Days 61 to 90 from Creation / 31–60 Days Delay):</strong> The ROC may grant a further 30 days upon payment of 3×/6× normal fee PLUS an <strong>Ad Valorem fee</strong>: 0.025% of the charge amount for Small/OPC (capped at ₹1 Lakh) or 0.05% of the charge amount for Other companies (capped at ₹5 Lakhs).</li><li><strong>Tier 4 — Statutory Hard Stop (Beyond 90 Days):</strong> ROC has NO power to register the charge. Form CHG-1 is blocked on MCA V3. Requires formal Condonation of Delay from the Regional Director via Form CHG-8.</li></ol>',
+      consequencesOfDelay: '<p>Delay in filing Form CHG-1 carries severe commercial, legal, and financial penalties:</p><ul><li><strong>Ad Valorem Penalties up to ₹5 Lakhs:</strong> Missing the 60-day window triggers punitive ad valorem fees calculated on the sanctioned loan amount, leading to substantial cash outflows.</li><li><strong>Charge VOID Against Liquidator (Section 77(3)):</strong> In the event of liquidation, an unregistered charge is completely unenforceable against the official liquidator and other creditors. The bank is downgraded to an unsecured creditor, creating significant lender friction.</li><li><strong>Bank Freezes & Penal Interest:</strong> Lending banks routinely freeze credit facilities, refuse further disbursements, and levy 1% to 2% penal interest if the MCA Charge Certificate (CHG-2) is not submitted within 30 days of loan disbursement.</li><li><strong>Section 87 Condonation Costs:</strong> Crossing 90 days necessitates petitioning the Regional Director, incurring legal fees, court attendances, and hefty compounding penalties.</li></ul>',
+      workedExample: '<div class="space-y-4"><p><strong>Scenario 1: Small Company — ₹50 Lakh Loan Filed on Day 50 (Tier 2, 20 Days Delay)</strong></p><ul><li>Authorized Share Capital: ₹10 Lakhs &rarr; Normal Base Fee (Table A): <strong>₹400</strong></li><li>Delay Period: 20 days (Days 31 to 60 window) &rarr; Multiplier: <strong>3×</strong> Normal Fee</li><li>Additional Late Fee: 3 × ₹400 = <strong>₹1,200</strong></li><li>Ad Valorem Fee: <strong>₹0</strong> (Not applicable in Tier 2)</li><li><strong>Total MCA Challan:</strong> ₹400 + ₹1,200 = <strong>₹1,600</strong></li></ul><p><strong>Scenario 2: Public Company — ₹10 Crore Credit Facility Filed on Day 80 (Tier 3, 50 Days Delay)</strong></p><ul><li>Authorized Share Capital: ₹1 Crore &rarr; Normal Base Fee (Table A): <strong>₹600</strong></li><li>Delay Period: 50 days (Days 61 to 90 window) &rarr; Multiplier: <strong>6×</strong> Normal Fee</li><li>Extension Multiplier Fee: 6 × ₹600 = <strong>₹3,600</strong></li><li>Ad Valorem Calculation: 0.05% of ₹10,00,00,000 = ₹50,000 (Within ₹5,00,000 statutory cap)</li><li><strong>Total MCA Challan:</strong> ₹600 + ₹3,600 + ₹50,000 = <strong>₹54,200</strong></li></ul><p><strong>Scenario 3: Any Company — Filed on Day 105 (> 90 Days from Creation)</strong></p><ul><li>ROC jurisdiction barred under Section 77(1) proviso. Direct portal challan = <strong>₹0 (Blocked)</strong>.</li><li>Action: Company must file Form CHG-8 with Regional Director for Section 87 condonation.</li></ul></div>'
     }
   },
   {

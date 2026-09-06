@@ -48,6 +48,9 @@ import {
 } from "../lib/penaltyCalculator";
 
 import { generateMsmePdf } from "../lib/pdf/generateMsmePdf";
+import { generateAdt1Pdf } from "../lib/pdf/generateAdt1Pdf";
+import { generateChg1Pdf } from "../lib/pdf/generateChg1Pdf";
+import { mcaForms } from "../data/mca-forms";
 
 jest.mock('jspdf', () => {
   return jest.fn().mockImplementation(() => {
@@ -59,6 +62,9 @@ jest.mock('jspdf', () => {
       setFont: jest.fn(),
       setFontSize: jest.fn(),
       setTextColor: jest.fn(),
+      setDrawColor: jest.fn(),
+      setLineWidth: jest.fn(),
+      line: jest.fn(),
       text: jest.fn(),
       splitTextToSize: (text: string) => [text],
       setPage: jest.fn(),
@@ -1794,6 +1800,138 @@ describe("MSME PDF Generation Report Tests — [ESTIMATION & NON-AUDIT SCOPE]", 
         deliveryDate: "2023-01-15",
         actualPaymentDate: "2023-03-15",
         result
+      });
+    }).not.toThrow();
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECTION 20 — Form CHG-1 Master Engine & PDF Generator Tests
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("Form CHG-1 — Metadata, FAQ & PDF Suite", () => {
+  test("CHG-1 entry in mcaForms has valid slug, aliases, and 15+ statutory FAQs", () => {
+    const chg1 = mcaForms.find((f) => f.slug === "chg-1");
+    expect(chg1).toBeDefined();
+    expect(chg1!.aliases.length).toBeGreaterThanOrEqual(15);
+    expect(chg1!.faqItems.length).toBeGreaterThanOrEqual(15);
+    expect(chg1!.metaTitle).toContain("CHG-1");
+    expect(chg1!.metaDescription).toContain("ad valorem");
+    expect(chg1!.contentSections.whatIsThisForm).toContain("Section 77");
+    expect(chg1!.contentSections.dueDateExplained).toContain("3-tier");
+    expect(chg1!.concessionApplies).toBe(true);
+  });
+
+  test("generateChg1Pdf executes without error for timely filing", () => {
+    expect(() => {
+      generateChg1Pdf({
+        companyName: "Acme Power Projects Ltd",
+        nominalCapital: 1000000,
+        hasShareCapital: true,
+        isSmallOrOpc: false,
+        chargeNature: "creation",
+        chargeAmount: 50000000,
+        lenderName: "State Bank of India",
+        calcMode: "date",
+        creationDate: "01-Sep-2026",
+        statutoryDueDate: "01-Oct-2026",
+        firstExtensionDate: "31-Oct-2026",
+        finalRocExtensionDate: "30-Nov-2026",
+        actualFilingDate: "15-Sep-2026",
+        calculatedDelayDays: 0,
+        daysFromCreation: 14,
+        normalFee: 400,
+        multiplier: 0,
+        multiplierFee: 0,
+        adValoremPercent: 0,
+        adValoremFee: 0,
+        adValoremCapped: false,
+        maxAdValoremCap: 0,
+        totalFee: 400,
+        isCondonation: false,
+      });
+    }).not.toThrow();
+  });
+
+  test("generateChg1Pdf executes without error for Tier 3 Ad-Valorem scenario", () => {
+    expect(() => {
+      generateChg1Pdf({
+        companyName: "Nova Infra Private Limited",
+        nominalCapital: 10000000,
+        hasShareCapital: true,
+        isSmallOrOpc: false,
+        chargeNature: "creation",
+        chargeAmount: 100000000,
+        lenderName: "HDFC Bank Ltd",
+        calcMode: "date",
+        creationDate: "01-Jul-2026",
+        statutoryDueDate: "31-Jul-2026",
+        firstExtensionDate: "30-Aug-2026",
+        finalRocExtensionDate: "29-Sep-2026",
+        actualFilingDate: "15-Sep-2026",
+        calculatedDelayDays: 46,
+        daysFromCreation: 76,
+        normalFee: 600,
+        multiplier: 6,
+        multiplierFee: 3600,
+        adValoremPercent: 0.0005,
+        adValoremFee: 50000,
+        adValoremCapped: false,
+        maxAdValoremCap: 500000,
+        totalFee: 54200,
+        isCondonation: false,
+      });
+    }).not.toThrow();
+  });
+
+  test("generateChg1Pdf executes without error for Tier 4 Section 87 Condonation scenario", () => {
+    expect(() => {
+      generateChg1Pdf({
+        companyName: "Zenith Solar Tech OPC Pvt Ltd",
+        nominalCapital: 100000,
+        hasShareCapital: true,
+        isSmallOrOpc: true,
+        chargeNature: "modification",
+        chargeAmount: 2500000,
+        lenderName: "Punjab National Bank",
+        calcMode: "date",
+        creationDate: "01-Jan-2026",
+        statutoryDueDate: "31-Jan-2026",
+        firstExtensionDate: "02-Mar-2026",
+        finalRocExtensionDate: "01-Apr-2026",
+        actualFilingDate: "15-May-2026",
+        calculatedDelayDays: 104,
+        daysFromCreation: 134,
+        normalFee: 300,
+        multiplier: 0,
+        multiplierFee: 0,
+        adValoremPercent: 0,
+        adValoremFee: 0,
+        adValoremCapped: false,
+        maxAdValoremCap: 0,
+        totalFee: 0,
+        isCondonation: true,
+      });
+    }).not.toThrow();
+  });
+
+  test("generateAdt1Pdf executes without error", () => {
+    expect(() => {
+      generateAdt1Pdf({
+        companyName: "Acme Corp Ltd",
+        nominalCapital: 1000000,
+        hasShareCapital: true,
+        appointmentType: "agm",
+        calcMode: "date",
+        meetingDate: "30-Sep-2026",
+        statutoryDueDate: "15-Oct-2026",
+        actualFilingDate: "20-Oct-2026",
+        calculatedDelayDays: 5,
+        normalFee: 400,
+        multiplier: 1,
+        additionalFee: 400,
+        totalFee: 800,
+        isCondonation: false,
       });
     }).not.toThrow();
   });

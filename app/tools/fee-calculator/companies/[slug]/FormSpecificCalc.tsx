@@ -11,6 +11,7 @@ import {
 } from '@/lib/rule-engine/mgt7-engine'
 import { generateMgt7Pdf } from '@/lib/pdf/generateMgt7Pdf'
 import ADT1Workspace from './ADT1Workspace'
+import CHG1Workspace from './CHG1Workspace'
 
 interface ResultRow {
   component: string
@@ -47,6 +48,10 @@ function getMultiplier(delay: number): number {
 export default function FormSpecificCalc({ form }: { form: MCAForm }) {
   if (form.slug === 'adt-1') {
     return <ADT1Workspace form={form} />
+  }
+
+  if (form.slug === 'chg-1') {
+    return <CHG1Workspace form={form} />
   }
 
   const isMgt7Family = form.slug === 'mgt-7' || form.slug === 'mgt-7a'
