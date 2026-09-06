@@ -130,65 +130,87 @@ export default function UnifiedCalculator() {
   const handleDownloadPDF = async () => {
     const { default: jsPDF } = await import('jspdf')
     const { default: autoTable } = await import('jspdf-autotable')
+    const { renderDocumentHeader, cleanTableData, renderSafeDisclaimer, renderPageFooters } = await import('@/lib/pdf/pdfUtils')
     const doc = new jsPDF()
-    const pageWidth = doc.internal.pageSize.width
-    
-    // Header
-    doc.setFontSize(22)
-    doc.setFont("helvetica", "bold")
-    doc.setTextColor(15, 23, 42) // Slate-900
-    doc.text('CorpLawUpdates.in', 14, 22)
-    
-    doc.setFontSize(10)
-    doc.setFont("helvetica", "normal")
-    doc.setTextColor(100, 116, 139) // Slate-500
-    doc.text("India's Free Corporate Law Intelligence Platform", 14, 28)
-    
-    doc.setFontSize(12)
-    doc.setFont("helvetica", "bold")
-    doc.setTextColor(37, 99, 235) // Blue-600
-    doc.text('MCA Fee Calculation Estimate', 14, 40)
-    
-    // Metadata
-    doc.setFontSize(10)
-    doc.setFont("helvetica", "normal")
-    doc.setTextColor(15, 23, 42)
-    doc.text(`Date: ${new Date().toLocaleDateString()}`, pageWidth - 14, 40, { align: 'right' })
-    doc.text(`Form: ${selectedForm.formNumber} - ${selectedForm.formName}`, 14, 50)
-    doc.text(`Company Type: ${companyType.toUpperCase()}`, 14, 56)
-    doc.text(`Authorized Capital: INR ${capital.toLocaleString()}`, 14, 62)
-    doc.text(`Delay in Days: ${delay}`, 14, 68)
 
-    // Details table
-    const tableData: any[] = [
-      ['Normal Filing Fee', `INR ${result.baseFee.toLocaleString()}`],
-      ['Additional Fee (Late Penalty)', `INR ${result.lateFee.toLocaleString()}`],
+    // Safe Non-Colliding Header
+    const startY = renderDocumentHeader(doc, {
+      title: `MCA Fee Calculation Estimate: Form ${selectedForm.formNumber}`,
+      subtitle: selectedForm.formName,
+      dateLabel: 'Assessment Date'
+    })
+
+    // Metadata Table (Guarantees wrap and clean layout)
+    const metadataRows: [string, string][] = [
+      ['Form Number & Name', `Form ${selectedForm.formNumber} - ${selectedForm.formName}`],
+      ['Company Classification', companyType.toUpperCase()],
+      ['Authorized / Nominal Capital', `INR ${capital.toLocaleString('en-IN')}`],
+      ['Filing Delay Considered', `${delay} Day(s) Delay`],
     ]
-    if (result.stampDuty > 0) tableData.push(['Estimated Stamp Duty', `INR ${result.stampDuty.toLocaleString()}`])
-    if (result.adValoremFee > 0) tableData.push(['Ad Valorem Fee', `INR ${result.adValoremFee.toLocaleString()}`])
-    
-    tableData.push([{ content: 'Total Liability', styles: { fontStyle: 'bold' } }, { content: `INR ${result.total.toLocaleString()}`, styles: { fontStyle: 'bold' } }])
+    if (newCapital && newCapital > capital) {
+      metadataRows.push(['New Increased Capital', `INR ${newCapital.toLocaleString('en-IN')}`])
+    }
+    if (chargeAmount && chargeAmount > 0) {
+      metadataRows.push(['Charge Secured Amount', `INR ${chargeAmount.toLocaleString('en-IN')}`])
+    }
+    if (state) {
+      metadataRows.push(['Jurisdiction / State', state.toUpperCase()])
+    }
 
     autoTable(doc, {
-      startY: 75,
-      head: [['Fee Component', 'Amount']],
-      body: tableData,
+      startY: startY,
+      head: [['Assessment Parameter', 'Input Specification']],
+      body: cleanTableData(metadataRows),
+      theme: 'plain',
+      styles: { fontSize: 8, cellPadding: 2, textColor: [30, 41, 59] },
+      headStyles: { fontStyle: 'bold', fillColor: [241, 245, 249], textColor: [15, 23, 42] },
+      columnStyles: {
+        0: { cellWidth: 65, fontStyle: 'bold', textColor: [51, 65, 85] },
+        1: { cellWidth: 'auto' }
+      },
+      margin: { left: 14, right: 14 }
+    })
+
+    // Fee breakdown table
+    const afterMeta = (doc as any).lastAutoTable.finalY + 6
+    doc.setFontSize(10)
+    doc.setFont('helvetica', 'bold')
+    doc.setTextColor(15, 23, 42)
+    doc.text('MCA21 Portal Fee Payable Breakdown', 14, afterMeta)
+
+    const tableData: any[] = [
+      ['Normal Government Filing Fee', `INR ${result.baseFee.toLocaleString('en-IN')}`],
+      ['Additional Fee (Late Filing Penalty)', `INR ${result.lateFee.toLocaleString('en-IN')}`],
+    ]
+    if (result.stampDuty > 0) tableData.push(['Estimated Stamp Duty (State Surcharge)', `INR ${result.stampDuty.toLocaleString('en-IN')}`])
+    if (result.adValoremFee > 0) tableData.push(['Ad Valorem Fee (Section 77)', `INR ${result.adValoremFee.toLocaleString('en-IN')}`])
+    
+    tableData.push([
+      { content: 'TOTAL MCA21 PORTAL PAYABLE', styles: { fontStyle: 'bold', fillColor: [241, 245, 249] } },
+      { content: `INR ${result.total.toLocaleString('en-IN')}`, styles: { fontStyle: 'bold', fillColor: [241, 245, 249], textColor: [15, 23, 42] } }
+    ])
+
+    autoTable(doc, {
+      startY: afterMeta + 3,
+      head: [['Fee Component', 'Amount (INR)']],
+      body: cleanTableData(tableData),
       theme: 'grid',
-      headStyles: { fillColor: [37, 99, 235], textColor: [255, 255, 255], fontStyle: 'bold' },
-      bodyStyles: { textColor: [15, 23, 42] },
+      headStyles: { fillColor: [37, 99, 235], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 8.5 },
+      bodyStyles: { textColor: [15, 23, 42], fontSize: 8 },
       alternateRowStyles: { fillColor: [248, 250, 252] },
       columnStyles: {
         0: { cellWidth: 'auto' },
         1: { cellWidth: 50, halign: 'right' }
-      }
+      },
+      margin: { left: 14, right: 14 }
     })
 
-    // Disclaimer
-    const finalY = (doc as any).lastAutoTable.finalY || 120
-    doc.setFontSize(8)
-    doc.setTextColor(220, 38, 38) // Red-600
-    const disclaimer = "DISCLAIMER: This is an indicative estimate for planning purposes only. It does not constitute legal advice or an official fee challan. Actual fees are determined strictly at the time of filing on the MCA21 portal."
-    doc.text(doc.splitTextToSize(disclaimer, pageWidth - 28), 14, finalY + 15)
+    // Safe Disclaimer
+    const afterTable = (doc as any).lastAutoTable.finalY + 6
+    const disclaimer = "DISCLAIMER: This is an indicative estimate for planning purposes only based on the Companies (Registration Offices and Fees) Rules, 2014. It does not constitute legal advice or an official fee challan. Actual statutory fees are determined strictly at the time of filing on the MCA21 portal."
+    renderSafeDisclaimer(doc, disclaimer, afterTable, { fontSize: 7 })
+
+    renderPageFooters(doc, `Form ${selectedForm.formNumber} MCA Fee Estimate`)
 
     doc.save(`MCA_Fee_Estimate_${selectedForm.formNumber}.pdf`)
   }

@@ -1,5 +1,13 @@
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
+import {
+  cleanPdfText,
+  cleanTableData,
+  renderDocumentHeader,
+  renderSafeDisclaimer,
+  renderPageFooters,
+  PDF_PALETTE
+} from './pdfUtils'
 
 export interface Adt1PdfData {
   companyName?: string
@@ -20,56 +28,22 @@ export interface Adt1PdfData {
 
 export function generateAdt1Pdf(data: Adt1PdfData): jsPDF {
   const doc = new jsPDF()
-  const pageWidth = doc.internal.pageSize.width
-
-  // Executive Palette
-  const navy: [number, number, number] = [15, 23, 42]      // #0F172A
-  const blue: [number, number, number] = [37, 99, 235]     // #2563EB
-  const slate: [number, number, number] = [71, 85, 105]    // #475569
-  const gray: [number, number, number] = [100, 116, 139]   // #64748B
-  const red: [number, number, number] = [220, 38, 38]      // #DC2626
-  const green: [number, number, number] = [16, 185, 129]   // #10B981
 
   doc.setFont('helvetica')
 
-  // Top Header Banner
-  doc.setFontSize(18)
-  doc.setTextColor(navy[0], navy[1], navy[2])
-  doc.setFont('helvetica', 'bold')
-  doc.text('CorpLawUpdates.in', 14, 18)
-
-  doc.setFontSize(8)
-  doc.setTextColor(slate[0], slate[1], slate[2])
-  doc.setFont('helvetica', 'normal')
-  doc.text("India's Free Corporate Law Intelligence & Statutory Compliance Platform", 14, 23)
-
-  // Title & Timestamp
-  doc.setFontSize(11)
-  doc.setTextColor(blue[0], blue[1], blue[2])
-  doc.setFont('helvetica', 'bold')
-  doc.text('FORM ADT-1 — STATUTORY AUDITOR APPOINTMENT FEE & DELAY CERTIFICATE', 14, 32)
-
-  const printDate = new Date().toLocaleDateString('en-IN', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric'
+  // Top Header Banner with safe non-colliding title and date
+  const startY = renderDocumentHeader(doc, {
+    title: 'FORM ADT-1 - STATUTORY AUDITOR APPOINTMENT FEE & DELAY CERTIFICATE',
+    subtitle: 'Section 139 & Rule 4(2), Companies (Audit and Auditors) Rules, 2014',
+    dateLabel: 'Certificate Date'
   })
-  doc.setFontSize(8)
-  doc.setTextColor(gray[0], gray[1], gray[2])
-  doc.setFont('helvetica', 'normal')
-  doc.text(`Certificate Date: ${printDate}`, pageWidth - 14, 32, { align: 'right' })
-
-  // Divider line
-  doc.setDrawColor(203, 213, 225)
-  doc.setLineWidth(0.5)
-  doc.line(14, 36, pageWidth - 14, 36)
 
   // Appointment Type Label
-  let apptLabel = 'Annual General Meeting (AGM) — Section 139(1) [5-Year Term]'
+  let apptLabel = 'Annual General Meeting (AGM) - Section 139(1) [5-Year Term]'
   if (data.appointmentType === 'casual_vacancy') {
-    apptLabel = 'Casual Vacancy Appointment — Section 139(8) [Board / EGM]'
+    apptLabel = 'Casual Vacancy Appointment - Section 139(8) [Board / EGM]'
   } else if (data.appointmentType === 'first_auditor') {
-    apptLabel = 'First Auditor Appointment — Section 139(6) [Board Meeting]'
+    apptLabel = 'First Auditor Appointment - Section 139(6) [Board Meeting]'
   }
 
   // 1. Filing & Entity Parameters Table
@@ -82,37 +56,38 @@ export function generateAdt1Pdf(data: Adt1PdfData): jsPDF {
 
   if (data.calcMode === 'date') {
     parameterRows.push(
-      ['Meeting / Appointment Date', data.meetingDate || '—', 'Day 0 of statutory timeline computation'],
-      ['Statutory Due Date', data.statutoryDueDate || '—', 'Strict 15-day deadline pursuant to Rule 4(2)'],
-      ['Actual / Filing Date', data.actualFilingDate || '—', 'Benchmark date considered for delay computation']
+      ['Meeting / Appointment Date', data.meetingDate || '-', 'Day 0 of statutory timeline computation'],
+      ['Statutory Due Date', data.statutoryDueDate || '-', 'Strict 15-day deadline pursuant to Rule 4(2)'],
+      ['Actual / Filing Date', data.actualFilingDate || '-', 'Benchmark date considered for delay computation']
     )
   }
 
   parameterRows.push(
     ['Delay Assessment', data.calculatedDelayDays > 0 ? `${data.calculatedDelayDays} Day(s) Overdue` : 'COMPLIANT (Timely Filing)', data.calculatedDelayDays > 0 ? `Delay attracts ${data.multiplier}x Table B multiplier` : 'Filing within statutory 15-day window'],
-    ['MCA Approval Mode', 'Straight Through Process (STP) — Auto Approval', 'Auto-processed upon successful challan generation'],
+    ['MCA Approval Mode', 'Straight Through Process (STP) - Auto Approval', 'Auto-processed upon successful challan generation'],
     ['Section 403 Condonation Status', data.isCondonation ? 'CONDONATION REQUIRED (> 270 Days Delay)' : 'STANDARD E-FILING ELIGIBLE', data.isCondonation ? 'Requires prior Form CG-1 application to RD' : 'Direct upload on MCA V3 allowed']
   )
 
   autoTable(doc, {
-    startY: 40,
+    startY: startY,
     theme: 'grid',
     head: [['Compliance Parameter', 'Particulars', 'Statutory Basis & Notes']],
-    headStyles: { fillColor: navy, textColor: 255, fontStyle: 'bold', fontSize: 8 },
-    body: parameterRows,
-    styles: { fontSize: 7.5, cellPadding: 2, textColor: [30, 41, 59] },
+    headStyles: { fillColor: PDF_PALETTE.navy, textColor: 255, fontStyle: 'bold', fontSize: 7.5 },
+    body: cleanTableData(parameterRows),
+    styles: { fontSize: 7.2, cellPadding: 1.6, textColor: [30, 41, 59] },
     columnStyles: {
-      0: { fontStyle: 'bold', cellWidth: 50, fillColor: [248, 250, 252] },
-      1: { fontStyle: 'bold', cellWidth: 65 },
+      0: { fontStyle: 'bold', cellWidth: 52, fillColor: [248, 250, 252] },
+      1: { fontStyle: 'bold', cellWidth: 63 },
       2: { cellWidth: 67 }
-    }
+    },
+    margin: { left: 14, right: 14 }
   })
 
   // 2. MCA21 Portal Payable Breakdown Table
-  const finalYParams = (doc as any).lastAutoTable.finalY + 5
+  const finalYParams = (doc as any).lastAutoTable.finalY + 4
 
-  doc.setFontSize(10)
-  doc.setTextColor(navy[0], navy[1], navy[2])
+  doc.setFontSize(9.5)
+  doc.setTextColor(PDF_PALETTE.navy[0], PDF_PALETTE.navy[1], PDF_PALETTE.navy[2])
   doc.setFont('helvetica', 'bold')
   doc.text('1. MCA21 Portal Fee Payable (e-Challan Checkout)', 14, finalYParams)
 
@@ -125,7 +100,7 @@ export function generateAdt1Pdf(data: Adt1PdfData): jsPDF {
     [
       'Additional Filing Fee (Delay Multiplier)',
       data.calculatedDelayDays === 0
-        ? 'No delay — filed within 15-day statutory window (0x)'
+        ? 'No delay - filed within 15-day statutory window (0x)'
         : `Governed by Table B, Rule 12 (${data.calculatedDelayDays} days delay = ${data.multiplier}x Normal Fee)`,
       `INR ${data.additionalFee.toLocaleString('en-IN')}`
     ],
@@ -137,24 +112,25 @@ export function generateAdt1Pdf(data: Adt1PdfData): jsPDF {
   ]
 
   autoTable(doc, {
-    startY: finalYParams + 3,
+    startY: finalYParams + 2.5,
     theme: 'grid',
     head: [['Fee Component', 'Calculation Basis / Statutory Rule', 'Payable Amount']],
-    headStyles: { fillColor: blue, textColor: 255, fontStyle: 'bold', fontSize: 8 },
-    body: portalRows,
-    styles: { fontSize: 7.5, cellPadding: 2 },
+    headStyles: { fillColor: PDF_PALETTE.blue, textColor: 255, fontStyle: 'bold', fontSize: 7.5 },
+    body: cleanTableData(portalRows),
+    styles: { fontSize: 7.2, cellPadding: 1.8 },
     columnStyles: {
       0: { fontStyle: 'bold', cellWidth: 55 },
       1: { cellWidth: 85 },
       2: { fontStyle: 'bold', cellWidth: 42, halign: 'right' }
-    }
+    },
+    margin: { left: 14, right: 14 }
   })
 
   // 3. Statutory Compliance Guidelines & Checklist Table
-  const finalYPortal = (doc as any).lastAutoTable.finalY + 5
+  const finalYPortal = (doc as any).lastAutoTable.finalY + 4
 
-  doc.setFontSize(10)
-  doc.setTextColor(navy[0], navy[1], navy[2])
+  doc.setFontSize(9.5)
+  doc.setTextColor(PDF_PALETTE.navy[0], PDF_PALETTE.navy[1], PDF_PALETTE.navy[2])
   doc.setFont('helvetica', 'bold')
   doc.text('2. Regulatory Guidelines & Mandatory Attachments (MCA V3)', 14, finalYPortal)
 
@@ -193,29 +169,27 @@ export function generateAdt1Pdf(data: Adt1PdfData): jsPDF {
   }
 
   autoTable(doc, {
-    startY: finalYPortal + 3,
+    startY: finalYPortal + 2.5,
     theme: 'grid',
     head: [['Regulatory Provision / Document', 'Compliance Mandate & MCA V3 Verification']],
-    headStyles: { fillColor: navy, textColor: 255, fontStyle: 'bold', fontSize: 8 },
-    body: complianceRows,
-    styles: { fontSize: 7, cellPadding: 2 },
+    headStyles: { fillColor: PDF_PALETTE.navy, textColor: 255, fontStyle: 'bold', fontSize: 7.5 },
+    body: cleanTableData(complianceRows),
+    styles: { fontSize: 6.8, cellPadding: 1.5 },
     columnStyles: {
-      0: { fontStyle: 'bold', cellWidth: 62 },
-      1: { cellWidth: 120 }
-    }
+      0: { fontStyle: 'bold', cellWidth: 58 },
+      1: { cellWidth: 124 }
+    },
+    margin: { left: 14, right: 14 }
   })
 
   // Mandatory Statutory Disclaimer
-  const finalYComp = (doc as any).lastAutoTable.finalY + 5
-  doc.setFontSize(6.8)
-  doc.setTextColor(gray[0], gray[1], gray[2])
-  doc.setFont('helvetica', 'normal')
-
+  const finalYComp = (doc as any).lastAutoTable.finalY + 4
   const disclaimer =
-    "LEGAL DISCLAIMER & STATUTORY NOTICE: This calculation memorandum is automatically generated by CorpLawUpdates.in for professional reference and fee estimation based on user inputs and Table B of the Companies (Registration Offices and Fees) Rules, 2014. Form ADT-1 does NOT attract ₹100/day penalties (which apply exclusively to AOC-4 & MGT-7). MCA portal records and generated challans represent the final authority. For delays beyond 270 days, prior condonation of delay under Section 403(1) is mandatory."
+    "LEGAL DISCLAIMER & STATUTORY NOTICE: This calculation memorandum is automatically generated by CorpLawUpdates.in for professional reference and fee estimation based on user inputs and Table B of the Companies (Registration Offices and Fees) Rules, 2014. Form ADT-1 does NOT attract INR 100/day penalties (which apply exclusively to AOC-4 & MGT-7). MCA portal records and generated challans represent the final authority. For delays beyond 270 days, prior condonation of delay under Section 403(1) is mandatory."
 
-  const splitDisclaimer = doc.splitTextToSize(disclaimer, pageWidth - 28)
-  doc.text(splitDisclaimer, 14, finalYComp)
+  renderSafeDisclaimer(doc, disclaimer, finalYComp, { fontSize: 6.5 })
+
+  renderPageFooters(doc, 'Form ADT-1 Statutory Compliance Memorandum')
 
   return doc
 }

@@ -1,29 +1,38 @@
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
+import {
+  cleanPdfText,
+  cleanTableData,
+  renderDocumentHeader,
+  renderSafeDisclaimer,
+  renderPageFooters,
+  PDF_PALETTE
+} from './pdfUtils'
 
 export interface Chg1PdfData {
   companyName?: string
+  lenderName?: string
   nominalCapital: number
   hasShareCapital: boolean
   isSmallOrOpc: boolean
   chargeNature: 'creation' | 'modification' | 'foreign_property'
   chargeAmount: number
-  lenderName?: string
   calcMode: 'date' | 'days'
   creationDate?: string
   statutoryDueDate?: string | null
   firstExtensionDate?: string | null
   finalRocExtensionDate?: string | null
   actualFilingDate?: string
+  daysFromCreation?: number
   calculatedDelayDays: number
-  daysFromCreation: number
   normalFee: number
   multiplier: number
-  multiplierFee: number
-  adValoremPercent: number
+  multiplierFee?: number
+  additionalFee?: number
+  adValoremPercent?: number
   adValoremFee: number
-  adValoremCapped: boolean
-  maxAdValoremCap: number
+  adValoremCapped?: boolean
+  maxAdValoremCap?: number
   totalFee: number
   isCondonation: boolean
 }
@@ -31,47 +40,16 @@ export interface Chg1PdfData {
 export function generateChg1Pdf(data: Chg1PdfData): jsPDF {
   const doc = new jsPDF()
   const pageWidth = doc.internal.pageSize.width
-
-  // Corporate Executive Color Palette
-  const navy: [number, number, number] = [15, 23, 42]      // #0F172A
-  const blue: [number, number, number] = [37, 99, 235]     // #2563EB
-  const slate: [number, number, number] = [71, 85, 105]    // #475569
-  const gray: [number, number, number] = [100, 116, 139]   // #64748B
-  const red: [number, number, number] = [220, 38, 38]      // #DC2626
+  const pageHeight = doc.internal.pageSize.height
 
   doc.setFont('helvetica')
 
-  // ── Header Banner ──
-  doc.setFontSize(18)
-  doc.setTextColor(navy[0], navy[1], navy[2])
-  doc.setFont('helvetica', 'bold')
-  doc.text('CorpLawUpdates.in', 14, 18)
-
-  doc.setFontSize(8)
-  doc.setTextColor(slate[0], slate[1], slate[2])
-  doc.setFont('helvetica', 'normal')
-  doc.text("India's Free Corporate Law Intelligence & Statutory Compliance Platform", 14, 23)
-
-  // ── Document Title ──
-  doc.setFontSize(11)
-  doc.setTextColor(blue[0], blue[1], blue[2])
-  doc.setFont('helvetica', 'bold')
-  doc.text('FORM CHG-1 — STATUTORY CHARGE REGISTRATION & FEE MEMORANDUM', 14, 32)
-
-  const printDate = new Date().toLocaleDateString('en-IN', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric'
+  // Top Header Banner with safe non-colliding title and date
+  const startY = renderDocumentHeader(doc, {
+    title: 'FORM CHG-1 - STATUTORY CHARGE REGISTRATION & FEE MEMORANDUM',
+    subtitle: 'Chapter VI (Sections 77, 78 & 79), Companies Act, 2013 & Registration Rules',
+    dateLabel: 'Certificate Date'
   })
-  doc.setFontSize(8)
-  doc.setTextColor(gray[0], gray[1], gray[2])
-  doc.setFont('helvetica', 'normal')
-  doc.text(`Certificate Date: ${printDate}`, pageWidth - 14, 32, { align: 'right' })
-
-  // Divider line
-  doc.setDrawColor(203, 213, 225)
-  doc.setLineWidth(0.5)
-  doc.line(14, 36, pageWidth - 14, 36)
 
   // Charge Nature Label
   let natureLabel = 'Creation of Charge (Section 77)'
@@ -81,7 +59,7 @@ export function generateChg1Pdf(data: Chg1PdfData): jsPDF {
     natureLabel = 'Charge on Foreign Property / Assets outside India (Section 77 Proviso)'
   }
 
-  // ── 1. Entity & Secured Facility Parameters Table ──
+  // 1. Entity & Secured Facility Parameters Table
   const parameterRows: any[] = [
     ['Form Number & Title', 'Form CHG-1 (Application for registration of creation/modification of charge)', 'Section 77, 78 & 79 read with Rule 3, 4 & 12'],
     ['Company Name', data.companyName ? data.companyName.toUpperCase() : 'Not Specified (Generic Assessment)', 'Borrower / Chargor entity registered on MCA21 portal'],
@@ -94,52 +72,53 @@ export function generateChg1Pdf(data: Chg1PdfData): jsPDF {
 
   if (data.calcMode === 'date') {
     parameterRows.push(
-      ['Date of Charge Creation', data.creationDate || '—', 'Day 0 of Chapter VI statutory timeline'],
-      ['Initial Due Date (30 Days)', data.statutoryDueDate || '—', 'Normal fee window under Section 77(1)'],
-      ['ROC Final Cutoff (120 Days)', data.finalRocExtensionDate || '—', 'Absolute statutory limit for ROC registration without RD order'],
-      ['Actual / Planned Filing Date', data.actualFilingDate || '—', 'Benchmark date considered for fee computation']
+      ['Date of Charge Creation', data.creationDate || '-', 'Day 0 of Chapter VI statutory timeline'],
+      ['Initial Due Date (30 Days)', data.statutoryDueDate || '-', 'Normal fee window under Section 77(1)'],
+      ['ROC Final Cutoff (120 Days)', data.finalRocExtensionDate || '-', 'Absolute statutory limit for ROC registration without RD order'],
+      ['Actual / Planned Filing Date', data.actualFilingDate || '-', 'Benchmark date considered for fee computation']
     )
   }
 
-  let delayStatusText = 'COMPLIANT — On-Time Filing (Within 30-Day Window)'
+  let delayStatusText = 'COMPLIANT - On-Time Filing (Within 30-Day Window)'
   let delaySubtext = 'Eligible for base filing fee only'
   if (data.isCondonation) {
-    delayStatusText = 'HARD STOP — SECTION 87 CONDONATION REQUIRED'
+    delayStatusText = 'HARD STOP - SECTION 87 CONDONATION REQUIRED'
     delaySubtext = 'Exceeds 120 days from creation (delay > 90 days). ROC direct filing barred. Requires Form CHG-8 to RD.'
   } else if (data.calculatedDelayDays > 30) {
-    delayStatusText = `DELAYED by ${data.calculatedDelayDays} day(s) (Days 61–120 Window)`
-    delaySubtext = `Attracts ${data.multiplier}x normal fee + ${(data.adValoremPercent * 100).toFixed(3)}% ad-valorem fee`
+    delayStatusText = `DELAYED by ${data.calculatedDelayDays} day(s) (Days 61-120 Window)`
+    delaySubtext = `Attracts maximum Table B multiplier (${data.multiplier}x) PLUS Ad-Valorem statutory fee`
   } else if (data.calculatedDelayDays > 0) {
-    delayStatusText = `DELAYED by ${data.calculatedDelayDays} day(s) (Days 31–60 Window)`
-    delaySubtext = `Attracts ${data.multiplier}x normal fee (First extension window)`
+    delayStatusText = `DELAYED by ${data.calculatedDelayDays} day(s) (Days 31-60 Window)`
+    delaySubtext = `Attracts Table B delay multiplier (${data.multiplier}x base fee)`
   }
 
   parameterRows.push(
-    ['Delay & Window Status', delayStatusText, delaySubtext],
-    ['Statutory Filing Route', data.isCondonation ? 'Section 87 Regional Director Condonation' : 'Standard ROC Electronic Filing (Approval by ROC)', data.isCondonation ? 'Requires RD order via Form CHG-8 before CHG-1' : 'Processed by ROC after scrutiny of instruments']
+    ['Delay Assessment', delayStatusText, delaySubtext],
+    ['Condonation Status', data.isCondonation ? 'MANDATORY (Form CHG-8 to RD)' : 'NOT REQUIRED (Within ROC Jurisdiction)', data.isCondonation ? 'Form INC-28 required post-order before CHG-1 upload' : 'Direct upload eligible on MCA V3 portal']
   )
 
   autoTable(doc, {
-    startY: 40,
+    startY: startY,
     theme: 'grid',
-    head: [['Compliance Parameter', 'Particulars', 'Statutory Basis & Notes']],
-    headStyles: { fillColor: navy, textColor: 255, fontStyle: 'bold', fontSize: 8 },
-    body: parameterRows,
-    styles: { fontSize: 7.2, cellPadding: 1.8, textColor: [30, 41, 59] },
+    head: [['Compliance Parameter', 'Particulars', 'Statutory Basis & Legal Rules']],
+    headStyles: { fillColor: PDF_PALETTE.navy, textColor: 255, fontStyle: 'bold', fontSize: 7.5 },
+    body: cleanTableData(parameterRows),
+    styles: { fontSize: 7, cellPadding: 1.5, textColor: [30, 41, 59] },
     columnStyles: {
       0: { fontStyle: 'bold', cellWidth: 50, fillColor: [248, 250, 252] },
-      1: { fontStyle: 'bold', cellWidth: 68 },
-      2: { cellWidth: 64 }
-    }
+      1: { fontStyle: 'bold', cellWidth: 63 },
+      2: { cellWidth: 69 }
+    },
+    margin: { left: 14, right: 14 }
   })
 
-  // ── 2. MCA21 Portal Challan Fee Computation Table ──
+  // 2. MCA21 Portal Payable Breakdown Table
   const finalYParams = (doc as any).lastAutoTable.finalY + 4
 
-  doc.setFontSize(10)
-  doc.setTextColor(navy[0], navy[1], navy[2])
+  doc.setFontSize(9.5)
+  doc.setTextColor(PDF_PALETTE.navy[0], PDF_PALETTE.navy[1], PDF_PALETTE.navy[2])
   doc.setFont('helvetica', 'bold')
-  doc.text('1. MCA21 Portal Fee Payable (e-Challan Checkout)', 14, finalYParams)
+  doc.text('1. MCA21 Portal Fee Payable Breakdown (e-Challan Checkout)', 14, finalYParams)
 
   let portalRows: any[] = []
 
@@ -152,72 +131,84 @@ export function generateChg1Pdf(data: Chg1PdfData): jsPDF {
       ],
       [
         'ROC Additional & Ad-Valorem Fees',
-        'Section 77(1) second proviso — ROC cannot compute or accept fees directly after 90 days',
+        'Section 77(1) second proviso - ROC cannot compute or accept fees directly after 90 days',
         'Direct Payment Blocked'
       ],
       [
-        { content: 'SECTION 87 CONDONATION REQUIRED', styles: { fontStyle: 'bold', fillColor: [254, 242, 242], textColor: red } },
-        { content: 'Form CHG-8 must be filed with Regional Director along with petition & affidavit', styles: { fontStyle: 'italic', fillColor: [254, 242, 242], textColor: red } },
-        { content: 'Subject to RD Penalty', styles: { fontStyle: 'bold', fillColor: [254, 242, 242], textColor: red } }
+        { content: 'SECTION 87 CONDONATION REQUIRED', styles: { fontStyle: 'bold', fillColor: [254, 242, 242], textColor: PDF_PALETTE.red } },
+        { content: 'Form CHG-8 must be filed with Regional Director along with petition & affidavit', styles: { fontStyle: 'italic', fillColor: [254, 242, 242], textColor: PDF_PALETTE.red } },
+        { content: 'Subject to RD Penalty', styles: { fontStyle: 'bold', fillColor: [254, 242, 242], textColor: PDF_PALETTE.red } }
       ]
     ]
   } else {
+    const additionalAmount = data.additionalFee ?? data.multiplierFee ?? 0
     portalRows = [
       [
-        'Normal Government Filing Fee',
+        '1. Normal Government Filing Fee',
         data.hasShareCapital
-          ? `Governed by Table A, Item 5 (Capital: INR ${data.nominalCapital.toLocaleString('en-IN')})`
-          : 'Governed by Table A, Item 6 (Company without Share Capital)',
+          ? `Table A, Item 5 (Authorized Capital: INR ${data.nominalCapital.toLocaleString('en-IN')})`
+          : 'Table A, Item 6 (Without Share Capital)',
         `INR ${data.normalFee.toLocaleString('en-IN')}`
       ],
       [
-        'Additional Filing Fee (Extension Multiplier)',
+        `2. Additional Fee (${data.multiplier}x Multiplier)`,
         data.calculatedDelayDays === 0
-          ? 'Filed within initial 30 days of creation — No delay fee'
-          : `Section 77(1) first/second proviso (${data.multiplier}x Normal Fee for ${data.isSmallOrOpc ? 'Small/OPC' : 'Other'})`,
-        `INR ${data.multiplierFee.toLocaleString('en-IN')}`
-      ],
-      [
-        'Ad Valorem Additional Fee',
-        data.calculatedDelayDays <= 30
-          ? 'Not applicable for filings within 60 days of charge creation'
-          : `Section 77(1) second proviso (${(data.adValoremPercent * 100).toFixed(3)}% of INR ${data.chargeAmount.toLocaleString('en-IN')}${data.adValoremCapped ? ` [Capped at INR ${data.maxAdValoremCap.toLocaleString('en-IN')}]` : ''})`,
-        `INR ${data.adValoremFee.toLocaleString('en-IN')}`
-      ],
-      [
-        { content: 'TOTAL MCA21 CHALLAN PAYABLE', styles: { fontStyle: 'bold', fillColor: [241, 245, 249] } },
-        { content: 'Payable online via Bharatkosh / MCA21 Gateway upon e-form submission', styles: { fontStyle: 'italic', fillColor: [241, 245, 249] } },
-        { content: `INR ${data.totalFee.toLocaleString('en-IN')}`, styles: { fontStyle: 'bold', fillColor: [241, 245, 249], textColor: [15, 23, 42] } }
+          ? 'Filed within initial 30 days of creation - No delay fee'
+          : `Table B, Rule 12 (${data.isSmallOrOpc ? 'Small/OPC: 3x' : 'Other: 6x'} base fee for delay beyond 30 days)`,
+        `INR ${additionalAmount.toLocaleString('en-IN')}`
       ]
     ]
+
+    if (data.adValoremFee > 0) {
+      portalRows.push([
+        '3. Ad-Valorem Fee (Section 77 Proviso)',
+        data.isSmallOrOpc
+          ? `0.025% of charge amount (INR ${data.chargeAmount.toLocaleString('en-IN')}), capped at INR 1,00,000`
+          : `0.05% of charge amount (INR ${data.chargeAmount.toLocaleString('en-IN')}), capped at INR 5,00,000`,
+        `INR ${data.adValoremFee.toLocaleString('en-IN')}`
+      ])
+    }
+
+    portalRows.push([
+      { content: 'TOTAL MCA21 CHALLAN PAYABLE', styles: { fontStyle: 'bold', fillColor: [241, 245, 249] } },
+      {
+        content: 'Payable online via Bharatkosh / MCA21 Gateway upon form submission',
+        styles: { fontStyle: 'italic', fillColor: [241, 245, 249] }
+      },
+      {
+        content: `INR ${data.totalFee.toLocaleString('en-IN')}`,
+        styles: { fontStyle: 'bold', fillColor: [241, 245, 249], textColor: [15, 23, 42] }
+      }
+    ])
   }
 
   autoTable(doc, {
-    startY: finalYParams + 3,
+    startY: finalYParams + 2.5,
     theme: 'grid',
-    head: [['Fee Component', 'Statutory Authority & Basis', 'Amount (INR)']],
-    headStyles: { fillColor: navy, textColor: 255, fontStyle: 'bold', fontSize: 8 },
-    body: portalRows,
-    styles: { fontSize: 7.2, cellPadding: 1.8, textColor: [30, 41, 59] },
+    head: [['Fee Component', 'Calculation Basis / Statutory Rule', 'Payable Amount']],
+    headStyles: { fillColor: PDF_PALETTE.blue, textColor: 255, fontStyle: 'bold', fontSize: 7.5 },
+    body: cleanTableData(portalRows),
+    styles: { fontSize: 7, cellPadding: 1.6, textColor: [30, 41, 59] },
     columnStyles: {
       0: { fontStyle: 'bold', cellWidth: 55, fillColor: [248, 250, 252] },
       1: { cellWidth: 88 },
       2: { fontStyle: 'bold', cellWidth: 39, halign: 'right' }
-    }
+    },
+    margin: { left: 14, right: 14 }
   })
 
-  // ── 3. Regulatory Guidelines & MCA V3 Checklist ──
+  // 3. Regulatory Guidelines & MCA V3 Checklist
   const finalYChecklist = (doc as any).lastAutoTable.finalY + 4
 
-  doc.setFontSize(10)
-  doc.setTextColor(navy[0], navy[1], navy[2])
+  doc.setFontSize(9.5)
+  doc.setTextColor(PDF_PALETTE.navy[0], PDF_PALETTE.navy[1], PDF_PALETTE.navy[2])
   doc.setFont('helvetica', 'bold')
   doc.text('2. Regulatory Roadmap & MCA V3 Filing Safeguards', 14, finalYChecklist)
 
   const guidanceRows: any[] = [
     [
       'Section 77 Timeline Framework',
-      'Charges created on/after 02.11.2018 have a strict 3-tier timeline: (1) Days 0–30: Normal fee; (2) Days 31–60: 3x/6x fee; (3) Days 61–120: 3x/6x + Ad Valorem (0.025%/0.05% capped at 1L/5L). Beyond 120 days (delay > 90 days), ROC has NO jurisdiction to register.'
+      'Charges created on/after 02.11.2018 have a strict 3-tier timeline: (1) Days 0-30: Normal fee; (2) Days 31-60: 3x/6x fee; (3) Days 61-120: 3x/6x + Ad Valorem (0.025%/0.05% capped at 1L/5L). Beyond 120 days (delay > 90 days), ROC has NO jurisdiction to register.'
     ],
     [
       'Section 87 Condonation Warning',
@@ -231,51 +222,59 @@ export function generateChg1Pdf(data: Chg1PdfData): jsPDF {
     ],
     [
       'Mandatory PDF Attachments Checklist',
-      '1. Sanction Letter from Bank/NBFC; 2. Instrument creating/modifying charge (Deed of Hypothecation / Mortgage Deed / Indenture); 3. Certified Board Resolution (Section 179(3)(d)); 4. Special Resolution under Section 180(1)(a)/(c) if borrowing limits are exceeded; 5. NOC from existing charge-holders in case of consortium/pari-passu charge.'
+      '1. Sanction Letter from Bank/NBFC; 2. Instrument creating/modifying charge (Deed of Hypothecation / Mortgage Deed); 3. Certified Board Resolution (Section 179(3)(d)); 4. Special Resolution under Section 180(1)(a)/(c) if borrowing limits are exceeded; 5. NOC from existing charge-holders in case of consortium charge.'
     ]
   ]
 
   autoTable(doc, {
-    startY: finalYChecklist + 3,
+    startY: finalYChecklist + 2.5,
     theme: 'grid',
     head: [['Compliance Domain', 'Statutory Provision & Procedural Direction']],
-    headStyles: { fillColor: navy, textColor: 255, fontStyle: 'bold', fontSize: 8 },
-    body: guidanceRows,
-    styles: { fontSize: 7, cellPadding: 1.6, textColor: [30, 41, 59] },
+    headStyles: { fillColor: PDF_PALETTE.navy, textColor: 255, fontStyle: 'bold', fontSize: 7.5 },
+    body: cleanTableData(guidanceRows),
+    styles: { fontSize: 6.8, cellPadding: 1.5, textColor: [30, 41, 59] },
     columnStyles: {
-      0: { fontStyle: 'bold', cellWidth: 50, fillColor: [248, 250, 252] },
-      1: { cellWidth: 132 }
-    }
+      0: { fontStyle: 'bold', cellWidth: 48, fillColor: [248, 250, 252] },
+      1: { cellWidth: 134 }
+    },
+    margin: { left: 14, right: 14 }
   })
 
-  // ── 4. Professional Sign-off & Verification ──
-  const finalYSign = (doc as any).lastAutoTable.finalY + 8
+  // 4. Professional Sign-off & Verification (Safe Page Budget Check)
+  const lastTableY = (doc as any).lastAutoTable.finalY
+  let finalYSign = lastTableY + 6
+
+  // If remaining height is less than 35mm, move sign-off and disclaimer cleanly to page 2
+  if (finalYSign + 35 > pageHeight - 12) {
+    doc.addPage()
+    finalYSign = 18
+  }
 
   doc.setFontSize(7.5)
-  doc.setTextColor(gray[0], gray[1], gray[2])
+  doc.setTextColor(PDF_PALETTE.gray[0], PDF_PALETTE.gray[1], PDF_PALETTE.gray[2])
   doc.text('Prepared & Verified by:', 14, finalYSign)
   doc.text('Approved for Filing by:', pageWidth - 70, finalYSign)
 
-  doc.setDrawColor(203, 213, 225)
-  doc.line(14, finalYSign + 11, 75, finalYSign + 11)
-  doc.line(pageWidth - 70, finalYSign + 11, pageWidth - 14, finalYSign + 11)
+  doc.setDrawColor(PDF_PALETTE.lightGray[0], PDF_PALETTE.lightGray[1], PDF_PALETTE.lightGray[2])
+  doc.line(14, finalYSign + 10, 75, finalYSign + 10)
+  doc.line(pageWidth - 70, finalYSign + 10, pageWidth - 14, finalYSign + 10)
 
   doc.setFontSize(7)
-  doc.setTextColor(navy[0], navy[1], navy[2])
+  doc.setTextColor(PDF_PALETTE.navy[0], PDF_PALETTE.navy[1], PDF_PALETTE.navy[2])
   doc.setFont('helvetica', 'bold')
-  doc.text('Practicing CS / CA / Cost Accountant', 14, finalYSign + 15)
-  doc.text('Authorized Director / MD / Secretary', pageWidth - 70, finalYSign + 15)
+  doc.text('Practicing CS / CA / Cost Accountant', 14, finalYSign + 14)
+  doc.text('Authorized Director / MD / Secretary', pageWidth - 70, finalYSign + 14)
 
   doc.setFont('helvetica', 'normal')
-  doc.setTextColor(gray[0], gray[1], gray[2])
-  doc.text('Membership / COP Number: _______________', 14, finalYSign + 19)
-  doc.text('DIN / PAN Number: _______________', pageWidth - 70, finalYSign + 19)
+  doc.setTextColor(PDF_PALETTE.gray[0], PDF_PALETTE.gray[1], PDF_PALETTE.gray[2])
+  doc.text('Membership / COP Number: _______________', 14, finalYSign + 18)
+  doc.text('DIN / PAN Number: _______________', pageWidth - 70, finalYSign + 18)
 
-  // ── 5. Statutory Disclaimer ──
-  doc.setFontSize(6.5)
-  doc.setTextColor(gray[0], gray[1], gray[2])
+  // 5. Statutory Disclaimer
   const disclaimer = 'STATUTORY NOTICE: This memorandum is generated for professional estimation purposes based on Section 77 & 78 of the Companies Act, 2013 and the Companies (Registration Offices and Fees) Rules, 2014. Form CHG-1 does not attract standard daily late fees; it is strictly governed by the 30-60-90 day ad-valorem structure. MCA portal records and generated challans remain the final statutory authority.'
-  doc.text(doc.splitTextToSize(disclaimer, pageWidth - 28), 14, finalYSign + 25)
+  renderSafeDisclaimer(doc, disclaimer, finalYSign + 23, { fontSize: 6.5 })
+
+  renderPageFooters(doc, 'Form CHG-1 Charge Registration Assessment Memorandum')
 
   return doc
 }

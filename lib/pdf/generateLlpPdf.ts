@@ -1,34 +1,17 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { LlpCalculationResult, LlpFeeParams } from '../penaltyCalculator';
+import {
+  cleanPdfText,
+  cleanTableData,
+  renderDocumentHeader,
+  renderPageFooters,
+  PDF_PALETTE
+} from './pdfUtils';
 
 export interface LlpPdfPayload {
   params: LlpFeeParams;
   result: LlpCalculationResult;
-}
-
-/**
- * Clean text for standard jsPDF helvetica font (ASCII-safe encoding).
- * Converts Unicode symbols (Rupee, inequality, arrows, dashes) to clean ASCII text.
- */
-function cleanPdfText(text: string | null | undefined): string {
-  if (!text) return '';
-  return text
-    .replace(/₹/g, 'Rs. ')
-    .replace(/≤/g, '<= ')
-    .replace(/≥/g, '>= ')
-    .replace(/→/g, ' -> ')
-    .replace(/←/g, ' <- ')
-    .replace(/—/g, ' - ')
-    .replace(/–/g, ' - ')
-    .replace(/−/g, '-')
-    .replace(/[“”]/g, '"')
-    .replace(/[‘’]/g, "'")
-    .replace(/×/g, 'x')
-    .replace(/✓/g, '[Y]')
-    .replace(/•/g, '-')
-    .replace(/\s+/g, ' ')
-    .trim();
 }
 
 export function generateLlpPdf(data: LlpPdfPayload) {
@@ -36,51 +19,36 @@ export function generateLlpPdf(data: LlpPdfPayload) {
   const pageWidth = doc.internal.pageSize.width;
 
   // Palette
-  const navy: [number, number, number] = [15, 23, 42];
-  const teal: [number, number, number] = [13, 148, 136];
-  const gray: [number, number, number] = [100, 116, 139];
-  const darkGray: [number, number, number] = [51, 65, 85];
-  const amber: [number, number, number] = [217, 119, 6];
+  const navy = PDF_PALETTE.navy;
+  const teal = PDF_PALETTE.teal;
+  const gray = PDF_PALETTE.gray;
+  const darkGray = [51, 65, 85] as [number, number, number];
+  const amber = PDF_PALETTE.amber;
 
   doc.setFont('helvetica');
 
-  // Header
-  doc.setFontSize(20);
-  doc.setTextColor(navy[0], navy[1], navy[2]);
-  doc.setFont('helvetica', 'bold');
-  doc.text('CorpLawUpdates.in', 14, 18);
-
-  doc.setFontSize(8.5);
-  doc.setTextColor(gray[0], gray[1], gray[2]);
-  doc.setFont('helvetica', 'normal');
-  doc.text('CORPORATE & LLP COMPLIANCE INTELLIGENCE', 14, 23);
-
-  // Document Title
-  doc.setFontSize(14);
-  doc.setTextColor(teal[0], teal[1], teal[2]);
-  doc.setFont('helvetica', 'bold');
-  doc.text('LLP Filing Fee & Statutory Penalty Calculation Report', 14, 34);
-
-  doc.setFontSize(8.5);
-  doc.setTextColor(gray[0], gray[1], gray[2]);
-  doc.setFont('helvetica', 'normal');
-  doc.text('Calculator-generated estimate under the Limited Liability Partnership Act, 2008 & LLP Rules, 2009', 14, 39);
-  doc.text(`Generated: ${new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}`, pageWidth - 14, 39, { align: 'right' });
+  // Top Header Banner with safe non-colliding title and date
+  let startY = renderDocumentHeader(doc, {
+    title: 'LLP Filing Fee & Statutory Penalty Calculation Report',
+    subtitle: 'Limited Liability Partnership Act, 2008 & LLP Rules, 2009 (Rule 12 & Annexure A)',
+    dateLabel: 'Generated',
+    titleColor: teal
+  });
 
   // General Disclaimer Banner
-  doc.setFontSize(7.5);
+  doc.setFontSize(7.2);
   doc.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
   doc.setFont('helvetica', 'italic');
   const disclaimerLines = doc.splitTextToSize(
     'This report is generated automatically by the CorpLawUpdates.in calculator based on user-entered parameters. It is provided for informational and estimation purposes only and does not constitute an audit, legal opinion, certification, or statutory adjudication. Actual filing fees are calculated by the MCA21 portal at the time of form upload. Statutory adjudication penalties require formal proceedings under Section 76A.',
     pageWidth - 28
   );
-  doc.text(disclaimerLines, 14, 46);
+  doc.text(disclaimerLines, 14, startY);
 
-  let startY = 46 + (disclaimerLines.length * 3.5) + 3;
+  startY += (disclaimerLines.length * 3.5) + 3.5;
 
   // Section 1: Entity & Filing Overview
-  doc.setFontSize(10.5);
+  doc.setFontSize(9.5);
   doc.setTextColor(navy[0], navy[1], navy[2]);
   doc.setFont('helvetica', 'bold');
   doc.text('1. Entity & Filing Overview', 14, startY);
@@ -88,12 +56,12 @@ export function generateLlpPdf(data: LlpPdfPayload) {
   const overviewRows = [
     ['Filing Form:', cleanPdfText(data.result.formName)],
     ['Statutory Authority:', cleanPdfText(data.result.statutoryAuthority)],
-    ['Total Contribution:', `Rs. ${data.params.contribution.toLocaleString('en-IN')}`],
+    ['Total Contribution:', `INR ${data.params.contribution.toLocaleString('en-IN')}`],
     ['Small LLP Assessment:', cleanPdfText(data.result.smallLlpAssessmentBasis)],
   ];
 
   if (data.params.turnover !== undefined && data.params.turnover !== null) {
-    overviewRows.push(['Preceding FY Turnover:', `Rs. ${data.params.turnover.toLocaleString('en-IN')}`]);
+    overviewRows.push(['Preceding FY Turnover:', `INR ${data.params.turnover.toLocaleString('en-IN')}`]);
   }
   if (data.result.dueDateFormatted) {
     overviewRows.push(['Statutory Due Date:', cleanPdfText(data.result.dueDateFormatted)]);
@@ -106,85 +74,96 @@ export function generateLlpPdf(data: LlpPdfPayload) {
   autoTable(doc, {
     startY: startY + 2.5,
     theme: 'plain',
-    body: overviewRows,
-    styles: { fontSize: 8.5, cellPadding: 1.8, textColor: darkGray },
+    body: cleanTableData(overviewRows),
+    styles: { fontSize: 7.5, cellPadding: 1.6, textColor: darkGray },
     columnStyles: {
       0: { fontStyle: 'bold', cellWidth: 60 },
       1: { cellWidth: 120 }
-    }
+    },
+    margin: { left: 14, right: 14 }
   });
 
-  startY = (doc as any).lastAutoTable.finalY + 6;
+  startY = (doc as any).lastAutoTable.finalY + 5;
 
   // Section 2: Four-Tier Financial Breakdown
-  doc.setFontSize(10.5);
+  doc.setFontSize(9.5);
   doc.setTextColor(navy[0], navy[1], navy[2]);
   doc.setFont('helvetica', 'bold');
   doc.text('2. Fee & Statutory Penalty Breakdown', 14, startY);
 
   const feeTableRows: any[] = [
-    ['Tier 1: Normal Base Filing Fee', cleanPdfText(data.result.whyExplanation.baseFeeDescription), `Rs. ${data.result.normalFee.toLocaleString('en-IN')}`],
-    ['Tier 2: Additional Filing Fee (Late Filing)', cleanPdfText(data.result.whyExplanation.multiplierDescription), `Rs. ${data.result.lateFee.toLocaleString('en-IN')}`],
+    ['Tier 1: Normal Base Filing Fee', cleanPdfText(data.result.whyExplanation.baseFeeDescription), `INR ${data.result.normalFee.toLocaleString('en-IN')}`],
+    ['Tier 2: Additional Filing Fee (Late Filing)', cleanPdfText(data.result.whyExplanation.multiplierDescription), `INR ${data.result.lateFee.toLocaleString('en-IN')}`],
   ];
 
   if (data.result.incrementalFee > 0) {
     feeTableRows.push([
       'Tier 3: Incremental Registration Fee',
       cleanPdfText(data.result.whyExplanation.incrementalFeeDescription || 'Incremental fee for contribution increase'),
-      `Rs. ${data.result.incrementalFee.toLocaleString('en-IN')}`
+      `INR ${data.result.incrementalFee.toLocaleString('en-IN')}`
     ]);
   }
 
   feeTableRows.push([
     'TOTAL MCA PORTAL PAYABLE AMOUNT',
     'Total fee payable at MCA checkout (Tier 1 + Tier 2 + Tier 3)',
-    `Rs. ${data.result.totalPayable.toLocaleString('en-IN')}`
+    `INR ${data.result.totalPayable.toLocaleString('en-IN')}`
   ]);
 
   autoTable(doc, {
     startY: startY + 2.5,
-    theme: 'grid',
-    head: [['Fee Component', 'Calculation Methodology / Basis', 'Amount (INR)']],
-    body: feeTableRows,
-    headStyles: { fillColor: navy, textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 8.5 },
-    styles: { fontSize: 8.5, cellPadding: 2.2, textColor: darkGray },
+    theme: 'striped',
+    head: [['Fee Component', 'Calculation Details & Rule Slabs', 'Amount (INR)']],
+    headStyles: { fillColor: navy, textColor: 255, fontSize: 8 },
+    body: cleanTableData(feeTableRows),
+    styles: { fontSize: 7.5, cellPadding: 2, textColor: darkGray },
     columnStyles: {
-      0: { fontStyle: 'bold', cellWidth: 55 },
-      1: { cellWidth: 85 },
-      2: { fontStyle: 'bold', cellWidth: 40, halign: 'right' }
-    }
+      0: { fontStyle: 'bold', cellWidth: 65 },
+      1: { cellWidth: 80 },
+      2: { fontStyle: 'bold', halign: 'right', cellWidth: 35 }
+    },
+    didParseCell: function(cellData) {
+      const isTotalRow = cellData.row.index === feeTableRows.length - 1;
+      if (isTotalRow && cellData.section === 'body') {
+        cellData.cell.styles.fillColor = [240, 253, 250];
+        cellData.cell.styles.textColor = teal;
+        cellData.cell.styles.fontStyle = 'bold';
+      }
+    },
+    margin: { left: 14, right: 14 }
   });
 
-  startY = (doc as any).lastAutoTable.finalY + 6;
+  startY = (doc as any).lastAutoTable.finalY + 5;
 
   // Section 3: Statutory Penalty Exposure & Section 76A Notice
-  if (data.result.totalPenaltyExposure > 0 || data.result.proceduralNotes) {
-    doc.setFontSize(10.5);
-    doc.setTextColor(amber[0], amber[1], amber[2]);
+  if (data.result.totalPenaltyExposure > 0) {
+    doc.setFontSize(9.5);
+    doc.setTextColor(navy[0], navy[1], navy[2]);
     doc.setFont('helvetica', 'bold');
     doc.text('3. Indicative Statutory Adjudication Penalty Exposure', 14, startY);
 
-    const penaltyRows: any[] = [
-      ['LLP Entity Penalty Exposure:', `Rs. ${data.result.llpPenalty.toLocaleString('en-IN')} (Section 34(5)/35(2) - Rs. ${data.result.isSmallLlp ? '50' : '100'}/day, cap Rs. 1,00,000)`],
-      ['Designated Partners Exposure:', `Rs. ${data.result.dpPenalty.toLocaleString('en-IN')} (Rs. ${data.result.isSmallLlp ? '50' : '100'}/day per DP, cap Rs. 50,000 each)`],
-      ['Total Adjudication Exposure:', `Rs. ${data.result.totalPenaltyExposure.toLocaleString('en-IN')} (NOT included in MCA portal payable amount)`],
+    const penaltyRows = [
+      ['LLP Entity Penalty Exposure:', `INR ${data.result.llpPenalty.toLocaleString('en-IN')} (Section 34(5)/35(2) - INR ${data.result.isSmallLlp ? '50' : '100'}/day, cap INR 1,00,000)`],
+      ['Designated Partners Exposure:', `INR ${data.result.dpPenalty.toLocaleString('en-IN')} (INR ${data.result.isSmallLlp ? '50' : '100'}/day per DP, cap INR 50,000 each)`],
+      ['Total Adjudication Exposure:', `INR ${data.result.totalPenaltyExposure.toLocaleString('en-IN')} (NOT included in MCA portal payable amount)`],
     ];
 
     autoTable(doc, {
       startY: startY + 2.5,
       theme: 'plain',
-      body: penaltyRows,
-      styles: { fontSize: 8.5, cellPadding: 1.8, textColor: darkGray },
+      body: cleanTableData(penaltyRows),
+      styles: { fontSize: 7.5, cellPadding: 1.6, textColor: darkGray },
       columnStyles: {
-        0: { fontStyle: 'bold', cellWidth: 60 },
+        0: { fontStyle: 'bold', cellWidth: 60, textColor: amber },
         1: { cellWidth: 120 }
-      }
+      },
+      margin: { left: 14, right: 14 }
     });
 
     startY = (doc as any).lastAutoTable.finalY + 4;
 
     // Section 76A Notice Box
-    doc.setFontSize(7.5);
+    doc.setFontSize(7.2);
     doc.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
     doc.setFont('helvetica', 'normal');
     const noticeLines = doc.splitTextToSize(
@@ -192,7 +171,7 @@ export function generateLlpPdf(data: LlpPdfPayload) {
       pageWidth - 28
     );
     doc.text(noticeLines, 14, startY);
-    startY += (noticeLines.length * 3.5) + 4;
+    startY += (noticeLines.length * 3.5) + 3.5;
   }
 
   // Section 4: Procedural Notes (if any, e.g. Form 24 / Charge)
@@ -202,27 +181,15 @@ export function generateLlpPdf(data: LlpPdfPayload) {
     doc.setFont('helvetica', 'bold');
     doc.text('Procedural & Compliance Notes:', 14, startY);
 
-    doc.setFontSize(7.5);
+    doc.setFontSize(7.2);
     doc.setTextColor(darkGray[0], darkGray[1], darkGray[2]);
     doc.setFont('helvetica', 'normal');
     const procLines = doc.splitTextToSize(cleanPdfText(data.result.proceduralNotes), pageWidth - 28);
     doc.text(procLines, 14, startY + 4);
   }
 
-  // Footer on All Pages
-  const totalPages = doc.getNumberOfPages();
-  for (let i = 1; i <= totalPages; i++) {
-    doc.setPage(i);
-    doc.setFontSize(7.5);
-    doc.setTextColor(gray[0], gray[1], gray[2]);
-    doc.setFont('helvetica', 'normal');
-    doc.text(
-      'Generated by CorpLawUpdates.in - Informational calculation estimate only. Official fees subject to MCA21 validation.',
-      14,
-      doc.internal.pageSize.height - 8
-    );
-    doc.text(`Page ${i} of ${totalPages}`, pageWidth - 14, doc.internal.pageSize.height - 8, { align: 'right' });
-  }
+  // Uniform Page Footers
+  renderPageFooters(doc, 'Generated by CorpLawUpdates.in - Informational calculation estimate only');
 
   doc.save(`LLP_Fee_Calculation_${data.result.formId}_${new Date().toISOString().slice(0, 10)}.pdf`);
 }
