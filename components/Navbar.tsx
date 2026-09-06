@@ -24,6 +24,7 @@ import {
     Wrench,
     X,
     Bookmark,
+    BookOpen,
 } from 'lucide-react'
 
 const links = [
@@ -36,9 +37,8 @@ const links = [
     { href: '/newsletter', label: 'Newsletter' },
 ]
 
-const GlossaryIcon = ({ className }: { className?: string }) => (
-    <span className={`${className} text-base flex items-center justify-center`} aria-hidden>📖</span>
-)
+    const GlossaryIcon = BookOpen
+
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false)

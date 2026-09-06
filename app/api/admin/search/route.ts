@@ -4,6 +4,8 @@ import { verifyAdminSession } from '@/lib/admin-auth'
 
 export const dynamic = 'force-dynamic'
 
+const privateHeaders = { 'Cache-Control': 'private, no-store' }
+
 interface UpdateRecord {
   id: string
   title: string
@@ -49,7 +51,7 @@ interface UnifiedSearchResult {
 export async function GET(request: Request) {
   // Verify real admin session (checks signature + expiry, not just cookie presence)
   if (!await verifyAdminSession()) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: privateHeaders })
   }
 
   const { searchParams } = new URL(request.url)
@@ -59,10 +61,7 @@ export async function GET(request: Request) {
   const impact = searchParams.get('impact') || ''
 
   if (q.length < 2) {
-    return NextResponse.json({ 
-      results: [], 
-      total: 0 
-    })
+    return NextResponse.json({ results: [], total: 0 }, { headers: privateHeaders })
   }
 
   const results: UnifiedSearchResult[] = []

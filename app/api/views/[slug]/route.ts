@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server'
+
+const privateHeaders = { 'Cache-Control': 'private, no-store' }
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
@@ -26,10 +28,10 @@ export async function GET(
   try {
     const { slug } = await params
     if (!redis) {
-      return NextResponse.json({ success: true, batchViews: 0 })
+      return NextResponse.json({ success: true, batchViews: 0 }, { headers: privateHeaders })
     }
     const batchViews = await redis.get<number>(`view_batch:${slug}`)
-    return NextResponse.json({ success: true, batchViews: batchViews || 0 })
+    return NextResponse.json({ success: true, batchViews: batchViews || 0 }, { headers: privateHeaders })
   } catch (error) {
     return NextResponse.json({ success: false, batchViews: 0 })
   }
@@ -44,7 +46,7 @@ export async function POST(
 
     // 1. Validate slug format — alphanumeric and hyphens only, max 200 chars
     if (!slug || !/^[a-z0-9-]{1,200}$/.test(slug)) {
-      return NextResponse.json({ success: false, error: 'Invalid slug' }, { status: 400 })
+      return NextResponse.json({ success: false, error: 'Invalid slug' }, { status: 400, headers: privateHeaders })
     }
 
     // 2. Verify the article actually exists (lightweight check)
