@@ -13,6 +13,7 @@ import { generateMgt7Pdf } from '@/lib/pdf/generateMgt7Pdf'
 import ADT1Workspace from './ADT1Workspace'
 import CHG1Workspace from './CHG1Workspace'
 import MGT7Workspace from './MGT7Workspace'
+import AOC4Workspace from './AOC4Workspace'
 
 interface ResultRow {
   component: string
@@ -57,6 +58,10 @@ export default function FormSpecificCalc({ form }: { form: MCAForm }) {
 
   if (form.slug === 'mgt-7' || form.slug === 'mgt-7a') {
     return <MGT7Workspace form={form} />
+  }
+
+  if (form.slug === 'aoc-4' || form.slug.startsWith('aoc-4')) {
+    return <AOC4Workspace form={form} />
   }
 
   const isMgt7Family = form.slug === 'mgt-7' || form.slug === 'mgt-7a'

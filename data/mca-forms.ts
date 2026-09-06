@@ -127,43 +127,103 @@ export const mcaForms: MCAForm[] = [
     slug: 'aoc-4',
     formNumber: 'AOC-4',
     formName: 'Financial Statements',
-    aliases: ['financial statement', 'aoc4', 'AOC 4', 'balance sheet filing'],
+    aliases: [
+      'aoc form fees',
+      'aoc fees',
+      'aoc form fee',
+      'aoc fee',
+      'aoc 4 late fees',
+      'aoc 4 late fees calculator',
+      'aoc 4 fees calculator',
+      'aoc-4 late fees calculator',
+      'aoc 4 penalty',
+      'aoc 4 penalty calculator',
+      'aoc-4 late fees',
+      'aoc4 late fees',
+      'aoc 4 fees',
+      'aoc 4 and mgt 7 late fees',
+      'aoc 4 and mgt 7 due date',
+      'aoc 4 late filing fees',
+      'aoc form price',
+      'aoc-4 fees',
+      'aoc 4 and mgt 7 late fees calculator',
+      'aoc filing fees',
+      'aoc 4 filing fees',
+      'aoc 4 attachments',
+      'aoc fee structure',
+      'financial statement filing'
+    ],
     category: 'annual',
-    filedBy: ['Private Limited', 'Public Limited', 'OPC', 'Small Company'],
-    dueDate: 'Within 30 days of AGM',
-    section: 'Section 137, Companies Act 2013',
+    filedBy: ['Private Limited', 'Public Limited (Unlisted & Listed)', 'One Person Company (OPC)', 'Small Company', 'Section 8 Company'],
+    dueDate: 'Within 30 days of AGM (Within 180 days of FY closure for OPC)',
+    section: 'Section 137, Companies Act 2013 read with Rule 12',
     penaltyType: 'per_day',
-    penaltyRate: '₹100 per day, no upper cap',
+    penaltyRate: '₹100 per day uncapped additional fee',
     normalFeeStructure: 'capital_slab',
     baseFeeSlab: 'standard_company_slab',
     concessionApplies: false,
     filingGuides: [
       {
-        title: "AOC-4 Filing Guide — Financial Statements for FY 2024-25",
+        title: "Complete Form AOC-4 Filing Guide for FY 2025-26 — Due Dates, Attachments & MCA V3 Rules",
         slug: "/updates/aoc-4-filing-guide-fy-2024-25",
         publishedDate: "2026-06-10",
-        summary: "How to file AOC-4 Financial Statements, attachments required, and common rejection reasons.",
+        summary: "Comprehensive walkthrough of filing Form AOC-4 Financial Statements on MCA V3, covering standalone vs CFS vs XBRL, cash flow exemptions, and penalty rules.",
         isOfficial: true
       }
     ],
-    metaTitle: 'AOC-4 Late Fee Calculator | Financial Statement ROC Penalty | CorpLawUpdates.in',
-    metaDescription: 'Calculate AOC-4 late filing fees and penalty of ₹100/day for financial statements. Free ROC fee calculator updated for FY 2026-27.',
-    ogDescription: 'Calculate AOC-4 late filing fees and penalty of ₹100/day for financial statements. Free ROC fee calculator updated for FY 2026-27.',
+    metaTitle: 'AOC-4 Late Fee Calculator (V3) & AOC Form Fees | FY 2026-27',
+    metaDescription: 'Calculate exact Form AOC-4 fees, normal filing fees (₹200–₹600), ₹100/day uncapped late filing fee, and Section 137(3) statutory penalties on MCA V3 for FY 2026-27.',
+    ogDescription: 'Free institutional calculator for MCA Form AOC-4 normal filing fees, ₹100/day late fee, 30-day AGM due date, OPC 180-day deadline, and Section 137(3) penalty exposure.',
     faqItems: [
-      { question: 'What is Form AOC-4 used for?', answer: 'Form AOC-4 is used to file the financial statements (Balance Sheet, Profit & Loss Account, Board Report) of a company with the ROC.' },
-      { question: 'What is the late fee for AOC-4?', answer: 'The late fee for AOC-4 is a flat ₹100 per day for every day of delay, without any maximum cap.' },
-      { question: 'When is the due date for AOC-4?', answer: 'AOC-4 must be filed within 30 days of the company’s Annual General Meeting (AGM).' },
-      { question: 'Can AOC-4 and MGT-7 be filed together?', answer: 'Yes, they are generally filed in tandem as part of the annual ROC compliance, though their specific due dates differ slightly (30 days vs 60 days from AGM).' },
-      { question: 'Does a small company pay less normal fee for AOC-4?', answer: 'Yes, Small Companies and OPCs enjoy a concessional normal filing fee (starting at ₹50), but the late fee penalty remains the strict ₹100/day.' }
+      {
+        question: 'What are the normal government filing fees for Form AOC-4 on MCA V3?',
+        answer: 'The normal government filing fee for Form AOC-4 is governed by Table A (Items 5 & 6) of the Companies (Registration Offices and Fees) Rules, 2014 based on authorized share capital: Nominal capital < ₹1 Lakh: ₹200; ₹1 Lakh to ₹5 Lakhs: ₹300; ₹5 Lakhs to ₹25 Lakhs: ₹400; ₹25 Lakhs to ₹1 Crore: ₹500; ₹1 Crore or more: ₹600. For companies without share capital, the fee is a fixed ₹200.'
+      },
+      {
+        question: 'How is the late filing fee calculated for Form AOC-4?',
+        answer: 'Under Table B (Note Item 2) of the Companies (Registration Offices and Fees) Rules, 2014, late filing of Form AOC-4 attracts a flat additional fee of ₹100 per calendar day of delay from the day following the statutory due date. This additional fee has no upper ceiling on the MCA21 V3 portal and accumulates indefinitely until filed.'
+      },
+      {
+        question: 'When is the statutory due date for filing Form AOC-4?',
+        answer: 'Under Section 137(1) of the Companies Act, 2013, Form AOC-4 must be filed within 30 days from the date of the Annual General Meeting (AGM). For a company holding its standard AGM on 30th September, the due date is 30th October. If the AGM was extended by the ROC under Section 96(1), the 30-day window commences from that extended date.'
+      },
+      {
+        question: 'What is the AOC-4 filing due date for a One Person Company (OPC)?',
+        answer: 'Under the third proviso to Section 137(1), a One Person Company (OPC) is exempt from holding an AGM under Section 122(1) and must file its financial statements within 180 days from the closure of the financial year. For an OPC whose financial year closes on 31st March, the statutory due date is 27th September.'
+      },
+      {
+        question: 'What is the difference between AOC-4 and MGT-7 due dates and late fees?',
+        answer: 'Form AOC-4 (Financial Statements) is governed by Section 137 and is due within 30 days of the AGM (standard: 30th October), whereas Form MGT-7/MGT-7A (Annual Return) is governed by Section 92 and is due within 60 days of the AGM (standard: 29th November). Both forms attract the same flat additional late fee of ₹100 per day of delay on the MCA portal, but their underlying statutory adjudication penalties under Section 137(3) and Section 92(5) operate under separate caps.'
+      },
+      {
+        question: 'What is the statutory penalty exposure under Section 137(3) for delayed filing?',
+        answer: 'Under Section 137(3) (as amended by the Companies (Amendment) Act, 2020), failure to file financial statements attracts an adjudication penalty of ₹10,000 plus ₹100 per day for continuing default, subject to a maximum cap of ₹2,00,000 for the company, and ₹10,000 plus ₹100 per day subject to a maximum cap of ₹50,000 for the Managing Director, CFO, or Directors in default. These penalties require formal ROC adjudication under Section 454 and are not collected via MCA portal challan.'
+      },
+      {
+        question: 'Does Section 446B penalty relief apply to Form AOC-4 filings?',
+        answer: 'Yes. Under Section 446B of the Companies Act, 2013, if the company is an OPC, Small Company (paid-up capital ≤ ₹10 Cr, turnover ≤ ₹100 Cr), DPIIT-recognized Startup, or Producer Company, the maximum penalty payable under Section 137(3) shall not exceed one-half (50%) of the statutory penalty, effectively capping the company penalty at ₹1,00,000 and officer penalties at ₹25,000 per person.'
+      },
+      {
+        question: 'Which companies are exempt from attaching a Cash Flow Statement in Form AOC-4?',
+        answer: 'Under the proviso to Section 2(40) of the Companies Act, 2013, One Person Companies (OPCs), Small Companies, Dormant Companies (Section 455), and DPIIT-recognized Private Startups are statutorily exempt from preparing and annexing a Cash Flow Statement to their financial statements.'
+      },
+      {
+        question: 'Who is required to file Form AOC-4 XBRL instead of standalone AOC-4?',
+        answer: 'Under Rule 3 of the Companies (Filing of Documents and Forms in XBRL) Rules, 2015, filing in XBRL is mandatory for: (1) All companies listed on any stock exchange in India and their Indian subsidiaries; (2) All companies having paid-up capital of ₹5 Crore or more; (3) All companies having turnover of ₹100 Crore or more; and (4) All companies preparing financial statements under Ind AS. Banking, insurance, power sector, and NBFC companies are exempt from XBRL.'
+      },
+      {
+        question: 'What mandatory attachments must be uploaded with Form AOC-4 on MCA V3?',
+        answer: 'Mandatory attachments include: (1) Standalone Balance Sheet; (2) Statement of Profit and Loss; (3) Cash Flow Statement (unless exempt under Section 2(40)); (4) Notes to Accounts; (5) Independent Auditor\'s Report with CARO 2020 if applicable; (6) Board\'s Report signed under Section 134; (7) Notice of AGM with Explanatory Statements; (8) Form AOC-1 for subsidiaries/associates (if applicable); and (9) CSR Report in prescribed format (if Section 135 applies).'
+      }
     ],
-    relatedForms: ['mgt-7', 'adt-1'],
-    filedTogetherWith: ['mgt-7'],
+    relatedForms: ['mgt-7', 'mgt-7a', 'adt-1'],
+    filedTogetherWith: ['mgt-7', 'mgt-7a'],
     contentSections: {
-      whatIsThisForm: '<p>Form AOC-4 is the official document through which a company files its <strong>Financial Statements</strong> with the Ministry of Corporate Affairs. This form must include the Balance Sheet, Profit and Loss account, Directors\' Report, Auditors\' Report, and other required financial annexures. This filing ensures that the company\'s financial health is officially recorded and available in the public domain for stakeholders and regulatory oversight.</p>',
-      whoMustFile: '<p>All companies registered in India, irrespective of their size, turnover, or nature of business (Private, Public, OPC, Section 8), must file Form AOC-4. Depending on the turnover and specific rules, some companies may be required to file <strong>AOC-4 XBRL</strong> instead of the standard form.</p>',
-      dueDateExplained: '<p>Under Section 137 of the Companies Act, AOC-4 must be filed <strong>within 30 days from the date of the Annual General Meeting (AGM)</strong>. If the AGM is held on the last permissible date (September 30th), the due date for AOC-4 falls on <strong>October 29th</strong>.</p>',
-      consequencesOfDelay: '<p>Failure to file AOC-4 within the 30-day window results in an immediate and uncapped late fee penalty of <strong>₹100 per day</strong>. Beyond financial penalties, chronic failure to file financial statements for three consecutive years can lead to the automatic disqualification of all directors of the company.</p>',
-      workedExample: '<p><strong>Scenario:</strong> A Small Company with an authorized capital of ₹1,00,000 files AOC-4 exactly 10 days late.</p><ul><li>Normal Filing Fee (Concessional Slab): ₹50</li><li>Late Penalty: 10 days × ₹100 = ₹1,000</li><li><strong>Total Liability:</strong> ₹50 + ₹1,000 = <strong>₹1,050</strong></li></ul>'
+      whatIsThisForm: '<p>Form AOC-4 is the statutory electronic return prescribed by the Ministry of Corporate Affairs (MCA) under Section 137 of the Companies Act, 2013 read with Rule 12 of the Companies (Accounts) Rules, 2014. Through this form, every company files its audited financial statements, including the Balance Sheet, Profit and Loss Account, Directors\' Report, and Auditor\'s Report, with the Registrar of Companies (ROC).</p><p>Depending on corporate structure and thresholds, companies file variants of this form: <strong>AOC-4</strong> (standard standalone non-XBRL), <strong>AOC-4 CFS</strong> (consolidated financial statements for companies with subsidiaries/JVs under Section 129(3)), <strong>AOC-4 XBRL</strong> (for listed entities, capital ≥ ₹5 Cr, or turnover ≥ ₹100 Cr), or <strong>AOC-4 NBFC (Ind AS)</strong> for NBFCs.</p>',
+      whoMustFile: '<p>Every company incorporated under the Companies Act, 2013 or previous company laws—including Private Limited Companies, Public Limited Companies (unlisted and listed), One Person Companies (OPCs), Section 8 Companies, and Producer Companies—must file its financial statements annually using Form AOC-4 or its applicable variant.</p><p>Small Companies and OPCs benefit from significant disclosure relaxations, including a statutory exemption from preparing a Cash Flow Statement under the proviso to Section 2(40) and abridged Board\'s Report disclosures under Rule 8A of the Companies (Accounts) Rules, 2014.</p>',
+      dueDateExplained: '<p>The statutory due date for filing Form AOC-4 depends on the company classification:</p><ul><li><strong>Standard Companies (AGM Held):</strong> Within <strong>30 days</strong> from the date of the Annual General Meeting (AGM) under Section 137(1). For a company holding its AGM on the standard deadline of 30th September, the due date is <strong>30th October</strong>.</li><li><strong>Subsequent AGM with ROC Extension:</strong> If the company obtains an extension of up to 3 months from the ROC under Section 96(1), the 30-day clock begins from the actual/extended AGM date.</li><li><strong>One Person Company (OPC):</strong> Under the third proviso to Section 137(1), OPCs are exempt from holding an AGM (Section 122(1)) and must file within <strong>180 days from the closure of the financial year</strong> (i.e. <strong>27th September</strong> for a 31st March financial year-end).</li><li><strong>AGM Not Held:</strong> Under Section 137(2), if the AGM is not held, financial statements along with reasons for not holding the meeting must be filed within <strong>30 days of the latest date on which the AGM ought to have been held</strong>.</li></ul>',
+      consequencesOfDelay: '<p>Delay in filing Form AOC-4 triggers dual statutory liabilities under corporate law:</p><ol><li><strong>Additional Late Filing Fee (Table B, Note Item 2):</strong> A flat statutory late fee of <strong>₹100 per day</strong> of delay is levied automatically on the MCA21 V3 portal upon form upload. This additional fee has no upper ceiling and continues indefinitely until the form is filed.</li><li><strong>Civil Adjudication Penalty Exposure (Section 137(3)):</strong> In case of formal adjudication proceedings initiated by the ROC under Section 454, the company is liable to a base penalty of <strong>₹10,000 plus ₹100 per day</strong> for continuing default (capped at <strong>₹2,00,000</strong>). The Managing Director, CFO, and Directors in default face individual penalties of <strong>₹10,000 plus ₹100 per day</strong> (capped at <strong>₹50,000</strong> each). Under Section 446B, these penalties are halved for Small Companies, OPCs, and Startups.</li><li><strong>Director Disqualification (Section 164(2)(a)):</strong> Failure to file financial statements for continuous period of <strong>3 financial years</strong> results in automatic disqualification of all directors from holding office in any company for 5 years.</li></ol>',
+      workedExample: '<p><strong>Scenario:</strong> A Private Limited Company with nominal share capital of ₹10,00,000 held its AGM on 30th September 2026 and filed Form AOC-4 on 29th November 2026 (30 days delay past the 30th October due date).</p><ul><li>Normal Government Filing Fee (Table A, Item 5 — ₹5L to ₹25L): <strong>₹400</strong></li><li>Additional Filing Fee on MCA V3 (30 days × ₹100/day): <strong>₹3,000</strong></li><li><strong>Total MCA21 Portal Payable:</strong> ₹400 + ₹3,000 = <strong>₹3,400</strong></li><li><strong>Indicative Section 137(3) Adjudication Exposure:</strong> ₹10,000 base + (29 continuing days × ₹100) = <strong>₹12,900 for Company</strong> and <strong>₹12,900 per Officer in default</strong> (Subject to ROC adjudication under Section 454; not collected via e-Challan).</li></ul>'
     }
   },
   {

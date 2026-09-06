@@ -149,6 +149,49 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         text: 'If delayed beyond 120 days from creation (delay exceeds 90 days), direct ROC registration is legally barred under Section 77. The company must file Form CHG-8 with the Regional Director for condonation of delay.'
       }
     ]
+  } : form.slug === 'aoc-4' ? {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How to Calculate Form AOC-4 Filing Fees & Late Penalties on MCA V3',
+    description: 'Step-by-step guide to calculating normal filing fees (Table A), flat ₹100/day uncapped late filing fee, 30-day AGM due date, OPC 180-day deadline, and Section 137(3) statutory penalties.',
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Determine Applicable AOC-4 Variant',
+        text: 'Identify whether the company must file standard AOC-4 (standalone), AOC-4 CFS (has subsidiaries/JVs under Section 129(3)), AOC-4 XBRL (listed, paid-up capital ≥ ₹5 Cr, or turnover ≥ ₹100 Cr), or AOC-4 NBFC (Ind AS).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Establish Statutory Due Date',
+        text: 'For standard companies, determine the 30-day statutory due date from the AGM under Section 137(1) (standard: October 30). For One Person Companies (OPC), determine the 180-day deadline from FY closure under Section 137(1) third proviso (standard: September 27).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Verify Cash Flow Statement Exemption',
+        text: 'Check whether the company is exempt from attaching a Cash Flow Statement under the proviso to Section 2(40) (OPCs, Small Companies, Dormant Companies, and DPIIT Startups are exempt).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: 'Determine Nominal Share Capital Base Fee',
+        text: 'Compute the Table A normal filing fee (₹200 to ₹600) based on authorized share capital bracket (or flat ₹200 for company without share capital).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 5,
+        name: 'Calculate ₹100/Day Uncapped Delay Fee',
+        text: 'If filing past the statutory due date, compute the additional late filing fee at flat ₹100 per day without upper ceiling under Table B Note Item 2.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 6,
+        name: 'Assess Section 137(3) Adjudication Exposure & 446B Relief',
+        text: 'Evaluate indicative civil penalty exposure: Base ₹10,000 + ₹100/day continuing default (Company cap: ₹2 Lakhs; Officer cap: ₹50,000). Apply 50% discount if eligible for Section 446B relief.'
+      }
+    ]
   } : (form.slug === 'mgt-7' || form.slug === 'mgt-7a') ? {
     '@context': 'https://schema.org',
     '@type': 'HowTo',
@@ -234,6 +277,8 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               ? 'MGT-7 Late Fees & Penalty Calculator (FY 2026-27) — Annual Return'
               : form.slug === 'mgt-7a'
               ? 'MGT-7A Late Fees & Penalty Calculator (FY 2026-27) — Small Company & OPC'
+              : form.slug === 'aoc-4'
+              ? 'AOC-4 Late Fees & Penalty Calculator (FY 2026-27) — AOC Form Fees on MCA V3'
               : `${form.formNumber} — ${form.formName} Fee & Penalty Calculator (2026-27)`}
           </h1>
           <p className="text-slate-400 text-lg max-w-3xl mx-auto mb-8">
@@ -245,6 +290,8 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               ? 'Calculate exact normal filing fees, 60-day AGM statutory deadlines, ₹100/day uncapped late fees, Form MGT-8 PCS certification, and Section 92(5) adjudication penalties on MCA V3.'
               : form.slug === 'mgt-7a'
               ? 'Calculate abridged annual return fees, 60-day due dates, ₹100/day late fees, Small Company limits (₹10 Cr / ₹100 Cr), and Section 446B 50% penalty relief for OPCs and Small Companies on MCA V3.'
+              : form.slug === 'aoc-4'
+              ? 'Calculate exact MCA V3 Form AOC-4 fees, Table A normal filing fees (₹200–₹600), ₹100/day uncapped late filing fee, OPC 180-day deadline, and Section 137(3) statutory penalties for FY 2026-27.'
               : `Calculate exact normal filing fees and late penalties for ${form.formNumber} (${form.formName}) based on authorized capital and delay.`}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
@@ -262,6 +309,25 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
       </div>
 
       <div className="max-w-5xl mx-auto px-4 -mt-8 relative z-10 mb-16">
+        {/* Princeton GEO Direct Answer Block (58 Words) */}
+        {form.slug === 'aoc-4' && (
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 border-l-4 border-l-blue-600 rounded-2xl shadow-sm">
+            <div className="flex items-center gap-2 mb-2 text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+              <span>⚡</span> Fast Statutory Summary • MCA V3 Portal
+            </div>
+            <p className="text-slate-800 dark:text-slate-200 text-sm md:text-base leading-relaxed font-medium">
+              Form AOC-4 is the statutory electronic return for filing audited financial statements with the Registrar of Companies under Section 137 of the Companies Act, 2013. Normal filing fees range from ₹200 to ₹600 based on nominal share capital under Table A. Delayed filings attract a flat, uncapped statutory additional fee of ₹100 per day on MCA21 V3 portal.
+            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-3">
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Section 137(1) Due Date: 30 Days from AGM</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ OPC Deadline: 180 Days from FY Close</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Section 446B: 50% Penalty Relief</span>
+            </div>
+          </div>
+        )}
+
         {/* 4C - Calculator */}
         <FormSpecificCalc form={form} />
       </div>
@@ -344,6 +410,191 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
           <h2 className="text-[1.5rem] font-semibold text-navy dark:text-white mb-4">Consequences of Late Filing {form.formNumber}</h2>
           <div dangerouslySetInnerHTML={{ __html: form.contentSections.consequencesOfDelay }} />
         </article>
+
+        {/* AOC-4 Dedicated Statutory Master Tables */}
+        {form.slug === 'aoc-4' && (
+          <div className="space-y-12 mb-16">
+            {/* Table 1: Normal Fees */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>📋</span> Table A: Normal Filing Fee Schedule (Items 5 & 6)
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Statutory base fee payable upon filing Form AOC-4, AOC-4 CFS, or AOC-4 XBRL on MCA21 V3 portal based on authorized capital.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Nominal / Authorized Capital Bracket</th>
+                      <th className="px-4 py-3 font-semibold">Normal Filing Fee</th>
+                      <th className="px-4 py-3 font-semibold">Statutory Reference</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr><td className="px-4 py-3 font-medium">Less than ₹1,00,000</td><td className="px-4 py-3 font-bold text-blue-600">₹200</td><td className="px-4 py-3 text-slate-500">Table A, Item 5, Fees Rules 2014</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">₹1,00,000 to ₹4,99,999</td><td className="px-4 py-3 font-bold text-blue-600">₹300</td><td className="px-4 py-3 text-slate-500">Table A, Item 5, Fees Rules 2014</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">₹5,00,000 to ₹24,99,999</td><td className="px-4 py-3 font-bold text-blue-600">₹400</td><td className="px-4 py-3 text-slate-500">Table A, Item 5, Fees Rules 2014</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">₹25,00,000 to ₹99,99,999</td><td className="px-4 py-3 font-bold text-blue-600">₹500</td><td className="px-4 py-3 text-slate-500">Table A, Item 5, Fees Rules 2014</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">₹1,00,00,000 or more (≥ ₹1 Crore)</td><td className="px-4 py-3 font-bold text-blue-600">₹600</td><td className="px-4 py-3 text-slate-500">Table A, Item 5, Fees Rules 2014</td></tr>
+                    <tr className="bg-slate-50/50 dark:bg-slate-800/30"><td className="px-4 py-3 font-medium italic">Company not having share capital</td><td className="px-4 py-3 font-bold text-blue-600">₹200</td><td className="px-4 py-3 text-slate-500">Table A, Item 6, Fees Rules 2014</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 2: ₹100/day Uncapped Delay Matrix */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>⏱️</span> Form AOC-4 Late Fee Calculation Matrix (₹100/Day Uncapped)
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Under Table B (Note Item 2), additional filing fees accrue at flat ₹100 per day indefinitely without any maximum ceiling on MCA V3.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Delay Period Beyond Due Date</th>
+                      <th className="px-4 py-3 font-semibold">Late Fee Formula</th>
+                      <th className="px-4 py-3 font-semibold">Additional Fee Amount</th>
+                      <th className="px-4 py-3 font-semibold">Filing Remarks & Risk Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr><td className="px-4 py-3 font-medium">0 Days (Filed on or before due date)</td><td className="px-4 py-3">0 × ₹100</td><td className="px-4 py-3 font-bold text-green-600">₹0</td><td className="px-4 py-3 text-slate-500">Fully compliant with Section 137(1)</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">15 Days Delay</td><td className="px-4 py-3">15 × ₹100</td><td className="px-4 py-3 font-bold text-amber-600">₹1,500</td><td className="px-4 py-3 text-slate-500">Minor delay; portal fee payable online</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">30 Days Delay (1 Month)</td><td className="px-4 py-3">30 × ₹100</td><td className="px-4 py-3 font-bold text-amber-600">₹3,000</td><td className="px-4 py-3 text-slate-500">MGT-7 due date typically coincides here</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">60 Days Delay (2 Months)</td><td className="px-4 py-3">60 × ₹100</td><td className="px-4 py-3 font-bold text-amber-600">₹6,000</td><td className="px-4 py-3 text-slate-500">Increased risk of ROC inquiry notice</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">90 Days Delay (3 Months)</td><td className="px-4 py-3">90 × ₹100</td><td className="px-4 py-3 font-bold text-amber-600">₹9,000</td><td className="px-4 py-3 text-slate-500">Section 137(3) penalty exposure grows</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">180 Days Delay (6 Months)</td><td className="px-4 py-3">180 × ₹100</td><td className="px-4 py-3 font-bold text-red-600">₹18,000</td><td className="px-4 py-3 text-slate-500">Severe ongoing statutory default</td></tr>
+                    <tr className="bg-red-50/40 dark:bg-red-950/20"><td className="px-4 py-3 font-medium text-red-700 dark:text-red-400">365 Days Delay (1 Full Year)</td><td className="px-4 py-3">365 × ₹100</td><td className="px-4 py-3 font-bold text-red-600">₹36,500</td><td className="px-4 py-3 text-red-600">Year 1 of Section 164(2)(a) 3-year clock</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 3: Section 137(3) Penalty vs Section 446B Relief */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>⚖️</span> Section 137(3) Civil Adjudication Penalties vs Section 446B Relief
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Comparison of statutory adjudication exposure under Section 137(3) (as amended by Companies Act 2020) and concessional caps under Section 446B.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Liable Person / Entity</th>
+                      <th className="px-4 py-3 font-semibold">Standard Statutory Formula</th>
+                      <th className="px-4 py-3 font-semibold">Standard Maximum Cap</th>
+                      <th className="px-4 py-3 font-semibold">Section 446B Concessional Cap (Small Co/OPC)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-navy dark:text-white">The Company</td>
+                      <td className="px-4 py-3">₹10,000 + ₹100/day after 1st day</td>
+                      <td className="px-4 py-3 font-bold text-red-600">₹2,00,000</td>
+                      <td className="px-4 py-3 font-bold text-green-600">₹1,00,000 (50% Relief)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-navy dark:text-white">MD / CFO / In-Charge Director</td>
+                      <td className="px-4 py-3">₹10,000 + ₹100/day after 1st day</td>
+                      <td className="px-4 py-3 font-bold text-red-600">₹50,000 per person</td>
+                      <td className="px-4 py-3 font-bold text-green-600">₹25,000 per person (50% Relief)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-navy dark:text-white">All Directors (if no MD/CFO)</td>
+                      <td className="px-4 py-3">₹10,000 + ₹100/day per director</td>
+                      <td className="px-4 py-3 font-bold text-red-600">₹50,000 per director</td>
+                      <td className="px-4 py-3 font-bold text-green-600">₹25,000 per director (50% Relief)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 4: Form AOC-4 Variants Comparison */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>📑</span> Form AOC-4 Variants: Which Form Applies to Your Company?
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Comparison of the 4 statutory variants of Form AOC-4 on MCA21 V3 portal.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Form Code</th>
+                      <th className="px-4 py-3 font-semibold">Form Title</th>
+                      <th className="px-4 py-3 font-semibold">Applicability Criteria</th>
+                      <th className="px-4 py-3 font-semibold">Key Statutory Attachment</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-blue-600">AOC-4</td>
+                      <td className="px-4 py-3 font-medium">Standalone Financial Statements</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-300">All companies not mandated for XBRL/Ind AS</td>
+                      <td className="px-4 py-3 text-slate-500">Balance sheet, P&L, Board report, Auditor report</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-blue-600">AOC-4 CFS</td>
+                      <td className="px-4 py-3 font-medium">Consolidated Financial Statements</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-300">Companies having ≥ 1 subsidiary, JV, or associate (Sec 129(3))</td>
+                      <td className="px-4 py-3 text-slate-500">Consolidated financials & Form AOC-1</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-blue-600">AOC-4 XBRL</td>
+                      <td className="px-4 py-3 font-medium">Financial Statements in XBRL</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-300">Listed, Capital ≥ ₹5 Cr, Turnover ≥ ₹100 Cr, or Ind AS</td>
+                      <td className="px-4 py-3 text-slate-500">XBRL instance document validated via MCA tool</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-blue-600">AOC-4 NBFC</td>
+                      <td className="px-4 py-3 font-medium">NBFC Financials (Ind AS)</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-300">NBFCs complying with Indian Accounting Standards</td>
+                      <td className="px-4 py-3 text-slate-500">Ind AS compliant standalone & consolidated financials</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 5: AOC-4 vs MGT-7 Comparison */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>🔄</span> AOC-4 vs MGT-7: Key Statutory Differences
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Comparative matrix between the two principal annual ROC compliance filings.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Feature / Parameter</th>
+                      <th className="px-4 py-3 font-semibold">Form AOC-4</th>
+                      <th className="px-4 py-3 font-semibold">Form MGT-7 / MGT-7A</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr><td className="px-4 py-3 font-bold text-navy dark:text-white">Subject Matter</td><td className="px-4 py-3">Audited Financial Statements & Accounts</td><td className="px-4 py-3">Annual Return (Shareholding, Directors, Governance)</td></tr>
+                    <tr><td className="px-4 py-3 font-bold text-navy dark:text-white">Governing Section</td><td className="px-4 py-3 font-medium">Section 137, Companies Act 2013</td><td className="px-4 py-3 font-medium">Section 92, Companies Act 2013</td></tr>
+                    <tr><td className="px-4 py-3 font-bold text-navy dark:text-white">Statutory Due Date</td><td className="px-4 py-3 font-bold text-blue-600">Within 30 days of AGM (30th October)</td><td className="px-4 py-3 font-bold text-purple-600">Within 60 days of AGM (29th November)</td></tr>
+                    <tr><td className="px-4 py-3 font-bold text-navy dark:text-white">OPC Statutory Due Date</td><td className="px-4 py-3">Within 180 days of FY closure (27th Sept)</td><td className="px-4 py-3">Within 60 days of deemed adoption</td></tr>
+                    <tr><td className="px-4 py-3 font-bold text-navy dark:text-white">MCA V3 Late Filing Fee</td><td className="px-4 py-3">Flat ₹100 per day (Uncapped)</td><td className="px-4 py-3">Flat ₹100 per day (Uncapped)</td></tr>
+                    <tr><td className="px-4 py-3 font-bold text-navy dark:text-white">Small Company Form</td><td className="px-4 py-3">Form AOC-4 (Cash flow exempt)</td><td className="px-4 py-3">Form MGT-7A (Abridged annual return)</td></tr>
+                    <tr><td className="px-4 py-3 font-bold text-navy dark:text-white">Civil Penalty Section</td><td className="px-4 py-3">Section 137(3) (Co: ₹2L, Off: ₹50k)</td><td className="px-4 py-3">Section 92(5) (Co: ₹2L, Off: ₹50k)</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* 4F - Worked Example */}
         <div className="bg-blue-50 dark:bg-blue-900/10 border-l-4 border-blue-600 p-6 md:p-8 rounded-r-2xl mb-16">
