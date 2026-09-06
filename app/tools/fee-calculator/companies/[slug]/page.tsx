@@ -149,6 +149,43 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         text: 'If delayed beyond 120 days from creation (delay exceeds 90 days), direct ROC registration is legally barred under Section 77. The company must file Form CHG-8 with the Regional Director for condonation of delay.'
       }
     ]
+  } : (form.slug === 'mgt-7' || form.slug === 'mgt-7a') ? {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: `How to Calculate Form ${form.formNumber} Annual Return Filing Fees & Late Penalties on MCA V3`,
+    description: `Step-by-step guide to calculating normal filing fees (Table A), ₹100/day uncapped late filing fee, 60-day AGM deadline, and Section 92(5) adjudication penalties for Form ${form.formNumber}.`,
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Identify the Date of the AGM',
+        text: 'Determine the date on which the Annual General Meeting (AGM) was held (Day 0), or for OPCs, the deemed resolution adoption date pursuant to Section 96 and Section 122.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Calculate the 60-Day Statutory Due Date',
+        text: 'Under Section 92(4), Form MGT-7/MGT-7A must be filed within 60 calendar days from the AGM date (standard due date: 29th November for 30th September AGM).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Determine Small Company Qualification (MGT-7 vs MGT-7A)',
+        text: 'Assess paid-up capital (≤ ₹10 Cr) and turnover (≤ ₹100 Cr) under Section 2(85) [amended by G.S.R. 880(E)]. Qualified Small Companies and OPCs file Form MGT-7A; others file Form MGT-7.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: 'Determine Nominal Share Capital Base Fee',
+        text: 'Check authorized share capital bracket under Table A (₹200 to ₹600) to find the normal government filing fee.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 5,
+        name: 'Calculate ₹100/Day Uncapped Delay Fee & Section 92(5) Penalty',
+        text: 'If filing past the 60-day deadline, compute additional fee at flat ₹100 per day without upper cap on MCA V3, and check potential Section 92(5) ROC adjudication exposure (with Section 446B relief if eligible).'
+      }
+    ]
   } : null
 
   return (
@@ -193,6 +230,10 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               ? 'ADT-1 Late Fees & Penalty Calculator (FY 2026-27) — Auditor Appointment'
               : form.slug === 'chg-1'
               ? 'CHG-1 Late Fees & Ad Valorem Calculator (FY 2026-27) — Charge Creation'
+              : form.slug === 'mgt-7'
+              ? 'MGT-7 Late Fees & Penalty Calculator (FY 2026-27) — Annual Return'
+              : form.slug === 'mgt-7a'
+              ? 'MGT-7A Late Fees & Penalty Calculator (FY 2026-27) — Small Company & OPC'
               : `${form.formNumber} — ${form.formName} Fee & Penalty Calculator (2026-27)`}
           </h1>
           <p className="text-slate-400 text-lg max-w-3xl mx-auto mb-8">
@@ -200,6 +241,10 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               ? 'Calculate statutory normal filing fees, 15-day due date from AGM/EGM, and Table B late fee multipliers (1× to 12×) for Form ADT-1 on MCA V3.'
               : form.slug === 'chg-1'
               ? 'Calculate exact normal filing fees, 30-60-120 day Section 77 timelines, 3×/6× extension multipliers, and ad valorem penalties (up to ₹5 Lakhs) for Form CHG-1 on MCA V3.'
+              : form.slug === 'mgt-7'
+              ? 'Calculate exact normal filing fees, 60-day AGM statutory deadlines, ₹100/day uncapped late fees, Form MGT-8 PCS certification, and Section 92(5) adjudication penalties on MCA V3.'
+              : form.slug === 'mgt-7a'
+              ? 'Calculate abridged annual return fees, 60-day due dates, ₹100/day late fees, Small Company limits (₹10 Cr / ₹100 Cr), and Section 446B 50% penalty relief for OPCs and Small Companies on MCA V3.'
               : `Calculate exact normal filing fees and late penalties for ${form.formNumber} (${form.formName}) based on authorized capital and delay.`}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">

@@ -2,7 +2,7 @@ import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import { Mgt7ComplianceCalculationResult } from '@/lib/rule-engine/mgt7-engine'
 
-export function generateMgt7Pdf(result: Mgt7ComplianceCalculationResult): jsPDF {
+export function generateMgt7Pdf(result: Mgt7ComplianceCalculationResult, companyName?: string): jsPDF {
   const doc = new jsPDF()
   const pageWidth = doc.internal.pageSize.width
 
@@ -49,6 +49,7 @@ export function generateMgt7Pdf(result: Mgt7ComplianceCalculationResult): jsPDF 
     headStyles: { fillColor: navy, textColor: 255, fontStyle: 'bold', fontSize: 8.5 },
     body: [
       ['Form Number & Title', `${result.metadata.formCode} — ${result.metadata.formName}`, 'Rule 11, Companies (Management & Admin) Rules 2014'],
+      ['Company Name', companyName ? companyName.toUpperCase() : 'Not Specified (Generic Estimation)', 'As registered on MCA21 portal'],
       ['Financial Year', result.metadata.financialYear, 'Relevant annual return filing period'],
       ['Company Classification', result.metadata.companyClassification, result.metadata.isSmallCompany ? 'Small Co under Sec 2(85)' : 'Standard entity class'],
       ['Nominal Share Capital', result.metadata.hasShareCapital ? `₹ ${result.metadata.nominalCapital.toLocaleString('en-IN')}` : 'Without Share Capital', 'Table A, Items 5 & 6 bracket basis'],
