@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useMemo } from 'react'
+import Link from 'next/link'
 import { mcaForms } from '@/data/mca-forms'
 import { calculateMCAFee, CalculatorParams } from '@/lib/calculatorUtils'
 
@@ -205,8 +206,40 @@ export default function UnifiedCalculator() {
         </p>
       </div>
 
+      {/* Quick Select Popular Forms */}
+      <div className="mb-6">
+        <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-2">Quick Select Popular Forms:</span>
+        <div className="flex flex-wrap gap-2">
+          {[
+            { slug: 'aoc-4', label: 'AOC-4 (Financial Statements)' },
+            { slug: 'mgt-7', label: 'MGT-7 (Annual Return)' },
+            { slug: 'mgt-7a', label: 'MGT-7A (Small Co/OPC)' },
+            { slug: 'adt-1', label: 'ADT-1 (Auditor)' },
+            { slug: 'chg-1', label: 'CHG-1 (Charges)' },
+            { slug: 'sh-7', label: 'SH-7 (Share Capital)' },
+            { slug: 'inc-22', label: 'INC-22 (Registered Office)' },
+            { slug: 'dir-12', label: 'DIR-12 (Directors)' },
+            { slug: 'dir-3-kyc', label: 'DIR-3 KYC' },
+            { slug: 'spice-plus', label: 'SPICe+ (Incorporation)' }
+          ].map(item => (
+            <button
+              key={item.slug}
+              type="button"
+              onClick={() => setSelectedSlug(item.slug)}
+              className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all ${
+                selectedSlug === item.slug
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+              }`}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <form 
-        className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6 mb-10"
+        className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6 mb-8"
       >
         {/* Basic Inputs */}
         <div className="flex flex-col">
@@ -352,38 +385,101 @@ export default function UnifiedCalculator() {
         )}
       </form>
 
-      {/* Calculate Button (replaces live result section) */}
-      <div className="mt-8 flex flex-col sm:flex-row gap-4">
-        <button
-          onClick={() => {
-            setShowModal(true)
-            // Log tool usage asynchronously
-            fetch('/api/calculators/log', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                type: 'mca_late_fee',
-                input: { formSlug: selectedForm.slug, companyType, capital, delay, isRepeatOffender, newCapital, state, chargeAmount },
-                result: { baseFee: result.baseFee, lateFee: result.lateFee, stampDuty: result.stampDuty, adValoremFee: result.adValoremFee, total: result.total }
-              })
-            }).catch(console.error)
-          }}
-          className="flex-1 bg-navy hover:bg-slate-800 dark:bg-amber-500 dark:hover:bg-amber-400 text-white dark:text-slate-950 font-bold py-4 px-6 rounded-xl transition-all flex items-center justify-center gap-2 text-lg shadow-md hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
-        >
-          Calculate Fee <span aria-hidden="true">→</span>
-        </button>
-        <button
-          onClick={copyShareLink}
-          aria-label="Copy share link to clipboard"
-          className="sm:w-auto px-6 py-4 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
-        >
-          <svg className="size-5 text-slate-500 dark:text-slate-400" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
-          {copiedLink ? 'Link Copied!' : 'Copy Share Link'}
-        </button>
+      {/* Live Result Card */}
+      <div className="p-6 rounded-2xl border border-blue-200 dark:border-blue-900/60 bg-gradient-to-br from-blue-50/50 via-white to-slate-50 dark:from-slate-800/90 dark:via-slate-900 dark:to-slate-950 shadow-sm mb-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-blue-100 dark:border-slate-800">
+          <div>
+            <span className="text-xs font-bold text-blue-700 dark:text-blue-400 uppercase tracking-wider">Total Portal Payable</span>
+            <div className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white tabular-nums flex items-baseline mt-1">
+              <span className="text-2xl mr-1 text-slate-400 dark:text-slate-500 font-medium">₹</span>
+              {result.total.toLocaleString('en-IN')}
+            </div>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              Form {selectedForm.formNumber} • {companyType.toUpperCase()} • ₹{capital.toLocaleString('en-IN')} Nominal Capital
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={handleDownloadPDF}
+              className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm hover:shadow"
+            >
+              <svg className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+              Download PDF Report
+            </button>
+            <button
+              onClick={() => setShowModal(true)}
+              className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600 text-white rounded-xl text-xs font-bold transition-colors"
+            >
+              Full Breakdown View
+            </button>
+            <button
+              onClick={copyShareLink}
+              className="px-3 py-2.5 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-semibold hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+            >
+              {copiedLink ? '✓ Copied!' : 'Share Link'}
+            </button>
+          </div>
+        </div>
+
+        {/* Breakdown Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4 border-b border-blue-100 dark:border-slate-800 text-xs">
+          <div>
+            <span className="text-slate-500 dark:text-slate-400 block mb-0.5">Normal Filing Fee</span>
+            <span className="text-sm font-bold text-slate-900 dark:text-white tabular-nums">₹ {result.baseFee.toLocaleString('en-IN')}</span>
+          </div>
+          <div>
+            <span className="text-slate-500 dark:text-slate-400 block mb-0.5">Additional Late Fee</span>
+            <span className={`text-sm font-bold tabular-nums ${result.lateFee > 0 ? 'text-red-600 dark:text-red-400' : 'text-slate-900 dark:text-white'}`}>
+              ₹ {result.lateFee.toLocaleString('en-IN')}
+            </span>
+          </div>
+          <div>
+            <span className="text-slate-500 dark:text-slate-400 block mb-0.5">Stamp Duty / Ad Valorem</span>
+            <span className="text-sm font-bold text-slate-900 dark:text-white tabular-nums">
+              {(result.stampDuty > 0 || result.adValoremFee > 0)
+                ? `₹ ${(result.stampDuty + result.adValoremFee).toLocaleString('en-IN')}`
+                : '₹ 0'}
+            </span>
+          </div>
+          <div>
+            <span className="text-slate-500 dark:text-slate-400 block mb-0.5">Filing Delay</span>
+            <span className="text-sm font-bold text-slate-900 dark:text-white tabular-nums">
+              {delay > 0 ? `${delay} Days` : '0 Days (On-Time)'}
+            </span>
+          </div>
+        </div>
+
+        {/* Warning / Guidance Text */}
+        {result.warningText && (
+          <div className="pt-3 flex items-start gap-2 text-xs text-slate-600 dark:text-slate-300">
+            <span className="text-blue-600 dark:text-blue-400 font-bold shrink-0">ℹ️ Statutory Note:</span>
+            <span>{result.warningText}</span>
+          </div>
+        )}
+
+        {/* Dedicated Workspace Cross-Link if applicable */}
+        {(selectedForm.slug === 'mgt-7' || selectedForm.slug === 'mgt-7a' || selectedForm.slug === 'adt-1' || selectedForm.slug === 'chg-1') && (
+          <div className="mt-4 pt-3 border-t border-blue-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs bg-white/70 dark:bg-slate-900/70 p-3 rounded-lg border border-blue-200/60 dark:border-slate-800">
+            <div className="flex items-center gap-2">
+              <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-slate-700 dark:text-slate-300 font-medium">
+                {selectedForm.slug.startsWith('mgt-7') && 'Need 60-day AGM calendar date engine, Small Co evaluation (G.S.R. 880(E)) & MGT-8 check?'}
+                {selectedForm.slug === 'adt-1' && 'Need 15-day auditor appointment calculator & printable ROC fee report?'}
+                {selectedForm.slug === 'chg-1' && 'Need 30-60-120 day ad-valorem matrices & Regional Director condonation check?'}
+              </span>
+            </div>
+            <Link
+              href={`/tools/fee-calculator/companies/${selectedForm.slug}`}
+              className="font-bold text-blue-600 dark:text-blue-400 hover:underline shrink-0"
+            >
+              Open Dedicated {selectedForm.formNumber} Workspace →
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* Quick Compare 9 Common Forms */}
-      <div className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800">
+      <div className="mt-8 pt-8 border-t border-slate-200 dark:border-slate-800">
         <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Quick Compare: 9 Common Forms</h3>
         <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">See how your current inputs (Company Type, Capital, Delay) affect the 9 most frequently filed MCA forms simultaneously.</p>
         <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
@@ -400,7 +496,14 @@ export default function UnifiedCalculator() {
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {commonForms.map((item: any) => (
                 <tr key={item.form.slug} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="px-4 py-3 font-bold text-blue-700 dark:text-blue-400">{item.form.formNumber}</td>
+                  <td className="px-4 py-3 font-bold text-blue-700 dark:text-blue-400">
+                    <Link href={`/tools/fee-calculator/companies/${item.form.slug}`} className="hover:underline inline-flex items-center gap-1.5">
+                      <span>{item.form.formNumber}</span>
+                      {['mgt-7', 'adt-1', 'chg-1'].includes(item.form.slug) && (
+                        <span className="text-[10px] bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 px-1.5 py-0.5 rounded font-medium">Dedicated</span>
+                      )}
+                    </Link>
+                  </td>
                   <td className="px-4 py-3 text-slate-600 dark:text-slate-300 tabular-nums">₹{item.result.baseFee.toLocaleString()}</td>
                   <td className={`px-4 py-3 tabular-nums ${item.result.lateFee > 0 ? 'text-red-600 dark:text-red-400 font-bold' : 'text-slate-600 dark:text-slate-300'}`}>
                     ₹{item.result.lateFee.toLocaleString()}

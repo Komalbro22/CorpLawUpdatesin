@@ -1,81 +1,50 @@
 'use client'
 
 import React, { useState } from 'react'
+import { companyFaqs, FAQItem } from './companyFaqsData'
+
+export type { FAQItem }
+export { companyFaqs }
 
 export default function CompanyFAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
 
-  const faqs = [
-    {
-      q: 'What is the normal fee for filing Company ROC forms?',
-      a: 'For private and public companies, normal filing fees range from ₹200 to ₹600 depending on the authorized share capital. For OPCs and Small Companies, the fee is heavily subsidized, ranging from ₹50 to ₹200.'
-    },
-    {
-      q: 'How is the late fee calculated for AOC-4 and MGT-7?',
-      a: 'Annual returns like AOC-4 and MGT-7 have an uncapped penalty of ₹100 per day. For example, if you are 30 days late, the penalty will be exactly ₹3,000 in addition to the normal filing fee.'
-    },
-    {
-      q: 'What happens if I delay filing general forms like ADT-1 or INC-22?',
-      a: 'General forms attract a multiplier-based penalty under Table B (Rule 12). For Form ADT-1, you have 15 days from the meeting appointing the auditor to file with normal fee. If delayed, additional fee starts immediately: 1× normal fee for up to 15 days delay, 2× for 16–30 days delay, up to 12× for delays beyond 180 days (capped up to 270 days). Beyond 270 days, prior condonation of delay under Section 403 via Form CG-1 is mandatory. (Note: ADT-1 does NOT attract ₹100/day penalty).'
-    },
-    {
-      q: 'How is stamp duty calculated for Share Capital (SH-7)?',
-      a: 'Stamp duty for increasing authorized share capital is determined by your state. For example, Maharashtra charges 0.2% subject to a cap of ₹50 Lakhs, while Delhi charges 0.15%. Our calculator provides an indicative estimate based on your selected state.'
-    },
-    {
-      q: 'What is the penalty for late filing of CHG-1?',
-      a: 'If Form CHG-1 is delayed within 30 days past the initial 30-day window (Days 31–60 from creation), an additional fee of 3× normal fee (Small/OPC) or 6× normal fee (Other) applies. The ad valorem fee (0.025% max ₹1L for Small/OPC, 0.05% max ₹5L for Other) activates only for delays between 31 and 90 days (Days 61–120 from creation). Beyond 120 days, direct ROC filing is barred and Section 87 condonation from the Regional Director (Form CHG-8) is mandatory.'
-    },
-    {
-      q: 'What are the penalties for late filing of MGT-14?',
-      a: 'Post the Companies (Amendment) Act, 2020, the penalty for MGT-14 under Section 117(2) was drastically reduced. The company faces a base penalty of ₹10,000 plus ₹100 per day (capped at ₹2,00,000). The officer in default also faces ₹10,000 plus ₹100 per day (capped at ₹50,000).'
-    },
-    {
-      q: 'What is the penalty for not filing DIR-12 on time?',
-      a: 'DIR-12 falls under the Chapter XI residuary penalty (Section 172). Both the company and the officer in default are liable to a base penalty of ₹50,000 plus ₹500 per day. The maximum cap is ₹3,00,000 for the company and ₹1,00,000 for the officer.'
-    },
-    {
-      q: 'How does the Section 446B halving relief work?',
-      a: 'Section 446B provides a massive 50% discount on statutory adjudication penalties (like Section 450) for Small Companies, One Person Companies (OPCs), and Startups. The maximum caps are also halved.'
-    },
-    {
-      q: 'What is the penalty for BEN-2 after the 2020 decriminalization?',
-      a: 'Under Section 90(11), the penalty for BEN-2 is a base of ₹1,00,000 plus ₹500/day for the company (max ₹5,00,000), and ₹25,000 plus ₹200/day for the officer in default (max ₹1,00,000).'
-    }
-  ]
-
   return (
     <div className="mb-20">
+      <div className="flex items-center gap-3 mb-3">
+        <span className="text-blue-600 dark:text-blue-400 text-sm font-bold uppercase tracking-wider">Statutory Intelligence</span>
+      </div>
       <h2 className="text-2xl md:text-3xl font-bold text-navy dark:text-white font-heading mb-8">
-        Frequently Asked Questions
+        Frequently Asked Questions: MCA &amp; ROC Fees (FY 2026-27)
       </h2>
       <div className="space-y-3">
-        {faqs.map((faq, index) => {
+        {companyFaqs.map((faq, index) => {
           const isOpen = openIndex === index
           return (
             <div 
               key={index} 
               className={`border rounded-2xl overflow-hidden transition-all duration-200 ${
                 isOpen 
-                ? 'border-navy dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50' 
+                ? 'border-blue-600 dark:border-blue-500 bg-blue-50/40 dark:bg-slate-800/60 shadow-sm' 
                 : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300 dark:hover:border-slate-700'
               }`}
             >
               <button
-                className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 focus:outline-none"
+                className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
                 onClick={() => setOpenIndex(isOpen ? null : index)}
+                aria-expanded={isOpen}
               >
-                <span className={`font-semibold text-lg ${isOpen ? 'text-navy dark:text-white' : 'text-slate-800 dark:text-slate-200'}`}>
+                <span className={`font-semibold text-base md:text-lg ${isOpen ? 'text-blue-900 dark:text-white' : 'text-slate-800 dark:text-slate-200'}`}>
                   {faq.q}
                 </span>
-                <span className={`shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180 text-navy dark:text-white' : 'text-slate-400'}`}>
+                <span className={`shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180 text-blue-600 dark:text-blue-400' : 'text-slate-400'}`}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="6 9 12 15 18 9"></polyline>
                   </svg>
                 </span>
               </button>
               <div className={`px-6 overflow-hidden transition-all duration-200 ease-in-out ${isOpen ? 'max-h-96 pb-6 opacity-100' : 'max-h-0 opacity-0'}`}>
-                <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-[15px]">
+                <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-[15px]">
                   {faq.a}
                 </p>
               </div>
