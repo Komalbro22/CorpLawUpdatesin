@@ -14,6 +14,7 @@ import ADT1Workspace from './ADT1Workspace'
 import CHG1Workspace from './CHG1Workspace'
 import MGT7Workspace from './MGT7Workspace'
 import AOC4Workspace from './AOC4Workspace'
+import DPT3Workspace from './DPT3Workspace'
 
 interface ResultRow {
   component: string
@@ -48,6 +49,10 @@ function getMultiplier(delay: number): number {
 }
 
 export default function FormSpecificCalc({ form }: { form: MCAForm }) {
+  if (form.slug === 'dpt-3') {
+    return <DPT3Workspace form={form} />
+  }
+
   if (form.slug === 'adt-1') {
     return <ADT1Workspace form={form} />
   }

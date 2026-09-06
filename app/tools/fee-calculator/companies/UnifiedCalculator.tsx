@@ -18,7 +18,7 @@ const extraForms = [
   { slug: 'dir-3-kyc', formNumber: 'DIR-3-KYC', formName: 'Director KYC', penaltyType: 'flat', penaltyRate: '₹5000', normalFeeStructure: 'flat', concessionApplies: false },
   { slug: 'stk-2', formNumber: 'STK-2', formName: 'Strike off company', penaltyType: 'flat', penaltyRate: '₹5000', normalFeeStructure: 'flat', concessionApplies: false },
   { slug: 'mgt-14', formNumber: 'MGT-14', formName: 'Filing of Resolutions and agreements', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
-  { slug: 'dpt-3', formNumber: 'DPT-3', formName: 'Return of Deposits', penaltyType: 'multiplier', penaltyRate: '1.2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
+  { slug: 'dpt-3', formNumber: 'DPT-3', formName: 'Return of Deposits & Exempted Receipts', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
   { slug: 'ben-2', formNumber: 'BEN-2', formName: 'Return of SBO Disclosures', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
   { slug: 'pas-6', formNumber: 'PAS-6', formName: 'Reconciliation of share capital audit', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
   { slug: 'adt-3', formNumber: 'ADT-3', formName: 'Notice of resignation by auditor', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },

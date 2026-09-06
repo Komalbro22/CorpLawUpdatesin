@@ -674,5 +674,74 @@ export const mcaForms: MCAForm[] = [
       consequencesOfDelay: '<p>Interestingly, the MCA portal does not charge a standard multiplier late fee for MSME-1. However, non-compliance is extremely dangerous. Defaulting companies face adjudication under Section 450 of the Companies Act, resulting in a base fine of ₹10,000, plus a continuing penalty of ₹1,000 per day (capped at ₹2 Lakhs) for the company and its directors.</p>',
       workedExample: '<p><strong>Scenario:</strong> Form MSME-1 is filed 30 days late.</p><ul><li>Normal Filing Fee: ₹0</li><li>Portal Late Fee: ₹0</li><li><strong>Adjudication Risk:</strong> Base ₹10,000 + (30 days × ₹1,000) = <strong>₹40,000 Potential Fine</strong></li></ul>'
     }
+  },
+  {
+    slug: 'dpt-3',
+    formNumber: 'DPT-3',
+    formName: 'Return of Deposits and Exempted Transactions',
+    aliases: ['dpt-3', 'dpt3', 'DPT 3', 'return of deposits', 'exempted deposits return', 'deposit return MCA', 'rule 16 return'],
+    category: 'annual',
+    filedBy: ['Private Limited Companies', 'Public Limited Companies (Unlisted & Listed)', 'One Person Companies (OPC)', 'Small Companies', 'Section 8 Companies', 'Holding & Subsidiary Companies'],
+    dueDate: '30th June annually (Within 90 days of FY closure; waived up to 31 July 2026 for FY 2025-26 under MCA Circular 02/2026)',
+    section: 'Section 73 & 76 read with Rule 16 & 16A, Companies (Acceptance of Deposits) Rules, 2014',
+    penaltyType: 'multiplier',
+    penaltyRate: '2× to 12× normal fee (Table B) + Rule 21 fine up to ₹5,000 + ₹500/day',
+    normalFeeStructure: 'capital_slab',
+    baseFeeSlab: 'standard_company_slab',
+    concessionApplies: false,
+    metaTitle: 'Form DPT-3 Fee Calculator: Return of Deposits & Late Penalty (FY 2026-27) | CorpLawUpdates.in',
+    metaDescription: 'Calculate exact Form DPT-3 normal filing fees (₹200–₹600), Table B late multipliers (2×–12×), 30 June deadline, Circular 02/2026 waiver, and Rule 21 penalties.',
+    ogDescription: 'Authoritative Form DPT-3 fee calculator for MCA V3. Compute normal base fees, Table B delay multipliers, Rule 21 fine exposure, and Rule 2(1)(c) exempted receipts.',
+    faqItems: [
+      {
+        question: 'Who is required to file Form DPT-3?',
+        answer: 'Every company registered in India (including Private Limited, Public Limited, One Person Companies, Small Companies, and Section 8 Companies) must file Form DPT-3 if it has any outstanding loan, advance, deposit, or receipt not considered as a deposit as on 31st March. Only Government Companies, Banking Companies, RBI-registered NBFCs, and NHB-registered Housing Finance Companies (HFCs) are exempt.'
+      },
+      {
+        question: 'Does a company with only director loans or inter-corporate loans need to file DPT-3?',
+        answer: 'Yes, absolutely. This is the single most common compliance mistake. Rule 16A requires reporting of all receipts not considered as deposits under Rule 2(1)(c). "Exempted from deposit definition" does NOT mean "exempt from filing." Every director loan, inter-corporate advance, bank loan, or customer advance outstanding on 31 March must be reported in DPT-3.'
+      },
+      {
+        question: 'What is the statutory due date for filing Form DPT-3?',
+        answer: 'Under Rule 16 of the Companies (Acceptance of Deposits) Rules, 2014, Form DPT-3 must be filed on or before 30th June of each year (i.e., within 90 days from the closure of the financial year on 31st March).'
+      },
+      {
+        question: 'What was the MCA Circular No. 02/2026 extension for FY 2025-26?',
+        answer: 'Following a major fire incident at the MCA Data Centre on 5 June 2026 that disrupted MCA21 V3 services, the Ministry issued General Circular No. 02/2026 dated 19 June 2026 waiving additional filing fees for Form DPT-3 filed up to 31 July 2026 for FY 2025-26. However, for filings made on or after 1 August 2026, Table B delay multipliers are calculated from the original due date of 1 July 2026.'
+      },
+      {
+        question: 'Is an Auditor\'s Certificate mandatory for filing Form DPT-3?',
+        answer: 'An Auditor\'s Certificate is mandatory only when filing: (1) Return of Deposits, or (2) Return of Deposits and particulars of transactions by a company not considered as deposits. When filing ONLY for particulars of transactions not considered as deposits under Rule 2(1)(c) (which applies to over 90% of private companies with director loans), an auditor certificate is NOT mandatory on the MCA V3 portal.'
+      },
+      {
+        question: 'What are the normal government filing fees for Form DPT-3 under Table A?',
+        answer: 'Normal filing fees are based on nominal share capital: Less than ₹1 Lakh: ₹200; ₹1 Lakh to ₹4,99,999: ₹300; ₹5 Lakh to ₹24,99,999: ₹400; ₹25 Lakh to ₹99,99,999: ₹500; ₹1 Crore or more: ₹600. Companies without share capital pay a flat fee of ₹200.'
+      },
+      {
+        question: 'What are the late fee multipliers for delayed filing of Form DPT-3 under Table B?',
+        answer: 'Under Table B of the Companies (Registration Offices and Fees) Rules, 2014: Delay up to 30 days: 2× normal fee; Delay 31 to 60 days: 4× normal fee; Delay 61 to 90 days: 6× normal fee; Delay 91 to 180 days: 10× normal fee; Delay beyond 180 days: 12× normal fee.'
+      },
+      {
+        question: 'What is the penalty for non-filing of Form DPT-3 under Rule 21?',
+        answer: 'Under Rule 21 of the Deposit Rules, failure to file DPT-3 attracts a fine up to ₹5,000 on the company and up to ₹5,000 on every officer in default, plus a continuing fine of ₹500 per day for each day the default continues. This is in addition to the MCA portal additional filing fee.'
+      },
+      {
+        question: 'When does Section 76A substantive penalty apply to deposits?',
+        answer: 'Section 76A applies if a company accepts deposits from the public in contravention of Section 73 or Section 76, or fails to repay them. Penalties include a fine on the company of ₹1 Crore to ₹10 Crore (or 2× the deposit amount), and imprisonment up to 7 years plus fine of ₹25 Lakh to ₹2 Crore for officers in default. It does not apply to mere procedural delay of exempted loans.'
+      },
+      {
+        question: 'Do LLPs need to file Form DPT-3?',
+        answer: 'No. Form DPT-3 is prescribed strictly under the Companies Act, 2013 and applies only to companies. Limited Liability Partnerships (LLPs) are governed by the LLP Act, 2008 and file Form 8 (Statement of Account & Solvency) and Form 11 (Annual Return).'
+      }
+    ],
+    relatedForms: ['aoc-4', 'mgt-7', 'chg-1'],
+    filedTogetherWith: [],
+    contentSections: {
+      whatIsThisForm: '<p><strong>Form DPT-3</strong> is a statutory compliance return filed under <strong>Section 73 and Section 76 of the Companies Act, 2013</strong> read with <strong>Rule 16 and Rule 16A of the Companies (Acceptance of Deposits) Rules, 2014</strong>. It serves as an electronic information return to disclose all outstanding deposits as well as all receipts of money or loans not considered as deposits (exempted receipts) under Rule 2(1)(c) as on 31st March of each financial year.</p><p>Introduced by the MCA via the 2019 Amendment Rules, Form DPT-3 was created to curb illicit deposit-taking, prevent unaccounted corporate borrowings, and provide transparency regarding related-party loans, director advances, and inter-corporate deposits.</p>',
+      whoMustFile: '<p>Every company incorporated under the Companies Act, 2013—including <strong>Private Limited Companies, Public Limited Companies (unlisted and listed), One Person Companies (OPC), Small Companies, and Section 8 Companies</strong>—must file Form DPT-3 if they have any outstanding loans or advances as on 31st March.</p><p><strong>Exempted Entities:</strong> Only Government Companies, Banking Companies, Reserve Bank of India (RBI) registered Non-Banking Financial Companies (NBFCs), and National Housing Bank (NHB) registered Housing Finance Companies (HFCs) are exempt from filing Form DPT-3.</p>',
+      dueDateExplained: '<p>Under Rule 16, Form DPT-3 must be filed annually <strong>on or before 30th June</strong> following the close of the financial year (within 90 days from 31st March). For FY 2025-26, following the MCA Data Centre fire on 5th June 2026, the MCA issued <strong>General Circular No. 02/2026</strong> waiving additional filing fees up to <strong>31st July 2026</strong>. For any filings on or after 1st August 2026, Table B delay multipliers apply calculated from the original due date of 1st July 2026.</p>',
+      consequencesOfDelay: '<p>Non-filing or delayed filing of Form DPT-3 carries distinct statutory consequences:</p><ul><li><strong>MCA21 Table B Late Fees:</strong> Escalating additional fees of 2× to 12× the normal base fee based on the period of delay.</li><li><strong>Rule 21 Procedural Fine:</strong> Fine up to ₹5,000 on the company and ₹5,000 on every officer in default, plus ₹500 per day for continuing default.</li><li><strong>Section 76A Deposit Penalties:</strong> If unauthorized receipts are recharacterized as illegal public deposits, the company faces fines of ₹1 Crore to ₹10 Crore, and officers face imprisonment up to 7 years.</li></ul>',
+      workedExample: '<div class="space-y-4"><p><strong>Scenario: Private Limited Company (Authorized Capital ₹10 Lakhs) filing DPT-3 for FY 2025-26 on 20th August 2026 (51 Days Delay from 30 June)</strong></p><ul><li>Authorized Capital: ₹10,00,000 &rarr; Normal Base Fee (Table A, Item 5): <strong>₹400</strong></li><li>Statutory Due Date: 30 June 2026 (Circular 02/2026 waiver ended 31 July 2026)</li><li>Days of Delay (from 1 July): 51 days &rarr; Table B Slab (31 to 60 days): <strong>4× Normal Fee</strong></li><li>Additional Late Fee: 4 × ₹400 = <strong>₹1,600</strong></li><li><strong>Total MCA21 Portal Challan:</strong> ₹400 + ₹1,600 = <strong>₹2,000</strong></li><li><strong>Rule 21 Indicative Exposure:</strong> ₹5,000 (Company) + ₹5,000 (Officer) + (51 days × ₹500 = ₹25,500) = <strong>₹35,500</strong></li></ul></div>'
+    }
   }
 ]

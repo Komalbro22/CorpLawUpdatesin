@@ -229,6 +229,43 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         text: 'If filing past the 60-day deadline, compute additional fee at flat ₹100 per day without upper cap on MCA V3, and check potential Section 92(5) ROC adjudication exposure (with Section 446B relief if eligible).'
       }
     ]
+  } : form.slug === 'dpt-3' ? {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How to Calculate Form DPT-3 Filing Fees & Return of Deposits Penalties on MCA V3',
+    description: 'Step-by-step guide to calculating normal filing fees, Table B multipliers (2x to 12x), 30 June statutory due date, Circular 02/2026 waiver, and Rule 21 penalties for Form DPT-3.',
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Identify Outstanding Receipts as on 31st March',
+        text: 'Review corporate balance sheet and ledger to identify any outstanding deposits (Sections 73/76) or exempted loans/receipts under Rule 2(1)(c) (such as director loans, inter-corporate borrowings, or customer advances).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Determine Filing Category & Auditor Certificate Requirement',
+        text: 'Select return category: Return of Deposits requires mandatory Auditor Certificate and trust deed; particulars of transactions not considered as deposits (Rule 2(1)(c)) does NOT require an Auditor Certificate.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Establish Statutory Due Date & Circular 02/2026 Waiver',
+        text: 'Statutory due date is 30 June annually (90 days from FY closure). For FY 2025-26, MCA General Circular No. 02/2026 provided fee waiver up to 31 July 2026.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: 'Determine Nominal Share Capital Base Fee',
+        text: 'Check authorized capital bracket under Table A (₹200 for < ₹1L; ₹300 for ₹1L-₹5L; ₹400 for ₹5L-₹25L; ₹500 for ₹25L-₹1Cr; ₹600 for ≥ ₹1Cr; or flat ₹200 for company without share capital).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 5,
+        name: 'Apply Table B Multiplier & Assess Rule 21 Penalty',
+        text: 'If delayed, apply Table B multiplier (2x for ≤30d, 4x for ≤60d, 6x for ≤90d, 10x for ≤180d, 12x for >180d). Evaluate potential Rule 21 exposure (₹5,000 company + ₹5,000 per officer + ₹500/day continuing default).'
+      }
+    ]
   } : null
 
   return (
@@ -269,7 +306,9 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </span>
           </div>
           <h1 className="text-[2.25rem] font-bold font-serif text-white mb-4">
-            {form.slug === 'adt-1'
+            {form.slug === 'dpt-3'
+              ? 'DPT-3 Late Fees & Return of Deposits Calculator (FY 2026-27)'
+              : form.slug === 'adt-1'
               ? 'ADT-1 Late Fees & Penalty Calculator (FY 2026-27) — Auditor Appointment'
               : form.slug === 'chg-1'
               ? 'CHG-1 Late Fees & Ad Valorem Calculator (FY 2026-27) — Charge Creation'
@@ -282,7 +321,9 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               : `${form.formNumber} — ${form.formName} Fee & Penalty Calculator (2026-27)`}
           </h1>
           <p className="text-slate-400 text-lg max-w-3xl mx-auto mb-8">
-            {form.slug === 'adt-1'
+            {form.slug === 'dpt-3'
+              ? 'Calculate statutory normal filing fees, 30 June due date, Circular 02/2026 fee waiver, Table B delay multipliers (2× to 12×), and Rule 21 penalties on MCA V3.'
+              : form.slug === 'adt-1'
               ? 'Calculate statutory normal filing fees, 15-day due date from AGM/EGM, and Table B late fee multipliers (1× to 12×) for Form ADT-1 on MCA V3.'
               : form.slug === 'chg-1'
               ? 'Calculate exact normal filing fees, 30-60-120 day Section 77 timelines, 3×/6× extension multipliers, and ad valorem penalties (up to ₹5 Lakhs) for Form CHG-1 on MCA V3.'
@@ -310,6 +351,24 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
 
       <div className="max-w-5xl mx-auto px-4 -mt-8 relative z-10 mb-16">
         {/* Princeton GEO Direct Answer Block (58 Words) */}
+        {form.slug === 'dpt-3' && (
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/50 border-l-4 border-l-amber-600 rounded-2xl shadow-sm">
+            <div className="flex items-center gap-2 mb-2 text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
+              <span>⚡</span> Fast Statutory Summary • MCA V3 Portal
+            </div>
+            <p className="text-slate-800 dark:text-slate-200 text-sm md:text-base leading-relaxed font-medium">
+              Form DPT-3 is the statutory annual return of deposits and non-deposit receipts filed under Section 73 and Rule 16 of the Deposit Rules. Normal filing fees range from ₹200 to ₹600 based on authorized capital. Delayed filings attract Table B multipliers from 2× to 12×. For FY 2025-26, filings up to 31 July 2026 enjoyed fee waiver under MCA General Circular 02/2026.
+            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-3">
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Section 73 Due Date: 30 June Annually</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Circular 02/2026: 31 July Waiver</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Rule 21: ₹5,000 + ₹500/day</span>
+            </div>
+          </div>
+        )}
+
         {form.slug === 'aoc-4' && (
           <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 border-l-4 border-l-blue-600 rounded-2xl shadow-sm">
             <div className="flex items-center gap-2 mb-2 text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
