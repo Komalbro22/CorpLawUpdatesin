@@ -173,7 +173,7 @@ function CompanySEO() {
           </div>
         </div>
         <div className="flex items-center gap-2 text-xs font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-3 py-1.5 rounded-lg border border-emerald-200 dark:border-emerald-800 self-start md:self-auto">
-          <span>✓ Vetted by Practicing Company Secretaries (PCS)</span>
+          <span>✓ Validated against MCA21 V3 Portal Fee Schedules</span>
         </div>
       </div>
 
