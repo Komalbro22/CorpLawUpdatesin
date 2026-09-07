@@ -20,7 +20,7 @@ const ALLOWED_ATTR = [
   'href', 'src', 'alt', 'title', 'class', 'style', 'id', 'target', 'rel',
   'width', 'height', 'border', 'align', 'valign',
   'cellpadding', 'cellspacing', 'colspan', 'rowspan',
-  'bgcolor', 'color', 'loading',
+  'bgcolor', 'color', 'loading', 'open',
   // SVG attributes
   'viewbox', 'viewBox', 'fill', 'stroke', 'stroke-width',
   'stroke-linecap', 'stroke-linejoin', 'd', 'cx', 'cy',
@@ -119,7 +119,7 @@ export function sanitizeHtml(html: string): string {
     ALLOWED_TAGS,
     ALLOWED_ATTR,
     ADD_TAGS: ['style', 'svg', 'path', 'g', 'rect', 'circle', 'polyline', 'polygon', 'line', 'text', 'tspan', 'use', 'defs', 'linearGradient', 'stop', 'clipPath', 'mask', 'foreignObject', 'iframe'],
-    ADD_ATTR: ['style', 'class', 'id', 'target', 'rel', 'viewBox', 'fill', 'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'd', 'cx', 'cy', 'r', 'rx', 'ry', 'x', 'y', 'x1', 'y1', 'x2', 'y2', 'points', 'transform', 'xmlns', 'aria-hidden'],
+    ADD_ATTR: ['style', 'class', 'id', 'target', 'rel', 'open', 'viewBox', 'fill', 'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'd', 'cx', 'cy', 'r', 'rx', 'ry', 'x', 'y', 'x1', 'y1', 'x2', 'y2', 'points', 'transform', 'xmlns', 'aria-hidden'],
     ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|data):|[^a-z]|[a-z+.-]+(?:[^a-z+.:-]|$))/i,
     FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover'],
     FORCE_BODY: true,

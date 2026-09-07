@@ -90,4 +90,63 @@ describe('Production Fixes & Regression Test Suite', () => {
       expect(parseRbiRate(sampleHtmlLow)).toBeNull()
     })
   })
+
+  describe('FAQ Accordions & Schema Extraction (Issue #6)', () => {
+    const stripIndentation = (content: string) =>
+      content.replace(/^[ \t]+(?=<\/?(?:[a-zA-Z][a-zA-Z0-9:-]*|!--|!DOCTYPE))/gm, '')
+
+    it('strips leading indentation from indented <details> and <summary>', () => {
+      const input = `
+Frequently asked questions
+
+    <details style="border:1px solid #e2e8f0;">
+      <summary style="font-weight:600;">Question 1?</summary>
+      <p>Answer 1</p>
+    </details>
+`
+      const stripped = stripIndentation(input)
+      expect(stripped).toContain('\n<details style="border:1px solid #e2e8f0;">')
+      expect(stripped).toContain('\n<summary style="font-weight:600;">Question 1?</summary>')
+      expect(stripped).toContain('\n<p>Answer 1</p>')
+      expect(stripped).toContain('\n</details>')
+    })
+
+    it('extracts FAQ pairs correctly from HTML details and summary blocks', () => {
+      const cleanText = (text: string) => text ? text.replace(/\s+/g, ' ').trim() : ''
+      const detailsRegex = /<details\b[^>]*>[\s\S]*?<summary\b[^>]*>([\s\S]*?)<\/summary>([\s\S]*?)<\/details>/gi
+
+      const html = `
+      <div style="margin:0 0 28px;">
+        <h3>Frequently asked questions</h3>
+
+        <details style="border:1px solid #e2e8f0;padding:12px 16px;">
+          <summary style="font-weight:600;color:#1e3a5f;cursor:pointer;">What does SEBI's September 2026 circular change for FPIs?</summary>
+          <p style="margin:10px 0 0;color:#475569;">It removes the "Fully Accessible Route" condition from an existing exemption, so FPIs investing only in Government Securities no longer need to furnish investor group details.</p>
+        </details>
+
+        <details style="border:1px solid #e2e8f0;padding:12px 16px;">
+          <summary style="font-weight:600;color:#1e3a5f;cursor:pointer;">Which FPIs newly qualify for this exemption?</summary>
+          <p style="margin:10px 0 0;color:#475569;">FPIs that invest only in Government Securities through the General Route now qualify.</p>
+        </details>
+      </div>
+`
+      const faqs: { question: string; answer: string }[] = []
+      let detailsMatch: RegExpExecArray | null
+      while ((detailsMatch = detailsRegex.exec(html)) !== null) {
+        const rawQ = detailsMatch[1] || ''
+        const rawA = detailsMatch[2] || ''
+        const q = cleanText(rawQ.replace(/<[^>]*>/g, ''))
+        const a = cleanText(rawA.replace(/<[^>]*>/g, ''))
+        if (q && a && q.length > 5 && a.length > 5) {
+          faqs.push({ question: q, answer: a })
+        }
+      }
+
+      expect(faqs).toHaveLength(2)
+      expect(faqs[0].question).toBe("What does SEBI's September 2026 circular change for FPIs?")
+      expect(faqs[0].answer).toContain("It removes the \"Fully Accessible Route\" condition")
+      expect(faqs[1].question).toBe("Which FPIs newly qualify for this exemption?")
+      expect(faqs[1].answer).toContain("FPIs that invest only in Government Securities through the General Route now qualify.")
+    })
+  })
 })

@@ -229,67 +229,82 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
     // Auto-extract FAQs for Search Console Rich Results
     const faqs: { question: string; answer: string }[] = []
     if (update.content) {
-        // 1. Convert HTML rich text to plain text, preserving paragraph breaks
-        const plainText = update.content
-            .replace(/<br\s*\/?>/gi, '\n')
-            .replace(/<\/p>|<\/div>|<\/li>|<\/h[1-6]>/gi, '\n')
-            .replace(/<[^>]*>/g, '') // Remove all other HTML tags
-            .replace(/&nbsp;/g, ' ')
-            .replace(/\u00A0/g, ' ');
-            
-        // 2. Find all markers (Q1, Q2, Question 1, etc.)
-        const markerRegex = /(?:\r?\n|^)\s*((?:Q|Question)\s*\d+[:.\s]+)/gi
-        const markers = Array.from(plainText.matchAll(markerRegex)) as any[]
-        
         const cleanText = (text: string) => text ? text.replace(/\s+/g, ' ').trim() : ''
 
-        markers.forEach((marker, i) => {
-            const start = (marker.index || 0) + marker[0].length
-            const nextMarker = markers[i + 1]
-            let end = nextMarker ? (nextMarker.index || plainText.length) : plainText.length
-
-            // If it is the last FAQ, terminate the block early if we find standard post-FAQ headings
-            if (!nextMarker) {
-                const endingKeywords = [
-                    /(?:\r?\n|^)\s*(?:###?\s*)?Conclusion\b/i,
-                    /(?:\r?\n|^)\s*(?:###?\s*)?Disclaimer\b/i,
-                    /(?:\r?\n|^)\s*(?:###?\s*)?About the Author\b/i,
-                    /(?:\r?\n|^)\s*(?:###?\s*)?Note\b/i,
-                    /(?:\r?\n|^)\s*(?:###?\s*)?References?\b/i
-                ]
-                for (const pattern of endingKeywords) {
-                    const match = plainText.substring(start).match(pattern)
-                    if (match && match.index !== undefined) {
-                        end = start + match.index
-                        break
-                    }
-                }
-            }
-
-            const block = plainText.substring(start, end).trim()
-            
-            // 3. Smart split: Question ends at first '?' or first newline
-            let qRaw = ''
-            let aRaw = ''
-            
-            const qEndMatch = block.match(/^(.*?\?)(?:\s+|$)([\s\S]*)$/)
-            if (qEndMatch) {
-                qRaw = qEndMatch[1]
-                aRaw = qEndMatch[2]
-            } else {
-                const lines = block.split(/\r?\n/)
-                qRaw = lines[0]
-                aRaw = lines.slice(1).join(' ')
-            }
-
-            // Include the "Q1" prefix in the question for completeness
-            const q = cleanText(marker[1].trim() + ' ' + qRaw)
-            const a = cleanText(aRaw)
-            
-            if (q && a) {
+        // 1. Try extracting HTML <details><summary> FAQs (used in circular & analysis deep dives)
+        const detailsRegex = /<details\b[^>]*>[\s\S]*?<summary\b[^>]*>([\s\S]*?)<\/summary>([\s\S]*?)<\/details>/gi
+        let detailsMatch: RegExpExecArray | null
+        while ((detailsMatch = detailsRegex.exec(update.content)) !== null) {
+            const rawQ = detailsMatch[1] || ''
+            const rawA = detailsMatch[2] || ''
+            const q = cleanText(rawQ.replace(/<[^>]*>/g, ''))
+            const a = cleanText(rawA.replace(/<[^>]*>/g, ''))
+            if (q && a && q.length > 5 && a.length > 5) {
                 faqs.push({ question: q, answer: a })
             }
-        })
+        }
+
+        // 2. If no <details><summary> FAQs were found, fallback to text markers (Q1, Q2, Question 1, etc.)
+        if (faqs.length === 0) {
+            // Convert HTML rich text to plain text, preserving paragraph breaks
+            const plainText = update.content
+                .replace(/<br\s*\/?>/gi, '\n')
+                .replace(/<\/p>|<\/div>|<\/li>|<\/h[1-6]>/gi, '\n')
+                .replace(/<[^>]*>/g, '') // Remove all other HTML tags
+                .replace(/&nbsp;/g, ' ')
+                .replace(/\u00A0/g, ' ')
+                
+            const markerRegex = /(?:\r?\n|^)\s*((?:Q|Question)\s*\d+[:.\s]+)/gi
+            const markers = Array.from(plainText.matchAll(markerRegex)) as any[]
+
+            markers.forEach((marker, i) => {
+                const start = (marker.index || 0) + marker[0].length
+                const nextMarker = markers[i + 1]
+                let end = nextMarker ? (nextMarker.index || plainText.length) : plainText.length
+
+                // If it is the last FAQ, terminate the block early if we find standard post-FAQ headings
+                if (!nextMarker) {
+                    const endingKeywords = [
+                        /(?:\r?\n|^)\s*(?:###?\s*)?Conclusion\b/i,
+                        /(?:\r?\n|^)\s*(?:###?\s*)?Disclaimer\b/i,
+                        /(?:\r?\n|^)\s*(?:###?\s*)?About the Author\b/i,
+                        /(?:\r?\n|^)\s*(?:###?\s*)?Note\b/i,
+                        /(?:\r?\n|^)\s*(?:###?\s*)?References?\b/i
+                    ]
+                    for (const pattern of endingKeywords) {
+                        const match = plainText.substring(start).match(pattern)
+                        if (match && match.index !== undefined) {
+                            end = start + match.index
+                            break
+                        }
+                    }
+                }
+
+                const block = plainText.substring(start, end).trim()
+                
+                // Smart split: Question ends at first '?' or first newline
+                let qRaw = ''
+                let aRaw = ''
+                
+                const qEndMatch = block.match(/^(.*?\?)(?:\s+|$)([\s\S]*)$/)
+                if (qEndMatch) {
+                    qRaw = qEndMatch[1]
+                    aRaw = qEndMatch[2]
+                } else {
+                    const lines = block.split(/\r?\n/)
+                    qRaw = lines[0]
+                    aRaw = lines.slice(1).join(' ')
+                }
+
+                // Include the "Q1" prefix in the question for completeness
+                const q = cleanText(marker[1].trim() + ' ' + qRaw)
+                const a = cleanText(aRaw)
+                
+                if (q && a) {
+                    faqs.push({ question: q, answer: a })
+                }
+            })
+        }
     }
 
     let contentPart1 = update.content || ''

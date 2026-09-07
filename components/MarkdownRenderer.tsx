@@ -244,6 +244,31 @@ function processInlineStyles(styleObj: any, className: string = '', isContainer:
         ) {
             classes.push('dynamic-text-adaptive');
             delete processedStyle.color;
+        } else if (
+            cLower === '#475569' ||
+            cLower === '#334155' ||
+            cLower === '#64748b' ||
+            cLower === '#555' ||
+            cLower === '#666'
+        ) {
+            classes.push('text-slate-600 dark:!text-slate-300');
+            delete processedStyle.color;
+        }
+    }
+
+    // Handle light neutral borders in dark mode
+    const borderVal = styleObj.border || styleObj.borderColor;
+    if (borderVal && typeof borderVal === 'string') {
+        const bLower = borderVal.toLowerCase().replace(/\s+/g, '');
+        if (
+            bLower.includes('#e2e8f0') ||
+            bLower.includes('#e5e7eb') ||
+            bLower.includes('#cbd5e1') ||
+            bLower.includes('#d1d5db') ||
+            bLower.includes('#eee') ||
+            bLower.includes('#e0e0e0')
+        ) {
+            classes.push('dark:!border-slate-800');
         }
     }
     
@@ -307,10 +332,10 @@ export default function MarkdownRenderer({ content }: { content: string }) {
     }, [content])
 
 
-    // Preprocess content to strip leading indentation from lines starting with HTML tags or comments.
-    // This prevents standard CommonMark parser from treating indented HTML blocks as code blocks.
+    // Preprocess content to strip leading indentation from lines starting with ANY HTML tags or comments.
+    // This prevents standard CommonMark parser from treating indented HTML blocks (such as <details>, <summary>, <div>, etc.) as code blocks.
     const processedContent = content
-        ? content.replace(/^\s+(?=<(?:\/)?(?:div|p|img|span|table|tr|td|th|tbody|thead|ul|ol|li|h[1-6]|a|strong|em|b|i|ins|del|iframe|svg|style|!--))/gim, '')
+        ? content.replace(/^[ \t]+(?=<\/?(?:[a-zA-Z][a-zA-Z0-9:-]*|!--|!DOCTYPE))/gm, '')
         : ''
 
     const sanitizedContent = sanitizeHtml(processedContent)
@@ -417,7 +442,12 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className, true);
                         return (
-                            <details suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
+                            <details
+                                suppressHydrationWarning
+                                style={processedStyle}
+                                className={`group my-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/40 dark:bg-slate-900/50 p-4 transition-all duration-200 open:shadow-sm dark:!border-slate-800 dark:!bg-slate-900/60 ${processedClassName}`}
+                                {...props}
+                            >
                                 {children}
                             </details>
                         );
@@ -426,7 +456,12 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
                         return (
-                            <summary suppressHydrationWarning style={processedStyle} className={`cursor-pointer font-bold ${processedClassName}`} {...props}>
+                            <summary
+                                suppressHydrationWarning
+                                style={processedStyle}
+                                className={`cursor-pointer font-bold select-none py-1 text-navy dark:text-slate-100 hover:text-amber-600 dark:hover:text-amber-400 transition-colors [&::-webkit-details-marker]:text-amber-500 [&::marker]:text-amber-500 ${processedClassName}`}
+                                {...props}
+                            >
                                 {children}
                             </summary>
                         );
