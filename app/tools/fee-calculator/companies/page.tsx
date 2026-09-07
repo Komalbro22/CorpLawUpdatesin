@@ -7,8 +7,10 @@ import { mcaForms } from '@/data/mca-forms'
 import UnifiedCalculator from './UnifiedCalculator'
 
 export const metadata: Metadata = {
-  title: 'MCA Fee Calculator (V3) & ROC Late Fee Penalty Calculator | FY 2026-27',
-  description: 'Calculate MCA21 V3 filing fees, ROC late penalties, Table B additional fee multipliers, ₹100/day annual return delays, ad-valorem charges, and state stamp duty for 25+ MCA forms for FY 2026-27.',
+  title: {
+    absolute: 'MCA Fee Calculator (V3) & ROC Late Fee Penalty Calculator',
+  },
+  description: 'Calculate MCA21 V3 normal filing fees, Table B delay multipliers, ₹100/day annual return late fees, and stamp duty for all MCA company e-forms.',
   keywords: [
     'MCA fee calculator',
     'ROC fees calculator',
@@ -32,8 +34,8 @@ export const metadata: Metadata = {
     canonical: 'https://www.corplawupdates.in/tools/fee-calculator/companies',
   },
   openGraph: {
-    title: 'MCA Fee Calculator (V3) & ROC Late Fee Penalty Calculator | FY 2026-27',
-    description: 'Calculate exact MCA21 V3 normal filing fees, Table B late multipliers, ₹100/day uncapped penalties for AOC-4 & MGT-7, ad-valorem charges, and state stamp duty.',
+    title: 'MCA Fee Calculator (V3) & ROC Late Fee Engine | CorpLawUpdates',
+    description: 'Calculate exact MCA21 V3 normal filing fees, Table B late multipliers, ₹100/day uncapped penalties for AOC-4 & MGT-7, and state stamp duty.',
     url: 'https://www.corplawupdates.in/tools/fee-calculator/companies',
     siteName: 'CorpLawUpdates',
     locale: 'en_IN',
@@ -41,8 +43,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'MCA Fee Calculator (V3) & ROC Late Fee Penalty Calculator | FY 2026-27',
-    description: 'Instant MCA V3 filing fee, late fee multipliers, ₹100/day annual return penalties, and state stamp duty calculator for Indian companies.',
+    title: 'MCA Fee Calculator (V3) & ROC Late Fee Engine | CorpLawUpdates',
+    description: 'Calculate exact MCA21 V3 normal filing fees, Table B late multipliers, ₹100/day uncapped penalties for AOC-4 & MGT-7, and state stamp duty.',
   }
 }
 

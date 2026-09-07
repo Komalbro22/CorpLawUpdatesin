@@ -6,8 +6,10 @@ import MSMEFAQ from './MSMEFAQ'
 import { supabase } from '@/lib/supabase'
 
 export const metadata: Metadata = {
-  title: 'MSME Delayed Payment Interest Calculator | Section 16 MSMED Act',
-  description: 'Calculate statutory compound interest with monthly rests on delayed payments to Micro and Small Enterprises under Section 16 of the MSMED Act (3x RBI Bank Rate).',
+  title: {
+    absolute: 'MSME Delayed Payment Interest Calculator | CorpLaw',
+  },
+  description: 'Calculate statutory compound interest with monthly rests on delayed payments to Micro and Small Enterprises under Section 16 of the MSMED Act.',
   keywords: ['MSME interest calculator', 'MSMED Act Section 16', 'delayed payment calculator', 'MSME Samadhaan interest', '3x Bank Rate calculator', 'Section 15 MSME'],
   alternates: {
     canonical: 'https://www.corplawupdates.in/tools/fee-calculator/msme',

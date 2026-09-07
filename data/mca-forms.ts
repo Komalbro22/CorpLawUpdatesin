@@ -60,7 +60,7 @@ export const mcaForms: MCAForm[] = [
         isOfficial: true
       }
     ],
-    metaTitle: 'Form MGT-7 Fee Calculator: Annual Return Filing Fee & Penalty | CorpLawUpdates.in',
+    metaTitle: 'Form MGT-7 Annual Return Fee & Penalty Calculator | CorpLaw',
     metaDescription: 'Calculate exact Form MGT-7 normal filing fees (₹200–₹600), ₹100/day additional filing fee, and Section 92(5) statutory penalty exposure for FY 2026-27.',
     ogDescription: 'Professional institutional calculator for Form MGT-7 normal fees, ₹100/day additional filing fee, and Section 92(5) statutory penalty exposure.',
     faqItems: [
@@ -103,8 +103,8 @@ export const mcaForms: MCAForm[] = [
         isOfficial: true
       }
     ],
-    metaTitle: 'Form MGT-7A Fee Calculator: Small Company & OPC Annual Return | CorpLawUpdates.in',
-    metaDescription: 'Calculate Form MGT-7A normal filing fees, ₹100/day additional filing fee, and Section 446B lesser penalty ceilings for OPCs and Small Companies (FY 2026-27).',
+    metaTitle: 'Form MGT-7A Small Co & OPC Annual Return Calc | CorpLaw',
+    metaDescription: 'Calculate Form MGT-7A normal filing fees, ₹100/day additional late fee, and Section 446B lesser penalty relief for Small Companies and OPCs (FY 2026-27).',
     ogDescription: 'Calculate Form MGT-7A filing fees and Section 446B penalty relief ceilings for One Person Companies and Small Companies under current 2025-26 rules.',
     faqItems: [
       { question: 'Who is eligible to file Form MGT-7A?', answer: 'One Person Companies (OPCs) under Section 2(62) and Small Companies under Section 2(85) are required to file Form MGT-7A instead of Form MGT-7 from FY 2020-21 onwards (MCA Notification G.S.R. 159(E)).' },
@@ -171,8 +171,8 @@ export const mcaForms: MCAForm[] = [
         isOfficial: true
       }
     ],
-    metaTitle: 'AOC-4 Late Fee Calculator (V3) & AOC Form Fees | FY 2026-27',
-    metaDescription: 'Calculate exact Form AOC-4 fees, normal filing fees (₹200–₹600), ₹100/day uncapped late filing fee, and Section 137(3) statutory penalties on MCA V3 for FY 2026-27.',
+    metaTitle: 'Form AOC-4 Late Fee & Penalty Calculator 2026-27 | CorpLaw',
+    metaDescription: 'Calculate Form AOC-4 normal fees, ₹100/day uncapped additional late filing fees, and Section 137(3) ROC adjudication penalties on MCA V3 for FY 2026-27.',
     ogDescription: 'Free institutional calculator for MCA Form AOC-4 normal filing fees, ₹100/day late fee, 30-day AGM due date, OPC 180-day deadline, and Section 137(3) penalty exposure.',
     faqItems: [
       {
@@ -258,8 +258,8 @@ export const mcaForms: MCAForm[] = [
     normalFeeStructure: 'capital_slab',
     baseFeeSlab: 'nil',
     concessionApplies: true,
-    metaTitle: 'SPICe+ Form INC-32 Fee Calculator (2026) | MCA & 36 States Stamp Duty Estimator',
-    metaDescription: 'Calculate exact MCA registration fees, 36 States/UTs MOA & AOA stamp duty, PAN/TAN statutory charges, and DIN costs for incorporating a company via SPICe+ (INC-32) on MCA V3.',
+    metaTitle: 'SPICe+ INC-32 Company Incorporation Calculator | CorpLaw',
+    metaDescription: 'Calculate SPICe+ (INC-32) MCA registration fees, 36 states MOA/AOA stamp duty, PAN/TAN charges, and DIN costs for incorporating an Indian company.',
     ogDescription: 'Accurate 2026 SPICe+ (INC-32) MCA & State Stamp Duty Fee Calculator covering all 36 States/UTs, G.S.R. 329(E) ₹15L zero-fee waiver, and 180-day compliance checklist.',
     faqItems: [
       {
@@ -315,7 +315,7 @@ export const mcaForms: MCAForm[] = [
     normalFeeStructure: 'nil',
     baseFeeSlab: 'nil',
     concessionApplies: false,
-    metaTitle: 'DIR-3 KYC Due Date & Penalty Calculator (FY 2026-27) | Triennial Rules (G.S.R. 943(E))',
+    metaTitle: 'DIR-3 KYC Due Date & Penalty Fee Calculator | CorpLaw',
     metaDescription: 'Check exact DIR-3 KYC triennial due date, Rule 12A(2) 30-day change rules, and G.S.R. 300(E) fee schedule (₹0 on-time / ₹500 change / ₹5,000 reactivation).',
     ogDescription: 'Authoritative DIR-3 KYC Due Date & Fee Calculator. Determine your triennial cycle anchor, check 30-day update rules, and calculate DIN reactivation fees on MCA V3.',
     faqItems: [
@@ -423,8 +423,8 @@ export const mcaForms: MCAForm[] = [
     normalFeeStructure: 'capital_slab',
     baseFeeSlab: 'standard_company_slab',
     concessionApplies: false,
-    metaTitle: 'ADT-1 Late Fees Calculator (FY 2026-27) — Due Date, Multiplier Slabs & Penalty | CorpLawUpdates',
-    metaDescription: 'Calculate MCA fees and late penalties for Form ADT-1 (Auditor Appointment). Get exact Table B multiplier fees (1x to 12x), 15-day statutory due date calculation from AGM/EGM, capital slabs, casual vacancy rules, and Section 403 condonation guidance.',
+    metaTitle: 'Form ADT-1 Auditor Appointment Late Fee Calc | CorpLaw',
+    metaDescription: 'Calculate MCA normal fees, 15-day due date from AGM, Table B late multipliers (2x to 12x), and Section 403 condonation rules for Form ADT-1 appointment.',
     ogDescription: 'Calculate MCA fees and late penalties for Form ADT-1 (Notice of appointment of auditor) with Table B multiplier slabs and 15-day statutory due date engine.',
     faqItems: [
       {
@@ -507,40 +507,6 @@ export const mcaForms: MCAForm[] = [
     }
   },
   {
-    slug: 'inc-20a',
-    formNumber: 'INC-20A',
-    formName: 'Commencement of Business',
-    aliases: ['inc20a', 'commencement of business', 'bank statement filing'],
-    category: 'event',
-    filedBy: ['Newly Incorporated Companies'],
-    dueDate: 'Within 180 days of incorporation',
-    section: 'Section 10A, Companies Act 2013',
-    penaltyType: 'multiplier',
-    penaltyRate: '2x to 12x normal fee',
-    normalFeeStructure: 'capital_slab',
-    baseFeeSlab: 'standard_company_slab',
-    concessionApplies: false,
-    metaTitle: 'INC-20A Fee & Penalty Calculator | Commencement of Business Form',
-    metaDescription: 'Calculate the MCA fee and multiplier-based late penalties for filing INC-20A (Declaration for commencement of business).',
-    ogDescription: 'Calculate the MCA fee and multiplier-based late penalties for filing INC-20A (Declaration for commencement of business).',
-    faqItems: [
-      { question: 'What is Form INC-20A?', answer: 'INC-20A is a declaration filed by directors to confirm that subscribers to the Memorandum have paid the value of shares agreed upon, and the company is ready to commence business.' },
-      { question: 'When is INC-20A due?', answer: 'It must be filed within 180 days from the date of the company’s incorporation.' },
-      { question: 'What is the penalty for late filing of INC-20A?', answer: 'INC-20A is subject to the standard event-based multiplier penalty (up to 12x normal fee). Additionally, failure to file can result in the ROC initiating strike-off proceedings.' },
-      { question: 'Can a company start business without INC-20A?', answer: 'No, a company incorporated after November 2018 cannot legally commence business or exercise borrowing powers until INC-20A is filed and approved.' },
-      { question: 'What documents are required for INC-20A?', answer: 'The primary document required is the company’s bank statement showing the receipt of subscription money from shareholders.' }
-    ],
-    relatedForms: ['spice-plus'],
-    filedTogetherWith: [],
-    contentSections: {
-      whatIsThisForm: '<p><strong>Form INC-20A</strong> is a pivotal compliance document known as the <em>Declaration for Commencement of Business</em>. Introduced to curb shell companies, this form proves to the ROC that the initial shareholders (subscribers) have actually deposited their promised share capital money into the company’s official bank account.</p>',
-      whoMustFile: '<p>Any company having share capital that was incorporated on or after November 2, 2018, is required to file this form. The company’s directors must sign the declaration and attach proof of capital receipt.</p>',
-      dueDateExplained: '<p>The form affords a generous window: it must be filed <strong>within 180 days</strong> from the exact date of the company’s incorporation as printed on the Certificate of Incorporation.</p>',
-      consequencesOfDelay: '<p>Filing late attracts the standard multiplier penalty (up to 12x the normal fee). However, the real danger is existential: if INC-20A is not filed within 180 days, the ROC possesses the authority to assume the company is not carrying on any business and may unilaterally <strong>strike the company’s name off the register</strong>, effectively shutting it down.</p>',
-      workedExample: '<p><strong>Scenario:</strong> A new OPC with ₹1 Lakh capital files INC-20A 100 days after the 180-day deadline expires.</p><ul><li>Normal Concessional Fee: ₹50</li><li>Late Penalty (91 to 180 days delay = 10x fee): ₹500</li><li><strong>Total Liability:</strong> ₹50 + ₹500 = <strong>₹550</strong> (Plus risk of strike-off action)</li></ul>'
-    }
-  },
-  {
     slug: 'dir-12',
     formNumber: 'DIR-12',
     formName: 'Director Changes',
@@ -554,8 +520,8 @@ export const mcaForms: MCAForm[] = [
     normalFeeStructure: 'capital_slab',
     baseFeeSlab: 'standard_company_slab',
     concessionApplies: false,
-    metaTitle: 'DIR-12 Fee & Penalty Calculator | ROC Director Appointment Fees',
-    metaDescription: 'Instantly calculate filing fees and late penalties for Form DIR-12 (Appointment or Resignation of Directors and KMP).',
+    metaTitle: 'Form DIR-12 Director Appointment Fee Calculator | CorpLaw',
+    metaDescription: 'Calculate Form DIR-12 normal MCA fees, 30-day statutory filing deadline, Table B late multipliers (2x to 12x), and ROC director appointment rules.',
     ogDescription: 'Instantly calculate filing fees and late penalties for Form DIR-12 (Appointment or Resignation of Directors and KMP).',
     faqItems: [
       { question: 'When is DIR-12 required to be filed?', answer: 'DIR-12 must be filed whenever there is an appointment, resignation, or change in designation of a Director or Key Managerial Personnel (KMP).' },
@@ -588,8 +554,8 @@ export const mcaForms: MCAForm[] = [
     normalFeeStructure: 'capital_slab',
     baseFeeSlab: 'standard_company_slab',
     concessionApplies: false,
-    metaTitle: 'PAS-3 Fee Calculator | Return of Allotment Penalty | CorpLawUpdates',
-    metaDescription: 'Calculate exact ROC fees and late filing penalties for Form PAS-3 (Return of Allotment of Shares). Updated for FY 2026-27.',
+    metaTitle: 'Form PAS-3 Return of Allotment Fee Calculator | CorpLaw',
+    metaDescription: 'Calculate Form PAS-3 Return of Allotment normal fees, 15-day filing deadline, Table B late fee multipliers, and Section 42/39 penalty exposure.',
     ogDescription: 'Calculate exact ROC fees and late filing penalties for Form PAS-3 (Return of Allotment of Shares).',
     faqItems: [
       { question: 'What is Form PAS-3?', answer: 'PAS-3 is a Return of Allotment filed with the ROC to declare that the company has allotted new shares to shareholders.' },
@@ -651,9 +617,9 @@ export const mcaForms: MCAForm[] = [
         isOfficial: true
       }
     ],
-    metaTitle: 'Form PAS-6 Fee & Late Penalty Calculator (2026-27) — Section 29 & Rule 9A/9B | CorpLawUpdates',
-    metaDescription: 'Calculate exact MCA normal fees, Table B multipliers (2x to 12x), and Section 450 civil adjudication penalties for delayed Form PAS-6 Reconciliation of Share Capital Report. Features live demat percentage tracker, 30 Sep 2026 compliance roadmap, and Small Company exemption checks.',
-    ogDescription: 'Instant statutory calculation of Form PAS-6 filing fees, 60-day deadlines (29 Nov & 30 May), Table B late multipliers, and Section 450 civil adjudication liability under Rules 9A & 9B.',
+    metaTitle: 'Form PAS-6 Fee & Late Penalty Calculator 2026-27 | CorpLaw',
+    metaDescription: 'Calculate Form PAS-6 normal filing fees, Table B delay multipliers, and Section 450 civil adjudication penalties with live demat share reconciliation.',
+    ogDescription: 'Instant statutory calculation of Form PAS-6 filing fees, 60-day deadlines (29 Nov & 30 May), Table B late multipliers, and Section 450 penalties.',
     faqItems: [
       {
         question: 'What is Form PAS-6 and what is its statutory purpose?',
@@ -728,9 +694,9 @@ export const mcaForms: MCAForm[] = [
     normalFeeStructure: 'capital_slab',
     baseFeeSlab: 'standard_company_slab',
     concessionApplies: true,
-    metaTitle: 'CHG-1 Late Fees & Ad Valorem Calculator (FY 2026-27) — Section 77 Charge Creation | CorpLawUpdates',
-    metaDescription: 'Calculate statutory normal filing fees, Table B multipliers (3x/6x), and ad valorem penalties (0.025%/0.05% capped at ₹1L/₹5L) for Form CHG-1 on MCA V3. Features exact 30-60-120 day statutory timelines, Small Company concessions, and Section 87 condonation roadmap.',
-    ogDescription: 'Instant statutory calculation of Form CHG-1 filing fees, 30-60-120 day deadlines, extension multipliers, and ad valorem penalties under Section 77 of the Companies Act, 2013.',
+    metaTitle: 'Form CHG-1 Charge Creation Late Fee Calculator | CorpLaw',
+    metaDescription: 'Calculate MCA filing fees, Table B multipliers (3x/6x), and ad valorem late penalties (0.025%/0.05%) for Form CHG-1 charge creation on MCA V3 portal.',
+    ogDescription: 'Instant statutory calculation of Form CHG-1 filing fees, 30-60-120 day deadlines, extension multipliers, and ad valorem penalties under Section 77.',
     faqItems: [
       {
         question: 'What is the statutory due date for filing Form CHG-1?',
@@ -817,9 +783,9 @@ export const mcaForms: MCAForm[] = [
     normalFeeStructure: 'nil', // No filing fee
     baseFeeSlab: 'nil',
     concessionApplies: false,
-    metaTitle: 'MSME-1 Filing Rules & Penalty Calculator | CorpLawUpdates',
-    metaDescription: 'Understand the filing requirements, due dates, and severe adjudication penalties for missing the MSME-1 half-yearly return.',
-    ogDescription: 'Understand the filing requirements, due dates, and severe adjudication penalties for missing the MSME-1 half-yearly return.',
+    metaTitle: 'Form MSME-1 Return Due Date & Penalty Calculator | CorpLaw',
+    metaDescription: 'Calculate MSME-1 half-yearly return filing deadlines, outstanding supplier dues reporting rules, and Section 405 ROC non-compliance penalties.',
+    ogDescription: 'Calculate MSME-1 half-yearly return filing deadlines, outstanding supplier dues reporting rules, and Section 405 ROC non-compliance penalties.',
     faqItems: [
       { question: 'Who is required to file MSME-1?', answer: 'Any "Specified Company" that receives goods or services from a Micro or Small Enterprise and delays payment beyond 45 days must file MSME-1.' },
       { question: 'What are the due dates for MSME-1?', answer: 'The return for the April-September period is due by 31st October. The return for October-March is due by 30th April.' },
@@ -851,9 +817,9 @@ export const mcaForms: MCAForm[] = [
     normalFeeStructure: 'capital_slab',
     baseFeeSlab: 'standard_company_slab',
     concessionApplies: false,
-    metaTitle: 'Form DPT-3 Fee Calculator: Return of Deposits & Late Penalty (FY 2026-27) | CorpLawUpdates.in',
-    metaDescription: 'Calculate exact Form DPT-3 normal filing fees (₹200–₹600), Table B late multipliers (2×–12×), 30 June deadline, Circular 02/2026 waiver, and Rule 21 penalties.',
-    ogDescription: 'Authoritative Form DPT-3 fee calculator for MCA V3. Compute normal base fees, Table B delay multipliers, Rule 21 fine exposure, and Rule 2(1)(c) exempted receipts.',
+    metaTitle: 'Form DPT-3 Return of Deposits Late Fee Calculator | CorpLaw',
+    metaDescription: 'Calculate Form DPT-3 normal filing fees (₹200–₹600), Table B late multipliers (2×–12×), June 30 statutory due date, and Rule 21 non-filing penalties.',
+    ogDescription: 'Calculate Form DPT-3 normal filing fees (₹200–₹600), Table B late multipliers (2×–12×), June 30 statutory due date, and Rule 21 non-filing penalties.',
     faqItems: [
       {
         question: 'Who is required to file Form DPT-3?',
@@ -939,9 +905,9 @@ export const mcaForms: MCAForm[] = [
     normalFeeStructure: 'capital_slab',
     baseFeeSlab: 'standard_company_slab',
     concessionApplies: true,
-    metaTitle: 'Form INC-20A Fee & Penalty Calculator: 180-Day Due Date & Adjudication Simulator | CorpLawUpdates.in',
-    metaDescription: 'Calculate Form INC-20A MCA portal filing fees (Table A & B 2x–12x multipliers) and Section 10A(2) ROC adjudication penalties with Section 446B 50% relief for Small Companies & Startups.',
-    ogDescription: 'Authoritative Form INC-20A Due Date & Penalty Calculator. Covers 180-day incorporation deadline, Table B slab multipliers, Section 10A(2) penalties, Section 446B relief, and strike-off risks.',
+    metaTitle: 'Form INC-20A Commencement of Business Calculator | CorpLaw',
+    metaDescription: 'Calculate Form INC-20A MCA portal filing fees, Table B multipliers (2x–12x), and Section 10A(2) penalties with Section 446B relief for startups.',
+    ogDescription: 'Calculate Form INC-20A MCA portal filing fees, Table B multipliers (2x–12x), and Section 10A(2) penalties with Section 446B relief for startups.',
     faqItems: [
       {
         question: 'What is Form INC-20A and why is it mandatory?',

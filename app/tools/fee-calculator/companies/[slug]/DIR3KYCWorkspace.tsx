@@ -716,7 +716,7 @@ Calculated on CorpLawUpdates.in | India's Leading Corporate Law Intelligence
         <div className="border-b-2 border-slate-900 pb-4 mb-6">
           <div className="flex justify-between items-start">
             <div>
-              <h1 className="text-2xl font-bold font-serif text-slate-900">CorpLawUpdates.in</h1>
+              <div role="heading" aria-level={2} className="text-2xl font-bold font-serif text-slate-900">CorpLawUpdates.in</div>
               <p className="text-xs text-slate-600">Corporate Law Intelligence &amp; Statutory Compliance Advisory</p>
             </div>
             <div className="text-right text-xs text-slate-600">

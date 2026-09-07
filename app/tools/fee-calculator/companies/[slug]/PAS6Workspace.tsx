@@ -299,9 +299,9 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/pas-
               <Sparkles className="size-3.5 text-indigo-400" />
               MCA V3 Share Capital Demat Engine | 2026-27 Edition
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-heading mb-2 text-white">
+            <h2 className="text-2xl sm:text-3xl font-bold font-heading mb-2 text-white">
               Form PAS-6 Fee &amp; Late Penalty Calculator
-            </h1>
+            </h2>
             <p className="text-slate-300 text-sm max-w-2xl leading-relaxed">
               Calculate half-yearly Reconciliation of Share Capital fees, Table B late multipliers (2× to 12×), and Section 450 civil adjudication liability under Rule 9A and Rule 9B.
             </p>

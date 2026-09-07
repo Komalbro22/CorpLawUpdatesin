@@ -219,9 +219,9 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/spic
               <Sparkles className="size-3.5 text-blue-400" />
               MCA V3 Digital Incorporation Engine | 2026 Edition
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-heading mb-2 text-white">
+            <h2 className="text-2xl sm:text-3xl font-bold font-heading mb-2 text-white">
               SPICe+ (INC-32) Company Incorporation Calculator
-            </h1>
+            </h2>
             <p className="text-slate-300 text-sm max-w-2xl leading-relaxed">
               Calculate government filing fees, state-wise e-MOA & e-AOA stamp duty across all 36 States/UTs, PAN/TAN charges, and free DIN allotments under G.S.R. 329(E).
             </p>

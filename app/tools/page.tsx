@@ -8,7 +8,7 @@ const ogImageUrl = 'https://www.corplawupdates.in/api/og?title=Free+Corporate+La
 
 export const metadata: Metadata = {
   title: 'Free Corporate Law & Compliance Tools',
-  description: 'Free interactive compliance and corporate law tools. Access our AI document generator, MCA late fee calculator, CIN decoder, compliance calendar, and repo rate tracker.',
+  description: 'Free interactive compliance and corporate law tools. Access our AI document generator, MCA fee calculators, CIN decoder, and compliance calendar.',
   alternates: {
     canonical: 'https://www.corplawupdates.in/tools',
   },

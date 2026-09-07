@@ -1,8 +1,10 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Compliance Fee & Penalty Calculators Hub | CorpLawUpdates.in',
-  description: 'Free interactive fee and penalty calculators for Companies, LLPs, MSMEs, and GST late fees.',
+  title: {
+    absolute: 'Compliance Fee & Penalty Calculators Hub | CorpLawUpdates',
+  },
+  description: 'Calculate MCA21 V3 statutory filing fees, Table B delay multipliers, ₹100/day ROC penalties, LLP late fees, and MSME delayed payment interest.',
   alternates: {
     canonical: 'https://www.corplawupdates.in/tools/fee-calculator',
   },

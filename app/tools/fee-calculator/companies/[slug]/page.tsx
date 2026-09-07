@@ -18,7 +18,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!form) return { title: 'Not Found' }
 
   return {
-    title: form.metaTitle,
+    title: {
+      absolute: form.metaTitle,
+    },
     description: form.metaDescription,
     keywords: form.aliases.join(', '),
     alternates: {
@@ -26,9 +28,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     },
     openGraph: {
       title: form.metaTitle,
-      description: form.ogDescription,
+      description: form.ogDescription || form.metaDescription,
       url: `https://www.corplawupdates.in/tools/fee-calculator/companies/${form.slug}`,
       type: 'website'
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: form.metaTitle,
+      description: form.ogDescription || form.metaDescription,
     }
   }
 }

@@ -4,9 +4,11 @@ import { MVP_DOCUMENTS_META } from '@/lib/doc-generator/ai-engine';
 import { Sparkles, FileText, Scale, ShieldCheck, ArrowRight, BookOpen, CheckCircle2 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'AI Corporate Document Generator | CorpLawUpdates.in',
+  title: {
+    absolute: 'AI Corporate Document Generator & Legal Drafter | CorpLaw',
+  },
   description:
-    'Parametric AI Document Generator for Indian Company Secretaries & CAs. Instantly generate perfectly formatted MS Word (.docx) files for Board Meetings, Resolutions, and Form DIR-2 under Companies Act 2013.',
+    'Generate formatted MS Word (.docx) compliance documents for Board Meetings, Resolutions, and Form DIR-2 under the Companies Act, 2013.',
 };
 
 export default function AIDocGeneratorIndexPage() {

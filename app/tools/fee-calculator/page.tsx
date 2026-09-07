@@ -14,7 +14,7 @@ const hubJsonLd = {
       '@type': 'CollectionPage',
       '@id': 'https://www.corplawupdates.in/tools/fee-calculator#collectionpage',
       name: 'Compliance Fee & Penalty Calculators Hub',
-      description: 'Free interactive fee and penalty calculators for Companies, LLPs, MSMEs, and GST late fees.',
+      description: 'Calculate MCA21 V3 statutory filing fees, Table B delay multipliers, ₹100/day ROC penalties, LLP late fees, and MSME delayed payment interest.',
       url: 'https://www.corplawupdates.in/tools/fee-calculator',
       mainEntity: {
         '@type': 'ItemList',

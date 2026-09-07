@@ -6,9 +6,11 @@ import LLPFAQ from './LLPFAQ'
 import { LLP_FAQS } from './faq-data'
 
 export const metadata: Metadata = {
-  title: 'LLP Fee Calculator: Form 8, Form 11, Form 3, Form 4 & Form 24',
+  title: {
+    absolute: 'LLP Form Fee Calculator: Form 8, 11, 3, 4 & 24 | CorpLaw',
+  },
   description:
-    'Calculate statutory MCA filing fees, Section 69 late filing multipliers, and indicative Section 34(5)/35(2) statutory penalties for Form 8, Form 11, Form 3, Form 4, Form 5, Form 15, and Form 24.',
+    'Calculate MCA LLP statutory filing fees, Section 69 late multipliers, and Form 8 & Form 11 annual return default penalties for FY 2026-27.',
   keywords: [
     'LLP fee calculator',
     'LLP late filing fee',

@@ -1106,7 +1106,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
         {/* Masthead */}
         <div className="border-b-2 border-slate-900 pb-4 mb-6 flex justify-between items-start">
           <div>
-            <h1 className="text-2xl font-black tracking-tight text-slate-950 uppercase">CorpLawUpdates.in</h1>
+            <div role="heading" aria-level={2} className="text-2xl font-black tracking-tight text-slate-950 uppercase">CorpLawUpdates.in</div>
             <p className="text-xs font-semibold text-slate-600 mt-0.5">
               India&apos;s Free Corporate Law Intelligence &amp; Statutory Compliance Platform
             </p>

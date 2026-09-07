@@ -8,14 +8,16 @@ export const dynamic = 'force-dynamic'
 const ogImageUrl = 'https://www.corplawupdates.in/api/og?title=Free+Corporate+Identification+Number+(CIN)+Decoder&category=Tools'
 
 export const metadata: Metadata = {
-  title: 'Free Corporate Identification Number (CIN) Decoder & Analyzer | MCA CIN Lookup Tool',
-  description: 'Instantly decode any 21-digit Indian Corporate Identification Number (CIN). Analyze listing status, 5-digit NIC industry classification, state RoC jurisdiction, incorporation year, ownership type, and statutory compliance rules.',
+  title: {
+    absolute: 'Free Corporate Identification Number (CIN) Decoder | CorpLaw',
+  },
+  description: 'Instantly decode 21-digit Indian CIN numbers. Lookup industry NIC codes, RoC state jurisdiction, incorporation year, and ownership classification.',
   alternates: {
     canonical: 'https://www.corplawupdates.in/tools/cin-decoder',
   },
   openGraph: {
-    title: 'Free Corporate Identification Number (CIN) Decoder & Structure Analyzer | CorpLawUpdates.in',
-    description: 'Decode 21-digit MCA CIN numbers into 6 statutory corporate dimensions including NIC industry codes, RoC state jurisdiction, and ownership classification.',
+    title: 'Free Corporate Identification Number (CIN) Decoder | CorpLawUpdates',
+    description: 'Decode 21-digit MCA CIN numbers into 6 dimensions: industry NIC codes, RoC jurisdiction, registration year, and ownership classification.',
     url: 'https://www.corplawupdates.in/tools/cin-decoder',
     type: 'website',
     siteName: 'CorpLawUpdates.in',
@@ -30,8 +32,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Free Corporate Identification Number (CIN) Decoder & Structure Analyzer | CorpLawUpdates.in',
-    description: 'Decode 21-digit MCA CIN numbers into 6 statutory corporate dimensions.',
+    title: 'Free Corporate Identification Number (CIN) Decoder | CorpLawUpdates',
+    description: 'Decode 21-digit MCA CIN numbers into 6 dimensions: industry NIC codes, RoC jurisdiction, registration year, and ownership classification.',
     images: [ogImageUrl],
   },
 }

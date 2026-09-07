@@ -1084,7 +1084,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
         {/* Printable Header */}
         <div className="flex justify-between items-start border-b-2 border-slate-900 pb-4 mb-4">
           <div>
-            <h1 className="text-xl font-bold text-slate-950 tracking-tight">CorpLawUpdates.in</h1>
+            <div role="heading" aria-level={2} className="text-xl font-bold text-slate-950 tracking-tight">CorpLawUpdates.in</div>
             <p className="text-[10px] text-slate-600 font-medium">India's Statutory Corporate Compliance &amp; Regulatory Intelligence Platform</p>
           </div>
           <div className="text-right">
