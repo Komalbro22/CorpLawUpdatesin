@@ -651,8 +651,8 @@ export const mcaForms: MCAForm[] = [
         isOfficial: true
       }
     ],
-    metaTitle: 'Form PAS-6 Fee Calculator & Late Penalty Audit (2026-27) — Section 29 & Rule 9A/9B | CorpLawUpdates',
-    metaDescription: 'Calculate exact MCA normal fees, Table B multipliers (2x to 12x), and Section 450 civil adjudication penalties for delayed Form PAS-6 Reconciliation of Share Capital Audit Report. Features live demat percentage audit, 30 Sep 2026 compliance roadmap, and Small Company exemption checks.',
+    metaTitle: 'Form PAS-6 Fee & Late Penalty Calculator (2026-27) — Section 29 & Rule 9A/9B | CorpLawUpdates',
+    metaDescription: 'Calculate exact MCA normal fees, Table B multipliers (2x to 12x), and Section 450 civil adjudication penalties for delayed Form PAS-6 Reconciliation of Share Capital Report. Features live demat percentage tracker, 30 Sep 2026 compliance roadmap, and Small Company exemption checks.',
     ogDescription: 'Instant statutory calculation of Form PAS-6 filing fees, 60-day deadlines (29 Nov & 30 May), Table B late multipliers, and Section 450 civil adjudication liability under Rules 9A & 9B.',
     faqItems: [
       {

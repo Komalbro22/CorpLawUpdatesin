@@ -107,7 +107,7 @@ export default function UnifiedCalculator() {
   }, [selectedForm, companyType, capital, delay, isRepeatOffender, newCapital, state, chargeAmount])
 
   const commonForms = useMemo(() => {
-    const commonSlugs = ['aoc-4', 'mgt-7', 'dpt-3', 'adt-1', 'chg-1', 'inc-22', 'dir-12', 'dir-3-kyc', 'inc-20a', 'mgt-14']
+    const commonSlugs = ['aoc-4', 'mgt-7', 'dpt-3', 'adt-1', 'chg-1', 'pas-6', 'spice-plus', 'inc-22', 'dir-12', 'dir-3-kyc', 'inc-20a', 'mgt-14']
     return commonSlugs.map(slug => {
       const form = allForms.find(f => f.slug === slug)
       if (!form) return null
@@ -243,7 +243,8 @@ export default function UnifiedCalculator() {
             { slug: 'dir-12', label: 'DIR-12 (Directors)' },
             { slug: 'dir-3-kyc', label: 'DIR-3 KYC' },
             { slug: 'inc-20a', label: 'INC-20A (Commencement)' },
-            { slug: 'spice-plus', label: 'SPICe+ (Incorporation)' }
+            { slug: 'spice-plus', label: 'SPICe+ (Incorporation)' },
+            { slug: 'pas-6', label: 'PAS-6 (Share Capital)' }
           ].map(item => (
             <button
               key={item.slug}
@@ -526,7 +527,7 @@ export default function UnifiedCalculator() {
                   <td className="px-4 py-3 font-bold text-blue-700 dark:text-blue-400">
                     <Link href={`/tools/fee-calculator/companies/${item.form.slug}`} className="hover:underline inline-flex items-center gap-1.5">
                       <span>{item.form.formNumber}</span>
-                      {['mgt-7', 'mgt-7a', 'aoc-4', 'dpt-3', 'dir-3-kyc', 'adt-1', 'chg-1', 'inc-20a'].includes(item.form.slug) && (
+                      {['mgt-7', 'mgt-7a', 'aoc-4', 'dpt-3', 'dir-3-kyc', 'adt-1', 'chg-1', 'inc-20a', 'pas-6', 'spice-plus'].includes(item.form.slug) && (
                         <span className="text-[10px] bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 px-1.5 py-0.5 rounded font-medium">Dedicated</span>
                       )}
                     </Link>

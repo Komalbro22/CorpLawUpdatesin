@@ -154,7 +154,7 @@ export interface Pas6CalculationResult {
   // Itemized breakdown
   breakdown: Array<{
     name: string;
-    category: 'MCA Government Fee' | 'Civil Adjudication Penalty' | 'Dematerialisation Audit';
+    category: 'MCA Government Fee' | 'Civil Adjudication Penalty' | 'Dematerialisation Reconciliation';
     amount: number;
     basis: string;
     isWaived?: boolean;
@@ -436,7 +436,7 @@ export function calculatePas6Compliance(params: Pas6CalculationParams): Pas6Calc
     if (hasMismatch) {
       breakdown.push({
         name: 'Share Reconciliation Discrepancy',
-        category: 'Dematerialisation Audit',
+        category: 'Dematerialisation Reconciliation',
         amount: 0,
         basis: `Mismatch of ${Math.abs(difference).toLocaleString('en-IN')} shares between issued capital and depository holdings (Mandatory Rule 9A(8A) notification)`
       });

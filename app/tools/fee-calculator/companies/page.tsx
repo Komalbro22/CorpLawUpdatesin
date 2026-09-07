@@ -610,6 +610,48 @@ export default function CompaniesFeePage() {
               Open Dedicated Workspace →
             </span>
           </Link>
+
+          <Link
+            href="/tools/fee-calculator/companies/spice-plus"
+            className="p-5 rounded-xl border border-orange-200 dark:border-orange-900/60 bg-orange-50/50 dark:bg-orange-950/20 hover:border-orange-500 transition-all group flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-orange-600 text-white">SPICe+</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">Company Incorporation</span>
+              </div>
+              <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors mb-1">
+                SPICe+ (INC-32) Workspace
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                36-state stamp duty engine, G.S.R. 329(E) zero-fee threshold (capital up to ₹15L), Part A/B fees, and incorporation roadmap.
+              </p>
+            </div>
+            <span className="text-xs font-bold text-orange-600 dark:text-orange-400 mt-4 flex items-center gap-1">
+              Open Dedicated Workspace →
+            </span>
+          </Link>
+
+          <Link
+            href="/tools/fee-calculator/companies/pas-6"
+            className="p-5 rounded-xl border border-violet-200 dark:border-violet-900/60 bg-violet-50/50 dark:bg-violet-950/20 hover:border-violet-500 transition-all group flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-violet-600 text-white">PAS-6</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">Share Capital Reconciliation</span>
+              </div>
+              <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors mb-1">
+                Form PAS-6 Workspace
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Rule 9A &amp; 9B rolling 18-month demat clock, Table B late multipliers (2× to 12×), Section 450 adjudication exposure, and depository balance tracker.
+              </p>
+            </div>
+            <span className="text-xs font-bold text-violet-600 dark:text-violet-400 mt-4 flex items-center gap-1">
+              Open Dedicated Workspace →
+            </span>
+          </Link>
         </div>
       </div>
 

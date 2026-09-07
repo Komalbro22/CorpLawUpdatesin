@@ -137,7 +137,7 @@ const PRESETS: PresetConfig[] = [
   },
   {
     id: 'mismatch_audit',
-    label: 'Reconciliation Mismatch Audit',
+    label: 'Reconciliation Discrepancy Alert',
     reportingYear: 2026,
     period: 'apr_sep',
     filingDate: '2026-11-25',
@@ -149,7 +149,7 @@ const PRESETS: PresetConfig[] = [
     nsdl: 70000,
     physical: 30000, // Sum = 180,000 -> 20,000 mismatch!
     description: 'Flagging discrepancy where depository and physical holdings do not match issued capital.',
-    badge: 'Audit Mismatch'
+    badge: 'Demat Mismatch'
   }
 ]
 
@@ -277,7 +277,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/pas-
     `.trim()
 
     navigator.clipboard.writeText(text)
-    showToast('PAS-6 audit summary copied to clipboard!', 'success')
+    showToast('PAS-6 calculation summary copied to clipboard!', 'success')
   }
 
   const capitalButtons = [
@@ -297,13 +297,13 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/pas-
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 mb-3">
               <Sparkles className="size-3.5 text-indigo-400" />
-              MCA V3 Share Capital Demat Audit Engine | 2026-27 Edition
+              MCA V3 Share Capital Demat Engine | 2026-27 Edition
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold font-heading mb-2 text-white">
-              Form PAS-6 Fee Calculator & Penalty Audit
+              Form PAS-6 Fee &amp; Late Penalty Calculator
             </h1>
             <p className="text-slate-300 text-sm max-w-2xl leading-relaxed">
-              Calculate half-yearly Reconciliation of Share Capital Audit fees, Table B late multipliers (2× to 12×), and Section 450 civil adjudication liability under Rule 9A and Rule 9B.
+              Calculate half-yearly Reconciliation of Share Capital fees, Table B late multipliers (2× to 12×), and Section 450 civil adjudication liability under Rule 9A and Rule 9B.
             </p>
           </div>
 
@@ -320,10 +320,10 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/pas-
               onClick={handleDownloadPdf}
               disabled={isGeneratingPdf}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white transition-colors shadow-md disabled:opacity-50"
-              title="Download Audit PDF"
+              title="Download PDF Summary"
             >
               <Download className="size-4" />
-              <span>{isGeneratingPdf ? 'Generating...' : 'Audit PDF'}</span>
+              <span>{isGeneratingPdf ? 'Generating...' : 'Download PDF'}</span>
             </button>
             <button
               onClick={() => window.print()}
@@ -573,7 +573,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/pas-
             </div>
           </div>
 
-          {/* Demat Reconciliation Audit Module */}
+          {/* Demat Reconciliation Module */}
           <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
               <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -587,7 +587,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/pas-
                     : 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900'
                 }`}
               >
-                {result.reconciliation.hasMismatch ? 'Audit Discrepancy' : 'Fully Reconciled'}
+                {result.reconciliation.hasMismatch ? 'Discrepancy Detected' : 'Fully Reconciled'}
               </span>
             </div>
 
@@ -753,7 +753,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/pas-
               className="w-full py-3 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-colors shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
             >
               <Download className="size-4" />
-              <span>{isGeneratingPdf ? 'Generating PDF...' : 'Download Form PAS-6 Audit Report'}</span>
+              <span>{isGeneratingPdf ? 'Generating PDF...' : 'Download Form PAS-6 Summary Report'}</span>
             </button>
           </div>
         </div>

@@ -29,9 +29,9 @@ export function generatePas6Pdf(
 
   // 1. Document Header
   const startY = renderDocumentHeader(doc, {
-    title: 'FORM PAS-6: RECONCILIATION OF SHARE CAPITAL AUDIT REPORT',
-    subtitle: 'Section 29 read with Rule 9A & 9B, Companies (PAS) Rules, 2014 | MCA V3 Compliance Audit',
-    dateLabel: 'Audit Date'
+    title: 'FORM PAS-6: RECONCILIATION OF SHARE CAPITAL REPORT',
+    subtitle: 'Section 29 read with Rule 9A & 9B, Companies (PAS) Rules, 2014 | MCA V3 Compliance Analysis',
+    dateLabel: 'Calculation Date'
   });
 
   let currentY = startY + 4;
@@ -94,7 +94,7 @@ export function generatePas6Pdf(
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(9.5);
   doc.setTextColor(...PDF_PALETTE.navy);
-  doc.text('1. SHARE CAPITAL DEMAT RECONCILIATION AUDIT (RULE 9A(8))', 14, currentY);
+  doc.text('1. SHARE CAPITAL DEMAT RECONCILIATION (RULE 9A(8))', 14, currentY);
   currentY += 4;
 
   const reconRows = [
@@ -184,7 +184,7 @@ export function generatePas6Pdf(
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(9.5);
   doc.setTextColor(...PDF_PALETTE.navy);
-  doc.text('3. STATUTORY DEMAT & AUDIT ROADMAP (RULES 9A & 9B)', 14, currentY);
+  doc.text('3. STATUTORY DEMAT & COMPLIANCE ROADMAP (RULES 9A & 9B)', 14, currentY);
   currentY += 4;
 
   const roadHeaders = ['Step', 'Action Required', 'Statutory Section', 'Statutory Mandate & Description'];
@@ -214,9 +214,9 @@ export function generatePas6Pdf(
   currentY = (doc as any).lastAutoTable.finalY + 6;
 
   // 6. Disclaimer & Footers
-  const disclaimerText = 'Note: This audit calculation reflects Table A/B fees and Section 450 general civil penalty exposure. Civil adjudication penalties are subject to ROC adjudication under Section 454 and are not automatically collected at e-Challan upload. Professional certification fees (PCS/PCA) are excluded.';
+  const disclaimerText = 'Note: This compliance calculation reflects Table A/B fees and Section 450 general civil penalty exposure. Civil adjudication penalties are subject to ROC adjudication under Section 454 and are not automatically collected at e-Challan upload. Professional certification fees (PCS/PCA) are excluded.';
   renderSafeDisclaimer(doc, disclaimerText, currentY);
-  renderPageFooters(doc, 'Form PAS-6 Share Capital Reconciliation Audit | CorpLawUpdates.in');
+  renderPageFooters(doc, 'Form PAS-6 Share Capital Reconciliation | CorpLawUpdates.in');
 
   return doc;
 }
