@@ -4,7 +4,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
-import { Resend } from 'resend'
+import { sendEmail, parseSender } from '@/lib/email-provider'
 import { buildEmailHtml, markdownToHtml, sendNewsletterEmails, buildNewsletterTemplateHtml } from '@/lib/newsletter'
 
 export async function POST(request: NextRequest) {
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
             previewOnly // true if only rendering for admin composer preview
         } = body
 
-        const fromEmail = (process.env.RESEND_FROM_EMAIL || 'updates@mail.corplawupdates.in').trim().replace(/['"]/g, '')
+        const { email: fromEmail, name: fromName } = parseSender()
         const adminEmail = (process.env.ADMIN_EMAIL || 'mail@corplawupdates.in').trim().replace(/['"]/g, '')
 
         // 3. Validate for standard modes (if not auto/custom preview/send)
@@ -121,7 +121,6 @@ export async function POST(request: NextRequest) {
 
         // 7. If test only
         if (testOnly) {
-            const resend = new Resend(process.env.RESEND_API_KEY)
             const sendTo = testEmail && testEmail.trim() ? testEmail.trim() : adminEmail
             
             let testHtml = ''
@@ -140,16 +139,17 @@ export async function POST(request: NextRequest) {
                 })
             }
 
-            const result = await resend.emails.send({
+            const result = await sendEmail({
                 from: fromEmail,
+                fromName,
                 to: sendTo,
                 subject: `[TEST] ${subject}`,
                 html: testHtml,
             })
 
-            if (result.error) {
+            if (!result.success) {
                 return NextResponse.json(
-                    { error: `Resend error: ${result.error.message}` },
+                    { error: `Send error (${result.provider}): ${result.error}` },
                     { status: 500 }
                 )
             }
@@ -158,7 +158,8 @@ export async function POST(request: NextRequest) {
                 sent: 1,
                 failed: 0,
                 total: 1,
-                testOnly: true
+                testOnly: true,
+                provider: result.provider
             })
         }
 

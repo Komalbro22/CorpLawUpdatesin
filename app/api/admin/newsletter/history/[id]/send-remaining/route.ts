@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
-import { Resend } from 'resend'
+import { sendBatchEmails, getActiveEmailProvider, parseSender } from '@/lib/email-provider'
 import { generateUnsubscribeToken, BASE_URL } from '@/lib/utils'
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -11,8 +11,8 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     }
 
     const { id } = await params
-    const resend = new Resend(process.env.RESEND_API_KEY)
-    const fromEmail = (process.env.RESEND_FROM_EMAIL || 'updates@mail.corplawupdates.in').trim().replace(/['"]/g, '')
+    const provider = getActiveEmailProvider()
+    const { email: fromEmail, name: fromName } = parseSender()
 
     try {
         // 1. Fetch Campaign Info
@@ -88,106 +88,42 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
 
         console.log(`[Send Remaining] Found ${remainingSubscribers.length} unsent subscriber(s) for campaign ${id}.`)
 
-        // 5. Send in batches of 100 using Resend Batch API
-        const BATCH_CHUNK_SIZE = 100
-        let sent = 0
-        let failed = 0
-        const recipientsToInsert: any[] = []
-
-        for (let i = 0; i < remainingSubscribers.length; i += BATCH_CHUNK_SIZE) {
-            const chunk = remainingSubscribers.slice(i, i + BATCH_CHUNK_SIZE)
-
-            const batchPayload = chunk.map(sub => {
-                const token = generateUnsubscribeToken(sub.email)
-                const unsubUrl = `${BASE_URL}/api/unsubscribe?email=${encodeURIComponent(sub.email)}&token=${token}`
-                
-                // Personalize unsubscribe link in the rendered HTML snapshot
-                let recipientHtml = campaign.rendered_html || ''
-                if (recipientHtml.includes('/api/unsubscribe')) {
-                    recipientHtml = recipientHtml.replace(/https?:\/\/[^"'\s]+\/api\/unsubscribe\?[^"'\s]+/g, unsubUrl)
-                } else if (recipientHtml.includes('Unsubscribe</a>')) {
-                    recipientHtml = recipientHtml.replace(/href=["']#[^"']*["']/g, `href="${unsubUrl}"`)
-                }
-
-                return {
-                    from: fromEmail,
-                    to: sub.email,
-                    subject: campaign.subject,
-                    html: recipientHtml,
-                }
-            })
-
-            try {
-                const batchResult = await resend.batch.send(batchPayload)
-
-                if (batchResult.error) {
-                    console.error(`[Send Remaining] Batch API error:`, batchResult.error)
-                    // Fallback to individual sends
-                    for (const sub of chunk) {
-                        try {
-                            const token = generateUnsubscribeToken(sub.email)
-                            const unsubUrl = `${BASE_URL}/api/unsubscribe?email=${encodeURIComponent(sub.email)}&token=${token}`
-                            let recipientHtml = campaign.rendered_html || ''
-                            if (recipientHtml.includes('/api/unsubscribe')) {
-                                recipientHtml = recipientHtml.replace(/https?:\/\/[^"'\s]+\/api\/unsubscribe\?[^"'\s]+/g, unsubUrl)
-                            }
-                            const singleRes = await resend.emails.send({
-                                from: fromEmail,
-                                to: sub.email,
-                                subject: campaign.subject,
-                                html: recipientHtml
-                            })
-                            if (singleRes.error) throw new Error(singleRes.error.message)
-                            sent++
-                            recipientsToInsert.push({
-                                campaign_id: id,
-                                email: sub.email,
-                                status: 'sent',
-                                resend_email_id: singleRes.data?.id || null,
-                                sent_at: new Date().toISOString()
-                            })
-                        } catch (singleErr: any) {
-                            failed++
-                            recipientsToInsert.push({
-                                campaign_id: id,
-                                email: sub.email,
-                                status: 'failed',
-                                error_message: singleErr?.message || 'Send failed'
-                            })
-                        }
-                        await new Promise(r => setTimeout(r, 250))
-                    }
-                } else {
-                    const responseData = (batchResult.data as any)?.data || (Array.isArray(batchResult.data) ? batchResult.data : [])
-                    chunk.forEach((sub: any, idx: number) => {
-                        const item = responseData[idx]
-                        sent++
-                        recipientsToInsert.push({
-                            campaign_id: id,
-                            email: sub.email,
-                            status: 'sent',
-                            resend_email_id: item?.id || null,
-                            sent_at: new Date().toISOString()
-                        })
-                    })
-                }
-            } catch (err: any) {
-                console.error(`[Send Remaining] Batch exception:`, err)
-                for (const sub of chunk) {
-                    failed++
-                    recipientsToInsert.push({
-                        campaign_id: id,
-                        email: sub.email,
-                        status: 'failed',
-                        error_message: err?.message || 'Batch send failed'
-                    })
-                }
+        // 5. Send using unified email provider (Brevo API > Brevo SMTP > Resend)
+        const emailsToSend = remainingSubscribers.map(sub => {
+            const token = generateUnsubscribeToken(sub.email)
+            const unsubUrl = `${BASE_URL}/api/unsubscribe?email=${encodeURIComponent(sub.email)}&token=${token}`
+            
+            // Personalize unsubscribe link in the rendered HTML snapshot
+            let recipientHtml = campaign.rendered_html || ''
+            if (recipientHtml.includes('/api/unsubscribe')) {
+                recipientHtml = recipientHtml.replace(/https?:\/\/[^"'\s]+\/api\/unsubscribe\?[^"'\s]+/g, unsubUrl)
+            } else if (recipientHtml.includes('Unsubscribe</a>')) {
+                recipientHtml = recipientHtml.replace(/href=["']#[^"']*["']/g, `href="${unsubUrl}"`)
             }
 
-            if (i + BATCH_CHUNK_SIZE < remainingSubscribers.length) {
-                await new Promise(resolve => setTimeout(resolve, 600))
+            return {
+                to: sub.email,
+                subject: campaign.subject,
+                html: recipientHtml,
             }
-        }
+        })
+
+        const batchResult = await sendBatchEmails({
+            emails: emailsToSend,
+            from: fromEmail,
+            fromName,
+        })
+
+        const sent = batchResult.sent
+        const failed = batchResult.failed
+        const recipientsToInsert = batchResult.results.map(r => ({
+            campaign_id: id,
+            email: r.email,
+            status: r.success ? 'sent' : 'failed',
+            resend_email_id: r.messageId || null,
+            sent_at: r.success ? new Date().toISOString() : null,
+            error_message: r.error || null,
+        }))
 
         // 6. Insert new recipients and update campaign numbers
         if (recipientsToInsert.length > 0) {

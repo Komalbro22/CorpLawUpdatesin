@@ -4,14 +4,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
-import { Resend } from 'resend'
+import { sendEmail, sendBatchEmails, parseSender } from '@/lib/email-provider'
 import { generateUnsubscribeToken, BASE_URL } from '@/lib/utils'
 
 export async function POST(request: NextRequest) {
     if (!await verifyAdminSession()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    const resend = new Resend(process.env.RESEND_API_KEY || 'dummy_key')
-    const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'newsletter@corplawupdates.in'
+    const { email: fromEmail, name: fromName } = parseSender()
 
     try {
         const { subject, content, testEmail } = await request.json()
@@ -36,13 +35,18 @@ export async function POST(request: NextRequest) {
         }
 
         if (testEmail) {
-            await resend.emails.send({
-                from: FROM_EMAIL,
+            const testRes = await sendEmail({
+                from: fromEmail,
+                fromName,
                 to: testEmail,
                 subject: `[TEST] ${subject}`,
                 html: buildEmailHtml(content, testEmail)
             })
-            return NextResponse.json({ success: true, message: 'Test email sent' })
+
+            if (!testRes.success) {
+                return NextResponse.json({ error: testRes.error || 'Failed to send test email' }, { status: 500 })
+            }
+            return NextResponse.json({ success: true, message: 'Test email sent', provider: testRes.provider })
         }
 
         // Send to all
@@ -71,30 +75,24 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'No active subscribers found' }, { status: 400 })
         }
 
-        // Resend batch API limit is 100 emails per request, we use 50 here
-        const batches = []
-        for (let i = 0; i < allSubscribers.length; i += 50) {
-            const batch = allSubscribers.slice(i, i + 50)
-            const payload = batch.map(sub => ({
-                from: FROM_EMAIL,
-                to: sub.email,
-                subject,
-                html: buildEmailHtml(content, sub.email)
-            }))
-            batches.push(payload)
-        }
+        const emailItems = allSubscribers.map(sub => ({
+            to: sub.email,
+            subject,
+            html: buildEmailHtml(content, sub.email)
+        }))
 
-        let sentCount = 0
-        for (const batch of batches) {
-            const { error } = await resend.batch.send(batch)
-            if (error) {
-                console.error('Batch send error:', error)
-            } else {
-                sentCount += batch.length
-            }
-        }
+        const batchResult = await sendBatchEmails({
+            emails: emailItems,
+            from: fromEmail,
+            fromName,
+        })
 
-        return NextResponse.json({ success: true, sent: sentCount })
+        return NextResponse.json({ 
+            success: batchResult.sent > 0, 
+            sent: batchResult.sent, 
+            failed: batchResult.failed, 
+            provider: batchResult.provider 
+        })
 
     } catch (err: any) {
         console.error('Newsletter error:', err)
