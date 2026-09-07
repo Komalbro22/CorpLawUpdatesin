@@ -609,6 +609,92 @@ export const mcaForms: MCAForm[] = [
     }
   },
   {
+    slug: 'pas-6',
+    formNumber: 'PAS-6',
+    formName: 'Reconciliation of Share Capital Audit Report (Half-yearly)',
+    aliases: [
+      'pas 6',
+      'pas-6',
+      'pas6',
+      'form pas-6',
+      'form pas 6',
+      'reconciliation of share capital audit',
+      'pas 6 due date',
+      'pas 6 late fees',
+      'pas 6 fees calculator',
+      'rule 9a dematerialisation',
+      'rule 9b private company demat',
+      'private company demat deadline',
+      'pas 6 penalty calculator',
+      'isin reconciliation report'
+    ],
+    category: 'event',
+    filedBy: [
+      'Unlisted Public Companies (Rule 9A)',
+      'Non-Small Private Companies (Rule 9B)',
+      'Holding & Subsidiary Companies',
+      'Section 8 Companies with Share Capital'
+    ],
+    dueDate: 'Within 60 days of half-year end (29 Nov & 30 May)',
+    section: 'Section 29 read with Rule 9A & 9B, Companies (PAS) Rules, 2014',
+    penaltyType: 'multiplier',
+    penaltyRate: '2× to 12× Normal Fee + Section 450 Adjudication (Up to ₹2L Company / ₹50k Officer)',
+    normalFeeStructure: 'capital_slab',
+    baseFeeSlab: 'standard_company_slab',
+    concessionApplies: true,
+    filingGuides: [
+      {
+        title: 'Form PAS-6 Dematerialisation & Share Capital Reconciliation Guide: Rules 9A & 9B, Due Dates, ISIN Audit & Late Penalties (2026-27)',
+        slug: '/updates/pas-6-reconciliation-share-capital-audit-demat-rules-9a-9b-due-date-mca-v3',
+        publishedDate: '2026-09-07',
+        summary: 'Comprehensive legal and procedural guide to filing Form PAS-6 on MCA V3. Covers Rule 9A & 9B demat mandates, 30 September 2026 deadline, ISIN allotment via RTA, Table B fee multipliers, and Section 450 civil adjudication risks.',
+        isOfficial: true
+      }
+    ],
+    metaTitle: 'Form PAS-6 Fee Calculator & Late Penalty Audit (2026-27) — Section 29 & Rule 9A/9B | CorpLawUpdates',
+    metaDescription: 'Calculate exact MCA normal fees, Table B multipliers (2x to 12x), and Section 450 civil adjudication penalties for delayed Form PAS-6 Reconciliation of Share Capital Audit Report. Features live demat percentage audit, 30 Sep 2026 compliance roadmap, and Small Company exemption checks.',
+    ogDescription: 'Instant statutory calculation of Form PAS-6 filing fees, 60-day deadlines (29 Nov & 30 May), Table B late multipliers, and Section 450 civil adjudication liability under Rules 9A & 9B.',
+    faqItems: [
+      {
+        question: 'What is Form PAS-6 and what is its statutory purpose?',
+        answer: 'Form PAS-6 is the half-yearly Reconciliation of Share Capital Audit Report mandated under Section 29 of the Companies Act, 2013 read with Rule 9A (for unlisted public companies) and Rule 9B (for non-small private companies). It reconciles the total issued share capital of a company with the holdings across NSDL, CDSL, and remaining physical share certificates. Under Rule 9A(8A), any discrepancy must be immediately flagged to the depositories.'
+      },
+      {
+        question: 'Who is required to file Form PAS-6 and who is exempt?',
+        answer: 'Filing is mandatory for all unlisted public companies and all private companies that do not qualify as "small companies" under Section 2(85). Private holding companies, subsidiaries, and Section 8 companies with share capital are always required to file because the Section 2(85) proviso disqualifies them from small company status. Exempt entities include Small Companies (revised thresholds: paid-up capital ≤ ₹10 Cr and turnover ≤ ₹100 Cr under G.S.R. 880(E)), Listed companies (which file under SEBI Reg 55A), Nidhi companies, Government companies, and Wholly-Owned Subsidiaries of unlisted public companies.'
+      },
+      {
+        question: 'What are the half-yearly due dates for filing Form PAS-6?',
+        answer: 'Form PAS-6 must be filed within 60 calendar days from the end of each half-year: for the half-year ending 30th September, the due date is 29th November; for the half-year ending 31st March, the due date is 30th May.'
+      },
+      {
+        question: 'How are normal filing fees and late fees computed on MCA V3?',
+        answer: 'Normal filing fees follow Table A based on authorized share capital: ₹200 (< ₹1L), ₹300 (₹1L to ₹5L), ₹400 (₹5L to ₹25L), ₹500 (₹25L to ₹1 Crore), and ₹600 (₹1 Crore or more). Late filings attract Table B multipliers: up to 30 days delay: 2× normal fee; 31 to 60 days: 4×; 61 to 90 days: 6×; 91 to 180 days: 10×; beyond 180 days: 12× normal fee.'
+      },
+      {
+        question: 'What are the Section 450 civil adjudication penalties for non-filing of PAS-6?',
+        answer: 'Because Rules 9A and 9B do not prescribe a specific fine, Section 450 (General Penalty) applies. In adjudication proceedings initiated by the ROC under Section 454, the company is liable to a base penalty of ₹10,000 plus ₹1,000 per day for continuing default (capped at ₹2,00,000). Every officer in default is liable to a base penalty of ₹10,000 plus ₹1,000 per day (capped at ₹50,000 each). Under Section 446B, eligible startups and small entities receive a 50% reduction in penalties.'
+      },
+      {
+        question: 'Does Form PAS-6 require certification by a Practising Professional?',
+        answer: 'Yes. Form PAS-6 must be digitally certified with DSC by an independent Practising Company Secretary (PCS) holding a Certificate of Practice from ICSI or a Practising Chartered Accountant (PCA) holding a Certificate of Practice from ICAI. False certification attracts criminal liability under Section 448 read with Section 447 (fraud).'
+      },
+      {
+        question: 'What are the consequences if physical shares remain undematerialised?',
+        answer: 'Under Rule 9A(4) and Rule 9B(4), every promoter, director, and Key Managerial Personnel (KMP) must dematerialise their entire shareholding before the company can make any offer of securities, rights issue, bonus issue, or buyback. Furthermore, any shareholder wishing to transfer physical shares must first convert them into demat form.'
+      }
+    ],
+    relatedForms: ['pas-3', 'inc-20a', 'mgt-7'],
+    filedTogetherWith: [],
+    contentSections: {
+      whatIsThisForm: '<p><strong>Form PAS-6</strong> is the statutory <strong>Reconciliation of Share Capital Audit Report (Half-yearly)</strong> prescribed by the Ministry of Corporate Affairs under Section 29 of the Companies Act, 2013 read with Rule 9A (for unlisted public companies) and Rule 9B (for non-small private companies) of the Companies (Prospectus and Allotment of Securities) Rules, 2014.</p><p>Its primary objective is to maintain complete transparency over corporate equity by reconciling a company&apos;s total issued share capital against shares held in dematerialised electronic form with the two national depositories—<strong>National Securities Depository Limited (NSDL)</strong> and <strong>Central Depository Services (India) Limited (CDSL)</strong>—and physical share certificates. Any discrepancy between issued capital and depository records must be reported immediately to depositories under Rule 9A(8A).</p>',
+      whoMustFile: '<p>The obligation to file Form PAS-6 applies on an ongoing half-yearly basis to:</p><ul><li><strong>Unlisted Public Companies:</strong> Governed by Rule 9A since October 2018.</li><li><strong>Private Limited Companies (Non-Small):</strong> Governed by Rule 9B. All private companies that exceed the Small Company limits (paid-up capital > ₹10 Crore or turnover > ₹100 Crore per G.S.R. 880(E)) must obtain ISIN and file PAS-6.</li><li><strong>Private Holding & Subsidiary Companies:</strong> Disqualified from small company status under the proviso to Section 2(85); mandatory demat applies regardless of capital size.</li><li><strong>Section 8 Companies with Share Capital:</strong> Also excluded from small company classification under Section 2(85).</li><li><strong>Producer Companies:</strong> Required to comply by 31 March 2028 per the February 2025 amendment.</li></ul><p><strong>Exempt Entities:</strong> Small Companies under Section 2(85), Listed companies (covered under SEBI Regulation 55A), Nidhi companies, Government companies, and Wholly-Owned Subsidiaries of unlisted public companies are exempt.</p>',
+      dueDateExplained: '<p>Form PAS-6 is filed semi-annually within <strong>60 calendar days</strong> from the conclusion of each half-year:</p><ul><li><strong>Half-Year 1 (1 April to 30 September):</strong> Due on or before <strong>29th November</strong>.</li><li><strong>Half-Year 2 (1 October to 31 March):</strong> Due on or before <strong>30th May</strong>.</li></ul><p>A separate Form PAS-6 must be submitted electronically on MCA V3 for <strong>each individual ISIN</strong> (e.g., if a company has both equity shares and preference shares, two distinct PAS-6 filings are required per half-year).</p>',
+      consequencesOfDelay: '<p>Delayed or non-filing of Form PAS-6 triggers dual statutory liabilities:</p><ol><li><strong>MCA21 Portal Additional Fee (Table B Multiplier):</strong> The portal automatically levies an additional fee scaling from <strong>2× to 12× the normal filing fee</strong> depending on the duration of delay past the 60-day window (12× maximum fee of up to ₹7,200 for delay exceeding 180 days).</li><li><strong>Section 450 Civil Adjudication Exposure:</strong> Under Section 450 read with Section 454, the ROC may initiate adjudication proceedings imposing a base penalty of <strong>₹10,000 plus ₹1,000 per day</strong> of continuing default on the company (capped at <strong>₹2,00,000</strong>) and <strong>₹10,000 plus ₹1,000 per day</strong> on each officer in default (capped at <strong>₹50,000 per officer</strong>). Section 446B halves these penalties for eligible startups.</li><li><strong>Commercial Embargo (Rule 9A(4) & 9B(4)):</strong> Companies in default cannot issue bonus shares, rights issues, private placements, or buybacks. Non-compliance severely impairs investor due diligence in M&A and funding rounds.</li></ol>',
+      workedExample: '<p><strong>Scenario:</strong> A Non-Small Private Limited Company with ₹5 Crore authorized share capital files Form PAS-6 for the half-year ended 30 September 2026 on 13 January 2027 (45 days delay past the 29 November statutory deadline) with 3 directors in default.</p><ul><li>Normal Government Filing Fee (Table A, Item 5 — ₹1Cr+): <strong>₹600</strong></li><li>Additional Late Fee on MCA V3 (31 to 60 days delay = 4× normal fee): 4 × ₹600 = <strong>₹2,400</strong></li><li><strong>Total MCA21 Portal Payable:</strong> ₹600 + ₹2,400 = <strong>₹3,000</strong></li><li><strong>Section 450 Civil Adjudication Exposure:</strong></li><ul><li>Company Penalty: ₹10,000 base + (45 days × ₹1,000) = <strong>₹55,000</strong> (within ₹2,00,000 cap).</li><li>Officers in Default (3 Directors): (₹10,000 base + 45 days × ₹1,000) = ₹55,000, capped at <strong>₹50,000 per director</strong> → 3 × ₹50,000 = <strong>₹1,50,000</strong>.</li></ul><li><strong>Total Maximum Combined Statutory Exposure:</strong> ₹3,000 + ₹55,000 + ₹1,50,000 = <strong>₹2,08,000</strong>.</li></ul>'
+    }
+  },
+  {
     slug: 'chg-1',
     formNumber: 'CHG-1',
     formName: 'Creation or Modification of Charge',

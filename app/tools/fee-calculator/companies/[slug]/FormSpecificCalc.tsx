@@ -18,6 +18,7 @@ import DPT3Workspace from './DPT3Workspace'
 import DIR3KYCWorkspace from './DIR3KYCWorkspace'
 import INC20AWorkspace from './INC20AWorkspace'
 import SPICePlusWorkspace from './SPICePlusWorkspace'
+import PAS6Workspace from './PAS6Workspace'
 
 interface ResultRow {
   component: string
@@ -82,6 +83,10 @@ export default function FormSpecificCalc({ form }: { form: MCAForm }) {
 
   if (form.slug === 'spice-plus' || form.slug === 'inc-32' || form.slug === 'spice') {
     return <SPICePlusWorkspace form={form} />
+  }
+
+  if (form.slug === 'pas-6' || form.slug === 'pas6') {
+    return <PAS6Workspace form={form} />
   }
 
   const isMgt7Family = form.slug === 'mgt-7' || form.slug === 'mgt-7a'
