@@ -303,6 +303,49 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         text: 'If delayed, apply Table B multiplier (2x for ≤30d, 4x for ≤60d, 6x for ≤90d, 10x for ≤180d, 12x for >180d). Evaluate potential Rule 21 exposure (₹5,000 company + ₹5,000 per officer + ₹500/day continuing default).'
       }
     ]
+  } : form.slug === 'inc-20a' ? {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How to Calculate Form INC-20A Filing Fees & Section 10A Penalties on MCA V3',
+    description: 'Step-by-step guide to calculating 180-day incorporation due dates, Table A normal fees, Table B delay multipliers (2x to 12x), Section 10A(2) statutory penalties, and Section 446B relief.',
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Identify the Date of Incorporation',
+        text: 'Check the date printed on the Certificate of Incorporation (CoI). Day 0 is the incorporation date, and Form INC-20A must be filed strictly within 180 calendar days.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Verify Share Subscription Remittance in Corporate Bank Account',
+        text: 'Ensure each subscriber to the MOA has deposited their full agreed share capital into the corporate bank account through banking channels, and obtain a certified bank statement.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Determine Table A Normal Base Filing Fee',
+        text: 'Find your authorized capital tier under Table A Item 5: ₹200 for < ₹1L; ₹300 for ₹1L-₹5L; ₹400 for ₹5L-₹25L; ₹500 for ₹25L-₹1Cr; ₹600 for ≥ ₹1Cr.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: 'Calculate Delay Beyond 180 Days & Apply Table B Multiplier',
+        text: 'If filing after 180 days, determine delay days: 1-30 days (2x fee), 31-60 days (4x fee), 61-90 days (6x fee), 91-180 days (10x fee), >180 days (12x fee).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 5,
+        name: 'Assess Section 10A(2) Adjudication Liability & Section 446B Relief',
+        text: 'Standard liability: ₹50,000 flat company penalty + ₹1,000/day per officer (capped at ₹1,00,000 each, payable from personal funds). Eligible Small Companies and Startups receive 50% statutory reduction under Section 446B (₹25,000 company + ₹500/day max ₹50,000 per officer).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 6,
+        name: 'Submit on MCA V3 & Complete Professional Certification',
+        text: 'Attach bank statement, geo-tagged registered office photos, and board resolution. Obtain Class 3 DSC certification from a practicing CA, CS, or CMA for STP auto-approval.'
+      }
+    ]
   } : null
 
   return (
@@ -343,7 +386,9 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </span>
           </div>
           <h1 className="text-[2.25rem] font-bold font-serif text-white mb-4">
-            {form.slug === 'dir-3-kyc'
+            {form.slug === 'inc-20a'
+              ? 'INC-20A Late Fees & Penalty Calculator (FY 2026-27) — Commencement of Business'
+              : form.slug === 'dir-3-kyc'
               ? 'DIR-3 KYC Due Date & Penalty Calculator (FY 2026-27) — Triennial Rules'
               : form.slug === 'dpt-3'
               ? 'DPT-3 Late Fees & Return of Deposits Calculator (FY 2026-27)'
@@ -360,7 +405,9 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               : `${form.formNumber} — ${form.formName} Fee & Penalty Calculator (2026-27)`}
           </h1>
           <p className="text-slate-400 text-lg max-w-3xl mx-auto mb-8">
-            {form.slug === 'dir-3-kyc'
+            {form.slug === 'inc-20a'
+              ? 'Calculate statutory normal filing fees, 180-day incorporation due date, Table B late fee multipliers (2× to 12×), Section 10A(2) adjudication penalties, and Section 446B relief for Form INC-20A on MCA V3.'
+              : form.slug === 'dir-3-kyc'
               ? 'Determine your triennial routine KYC cycle (Rule 12A(1)), 30-day event-based change rules (Rule 12A(2)), and G.S.R. 300(E) fee schedule (₹0 on-time / ₹500 change / ₹5,000 reactivation) on MCA21 V3.'
               : form.slug === 'dpt-3'
               ? 'Calculate statutory normal filing fees, 30 June due date, Circular 02/2026 fee waiver, Table B delay multipliers (2× to 12×), and Rule 21 penalties on MCA V3.'
@@ -442,6 +489,26 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               <span className="font-semibold text-slate-700 dark:text-slate-300">✓ OPC Deadline: 180 Days from FY Close</span>
               <span>•</span>
               <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Section 446B: 50% Penalty Relief</span>
+            </div>
+          </div>
+        )}
+
+        {form.slug === 'inc-20a' && (
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-rose-200 dark:border-rose-900/50 border-l-4 border-l-rose-600 rounded-2xl shadow-sm">
+            <div className="flex items-center gap-2 mb-2 text-xs font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider">
+              <span>⚡</span> Fast Statutory Summary • Section 10A &amp; Rule 23A
+            </div>
+            <p className="text-slate-800 dark:text-slate-200 text-sm md:text-base leading-relaxed font-medium">
+              Form INC-20A is the mandatory one-time declaration for commencement of business under Section 10A. It is due strictly within 180 calendar days from incorporation. Delayed filing attracts Table B portal late multipliers (2× to 12× base fee) PLUS statutory adjudication penalties under Section 10A(2) of ₹50,000 on the company and ₹1,000/day per officer (max ₹1,00,000 each), halved under Section 446B for Small Companies and Startups.
+            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-3">
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Strict Due Date: 180 Days from Incorporation</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Table B Multipliers: 2× to 12× Normal Fee</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Section 446B: 50% Reduced Penalty</span>
+              <span>•</span>
+              <span className="font-semibold text-rose-600 dark:text-rose-400">✗ CCFS-2026 Amnesty: EXCLUDED</span>
             </div>
           </div>
         )}
@@ -1206,6 +1273,165 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
                       <td className="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">Payment &amp; STP Auto-Approval</td>
                       <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Pay challan (₹0 / ₹500 / ₹5,000) via Bharatkosh online gateway.</td>
                       <td className="px-4 py-2.5 text-xs font-bold text-emerald-600">Instant STP approval. DIN marked Active immediately.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* INC-20A Dedicated Statutory Master Tables */}
+        {form.slug === 'inc-20a' && (
+          <div className="space-y-12 mb-16">
+            {/* Table 1: Table A Base Normal Fees */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>📋</span> Table A: Normal Base Filing Fee Schedule (Item 5)
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Statutory base fee payable upon filing Form INC-20A on MCA21 V3 portal based on authorized nominal share capital under the Companies (Registration Offices and Fees) Rules, 2014.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Nominal / Authorized Capital Bracket</th>
+                      <th className="px-4 py-3 font-semibold">Normal Base Fee</th>
+                      <th className="px-4 py-3 font-semibold">Statutory Reference &amp; Entity Coverage</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr><td className="px-4 py-3 font-medium">Less than ₹1,00,000</td><td className="px-4 py-3 font-bold text-rose-600">₹200</td><td className="px-4 py-3 text-slate-500">Table A, Item 5, Fees Rules 2014</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">₹1,00,000 to ₹4,99,999</td><td className="px-4 py-3 font-bold text-rose-600">₹300</td><td className="px-4 py-3 text-slate-500">Table A, Item 5, Fees Rules 2014 (Standard OPC bracket)</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">₹5,00,000 to ₹24,99,999</td><td className="px-4 py-3 font-bold text-rose-600">₹400</td><td className="px-4 py-3 text-slate-500">Table A, Item 5, Fees Rules 2014 (Standard ₹10L Pvt Ltd)</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">₹25,00,000 to ₹99,99,999</td><td className="px-4 py-3 font-bold text-rose-600">₹500</td><td className="px-4 py-3 text-slate-500">Table A, Item 5, Fees Rules 2014</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">₹1,00,00,000 or more (≥ ₹1 Crore)</td><td className="px-4 py-3 font-bold text-rose-600">₹600</td><td className="px-4 py-3 text-slate-500">Table A, Item 5, Fees Rules 2014 (Maximum base tier)</td></tr>
+                    <tr className="bg-slate-50/50 dark:bg-slate-800/30"><td className="px-4 py-3 font-medium italic">Company not having share capital</td><td className="px-4 py-3 font-bold text-emerald-600">Exempt from Sec 10A</td><td className="px-4 py-3 text-slate-500">Section 10A(1)(a) applies strictly to companies having share capital</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 2: Table B Multipliers */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>⏱️</span> Table B: Additional Late Fee Multiplier Schedule (2× to 12×)
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Unlike AOC-4 and MGT-7 (which charge flat ₹100/day), Form INC-20A late filing fees on MCA V3 are calculated as multipliers of the Table A normal fee under Item B of the Fees Rules.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Period of Delay Beyond 180 Days</th>
+                      <th className="px-4 py-3 font-semibold">Table B Multiplier</th>
+                      <th className="px-4 py-3 font-semibold">Fee on ₹10L Capital (Base ₹400)</th>
+                      <th className="px-4 py-3 font-semibold">Fee on ₹1Cr Capital (Base ₹600)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr><td className="px-4 py-3 font-medium">Up to 30 Days Delay (Days 181 to 210)</td><td className="px-4 py-3 font-bold text-amber-600">2× Normal Fee</td><td className="px-4 py-3">₹400 + ₹800 = <strong className="text-slate-900 dark:text-white">₹1,200</strong></td><td className="px-4 py-3">₹600 + ₹1,200 = <strong className="text-slate-900 dark:text-white">₹1,800</strong></td></tr>
+                    <tr><td className="px-4 py-3 font-medium">31 to 60 Days Delay (Days 211 to 240)</td><td className="px-4 py-3 font-bold text-amber-600">4× Normal Fee</td><td className="px-4 py-3">₹400 + ₹1,600 = <strong className="text-slate-900 dark:text-white">₹2,000</strong></td><td className="px-4 py-3">₹600 + ₹2,400 = <strong className="text-slate-900 dark:text-white">₹3,000</strong></td></tr>
+                    <tr><td className="px-4 py-3 font-medium">61 to 90 Days Delay (Days 241 to 270)</td><td className="px-4 py-3 font-bold text-amber-600">6× Normal Fee</td><td className="px-4 py-3">₹400 + ₹2,400 = <strong className="text-slate-900 dark:text-white">₹2,800</strong></td><td className="px-4 py-3">₹600 + ₹3,600 = <strong className="text-slate-900 dark:text-white">₹4,200</strong></td></tr>
+                    <tr><td className="px-4 py-3 font-medium">91 to 180 Days Delay (Days 271 to 360)</td><td className="px-4 py-3 font-bold text-rose-600">10× Normal Fee</td><td className="px-4 py-3">₹400 + ₹4,000 = <strong className="text-slate-900 dark:text-white">₹4,400</strong></td><td className="px-4 py-3">₹600 + ₹6,000 = <strong className="text-slate-900 dark:text-white">₹6,600</strong></td></tr>
+                    <tr className="bg-rose-50/40 dark:bg-rose-950/20"><td className="px-4 py-3 font-medium text-rose-700 dark:text-rose-400">Beyond 180 Days Delay (Day 361 onwards)</td><td className="px-4 py-3 font-bold text-rose-600">12× Normal Fee</td><td className="px-4 py-3">₹400 + ₹4,800 = <strong className="text-slate-900 dark:text-white">₹5,200</strong></td><td className="px-4 py-3">₹600 + ₹7,200 = <strong className="text-slate-900 dark:text-white">₹7,800</strong></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 3: Section 10A(2) Adjudication Penalties vs Section 446B Relief */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>⚖️</span> Section 10A(2) Statutory Penalties vs Section 446B Relief Comparison
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Adjudication penalties are distinct from MCA portal e-Challan fees. Directors must remit penalties from personal funds, NOT from corporate bank accounts.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Statutory Subject / Offender</th>
+                      <th className="px-4 py-3 font-semibold">Standard Penalty (Section 10A(2))</th>
+                      <th className="px-4 py-3 font-semibold text-emerald-600">Section 446B Reduced Penalty (Small Co / Startup)</th>
+                      <th className="px-4 py-3 font-semibold">Payment Source &amp; Disclosure</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Company Liability</td>
+                      <td className="px-4 py-3 font-bold text-rose-600">₹50,000 flat fine</td>
+                      <td className="px-4 py-3 font-bold text-emerald-600">₹25,000 (50% relief)</td>
+                      <td className="px-4 py-3 text-slate-500">Payable from company funds; board disclosure required</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Each Officer in Default (Director)</td>
+                      <td className="px-4 py-3 font-bold text-rose-600">₹1,000/day (max ₹1,00,000 each)</td>
+                      <td className="px-4 py-3 font-bold text-emerald-600">₹500/day (max ₹50,000 each)</td>
+                      <td className="px-4 py-3 text-rose-600 font-semibold">PERSONAL FUNDS ONLY (cannot use company funds)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Total for 2 Directors (42 Days Delay)</td>
+                      <td className="px-4 py-3 font-bold">₹50k + ₹84k = ₹1,34,000</td>
+                      <td className="px-4 py-3 font-bold text-emerald-600">₹25k + ₹42k = ₹67,000</td>
+                      <td className="px-4 py-3 text-slate-500">Benchmark order: ROC Pune (Dec 2025)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Total for 3 Directors (100+ Days Delay)</td>
+                      <td className="px-4 py-3 font-bold">₹50k + ₹3,00,000 = ₹3,50,000</td>
+                      <td className="px-4 py-3 font-bold text-emerald-600">₹25k + ₹1,50,000 = ₹1,75,000</td>
+                      <td className="px-4 py-3 text-slate-500">Benchmark order: ROC Bangalore (Jun 2026)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 4: Operational Freeze, Strike-Off & Escalation Timeline */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>🛡️</span> Operational Freeze, Strike-Off Risk &amp; Escalation Timeline
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Statutory consequences under Section 10A(1), Section 10A(3), Section 248(1)(c), and Section 454(8).
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Timeline Phase</th>
+                      <th className="px-4 py-3 font-semibold">Statutory Status</th>
+                      <th className="px-4 py-3 font-semibold">Operational &amp; Borrowing Powers</th>
+                      <th className="px-4 py-3 font-semibold">Enforcement Action Risk</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Days 0 to 180 from CoI</td>
+                      <td className="px-4 py-3 font-bold text-emerald-600">Statutory Window</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Cannot commence business until INC-20A filed</td>
+                      <td className="px-4 py-3 text-slate-500">Fully compliant; normal filing fees apply</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Day 181 to Day 360</td>
+                      <td className="px-4 py-3 font-bold text-amber-600">Statutory Default</td>
+                      <td className="px-4 py-3 text-rose-600 font-semibold">OPERATIONAL FREEZE: Contracts voidable; loans unauthorized</td>
+                      <td className="px-4 py-3 text-slate-500">Table B multipliers (2x to 10x) + Section 10A(2) per-day fine active</td>
+                    </tr>
+                    <tr className="bg-rose-50/40 dark:bg-rose-950/20">
+                      <td className="px-4 py-3 font-medium text-rose-700 dark:text-rose-400">Day 361+ (&gt; 180 Days Delay)</td>
+                      <td className="px-4 py-3 font-bold text-rose-600">Strike-Off Trigger</td>
+                      <td className="px-4 py-3 text-rose-600 font-semibold">Severe default; corporate capacity frozen</td>
+                      <td className="px-4 py-3 text-rose-600 font-bold">ROC empowered to initiate strike-off &amp; dissolve entity under Section 248(1)(c)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Day 90 Post Adjudication Order</td>
+                      <td className="px-4 py-3 font-bold text-rose-700 dark:text-rose-300">Section 454(8) Escalation</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Penalties unpaid after 90 days of order</td>
+                      <td className="px-4 py-3 text-rose-700 dark:text-rose-300 font-bold">Additional fine ₹25k–₹5L on company; up to 6 months imprisonment for directors</td>
                     </tr>
                   </tbody>
                 </table>

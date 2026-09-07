@@ -15,6 +15,8 @@ import { generateMgt7Pdf } from '@/lib/pdf/generateMgt7Pdf'
 import { generateLlpPdf } from '@/lib/pdf/generateLlpPdf'
 import { generateCompanyPdfBuffer, generateCinDecoderPdfBuffer } from '@/lib/pdf/generateCompanyPdf'
 import { generateMsmePdf } from '@/lib/pdf/generateMsmePdf'
+import { generateInc20aPdf } from '@/lib/pdf/generateInc20aPdf'
+import { calculateInc20aCompliance } from '@/lib/rule-engine/inc20a-engine'
 
 describe('PDF Layout, Encoding & Sanitization Suite', () => {
   describe('cleanPdfText utility', () => {
@@ -275,6 +277,26 @@ describe('PDF Layout, Encoding & Sanitization Suite', () => {
       const buf2 = generateCinDecoderPdfBuffer(mockBreakdown)
       expect(Buffer.isBuffer(buf2)).toBe(true)
       expect(buf2.length).toBeGreaterThan(1000)
+    })
+
+    test('generateInc20aPdf generates valid PDF with clean sanitization and no collisions', () => {
+      const calculation = calculateInc20aCompliance({
+        incorporationDate: '2025-01-01',
+        filingDate: '2025-08-15',
+        authorizedShareCapital: 1000000,
+        companyClassification: 'standard_private',
+        hasCommencedBusinessBeforeFiling: true,
+        numberOfDirectors: 2
+      })
+
+      const doc = generateInc20aPdf(calculation, {
+        companyName: 'Apex Innovations Private Limited',
+        cin: 'U72900DL2025PTC123456',
+        numberOfDirectors: 2
+      })
+
+      expect((doc as any).internal.getNumberOfPages()).toBeGreaterThanOrEqual(1)
+      expect(doc.output()).toContain('%PDF')
     })
   })
 })

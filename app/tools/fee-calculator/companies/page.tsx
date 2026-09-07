@@ -589,6 +589,27 @@ export default function CompaniesFeePage() {
               Open Dedicated Workspace →
             </span>
           </Link>
+
+          <Link
+            href="/tools/fee-calculator/companies/inc-20a"
+            className="p-5 rounded-xl border border-rose-200 dark:border-rose-900/60 bg-rose-50/50 dark:bg-rose-950/20 hover:border-rose-500 transition-all group flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-rose-600 text-white">INC-20A</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">Commencement of Business</span>
+              </div>
+              <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors mb-1">
+                Form INC-20A Workspace
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                180-day incorporation deadline tracker, Table B late multipliers (2x to 12x), Section 10A(2) adjudication penalties, Section 446B relief, and strike-off risks.
+              </p>
+            </div>
+            <span className="text-xs font-bold text-rose-600 dark:text-rose-400 mt-4 flex items-center gap-1">
+              Open Dedicated Workspace →
+            </span>
+          </Link>
         </div>
       </div>
 

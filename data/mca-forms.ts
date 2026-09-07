@@ -778,5 +778,94 @@ export const mcaForms: MCAForm[] = [
       consequencesOfDelay: '<p>Non-filing or delayed filing of Form DPT-3 carries distinct statutory consequences:</p><ul><li><strong>MCA21 Table B Late Fees:</strong> Escalating additional fees of 2× to 12× the normal base fee based on the period of delay.</li><li><strong>Rule 21 Procedural Fine:</strong> Fine up to ₹5,000 on the company and ₹5,000 on every officer in default, plus ₹500 per day for continuing default.</li><li><strong>Section 76A Deposit Penalties:</strong> If unauthorized receipts are recharacterized as illegal public deposits, the company faces fines of ₹1 Crore to ₹10 Crore, and officers face imprisonment up to 7 years.</li></ul>',
       workedExample: '<div class="space-y-4"><p><strong>Scenario: Private Limited Company (Authorized Capital ₹10 Lakhs) filing DPT-3 for FY 2025-26 on 20th August 2026 (51 Days Delay from 30 June)</strong></p><ul><li>Authorized Capital: ₹10,00,000 &rarr; Normal Base Fee (Table A, Item 5): <strong>₹400</strong></li><li>Statutory Due Date: 30 June 2026 (Circular 02/2026 waiver ended 31 July 2026)</li><li>Days of Delay (from 1 July): 51 days &rarr; Table B Slab (31 to 60 days): <strong>4× Normal Fee</strong></li><li>Additional Late Fee: 4 × ₹400 = <strong>₹1,600</strong></li><li><strong>Total MCA21 Portal Challan:</strong> ₹400 + ₹1,600 = <strong>₹2,000</strong></li><li><strong>Rule 21 Indicative Exposure:</strong> ₹5,000 (Company) + ₹5,000 (Officer) + (51 days × ₹500 = ₹25,500) = <strong>₹35,500</strong></li></ul></div>'
     }
+  },
+  {
+    slug: 'inc-20a',
+    formNumber: 'INC-20A',
+    formName: 'Declaration for Commencement of Business',
+    aliases: [
+      'inc 20a',
+      'inc-20a',
+      'commencement of business',
+      'form inc 20a',
+      'section 10a',
+      'inc 20a penalty calculator',
+      'inc 20a late fees calculator',
+      'inc 20a fees',
+      'inc 20a penalty',
+      'declaration of commencement of business',
+      'inc 20a due date'
+    ],
+    category: 'incorporation',
+    filedBy: [
+      'Private Limited Companies',
+      'Public Limited Companies',
+      'One Person Companies (OPC)',
+      'Small Companies',
+      'DPIIT-Recognized Startups',
+      'Producer Companies'
+    ],
+    dueDate: 'Within 180 calendar days from Certificate of Incorporation date',
+    section: 'Section 10A(1)(a), Companies Act, 2013 read with Rule 23A of Companies (Incorporation) Rules, 2014',
+    penaltyType: 'multiplier',
+    penaltyRate: 'Table B Multipliers (2× to 12×) + Section 10A(2) Adjudication (₹50k Co + ₹1k/day per Officer)',
+    normalFeeStructure: 'capital_slab',
+    baseFeeSlab: 'standard_company_slab',
+    concessionApplies: true,
+    metaTitle: 'Form INC-20A Fee & Penalty Calculator: 180-Day Due Date & Adjudication Simulator | CorpLawUpdates.in',
+    metaDescription: 'Calculate Form INC-20A MCA portal filing fees (Table A & B 2x–12x multipliers) and Section 10A(2) ROC adjudication penalties with Section 446B 50% relief for Small Companies & Startups.',
+    ogDescription: 'Authoritative Form INC-20A Due Date & Penalty Calculator. Covers 180-day incorporation deadline, Table B slab multipliers, Section 10A(2) penalties, Section 446B relief, and strike-off risks.',
+    faqItems: [
+      {
+        question: 'What is Form INC-20A and why is it mandatory?',
+        answer: 'Form INC-20A is a mandatory one-time statutory declaration filed under Section 10A of the Companies Act, 2013 confirming that every subscriber to the Memorandum of Association (MOA) has deposited the agreed subscription money into the company bank account, and registered office verification under Section 12(2) is complete. Without filing INC-20A, the company cannot legally commence commercial operations or exercise borrowing powers.'
+      },
+      {
+        question: 'What is the statutory deadline for filing Form INC-20A?',
+        answer: 'Form INC-20A must be filed strictly within 180 calendar days from the date of incorporation printed on the Certificate of Incorporation (CoI). Unlike annual returns, this deadline is unique to each company and does not align with financial years. Day 181 onwards is a statutory default.'
+      },
+      {
+        question: 'What are the MCA portal fees for filing Form INC-20A late?',
+        answer: 'Late filing on the MCA21 portal incurs slab-based additional fees under Table B of the Fees Rules, 2014: Up to 30 days late: 2× normal fee; 31 to 60 days: 4× normal fee; 61 to 90 days: 6× normal fee; 91 to 180 days: 10× normal fee; beyond 180 days: 12× normal fee. The normal base fee ranges from ₹200 to ₹600 depending on authorized capital.'
+      },
+      {
+        question: 'What are the statutory adjudication penalties under Section 10A(2)?',
+        answer: 'Separate from the MCA portal fee, default under Section 10A(2) attracts a flat penalty of ₹50,000 on the company and ₹1,000 per day of continuing default on every officer in default (capped at ₹1,00,000 per officer). Directors must pay this penalty from personal funds.'
+      },
+      {
+        question: 'How does Section 446B reduce INC-20A penalties for Small Companies and Startups?',
+        answer: 'Under Section 446B, eligible Small Companies (per Section 2(85)), One Person Companies (OPC), Producer Companies, and DPIIT-recognized Startups are granted a 50% statutory reduction: the company penalty is capped at ₹25,000, and officer penalties are ₹500 per day capped at ₹50,000 per officer. This must be disclosed in the upcoming Board Report.'
+      },
+      {
+        question: 'What happens if a company commences business or borrows loans before filing INC-20A?',
+        answer: 'Under Section 10A(1), commencing business or borrowing prior to filing is ultra vires and unlawful. Pre-filing loans are unauthorized, commercial agreements may be deemed voidable by counterparties, and directors face severe adjudication and prosecution risks.'
+      },
+      {
+        question: 'Can the ROC strike off a company for not filing Form INC-20A?',
+        answer: 'Yes. Under Section 10A(3) read with Section 248(1)(c), if a company fails to file Form INC-20A within 180 days and the ROC has reasonable cause to believe no business is being carried on, the ROC may initiate strike-off proceedings and dissolve the corporate entity.'
+      },
+      {
+        question: 'Is Form INC-20A covered under the CCFS-2026 amnesty scheme?',
+        answer: 'No. The Companies Compliance Facilitation Scheme (CCFS-2026) covers annual defaults under Sections 92 and 137 only. Section 10A defaults are strictly excluded from CCFS amnesty, meaning companies with pending INC-20A face the full Table B late fees and Section 10A(2) penalties.'
+      },
+      {
+        question: 'Which companies are exempt from filing Form INC-20A?',
+        answer: 'Companies incorporated prior to 2 November 2018 (when Section 10A was introduced), companies without share capital (limited by guarantee without share capital), and LLPs are completely exempt from Form INC-20A.'
+      },
+      {
+        question: 'What documents are mandatory for filing Form INC-20A on MCA V3?',
+        answer: 'Mandatory attachments include: (1) Corporate bank account statement showing individual subscription receipts from each subscriber, (2) Geo-tagged photographs of the registered office (external nameplate with CIN + interior with director), (3) Board Resolution under Section 179 authorising the director to sign, and (4) Digital certification by a practicing CA, CS, or CMA.'
+      }
+    ],
+    relatedForms: ['spice-plus', 'inc-22', 'aoc-4', 'mgt-7'],
+    filedTogetherWith: ['inc-22'],
+    contentSections: {
+      whatIsThisForm: '<p><strong>Form INC-20A</strong> is the statutory declaration for commencement of business required under <strong>Section 10A of the Companies Act, 2013</strong> and <strong>Rule 23A of the Companies (Incorporation) Rules, 2014</strong>. Introduced by the Companies (Amendment) Ordinance, 2018 (effective 2 November 2018), it ensures that newly formed companies do not operate as hollow shell entities before subscribers fulfill their capital commitment.</p><p>Through this electronic filing on MCA21 V3, an authorized director solemnly declares that all MOA subscribers have paid the full value of shares agreed to be taken, verified by bank statements and certified by an independent practicing CA, CS, or CMA.</p>',
+      whoMustFile: '<p>Every company registered under the Companies Act, 2013 <strong>having a share capital</strong> and incorporated on or after <strong>2 November 2018</strong> must file Form INC-20A. This includes:</p><ul><li>Private Limited Companies</li><li>Public Limited Companies (Unlisted & Listed)</li><li>One Person Companies (OPCs) with share capital</li><li>Small Companies with share capital</li><li>DPIIT-Recognized Startup Companies</li><li>Producer Companies with share capital</li><li>Section 8 Companies with share capital</li></ul><p><strong>Exempted Entities:</strong> Companies incorporated before 2 November 2018, companies without share capital (guarantee companies), and LLPs are legally exempt.</p>',
+      dueDateExplained: '<p>The statutory deadline is strictly <strong>180 calendar days from the date of incorporation</strong> printed on the Certificate of Incorporation (CoI). Day 0 is the registration date. Unlike annual filings (AOC-4 or MGT-7), there is no fixed calendar date or financial year trigger—each company has its own independent 180-day deadline. Day 181 onwards constitutes statutory default under Section 10A(2).</p>',
+      consequencesOfDelay: '<p>Failure or delay in filing Form INC-20A triggers four cascading legal consequences:</p><ol><li><strong>Operational Freeze (Section 10A(1)):</strong> The company cannot legally commence commercial operations or exercise borrowing powers. Pre-filing agreements are voidable.</li><li><strong>MCA21 Slab Late Fees (Table B):</strong> Escalating multipliers from 2× to 12× normal filing fees.</li><li><strong>Statutory Adjudication Penalties (Section 10A(2)):</strong> Flat ₹50,000 fine on the company plus ₹1,000/day per officer in default (max ₹1,00,000 each), payable from personal funds (halved under Section 446B for Small Companies/Startups).</li><li><strong>Strike-Off Risk (Section 10A(3) / 248(1)(c)):</strong> If delay exceeds 180 days, ROC may initiate name removal and entity dissolution.</li></ol>',
+      workedExample: '<div class="space-y-4"><p><strong>Scenario: Private Limited Company (Authorized Capital ₹10 Lakhs, 2 Directors) filing INC-20A 42 Days Late</strong></p><ul><li>Nominal Share Capital: ₹10,00,000 &rarr; Normal Base Fee (Table A, Item 5): <strong>₹400</strong></li><li>Days of Delay: 42 calendar days &rarr; Table B Slab (31 to 60 days): <strong>4× Normal Fee</strong></li><li>Additional Late Fee: 4 × ₹400 = <strong>₹1,600</strong></li><li><strong>Total MCA21 Portal e-Challan:</strong> ₹400 + ₹1,600 = <strong>₹2,000</strong></li><li><strong>Section 10A(2) Adjudication Exposure:</strong> ₹50,000 (Company) + (42 days × ₹1,000 × 2 Directors = ₹84,000) = <strong>₹1,34,000</strong> (Directors pay personally).</li><li><strong>Combined Financial Exposure:</strong> ₹2,000 + ₹1,34,000 = <strong>₹1,36,000</strong>.</li></ul></div>'
+    }
   }
 ]
+
