@@ -4,11 +4,11 @@ export type FormType = 'AOC-4' | 'MGT-7' | 'DIR-3-KYC' | 'DPT-3' | 'LLP-11' | 'L
 // MOA REGISTRATION FEE — OPC / SMALL COMPANIES
 // Table A, items 1a/1b, Rule 12 Annexure (as amended 26.01.2018)
 //
-// Zero-fee provision (SPICe+ only, post-26.01.2018): capital ≤ ₹10L → ₹0.
-// Above ₹10L: base ₹2,000 + ₹200 per ₹10,000 or part thereof above ₹10L.
+// Zero-fee provision (SPICe+ only, G.S.R. 329(E) effective 2019): capital ≤ ₹15L → ₹0.
+// Above ₹10L/₹15L: base ₹2,000 + ₹200 per ₹10,000 or part thereof above ₹10L.
 // ─────────────────────────────────────────────────────────────────────────────
 export function getOpcSmallIncorporationFee(capital: number, isSpicePlus = false): number {
-  if (isSpicePlus && capital <= 1000000) return 0;
+  if (isSpicePlus && capital <= 1500000) return 0;
   if (capital <= 1000000) return 2000;
   return 2000 + Math.ceil((capital - 1000000) / 10000) * 200;
 }
@@ -17,8 +17,8 @@ export function getOpcSmallIncorporationFee(capital: number, isSpicePlus = false
 // MOA REGISTRATION FEE — OTHER COMPANIES (Private, Public, Section 8, etc.)
 // Table A, items 1c/2, Rule 12 Annexure
 //
-// Zero-fee provision (SPICe+ only, post-26.01.2018): capital ≤ ₹10L → ₹0.
-// Above ₹10L: base ₹5,000 + progressive tiers (starting from ₹1L baseline):
+// Zero-fee provision (SPICe+ only, G.S.R. 329(E) effective 2019): capital ≤ ₹15L → ₹0.
+// Above ₹15L: base ₹5,000 + progressive tiers (starting from ₹1L baseline):
 //   Tier 1  ₹1L – ₹5L    : ₹400 per ₹10K
 //   Tier 2  ₹5L – ₹50L   : ₹300 per ₹10K
 //   Tier 3  ₹50L – ₹1Cr  : ₹100 per ₹1L  (per audit-verified schedule)
@@ -26,7 +26,7 @@ export function getOpcSmallIncorporationFee(capital: number, isSpicePlus = false
 // Hard cap: total additional fees ≤ ₹2,50,00,000.
 // ─────────────────────────────────────────────────────────────────────────────
 export function getOtherCompanyIncorporationFee(capital: number, isSpicePlus = false): number {
-  if (isSpicePlus && capital <= 1000000) return 0;
+  if (isSpicePlus && capital <= 1500000) return 0;
   if (capital <= 100000) return 5000;
 
   let additionalFee = 0;
@@ -127,7 +127,7 @@ export interface CalculationResult {
  * and Section 8 companies alike. There is no concessional normal filing fee for OPC/Small
  * Companies on post-incorporation filings (AOC-4, MGT-7, etc.).
  *
- * NOTE: The zero-fee SPICe+ provision (capital ≤ ₹10L, post 26.01.2018) applies ONLY at
+ * NOTE: The zero-fee SPICe+ provision (capital ≤ ₹15L, G.S.R. 329(E)) applies ONLY at
  * incorporation and is NOT applicable here.
  */
 export function getNormalFilingFee(capitalInRupees: number): number {

@@ -229,35 +229,76 @@ export const mcaForms: MCAForm[] = [
   {
     slug: 'spice-plus',
     formNumber: 'SPICe+',
-    formName: 'Incorporation (SPICe+)',
-    aliases: ['spice', 'inc-32', 'incorporation', 'company registration'],
-    category: 'incorporation',
-    filedBy: ['Promoters', 'New Companies'],
-    dueDate: 'N/A',
-    section: 'Section 7, Companies Act 2013',
-    penaltyType: 'nil',
-    penaltyRate: 'No penalty, initial filing',
-    normalFeeStructure: 'flat',
-    baseFeeSlab: 'nil',
-    concessionApplies: false,
-    metaTitle: 'SPICe+ Company Incorporation Fee Calculator | Stamp Duty Estimate',
-    metaDescription: 'Calculate the exact MCA fee and state-wise stamp duty for incorporating a new company in India using SPICe+ (INC-32). Free estimator tool.',
-    ogDescription: 'Calculate the exact MCA fee and state-wise stamp duty for incorporating a new company in India using SPICe+ (INC-32).',
-    faqItems: [
-      { question: 'Is the SPICe+ form fee waived for small capitals?', answer: 'Yes, the MCA has waived the normal incorporation fee for companies incorporating with an authorized capital of up to ₹15 Lakhs. However, stamp duty still applies.' },
-      { question: 'What is SPICe+ Part A and Part B?', answer: 'Part A is exclusively for name reservation, while Part B covers the actual incorporation, DIN allotment, PAN/TAN application, and other registrations.' },
-      { question: 'Is stamp duty the same across India?', answer: 'No, stamp duty is a state subject. It varies heavily depending on the state where the registered office is located.' },
-      { question: 'Does SPICe+ include GST registration?', answer: 'Yes, GST registration is optional but integrated into the SPICe+ process via the AGILE-PRO-S linked form.' },
-      { question: 'Can I apply for DIN through SPICe+?', answer: 'Yes, up to 3 directors who do not currently possess a DIN can apply for it simultaneously through the SPICe+ form.' }
+    formName: 'Incorporation of Company (SPICe+ / Form INC-32)',
+    aliases: [
+      'spice',
+      'spice+',
+      'spice plus',
+      'inc-32',
+      'form inc-32',
+      'incorporation',
+      'company registration',
+      'mca incorporation fee',
+      'company registration fees',
+      'stamp duty company incorporation',
+      'moa aoa stamp duty',
+      'spice part a part b',
+      'agile-pro-s',
+      'inc-33',
+      'inc-34',
+      'opc incorporation',
+      'private limited registration fee'
     ],
-    relatedForms: ['inc-20a', 'dir-3-kyc'],
-    filedTogetherWith: [],
+    category: 'incorporation',
+    filedBy: ['Promoters', 'Subscribers', 'New Companies (Pvt Ltd, Public, OPC, Section 8)'],
+    dueDate: '20 days from Name Reservation (Rule 9A)',
+    section: 'Section 7, 8, 12, 152 & 153 read with Rule 38 & 38A, Companies (Incorporation) Rules 2014',
+    penaltyType: 'nil',
+    penaltyRate: 'No late fee (Entity not yet formed; name lapses after 20 days if unfiled)',
+    normalFeeStructure: 'capital_slab',
+    baseFeeSlab: 'nil',
+    concessionApplies: true,
+    metaTitle: 'SPICe+ Form INC-32 Fee Calculator (2026) | MCA & 36 States Stamp Duty Estimator',
+    metaDescription: 'Calculate exact MCA registration fees, 36 States/UTs MOA & AOA stamp duty, PAN/TAN statutory charges, and DIN costs for incorporating a company via SPICe+ (INC-32) on MCA V3.',
+    ogDescription: 'Accurate 2026 SPICe+ (INC-32) MCA & State Stamp Duty Fee Calculator covering all 36 States/UTs, G.S.R. 329(E) ₹15L zero-fee waiver, and 180-day compliance checklist.',
+    faqItems: [
+      {
+        question: 'Is the MCA incorporation fee completely waived up to ₹15 Lakhs capital?',
+        answer: 'Yes. Under G.S.R. 329(E) dated 25th April 2019 amending Table A of the Companies (Registration Offices and Fees) Rules, 2014, the MCA normal filing fee is NIL for companies incorporating with an authorized share capital up to ₹15,00,000. However, state stamp duty on MOA/AOA, e-form stamp duty, and statutory PAN/TAN charges (₹155) remain payable.'
+      },
+      {
+        question: 'What are the linked forms integrated into SPICe+ (INC-32)?',
+        answer: 'SPICe+ Part B is filed alongside SPICe+ MOA (Form INC-33), SPICe+ AOA (Form INC-34), AGILE-PRO-S (Form INC-35) for GSTIN/EPFO/ESIC/PT/Bank Account, and INC-9 electronic declarations signed digitally by directors and subscribers.'
+      },
+      {
+        question: 'How is state stamp duty calculated for electronic MOA and AOA?',
+        answer: 'Stamp duty is governed by the Indian Stamp Act, 1899 and respective State Stamp Acts. Some states levy flat charges (e.g. Uttar Pradesh flat ₹500 MOA + ₹500 AOA; West Bengal ₹300 MOA + ₹300 AOA), while others apply progressive slabs or percentages (e.g. Maharashtra 0.3% min ₹1,000 max ₹1 Cr; Karnataka ₹5,000 per ₹10L on AOA under Karnataka Stamp Amendment Act 2024; Delhi 0.15% on AOA).'
+      },
+      {
+        question: 'Can proposed directors obtain DIN through SPICe+ without filing DIR-3?',
+        answer: 'Yes. Under Section 153 read with Rule 38, up to 3 proposed directors who do not possess a DIN can apply for and receive DIN directly through SPICe+ Part B at ₹0 government fee. Any director beyond 3 must obtain DIN separately via Form DIR-3 paying the standard ₹500 statutory fee.'
+      },
+      {
+        question: 'What is the statutory validity of a company name reserved under SPICe+ Part A?',
+        answer: 'Under Rule 9A of the Companies (Incorporation) Rules, 2014, a reserved name for a new company is valid for 20 days. Promoters can extend name validity before expiry by paying ₹1,000 for an additional 20 days (up to 40 days total) or ₹2,000 for an additional 40 days (up to 60 days total).'
+      },
+      {
+        question: 'What are the critical post-incorporation compliances within 180 days?',
+        answer: 'Upon receiving the Certificate of Incorporation, every company must: (1) Open a bank account and deposit subscription money; (2) File Form INC-20A (Commencement of Business) within 180 days under Section 10A; (3) File Form ADT-1 within 30 days of the first board meeting to formalize auditor appointment under Section 139(6); and (4) Issue physical share certificates to subscribers within 60 days under Section 56(4).'
+      },
+      {
+        question: 'Are Section 8 (Non-Profit) companies exempt from stamp duty?',
+        answer: 'Yes. In the majority of states and union territories (including Delhi, Maharashtra, Karnataka, and Tamil Nadu), electronic MOA and AOA stamp duties are either fully exempt or levied at nominal base rates for non-profit companies licensed under Section 8 of the Companies Act, 2013.'
+      }
+    ],
+    relatedForms: ['inc-20a', 'adt-1', 'dir-3-kyc'],
+    filedTogetherWith: ['inc-33', 'inc-34', 'agile-pro-s', 'inc-9'],
     contentSections: {
-      whatIsThisForm: '<p><strong>SPICe+ (Simplified Proforma for Incorporating Company Electronically Plus)</strong>, technically designated as Form INC-32, is the flagship web-based form introduced by the MCA to drastically simplify company registration in India. It replaces multiple older forms by offering over 10 services integrated into a single application, allowing entrepreneurs to register their business, obtain PAN, TAN, EPFO, ESIC, and optionally GST in one go.</p>',
-      whoMustFile: '<p>Any entrepreneur, promoter, or professional seeking to incorporate a new Private Limited, Public Limited, or One Person Company (OPC) in India must use the SPICe+ web form.</p>',
-      dueDateExplained: '<p>Because SPICe+ is an initial registration form, there is no "due date" per se. However, if you reserve a company name via SPICe+ Part A, that name is only valid for <strong>20 days</strong>. You must file Part B to complete incorporation within this 20-day window.</p>',
-      consequencesOfDelay: '<p>There are no late fees for SPICe+ since it is an initial application. If you fail to file Part B within the 20-day name reservation window, the reserved name will expire, and you will have to pay ₹1,000 to reserve a name again.</p>',
-      workedExample: '<p><strong>Scenario:</strong> Incorporating a Private Limited Company in Maharashtra with an authorized capital of ₹1,00,000.</p><ul><li>MCA Incorporation Fee (Waived up to 15L): ₹0</li><li>Estimated MOA Stamp Duty (Maharashtra): ₹1,000</li><li>Estimated AOA Stamp Duty (Maharashtra): ₹500</li><li><strong>Estimated Total Liability:</strong> <strong>₹1,500</strong></li></ul>'
+      whatIsThisForm: '<p><strong>SPICe+ (Simplified Proforma for Incorporating Company Electronically Plus)</strong>, officially designated as <strong>Form INC-32</strong>, is the comprehensive single-window web-based incorporation mechanism administered by the Ministry of Corporate Affairs (MCA) under Section 7 of the Companies Act, 2013 read with Rule 38 and Rule 38A of the Companies (Incorporation) Rules, 2014.</p><p>SPICe+ operates in two integrated segments: <strong>Part A</strong> for reservation of name for new companies, and <strong>Part B</strong> for incorporation offering 11 integrated services in a unified workflow: Company Name Reservation, Certificate of Incorporation (COI) allotment by the Central Registration Centre (CRC), Director Identification Numbers (DIN for up to 3 directors), Permanent Account Number (PAN), Tax Deduction and Collection Account Number (TAN), EPFO registration, ESIC registration, State Professional Tax (PT) registration, Mandatory Corporate Bank Account opening, optional GSTIN registration, and Delhi Shops & Establishment registration.</p>',
+      whoMustFile: '<p>Any group of promoters, professionals, or sole entrepreneurs intending to incorporate an entity under the Companies Act, 2013 in India must file SPICe+ (INC-32). This includes:</p><ul><li><strong>Private Limited Companies:</strong> Minimum 2 subscribers and 2 directors.</li><li><strong>One Person Companies (OPCs):</strong> Single subscriber/director plus designated nominee under Section 3(1)(c).</li><li><strong>Public Limited Companies (Unlisted & Listed):</strong> Minimum 7 subscribers and 3 directors.</li><li><strong>Section 8 Non-Profit Companies:</strong> Entities licensed under Section 8 for charitable or social objectives.</li><li><strong>Producer Companies:</strong> Agricultural and primary producer collectives formed under Chapter XXIA.</li></ul>',
+      dueDateExplained: '<p>Because SPICe+ is an initial incorporation application, there is no recurring annual statutory due date. However, strict statutory timeframes govern the incorporation cycle:</p><ul><li><strong>SPICe+ Part A Name Reservation (Rule 9A):</strong> A name approved under Part A remains valid for <strong>20 days</strong> from the date of approval. SPICe+ Part B along with linked forms must be submitted within this 20-day window.</li><li><strong>Name Extension Facility (Rule 9A Provisos):</strong> Promoters can extend the name validity on MCA V3 by paying <strong>₹1,000</strong> (before 20 days expiry to extend up to 40 days) or <strong>₹2,000</strong> (before 40 days expiry to extend up to 60 days).</li><li><strong>180-Day Commencement Deadline (Section 10A):</strong> Within <strong>180 days</strong> of receiving the Certificate of Incorporation, the company must receive subscription funds and file <strong>Form INC-20A</strong> before commencing any commercial operations or borrowing money.</li></ul>',
+      consequencesOfDelay: '<p>Filing SPICe+ does not attract per-day late filing fees (such as the ₹100/day late fee under Table B) because the company does not legally exist prior to incorporation. However, procedural delays carry significant consequences:</p><ol><li><strong>Lapse of Approved Name:</strong> If SPICe+ Part B is not filed before the 20-day validity expires (and no Rule 9A extension is applied for), the approved name is released back into the public MCA name pool, requiring a fresh ₹1,000 filing.</li><li><strong>Default in Post-Incorporation Form INC-20A (Section 10A(2)):</strong> If the company fails to file Form INC-20A within 180 days of incorporation, the company is liable to a penalty of <strong>₹50,000</strong>, and every officer in default is liable to a penalty of <strong>₹1,000 per day</strong> of continuing default, up to a maximum of <strong>₹1,00,000</strong>. Furthermore, the ROC may initiate strike-off proceedings under Section 248.</li><li><strong>Delayed Auditor Appointment (Section 139(6)):</strong> The first auditor must be appointed by the Board within 30 days of incorporation, failing which members must hold an EGM within 90 days.</li></ol>',
+      workedExample: '<p><strong>Comparative Scenario:</strong> Incorporating a Private Limited Company with <strong>₹10,00,000 Authorized Capital</strong> and 2 directors across key jurisdictions:</p><ul><li><strong>MCA Normal Registration Fee (G.S.R. 329(E)):</strong> <strong>₹0</strong> (Zero fee applies across India since capital ≤ ₹15,00,000).</li><li><strong>Statutory PAN & TAN Charges:</strong> <strong>₹155</strong> (₹78 PAN + ₹77 TAN fixed across all states).</li><li><strong>Case A — NCT of Delhi:</strong> MOA Stamp Duty: ₹200 | AOA Stamp Duty (0.15%): ₹1,500 | SPICe+ Form Stamp Duty: ₹10. <strong>Total Government Estimate: ₹1,865</strong>.</li><li><strong>Case B — Maharashtra (Mumbai):</strong> MOA Stamp Duty: ₹1,000 | AOA Stamp Duty (0.3% / ₹1,000 per ₹5L): ₹2,000 | SPICe+ Form Stamp Duty: ₹100. <strong>Total Government Estimate: ₹3,255</strong>.</li><li><strong>Case C — Karnataka (Bengaluru):</strong> MOA Stamp Duty: ₹1,000 | AOA Stamp Duty (Karnataka Stamp Amendment Act 2024 — ₹5,000 per ₹10L): ₹5,000 | SPICe+ Form Stamp Duty: ₹20. <strong>Total Government Estimate: ₹6,175</strong>.</li></ul>'
     }
   },
   {

@@ -1,4 +1,5 @@
 import { getNormalFilingFee, getOpcSmallIncorporationFee, getOtherCompanyIncorporationFee } from './fee-calculator-core';
+import { calculateStateStampDuty } from './rule-engine/spice-engine';
 
 export interface CalculatorParams {
   formSlug: string;
@@ -53,60 +54,9 @@ export function getLateFeeMultiplier(days: number): number {
   return -1; // Signal: condonation required
 }
 
-export function calculateIncorporationStampDuty(state: string, capital: number): { moa: number, aoa: number, form: number } {
-  let moa = 0, aoa = 0, form = 0;
-  const s = state.toLowerCase().replace(/\s/g, '');
-
-  switch(s) {
-    case 'andhrapradesh':
-      moa = 500; aoa = 500;
-      form = Math.min(500000, Math.max(1000, capital * 0.0015));
-      break;
-    case 'bihar':
-      moa = 500; aoa = 500;
-      form = Math.min(500000, Math.max(1000, capital * 0.0015));
-      break;
-    case 'delhi':
-      moa = 200; aoa = 200;
-      form = Math.min(2500000, capital * 0.0015);
-      break;
-    case 'gujarat':
-      moa = 100; aoa = 100;
-      form = Math.min(500000, capital * 0.005);
-      break;
-    case 'karnataka':
-      moa = 1000; aoa = 1000;
-      form = Math.min(500000, capital * 0.005);
-      break;
-    case 'maharashtra':
-      moa = 200; aoa = 200;
-      form = Math.min(5000000, Math.ceil(capital / 500000) * 1000);
-      break;
-    case 'madhyapradesh':
-      moa = 2500; aoa = 2500;
-      form = Math.min(2500000, Math.max(5000, capital * 0.0015));
-      break;
-    case 'punjab':
-      moa = 5000; aoa = 5000;
-      form = capital < 100000 ? 5000 : 10000;
-      break;
-    case 'tamilnadu':
-      moa = 200; aoa = 200;
-      form = capital < 100000 ? 300 : 600;
-      break;
-    case 'telangana':
-      moa = 500; aoa = 500;
-      form = Math.min(500000, Math.max(1000, capital * 0.0015));
-      break;
-    case 'rajasthan':
-      moa = 500; aoa = 500;
-      form = Math.min(2500000, capital * 0.005);
-      break;
-    default:
-      moa = 1000; aoa = 1000;
-      form = 0;
-  }
-  return { moa, aoa, form };
+export function calculateIncorporationStampDuty(state: string, capital: number, isSection8 = false): { moa: number, aoa: number, form: number } {
+  const result = calculateStateStampDuty(state, capital, isSection8);
+  return { moa: result.moa, aoa: result.aoa, form: result.form };
 }
 
 
@@ -198,21 +148,24 @@ export function calculateMCAFee(params: CalculatorParams): CalculatorResult {
 
   // ─────────────────────────────────────────────────────────────────────────
   // 2. SPICe+ (INC-32) — Incorporation fee (MOA registration)
-  // Zero-fee provision: post 26.01.2018 companies with capital ≤ ₹10L pay ₹0.
+  // Zero-fee provision: G.S.R. 329(E) companies with capital ≤ ₹15L pay ₹0.
   // DIN note: SPICe+ supports DIN allotment for up to 3 directors.
   // ─────────────────────────────────────────────────────────────────────────
   if (formSlug === 'spice-plus' || formSlug === 'inc-32') {
-    if (isOpcSmall) {
-      // OPC/Small: ₹0 if capital ≤ ₹10L (post-2018 zero-fee provision)
-      baseFee = capital <= 1000000 ? 0 : getOpcSmallIncorporationFee(capital);
+    const isSection8 = companyType === 'section_8';
+    if (isSection8) {
+      baseFee = capital <= 1500000 ? 0 : 2000;
+    } else if (isOpcSmall) {
+      // OPC/Small: ₹0 if capital ≤ ₹15L (G.S.R. 329(E))
+      baseFee = capital <= 1500000 ? 0 : getOpcSmallIncorporationFee(capital, true);
     } else {
-      // Other companies: ₹0 if capital ≤ ₹10L (post-2018 zero-fee provision)
-      baseFee = capital <= 1000000 ? 0 : getOtherCompanyIncorporationFee(capital);
+      // Other companies: ₹0 if capital ≤ ₹15L (G.S.R. 329(E))
+      baseFee = capital <= 1500000 ? 0 : getOtherCompanyIncorporationFee(capital, true);
     }
 
-    const sd = calculateIncorporationStampDuty(state, capital);
+    const sd = calculateIncorporationStampDuty(state, capital, isSection8);
     stampDuty = sd.moa + sd.aoa + sd.form;
-    warningText = 'Initial filing — no late penalty applies. State Stamp Duty is estimated based on authorised capital and state rates. ' +
+    warningText = 'Initial filing — no late penalty applies. State Stamp Duty is estimated based on authorised capital and state rates under respective State Stamp Acts. ' +
       'SPICe+ supports DIN allotment for up to 3 directors. Additional directors need separate DIR-3 filing.';
     return { baseFee, lateFee, stampDuty, adValoremFee, total: baseFee + lateFee + stampDuty, warningText };
   }
