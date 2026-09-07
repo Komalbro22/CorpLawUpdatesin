@@ -55,15 +55,14 @@ export async function POST(request: Request) {
       )
     }
 
-    // Send welcome confirmation email via Resend
+    // Send welcome confirmation email via unified email-provider
     try {
-      const { Resend } = await import('resend')
-      const resend = new Resend(
-        process.env.RESEND_API_KEY
-      )
-      await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL || 
-          'updates@mail.corplawupdates.in',
+      const { sendEmail, parseSender } = await import('@/lib/email-provider')
+      const { email: fromEmail, name: fromName } = parseSender()
+
+      await sendEmail({
+        from: fromEmail,
+        fromName,
         to: user_email,
         subject: `✅ ROC Reminders Set — ${company_name} | CorpLawUpdates.in`,
         html: `

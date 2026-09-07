@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Resend } from 'resend'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { redis } from '@/lib/redis-cache'
-
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
+import { sendEmail, parseSender, getActiveEmailProvider } from '@/lib/email-provider'
 
 export async function POST(request: NextRequest) {
   try {
@@ -73,9 +71,9 @@ export async function POST(request: NextRequest) {
     }
 
     const toEmail = process.env.ADMIN_EMAIL || 'mail@corplawupdates.in'
-    const fromEmail = process.env.RESEND_FROM_EMAIL || 'CorpLawUpdates <onboarding@resend.dev>'
+    const { email: fromEmail, name: fromName } = parseSender()
 
-    if (!resend) {
+    if (getActiveEmailProvider() === 'none') {
       return NextResponse.json({ error: 'Email service unavailable' }, { status: 503 })
     }
 
@@ -83,15 +81,29 @@ export async function POST(request: NextRequest) {
     const safeSubject = String(subject).trim().slice(0, 200)
     const safeMessage = String(message).trim().slice(0, 5000)
 
-    await resend.emails.send({
+    const sendRes = await sendEmail({
       from: fromEmail,
+      fromName,
       to: toEmail,
       replyTo: email,
       subject: `[Contact] ${safeSubject}`,
-      text: `Name: ${safeName}\nEmail: ${email}\nSubject: ${safeSubject}\n\nMessage:\n${safeMessage}`,
+      html: `<div style="font-family:sans-serif;line-height:1.6;color:#333;">
+        <h3>New Contact Message</h3>
+        <p><strong>Name:</strong> ${safeName}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Subject:</strong> ${safeSubject}</p>
+        <hr style="border:none;border-top:1px solid #eee;margin:16px 0;">
+        <p><strong>Message:</strong></p>
+        <p style="white-space:pre-wrap;background:#f8fafc;padding:12px;border-radius:6px;">${safeMessage}</p>
+      </div>`,
     })
 
-    return NextResponse.json({ success: true })
+    if (!sendRes.success) {
+      console.error('[Contact] Delivery error:', sendRes.error)
+      return NextResponse.json({ error: 'Failed to send message' }, { status: 500 })
+    }
+
+    return NextResponse.json({ success: true, provider: sendRes.provider })
   } catch (error) {
     console.error('Contact form error:', error)
     return NextResponse.json({ error: 'Failed to send message' }, { status: 500 })

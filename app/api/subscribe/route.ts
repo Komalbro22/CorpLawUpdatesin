@@ -7,6 +7,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { redis } from '@/lib/redis-cache'
+import { sendEmail, getActiveEmailProvider, parseSender } from '@/lib/email-provider'
 
 export async function POST(request: NextRequest) {
     try {
@@ -96,9 +97,9 @@ export async function POST(request: NextRequest) {
 
         // Send Welcome Email (Non-fatal)
         try {
-            const resendApiKey = process.env.RESEND_API_KEY
-            if (!resendApiKey) {
-                console.warn('[Subscribe] RESEND_API_KEY is missing. Skipping welcome email.')
+            const provider = getActiveEmailProvider()
+            if (provider === 'none') {
+                console.warn('[Subscribe] No active email provider configured. Skipping welcome email.')
             } else {
                 const { generateWelcomeEmail } = await import('@/lib/email-templates/welcome')
                 const { generateUnsubscribeToken } = await import('@/lib/utils')
@@ -118,25 +119,20 @@ export async function POST(request: NextRequest) {
                     recentArticles: recentArticles || [],
                 })
 
-                const { Resend } = await import('resend')
-                const resend = new Resend(resendApiKey)
-                const fromEmail = (process.env.RESEND_FROM_EMAIL || 'updates@mail.corplawupdates.in').trim().replace(/['"]/g, '')
+                const { email: fromEmail, name: fromName } = parseSender()
 
-                const { data: emailRes, error: emailError } = await resend.emails.send({
+                const emailRes = await sendEmail({
                     from: fromEmail,
+                    fromName,
                     to: email,
                     subject: '🎉 Welcome to CorpLawUpdates.in — Your Free Corporate Law Digest',
                     html: welcomeHtml,
-                    headers: {
-                        'List-Unsubscribe': `<https://www.corplawupdates.in/api/unsubscribe?email=${encodeURIComponent(email)}&token=${token}>`,
-                        'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
-                    },
                 })
 
-                if (emailError) {
-                    console.error('[Subscribe] Welcome email delivery error:', emailError)
+                if (!emailRes.success) {
+                    console.error(`[Subscribe] Welcome email delivery error (${emailRes.provider}):`, emailRes.error)
                 } else {
-                    console.log(`[Subscribe] Welcome email sent successfully to ${email} (ID: ${emailRes?.id})`)
+                    console.log(`[Subscribe] Welcome email sent successfully to ${email} (Provider: ${emailRes.provider}, ID: ${emailRes.messageId})`)
                 }
             }
         } catch (welcomeErr: any) {
