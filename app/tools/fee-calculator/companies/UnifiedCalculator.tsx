@@ -107,7 +107,7 @@ export default function UnifiedCalculator() {
   }, [selectedForm, companyType, capital, delay, isRepeatOffender, newCapital, state, chargeAmount])
 
   const commonForms = useMemo(() => {
-    const commonSlugs = ['aoc-4', 'mgt-7', 'dpt-3', 'adt-1', 'chg-1', 'pas-6', 'spice-plus', 'inc-22', 'dir-12', 'dir-3-kyc', 'inc-20a', 'mgt-14']
+    const commonSlugs = ['aoc-4', 'mgt-7', 'dpt-3', 'adt-1', 'chg-1', 'pas-6', 'spice-plus', 'msme-1', 'inc-22', 'dir-12', 'dir-3-kyc', 'inc-20a', 'mgt-14']
     return commonSlugs.map(slug => {
       const form = allForms.find(f => f.slug === slug)
       if (!form) return null
@@ -244,7 +244,8 @@ export default function UnifiedCalculator() {
             { slug: 'dir-3-kyc', label: 'DIR-3 KYC' },
             { slug: 'inc-20a', label: 'INC-20A (Commencement)' },
             { slug: 'spice-plus', label: 'SPICe+ (Incorporation)' },
-            { slug: 'pas-6', label: 'PAS-6 (Share Capital)' }
+            { slug: 'pas-6', label: 'PAS-6 (Share Capital)' },
+            { slug: 'msme-1', label: 'MSME-1 (Vendor Dues)' }
           ].map(item => (
             <button
               key={item.slug}

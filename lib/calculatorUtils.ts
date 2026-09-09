@@ -94,8 +94,8 @@ export function calculateMCAFee(params: CalculatorParams): CalculatorResult {
       warningText:
         'MSME-1 filing fee: ₹0 (no portal filing fee). ' +
         'Non-filing penalty exposure under Section 405(4): ' +
-        'Company — ₹25,000 for first default, ₹500 per day for continuing default. ' +
-        'Officer in default — same. Penalty is adjudicated by the ROC; it is not collected at the portal.',
+        'Company — ₹20,000 base penalty plus ₹1,000 per day continuing penalty (capped at ₹3,00,000). ' +
+        'Each officer in default — same (capped at ₹3,00,000). Penalty is adjudicated by the ROC under Section 454; it is not collected at the portal.',
     };
   }
 

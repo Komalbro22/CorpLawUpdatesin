@@ -509,35 +509,38 @@ export const mcaForms: MCAForm[] = [
   {
     slug: 'dir-12',
     formNumber: 'DIR-12',
-    formName: 'Director Changes',
-    aliases: ['dir12', 'director appointment', 'director resignation'],
+    formName: 'Director Appointment & Resignation',
+    aliases: ['dir12', 'dir 12', 'file dir 12 within 30 days', 'dir-12 form', 'director appointment', 'director resignation', 'dir 12 due date', 'dir 12 mca v3'],
     category: 'event',
-    filedBy: ['Private Limited', 'Public Limited', 'OPC'],
-    dueDate: 'Within 30 days of the change',
-    section: 'Section 168 & 170, Companies Act 2013',
+    filedBy: ['Private Limited', 'Public Limited', 'One Person Company (OPC)', 'Section 8 Company', 'Producer Company'],
+    dueDate: 'Within 30 days of appointment, resignation, or change',
+    section: 'Sections 168 & 170, Companies Act 2013 read with Rule 17',
     penaltyType: 'multiplier',
-    penaltyRate: '2x to 12x normal fee',
+    penaltyRate: 'Table B Multiplier (2x to 12x normal fee)',
     normalFeeStructure: 'capital_slab',
     baseFeeSlab: 'standard_company_slab',
     concessionApplies: false,
-    metaTitle: 'Form DIR-12 Director Appointment Fee Calculator | CorpLaw',
-    metaDescription: 'Calculate Form DIR-12 normal MCA fees, 30-day statutory filing deadline, Table B late multipliers (2x to 12x), and ROC director appointment rules.',
-    ogDescription: 'Instantly calculate filing fees and late penalties for Form DIR-12 (Appointment or Resignation of Directors and KMP).',
+    metaTitle: 'DIR-12 Form: Director Appointment/Resignation Filing Guide (2026)',
+    metaDescription: 'Complete guide to file DIR-12 within 30 days for director appointment, resignation, or change. Calculate MCA V3 fees, Table B late penalties & rules.',
+    ogDescription: 'Complete guide to file DIR-12 within 30 days for director appointment, resignation, or change. Calculate MCA V3 fees, Table B late penalties & rules.',
     faqItems: [
-      { question: 'When is DIR-12 required to be filed?', answer: 'DIR-12 must be filed whenever there is an appointment, resignation, or change in designation of a Director or Key Managerial Personnel (KMP).' },
-      { question: 'What is the due date for DIR-12?', answer: 'It must be filed within 30 days from the date of the event (appointment or resignation).' },
-      { question: 'Who files DIR-12 when a director resigns?', answer: 'The company is responsible for filing DIR-12 to formally notify the ROC of the resignation. (The resigning director may optionally file DIR-11 to protect themselves).' },
-      { question: 'Is the DIR-12 penalty per day or multiplier?', answer: 'DIR-12 uses the multiplier-based penalty system. Delays result in penalties ranging from 2x to 12x the base filing fee depending on the number of days delayed.' },
-      { question: 'Do I need a DIR-12 for changing a director to a Managing Director?', answer: 'Yes, a change in designation triggers the requirement to file DIR-12 within 30 days.' }
+      { question: 'When is Form DIR-12 required to be filed?', answer: 'Form DIR-12 must be filed with the Registrar of Companies (ROC) whenever there is an appointment of a director, resignation or cessation of a director, appointment/cessation of Key Managerial Personnel (KMP), or a change in designation (such as Additional Director to Regular Director, or Director to Managing Director).' },
+      { question: 'What is the statutory due date to file DIR-12?', answer: 'Under Sections 168 and 170 of the Companies Act, 2013 read with Rule 17 of the Companies (Appointment and Qualification of Directors) Rules, 2014, companies must file DIR-12 within 30 days from the effective date of the appointment, resignation, or change in designation.' },
+      { question: 'What documents and attachments are mandatory for director appointment in DIR-12?', answer: 'Mandatory attachments include: (1) Form DIR-2 (Consent in writing to act as director), (2) Form DIR-8 (Intimation of non-disqualification under Section 164(2)), (3) Certified True Copy of Board/General Meeting Resolution, (4) Letter of Appointment with terms, and (5) Proof of identity and residential address of the appointee.' },
+      { question: 'What documents are required when filing DIR-12 for a director resignation?', answer: 'For resignation, the company must attach: (1) Formal Notice / Letter of Resignation submitted by the director, (2) Board resolution or intimation taking note of the resignation, and (3) Proof of dispatch/delivery. The resigning director may also optionally file Form DIR-11 within 30 days to protect themselves.' },
+      { question: 'What are the late filing penalties under Table B for Form DIR-12?', answer: 'DIR-12 is an event-based form governed by Table B multipliers of the normal fee: delay up to 30 days attracts 2× normal fee; 31 to 60 days attracts 4×; 61 to 90 days attracts 6×; 91 to 180 days attracts 10×; and 181 to 270 days attracts 12× normal fee.' },
+      { question: 'Can DIR-12 be filed after 270 days without condonation?', answer: 'No. Under the second proviso to Section 403(1), if Form DIR-12 is delayed beyond 270 days from the statutory due date, MCA V3 blocks direct filing. The company must file Form CG-1 with the Regional Director for Condonation of Delay before the ROC will accept the belated DIR-12.' },
+      { question: 'Does regularizing an Additional Director at the AGM require Form DIR-12?', answer: 'Yes. When an Additional Director appointed under Section 161(1) is regularized as an Ordinary/Regular Director at the Annual General Meeting under Section 152, Form DIR-12 must be filed within 30 days of the AGM for change in designation.' },
+      { question: 'Who must sign and certify Form DIR-12 on MCA V3?', answer: 'Form DIR-12 must be digitally signed with a Class 3 DSC by an existing Director, Manager, Company Secretary, or CEO/CFO of the company. It must also be certified by an independent practicing professional (CA, CS, or CMA in whole-time practice) confirming statutory verification.' }
     ],
-    relatedForms: ['dir-3-kyc'],
+    relatedForms: ['dir-3-kyc', 'mgt-14', 'inc-22'],
     filedTogetherWith: [],
     contentSections: {
-      whatIsThisForm: '<p><strong>Form DIR-12</strong> is the official mechanism used by a company to communicate any changes in its leadership structure to the Registrar of Companies. Whether appointing a new director, accepting a resignation, or changing the designation of a Key Managerial Personnel (KMP), DIR-12 updates the public master data of the company to reflect its current management.</p>',
-      whoMustFile: '<p>Every company—regardless of type—must file DIR-12 whenever an individual joins the board, leaves the board, or changes their role within the board.</p>',
-      dueDateExplained: '<p>The form is strictly time-bound and must be filed <strong>within 30 days</strong> of the effective date of the appointment or resignation. A board resolution date is typically considered the anchor date for this 30-day countdown.</p>',
-      consequencesOfDelay: '<p>Delaying the filing of DIR-12 causes the company\'s master data to become outdated, creating compliance friction with banks and stakeholders. Financially, it attracts a multiplier penalty up to <strong>12 times the base fee</strong> if delayed beyond 180 days.</p>',
-      workedExample: '<p><strong>Scenario:</strong> A Private Company with ₹25 Lakhs capital appoints a new director but files DIR-12 20 days late.</p><ul><li>Normal Filing Fee: ₹400</li><li>Late Penalty (16 to 30 days delay = 2x fee): ₹800</li><li><strong>Total Liability:</strong> ₹400 + ₹800 = <strong>₹1,200</strong></li></ul>'
+      whatIsThisForm: '<p><strong>Form DIR-12</strong> is the statutory e-form mandated under <strong>Sections 168 and 170 of the Companies Act, 2013</strong> read with <strong>Rule 17 of the Companies (Appointment and Qualification of Directors) Rules, 2014</strong>, filed with the Ministry of Corporate Affairs (MCA) to intimate the Registrar of Companies (ROC) regarding particulars of appointment, cessation, or change in designation of Directors and Key Managerial Personnel (KMP).</p><p>Whenever a company alters its board composition or executive leadership, filing Form DIR-12 on the MCA V3 portal updates the public master data of the company on the MCA registry. Because master data drives banking relationships, vendor diligence, GST registrations, and statutory credibility, timely filing is vital.</p>',
+      whoMustFile: '<p>Every incorporated company—including <strong>Private Limited Companies, Public Limited Companies (unlisted and listed), One Person Companies (OPC), Section 8 Non-Profit Companies, and Producer Companies</strong>—must file Form DIR-12 whenever any of the following corporate events take place:</p><ol><li><strong>Appointment of New Director:</strong> Additional Director (Sec 161(1)), Alternate Director (Sec 161(2)), Nominee Director (Sec 161(3)), Casual Vacancy Director (Sec 161(4)), or Independent Director (Sec 149).</li><li><strong>Regularization of Director:</strong> Confirmation of an Additional Director as a permanent Director at the Annual General Meeting (Sec 152).</li><li><strong>Resignation or Cessation:</strong> Resignation under Section 168, vacation of office under Section 167, removal by shareholders under Section 169, or disqualification under Section 164.</li><li><strong>Change in Designation:</strong> Elevation from Director to Managing Director (MD), Whole-Time Director (WTD), or Executive Director.</li><li><strong>Appointment or Cessation of KMP:</strong> Managing Director, CEO, CFO, Manager, or Whole-Time Company Secretary (CS) under Section 203.</li></ol>',
+      dueDateExplained: '<p>Companies are legally required to <strong>file DIR-12 within 30 days</strong> of the triggering event:</p><ul><li><strong>Day 0 Anchor Date:</strong> The 30-day countdown begins on the effective date of appointment or resignation specified in the Board Resolution or Resignation Letter. Day 0 is excluded, and counting starts on Day 1.</li><li><strong>Example Timeline:</strong> If a director is appointed at a Board Meeting on <strong>10th April</strong>, the statutory 30-day window expires on <strong>10th May</strong>. Filing on 11th May constitutes Day 1 of statutory delay.</li><li><strong>No Backdating Allowed:</strong> MCA V3 system validates event dates against company master data, board meeting intimations, and digital signature timestamps. Belated filings cannot be backdated.</li><li><strong>Simultaneous Events:</strong> Multiple appointments or resignations effective on the same date can be combined into a single Form DIR-12, saving MCA base filing fees.</li></ul>',
+      consequencesOfDelay: '<p>Failing to file DIR-12 within 30 days exposes the company and its officers to three distinct legal consequences:</p><h3>1. Table B Additional Filing Fee Multipliers (Rule 12 Annexure)</h3><p>Unlike annual returns which carry ₹100/day fees, Form DIR-12 is an event-based form governed by <strong>Table B</strong> escalation multipliers:</p><ul><li><strong>Delay up to 30 days:</strong> 2 times the normal filing fee (2×)</li><li><strong>Delay 31 to 60 days:</strong> 4 times the normal filing fee (4×)</li><li><strong>Delay 61 to 90 days:</strong> 6 times the normal filing fee (6×)</li><li><strong>Delay 91 to 180 days:</strong> 10 times the normal filing fee (10×)</li><li><strong>Delay 181 to 270 days:</strong> 12 times the normal filing fee (12×)</li></ul><h3>2. Section 403 Hard Stop (> 270 Days Delay)</h3><p>If Form DIR-12 is delayed beyond 270 days from the statutory due date (total 300 days from event), self-service filing on MCA V3 is automatically blocked. The company cannot file the form without first obtaining <strong>Condonation of Delay from the Regional Director (RD)</strong> via Form CG-1 under Section 460.</p><h3>3. Section 172 Residuary Penalties</h3><p>Under Section 172 of the Companies Act, 2013, default in filing director particulars attracts a company fine of <strong>₹50,000</strong>, plus a continuing penalty of <strong>₹500 per day</strong> of default (up to ₹3,00,000 for the company and ₹1,00,000 for every officer in default). Eligible Small Companies and Startups receive a 50% statutory reduction under Section 446B.</p>',
+      workedExample: '<p><strong>Real-World Illustration:</strong> A Private Limited Company with an authorized nominal capital of <strong>₹15 Lakhs</strong> appoints an Additional Director on <strong>1st August 2026</strong>.</p><ul><li><strong>Statutory Due Date:</strong> 31st August 2026 (strictly within 30 days).</li><li><strong>Nominal Capital Bracket:</strong> ₹5 Lakhs to &lt; ₹25 Lakhs &rarr; Normal Base Filing Fee = <strong>₹400</strong>.</li></ul><h4>Scenario 1 — On-Time Filing (On or before 31st August 2026):</h4><ul><li>Normal Filing Fee: ₹400</li><li>Late Multiplier: ₹0</li><li><strong>Total MCA Challan: ₹400</strong></li></ul><h4>Scenario 2 — Delayed by 25 Days (Filing on 25th September 2026):</h4><ul><li>Delay Bracket: 1 to 30 days &rarr; Multiplier = <strong>2× normal fee</strong></li><li>Additional Fee: ₹400 × 2 = ₹800</li><li><strong>Total MCA Challan: ₹400 + ₹800 = ₹1,200</strong></li></ul><h4>Scenario 3 — Delayed by 75 Days (Filing on 14th November 2026):</h4><ul><li>Delay Bracket: 61 to 90 days &rarr; Multiplier = <strong>6× normal fee</strong></li><li>Additional Fee: ₹400 × 6 = ₹2,400</li><li><strong>Total MCA Challan: ₹400 + ₹2,400 = ₹2,800</strong></li></ul><h4>Scenario 4 — Delayed by 210 Days (Filing in April 2027):</h4><ul><li>Delay Bracket: 181 to 270 days &rarr; Multiplier = <strong>12× normal fee</strong></li><li>Additional Fee: ₹400 × 12 = ₹4,800</li><li><strong>Total MCA Challan: ₹400 + ₹4,800 = ₹5,200</strong></li></ul>'
     }
   },
   {
@@ -772,35 +775,71 @@ export const mcaForms: MCAForm[] = [
   {
     slug: 'msme-1',
     formNumber: 'MSME-1',
-    formName: 'MSME Half-Yearly Return',
-    aliases: ['msme 1', 'msme half yearly', 'delayed payment return'],
+    formName: 'MSME Half-Yearly Return (Delayed Payments)',
+    aliases: ['msme 1', 'msme form 1', 'msme-1 due date', 'msme-1 penalty', 'section 405 companies act', 'msme half yearly return', 'msme form 1 mca v3', 'msme delayed payment return'],
     category: 'event',
-    filedBy: ['Specified Companies'],
-    dueDate: '30th April & 31st October',
-    section: 'Specified Companies (Furnishing of info about payment to micro and small enterprise suppliers) Order',
-    penaltyType: 'nil', // Usually no late fee on the portal, but severe adjudication penalty
-    penaltyRate: 'Adjudication fine up to ₹10,000',
-    normalFeeStructure: 'nil', // No filing fee
+    filedBy: ['Private Limited', 'Public Limited', 'One Person Company (OPC)', 'Section 8 Company', 'Small Company', 'Producer Company'],
+    dueDate: '31st October (Apr–Sep) & 30th April (Oct–Mar)',
+    section: 'Section 405, Companies Act 2013 read with Specified Companies Order 2019',
+    penaltyType: 'nil', // Zero portal fee, severe adjudication penalty under Section 405(4)
+    penaltyRate: 'Section 405(4) Adjudication (₹20,000 + ₹1,000/day, Max ₹3L Each)',
+    normalFeeStructure: 'nil', // No portal fee (₹0)
     baseFeeSlab: 'nil',
     concessionApplies: false,
-    metaTitle: 'Form MSME-1 Return Due Date & Penalty Calculator | CorpLaw',
-    metaDescription: 'Calculate MSME-1 half-yearly return filing deadlines, outstanding supplier dues reporting rules, and Section 405 ROC non-compliance penalties.',
-    ogDescription: 'Calculate MSME-1 half-yearly return filing deadlines, outstanding supplier dues reporting rules, and Section 405 ROC non-compliance penalties.',
-    faqItems: [
-      { question: 'Who is required to file MSME-1?', answer: 'Any "Specified Company" that receives goods or services from a Micro or Small Enterprise and delays payment beyond 45 days must file MSME-1.' },
-      { question: 'What are the due dates for MSME-1?', answer: 'The return for the April-September period is due by 31st October. The return for October-March is due by 30th April.' },
-      { question: 'Is there a normal MCA filing fee for MSME-1?', answer: 'No, there is zero filing fee for submitting Form MSME-1 on the MCA portal.' },
-      { question: 'What is the penalty for not filing MSME-1?', answer: 'While there is no portal-calculated late fee, failure to file attracts an adjudication fine under Section 450 of the Companies Act, which can be ₹10,000 plus ₹1,000 per day of continuing default.' },
-      { question: 'Do we need to file MSME-1 if there are no delayed payments?', answer: 'No, MSME-1 is a nil-return exempt form. If your company has no dues to MSMEs exceeding 45 days, you are not required to file it.' }
+    filingGuides: [
+      {
+        title: "Complete MSME Form 1 Filing Guide: Due Dates (31 Oct / 30 Apr), Section 405(4) Penalties & MCA V3 Reporting Rules",
+        slug: "/updates/msme-form-1-half-yearly-return-filing-guide-due-dates-penalties-mca-v3-section-405",
+        publishedDate: "2026-09-09",
+        summary: "Comprehensive statutory guide to filing MSME Form 1 on MCA V3, avoiding the V3 disclosure trap, calculating Section 405(4) company and officer penalties, and managing Section 16 interest.",
+        isOfficial: true
+      }
     ],
-    relatedForms: ['aoc-4'],
+    metaTitle: 'MSME Form 1 Due Date, Penalty Calculator & Filing Guide (2026)',
+    metaDescription: 'File MSME Form 1 under Section 405. Check 31 Oct due date, Section 405(4) penalty calculator (₹20,000 + ₹1,000/day), V3 disclosure rules & filing guide.',
+    ogDescription: 'File MSME Form 1 under Section 405. Check 31 Oct due date, Section 405(4) penalty calculator (₹20,000 + ₹1,000/day), V3 disclosure rules & filing guide.',
+    faqItems: [
+      {
+        question: 'Who is required to file Form MSME-1?',
+        answer: 'Any specified company (Private, Public, OPC, Section 8, or Small Company) that receives goods or services from a supplier registered as a Micro or Small Enterprise under the MSMED Act and delays payment beyond 45 days from acceptance (or 15 days without written agreement) must file Form MSME-1.'
+      },
+      {
+        question: 'What are the statutory due dates for Form MSME-1?',
+        answer: 'Form MSME-1 is a half-yearly return. For the April 1 to September 30 half-year, the due date is strictly 31st October. For the October 1 to March 31 half-year, the due date is strictly 30th April.'
+      },
+      {
+        question: 'What is the government portal filing fee for Form MSME-1?',
+        answer: 'The MCA V3 portal charges ₹0 (zero filing fee) for Form MSME-1. There is also no late fee multiplier charged at checkout. However, defaulting companies face severe adjudication penalties under Section 405(4).'
+      },
+      {
+        question: 'What are the penalties under Section 405(4) for not filing MSME-1?',
+        answer: 'Under Section 405(4) of the Companies Act, 2013, default in filing Form MSME-1 attracts a fine of ₹20,000 base penalty PLUS a continuing penalty of ₹1,000 per day of default, capped at ₹3,00,000 for the company AND ₹3,00,000 for each officer in default. A 90-day delay for 2 directors creates a ₹3,30,000 penalty exposure.'
+      },
+      {
+        question: 'What is the "MCA V3 Disclosure Trap" for MSME-1?',
+        answer: 'Under old V2 rules, companies only filed if dues exceeded 45 days at period end. Under MCA V3, if ANY payment to a Micro or Small vendor crossed 45 days during the half-year—even if fully paid and settled before 30 September or 31 March—the filing obligation is triggered, and all 4 transaction categories with that vendor must be reported.'
+      },
+      {
+        question: 'Are Limited Liability Partnerships (LLPs) required to file MSME-1?',
+        answer: 'No. LLPs are governed by the Limited Liability Partnership Act, 2008 and are not "companies" under Section 405 of the Companies Act, 2013. LLPs are exempt from filing Form MSME-1, though they remain bound by Section 15 and 16 of the MSMED Act regarding vendor payment and 16.50% interest.'
+      },
+      {
+        question: 'Do outstanding dues to Medium Enterprises trigger Form MSME-1?',
+        answer: 'No. The Specified Companies Order, 2019 strictly covers Micro Enterprises (investment ≤ ₹1 Cr, turnover ≤ ₹5 Cr) and Small Enterprises (investment ≤ ₹10 Cr, turnover ≤ ₹50 Cr). Medium enterprises and wholesale/retail traders are excluded from MSME-1 reporting.'
+      },
+      {
+        question: 'Have ROCs imposed real penalties for Form MSME-1 non-filing?',
+        answer: 'Yes. In January 2026, ROC Coimbatore imposed the maximum statutory penalty of ₹9,00,000 on Natrinai Ventures Limited (₹3,00,000 on the company and ₹3,00,000 on each of two directors) for delayed filings. ROC Bangalore similarly imposed ~₹11.67 Lakhs on Samsung R&D Institute India Pvt Ltd.'
+      }
+    ],
+    relatedForms: ['aoc-4', 'dpt-3'],
     filedTogetherWith: [],
     contentSections: {
-      whatIsThisForm: '<p><strong>Form MSME-1</strong> is a half-yearly return mandated by the MCA to protect the financial interests of Micro and Small Enterprises. Through this form, large corporate buyers are forced to publicly disclose any outstanding dues they owe to MSME suppliers that have been delayed beyond the statutory limit of 45 days.</p>',
-      whoMustFile: '<p>All "Specified Companies"—defined as any company that buys from an MSME and whose payment to that MSME exceeds 45 days from the date of acceptance of goods or services—must file this return.</p>',
-      dueDateExplained: '<p>The form is filed twice a year. For the half-year ending September 30, the due date is <strong>October 31</strong>. For the half-year ending March 31, the due date is <strong>April 30</strong>.</p>',
-      consequencesOfDelay: '<p>Interestingly, the MCA portal does not charge a standard multiplier late fee for MSME-1. However, non-compliance is extremely dangerous. Defaulting companies face adjudication under Section 450 of the Companies Act, resulting in a base fine of ₹10,000, plus a continuing penalty of ₹1,000 per day (capped at ₹2 Lakhs) for the company and its directors.</p>',
-      workedExample: '<p><strong>Scenario:</strong> Form MSME-1 is filed 30 days late.</p><ul><li>Normal Filing Fee: ₹0</li><li>Portal Late Fee: ₹0</li><li><strong>Adjudication Risk:</strong> Base ₹10,000 + (30 days × ₹1,000) = <strong>₹40,000 Potential Fine</strong></li></ul>'
+      whatIsThisForm: '<p><strong>Form MSME-1</strong> is a statutory half-yearly return mandated under <strong>Section 405 of the Companies Act, 2013</strong> read with the <strong>Specified Companies (Furnishing of Information about Payment to Micro and Small Enterprise Suppliers) Order, 2019</strong>, notified on 22 January 2019.</p><p>Its purpose is to create regulatory visibility into delayed corporate payments to Micro and Small Enterprise (MSE) vendors. Any incorporated company that procures goods or services from MSE suppliers and delays payment beyond <strong>45 days</strong> must submit this electronic return disclosing invoice details, supplier Udyam registration numbers, reasons for delay, and penal interest accrued under the MSMED Act, 2006.</p>',
+      whoMustFile: '<p>A company must file Form MSME-1 if it satisfies the <strong>Two-Condition Test</strong>:</p><ol><li>The company has received goods or services from a supplier registered as a <strong>Micro or Small Enterprise</strong> under the MSMED Act (verified via Udyam Registration); <strong>AND</strong></li><li>Payment to that supplier has been delayed for <strong>more than 45 days</strong> from the date of acceptance or deemed acceptance.</li></ol><p><strong>Applicable Entities:</strong> Private Limited Companies, Public Limited Companies, One Person Companies (OPC), Small Companies, Section 8 Non-Profit Companies, and Producer Companies.<br/><strong>Exempt Entities:</strong> Limited Liability Partnerships (LLPs), Partnership Firms, Sole Proprietorships, and transactions with Medium Enterprises (turnover &gt; ₹50 Cr) or retail traders.</p>',
+      dueDateExplained: '<p>Form MSME-1 follows a strict bi-annual cycle governed by Section 405:</p><ul><li><strong>Half-Year 1 (April 1 to September 30):</strong> Statutory Due Date is <strong>31st October</strong>.</li><li><strong>Half-Year 2 (October 1 to March 31):</strong> Statutory Due Date is <strong>30th April</strong>.</li><li><strong>No Nil Return (Subject to V3 Trap):</strong> If no vendor payments crossed 45 days during the half-year, no return is due. However, if any payment crossed 45 days during the term—even if settled before period end—filing is mandatory on MCA V3.</li><li><strong>No Extension of Time:</strong> Unlike annual financial returns, MCA circulars rarely extend MSME-1 due dates. Backdating is strictly blocked.</li></ul>',
+      consequencesOfDelay: '<p>Failing to file Form MSME-1 or delaying payments triggers three cumulative legal consequences:</p><h3>1. Section 405(4) Civil Adjudication Penalties</h3><p>Section 405(4) imposes an immediate base penalty of <strong>₹20,000</strong> PLUS a continuing penalty of <strong>₹1,000 per day</strong> of default on the company AND on every officer in default (capped at <strong>₹3,00,000 each</strong>). For a 2-director company with a 90-day delay, the total exposure is ₹3,30,000.</p><h3>2. Section 16 MSMED Act Compound Interest (16.50% p.a.)</h3><p>Buyers must pay compound interest at <strong>3× the RBI Bank Rate</strong> (currently 16.50% p.a. based on 5.50% Bank Rate) with monthly rests for every day of delay. Under Section 23 of the MSMED Act, this interest is <strong>permanently non-deductible</strong> from business income.</p><h3>3. Section 43B(h) Income Tax Disallowance</h3><p>Under Section 43B(h) of the Income Tax Act, 1961 (renumbered Section 37(2)(g) from TY 2026-27), delayed principal amounts are disallowed as business expenses in the year of accrual, causing a direct 25.17% corporate tax outflow.</p>',
+      workedExample: '<div class="space-y-4"><p><strong>Scenario:</strong> A Private Limited Company with 2 directors has an overdue invoice of ₹10,00,000 payable to a Micro supplier. The company files Form MSME-1 <strong>30 days late</strong>.</p><h4>1. ROC Portal Outlay:</h4><ul><li>Normal MCA Filing Fee: ₹0</li><li>Portal Late Fee: ₹0</li></ul><h4>2. Section 405(4) ROC Adjudication Exposure:</h4><ul><li>Company Penalty: ₹20,000 + (30 × ₹1,000) = <strong>₹50,000</strong></li><li>Officer 1 Penalty: ₹20,000 + (30 × ₹1,000) = <strong>₹50,000</strong></li><li>Officer 2 Penalty: ₹20,000 + (30 × ₹1,000) = <strong>₹50,000</strong></li><li><strong>Total ROC Exposure: ₹1,50,000</strong></li></ul><h4>3. Section 16 Penal Interest (16.50% p.a., 60-day delay):</h4><ul><li>Penal Interest Payable to Vendor: <strong>₹27,330</strong> (Permanently non-deductible)</li></ul><h4>4. Section 43B(h) Tax Impact:</h4><ul><li>Delayed Expense Disallowed: ₹10,00,000</li><li>Additional Tax Outflow (at 25.17%): <strong>₹2,51,700</strong></li></ul><p><strong>Total Combined Financial Burden: ₹1,50,000 + ₹27,330 + ₹2,51,700 = ₹4,29,030.</strong></p></div>'
     }
   },
   {

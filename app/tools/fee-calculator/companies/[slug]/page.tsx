@@ -353,6 +353,86 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         text: 'Attach bank statement, geo-tagged registered office photos, and board resolution. Obtain Class 3 DSC certification from a practicing CA, CS, or CMA for STP auto-approval.'
       }
     ]
+  } : form.slug === 'dir-12' ? {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How to File Form DIR-12 for Director Appointment or Resignation on MCA V3 within 30 Days',
+    description: 'Step-by-step statutory guide to file Form DIR-12 within 30 days of director appointment, resignation, or designation change, calculate Table A fees and Table B late multipliers, and attach mandatory documentation.',
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Obtain Written Consent (DIR-2) & Declaration (DIR-8)',
+        text: 'Before appointing a director, obtain their formal consent to act in Form DIR-2 and intimation of non-disqualification under Section 164(2) in Form DIR-8 along with identity and address proofs.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Convene Board Meeting & Pass Resolution',
+        text: 'Convene a meeting of the Board of Directors (or General Meeting for regular appointments) and pass a formal resolution approving the appointment, resignation, or change in designation. The resolution date sets Day 0.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Track the Strict 30-Day Due Date',
+        text: 'Companies must file DIR-12 within 30 days from the effective date of the corporate event pursuant to Section 168(1) and Section 170(2) of the Companies Act, 2013.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: 'Compute Table A Normal Fee & Table B Late Multiplier',
+        text: 'Determine the base filing fee (₹200 to ₹600) based on nominal capital. If delayed, apply Table B multipliers: 2x (≤30d), 4x (≤60d), 6x (≤90d), 10x (≤180d), or 12x (≤270d).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 5,
+        name: 'Attach Mandatory Documents & Sign with DSC on MCA V3',
+        text: 'Attach DIR-2, DIR-8, Board Resolution, or Resignation Letter. Affix Class 3 DSC of an authorized Director and get the form digitally certified by a practicing CA, CS, or CMA.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 6,
+        name: 'Submit Challan & Verify Master Data Update on STP',
+        text: 'Pay the MCA e-Challan. Form DIR-12 is approved on a Straight-Through-Process (STP) basis, and company master data is updated on the MCA registry immediately.'
+      }
+    ]
+  } : form.slug === 'msme-1' ? {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How to File Form MSME-1 Half-Yearly Return & Check Section 405 Penalties on MCA V3',
+    description: 'Step-by-step statutory guide to reporting delayed payments to Micro and Small Enterprise suppliers (> 45 days), navigating MCA V3 4-category disclosures, and avoiding Section 405(4) adjudication penalties.',
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Audit Vendor Master for Udyam Registration',
+        text: 'Collect and verify Udyam Registration certificates of all Micro and Small enterprise vendors. Filter out Medium enterprises and wholesale/retail traders.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Perform 45-Day Invoice Ageing Reconciliation',
+        text: 'Identify all supplier payments or outstanding balances exceeding 45 days from acceptance (or 15 days if no written contract). Anchor Day 0 to the date of physical receipt or service sign-off.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Compile V3 Four-Category Transaction Data',
+        text: 'Compile transactions across: (1) Paid <= 45d, (2) Paid > 45d, (3) Outstanding <= 45d, and (4) Outstanding > 45d with specific reasons for delay for each overdue vendor.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: 'Calculate Section 16 Penal Interest & Section 43B(h) Provision',
+        text: 'Compute compound interest at 16.50% p.a. (3× 5.50% RBI Bank Rate) with monthly rests and account for permanent tax disallowance under Section 23 of MSMED Act and Section 43B(h).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 5,
+        name: 'Submit Form MSME-1 on MCA V3 Portal by 31 Oct / 30 Apr',
+        text: 'Log into MCA Services -> Company e-Filing -> MSME Form 1. Sign digitally using an authorized Director Class 3 DSC. Portal filing fee is ₹0 (free of cost). Processed via STP auto-approval.'
+      }
+    ]
   } : null
 
   return (
@@ -409,13 +489,17 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               ? 'MGT-7A Late Fees & Penalty Calculator (FY 2026-27) — Small Company & OPC'
               : form.slug === 'aoc-4'
               ? 'AOC-4 Late Fees & Penalty Calculator (FY 2026-27) — AOC Form Fees on MCA V3'
+              : form.slug === 'dir-12'
+              ? 'DIR-12 Form: Director Appointment/Resignation Filing Guide (2026)'
+              : form.slug === 'msme-1'
+              ? 'MSME Form 1: Half-Yearly Return Due Date, Penalty Calculator & Filing Guide (FY 2026-27)'
               : `${form.formNumber} — ${form.formName} Fee & Penalty Calculator (2026-27)`}
           </h1>
           <p className="text-slate-400 text-lg max-w-3xl mx-auto mb-8">
             {form.slug === 'inc-20a'
               ? 'Calculate statutory normal filing fees, 180-day incorporation due date, Table B late fee multipliers (2× to 12×), Section 10A(2) adjudication penalties, and Section 446B relief for Form INC-20A on MCA V3.'
               : form.slug === 'dir-3-kyc'
-              ? 'Determine your triennial routine KYC cycle (Rule 12A(1)), 30-day event-based change rules (Rule 12A(2)), and G.S.R. 300(E) fee schedule (₹0 on-time / ₹500 change / ₹5,000 reactivation) on MCA21 V3.'
+              ? 'Determine your triennial routine KYC cycle (Rule 12A(1)), 30-day event-based change rules (Rule 12A(2)), and G.S.R. 300(E) fee schedule (₹0 on-time / ₹500 change / ₹5,00,000 reactivation) on MCA21 V3.'
               : form.slug === 'dpt-3'
               ? 'Calculate statutory normal filing fees, 30 June due date, Circular 02/2026 fee waiver, Table B delay multipliers (2× to 12×), and Rule 21 penalties on MCA V3.'
               : form.slug === 'adt-1'
@@ -428,6 +512,10 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               ? 'Calculate abridged annual return fees, 60-day due dates, ₹100/day late fees, Small Company limits (₹10 Cr / ₹100 Cr), and Section 446B 50% penalty relief for OPCs and Small Companies on MCA V3.'
               : form.slug === 'aoc-4'
               ? 'Calculate exact MCA V3 Form AOC-4 fees, Table A normal filing fees (₹200–₹600), ₹100/day uncapped late filing fee, OPC 180-day deadline, and Section 137(3) statutory penalties for FY 2026-27.'
+              : form.slug === 'dir-12'
+              ? 'Complete guide to file DIR-12 within 30 days of director appointment, resignation, or change in designation. Calculate MCA V3 filing fees, Table B late multipliers (2× to 12×), and checklist rules.'
+              : form.slug === 'msme-1'
+              ? 'Calculate Section 405(4) adjudication penalties (₹20,000 + ₹1,000/day up to ₹3,00,000), 31 Oct / 30 Apr due dates, V3 4-category reporting rules, Section 16 penal interest (16.50%), and Section 43B(h) tax disallowance.'
               : `Calculate exact normal filing fees and late penalties for ${form.formNumber} (${form.formName}) based on authorized capital and delay.`}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
@@ -516,6 +604,46 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Section 446B: 50% Reduced Penalty</span>
               <span>•</span>
               <span className="font-semibold text-rose-600 dark:text-rose-400">✗ CCFS-2026 Amnesty: EXCLUDED</span>
+            </div>
+          </div>
+        )}
+
+        {form.slug === 'dir-12' && (
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 border-l-4 border-l-blue-600 rounded-2xl shadow-sm">
+            <div className="flex items-center gap-2 mb-2 text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+              <span>⚡</span> Fast Statutory Summary • Sections 168 &amp; 170 &amp; Rule 17
+            </div>
+            <p className="text-slate-800 dark:text-slate-200 text-sm md:text-base leading-relaxed font-medium">
+              Companies must file DIR-12 within 30 days of appointment, resignation, or designation change of any director or KMP with the ROC. Filing requires Form DIR-2 consent, DIR-8 non-disqualification, and board resolution. Normal fees follow Table A (₹200–₹600). Delayed filing attracts Table B multipliers (2× to 12× base fee), and delays beyond 270 days require Regional Director condonation under Section 403.
+            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-3">
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Strict Timeline: File DIR-12 within 30 days</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Mandatory Attachments: DIR-2 Consent + DIR-8 + Resolution</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Table B Multipliers: 2× to 12× Normal Fee</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Delay &gt; 270 Days: Section 403 Condonation Required</span>
+            </div>
+          </div>
+        )}
+
+        {form.slug === 'msme-1' && (
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/50 border-l-4 border-l-amber-600 rounded-2xl shadow-sm">
+            <div className="flex items-center gap-2 mb-2 text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
+              <span>⚡</span> Fast Statutory Summary • Section 405 &amp; MSMED Act
+            </div>
+            <p className="text-slate-800 dark:text-slate-200 text-sm md:text-base leading-relaxed font-medium">
+              Form MSME-1 is a mandatory half-yearly return due 31 October (Apr–Sep) and 30 April (Oct–Mar) for companies with overdue vendor payments exceeding 45 days. Portal filing fee is ₹0. Default attracts Section 405(4) adjudication penalties of ₹20,000 base + ₹1,000/day (capped at ₹3,00,000 each for company and officers) plus Section 16 penal compound interest at 16.50% p.a.
+            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-3">
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Due Dates: 31 Oct &amp; 30 Apr</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Portal Fee: ₹0 (No Late Fee on MCA V3)</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Sec 405(4): ₹20,000 + ₹1,000/day (Max ₹3L Each)</span>
+              <span>•</span>
+              <span className="font-semibold text-rose-600 dark:text-rose-400">✓ Sec 16 Interest: 16.50% p.a. Monthly Rests</span>
             </div>
           </div>
         )}
@@ -1439,6 +1567,346 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
                       <td className="px-4 py-3 font-bold text-rose-700 dark:text-rose-300">Section 454(8) Escalation</td>
                       <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Penalties unpaid after 90 days of order</td>
                       <td className="px-4 py-3 text-rose-700 dark:text-rose-300 font-bold">Additional fine ₹25k–₹5L on company; up to 6 months imprisonment for directors</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* DIR-12 Dedicated Statutory Master Tables */}
+        {form.slug === 'dir-12' && (
+          <div className="space-y-12 mb-16">
+            {/* Table 1: Mandatory Attachments Checklist */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>📋</span> Form DIR-12 Mandatory Attachments Checklist by Corporate Event
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Under Rule 17 of the Companies (Appointment and Qualification of Directors) Rules, 2014, incomplete attachments result in form rejection on MCA V3.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Corporate Event</th>
+                      <th className="px-4 py-3 font-semibold">Statutory Authority</th>
+                      <th className="px-4 py-3 font-semibold">Mandatory Attachments Required on MCA V3</th>
+                      <th className="px-4 py-3 font-semibold">Signatory Requirement</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-medium text-slate-900 dark:text-white">Appointment of New / Additional Director</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Section 161(1) / Section 152</td>
+                      <td className="px-4 py-3 text-slate-700 dark:text-slate-300">
+                        1. <strong>Form DIR-2:</strong> Consent to act as Director<br />
+                        2. <strong>Form DIR-8:</strong> Intimation of non-disqualification (Sec 164(2))<br />
+                        3. <strong>Board/EGM Resolution:</strong> Certified true copy<br />
+                        4. <strong>ID &amp; Address Proof:</strong> PAN card and residential proof
+                      </td>
+                      <td className="px-4 py-3 text-blue-600 font-medium">Existing Director + Appointee DSC</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium text-slate-900 dark:text-white">Resignation of Director</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Section 168(1)</td>
+                      <td className="px-4 py-3 text-slate-700 dark:text-slate-300">
+                        1. <strong>Formal Resignation Notice:</strong> Signed letter specifying effective date<br />
+                        2. <strong>Board Resolution / Intimation:</strong> Acknowledging receipt of resignation<br />
+                        3. <strong>Proof of Delivery:</strong> Dispatch receipt / email acknowledgment
+                      </td>
+                      <td className="px-4 py-3 text-blue-600 font-medium">Continuing Director DSC</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium text-slate-900 dark:text-white">Regularization of Additional Director at AGM</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Section 152(2) &amp; Section 161(1)</td>
+                      <td className="px-4 py-3 text-slate-700 dark:text-slate-300">
+                        1. <strong>AGM Ordinary Resolution:</strong> Passed by shareholders<br />
+                        2. <strong>Form DIR-2 &amp; DIR-8:</strong> Fresh consent and declaration<br />
+                        3. <strong>Scrutinizer Report:</strong> For voting verification (if applicable)
+                      </td>
+                      <td className="px-4 py-3 text-blue-600 font-medium">Authorized Director DSC</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium text-slate-900 dark:text-white">Appointment or Cessation of KMP (MD, CEO, CFO, CS)</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Section 203</td>
+                      <td className="px-4 py-3 text-slate-700 dark:text-slate-300">
+                        1. <strong>Board Resolution:</strong> Approving appointment terms / cessation<br />
+                        2. <strong>Consent Letter:</strong> From appointee KMP<br />
+                        3. <strong>Membership Proof:</strong> For Company Secretary (ICSI Certificate)
+                      </td>
+                      <td className="px-4 py-3 text-blue-600 font-medium">Director / MD DSC</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 2: Form DIR-12 vs Form DIR-11 Statutory Comparison */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>🛡️</span> Form DIR-12 vs Form DIR-11: Statutory Differences for Resigning Directors
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Critical distinction between corporate filing responsibility (DIR-12) and director personal protective filing (DIR-11).
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Comparison Aspect</th>
+                      <th className="px-4 py-3 font-semibold text-blue-600">Form DIR-12 (Company Filing)</th>
+                      <th className="px-4 py-3 font-semibold text-emerald-600">Form DIR-11 (Director Personal Return)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Statutory Mandate</td>
+                      <td className="px-4 py-3 font-bold text-rose-600">MANDATORY on the Company (Sec 168(1) &amp; 170(2))</td>
+                      <td className="px-4 py-3 font-bold text-emerald-600">OPTIONAL on the Resigning Director (Rule 16)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Statutory Due Date</td>
+                      <td className="px-4 py-3 font-semibold">Strictly within 30 days of resignation/appointment</td>
+                      <td className="px-4 py-3 font-semibold">Within 30 days of resignation notice to company</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Filing Authority &amp; Signature</td>
+                      <td className="px-4 py-3">Authorized continuing Director / CS + Professional Certification</td>
+                      <td className="px-4 py-3">Resigning Director personally using their own Class 3 DSC</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">MCA V3 Normal Base Fee</td>
+                      <td className="px-4 py-3 font-medium">₹200 to ₹600 (based on authorized capital bracket)</td>
+                      <td className="px-4 py-3 font-medium">Flat ₹300 individual e-Challan fee</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">If Company Fails to File</td>
+                      <td className="px-4 py-3 text-rose-600">Company master data frozen; Table B late multipliers (2× to 12×)</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Protects director against post-resignation liabilities and bank claims</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 3: Table B Late Multiplier Matrix & Section 172 Exposure */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>⏱️</span> Form DIR-12 Late Fee Multipliers &amp; Section 172 Residuary Penalties
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Late filing fees escalate under Table B of the Fees Rules. Delays exceeding 270 days require prior Condonation of Delay from the Regional Director.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Delay Duration Beyond 30 Days</th>
+                      <th className="px-4 py-3 font-semibold">Table B Multiplier</th>
+                      <th className="px-4 py-3 font-semibold">Sample Fee (₹10L Capital)</th>
+                      <th className="px-4 py-3 font-semibold">Civil Adjudication Exposure (Sec 172)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-medium">1 to 30 Days Delay</td>
+                      <td className="px-4 py-3 font-bold text-amber-600">2× Normal Fee</td>
+                      <td className="px-4 py-3">₹400 + ₹800 = <strong className="text-slate-900 dark:text-white">₹1,200</strong></td>
+                      <td className="px-4 py-3 text-slate-500">Low adjudication risk if filed before ROC notice</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">31 to 60 Days Delay</td>
+                      <td className="px-4 py-3 font-bold text-amber-600">4× Normal Fee</td>
+                      <td className="px-4 py-3">₹400 + ₹1,600 = <strong className="text-slate-900 dark:text-white">₹2,000</strong></td>
+                      <td className="px-4 py-3 text-slate-500">Section 172 inquiry risk: ₹50k base fine</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">61 to 90 Days Delay</td>
+                      <td className="px-4 py-3 font-bold text-amber-600">6× Normal Fee</td>
+                      <td className="px-4 py-3">₹400 + ₹2,400 = <strong className="text-slate-900 dark:text-white">₹2,800</strong></td>
+                      <td className="px-4 py-3 text-amber-600 font-semibold">Continuing fine: ₹50,000 + ₹500/day</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">91 to 180 Days Delay</td>
+                      <td className="px-4 py-3 font-bold text-rose-600">10× Normal Fee</td>
+                      <td className="px-4 py-3">₹400 + ₹4,000 = <strong className="text-slate-900 dark:text-white">₹4,400</strong></td>
+                      <td className="px-4 py-3 text-rose-600 font-semibold">ROC Show Cause Notice issued for board defect</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">181 to 270 Days Delay</td>
+                      <td className="px-4 py-3 font-bold text-rose-600">12× Normal Fee</td>
+                      <td className="px-4 py-3">₹400 + ₹4,800 = <strong className="text-slate-900 dark:text-white">₹5,200</strong></td>
+                      <td className="px-4 py-3 text-rose-600 font-bold">Max fee bracket; board resolutions voidable</td>
+                    </tr>
+                    <tr className="bg-rose-50/40 dark:bg-rose-950/20">
+                      <td className="px-4 py-3 font-medium text-rose-700 dark:text-rose-400">Beyond 270 Days Delay</td>
+                      <td className="px-4 py-3 font-bold text-rose-700 dark:text-rose-300">PORTAL BLOCKED</td>
+                      <td className="px-4 py-3 font-bold text-rose-700 dark:text-rose-300">Section 403 Hard Stop</td>
+                      <td className="px-4 py-3 text-rose-700 dark:text-rose-300 font-bold">Must file Form CG-1 for Condonation of Delay to Regional Director</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* MSME-1 Dedicated Statutory Master Tables */}
+        {form.slug === 'msme-1' && (
+          <div className="space-y-12 mb-16">
+            {/* Table 1: Section 405(4) Adjudication Penalty Matrix */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>⚖️</span> Form MSME-1 Statutory Penalty Schedule under Section 405(4)
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Civil penalties adjudicated under Section 454 of the Companies Act, 2013 for failure to furnish information about delayed MSME payments.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Delay Duration</th>
+                      <th className="px-4 py-3 font-semibold">Company Liability</th>
+                      <th className="px-4 py-3 font-semibold">Per Officer in Default</th>
+                      <th className="px-4 py-3 font-semibold">Total (Company + 2 Directors)</th>
+                      <th className="px-4 py-3 font-semibold">Statutory Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-medium">On-Time (By 31 Oct / 30 Apr)</td>
+                      <td className="px-4 py-3 font-bold text-emerald-600">₹0</td>
+                      <td className="px-4 py-3 font-bold text-emerald-600">₹0</td>
+                      <td className="px-4 py-3 font-bold text-emerald-600">₹0</td>
+                      <td className="px-4 py-3 text-emerald-600 font-semibold">Fully Compliant</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">30 Days Delay</td>
+                      <td className="px-4 py-3">₹20k + (30 × ₹1k) = <strong className="text-slate-900 dark:text-white">₹50,000</strong></td>
+                      <td className="px-4 py-3">₹50,000 each</td>
+                      <td className="px-4 py-3 font-bold text-amber-600">₹1,50,000</td>
+                      <td className="px-4 py-3 text-slate-500">Initial Default Notice</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">60 Days Delay</td>
+                      <td className="px-4 py-3">₹20k + (60 × ₹1k) = <strong className="text-slate-900 dark:text-white">₹80,000</strong></td>
+                      <td className="px-4 py-3">₹80,000 each</td>
+                      <td className="px-4 py-3 font-bold text-amber-600">₹2,40,000</td>
+                      <td className="px-4 py-3 text-amber-600 font-semibold">ROC Inquiry Triggered</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">90 Days Delay</td>
+                      <td className="px-4 py-3">₹20k + (90 × ₹1k) = <strong className="text-slate-900 dark:text-white">₹1,10,000</strong></td>
+                      <td className="px-4 py-3">₹1,10,000 each</td>
+                      <td className="px-4 py-3 font-bold text-rose-600">₹3,30,000</td>
+                      <td className="px-4 py-3 text-rose-600 font-semibold">Adjudication Hearing Notice</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">200 Days Delay</td>
+                      <td className="px-4 py-3">₹20k + (200 × ₹1k) = <strong className="text-slate-900 dark:text-white">₹2,20,000</strong></td>
+                      <td className="px-4 py-3">₹2,20,000 each</td>
+                      <td className="px-4 py-3 font-bold text-rose-600">₹6,60,000</td>
+                      <td className="px-4 py-3 text-rose-600 font-bold">Severe Corporate Default</td>
+                    </tr>
+                    <tr className="bg-rose-50/40 dark:bg-rose-950/20">
+                      <td className="px-4 py-3 font-medium text-rose-700 dark:text-rose-400">280+ Days Delay (Cap Hit)</td>
+                      <td className="px-4 py-3 font-bold text-rose-600">₹3,00,000 (Maximum Cap)</td>
+                      <td className="px-4 py-3 font-bold text-rose-600">₹3,00,000 each (Cap)</td>
+                      <td className="px-4 py-3 font-bold text-rose-600">₹9,00,000</td>
+                      <td className="px-4 py-3 text-rose-600 font-bold">Benchmark: Natrinai Ventures Ltd Order</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 2: The V2 vs V3 Disclosure Trap */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>🔄</span> The MCA V3 Disclosure Architecture: Why Clearing Dues Early Still Requires Filing
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Understanding the transition from old V2 logic to the expanded MCA V3 four-category reporting structure.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Compliance Feature</th>
+                      <th className="px-4 py-3 font-semibold text-slate-500">Old Portal Logic (MCA V2)</th>
+                      <th className="px-4 py-3 font-semibold text-blue-600">Current Portal Logic (MCA V3)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Primary Filing Trigger</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Outstanding dues &gt; 45 days at the END of the half-year only</td>
+                      <td className="px-4 py-3 font-bold text-rose-600">ANY payment &gt; 45 days DURING the half-year, even if balance is ₹0 at period end</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Paid Late but Settled Before Period End</td>
+                      <td className="px-4 py-3 font-semibold text-emerald-600">No filing required (zero outstanding at period end)</td>
+                      <td className="px-4 py-3 font-bold text-rose-600">MANDATORY FILING REQUIRED — the delayed transaction itself triggers reporting</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Scope of Transaction Reporting</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Only outstanding balances at 30 Sep / 31 Mar</td>
+                      <td className="px-4 py-3 font-medium">ALL transactions with the triggered supplier (on-time payments, late payments, outstanding)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Transaction Categories</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">2 categories reported</td>
+                      <td className="px-4 py-3 font-bold text-blue-600">4 distinct categories reported (Paid on time, Paid late, Overdue, Accrued)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Professional Certification</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Not required</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Not required (signed digitally by Director DSC, STP auto-approved)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 3: The Triple Compliance Penalty */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>⚡</span> The Triple Penalty for a Single Delayed MSME Invoice
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                A single delayed invoice to a Micro or Small supplier triggers three cumulative legal consequences across corporate, commercial, and tax laws.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Compliance Layer</th>
+                      <th className="px-4 py-3 font-semibold">Governing Statute</th>
+                      <th className="px-4 py-3 font-semibold">Penalty Mechanism &amp; Formula</th>
+                      <th className="px-4 py-3 font-semibold">Financial Impact on Buyer</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-blue-600">Layer 1: ROC Reporting</td>
+                      <td className="px-4 py-3 font-medium">Section 405(4), Companies Act 2013</td>
+                      <td className="px-4 py-3">₹20,000 base + ₹1,000/day continuing default (max ₹3,00,000 each)</td>
+                      <td className="px-4 py-3 font-semibold text-rose-600">Up to ₹9 Lakhs for company + 2 directors</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-amber-600">Layer 2: Commercial Penal Interest</td>
+                      <td className="px-4 py-3 font-medium">Section 16, MSMED Act 2006</td>
+                      <td className="px-4 py-3">Compound interest at 3× RBI Bank Rate (16.50% p.a.) with monthly rests</td>
+                      <td className="px-4 py-3 font-semibold text-amber-600">Payable directly to vendor; permanently NON-DEDUCTIBLE (Sec 23)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-indigo-600">Layer 3: Income Tax Disallowance</td>
+                      <td className="px-4 py-3 font-medium">Section 43B(h) / Section 37(2)(g), IT Act</td>
+                      <td className="px-4 py-3">Principal amount disallowed as expense in year of accrual if not paid within 45 days</td>
+                      <td className="px-4 py-3 font-semibold text-indigo-600">Direct cash outflow: ~25.17% corporate tax on unpaid amount</td>
                     </tr>
                   </tbody>
                 </table>

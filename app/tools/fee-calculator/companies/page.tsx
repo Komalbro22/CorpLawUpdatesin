@@ -654,6 +654,48 @@ export default function CompaniesFeePage() {
               Open Dedicated Workspace →
             </span>
           </Link>
+
+          <Link
+            href="/tools/fee-calculator/companies/dir-12"
+            className="p-5 rounded-xl border border-blue-200 dark:border-blue-900/60 bg-blue-50/50 dark:bg-blue-950/20 hover:border-blue-500 transition-all group flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-blue-600 text-white">DIR-12</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">Director Changes</span>
+              </div>
+              <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-1">
+                Form DIR-12 Workspace
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                30-day statutory appointment &amp; resignation tracker, DIR-2/DIR-8 checklist, Table B late fee multipliers (2× to 12×), and Section 403 condonation limits.
+              </p>
+            </div>
+            <span className="text-xs font-bold text-blue-600 dark:text-blue-400 mt-4 flex items-center gap-1">
+              Open Dedicated Workspace →
+            </span>
+          </Link>
+
+          <Link
+            href="/tools/fee-calculator/companies/msme-1"
+            className="p-5 rounded-xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/50 dark:bg-emerald-950/20 hover:border-emerald-500 transition-all group flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-600 text-white">MSME-1</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">Vendor Dues Return</span>
+              </div>
+              <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors mb-1">
+                Form MSME-1 Workspace
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Section 405(4) adjudication penalty engine (₹20k + ₹1k/day max ₹3L each), V3 4-category disclosure assessor, and Section 16 penal compound interest (16.50%).
+              </p>
+            </div>
+            <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 mt-4 flex items-center gap-1">
+              Open Dedicated Workspace →
+            </span>
+          </Link>
         </div>
       </div>
 
