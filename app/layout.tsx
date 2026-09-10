@@ -8,7 +8,6 @@ import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { ToastProvider } from '@/components/Toast'
 import BackToTop from '@/components/BackToTop'
-import WhatsAppButton from '@/components/WhatsAppButton'
 import HideOnAdmin from '@/components/HideOnAdmin'
 import AnnouncementBar from '@/components/AnnouncementBar'
 import Script from 'next/script'
@@ -178,7 +177,6 @@ export default async function RootLayout({
           </main>
           <HideOnAdmin><Footer /></HideOnAdmin>
           <HideOnAdmin><BackToTop /></HideOnAdmin>
-          <HideOnAdmin><WhatsAppButton /></HideOnAdmin>
           <HideOnAdmin><WebMCPRegistry /></HideOnAdmin>
         </ToastProvider>
         <HideOnAdmin>
