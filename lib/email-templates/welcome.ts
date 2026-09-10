@@ -456,7 +456,7 @@ export function generateWelcomeEmail({
                         </td>
                         <!-- WhatsApp -->
                         <td>
-                          <a href="https://whatsapp.com/channel/corplawupdates"
+                          <a href="https://whatsapp.com/channel/0029VbCfcUEEgGfGLWOTvV1A"
                              style="display:inline-block;
                                     background:#25D366;
                                     color:#ffffff;
@@ -466,6 +466,20 @@ export function generateWelcomeEmail({
                                     border-radius:8px;
                                     text-decoration:none;">
                             💬 WhatsApp
+                          </a>
+                        </td>
+                        <!-- Telegram -->
+                        <td>
+                          <a href="https://t.me/corplawupdate"
+                             style="display:inline-block;
+                                    background:#229ED9;
+                                    color:#ffffff;
+                                    font-size:12px;
+                                    font-weight:700;
+                                    padding:8px 16px;
+                                    border-radius:8px;
+                                    text-decoration:none;">
+                            ✈️ Telegram
                           </a>
                         </td>
                         <!-- RSS -->

@@ -1228,6 +1228,8 @@ h2, h3, h4 {
   [class*="share"] button,
   a[href*="whatsapp.com"],
   a[href*="wa.me"],
+  a[href*="t.me"],
+  a[href*="telegram.me"],
   a[href*="twitter.com"],
   a[href*="linkedin.com"] { display: none !important; }
 

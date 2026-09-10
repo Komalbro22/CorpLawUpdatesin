@@ -78,6 +78,27 @@ export default function NewsletterWidget() {
                             Check your inbox — we just sent you a welcome email with recent articles.
                             (Check spam if not found in 2 minutes)
                         </p>
+                        <div className="mt-3 pt-3 border-t border-emerald-200/80 dark:border-emerald-800/60 flex flex-wrap items-center gap-2">
+                            <span className="text-xs font-semibold text-emerald-900 dark:text-emerald-200 w-full mb-0.5">
+                                Also get real-time breaking alerts:
+                            </span>
+                            <a
+                                href="https://whatsapp.com/channel/0029VbCfcUEEgGfGLWOTvV1A"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 text-[11px] bg-[#25D366] text-white px-2.5 py-1 rounded-md font-semibold hover:opacity-90 transition-opacity"
+                            >
+                                WhatsApp Channel
+                            </a>
+                            <a
+                                href="https://t.me/corplawupdate"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 text-[11px] bg-[#229ED9] text-white px-2.5 py-1 rounded-md font-semibold hover:opacity-90 transition-opacity"
+                            >
+                                Telegram Channel
+                            </a>
+                        </div>
                     </div>
                 </div>
             ) : (

@@ -22,6 +22,8 @@ export function getArticleAuthorSchema() {
       sameAs: [
         'https://x.com/CorpLawUpdates',
         'https://www.linkedin.com/company/corplawupdates/',
+        'https://whatsapp.com/channel/0029VbCfcUEEgGfGLWOTvV1A',
+        'https://t.me/corplawupdate',
       ],
     },
   }

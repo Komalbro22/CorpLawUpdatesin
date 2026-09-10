@@ -404,8 +404,13 @@ export function buildNewsletterTemplateHtml({
                           </a>
                         </td>
                         <td>
-                          <a href="https://whatsapp.com/channel/corplawupdates" style="display:inline-block; background:#25D366; color:#ffffff; font-size:11px; font-weight:700; padding:6px 12px; border-radius:6px; text-decoration:none;">
+                          <a href="https://whatsapp.com/channel/0029VbCfcUEEgGfGLWOTvV1A" style="display:inline-block; background:#25D366; color:#ffffff; font-size:11px; font-weight:700; padding:6px 12px; border-radius:6px; text-decoration:none;">
                             💬 WhatsApp
+                          </a>
+                        </td>
+                        <td>
+                          <a href="https://t.me/corplawupdate" style="display:inline-block; background:#229ED9; color:#ffffff; font-size:11px; font-weight:700; padding:6px 12px; border-radius:6px; text-decoration:none;">
+                            ✈️ Telegram
                           </a>
                         </td>
                       </tr>
@@ -699,8 +704,13 @@ export function buildWeeklyDigestHtml({
                           </a>
                         </td>
                         <td>
-                          <a href="https://whatsapp.com/channel/corplawupdates" style="display:inline-block; background:#25D366; color:#ffffff; font-size:11px; font-weight:700; padding:6px 12px; border-radius:6px; text-decoration:none;">
+                          <a href="https://whatsapp.com/channel/0029VbCfcUEEgGfGLWOTvV1A" style="display:inline-block; background:#25D366; color:#ffffff; font-size:11px; font-weight:700; padding:6px 12px; border-radius:6px; text-decoration:none;">
                             💬 WhatsApp
+                          </a>
+                        </td>
+                        <td>
+                          <a href="https://t.me/corplawupdate" style="display:inline-block; background:#229ED9; color:#ffffff; font-size:11px; font-weight:700; padding:6px 12px; border-radius:6px; text-decoration:none;">
+                            ✈️ Telegram
                           </a>
                         </td>
                       </tr>

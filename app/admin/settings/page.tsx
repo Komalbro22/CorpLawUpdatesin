@@ -27,7 +27,7 @@ const settingGroups: { id: string; title: string; Icon: LucideIcon; keys: string
     id: 'social',
     title: 'Social Media & Channels',
     Icon: Share2,
-    keys: ['whatsapp_channel', 'linkedin_url', 'twitter_url', 'instagram_url'],
+    keys: ['whatsapp_channel', 'telegram_channel', 'linkedin_url', 'twitter_url', 'instagram_url'],
   },
   {
     id: 'site',
@@ -70,6 +70,7 @@ const settingGroups: { id: string; title: string; Icon: LucideIcon; keys: string
 
 const urlKeys = [
   'whatsapp_channel',
+  'telegram_channel',
   'linkedin_url',
   'twitter_url',
   'instagram_url',
