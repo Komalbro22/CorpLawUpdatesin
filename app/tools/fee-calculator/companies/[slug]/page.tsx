@@ -433,6 +433,49 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         text: 'Log into MCA Services -> Company e-Filing -> MSME Form 1. Sign digitally using an authorized Director Class 3 DSC. Portal filing fee is ₹0 (free of cost). Processed via STP auto-approval.'
       }
     ]
+  } : form.slug === 'pas-3' ? {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How to File Form PAS-3 Return of Allotment & Check Section 42/39 Penalties on MCA V3',
+    description: 'Step-by-step statutory guide to calculating 15-day private placement vs 30-day ordinary allotment deadlines, Table A/B fees, Section 42(9) promoter liability, and filing Form PAS-3 on MCA V3.',
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Determine Allotment Mode (Section 42 vs Section 39)',
+        text: 'Identify whether shares were allotted via Private Placement under Section 42 (15-day strict deadline) or via Rights/Bonus/ESOP/Preferential under Section 39 (30-day statutory deadline).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Anchor Clock to Board Resolution Date',
+        text: 'The statutory countdown starts on the date of the board resolution approving the allotment of securities (Day 0), NOT on the date subscription money was received.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Enforce Separate Bank Account & Fund Utilisation Lock',
+        text: 'Ensure application money was kept in a separate scheduled bank account and NOT utilised until Form PAS-3 is submitted, avoiding severe Section 42(6) contraventions.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: 'Compute Table A Base Fee & Table B Escalation Multipliers',
+        text: 'Determine base fee (₹200 to ₹600) based on authorised capital. If delayed, apply Table B late multipliers (2x to 12x) computed from the event-specific due date.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 5,
+        name: 'Attach Mandatory Schedules & Certified Resolutions',
+        text: 'Attach complete list of allottees (separate list for each allotment date), certified board resolution, valuation report (if non-cash or preferential), and PAS-4/PAS-5 records.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 6,
+        name: 'Affix Class 3 DSC & File on MCA V3 Portal',
+        text: 'Sign with Class 3 DSC of an authorised Director and practicing professional (PCS/PCA/PCMA, except OPC/Small Co). Pay MCA challan within 7 days of upload.'
+      }
+    ]
   } : null
 
   return (
@@ -493,6 +536,8 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               ? 'DIR-12 Form: Director Appointment/Resignation Filing Guide (2026)'
               : form.slug === 'msme-1'
               ? 'MSME Form 1: Half-Yearly Return Due Date, Penalty Calculator & Filing Guide (FY 2026-27)'
+              : form.slug === 'pas-3'
+              ? 'PAS-3 Return of Allotment: Due Date (15/30 Days), Fees & Penalty Calculator (2026-27)'
               : `${form.formNumber} — ${form.formName} Fee & Penalty Calculator (2026-27)`}
           </h1>
           <p className="text-slate-400 text-lg max-w-3xl mx-auto mb-8">
@@ -516,6 +561,8 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               ? 'Complete guide to file DIR-12 within 30 days of director appointment, resignation, or change in designation. Calculate MCA V3 filing fees, Table B late multipliers (2× to 12×), and checklist rules.'
               : form.slug === 'msme-1'
               ? 'Calculate Section 405(4) adjudication penalties (₹20,000 + ₹1,000/day up to ₹3,00,000), 31 Oct / 30 Apr due dates, V3 4-category reporting rules, Section 16 penal interest (16.50%), and Section 43B(h) tax disallowance.'
+              : form.slug === 'pas-3'
+              ? 'When is Form PAS-3 due? 15 days for private placements (Section 42), 30 days for other allotments (Section 39). Calculate MCA Table A base fees, Table B late fee multipliers (2× to 12×), and Section 42(9) promoter liability.'
               : `Calculate exact normal filing fees and late penalties for ${form.formNumber} (${form.formName}) based on authorized capital and delay.`}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
@@ -644,6 +691,28 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Sec 405(4): ₹20,000 + ₹1,000/day (Max ₹3L Each)</span>
               <span>•</span>
               <span className="font-semibold text-rose-600 dark:text-rose-400">✓ Sec 16 Interest: 16.50% p.a. Monthly Rests</span>
+            </div>
+          </div>
+        )}
+
+        {form.slug === 'pas-3' && (
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 border-l-4 border-l-blue-600 rounded-2xl shadow-sm">
+            <div className="flex items-center gap-2 mb-2 text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+              <span>⚡</span> Fast Statutory Summary • Sections 39 &amp; 42 • Dual Deadline Rule
+            </div>
+            <p className="text-slate-800 dark:text-slate-200 text-sm md:text-base leading-relaxed font-medium">
+              Form PAS-3 (Return of Allotment) has two distinct statutory deadlines: <strong>15 days</strong> from board allotment for Private Placements (Section 42(8)), and <strong>30 days</strong> for all other allotments including rights, bonus, preferential, and ESOPs (Section 39(4)). Late filings attract Table B multipliers (2× to 12× normal fee) plus adjudication penalties of ₹1,000/day (capped at ₹25 Lakh on company, promoters, and directors under Section 42(9), or ₹1 Lakh under Section 39(5)).
+            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-3">
+              <span className="font-semibold text-blue-700 dark:text-blue-300">✓ Private Placement: Strict 15 Days</span>
+              <span>•</span>
+              <span className="font-semibold text-emerald-700 dark:text-emerald-300">✓ Rights / Bonus / ESOP: 30 Days</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Table B Multipliers: 2× to 12× Base Fee</span>
+              <span>•</span>
+              <span className="font-semibold text-red-600 dark:text-red-400">✓ Sec 42(9) Cap: ₹25L Each on Promoters &amp; Directors</span>
+              <span>•</span>
+              <span className="font-semibold text-purple-600 dark:text-purple-400">✓ Sec 446B: 50% Concession for Startups/Small Cos</span>
             </div>
           </div>
         )}
@@ -1907,6 +1976,260 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
                       <td className="px-4 py-3 font-medium">Section 43B(h) / Section 37(2)(g), IT Act</td>
                       <td className="px-4 py-3">Principal amount disallowed as expense in year of accrual if not paid within 45 days</td>
                       <td className="px-4 py-3 font-semibold text-indigo-600">Direct cash outflow: ~25.17% corporate tax on unpaid amount</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* PAS-3 Dedicated Statutory Master Tables & Comparison Framework */}
+        {form.slug === 'pas-3' && (
+          <div className="space-y-12 mb-16">
+            {/* Table 1: The Two Clocks — Private Placement vs Ordinary Allotments */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>⏱️</span> The Dual Statutory Clocks: Section 42 (15 Days) vs Section 39 (30 Days)
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Form PAS-3 is unique in corporate law: the statutory deadline and maximum penalty exposure depend strictly on the mode of allotment.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Regulatory Parameter</th>
+                      <th className="px-4 py-3 font-semibold text-blue-600">Private Placement (Section 42)</th>
+                      <th className="px-4 py-3 font-semibold text-emerald-600">Ordinary Allotment (Section 39)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Applicable Instruments / Routes</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-300">Angel rounds, Venture Capital, HNI issuances via PAS-4 offer letter</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-300">Rights Issues (Sec 62(1)(a)), Bonus Shares (Sec 63), ESOPs, CCPS/CCD conversions</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Statutory Filing Deadline</td>
+                      <td className="px-4 py-3 font-bold text-blue-600">Strictly 15 Calendar Days from board allotment date (Sec 42(8))</td>
+                      <td className="px-4 py-3 font-bold text-emerald-600">30 Calendar Days from board allotment date (Sec 39(4))</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Anchor Date (Day 0)</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-300">Date of Board Resolution approving allotment (NOT receipt of funds)</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-300">Date of Board Resolution approving allotment</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Continuing Daily Adjudication Rate</td>
+                      <td className="px-4 py-3 font-semibold text-red-600">₹1,000 per day of default</td>
+                      <td className="px-4 py-3 font-semibold text-amber-600">₹1,000 per day of default</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Statutory Penalty Cap (Standard Company)</td>
+                      <td className="px-4 py-3 font-bold text-red-600">₹25,00,000 (Twenty-Five Lakhs) on Company</td>
+                      <td className="px-4 py-3 font-bold text-amber-600">₹1,00,000 (One Lakh) on Company</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Personal Liability Exposure</td>
+                      <td className="px-4 py-3 font-bold text-red-600">Promoters AND Directors personally up to ₹25 Lakhs EACH (Sec 42(9))</td>
+                      <td className="px-4 py-3 font-medium text-slate-600 dark:text-slate-300">Every Officer in Default up to ₹1 Lakh each (Sec 39(5))</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Section 446B Concession (Startup/Small Co)</td>
+                      <td className="px-4 py-3 font-semibold text-purple-600">Capped at ₹2 Lakhs (Company) / ₹1 Lakh (Promoter/Director)</td>
+                      <td className="px-4 py-3 font-semibold text-purple-600">Capped at ₹1 Lakh (Company) / ₹1 Lakh (Officer)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 2: MCA Table A Base Fees & Table B Escalation Multipliers */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>📊</span> Table A Normal Filing Fees &amp; Table B Delay Escalation Multipliers
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Government portal fees computed on MCA V3 under the Companies (Registration Offices and Fees) Rules, 2014.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="overflow-x-auto">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Table A: Base Filing Fee by Capital</h4>
+                  <table className="w-full text-xs text-left">
+                    <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                      <tr>
+                        <th className="px-3 py-2 font-semibold">Authorised Share Capital</th>
+                        <th className="px-3 py-2 font-semibold text-right">Normal Fee</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                      <tr><td className="px-3 py-2">Less than ₹1,00,000</td><td className="px-3 py-2 text-right font-mono font-bold">₹200</td></tr>
+                      <tr><td className="px-3 py-2">₹1,00,000 to ₹4,99,999</td><td className="px-3 py-2 text-right font-mono font-bold">₹300</td></tr>
+                      <tr><td className="px-3 py-2">₹5,00,000 to ₹24,99,999</td><td className="px-3 py-2 text-right font-mono font-bold">₹400</td></tr>
+                      <tr><td className="px-3 py-2">₹25,00,000 to ₹99,99,999</td><td className="px-3 py-2 text-right font-mono font-bold">₹500</td></tr>
+                      <tr><td className="px-3 py-2">₹1,00,00,000 or more</td><td className="px-3 py-2 text-right font-mono font-bold">₹600</td></tr>
+                      <tr><td className="px-3 py-2 text-slate-500">Company without share capital</td><td className="px-3 py-2 text-right font-mono font-bold">₹200</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Table B: Late Escalation Multipliers</h4>
+                  <table className="w-full text-xs text-left">
+                    <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                      <tr>
+                        <th className="px-3 py-2 font-semibold">Delay Past Due Date</th>
+                        <th className="px-3 py-2 font-semibold text-right">Escalation Multiplier</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                      <tr><td className="px-3 py-2">Up to 30 days</td><td className="px-3 py-2 text-right font-mono font-bold text-amber-600">2× normal fee</td></tr>
+                      <tr><td className="px-3 py-2">31 to 60 days</td><td className="px-3 py-2 text-right font-mono font-bold text-amber-600">4× normal fee</td></tr>
+                      <tr><td className="px-3 py-2">61 to 90 days</td><td className="px-3 py-2 text-right font-mono font-bold text-amber-600">6× normal fee</td></tr>
+                      <tr><td className="px-3 py-2">91 to 180 days</td><td className="px-3 py-2 text-right font-mono font-bold text-red-600">10× normal fee</td></tr>
+                      <tr><td className="px-3 py-2">Beyond 180 days</td><td className="px-3 py-2 text-right font-mono font-bold text-red-600">12× normal fee</td></tr>
+                      <tr><td className="px-3 py-2 text-slate-500">Delay Calculation Basis</td><td className="px-3 py-2 text-right text-slate-500">Calculated from Day 16 or Day 31</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            {/* Table 3: Section 42(6) Upstream Rules (The Startup Trap) */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>⚠️</span> The Startup Trap: Upstream Clocks &amp; Fund Utilisation Lock (Section 42(6))
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Critical compliance provisions governing application money that frequently trigger heavy ROC compounding orders for emerging companies.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Statutory Rule</th>
+                      <th className="px-4 py-3 font-semibold">Governing Provision</th>
+                      <th className="px-4 py-3 font-semibold">Prescribed Protocol</th>
+                      <th className="px-4 py-3 font-semibold">Consequences of Default</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-navy dark:text-white">Separate Bank Account</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Section 42(6)</td>
+                      <td className="px-4 py-3">Keep all subscription money in a distinct scheduled bank account.</td>
+                      <td className="px-4 py-3 text-rose-600">Invalidates private placement offering under Section 42(10).</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-navy dark:text-white">Fund Utilisation Lock</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Section 42(6) Proviso</td>
+                      <td className="px-4 py-3 font-bold text-red-600">MONEY CANNOT BE USED UNTIL PAS-3 IS FILED WITH ROC.</td>
+                      <td className="px-4 py-3 text-rose-600">Compulsory refund of all money + penalty up to amount raised or ₹2 Cr.</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-navy dark:text-white">60-Day Allotment Window</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Section 42(6) Main Text</td>
+                      <td className="px-4 py-3">Allot securities within 60 days of receiving subscription money.</td>
+                      <td className="px-4 py-3 text-rose-600">Refund within 15 days, failing which 12% p.a. interest runs from Day 61.</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-navy dark:text-white">5-Allotment Batching Rule</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">MCA V3 Webform Logic</td>
+                      <td className="px-4 py-3">Max 5 allotment dates per form, all within 30 days of filing.</td>
+                      <td className="px-4 py-3 text-amber-600">Portal rejects batch; separate PAS-3 required for each event date.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 4: Mandatory Document Checklist for MCA V3 */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>📎</span> Mandatory Attachments Checklist for MCA V3 Form PAS-3
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Checklist of required documentation to ensure Straight-Through-Process (STP) approval and avoid resubmission lapses (T+15 days).
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Attachment Name</th>
+                      <th className="px-4 py-3 font-semibold">When Mandatory</th>
+                      <th className="px-4 py-3 font-semibold">Key Details Required</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-blue-600">List of Allottees (Schedule)</td>
+                      <td className="px-4 py-2.5 font-bold text-slate-900 dark:text-white">Always Mandatory (Every Allotment)</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Name, address, PAN, occupation, class &amp; number of securities, nominal value, total consideration.</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-blue-600">Certified Board Resolution</td>
+                      <td className="px-4 py-2.5 font-bold text-slate-900 dark:text-white">Always Mandatory</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Extract of board meeting approving allotment, specifying share entitlement, date, and signing authorization.</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-blue-600">Special Resolution Copy</td>
+                      <td className="px-4 py-2.5 text-slate-700 dark:text-slate-300">Private Placement &amp; Preferential Issues</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">General meeting resolution approved under Section 42 / 62(1)(c) with filed Form MGT-14 SRN reference.</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-blue-600">Registered Valuer Report</td>
+                      <td className="px-4 py-2.5 text-slate-700 dark:text-slate-300">Non-Cash Issues &amp; Preferential Allotments</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Fair value computation per Rule 11 of PAS Rules and Section 247 by an IBBI Registered Valuer.</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-blue-600">PAS-4 &amp; PAS-5 Records</td>
+                      <td className="px-4 py-2.5 text-slate-700 dark:text-slate-300">Private Placement</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Copy of private placement offer letter (PAS-4) and complete record of offerees (PAS-5).</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-blue-600">Contract for Non-Cash Allotment</td>
+                      <td className="px-4 py-2.5 text-slate-700 dark:text-slate-300">Consideration Other Than Cash</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Duly stamped agreement constituting the title of allottee to the shares / intellectual property / assets.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 5: Real ROC Adjudication Precedents */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>⚖️</span> Real 2026 ROC Adjudication Precedents on Form PAS-3
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Authoritative orders passed by Registrars of Companies highlighting strict enforcement of Section 42 timelines.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Adjudicating Authority</th>
+                      <th className="px-4 py-3 font-semibold">Factual Matrix</th>
+                      <th className="px-4 py-3 font-semibold">Days Delayed</th>
+                      <th className="px-4 py-3 font-semibold text-right">Adjudicated Penalty</th>
+                      <th className="px-4 py-3 font-semibold">Key Legal Precedent</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-blue-600">ROC Chennai (5 Mar 2026)</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">681 CCPS allotted via private placement; company assumed 30-day window instead of 15-day</td>
+                      <td className="px-4 py-3 font-mono font-bold text-amber-600">46 Days</td>
+                      <td className="px-4 py-3 font-mono font-bold text-red-600 text-right">₹1,38,000</td>
+                      <td className="px-4 py-3 text-xs text-slate-500">Closing funding round does NOT cure late filing; promoters &amp; directors personally penalised under Section 42(9).</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-blue-600">Tridib Industries (2026)</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Multiple private placement contraventions including belated PAS-3 and fund utilisation</td>
+                      <td className="px-4 py-3 font-mono font-bold text-amber-600">Multiple</td>
+                      <td className="px-4 py-3 font-mono font-bold text-red-600 text-right">~₹16,00,000</td>
+                      <td className="px-4 py-3 text-xs text-slate-500">Even after applying Section 446B 50% concession, cumulative Section 42 penalties totalled ₹16 Lakhs across directors.</td>
                     </tr>
                   </tbody>
                 </table>

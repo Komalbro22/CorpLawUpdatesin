@@ -20,6 +20,7 @@ import INC20AWorkspace from './INC20AWorkspace'
 import SPICePlusWorkspace from './SPICePlusWorkspace'
 import PAS6Workspace from './PAS6Workspace'
 import MSME1Workspace from './MSME1Workspace'
+import PAS3Workspace from './PAS3Workspace'
 
 interface ResultRow {
   component: string
@@ -92,6 +93,10 @@ export default function FormSpecificCalc({ form }: { form: MCAForm }) {
 
   if (form.slug === 'msme-1' || form.slug === 'msme1') {
     return <MSME1Workspace form={form} />
+  }
+
+  if (form.slug === 'pas-3' || form.slug === 'pas3') {
+    return <PAS3Workspace form={form} />
   }
 
   const isMgt7Family = form.slug === 'mgt-7' || form.slug === 'mgt-7a'

@@ -547,34 +547,71 @@ export const mcaForms: MCAForm[] = [
     slug: 'pas-3',
     formNumber: 'PAS-3',
     formName: 'Return of Allotment',
-    aliases: ['pas3', 'return of allotment', 'share allotment'],
+    aliases: [
+      'pas3',
+      'pas 3',
+      'return of allotment',
+      'share allotment',
+      'pas 3 due date',
+      'pas 3 late fees',
+      'pas 3 filing due date',
+      'form pas 3',
+      'private placement return of allotment'
+    ],
     category: 'event',
-    filedBy: ['Private Limited', 'Public Limited', 'OPC'],
-    dueDate: 'Within 30 days of allotment',
-    section: 'Section 39(4), Companies Act 2013',
+    filedBy: ['Private Limited', 'Public Limited (Unlisted & Listed)', 'One Person Company (OPC)', 'Section 8 Company', 'Producer Company'],
+    dueDate: '15 Days (Private Placement) / 30 Days (Other Allotments)',
+    section: 'Section 39(4) & Section 42(8), Companies Act 2013 read with Rules 12 & 14, Companies (PAS) Rules, 2014',
     penaltyType: 'multiplier',
-    penaltyRate: '2x to 12x normal fee',
+    penaltyRate: '2x to 12x Table B late fee + ₹1,000/day adjudication penalty',
     normalFeeStructure: 'capital_slab',
     baseFeeSlab: 'standard_company_slab',
-    concessionApplies: false,
-    metaTitle: 'Form PAS-3 Return of Allotment Fee Calculator | CorpLaw',
-    metaDescription: 'Calculate Form PAS-3 Return of Allotment normal fees, 15-day filing deadline, Table B late fee multipliers, and Section 42/39 penalty exposure.',
-    ogDescription: 'Calculate exact ROC fees and late filing penalties for Form PAS-3 (Return of Allotment of Shares).',
+    concessionApplies: true,
+    metaTitle: 'PAS-3 Return of Allotment: Due Date (15/30 Days), Fees & Late Fee Calculator (2026) | CorpLaw',
+    metaDescription: 'When is PAS-3 due? 15 days for private placement (Section 42), 30 days for other allotments (Section 39). Calculate normal fees, Table B late fees, and statutory penalty exposure.',
+    ogDescription: 'Calculate Form PAS-3 Return of Allotment normal fees, 15 vs 30-day statutory deadlines, Table B escalation multipliers, and Section 42/39 penalty exposure.',
     faqItems: [
-      { question: 'What is Form PAS-3?', answer: 'PAS-3 is a Return of Allotment filed with the ROC to declare that the company has allotted new shares to shareholders.' },
-      { question: 'When is PAS-3 due?', answer: 'It must be filed within 30 days from the date of the board meeting where the shares were formally allotted.' },
-      { question: 'What happens if PAS-3 is not filed?', answer: 'If not filed, the newly allotted shares will not reflect in the MCA master data, and heavy multiplier penalties will apply upon delayed filing.' },
-      { question: 'Is PAS-3 needed for rights issues?', answer: 'Yes, PAS-3 must be filed whenever shares are allotted, whether through a rights issue, private placement, or bonus issue.' },
-      { question: 'Does PAS-3 require a valuation report?', answer: 'Yes, if shares are allotted for consideration other than cash or through private placement, a registered valuer’s report must be attached.' }
+      {
+        question: 'When is Form PAS-3 due for filing with ROC?',
+        answer: 'The statutory deadline depends strictly on the mode of allotment: For Private Placements under Section 42, PAS-3 must be filed within strictly 15 days from the date of the board resolution allotting securities. For all other allotments (Rights issues, Bonus shares, ESOPs, Preferential issues under Section 62(1)(c), and Debenture conversions), it must be filed within 30 days from the date of allotment under Section 39(4).'
+      },
+      {
+        question: 'Is PAS-3 due date 15 days or 30 days?',
+        answer: 'Both deadlines exist under corporate law: 15 days applies to Private Placements pursuant to Section 42(8) read with Rule 14. 30 days applies to ordinary allotments (rights, bonus, sweat equity, ESOPs) under Section 39(4) read with Rule 12. Treating a private placement as a 30-day filing is a severe statutory default penalised by ROCs.'
+      },
+      {
+        question: 'What is the late filing fee on MCA V3 for Form PAS-3?',
+        answer: 'Form PAS-3 is an event-based document governed by Table B escalation multipliers of the Companies (Registration Offices and Fees) Rules: Delay up to 30 days: 2× normal fee; Delay 31 to 60 days: 4× normal fee; Delay 61 to 90 days: 6× normal fee; Delay 91 to 180 days: 10× normal fee; Delay beyond 180 days: 12× normal fee. Normal fees range from ₹200 to ₹600 based on authorised nominal share capital.'
+      },
+      {
+        question: 'What is the statutory adjudication penalty under Section 42(9) vs Section 39(5)?',
+        answer: 'Under Section 42(9) (Private Placement default), the company, its promoters, and its directors are individually liable to a penalty of ₹1,00,000 or ₹1,000 per day of continuing default, capped at a massive ₹25,00,000 each. Under Section 39(5) (Ordinary allotment default), the company and every officer in default face a penalty of ₹1,000 per day, capped at ₹1,00,000 each. Eligible Small Companies, OPCs, and DPIIT Startups receive a 50% concession under Section 446B (capped at ₹2 Lakh for company and ₹1 Lakh for individuals).'
+      },
+      {
+        question: 'Can a company utilise application money before filing Form PAS-3?',
+        answer: 'No! The proviso to Section 42(6) strictly prohibits companies from utilising subscription monies until Form PAS-3 has been submitted to the Registrar. Spending money before filing constitutes an independent breach under Section 42(10), punishable by a penalty up to the entire amount raised or ₹2 Crore (whichever is lower), plus mandatory refund of all subscription monies with 12% p.a. interest.'
+      },
+      {
+        question: 'What is the 60-day allotment window under Section 42(6)?',
+        answer: 'A company offering securities through private placement must allot securities within 60 days from the date of receiving application money. If unable to allot within 60 days, the company must refund all application money within 15 days from the expiry of the 60th day. Failing this, the company becomes liable to repay the money with 12% p.a. interest calculated from the 60th day onwards.'
+      },
+      {
+        question: 'Can multiple allotment dates be combined in a single Form PAS-3?',
+        answer: 'Yes, but subject to two strict MCA V3 portal conditions: (1) A maximum of 5 distinct allotment dates can be included in a single form; and (2) All allotment dates must fall within 30 days of the filing date. If any allotment date is older than 30 days from filing, a separate Form PAS-3 must be filed for each allotment date.'
+      },
+      {
+        question: 'What mandatory attachments must be uploaded with Form PAS-3?',
+        answer: 'Mandatory attachments include: (1) Complete list of allottees (separate list for each allotment date stating name, address, PAN, folio, securities allotted, and consideration); (2) Certified true copy of Board resolution approving allotment; (3) Certified true copy of Special resolution (for private placement or bonus shares); (4) Registered Valuer report (for consideration other than cash or Section 62(1)(c) preferential issues); (5) PAS-4 offer letter and PAS-5 record of offers; and (6) Copy of stamped contract/agreement for non-cash allotments.'
+      }
     ],
-    relatedForms: ['dir-12'],
-    filedTogetherWith: [],
+    relatedForms: ['pas-4', 'pas-5', 'mgt-14', 'sh-7', 'pas-6', 'dir-12'],
+    filedTogetherWith: ['MGT-14', 'SH-7'],
     contentSections: {
-      whatIsThisForm: '<p><strong>Form PAS-3</strong> (Return of Allotment) is a crucial filing that a company executes whenever it issues new shares to investors or promoters. It serves as the official declaration to the government documenting who bought the shares, how many were bought, and at what premium or discount, ensuring absolute transparency in corporate fundraising.</p>',
-      whoMustFile: '<p>Any company having a share capital that makes an allotment of shares or securities (via private placement, rights issue, or bonus issue) must file PAS-3.</p>',
-      dueDateExplained: '<p>The Return of Allotment must be filed <strong>within 30 days</strong> from the date the shares were formally allotted via a board resolution.</p>',
-      consequencesOfDelay: '<p>If PAS-3 is delayed, the MCA levies a multiplier-based penalty (up to 12x the normal fee). Furthermore, under Section 39, the company and its defaulting officers can face severe adjudication fines extending up to ₹1,000 per day or ₹1 Lakh, whichever is less, independently of the late filing fee.</p>',
-      workedExample: '<p><strong>Scenario:</strong> A Public Company with ₹2 Crore capital files PAS-3 exactly 70 days after the 30-day deadline.</p><ul><li>Normal Filing Fee: ₹600</li><li>Late Penalty (61 to 90 days delay = 6x fee): ₹3,600</li><li><strong>Total Liability:</strong> ₹600 + ₹3,600 = <strong>₹4,200</strong></li></ul>'
+      whatIsThisForm: '<p><strong>Form PAS-3</strong> (Return of Allotment) is the statutory declaration filed with the Registrar of Companies (ROC) pursuant to Section 39(4) and Section 42(8) of the Companies Act, 2013 whenever a company allots shares, debentures, preference shares, or other securities. It intimates the government regarding the identity of allottees, class of securities, nominal value, issue price, premium or discount, and consideration received (cash or non-cash).</p><p>Every corporate capital alteration triggers this filing—including founder seed allotments, venture capital rounds, rights issues, bonus issues, preferential allotments, sweat equity, ESOP exercises, and conversion of convertible instruments (CCPS/CCD).</p>',
+      whoMustFile: '<p>Every company having a share capital—including <strong>Private Limited Companies, Public Limited Companies (unlisted and listed), One Person Companies (OPC), Section 8 Non-Profit Companies, and Producer Companies</strong>—must file Form PAS-3 upon executing an allotment of securities.</p><p>The return must be digitally signed by an authorized Director (DSC) and certified by an independent Practicing Professional (PCS, PCA, or PCMA), except for One Person Companies and Small Companies which are exempt from mandatory professional pre-certification.</p>',
+      dueDateExplained: '<h3>The Two Statutory Clocks: 15 Days vs 30 Days</h3><p>Unlike standard annual returns which follow financial year deadlines, Form PAS-3 is an event-based statutory return governed by <strong>two distinct regulatory timelines</strong>:</p><ul><li><strong>1. Private Placement (Section 42(8) read with Rule 14):</strong> Must be filed within strictly <strong>15 calendar days</strong> from the date of the board resolution approving the allotment of securities.</li><li><strong>2. All Other Allotments (Section 39(4) read with Rule 12):</strong> Must be filed within <strong>30 calendar days</strong> from the date of the board resolution approving allotment (governing Rights Issues, Bonus Shares, Preferential Allotments, ESOP Exercises, and Loan/Debenture Conversions).</li></ul><p><strong>Anchor Date:</strong> The statutory clock begins ticking on the exact date on which the Board of Directors passed the allotment resolution (Day 0). The date on which application money was remitted does NOT determine the filing deadline.</p>',
+      consequencesOfDelay: '<h3>Triple Legal Exposure for Delayed PAS-3 Filings</h3><p>Failing to submit Form PAS-3 within the prescribed 15-day or 30-day window exposes the company and its management to three cumulative layers of legal and financial liability:</p><h4>1. Table B Additional Filing Fee Multipliers</h4><p>The MCA V3 portal automatically computes escalation multipliers based on authorized share capital and the delay past the event-specific due date:</p><ul><li><strong>Delay up to 30 days:</strong> 2× normal base fee</li><li><strong>Delay 31 to 60 days:</strong> 4× normal base fee</li><li><strong>Delay 61 to 90 days:</strong> 6× normal base fee</li><li><strong>Delay 91 to 180 days:</strong> 10× normal base fee</li><li><strong>Delay beyond 180 days:</strong> 12× normal base fee</li></ul><h4>2. Statutory Adjudication Penalties: Section 42(9) vs Section 39(5)</h4><p>Beyond portal late fees, ROC Adjudication Officers levy severe civil financial penalties under the Companies Act:</p><ul><li><strong>Private Placement Default (Section 42(9)):</strong> The company, its <strong>promoters, and its directors</strong> are individually liable to a continuing penalty of <strong>₹1,000 per day</strong>, capped at <strong>₹25,00,000 each</strong>!</li><li><strong>Ordinary Allotment Default (Section 39(5)):</strong> The company and every officer in default are liable to <strong>₹1,000 per day</strong>, capped at <strong>₹1,00,000 each</strong>.</li><li><strong>Section 446B Concession:</strong> Small Companies, OPCs, DPIIT-recognised Startups, and Producer Companies pay 50% reduced penalties (capped at ₹2,00,000 for the company and ₹1,00,000 per officer/promoter).</li></ul><h4>3. Section 42(6) Critical Fund Utilisation Violation</h4><p>Under the proviso to Section 42(6), subscription money kept in a separate scheduled bank account <strong>cannot be utilised until Form PAS-3 is filed</strong>. Using money prematurely triggers Section 42(10) with penalties up to the amount raised or ₹2 Crore, plus compulsory refund of all capital with 12% p.a. interest.</p>',
+      workedExample: '<h4>Scenario 1: Private Placement Allotment (The ROC Chennai Precedent)</h4><p>A corporate entity with ₹2 Crore capital allots shares via Private Placement on 1st January 2026. The 15-day statutory deadline expires on 16th January 2026. The company files on 3rd March 2026 (46 days delayed):</p><ul><li>Normal Filing Fee (₹1 Cr+ capital): ₹600</li><li>Table B Multiplier (31–60 days delay = 4×): ₹2,400</li><li><strong>Total MCA V3 Challan: ₹3,000</strong></li><li>Section 42(9) Company Penalty (46 × ₹1,000): ₹46,000</li><li>Section 42(9) Promoter/Director Penalty (2 individuals × ₹46,000): ₹92,000</li><li><strong>Total Statutory Adjudication Exposure: ₹1,38,000</strong></li></ul><h4>Scenario 2: Ordinary Rights Issue (Section 39)</h4><p>A company with ₹10 Lakh capital allots rights shares on 1st October 2026. The 30-day deadline expires on 31st October 2026. Company files on 15th December 2026 (45 days delayed):</p><ul><li>Normal Filing Fee (₹5L–₹25L capital): ₹400</li><li>Table B Multiplier (4×): ₹1,600</li><li><strong>Total MCA V3 Challan: ₹2,000</strong></li><li>Section 39(5) Company Penalty: ₹45,000 (Cap ₹1 Lakh)</li><li>Section 39(5) Officers Penalty (2 officers): ₹90,000</li><li><strong>Total Adjudication Liability: ₹1,35,000</strong></li></ul>'
     }
   },
   {
