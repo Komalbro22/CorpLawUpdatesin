@@ -696,6 +696,27 @@ export default function CompaniesFeePage() {
               Open Dedicated Workspace →
             </span>
           </Link>
+
+          <Link
+            href="/tools/fee-calculator/companies/pas-3"
+            className="p-5 rounded-xl border border-indigo-200 dark:border-indigo-900/60 bg-indigo-50/50 dark:bg-indigo-950/20 hover:border-indigo-500 transition-all group flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-indigo-600 text-white">PAS-3</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">Return of Allotment</span>
+              </div>
+              <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors mb-1">
+                Form PAS-3 Workspace
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Dual statutory clocks (15 days Sec 42 private placement vs 30 days Sec 39), Table B late fee multipliers (2× to 12×), Section 42(9) promoter personal liability (₹25L cap), Section 446B relief, and upstream fund utilization checks.
+              </p>
+            </div>
+            <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 mt-4 flex items-center gap-1">
+              Open Dedicated Workspace →
+            </span>
+          </Link>
         </div>
       </div>
 

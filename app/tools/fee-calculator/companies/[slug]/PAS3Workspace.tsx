@@ -185,7 +185,7 @@ export default function PAS3Workspace({ form }: { form: MCAForm }) {
 
   // Copy summary to clipboard
   const handleCopySummary = async () => {
-    const text = `--- FORM PAS-3 COMPLIANCE & PENALTY AUDIT ---
+    const text = `--- FORM PAS-3 COMPLIANCE & PENALTY ASSESSMENT ---
 Company: ${companyName || 'Not Specified'} (CIN: ${cin || 'N/A'})
 Allotment Mode: ${result.allotmentMode === 'private_placement' ? 'Private Placement (Sec 42 - 15 Days)' : 'Ordinary Allotment (Sec 39 - 30 Days)'}
 Board Allotment Date: ${result.allotmentDate}
@@ -211,7 +211,7 @@ Generated via CorpLawUpdates.in/tools/fee-calculator/companies/pas-3`
 
     try {
       await navigator.clipboard.writeText(text)
-      showToast('PAS-3 Audit summary copied to clipboard!', 'success')
+      showToast('PAS-3 Compliance summary copied to clipboard!', 'success')
     } catch {
       showToast('Failed to copy summary to clipboard', 'error')
     }
@@ -225,8 +225,8 @@ Generated via CorpLawUpdates.in/tools/fee-calculator/companies/pas-3`
         cin,
         professionalFirm
       })
-      doc.save(`PAS-3_Compliance_Audit_${cin || 'Company'}_${result.filingDate}.pdf`)
-      showToast('PAS-3 Compliance Audit PDF downloaded successfully!', 'success')
+      doc.save(`PAS-3_Compliance_Report_${cin || 'Company'}_${result.filingDate}.pdf`)
+      showToast('PAS-3 Compliance PDF downloaded successfully!', 'success')
     } catch (err) {
       console.error(err)
       showToast('Error generating PDF report', 'error')
@@ -769,7 +769,7 @@ Generated via CorpLawUpdates.in/tools/fee-calculator/companies/pas-3`
                   className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-navy dark:bg-blue-600 hover:bg-slate-800 dark:hover:bg-blue-700 text-white font-bold text-xs transition-colors shadow-sm"
                 >
                   <Download className="size-3.5" />
-                  <span>Audit PDF</span>
+                  <span>Download PDF</span>
                 </button>
                 <button
                   type="button"

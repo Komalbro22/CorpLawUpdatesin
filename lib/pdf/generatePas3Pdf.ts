@@ -28,9 +28,9 @@ export function generatePas3Pdf(
 
   // 1. Header
   const startY = renderDocumentHeader(doc, {
-    title: 'FORM PAS-3: RETURN OF ALLOTMENT AUDIT & FEE REPORT',
+    title: 'FORM PAS-3: RETURN OF ALLOTMENT & FEE REPORT',
     subtitle: 'Sections 39, 42 & 446B, Companies Act, 2013 read with PAS Rules 2014 | MCA V3 Adjudication Analysis',
-    dateLabel: 'Audit Date'
+    dateLabel: 'Assessment Date'
   })
 
   let currentY = startY + 4
@@ -53,7 +53,7 @@ export function generatePas3Pdf(
   const metaRows = [
     [
       { content: 'Company / Entity', styles: { fontStyle: 'bold' as const, fillColor: PDF_PALETTE.lightGray } },
-      extraMeta?.companyName || 'Corporate Entity (Allotment Audit)',
+      extraMeta?.companyName || 'Corporate Entity',
       { content: 'CIN / Corporate ID', styles: { fontStyle: 'bold' as const, fillColor: PDF_PALETTE.lightGray } },
       extraMeta?.cin || 'Not Specified'
     ],
@@ -248,7 +248,7 @@ export function generatePas3Pdf(
   renderSafeDisclaimer(doc, disclaimerText, currentY, { fontSize: 6.8 })
 
   // 7. Render Professional Page Footers
-  renderPageFooters(doc, 'CorpLawUpdates.in • PAS-3 Statutory Audit Report • Confidential')
+  renderPageFooters(doc, 'CorpLawUpdates.in • PAS-3 Statutory Compliance Report • Confidential')
 
   return doc
 }
