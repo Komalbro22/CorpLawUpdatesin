@@ -5,6 +5,9 @@ import {
   buildBankCoveringLetterDocx,
   buildChg1ExtractDocx,
   buildBankLoanBoardResolutionPdf,
+  buildBankLoanSpecialResolutionPdf,
+  buildBankCoveringLetterPdf,
+  buildChg1ExtractPdf,
   DEFAULT_SAMPLE_BANK_LOAN_DATA,
 } from '@/lib/doc-generator/bank-loan-generator'
 
@@ -69,6 +72,19 @@ describe('Bank Loan Generator & Statutory Borrowing Limit Engine', () => {
     expect(buffer.length).toBeGreaterThan(1000)
   })
 
+  test('buildBankLoanBoardResolutionDocx handles unsecured loan correctly', async () => {
+    const buffer = await buildBankLoanBoardResolutionDocx({
+      facilityType: 'unsecured_loan',
+      companyName: 'UNSECURED BORROWER PRIVATE LIMITED',
+      loanAmount: 10000000,
+      bankName: 'Kotak Mahindra Bank',
+      hasChg1Filing: false,
+    })
+
+    expect(buffer).toBeDefined()
+    expect(buffer.length).toBeGreaterThan(1000)
+  })
+
   test('buildBankLoanSpecialResolutionDocx generates non-empty Word buffer', async () => {
     const buffer = await buildBankLoanSpecialResolutionDocx({
       companyName: 'TEST PUBLIC LIMITED',
@@ -100,7 +116,7 @@ describe('Bank Loan Generator & Statutory Borrowing Limit Engine', () => {
     expect(buffer.length).toBeGreaterThan(1000)
   })
 
-  test('buildBankLoanBoardResolutionPdf generates non-empty PDF byte array', async () => {
+  test('buildBankLoanBoardResolutionPdf generates authentic letterhead PDF byte array', async () => {
     const pdfBytes = await buildBankLoanBoardResolutionPdf({
       companyName: 'TEST ENTERPRISES PRIVATE LIMITED',
       loanAmount: 10000000,
@@ -108,6 +124,51 @@ describe('Bank Loan Generator & Statutory Borrowing Limit Engine', () => {
     })
 
     expect(pdfBytes).toBeDefined()
-    expect(pdfBytes.length).toBeGreaterThan(500)
+    expect(pdfBytes.length).toBeGreaterThan(1000)
+  })
+
+  test('buildBankLoanBoardResolutionPdf generates clean unsecured loan PDF', async () => {
+    const pdfBytes = await buildBankLoanBoardResolutionPdf({
+      facilityType: 'unsecured_loan',
+      securityType: 'unsecured',
+      companyName: 'CLEAN LOAN PRIVATE LIMITED',
+      loanAmount: 5000000,
+      bankName: 'IndusInd Bank',
+      hasChg1Filing: false,
+    })
+
+    expect(pdfBytes).toBeDefined()
+    expect(pdfBytes.length).toBeGreaterThan(1000)
+  })
+
+  test('buildBankLoanSpecialResolutionPdf generates valid PDF bytes', async () => {
+    const pdfBytes = await buildBankLoanSpecialResolutionPdf({
+      companyName: 'MEGA PUBLIC LIMITED',
+      companyType: 'public',
+      loanAmount: 80000000,
+    })
+
+    expect(pdfBytes).toBeDefined()
+    expect(pdfBytes.length).toBeGreaterThan(1000)
+  })
+
+  test('buildBankCoveringLetterPdf generates valid PDF bytes', async () => {
+    const pdfBytes = await buildBankCoveringLetterPdf({
+      companyName: 'TEST ENTERPRISES PRIVATE LIMITED',
+      bankName: 'State Bank of India',
+    })
+
+    expect(pdfBytes).toBeDefined()
+    expect(pdfBytes.length).toBeGreaterThan(1000)
+  })
+
+  test('buildChg1ExtractPdf generates valid PDF bytes', async () => {
+    const pdfBytes = await buildChg1ExtractPdf({
+      companyName: 'TEST ENTERPRISES PRIVATE LIMITED',
+      bankName: 'Bank of Baroda',
+    })
+
+    expect(pdfBytes).toBeDefined()
+    expect(pdfBytes.length).toBeGreaterThan(1000)
   })
 })

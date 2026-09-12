@@ -198,16 +198,26 @@ export default function BankLoanClient() {
       const companySlug = (formData.companyName || 'Company').replace(/[^a-zA-Z0-9]/g, '_')
       const facilitySlug = formData.facilityType || 'term_loan'
 
-      if (type === 'bank-letter') {
-        a.download = `Bank_Covering_Letter_${companySlug}.docx`
-      } else if (type === 'special-resolution') {
-        a.download = `Special_Resolution_Section_180_${companySlug}.docx`
-      } else if (type === 'chg1-extract') {
-        a.download = `CHG1_Resolution_Extract_${companySlug}.docx`
-      } else if (format === 'docx') {
-        a.download = `Board_Resolution_Bank_Loan_${facilitySlug}_${companySlug}.docx`
+      if (format === 'pdf') {
+        if (type === 'bank-letter') {
+          a.download = `Bank_Covering_Letter_${companySlug}.pdf`
+        } else if (type === 'special-resolution') {
+          a.download = `Special_Resolution_Section_180_${companySlug}.pdf`
+        } else if (type === 'chg1-extract') {
+          a.download = `CHG1_Resolution_Extract_${companySlug}.pdf`
+        } else {
+          a.download = `Board_Resolution_Bank_Loan_${facilitySlug}_${companySlug}.pdf`
+        }
       } else {
-        a.download = `Board_Resolution_Bank_Loan_${facilitySlug}_${companySlug}.pdf`
+        if (type === 'bank-letter') {
+          a.download = `Bank_Covering_Letter_${companySlug}.docx`
+        } else if (type === 'special-resolution') {
+          a.download = `Special_Resolution_Section_180_${companySlug}.docx`
+        } else if (type === 'chg1-extract') {
+          a.download = `CHG1_Resolution_Extract_${companySlug}.docx`
+        } else {
+          a.download = `Board_Resolution_Bank_Loan_${facilitySlug}_${companySlug}.docx`
+        }
       }
 
       document.body.appendChild(a)
@@ -236,8 +246,13 @@ export default function BankLoanClient() {
 
   // Resolution text for preview & clipboard
   const boardResolutionText = useMemo(() => {
+    const comp = (formData.companyName || 'Company').toUpperCase()
     const amtFormatted = formatInrCurrency(formData.loanAmount)
-    const comp = formData.companyName.toUpperCase()
+    const isUnsecured = formData.facilityType === 'unsecured_loan' || formData.securityType === 'unsecured'
+    const securityClauseText = isUnsecured
+      ? `RESOLVED FURTHER THAT the credit facility availed from ${formData.bankName} shall be clean and unsecured, without creating any charge, hypothecation, mortgage, lien, or encumbrance on any of the movable or immovable properties or assets of the Company.`
+      : `RESOLVED FURTHER THAT for securing the due repayment of the principal amount together with interest, charges, and costs, the consent of the Board be and is hereby accorded for the creation of security by way of ${formData.securityDescription} in favour of ${formData.bankName}${formData.isPariPassu ? ` on a pari-passu basis with ${formData.pariPassuLenders || 'existing lenders'}` : ' on an exclusive first charge basis'}.`
+
     return `CERTIFIED TRUE COPY OF THE RESOLUTION PASSED AT THE MEETING OF THE BOARD OF DIRECTORS OF ${comp} HELD ON ${formData.meetingDate} AT ${formData.meetingTime} AT ${formData.meetingVenue.toUpperCase()}
 
 PRESENT:
@@ -256,12 +271,12 @@ RESOLVED FURTHER THAT the Company accepts the commercial terms governing the fac
 • Rate of Interest: ${formData.interestRate}
 • Tenure & Repayment: ${formData.tenure}; Repayable ${formData.repaymentTerms}
 
-RESOLVED FURTHER THAT for securing the due repayment of the principal amount together with interest, charges, and costs, the consent of the Board be and is hereby accorded for the creation of security by way of ${formData.securityDescription} in favour of ${formData.bankName}${formData.isPariPassu ? ` on a pari-passu basis with ${formData.pariPassuLenders || 'existing lenders'}` : ' on an exclusive first charge basis'}.
+${securityClauseText}
 
 RESOLVED FURTHER THAT ${formData.director1Name}, Director (DIN: ${formData.director1Din}) or ${formData.director2Name}, Director (DIN: ${formData.director2Din}) be and is/are hereby authorized on behalf of the Company to negotiate, finalize, and sign the duplicate copy of the Sanction Letter, Loan Agreement, Hypothecation Deed, Mortgage Deeds, Demand Promissory Notes, Guarantees, and all such other agreements and declarations as may be required by ${formData.bankName}.
 
 ${
-  formData.hasChg1Filing
+  formData.hasChg1Filing && !isUnsecured
     ? `RESOLVED FURTHER THAT pursuant to Section 77 of the Companies Act, 2013, the Directors or Company Secretary of the Company be and is hereby authorized to file statutory e-Form CHG-1 with the Registrar of Companies (ROC) within 30 days of the creation of the charge, sign digitally, and obtain the Certificate of Registration of Charge (Form CHG-2).\n\n`
     : ''
 }RESOLVED FURTHER THAT a certified true copy of this resolution signed by any Director or Company Secretary of the Company be furnished to ${formData.bankName} and that the Bank be requested to act upon the same."
@@ -914,10 +929,21 @@ Place: New Delhi`
                   </span>
                 </button>
 
-                {activeTab === 'resolution' && (
+                {activeTab !== 'checklist' && (
                   <button
                     type="button"
-                    onClick={() => handleDownload('pdf', 'resolution')}
+                    onClick={() =>
+                      handleDownload(
+                        'pdf',
+                        activeTab === 'special-resolution'
+                          ? 'special-resolution'
+                          : activeTab === 'bank-letter'
+                          ? 'bank-letter'
+                          : activeTab === 'chg1-extract'
+                          ? 'chg1-extract'
+                          : 'resolution'
+                      )
+                    }
                     disabled={!!isDownloading}
                     className="px-3.5 py-2 rounded-xl bg-navy hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white text-xs font-bold transition-colors flex items-center gap-1.5 border border-slate-700 shadow-sm"
                   >
@@ -1014,17 +1040,24 @@ Place: New Delhi`
                     </p>
                   </div>
 
-                  <p className="text-justify text-xs text-slate-800 dark:text-slate-200">
-                    <strong className="font-bold">RESOLVED FURTHER THAT </strong>
-                    for securing the due repayment of the credit facility, consent of the Board be and is hereby accorded for the creation of security by way of {formData.securityDescription} in favour of {formData.bankName}{formData.isPariPassu ? ` on a pari-passu basis with other lenders` : ' on an exclusive first charge basis'}.
-                  </p>
+                  {formData.facilityType === 'unsecured_loan' || formData.securityType === 'unsecured' ? (
+                    <p className="text-justify text-xs text-slate-800 dark:text-slate-200">
+                      <strong className="font-bold">RESOLVED FURTHER THAT </strong>
+                      the credit facility availed from {formData.bankName} shall be clean and unsecured, without creating any charge, hypothecation, mortgage, lien, or encumbrance on any of the movable or immovable properties or assets of the Company.
+                    </p>
+                  ) : (
+                    <p className="text-justify text-xs text-slate-800 dark:text-slate-200">
+                      <strong className="font-bold">RESOLVED FURTHER THAT </strong>
+                      for securing the due repayment of the credit facility, consent of the Board be and is hereby accorded for the creation of security by way of {formData.securityDescription} in favour of {formData.bankName}{formData.isPariPassu ? ` on a pari-passu basis with other lenders` : ' on an exclusive first charge basis'}.
+                    </p>
+                  )}
 
                   <p className="text-justify text-xs text-slate-800 dark:text-slate-200">
                     <strong className="font-bold">RESOLVED FURTHER THAT </strong>
                     {formData.director1Name}, Director (DIN: {formData.director1Din}) or {formData.director2Name}, Director (DIN: {formData.director2Din}) be and is/are hereby authorized on behalf of the Company to finalize, sign, and execute the duplicate Sanction Letter, Loan Agreement, Hypothecation Deed, Promissory Notes, and all related documentation.
                   </p>
 
-                  {formData.hasChg1Filing && (
+                  {formData.hasChg1Filing && formData.facilityType !== 'unsecured_loan' && (
                     <p className="text-justify text-xs text-slate-800 dark:text-slate-200">
                       <strong className="font-bold">RESOLVED FURTHER THAT </strong>
                       pursuant to Section 77 of the Companies Act, 2013, the Directors or Company Secretary of the Company be authorized to file e-Form CHG-1 with the Registrar of Companies within 30 days of charge creation and obtain the Certificate of Registration of Charge (CHG-2).
