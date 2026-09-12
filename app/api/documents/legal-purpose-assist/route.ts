@@ -6,6 +6,7 @@ export type PurposeAssistMode =
   | 'bank_loan_purpose'
   | 'property_description'
   | 'registered_office_rationale'
+  | 'partnership_business_objects'
   | 'generic_purpose'
 
 async function runWithKeyRotation<T>(fn: (apiKey: string) => Promise<T>): Promise<T> {
@@ -101,6 +102,20 @@ Rules:
 {
   "polishedText": "string (formal corporate rationale statement)",
   "primaryFactor": "Lease Expiry" | "Business Expansion" | "Cost Optimization" | "Operational Synergy" | "Administrative Convenience"
+}`
+    } else if (mode === 'partnership_business_objects') {
+      systemPrompt = `You are a Senior Indian Corporate and Partnership Law Specialist (Indian Partnership Act, 1932).
+The user will provide an informal description of the business activities or commercial trade they plan to conduct through their partnership firm.
+Your task is to refine and expand this into formal, bank-approved, and tax-compliant "Nature of Business & Primary Objects" clauses for a Partnership Deed.
+
+Rules:
+1. Formulate 2 to 3 structured paragraphs covering the primary business activity, ancillary trade/services, and future expansion scope.
+2. Ensure the drafting is commercially comprehensive and broad enough to satisfy banking KYC and tax authorities (e.g. GST, Section 44AB).
+3. Return a JSON object with this exact schema:
+{
+  "polishedText": "string (comprehensive formal partnership business objects clause)",
+  "industryCategory": "Trading & Retail" | "Professional Services" | "Manufacturing & Industrial" | "Technology & E-Commerce" | "Services & Contracting" | "General Commercial",
+  "shortSummary": "string (3-5 words summarizing the business)"
 }`
     } else {
       systemPrompt = `You are a Senior Indian Corporate Lawyer.

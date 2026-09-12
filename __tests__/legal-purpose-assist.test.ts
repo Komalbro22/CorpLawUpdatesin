@@ -155,4 +155,46 @@ describe('Legal Purpose Assist API Route Suite', () => {
     expect(json.data.polishedText).toBe('relocating to commercial premises for business scaling')
     expect(json.data.primaryFactor).toBe('Business Expansion')
   })
+
+  it('successfully polishes partnership business objects using Gemini response', async () => {
+    const mockGeminiResponse = {
+      candidates: [
+        {
+          content: {
+            parts: [
+              {
+                text: JSON.stringify({
+                  polishedText:
+                    'To carry on the business of wholesale and retail trading, import, export, and distribution of industrial automation components, solar photovoltaic modules, power inverters, and allied electrical equipment.',
+                  industryCategory: 'Trading & Retail',
+                  shortSummary: 'Solar & Industrial Automation Trading',
+                }),
+              },
+            ],
+          },
+        },
+      ],
+    }
+
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => mockGeminiResponse,
+    } as Response)
+
+    const req = new Request('http://localhost:3000/api/documents/legal-purpose-assist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        mode: 'partnership_business_objects',
+        rawText: 'trading and selling solar panels and automation inverters',
+      }),
+    })
+
+    const res = await POST(req)
+    expect(res.status).toBe(200)
+    const json = await res.json()
+    expect(json.success).toBe(true)
+    expect(json.data.polishedText).toContain('wholesale and retail trading')
+    expect(json.data.industryCategory).toBe('Trading & Retail')
+  })
 })
