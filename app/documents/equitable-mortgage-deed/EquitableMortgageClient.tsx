@@ -22,6 +22,7 @@ import {
   User,
   Users,
   ExternalLink,
+  Sparkles,
 } from 'lucide-react'
 import {
   ModtFormData,
@@ -134,6 +135,57 @@ export default function EquitableMortgageClient() {
   const [isDownloading, setIsDownloading] = useState<string | null>(null)
   const [copySuccess, setCopySuccess] = useState(false)
   const [selectedState, setSelectedState] = useState<string>('maharashtra')
+
+  // Gemini AI Legal Property Assistant
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiError, setAiError] = useState<string | null>(null)
+  const [aiSuccessBadge, setAiSuccessBadge] = useState<string | null>(null)
+  const [showAiPrompt, setShowAiPrompt] = useState(false)
+  const [customPrompt, setCustomPrompt] = useState('')
+
+  const handlePolishProperty = async (promptToUse?: string) => {
+    const textToPolish = (promptToUse || customPrompt || formData.propertyDescription).trim()
+    if (!textToPolish) {
+      setAiError('Please enter a brief description of the property or pick a quick suggestion below.')
+      return
+    }
+    setAiLoading(true)
+    setAiError(null)
+    try {
+      const res = await fetch('/api/documents/legal-purpose-assist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mode: 'property_description',
+          rawText: textToPolish,
+          context: {
+            city: formData.notifiedTown,
+            state: formData.state,
+          },
+        }),
+      })
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}))
+        throw new Error(errJson.error || 'Failed to polish property description')
+      }
+      const data = await res.json()
+      if (data?.data?.polishedText) {
+        setFormData(prev => ({ ...prev, propertyDescription: data.data.polishedText }))
+        setAiSuccessBadge(
+          data.data.propertyType
+            ? `Conveyancing Language Applied (${data.data.propertyType})`
+            : 'Conveyancing Language Applied'
+        )
+        setShowAiPrompt(false)
+        setCustomPrompt('')
+        setTimeout(() => setAiSuccessBadge(null), 6000)
+      }
+    } catch (err: any) {
+      setAiError(err.message || 'AI assist encountered an error. Please try again.')
+    } finally {
+      setAiLoading(false)
+    }
+  }
 
   const isCorp = formData.mortgagorType === 'corporate'
 
@@ -740,10 +792,80 @@ export default function EquitableMortgageClient() {
               Second Schedule: Property & Boundaries
             </h4>
 
-            <div>
-              <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-                Property Description
-              </label>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400">
+                  Property Description (Second Schedule)
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setShowAiPrompt(!showAiPrompt)}
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-100 dark:hover:bg-indigo-900 transition"
+                >
+                  <Sparkles className="size-3 text-indigo-600 dark:text-indigo-400" />
+                  <span>{showAiPrompt ? 'Close AI' : '✨ AI Polish with Gemini'}</span>
+                </button>
+              </div>
+
+              {showAiPrompt && (
+                <div className="p-3 bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800/80 rounded-xl space-y-2 text-xs">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-indigo-900 dark:text-indigo-200">
+                      Describe property in plain English:
+                    </span>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400">Gemini 2.5 Flash</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="e.g. industrial shed on plot 42 okhla phase 3 with boundary wall & power"
+                      value={customPrompt}
+                      onChange={(e) => setCustomPrompt(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handlePolishProperty()}
+                      className="flex-1 px-3 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handlePolishProperty()}
+                      disabled={aiLoading}
+                      className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shrink-0 disabled:opacity-50 transition"
+                    >
+                      {aiLoading ? 'Refining...' : 'Refine'}
+                    </button>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                    <span className="text-[10px] font-semibold text-slate-500">Quick Presets:</span>
+                    {[
+                      'Industrial Land & Built-up Factory Shed',
+                      'Commercial Office Unit in Tech Park',
+                      'Residential Apartment with Undivided Share',
+                      'Freehold Commercial Showroom Building',
+                      'Industrial Warehouse with RCC Structure',
+                    ].map((preset, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => handlePolishProperty(preset)}
+                        disabled={aiLoading}
+                        className="px-2 py-0.5 rounded text-[10px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-400 text-slate-700 dark:text-slate-300 transition"
+                      >
+                        {preset}
+                      </button>
+                    ))}
+                  </div>
+
+                  {aiError && <p className="text-[11px] text-rose-600 dark:text-rose-400">{aiError}</p>}
+                </div>
+              )}
+
+              {aiSuccessBadge && (
+                <div className="flex items-center gap-1.5 text-[11px] text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded-md border border-emerald-200 dark:border-emerald-800">
+                  <CheckCircle2 className="size-3 text-emerald-600" />
+                  <span>{aiSuccessBadge}</span>
+                </div>
+              )}
+
               <textarea
                 rows={2}
                 value={formData.propertyDescription}

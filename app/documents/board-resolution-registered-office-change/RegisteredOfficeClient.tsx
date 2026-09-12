@@ -18,6 +18,7 @@ import {
   Scale,
   Newspaper,
   BookOpen,
+  CheckCircle2,
 } from 'lucide-react'
 import {
   RegisteredOfficeFormData,
@@ -94,6 +95,58 @@ export default function RegisteredOfficeClient() {
   >('preview')
   const [isDownloading, setIsDownloading] = useState<string | null>(null)
   const [copiedType, setCopiedType] = useState<string | null>(null)
+
+  // Gemini AI Shifting Rationale Assistant
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiError, setAiError] = useState<string | null>(null)
+  const [aiSuccessBadge, setAiSuccessBadge] = useState<string | null>(null)
+  const [showAiPrompt, setShowAiPrompt] = useState(false)
+  const [customPrompt, setCustomPrompt] = useState('')
+
+  const handlePolishRationale = async (promptToUse?: string) => {
+    const textToPolish = (promptToUse || customPrompt || formData.shiftingRationale || '').trim()
+    if (!textToPolish) {
+      setAiError('Please enter a brief reason for shifting or pick a quick suggestion below.')
+      return
+    }
+    setAiLoading(true)
+    setAiError(null)
+    try {
+      const res = await fetch('/api/documents/legal-purpose-assist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mode: 'registered_office_rationale',
+          rawText: textToPolish,
+          context: {
+            oldAddress: formData.oldAddress,
+            newAddress: formData.newAddress,
+            scope: currentScope,
+          },
+        }),
+      })
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}))
+        throw new Error(errJson.error || 'Failed to polish rationale')
+      }
+      const data = await res.json()
+      if (data?.data?.polishedText) {
+        setFormData((prev) => ({ ...prev, shiftingRationale: data.data.polishedText }))
+        setAiSuccessBadge(
+          data.data.primaryFactor
+            ? `Corporate Rationale Applied (${data.data.primaryFactor})`
+            : 'Corporate Rationale Applied'
+        )
+        setShowAiPrompt(false)
+        setCustomPrompt('')
+        setTimeout(() => setAiSuccessBadge(null), 6000)
+      }
+    } catch (err: any) {
+      setAiError(err.message || 'AI assist encountered an error. Please try again.')
+    } finally {
+      setAiLoading(false)
+    }
+  }
 
   const currentScope = formData.shiftingScope || 'same_city'
 
@@ -892,7 +945,11 @@ ${dir}, Director (DIN: ${din})`
                   EXPLANATORY STATEMENT PURSUANT TO SECTION 102 OF THE COMPANIES ACT, 2013
                 </p>
                 <p className="text-justify">
-                  The Board of Directors evaluated the commercial rationale and operational expansion of the Company. Shifting to {formData.newAddress || 'the new premises'} offers state-of-the-art infrastructure and closer proximity to key markets.
+                  {formData.shiftingRationale
+                    ? formData.shiftingRationale
+                    : `The Board of Directors evaluated the commercial rationale and operational expansion of the Company. Shifting to ${
+                        formData.newAddress || 'the new premises'
+                      } offers state-of-the-art infrastructure and closer proximity to key markets.`}
                 </p>
                 <p className="text-justify">
                   None of the Directors, KMPs, or their relatives are concerned or interested in the resolution except to the extent of their shareholding. The Board recommends passing the Special Resolution unanimously.
@@ -1129,6 +1186,88 @@ ${dir}, Director (DIN: ${din})`
                       onChange={(e) => handleInputChange('newAddress', e.target.value)}
                       placeholder="Full new registered office address with PIN code"
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                    />
+                  </div>
+
+                  <div className="md:col-span-2 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                        Commercial Rationale & Business Justification (Sec 102 Explanatory Statement)
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => setShowAiPrompt(!showAiPrompt)}
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-100 dark:hover:bg-indigo-900 transition"
+                      >
+                        <Sparkles className="size-3 text-indigo-600 dark:text-indigo-400" />
+                        <span>{showAiPrompt ? 'Close AI' : '✨ AI Polish with Gemini'}</span>
+                      </button>
+                    </div>
+
+                    {showAiPrompt && (
+                      <div className="p-3 bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800/80 rounded-xl space-y-2 text-xs">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-indigo-900 dark:text-indigo-200">
+                            Describe shifting reason in plain English:
+                          </span>
+                          <span className="text-[10px] text-slate-500 dark:text-slate-400">Gemini 2.5 Flash</span>
+                        </div>
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            placeholder="e.g. current office lease expired, moving to Cyber City Gurgaon for bigger team"
+                            value={customPrompt}
+                            onChange={(e) => setCustomPrompt(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handlePolishRationale()}
+                            className="flex-1 px-3 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => handlePolishRationale()}
+                            disabled={aiLoading}
+                            className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shrink-0 disabled:opacity-50 transition"
+                          >
+                            {aiLoading ? 'Refining...' : 'Refine'}
+                          </button>
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                          <span className="text-[10px] font-semibold text-slate-500">Quick Presets:</span>
+                          {[
+                            'Lease Expiry & Relocation to Better Premises',
+                            'Business Expansion & Growing Workforce',
+                            'Strategic Proximity to Key Corporate Clients',
+                            'Cost Optimization & Lower Commercial Overheads',
+                          ].map((preset, idx) => (
+                            <button
+                              key={idx}
+                              type="button"
+                              onClick={() => handlePolishRationale(preset)}
+                              disabled={aiLoading}
+                              className="px-2 py-0.5 rounded text-[10px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-400 text-slate-700 dark:text-slate-300 transition"
+                            >
+                              {preset}
+                            </button>
+                          ))}
+                        </div>
+
+                        {aiError && <p className="text-[11px] text-rose-600 dark:text-rose-400">{aiError}</p>}
+                      </div>
+                    )}
+
+                    {aiSuccessBadge && (
+                      <div className="flex items-center gap-1.5 text-[11px] text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded-md border border-emerald-200 dark:border-emerald-800">
+                        <CheckCircle2 className="size-3 text-emerald-600" />
+                        <span>{aiSuccessBadge}</span>
+                      </div>
+                    )}
+
+                    <textarea
+                      rows={2}
+                      value={formData.shiftingRationale || ''}
+                      onChange={(e) => handleInputChange('shiftingRationale', e.target.value)}
+                      placeholder="Commercial rationale for shifting (used in EGM Explanatory Statement under Section 102)"
+                      className="w-full px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
                     />
                   </div>
                 </div>

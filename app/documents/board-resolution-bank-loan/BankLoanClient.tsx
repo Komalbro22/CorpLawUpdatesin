@@ -129,6 +129,58 @@ export default function BankLoanClient() {
   const [cinLoading, setCinLoading] = useState(false)
   const [cinError, setCinError] = useState<string | null>(null)
 
+  // Gemini AI Legal Purpose Assistant
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiError, setAiError] = useState<string | null>(null)
+  const [aiSuccessBadge, setAiSuccessBadge] = useState<string | null>(null)
+  const [showAiPrompt, setShowAiPrompt] = useState(false)
+  const [customPrompt, setCustomPrompt] = useState('')
+
+  const handlePolishPurpose = async (promptToUse?: string) => {
+    const textToPolish = (promptToUse || customPrompt || formData.loanPurpose).trim()
+    if (!textToPolish) {
+      setAiError('Please enter a brief description of the purpose or pick a quick suggestion below.')
+      return
+    }
+    setAiLoading(true)
+    setAiError(null)
+    try {
+      const res = await fetch('/api/documents/legal-purpose-assist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mode: 'bank_loan_purpose',
+          rawText: textToPolish,
+          context: {
+            bankName: formData.bankName,
+            facilityType: formData.facilityType,
+            loanAmount: formData.loanAmount,
+          },
+        }),
+      })
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}))
+        throw new Error(errJson.error || 'Failed to polish purpose')
+      }
+      const data = await res.json()
+      if (data?.data?.polishedText) {
+        setFormData((prev) => ({ ...prev, loanPurpose: data.data.polishedText }))
+        setAiSuccessBadge(
+          data.data.category
+            ? `Legal Phrasing Applied (${data.data.category})`
+            : 'Legal Phrasing Applied'
+        )
+        setShowAiPrompt(false)
+        setCustomPrompt('')
+        setTimeout(() => setAiSuccessBadge(null), 6000)
+      }
+    } catch (err: any) {
+      setAiError(err.message || 'AI assist encountered an error. Please try again.')
+    } finally {
+      setAiLoading(false)
+    }
+  }
+
   const limits = useMemo(() => calculateBorrowingLimit(formData), [formData])
 
   const handleInputChange = (field: keyof BankLoanFormData, value: any) => {
@@ -603,15 +655,85 @@ Place: New Delhi`
                 </div>
               </div>
 
-              <div>
-                <label className="block font-semibold text-slate-600 dark:text-slate-400 mb-1">
-                  Loan Purpose / Use of Proceeds
-                </label>
-                <input
-                  type="text"
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="block font-semibold text-slate-600 dark:text-slate-400 text-xs">
+                    Loan Purpose / Use of Proceeds
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setShowAiPrompt(!showAiPrompt)}
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-100 dark:hover:bg-indigo-900 transition"
+                  >
+                    <Sparkles className="size-3 text-indigo-600 dark:text-indigo-400" />
+                    <span>{showAiPrompt ? 'Close AI' : '✨ AI Polish with Gemini'}</span>
+                  </button>
+                </div>
+
+                {showAiPrompt && (
+                  <div className="p-3 bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800/80 rounded-xl space-y-2 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-indigo-900 dark:text-indigo-200">
+                        Describe loan purpose in plain English:
+                      </span>
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400">Gemini 2.5 Flash</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="e.g. buying German CNC machines & warehouse expansion in Pune"
+                        value={customPrompt}
+                        onChange={(e) => setCustomPrompt(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handlePolishPurpose()}
+                        className="flex-1 px-3 py-1.5 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handlePolishPurpose()}
+                        disabled={aiLoading}
+                        className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shrink-0 disabled:opacity-50 transition"
+                      >
+                        {aiLoading ? 'Refining...' : 'Refine'}
+                      </button>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                      <span className="text-[10px] font-semibold text-slate-500">Quick Presets:</span>
+                      {[
+                        'Working Capital & Creditor Payments',
+                        'Machinery & Industrial Capex',
+                        'Factory & Warehouse Expansion',
+                        'Refinancing Existing High-Cost Debt',
+                        'Solar PV & Clean Energy Capex',
+                      ].map((preset, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => handlePolishPurpose(preset)}
+                          disabled={aiLoading}
+                          className="px-2 py-0.5 rounded text-[10px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-400 text-slate-700 dark:text-slate-300 transition"
+                        >
+                          {preset}
+                        </button>
+                      ))}
+                    </div>
+
+                    {aiError && <p className="text-[11px] text-rose-600 dark:text-rose-400">{aiError}</p>}
+                  </div>
+                )}
+
+                {aiSuccessBadge && (
+                  <div className="flex items-center gap-1.5 text-[11px] text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded-md border border-emerald-200 dark:border-emerald-800">
+                    <CheckCircle2 className="size-3 text-emerald-600" />
+                    <span>{aiSuccessBadge}</span>
+                  </div>
+                )}
+
+                <textarea
+                  rows={2}
                   value={formData.loanPurpose}
                   onChange={(e) => handleInputChange('loanPurpose', e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs sm:text-sm"
                 />
               </div>
             </div>

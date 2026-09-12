@@ -36,6 +36,7 @@ export interface RegisteredOfficeFormData {
   companySecretaryName?: string
   csMembershipNo?: string
   certifiedDate?: string
+  shiftingRationale?: string
 
   // EGM & Special Resolution fields
   egmDate?: string
