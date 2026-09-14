@@ -7,6 +7,7 @@ import { supabaseAdmin } from '@/lib/supabase-server'
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { slugify, calculateReadingTime, extractFirstImage } from '@/lib/utils'
 import { submitArticleToIndexNow } from '@/lib/indexnow'
+import { submitArticleToGoogleIndexing } from '@/lib/google-indexing'
 import { articleSchema } from '@/lib/admin-schemas'
 
 export async function GET(request: NextRequest) {
@@ -156,6 +157,9 @@ export async function POST(request: NextRequest) {
         if (createdArticle?.slug && createdArticle?.published_at) {
             submitArticleToIndexNow(createdArticle.slug).catch(
                 err => console.error('IndexNow submit failed:', err)
+            )
+            submitArticleToGoogleIndexing(createdArticle.slug).catch(
+                err => console.error('Google Indexing submit failed:', err)
             )
         }
 

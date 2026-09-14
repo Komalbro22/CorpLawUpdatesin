@@ -6,6 +6,7 @@ import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { submitArticleToIndexNow } from '@/lib/indexnow'
+import { submitArticleToGoogleIndexing } from '@/lib/google-indexing'
 import { calculateReadingTime, extractFirstImage } from '@/lib/utils'
 import { articleSchema } from '@/lib/admin-schemas'
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -72,6 +73,9 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             submitArticleToIndexNow(updatedArticle.slug).catch(
                 err => console.error('IndexNow error:', err)
             )
+            submitArticleToGoogleIndexing(updatedArticle.slug).catch(
+                err => console.error('Google Indexing error:', err)
+            )
         }
 
         try { revalidateTag('updates', 'default') } catch { /* ignore */ }
@@ -119,6 +123,12 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
         if (error || !deletedArticle) {
             return NextResponse.json({ error: 'Article not found' }, { status: 404 })
+        }
+
+        if (deletedArticle?.slug) {
+            submitArticleToGoogleIndexing(deletedArticle.slug, 'URL_DELETED').catch(
+                err => console.error('Google Indexing delete error:', err)
+            )
         }
 
         try { revalidateTag('updates', 'default') } catch { /* ignore */ }
