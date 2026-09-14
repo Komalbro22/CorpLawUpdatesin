@@ -38,6 +38,374 @@ const OFFICIAL_URLS: Record<string, string> = {
     'labour-law': 'https://labour.gov.in',
 }
 
+const WIKIPEDIA_URLS: Record<string, string> = {
+    mca: 'https://en.wikipedia.org/wiki/Ministry_of_Corporate_Affairs',
+    sebi: 'https://en.wikipedia.org/wiki/Securities_and_Exchange_Board_of_India',
+    rbi: 'https://en.wikipedia.org/wiki/Reserve_Bank_of_India',
+    nclt: 'https://en.wikipedia.org/wiki/National_Company_Law_Tribunal',
+    ibc: 'https://en.wikipedia.org/wiki/Insolvency_and_Bankruptcy_Board_of_India',
+    fema: 'https://en.wikipedia.org/wiki/Foreign_Exchange_Management_Act',
+    cci: 'https://en.wikipedia.org/wiki/Competition_Commission_of_India',
+    labour: 'https://en.wikipedia.org/wiki/Ministry_of_Labour_and_Employment_(India)',
+    'labour-law': 'https://en.wikipedia.org/wiki/Ministry_of_Labour_and_Employment_(India)',
+}
+
+const CATEGORY_KEYWORDS: Record<string, string[]> = {
+    mca: [
+        'mca circulars',
+        'mca updates today live',
+        'mca notifications India',
+        'mca circulars and notifications',
+        'mca latest circulars 2026',
+        'MCA21 compliance updates',
+        'mca circular',
+    ],
+    sebi: [
+        'sebi circulars 2026',
+        'sebi master circulars',
+        'sebi lodr amendments',
+        'latest sebi circulars',
+        'sebi capital market regulations',
+        'new sebi rules',
+        'sebi notifications India',
+    ],
+    rbi: [
+        'rbi latest circular',
+        'latest rbi circular for banks',
+        'rbi master directions 2026',
+        'rbi notification today',
+        'rbi circular 2026',
+        'rbi banking regulations India',
+    ],
+    fema: [
+        'fema updates',
+        'recent changes in fema act',
+        'rbi fema notifications',
+        'fdi odi compliance India',
+        'cross border transactions fema',
+    ],
+    nclt: [
+        'nclt circulars',
+        'latest nclt orders',
+        'nclt judgments today',
+        'nclat appellate orders',
+        'national company law tribunal orders',
+    ],
+    ibc: [
+        'ibbi circulars',
+        'ibc updates 2026',
+        'cirp regulations ibbi',
+        'insolvency and bankruptcy code notifications',
+        'latest ibc guidelines',
+    ],
+    cci: [
+        'cci orders',
+        'competition commission of india circulars',
+        'cci combination approvals',
+        'green channel approval cci',
+    ],
+    labour: [
+        'labour law updates India',
+        'epfo circulars 2026',
+        'esic notifications',
+        '4 labour codes compliance India',
+    ],
+    'labour-law': [
+        'labour law updates India',
+        'epfo circulars 2026',
+        'esic notifications',
+        '4 labour codes compliance India',
+    ],
+}
+
+interface CategoryFAQ {
+    question: string
+    answer: string
+}
+
+const CATEGORY_REGULATORY_FAQS: Record<string, CategoryFAQ[]> = {
+    mca: [
+        {
+            question: 'Are MCA circulars legally binding under the Companies Act, 2013?',
+            answer: 'Yes. Circulars issued by the Ministry of Corporate Affairs clarify procedural requirements, statutory compliance timelines, and interpretations of the Companies Act, 2013 and LLP Act, 2008. They are legally binding on all registered companies, LLPs, and directors in India.',
+        },
+        {
+            question: 'Where can compliance professionals verify official MCA notifications?',
+            answer: 'Official MCA circulars, notifications, and orders are published directly on the MCA21 portal (mca.gov.in) under the Notifications & Circulars repository. CorpLawUpdates tracks and summarizes them daily with direct links to official gazette copies.',
+        },
+        {
+            question: 'What is the difference between an MCA notification and a circular?',
+            answer: 'An MCA notification amends statutory rules, enacts new sections of the Companies Act, or modifies statutory fee schedules (published in the Gazette of India). An MCA circular provides administrative clarifications, procedural relief, or filing extensions without amending substantive statutory provisions.',
+        },
+    ],
+    sebi: [
+        {
+            question: 'What is the legal effect of SEBI circulars and Master Circulars?',
+            answer: 'SEBI circulars are issued under Section 11(1) of the SEBI Act, 1992. They are statutory directives legally binding on stock exchanges, depositories, mutual funds, listed entities, merchant bankers, and registered market intermediaries.',
+        },
+        {
+            question: 'How frequently does SEBI issue Master Circulars?',
+            answer: 'SEBI consolidates individual circulars into subject-specific Master Circulars annually (covering LODR, Mutual Funds, Substantial Acquisition of Shares, and Intermediaries) to provide a single, updated point of reference for market participants.',
+        },
+        {
+            question: 'Where are official SEBI circulars published?',
+            answer: 'Official circulars, board meeting decisions, and consultation papers are published on the official SEBI portal (sebi.gov.in) in the Legal Framework repository.',
+        },
+    ],
+    rbi: [
+        {
+            question: 'What is the difference between an RBI circular and a Master Direction?',
+            answer: 'An RBI circular announces a specific operational instruction or policy revision. Master Directions consolidate all existing instructions on a regulatory area (e.g., KYC, NBFCs, FEMA, Digital Payments) into an ongoing running compendium updated dynamically whenever amendments occur.',
+        },
+        {
+            question: 'Are RBI circulars binding on all banks and NBFCs in India?',
+            answer: 'Yes. RBI directives issued under the Banking Regulation Act, 1949 and RBI Act, 1934 are mandatory statutory directions. Non-compliance attracts supervisory action and monetary penalties under Section 47A.',
+        },
+        {
+            question: 'Where can banks and financial institutions track RBI circulars?',
+            answer: 'Official RBI notifications, circulars, and Master Directions are published on rbi.org.in under the Notifications and Master Directions sections.',
+        },
+    ],
+    nclt: [
+        {
+            question: 'What matters are adjudicated by the NCLT?',
+            answer: 'The National Company Law Tribunal (NCLT) adjudicates corporate dispute petitions under the Companies Act, 2013 (mergers, amalgamations, oppression, mismanagement, capital reduction) and corporate insolvency proceedings under the Insolvency and Bankruptcy Code, 2016.',
+        },
+        {
+            question: 'Where can daily NCLT orders and cause lists be accessed?',
+            answer: 'Orders and cause lists are published on nclt.gov.in across its principal bench in New Delhi and regional benches across India.',
+        },
+    ],
+    ibc: [
+        {
+            question: 'Who regulates insolvency circulars and guidelines in India?',
+            answer: 'Insolvency rules and guidelines are administered by the Ministry of Corporate Affairs (MCA) and the Insolvency and Bankruptcy Board of India (IBBI) under the Insolvency and Bankruptcy Code, 2016.',
+        },
+        {
+            question: 'What is the statutory timeline for CIRP under IBC?',
+            answer: 'Under Section 12 of the IBC, 2016, Corporate Insolvency Resolution Process (CIRP) must be completed within 180 days, with a maximum permissible extension of up to 330 days including legal proceedings.',
+        },
+    ],
+    fema: [
+        {
+            question: 'Who administers FEMA regulations and notifications in India?',
+            answer: 'The Reserve Bank of India (RBI) administers FEMA regulations for foreign exchange and cross-border capital transactions (FDI, ODI, ECB), while the Directorate of Enforcement (ED) investigates contraventions.',
+        },
+        {
+            question: 'What is the penalty for non-compliance under FEMA, 1999?',
+            answer: 'FEMA violations are civil contraventions punishable with penalties up to thrice the amount involved, or up to ₹2 lakh where the amount is unquantifiable, along with compounding options under RBI rules.',
+        },
+    ],
+    cci: [
+        {
+            question: 'What is the primary function of CCI orders and notifications?',
+            answer: 'The Competition Commission of India enforces the Competition Act, 2002 to prohibit anti-competitive agreements, prevent abuse of dominant market position, and review combinations (mergers and acquisitions) to protect fair competition.',
+        },
+        {
+            question: 'What is the Green Channel approval route in CCI?',
+            answer: 'The Green Channel provides automatic deemed approval for combination filings where there are no horizontal overlaps, vertical relationships, or complementary activities between the transacting parties.',
+        },
+    ],
+    labour: [
+        {
+            question: 'What are the 4 Labour Codes in India?',
+            answer: 'The 4 Labour Codes are the Code on Wages (2019), Industrial Relations Code (2020), Code on Social Security (2020), and Occupational Safety, Health and Working Conditions (OSHWC) Code (2020), consolidating 29 central labor statutes.',
+        },
+        {
+            question: 'Where are official EPFO and ESIC circulars published?',
+            answer: 'EPFO circulars are published at epfindia.gov.in and ESIC circulars at esic.gov.in, tracking monthly ECR filing guidelines, contribution rates, and social security updates.',
+        },
+    ],
+    'labour-law': [
+        {
+            question: 'What are the 4 Labour Codes in India?',
+            answer: 'The 4 Labour Codes are the Code on Wages (2019), Industrial Relations Code (2020), Code on Social Security (2020), and Occupational Safety, Health and Working Conditions (OSHWC) Code (2020), consolidating 29 central labor statutes.',
+        },
+        {
+            question: 'Where are official EPFO and ESIC circulars published?',
+            answer: 'EPFO circulars are published at epfindia.gov.in and ESIC circulars at esic.gov.in, tracking monthly ECR filing guidelines, contribution rates, and social security updates.',
+        },
+    ],
+}
+
+interface RelatedResource {
+    title: string
+    description: string
+    href: string
+    tag: string
+}
+
+const CATEGORY_RELATED_RESOURCES: Record<string, RelatedResource[]> = {
+    mca: [
+        {
+            title: 'MCA Company Filing & Late Fee Calculator',
+            description: 'Calculate official ROC filing fees and delayed additional late fee slabs under Companies Act, 2013.',
+            href: '/tools/fee-calculator/companies',
+            tag: 'Calculator',
+        },
+        {
+            title: 'LLP Form 8 & Form 11 Late Fee Calculator',
+            description: 'Compute per-day additional fees for delayed LLP Annual Returns and Statement of Account & Solvency.',
+            href: '/tools/fee-calculator/llp',
+            tag: 'Calculator',
+        },
+        {
+            title: 'Form ADT-1 Filing & Appointment Guide',
+            description: 'Auditor appointment rules, intimation timelines, and late fee slabs under Section 139.',
+            href: '/tools/fee-calculator/companies/adt-1',
+            tag: 'Statutory Tool',
+        },
+        {
+            title: 'Form AOC-4 Financial Statements Filing Guide',
+            description: 'Financial statement filing deadlines, XBRL requirements, and ROC late fees under Section 137.',
+            href: '/tools/fee-calculator/companies/aoc-4',
+            tag: 'Statutory Tool',
+        },
+    ],
+    sebi: [
+        {
+            title: 'Share Transfer Deed (Form SH-4) Workstation',
+            description: 'Generate legally vetted Form SH-4 deeds under Section 56 with instant stamp duty computation.',
+            href: '/documents/share-transfer-deed',
+            tag: 'Legal Workstation',
+        },
+        {
+            title: 'Board Resolution for Bank Account Operations',
+            description: 'Draft compliant board resolutions for corporate banking mandates, authorized signatories, and credit facilities.',
+            href: '/documents/board-resolution-bank-account-opening',
+            tag: 'Legal Workstation',
+        },
+        {
+            title: 'MCA Corporate Governance & ROC Updates',
+            description: 'Track Companies Act circulars and statutory filing requirements complementary to SEBI LODR.',
+            href: '/category/mca',
+            tag: 'Category Hub',
+        },
+    ],
+    rbi: [
+        {
+            title: 'MSME Delayed Payment Interest Calculator',
+            description: 'Compute compound interest with monthly rests under Section 16 of the MSMED Act, 2006.',
+            href: '/tools/fee-calculator/msme',
+            tag: 'Calculator',
+        },
+        {
+            title: 'Equitable Mortgage Deed Workstation',
+            description: 'Generate commercial property mortgage deeds by deposit of title deeds under Transfer of Property Act.',
+            href: '/documents/equitable-mortgage-deed',
+            tag: 'Legal Workstation',
+        },
+        {
+            title: 'FEMA & Cross-Border Capital Notifications',
+            description: 'Track RBI notifications on foreign direct investment (FDI), ODI, and external commercial borrowings.',
+            href: '/category/fema',
+            tag: 'Category Hub',
+        },
+    ],
+    fema: [
+        {
+            title: 'RBI Master Directions & Circulars',
+            description: 'Track Reserve Bank of India foreign exchange directives and monetary compliance.',
+            href: '/category/rbi',
+            tag: 'Category Hub',
+        },
+        {
+            title: 'Commercial Memorandum of Understanding (MoU)',
+            description: 'Draft cross-border commercial MoUs with dispute resolution and governing law clauses.',
+            href: '/documents/memorandum-of-understanding',
+            tag: 'Legal Workstation',
+        },
+        {
+            title: 'MCA Foreign Company Compliances',
+            description: 'ROC filing requirements and FC-1 to FC-4 statutory compliance for foreign companies in India.',
+            href: '/category/mca',
+            tag: 'Category Hub',
+        },
+    ],
+    nclt: [
+        {
+            title: 'Insolvency and Bankruptcy Code (IBC) Updates',
+            description: 'Track IBBI circulars, CIRP regulations, and personal guarantor insolvency rules.',
+            href: '/category/ibc',
+            tag: 'Category Hub',
+        },
+        {
+            title: 'Board Resolution for Corporate Filings',
+            description: 'Draft certified board resolutions authorizing corporate filings before NCLT benches.',
+            href: '/documents/board-resolution-bank-account-opening',
+            tag: 'Legal Workstation',
+        },
+        {
+            title: 'MCA Companies Act Notifications',
+            description: 'Section-wise company law amendments and adjudication orders from the Ministry of Corporate Affairs.',
+            href: '/category/mca',
+            tag: 'Category Hub',
+        },
+    ],
+    ibc: [
+        {
+            title: 'Personal Guarantor Insolvency Safeguards (IBBI)',
+            description: 'Analysis of IBBI guidelines, asset safeguards, and insolvency process for personal guarantors.',
+            href: '/updates/ibbi-personal-guarantor-insolvency-safeguards-2026',
+            tag: 'Regulatory Guide',
+        },
+        {
+            title: 'Limited Insolvency Examination (Phase 10) Syllabus',
+            description: 'Detailed syllabus, weighting, and case study requirements for insolvency professionals.',
+            href: '/updates/ibbi-phase-10-syllabus-limited-insolvency-examination-2026',
+            tag: 'Regulatory Guide',
+        },
+        {
+            title: 'NCLT Orders & Benches Hub',
+            description: 'Track NCLT insolvency admissions, resolution approvals, and liquidation orders across India.',
+            href: '/category/nclt',
+            tag: 'Category Hub',
+        },
+    ],
+    cci: [
+        {
+            title: 'MCA Corporate Law Hub',
+            description: 'Merger and amalgamation procedures under Sections 230–232 of the Companies Act, 2013.',
+            href: '/category/mca',
+            tag: 'Category Hub',
+        },
+        {
+            title: 'Partnership Deed Drafting Workstation',
+            description: 'Generate commercial partnership agreements with capital clauses, profit ratios, and governance.',
+            href: '/documents/partnership-deed',
+            tag: 'Legal Workstation',
+        },
+    ],
+    labour: [
+        {
+            title: 'Partnership Deed & Employment Workstation',
+            description: 'Create statutory deeds with partner remuneration, retirement terms, and statutory compliance.',
+            href: '/documents/partnership-deed',
+            tag: 'Legal Workstation',
+        },
+        {
+            title: 'MCA Director & Officer Compliance',
+            description: 'Director appointments, DIR-3 KYC, and statutory filings under Companies Act, 2013.',
+            href: '/category/mca',
+            tag: 'Category Hub',
+        },
+    ],
+    'labour-law': [
+        {
+            title: 'Partnership Deed & Employment Workstation',
+            description: 'Create statutory deeds with partner remuneration, retirement terms, and statutory compliance.',
+            href: '/documents/partnership-deed',
+            tag: 'Legal Workstation',
+        },
+        {
+            title: 'MCA Director & Officer Compliance',
+            description: 'Director appointments, DIR-3 KYC, and statutory filings under Companies Act, 2013.',
+            href: '/category/mca',
+            tag: 'Category Hub',
+        },
+    ],
+}
+
 // Answer-First definition paragraphs for AI Overview + SEO
 const ANSWER_FIRST: Record<string, { definition: string; facts: string[] }> = {
     mca: {
@@ -149,11 +517,20 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(
-    { params }: { params: Promise<{ category: string }> }
+    { params, searchParams }: {
+        params: Promise<{ category: string }>,
+        searchParams?: Promise<{ [key: string]: string | string[] | undefined }>
+    }
 ): Promise<Metadata> {
     const resolvedParams = await params
+    const resolvedSearchParams = searchParams ? await searchParams : {}
     const cat = resolvedParams.category.toLowerCase()
     const categoryName = cat.toUpperCase()
+
+    const rawPage = resolvedSearchParams.page
+    const pageStr = Array.isArray(rawPage) ? rawPage[0] : rawPage
+    const pageNum = pageStr ? parseInt(pageStr, 10) : 1
+    const isPaginated = !isNaN(pageNum) && pageNum > 1
 
     const { data: latestUpdate } = await supabase
         .from('updates')
@@ -167,21 +544,31 @@ export async function generateMetadata(
 
     const dynamicSuffix = latestUpdate ? ` Latest: ${latestUpdate.title}.` : ''
 
-    const title = `Latest ${categoryName} Circulars, Notifications & Updates Today – India`
-    const description = `Get the latest ${categoryName} circulars, notifications, orders and regulatory updates today from ${CATEGORY_FULL_NAMES[cat]}. Track all ${categoryName} compliance changes in India.${dynamicSuffix}`
-    const url = `https://www.corplawupdates.in/category/${cat}`
+    const title = isPaginated
+        ? `Latest ${categoryName} Circulars, Notifications & Updates (Page ${pageNum}) – India`
+        : `Latest ${categoryName} Circulars, Notifications & Updates Today – India`
+
+    const description = isPaginated
+        ? `Browse page ${pageNum} of latest ${categoryName} circulars, notifications, orders and compliance updates issued by ${CATEGORY_FULL_NAMES[cat] || categoryName}.`
+        : `Get the latest ${categoryName} circulars, notifications, orders and regulatory updates today from ${CATEGORY_FULL_NAMES[cat]}. Track all ${categoryName} compliance changes in India.${dynamicSuffix}`
+
+    const url = isPaginated
+        ? `https://www.corplawupdates.in/category/${cat}?page=${pageNum}`
+        : `https://www.corplawupdates.in/category/${cat}`
+
+    const keywords = CATEGORY_KEYWORDS[cat] || [
+        `${categoryName} update today`,
+        `${categoryName} circular today`,
+        `latest ${categoryName} notifications India`,
+        `${categoryName} compliance updates`,
+        `${CATEGORY_FULL_NAMES[cat]} circulars`,
+        `MCA SEBI RBI updates for CS CA`,
+    ]
 
     return {
         title,
         description,
-        keywords: [
-            `${categoryName} update today`,
-            `${categoryName} circular today`,
-            `latest ${categoryName} notifications India`,
-            `${categoryName} compliance updates`,
-            `${CATEGORY_FULL_NAMES[cat]} circulars`,
-            `MCA SEBI RBI updates for CS CA`,
-        ],
+        keywords,
         alternates: { canonical: url },
         other: {
             'revisit-after': '1 day',
@@ -270,50 +657,6 @@ export default async function CategoryPage({
 
     // ─── JSON-LD Schemas ───────────────────────────────────────────────────────
 
-    const collectionPageSchema = {
-        '@context': 'https://schema.org',
-        '@type': 'CollectionPage',
-        'name': `Latest ${cat.toUpperCase()} Circulars, Notifications & Updates`,
-        'description': answerFirst.definition,
-        'url': `https://www.corplawupdates.in/category/${cat}`,
-        'dateModified': lastModified,
-        'about': {
-            '@type': 'GovernmentOrganization',
-            'name': CATEGORY_FULL_NAMES[cat],
-            'url': OFFICIAL_URLS[cat],
-        },
-        'publisher': {
-            '@type': 'Organization',
-            'name': 'CorpLawUpdates.in',
-            'url': 'https://www.corplawupdates.in',
-        },
-    }
-
-    const faqSchema = top5Updates.length > 0 ? {
-        '@context': 'https://schema.org',
-        '@type': 'FAQPage',
-        'mainEntity': [
-            {
-                '@type': 'Question',
-                'name': `What is the latest ${cat.toUpperCase()} update today?`,
-                'acceptedAnswer': {
-                    '@type': 'Answer',
-                    'text': top5Updates[0]
-                        ? `The latest ${cat.toUpperCase()} update is "${top5Updates[0].title}", published on ${new Date(top5Updates[0].published_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}. ${top5Updates[0].summary || ''}`
-                        : `Visit our ${cat.toUpperCase()} updates page for the latest circulars and notifications.`,
-                },
-            },
-            ...top5Updates.slice(1).map((u: any) => ({
-                '@type': 'Question',
-                'name': `What is the latest ${cat.toUpperCase()} circular/notification about "${u.title}"?`,
-                'acceptedAnswer': {
-                    '@type': 'Answer',
-                    'text': `${u.summary || u.title} — Published on ${new Date(u.published_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}. Read more at https://www.corplawupdates.in/updates/${u.slug}`,
-                },
-            })),
-        ],
-    } : null
-
     const itemListSchema = top5Updates.length > 0 ? {
         '@context': 'https://schema.org',
         '@type': 'ItemList',
@@ -328,6 +671,57 @@ export default async function CategoryPage({
             'datePublished': u.published_at,
         })),
     } : null
+
+    const collectionPageSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        'name': `Latest ${cat.toUpperCase()} Circulars, Notifications & Updates`,
+        'description': answerFirst.definition,
+        'url': `https://www.corplawupdates.in/category/${cat}`,
+        'dateModified': lastModified,
+        'about': {
+            '@type': 'GovernmentOrganization',
+            'name': CATEGORY_FULL_NAMES[cat],
+            'url': OFFICIAL_URLS[cat],
+            ...(WIKIPEDIA_URLS[cat] ? { 'sameAs': [WIKIPEDIA_URLS[cat]] } : {}),
+        },
+        'publisher': {
+            '@type': 'Organization',
+            'name': 'CorpLawUpdates.in',
+            'url': 'https://www.corplawupdates.in',
+        },
+        ...(itemListSchema ? { 'mainEntity': itemListSchema } : {}),
+    }
+
+    const regulatoryFaqs = CATEGORY_REGULATORY_FAQS[cat] || []
+    const dynamicFaqs = top5Updates.slice(0, 3).map((u: any) => ({
+        '@type': 'Question',
+        'name': `What is the latest ${cat.toUpperCase()} circular/notification about "${u.title}"?`,
+        'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': `${u.summary || u.excerpt || u.title} — Published on ${new Date(u.published_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}. Read more at https://www.corplawupdates.in/updates/${u.slug}`,
+        },
+    }))
+
+    const allFaqs = [
+        ...regulatoryFaqs.map((faq) => ({
+            '@type': 'Question',
+            'name': faq.question,
+            'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': faq.answer,
+            },
+        })),
+        ...dynamicFaqs,
+    ]
+
+    const faqSchema = allFaqs.length > 0 ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        'mainEntity': allFaqs,
+    } : null
+
+    const relatedResources = CATEGORY_RELATED_RESOURCES[cat] || []
 
     const definedTermSchema = {
         '@context': 'https://schema.org',
@@ -474,6 +868,85 @@ export default async function CategoryPage({
                 </section>
             )}
 
+            {/* Regulatory FAQs (AI Overview & Search Answers) */}
+            {regulatoryFaqs.length > 0 && (
+                <section className="max-w-7xl mx-auto px-4 py-8 mb-4">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 md:p-8">
+                        <div className="flex items-center gap-2 mb-2">
+                            <span className="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2.5 py-0.5 rounded-full border border-amber-300 dark:border-amber-800/60">
+                                Regulatory Intelligence
+                            </span>
+                        </div>
+                        <h2 className="text-2xl font-bold text-navy dark:text-white mb-2 font-heading">
+                            {cat.toUpperCase()} Compliance & Regulatory FAQs
+                        </h2>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
+                            Essential compliance answers for Company Secretaries, Chartered Accountants, and corporate legal teams.
+                        </p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {regulatoryFaqs.map((faq, idx) => (
+                                <div key={idx} className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60">
+                                    <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-2 flex items-start gap-2">
+                                        <span className="text-amber-600 dark:text-amber-400 font-bold">Q.</span>
+                                        <span>{faq.question}</span>
+                                    </h3>
+                                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed pl-5">
+                                        {faq.answer}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* Related Compliance Tools & Workstations (Topic Hub) */}
+            {relatedResources.length > 0 && (
+                <section className="max-w-7xl mx-auto px-4 py-8 mb-4">
+                    <div className="bg-gradient-to-br from-slate-900 to-slate-950 text-white rounded-2xl border border-slate-800 p-6 md:p-8 shadow-md">
+                        <div className="flex items-center justify-between flex-wrap gap-2 mb-6">
+                            <div>
+                                <span className="text-xs font-bold uppercase tracking-wider text-amber-400 bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/20">
+                                    Topic Hub
+                                </span>
+                                <h2 className="text-2xl font-bold text-white mt-2 font-heading">
+                                    Related {cat.toUpperCase()} Statutory Tools & Workstations
+                                </h2>
+                            </div>
+                            <p className="text-xs text-slate-400 max-w-md">
+                                Streamline your filings, statutory late fee computations, and corporate legal drafting.
+                            </p>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            {relatedResources.map((res, idx) => (
+                                <Link
+                                    key={idx}
+                                    href={res.href}
+                                    className="group flex flex-col justify-between p-4 rounded-xl bg-slate-800/70 border border-slate-700/70 hover:border-amber-400/50 hover:bg-slate-800 transition-all duration-200"
+                                >
+                                    <div>
+                                        <div className="flex items-center justify-between mb-2">
+                                            <span className="text-[10px] font-semibold tracking-wider uppercase text-amber-300 bg-amber-400/10 px-2 py-0.5 rounded">
+                                                {res.tag}
+                                            </span>
+                                            <span className="text-slate-400 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all text-sm font-bold">
+                                                →
+                                            </span>
+                                        </div>
+                                        <h3 className="text-sm font-bold text-slate-100 group-hover:text-amber-300 transition-colors mb-1.5 line-clamp-2">
+                                            {res.title}
+                                        </h3>
+                                        <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+                                            {res.description}
+                                        </p>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
             {/* Professional SEO Knowledge Footer — "About" Section */}
             <section className="max-w-7xl mx-auto px-4 py-10 border-t border-slate-100 dark:border-slate-800">
                 <div className="bg-slate-50/50 dark:bg-slate-900/60 rounded-2xl border border-slate-200/60 dark:border-slate-800 p-8 shadow-sm">
@@ -508,11 +981,19 @@ export default async function CategoryPage({
                                     {OFFICIAL_URLS[cat]}
                                 </a>
                             </p>
-                            <p className="pt-2">
-                                👉 <Link href="/" className="text-gold font-bold hover:text-amber-700 transition-colors underline decoration-gold/30 underline-offset-4">
-                                    Latest Corporate Law Updates in India
+                            <div className="pt-2 flex flex-wrap items-center gap-3">
+                                <Link href="/" className="text-xs font-semibold text-gold hover:text-amber-700 transition-colors underline decoration-gold/30 underline-offset-4">
+                                    Latest Law Updates ↗
                                 </Link>
-                            </p>
+                                <span className="text-slate-400 text-xs">·</span>
+                                <Link href="/category" className="text-xs font-semibold text-gold hover:text-amber-700 transition-colors underline decoration-gold/30 underline-offset-4">
+                                    All Regulators ↗
+                                </Link>
+                                <span className="text-slate-400 text-xs">·</span>
+                                <Link href="/tools/fee-calculator" className="text-xs font-semibold text-gold hover:text-amber-700 transition-colors underline decoration-gold/30 underline-offset-4">
+                                    Statutory Calculators ↗
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>
