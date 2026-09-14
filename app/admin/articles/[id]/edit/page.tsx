@@ -100,7 +100,10 @@ export default function EditArticle() {
                 setTags(data.tags || [])
                 setSourceName(data.source_name || '')
                 setSourceUrl(data.source_url || '')
-                setSources(data.sources || [])
+                setSources(Array.isArray(data.sources) ? data.sources.map((s: any) => ({
+                    name: typeof s === 'string' ? s : (s?.name || s?.title || ''),
+                    url: s?.url || ''
+                })) : [])
                 setSeoTitle(data.seo_title || '')
                 setSeoDescription(data.seo_description || '')
                 setIsFeatured(data.is_featured || false)
@@ -114,7 +117,10 @@ export default function EditArticle() {
                 setLastAmended(data.last_amended || '')
                 setKeyTakeaways(data.key_takeaways || [])
                 setHasSteps(data.has_steps || false)
-                setStepsJson(data.steps_json || [])
+                setStepsJson(Array.isArray(data.steps_json) ? data.steps_json.map((s: any) => ({
+                    heading: typeof s === 'string' ? s : (s?.heading || s?.title || ''),
+                    description: s?.description || ''
+                })) : [])
 
                 if (data.published_at) {
                     // Convert to datetime-local format
@@ -353,7 +359,7 @@ export default function EditArticle() {
                     tags,
                     source_url: sourceUrl || null,
                     source_name: sourceName || null,
-                    sources: sources.filter(s => s.name.trim() || s.url.trim()).length > 0 ? sources.filter(s => s.name.trim() || s.url.trim()) : null,
+                    sources: sources.filter(s => (s?.name || '').trim() || (s?.url || '').trim()).length > 0 ? sources.map(s => ({ name: (s?.name || '').trim(), url: (s?.url || '').trim() })) : null,
                     seo_title: seoTitle.trim() || null,
                     seo_description: seoDescription.trim() || null,
                     published_at: publishedAtValue,
@@ -368,7 +374,7 @@ export default function EditArticle() {
                     last_amended: lastAmended || null,
                     key_takeaways: keyTakeaways.filter(k => k.trim()).length > 0 ? keyTakeaways.filter(k => k.trim()) : null,
                     has_steps: hasSteps,
-                    steps_json: stepsJson.filter(s => s.heading.trim() || s.description.trim()).length > 0 ? stepsJson.filter(s => s.heading.trim() || s.description.trim()) : null,
+                    steps_json: stepsJson.filter(s => (s?.heading || '').trim() || (s?.description || '').trim()).length > 0 ? stepsJson.map(s => ({ heading: (s?.heading || '').trim(), description: (s?.description || '').trim() })) : null,
                 })
             })
 

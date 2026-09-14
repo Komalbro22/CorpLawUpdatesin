@@ -322,7 +322,7 @@ export default function NewArticle() {
                     tags,
                     source_url: sourceUrl || null,
                     source_name: sourceName || null,
-                    sources: sources.filter(s => s.name.trim() || s.url.trim()).length > 0 ? sources.filter(s => s.name.trim() || s.url.trim()) : null,
+                    sources: sources.filter(s => (s?.name || '').trim() || (s?.url || '').trim()).length > 0 ? sources.map(s => ({ name: (s?.name || '').trim(), url: (s?.url || '').trim() })) : null,
                     seo_title: seoTitle.trim() || null,
                     seo_description: seoDescription.trim() || null,
                     published_at: publishedAtValue,
@@ -337,7 +337,7 @@ export default function NewArticle() {
                     last_amended: lastAmended || null,
                     key_takeaways: keyTakeaways.filter(k => k.trim()).length > 0 ? keyTakeaways.filter(k => k.trim()) : null,
                     has_steps: hasSteps,
-                    steps_json: stepsJson.filter(s => s.heading.trim() || s.description.trim()).length > 0 ? stepsJson.filter(s => s.heading.trim() || s.description.trim()) : null,
+                    steps_json: stepsJson.filter(s => (s?.heading || '').trim() || (s?.description || '').trim()).length > 0 ? stepsJson.map(s => ({ heading: (s?.heading || '').trim(), description: (s?.description || '').trim() })) : null,
                 })
             })
 
