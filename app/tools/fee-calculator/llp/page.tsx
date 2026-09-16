@@ -4,6 +4,7 @@ import JsonLd from '@/components/JsonLd'
 import LLPFeeCalc from '../components/LLPFeeCalc'
 import LLPFAQ from './LLPFAQ'
 import { LLP_FAQS } from './faq-data'
+import ReaderFeedback from '@/components/ReaderFeedback'
 
 export const metadata: Metadata = {
   title: {
@@ -205,6 +206,13 @@ export default function LLPFeePage() {
       {/* Main Interactive Form Workspace */}
       <div className="max-w-4xl mx-auto px-4 -mt-6 relative z-10 mb-16">
         <LLPFeeCalc />
+        <div className="mt-8">
+          <ReaderFeedback
+            contextType="calculator"
+            contextTitle="LLP Fee & Late Filing Calculator"
+            contextUrl="https://www.corplawupdates.in/tools/fee-calculator/llp"
+          />
+        </div>
       </div>
 
       {/* SEO & FAQ Knowledge Modules */}

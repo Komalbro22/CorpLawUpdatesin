@@ -4,6 +4,7 @@ import JsonLd from '@/components/JsonLd'
 import MSMEFeeCalc from '../components/MSMEFeeCalc'
 import MSMEFAQ from './MSMEFAQ'
 import { supabase } from '@/lib/supabase'
+import ReaderFeedback from '@/components/ReaderFeedback'
 
 export const metadata: Metadata = {
   title: {
@@ -404,6 +405,13 @@ export default async function MSMEFeePage() {
           <p className="mt-6 text-xs text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800 pt-4">
             Interest is computed with calendar monthly rests under Section 16 of the MSMED Act, 2006. Multi-period calculations apply verified historical RBI Bank Rates from 5 April 2016 onward.
           </p>
+        </div>
+        <div className="mb-16">
+          <ReaderFeedback
+            contextType="calculator"
+            contextTitle="MSME Delayed Payment Interest Calculator"
+            contextUrl="https://www.corplawupdates.in/tools/fee-calculator/msme"
+          />
         </div>
       </div>
 

@@ -33,6 +33,7 @@ import { AlertCircle, BookOpen, CalendarDays, ChevronDown, Clock3, Eye, FileText
 import { sanitizeHtml } from '@/lib/sanitize'
 import { mcaForms } from '@/data/mca-forms'
 import ArticleContextTool from '@/components/ArticleContextTool'
+import ReaderFeedback from '@/components/ReaderFeedback'
 
 const stripHtml = (html: string) => html ? html.replace(/<[^>]*>/g, '').trim() : ''
 
@@ -761,6 +762,15 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                         </ul>
                     </div>
                 )}
+            </div>
+
+            {/* Reader Feedback */}
+            <div className="print:hidden">
+                <ReaderFeedback
+                    contextType="article"
+                    contextTitle={update.title}
+                    contextUrl={`${BASE_URL}/updates/${update.slug}`}
+                />
             </div>
 
             {/* 5. TAGS */}

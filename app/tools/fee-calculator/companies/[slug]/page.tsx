@@ -5,6 +5,7 @@ import Link from 'next/link'
 import JsonLd from '@/components/JsonLd'
 import FormSpecificCalc from './FormSpecificCalc'
 import SPICePlusAdditions from './SPICePlusAdditions'
+import ReaderFeedback from '@/components/ReaderFeedback'
 
 export function generateStaticParams() {
   return mcaForms.map((form) => ({
@@ -719,6 +720,15 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
 
         {/* 4C - Calculator */}
         <FormSpecificCalc form={form} />
+
+        {/* Reader Feedback */}
+        <div className="mt-8">
+          <ReaderFeedback
+            contextType="calculator"
+            contextTitle={`MCA Fee Calculator: ${form.formNumber} (${form.formName})`}
+            contextUrl={`https://www.corplawupdates.in/tools/fee-calculator/companies/${form.slug}`}
+          />
+        </div>
       </div>
 
       <div className="max-w-5xl mx-auto px-4 mb-20">

@@ -7,6 +7,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { useToast } from '@/components/Toast'
 import { checkMissingClauses, checkLeaseClauses, getImportanceIcon, getImportanceLabel, formatTemplateSource, type ClauseCheck } from '@/lib/document-clause-checker'
 import { markdownToHtml } from '@/lib/markdown'
+import ReaderFeedback from '@/components/ReaderFeedback'
 
 const FuzzyClarifier = dynamic(
   () => import('@/components/documents/FuzzyClarifier').then(m => ({ default: m.FuzzyClarifier })),
@@ -3649,6 +3650,15 @@ export default function DocumentGeneratorClient({
           </div>
         </div>
       )}
+
+      {/* Reader Feedback */}
+      <div className="max-w-4xl mx-auto px-4 mt-10">
+        <ReaderFeedback
+          contextType="document"
+          contextTitle={`Document Template: ${template.name}`}
+          contextUrl={`https://www.corplawupdates.in/documents/${template.slug}`}
+        />
+      </div>
 
       {/* SEO FAQs */}
       <div className="bg-white border-t border-slate-200 py-12 px-4 mt-12">
