@@ -14,6 +14,7 @@ import Script from 'next/script'
 import JsonLd from '@/components/JsonLd'
 import TrackingScripts from '@/components/TrackingScripts'
 import ConsentGatedAnalytics from '@/components/ConsentGatedAnalytics'
+import CookieConsentBanner from '@/components/CookieConsentBanner'
 
 import WebMCPRegistry from '@/components/WebMCPRegistry'
 
@@ -184,6 +185,9 @@ export default async function RootLayout({
         </ToastProvider>
         <HideOnAdmin>
           <ConsentGatedAnalytics />
+        </HideOnAdmin>
+        <HideOnAdmin>
+          <CookieConsentBanner />
         </HideOnAdmin>
 
         <Script

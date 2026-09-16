@@ -185,6 +185,8 @@ export default async function Footer() {
                 <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
                     <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-slate-300 text-[11px] font-semibold uppercase tracking-widest">
                         <span>© 2026 CorpLawUpdates.in</span>
+                        <Link href="/about" className="hover:text-white focus:outline-none focus:underline transition-colors">About</Link>
+                        <Link href="/contact" className="hover:text-white focus:outline-none focus:underline transition-colors">Contact</Link>
                         <Link href="/privacy-policy" className="hover:text-white focus:outline-none focus:underline transition-colors">Privacy</Link>
                         <Link href="/editorial-policy" className="hover:text-white focus:outline-none focus:underline transition-colors">Editorial</Link>
                         <Link href="/terms" className="hover:text-white focus:outline-none focus:underline transition-colors">Terms</Link>

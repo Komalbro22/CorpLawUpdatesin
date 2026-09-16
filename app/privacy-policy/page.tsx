@@ -24,7 +24,7 @@ export default function PrivacyPolicyPage() {
                     Privacy Policy
                 </h1>
                 <p className="text-slate-400 text-sm mb-8">
-                    Last updated: 14 June 2026
+                    Last updated: 16 September 2026
                 </p>
 
                 <section>
@@ -155,10 +155,15 @@ export default function PrivacyPolicyPage() {
                                     <td className="p-3">IP address, page visits, performance metrics</td>
                                     <td className="p-3">Website hosting and analytics</td>
                                 </tr>
-                                <tr>
+                                <tr className="border-b border-slate-100 dark:border-slate-800/60">
                                     <td className="p-3 font-bold">Google (GA4 + SWG)</td>
                                     <td className="p-3">Page visits, interactions (if GA4 enabled)</td>
                                     <td className="p-3">Traffic analytics and News integration</td>
+                                </tr>
+                                <tr>
+                                    <td className="p-3 font-bold">Google AdSense</td>
+                                    <td className="p-3">Advertising identifiers, cookies, interaction telemetry</td>
+                                    <td className="p-3">Contextual and personalized advertising delivery (ca-pub-8404756575471756)</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -168,14 +173,42 @@ export default function PrivacyPolicyPage() {
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
 
                 <section>
-                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">5. Cookies</h2>
-                    <p className="text-slate-600 dark:text-slate-400 mb-3">We use cookies for the following purposes:</p>
-                    <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-400">
-                        <li><strong>Session cookies</strong> — to maintain admin login state (admin-only; not set for public visitors)</li>
-                        <li><strong>Google Analytics cookies</strong> — to track visitor sessions and page interactions (if GA4 is configured)</li>
-                        <li><strong>Google SWG</strong> — may set cookies related to content access for Google News</li>
-                    </ul>
-                    <p className="text-slate-600 dark:text-slate-400 mt-3 italic">You can disable cookies in your browser settings. Disabling analytics cookies will not affect your ability to read any content on this site.</p>
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">5. Cookies & Google AdSense Advertising Disclosures</h2>
+                    <p className="text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">
+                        CorpLawUpdates.in uses cookies, device identifiers, and similar technologies to enhance user navigation, measure readership, and deliver relevant advertisements in compliance with the Digital Personal Data Protection (DPDP) Act, 2023 and Google Publisher Policies.
+                    </p>
+
+                    <div className="space-y-6 text-slate-600 dark:text-slate-400">
+                        <div>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">A. Categories of Cookies Employed</h3>
+                            <ul className="list-disc list-inside space-y-1.5 text-slate-600 dark:text-slate-400">
+                                <li><strong>Strictly Necessary Cookies:</strong> Essential for website navigation, security verification, theme persistence (light/dark mode), and administrative sessions.</li>
+                                <li><strong>Analytics & Performance Cookies:</strong> Used anonymously via Vercel Analytics and Google Analytics (GA4) to analyze traffic density, top performing regulatory circulars, and Core Web Vitals.</li>
+                                <li><strong>Advertising & Targeting Cookies:</strong> Deployed by Google AdSense and third-party advertising partners to deliver contextually relevant advertisements based on prior visits to this and other websites.</li>
+                            </ul>
+                        </div>
+
+                        <div className="p-5 rounded-2xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200/80 dark:border-amber-800/50">
+                            <h3 className="font-bold text-amber-950 dark:text-amber-300 mb-2 text-sm uppercase tracking-wide">B. Mandatory Google AdSense & DoubleClick Disclosure</h3>
+                            <p className="leading-relaxed mb-3 text-slate-700 dark:text-slate-300 text-sm">
+                                As a publisher participating in the Google AdSense network (Publisher ID: <code className="bg-amber-100 dark:bg-amber-900/60 px-1.5 py-0.5 rounded text-amber-900 dark:text-amber-200 font-mono text-xs">ca-pub-8404756575471756</code>), we formally state the following:
+                            </p>
+                            <ul className="list-disc list-inside space-y-2 text-slate-700 dark:text-slate-300 text-sm">
+                                <li>Third-party vendors, including Google, use cookies to serve ads based on a user&apos;s prior visits to your website or other websites.</li>
+                                <li>Google&apos;s use of advertising cookies enables it and its partners to serve ads to our users based on their visits to our site and/or other sites on the Internet.</li>
+                                <li>Users may opt out of personalized advertising at any time by visiting <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-400 font-bold underline hover:text-amber-800">Google Ads Settings</a>.</li>
+                                <li>Alternatively, you can opt out of third-party vendors&apos; use of cookies for personalized advertising by visiting the Network Advertising Initiative at <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-400 font-bold underline hover:text-amber-800">www.aboutads.info</a> or <a href="https://www.youronlinechoices.com/" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-400 font-bold underline hover:text-amber-800">Your Online Choices</a>.</li>
+                                <li>To learn more about how Google collects and manages data when you use our partner sites or apps, review <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-400 font-bold underline hover:text-amber-800">How Google uses information from sites or apps that use our services</a>.</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">C. Managing Your Browser Cookie Settings</h3>
+                            <p className="leading-relaxed text-sm">
+                                You can control, restrict, or wipe cookies through your browser settings (Chrome, Safari, Firefox, Edge). Choosing to block advertising cookies will not prevent ads from appearing; rather, ads served will be generic and non-personalized.
+                            </p>
+                        </div>
+                    </div>
                 </section>
 
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
