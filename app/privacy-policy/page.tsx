@@ -47,13 +47,13 @@ export default function PrivacyPolicyPage() {
                             </ul>
                         </div>
                         <div>
-                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">B. Newsletter Interaction Data</h3>
-                            <p className="text-slate-600 dark:text-slate-400 mb-2">When we send you a newsletter, we track:</p>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">B. Newsletter & Transactional Email Interaction Data</h3>
+                            <p className="text-slate-600 dark:text-slate-400 mb-2">When we send you a newsletter or transactional confirmation (such as a welcome email), we track:</p>
                             <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-400">
                                 <li>Whether the email was <strong>delivered, opened, or clicked</strong></li>
                                 <li>Timestamps of open and click events</li>
                             </ul>
-                            <p className="text-slate-500 dark:text-slate-400 text-sm mt-2 italic">This data is processed via Resend (our email provider) and stored in our database to help us measure campaign performance.</p>
+                            <p className="text-slate-500 dark:text-slate-400 text-sm mt-2 italic">This data is processed via Brevo (Sendinblue) and Resend (our email delivery infrastructure providers) and stored in our database to help us measure delivery reliability and campaign performance.</p>
                         </div>
                         <div>
                             <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">C. AI Document Generator Inputs & Logs</h3>
@@ -136,6 +136,11 @@ export default function PrivacyPolicyPage() {
                             </thead>
                             <tbody className="text-slate-600 dark:text-slate-300">
                                 <tr className="border-b border-slate-100 dark:border-slate-800/60">
+                                    <td className="p-3 font-bold">Brevo (Sendinblue)</td>
+                                    <td className="p-3">Your email address, delivery/open/click telemetry</td>
+                                    <td className="p-3">Transactional email delivery (welcome notifications, alerts) and newsletter dispatch</td>
+                                </tr>
+                                <tr className="border-b border-slate-100 dark:border-slate-800/60">
                                     <td className="p-3 font-bold">Resend</td>
                                     <td className="p-3">Your email address, delivery/open/click events</td>
                                     <td className="p-3">Email delivery and tracking</td>
@@ -214,9 +219,9 @@ export default function PrivacyPolicyPage() {
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
 
                 <section>
-                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">6. Newsletter Tracking</h2>
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">6. Newsletter & Email Delivery Tracking</h2>
                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                        Our newsletters contain standard tracking technology (provided by Resend) that detects when an email is opened and when links are clicked. This is used solely for internal performance metrics and is never shared with or sold to any third party. If you do not wish to be tracked, you may unsubscribe at any time.
+                        Our newsletters and transactional communications (such as welcome messages and regulatory notifications) use industry-standard email delivery infrastructure provided by Brevo (Sendinblue) and Resend. Standard tracking technology detects when an email is delivered, opened, or links are clicked to ensure high deliverability and measure engagement. This telemetry is used strictly for internal diagnostics and service delivery, and is never sold or shared with any third party. You can unsubscribe or update your email preferences at any time via the one-click unsubscribe link provided in every email.
                     </p>
                 </section>
 
