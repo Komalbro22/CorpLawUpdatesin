@@ -331,11 +331,12 @@ export default async function UpdatesPage({
                     <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 max-w-3xl">
                         Our intelligence engine monitors real-time circulars, master directions, and gazette notifications across India's primary corporate and financial regulatory bodies:
                     </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {[
                             { name: 'MCA Updates', code: 'MCA', desc: 'Ministry of Corporate Affairs, Companies Act 2013, LLP Act & ROC compliance', href: '/category/mca', color: 'border-l-blue-600' },
                             { name: 'SEBI Notifications', code: 'SEBI', desc: 'Securities and Exchange Board of India, LODR, ICDR & capital markets', href: '/category/sebi', color: 'border-l-emerald-600' },
                             { name: 'RBI Circulars', code: 'RBI', desc: 'Reserve Bank of India, master directions, banking regulation & monetary policy', href: '/category/rbi', color: 'border-l-violet-600' },
+                            { name: 'IFSCA & GIFT City', code: 'IFSCA', desc: 'Fund Management Entities (FMEs), banking units, leasing & GIFT City compliance', href: '/category/ifsca', color: 'border-l-cyan-600' },
                             { name: 'CCI Orders', code: 'CCI', desc: 'Competition Commission of India, antitrust, merger control & combinations', href: '/category/cci', color: 'border-l-indigo-600' },
                             { name: 'Labour Law Updates', code: 'LABOUR', desc: '4 Labour Codes, EPFO ECR, ESIC compliance & statutory wages', href: '/category/labour', color: 'border-l-amber-600' },
                             { name: 'NCLT Orders', code: 'NCLT', desc: 'National Company Law Tribunal orders, company petition decisions & appeals', href: '/category/nclt', color: 'border-l-orange-600' },

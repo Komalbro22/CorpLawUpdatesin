@@ -14,6 +14,7 @@ export type RegulatorKey =
   | 'SEBI'
   | 'RBI'
   | 'TAX'
+  | 'IFSCA'
 
 export interface RegulatorUpdate {
   id: string

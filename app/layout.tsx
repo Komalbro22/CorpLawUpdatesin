@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     default: 'CorpLawUpdates.in - Free Corporate Law Intelligence',
     template: '%s | CorpLawUpdates.in',
   },
-  description: 'Free Indian corporate law updates covering MCA, SEBI, RBI, CCI, Labour Law, NCLT, IBC and FEMA regulatory developments for legal & compliance professionals.',
+  description: 'Free Indian corporate law updates covering MCA, SEBI, RBI, IFSCA (GIFT City), CCI, Labour Law, NCLT, IBC and FEMA regulatory developments for legal & compliance professionals.',
 
   authors: [{ name: 'CorpLawUpdates.in' }],
   creator: 'CorpLawUpdates.in',

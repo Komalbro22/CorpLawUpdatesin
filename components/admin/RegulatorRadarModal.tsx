@@ -265,6 +265,7 @@ export default function RegulatorRadarModal({ isOpen, onClose }: Props) {
               { key: 'SEBI', label: 'SEBI' },
               { key: 'RBI', label: 'RBI Banking' },
               { key: 'CCI', label: 'CCI' },
+              { key: 'IFSCA', label: 'IFSCA (GIFT City)' },
               { key: 'IBBI', label: 'IBBI' },
               { key: 'TAX', label: 'Tax' }
             ].map((tab) => (

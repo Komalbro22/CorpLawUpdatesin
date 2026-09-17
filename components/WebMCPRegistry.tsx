@@ -91,8 +91,8 @@ export default function WebMCPRegistry() {
           },
           regulator: {
             type: 'string',
-            description: 'Filter by regulator: MCA, SEBI, RBI, NCLT, IBC, FEMA, CCI, or LABOUR',
-            enum: ['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA', 'CCI', 'LABOUR'],
+            description: 'Filter by regulator: MCA, SEBI, RBI, NCLT, IBC, FEMA, CCI, LABOUR, or IFSCA',
+            enum: ['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA', 'CCI', 'LABOUR', 'IFSCA'],
           },
           maxResults: {
             type: 'number',

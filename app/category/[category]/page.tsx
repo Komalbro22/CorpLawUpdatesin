@@ -12,7 +12,7 @@ import EmptyState from '@/components/EmptyState'
 
 export const revalidate = 43200 // 12 hours
 
-const CATEGORIES = ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci', 'labour', 'labour-law']
+const CATEGORIES = ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci', 'labour', 'labour-law', 'ifsca']
 
 const CATEGORY_FULL_NAMES: Record<string, string> = {
     mca: 'Ministry of Corporate Affairs',
@@ -24,6 +24,7 @@ const CATEGORY_FULL_NAMES: Record<string, string> = {
     cci: 'Competition Commission of India',
     labour: 'Ministry of Labour & Employment',
     'labour-law': 'Ministry of Labour & Employment',
+    ifsca: 'International Financial Services Centres Authority',
 }
 
 const OFFICIAL_URLS: Record<string, string> = {
@@ -36,6 +37,7 @@ const OFFICIAL_URLS: Record<string, string> = {
     cci: 'https://cci.gov.in',
     labour: 'https://labour.gov.in',
     'labour-law': 'https://labour.gov.in',
+    ifsca: 'https://ifsca.gov.in',
 }
 
 const WIKIPEDIA_URLS: Record<string, string> = {
@@ -48,6 +50,7 @@ const WIKIPEDIA_URLS: Record<string, string> = {
     cci: 'https://en.wikipedia.org/wiki/Competition_Commission_of_India',
     labour: 'https://en.wikipedia.org/wiki/Ministry_of_Labour_and_Employment_(India)',
     'labour-law': 'https://en.wikipedia.org/wiki/Ministry_of_Labour_and_Employment_(India)',
+    ifsca: 'https://en.wikipedia.org/wiki/International_Financial_Services_Centres_Authority',
 }
 
 const CATEGORY_KEYWORDS: Record<string, string[]> = {
@@ -115,6 +118,17 @@ const CATEGORY_KEYWORDS: Record<string, string[]> = {
         'epfo circulars 2026',
         'esic notifications',
         '4 labour codes compliance India',
+    ],
+    ifsca: [
+        'ifsca circulars 2026',
+        'gift city regulations',
+        'ifsca fund management regulations 2026',
+        'ifsc banking unit compliance',
+        'ifsca latest notifications',
+        'gift city compliance updates',
+        'ifsca guidelines for fme',
+        'ifsca aircraft leasing regulations',
+        'ifsca market abuse regulations',
     ],
 }
 
@@ -224,6 +238,24 @@ const CATEGORY_REGULATORY_FAQS: Record<string, CategoryFAQ[]> = {
         {
             question: 'Where are official EPFO and ESIC circulars published?',
             answer: 'EPFO circulars are published at epfindia.gov.in and ESIC circulars at esic.gov.in, tracking monthly ECR filing guidelines, contribution rates, and social security updates.',
+        },
+    ],
+    ifsca: [
+        {
+            question: 'What is the regulatory role of IFSCA in GIFT City IFSC?',
+            answer: 'The International Financial Services Centres Authority (IFSCA), established under the IFSCA Act, 2019, is the unified statutory regulator for financial products, financial services, and financial institutions in International Financial Services Centres (IFSCs) in India. It consolidates regulatory powers that were previously exercised by RBI, SEBI, IRDAI, and PFRDA into a single window.',
+        },
+        {
+            question: 'What entities are regulated under IFSCA regulations?',
+            answer: 'IFSCA regulates Fund Management Entities (FMEs) managing AIFs and Family Investment Funds (FIFs), IFSC Banking Units (IBUs), international stock exchanges (NSE IX, India INX), capital market intermediaries, aircraft and ship leasing units, bullion exchanges (IIBX), and FinTech sandboxes operating in GIFT City.',
+        },
+        {
+            question: 'What are the main compliance requirements for FMEs under IFSCA Fund Management Regulations?',
+            answer: 'Fund Management Entities must maintain prescribed net worth requirements, appoint dedicated Key Managerial Personnel (KMPs) and Compliance Officers, adhere to portfolio diversification limits, compute and disclose Scheme NAV at mandatory intervals, and submit periodic regulatory filings through the IFSCA online reporting portal.',
+        },
+        {
+            question: 'What tax benefits are available to units registered under IFSCA in GIFT City?',
+            answer: 'Under Section 80LA of the Income-tax Act, eligible IFSC units enjoy a 100% tax exemption on profits for 10 consecutive assessment years out of 15 years. Additional benefits include a concessional Minimum Alternate Tax (MAT) / Alternate Minimum Tax (AMT) rate of 9%, exemption from Dividend Distribution Tax, and GST exemptions on transactions carried out on IFSC exchanges.',
         },
     ],
 }
@@ -404,6 +436,32 @@ const CATEGORY_RELATED_RESOURCES: Record<string, RelatedResource[]> = {
             tag: 'Category Hub',
         },
     ],
+    ifsca: [
+        {
+            title: 'FEMA & Cross-Border Capital Notifications',
+            description: 'Track RBI notifications on foreign direct investment (FDI), ODI, and external commercial borrowings applicable to IFSC.',
+            href: '/category/fema',
+            tag: 'Category Hub',
+        },
+        {
+            title: 'SEBI Notifications & Capital Markets',
+            description: 'Monitor domestic securities regulations, AIF frameworks, and intermediary compliance standards.',
+            href: '/category/sebi',
+            tag: 'Category Hub',
+        },
+        {
+            title: 'Share Transfer Deed (Form SH-4) Workstation',
+            description: 'Generate legally vetted Form SH-4 transfer deeds with automatic stamp duty calculations under Section 56.',
+            href: '/documents/share-transfer-deed',
+            tag: 'Legal Workstation',
+        },
+        {
+            title: 'RBI Master Directions & Banking Hub',
+            description: 'Review banking regulation and monetary directions governing cross-border financial operations.',
+            href: '/category/rbi',
+            tag: 'Category Hub',
+        },
+    ],
 }
 
 // Answer-First definition paragraphs for AI Overview + SEO
@@ -497,6 +555,17 @@ const ANSWER_FIRST: Record<string, { definition: string; facts: string[] }> = {
             'EPFO regulates Employees Provident Fund (EPF) and Electronic Challan-cum-Return (ECR) monthly filings.',
             'ESIC provides statutory social security and healthcare coverage for eligible employees.',
             'The Code on Wages standardizes minimum wages, bonus payments, and timely salary disbursements across India.',
+        ],
+    },
+    ifsca: {
+        definition:
+            'IFSCA Regulations, Circulars, and Guidelines are statutory directives issued by the International Financial Services Centres Authority under the IFSCA Act, 2019. Headquartered in GIFT City, Gandhinagar, IFSCA is India’s unified statutory regulator governing financial products, financial services, and financial institutions in International Financial Services Centres (IFSCs). This page tracks all latest IFSCA circulars, regulations, consultation papers, and compliance updates for Fund Management Entities (FMEs), IFSC Banking Units (IBUs), Capital Market Intermediaries, and FinTech entities.',
+        facts: [
+            'IFSCA was established in 2020 under the IFSCA Act, 2019 as India’s unified financial regulator for IFSCs.',
+            'IFSCA exercises the powers of RBI, SEBI, IRDAI, and PFRDA within GIFT City IFSC.',
+            'Key regulated entities include Fund Management Entities (FMEs), IFSC Banking Units (IBUs), Stock Exchanges (NSE IX / India INX), and Bullion Exchanges (IIBX).',
+            'Units in GIFT City enjoy a 100% tax exemption for 10 out of 15 consecutive years under Section 80LA of the Income-tax Act.',
+            'IFSCA also regulates global aircraft leasing, ship leasing, global in-house centres (GICs), and cross-border FinTech sandboxes.',
         ],
     },
 }
@@ -653,6 +722,7 @@ export default async function CategoryPage({
         cci: 'from-indigo-600 to-indigo-800',
         labour: 'from-amber-600 to-amber-800',
         'labour-law': 'from-amber-600 to-amber-800',
+        ifsca: 'from-cyan-700 to-cyan-900',
     }
 
     // ─── JSON-LD Schemas ───────────────────────────────────────────────────────

@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
 
         if (error) throw error
 
-        const categories = ['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA', 'CCI', 'LABOUR']
+        const categories = ['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA', 'CCI', 'LABOUR', 'IFSCA']
         const categoryCounts: Record<string, number> = {}
 
         await Promise.all(

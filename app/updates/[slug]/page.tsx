@@ -511,6 +511,15 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                             iconColor: 'text-amber-500',
                             badgeBg: 'bg-amber-50 text-amber-700 border-amber-200/50',
                         };
+                    } else if (cat === 'IFSCA') {
+                        cardStyles = {
+                            borderColor: 'border-cyan-100',
+                            borderLeftColor: 'border-l-cyan-600',
+                            bgColor: 'bg-cyan-50/30',
+                            accentColor: 'text-cyan-600',
+                            iconColor: 'text-cyan-500',
+                            badgeBg: 'bg-cyan-50 text-cyan-700 border-cyan-200/50',
+                        };
                     }
 
                     return (

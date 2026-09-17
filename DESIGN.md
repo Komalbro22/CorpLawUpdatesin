@@ -25,6 +25,7 @@ colors:
   category-fema: "#14B8A6"
   category-cci: "#6366F1"
   category-labour: "#F59E0B"
+  category-ifsca: "#0E7490"
   dark-bg-primary: "#040814"
   dark-bg-card: "#0E1626"
   dark-bg-surface: "#111827"
@@ -68,6 +69,7 @@ CorpLawUpdates.in provides real-time corporate regulatory updates, circular brea
   - FEMA (Foreign Exchange Management Act): `#14B8A6` (Teal)
   - CCI (Competition Commission of India): `#6366F1` (Indigo)
   - Labour Law (Ministry of Labour & Employment / Labour Codes): `#F59E0B` (Amber)
+  - IFSCA (International Financial Services Centres Authority / GIFT City): `#0E7490` (Cyan)
 
 ## Typography
 

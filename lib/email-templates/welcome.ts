@@ -21,6 +21,7 @@ const categoryColors: Record<string, string> = {
   fema: '#14B8A6',
   cci: '#6366F1',
   labour: '#F59E0B',
+  ifsca: '#0E7490',
   income_tax: '#F59E0B',
 }
 
@@ -33,6 +34,7 @@ const categoryLabels: Record<string, string> = {
   fema: 'FEMA',
   cci: 'CCI',
   labour: 'Labour Law',
+  ifsca: 'IFSCA (GIFT City)',
   income_tax: 'Income Tax',
 }
 

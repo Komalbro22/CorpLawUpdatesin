@@ -26,6 +26,7 @@ const REGULATOR_CATEGORIES = [
   { id: 'fema', label: 'FEMA Guidelines' },
   { id: 'cci', label: 'CCI Regulations' },
   { id: 'labour', label: 'Labour Law Updates' },
+  { id: 'ifsca', label: 'IFSCA (GIFT City)' },
 ]
 
 export default function NotificationBell() {

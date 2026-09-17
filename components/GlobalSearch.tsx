@@ -174,17 +174,18 @@ export default function GlobalSearch() {
       { value: 'fema', label: 'FEMA' },
       { value: 'cci', label: 'CCI' },
       { value: 'labour', label: 'Labour Law' },
+      { value: 'ifsca', label: 'IFSCA (GIFT City)' },
       { value: 'income_tax', label: 'Income Tax' },
     ]
 
     if (activeType === 'articles') {
-      return allOptions.filter(o => ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci', 'labour'].includes(o.value))
+      return allOptions.filter(o => ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci', 'labour', 'ifsca'].includes(o.value))
     }
     if (activeType === 'calendar') {
-      return allOptions.filter(o => ['mca', 'sebi', 'rbi', 'fema', 'cci', 'labour', 'income_tax'].includes(o.value))
+      return allOptions.filter(o => ['mca', 'sebi', 'rbi', 'fema', 'cci', 'labour', 'ifsca', 'income_tax'].includes(o.value))
     }
     if (activeType === 'glossary') {
-      return allOptions.filter(o => ['mca', 'sebi', 'rbi', 'ibc', 'fema', 'cci', 'labour'].includes(o.value))
+      return allOptions.filter(o => ['mca', 'sebi', 'rbi', 'ibc', 'fema', 'cci', 'labour', 'ifsca'].includes(o.value))
     }
     return allOptions
   }

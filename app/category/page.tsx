@@ -9,6 +9,7 @@ import {
   Globe2,
   ShieldCheck,
   Users,
+  Coins,
   ArrowRight,
 } from 'lucide-react'
 import JsonLd from '@/components/JsonLd'
@@ -19,14 +20,14 @@ export const revalidate = 43200
 export const metadata: Metadata = {
   title: 'Browse Regulatory Updates by Authority',
   description:
-    'Browse corporate law updates by regulator — MCA, SEBI, RBI, NCLT, IBC, FEMA, CCI and Labour Law. Daily circulars and notifications for CS, CA and compliance professionals.',
+    'Browse corporate law updates by regulator — MCA, SEBI, RBI, IFSCA (GIFT City), NCLT, IBC, FEMA, CCI and Labour Law. Daily circulars and notifications for CS, CA and compliance professionals.',
   alternates: {
     canonical: 'https://www.corplawupdates.in/category',
   },
   openGraph: {
     title: 'Browse Regulatory Updates by Authority | CorpLawUpdates.in',
     description:
-      'Browse MCA, SEBI, RBI, NCLT, IBC, FEMA, CCI and Labour Law updates — daily circulars for Indian compliance professionals.',
+      'Browse MCA, SEBI, RBI, IFSCA (GIFT City), NCLT, IBC, FEMA, CCI and Labour Law updates — daily circulars for Indian compliance professionals.',
     url: 'https://www.corplawupdates.in/category',
     type: 'website',
     siteName: 'CorpLawUpdates.in',
@@ -98,6 +99,14 @@ const categories = [
     description: 'Labour Codes, EPF ECR, ESIC compliance and employment notifications.',
     bg: 'bg-amber-50 dark:bg-amber-950/30 text-amber-800 dark:text-amber-400 border border-amber-200/70 dark:border-amber-800/40 hover:bg-amber-100/60 dark:hover:bg-amber-900/40',
   },
+  {
+    slug: 'ifsca',
+    label: 'IFSCA (GIFT City)',
+    Icon: Coins,
+    fullName: 'International Financial Services Centres Authority',
+    description: 'Fund management (FMEs), banking units (IBUs), capital markets, leasing & GIFT City compliance.',
+    bg: 'bg-cyan-50 dark:bg-cyan-950/30 text-cyan-800 dark:text-cyan-400 border border-cyan-200/70 dark:border-cyan-800/40 hover:bg-cyan-100/60 dark:hover:bg-cyan-900/40',
+  },
 ]
 
 export default function CategoryIndexPage() {
@@ -128,7 +137,7 @@ export default function CategoryIndexPage() {
             Browse by Regulator
           </h1>
           <p className="text-slate-600 dark:text-slate-400 text-base leading-relaxed">
-            Track corporate law updates from India&apos;s primary regulatory authorities — MCA, SEBI, RBI, NCLT, IBC, FEMA, CCI and Labour Law.
+            Track corporate law updates from India&apos;s primary regulatory authorities — MCA, SEBI, RBI, IFSCA (GIFT City), NCLT, IBC, FEMA, CCI and Labour Law.
           </p>
         </header>
 

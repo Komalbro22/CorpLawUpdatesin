@@ -57,6 +57,7 @@ const config: Config = {
           fema: '#0F766E',
           cci:  '#4338CA',
           labour: '#B45309',
+          ifsca:  '#0E7490',
         },
         brand: {
           navy:       '#0B1F3A',  // Primary dark navy background

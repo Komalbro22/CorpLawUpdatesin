@@ -18,6 +18,7 @@ const categories = [
     { id: 'FEMA',   name: 'FEMA Updates' },
     { id: 'CCI',    name: 'CCI Updates' },
     { id: 'LABOUR', name: 'Labour Law Updates' },
+    { id: 'IFSCA',  name: 'IFSCA (GIFT City)' },
 ]
 
 const categoryBadges: Record<string, string> = {
@@ -29,6 +30,7 @@ const categoryBadges: Record<string, string> = {
     FEMA:   'bg-category-fema text-white',
     CCI:    'bg-category-cci text-white',
     LABOUR: 'bg-category-labour text-white',
+    IFSCA:  'bg-category-ifsca text-white',
 }
 
 export default async function Footer() {

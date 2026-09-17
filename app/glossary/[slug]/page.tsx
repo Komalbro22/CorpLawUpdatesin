@@ -217,6 +217,7 @@ export default async function GlossaryTermPage({ params }: Props) {
     'FEMA': 'governed by the Foreign Exchange Management Act, 1999 and regulated by RBI',
     'CCI': 'governed by the Competition Commission of India under the Competition Act, 2002',
     'LABOUR': 'governed by the Ministry of Labour & Employment under the Indian Labour Codes and statutory provisions',
+    'IFSCA': 'governed by the International Financial Services Centres Authority under the IFSCA Act, 2019 and GIFT City regulations',
   }
   const ctx = categoryContext[term.category] || `regulated under Indian ${term.category} law`
 
@@ -336,6 +337,14 @@ export default async function GlossaryTermPage({ params }: Props) {
       badgeBg: 'bg-amber-50 text-amber-855 border-amber-200/50',
       iconColor: 'text-amber-500',
       titleColor: 'text-amber-900',
+    };
+  } else if (cat === 'IFSCA') {
+    themeStyles = {
+      borderColor: 'border-cyan-100',
+      borderLeftColor: 'border-l-cyan-500',
+      badgeBg: 'bg-cyan-50 text-cyan-800 border-cyan-200/50',
+      iconColor: 'text-cyan-500',
+      titleColor: 'text-cyan-900',
     };
   }
 

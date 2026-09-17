@@ -9,6 +9,7 @@ const colorMap: Record<Category, string> = {
     FEMA: 'bg-teal-700',
     CCI: 'bg-indigo-600',
     LABOUR: 'bg-amber-600',
+    IFSCA: 'bg-cyan-700',
 }
 
 export default function CategoryBadge({ category, className = '' }: { category: Category, className?: string }) {

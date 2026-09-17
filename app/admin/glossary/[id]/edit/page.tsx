@@ -10,7 +10,7 @@ import MarkdownRenderer from '@/components/MarkdownRenderer'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 
-const CATEGORIES = ['IBC', 'NCLT', 'MCA', 'SEBI', 'RBI', 'FEMA', 'CCI', 'LABOUR', 'GENERAL']
+const CATEGORIES = ['IBC', 'NCLT', 'MCA', 'SEBI', 'RBI', 'FEMA', 'CCI', 'LABOUR', 'IFSCA', 'GENERAL']
 
 const parseMetadata = (content: string) => {
   const match = content.match(/^\s*<!--\s*METADATA\s*([\s\S]*?)\s*METADATA\s*-->/)

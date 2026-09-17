@@ -22,7 +22,7 @@ interface Article {
   published_at: string
 }
 
-const CATEGORIES = ['All', 'MCA', 'SEBI', 'RBI', 'IBC', 'FEMA', 'NCLT', 'CCI', 'LABOUR']
+const CATEGORIES = ['All', 'MCA', 'SEBI', 'RBI', 'IBC', 'FEMA', 'NCLT', 'CCI', 'LABOUR', 'IFSCA']
 
 export default function ArticleAnalyticsPage() {
   const [articles, setArticles] = useState<Article[]>([])

@@ -20,6 +20,7 @@ import {
   ShieldCheck,
   TrendingUp,
   Users,
+  Coins,
 } from 'lucide-react'
 
 export const revalidate = 3600
@@ -27,12 +28,12 @@ export const revalidate = 3600
 export const metadata: Metadata = {
   title: 'Corporate Law Updates India 2026',
   description:
-    'Daily MCA, SEBI, RBI, CCI, NCLT, IBC and Labour Law updates for CS, CA and compliance professionals. Free compliance tools included.',
+    'Daily MCA, SEBI, RBI, IFSCA (GIFT City), CCI, NCLT, IBC and Labour Law updates for CS, CA and compliance professionals. Free compliance tools included.',
   alternates: { canonical: 'https://www.corplawupdates.in' },
   openGraph: {
     title: 'Corporate Law Updates India 2026 | CorpLawUpdates.in',
     description:
-      'Daily MCA, SEBI, RBI, CCI, NCLT, IBC and Labour Law updates for CS, CA and compliance professionals.',
+      'Daily MCA, SEBI, RBI, IFSCA (GIFT City), CCI, NCLT, IBC and Labour Law updates for CS, CA and compliance professionals.',
     url: 'https://www.corplawupdates.in',
     type: 'website',
     siteName: 'CorpLawUpdates.in',
@@ -45,7 +46,7 @@ export const metadata: Metadata = {
     creator: '@corplawupdates',
     title: 'Corporate Law Updates India 2026 | CorpLawUpdates.in',
     description:
-      'Daily MCA, SEBI, RBI, CCI, NCLT, IBC and Labour Law updates for CS, CA and compliance professionals.',
+      'Daily MCA, SEBI, RBI, IFSCA (GIFT City), CCI, NCLT, IBC and Labour Law updates for CS, CA and compliance professionals.',
     images: ['https://www.corplawupdates.in/api/og?title=Corporate+Law+Updates+India+2026&category='],
   },
 }
@@ -59,6 +60,7 @@ const categoryMeta = [
   { id: 'NCLT', label: 'NCLT', Icon: Scale, bg: 'bg-orange-50 dark:bg-orange-950/30 text-orange-700 dark:text-orange-400 border border-orange-200/70 dark:border-orange-800/40 hover:bg-orange-100/60 dark:hover:bg-orange-900/40', desc: 'Company Law Tribunal' },
   { id: 'IBC', label: 'IBC', Icon: Gavel, bg: 'bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-400 border border-red-200/70 dark:border-red-800/40 hover:bg-red-100/60 dark:hover:bg-red-900/40', desc: 'Insolvency & Bankruptcy' },
   { id: 'FEMA', label: 'FEMA', Icon: Globe2, bg: 'bg-teal-50 dark:bg-teal-950/30 text-teal-700 dark:text-teal-400 border border-teal-200/70 dark:border-teal-800/40 hover:bg-teal-100/60 dark:hover:bg-teal-900/40', desc: 'Foreign Exchange' },
+  { id: 'IFSCA', label: 'IFSCA', Icon: Coins, bg: 'bg-cyan-50 dark:bg-cyan-950/30 text-cyan-800 dark:text-cyan-400 border border-cyan-200/70 dark:border-cyan-800/40 hover:bg-cyan-100/60 dark:hover:bg-cyan-900/40', desc: 'GIFT City / IFSC Authority' },
 ]
 
 export default async function HomePage() {
