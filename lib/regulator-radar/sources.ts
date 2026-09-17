@@ -16,7 +16,8 @@ const BROWSER_HEADERS = {
   'Sec-Fetch-Mode': 'navigate',
   'Sec-Fetch-Site': 'none',
   'Sec-Fetch-User': '?1',
-  'Upgrade-Insecure-Requests': '1'
+  'Upgrade-Insecure-Requests': '1',
+  'Connection': 'close'
 }
 
 /**
@@ -34,6 +35,13 @@ export function cleanHtmlText(text: string): string {
     .replace(/&apos;/gi, "'")
     .replace(/&lt;/gi, '<')
     .replace(/&gt;/gi, '>')
+    .replace(/&#x2013;/gi, '-')
+    .replace(/&#x2014;/gi, '-')
+    .replace(/&#x2018;/gi, "'")
+    .replace(/&#x2019;/gi, "'")
+    .replace(/&#x201C;/gi, '"')
+    .replace(/&#x201D;/gi, '"')
+    .replace(/&#x200B;/gi, '')
     .replace(/\s+/g, ' ')
     .trim()
 }
@@ -126,7 +134,7 @@ export function isWithinHours(date: Date, maxHours = 72): boolean {
  */
 function fetchHttpsText(url: string, extraHeaders: Record<string, string> = {}): Promise<string> {
   return new Promise((resolve) => {
-    https.get(url, {
+    const req = https.get(url, {
       rejectUnauthorized: false,
       headers: { ...BROWSER_HEADERS, ...extraHeaders },
       timeout: FETCH_TIMEOUT_MS
@@ -134,7 +142,12 @@ function fetchHttpsText(url: string, extraHeaders: Record<string, string> = {}):
       let data = ''
       res.on('data', chunk => data += chunk)
       res.on('end', () => resolve(data))
-    }).on('error', () => resolve(''))
+    })
+    req.on('error', () => resolve(''))
+    req.on('timeout', () => {
+      req.destroy()
+      resolve('')
+    })
   })
 }
 
@@ -755,4 +768,85 @@ export async function fetchNclat(maxHours = 72): Promise<RegulatorUpdate[]> {
 
   return updates
 }
+
+/* =========================================================================
+   10. IFSCA (International Financial Services Centres Authority - GIFT City)
+   ========================================================================= */
+export async function fetchIfsca(maxHours = 72): Promise<RegulatorUpdate[]> {
+  const updates: RegulatorUpdate[] = []
+  const url = 'https://ifsca.gov.in/'
+  // Regulatory notifications are published periodically; allow at least a 15-day lookback
+  const lookbackHours = Math.max(maxHours, 360)
+
+  try {
+    const html = await fetchHttpsText(url)
+    if (!html || html.length < 500) {
+      return updates
+    }
+
+    const blockRegex = /<div[^>]*class=["'][^"']*new-head[^"']*["'][\s\S]*?<div[^>]*class=["'][^"']*main-list[^"']*["'][\s\S]*?<\/div>/gi
+    const blocks = html.match(blockRegex) || []
+
+    for (const block of blocks) {
+      const h6Matches = block.match(/<h6[^>]*>([\s\S]*?)<\/h6>/gi) || []
+      if (h6Matches.length < 2) continue
+
+      const rawDocType = h6Matches[0]
+      const rawDateVal = h6Matches[1]
+      if (!rawDocType || !rawDateVal) continue
+
+      const docType = cleanHtmlText(rawDocType)
+      const rawDate = cleanHtmlText(rawDateVal)
+
+      // Exclude recruitment, careers, and general administrative tenders
+      const docLower = docType.toLowerCase()
+      if (docLower.includes('career') || docLower.includes('vacancy') || docLower.includes('tender')) {
+        continue
+      }
+
+      const mainListMatch = block.match(/<div[^>]*class=["'][^"']*main-list[^"']*["'][\s\S]*?<a[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/i)
+      if (!mainListMatch) continue
+
+      const rawHref = (mainListMatch[1] || '').trim()
+      const rawTitle = mainListMatch[2]
+      if (!rawTitle) continue
+      const title = cleanHtmlText(rawTitle)
+      if (!title || title.length < 5) continue
+
+      const parsedDate = parseIndianDate(rawDate)
+      if (!parsedDate || !isWithinHours(parsedDate, lookbackHours)) continue
+
+      const year = parsedDate.getFullYear()
+      const month = String(parsedDate.getMonth() + 1).padStart(2, '0')
+      const day = String(parsedDate.getDate()).padStart(2, '0')
+      const isoDate = `${year}-${month}-${day}`
+
+      let sourceUrl = rawHref
+      if (sourceUrl && !sourceUrl.startsWith('http')) {
+        sourceUrl = `https://ifsca.gov.in/${sourceUrl.replace(/^\/+/, '')}`
+      }
+
+      const pdfUrl = sourceUrl.endsWith('.pdf') ? sourceUrl : undefined
+
+      updates.push({
+        id: createHash('IFSCA', isoDate, title),
+        regulator: 'IFSCA',
+        regulatorLabel: 'IFSCA (GIFT City)',
+        category: 'IFSCA',
+        title,
+        date: isoDate,
+        rawDateStr: rawDate,
+        sourceUrl,
+        pdfUrl,
+        circularNo: `IFSCA ${docType}`,
+        snippet: `IFSCA ${docType} (${rawDate}): ${title}`
+      })
+    }
+  } catch (err) {
+    console.warn('[Radar] IFSCA fetch failed:', err)
+  }
+
+  return updates
+}
+
 

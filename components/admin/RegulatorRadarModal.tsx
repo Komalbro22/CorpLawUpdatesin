@@ -267,6 +267,8 @@ export default function RegulatorRadarModal({ isOpen, onClose }: Props) {
               { key: 'CCI', label: 'CCI' },
               { key: 'IFSCA', label: 'IFSCA (GIFT City)' },
               { key: 'IBBI', label: 'IBBI' },
+              { key: 'NCLT', label: 'NCLT Orders' },
+              { key: 'NCLAT', label: 'NCLAT Appeals' },
               { key: 'TAX', label: 'Tax' }
             ].map((tab) => (
               <button

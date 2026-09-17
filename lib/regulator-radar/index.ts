@@ -8,7 +8,8 @@ import {
   fetchIbbi,
   fetchTax,
   fetchNclt,
-  fetchNclat
+  fetchNclat,
+  fetchIfsca
 } from './sources'
 import { RadarResponse, RegulatorUpdate, SourceCheckResult, RegulatorKey } from './types'
 
@@ -53,6 +54,7 @@ export async function runRegulatorRadar(
     { regulator: 'MCA', label: 'MCA General Circulars', fn: () => fetchMca(filterHours) },
     { regulator: 'CCI', label: 'Competition Commission', fn: () => fetchCci(filterHours) },
     { regulator: 'IBBI', label: 'IBBI Circulars', fn: () => fetchIbbi(filterHours) },
+    { regulator: 'IFSCA', label: 'IFSCA (GIFT City)', fn: () => fetchIfsca(filterHours) },
     { regulator: 'TAX', label: 'Income Tax / GST', fn: () => fetchTax(filterHours) },
   ]
 
