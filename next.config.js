@@ -133,6 +133,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/updates/mgt-7-annual-return-filing-guide-fy-2025-26-due-date-mca-v3-small-company-limits-ccfs2026',
+        destination: '/updates/form-mgt-7-mgt-7a-annual-return-guide-2026',
+        permanent: true,
+      },
+      {
         source: '/corporate-law-updates-india',
         destination: '/updates',
         permanent: true,

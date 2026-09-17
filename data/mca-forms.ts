@@ -54,8 +54,8 @@ export const mcaForms: MCAForm[] = [
     filingGuides: [
       {
         title: "Complete MGT-7 Annual Return Filing Guide for FY 2025-26 — Due Dates, MCA V3 & Small Co Limits",
-        slug: "/updates/mgt-7-annual-return-filing-guide-fy-2025-26-due-date-mca-v3-small-company-limits-ccfs2026",
-        publishedDate: "2026-03-15",
+        slug: "/updates/form-mgt-7-mgt-7a-annual-return-guide-2026",
+        publishedDate: "2026-09-16",
         summary: "Step-by-step walkthrough of filing MGT-7 Annual Return on MCA V3, including attachments, certification requirements, updated Small Company thresholds, and penalty rules.",
         isOfficial: true
       }
@@ -97,8 +97,8 @@ export const mcaForms: MCAForm[] = [
     filingGuides: [
       {
         title: "Complete MGT-7A Annual Return Filing Guide for Small Companies and OPCs (FY 2025-26)",
-        slug: "/updates/mgt-7-annual-return-filing-guide-fy-2025-26-due-date-mca-v3-small-company-limits-ccfs2026",
-        publishedDate: "2026-03-15",
+        slug: "/updates/form-mgt-7-mgt-7a-annual-return-guide-2026",
+        publishedDate: "2026-09-16",
         summary: "Step-by-step guide to filing Form MGT-7A on MCA V3, covering abridged disclosures, exemption from PCS certification, updated Small Company thresholds, and Section 446B relief.",
         isOfficial: true
       }
