@@ -12,7 +12,7 @@ import EmptyState from '@/components/EmptyState'
 
 export const revalidate = 43200 // 12 hours
 
-const CATEGORIES = ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci', 'labour', 'labour-law', 'ifsca']
+const CATEGORIES = ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci', 'labour', 'ifsca']
 
 const CATEGORY_FULL_NAMES: Record<string, string> = {
     mca: 'Ministry of Corporate Affairs',
@@ -189,6 +189,14 @@ const CATEGORY_REGULATORY_FAQS: Record<string, CategoryFAQ[]> = {
             question: 'Where can daily NCLT orders and cause lists be accessed?',
             answer: 'Orders and cause lists are published on nclt.gov.in across its principal bench in New Delhi and regional benches across India.',
         },
+        {
+            question: 'Can NCLT orders be appealed, and what is the appellate forum?',
+            answer: 'Appeals against orders passed by any bench of the NCLT lie before the National Company Law Appellate Tribunal (NCLAT) under Section 421 of the Companies Act, 2013 and Section 61 of the IBC, 2016, with a statutory limitation period of 45 days (extendable by 15 days on showing sufficient cause).',
+        },
+        {
+            question: 'Does NCLT have jurisdiction over personal insolvency under IBC?',
+            answer: 'Yes. Under Section 60(1) and 60(2) of the IBC, the NCLT bench having territorial jurisdiction over the corporate debtor is also the Adjudicating Authority for insolvency and bankruptcy proceedings of personal guarantors to the corporate debtor.',
+        },
     ],
     ibc: [
         {
@@ -198,6 +206,10 @@ const CATEGORY_REGULATORY_FAQS: Record<string, CategoryFAQ[]> = {
         {
             question: 'What is the statutory timeline for CIRP under IBC?',
             answer: 'Under Section 12 of the IBC, 2016, Corporate Insolvency Resolution Process (CIRP) must be completed within 180 days, with a maximum permissible extension of up to 330 days including legal proceedings.',
+        },
+        {
+            question: 'What is the waterfall mechanism of liquidation payout under Section 53 of IBC?',
+            answer: 'Under Section 53 of the IBC, liquidation proceeds are distributed in strict hierarchy: (1) CIRP and liquidation costs in full; (2) Workmen dues (24 months) and secured debts ranking equally; (3) Wages of other employees (12 months); (4) Financial debts owed to unsecured creditors; (5) Government taxes (2 years) and remaining secured debt; (6) Any remaining debts and liabilities; (7) Preference shareholders; (8) Equity shareholders.',
         },
     ],
     fema: [
@@ -209,6 +221,14 @@ const CATEGORY_REGULATORY_FAQS: Record<string, CategoryFAQ[]> = {
             question: 'What is the penalty for non-compliance under FEMA, 1999?',
             answer: 'FEMA violations are civil contraventions punishable with penalties up to thrice the amount involved, or up to ₹2 lakh where the amount is unquantifiable, along with compounding options under RBI rules.',
         },
+        {
+            question: 'What is the difference between Automatic Route and Approval Route for FDI?',
+            answer: 'Under the Foreign Exchange Management (Non-debt Instruments) Rules, 2019, FDI under the Automatic Route requires no prior approval from the Government or RBI, requiring only post-investment filing in Form FC-GPR on the FIRMS portal within 30 days. Under the Government Approval Route, prior approval from the relevant administrative ministry is mandatory before inward remittance.',
+        },
+        {
+            question: 'What is the External Commercial Borrowing (ECB) framework under FEMA?',
+            answer: 'ECB refers to commercial loans raised by eligible resident entities from recognized non-resident entities. Under the automatic route, eligible borrowers can raise up to USD 750 million per financial year with a minimum average maturity period (MAMP) of 3 to 5 years depending on end-use.',
+        },
     ],
     cci: [
         {
@@ -219,6 +239,14 @@ const CATEGORY_REGULATORY_FAQS: Record<string, CategoryFAQ[]> = {
             question: 'What is the Green Channel approval route in CCI?',
             answer: 'The Green Channel provides automatic deemed approval for combination filings where there are no horizontal overlaps, vertical relationships, or complementary activities between the transacting parties.',
         },
+        {
+            question: 'What constitutes an abuse of dominant position under Section 4 of the Competition Act?',
+            answer: 'Section 4 prohibits unfair or discriminatory conditions in purchase or sale, predatory pricing, limiting or restricting scientific/technical development, denial of market access, and leveraging dominance in one relevant market to enter or protect another.',
+        },
+        {
+            question: 'What are the combination thresholds requiring mandatory notification to CCI?',
+            answer: 'Parties to mergers, amalgamations, or acquisitions exceeding prescribed domestic or worldwide asset/turnover thresholds (or meeting the Deal Value Threshold of ₹2,000 crore under the Competition Amendment Act) must file a notification with CCI and observe a mandatory 150-day standstill period prior to closing.',
+        },
     ],
     labour: [
         {
@@ -228,6 +256,14 @@ const CATEGORY_REGULATORY_FAQS: Record<string, CategoryFAQ[]> = {
         {
             question: 'Where are official EPFO and ESIC circulars published?',
             answer: 'EPFO circulars are published at epfindia.gov.in and ESIC circulars at esic.gov.in, tracking monthly ECR filing guidelines, contribution rates, and social security updates.',
+        },
+        {
+            question: 'What are the compliance responsibilities of employers under EPF ECR?',
+            answer: 'Under the EPF & MP Act, 1952, establishments employing 20 or more persons must deduct 12% statutory PF contributions from eligible employees wages, match with employer contributions (including EPS), and remit electronically via the Electronic Challan-cum-Return (ECR) portal on epfindia.gov.in by the 15th of each succeeding month.',
+        },
+        {
+            question: 'What is the threshold limit and wage ceiling for ESIC coverage in India?',
+            answer: 'Under the ESI Act, 1948, non-seasonal factories employing 10 or more persons (and notified establishments) must enroll employees whose gross monthly wages are up to ₹21,000 (₹25,000 for persons with disabilities). Employer contribution is 3.25% and employee contribution is 0.75% of wages.',
         },
     ],
     'labour-law': [
@@ -593,7 +629,11 @@ export async function generateMetadata(
 ): Promise<Metadata> {
     const resolvedParams = await params
     const resolvedSearchParams = searchParams ? await searchParams : {}
-    const cat = resolvedParams.category.toLowerCase()
+    const rawCat = resolvedParams.category.toLowerCase()
+    if (rawCat === 'labour-law') {
+        redirect('/category/labour')
+    }
+    const cat = rawCat
     const categoryName = cat.toUpperCase()
 
     const rawPage = resolvedSearchParams.page
@@ -670,10 +710,15 @@ export default async function CategoryPage({
     const resolvedSearchParams = searchParams ? await searchParams : {}
 
     const originalCat = resolvedParams.category
-    if (originalCat !== originalCat.toLowerCase()) {
-        redirect(`/category/${originalCat.toLowerCase()}`)
-    }
     const cat = originalCat.toLowerCase()
+
+    if (cat === 'labour-law') {
+        redirect('/category/labour')
+    }
+
+    if (originalCat !== cat) {
+        redirect(`/category/${cat}`)
+    }
 
     if (!CATEGORIES.includes(cat)) {
         notFound()
@@ -891,9 +936,9 @@ export default async function CategoryPage({
                     <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-card ring-1 ring-slate-900/[0.02] dark:ring-white/[0.02]">
                         <EmptyState
                             icon="📋"
-                            title={`No ${cat.toUpperCase()} updates yet`}
-                            description={`We're working on adding articles for this category. Subscribe to get notified when new updates are published.`}
-                            actionLabel="Subscribe to Newsletter"
+                            title={`Recent ${cat.toUpperCase()} Circulars & Gazette Notifications`}
+                            description={`Official notifications and circulars for ${CATEGORY_FULL_NAMES[cat] || cat.toUpperCase()} are monitored and indexed dynamically in real time. Explore our statutory intelligence guides, regulatory FAQs, and compliance calculators below.`}
+                            actionLabel="Subscribe to Regulatory Alerts"
                             actionHref="/newsletter"
                         />
                     </div>

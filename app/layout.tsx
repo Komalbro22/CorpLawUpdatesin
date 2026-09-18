@@ -110,6 +110,12 @@ export default async function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="format-detection" content="telephone=no" />
+        {/* Google AdSense Official Script Tag in Head */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8404756575471756"
+          crossOrigin="anonymous"
+        />
         <JsonLd data={{
           '@context': 'https://schema.org',
           '@type': 'Organization',
@@ -217,15 +223,6 @@ export default async function RootLayout({
         <Script
           id="google-publisher-sdk"
           src="https://news.google.com/swg/js/v1/publisher.js"
-          strategy="lazyOnload"
-        />
-
-        {/* Google AdSense Publisher Verification & Script */}
-        <Script
-          id="google-adsense"
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8404756575471756"
-          crossOrigin="anonymous"
           strategy="lazyOnload"
         />
 
