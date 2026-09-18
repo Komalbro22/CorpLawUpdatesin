@@ -197,12 +197,20 @@ export default function RegulatorRadarPage() {
     fetchRadar(false)
   }, [fetchRadar])
 
+  // Check if a regulator key (or child sub-regulator like EPFO/ESIC) is enabled
+  const isRegulatorActive = useCallback((reg: string) => {
+    if (enabledRegulators.includes(reg as any)) return true
+    if (enabledRegulators.includes('LABOUR') && (reg === 'EPFO' || reg === 'ESIC')) return true
+    if (enabledRegulators.includes('RBI') && reg === 'FEMA') return true
+    return false
+  }, [enabledRegulators])
+
   // Filter items based on active regulators, seen filter, category tab, and search query
   const filteredItems = useMemo(() => {
     if (!data?.items) return []
     return data.items.filter((item) => {
       // Must belong to an enabled regulator
-      if (!enabledRegulators.includes(item.regulator)) return false
+      if (!isRegulatorActive(item.regulator)) return false
 
       const isSeen = seenHashes.includes(item.id)
       if (hideSeen && isSeen) return false
@@ -226,12 +234,12 @@ export default function RegulatorRadarPage() {
 
       return true
     })
-  }, [data, seenHashes, hideSeen, selectedRegulator, searchQuery, enabledRegulators])
+  }, [data, seenHashes, hideSeen, selectedRegulator, searchQuery, isRegulatorActive])
 
   const unreadCount = useMemo(() => {
     if (!data?.items) return 0
-    return data.items.filter((i) => enabledRegulators.includes(i.regulator) && !seenHashes.includes(i.id)).length
-  }, [data, seenHashes, enabledRegulators])
+    return data.items.filter((i) => isRegulatorActive(i.regulator) && !seenHashes.includes(i.id)).length
+  }, [data, seenHashes, isRegulatorActive])
 
   // Count by regulator for badges
   const regulatorCounts = useMemo(() => {
@@ -239,7 +247,7 @@ export default function RegulatorRadarPage() {
     if (!data?.items) return counts
 
     data.items.forEach((item) => {
-      if (!enabledRegulators.includes(item.regulator)) return
+      if (!isRegulatorActive(item.regulator)) return
       const isUnread = !seenHashes.includes(item.id)
       if (isUnread) {
         counts.ALL++
@@ -257,7 +265,7 @@ export default function RegulatorRadarPage() {
       }
     })
     return counts
-  }, [data, seenHashes, enabledRegulators])
+  }, [data, seenHashes, isRegulatorActive])
 
   // 1-Click Create Article Action (Intelligently structured for Case Laws vs Circulars)
   const handleCreateArticle = (item: RegulatorUpdate) => {

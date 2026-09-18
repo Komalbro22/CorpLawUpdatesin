@@ -2,6 +2,7 @@
 import { RegulatorKey, RegulatorUpdate, SourceCheckResult } from './types'
 import { Category } from '@/types'
 import https from 'https'
+import http from 'http'
 
 const FETCH_TIMEOUT_MS = 6000 // 6 seconds max per source
 
@@ -130,24 +131,59 @@ export function isWithinHours(date: Date, maxHours = 72): boolean {
 }
 
 /**
- * Fetch HTML via direct HTTPS with relaxed SSL for government servers
+ * Fetch HTML/Text via direct HTTP/HTTPS with redirect-following and relaxed SSL for government servers
  */
-function fetchHttpsText(url: string, extraHeaders: Record<string, string> = {}): Promise<string> {
+function fetchHttpsText(
+  url: string,
+  extraHeaders: Record<string, string> = {},
+  timeoutMs = FETCH_TIMEOUT_MS,
+  maxRedirects = 3
+): Promise<string> {
   return new Promise((resolve) => {
-    const req = https.get(url, {
-      rejectUnauthorized: false,
-      headers: { ...BROWSER_HEADERS, ...extraHeaders },
-      timeout: FETCH_TIMEOUT_MS
-    }, (res) => {
-      let data = ''
-      res.on('data', chunk => data += chunk)
-      res.on('end', () => resolve(data))
-    })
-    req.on('error', () => resolve(''))
-    req.on('timeout', () => {
-      req.destroy()
+    if (maxRedirects < 0) return resolve('')
+    try {
+      const client = url.startsWith('http://') ? http : https
+      const req = client.get(
+        url,
+        {
+          rejectUnauthorized: false,
+          headers: { ...BROWSER_HEADERS, ...extraHeaders },
+          timeout: timeoutMs
+        },
+        (res) => {
+          if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+            let redirectUrl = res.headers.location
+            if (!redirectUrl.startsWith('http')) {
+              try {
+                const u = new URL(url)
+                redirectUrl = `${u.protocol}//${u.host}${redirectUrl}`
+              } catch {
+                return resolve('')
+              }
+            }
+            return resolve(fetchHttpsText(redirectUrl, extraHeaders, timeoutMs, maxRedirects - 1))
+          }
+
+          let data = ''
+          res.on('data', (chunk) => {
+            data += chunk
+            // Cap body at 250KB to prevent memory exhaustion and long downloads
+            if (data.length > 250000) {
+              req.destroy()
+              resolve(data)
+            }
+          })
+          res.on('end', () => resolve(data))
+        }
+      )
+      req.on('error', () => resolve(''))
+      req.on('timeout', () => {
+        req.destroy()
+        resolve('')
+      })
+    } catch {
       resolve('')
-    })
+    }
   })
 }
 
@@ -426,56 +462,192 @@ export async function fetchCci(maxHours = 72): Promise<RegulatorUpdate[]> {
 }
 
 /* =========================================================================
-   4. Labour (ESIC & EPFO Circulars)
+   4. Labour (ESIC, EPFO & Ministry of Labour Circulars)
    ========================================================================= */
 export async function fetchLabourAndEpfo(maxHours = 72): Promise<RegulatorUpdate[]> {
   const updates: RegulatorUpdate[] = []
+  // Labour authorities and judicial bodies publish circulars periodically; allow at least a 15-day lookback
+  const lookbackHours = Math.max(maxHours, 360)
 
-  // 4A. ESIC Circulars
-  try {
-    const esicUrl = 'https://esic.gov.in/circulars'
-    const html = await fetchHttpsText(esicUrl)
-    const cleanHtml = html.replace(/<!--[\s\S]*?-->/g, '')
-    const rows = cleanHtml.match(/<tr[^>]*>[\s\S]*?<\/tr>/gi) || []
+  // Run live scrapers in parallel with independent fail-safes
+  const [esicRes, pibRes, labourCmsRes] = await Promise.allSettled([
+    // 4A. ESIC Circulars
+    (async () => {
+      const items: RegulatorUpdate[] = []
+      const esicUrl = 'https://esic.gov.in/circulars'
+      const html = await fetchHttpsText(esicUrl, {}, 4500)
+      if (!html || html.length < 200) return items
 
-    for (const r of rows) {
-      if (r.includes('<th')) continue
+      const cleanHtml = html.replace(/<!--[\s\S]*?-->/g, '')
+      const rows = cleanHtml.match(/<tr[^>]*>[\s\S]*?<\/tr>/gi) || []
 
-      const aMatch = r.match(/<a[^>]*href=(?:["']([^"']+)["']|([^\s>]+))[^>]*>([\s\S]*?)<\/a>/i)
-      const dateMatch = r.match(/(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4}|\d{1,2}\s+[A-Za-z]+,?\s+\d{4})/i)
+      for (const r of rows) {
+        if (r.includes('<th')) continue
 
-      if (aMatch && dateMatch) {
-        const rawHref = aMatch[1] || aMatch[2]
-        let title = cleanHtmlText(aMatch[3])
-        if (!title || title.length < 5) continue
+        const aMatch = r.match(/<a[^>]*href=(?:["']([^"']+)["']|([^\s>]+))[^>]*>([\s\S]*?)<\/a>/i)
+        const dateMatch = r.match(/(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4}|\d{1,2}\s+[A-Za-z]+,?\s+\d{4})/i)
 
-        title = title.replace(/-?\s*PDF size.*$/i, '').trim()
+        if (aMatch && dateMatch) {
+          const rawHref = aMatch[1] || aMatch[2]
+          let title = cleanHtmlText(aMatch[3])
+          if (!title || title.length < 5) continue
 
-        const parsedDate = parseIndianDate(dateMatch[1])
-        if (!parsedDate || !isWithinHours(parsedDate, maxHours)) continue
+          title = title.replace(/-?\s*PDF size.*$/i, '').trim()
 
-        const href = rawHref.startsWith('http') ? rawHref : `https://esic.gov.in/${rawHref.replace(/^\/+/, '')}`
+          const parsedDate = parseIndianDate(dateMatch[1])
+          if (!parsedDate || !isWithinHours(parsedDate, lookbackHours)) continue
+
+          const href = rawHref.startsWith('http') ? rawHref : `https://esic.gov.in/${rawHref.replace(/^\/+/, '')}`
+          const isoDate = formatIsoDate(parsedDate)
+
+          items.push({
+            id: createHash('LABOUR', isoDate, title),
+            regulator: 'LABOUR',
+            regulatorLabel: 'Labour / ESIC / EPFO',
+            category: 'LABOUR',
+            title: title.startsWith('ESIC') || title.startsWith('Labour') ? title : `ESIC: ${title}`,
+            date: isoDate,
+            rawDateStr: dateMatch[1].trim(),
+            sourceUrl: href,
+            pdfUrl: href.endsWith('.pdf') ? href : undefined,
+            snippet: `Ministry of Labour / ESIC Order: ${title}`
+          })
+        }
+      }
+      return items
+    })(),
+
+    // 4B. Ministry of Labour & Employment / PIB Press Releases
+    (async () => {
+      const pibUpdates: RegulatorUpdate[] = []
+      const pibUrl = 'https://www.pib.gov.in/RssMain.aspx?ModId=6&reg=3&lang=1'
+      const xml = await fetchHttpsText(pibUrl, {}, 3500)
+      if (!xml || xml.length < 200) return pibUpdates
+
+      const items = xml.match(/<item>[\s\S]*?<\/item>/gi) || []
+      const labourKeywords = /labour|labor|epfo|esic|provident fund|employment|pension|shram|wage|gratuity|workmen|social security/i
+
+      for (const it of items) {
+        const titleMatch = it.match(/<title>([\s\S]*?)<\/title>/i)
+        const linkMatch = it.match(/<link>([\s\S]*?)<\/link>/i)
+        const dateMatch = it.match(/<pubDate>([\s\S]*?)<\/pubDate>/i)
+        const descMatch = it.match(/<description>([\s\S]*?)<\/description>/i)
+
+        const rawTitle = cleanHtmlText(titleMatch ? titleMatch[1] : '')
+        const href = cleanHtmlText(linkMatch ? linkMatch[1] : '')
+        const desc = cleanHtmlText(descMatch ? descMatch[1] : '')
+
+        if (!rawTitle || (!labourKeywords.test(rawTitle) && !labourKeywords.test(desc))) {
+          continue
+        }
+
+        const parsedDate = dateMatch ? parseIndianDate(dateMatch[1]) : new Date()
+        if (!parsedDate || !isWithinHours(parsedDate, lookbackHours)) continue
+
         const isoDate = formatIsoDate(parsedDate)
+        const title = rawTitle.startsWith('Labour:') || rawTitle.startsWith('Ministry of Labour') ? rawTitle : `Labour: ${rawTitle}`
 
-        updates.push({
+        pibUpdates.push({
           id: createHash('LABOUR', isoDate, title),
           regulator: 'LABOUR',
           regulatorLabel: 'Labour / ESIC / EPFO',
           category: 'LABOUR',
-          title: title.startsWith('ESIC') || title.startsWith('Labour') ? title : `ESIC: ${title}`,
+          title,
           date: isoDate,
-          rawDateStr: dateMatch[1].trim(),
-          sourceUrl: href,
-          pdfUrl: href.endsWith('.pdf') ? href : undefined,
-          snippet: `Ministry of Labour / ESIC Order: ${title}`
+          rawDateStr: dateMatch ? dateMatch[1].trim() : isoDate,
+          sourceUrl: href || 'https://www.pib.gov.in',
+          snippet: desc ? `PIB Press Release: ${desc.slice(0, 180)}` : `PIB Labour & Employment Announcement: ${rawTitle}`
         })
       }
+      return pibUpdates
+    })(),
+
+    // 4C. Labour Ministry CMS
+    (async () => {
+      const cmsUpdates: RegulatorUpdate[] = []
+      const cmsUrl = 'https://www.labour.gov.in/cms/wp-json/post-page/whats_new'
+      const jsonStr = await fetchHttpsText(cmsUrl, { apikey: '4bW5t13453pa' }, 3500)
+      if (!jsonStr || jsonStr.length < 50) return cmsUpdates
+
+      try {
+        const j = JSON.parse(jsonStr)
+        const posts = j.posts || []
+        for (const p of posts) {
+          const title = cleanHtmlText(p.post_title)
+          if (!title || title.length < 5) continue
+          const parsedDate = parseIndianDate(p.post_date)
+          if (!parsedDate || !isWithinHours(parsedDate, lookbackHours)) continue
+
+          const isoDate = formatIsoDate(parsedDate)
+          cmsUpdates.push({
+            id: createHash('LABOUR', isoDate, title),
+            regulator: 'LABOUR',
+            regulatorLabel: 'Labour / ESIC / EPFO',
+            category: 'LABOUR',
+            title: title.startsWith('Labour') ? title : `Labour: ${title}`,
+            date: isoDate,
+            rawDateStr: p.post_date,
+            sourceUrl: 'https://www.labour.gov.in/whats-new',
+            snippet: `Ministry of Labour & Employment Notification: ${title}`
+          })
+        }
+      } catch {}
+      return cmsUpdates
+    })()
+  ])
+
+  if (esicRes.status === 'fulfilled' && Array.isArray(esicRes.value)) updates.push(...esicRes.value)
+  if (pibRes.status === 'fulfilled' && Array.isArray(pibRes.value)) updates.push(...pibRes.value)
+  if (labourCmsRes.status === 'fulfilled' && Array.isArray(labourCmsRes.value)) updates.push(...labourCmsRes.value)
+
+  // 4D. Resilient Database Fallback
+  // If external government scrapers returned 0 items (e.g. NIC downtime or server block),
+  // pull latest published Labour & EPFO updates from Supabase so the tab is never empty!
+  if (updates.length === 0) {
+    try {
+      const { getSupabaseAdminClient } = await import('@/lib/supabase-factory')
+      const supabase = getSupabaseAdminClient()
+      const { data: dbItems, error } = await supabase
+        .from('updates')
+        .select('id, title, slug, summary, published_at, category')
+        .ilike('category', '%labour%')
+        .order('published_at', { ascending: false })
+        .limit(10)
+
+      if (!error && Array.isArray(dbItems)) {
+        for (const item of dbItems) {
+          const pubDate = new Date(item.published_at)
+          const isoDate = !isNaN(pubDate.getTime()) ? formatIsoDate(pubDate) : formatIsoDate(new Date())
+          updates.push({
+            id: createHash('LABOUR', isoDate, item.title),
+            regulator: 'LABOUR',
+            regulatorLabel: 'Labour / ESIC / EPFO',
+            category: 'LABOUR',
+            title: item.title,
+            date: isoDate,
+            rawDateStr: isoDate,
+            sourceUrl: `https://corplawupdates.in/updates/${item.slug}`,
+            snippet: item.summary || `Labour Law Update: ${item.title}`
+          })
+        }
+      }
+    } catch (dbErr) {
+      console.warn('[Radar] Labour DB fallback error:', dbErr)
     }
-  } catch (err) {
-    console.warn('[Radar] ESIC fetch failed:', err)
   }
 
-  return updates
+  // Deduplicate items by ID
+  const seenMap = new Map<string, RegulatorUpdate>()
+  for (const u of updates) {
+    if (!seenMap.has(u.id)) {
+      seenMap.set(u.id, u)
+    }
+  }
+
+  const result = Array.from(seenMap.values())
+  result.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+
+  return result
 }
 
 /* =========================================================================
