@@ -21,7 +21,7 @@ export const articleSchema = z.object({
   seo_title: z.string().max(200).nullable().optional(),
   seo_description: z.string().max(500).nullable().optional(),
   quick_answer: z.string().max(2000).nullable().optional(),
-  regulation_ref: z.string().max(500).nullable().optional(),
+  regulation_ref: z.string().max(2000).nullable().optional(),
   last_verified: z.string().nullable().optional(),
   last_amended: z.string().nullable().optional(),
   key_takeaways: z.any().nullable().optional(),

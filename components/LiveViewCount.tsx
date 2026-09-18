@@ -39,9 +39,10 @@ export default function LiveViewCount({ slug, initialViews = 0 }: { slug: string
         <span 
           className="views-count inline-flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 font-medium"
           aria-label={`${views.toLocaleString('en-IN')} article views`}
+          suppressHydrationWarning
         >
             <Eye className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" aria-hidden />
-            <span>{formattedViews} views</span>
+            <span suppressHydrationWarning>{formattedViews} views</span>
         </span>
     )
 }
