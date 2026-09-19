@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
 
   if (!slug) {
     return {
-      title: 'AI Legal Document Generator | CorpLawUpdates.in',
+      title: 'Legal Document & Secretarial Draft Generator | CorpLawUpdates.in',
     }
   }
 
@@ -29,13 +29,13 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
 
   if (!template) {
     return {
-      title: 'AI Legal Document Generator | CorpLawUpdates.in',
+      title: 'Legal Document & Secretarial Draft Generator | CorpLawUpdates.in',
     }
   }
 
   // Optimize title/description for SEO based on document type (Next.js applies %s | CorpLawUpdates.in)
   let title = `${template.name} Format (Free Generator)`
-  let description = `${template.description} Create, customize, and edit your document instantly with AI. Fully verified for compliance under Indian laws.`
+  let description = `${template.description} Create, customize, and edit your document format instantly. Fully verified for compliance under Indian laws and ICSI Secretarial Standards.`
   let keywords = [template.name, `${template.name} format`, `${template.name} india`, 'generator', 'drafting', 'legal template', 'pdf download']
   
   if (template.tags && Array.isArray(template.tags)) {

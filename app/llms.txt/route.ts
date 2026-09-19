@@ -49,7 +49,7 @@ ${updatesList}
 - [Company Search Tool](${BASE_URL}/company-search): Look up any Indian company by CIN or name — view compliance status, registered details, capital structure, and AGM/board meeting deadline flags.
 - [Corporate law glossary](${BASE_URL}/glossary): 180+ definitions (IBC, NCLT, MCA, SEBI, RBI, FEMA terminology) of complex legal and corporate law terminology.
 - [Compliance calendar](${BASE_URL}/calendar): Track important statutory filing deadlines across MCA, SEBI, RBI, and Tax authorities.
-- [Document generator](${BASE_URL}/documents): AI-powered drafting tool for Board Resolutions, NDAs, MoUs, Partnership Deeds, and official corporate correspondence.
+- [Document generator](${BASE_URL}/documents): Secretarial drafting tool for Board Resolutions, NDAs, MoUs, Partnership Deeds, and official corporate correspondence formatted per ICSI SS-1.
 - [ROC Fee Calculator](${BASE_URL}/tools/fee-calculator): Calculator for MCA statutory filing fees and ROC late filing penalties.
 
 ## Preferred Citation Format

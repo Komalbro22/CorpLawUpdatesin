@@ -56,10 +56,10 @@ export default function PrivacyPolicyPage() {
                             <p className="text-slate-500 dark:text-slate-400 text-sm mt-2 italic">This data is processed via Brevo (Sendinblue) and Resend (our email delivery infrastructure providers) and stored in our database to help us measure delivery reliability and campaign performance.</p>
                         </div>
                         <div>
-                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">C. AI Document Generator Inputs & Logs</h3>
-                            <p className="text-slate-600 dark:text-slate-400 mb-2">When you use our AI Legal Document Generator, we process:</p>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">C. Document Generator Inputs & Logs</h3>
+                            <p className="text-slate-600 dark:text-slate-400 mb-2">When you use our Legal Document Generator, we process:</p>
                             <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-400">
-                                <li><strong>Form Inputs</strong> — whatever details you fill (e.g. company names, director DINs, addresses, financial amounts, custom instructions). These are sent to the AI subprocessor to render the document.</li>
+                                <li><strong>Form Inputs</strong> — whatever details you fill (e.g. company names, director DINs, addresses, financial amounts, custom instructions). These are used to render and format the statutory document.</li>
                                 <li><strong>Generation Metadata</strong> — we log document type, timestamp, IP address, and token usage to enforce rate limits and monitor server load.</li>
                             </ul>
                         </div>
@@ -151,9 +151,9 @@ export default function PrivacyPolicyPage() {
                                     <td className="p-3">Database hosting and storage</td>
                                 </tr>
                                 <tr className="border-b border-slate-100 dark:border-slate-800/60">
-                                    <td className="p-3 font-bold">Google (Gemini API)</td>
-                                    <td className="p-3">AI document generation inputs</td>
-                                    <td className="p-3">AI legal document translation and drafting</td>
+                                    <td className="p-3 font-bold">Google Cloud APIs</td>
+                                    <td className="p-3">Document generation inputs</td>
+                                    <td className="p-3">Document formatting, translation and template rendering</td>
                                 </tr>
                                 <tr className="border-b border-slate-100 dark:border-slate-800/60">
                                     <td className="p-3 font-bold">Vercel</td>
@@ -232,7 +232,7 @@ export default function PrivacyPolicyPage() {
                     <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-400">
                         <li><strong>Subscriber emails</strong> — retained until you unsubscribe. After unsubscribing, your email is marked inactive and deleted within 30 days upon written request.</li>
                         <li><strong>IP addresses (rate-limiting)</strong> — retained for a short rolling window only (used to detect abuse; not linked to your email)</li>
-                        <li><strong>AI Generated Documents</strong> — saved draft contents are retained in our database for session retrieval and professional editing purposes. You can request immediate erasure of your documents by contacting us.</li>
+                        <li><strong>Generated Documents</strong> — saved draft contents are retained in our database for session retrieval and professional editing purposes. You can request immediate erasure of your documents by contacting us.</li>
                     </ul>
                     <p className="text-slate-600 dark:text-slate-400 mt-3 italic">To request deletion of your data: legal@corplawupdates.in</p>
                 </section>

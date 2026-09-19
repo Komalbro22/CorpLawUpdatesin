@@ -342,7 +342,7 @@ export default function FeeCalculatorHub() {
             { href: '/tools/fee-calculator/companies', label: 'MCA Form Calculators', desc: 'MGT-7, AOC-4, DIR-3 & more' },
             { href: '/tools/cin-decoder', label: 'CIN Decoder', desc: 'Decode company CINs' },
             { href: '/tools/roc-tracker', label: 'ROC Deadline Tracker', desc: 'Track filing deadlines' },
-            { href: '/documents', label: 'Document Generator', desc: 'AI-powered drafts' },
+            { href: '/documents', label: 'Document Generator', desc: 'ICSI & MCA formats' },
             { href: '/updates', label: 'Latest Updates', desc: 'Daily regulatory briefs' },
           ]}
           className="mb-8"

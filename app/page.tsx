@@ -333,9 +333,9 @@ export default async function HomePage() {
                 href: '/documents',
                 icon: '📄',
                 title: 'Document Generator',
-                desc: 'Generate Board Resolutions, Director Appointment letters, Agreements, and corporate letters in seconds. AI-powered with ICSI SS-1 formatting.',
-                badge: 'AI Powered',
-                badgeColor: 'bg-purple-100 text-purple-700 dark:bg-purple-950/50 dark:text-purple-300',
+                desc: 'Generate Board Resolutions, Director Appointment letters, Agreements, and corporate letters in seconds. Formatted per ICSI SS-1 standards.',
+                badge: 'ICSI SS-1',
+                badgeColor: 'bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300',
               },
               {
                 href: '/tools/fee-calculator',

@@ -8,7 +8,7 @@ import { MVP_DOCUMENTS_META } from '@/lib/doc-generator/ai-engine'
 
 export const metadata: Metadata = {
   title: 'Free Legal Document Generator India — Board Resolutions, Agreements | CorpLawUpdates.in',
-  description: 'Generate legally accurate Indian company documents free. Board resolutions, MOA, director appointments, lease agreements — powered by AI. Updated to latest MCA/ICSI formats.',
+  description: 'Generate legally accurate Indian company documents free. Board resolutions, MOA, director appointments, lease agreements — updated to latest MCA and ICSI Secretarial Standards.',
   keywords: ['legal document generator', 'free board resolution generator', 'draft lease agreement india', 'online rent agreement format', 'mca compliance documents'],
   alternates: {
     canonical: 'https://www.corplawupdates.in/documents',

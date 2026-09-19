@@ -1787,8 +1787,8 @@ export default function DocumentGeneratorClient({
       <div className="max-w-7xl mx-auto px-4 pt-8">
         <div className="prose prose-slate max-w-none mb-8">
           <p className="text-slate-600 leading-relaxed text-sm md:text-base">
-            Use our AI-powered {template.name} generator to draft a legally compliant document in minutes. 
-            This intelligent tool analyzes your inputs to automatically format clauses, structure the document correctly according to the <strong>{template.regulation_reference}</strong>, and check for legal conflicts. Completely free to use.
+            Use our {template.name} generator to draft a compliant document in minutes. 
+            This automated drafting tool structures your inputs correctly according to <strong>{template.regulation_reference}</strong> and formats standard statutory clauses. Completely free to use.
           </p>
         </div>
       </div>
