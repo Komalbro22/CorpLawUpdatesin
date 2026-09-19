@@ -562,22 +562,24 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                 {(() => {
                     const desk = getEditorialDesk(update.category);
                     return (
-                        <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4 rounded-xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 p-3 text-xs">
-                            <div className="flex items-center gap-2.5">
+                        <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 rounded-xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 p-3 text-xs">
+                            <div className="flex items-center gap-2.5 min-w-0 flex-1">
                                 <span className="flex size-8 items-center justify-center rounded-full bg-navy dark:bg-slate-800 text-white font-bold text-xs shrink-0 border border-slate-700">CL</span>
-                                <div className="min-w-0">
-                                    <Link href="/editorial-policy" className="font-bold text-slate-800 dark:text-slate-200 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+                                <div className="min-w-0 flex-1">
+                                    <Link href="/editorial-policy" className="font-bold text-slate-800 dark:text-slate-200 hover:text-amber-700 dark:hover:text-amber-400 transition-colors block truncate">
                                         {desk.name}
                                     </Link>
-                                    <span className="block text-[11px] text-slate-500 truncate">{desk.tagline}</span>
+                                    <span className="block text-[11px] text-slate-500 truncate" title={desk.tagline}>{desk.tagline}</span>
                                 </div>
                             </div>
                             {geoData?.last_verified && (
-                                <div className="flex flex-col sm:items-end border-t sm:border-t-0 border-slate-200/60 dark:border-slate-800/60 pt-2 sm:pt-0">
-                                    <span className="flex items-center gap-1 font-semibold text-emerald-700 dark:text-emerald-400 text-[11px] sm:text-xs">
-                                        <CheckCircle2 className="size-3.5 text-emerald-500" aria-hidden="true" /> Verified for compliance
+                                <div className="flex flex-col sm:items-end border-t sm:border-t-0 border-slate-200/60 dark:border-slate-800/60 pt-2 sm:pt-0 shrink-0 whitespace-nowrap">
+                                    <span className="flex items-center gap-1 font-semibold text-emerald-700 dark:text-emerald-400 text-[11px] sm:text-xs whitespace-nowrap">
+                                        <CheckCircle2 className="size-3.5 text-emerald-500 shrink-0" aria-hidden="true" /> Verified for compliance
                                     </span>
-                                    <span className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400">Last verified: <span className="tabular-nums font-medium">{formatDate(geoData.last_verified)}</span></span>
+                                    <span className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                                        Last verified: <span className="tabular-nums font-medium">{formatDate(geoData.last_verified)}</span>
+                                    </span>
                                 </div>
                             )}
                         </div>
