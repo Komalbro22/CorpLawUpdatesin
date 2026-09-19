@@ -47,7 +47,6 @@ const sections: SidebarSection[] = [
         links: [
             { href: '/admin/dashboard',      icon: LayoutDashboard, label: 'Dashboard'       },
             { href: '/admin/radar',          icon: Radio,           label: 'Regulator Radar' },
-            { href: '/admin/articles/new',   icon: PenSquare,       label: 'New Article'     },
             { href: '/admin/articles',       icon: FileText,        label: 'All Articles'    },
             { href: '/admin/glossary',       icon: BookOpen,        label: 'Glossary'        },
             { href: '/admin/documents',      icon: ScrollText,      label: 'Documents'       },
@@ -189,8 +188,8 @@ export default function Sidebar() {
             return (
                 <div key={section.label} className={iconOnly ? 'mb-3' : 'mb-4'}>
                     {!iconOnly && (
-                        <p className={`px-4 mb-2 text-[10px] font-extrabold tracking-widest uppercase transition-colors ${
-                            hasActive ? 'admin-section-label-active' : 'admin-section-label-inactive'
+                        <p className={`px-3 mb-1.5 text-xs font-bold tracking-normal transition-colors ${
+                            hasActive ? 'text-amber-700 font-extrabold' : 'text-slate-400'
                         }`}>
                             {section.label}
                         </p>
@@ -362,7 +361,19 @@ export default function Sidebar() {
                         </button>
                     </div>
 
-                    <nav className="admin-sidebar-scroll flex-1 overflow-y-auto py-4 px-2" aria-label="Admin navigation">
+                    {/* Mobile Primary Action */}
+                    <div className="px-3 pt-3 pb-1 shrink-0">
+                        <Link
+                            href="/admin/articles/new"
+                            onClick={closeDrawer}
+                            className="flex items-center justify-center gap-2 w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-bold text-xs shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+                        >
+                            <PenSquare className="w-4 h-4 shrink-0 text-slate-950" aria-hidden />
+                            <span>New Article</span>
+                        </Link>
+                    </div>
+
+                    <nav className="admin-sidebar-scroll flex-1 overflow-y-auto py-3 px-2" aria-label="Admin navigation">
                         {renderSections({ onLinkClick: closeDrawer })}
                     </nav>
 
@@ -420,9 +431,32 @@ export default function Sidebar() {
                 }
             </button>
 
+            {/* Primary Action Button (Top Placement — never obscures navigation) */}
+            <div className={`shrink-0 ${collapsed ? 'px-2 pt-3 pb-1' : 'px-3 pt-3 pb-2'}`}>
+                {collapsed ? (
+                    <Link
+                        href="/admin/articles/new"
+                        className="flex items-center justify-center h-9 w-9 mx-auto rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-bold shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+                        title="New Article (⌘N)"
+                        aria-label="New Article (⌘N)"
+                    >
+                        <PenSquare className="w-4 h-4" aria-hidden />
+                    </Link>
+                ) : (
+                    <Link
+                        href="/admin/articles/new"
+                        className="flex items-center gap-2 w-full px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-bold text-xs shadow-sm hover:shadow transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+                    >
+                        <PenSquare className="w-4 h-4 shrink-0 text-slate-950" aria-hidden />
+                        <span>New Article</span>
+                        <span className="ml-auto text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-950/10 text-slate-900 border border-amber-950/15">⌘N</span>
+                    </Link>
+                )}
+            </div>
+
             {/* Nav */}
             <nav
-                className="admin-sidebar-scroll flex-1 overflow-y-auto py-5 overflow-x-hidden"
+                className="admin-sidebar-scroll flex-1 overflow-y-auto py-2 overflow-x-hidden pb-4"
                 style={{ overflowX: collapsed ? 'visible' : 'hidden' }}
                 aria-label="Admin navigation"
             >
@@ -431,17 +465,6 @@ export default function Sidebar() {
                     : <div className="px-2">{renderSections({})}</div>
                 }
             </nav>
-
-            {/* Pinned quick-action (only when expanded) */}
-            {!collapsed && (
-                <div className="px-3 py-2 border-t border-slate-100">
-                    <Link href="/admin/articles/new" className="admin-pinned-action">
-                        <PenSquare className="w-4 h-4 shrink-0" aria-hidden />
-                        <span>New Article</span>
-                        <span className="ml-auto admin-kbd">⌘N</span>
-                    </Link>
-                </div>
-            )}
 
             {/* User + Sign Out */}
             <div className="shrink-0 border-t border-slate-100 bg-white/30 backdrop-blur-md">
