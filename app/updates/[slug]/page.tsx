@@ -615,11 +615,31 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                     }
 
                     const hasSummary = !!update.summary;
-                    const hasKeyChanges = Array.isArray(update.key_changes) && update.key_changes.length > 0;
-                    const hasKeyChange = !!update.key_change;
-                    const hasTakeaways = Array.isArray(geoData?.key_takeaways) && geoData.key_takeaways.length > 0;
 
-                    if (!hasSummary && !hasKeyChanges && !hasKeyChange && !hasTakeaways) return null;
+                    // Collect all key takeaways & key changes points without losing any
+                    const allPoints: string[] = [];
+                    const seen = new Set<string>();
+
+                    const addPoint = (pt: string) => {
+                        if (!pt || typeof pt !== 'string') return;
+                        const cleaned = pt.trim().toLowerCase();
+                        if (cleaned && !seen.has(cleaned)) {
+                            seen.add(cleaned);
+                            allPoints.push(pt.trim());
+                        }
+                    };
+
+                    if (Array.isArray(geoData?.key_takeaways)) {
+                        geoData.key_takeaways.forEach(addPoint);
+                    }
+                    if (Array.isArray(update.key_changes)) {
+                        update.key_changes.forEach(addPoint);
+                    }
+                    if (allPoints.length === 0 && update.key_change) {
+                        addPoint(update.key_change);
+                    }
+
+                    if (!hasSummary && allPoints.length === 0) return null;
 
                     return (
                         <section id="tldr-summary" aria-label="TL;DR Executive Summary" className="mb-6">
@@ -643,30 +663,16 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                                         </p>
                                     )}
 
-                                    {hasKeyChanges ? (
+                                    {allPoints.length > 0 && (
                                         <ul className="space-y-2.5 list-none pl-0 m-0" data-ai-summary="true">
-                                            {update.key_changes.map((kc: string, i: number) => (
-                                                <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-400 leading-relaxed font-medium">
+                                            {allPoints.map((point: string, i: number) => (
+                                                <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
                                                     <CheckCircle2 className={`size-4 mt-0.5 shrink-0 ${cardStyles.iconColor}`} aria-hidden="true" />
-                                                    <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(kc) }} />
+                                                    <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(point) }} />
                                                 </li>
                                             ))}
                                         </ul>
-                                    ) : hasKeyChange ? (
-                                        <div className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-400 leading-relaxed font-medium">
-                                            <CheckCircle2 className={`size-4 mt-0.5 shrink-0 ${cardStyles.iconColor}`} aria-hidden="true" />
-                                            <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(update.key_change) }} />
-                                        </div>
-                                    ) : hasTakeaways ? (
-                                        <ul className="space-y-2.5 list-none pl-0 m-0" data-ai-summary="true">
-                                            {geoData.key_takeaways.map((point: string, i: number) => (
-                                                <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-400 leading-relaxed font-medium">
-                                                    <CheckCircle2 className={`size-4 mt-0.5 shrink-0 ${cardStyles.iconColor}`} aria-hidden="true" />
-                                                    <span>{point}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    ) : null}
+                                    )}
                                 </div>
                             </details>
                         </section>
