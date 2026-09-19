@@ -415,26 +415,126 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                     </div>
                 </div>
 
-
-
-                {/* Key change banner */}
-                {update.key_change && (
-                    <div className="mb-6 flex items-start gap-3 rounded-xl border border-amber-200/80 dark:border-amber-900/30 border-l-[3px] border-l-amber-500 bg-amber-50/90 dark:bg-amber-950/20 p-4 shadow-sm ring-1 ring-slate-900/[0.02] dark:ring-white/[0.02]">
-                        <FileText className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-600 dark:text-amber-400" aria-hidden />
-                        <div>
-                            <p className="text-xs font-bold text-amber-900 dark:text-amber-450 uppercase tracking-widest mb-1">Key Change</p>
-                            <p className="text-amber-800 dark:text-amber-300 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: sanitizeHtml(update.key_change) }} />
+                {/* 1. Article Title */}
+                <h1 id="article-title" className="font-heading text-xl sm:text-2xl md:text-[2.2rem] text-navy dark:text-slate-50 font-bold mb-3 sm:mb-4 leading-snug break-words text-balance">
+                    {update.title}
+                </h1>
+                
+                {/* 2. Editorial byline */}
+                {(() => {
+                    const desk = getEditorialDesk(update.category);
+                    return (
+                        <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 rounded-xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 p-2.5 sm:p-3 text-xs">
+                            <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                                <span className="flex size-8 items-center justify-center rounded-full bg-navy dark:bg-slate-800 text-white font-bold text-xs shrink-0 border border-slate-700">CL</span>
+                                <div className="min-w-0 flex-1">
+                                    <Link href="/editorial-policy" className="font-bold text-slate-800 dark:text-slate-200 hover:text-amber-700 dark:hover:text-amber-400 transition-colors block truncate">
+                                        {desk.name}
+                                    </Link>
+                                    <span className="block text-[11px] text-slate-500 truncate" title={desk.tagline}>{desk.tagline}</span>
+                                </div>
+                            </div>
+                            {geoData?.last_verified && (
+                                <div className="flex flex-col sm:items-end border-t sm:border-t-0 border-slate-200/60 dark:border-slate-800/60 pt-2 sm:pt-0 shrink-0 whitespace-nowrap">
+                                    <span className="flex items-center gap-1 font-semibold text-emerald-700 dark:text-emerald-400 text-[11px] sm:text-xs whitespace-nowrap">
+                                        <CheckCircle2 className="size-3.5 text-emerald-500 shrink-0" aria-hidden="true" /> Verified for compliance
+                                    </span>
+                                    <span className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                                        Last verified: <span className="tabular-nums font-medium">{formatDate(geoData.last_verified)}</span>
+                                    </span>
+                                </div>
+                            )}
                         </div>
+                    );
+                })()}
+
+                {/* 3. Meta row */}
+                <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:gap-x-4 sm:gap-y-2 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+                    <time className="publish-date inline-flex items-center gap-1.5" dateTime={update.published_at}>
+                        <CalendarDays className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-400" aria-hidden />
+                        {formattedDate}
+                    </time>
+                    <span className="read-count inline-flex items-center gap-1.5">
+                        <Clock3 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-400" aria-hidden />
+                        {readTime} min read
+                    </span>
+                    {wordCount > 0 && (
+                        <span className="read-count inline-flex items-center gap-1.5">
+                            <BookOpen className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-400" aria-hidden />
+                            {wordCount.toLocaleString('en-IN')} words
+                        </span>
+                    )}
+                    {update.source_name && (
+                        <span className="print:hidden text-slate-500 dark:text-slate-400">
+                            Source:{' '}
+                            {update.source_url ? (
+                                <a 
+                                    href={update.source_url} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                    className="hover:text-gold underline font-semibold transition-colors"
+                                    title={update.source_name}
+                                >
+                                    {update.source_name.length > 30 ? `${update.source_name.slice(0, 30)}...` : update.source_name}
+                                </a>
+                            ) : (
+                                <span className="font-semibold" title={update.source_name}>
+                                    {update.source_name.length > 30 ? `${update.source_name.slice(0, 30)}...` : update.source_name}
+                                </span>
+                            )}
+                        </span>
+                    )}
+                    {update.effective_date && (
+                        <span className="inline-flex items-center gap-1 rounded-md border border-green-100 dark:border-green-900/30 bg-green-50 dark:bg-green-950/20 px-2 py-0.5 text-xs font-medium text-green-700">
+                            <CalendarDays className="h-3 w-3" aria-hidden />
+                            Effective: {formatDate(update.effective_date)}
+                        </span>
+                    )}
+                    {geoData?.last_amended && (
+                        <span className="inline-flex items-center gap-1 rounded-md border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 px-2 py-0.5 text-xs font-medium text-slate-600 dark:text-slate-400">
+                            <Clock3 className="h-3 w-3" aria-hidden />
+                            Last amended: {formatDate(geoData.last_amended)}
+                        </span>
+                    )}
+                    {update.impact_level && (
+                        <span className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium ${
+                            update.impact_level === 'high'   ? 'bg-red-100 dark:bg-red-950/30 text-red-700 dark:text-red-400'   :
+                            update.impact_level === 'medium' ? 'bg-amber-100 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400' :
+                                                               'bg-green-100 dark:bg-green-950/30 text-green-700 dark:text-green-400'
+                        }`}>
+                            <AlertCircle className="h-3 w-3" aria-hidden />
+                            {update.impact_level === 'high'   && 'High impact'}
+                            {update.impact_level === 'medium' && 'Medium impact'}
+                            {update.impact_level === 'low'    && 'Low impact'}
+                        </span>
+                    )}
+                </div>
+
+                {/* 4. Top compact share actions */}
+                <div className="mb-4">
+                    <ArticleActions
+                        title={update.title}
+                        url={`${BASE_URL}/updates/${update.slug}`}
+                        slug={update.slug}
+                        compact={true}
+                    />
+                </div>
+                
+                {/* 5. Legal basis reference */}
+                {geoData?.regulation_ref && (
+                    <div className="mb-5 flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300 shadow-sm">
+                        <BookOpen className="h-4 w-4 text-amber-600 shrink-0" aria-hidden />
+                        <span><strong className="font-bold">Legal basis:</strong> {geoData.regulation_ref}</span>
                     </div>
                 )}
 
-                {/* Key changes accordion - Wrapped in semantic section for accessibility & AI crawler extraction */}
-                {update.key_changes && Array.isArray(update.key_changes) && update.key_changes.length > 0 && (() => {
+                {/* 6. Unified Executive Summary & Key Changes Card */}
+                {(() => {
                     const cat = update.category?.toUpperCase() || 'DEFAULT';
                     let cardStyles = {
                         borderColor: 'border-slate-200',
                         borderLeftColor: 'border-l-gold',
-                        bgColor: 'bg-slate-50/40',
+                        bgColor: 'bg-slate-50/50',
                         accentColor: 'text-gold',
                         iconColor: 'text-amber-500',
                         badgeBg: 'bg-amber-50 text-amber-700 border-amber-200/50',
@@ -494,15 +594,6 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                             iconColor: 'text-teal-500',
                             badgeBg: 'bg-teal-50 text-teal-700 border-teal-200/50',
                         };
-                    } else if (cat === 'CCI') {
-                        cardStyles = {
-                            borderColor: 'border-indigo-100',
-                            borderLeftColor: 'border-l-indigo-500',
-                            bgColor: 'bg-indigo-50/30',
-                            accentColor: 'text-indigo-600',
-                            iconColor: 'text-indigo-500',
-                            badgeBg: 'bg-indigo-50 text-indigo-700 border-indigo-200/50',
-                        };
                     } else if (cat === 'LABOUR' || cat === 'LABOUR_LAW' || cat === 'LABOUR LAW') {
                         cardStyles = {
                             borderColor: 'border-amber-100',
@@ -523,183 +614,68 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                         };
                     }
 
+                    const hasSummary = !!update.summary;
+                    const hasKeyChanges = Array.isArray(update.key_changes) && update.key_changes.length > 0;
+                    const hasKeyChange = !!update.key_change;
+                    const hasTakeaways = Array.isArray(geoData?.key_takeaways) && geoData.key_takeaways.length > 0;
+
+                    if (!hasSummary && !hasKeyChanges && !hasKeyChange && !hasTakeaways) return null;
+
                     return (
                         <section id="tldr-summary" aria-label="TL;DR Executive Summary" className="mb-6">
                             <details open className={`group overflow-hidden rounded-xl border ${cardStyles.borderColor} dark:border-slate-800 border-l-[4px] ${cardStyles.borderLeftColor} ${cardStyles.bgColor} shadow-sm transition-all duration-200`}>
-                                <summary className="cursor-pointer p-4 font-bold text-navy dark:text-slate-100 flex justify-between items-center bg-white dark:bg-slate-900 hover:bg-slate-50/80 dark:hover:bg-slate-800/80 transition-colors list-none [&::-webkit-details-marker]:hidden focus:outline-none">
+                                <summary className="cursor-pointer p-3.5 sm:p-4 font-bold text-navy dark:text-slate-100 flex justify-between items-center bg-white dark:bg-slate-900 hover:bg-slate-50/80 dark:hover:bg-slate-800/80 transition-colors list-none [&::-webkit-details-marker]:hidden focus:outline-none">
                                     <div className="flex items-center gap-2">
-                                        <Sparkles className={`size-5 ${cardStyles.iconColor} animate-pulse`} aria-hidden="true" />
-                                        <span className="font-heading text-base font-bold text-navy dark:text-white tracking-tight">TL;DR — Executive Summary</span>
+                                        <Sparkles className={`size-4 sm:size-5 ${cardStyles.iconColor} animate-pulse`} aria-hidden="true" />
+                                        <span className="font-heading text-sm sm:text-base font-bold text-navy dark:text-white tracking-tight">TL;DR — Executive Summary</span>
                                     </div>
-                                    <div className="flex items-center gap-3">
-                                        <span className={`hidden sm:inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${cardStyles.badgeBg}`}>
+                                    <div className="flex items-center gap-2 sm:gap-3">
+                                        <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${cardStyles.badgeBg}`}>
                                             ⚡ Key Takeaways
                                         </span>
                                         <ChevronDown className="size-4 text-slate-400 transition-transform duration-300 group-open:rotate-180" aria-hidden="true" />
                                     </div>
                                 </summary>
-                                <div className="p-5 border-t border-slate-100 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm">
-                                    <ul className="space-y-3.5 list-none pl-0 m-0" itemProp="abstract" data-ai-summary="true">
-                                        {update.key_changes.map((kc: string, i: number) => (
-                                            <li key={i} className="flex items-start gap-3 text-sm text-slate-700 dark:text-slate-400 leading-relaxed font-medium">
-                                                <CheckCircle2 className={`size-4 mt-0.5 shrink-0 ${cardStyles.iconColor}`} aria-hidden="true" />
-                                                <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(kc) }} />
-                                            </li>
-                                        ))}
-                                    </ul>
+                                <div className="p-3.5 sm:p-5 border-t border-slate-100 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm space-y-3.5">
+                                    {hasSummary && (
+                                        <p id="article-summary" itemProp="abstract" className="text-xs sm:text-sm text-slate-800 dark:text-slate-200 font-medium leading-relaxed">
+                                            {update.summary}
+                                        </p>
+                                    )}
+
+                                    {hasKeyChanges ? (
+                                        <ul className="space-y-2.5 list-none pl-0 m-0" data-ai-summary="true">
+                                            {update.key_changes.map((kc: string, i: number) => (
+                                                <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-400 leading-relaxed font-medium">
+                                                    <CheckCircle2 className={`size-4 mt-0.5 shrink-0 ${cardStyles.iconColor}`} aria-hidden="true" />
+                                                    <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(kc) }} />
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    ) : hasKeyChange ? (
+                                        <div className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-400 leading-relaxed font-medium">
+                                            <CheckCircle2 className={`size-4 mt-0.5 shrink-0 ${cardStyles.iconColor}`} aria-hidden="true" />
+                                            <span dangerouslySetInnerHTML={{ __html: sanitizeHtml(update.key_change) }} />
+                                        </div>
+                                    ) : hasTakeaways ? (
+                                        <ul className="space-y-2.5 list-none pl-0 m-0" data-ai-summary="true">
+                                            {geoData.key_takeaways.map((point: string, i: number) => (
+                                                <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-400 leading-relaxed font-medium">
+                                                    <CheckCircle2 className={`size-4 mt-0.5 shrink-0 ${cardStyles.iconColor}`} aria-hidden="true" />
+                                                    <span>{point}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    ) : null}
                                 </div>
                             </details>
                         </section>
                     );
                 })()}
 
-                {/* Title */}
-                <h1 id="article-title" className="font-heading text-xl sm:text-2xl md:text-[2.2rem] text-navy dark:text-slate-50 font-bold mb-3 sm:mb-4 leading-snug break-words text-balance">
-                    {update.title}
-                </h1>
-                
-                {/* Editorial byline */}
-                {(() => {
-                    const desk = getEditorialDesk(update.category);
-                    return (
-                        <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 rounded-xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 p-3 text-xs">
-                            <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                                <span className="flex size-8 items-center justify-center rounded-full bg-navy dark:bg-slate-800 text-white font-bold text-xs shrink-0 border border-slate-700">CL</span>
-                                <div className="min-w-0 flex-1">
-                                    <Link href="/editorial-policy" className="font-bold text-slate-800 dark:text-slate-200 hover:text-amber-700 dark:hover:text-amber-400 transition-colors block truncate">
-                                        {desk.name}
-                                    </Link>
-                                    <span className="block text-[11px] text-slate-500 truncate" title={desk.tagline}>{desk.tagline}</span>
-                                </div>
-                            </div>
-                            {geoData?.last_verified && (
-                                <div className="flex flex-col sm:items-end border-t sm:border-t-0 border-slate-200/60 dark:border-slate-800/60 pt-2 sm:pt-0 shrink-0 whitespace-nowrap">
-                                    <span className="flex items-center gap-1 font-semibold text-emerald-700 dark:text-emerald-400 text-[11px] sm:text-xs whitespace-nowrap">
-                                        <CheckCircle2 className="size-3.5 text-emerald-500 shrink-0" aria-hidden="true" /> Verified for compliance
-                                    </span>
-                                    <span className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 whitespace-nowrap">
-                                        Last verified: <span className="tabular-nums font-medium">{formatDate(geoData.last_verified)}</span>
-                                    </span>
-                                </div>
-                            )}
-                        </div>
-                    );
-                })()}
-
-                {/* Top compact share actions */}
-                <div className="mb-4">
-                    <ArticleActions
-                        title={update.title}
-                        url={`${BASE_URL}/updates/${update.slug}`}
-                        slug={update.slug}
-                        compact={true}
-                    />
-                </div>
-                
-                {/* 3.2 Regulation reference */}
-                {geoData?.regulation_ref && (
-                    <div className="mb-6 flex items-center gap-2 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-600 dark:text-slate-300 shadow-sm">
-                        <BookOpen className="h-4 w-4 text-amber-600" aria-hidden />
-                        <span className="font-bold">Legal basis:</span> {geoData.regulation_ref}
-                    </div>
-                )}
-                
-                {/* Meta row */}
-                <div className="mb-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-500 dark:text-slate-400">
-                    <time className="publish-date inline-flex items-center gap-1.5" dateTime={update.published_at}>
-                        <CalendarDays className="h-4 w-4 text-slate-400" aria-hidden />
-                        {formattedDate}
-                    </time>
-                    {/* LiveViewCount hidden from users — views still tracked via ViewCounter above */}
-                    <span className="read-count inline-flex items-center gap-1.5">
-                        <Clock3 className="h-4 w-4 text-slate-400" aria-hidden />
-                        {readTime} min read
-                    </span>
-                    {wordCount > 0 && (
-                        <span className="read-count inline-flex items-center gap-1.5">
-                            <BookOpen className="h-4 w-4 text-slate-400" aria-hidden />
-                            {wordCount.toLocaleString('en-IN')} words
-                        </span>
-                    )}
-                    {update.source_name && (
-                        <span className="print:hidden text-slate-500 dark:text-slate-400">
-                            Source:{' '}
-                            {update.source_url ? (
-                                <a 
-                                    href={update.source_url} 
-                                    target="_blank" 
-                                    rel="noopener noreferrer" 
-                                    className="hover:text-gold underline font-semibold transition-colors"
-                                    title={update.source_name}
-                                >
-                                    {update.source_name.length > 30 ? `${update.source_name.slice(0, 30)}...` : update.source_name}
-                                </a>
-                            ) : (
-                                <span className="font-semibold" title={update.source_name}>
-                                    {update.source_name.length > 30 ? `${update.source_name.slice(0, 30)}...` : update.source_name}
-                                </span>
-                            )}
-                        </span>
-                    )}
-                    {update.effective_date && (
-                        <span className="inline-flex items-center gap-1 rounded-md border border-green-100 dark:border-green-900/30 bg-green-50 dark:bg-green-950/20 px-2 py-1 text-xs font-medium text-green-700">
-                            <CalendarDays className="h-3.5 w-3.5" aria-hidden />
-                            Effective: {formatDate(update.effective_date)}
-                        </span>
-                    )}
-                    {geoData?.last_amended && (
-                        <span className="inline-flex items-center gap-1 rounded-md border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 px-2 py-1 text-xs font-medium text-slate-600 dark:text-slate-400">
-                            <Clock3 className="h-3.5 w-3.5" aria-hidden />
-                            Last amended: {formatDate(geoData.last_amended)}
-                        </span>
-                    )}
-                    {update.impact_level && (
-                        <span className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium ${
-                            update.impact_level === 'high'   ? 'bg-red-100 dark:bg-red-950/30 text-red-700 dark:text-red-400'   :
-                            update.impact_level === 'medium' ? 'bg-amber-100 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400' :
-                                                               'bg-green-100 dark:bg-green-950/30 text-green-700 dark:text-green-400'
-                        }`}>
-                            <AlertCircle className="h-3.5 w-3.5" aria-hidden />
-                            {update.impact_level === 'high'   && 'High impact'}
-                            {update.impact_level === 'medium' && 'Medium impact'}
-                            {update.impact_level === 'low'    && 'Low impact'}
-                        </span>
-                    )}
-
-                </div>
-
-                {/* Summary box */}
-                {update.summary && (
-                    <div className="mb-6 rounded-r-lg border-l-4 border-blue-400 dark:border-l-blue-500 bg-blue-50 dark:bg-blue-950/20 p-4">
-                        <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-blue-800 dark:text-blue-400">
-                            <FileText className="h-4 w-4" aria-hidden />
-                            Summary
-                        </p>
-                        <p id="article-summary" className="text-blue-900 dark:text-blue-300 text-sm leading-relaxed font-medium">{update.summary}</p>
-                    </div>
-                )}
-
-                {/* Quick Answer box */}
+                {/* 7. Quick Answer box */}
                 {geoData?.quick_answer && (
                     <QuickAnswer answer={geoData.quick_answer} />
-                )}
-
-                {/* Key Takeaways */}
-                {geoData?.key_takeaways && Array.isArray(geoData.key_takeaways) && geoData.key_takeaways.length > 0 && (
-                    <div className="mb-8 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 p-5 shadow-sm">
-                        <h2 className="mb-3 font-heading text-lg font-bold text-navy dark:text-white flex items-center gap-2">
-                            <Sparkles className="h-5 w-5 text-amber-500" aria-hidden />
-                            Key Takeaways
-                        </h2>
-                        <ul className="space-y-2 pl-2">
-                            {geoData.key_takeaways.map((point: string, i: number) => (
-                                <li key={i} className="flex items-start gap-3 text-[15px] text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
-                                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" aria-hidden />
-                                    <span>{point}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
                 )}
             </header>
 
