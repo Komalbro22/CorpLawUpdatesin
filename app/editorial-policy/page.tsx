@@ -73,29 +73,79 @@ export default function EditorialPolicyPage() {
           </div>
 
           <div>
-            <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">4. AI-Assisted Drafting Disclosure</h2>
-            <p>
-              Some articles and document templates use AI-assisted drafting tools. All AI-generated content is reviewed
-              by our editorial desk against the original source material before publication. AI is used to improve
-              clarity and structure — not to invent legal positions or regulatory requirements.
+            <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">4. Editorial Verification & Four-Eye Review Standard</h2>
+            <p className="mb-3">
+              Every regulatory update published on CorpLawUpdates.in undergoes a strict four-eye editorial verification standard before publication:
             </p>
+            <ul className="list-disc list-inside space-y-2">
+              <li>
+                <strong className="text-slate-800 dark:text-slate-200">Primary Source Authentication:</strong> No update is drafted from secondary press reports or unverified social commentary. Every notice is corroborated against official Gazette notifications, regulator circulars (MCA, SEBI, RBI, IBBI, EPFO, CBDT, CBIC), or direct tribunal orders.
+              </li>
+              <li>
+                <strong className="text-slate-800 dark:text-slate-200">Legal & Compliance Fact-Checking:</strong> Operative provisions, effective dates, penalty clauses, and required statutory filings are independently verified against the parent Act and governing rules.
+              </li>
+              <li>
+                <strong className="text-slate-800 dark:text-slate-200">Continuous Corrigenda Tracking:</strong> When government departments issue subsequent amendments, clarifications, or timeline extensions, our editorial desk updates existing articles with revision timestamps and updated compliance notes.
+              </li>
+            </ul>
           </div>
 
           <div>
-            <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">5. Corrections & Updates</h2>
+            <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">5. Specialized Regulatory Research Desks</h2>
+            <p className="mb-3">
+              To ensure deep subject-matter expertise across diverse areas of Indian corporate law, our coverage is organized into specialized regulatory research desks:
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div className="rounded-lg border border-slate-200/80 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-3">
+                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">🏛️ MCA & Corporate Compliance Desk</span>
+                <span className="text-slate-500 dark:text-slate-400">Companies Act 2013, LLP Act, RoC filings, statutory compliance calendars, and MCA circulars.</span>
+              </div>
+              <div className="rounded-lg border border-slate-200/80 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-3">
+                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">📈 Securities & Capital Markets Desk</span>
+                <span className="text-slate-500 dark:text-slate-400">SEBI LODR, ICDR, PIT, Takeover Regulations, mutual funds, AIFs, and stock exchange circulars.</span>
+              </div>
+              <div className="rounded-lg border border-slate-200/80 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-3">
+                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">🏦 Banking & Monetary Regulations Desk</span>
+                <span className="text-slate-500 dark:text-slate-400">RBI Master Directions, NBFC regulations, prudential frameworks, digital lending, and payments.</span>
+              </div>
+              <div className="rounded-lg border border-slate-200/80 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-3">
+                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">⚖️ Insolvency & Bankruptcy Desk</span>
+                <span className="text-slate-500 dark:text-slate-400">Insolvency & Bankruptcy Code (IBC 2016), CIRP timelines, liquidation rules, and IBBI notifications.</span>
+              </div>
+              <div className="rounded-lg border border-slate-200/80 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-3">
+                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">👷 Labour & Employment Law Desk</span>
+                <span className="text-slate-500 dark:text-slate-400">EPFO wage ceilings, ESIC compliance, minimum wages, POSH compliance, and Labour Code reforms.</span>
+              </div>
+              <div className="rounded-lg border border-slate-200/80 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-3">
+                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">🌐 FEMA & Cross-Border Desk</span>
+                <span className="text-slate-500 dark:text-slate-400">FDI policy, Overseas Direct Investment (ODI), ECB regulations, and DGFT foreign trade notices.</span>
+              </div>
+              <div className="rounded-lg border border-slate-200/80 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-3">
+                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">📜 Company Law Tribunal & CCI Desk</span>
+                <span className="text-slate-500 dark:text-slate-400">NCLT & NCLAT bench orders, corporate dispute rulings, and Competition Commission orders.</span>
+              </div>
+              <div className="rounded-lg border border-slate-200/80 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-3">
+                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">💰 Direct & Indirect Tax Desk</span>
+                <span className="text-slate-500 dark:text-slate-400">CBDT Income Tax circulars, CBIC GST notifications, advance rulings, and statutory rate changes.</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">6. Corrections & Updates</h2>
             <p>
-              If you identify a factual error, outdated effective date, or missing source reference, please contact us
+              If you identify a factual error, outdated effective date, or missing source reference, please contact our editorial desk
               at{' '}
-              <a href="mailto:mail@corplawupdates.in" className="text-gold hover:underline font-semibold">
-                mail@corplawupdates.in
+              <a href="mailto:editorial@corplawupdates.in" className="text-gold hover:underline font-semibold">
+                editorial@corplawupdates.in
               </a>
               . We aim to review correction requests within 2 business days and update affected articles with a revised
-              publication date where material changes are made.
+              publication date and changelog notes where material changes are made.
             </p>
           </div>
 
           <div>
-            <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">6. Not Legal Advice</h2>
+            <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">7. Not Legal Advice</h2>
             <p>
               Content on CorpLawUpdates.in is for informational and educational purposes only. It does not constitute
               legal, tax, or professional advice. Readers should consult a qualified Company Secretary, Chartered
@@ -104,7 +154,7 @@ export default function EditorialPolicyPage() {
           </div>
 
           <div>
-            <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">7. Independence</h2>
+            <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">8. Independence</h2>
             <p>
               CorpLawUpdates.in does not accept payment from regulators, law firms, or service providers in exchange
               for editorial coverage. Partner listings on our{' '}
