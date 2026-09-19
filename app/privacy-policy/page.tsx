@@ -213,6 +213,26 @@ export default function PrivacyPolicyPage() {
                                 You can control, restrict, or wipe cookies through your browser settings (Chrome, Safari, Firefox, Edge). Choosing to block advertising cookies will not prevent ads from appearing; rather, ads served will be generic and non-personalized.
                             </p>
                         </div>
+
+                        <div>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">D. European Economic Area (EEA), UK & Swiss Visitors (GDPR & IAB TCF v2.2)</h3>
+                            <p className="leading-relaxed text-sm">
+                                For visitors accessing the site from the European Economic Area (EEA), the United Kingdom, or Switzerland, advertising and measurement cookies are managed in compliance with the General Data Protection Regulation (GDPR), UK GDPR, and the IAB Europe Transparency and Consent Framework (TCF v2.2). Consent for non-essential cookies and personalized advertising is collected and signaled through Google-certified consent management mechanisms. You may review or modify your consent choices at any time.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">E. United States State Privacy Disclosures (CPRA, CCPA, CPA, VCDPA)</h3>
+                            <p className="leading-relaxed text-sm mb-2">
+                                Residents of California (California Consumer Privacy Act as amended by the CPRA), Colorado, Virginia, Connecticut, Utah, and other US states with comprehensive privacy legislation have specific rights regarding their personal information:
+                            </p>
+                            <ul className="list-disc list-inside space-y-1.5 text-sm text-slate-600 dark:text-slate-400">
+                                <li><strong>Do Not Sell or Share My Personal Information:</strong> We do not sell your personal information for monetary consideration. Third-party advertising partners (such as Google) may collect persistent identifiers, cookies, and browsing telemetry to deliver cross-context behavioral advertising. You can opt out of personalized advertising by visiting <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 underline">Google Ads Settings</a> or the <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 underline">Digital Advertising Alliance Opt-Out Tool</a>.</li>
+                                <li><strong>Right to Know & Access:</strong> You have the right to request disclosure of the categories and specific pieces of personal information we have collected about you over the past 12 months.</li>
+                                <li><strong>Right to Delete:</strong> You have the right to request deletion of your personal information, subject to statutory exceptions.</li>
+                                <li><strong>Non-Discrimination:</strong> We will never discriminate against you, deny services, or alter pricing because you exercised your statutory privacy rights.</li>
+                            </ul>
+                        </div>
                     </div>
                 </section>
 
