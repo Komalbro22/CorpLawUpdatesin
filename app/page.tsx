@@ -412,7 +412,7 @@ export default async function HomePage() {
             </p>
             <Link
               href="/newsletter"
-              className="inline-flex items-center gap-2 rounded-lg bg-gold px-8 py-3.5 font-bold text-navy shadow-md transition-colors hover:bg-amber-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+              className="inline-flex items-center gap-2 rounded-lg bg-amber-400 px-8 py-3.5 font-bold text-navy shadow-md transition-colors hover:bg-amber-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
             >
               Subscribe free
               <ArrowRight className="size-4" aria-hidden="true" />

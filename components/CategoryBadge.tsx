@@ -8,7 +8,7 @@ const colorMap: Record<Category, string> = {
     IBC: 'bg-red-700',
     FEMA: 'bg-teal-700',
     CCI: 'bg-indigo-600',
-    LABOUR: 'bg-amber-600',
+    LABOUR: 'bg-amber-700',
     IFSCA: 'bg-cyan-700',
 }
 

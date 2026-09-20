@@ -129,7 +129,7 @@ export default async function Footer() {
 
                     {/* Quick Nav */}
                     <div className="lg:col-span-2">
-                        <h4 className="font-heading text-sm font-bold text-white uppercase tracking-widest mb-6">Explore</h4>
+                        <h3 className="font-heading text-sm font-bold text-white uppercase tracking-widest mb-6">Explore</h3>
                         <ul className="space-y-3">
                             {['Home', 'Updates', 'Documents', 'Tools', 'Glossary', 'About', 'Newsletter', 'Contact'].map(item => (
                                 <li key={item}>
@@ -149,7 +149,7 @@ export default async function Footer() {
 
                     {/* Regulators */}
                     <div className="lg:col-span-2">
-                        <h4 className="font-heading text-sm font-bold text-white uppercase tracking-widest mb-6">Regulators</h4>
+                        <h3 className="font-heading text-sm font-bold text-white uppercase tracking-widest mb-6">Regulators</h3>
                         <ul className="space-y-3">
                             {categories.map(cat => (
                                 <li key={cat.id}>
@@ -168,10 +168,10 @@ export default async function Footer() {
                     <div className="lg:col-span-3">
                          <div className="bg-white/5 border border-white/10 rounded-2xl p-6 relative group overflow-hidden">
                             <div className="absolute -top-10 -right-10 w-24 h-24 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/20 transition-all duration-500" aria-hidden />
-                             <h4 className="font-heading text-base font-bold text-white mb-2 flex items-center gap-2">
+                             <h3 className="font-heading text-base font-bold text-white mb-2 flex items-center gap-2">
                                 <Mail className="size-4 text-amber-400" aria-hidden="true" />
                                 Stay Informed
-                            </h4>
+                            </h3>
                             <p className="text-slate-300 text-xs leading-relaxed mb-4">
                                 Join <span className="tabular-nums font-semibold">{activeSubscribersCount.toLocaleString()}</span>+ professionals receiving our weekly Monday digest.
                             </p>
