@@ -158,12 +158,19 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
             </p>
 
             {/* Input Form */}
-            <form action="/tools/cin-decoder" method="GET" className="pt-3 flex flex-col sm:flex-row gap-2">
+            <form 
+              action="/tools/cin-decoder" 
+              method="GET" 
+              className="pt-3 flex flex-col sm:flex-row gap-2"
+              toolname="decode_company_cin"
+              tooldescription="Decode any 21-digit Indian Corporate Identification Number (CIN) into 6 statutory dimensions: listing status, NIC industry code, state RoC office, incorporation year, and ownership classification."
+            >
               <div className="relative flex-1">
                 <Search className="size-4 text-slate-400 absolute left-3.5 top-3.5 pointer-events-none" aria-hidden="true" />
                 <input
                   type="text"
                   name="cin"
+                  toolparamdescription="21-character Corporate Identification Number (e.g. L21091MH1945PLC004520)"
                   defaultValue={inputCin}
                   placeholder="Enter 21-digit CIN (e.g. L21091MH1945PLC004520)"
                   maxLength={21}

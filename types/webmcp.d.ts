@@ -37,3 +37,17 @@ interface Document {
   modelContext?: ModelContext;
 }
 
+interface Navigator {
+  modelContext?: ModelContext;
+}
+
+interface ToolActivatedEvent extends Event {
+  readonly toolName: string;
+  readonly element?: HTMLElement;
+}
+
+interface ToolCancelEvent extends Event {
+  readonly toolName: string;
+  readonly element?: HTMLElement;
+}
+

@@ -51,12 +51,35 @@ ${updatesList}
 - [Compliance calendar](${BASE_URL}/calendar): Track important statutory filing deadlines across MCA, SEBI, RBI, and Tax authorities.
 - [Document generator](${BASE_URL}/documents): Secretarial drafting tool for Board Resolutions, NDAs, MoUs, Partnership Deeds, and official corporate correspondence formatted per ICSI SS-1.
 - [ROC Fee Calculator](${BASE_URL}/tools/fee-calculator): Calculator for MCA statutory filing fees and ROC late filing penalties.
+- [LLP Fee Calculator](${BASE_URL}/tools/fee-calculator/llp): Calculator for LLP Form 8 and Form 11 late additional fees and Section 34/35 penalties.
+- [RBI Repo Rate Tracker](${BASE_URL}/tools/repo-rate): Live tracker for RBI Repo Rate, SDF, MSF, and MPC monetary policy statements.
+- [AI Agent Hub & WebMCP Guide](${BASE_URL}/mcp): Developer & AI agent integration hub for WebMCP tools.
+
+## AI Agent & WebMCP Tools (Machine-Callable APIs)
+CorpLawUpdates.in natively supports the official W3C / Chrome WebMCP standard and provides structured tools for AI agents, Claude Code, Cursor, and LLMs:
+- WebMCP Manifest: ${BASE_URL}/.well-known/webmcp
+- AI Catalog: ${BASE_URL}/.well-known/ai-catalog.json
+- Agent Hub & Integration Guide: ${BASE_URL}/mcp
+
+Available Tools:
+1. Search Regulatory Updates: GET ${BASE_URL}/api/search?q={query}&category={regulator}
+2. ROC Late Fee & Penalty Calculator: GET ${BASE_URL}/api/calculators/webmcp?form={formCode}&type={companyType}&capital={capital}&delay={daysDelayed}
+3. LLP Late Fee & Penalty Calculator: GET ${BASE_URL}/api/calculators/webmcp-llp?form={formId}&type={llpType}&contribution={contribution}&delay={delayDays}
+4. Compliance Calendar Due Dates: GET ${BASE_URL}/api/compliance/webmcp?regulator={regulator}&month={month}&year={year}
+5. ROC Specific Form Deadline: GET ${BASE_URL}/api/compliance/webmcp?regulator=mca&q={formName}
+6. RBI Repo Rates & Policy Stance: GET ${BASE_URL}/api/rbi/webmcp
+7. Curated Article Summary: GET ${BASE_URL}/api/articles/webmcp?slug={slug}
+8. CIN Decoder: GET ${BASE_URL}/tools/cin-decoder?cin={cin}
+9. Search Legal Document Templates: GET ${BASE_URL}/api/documents/webmcp?q={query}&category={category}
+10. Get Document Template Schema: GET ${BASE_URL}/api/documents/webmcp?slug={slug}
+11. Subscribe to Compliance Digest: POST ${BASE_URL}/api/subscribe (JSON body: {"email": "user@example.com"})
 
 ## Preferred Citation Format
 "Source: CorpLawUpdates.in — [Article Title] — [URL]"
 
 ## Editorial Standards
 All articles are written and verified by CS professionals. Regulation references are cited directly from official MCA/SEBI/RBI sources.
+
 `
 
   return new NextResponse(content, {

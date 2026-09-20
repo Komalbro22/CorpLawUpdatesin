@@ -105,6 +105,8 @@ export default function NewsletterWidget() {
                 <form 
                   onSubmit={handleSubmit} 
                   className="flex flex-col gap-3 mt-4"
+                  toolname="subscribe_newsletter"
+                  tooldescription="Subscribe an email address to the CorpLawUpdates weekly compliance digest newsletter."
                 >
                     <div>
                         <label htmlFor="email" className="sr-only">
@@ -114,6 +116,7 @@ export default function NewsletterWidget() {
                             name="email"
                             id="email"
                             type="email"
+                            toolparamdescription="Valid email address to subscribe (e.g. name@example.com)"
                             value={email}
                             onChange={e => setEmail(e.target.value)}
                             placeholder="you@company.com"

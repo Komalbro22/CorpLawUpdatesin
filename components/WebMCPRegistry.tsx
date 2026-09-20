@@ -74,7 +74,23 @@ export default function WebMCPRegistry() {
       }
     };
 
+    const handleToolActivated = (e: Event) => {
+      const toolEvent = e as unknown as ToolActivatedEvent;
+      if (process.env.NODE_ENV !== 'production') {
+        console.info(`[WebMCP] Tool activated: ${toolEvent.toolName || 'unknown'}`);
+      }
+    };
+
+    const handleToolCanceled = (e: Event) => {
+      const toolEvent = e as unknown as ToolCancelEvent;
+      if (process.env.NODE_ENV !== 'production') {
+        console.info(`[WebMCP] Tool canceled: ${toolEvent.toolName || 'unknown'}`);
+      }
+    };
+
     window.addEventListener('unhandledrejection', handleWebMCPRejection);
+    document.addEventListener('toolactivated', handleToolActivated);
+    document.addEventListener('toolcanceled', handleToolCanceled);
 
     // ── Tool 1: search_legal_updates ─────────────────────────────────────────
     safeRegister(ctx, {
@@ -465,7 +481,99 @@ export default function WebMCPRegistry() {
         }
       },
     }, { readOnlyHint: true });
+
+    // ── Tool 10: search_document_templates ──────────────────────────────────
+    safeRegister(ctx, {
+      name: 'search_document_templates',
+      description:
+        'Search 34+ Indian corporate legal drafting templates (Board Resolutions, NDAs, MoUs, ' +
+        'Partnership Deeds, Lease Agreements, Notices) compliant with ICSI Secretarial Standards and Companies Act 2013.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          query: {
+            type: 'string',
+            description: 'Search keywords (e.g. "board resolution bank loan", "lease agreement", "NDA", "director resignation")',
+          },
+          category: {
+            type: 'string',
+            description: 'Filter by template category',
+            enum: [
+              'board_resolution',
+              'commercial_contracts',
+              'appointments',
+              'company_drafts',
+              'shareholders_meeting',
+              'agreements',
+              'mca_forms',
+              'notices',
+              'banking_finance',
+              'real_estate',
+            ],
+          },
+          limit: {
+            type: 'number',
+            description: 'Maximum number of templates to return (1-20, default 10)',
+          },
+        },
+        required: [],
+      },
+      execute: async (args) => {
+        try {
+          const params = new URLSearchParams();
+          if (args.query) params.set('q', String(args.query));
+          if (args.category) params.set('category', String(args.category));
+          if (args.limit) params.set('limit', String(args.limit));
+
+          const res = await fetch(`/api/documents/webmcp?${params}`);
+          if (!res.ok) return { error: 'Failed to search document templates.' };
+          return res.json().catch(() => ({}));
+        } catch {
+          return { error: 'Document templates search could not be completed.' };
+        }
+      },
+    }, { readOnlyHint: true, untrustedContentHint: true });
+
+    // ── Tool 11: get_document_template ──────────────────────────────────────
+    safeRegister(ctx, {
+      name: 'get_document_template',
+      description:
+        'Get the full metadata, statutory authority (ICSI SS-1 / Companies Act), and required drafting fields ' +
+        'for a specific Indian corporate legal template by its slug (e.g. "board-resolution-bank-loan", "memorandum-of-understanding").',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          slug: {
+            type: 'string',
+            description: 'URL slug of the document template (e.g. "board-resolution-bank-loan", "partnership-deed", "share-transfer-deed")',
+          },
+        },
+        required: ['slug'],
+      },
+      execute: async (args) => {
+        try {
+          const slug = String(args.slug ?? '').trim().toLowerCase();
+          if (!slug) return { error: 'Please provide a document template slug.' };
+
+          const res = await fetch(`/api/documents/webmcp?slug=${encodeURIComponent(slug)}`);
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            return { error: (err as { error?: string }).error ?? `Template "${slug}" not found.` };
+          }
+          return res.json().catch(() => ({}));
+        } catch {
+          return { error: 'Template details request could not be completed.' };
+        }
+      },
+    }, { readOnlyHint: true });
+
+    return () => {
+      window.removeEventListener('unhandledrejection', handleWebMCPRejection);
+      document.removeEventListener('toolactivated', handleToolActivated);
+      document.removeEventListener('toolcanceled', handleToolCanceled);
+    };
   }, []);
 
   return null; // Renders nothing — purely a side-effect component
 }
+

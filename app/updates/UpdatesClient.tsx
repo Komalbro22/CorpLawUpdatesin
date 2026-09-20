@@ -133,6 +133,9 @@ export default function UpdatesClient({
                         <form 
                             onSubmit={(e) => e.preventDefault()}
                             className="relative mb-4"
+                            toolname="search_legal_updates"
+                            tooldescription="Search Indian corporate law circulars, notifications, and regulatory updates across MCA, SEBI, RBI, NCLT, and IBC."
+                            toolautosubmit={true}
                         >
                             <Search
                                 className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400 pointer-events-none"

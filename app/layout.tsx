@@ -105,6 +105,9 @@ export default async function RootLayout({
       <head>
         <ThemeScript />
         <link rel="llms" href="/llms.txt" />
+        <link rel="describedby" href="/llms.txt" type="text/markdown" />
+        <link rel="webmcp" href="/.well-known/webmcp" type="application/json" />
+        <link rel="ai-catalog" href="/.well-known/ai-catalog.json" type="application/json" />
         <meta name="theme-color" content="#0F172A" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />

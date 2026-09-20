@@ -78,7 +78,19 @@ export default function HubSearch() {
 
   return (
     <div className="relative w-full max-w-2xl mx-auto mt-8 z-50" ref={wrapperRef}>
-      <div className="relative">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (selectedIndex >= 0 && results[selectedIndex]) {
+            handleNavigate(results[selectedIndex].slug);
+          } else if (results.length > 0) {
+            handleNavigate(results[0].slug);
+          }
+        }}
+        toolname="search_roc_fee_calculator"
+        tooldescription="Search MCA forms (e.g. MGT-7, AOC-4, DIR-12, SPICe+) to calculate statutory ROC filing fees and late penalties."
+        className="relative"
+      >
         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
           <svg className="h-5 w-5 text-slate-400" viewBox="0 0 20 20" fill="currentColor">
             <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
@@ -86,6 +98,8 @@ export default function HubSearch() {
         </div>
         <input
           type="text"
+          name="form_search"
+          toolparamdescription="MCA form name or number (e.g. MGT-7, AOC-4, DIR-12, SPICe+)"
           className="block w-full pl-11 pr-4 py-4 text-lg border-2 border-slate-700 bg-slate-900/50 text-white placeholder-slate-400 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all shadow-lg"
           placeholder="Search by form name or number — e.g. MGT-7, SPICe+, Annual Return"
           value={query}
@@ -93,7 +107,7 @@ export default function HubSearch() {
           onKeyDown={handleKeyDown}
           onFocus={() => { if (query.trim()) setIsOpen(true) }}
         />
-      </div>
+      </form>
 
       {isOpen && (
         <div className="absolute w-full mt-2 bg-white dark:bg-slate-900 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
