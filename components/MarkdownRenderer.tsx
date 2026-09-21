@@ -43,7 +43,7 @@ function parseStyle(styleInput: any, node?: any): React.CSSProperties {
     return {};
 }
 
-function processInlineStyles(styleObj: any, className: string = '', isContainer: boolean = false): { processedStyle: any; processedClassName: string } {
+function processInlineStyles(styleObj: any, className: string = '', isContainer: boolean = false, isTableElement: boolean = false): { processedStyle: any; processedClassName: string } {
     const processedStyle = { ...styleObj };
     const classes = className ? className.split(' ') : [];
     
@@ -182,7 +182,7 @@ function processInlineStyles(styleObj: any, className: string = '', isContainer:
             bgLower.includes('rgb(241,245,249)') ||
             bgLower.includes('rgb(249,250,251)');
 
-        if (!isProgressBarOrComponent) {
+        if (!isProgressBarOrComponent && !isTableElement) {
             if (isYellowAmberBg) {
                 classes.push('dynamic-card-amber');
                 delete processedStyle.background;
@@ -554,7 +554,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                     },
                     table: ({ node, style, className, children, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
-                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className, false, true);
                         return (
                             <div suppressHydrationWarning className="w-full overflow-x-auto my-6 border border-slate-200/80 dark:border-slate-800 rounded-xl shadow-sm scrollbar-thin">
                                 <table suppressHydrationWarning style={processedStyle} className={`w-full border-collapse ${processedClassName}`} {...props}>
@@ -565,7 +565,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                     },
                     thead: ({ node, style, className, children, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
-                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className, false, true);
                         return (
                             <thead suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
                                 {children}
@@ -574,7 +574,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                     },
                     tbody: ({ node, style, className, children, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
-                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className, false, true);
                         return (
                             <tbody suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
                                 {children}
@@ -583,7 +583,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                     },
                     tr: ({ node, style, className, children, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
-                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className, false, true);
                         return (
                             <tr suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
                                 {children}
@@ -592,16 +592,54 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                     },
                     th: ({ node, style, className, children, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
-                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className, false, true);
+                        const hasCustomBg = !!(styleObj.background || styleObj.backgroundColor || processedStyle.background || processedStyle.backgroundColor);
+                        const bgLower = (styleObj.background || styleObj.backgroundColor || '').toString().toLowerCase().replace(/\s+/g, '');
+                        const isDarkBg = 
+                            bgLower.includes('#0f172a') || 
+                            bgLower.includes('#0f2342') ||
+                            bgLower.includes('#0b1121') ||
+                            bgLower.includes('#1e293b') ||
+                            bgLower.includes('#1e3a5f') ||
+                            bgLower.includes('#070c18') ||
+                            bgLower.includes('#000000') ||
+                            bgLower === 'black' ||
+                            bgLower.includes('rgb(15,23,42)') ||
+                            bgLower.includes('rgb(15,35,66)') ||
+                            bgLower.includes('rgb(30,41,59)');
+                        const hasWhiteText = styleObj.color && (
+                            styleObj.color.toLowerCase().includes('#fff') || 
+                            styleObj.color.toLowerCase() === 'white' ||
+                            styleObj.color.toLowerCase().includes('rgb(255,255,255)')
+                        );
+
+                        if (isDarkBg || hasWhiteText) {
+                            processedStyle.color = '#ffffff';
+                        }
+
+                        const defaultBg = hasCustomBg ? '' : 'bg-slate-50 dark:bg-slate-800/80';
+                        const defaultText = (isDarkBg || hasWhiteText) ? 'text-white' : 'text-navy dark:text-slate-200';
+
                         return (
-                            <th suppressHydrationWarning style={processedStyle} className={`px-4 py-3 bg-slate-50 dark:bg-slate-800/80 text-left font-heading font-bold text-xs uppercase tracking-wider text-navy dark:text-slate-200 border-b border-slate-200 dark:border-slate-700 ${processedClassName}`} {...props}>
-                                {children}
+                            <th
+                                suppressHydrationWarning
+                                style={processedStyle}
+                                className={`px-4 py-3 text-left font-heading font-bold text-xs uppercase tracking-wider border-b border-slate-200 dark:border-slate-700 ${defaultBg} ${defaultText} ${processedClassName}`}
+                                {...props}
+                            >
+                                {(isDarkBg || hasWhiteText) ? (
+                                    <span style={{ color: '#ffffff' }} className="text-white font-bold inline-block">
+                                        {children}
+                                    </span>
+                                ) : (
+                                    children
+                                )}
                             </th>
                         );
                     },
                     td: ({ node, style, className, children, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
-                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className);
+                        const { processedStyle, processedClassName } = processInlineStyles(styleObj, className, false, true);
                         return (
                             <td suppressHydrationWarning style={processedStyle} className={`px-4 py-3 text-sm text-slate-700 dark:text-slate-300 border-b border-slate-100 dark:border-slate-800/80 align-top ${processedClassName}`} {...props}>
                                 {children}

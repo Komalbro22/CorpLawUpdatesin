@@ -1044,16 +1044,87 @@ h2, h3, h4 {
   min-width: 100px;
 }
 
-.article-content table th {
-  color: #0f172a !important;
+.article-content table th:not([style*="color"]):not([style*="background"]):not(.text-white) {
+  color: #0f172a;
   font-weight: 700;
 }
 
-.article-content table th p,
-.article-content table th span,
-.article-content table th strong,
-.article-content table th b {
-  color: #0f172a !important;
+.article-content table th:not([style*="color"]):not([style*="background"]):not(.text-white) p,
+.article-content table th:not([style*="color"]):not([style*="background"]):not(.text-white) span,
+.article-content table th:not([style*="color"]):not([style*="background"]):not(.text-white) strong,
+.article-content table th:not([style*="color"]):not([style*="background"]):not(.text-white) b {
+  color: #0f172a;
+}
+
+/* Explicit styling for table headers with dark backgrounds or white text */
+.article-content table th.text-white,
+.article-content table th[style*="color:#fff"],
+.article-content table th[style*="color: #fff"],
+.article-content table th[style*="color:#ffffff"],
+.article-content table th[style*="color: #ffffff"],
+.article-content table th[style*="color:white"],
+.article-content table th[style*="color: white"],
+.article-content table th[style*="background:#1e3a5f"],
+.article-content table th[style*="background: #1e3a5f"],
+.article-content table th[style*="background:#0f172a"],
+.article-content table th[style*="background: #0f172a"],
+.article-content table th[style*="background:#0F172A"],
+.article-content table th[style*="background: #0F172A"],
+.article-content table th[style*="background:#0f2342"],
+.article-content table th[style*="background: #0f2342"],
+.article-content table th[style*="background:#0b1121"],
+.article-content table th[style*="background: #0b1121"],
+.article-content table thead tr[style*="background"] th,
+.article-content table thead[style*="background"] th {
+  background-color: #0f2342 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em !important;
+  border-bottom: 2px solid #f59e0b !important;
+}
+
+.dark .article-content table th.text-white,
+.dark .article-content table th[style*="background:#1e3a5f"],
+.dark .article-content table th[style*="background: #1e3a5f"],
+.dark .article-content table th[style*="background:#0f172a"],
+.dark .article-content table th[style*="background: #0f172a"],
+.dark .article-content table th[style*="background:#0F172A"],
+.dark .article-content table th[style*="background: #0F172A"],
+.dark .article-content table th[style*="background:#0f2342"],
+.dark .article-content table th[style*="background: #0f2342"],
+.dark .article-content table thead tr[style*="background"] th,
+.dark .article-content table thead[style*="background"] th {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border-bottom: 2px solid #f59e0b !important;
+}
+
+.article-content table th.text-white *,
+.article-content table th[style*="color:#fff"] *,
+.article-content table th[style*="color: #fff"] *,
+.article-content table th[style*="color:#ffffff"] *,
+.article-content table th[style*="color: #ffffff"] *,
+.article-content table th[style*="color:white"] *,
+.article-content table th[style*="color: white"] *,
+.article-content table th[style*="background:#1e3a5f"] *,
+.article-content table th[style*="background: #1e3a5f"] *,
+.article-content table th[style*="background:#0f172a"] *,
+.article-content table th[style*="background: #0f172a"] *,
+.article-content table th[style*="background:#0F172A"] *,
+.article-content table th[style*="background: #0F172A"] *,
+.article-content table th[style*="background:#0f2342"] *,
+.article-content table th[style*="background: #0f2342"] *,
+.article-content table th[style*="background:#0b1121"] *,
+.article-content table th[style*="background: #0b1121"] *,
+.article-content table thead tr[style*="background"] th *,
+.article-content table thead[style*="background"] th * {
+  color: #ffffff !important;
+}
+
+/* Ensure table cells never render with card-like rounded borders */
+.article-content table th,
+.article-content table td {
+  border-radius: 0 !important;
 }
 
 /* Fix inline yellow highlights / mark tags in light mode */
