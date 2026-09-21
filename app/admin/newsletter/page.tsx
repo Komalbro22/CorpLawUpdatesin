@@ -21,7 +21,9 @@ import {
     Sparkles,
     Settings,
     History,
-    CheckCircle2
+    CheckCircle2,
+    Calendar,
+    Star
 } from 'lucide-react'
 import { useToast } from '@/components/Toast'
 
@@ -69,6 +71,8 @@ export default function NewsletterPage() {
     const [availableArticles, setAvailableArticles] = useState<any[]>([])
     const [searchQuery, setSearchQuery] = useState('')
     const [customSelectedIds, setCustomSelectedIds] = useState<string[]>([])
+    const [leadArticleId, setLeadArticleId] = useState<string>('')
+    const [includeDeadlines, setIncludeDeadlines] = useState<boolean>(false)
     const [introMessage, setIntroMessage] = useState('')
     
     // Live template preview
@@ -118,6 +122,9 @@ export default function NewsletterPage() {
             .then(data => {
                 if (data.articles) {
                     setAutoArticles(data.articles)
+                    if (data.articles.length > 0) {
+                        setLeadArticleId(data.articles[0].id)
+                    }
                     
                     // Set intelligent default subject
                     const todayStr = new Date().toLocaleDateString('en-IN', {
@@ -127,9 +134,10 @@ export default function NewsletterPage() {
                     })
                     setSubject(`Weekly Corporate Law Update — ${todayStr}`)
                     
-                    // Set default preview text based on top article
+                    // Set default preview text and lead story based on top article
                     if (data.articles.length > 0) {
                         const topArt = data.articles[0]
+                        setLeadArticleId(topArt.id)
                         setPreviewText(`This week's top update: ${topArt.title}. Read details inside.`)
                     } else {
                         setPreviewText('Stay updated with this week\'s corporate compliance and regulatory updates.')
@@ -156,14 +164,20 @@ export default function NewsletterPage() {
                 month: 'short',
                 year: 'numeric'
             })
-            setSubject(`Curated Compliance & Regulatory Updates — ${todayStr}`)
+            setSubject(prev => (!prev || prev.startsWith('Weekly Corporate Law') || prev.startsWith('Curated Compliance'))
+                ? `Curated Compliance & Regulatory Updates — ${todayStr}`
+                : prev
+            )
             
-            const topChosen = availableArticles.find(a => customSelectedIds.includes(a.id))
-            if (topChosen) {
-                setPreviewText(`Featured: ${topChosen.title}. Read full insights inside.`)
+            if (!leadArticleId || !customSelectedIds.includes(leadArticleId)) {
+                const topChosen = availableArticles.find(a => customSelectedIds.includes(a.id))
+                if (topChosen) {
+                    setLeadArticleId(topChosen.id)
+                    setPreviewText(`This week's top update: ${topChosen.title}. Read details inside.`)
+                }
             }
         }
-    }, [modeTab, customSelectedIds, availableArticles])
+    }, [modeTab, customSelectedIds, availableArticles, leadArticleId])
 
     // Real-time isolated template preview compiler
     async function renderLivePreview() {
@@ -178,6 +192,8 @@ export default function NewsletterPage() {
                 newsletterMode: modeTab === 'legacy' ? undefined : modeTab,
                 introMessage: modeTab === 'custom' ? introMessage : undefined,
                 selectedArticleIds: modeTab === 'custom' ? customSelectedIds : undefined,
+                leadArticleId: leadArticleId || undefined,
+                includeDeadlines,
                 body: modeTab === 'legacy' ? body : undefined,
                 mode: modeTab === 'legacy' ? editorMode : undefined
             }
@@ -206,7 +222,7 @@ export default function NewsletterPage() {
         }, 800)
         return () => clearTimeout(timer)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [subject, previewText, introMessage, customSelectedIds, modeTab, body, editorMode])
+    }, [subject, previewText, introMessage, customSelectedIds, leadArticleId, includeDeadlines, modeTab, body, editorMode])
 
     async function handleSend(testOnly: boolean, retryList?: string[]) {
         setError('')
@@ -243,6 +259,8 @@ export default function NewsletterPage() {
                 scheduledAt: (!testOnly && isScheduled && scheduledAt) ? new Date(scheduledAt).toISOString() : undefined,
                 newsletterMode: modeTab === 'legacy' ? undefined : modeTab,
                 selectedArticleIds: modeTab === 'custom' ? customSelectedIds : undefined,
+                leadArticleId: leadArticleId || undefined,
+                includeDeadlines,
                 introMessage: modeTab === 'custom' ? introMessage : undefined,
                 body: modeTab === 'legacy' ? body.trim() : undefined,
                 mode: modeTab === 'legacy' ? editorMode : undefined,
@@ -292,9 +310,26 @@ export default function NewsletterPage() {
     }
 
     const toggleArticleSelection = (id: string) => {
-        setCustomSelectedIds(prev => 
-            prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
-        )
+        setCustomSelectedIds(prev => {
+            const next = prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
+            if (leadArticleId === id && prev.includes(id)) {
+                // Was deselected, pick next selected as lead or reset
+                setLeadArticleId(next[0] || '')
+            }
+            return next
+        })
+    }
+
+    const handleSetLeadArticle = (art: { id: string; title: string }) => {
+        if (leadArticleId === art.id) {
+            setLeadArticleId('')
+        } else {
+            setLeadArticleId(art.id)
+            if (modeTab === 'custom' && !customSelectedIds.includes(art.id)) {
+                setCustomSelectedIds(prev => [...prev, art.id])
+            }
+            setPreviewText(`This week's top update: ${art.title.slice(0, 75)}... Read details inside.`)
+        }
     }
 
     // SUCCESS SUMMARY COMPONENT
@@ -535,6 +570,28 @@ export default function NewsletterPage() {
                                 {previewText.length}/100 characters
                             </p>
                         </div>
+
+                        {/* Statutory Deadlines Toggle */}
+                        <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                            <div>
+                                <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5 cursor-pointer" onClick={() => setIncludeDeadlines(!includeDeadlines)}>
+                                    <Calendar size={14} className="text-amber-500" />
+                                    Include Upcoming Statutory Deadlines
+                                </label>
+                                <p className="text-[11px] text-slate-500">
+                                    Turn ON or OFF to display upcoming ROC, GST & SEBI filing due dates
+                                </p>
+                            </div>
+                            <label className="relative inline-flex items-center cursor-pointer">
+                                <input 
+                                    type="checkbox" 
+                                    checked={includeDeadlines} 
+                                    onChange={e => setIncludeDeadlines(e.target.checked)}
+                                    className="sr-only peer"
+                                />
+                                <div className="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+                            </label>
+                        </div>
                     </div>
 
                     {/* DYNAMIC MODE SPECIFIC FIELDS CONTAINER */}
@@ -557,26 +614,55 @@ export default function NewsletterPage() {
                                             The system automatically fetched the following <span className="font-bold text-slate-900">{autoArticles.length} published updates</span> to build your digest block.
                                         </p>
                                         <div className="border border-slate-100  rounded-xl divide-y divide-slate-100 dark:divide-slate-850 max-h-60 overflow-y-auto">
-                                            {autoArticles.map((art, index) => (
-                                                <div key={art.id} className="p-3 text-sm flex items-start gap-3 hover:bg-slate-50/50  transition-colors">
-                                                    <span className="text-xs font-bold text-slate-500 min-w-[1.2rem] text-right mt-0.5">{index + 1}.</span>
-                                                    <div className="flex-1">
-                                                        <p className="font-semibold text-slate-900  leading-tight">{art.title}</p>
-                                                        <div className="flex items-center gap-2 mt-1">
-                                                            <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-1.5 py-0.5 rounded uppercase">
-                                                                 {art.category}
-                                                            </span>
-                                                            {art.impact_level && (
-                                                                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded capitalize ${
-                                                                    art.impact_level === 'high' ? 'bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400' : 'bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-500'
-                                                                }`}>
-                                                                    {art.impact_level} impact
-                                                                </span>
-                                                            )}
+                                            {autoArticles.map((art, index) => {
+                                                const isLead = leadArticleId ? leadArticleId === art.id : index === 0
+                                                return (
+                                                    <div 
+                                                        key={art.id} 
+                                                        className={`p-3 text-sm flex items-center justify-between gap-3 transition-colors ${
+                                                            isLead ? 'bg-amber-50/60 dark:bg-amber-950/20 border-l-4 border-l-amber-500' : 'hover:bg-slate-50/50'
+                                                        }`}
+                                                    >
+                                                        <div className="flex items-start gap-3 flex-1 min-w-0">
+                                                            <span className="text-xs font-bold text-slate-400 min-w-[1.2rem] text-right mt-0.5">{index + 1}.</span>
+                                                            <div className="min-w-0 flex-1">
+                                                                <p className="font-semibold text-slate-900 leading-snug">{art.title}</p>
+                                                                <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+                                                                    <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-1.5 py-0.5 rounded uppercase">
+                                                                         {art.category}
+                                                                    </span>
+                                                                    {art.impact_level && (
+                                                                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded capitalize ${
+                                                                            art.impact_level === 'high' ? 'bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400' : 'bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-500'
+                                                                        }`}>
+                                                                            {art.impact_level} impact
+                                                                        </span>
+                                                                    )}
+                                                                    {isLead && (
+                                                                        <span className="inline-flex items-center gap-1 text-[10px] font-extrabold bg-amber-500 text-white px-2 py-0.5 rounded-full shadow-xs">
+                                                                            <Star size={10} className="fill-white" />
+                                                                            Current Lead Story
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                            </div>
                                                         </div>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleSetLeadArticle(art)}
+                                                            title={isLead ? "Currently set as the lead story" : "Set as lead story for this newsletter"}
+                                                            className={`shrink-0 flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg border font-semibold transition-all ${
+                                                                isLead
+                                                                    ? 'bg-amber-500 text-white border-amber-600 shadow-sm'
+                                                                    : 'bg-white text-slate-700 border-slate-200 hover:border-amber-400 hover:text-amber-600 hover:bg-amber-50/50'
+                                                            }`}
+                                                        >
+                                                            <Star size={13} className={isLead ? 'fill-white text-white' : 'text-slate-400'} />
+                                                            <span>{isLead ? 'Lead Story' : 'Set as Lead'}</span>
+                                                        </button>
                                                     </div>
-                                                </div>
-                                            ))}
+                                                )
+                                            })}
                                         </div>
                                     </div>
                                 ) : (
@@ -634,32 +720,65 @@ export default function NewsletterPage() {
                                     {availableArticles.length > 0 ? (
                                         availableArticles.map((art) => {
                                             const isSelected = customSelectedIds.includes(art.id)
+                                            const isLead = leadArticleId === art.id
                                             return (
                                                 <div
                                                     key={art.id}
                                                     onClick={() => toggleArticleSelection(art.id)}
-                                                    className="p-3 text-sm flex items-start gap-3 cursor-pointer hover:bg-slate-50  transition-colors select-none"
+                                                    className={`p-3 text-sm flex items-center justify-between gap-3 cursor-pointer transition-colors select-none ${
+                                                        isLead
+                                                            ? 'bg-amber-50/60 dark:bg-amber-950/20 border-l-4 border-l-amber-500'
+                                                            : isSelected
+                                                                ? 'bg-slate-50/80 dark:bg-slate-800/40'
+                                                                : 'hover:bg-slate-50'
+                                                    }`}
                                                 >
-                                                    <span className="mt-0.5 text-slate-500">
-                                                        {isSelected ? (
-                                                            <CheckSquare size={16} className="text-amber-500 fill-amber-105 dark:fill-amber-950" />
-                                                        ) : (
-                                                            <Square size={16} />
-                                                        )}
-                                                    </span>
-                                                    <div className="flex-1">
-                                                        <p className={`font-semibold leading-tight ${isSelected ? 'text-slate-900 ' : 'text-slate-650 '}`}>
-                                                            {art.title}
-                                                        </p>
-                                                        <div className="flex items-center gap-2 mt-1">
-                                                            <span className="text-[9px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-1 py-0.2 rounded uppercase">
-                                                                {art.category}
-                                                            </span>
-                                                            <span className="text-[9px] text-slate-500  font-medium">
-                                                                {new Date(art.published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
-                                                            </span>
+                                                    <div className="flex items-start gap-3 flex-1 min-w-0">
+                                                        <span className="mt-0.5 text-slate-500 shrink-0">
+                                                            {isSelected ? (
+                                                                <CheckSquare size={16} className="text-amber-500 fill-amber-105 dark:fill-amber-950" />
+                                                            ) : (
+                                                                <Square size={16} />
+                                                            )}
+                                                        </span>
+                                                        <div className="flex-1 min-w-0">
+                                                            <p className={`font-semibold leading-tight line-clamp-2 ${isSelected ? 'text-slate-900' : 'text-slate-600'}`}>
+                                                                {art.title}
+                                                            </p>
+                                                            <div className="flex items-center gap-2 mt-1 flex-wrap">
+                                                                <span className="text-[9px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-1.5 py-0.5 rounded uppercase">
+                                                                    {art.category}
+                                                                </span>
+                                                                <span className="text-[10px] text-slate-500 font-medium">
+                                                                    {new Date(art.published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                                                                </span>
+                                                                {isLead && (
+                                                                    <span className="inline-flex items-center gap-1 text-[10px] font-extrabold bg-amber-500 text-white px-2 py-0.5 rounded-full shadow-xs">
+                                                                        <Star size={10} className="fill-white" />
+                                                                        Lead Story
+                                                                    </span>
+                                                                )}
+                                                            </div>
                                                         </div>
                                                     </div>
+                                                    {isSelected && (
+                                                        <button
+                                                            type="button"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
+                                                                handleSetLeadArticle(art)
+                                                            }}
+                                                            title={isLead ? "Currently set as lead story" : "Set as lead story"}
+                                                            className={`shrink-0 flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg border font-semibold transition-all ${
+                                                                isLead
+                                                                    ? 'bg-amber-500 text-white border-amber-600 shadow-sm'
+                                                                    : 'bg-white text-slate-700 border-slate-200 hover:border-amber-400 hover:text-amber-600 hover:bg-amber-50/50'
+                                                            }`}
+                                                        >
+                                                            <Star size={13} className={isLead ? 'fill-white text-white' : 'text-slate-400'} />
+                                                            <span>{isLead ? 'Lead Story' : 'Set as Lead'}</span>
+                                                        </button>
+                                                    )}
                                                 </div>
                                             )
                                         })

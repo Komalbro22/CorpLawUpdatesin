@@ -151,12 +151,29 @@ describe('Newsletter & Email Template Engine', () => {
             expect(html).toContain('RBI Revises Master Direction on Overseas Direct Investment')
         })
 
-        it('renders live statutory deadlines when provided', () => {
+        it('honors custom leadArticleId to override default lead story', () => {
+            const html = buildNewsletterTemplateHtml({
+                subject: 'Custom Lead Test',
+                previewText: 'SEBI lead',
+                articles: sampleArticles,
+                leadArticleId: '2', // SEBI article
+                unsubscribeUrl: '#'
+            })
+
+            expect(html).toContain('LEAD STORY · SEBI')
+            expect(html).toContain('SEBI Clarifies ESG Rating Provider Regulations')
+            // Secondary cards should now contain MCA article
+            expect(html).toContain('Regulatory Radar & Practice Updates')
+            expect(html).toContain('MCA Mandates Dematerialisation for Private Companies')
+        })
+
+        it('renders live statutory deadlines when includeDeadlines is true and provided', () => {
             const html = buildNewsletterTemplateHtml({
                 subject: 'Deadlines Digest',
                 previewText: 'Deadlines included',
                 articles: sampleArticles,
                 unsubscribeUrl: '#',
+                includeDeadlines: true,
                 upcomingDeadlines: sampleDeadlines
             })
 
@@ -166,17 +183,31 @@ describe('Newsletter & Email Template Engine', () => {
             expect(html).toContain('30 September')
         })
 
-        it('renders fallback compliance calendar card when no upcoming deadlines are passed', () => {
+        it('renders fallback compliance calendar card when includeDeadlines is true and no upcoming deadlines are passed', () => {
             const html = buildNewsletterTemplateHtml({
                 subject: 'Calendar CTA Test',
                 previewText: 'No deadlines passed',
                 articles: sampleArticles,
                 unsubscribeUrl: '#',
+                includeDeadlines: true,
                 upcomingDeadlines: []
             })
 
             expect(html).toContain('Interactive Compliance Calendar 2026')
             expect(html).toContain('/calendar')
+        })
+
+        it('completely omits statutory deadlines when includeDeadlines is false or omitted', () => {
+            const html = buildNewsletterTemplateHtml({
+                subject: 'Clean Layout Test',
+                previewText: 'No dead space',
+                articles: sampleArticles,
+                unsubscribeUrl: '#',
+                includeDeadlines: false
+            })
+
+            expect(html).not.toContain('Upcoming Statutory Deadlines')
+            expect(html).not.toContain('Interactive Compliance Calendar 2026')
         })
 
         it('renders practitioner tool spotlight and forward to colleague callout', () => {
@@ -217,7 +248,6 @@ describe('Newsletter & Email Template Engine', () => {
 
             expect(html).toContain('CorpLawUpdates')
             expect(html).toContain('Weekly Intelligence Breakdown (0 Updates)')
-            expect(html).toContain('Interactive Compliance Calendar 2026')
         })
     })
 

@@ -7,17 +7,29 @@ import { supabaseAdmin } from '@/lib/supabase-server'
 import { sendEmail, parseSender } from '@/lib/email-provider'
 import { buildEmailHtml, markdownToHtml, sendNewsletterEmails, buildNewsletterTemplateHtml } from '@/lib/newsletter'
 
-export async function POST(request: NextRequest) {
+function parseDueDate(s: string): Date | null {
+    try {
+        let dateStr = s
+        const parenMatch = dateStr.match(/by\s+(\d+\s+\w+\s+\d{4})/i)
+        if (parenMatch) dateStr = parenMatch[1]
+        const d = new Date(dateStr)
+        if (!isNaN(d.getTime())) return d
+        const p = new Date(dateStr.replace(/(\d+)\s+(\w+)\s+(\d+)/, '$2 $1, $3'))
+        return isNaN(p.getTime()) ? null : p
+    } catch { return null }
+}
+
+export async function POST(request: Request) {
     try {
         console.log('=== NEWSLETTER SEND START ===')
 
-        // 1. Verify session
+        // 1. Authenticate admin
         const isValid = await verifyAdminSession()
         if (!isValid) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }
 
-        // 2. Parse body
+        // 2. Parse request payload
         const body = await request.json()
         const { 
             subject, 
@@ -30,6 +42,8 @@ export async function POST(request: NextRequest) {
             scheduledAt,
             newsletterMode, // 'auto' | 'custom'
             selectedArticleIds,
+            leadArticleId,
+            includeDeadlines = false,
             introMessage,
             previewOnly // true if only rendering for admin composer preview
         } = body
@@ -83,17 +97,27 @@ export async function POST(request: NextRequest) {
             }
         }
 
-        // Fetch upcoming compliance deadlines for executive deadlines section
+        // Fetch upcoming compliance deadlines for executive deadlines section (strictly if enabled and chronologically upcoming)
         let upcomingDeadlines: any[] = []
-        if (isCuratedNewsletter) {
+        if (isCuratedNewsletter && includeDeadlines === true) {
             try {
                 const { data: dlData } = await supabaseAdmin
                     .from('compliance_entries')
                     .select('id, form_name, compliance_title, due_date, regulator, applicable_to')
                     .eq('is_active', true)
-                    .order('due_date', { ascending: true })
-                    .limit(4)
-                upcomingDeadlines = dlData || []
+
+                const now = new Date()
+                const fortyFiveDaysLater = new Date()
+                fortyFiveDaysLater.setDate(now.getDate() + 45)
+
+                upcomingDeadlines = (dlData || [])
+                    .map((entry: any) => ({
+                        ...entry,
+                        parsedDate: parseDueDate(entry.due_date)
+                    }))
+                    .filter((e: any) => e.parsedDate && e.parsedDate >= now && e.parsedDate <= fortyFiveDaysLater)
+                    .sort((a: any, b: any) => a.parsedDate.getTime() - b.parsedDate.getTime())
+                    .slice(0, 4)
             } catch (dlErr) {
                 console.warn('Failed to fetch upcoming deadlines for newsletter:', dlErr)
             }
@@ -108,7 +132,9 @@ export async function POST(request: NextRequest) {
                     introMessage,
                     articles,
                     unsubscribeUrl: '#',
-                    upcomingDeadlines
+                    upcomingDeadlines,
+                    leadArticleId,
+                    includeDeadlines
                   })
                 : buildEmailHtml({
                     subject,
@@ -133,7 +159,9 @@ export async function POST(request: NextRequest) {
                 introMessage,
                 articles,
                 unsubscribeUrl: unsubUrl,
-                upcomingDeadlines
+                upcomingDeadlines,
+                leadArticleId,
+                includeDeadlines
             })
         }
 

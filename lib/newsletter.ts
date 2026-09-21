@@ -129,7 +129,9 @@ export function buildNewsletterTemplateHtml({
     introMessage,
     articles = [],
     unsubscribeUrl,
-    upcomingDeadlines = []
+    upcomingDeadlines = [],
+    leadArticleId,
+    includeDeadlines = false
 }: {
     subject: string
     previewText: string
@@ -137,6 +139,8 @@ export function buildNewsletterTemplateHtml({
     articles: any[]
     unsubscribeUrl: string
     upcomingDeadlines?: any[]
+    leadArticleId?: string | null
+    includeDeadlines?: boolean
 }): string {
     const SITE_URL = BASE_URL || 'https://www.corplawupdates.in'
 
@@ -194,7 +198,10 @@ export function buildNewsletterTemplateHtml({
 
     // 2. Separate Lead Hero Story vs Secondary Articles
     let leadArticle: any = null
-    if (articles.length > 0) {
+    if (leadArticleId && articles.length > 0) {
+        leadArticle = articles.find(a => a.id === leadArticleId || a.slug === leadArticleId)
+    }
+    if (!leadArticle && articles.length > 0) {
         leadArticle = articles.find(a => a.is_featured) ||
                       articles.find(a => a.impact_level?.toLowerCase() === 'high') ||
                       articles[0]
@@ -214,9 +221,11 @@ export function buildNewsletterTemplateHtml({
             </tr>
         `).join('')
     } else if (articles.length > 0) {
-        // Auto-synthesize from top updates
-        const top3 = articles.slice(0, 3)
-        memoBulletsHtml = top3.map(art => {
+        // Auto-synthesize from top updates with lead story prioritized first
+        const bulletArticles = leadArticle
+            ? [leadArticle, ...articles.filter(a => a !== leadArticle)].slice(0, 3)
+            : articles.slice(0, 3)
+        memoBulletsHtml = bulletArticles.map(art => {
             const cat = (art.category || 'Regulatory').toUpperCase()
             let rawSnippet = (art.summary || art.content || '').replace(/<[^>]*>/g, '').trim()
             if (rawSnippet.length > 120) {
@@ -391,96 +400,98 @@ export function buildNewsletterTemplateHtml({
         `
     }).join('')
 
-    // 6. Upcoming Statutory Deadlines Widget
+    // 6. Upcoming Statutory Deadlines Widget (controlled by includeDeadlines toggle)
     let deadlinesSectionHtml = ''
-    if (upcomingDeadlines && upcomingDeadlines.length > 0) {
-        const rowsHtml = upcomingDeadlines.map((dl: any) => {
-            const regUpper = (dl.regulator || 'MCA').toUpperCase()
-            const regMeta = REGULATOR_COLORS[regUpper] || REGULATOR_COLORS.OTHER
-            const cleanDueDate = (dl.due_date || '').replace(/\s+\d{4}$/, '')
-            return `
+    if (includeDeadlines) {
+        if (upcomingDeadlines && upcomingDeadlines.length > 0) {
+            const rowsHtml = upcomingDeadlines.map((dl: any) => {
+                const regUpper = (dl.regulator || 'MCA').toUpperCase()
+                const regMeta = REGULATOR_COLORS[regUpper] || REGULATOR_COLORS.OTHER
+                const cleanDueDate = (dl.due_date || '').replace(/\s+\d{4}$/, '')
+                return `
+                    <tr>
+                        <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+                            <span style="background:${regMeta.lightBg};color:${regMeta.border};font-size:10px;font-weight:800;padding:2px 6px;border-radius:4px;letter-spacing:0.5px;text-transform:uppercase;">
+                                ${dl.form_name || regUpper}
+                            </span>
+                        </td>
+                        <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:13px;color:#0F172A;font-weight:600;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+                            ${dl.compliance_title}
+                            <div style="font-size:11px;color:#64748B;font-weight:400;">Applicable: ${dl.applicable_to || 'Relevant entities'}</div>
+                        </td>
+                        <td align="right" style="padding:10px 12px;border-bottom:1px solid #E2E8F0;white-space:nowrap;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+                            <span style="background:#FEF3C7;color:#92400E;font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px;">
+                                ${cleanDueDate}
+                            </span>
+                        </td>
+                    </tr>
+                `
+            }).join('')
+
+            deadlinesSectionHtml = `
                 <tr>
-                    <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-                        <span style="background:${regMeta.lightBg};color:${regMeta.border};font-size:10px;font-weight:800;padding:2px 6px;border-radius:4px;letter-spacing:0.5px;text-transform:uppercase;">
-                            ${dl.form_name || regUpper}
-                        </span>
-                    </td>
-                    <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:13px;color:#0F172A;font-weight:600;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-                        ${dl.compliance_title}
-                        <div style="font-size:11px;color:#64748B;font-weight:400;">Applicable: ${dl.applicable_to || 'Relevant entities'}</div>
-                    </td>
-                    <td align="right" style="padding:10px 12px;border-bottom:1px solid #E2E8F0;white-space:nowrap;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-                        <span style="background:#FEF3C7;color:#92400E;font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px;">
-                            ${cleanDueDate}
-                        </span>
+                    <td style="padding:20px 24px 0;">
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;overflow:hidden;border-collapse:collapse;">
+                            <tr>
+                                <td style="padding:16px 20px;border-bottom:1px solid #E2E8F0;background:#F1F5F9;">
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+                                        <tr>
+                                            <td>
+                                                <div style="font-size:12px;font-weight:800;color:#0F172A;letter-spacing:0.5px;text-transform:uppercase;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+                                                    📅 Upcoming Statutory Deadlines
+                                                </div>
+                                            </td>
+                                            <td align="right">
+                                                <a href="${SITE_URL}/calendar" style="font-size:12px;color:#2563EB;font-weight:700;text-decoration:none;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+                                                    View 2026 Calendar →
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px 8px;">
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+                                        ${rowsHtml}
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
             `
-        }).join('')
-
-        deadlinesSectionHtml = `
-            <tr>
-                <td style="padding:20px 24px 0;">
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;overflow:hidden;border-collapse:collapse;">
-                        <tr>
-                            <td style="padding:16px 20px;border-bottom:1px solid #E2E8F0;background:#F1F5F9;">
-                                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
-                                    <tr>
-                                        <td>
-                                            <div style="font-size:12px;font-weight:800;color:#0F172A;letter-spacing:0.5px;text-transform:uppercase;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-                                                📅 Upcoming Statutory Deadlines
-                                            </div>
-                                        </td>
-                                        <td align="right">
-                                            <a href="${SITE_URL}/calendar" style="font-size:12px;color:#2563EB;font-weight:700;text-decoration:none;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-                                                View 2026 Calendar →
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding:4px 8px;">
-                                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
-                                    ${rowsHtml}
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        `
-    } else {
-        deadlinesSectionHtml = `
-            <tr>
-                <td style="padding:20px 24px 0;">
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F8FAFC;border-radius:10px;border:1px solid #E2E8F0;overflow:hidden;border-collapse:collapse;">
-                        <tr>
-                            <td style="padding:18px 22px;">
-                                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
-                                    <tr>
-                                        <td style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-                                            <p style="margin:0 0 4px;font-size:15px;font-weight:800;color:#0F172A;font-family:Georgia,serif;">
-                                                📅 Interactive Compliance Calendar 2026
-                                            </p>
-                                            <p style="margin:0;font-size:12px;color:#64748B;line-height:1.5;">
-                                                Track statutory due dates for 250+ annual & periodic filings across MCA, SEBI LODR, RBI & GST with penalty calculators.
-                                            </p>
-                                        </td>
-                                        <td align="right" style="padding-left:14px;white-space:nowrap;">
-                                            <a href="${SITE_URL}/calendar" style="display:inline-block;background:#0F172A;color:#FFFFFF;font-weight:700;font-size:12px;padding:8px 16px;border-radius:6px;text-decoration:none;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-                                                Open Calendar →
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        `
+        } else {
+            deadlinesSectionHtml = `
+                <tr>
+                    <td style="padding:20px 24px 0;">
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F8FAFC;border-radius:10px;border:1px solid #E2E8F0;overflow:hidden;border-collapse:collapse;">
+                            <tr>
+                                <td style="padding:18px 22px;">
+                                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+                                        <tr>
+                                            <td style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+                                                <p style="margin:0 0 4px;font-size:15px;font-weight:800;color:#0F172A;font-family:Georgia,serif;">
+                                                    📅 Interactive Compliance Calendar 2026
+                                                </p>
+                                                <p style="margin:0;font-size:12px;color:#64748B;line-height:1.5;">
+                                                    Track statutory due dates for 250+ annual & periodic filings across MCA, SEBI LODR, RBI & GST with penalty calculators.
+                                                </p>
+                                            </td>
+                                            <td align="right" style="padding-left:14px;white-space:nowrap;">
+                                                <a href="${SITE_URL}/calendar" style="display:inline-block;background:#0F172A;color:#FFFFFF;font-weight:700;font-size:12px;padding:8px 16px;border-radius:6px;text-decoration:none;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+                                                    Open Calendar →
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            `
+        }
     }
 
     return `<!DOCTYPE html>
