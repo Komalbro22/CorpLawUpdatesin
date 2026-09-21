@@ -1,0 +1,36 @@
+import { NextResponse } from 'next/server'
+
+export const dynamic = 'force-static'
+export const revalidate = 86400 // 24 hours
+
+export async function GET() {
+  const content = `# CorpLawUpdates.in Security Policy (RFC 9116)
+# https://securitytxt.org/
+
+# Primary security vulnerability reporting email
+Contact: mailto:editorial@corplawupdates.in
+
+# Secondary contact for general security and administrative inquiries
+Contact: mailto:mail@corplawupdates.in
+
+# Canonical location of this file
+Canonical: https://www.corplawupdates.in/.well-known/security.txt
+
+# Our disclosure and editorial policy
+Policy: https://www.corplawupdates.in/editorial-policy
+
+# Preferred communication languages
+Preferred-Languages: en, hi
+
+# File expiration date (ISO 8601 UTC timestamp per RFC 9116 Section 2.5.5)
+Expires: 2027-09-21T00:00:00.000Z
+`
+
+  return new NextResponse(content, {
+    status: 200,
+    headers: {
+      'Content-Type': 'text/plain; charset=utf-8',
+      'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=2592000',
+    },
+  })
+}

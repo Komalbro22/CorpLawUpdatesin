@@ -256,6 +256,12 @@ const nextConfig = {
         destination: '/updates',
         permanent: true,
       },
+      // RFC 9116 security.txt fallback redirect
+      {
+        source: '/security.txt',
+        destination: '/.well-known/security.txt',
+        permanent: true,
+      },
     ]
   },
 }
