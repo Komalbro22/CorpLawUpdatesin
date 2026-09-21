@@ -83,6 +83,22 @@ export async function POST(request: NextRequest) {
             }
         }
 
+        // Fetch upcoming compliance deadlines for executive deadlines section
+        let upcomingDeadlines: any[] = []
+        if (isCuratedNewsletter) {
+            try {
+                const { data: dlData } = await supabaseAdmin
+                    .from('compliance_entries')
+                    .select('id, form_name, compliance_title, due_date, regulator, applicable_to')
+                    .eq('is_active', true)
+                    .order('due_date', { ascending: true })
+                    .limit(4)
+                upcomingDeadlines = dlData || []
+            } catch (dlErr) {
+                console.warn('Failed to fetch upcoming deadlines for newsletter:', dlErr)
+            }
+        }
+
         // 5. Handle previewOnly rendering
         if (previewOnly) {
             const html = isCuratedNewsletter 
@@ -91,7 +107,8 @@ export async function POST(request: NextRequest) {
                     previewText: previewText || '',
                     introMessage,
                     articles,
-                    unsubscribeUrl: '#'
+                    unsubscribeUrl: '#',
+                    upcomingDeadlines
                   })
                 : buildEmailHtml({
                     subject,
@@ -115,7 +132,8 @@ export async function POST(request: NextRequest) {
                 previewText: previewText || '',
                 introMessage,
                 articles,
-                unsubscribeUrl: unsubUrl
+                unsubscribeUrl: unsubUrl,
+                upcomingDeadlines
             })
         }
 
