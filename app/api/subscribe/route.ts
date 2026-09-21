@@ -82,7 +82,11 @@ export async function POST(request: NextRequest) {
 
         if (existing) {
             if (existing.is_active) {
-                return NextResponse.json({ error: 'Already subscribed' }, { status: 400 })
+                return NextResponse.json({ 
+                    success: true, 
+                    alreadySubscribed: true,
+                    message: 'You are already subscribed! Your weekly corporate law briefings are active.' 
+                }, { status: 200 })
             } else {
                 await supabaseAdmin
                     .from('subscribers')
