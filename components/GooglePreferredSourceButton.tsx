@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Check, ExternalLink, ArrowRight } from 'lucide-react'
 
 interface GooglePreferredSourceButtonProps {
@@ -42,8 +42,40 @@ export default function GooglePreferredSourceButton({
     className = ''
 }: GooglePreferredSourceButtonProps) {
     const [clicked, setClicked] = useState(false)
+    const [isNativeLoaded, setIsNativeLoaded] = useState(false)
+    const nativeContainerRef = useRef<HTMLDivElement>(null)
 
     const GOOGLE_PREFERENCE_URL = 'https://www.google.com/preferences/source?q=https://www.corplawupdates.in'
+
+    // Detect if Google's official publisher.js injected the native 1-click button
+    useEffect(() => {
+        const el = nativeContainerRef.current
+        if (!el) return
+
+        const check = () => {
+            if (el.children.length > 0 || el.querySelector('button, iframe, [role="button"]')) {
+                setIsNativeLoaded(true)
+                return true
+            }
+            return false
+        }
+
+        if (check()) return
+
+        const observer = new MutationObserver(() => {
+            if (check()) {
+                observer.disconnect()
+            }
+        })
+
+        observer.observe(el, { childList: true, subtree: true })
+        const timer = setTimeout(check, 1200)
+
+        return () => {
+            observer.disconnect()
+            clearTimeout(timer)
+        }
+    }, [])
 
     const trackClick = () => {
         setClicked(true)
@@ -96,6 +128,14 @@ export default function GooglePreferredSourceButton({
                 className={`relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm transition-all duration-300 hover:shadow-md ${className}`}
                 onClickCapture={trackClick}
             >
+                {/* CSS Rule: Automatically hide fallback button if Google's official SDK renders inside container */}
+                <style>{`
+                    div[google-add-preferred-source-btn]:not(:empty) + .google-preferred-fallback-btn,
+                    div[google-add-preferred-source-btn]:not(:empty) ~ .google-preferred-fallback-btn {
+                        display: none !important;
+                    }
+                `}</style>
+
                 {/* Official Google 4-Color Top Hairline Bar */}
                 <div 
                     className="h-1.5 w-full bg-gradient-to-r from-[#4285F4] via-[#EA4335] via-[#FBBC05] to-[#34A853]" 
@@ -140,20 +180,23 @@ export default function GooglePreferredSourceButton({
 
                         {/* CTA Actions */}
                         <div className="flex flex-col sm:flex-row lg:flex-col items-stretch lg:items-end justify-center gap-2.5 shrink-0">
-                            {/* Google Publisher.js container (if script renders natively) */}
+                            {/* Google Publisher.js container (Official 1-Click Button) */}
                             <div 
+                                ref={nativeContainerRef}
                                 {...{ 'google-add-preferred-source-btn': '' }}
                                 data-theme={theme}
                                 data-lang="en"
-                                className="flex justify-center"
+                                className="flex justify-center min-h-[38px] items-center"
                             />
 
-                            {/* Official Google-Style Pill Action Button */}
+                            {/* Fallback One-Click CTA (Only displayed if Google's script does not load) */}
                             <a
                                 href={GOOGLE_PREFERENCE_URL}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-xl bg-[#1A73E8] hover:bg-[#1557B0] text-white font-bold text-sm transition-all shadow-sm hover:shadow-md active:scale-[0.98] group"
+                                className={`google-preferred-fallback-btn inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-xl bg-[#1A73E8] hover:bg-[#1557B0] text-white font-bold text-sm transition-all shadow-sm hover:shadow-md active:scale-[0.98] group ${
+                                    isNativeLoaded ? 'hidden' : ''
+                                }`}
                             >
                                 <span className="flex size-6 items-center justify-center rounded-full bg-white shrink-0 shadow-xs">
                                     <GoogleIcon className="w-3.5 h-3.5" />
@@ -175,7 +218,7 @@ export default function GooglePreferredSourceButton({
                                     href="https://developers.google.com/search/docs/appearance/preferred-sources"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-[11px] text-slate-600 hover:text-slate-900 dark:hover:text-slate-200 underline inline-flex items-center gap-1"
+                                    className="text-[11px] text-slate-500 hover:text-slate-900 dark:hover:text-slate-200 underline inline-flex items-center gap-1"
                                 >
                                     <span>Learn how Google Preferred Sources works</span>
                                     <ExternalLink size={10} />
