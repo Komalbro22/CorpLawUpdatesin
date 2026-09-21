@@ -36,7 +36,7 @@ const nextConfig = {
   async headers() {
     const isDev = process.env.NODE_ENV !== 'production'
     const scriptSrcEval = isDev ? " 'unsafe-eval'" : ""
-    const cspHeader = `default-src 'self'; script-src 'self' 'unsafe-inline'${scriptSrcEval} https://static.cloudflareinsights.com https://www.googletagmanager.com https://va.vercel-scripts.com https://*.clarity.ms https://pagead2.googlesyndication.com https://*.googlesyndication.com https://googleads.g.doubleclick.net https://news.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https:; font-src 'self' data:; connect-src 'self' blob: data: https: wss://*.supabase.co; frame-src 'self' https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://news.google.com; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests;`
+    const cspHeader = `default-src 'self'; script-src 'self' 'unsafe-inline'${scriptSrcEval} https://static.cloudflareinsights.com https://www.googletagmanager.com https://va.vercel-scripts.com https://*.clarity.ms https://pagead2.googlesyndication.com https://*.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://tpc.googlesyndication.com https://news.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https:; font-src 'self' data:; connect-src 'self' blob: data: https: wss://*.supabase.co; frame-src 'self' https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://news.google.com; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests;`
 
     return [
       {
