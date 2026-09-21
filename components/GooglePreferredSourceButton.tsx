@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Sparkles, Check, ExternalLink } from 'lucide-react'
+import { Check, ExternalLink, ArrowRight } from 'lucide-react'
 
 interface GooglePreferredSourceButtonProps {
     variant?: 'badge' | 'banner' | 'card' | 'footer' | 'compact'
@@ -11,11 +11,34 @@ interface GooglePreferredSourceButtonProps {
     className?: string
 }
 
+function GoogleIcon({ className = 'w-4 h-4' }: { className?: string }) {
+    return (
+        <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path
+                d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"
+                fill="#4285F4"
+            />
+            <path
+                d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"
+                fill="#34A853"
+            />
+            <path
+                d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.14-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"
+                fill="#FBBC05"
+            />
+            <path
+                d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"
+                fill="#EA4335"
+            />
+        </svg>
+    )
+}
+
 export default function GooglePreferredSourceButton({
     variant = 'banner',
     location = 'article_bottom',
     slug = '',
-    theme = 'dark',
+    theme = 'light',
     className = ''
 }: GooglePreferredSourceButtonProps) {
     const [clicked, setClicked] = useState(false)
@@ -66,59 +89,100 @@ export default function GooglePreferredSourceButton({
         } catch {}
     }
 
-    // --- VARIANT 1: High-Converting Banner (for bottom of article) ---
+    // --- VARIANT 1: Google-Native Article Banner ---
     if (variant === 'banner') {
         return (
             <div 
-                className={`relative overflow-hidden rounded-2xl bg-gradient-to-br from-navy via-slate-900 to-slate-950 p-6 md:p-8 text-white shadow-xl border border-amber-500/30 ${className}`}
+                className={`relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm transition-all duration-300 hover:shadow-md ${className}`}
                 onClickCapture={trackClick}
             >
-                {/* Decorative background glow */}
-                <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-amber-500/10 blur-3xl" aria-hidden="true" />
-                <div className="absolute -left-12 -bottom-12 h-40 w-40 rounded-full bg-blue-500/10 blur-3xl" aria-hidden="true" />
+                {/* Official Google 4-Color Top Hairline Bar */}
+                <div 
+                    className="h-1.5 w-full bg-gradient-to-r from-[#4285F4] via-[#EA4335] via-[#FBBC05] to-[#34A853]" 
+                    aria-hidden="true" 
+                />
 
-                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    <div className="space-y-2 max-w-xl">
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-400 text-xs font-bold uppercase tracking-wider">
-                            <Sparkles className="w-3.5 h-3.5" />
-                            Google Search Feature
+                <div className="p-6 sm:p-7 md:p-8">
+                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                        
+                        {/* Text & Explainer */}
+                        <div className="space-y-3 max-w-2xl">
+                            {/* Official Google Search Feature Pill */}
+                            <div className="flex items-center gap-2 flex-wrap">
+                                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200">
+                                    <GoogleIcon className="w-3.5 h-3.5 shrink-0" />
+                                    <span>Google Search Feature</span>
+                                </span>
+
+                                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/40 border border-blue-200/60 dark:border-blue-800/40 text-[11px] font-bold text-[#1A73E8] dark:text-blue-400">
+                                    Top Stories & AI Overviews
+                                </span>
+                            </div>
+
+                            {/* Headline */}
+                            <h3 className="font-heading text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight leading-snug">
+                                Get Corporate Law Updates First on Google
+                            </h3>
+
+                            {/* Description */}
+                            <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed">
+                                Add <strong className="font-semibold text-slate-900 dark:text-white">CorpLawUpdates.in</strong> as your Preferred Source on Google to see verified MCA, SEBI, RBI & NCLT circulars prioritized whenever you search.
+                            </p>
+
+                            {/* Subtle Trust & Search Preview Indicator */}
+                            <div className="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 pt-1">
+                                <span className="inline-flex items-center justify-center size-4 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 font-bold text-[10px]">
+                                    ✓
+                                </span>
+                                <span>Official Google Search personalization · 1-click add · No sign-in required</span>
+                            </div>
                         </div>
-                        <h3 className="font-heading text-xl md:text-2xl font-bold text-white tracking-tight">
-                            Get Corporate Law Updates First on Google
-                        </h3>
-                        <p className="text-slate-300 text-sm leading-relaxed">
-                            Add <strong className="text-white">CorpLawUpdates.in</strong> as your Preferred Source on Google to see daily MCA, SEBI, RBI & NCLT circulars prioritized in your <strong className="text-amber-300">Top Stories</strong> and <strong className="text-amber-300">AI Overviews</strong>.
-                        </p>
-                    </div>
 
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
-                        {/* Native Google Preferred Source Button Container (auto-filled by publisher.js) */}
-                        <div 
-                            {...{ 'google-add-preferred-source-btn': '' }}
-                            data-theme={theme}
-                            data-lang="en"
-                            className="flex justify-center"
-                        />
+                        {/* CTA Actions */}
+                        <div className="flex flex-col sm:flex-row lg:flex-col items-stretch lg:items-end justify-center gap-2.5 shrink-0">
+                            {/* Google Publisher.js container (if script renders natively) */}
+                            <div 
+                                {...{ 'google-add-preferred-source-btn': '' }}
+                                data-theme={theme}
+                                data-lang="en"
+                                className="flex justify-center"
+                            />
 
-                        {/* Fallback & Direct One-Click CTA */}
-                        <a
-                            href={GOOGLE_PREFERENCE_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-sm transition-all shadow-lg shadow-amber-500/20 active:scale-95 group"
-                        >
-                            {clicked ? (
-                                <>
-                                    <Check className="w-4 h-4 text-slate-950" />
-                                    <span>Opening Google Preferences...</span>
-                                </>
-                            ) : (
-                                <>
-                                    <span>⭐ Set as Preferred Source</span>
-                                    <ExternalLink className="w-4 h-4 opacity-70 group-hover:opacity-100 transition-opacity" />
-                                </>
-                            )}
-                        </a>
+                            {/* Official Google-Style Pill Action Button */}
+                            <a
+                                href={GOOGLE_PREFERENCE_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-xl bg-[#1A73E8] hover:bg-[#1557B0] text-white font-bold text-sm transition-all shadow-sm hover:shadow-md active:scale-[0.98] group"
+                            >
+                                <span className="flex size-6 items-center justify-center rounded-full bg-white shrink-0 shadow-xs">
+                                    <GoogleIcon className="w-3.5 h-3.5" />
+                                </span>
+
+                                <span className="whitespace-nowrap font-medium">
+                                    {clicked ? 'Opening Google Preferences...' : 'Add as Preferred Source'}
+                                </span>
+
+                                {clicked ? (
+                                    <Check className="w-4 h-4 text-white" />
+                                ) : (
+                                    <ArrowRight className="w-4 h-4 text-white/80 group-hover:translate-x-0.5 transition-transform" />
+                                )}
+                            </a>
+
+                            <div className="text-center lg:text-right">
+                                <a 
+                                    href="https://developers.google.com/search/docs/appearance/preferred-sources"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-[11px] text-slate-600 hover:text-slate-900 dark:hover:text-slate-200 underline inline-flex items-center gap-1"
+                                >
+                                    <span>Learn how Google Preferred Sources works</span>
+                                    <ExternalLink size={10} />
+                                </a>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -134,9 +198,9 @@ export default function GooglePreferredSourceButton({
                     target="_blank"
                     rel="noopener noreferrer"
                     title="Add CorpLawUpdates.in as your Preferred Source in Google Search"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-600 dark:text-amber-400 text-xs font-semibold transition-all hover:scale-[1.02] active:scale-95"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold shadow-xs transition-all hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400 active:scale-95"
                 >
-                    <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                    <GoogleIcon className="w-3.5 h-3.5 shrink-0" />
                     <span>Follow on Google</span>
                 </a>
             </div>
@@ -150,11 +214,11 @@ export default function GooglePreferredSourceButton({
                 href={GOOGLE_PREFERENCE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-amber-500/40 text-slate-200 text-xs font-medium transition-all group"
+                className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/50 text-slate-200 text-xs font-semibold transition-all group"
             >
-                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                <GoogleIcon className="w-4 h-4 shrink-0" />
                 <span>Google Preferred Source</span>
-                <ExternalLink className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-400 transition-colors" />
+                <ExternalLink className="w-3.5 h-3.5 text-slate-400 group-hover:text-white transition-colors" />
             </a>
         </div>
     )
