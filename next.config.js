@@ -143,6 +143,32 @@ const nextConfig = {
         permanent: true,
       },
       {
+        // Specific singular-to-plural calculator redirects
+        source: '/tools/penalty-calculator/company',
+        destination: '/tools/fee-calculator/companies',
+        permanent: true,
+      },
+      {
+        source: '/tools/fee-calculator/company',
+        destination: '/tools/fee-calculator/companies',
+        permanent: true,
+      },
+      {
+        source: '/tools/fee-calculator/company/:path*',
+        destination: '/tools/fee-calculator/companies/:path*',
+        permanent: true,
+      },
+      {
+        source: '/tools/fee-calculator/companies/mgt-14',
+        destination: '/tools/fee-calculator/companies',
+        permanent: true,
+      },
+      {
+        source: '/tools/fee-calculator/companies/inc-22',
+        destination: '/tools/fee-calculator/companies',
+        permanent: true,
+      },
+      {
         source: '/tools/penalty-calculator',
         destination: '/tools/fee-calculator',
         permanent: true,
@@ -156,6 +182,78 @@ const nextConfig = {
       {
         source: '/roc-deadline-tracker',
         destination: '/tools/roc-tracker',
+        permanent: true,
+      },
+      // Unprefixed Glossary & Document Routes
+      {
+        source: '/director-identification-number',
+        destination: '/glossary/din',
+        permanent: true,
+      },
+      {
+        source: '/independent-director',
+        destination: '/glossary/independent-director',
+        permanent: true,
+      },
+      {
+        source: '/interested-director',
+        destination: '/glossary/board-of-directors',
+        permanent: true,
+      },
+      {
+        source: '/key-managerial-personnel',
+        destination: '/glossary/key-managerial-personnel',
+        permanent: true,
+      },
+      {
+        source: '/audit-committee',
+        destination: '/glossary/audit-committee',
+        permanent: true,
+      },
+      {
+        source: '/board-meeting',
+        destination: '/glossary/board-meeting',
+        permanent: true,
+      },
+      {
+        source: '/board-resolution',
+        destination: '/documents',
+        permanent: true,
+      },
+      // Legacy Blogger URLs
+      {
+        source: '/2026/:month/:slug*.html',
+        destination: '/updates',
+        permanent: true,
+      },
+      {
+        source: '/p/privacy-policy.html',
+        destination: '/privacy-policy',
+        permanent: true,
+      },
+      {
+        source: '/p/:slug*.html',
+        destination: '/:slug*',
+        permanent: true,
+      },
+      {
+        source: '/search/label/:label*',
+        destination: '/category',
+        permanent: true,
+      },
+      {
+        source: '/search',
+        destination: '/company-search',
+        permanent: true,
+      },
+      {
+        source: '/3',
+        destination: '/updates',
+        permanent: true,
+      },
+      {
+        source: '/8',
+        destination: '/updates',
         permanent: true,
       },
     ]
