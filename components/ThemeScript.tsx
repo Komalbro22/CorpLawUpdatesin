@@ -3,11 +3,16 @@
 import { useServerInsertedHTML } from 'next/navigation'
 import { themeScript } from '@/lib/theme-script'
 
-// Suppress React 19 false-positive warning for theme scripts in development
+// Suppress React 19 false-positive warnings for theme scripts and AdSense third-party injections in development
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
     const origError = console.error
     console.error = (...args: unknown[]) => {
-        if (typeof args[0] === 'string' && args[0].includes('Encountered a script tag')) {
+        const fullMsg = args.map(a => (typeof a === 'string' ? a : '')).join(' ')
+        if (
+            fullMsg.includes('Encountered a script tag') ||
+            fullMsg.includes('pagead2.googlesyndication.com') ||
+            fullMsg.includes('adsbygoogle')
+        ) {
             return
         }
         origError.apply(console, args)

@@ -1074,12 +1074,28 @@ h2, h3, h4 {
 .article-content table th[style*="background: #0f2342"],
 .article-content table th[style*="background:#0b1121"],
 .article-content table th[style*="background: #0b1121"],
-.article-content table thead tr[style*="background"] th,
-.article-content table thead[style*="background"] th {
+.article-content table thead tr[style*="background:#0f2342"] th,
+.article-content table thead tr[style*="background: #0f2342"] th,
+.article-content table thead tr[style*="background:#0f172a"] th,
+.article-content table thead tr[style*="background: #0f172a"] th,
+.article-content table thead tr[style*="background:#0F172A"] th,
+.article-content table thead tr[style*="background: #0F172A"] th,
+.article-content table thead tr[style*="background:#1e3a5f"] th,
+.article-content table thead tr[style*="background: #1e3a5f"] th,
+.article-content table thead tr[style*="background:#0b1121"] th,
+.article-content table thead tr[style*="background: #0b1121"] th,
+.article-content table thead tr[style*="background:#1e293b"] th,
+.article-content table thead tr[style*="background: #1e293b"] th,
+.article-content table thead[style*="background:#0f2342"] th,
+.article-content table thead[style*="background: #0f2342"] th,
+.article-content table thead[style*="background:#0f172a"] th,
+.article-content table thead[style*="background: #0f172a"] th,
+.article-content table thead[style*="background:#1e3a5f"] th,
+.article-content table thead[style*="background: #1e3a5f"] th {
   background-color: #0f2342 !important;
   color: #ffffff !important;
   font-weight: 700 !important;
-  letter-spacing: 0.03em !important;
+  letter-spacing: 0.02em !important;
   border-bottom: 2px solid #f59e0b !important;
 }
 
@@ -1092,8 +1108,15 @@ h2, h3, h4 {
 .dark .article-content table th[style*="background: #0F172A"],
 .dark .article-content table th[style*="background:#0f2342"],
 .dark .article-content table th[style*="background: #0f2342"],
-.dark .article-content table thead tr[style*="background"] th,
-.dark .article-content table thead[style*="background"] th {
+.dark .article-content table thead tr[style*="background:#0f2342"] th,
+.dark .article-content table thead tr[style*="background: #0f2342"] th,
+.dark .article-content table thead tr[style*="background:#0f172a"] th,
+.dark .article-content table thead tr[style*="background: #0f172a"] th,
+.dark .article-content table thead tr[style*="background:#1e3a5f"] th,
+.dark .article-content table thead tr[style*="background: #1e3a5f"] th,
+.dark .article-content table thead[style*="background:#0f2342"] th,
+.dark .article-content table thead[style*="background:#0f172a"] th,
+.dark .article-content table thead[style*="background:#1e3a5f"] th {
   background-color: #1e293b !important;
   color: #f8fafc !important;
   border-bottom: 2px solid #f59e0b !important;
@@ -1116,9 +1139,118 @@ h2, h3, h4 {
 .article-content table th[style*="background: #0f2342"] *,
 .article-content table th[style*="background:#0b1121"] *,
 .article-content table th[style*="background: #0b1121"] *,
-.article-content table thead tr[style*="background"] th *,
-.article-content table thead[style*="background"] th * {
+.article-content table thead tr[style*="background:#0f2342"] th *,
+.article-content table thead tr[style*="background: #0f2342"] th *,
+.article-content table thead tr[style*="background:#0f172a"] th *,
+.article-content table thead tr[style*="background: #0f172a"] th *,
+.article-content table thead tr[style*="background:#0F172A"] th *,
+.article-content table thead tr[style*="background: #0F172A"] th *,
+.article-content table thead tr[style*="background:#1e3a5f"] th *,
+.article-content table thead tr[style*="background: #1e3a5f"] th *,
+.article-content table thead tr[style*="background:#0b1121"] th *,
+.article-content table thead tr[style*="background: #0b1121"] th *,
+.article-content table thead tr[style*="background:#1e293b"] th *,
+.article-content table thead tr[style*="background: #1e293b"] th *,
+.article-content table thead[style*="background:#0f2342"] th *,
+.article-content table thead[style*="background: #0f2342"] th *,
+.article-content table thead[style*="background:#0f172a"] th *,
+.article-content table thead[style*="background: #0f172a"] th *,
+.article-content table thead[style*="background:#1e3a5f"] th *,
+.article-content table thead[style*="background: #1e3a5f"] th * {
   color: #ffffff !important;
+}
+
+/* Explicit Light headers on tr, thead, or th (e.g. #f0f4ff, #f8fafc, #eff6ff, #f0fdf4) */
+.article-content table thead tr[style*="background:#f0f4ff"] th,
+.article-content table thead tr[style*="background: #f0f4ff"] th,
+.article-content table thead tr[style*="background:#f8fafc"] th,
+.article-content table thead tr[style*="background: #f8fafc"] th,
+.article-content table thead tr[style*="background:#eff6ff"] th,
+.article-content table thead tr[style*="background: #eff6ff"] th,
+.article-content table thead tr[style*="background:#f0fdf4"] th,
+.article-content table thead tr[style*="background: #f0fdf4"] th,
+.article-content table thead tr[style*="background:#f1f5f9"] th,
+.article-content table thead tr[style*="background: #f1f5f9"] th,
+.article-content table thead tr[style*="background:#ffffff"] th,
+.article-content table thead tr[style*="background: #ffffff"] th,
+.article-content table thead tr[style*="background:#fff"] th,
+.article-content table thead tr[style*="background: #fff"] th,
+.article-content table thead[style*="background:#f0f4ff"] th,
+.article-content table thead[style*="background: #f0f4ff"] th,
+.article-content table thead[style*="background:#f8fafc"] th,
+.article-content table thead[style*="background: #f8fafc"] th,
+.article-content table thead[style*="background:#eff6ff"] th,
+.article-content table thead[style*="background: #eff6ff"] th,
+.article-content table thead[style*="background:#f0fdf4"] th,
+.article-content table thead[style*="background: #f0fdf4"] th,
+.article-content table th[style*="background:#f0f4ff"],
+.article-content table th[style*="background: #f0f4ff"],
+.article-content table th[style*="background:#f8fafc"],
+.article-content table th[style*="background: #f8fafc"],
+.article-content table th[style*="background:#eff6ff"],
+.article-content table th[style*="background: #eff6ff"],
+.article-content table th[style*="background:#f0fdf4"],
+.article-content table th[style*="background: #f0fdf4"] {
+  background-color: transparent !important;
+  color: #0b1f3a !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  border-bottom: 1px solid #dbe3ef !important;
+}
+
+.article-content table thead tr[style*="background:#f0f4ff"] th *,
+.article-content table thead tr[style*="background: #f0f4ff"] th *,
+.article-content table thead tr[style*="background:#f8fafc"] th *,
+.article-content table thead tr[style*="background: #f8fafc"] th *,
+.article-content table thead tr[style*="background:#eff6ff"] th *,
+.article-content table thead tr[style*="background: #eff6ff"] th *,
+.article-content table thead tr[style*="background:#f0fdf4"] th *,
+.article-content table thead tr[style*="background: #f0fdf4"] th *,
+.article-content table thead[style*="background:#f0f4ff"] th *,
+.article-content table thead[style*="background: #f0f4ff"] th *,
+.article-content table thead[style*="background:#f8fafc"] th *,
+.article-content table thead[style*="background: #f8fafc"] th *,
+.article-content table thead[style*="background:#eff6ff"] th *,
+.article-content table thead[style*="background: #eff6ff"] th *,
+.article-content table th[style*="background:#f0f4ff"] *,
+.article-content table th[style*="background: #f0f4ff"] *,
+.article-content table th[style*="background:#f8fafc"] *,
+.article-content table th[style*="background: #f8fafc"] * {
+  color: #0b1f3a !important;
+}
+
+/* Dark mode handling for light headers */
+.dark .article-content table thead tr[style*="background:#f0f4ff"] th,
+.dark .article-content table thead tr[style*="background: #f0f4ff"] th,
+.dark .article-content table thead tr[style*="background:#f8fafc"] th,
+.dark .article-content table thead tr[style*="background: #f8fafc"] th,
+.dark .article-content table thead tr[style*="background:#eff6ff"] th,
+.dark .article-content table thead tr[style*="background: #eff6ff"] th,
+.dark .article-content table thead tr[style*="background:#f0fdf4"] th,
+.dark .article-content table thead tr[style*="background: #f0fdf4"] th,
+.dark .article-content table thead[style*="background:#f0f4ff"] th,
+.dark .article-content table thead[style*="background: #f0f4ff"] th,
+.dark .article-content table thead[style*="background:#f8fafc"] th,
+.dark .article-content table thead[style*="background: #f8fafc"] th,
+.dark .article-content table th[style*="background:#f0f4ff"],
+.dark .article-content table th[style*="background: #f0f4ff"],
+.dark .article-content table th[style*="background:#f8fafc"],
+.dark .article-content table th[style*="background: #f8fafc"] {
+  background-color: rgba(30, 41, 59, 0.85) !important;
+  color: #f1f5f9 !important;
+  border-bottom: 1px solid #334155 !important;
+}
+
+.dark .article-content table thead tr[style*="background:#f0f4ff"] th *,
+.dark .article-content table thead tr[style*="background: #f0f4ff"] th *,
+.dark .article-content table thead tr[style*="background:#f8fafc"] th *,
+.dark .article-content table thead tr[style*="background: #f8fafc"] th *,
+.dark .article-content table thead[style*="background:#f0f4ff"] th *,
+.dark .article-content table thead[style*="background: #f0f4ff"] th *,
+.dark .article-content table th[style*="background:#f0f4ff"] *,
+.dark .article-content table th[style*="background: #f0f4ff"] * {
+  color: #f1f5f9 !important;
 }
 
 /* Ensure table cells never render with card-like rounded borders */

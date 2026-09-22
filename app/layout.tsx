@@ -102,7 +102,7 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en" data-scroll-behavior="smooth" className={fontVariables} suppressHydrationWarning>
-      <head>
+      <head suppressHydrationWarning>
         <ThemeScript />
         <link rel="llms" href="/llms.txt" />
         <link rel="describedby" href="/llms.txt" type="text/markdown" />
@@ -113,13 +113,7 @@ export default async function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="format-detection" content="telephone=no" />
-        {/* Google AdSense Official Script Tag in Head */}
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8404756575471756"
-          crossOrigin="anonymous"
-        />
-        <JsonLd data={{
+        <JsonLd id="schema-org" data={{
           '@context': 'https://schema.org',
           '@type': 'Organization',
           name: 'CorpLawUpdates.in',
@@ -151,7 +145,7 @@ export default async function RootLayout({
             availableLanguage: 'English',
           },
         }} />
-        <JsonLd data={{
+        <JsonLd id="schema-website" data={{
           '@context': 'https://schema.org',
           '@type': 'WebSite',
           name: 'CorpLawUpdates.in',
@@ -167,6 +161,14 @@ export default async function RootLayout({
             'query-input': 'required name=search_term_string',
           },
         }} />
+        {/* Google AdSense Official Script Tag in Head */}
+        <script
+          id="adsbygoogle-init"
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8404756575471756"
+          crossOrigin="anonymous"
+          suppressHydrationWarning
+        />
       </head>
       <body className="font-body bg-slate-50 dark:bg-slate-950 text-navy dark:text-slate-100 antialiased min-h-dvh flex flex-col selection:bg-amber-200/50 selection:text-navy break-words" suppressHydrationWarning>
         <ToastProvider>

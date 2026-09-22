@@ -624,7 +624,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                             <th
                                 suppressHydrationWarning
                                 style={processedStyle}
-                                className={`px-4 py-3 text-left font-heading font-bold text-xs uppercase tracking-wider border-b border-slate-200 dark:border-slate-700 ${defaultBg} ${defaultText} ${processedClassName}`}
+                                className={`px-4 py-3 text-left font-heading font-bold text-sm tracking-normal border-b border-slate-200 dark:border-slate-700 ${defaultBg} ${defaultText} ${processedClassName}`}
                                 {...props}
                             >
                                 {(isDarkBg || hasWhiteText) ? (
