@@ -93,6 +93,11 @@ export default function SettingsPage() {
   const [error, setError] = useState('')
   const [indexNowLoading, setIndexNowLoading] = useState(false)
   const [indexNowResult, setIndexNowResult] = useState('')
+  const [googleIndexingLoading, setGoogleIndexingLoading] = useState(false)
+  const [googleIndexingResult, setGoogleIndexingResult] = useState('')
+  const [googleTestUrl, setGoogleTestUrl] = useState('')
+  const [googleTestLoading, setGoogleTestLoading] = useState(false)
+  const [googleTestResult, setGoogleTestResult] = useState('')
   const [revalidateLoading, setRevalidateLoading] = useState(false)
   const [revalidateResult, setRevalidateResult] = useState('')
 
@@ -119,6 +124,59 @@ export default function SettingsPage() {
       showToast('IndexNow submission failed', 'error')
     } finally {
       setIndexNowLoading(false)
+    }
+  }
+
+  async function handleGoogleIndexingSubmit() {
+    setGoogleIndexingLoading(true)
+    setGoogleIndexingResult('')
+    try {
+      const res = await fetch('/api/admin/google-indexing', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ limit: 20 }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setGoogleIndexingResult(data.error || 'Request failed')
+        showToast(data.error || 'Google Indexing request failed', 'error')
+        return
+      }
+      setGoogleIndexingResult(
+        `Submitted ${data.successCount} of ${data.count} URLs to Googlebot (${data.webSubPinged ? 'WebSub notified' : ''})`
+      )
+      showToast('URLs pushed to Google Indexing API', 'success')
+    } catch {
+      setGoogleIndexingResult('Failed - check console')
+      showToast('Google Indexing submission failed', 'error')
+    } finally {
+      setGoogleIndexingLoading(false)
+    }
+  }
+
+  async function handleGoogleSingleUrlSubmit() {
+    if (!googleTestUrl.trim()) return
+    setGoogleTestLoading(true)
+    setGoogleTestResult('')
+    try {
+      const res = await fetch('/api/admin/google-indexing', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: googleTestUrl.trim() }),
+      })
+      const data = await res.json()
+      if (!res.ok || !data.success) {
+        setGoogleTestResult(data.message || data.error || 'Submission failed')
+        showToast(data.message || 'Google Indexing submission failed', 'error')
+        return
+      }
+      setGoogleTestResult(`Success: ${data.message || 'Googlebot crawl scheduled'}`)
+      showToast('URL submitted to Google Indexing API', 'success')
+    } catch {
+      setGoogleTestResult('Error connecting to API')
+      showToast('Request failed', 'error')
+    } finally {
+      setGoogleTestLoading(false)
     }
   }
 
@@ -381,6 +439,101 @@ export default function SettingsPage() {
             New articles are submitted automatically 
             when published. Use this button to 
             resubmit all articles at once.
+          </p>
+        </div>
+      </div>
+
+      {/* Google Indexing API & WebSub Section */}
+      <div className="admin-card overflow-hidden">
+        <div className="bg-slate-50/50 border-b border-white/60 px-6 py-4 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-600 shrink-0">
+              <Globe className="w-4 h-4" aria-hidden />
+            </span>
+            <div>
+              <h2 className="font-heading font-bold text-slate-900">Google Indexing API & WebSub Hub</h2>
+              <p className="text-xs text-slate-500">Accelerated Googlebot crawl requests & Google News RSS push</p>
+            </div>
+          </div>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-750 border border-emerald-200">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            Live & Connected
+          </span>
+        </div>
+        <div className="px-6 py-5 space-y-5">
+          <div className="text-sm text-slate-700 leading-relaxed space-y-1">
+            <p>
+              Directly triggers Google’s <strong>Indexing API v3</strong> to request an immediate Googlebot visit, while simultaneously notifying Google’s <strong>PubSubHubbub (WebSub)</strong> hub for Google News / Discover feed updates.
+            </p>
+            <p className="text-xs text-slate-500 font-mono">
+              Service Account: analytics-viewer@corplawupdates.iam.gserviceaccount.com (Quota: 200 URLs/day)
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3 pt-1">
+            <button
+              type="button"
+              onClick={handleGoogleIndexingSubmit}
+              disabled={googleIndexingLoading}
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-sm font-semibold disabled:opacity-50 transition-colors shadow-sm"
+            >
+              {googleIndexingLoading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" aria-hidden />
+                  Pushing to Google...
+                </>
+              ) : (
+                <>
+                  <Globe className="w-4 h-4 opacity-90" aria-hidden />
+                  Push Recent Updates (Top 20)
+                </>
+              )}
+            </button>
+            {googleIndexingResult && (
+              <span className="text-sm text-emerald-600 font-semibold">
+                {googleIndexingResult}
+              </span>
+            )}
+          </div>
+
+          {/* Single URL test input */}
+          <div className="pt-3 border-t border-slate-100">
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+              Push or Inspect a Specific URL
+            </label>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <input
+                type="text"
+                value={googleTestUrl}
+                onChange={(e) => setGoogleTestUrl(e.target.value)}
+                placeholder="/updates/slug or full https://... URL"
+                className="flex-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                type="button"
+                onClick={handleGoogleSingleUrlSubmit}
+                disabled={googleTestLoading || !googleTestUrl.trim()}
+                className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-sm font-semibold disabled:opacity-50 transition-colors shrink-0"
+              >
+                {googleTestLoading ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" aria-hidden />
+                    Submitting...
+                  </>
+                ) : (
+                  'Push Single URL'
+                )}
+              </button>
+            </div>
+            {googleTestResult && (
+              <p className="mt-2 text-xs font-semibold text-emerald-600">
+                {googleTestResult}
+              </p>
+            )}
+          </div>
+
+          <p className="text-xs text-slate-500">
+            New updates published via the Admin panel are already pushed automatically in real-time. Use this panel for manual re-indexing, testing individual URLs, or after bulk edits.
           </p>
         </div>
       </div>

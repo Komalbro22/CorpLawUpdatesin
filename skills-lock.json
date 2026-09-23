@@ -25,6 +25,12 @@
       "skillPath": "skills/fixing-motion-performance/SKILL.md",
       "computedHash": "c1aca76fe18e8594f401cf78e5e76be24f182ce63167a398bdd4458f2a07639f"
     },
+    "idea-finder": {
+      "source": "bdbch/ai-dotfiles",
+      "sourceType": "github",
+      "skillPath": "skills/idea-finder/SKILL.md",
+      "computedHash": "c5032c57ad56cb6815a22bfea66340d0405359b7af34a40f5d008902ab223cdc"
+    },
     "improve-ui": {
       "source": "ibelick/ui-skills",
       "sourceType": "github",
