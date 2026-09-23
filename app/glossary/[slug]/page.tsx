@@ -6,7 +6,7 @@ import { GLOSSARY_LINK_COLUMNS } from '@/lib/supabase-queries'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import { linkGlossaryTerms } from '@/lib/glossaryLinker'
 import TableOfContents from '@/components/TableOfContents'
-import { BookOpen, Link2, Search, FileText, HelpCircle, Sparkles, Clock } from 'lucide-react'
+import { BookOpen, Link2, Search, FileText, HelpCircle, Clock } from 'lucide-react'
 
 export const revalidate = 86400 // Revalidate daily per Supabase egress budget
 
@@ -412,11 +412,11 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
               )}
               {parsed.tldr && parsed.tldr.length > 0 && (
                 <Link 
-                  href="#key-takeaways-tldr" 
+                  href="#key-takeaways" 
                   className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 hover:text-amber-700 bg-amber-50 hover:bg-amber-100/80 border border-amber-250/30 px-3 py-1 rounded-full transition-all shadow-sm active:scale-95"
                 >
-                  <Sparkles className="h-3 w-3 animate-pulse" />
-                  Jump to TL;DR Summary ⚡
+                  <FileText className="h-3 w-3" />
+                  Key Takeaways
                 </Link>
               )}
               <p className="text-xs text-slate-400 font-medium">
@@ -451,11 +451,11 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
                 </h1>
                 {parsed.tldr && parsed.tldr.length > 0 && (
                   <Link 
-                    href="#key-takeaways-tldr" 
+                    href="#key-takeaways" 
                     className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 hover:text-amber-700 bg-amber-50 hover:bg-amber-100/80 border border-amber-250/30 px-3 py-1 rounded-full transition-all shadow-sm active:scale-95"
                   >
-                    <Sparkles className="h-3 w-3 animate-pulse" />
-                    Jump to TL;DR Summary ⚡
+                    <FileText className="h-3 w-3" />
+                    Key Takeaways
                   </Link>
                 )}
               </div>
@@ -483,16 +483,16 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
           </section>
         )}
 
-        {/* TL;DR Executive Takeaways Bullet Card */}
+        {/* Executive Takeaways Bullet Card */}
         {parsed.tldr && parsed.tldr.length > 0 && (
-          <section id="key-takeaways-tldr" className="bg-gradient-to-br from-amber-50/60 via-amber-50/20 to-transparent rounded-2xl p-6 sm:p-8 border border-amber-250/30 shadow-sm relative overflow-hidden">
+          <section id="key-takeaways" className="bg-gradient-to-br from-amber-50/60 via-amber-50/20 to-transparent rounded-2xl p-6 sm:p-8 border border-amber-250/30 shadow-sm relative overflow-hidden">
             <div className="absolute top-0 right-0 p-8 opacity-[0.06] select-none pointer-events-none" aria-hidden="true">
-              <Sparkles className="text-6xl text-amber-500" />
+              <FileText className="text-6xl text-amber-500" />
             </div>
             <h2 className="text-xl font-bold text-navy mb-4 flex items-center gap-2 font-heading group">
               <span className="w-1.5 h-5 bg-amber-500 rounded-full"></span>
-              <a href="#key-takeaways-tldr" className="hover:text-amber-700 transition-colors flex items-center gap-1.5">
-                Quick Summary (TL;DR)
+              <a href="#key-takeaways" className="hover:text-amber-700 transition-colors flex items-center gap-1.5">
+                Executive Takeaways
                 <span className="opacity-0 group-hover:opacity-100 text-slate-400 text-xs font-normal transition-opacity duration-150 select-none">🔗</span>
               </a>
             </h2>

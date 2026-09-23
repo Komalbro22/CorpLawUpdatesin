@@ -30,7 +30,7 @@ import FontSizeToggle from '@/components/FontSizeToggle'
 import ArticleImage from '@/components/ArticleImage'
 
 import { QuickAnswer } from '@/components/QuickAnswer'
-import { AlertCircle, BookOpen, CalendarDays, ChevronDown, Clock3, Eye, FileText, Lightbulb, Sparkles, CheckCircle2 } from 'lucide-react'
+import { AlertCircle, BookOpen, CalendarDays, ChevronDown, Clock3, Eye, FileText, Lightbulb, CheckCircle2 } from 'lucide-react'
 import { sanitizeHtml } from '@/lib/sanitize'
 import { mcaForms } from '@/data/mca-forms'
 import ArticleContextTool from '@/components/ArticleContextTool'
@@ -642,16 +642,17 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                     if (!hasSummary && allPoints.length === 0) return null;
 
                     return (
-                        <section id="tldr-summary" aria-label="TL;DR Executive Summary" className="mb-6">
+                        <section id="executive-summary" aria-label="Executive Summary" className="mb-6">
                             <details open className={`group overflow-hidden rounded-xl border ${cardStyles.borderColor} dark:border-slate-800 border-l-[4px] ${cardStyles.borderLeftColor} ${cardStyles.bgColor} shadow-sm transition-all duration-200`}>
                                 <summary className="cursor-pointer p-3.5 sm:p-4 font-bold text-navy dark:text-slate-100 flex justify-between items-center bg-white dark:bg-slate-900 hover:bg-slate-50/80 dark:hover:bg-slate-800/80 transition-colors list-none [&::-webkit-details-marker]:hidden focus:outline-none">
-                                    <div className="flex items-center gap-2">
-                                        <Sparkles className={`size-4 sm:size-5 ${cardStyles.iconColor} animate-pulse`} aria-hidden="true" />
-                                        <span className="font-heading text-sm sm:text-base font-bold text-navy dark:text-white tracking-tight">TL;DR — Executive Summary</span>
+                                    <div className="flex items-center gap-2.5">
+                                        <FileText className={`size-4 sm:size-5 ${cardStyles.iconColor}`} aria-hidden="true" />
+                                        <span className="font-heading text-sm sm:text-base font-bold text-navy dark:text-white tracking-tight">Executive Summary</span>
                                     </div>
                                     <div className="flex items-center gap-2 sm:gap-3">
-                                        <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${cardStyles.badgeBg}`}>
-                                            ⚡ Key Takeaways
+                                        <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${cardStyles.badgeBg}`}>
+                                            <span className="size-1.5 rounded-full bg-current opacity-70" />
+                                            Key Takeaways
                                         </span>
                                         <ChevronDown className="size-4 text-slate-400 transition-transform duration-300 group-open:rotate-180" aria-hidden="true" />
                                     </div>
@@ -664,7 +665,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                                     )}
 
                                     {allPoints.length > 0 && (
-                                        <ul className="space-y-2.5 list-none pl-0 m-0" data-ai-summary="true">
+                                        <ul className="space-y-2.5 list-none pl-0 m-0">
                                             {allPoints.map((point: string, i: number) => (
                                                 <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
                                                     <CheckCircle2 className={`size-4 mt-0.5 shrink-0 ${cardStyles.iconColor}`} aria-hidden="true" />
