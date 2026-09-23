@@ -52,15 +52,87 @@ export const metadata: Metadata = {
 }
 
 const categoryMeta = [
-  { id: 'MCA', label: 'MCA', Icon: Building2, bg: 'bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-400 border border-blue-200/70 dark:border-blue-800/40 hover:bg-blue-100/60 dark:hover:bg-blue-900/40', desc: 'Ministry of Corporate Affairs' },
-  { id: 'SEBI', label: 'SEBI', Icon: TrendingUp, bg: 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 border border-emerald-200/70 dark:border-emerald-800/40 hover:bg-emerald-100/60 dark:hover:bg-emerald-900/40', desc: 'Securities & Exchange Board' },
-  { id: 'RBI', label: 'RBI', Icon: Landmark, bg: 'bg-purple-50 dark:bg-purple-950/30 text-purple-700 dark:text-purple-400 border border-purple-200/70 dark:border-purple-800/40 hover:bg-purple-100/60 dark:hover:bg-purple-900/40', desc: 'Reserve Bank of India' },
-  { id: 'CCI', label: 'CCI', Icon: ShieldCheck, bg: 'bg-indigo-50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-400 border border-indigo-200/70 dark:border-indigo-800/40 hover:bg-indigo-100/60 dark:hover:bg-indigo-900/40', desc: 'Competition Commission' },
-  { id: 'LABOUR', label: 'Labour Law', Icon: Users, bg: 'bg-amber-50 dark:bg-amber-950/30 text-amber-800 dark:text-amber-400 border border-amber-200/70 dark:border-amber-800/40 hover:bg-amber-100/60 dark:hover:bg-amber-900/40', desc: 'Labour Codes & EPF' },
-  { id: 'NCLT', label: 'NCLT', Icon: Scale, bg: 'bg-orange-50 dark:bg-orange-950/30 text-orange-700 dark:text-orange-400 border border-orange-200/70 dark:border-orange-800/40 hover:bg-orange-100/60 dark:hover:bg-orange-900/40', desc: 'Company Law Tribunal' },
-  { id: 'IBC', label: 'IBC', Icon: Gavel, bg: 'bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-400 border border-red-200/70 dark:border-red-800/40 hover:bg-red-100/60 dark:hover:bg-red-900/40', desc: 'Insolvency & Bankruptcy' },
-  { id: 'FEMA', label: 'FEMA', Icon: Globe2, bg: 'bg-teal-50 dark:bg-teal-950/30 text-teal-700 dark:text-teal-400 border border-teal-200/70 dark:border-teal-800/40 hover:bg-teal-100/60 dark:hover:bg-teal-900/40', desc: 'Foreign Exchange' },
-  { id: 'IFSCA', label: 'IFSCA', Icon: Coins, bg: 'bg-cyan-50 dark:bg-cyan-950/30 text-cyan-800 dark:text-cyan-400 border border-cyan-200/70 dark:border-cyan-800/40 hover:bg-cyan-100/60 dark:hover:bg-cyan-900/40', desc: 'GIFT City / IFSC Authority' },
+  {
+    id: 'MCA',
+    label: 'MCA',
+    shortDesc: 'Companies & ROC',
+    Icon: Building2,
+    badgeBg: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
+    hoverBorder: 'hover:border-blue-400/80 dark:hover:border-blue-500/60',
+    hoverShadow: 'hover:shadow-blue-500/5',
+  },
+  {
+    id: 'SEBI',
+    label: 'SEBI',
+    shortDesc: 'Capital Markets',
+    Icon: TrendingUp,
+    badgeBg: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+    hoverBorder: 'hover:border-emerald-400/80 dark:hover:border-emerald-500/60',
+    hoverShadow: 'hover:shadow-emerald-500/5',
+  },
+  {
+    id: 'RBI',
+    label: 'RBI',
+    shortDesc: 'Banking & NBFCs',
+    Icon: Landmark,
+    badgeBg: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20',
+    hoverBorder: 'hover:border-purple-400/80 dark:hover:border-purple-500/60',
+    hoverShadow: 'hover:shadow-purple-500/5',
+  },
+  {
+    id: 'IBC',
+    label: 'IBC',
+    shortDesc: 'Insolvency & CIRP',
+    Icon: Gavel,
+    badgeBg: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+    hoverBorder: 'hover:border-rose-400/80 dark:hover:border-rose-500/60',
+    hoverShadow: 'hover:shadow-rose-500/5',
+  },
+  {
+    id: 'FEMA',
+    label: 'FEMA',
+    shortDesc: 'Forex, FDI & ODI',
+    Icon: Globe2,
+    badgeBg: 'bg-teal-500/10 text-teal-600 dark:text-teal-400 border-teal-500/20',
+    hoverBorder: 'hover:border-teal-400/80 dark:hover:border-teal-500/60',
+    hoverShadow: 'hover:shadow-teal-500/5',
+  },
+  {
+    id: 'IFSCA',
+    label: 'IFSCA',
+    shortDesc: 'GIFT City / IFSC',
+    Icon: Coins,
+    badgeBg: 'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-500/20',
+    hoverBorder: 'hover:border-cyan-400/80 dark:hover:border-cyan-500/60',
+    hoverShadow: 'hover:shadow-cyan-500/5',
+  },
+  {
+    id: 'CCI',
+    label: 'CCI',
+    shortDesc: 'Competition Law',
+    Icon: ShieldCheck,
+    badgeBg: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20',
+    hoverBorder: 'hover:border-indigo-400/80 dark:hover:border-indigo-500/60',
+    hoverShadow: 'hover:shadow-indigo-500/5',
+  },
+  {
+    id: 'NCLT',
+    label: 'NCLT',
+    shortDesc: 'Tribunal Orders',
+    Icon: Scale,
+    badgeBg: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
+    hoverBorder: 'hover:border-amber-400/80 dark:hover:border-amber-500/60',
+    hoverShadow: 'hover:shadow-amber-500/5',
+  },
+  {
+    id: 'LABOUR',
+    label: 'Labour',
+    shortDesc: 'EPF, ESI & Codes',
+    Icon: Users,
+    badgeBg: 'bg-slate-500/10 text-slate-700 dark:text-slate-300 border-slate-500/20',
+    hoverBorder: 'hover:border-slate-400/80 dark:hover:border-slate-500/60',
+    hoverShadow: 'hover:shadow-slate-500/5',
+  },
 ]
 
 export default async function HomePage() {
@@ -72,7 +144,7 @@ export default async function HomePage() {
     .order('published_at', { ascending: false })
     .limit(9)
 
-  const [featuredRes, latestRes, popularRes] = await Promise.all([
+  const [featuredRes, latestRes, popularRes, countsRes] = await Promise.all([
     supabase
       .from('updates')
       .select(UPDATE_LIST_COLUMNS)
@@ -90,7 +162,15 @@ export default async function HomePage() {
       .gte('published_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
       .order('views', { ascending: false })
       .limit(3),
+    supabase.rpc('get_published_category_counts'),
   ])
+
+  const countsMap: Record<string, number> = {}
+  if (Array.isArray(countsRes?.data)) {
+    countsRes.data.forEach((item: any) => {
+      if (item.category) countsMap[item.category.toUpperCase()] = Number(item.count) || 0
+    })
+  }
 
   const featuredUpdates = featuredRes.data || []
   const latestUpdates = latestRes.data || []
@@ -246,29 +326,72 @@ export default async function HomePage() {
         )}
 
         {/* Browse By Regulator */}
-        <section className="py-14 px-4 w-full border-y border-slate-200/80 dark:border-slate-800/80 bg-white/70 dark:bg-slate-900/40">
+        <section className="py-14 sm:py-16 px-4 w-full border-y border-slate-200/80 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-900/40">
           <div className="max-w-7xl mx-auto">
-            <h2 className="text-xl md:text-2xl font-bold text-navy dark:text-white mb-2 font-heading text-center">
-              Browse by regulator
-            </h2>
-            <p className="text-slate-600 dark:text-slate-400 text-center text-sm md:text-base mb-10 max-w-xl mx-auto">
-              Jump straight to updates from the authority you follow.
-            </p>
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 md:gap-4">
-              {categoryMeta.map(({ id, label, Icon, bg, desc }, i) => (
-                <Link
-                  key={id}
-                  href={`/category/${id.toLowerCase()}`}
-                  style={{ '--delay': `${i * 40}ms` } as CSSProperties}
-                  className={`animate-fade-up group flex min-h-[115px] flex-col items-center justify-center gap-2 rounded-xl ${bg} p-3.5 text-center shadow-sm transition-[transform,box-shadow,background-color] duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 motion-safe:hover:-translate-y-1 hover:shadow-md`}
-                >
-                  <Icon className="size-6 opacity-90 transition-transform duration-200 group-hover:scale-110" aria-hidden="true" />
-                  <div className="flex flex-col items-center">
-                    <span className="font-bold text-sm md:text-base leading-tight">{label}</span>
-                    <span className="text-[10px] opacity-75 font-medium leading-tight mt-1 line-clamp-1 hidden sm:block">{desc}</span>
-                  </div>
-                </Link>
-              ))}
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-3">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-700 dark:text-amber-500">
+                  Regulatory Jurisdictions
+                </p>
+                <h2 className="mt-1 text-2xl md:text-3xl font-extrabold text-navy dark:text-white font-heading tracking-tight">
+                  Browse by Regulator
+                </h2>
+                <p className="mt-1 text-slate-500 dark:text-slate-400 text-sm md:text-base">
+                  Direct access to circulars, master directions, and enforcement orders from India&apos;s key corporate authorities.
+                </p>
+              </div>
+              <Link
+                href="/category"
+                className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-navy dark:text-slate-400 dark:hover:text-white transition-colors"
+              >
+                View all authority hubs
+                <ArrowRight className="size-3.5" aria-hidden="true" />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-9 gap-2.5 sm:gap-3">
+              {categoryMeta.map(({ id, label, Icon, badgeBg, hoverBorder, hoverShadow, shortDesc }, i) => {
+                const count = countsMap[id] ?? 0
+                return (
+                  <Link
+                    key={id}
+                    href={`/category/${id.toLowerCase()}`}
+                    style={{ '--delay': `${i * 35}ms` } as CSSProperties}
+                    className={`animate-fade-up group flex flex-col items-center justify-between rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-3 sm:p-3.5 text-center shadow-xs ${hoverBorder} ${hoverShadow} hover:shadow-md transition-[transform,box-shadow,border-color] duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 motion-safe:hover:-translate-y-1`}
+                  >
+                    <div className={`size-10 sm:size-11 rounded-xl flex items-center justify-center border ${badgeBg} mb-2.5 transition-transform duration-200 group-hover:scale-110 shadow-2xs`}>
+                      <Icon className="size-5" aria-hidden="true" />
+                    </div>
+                    <div className="flex flex-col items-center w-full">
+                      <span className="font-heading font-extrabold text-sm sm:text-base text-navy dark:text-white leading-tight group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                        {label}
+                      </span>
+                      <span className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 font-medium leading-tight mt-0.5 line-clamp-1">
+                        {shortDesc}
+                      </span>
+                    </div>
+                    {count > 0 ? (
+                      <span className="mt-2 text-[10px] font-semibold tabular-nums text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/80 px-2 py-0.5 rounded-full border border-slate-200/60 dark:border-slate-700/60">
+                        {count} updates
+                      </span>
+                    ) : (
+                      <span className="mt-2 text-[10px] font-medium text-slate-400 dark:text-slate-500">
+                        Explore
+                      </span>
+                    )}
+                  </Link>
+                )
+              })}
+            </div>
+
+            <div className="mt-6 text-center sm:hidden">
+              <Link
+                href="/category"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-navy dark:hover:text-white"
+              >
+                View all authority hubs
+                <ArrowRight className="size-3.5" aria-hidden="true" />
+              </Link>
             </div>
           </div>
         </section>
