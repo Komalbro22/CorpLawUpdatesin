@@ -930,53 +930,18 @@ export default async function CategoryPage({
                         Updated daily · <a href={OFFICIAL_URLS[cat]} target="_blank" rel="noopener noreferrer" className="underline hover:text-white transition-colors">{CATEGORY_FULL_NAMES[cat]} Official Site ↗</a>
                     </p>
 
-                    {/* RBI-Specific High-Intent Rates Bar & Semantic Topic Chips */}
+                    {/* Compact focus chips */}
                     {cat === 'rbi' && (
-                        <div className="mt-8 pt-6 border-t border-white/15">
-                            <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
-                                <span className="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-2">
-                                    <span className="inline-block size-2 rounded-full bg-emerald-400 animate-pulse" />
-                                    Key RBI Policy Rates & Benchmarks (Monetary Policy)
+                        <div className="flex flex-wrap items-center gap-2 pt-2">
+                            <span className="text-xs text-white/70 font-semibold">Key Focus:</span>
+                            {['Commercial Banks', 'NBFC Directives', 'Master Directions', 'KYC & AML Norms', 'Digital Lending'].map((chip, idx) => (
+                                <span
+                                    key={idx}
+                                    className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-white/15 text-white/90 border border-white/10 backdrop-blur-sm"
+                                >
+                                    {chip}
                                 </span>
-                                <Link href="/rbi/repo-rate" className="text-xs text-white/80 hover:text-white underline underline-offset-2 transition-colors">
-                                    Historical Rate Tracker →
-                                </Link>
-                            </div>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 sm:gap-3 text-xs mb-5">
-                                <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/10">
-                                    <span className="text-white/70 block text-[11px] font-medium">Policy Repo Rate</span>
-                                    <span className="text-base sm:text-lg font-bold text-white tabular-nums">6.50%</span>
-                                </div>
-                                <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/10">
-                                    <span className="text-white/70 block text-[11px] font-medium">Standing Deposit (SDF)</span>
-                                    <span className="text-base sm:text-lg font-bold text-white tabular-nums">6.25%</span>
-                                </div>
-                                <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/10">
-                                    <span className="text-white/70 block text-[11px] font-medium">MSF / Bank Rate</span>
-                                    <span className="text-base sm:text-lg font-bold text-white tabular-nums">6.75%</span>
-                                </div>
-                                <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/10">
-                                    <span className="text-white/70 block text-[11px] font-medium">Cash Reserve (CRR)</span>
-                                    <span className="text-base sm:text-lg font-bold text-white tabular-nums">4.50%</span>
-                                </div>
-                                <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/10 col-span-2 sm:col-span-1">
-                                    <span className="text-white/70 block text-[11px] font-medium">Statutory Liquidity (SLR)</span>
-                                    <span className="text-base sm:text-lg font-bold text-white tabular-nums">18.00%</span>
-                                </div>
-                            </div>
-
-                            {/* Semantic Search Topic Chips */}
-                            <div className="flex flex-wrap items-center gap-2 pt-1">
-                                <span className="text-xs text-white/60 font-semibold mr-1">Banking Directives:</span>
-                                {['Commercial Banks', 'NBFC Guidelines', 'Master Directions', 'KYC & AML Norms', 'Digital Lending', 'FEMA Norms'].map((chip, idx) => (
-                                    <span
-                                        key={idx}
-                                        className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-white/15 hover:bg-white/25 text-white/95 border border-white/10 transition-colors backdrop-blur-sm shadow-sm"
-                                    >
-                                        {chip}
-                                    </span>
-                                ))}
-                            </div>
+                            ))}
                         </div>
                     )}
                 </div>
@@ -1018,6 +983,64 @@ export default async function CategoryPage({
                     </div>
                 )}
             </div>
+
+            {/* RBI-Specific High-Intent Rates Bar & Semantic Intelligence (Below Circulars) */}
+            {cat === 'rbi' && (
+                <section className="max-w-7xl mx-auto px-4 py-4 mb-4">
+                    <div className="bg-gradient-to-br from-slate-900 to-violet-950 text-white rounded-2xl border border-violet-800/40 p-6 md:p-8 shadow-md">
+                        <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
+                            <div>
+                                <span className="text-xs font-bold uppercase tracking-wider text-amber-300 bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/20 inline-flex items-center gap-1.5">
+                                    <span className="inline-block size-2 rounded-full bg-emerald-400 animate-pulse" />
+                                    Statutory Intelligence
+                                </span>
+                                <h2 className="text-xl sm:text-2xl font-bold text-white mt-2 font-heading">
+                                    Key RBI Policy Rates & Benchmarks (Monetary Policy)
+                                </h2>
+                            </div>
+                            <Link href="/rbi/repo-rate" className="text-xs text-amber-300 hover:text-white underline underline-offset-4 transition-colors font-medium">
+                                View Historical Repo Rate Tracker →
+                            </Link>
+                        </div>
+                        <p className="text-xs sm:text-sm text-slate-300 max-w-2xl mb-5">
+                            Current benchmark interest rates and statutory reserve ratios prescribed by the Reserve Bank of India Monetary Policy Committee (MPC) governing commercial banks and credit institutions in India.
+                        </p>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 text-xs mb-5">
+                            <div className="bg-white/5 backdrop-blur-md rounded-xl p-3.5 border border-white/10">
+                                <span className="text-slate-400 block text-[11px] font-medium">Policy Repo Rate</span>
+                                <span className="text-lg sm:text-xl font-bold text-emerald-400 tabular-nums">6.50%</span>
+                            </div>
+                            <div className="bg-white/5 backdrop-blur-md rounded-xl p-3.5 border border-white/10">
+                                <span className="text-slate-400 block text-[11px] font-medium">Standing Deposit (SDF)</span>
+                                <span className="text-lg sm:text-xl font-bold text-white tabular-nums">6.25%</span>
+                            </div>
+                            <div className="bg-white/5 backdrop-blur-md rounded-xl p-3.5 border border-white/10">
+                                <span className="text-slate-400 block text-[11px] font-medium">MSF / Bank Rate</span>
+                                <span className="text-lg sm:text-xl font-bold text-white tabular-nums">6.75%</span>
+                            </div>
+                            <div className="bg-white/5 backdrop-blur-md rounded-xl p-3.5 border border-white/10">
+                                <span className="text-slate-400 block text-[11px] font-medium">Cash Reserve (CRR)</span>
+                                <span className="text-lg sm:text-xl font-bold text-white tabular-nums">4.50%</span>
+                            </div>
+                            <div className="bg-white/5 backdrop-blur-md rounded-xl p-3.5 border border-white/10 col-span-2 sm:col-span-1">
+                                <span className="text-slate-400 block text-[11px] font-medium">Statutory Liquidity (SLR)</span>
+                                <span className="text-lg sm:text-xl font-bold text-white tabular-nums">18.00%</span>
+                            </div>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-white/10">
+                            <span className="text-xs text-slate-400 font-semibold mr-1">Banking Directives Focus:</span>
+                            {['Commercial Banks', 'NBFC Guidelines', 'Master Directions', 'KYC & AML Norms', 'Digital Lending Guidelines', 'FEMA Cross-Border Norms'].map((chip, idx) => (
+                                <span
+                                    key={idx}
+                                    className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-white/10 text-slate-200 border border-white/10"
+                                >
+                                    {chip}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
 
             {/* Dynamic Latest Circulars & Notifications (Bottom — FAQ-style for AI) */}
             {top5Updates.length > 0 && (
