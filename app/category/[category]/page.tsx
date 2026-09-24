@@ -74,10 +74,15 @@ const CATEGORY_KEYWORDS: Record<string, string[]> = {
     ],
     rbi: [
         'rbi latest circular',
-        'latest rbi circular for banks',
+        'latest rbi circulars for banks',
+        'rbi new circular',
+        'rbi recent circular',
+        'rbi circular today',
+        'rbi circulars for commercial banks',
         'rbi master directions 2026',
         'rbi notification today',
         'rbi circular 2026',
+        'rbi recent notification',
         'rbi banking regulations India',
     ],
     fema: [
@@ -168,16 +173,24 @@ const CATEGORY_REGULATORY_FAQS: Record<string, CategoryFAQ[]> = {
     ],
     rbi: [
         {
+            question: 'Where can compliance officers find the latest RBI circulars for banks and NBFCs?',
+            answer: 'Official RBI circulars, notifications, and Master Directions are issued on rbi.org.in across the Banking Operations, Non-Banking, and Financial Markets departments. CorpLawUpdates tracks and summarizes all new circulars daily with direct gazette citations and official PDF download links for compliance professionals.',
+        },
+        {
             question: 'What is the difference between an RBI circular and a Master Direction?',
-            answer: 'An RBI circular announces a specific operational instruction or policy revision. Master Directions consolidate all existing instructions on a regulatory area (e.g., KYC, NBFCs, FEMA, Digital Payments) into an ongoing running compendium updated dynamically whenever amendments occur.',
+            answer: 'An RBI circular announces a specific operational instruction, regulatory policy change, or statutory reporting deadline. Master Directions consolidate all existing instructions on a specific regulatory area (e.g., KYC Directions, NBFC Scale-Based Regulations, FEMA, Digital Payments) into an ongoing running compendium updated dynamically whenever amendments occur.',
         },
         {
             question: 'Are RBI circulars binding on all banks and NBFCs in India?',
-            answer: 'Yes. RBI directives issued under the Banking Regulation Act, 1949 and RBI Act, 1934 are mandatory statutory directions. Non-compliance attracts supervisory action and monetary penalties under Section 47A.',
+            answer: 'Yes. RBI directives issued under the Banking Regulation Act, 1949 and the Reserve Bank of India Act, 1934 are mandatory statutory directions. Non-compliance attracts supervisory enforcement, monetary penalties under Section 47A, or administrative restrictions under the Prompt Corrective Action (PCA) framework.',
         },
         {
-            question: 'Where can banks and financial institutions track RBI circulars?',
-            answer: 'Official RBI notifications, circulars, and Master Directions are published on rbi.org.in under the Notifications and Master Directions sections.',
+            question: 'How often does the Reserve Bank of India issue new circulars and notifications?',
+            answer: 'The RBI issues new circulars and regulatory notifications on an ongoing daily basis as policy updates, monetary decisions, or statutory clarifications arise. Major policy revisions often follow bi-monthly Monetary Policy Committee (MPC) meetings and annual Master Direction consolidations.',
+        },
+        {
+            question: 'What key compliance areas are governed by recent RBI circulars in 2026?',
+            answer: 'Recent RBI circulars prioritize Digital Lending Guidelines, Default Loss Guarantee (DLG) arrangements, Cyber Security Resilience frameworks, Master Directions on KYC/AML, Scale-Based Regulation (SBR) for NBFCs, Green Finance taxonomy, and Project Finance prudential norms.',
         },
     ],
     nclt: [
@@ -524,12 +537,12 @@ const ANSWER_FIRST: Record<string, { definition: string; facts: string[] }> = {
     },
     rbi: {
         definition:
-            'RBI Circulars are official directives issued by the Reserve Bank of India under the RBI Act, 1934 and the Banking Regulation Act, 1949. They cover banking regulation, monetary policy, FEMA compliance, foreign exchange management, and NBFC rules in India. This page tracks all latest RBI circulars, master directions, notifications, and press releases.',
+            'Latest RBI Circulars for banks and NBFCs are statutory directives issued by the Reserve Bank of India under the Banking Regulation Act, 1949 and RBI Act, 1934. They govern banking compliance, credit policy, monetary regulations, FEMA foreign exchange guidelines, and digital payment frameworks. This real-time repository tracks all latest RBI circulars, new notifications today, Master Directions, and regulatory announcements for Scheduled Commercial Banks and financial institutions in India.',
         facts: [
-            'RBI issues circulars, master directions, press releases, and guidelines.',
-            'RBI regulates commercial banks, cooperative banks, NBFCs, and payment systems.',
-            'RBI circulars are binding on all scheduled banks and regulated entities.',
-            'FEMA (Foreign Exchange Management Act) circulars are also issued under RBI authority.',
+            'RBI issues latest circulars, Master Directions, notifications today, and press releases.',
+            'Mandatory for all Scheduled Commercial Banks, Small Finance Banks, Cooperative Banks, and NBFCs.',
+            'Covers key compliance domains including KYC/AML norms, digital lending guidelines, CRR/SLR policy rates, and cyber security frameworks.',
+            'FEMA notifications on FDI, ODI, and cross-border remittances are administered under RBI regulatory purview.',
         ],
     },
     nclt: {
@@ -653,13 +666,22 @@ export async function generateMetadata(
 
     const dynamicSuffix = latestUpdate ? ` Latest: ${latestUpdate.title}.` : ''
 
-    const title = isPaginated
+    let title = isPaginated
         ? `Latest ${categoryName} Circulars, Notifications & Updates (Page ${pageNum}) – India`
         : `Latest ${categoryName} Circulars, Notifications & Updates Today – India`
 
-    const description = isPaginated
+    let description = isPaginated
         ? `Browse page ${pageNum} of latest ${categoryName} circulars, notifications, orders and compliance updates issued by ${CATEGORY_FULL_NAMES[cat] || categoryName}.`
         : `Get the latest ${categoryName} circulars, notifications, orders and regulatory updates today from ${CATEGORY_FULL_NAMES[cat]}. Track all ${categoryName} compliance changes in India.${dynamicSuffix}`
+
+    if (cat === 'rbi') {
+        title = isPaginated
+            ? `Latest RBI Circulars for Banks & NBFCs Today (2026) – Page ${pageNum}`
+            : `Latest RBI Circulars & Notifications Today (2026) – Directives for Banks & NBFCs`
+        description = isPaginated
+            ? `Browse page ${pageNum} of latest RBI circulars for banks, NBFC notifications, and Master Directions issued by the Reserve Bank of India.`
+            : `Track all latest RBI circulars for banks, recent notifications & Master Directions (2026). Daily updates for Commercial Banks & NBFCs with official PDF download links.${dynamicSuffix}`
+    }
 
     const url = isPaginated
         ? `https://www.corplawupdates.in/category/${cat}?page=${pageNum}`
@@ -894,7 +916,9 @@ export default async function CategoryPage({
                     </div>
 
                     <h1 className="font-heading text-4xl md:text-5xl font-bold mb-3 animate-fade-up">
-                        Latest {cat.toUpperCase()} Circulars, Notifications & Updates
+                        {cat === 'rbi'
+                            ? 'Latest RBI Circulars & Notifications for Banks (2026)'
+                            : `Latest ${cat.toUpperCase()} Circulars, Notifications & Updates`}
                     </h1>
 
                     {/* Answer-First Paragraph for AI Overview */}
@@ -905,6 +929,56 @@ export default async function CategoryPage({
                     <p className="text-sm text-white/60">
                         Updated daily · <a href={OFFICIAL_URLS[cat]} target="_blank" rel="noopener noreferrer" className="underline hover:text-white transition-colors">{CATEGORY_FULL_NAMES[cat]} Official Site ↗</a>
                     </p>
+
+                    {/* RBI-Specific High-Intent Rates Bar & Semantic Topic Chips */}
+                    {cat === 'rbi' && (
+                        <div className="mt-8 pt-6 border-t border-white/15">
+                            <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
+                                <span className="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-2">
+                                    <span className="inline-block size-2 rounded-full bg-emerald-400 animate-pulse" />
+                                    Key RBI Policy Rates & Benchmarks (Monetary Policy)
+                                </span>
+                                <Link href="/rbi/repo-rate" className="text-xs text-white/80 hover:text-white underline underline-offset-2 transition-colors">
+                                    Historical Rate Tracker →
+                                </Link>
+                            </div>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 sm:gap-3 text-xs mb-5">
+                                <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/10">
+                                    <span className="text-white/70 block text-[11px] font-medium">Policy Repo Rate</span>
+                                    <span className="text-base sm:text-lg font-bold text-white tabular-nums">6.50%</span>
+                                </div>
+                                <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/10">
+                                    <span className="text-white/70 block text-[11px] font-medium">Standing Deposit (SDF)</span>
+                                    <span className="text-base sm:text-lg font-bold text-white tabular-nums">6.25%</span>
+                                </div>
+                                <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/10">
+                                    <span className="text-white/70 block text-[11px] font-medium">MSF / Bank Rate</span>
+                                    <span className="text-base sm:text-lg font-bold text-white tabular-nums">6.75%</span>
+                                </div>
+                                <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/10">
+                                    <span className="text-white/70 block text-[11px] font-medium">Cash Reserve (CRR)</span>
+                                    <span className="text-base sm:text-lg font-bold text-white tabular-nums">4.50%</span>
+                                </div>
+                                <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/10 col-span-2 sm:col-span-1">
+                                    <span className="text-white/70 block text-[11px] font-medium">Statutory Liquidity (SLR)</span>
+                                    <span className="text-base sm:text-lg font-bold text-white tabular-nums">18.00%</span>
+                                </div>
+                            </div>
+
+                            {/* Semantic Search Topic Chips */}
+                            <div className="flex flex-wrap items-center gap-2 pt-1">
+                                <span className="text-xs text-white/60 font-semibold mr-1">Banking Directives:</span>
+                                {['Commercial Banks', 'NBFC Guidelines', 'Master Directions', 'KYC & AML Norms', 'Digital Lending', 'FEMA Norms'].map((chip, idx) => (
+                                    <span
+                                        key={idx}
+                                        className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-white/15 hover:bg-white/25 text-white/95 border border-white/10 transition-colors backdrop-blur-sm shadow-sm"
+                                    >
+                                        {chip}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 
