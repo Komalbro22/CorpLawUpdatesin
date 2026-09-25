@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { decodeCIN } from '@/lib/cin-decoder'
 import { Binary, Sparkles, FileText, HelpCircle, ShieldCheck, MapPin, Calendar, Briefcase, Award, Building2, Download, Search, CheckCircle2, AlertCircle } from 'lucide-react'
+import CinDownloadButton from '@/components/CinDownloadButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -229,14 +230,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
               </div>
 
               {/* PDF Download Trigger */}
-              <a
-                href={`/api/tools/cin-decoder/pdf?cin=${breakdown.cin}`}
-                target="_blank"
-                download={`CIN_Breakdown_${breakdown.cin}.pdf`}
-                className="inline-flex items-center gap-2 bg-navy hover:bg-slate-800 text-white dark:bg-amber-400 dark:hover:bg-amber-500 dark:text-navy font-bold px-4 py-2 rounded-xl text-xs md:text-sm transition-all shadow-sm active:scale-95"
-              >
-                <Download className="size-4" aria-hidden="true" /> Download PDF Certificate
-              </a>
+              <CinDownloadButton cin={breakdown.cin} />
             </div>
 
             {/* 6-Segment Breakdown Cards Grid */}

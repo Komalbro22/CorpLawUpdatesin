@@ -35,6 +35,7 @@ import {
   SlaFormData,
   SlaCustomClause,
 } from '@/lib/doc-generator/sla-generator'
+import DownloadGatewayModal from '@/components/DownloadGatewayModal'
 
 const QUICK_AI_PROMPTS = [
   {
@@ -202,6 +203,41 @@ export default function SlaClient() {
     } finally {
       setDownloadingFormat(null)
     }
+  }
+
+  // Universal Download Gateway Modal State
+  const [gatewayModal, setGatewayModal] = useState<{
+    isOpen: boolean
+    fileName: string
+    fileType: 'docx' | 'pdf'
+    docTitle: string
+    onDownload: () => void
+  }>({
+    isOpen: false,
+    fileName: '',
+    fileType: 'docx',
+    docTitle: '',
+    onDownload: () => {},
+  })
+
+  const openInstantDownloadGateway = (type: SlaType, format: 'docx' | 'pdf') => {
+    setGatewayModal({
+      isOpen: true,
+      fileName: `Service_Level_Agreement_${type}.${format}`,
+      fileType: format,
+      docTitle: `${SLA_PRESETS[type]?.title || 'Service Level Agreement'} (${format.toUpperCase()})`,
+      onDownload: () => handleInstantDownload(type, format),
+    })
+  }
+
+  const openCustomDownloadGateway = (format: 'docx' | 'pdf') => {
+    setGatewayModal({
+      isOpen: true,
+      fileName: `Custom_SLA_${formData.slaType}.${format}`,
+      fileType: format,
+      docTitle: `${formData.title || 'Customized Service Level Agreement'} (${format.toUpperCase()})`,
+      onDownload: () => handleCustomDownload(format),
+    })
   }
 
   const handlePrint = () => {
@@ -559,7 +595,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
 
               <button
                 type="button"
-                onClick={() => handleCustomDownload('docx')}
+                onClick={() => openCustomDownloadGateway('docx')}
                 disabled={downloadingFormat !== null}
                 className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white font-bold px-3.5 py-1.5 rounded-lg text-xs transition-colors shadow-2xs disabled:opacity-50"
               >
@@ -569,7 +605,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
 
               <button
                 type="button"
-                onClick={() => handleCustomDownload('pdf')}
+                onClick={() => openCustomDownloadGateway('pdf')}
                 disabled={downloadingFormat !== null}
                 className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold px-3.5 py-1.5 rounded-lg text-xs transition-colors shadow-2xs disabled:opacity-50"
               >
@@ -1151,7 +1187,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
             <div className="flex items-center gap-3 w-full sm:w-auto">
               <button
                 type="button"
-                onClick={() => handleCustomDownload('docx')}
+                onClick={() => openCustomDownloadGateway('docx')}
                 disabled={downloadingFormat !== null}
                 className="w-full sm:w-auto flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition-all disabled:opacity-50"
               >
@@ -1161,7 +1197,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
 
               <button
                 type="button"
-                onClick={() => handleCustomDownload('pdf')}
+                onClick={() => openCustomDownloadGateway('pdf')}
                 disabled={downloadingFormat !== null}
                 className="w-full sm:w-auto flex items-center justify-center gap-2 bg-rose-600 hover:bg-rose-700 text-white font-bold px-6 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition-all disabled:opacity-50"
               >
@@ -1361,7 +1397,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
             <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
               <button
                 type="button"
-                onClick={() => handleInstantDownload(selectedPreset, 'docx')}
+                onClick={() => openInstantDownloadGateway(selectedPreset, 'docx')}
                 disabled={downloadingFormat !== null}
                 className="flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-5 py-3 rounded-xl text-xs sm:text-sm shadow-md transition-all disabled:opacity-50"
               >
@@ -1371,7 +1407,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
 
               <button
                 type="button"
-                onClick={() => handleInstantDownload(selectedPreset, 'pdf')}
+                onClick={() => openInstantDownloadGateway(selectedPreset, 'pdf')}
                 disabled={downloadingFormat !== null}
                 className="flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 font-bold px-5 py-3 rounded-xl text-xs sm:text-sm transition-all disabled:opacity-50"
               >
@@ -1539,6 +1575,16 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
           </div>
         </div>
       )}
+
+      {/* Universal Download Gateway Modal */}
+      <DownloadGatewayModal
+        isOpen={gatewayModal.isOpen}
+        onClose={() => setGatewayModal((prev) => ({ ...prev, isOpen: false }))}
+        fileName={gatewayModal.fileName}
+        fileType={gatewayModal.fileType}
+        docTitle={gatewayModal.docTitle}
+        onProceedDownload={gatewayModal.onDownload}
+      />
     </div>
   )
 }

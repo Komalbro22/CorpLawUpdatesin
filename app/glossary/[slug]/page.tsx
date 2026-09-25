@@ -7,6 +7,7 @@ import MarkdownRenderer from '@/components/MarkdownRenderer'
 import { linkGlossaryTerms } from '@/lib/glossaryLinker'
 import TableOfContents from '@/components/TableOfContents'
 import { BookOpen, Link2, Search, FileText, HelpCircle, Clock } from 'lucide-react'
+import GlossaryAdBanner from '@/components/GlossaryAdBanner'
 
 export const revalidate = 86400 // Revalidate daily per Supabase egress budget
 
@@ -579,6 +580,9 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
             </div>
           </section>
         )}
+
+        {/* Professional Limited Compliance Ad / Partner Banner */}
+        <GlossaryAdBanner />
 
         {/* Contextual Analysis & Related Updates */}
         {relatedArticles && relatedArticles.length > 0 && (

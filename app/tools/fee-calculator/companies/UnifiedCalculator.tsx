@@ -4,6 +4,7 @@ import React, { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { mcaForms } from '@/data/mca-forms'
 import { calculateMCAFee, CalculatorParams } from '@/lib/calculatorUtils'
+import DownloadGatewayModal from '@/components/DownloadGatewayModal'
 
 const extraForms = [
   { slug: 'inc-22', formNumber: 'INC-22', formName: 'Notice of change of registered office', penaltyType: 'multiplier', penaltyRate: '2x to 12x normal fee', normalFeeStructure: 'capital_slab', concessionApplies: false },
@@ -43,6 +44,7 @@ export default function UnifiedCalculator() {
   const [chargeAmount, setChargeAmount] = useState<number>(1000000)
   const [showModal, setShowModal] = useState(false)
   const [copiedLink, setCopiedLink] = useState(false)
+  const [isGatewayOpen, setIsGatewayOpen] = useState(false)
 
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -426,7 +428,7 @@ export default function UnifiedCalculator() {
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <button
-              onClick={handleDownloadPDF}
+              onClick={() => setIsGatewayOpen(true)}
               className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm hover:shadow"
             >
               <svg className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
@@ -623,7 +625,7 @@ export default function UnifiedCalculator() {
               </p>
               
               <button 
-                onClick={handleDownloadPDF} 
+                onClick={() => setIsGatewayOpen(true)} 
                 className="w-full bg-white text-black font-bold py-3.5 px-4 rounded-[6px] hover:bg-slate-100 transition-colors flex items-center justify-center gap-2 shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
               >
                  Download Detailed PDF <span aria-hidden="true">→</span>
@@ -632,6 +634,16 @@ export default function UnifiedCalculator() {
           </div>
         </div>
       )}
+
+      {/* Universal Download Gateway Modal */}
+      <DownloadGatewayModal
+        isOpen={isGatewayOpen}
+        onClose={() => setIsGatewayOpen(false)}
+        fileName={`MCA_Fee_Estimate_${selectedForm.formNumber}.pdf`}
+        fileType="pdf"
+        docTitle={`MCA Fee Assessment: Form ${selectedForm.formNumber}`}
+        onProceedDownload={handleDownloadPDF}
+      />
     </div>
   )
 }
