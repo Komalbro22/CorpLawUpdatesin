@@ -27,6 +27,7 @@ import {
   AOC4_ATTACHMENTS
 } from '@/lib/rule-engine/aoc4-engine'
 import { generateAoc4Pdf } from '@/lib/pdf/generateAoc4Pdf'
+import IndianDateInput from '@/components/shared/IndianDateInput'
 
 interface AOC4WorkspaceProps {
   form: MCAForm
@@ -485,13 +486,11 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
                       {agmStatus !== 'not_held' && (
                         <div>
                           <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5 uppercase tracking-wider">
-                            Actual AGM Date
+                            Actual AGM Date (DD/MM/YYYY)
                           </label>
-                          <input
-                            type="date"
+                          <IndianDateInput
                             value={actualAgmDate}
-                            onChange={(e) => setActualAgmDate(e.target.value)}
-                            className="w-full px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none dark:text-white font-medium"
+                            onChange={setActualAgmDate}
                           />
                           <p className="text-[11px] text-slate-400 mt-1">
                             AOC-4 due exactly 30 days after this date per Sec 137(1).
@@ -502,26 +501,22 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
                       {agmStatus === 'extended_and_held' && agmType === 'subsequent' && (
                         <div>
                           <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5 uppercase tracking-wider">
-                            ROC Approved Extended Date
+                            ROC Approved Extended Date (DD/MM/YYYY)
                           </label>
-                          <input
-                            type="date"
+                          <IndianDateInput
                             value={rocExtensionDate}
-                            onChange={(e) => setRocExtensionDate(e.target.value)}
-                            className="w-full px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none dark:text-white font-medium"
+                            onChange={setRocExtensionDate}
                           />
                         </div>
                       )}
 
                       <div>
                         <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5 uppercase tracking-wider">
-                          Actual Date of Filing on MCA
+                          Actual Date of Filing on MCA (DD/MM/YYYY)
                         </label>
-                        <input
-                          type="date"
+                        <IndianDateInput
                           value={actualFilingDate}
-                          onChange={(e) => setActualFilingDate(e.target.value)}
-                          className="w-full px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none dark:text-white font-medium"
+                          onChange={setActualFilingDate}
                         />
                       </div>
                     </div>
@@ -531,13 +526,11 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
                 {companyTypeSelection === 'one_person_company' && (
                   <div>
                     <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5 uppercase tracking-wider">
-                      Actual Date of Filing on MCA
+                      Actual Date of Filing on MCA (DD/MM/YYYY)
                     </label>
-                    <input
-                      type="date"
+                    <IndianDateInput
                       value={actualFilingDate}
-                      onChange={(e) => setActualFilingDate(e.target.value)}
-                      className="w-full px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none dark:text-white font-medium"
+                      onChange={setActualFilingDate}
                     />
                   </div>
                 )}

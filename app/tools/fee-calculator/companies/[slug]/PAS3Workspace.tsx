@@ -37,6 +37,7 @@ import {
   formatInr
 } from '@/lib/rule-engine/pas3-engine'
 import { generatePas3Pdf } from '@/lib/pdf/generatePas3Pdf'
+import IndianDateInput from '@/components/shared/IndianDateInput'
 
 interface PresetConfig {
   id: string
@@ -452,13 +453,11 @@ Generated via CorpLawUpdates.in/tools/fee-calculator/companies/pas-3`
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">
-                  4. Board Allotment Date (Day 0) *
+                  4. Board Allotment Date (Day 0 - DD/MM/YYYY) *
                 </label>
-                <input
-                  type="date"
+                <IndianDateInput
                   value={allotmentDate}
-                  onChange={e => setAllotmentDate(e.target.value)}
-                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  onChange={setAllotmentDate}
                 />
                 <span className="text-[11px] text-slate-400 block mt-1">
                   Date of board resolution allotting the shares
@@ -467,13 +466,11 @@ Generated via CorpLawUpdates.in/tools/fee-calculator/companies/pas-3`
 
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">
-                  5. Filing / Evaluation Date *
+                  5. Filing / Evaluation Date (DD/MM/YYYY) *
                 </label>
-                <input
-                  type="date"
+                <IndianDateInput
                   value={filingDate}
-                  onChange={e => setFilingDate(e.target.value)}
-                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  onChange={setFilingDate}
                 />
                 <span className="text-[11px] text-slate-400 block mt-1">
                   Actual or planned submission date on MCA V3
@@ -552,10 +549,9 @@ Generated via CorpLawUpdates.in/tools/fee-calculator/companies/pas-3`
                       <label className="block text-[11px] text-slate-500 mb-1">
                         Date Application Money was Received in Separate Bank Account:
                       </label>
-                      <input
-                        type="date"
+                      <IndianDateInput
                         value={appMoneyReceivedDate}
-                        onChange={e => setAppMoneyReceivedDate(e.target.value)}
+                        onChange={val => setAppMoneyReceivedDate(val)}
                         className="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs"
                       />
                     </div>
@@ -592,10 +588,9 @@ Generated via CorpLawUpdates.in/tools/fee-calculator/companies/pas-3`
                     </div>
                     <div>
                       <label className="block text-[11px] text-slate-500 mb-1">Oldest Allotment Date:</label>
-                      <input
-                        type="date"
+                      <IndianDateInput
                         value={oldestAllotmentDate}
-                        onChange={e => setOldestAllotmentDate(e.target.value)}
+                        onChange={val => setOldestAllotmentDate(val)}
                         className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs"
                       />
                     </div>

@@ -32,6 +32,7 @@ import {
   getDpt3DepositCeilings
 } from '@/lib/rule-engine/dpt3-engine'
 import { generateDpt3Pdf } from '@/lib/pdf/generateDpt3Pdf'
+import IndianDateInput from '@/components/shared/IndianDateInput'
 
 interface DPT3WorkspaceProps {
   form: MCAForm
@@ -347,11 +348,9 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
                         </button>
                       </div>
                     </div>
-                    <input
-                      type="date"
+                    <IndianDateInput
                       value={filingDate}
-                      onChange={(e) => setFilingDate(e.target.value)}
-                      className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl p-2.5 text-sm font-semibold focus:ring-2 focus:ring-amber-500 transition-colors"
+                      onChange={setFilingDate}
                     />
                   </div>
                 </div>

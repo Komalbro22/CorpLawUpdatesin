@@ -192,7 +192,7 @@ export function calculateLiquidationFee(params: {
       'Circular No. IBBI/LIQ/107/2026 explicitly stipulates that forms submitted after the due date "whether by correction, updation, or otherwise" attract ₹500/month + 18% GST.';
   } else if (!isDueOnOrBeforeCutoff) {
     note =
-      'Note: Circular No. IBBI/LIQ/107/2026 specifically commenced levy for forms due on or before 30.09.2026. For subsequent periods, the standard ₹500/month fee under Regulation 47B applies upon delay.';
+      'Note: Circular No. IBBI/LIQ/107/2026 specifically commenced levy for forms due on or before 30/09/2026 (30 September 2026). For subsequent periods, the standard ₹500/month fee under Regulation 47B applies upon delay.';
   } else {
     note =
       'Mandatory fee under Regulation 47B read with Circular No. IBBI/LIQ/107/2026. Fee must be deposited via IBBI Portal / Bharatkosh before receipt generation.';

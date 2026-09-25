@@ -247,7 +247,7 @@ function HubGuides() {
               {guide.summary}
             </p>
             <div className="flex justify-between items-center text-xs font-bold text-slate-400 pt-4 border-t border-slate-100 dark:border-slate-800">
-              <span>{new Date(guide.publishedDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+              <span>{new Date(guide.publishedDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
               <span className="text-[#1D4ED8] dark:text-blue-400 group-hover:underline">Read Guide →</span>
             </div>
           </Link>

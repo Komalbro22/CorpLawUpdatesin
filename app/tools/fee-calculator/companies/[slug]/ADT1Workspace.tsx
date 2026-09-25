@@ -19,6 +19,7 @@ import {
 import { MCAForm } from '@/data/mca-forms'
 import { useToast } from '@/components/Toast'
 import { generateAdt1Pdf } from '@/lib/pdf/generateAdt1Pdf'
+import IndianDateInput from '@/components/shared/IndianDateInput'
 
 interface ADT1WorkspaceProps {
   form: MCAForm
@@ -393,11 +394,9 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
                       </button>
                     </div>
                   </div>
-                  <input
-                    type="date"
+                  <IndianDateInput
                     value={meetingDate}
-                    onChange={(e) => setMeetingDate(e.target.value)}
-                    className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-blue-500 transition-colors"
+                    onChange={setMeetingDate}
                   />
                 </div>
 
@@ -405,7 +404,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
                     <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                      Actual / Planned Filing Date
+                      Actual / Planned Filing Date (DD/MM/YYYY)
                     </label>
                     <button
                       type="button"
@@ -415,11 +414,9 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
                       Today
                     </button>
                   </div>
-                  <input
-                    type="date"
+                  <IndianDateInput
                     value={filingDate}
-                    onChange={(e) => setFilingDate(e.target.value)}
-                    className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-blue-500 transition-colors"
+                    onChange={setFilingDate}
                   />
                 </div>
               </div>

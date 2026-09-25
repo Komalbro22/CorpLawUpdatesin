@@ -22,6 +22,7 @@ import {
 import { MCAForm } from '@/data/mca-forms'
 import { useToast } from '@/components/Toast'
 import { generateChg1Pdf } from '@/lib/pdf/generateChg1Pdf'
+import IndianDateInput from '@/components/shared/IndianDateInput'
 
 interface CHG1WorkspaceProps {
   form: MCAForm
@@ -599,26 +600,22 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
-                      Date of Charge Creation / Instrument Execution
+                      Date of Charge Creation / Instrument Execution (DD/MM/YYYY)
                     </label>
-                    <input
-                      type="date"
+                    <IndianDateInput
                       value={creationDate}
-                      onChange={(e) => setCreationDate(e.target.value)}
-                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-xl text-sm font-semibold text-slate-900 dark:text-white"
+                      onChange={setCreationDate}
                     />
                     <p className="text-[11px] text-slate-500 mt-1">Day 0 of Section 77 timeline</p>
                   </div>
 
                   <div>
                     <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">
-                      Actual / Planned Filing Date
+                      Actual / Planned Filing Date (DD/MM/YYYY)
                     </label>
-                    <input
-                      type="date"
+                    <IndianDateInput
                       value={filingDate}
-                      onChange={(e) => setFilingDate(e.target.value)}
-                      className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-xl text-sm font-semibold text-slate-900 dark:text-white"
+                      onChange={setFilingDate}
                     />
                     <p className="text-[11px] text-slate-500 mt-1">Defaults to today</p>
                   </div>

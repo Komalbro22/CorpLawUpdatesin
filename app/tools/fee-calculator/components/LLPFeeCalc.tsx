@@ -12,6 +12,7 @@ import {
   LlpCalculationResult,
 } from '@/lib/penaltyCalculator'
 import { generateLlpPdf } from '@/lib/pdf/generateLlpPdf'
+import IndianDateInput from '@/components/shared/IndianDateInput'
 
 const FINANCIAL_YEAR_OPTIONS = [
   { value: '2025-26', label: 'FY 2025-26 (Ending 31 Mar 2026)' },
@@ -389,16 +390,14 @@ export default function LLPFeeCalc() {
             <div className="space-y-2">
               <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                 {formId === 'Form-5'
-                  ? 'Date of Govt/ROC Approval'
+                  ? 'Date of Govt/ROC Approval (DD/MM/YYYY)'
                   : formId === 'Form-15'
-                  ? 'Derived Trigger Date'
-                  : 'Event Date'}
+                  ? 'Derived Trigger Date (DD/MM/YYYY)'
+                  : 'Event Date (DD/MM/YYYY)'}
               </label>
-              <input
-                type="date"
+              <IndianDateInput
                 value={eventDate}
-                onChange={(e) => setEventDate(e.target.value)}
-                className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-slate-900 dark:text-slate-100 font-medium"
+                onChange={setEventDate}
               />
               <p className="text-[11px] text-slate-400">
                 Statutory filing window: 30 calendar days from trigger date.
@@ -410,13 +409,11 @@ export default function LLPFeeCalc() {
           {!isForm24 && (
             <div className="space-y-2">
               <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                Actual / Anticipated Filing Date
+                Actual / Anticipated Filing Date (DD/MM/YYYY)
               </label>
-              <input
-                type="date"
+              <IndianDateInput
                 value={actualFilingDate}
-                onChange={(e) => setActualFilingDate(e.target.value)}
-                className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-slate-900 dark:text-slate-100 font-medium"
+                onChange={setActualFilingDate}
               />
               <p className="text-[11px] text-slate-400">
                 Determines delay days after the statutory due date.

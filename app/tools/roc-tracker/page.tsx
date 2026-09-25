@@ -10,6 +10,7 @@ import {
   type DeadlineItem,
   type ROCFormDB,
 } from '@/lib/calculators/roc-deadlines'
+import IndianDateInput from '@/components/shared/IndianDateInput'
 
 function daysUntilCCFSExpiry(): number {
   const expiry = new Date('2026-07-15')
@@ -860,14 +861,15 @@ export default function ROCTrackerPage() {
                   <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5">
                     Date of Incorporation *
                   </label>
-                  <input type="date"
+                  <IndianDateInput
                     value={profile.incorporationDate 
                       ? new Date(profile.incorporationDate).toISOString().split('T')[0]
                       : ''}
-                    onChange={e => setProfile(p => ({
-                      ...p, incorporationDate: e.target.value ? new Date(e.target.value) : undefined
+                    onChange={val => setProfile(p => ({
+                      ...p, incorporationDate: val ? new Date(val) : undefined
                     }))}
-                    className={inputClass} />
+                    className={inputClass}
+                  />
                 </div>
               </div>
             </div>
@@ -976,14 +978,15 @@ export default function ROCTrackerPage() {
                     <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5">
                       Last AGM Date
                     </label>
-                    <input type="date"
+                    <IndianDateInput
                       value={profile.agmDate 
                         ? new Date(profile.agmDate).toISOString().split('T')[0]
                         : ''}
-                      onChange={e => setProfile(p => ({
-                        ...p, agmDate: e.target.value ? new Date(e.target.value) : null
+                      onChange={val => setProfile(p => ({
+                        ...p, agmDate: val ? new Date(val) : null
                       }))}
-                      className={inputClass} />
+                      className={inputClass}
+                    />
                   </div>
                 ) : (
                   <div>
@@ -1838,10 +1841,9 @@ export default function ROCTrackerPage() {
                               {isFiled && (
                                 <div className="flex items-center gap-1.5 animate-in fade-in slide-in-from-left-2 duration-200">
                                   <span className="text-slate-400 text-[10px] uppercase font-bold">Filing Date:</span>
-                                  <input
-                                    type="date"
+                                  <IndianDateInput
                                     value={(d as any).actualFilingDate ? new Date((d as any).actualFilingDate).toISOString().split('T')[0] : ''}
-                                    onChange={e => handleUpdateFilingDate(d.id, activeResultsTab === 'current' ? currentYear : previousYear, e.target.value)}
+                                    onChange={val => handleUpdateFilingDate(d.id, activeResultsTab === 'current' ? currentYear : previousYear, val)}
                                     className="text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                                   />
                                 </div>

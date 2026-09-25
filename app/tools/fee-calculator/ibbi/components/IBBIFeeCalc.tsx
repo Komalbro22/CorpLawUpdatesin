@@ -9,6 +9,8 @@ import {
   CIRP_FORMS,
 } from '@/lib/ibbi-calculator/engine';
 import { LiquidationFormId, CirpFormId } from '@/lib/ibbi-calculator/types';
+import IndianDateInput from '@/components/shared/IndianDateInput';
+import { formatDDMMYYYY, formatIndianLong } from '@/lib/date-utils';
 import {
   Calculator,
   Calendar,
@@ -93,8 +95,8 @@ export default function IBBIFeeCalc() {
       text = `IBBI REGULATION 47B DELAYED FILING FEE COMPUTATION
 Statutory Reference: Circular No. IBBI/LIQ/107/2026 dated 24.09.2026
 Form: ${liqResult.formName} (${liqResult.formId})
-Statutory Due Date: ${liqResult.dueDate}
-Actual / Proposed Submission Date: ${liqResult.submissionDate}
+Statutory Due Date: ${formatDDMMYYYY(liqResult.dueDate)} (${formatIndianLong(liqResult.dueDate)})
+Actual / Proposed Submission Date: ${formatDDMMYYYY(liqResult.submissionDate)} (${formatIndianLong(liqResult.submissionDate)})
 Delayed Period: ${liqResult.monthsOfDelay} calendar month(s) (${liqResult.daysOfDelay} days)
 Number of Forms: ${liqResult.numberOfForms}
 Submission Nature: ${liqResult.isCorrectionOrUpdation ? 'Correction / Updation' : 'Fresh Delay'}
@@ -106,8 +108,8 @@ Note: Deposited electronically via IBBI portal / Bharatkosh under Regulation 47B
       text = `IBBI REGULATION 40B DELAYED CIRP FORM FEE COMPUTATION
 Statutory Reference: Regulation 40B read with Circular No. IBBI/CIRP/89/2025
 Form: ${cirpResult.formName} (${cirpResult.formId})
-Due Date: ${cirpResult.dueDate}
-Submission Date: ${cirpResult.submissionDate}
+Statutory Due Date: ${formatDDMMYYYY(cirpResult.dueDate)} (${formatIndianLong(cirpResult.dueDate)})
+Actual Submission Date: ${formatDDMMYYYY(cirpResult.submissionDate)} (${formatIndianLong(cirpResult.submissionDate)})
 Months of Delay: ${cirpResult.monthsOfDelay} month(s)
 Base Fee: ₹500 × ${cirpResult.monthsOfDelay} × ${cirpResult.numberOfForms} = ${formatINR(cirpResult.totalBaseFee)}
 GST @ 18%: ${formatINR(cirpResult.totalGst)}
@@ -220,33 +222,25 @@ Gross Total Payable to Liquidator: ${formatINR(liquidatorResult.grossPayable)}`;
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor={liqDueDateAttr} className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                    Statutory Due Date
+                    Statutory Due Date (DD/MM/YYYY)
                   </label>
-                  <div className="relative">
-                    <input
-                      id={liqDueDateAttr}
-                      type="date"
-                      value={liqDueDate}
-                      onChange={(e) => setLiqDueDate(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    />
-                  </div>
-                  <span className="text-[11px] text-slate-500">Cohort: Forms due on/before 30.09.2026</span>
+                  <IndianDateInput
+                    id={liqDueDateAttr}
+                    value={liqDueDate}
+                    onChange={setLiqDueDate}
+                  />
+                  <span className="text-[11px] text-slate-500">Cohort: Forms due on/before 30/09/2026</span>
                 </div>
 
                 <div>
                   <label htmlFor={liqSubDateAttr} className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                    Filing / Submission Date
+                    Filing / Submission Date (DD/MM/YYYY)
                   </label>
-                  <div className="relative">
-                    <input
-                      id={liqSubDateAttr}
-                      type="date"
-                      value={liqSubmissionDate}
-                      onChange={(e) => setLiqSubmissionDate(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    />
-                  </div>
+                  <IndianDateInput
+                    id={liqSubDateAttr}
+                    value={liqSubmissionDate}
+                    onChange={setLiqSubmissionDate}
+                  />
                   <span className="text-[11px] text-slate-500">Date deposited on IBBI portal</span>
                 </div>
               </div>
@@ -338,28 +332,26 @@ Gross Total Payable to Liquidator: ${formatINR(liquidatorResult.grossPayable)}`;
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor={cirpDueDateAttr} className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                    Statutory Due Date
+                    Statutory Due Date (DD/MM/YYYY)
                   </label>
-                  <input
+                  <IndianDateInput
                     id={cirpDueDateAttr}
-                    type="date"
                     value={cirpDueDate}
-                    onChange={(e) => setCirpDueDate(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                    onChange={setCirpDueDate}
                   />
+                  <span className="text-[11px] text-slate-500">Cutoff: Forms due on/before 31/12/2025</span>
                 </div>
 
                 <div>
                   <label htmlFor={cirpSubDateAttr} className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                    Actual Submission Date
+                    Actual Submission Date (DD/MM/YYYY)
                   </label>
-                  <input
+                  <IndianDateInput
                     id={cirpSubDateAttr}
-                    type="date"
                     value={cirpSubmissionDate}
-                    onChange={(e) => setCirpSubmissionDate(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                    onChange={setCirpSubmissionDate}
                   />
+                  <span className="text-[11px] text-slate-500">Date uploaded on portal</span>
                 </div>
               </div>
 
@@ -522,6 +514,13 @@ Gross Total Payable to Liquidator: ${formatINR(liquidatorResult.grossPayable)}`;
               {/* Detailed Breakdown Slabs */}
               {activeTab !== 'liquidator-fee' ? (
                 <div className="space-y-3 mb-6 text-sm">
+                  <div className="flex justify-between text-slate-600 dark:text-slate-400">
+                    <span>Filing Timeline:</span>
+                    <strong className="text-slate-900 dark:text-white font-mono text-xs">
+                      {formatDDMMYYYY(activeTab === 'liquidation' ? liqResult.dueDate : cirpResult.dueDate)} →{' '}
+                      {formatDDMMYYYY(activeTab === 'liquidation' ? liqResult.submissionDate : cirpResult.submissionDate)}
+                    </strong>
+                  </div>
                   <div className="flex justify-between text-slate-600 dark:text-slate-400">
                     <span>Delay Period:</span>
                     <strong className="text-slate-900 dark:text-white">

@@ -2278,7 +2278,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
                   <p className="text-slate-600 dark:text-slate-400 text-sm mt-2">{guide.summary}</p>
                   <div className="mt-4 flex justify-between items-center text-sm font-medium pt-4 border-t border-blue-100 dark:border-slate-800">
                     <span className="text-slate-500">
-                      Published: {new Date(guide.publishedDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                      Published: {new Date(guide.publishedDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                     </span>
                     <Link href={guide.slug} className="text-[#1D4ED8] dark:text-blue-400 hover:underline font-bold">
                       Read Full Guide →

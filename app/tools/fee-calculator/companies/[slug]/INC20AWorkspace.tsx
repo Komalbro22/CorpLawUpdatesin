@@ -44,6 +44,7 @@ import {
   formatInr
 } from '@/lib/rule-engine/inc20a-engine'
 import { generateInc20aPdf } from '@/lib/pdf/generateInc20aPdf'
+import IndianDateInput from '@/components/shared/IndianDateInput'
 
 interface PresetConfig {
   id: string
@@ -321,13 +322,11 @@ Calculated on CorpLawUpdates.in | India's Authoritative Corporate Law Intelligen
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
-                    Date of Incorporation (CoI Date):
+                    Date of Incorporation (CoI Date - DD/MM/YYYY):
                   </label>
-                  <input
-                    type="date"
+                  <IndianDateInput
                     value={incorporationDate}
-                    onChange={(e) => setIncorporationDate(e.target.value)}
-                    className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl p-3 text-sm font-medium focus:ring-2 focus:ring-indigo-500"
+                    onChange={setIncorporationDate}
                   />
                   <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
                     Day 0 is the registration date on Certificate of Incorporation.
@@ -336,13 +335,11 @@ Calculated on CorpLawUpdates.in | India's Authoritative Corporate Law Intelligen
 
                 <div>
                   <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
-                    Actual / Proposed Filing Date:
+                    Actual / Proposed Filing Date (DD/MM/YYYY):
                   </label>
-                  <input
-                    type="date"
+                  <IndianDateInput
                     value={filingDate}
-                    onChange={(e) => setFilingDate(e.target.value)}
-                    className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl p-3 text-sm font-medium focus:ring-2 focus:ring-indigo-500"
+                    onChange={setFilingDate}
                   />
                   <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
                     Date of submitting declaration on MCA V3.

@@ -21,6 +21,7 @@ import SPICePlusWorkspace from './SPICePlusWorkspace'
 import PAS6Workspace from './PAS6Workspace'
 import MSME1Workspace from './MSME1Workspace'
 import PAS3Workspace from './PAS3Workspace'
+import IndianDateInput from '@/components/shared/IndianDateInput'
 
 interface ResultRow {
   component: string
@@ -554,25 +555,21 @@ export default function FormSpecificCalc({ form }: { form: MCAForm }) {
             {agmStatus !== 'not_held' ? (
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-2">
-                  Actual AGM Date
+                  Actual AGM Date (DD/MM/YYYY)
                 </label>
-                <input
-                  type="date"
+                <IndianDateInput
                   value={actualAgmDate}
-                  onChange={e => setActualAgmDate(e.target.value)}
-                  className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 font-medium"
+                  onChange={setActualAgmDate}
                 />
               </div>
             ) : agmType === 'subsequent' ? (
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-2">
-                  ROC Extension Target Date
+                  ROC Extension Target Date (DD/MM/YYYY)
                 </label>
-                <input
-                  type="date"
+                <IndianDateInput
                   value={rocExtensionDate}
-                  onChange={e => setRocExtensionDate(e.target.value)}
-                  className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 font-medium"
+                  onChange={setRocExtensionDate}
                 />
               </div>
             ) : (
@@ -591,13 +588,11 @@ export default function FormSpecificCalc({ form }: { form: MCAForm }) {
 
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-2">
-                Actual / Filing Date
+                Actual / Filing Date (DD/MM/YYYY)
               </label>
-              <input
-                type="date"
+              <IndianDateInput
                 value={actualFilingDate}
-                onChange={e => setActualFilingDate(e.target.value)}
-                className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 font-medium"
+                onChange={setActualFilingDate}
               />
             </div>
           </div>
@@ -869,10 +864,9 @@ export default function FormSpecificCalc({ form }: { form: MCAForm }) {
               <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
                 Due Date
               </label>
-              <input
-                type="date"
+              <IndianDateInput
                 value={genericDueDate}
-                onChange={e => setGenericDueDate(e.target.value)}
+                onChange={val => setGenericDueDate(val)}
                 className="w-full border-[1.5px] border-[#CBD5E1] dark:border-slate-700 bg-[#FFFFFF] dark:bg-slate-900 text-slate-900 dark:text-white rounded-lg px-[14px] py-[10px] focus:ring-2 focus:ring-[#1D4ED8] focus:border-[#1D4ED8] transition-colors"
               />
             </div>
@@ -880,10 +874,9 @@ export default function FormSpecificCalc({ form }: { form: MCAForm }) {
               <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
                 Actual/Proposed Filing Date
               </label>
-              <input
-                type="date"
+              <IndianDateInput
                 value={genericActualDate}
-                onChange={e => setGenericActualDate(e.target.value)}
+                onChange={val => setGenericActualDate(val)}
                 className="w-full border-[1.5px] border-[#CBD5E1] dark:border-slate-700 bg-[#FFFFFF] dark:bg-slate-900 text-slate-900 dark:text-white rounded-lg px-[14px] py-[10px] focus:ring-2 focus:ring-[#1D4ED8] focus:border-[#1D4ED8] transition-colors"
               />
             </div>

@@ -36,6 +36,7 @@ import {
   Dir3KycCalculationResult
 } from '@/lib/rule-engine/dir3kyc-engine'
 import { generateDir3KycPdf } from '@/lib/pdf/generateDir3KycPdf'
+import IndianDateInput from '@/components/shared/IndianDateInput'
 
 export default function DIR3KYCWorkspace({ form }: { form: MCAForm }) {
   const { showToast } = useToast()
@@ -300,18 +301,16 @@ Calculated on CorpLawUpdates.in | India's Leading Corporate Law Intelligence
               </div>
 
               {/* Custom Date Input */}
-              <div className="pt-2 border-t border-slate-200 dark:border-slate-700/60 flex items-center gap-3">
+              <div className="pt-2 border-t border-slate-200 dark:border-slate-700/60 flex flex-col sm:flex-row sm:items-center gap-3">
                 <span className="text-xs font-medium text-slate-600 dark:text-slate-400 shrink-0">
-                  Or Exact Allotment Date:
+                  Or Exact Allotment Date (DD/MM/YYYY):
                 </span>
-                <input
-                  type="date"
+                <IndianDateInput
                   value={customAllotmentDate}
-                  onChange={(e) => {
-                    setCustomAllotmentDate(e.target.value)
+                  onChange={(iso) => {
+                    setCustomAllotmentDate(iso)
                     setAllotmentPresetId('custom')
                   }}
-                  className="border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-lg px-2.5 py-1.5 text-xs focus:ring-2 focus:ring-blue-500"
                 />
               </div>
             </div>
@@ -387,13 +386,11 @@ Calculated on CorpLawUpdates.in | India's Leading Corporate Law Intelligence
 
                   <div>
                     <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
-                      Date of Change:
+                      Date of Change (DD/MM/YYYY):
                     </label>
-                    <input
-                      type="date"
+                    <IndianDateInput
                       value={changeDate}
-                      onChange={(e) => setChangeDate(e.target.value)}
-                      className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl p-2.5 text-xs focus:ring-2 focus:ring-blue-500"
+                      onChange={setChangeDate}
                     />
                   </div>
                 </div>

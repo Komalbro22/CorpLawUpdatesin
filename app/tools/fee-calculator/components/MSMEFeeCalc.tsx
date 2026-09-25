@@ -10,6 +10,7 @@ import {
   MsmeInterestResult
 } from '@/lib/penaltyCalculator'
 import { generateMsmePdf } from '@/lib/pdf/generateMsmePdf'
+import IndianDateInput from '@/components/shared/IndianDateInput'
 
 export default function MSMEFeeCalc({ initialBankRate = '5.50' }: { initialBankRate?: string }) {
   // Step 1: Supplier Eligibility State
@@ -225,12 +226,10 @@ export default function MSMEFeeCalc({ initialBankRate = '5.50' }: { initialBankR
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Relevant Transaction / Order Date</label>
-              <input
-                type="date"
-                className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm outline-none focus:ring-2 focus:ring-navy"
+              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Relevant Transaction / Order Date (DD/MM/YYYY)</label>
+              <IndianDateInput
                 value={relevantTransactionDate || deliveryDate}
-                onChange={(e) => setRelevantTransactionDate(e.target.value)}
+                onChange={setRelevantTransactionDate}
               />
             </div>
           </div>
@@ -260,12 +259,10 @@ export default function MSMEFeeCalc({ initialBankRate = '5.50' }: { initialBankR
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Date of Delivery / Supply</label>
-              <input
-                type="date"
-                className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm outline-none focus:ring-2 focus:ring-navy"
+              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Date of Delivery / Supply (DD/MM/YYYY)</label>
+              <IndianDateInput
                 value={deliveryDate}
-                onChange={(e) => setDeliveryDate(e.target.value)}
+                onChange={setDeliveryDate}
               />
             </div>
 
@@ -285,22 +282,20 @@ export default function MSMEFeeCalc({ initialBankRate = '5.50' }: { initialBankR
               <>
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Date Objection Served</label>
-                  <input
-                    type="date"
+                  <IndianDateInput
                     className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm outline-none focus:ring-2 focus:ring-navy"
                     value={objectionDate}
-                    onChange={(e) => setObjectionDate(e.target.value)}
+                    onChange={(val) => setObjectionDate(val)}
                   />
                   <p className="text-[10px] text-slate-500">Must be within 15 days of delivery to be legally effective.</p>
                 </div>
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Date Objection Resolved</label>
-                  <input
-                    type="date"
+                  <IndianDateInput
                     className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm outline-none focus:ring-2 focus:ring-navy"
                     value={objectionResolvedDate}
-                    onChange={(e) => setObjectionResolvedDate(e.target.value)}
+                    onChange={(val) => setObjectionResolvedDate(val)}
                   />
                   <p className="text-[10px] text-slate-500">Becomes the effective Day of Acceptance (Section 2(b)).</p>
                 </div>
@@ -331,12 +326,10 @@ export default function MSMEFeeCalc({ initialBankRate = '5.50' }: { initialBankR
 
             {hasAgreement ? (
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Contractually Agreed Payment Date</label>
-                <input
-                  type="date"
-                  className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm outline-none focus:ring-2 focus:ring-navy"
+                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Contractually Agreed Payment Date (DD/MM/YYYY)</label>
+                <IndianDateInput
                   value={agreedPaymentDate}
-                  onChange={(e) => setAgreedPaymentDate(e.target.value)}
+                  onChange={setAgreedPaymentDate}
                 />
                 <p className="text-[10px] text-purple-600 dark:text-purple-400">
                   Note: Under Section 15 proviso, credit period cannot exceed 45 days.
@@ -359,12 +352,10 @@ export default function MSMEFeeCalc({ initialBankRate = '5.50' }: { initialBankR
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Actual Payment / Settlement Date</label>
-              <input
-                type="date"
-                className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm outline-none focus:ring-2 focus:ring-navy"
+              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Actual Payment / Settlement Date (DD/MM/YYYY)</label>
+              <IndianDateInput
                 value={actualPaymentDate}
-                onChange={(e) => setActualPaymentDate(e.target.value)}
+                onChange={setActualPaymentDate}
               />
             </div>
 

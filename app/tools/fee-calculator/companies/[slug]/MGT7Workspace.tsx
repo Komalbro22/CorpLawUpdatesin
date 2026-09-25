@@ -25,6 +25,7 @@ import {
   Mgt7ComplianceCalculationResult
 } from '@/lib/rule-engine/mgt7-engine'
 import { generateMgt7Pdf } from '@/lib/pdf/generateMgt7Pdf'
+import IndianDateInput from '@/components/shared/IndianDateInput'
 
 interface MGT7WorkspaceProps {
   form: MCAForm
@@ -442,11 +443,9 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                       </button>
                     </div>
                   </div>
-                  <input
-                    type="date"
+                  <IndianDateInput
                     value={actualAgmDate}
-                    onChange={(e) => setActualAgmDate(e.target.value)}
-                    className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-blue-500 transition-colors"
+                    onChange={setActualAgmDate}
                   />
                 </div>
 
@@ -454,13 +453,11 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                 {agmStatus === 'extended_and_held' && (
                   <div>
                     <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                      ROC Approved Extended Last Date (Section 96(1) Max 3 Months)
+                      ROC Approved Extended Last Date (DD/MM/YYYY)
                     </label>
-                    <input
-                      type="date"
+                    <IndianDateInput
                       value={rocExtensionDate}
-                      onChange={(e) => setRocExtensionDate(e.target.value)}
-                      className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-blue-500 transition-colors"
+                      onChange={setRocExtensionDate}
                     />
                   </div>
                 )}
@@ -469,7 +466,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
                     <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
-                      Actual / Planned Filing Date
+                      Actual / Planned Filing Date (DD/MM/YYYY)
                     </label>
                     <button
                       type="button"
@@ -479,11 +476,9 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                       Today
                     </button>
                   </div>
-                  <input
-                    type="date"
+                  <IndianDateInput
                     value={actualFilingDate}
-                    onChange={(e) => setActualFilingDate(e.target.value)}
-                    className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-blue-500 transition-colors"
+                    onChange={setActualFilingDate}
                   />
                 </div>
               </div>

@@ -36,6 +36,7 @@ import {
   formatInr
 } from '@/lib/rule-engine/pas6-engine'
 import { generatePas6Pdf } from '@/lib/pdf/generatePas6Pdf'
+import IndianDateInput from '@/components/shared/IndianDateInput'
 
 interface PresetConfig {
   id: string
@@ -443,14 +444,14 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/pas-
             {/* Filing Date & Delay Chips */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">
-                Actual / Projected Filing Date
+                Actual / Projected Filing Date (DD/MM/YYYY)
               </label>
-              <input
-                type="date"
-                value={filingDate}
-                onChange={(e) => setFilingDate(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl text-xs border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-2"
-              />
+              <div className="mb-2">
+                <IndianDateInput
+                  value={filingDate}
+                  onChange={setFilingDate}
+                />
+              </div>
               <div className="flex flex-wrap gap-1.5 pt-1">
                 <button
                   type="button"
