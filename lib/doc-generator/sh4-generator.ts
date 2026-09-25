@@ -9,7 +9,6 @@ import {
   TableCell,
   WidthType,
   BorderStyle,
-  TableLayoutType,
 } from 'docx'
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 
@@ -87,6 +86,7 @@ export const DEFAULT_SAMPLE_SH4_DATA: Sh4FormData = {
 }
 
 const FONT = 'Times New Roman'
+const PRINTABLE_WIDTH_DXA = 9500 // 11906 - 1200 (left) - 1200 (right) ~= 9506 dxa
 const BORDER_STYLE = {
   top: { style: BorderStyle.SINGLE, size: 1, color: '666666' },
   bottom: { style: BorderStyle.SINGLE, size: 1, color: '666666' },
@@ -101,6 +101,7 @@ function createCell(
   options?: {
     bold?: boolean
     widthPct?: number
+    widthDxa?: number
     align?: (typeof AlignmentType)[keyof typeof AlignmentType]
     size?: number
     italics?: boolean
@@ -110,9 +111,10 @@ function createCell(
   const bold = !!options?.bold
   const italics = !!options?.italics
   const align = options?.align || AlignmentType.LEFT
+  const widthDxa = options?.widthDxa || (options?.widthPct ? Math.round((options.widthPct / 100) * PRINTABLE_WIDTH_DXA) : undefined)
 
   return new TableCell({
-    width: options?.widthPct ? { size: options.widthPct, type: WidthType.PERCENTAGE } : undefined,
+    width: widthDxa ? { size: widthDxa, type: WidthType.DXA } : undefined,
     borders: BORDER_STYLE,
     margins: CELL_MARGINS,
     children: [
@@ -263,25 +265,25 @@ export async function buildSh4Docx(data: Partial<Sh4FormData> = {}): Promise<Buf
             ],
           }),
 
-          // Table: Securities details
+          // Table: Securities details (4 cols of 25% = 2375 dxa each)
           new Table({
-            width: { size: 100, type: WidthType.PERCENTAGE },
-            layout: TableLayoutType.FIXED,
+            width: { size: PRINTABLE_WIDTH_DXA, type: WidthType.DXA },
+            columnWidths: [2375, 2375, 2375, 2375],
             rows: [
               new TableRow({
                 children: [
-                  createCell('Kind/Class of securities (1)', { bold: true, widthPct: 25 }),
-                  createCell('Nominal value of each unit of security (2)', { bold: true, widthPct: 25 }),
-                  createCell('Amount called up per unit of security (3)', { bold: true, widthPct: 25 }),
-                  createCell('Amount paid up per unit of security (4)', { bold: true, widthPct: 25 }),
+                  createCell('Kind/Class of securities (1)', { bold: true, widthDxa: 2375 }),
+                  createCell('Nominal value of each unit of security (2)', { bold: true, widthDxa: 2375 }),
+                  createCell('Amount called up per unit of security (3)', { bold: true, widthDxa: 2375 }),
+                  createCell('Amount paid up per unit of security (4)', { bold: true, widthDxa: 2375 }),
                 ],
               }),
               new TableRow({
                 children: [
-                  createCell(d.securityClass, { widthPct: 25 }),
-                  createCell(`₹ ${d.nominalValue}`, { widthPct: 25 }),
-                  createCell(`₹ ${d.calledUpValue}`, { widthPct: 25 }),
-                  createCell(`₹ ${d.paidUpValue}`, { widthPct: 25 }),
+                  createCell(d.securityClass, { widthDxa: 2375 }),
+                  createCell(`₹ ${d.nominalValue}`, { widthDxa: 2375 }),
+                  createCell(`₹ ${d.calledUpValue}`, { widthDxa: 2375 }),
+                  createCell(`₹ ${d.paidUpValue}`, { widthDxa: 2375 }),
                 ],
               }),
             ],
@@ -289,27 +291,27 @@ export async function buildSh4Docx(data: Partial<Sh4FormData> = {}): Promise<Buf
 
           new Paragraph({ spacing: { after: 80 } }),
 
-          // Table: Quantity & Consideration
+          // Table: Quantity & Consideration (2 cols of 50% = 4750 dxa each)
           new Table({
-            width: { size: 100, type: WidthType.PERCENTAGE },
-            layout: TableLayoutType.FIXED,
+            width: { size: PRINTABLE_WIDTH_DXA, type: WidthType.DXA },
+            columnWidths: [4750, 4750],
             rows: [
               new TableRow({
                 children: [
-                  createCell('No. of Securities being transferred', { bold: true, widthPct: 50 }),
-                  createCell('Consideration Received (₹)', { bold: true, widthPct: 50 }),
+                  createCell('No. of Securities being transferred', { bold: true, widthDxa: 4750 }),
+                  createCell('Consideration Received (₹)', { bold: true, widthDxa: 4750 }),
                 ],
               }),
               new TableRow({
                 children: [
-                  createCell(`In figures: ${d.numberOfSecurities}\nIn words: ${d.numberOfSecuritiesWords}`, { widthPct: 50 }),
-                  createCell(`In figures: ₹ ${d.consideration}\nIn words: ${d.considerationWords}`, { widthPct: 50 }),
+                  createCell(`In figures: ${d.numberOfSecurities}\nIn words: ${d.numberOfSecuritiesWords}`, { widthDxa: 4750 }),
+                  createCell(`In figures: ₹ ${d.consideration}\nIn words: ${d.considerationWords}`, { widthDxa: 4750 }),
                 ],
               }),
               new TableRow({
                 children: [
-                  createCell(`Distinctive Numbers: From ${d.distinctiveFrom} to ${d.distinctiveTo}`, { widthPct: 50 }),
-                  createCell(`Corresponding Certificate Nos.: ${d.certificateNumbers}`, { widthPct: 50 }),
+                  createCell(`Distinctive Numbers: From ${d.distinctiveFrom} to ${d.distinctiveTo}`, { widthDxa: 4750 }),
+                  createCell(`Corresponding Certificate Nos.: ${d.certificateNumbers}`, { widthDxa: 4750 }),
                 ],
               }),
             ],
@@ -323,19 +325,19 @@ export async function buildSh4Docx(data: Partial<Sh4FormData> = {}): Promise<Buf
             ],
           }),
           new Table({
-            width: { size: 100, type: WidthType.PERCENTAGE },
-            layout: TableLayoutType.FIXED,
+            width: { size: PRINTABLE_WIDTH_DXA, type: WidthType.DXA },
+            columnWidths: [3800, 5700],
             rows: [
               new TableRow({
                 children: [
-                  createCell(`Registered Folio Number: ${d.transferorFolio}`, { bold: true, widthPct: 40 }),
-                  createCell(`Name(s) in full: ${d.transferorName}`, { widthPct: 60 }),
+                  createCell(`Registered Folio Number: ${d.transferorFolio}`, { bold: true, widthDxa: 3800 }),
+                  createCell(`Name(s) in full: ${d.transferorName}`, { widthDxa: 5700 }),
                 ],
               }),
               new TableRow({
                 children: [
-                  createCell('Transferor Signature(s):', { bold: true, widthPct: 40 }),
-                  createCell('\n\n________________________________________\nSignature of Transferor', { widthPct: 60 }),
+                  createCell('Transferor Signature(s):', { bold: true, widthDxa: 3800 }),
+                  createCell('\n\n________________________________________\nSignature of Transferor', { widthDxa: 5700 }),
                 ],
               }),
             ],
@@ -360,13 +362,13 @@ export async function buildSh4Docx(data: Partial<Sh4FormData> = {}): Promise<Buf
             ],
           }),
           new Table({
-            width: { size: 100, type: WidthType.PERCENTAGE },
-            layout: TableLayoutType.FIXED,
+            width: { size: PRINTABLE_WIDTH_DXA, type: WidthType.DXA },
+            columnWidths: [5700, 3800],
             rows: [
               new TableRow({
                 children: [
-                  createCell(`Name of Witness: ${d.witnessName}\nAddress: ${d.witnessAddress}\nPin Code: ${d.witnessPincode}`, { widthPct: 60 }),
-                  createCell('\n\n________________________________________\nSignature of Witness', { widthPct: 40 }),
+                  createCell(`Name of Witness: ${d.witnessName}\nAddress: ${d.witnessAddress}\nPin Code: ${d.witnessPincode}`, { widthDxa: 5700 }),
+                  createCell('\n\n________________________________________\nSignature of Witness', { widthDxa: 3800 }),
                 ],
               }),
             ],
@@ -380,47 +382,47 @@ export async function buildSh4Docx(data: Partial<Sh4FormData> = {}): Promise<Buf
             ],
           }),
           new Table({
-            width: { size: 100, type: WidthType.PERCENTAGE },
-            layout: TableLayoutType.FIXED,
+            width: { size: PRINTABLE_WIDTH_DXA, type: WidthType.DXA },
+            columnWidths: [2090, 2090, 2470, 1045, 950, 855],
             rows: [
               new TableRow({
                 children: [
-                  createCell('Name in full (1)', { bold: true, widthPct: 22, size: 18 }),
-                  createCell('Father’s / Mother’s / Spouse name (2)', { bold: true, widthPct: 22, size: 18 }),
-                  createCell('Address & E-mail ID (3)', { bold: true, widthPct: 26, size: 18 }),
-                  createCell('Occupation (4)', { bold: true, widthPct: 11, size: 18 }),
-                  createCell('Existing Folio No., if any (5)', { bold: true, widthPct: 10, size: 18 }),
-                  createCell('Signature (6)', { bold: true, widthPct: 9, size: 18 }),
+                  createCell('Name in full (1)', { bold: true, widthDxa: 2090, size: 18 }),
+                  createCell('Father’s / Mother’s / Spouse name (2)', { bold: true, widthDxa: 2090, size: 18 }),
+                  createCell('Address & E-mail ID (3)', { bold: true, widthDxa: 2470, size: 18 }),
+                  createCell('Occupation (4)', { bold: true, widthDxa: 1045, size: 18 }),
+                  createCell('Existing Folio No., if any (5)', { bold: true, widthDxa: 950, size: 18 }),
+                  createCell('Signature (6)', { bold: true, widthDxa: 855, size: 18 }),
                 ],
               }),
               new TableRow({
                 children: [
-                  createCell(`1. ${d.transfereeName}`, { widthPct: 22, size: 18 }),
-                  createCell(d.transfereeRelativeName, { widthPct: 22, size: 18 }),
-                  createCell(`${d.transfereeAddress}\nPIN: ${d.transfereePincode}\nE-mail: ${d.transfereeEmail}`, { widthPct: 26, size: 18 }),
-                  createCell(d.transfereeOccupation, { widthPct: 11, size: 18 }),
-                  createCell(d.transfereeExistingFolio, { widthPct: 10, size: 18 }),
-                  createCell('\n\n________________\n(1)', { widthPct: 9, size: 18 }),
+                  createCell(`1. ${d.transfereeName}`, { widthDxa: 2090, size: 18 }),
+                  createCell(d.transfereeRelativeName, { widthDxa: 2090, size: 18 }),
+                  createCell(`${d.transfereeAddress}\nPIN: ${d.transfereePincode}\nE-mail: ${d.transfereeEmail}`, { widthDxa: 2470, size: 18 }),
+                  createCell(d.transfereeOccupation, { widthDxa: 1045, size: 18 }),
+                  createCell(d.transfereeExistingFolio, { widthDxa: 950, size: 18 }),
+                  createCell('\n\n________________\n(1)', { widthDxa: 855, size: 18 }),
                 ],
               }),
               new TableRow({
                 children: [
-                  createCell('2.', { widthPct: 22, size: 18 }),
-                  createCell('', { widthPct: 22, size: 18 }),
-                  createCell('', { widthPct: 26, size: 18 }),
-                  createCell('', { widthPct: 11, size: 18 }),
-                  createCell('', { widthPct: 10, size: 18 }),
-                  createCell('\n\n________________\n(2)', { widthPct: 9, size: 18 }),
+                  createCell('2.', { widthDxa: 2090, size: 18 }),
+                  createCell('', { widthDxa: 2090, size: 18 }),
+                  createCell('', { widthDxa: 2470, size: 18 }),
+                  createCell('', { widthDxa: 1045, size: 18 }),
+                  createCell('', { widthDxa: 950, size: 18 }),
+                  createCell('\n\n________________\n(2)', { widthDxa: 855, size: 18 }),
                 ],
               }),
               new TableRow({
                 children: [
-                  createCell('3.', { widthPct: 22, size: 18 }),
-                  createCell('', { widthPct: 22, size: 18 }),
-                  createCell('', { widthPct: 26, size: 18 }),
-                  createCell('', { widthPct: 11, size: 18 }),
-                  createCell('', { widthPct: 10, size: 18 }),
-                  createCell('\n\n________________\n(3)', { widthPct: 9, size: 18 }),
+                  createCell('3.', { widthDxa: 2090, size: 18 }),
+                  createCell('', { widthDxa: 2090, size: 18 }),
+                  createCell('', { widthDxa: 2470, size: 18 }),
+                  createCell('', { widthDxa: 1045, size: 18 }),
+                  createCell('', { widthDxa: 950, size: 18 }),
+                  createCell('\n\n________________\n(3)', { widthDxa: 855, size: 18 }),
                 ],
               }),
             ],
@@ -428,13 +430,13 @@ export async function buildSh4Docx(data: Partial<Sh4FormData> = {}): Promise<Buf
 
           // Folio & Specimen Signature of Transferee
           new Table({
-            width: { size: 100, type: WidthType.PERCENTAGE },
-            layout: TableLayoutType.FIXED,
+            width: { size: PRINTABLE_WIDTH_DXA, type: WidthType.DXA },
+            columnWidths: [3325, 6175],
             rows: [
               new TableRow({
                 children: [
-                  createCell(`Folio No. of Transferee: ${d.transfereeExistingFolio}`, { bold: true, widthPct: 35, size: 18 }),
-                  createCell('Specimen Signature of Transferee:\n(1) ____________________  (2) ____________________  (3) ____________________', { bold: true, widthPct: 65, size: 18 }),
+                  createCell(`Folio No. of Transferee: ${d.transfereeExistingFolio}`, { bold: true, widthDxa: 3325, size: 18 }),
+                  createCell('Specimen Signature of Transferee:\n(1) ____________________  (2) ____________________  (3) ____________________', { bold: true, widthDxa: 6175, size: 18 }),
                 ],
               }),
             ],
@@ -449,11 +451,13 @@ export async function buildSh4Docx(data: Partial<Sh4FormData> = {}): Promise<Buf
             ],
           }),
           new Table({
-            width: { size: 100, type: WidthType.PERCENTAGE },
+            width: { size: PRINTABLE_WIDTH_DXA, type: WidthType.DXA },
+            columnWidths: [PRINTABLE_WIDTH_DXA],
             rows: [
               new TableRow({
                 children: [
                   new TableCell({
+                    width: { size: PRINTABLE_WIDTH_DXA, type: WidthType.DXA },
                     borders: BORDER_STYLE,
                     margins: { top: 160, bottom: 160, left: 160, right: 160 },
                     children: [
@@ -568,13 +572,13 @@ export async function buildSh4Docx(data: Partial<Sh4FormData> = {}): Promise<Buf
             ],
           }),
           new Table({
-            width: { size: 100, type: WidthType.PERCENTAGE },
-            layout: TableLayoutType.FIXED,
+            width: { size: PRINTABLE_WIDTH_DXA, type: WidthType.DXA },
+            columnWidths: [4750, 4750],
             rows: [
               new TableRow({
                 children: [
-                  createCell('Checked by: _________________________\nSignature tallied by: ____________________\nEntered in Register of Transfers on: _________\nvide Transfer No.: _____________________', { widthPct: 50, size: 18 }),
-                  createCell('Approval Date: _________________________\nPower of attorney / Probate / Death Certificate / Letter of Administration\nRegistered on: _____________ at No.: __________', { widthPct: 50, size: 18 }),
+                  createCell('Checked by: _________________________\nSignature tallied by: ____________________\nEntered in Register of Transfers on: _________\nvide Transfer No.: _____________________', { widthDxa: 4750, size: 18 }),
+                  createCell('Approval Date: _________________________\nPower of attorney / Probate / Death Certificate / Letter of Administration\nRegistered on: _____________ at No.: __________', { widthDxa: 4750, size: 18 }),
                 ],
               }),
             ],
@@ -588,25 +592,25 @@ export async function buildSh4Docx(data: Partial<Sh4FormData> = {}): Promise<Buf
             ],
           }),
           new Table({
-            width: { size: 100, type: WidthType.PERCENTAGE },
-            layout: TableLayoutType.FIXED,
+            width: { size: PRINTABLE_WIDTH_DXA, type: WidthType.DXA },
+            columnWidths: [2375, 2375, 1425, 1425, 1900],
             rows: [
               new TableRow({
                 children: [
-                  createCell('Name of the Transferor', { bold: true, widthPct: 25, size: 18 }),
-                  createCell('Name of the Transferee', { bold: true, widthPct: 25, size: 18 }),
-                  createCell('No. of shares', { bold: true, widthPct: 15, size: 18 }),
-                  createCell('Date of Transfer', { bold: true, widthPct: 15, size: 18 }),
-                  createCell('Signature of the authorized signatory', { bold: true, widthPct: 20, size: 18 }),
+                  createCell('Name of the Transferor', { bold: true, widthDxa: 2375, size: 18 }),
+                  createCell('Name of the Transferee', { bold: true, widthDxa: 2375, size: 18 }),
+                  createCell('No. of shares', { bold: true, widthDxa: 1425, size: 18 }),
+                  createCell('Date of Transfer', { bold: true, widthDxa: 1425, size: 18 }),
+                  createCell('Signature of the authorized signatory', { bold: true, widthDxa: 1900, size: 18 }),
                 ],
               }),
               new TableRow({
                 children: [
-                  createCell(d.transferorName, { widthPct: 25, size: 18 }),
-                  createCell(d.transfereeName, { widthPct: 25, size: 18 }),
-                  createCell(d.numberOfSecurities, { widthPct: 15, size: 18 }),
-                  createCell('_____/_____/2026', { widthPct: 15, size: 18 }),
-                  createCell('\n\n__________________', { widthPct: 20, size: 18 }),
+                  createCell(d.transferorName, { widthDxa: 2375, size: 18 }),
+                  createCell(d.transfereeName, { widthDxa: 2375, size: 18 }),
+                  createCell(d.numberOfSecurities, { widthDxa: 1425, size: 18 }),
+                  createCell('_____/_____/2026', { widthDxa: 1425, size: 18 }),
+                  createCell('\n\n__________________', { widthDxa: 1900, size: 18 }),
                 ],
               }),
             ],

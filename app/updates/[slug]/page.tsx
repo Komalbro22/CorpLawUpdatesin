@@ -714,6 +714,30 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                                 </p>
                             </div>
                         )}
+
+                        {(update.slug?.includes('ibbi-reg-47b') || update.slug?.includes('liquidation-forms-fee') || update.slug?.includes('delayed-liquidation')) && (
+                            <div className="my-10 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-[16px] p-8 flex flex-col items-center text-center shadow-xl border border-indigo-900/60 clear-both not-prose">
+                                <span className="text-4xl mb-3" aria-hidden>⚖️</span>
+                                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold mb-3 border border-emerald-500/30">
+                                    <span>Circular No. IBBI/LIQ/107/2026 Compliance</span>
+                                </div>
+                                <h3 className="text-2xl font-bold text-white mb-2">
+                                    Calculate Your Regulation 47B Delayed Filing Fee
+                                </h3>
+                                <p className="text-slate-300 text-sm sm:text-base max-w-xl mb-6 leading-relaxed">
+                                    Calculate the exact delayed fee for Form LIQ-1 to LIQ-4 (₹500/month + 18% GST) due on or before 30.09.2026, or compute Liquidator remuneration slabs.
+                                </p>
+                                <Link 
+                                    href="/tools/fee-calculator/ibbi"
+                                    className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3.5 px-8 rounded-xl transition-all shadow-lg inline-block w-full sm:w-auto"
+                                >
+                                    Open IBBI Regulation 47B Fee Calculator →
+                                </Link>
+                                <p className="sr-only">
+                                    <a href="/tools/fee-calculator/ibbi">IBBI Regulation 47B Liquidation Fee Calculator</a>
+                                </p>
+                            </div>
+                        )}
                         
                         {contentPart2 && <MarkdownRenderer content={contentPart2} />}
                     </div>

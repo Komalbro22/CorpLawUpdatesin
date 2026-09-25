@@ -36,6 +36,12 @@ const hubJsonLd = {
             position: 3,
             url: 'https://www.corplawupdates.in/tools/fee-calculator/msme',
             name: 'MSME Interest Calculator'
+          },
+          {
+            '@type': 'ListItem',
+            position: 4,
+            url: 'https://www.corplawupdates.in/tools/fee-calculator/ibbi',
+            name: 'IBBI Delayed Filing Fee & Liquidation Calculator'
           }
         ]
       }
@@ -92,6 +98,19 @@ const calculators = [
     headerBg: 'from-purple-600 to-purple-800',
   },
   {
+    id: 'ibbi',
+    href: '/tools/fee-calculator/ibbi',
+    icon: '⚖️',
+    label: 'IBBI Liquidation & CIRP Fee Calculator',
+    description: 'Calculate delayed filing fees under Regulation 47B & 40B at ₹500/month + 18% GST (Circular 107/2026), plus Liquidator remuneration slabs.',
+    badge: 'New (Circular 107/2026)',
+    badgeColor: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300',
+    stats: 'Reg 47B, 40B & Reg 4',
+    isLive: true,
+    color: 'border-indigo-200 hover:border-indigo-400 dark:border-slate-800 dark:hover:border-indigo-900/50',
+    headerBg: 'from-indigo-600 to-indigo-900',
+  },
+  {
     id: 'gst',
     href: '#',
     icon: '🧾',
@@ -113,19 +132,25 @@ function HubSEO() {
         Statutory Compliance & Tax Fee Calculators Hub
       </h2>
       <p className="text-slate-600 dark:text-slate-300 text-lg leading-relaxed">
-        Navigating the complex landscape of statutory compliance in India requires careful attention to detail. Whether you are dealing with the Ministry of Corporate Affairs (MCA) for company or LLP filings, calculating delayed payment interest under the MSMED Act, or managing GST late fees with the CBIC, our comprehensive hub provides indicative, up-to-date calculation tools.
+        Navigating the complex landscape of statutory compliance in India requires careful attention to detail. Whether you are dealing with the Ministry of Corporate Affairs (MCA) for company or LLP filings, calculating delayed payment interest under the MSMED Act, computing delayed electronic form fees under IBBI Liquidation and CIRP regulations, or managing GST late fees with the CBIC, our comprehensive hub provides indicative, up-to-date calculation tools.
       </p>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-10 not-prose">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-10 not-prose">
         <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
           <h3 className="font-bold text-slate-800 dark:text-slate-200 mb-2">Corporate Compliance (MCA)</h3>
           <p className="text-sm text-slate-600 dark:text-slate-400">
-            For Companies and LLPs, missing statutory deadlines (like AOC-4, MGT-7, or Form 11) results in compounding penalties. MCA late fees follow distinct multiplier schedules under the Companies Rules and LLP 2nd Amendment Rules. Select our Company or LLP calculator for indicative fee breakdowns.
+            For Companies and LLPs, missing statutory deadlines (like AOC-4, MGT-7, or Form 11) results in compounding penalties. MCA late fees follow distinct multiplier schedules under the Companies Rules and LLP 2nd Amendment Rules.
+          </p>
+        </div>
+        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <h3 className="font-bold text-slate-800 dark:text-slate-200 mb-2">Insolvency & IBBI Rules</h3>
+          <p className="text-sm text-slate-600 dark:text-slate-400">
+            For Insolvency Professionals and Liquidators, missing electronic filing deadlines under Regulation 47B (Liquidation) or Regulation 40B (CIRP) attracts ₹500/month plus 18% GST per Circular No. IBBI/LIQ/107/2026.
           </p>
         </div>
         <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
           <h3 className="font-bold text-slate-800 dark:text-slate-200 mb-2">Taxation & MSME Rules</h3>
           <p className="text-sm text-slate-600 dark:text-slate-400">
-            Beyond MCA, strict rules govern delayed payments to MSMEs (attracting compound interest at 3 times the RBI Bank Rate) and late GST return filings. Use our specialised calculators for indicative liability estimates under the MSMED Act and CGST Act.
+            Beyond MCA and IBBI, strict rules govern delayed payments to MSMEs (attracting compound interest at 3 times the RBI Bank Rate under Section 16) and late GST return filings under the CGST Act.
           </p>
         </div>
       </div>
