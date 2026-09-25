@@ -1,14 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import Script from 'next/script'
-import { CheckCircle2, Download, Mail, Loader2, X, ExternalLink, ShieldCheck, FileText } from 'lucide-react'
-
-declare global {
-  interface Window {
-    adsbygoogle?: Record<string, unknown>[]
-  }
-}
+import { CheckCircle2, Download, Mail, Loader2, X, FileText, Heart, Share2, Copy, Check } from 'lucide-react'
 
 interface DownloadGatewayModalProps {
   isOpen: boolean
@@ -33,6 +26,7 @@ export default function DownloadGatewayModal({
   const [subscribing, setSubscribing] = useState(false)
   const [subscribed, setSubscribed] = useState(false)
   const [subError, setSubError] = useState<string | null>(null)
+  const [copied, setCopied] = useState(false)
   
   const timerRef = useRef<NodeJS.Timeout | null>(null)
   const hasTriggeredRef = useRef(false)
@@ -81,17 +75,6 @@ export default function DownloadGatewayModal({
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isOpen, onClose])
-
-  // Trigger Google AdSense display unit when modal opens
-  useEffect(() => {
-    if (isOpen && typeof window !== 'undefined') {
-      try {
-        ;(window.adsbygoogle = window.adsbygoogle || []).push({})
-      } catch (err) {
-        // Suppress expected duplicate adsbygoogle pushes
-      }
-    }
-  }, [isOpen])
 
   if (!isOpen) return null
 
@@ -209,71 +192,61 @@ export default function DownloadGatewayModal({
             )}
           </div>
 
-          {/* SPONSOR / AD SLOT (Live Ad Unit + Corporate Partner Fallback) */}
-          <div className="p-3.5 rounded-xl border border-amber-500/20 bg-amber-50/50 dark:bg-amber-950/20 relative overflow-hidden">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20">
-                Sponsored / Advertisement
+          {/* Community Support & Friend Share Card */}
+          <div className="p-4 rounded-xl border border-rose-200/80 dark:border-rose-900/40 bg-rose-50/50 dark:bg-rose-950/20 relative overflow-hidden">
+            <div className="flex items-center gap-2 mb-1.5">
+              <span className="p-1 rounded-md bg-rose-100 dark:bg-rose-900/50 text-rose-600 dark:text-rose-400">
+                <Heart className="size-3.5 fill-rose-500 text-rose-500" />
               </span>
-              <span className="text-[11px] text-slate-400 flex items-center gap-1">
-                <ShieldCheck className="size-3 text-emerald-500" /> MCA &amp; IT Act Compliant
+              <span className="text-xs font-bold text-rose-950 dark:text-rose-200">
+                Running 100% Free for India&apos;s Legal &amp; Corporate Community
               </span>
             </div>
 
-            {/* Live Google AdSense Display Slot */}
-            <div className="w-full min-h-[90px] overflow-hidden flex items-center justify-center my-1">
-              <ins
-                className="adsbygoogle"
-                style={{ display: 'block', width: '100%', minHeight: '90px' }}
-                data-ad-client="ca-pub-8404756575471756"
-                data-ad-format="auto"
-                data-full-width-responsive="true"
-              />
-            </div>
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-3">
+              If this free tool or document helped you, <strong>please share CorpLawUpdates with 1 colleague or friend</strong>. Your support motivates us to keep every calculator, template, and statutory update completely free!
+            </p>
 
-            {/* Professional Fallback Card if ad network doesn't fill */}
-            <div className="pt-2 border-t border-amber-500/15">
-              <h4 className="text-xs sm:text-sm font-bold text-navy dark:text-white mb-1">
-                Need to Legally E-Sign or Vet This Document?
-              </h4>
-              <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed mb-2">
-                Ensure 100% legal enforceability under the Indian Contract Act &amp; Information Technology Act with certified digital signatures and partner CS review.
-              </p>
+            <div className="flex items-center gap-2">
               <a
-                href="https://wa.me/919999999999?text=Hi,%20I%20need%20help%20vetting%20a%20corporate%20agreement%20from%20CorpLawUpdates"
+                href="https://api.whatsapp.com/send?text=Hey!%20Check%20out%20CorpLawUpdates.in%20for%20free%20corporate%20law%20calculators,%20MCA%20updates,%20and%20legal%20document%20generators:%20https://www.corplawupdates.in"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700 dark:text-amber-300 hover:text-amber-800 dark:hover:text-amber-200 transition-colors"
+                className="inline-flex items-center gap-1.5 bg-[#25D366] hover:bg-[#20ba5a] text-white font-bold px-3 py-1.5 rounded-lg text-xs transition-colors shadow-2xs cursor-pointer"
               >
-                Consult Partner CS / Legal Counsel <ExternalLink className="size-3" />
+                <Share2 className="size-3.5" /> Share on WhatsApp
               </a>
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText('https://www.corplawupdates.in')
+                  setCopied(true)
+                  setTimeout(() => setCopied(false), 2000)
+                }}
+                className="inline-flex items-center gap-1.5 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 font-semibold px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer"
+              >
+                {copied ? <Check className="size-3.5 text-emerald-600" /> : <Copy className="size-3.5 text-slate-400" />}
+                <span>{copied ? 'Link Copied!' : 'Copy Link'}</span>
+              </button>
             </div>
-
-            {/* AdSense Script loader for modal */}
-            <Script
-              id="adsense-modal-init"
-              strategy="lazyOnload"
-              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8404756575471756"
-              crossOrigin="anonymous"
-            />
           </div>
 
-          {/* EMAIL CAPTURE: 50+ Templates & Friday Digest */}
+          {/* EMAIL CAPTURE: Weekly Free Newsletter */}
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 space-y-3">
             <div className="space-y-1">
               <div className="flex items-center gap-1.5 text-navy dark:text-white font-bold text-sm">
                 <Mail className="size-4 text-amber-500" />
-                <span>Get 50+ Corporate Agreements &amp; Friday Digest</span>
+                <span>Subscribe to Weekly Corporate Law Digest</span>
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                Join 12,000+ CAs, CSs, and Founders receiving our weekly MCA, SEBI &amp; RBI circular summaries + free editable Word (.docx) contracts.
+                Receive curated summaries of latest MCA, SEBI, and RBI notifications every Friday. 100% free. No spam, no advertisements, unsubscribe anytime.
               </p>
             </div>
 
             {subscribed ? (
               <div className="p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 text-xs font-semibold text-emerald-700 dark:text-emerald-300 flex items-center gap-2">
                 <CheckCircle2 className="size-4 shrink-0 text-emerald-500" />
-                <span>You&apos;re subscribed! Check your inbox for the starter bundle &amp; weekly updates.</span>
+                <span>You&apos;re subscribed! Check your inbox for your Friday regulatory digest.</span>
               </div>
             ) : (
               <form onSubmit={handleSubscribe} className="space-y-2">
@@ -289,14 +262,14 @@ export default function DownloadGatewayModal({
                   <button
                     type="submit"
                     disabled={subscribing}
-                    className="px-4 py-2 bg-navy hover:bg-slate-800 dark:bg-amber-500 dark:hover:bg-amber-600 text-white dark:text-navy text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 shrink-0 disabled:opacity-50"
+                    className="px-4 py-2 bg-navy hover:bg-slate-800 dark:bg-amber-500 dark:hover:bg-amber-600 text-white dark:text-navy text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 shrink-0 disabled:opacity-50 cursor-pointer"
                   >
                     {subscribing ? (
                       <>
                         <Loader2 className="size-3 animate-spin" /> Subscribing...
                       </>
                     ) : (
-                      'Get Free Bundle'
+                      'Subscribe Free'
                     )}
                   </button>
                 </div>
@@ -304,7 +277,7 @@ export default function DownloadGatewayModal({
                   <p className="text-[11px] text-rose-500 font-medium">{subError}</p>
                 )}
                 <p className="text-[10px] text-slate-400 dark:text-slate-500">
-                  🔒 100% Free. No spam. One-click unsubscribe anytime.
+                  🔒 100% Free. No spam. No promotions. One-click unsubscribe anytime.
                 </p>
               </form>
             )}

@@ -3,7 +3,7 @@
 import { useServerInsertedHTML } from 'next/navigation'
 import { themeScript } from '@/lib/theme-script'
 
-// Suppress React 19 false-positive warnings for theme scripts and AdSense third-party injections in development
+// Suppress React 19 false-positive warnings for theme scripts in development
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
     const origError = console.error
     console.error = (...args: unknown[]) => {

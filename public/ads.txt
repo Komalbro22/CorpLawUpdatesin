@@ -1,6 +1,3 @@
-# Google AdSense
-google.com, pub-8404756575471756, DIRECT, f08c47fec0942fa0
-
 # SOVRN
 lijit.com, 614782, DIRECT, fafdf38b16bf6b2b #SOVRN
 lijit.com, 614782-eb, DIRECT, fafdf38b16bf6b2b #SOVRN

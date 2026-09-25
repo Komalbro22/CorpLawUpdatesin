@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Search } from 'lucide-react'
-import GlossaryAdBanner from '@/components/GlossaryAdBanner'
 
 type GlossaryTerm = {
   id: string
@@ -129,9 +128,6 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
             })}
           </div>
         )}
-
-        {/* Professional Limited Ad / Partner Banner */}
-        <GlossaryAdBanner />
 
         {/* Terms List */}
         <div className="space-y-12">

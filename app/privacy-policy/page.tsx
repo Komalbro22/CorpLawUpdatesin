@@ -160,15 +160,10 @@ export default function PrivacyPolicyPage() {
                                     <td className="p-3">IP address, page visits, performance metrics</td>
                                     <td className="p-3">Website hosting and analytics</td>
                                 </tr>
-                                <tr className="border-b border-slate-100 dark:border-slate-800/60">
+                                <tr>
                                     <td className="p-3 font-bold">Google (GA4 + SWG)</td>
                                     <td className="p-3">Page visits, interactions (if GA4 enabled)</td>
                                     <td className="p-3">Traffic analytics and News integration</td>
-                                </tr>
-                                <tr>
-                                    <td className="p-3 font-bold">Google AdSense</td>
-                                    <td className="p-3">Advertising identifiers, cookies, interaction telemetry</td>
-                                    <td className="p-3">Contextual and personalized advertising delivery (ca-pub-8404756575471756)</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -178,9 +173,9 @@ export default function PrivacyPolicyPage() {
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
 
                 <section>
-                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">5. Cookies & Google AdSense Advertising Disclosures</h2>
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">5. Cookies & Analytics Policy</h2>
                     <p className="text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">
-                        CorpLawUpdates.in uses cookies, device identifiers, and similar technologies to enhance user navigation, measure readership, and deliver relevant advertisements in compliance with the Digital Personal Data Protection (DPDP) Act, 2023 and Google Publisher Policies.
+                        CorpLawUpdates.in uses essential cookies, device storage, and privacy-respecting analytics to enhance user navigation and measure platform readership in compliance with the Digital Personal Data Protection (DPDP) Act, 2023.
                     </p>
 
                     <div className="space-y-6 text-slate-600 dark:text-slate-400">
@@ -189,45 +184,30 @@ export default function PrivacyPolicyPage() {
                             <ul className="list-disc list-inside space-y-1.5 text-slate-600 dark:text-slate-400">
                                 <li><strong>Strictly Necessary Cookies:</strong> Essential for website navigation, security verification, theme persistence (light/dark mode), and administrative sessions.</li>
                                 <li><strong>Analytics & Performance Cookies:</strong> Used anonymously via Vercel Analytics and Google Analytics (GA4) to analyze traffic density, top performing regulatory circulars, and Core Web Vitals.</li>
-                                <li><strong>Advertising & Targeting Cookies:</strong> Deployed by Google AdSense and third-party advertising partners to deliver contextually relevant advertisements based on prior visits to this and other websites.</li>
-                            </ul>
-                        </div>
-
-                        <div className="p-5 rounded-2xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200/80 dark:border-amber-800/50">
-                            <h3 className="font-bold text-amber-950 dark:text-amber-300 mb-2 text-sm uppercase tracking-wide">B. Mandatory Google AdSense & DoubleClick Disclosure</h3>
-                            <p className="leading-relaxed mb-3 text-slate-700 dark:text-slate-300 text-sm">
-                                As a publisher participating in the Google AdSense network (Publisher ID: <code className="bg-amber-100 dark:bg-amber-900/60 px-1.5 py-0.5 rounded text-amber-900 dark:text-amber-200 font-mono text-xs">ca-pub-8404756575471756</code>), we formally state the following:
-                            </p>
-                            <ul className="list-disc list-inside space-y-2 text-slate-700 dark:text-slate-300 text-sm">
-                                <li>Third-party vendors, including Google, use cookies to serve ads based on a user&apos;s prior visits to your website or other websites.</li>
-                                <li>Google&apos;s use of advertising cookies enables it and its partners to serve ads to our users based on their visits to our site and/or other sites on the Internet.</li>
-                                <li>Users may opt out of personalized advertising at any time by visiting <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-400 font-bold underline hover:text-amber-800">Google Ads Settings</a>.</li>
-                                <li>Alternatively, you can opt out of third-party vendors&apos; use of cookies for personalized advertising by visiting the Network Advertising Initiative at <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-400 font-bold underline hover:text-amber-800">www.aboutads.info</a> or <a href="https://www.youronlinechoices.com/" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-400 font-bold underline hover:text-amber-800">Your Online Choices</a>.</li>
-                                <li>To learn more about how Google collects and manages data when you use our partner sites or apps, review <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" className="text-amber-700 dark:text-amber-400 font-bold underline hover:text-amber-800">How Google uses information from sites or apps that use our services</a>.</li>
                             </ul>
                         </div>
 
                         <div>
-                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">C. Managing Your Browser Cookie Settings</h3>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">B. Managing Your Browser Cookie Settings</h3>
                             <p className="leading-relaxed text-sm">
-                                You can control, restrict, or wipe cookies through your browser settings (Chrome, Safari, Firefox, Edge). Choosing to block advertising cookies will not prevent ads from appearing; rather, ads served will be generic and non-personalized.
+                                You can control, restrict, or clear cookies through your browser settings (Chrome, Safari, Firefox, Edge).
                             </p>
                         </div>
 
                         <div>
-                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">D. European Economic Area (EEA), UK & Swiss Visitors (GDPR & IAB TCF v2.2)</h3>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">C. European Economic Area (EEA), UK & Swiss Visitors (GDPR)</h3>
                             <p className="leading-relaxed text-sm">
-                                For visitors accessing the site from the European Economic Area (EEA), the United Kingdom, or Switzerland, advertising and measurement cookies are managed in compliance with the General Data Protection Regulation (GDPR), UK GDPR, and the IAB Europe Transparency and Consent Framework (TCF v2.2). Consent for non-essential cookies and personalized advertising is collected and signaled through Google-certified consent management mechanisms. You may review or modify your consent choices at any time.
+                                For visitors accessing the site from the European Economic Area (EEA), the United Kingdom, or Switzerland, measurement cookies are managed in compliance with the General Data Protection Regulation (GDPR) and UK GDPR. You may review or modify your consent choices at any time.
                             </p>
                         </div>
 
                         <div>
-                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">E. United States State Privacy Disclosures (CPRA, CCPA, CPA, VCDPA)</h3>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">D. United States State Privacy Disclosures (CPRA, CCPA, CPA, VCDPA)</h3>
                             <p className="leading-relaxed text-sm mb-2">
                                 Residents of California (California Consumer Privacy Act as amended by the CPRA), Colorado, Virginia, Connecticut, Utah, and other US states with comprehensive privacy legislation have specific rights regarding their personal information:
                             </p>
                             <ul className="list-disc list-inside space-y-1.5 text-sm text-slate-600 dark:text-slate-400">
-                                <li><strong>Do Not Sell or Share My Personal Information:</strong> We do not sell your personal information for monetary consideration. Third-party advertising partners (such as Google) may collect persistent identifiers, cookies, and browsing telemetry to deliver cross-context behavioral advertising. You can opt out of personalized advertising by visiting <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 underline">Google Ads Settings</a> or the <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 underline">Digital Advertising Alliance Opt-Out Tool</a>.</li>
+                                <li><strong>Do Not Sell or Share My Personal Information:</strong> We do not sell or share your personal information for monetary consideration or cross-context behavioral advertising.</li>
                                 <li><strong>Right to Know & Access:</strong> You have the right to request disclosure of the categories and specific pieces of personal information we have collected about you over the past 12 months.</li>
                                 <li><strong>Right to Delete:</strong> You have the right to request deletion of your personal information, subject to statutory exceptions.</li>
                                 <li><strong>Non-Discrimination:</strong> We will never discriminate against you, deny services, or alter pricing because you exercised your statutory privacy rights.</li>
