@@ -16,7 +16,6 @@ import TrackingScripts from '@/components/TrackingScripts'
 import ConsentGatedAnalytics from '@/components/ConsentGatedAnalytics'
 import CookieConsentBanner from '@/components/CookieConsentBanner'
 import AdSenseScript from '@/components/AdSenseScript'
-import MonetagScript from '@/components/MonetagScript'
 
 import WebMCPRegistry from '@/components/WebMCPRegistry'
 
@@ -118,6 +117,12 @@ export default async function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="monetag" content="350f6f6cece893230af559a511e04841" />
+        {/* Monetag In-Page Push Golden Tag */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(s){s.dataset.zone='11889835',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`
+          }}
+        />
         <JsonLd id="schema-org" data={{
           '@context': 'https://schema.org',
           '@type': 'Organization',
@@ -172,7 +177,6 @@ export default async function RootLayout({
           <HideOnAdmin>
             <TrackingScripts />
             <AdSenseScript />
-            <MonetagScript />
           </HideOnAdmin>
           <a
             href="#main-content"
