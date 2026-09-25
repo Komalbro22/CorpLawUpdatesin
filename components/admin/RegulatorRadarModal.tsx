@@ -127,7 +127,13 @@ export default function RegulatorRadarModal({ isOpen, onClose }: Props) {
 
       if (selectedRegulator === 'ALL') return true
       if (selectedRegulator === 'LABOUR') {
-        return item.regulator === 'LABOUR' || item.regulator === 'EPFO' || item.regulator === 'ESIC'
+        return item.regulator === 'LABOUR' || item.regulator === 'EPFO' || item.regulator === 'ESIC' || (item.regulator === 'PIB' && item.category === 'LABOUR')
+      }
+      if (selectedRegulator === 'MCA') {
+        return item.regulator === 'MCA' || (item.regulator === 'PIB' && item.category === 'MCA')
+      }
+      if (selectedRegulator === 'PIB') {
+        return item.regulator === 'PIB'
       }
       return item.regulator === selectedRegulator
     })
@@ -269,6 +275,7 @@ export default function RegulatorRadarModal({ isOpen, onClose }: Props) {
               { key: 'IBBI', label: 'IBBI' },
               { key: 'NCLT', label: 'NCLT Orders' },
               { key: 'NCLAT', label: 'NCLAT Appeals' },
+              { key: 'PIB', label: 'PIB Releases' },
               { key: 'TAX', label: 'Tax' }
             ].map((tab) => (
               <button

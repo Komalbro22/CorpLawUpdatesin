@@ -167,8 +167,8 @@ function fetchHttpsText(
           let data = ''
           res.on('data', (chunk) => {
             data += chunk
-            // Cap body at 250KB to prevent memory exhaustion and long downloads
-            if (data.length > 250000) {
+            // Cap body at 450KB to prevent memory exhaustion and long downloads
+            if (data.length > 450000) {
               req.destroy()
               resolve(data)
             }
@@ -1016,6 +1016,208 @@ export async function fetchIfsca(maxHours = 72): Promise<RegulatorUpdate[]> {
     }
   } catch (err) {
     console.warn('[Radar] IFSCA fetch failed:', err)
+  }
+
+  return updates
+}
+
+/* =========================================================================
+   11. PIB (Press Information Bureau - Government of India Releases)
+   Monitors https://www.pib.gov.in/allRel.aspx?reg=48&lang=1 for official
+   policy announcements from key economic, regulatory & corporate ministries:
+   - Ministry of Corporate Affairs (MCA)
+   - Ministry of Finance (FinMin, CBDT, CBIC, DEA, DFS)
+   - Ministry of Commerce & Industry (DPIIT, Foreign Trade, Patents)
+   - Ministry of Labour & Employment (Labour Codes, EPFO, ESIC)
+   - Ministry of Micro, Small and Medium Enterprises (MSME)
+   - Ministry of Law and Justice (Tribunals, Courts, Commercial Law)
+   - Cabinet Committee on Economic Affairs (CCEA) & Union Cabinet
+   ========================================================================= */
+export async function fetchPib(maxHours = 72): Promise<RegulatorUpdate[]> {
+  const updates: RegulatorUpdate[] = []
+
+  try {
+    const url = 'https://www.pib.gov.in/allRel.aspx?reg=48&lang=1'
+    const html = await fetchHttpsText(url, {}, 3500)
+    if (!html || html.length < 500) return updates
+
+    const parsePibHtml = (content: string, defaultDate?: string): RegulatorUpdate[] => {
+      const items: RegulatorUpdate[] = []
+      
+      // Extract selected date from select dropdown if present
+      let isoDate = defaultDate || new Date().toISOString().slice(0, 10)
+      let rawDateStr = ''
+      const dayMatch = content.match(/ddlday["'][^>]*>[\s\S]*?<option[^>]*selected[^>]*value=["'](\d+)["']/i)
+      const monthMatch = content.match(/ddlMonth["'][^>]*>[\s\S]*?<option[^>]*selected[^>]*value=["'](\d+)["']/i)
+      const yearMatch = content.match(/ddlYear["'][^>]*>[\s\S]*?<option[^>]*selected[^>]*value=["'](\d+)["']/i)
+
+      if (dayMatch && monthMatch && yearMatch) {
+        const y = parseInt(yearMatch[1], 10)
+        const m = parseInt(monthMatch[1], 10)
+        const d = parseInt(dayMatch[1], 10)
+        isoDate = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        rawDateStr = `${d} ${months[m - 1] || ''} ${y}`
+      }
+
+      const parsedDate = parseIndianDate(rawDateStr || isoDate)
+      if (parsedDate && !isWithinHours(parsedDate, maxHours)) {
+        return items
+      }
+
+      // Parse each ministry section: <h3>Ministry Name</h3><ul class='num'>...</ul>
+      const ministryBlockRegex = /<h3[^>]*>([^<]+)<\/h3>\s*<ul class=['"]num['"]>([\s\S]*?)<\/ul>/gi
+      let mb: RegExpExecArray | null
+
+      while ((mb = ministryBlockRegex.exec(content)) !== null) {
+        const ministryName = cleanHtmlText(mb[1])
+        const releasesHtml = mb[2]
+
+        const mLower = ministryName.toLowerCase()
+        const isMca = mLower.includes('corporate')
+        const isFin = mLower.includes('finance') || mLower.includes('financial')
+        const isLabour = mLower.includes('labour') || mLower.includes('employment')
+        const isCommerce = mLower.includes('commerce') || mLower.includes('industry') || mLower.includes('dpiit')
+        const isMsme = mLower.includes('msme') || mLower.includes('medium enterprises')
+        const isLaw = mLower.includes('law and justice') || mLower.includes('law & justice')
+        const isCabinet = mLower.includes('cabinet')
+
+        if (!isMca && !isFin && !isLabour && !isCommerce && !isMsme && !isLaw && !isCabinet) {
+          continue
+        }
+
+        const releaseRegex = /<a[^>]*href=['"]([^'"]+)['"][^>]*>([\s\S]*?)<\/a>/gi
+        let r: RegExpExecArray | null
+        while ((r = releaseRegex.exec(releasesHtml)) !== null) {
+          const rawHref = r[1]
+          const title = cleanHtmlText(r[2])
+          if (!title || title.length < 5) continue
+
+          const pridMatch = rawHref.match(/PRID=(\d+)/i)
+          const prid = pridMatch ? pridMatch[1] : ''
+
+          let sourceUrl = rawHref
+          if (!sourceUrl.startsWith('http')) {
+            sourceUrl = `https://www.pib.gov.in/${sourceUrl.replace(/^\/+/, '')}`
+          }
+
+          let category: Category = 'MCA'
+          let label = 'PIB (Govt Release)'
+          const circularNo = prid ? `PIB PRID ${prid}` : 'PIB Press Release'
+
+          if (isMca) {
+            category = 'MCA'
+            label = 'PIB (Corporate Affairs)'
+          } else if (isFin) {
+            const tLower = title.toLowerCase()
+            if (/tax|gst|customs|cbdt|cbic|revenue/.test(tLower)) {
+              category = 'MCA'
+              label = 'PIB (Finance / Tax)'
+            } else if (/fema|fdi|forex|odi|cross-border/.test(tLower)) {
+              category = 'FEMA'
+              label = 'PIB (Finance / FEMA)'
+            } else {
+              category = 'RBI'
+              label = 'PIB (Finance Ministry)'
+            }
+          } else if (isLabour) {
+            category = 'LABOUR'
+            label = 'PIB (Labour Ministry)'
+          } else if (isCommerce) {
+            category = 'MCA'
+            label = 'PIB (Commerce & Industry)'
+          } else if (isMsme) {
+            category = 'MCA'
+            label = 'PIB (MSME Ministry)'
+          } else if (isLaw) {
+            category = 'NCLT'
+            label = 'PIB (Law & Justice)'
+          } else if (isCabinet) {
+            category = 'MCA'
+            label = 'PIB (Union Cabinet)'
+          }
+
+          items.push({
+            id: createHash('PIB', isoDate, prid ? `prid${prid}_${title}` : title),
+            regulator: 'PIB',
+            regulatorLabel: label,
+            category,
+            title,
+            date: isoDate,
+            rawDateStr: rawDateStr || isoDate,
+            sourceUrl,
+            circularNo,
+            snippet: `${ministryName}: ${title}`
+          })
+        }
+      }
+
+      return items
+    }
+
+    // 1. Process today's releases
+    const todayItems = parsePibHtml(html)
+    updates.push(...todayItems)
+
+    // 2. If lookback >= 48 hours, fetch yesterday via ASP.NET postback
+    if (maxHours >= 48) {
+      const viewstate = html.match(/id="__VIEWSTATE"\s+value="([^"]+)"/)?.[1]
+      const viewstategen = html.match(/id="__VIEWSTATEGENERATOR"\s+value="([^"]+)"/)?.[1]
+      const eventval = html.match(/id="__EVENTVALIDATION"\s+value="([^"]+)"/)?.[1]
+
+      if (viewstate && eventval) {
+        const yesterday = new Date(Date.now() - 86400000)
+        const yDay = yesterday.getDate()
+        const yMonth = yesterday.getMonth() + 1
+        const yYear = yesterday.getFullYear()
+
+        const postBody = new URLSearchParams({
+          '__EVENTTARGET': 'ctl00$ContentPlaceHolder1$ddlday',
+          '__EVENTARGUMENT': '',
+          '__LASTFOCUS': '',
+          '__VIEWSTATE': viewstate,
+          '__VIEWSTATEGENERATOR': viewstategen || '',
+          '__EVENTVALIDATION': eventval,
+          'ctl00$Bar1$ddlregion': '48',
+          'ctl00$Bar1$ddlLang': '1',
+          'ctl00$ContentPlaceHolder1$ddlMinistry': '0',
+          'ctl00$ContentPlaceHolder1$ddlday': String(yDay),
+          'ctl00$ContentPlaceHolder1$ddlMonth': String(yMonth),
+          'ctl00$ContentPlaceHolder1$ddlYear': String(yYear),
+        }).toString()
+
+        const yesterdayHtml = await new Promise<string>((resolve) => {
+          const req = https.request('https://www.pib.gov.in/allRel.aspx?reg=48&lang=1', {
+            method: 'POST',
+            rejectUnauthorized: false,
+            headers: {
+              ...BROWSER_HEADERS,
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Content-Length': Buffer.byteLength(postBody),
+            },
+            timeout: 2500
+          }, (res) => {
+            let data = ''
+            res.on('data', chunk => {
+              data += chunk
+              if (data.length > 450000) { req.destroy(); resolve(data) }
+            })
+            res.on('end', () => resolve(data))
+          })
+          req.on('error', () => resolve(''))
+          req.on('timeout', () => { req.destroy(); resolve('') })
+          req.write(postBody)
+          req.end()
+        })
+
+        if (yesterdayHtml && yesterdayHtml.length > 500) {
+          const yesterdayItems = parsePibHtml(yesterdayHtml)
+          updates.push(...yesterdayItems)
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('[Radar] PIB fetch failed:', err)
   }
 
   return updates

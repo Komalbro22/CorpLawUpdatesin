@@ -9,7 +9,8 @@ import {
   fetchTax,
   fetchNclt,
   fetchNclat,
-  fetchIfsca
+  fetchIfsca,
+  fetchPib
 } from './sources'
 import { RadarResponse, RegulatorUpdate, SourceCheckResult, RegulatorKey } from './types'
 
@@ -56,6 +57,7 @@ export async function runRegulatorRadar(
     { regulator: 'IBBI', label: 'IBBI Circulars', fn: () => fetchIbbi(filterHours) },
     { regulator: 'IFSCA', label: 'IFSCA (GIFT City)', fn: () => fetchIfsca(filterHours) },
     { regulator: 'TAX', label: 'Income Tax / GST', fn: () => fetchTax(filterHours) },
+    { regulator: 'PIB', label: 'PIB (Govt Releases)', fn: () => fetchPib(filterHours) },
   ]
 
   // Filter tasks if enabledRegulators list is provided

@@ -41,6 +41,7 @@ const ALL_REGULATORS: { key: RegulatorKey; label: string; desc: string; defaultO
   { key: 'IBBI', label: 'IBBI', desc: 'Insolvency & Bankruptcy Circulars', defaultOn: true },
   { key: 'NCLT', label: 'NCLT Orders', desc: 'National Company Law Tribunal Benches & Orders', defaultOn: true },
   { key: 'NCLAT', label: 'NCLAT Appeals', desc: 'Company Law & IBC Appellate Judgments', defaultOn: true },
+  { key: 'PIB', label: 'PIB Releases', desc: 'Press Information Bureau — MCA, FinMin, DPIIT & Cabinet', defaultOn: true },
   { key: 'TAX', label: 'Tax (CBDT/CBIC)', desc: 'Income Tax & GST Notifications', defaultOn: false },
 ]
 
@@ -202,6 +203,7 @@ export default function RegulatorRadarPage() {
     if (enabledRegulators.includes(reg as any)) return true
     if (enabledRegulators.includes('LABOUR') && (reg === 'EPFO' || reg === 'ESIC')) return true
     if (enabledRegulators.includes('RBI') && reg === 'FEMA') return true
+    if (enabledRegulators.includes('PIB') && reg === 'PIB') return true
     return false
   }, [enabledRegulators])
 
@@ -217,7 +219,11 @@ export default function RegulatorRadarPage() {
 
       if (selectedRegulator !== 'ALL') {
         if (selectedRegulator === 'LABOUR') {
-          if (item.regulator !== 'LABOUR' && item.regulator !== 'EPFO' && item.regulator !== 'ESIC') return false
+          if (item.regulator !== 'LABOUR' && item.regulator !== 'EPFO' && item.regulator !== 'ESIC' && !(item.regulator === 'PIB' && item.category === 'LABOUR')) return false
+        } else if (selectedRegulator === 'MCA') {
+          if (item.regulator !== 'MCA' && !(item.regulator === 'PIB' && item.category === 'MCA')) return false
+        } else if (selectedRegulator === 'PIB') {
+          if (item.regulator !== 'PIB') return false
         } else if (item.regulator !== selectedRegulator) {
           return false
         }
@@ -243,7 +249,7 @@ export default function RegulatorRadarPage() {
 
   // Count by regulator for badges
   const regulatorCounts = useMemo(() => {
-    const counts: Record<string, number> = { ALL: 0, FEMA: 0, LABOUR: 0, MCA: 0, SEBI: 0, RBI: 0, CCI: 0, IFSCA: 0, IBBI: 0, NCLT: 0, NCLAT: 0, TAX: 0 }
+    const counts: Record<string, number> = { ALL: 0, FEMA: 0, LABOUR: 0, MCA: 0, SEBI: 0, RBI: 0, CCI: 0, IFSCA: 0, IBBI: 0, NCLT: 0, NCLAT: 0, TAX: 0, PIB: 0 }
     if (!data?.items) return counts
 
     data.items.forEach((item) => {
@@ -262,6 +268,11 @@ export default function RegulatorRadarPage() {
         else if (item.regulator === 'NCLT') counts.NCLT++
         else if (item.regulator === 'NCLAT') counts.NCLAT++
         else if (item.regulator === 'TAX') counts.TAX++
+        if (item.regulator === 'PIB') {
+          counts.PIB++
+          if (item.category === 'MCA') counts.MCA++
+          else if (item.category === 'LABOUR') counts.LABOUR++
+        }
       }
     })
     return counts
