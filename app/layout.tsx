@@ -16,6 +16,7 @@ import TrackingScripts from '@/components/TrackingScripts'
 import ConsentGatedAnalytics from '@/components/ConsentGatedAnalytics'
 import CookieConsentBanner from '@/components/CookieConsentBanner'
 import AdSenseScript from '@/components/AdSenseScript'
+import MonetagScript from '@/components/MonetagScript'
 
 import WebMCPRegistry from '@/components/WebMCPRegistry'
 
@@ -171,6 +172,7 @@ export default async function RootLayout({
           <HideOnAdmin>
             <TrackingScripts />
             <AdSenseScript />
+            <MonetagScript />
           </HideOnAdmin>
           <a
             href="#main-content"
@@ -204,18 +206,7 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               if ('serviceWorker' in navigator) {
-                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                  navigator.serviceWorker.getRegistrations().then(function(regs) {
-                    for (var r of regs) { r.unregister(); }
-                  });
-                  if ('caches' in window) {
-                    caches.keys().then(function(keys) {
-                      for (var k of keys) { caches.delete(k); }
-                    });
-                  }
-                } else {
-                  navigator.serviceWorker.register('/sw.js').catch(function() {});
-                }
+                navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function() {});
               }
             `,
           }}

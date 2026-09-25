@@ -48,18 +48,21 @@ export default function NotificationBell() {
     setPermission(currentPerm)
 
     // Ensure Service Worker is registered
-    navigator.serviceWorker.register('/sw.js').then((reg) => {
-      reg.pushManager.getSubscription().then((sub) => {
-        if (sub) {
-          setIsSubscribed(true)
-        } else if (currentPerm === 'granted') {
-          // Permission already granted in Chrome settings — auto-register token to Supabase
-          handleSubscribe()
-        }
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js', { scope: '/' }).then(() => {
+        navigator.serviceWorker.ready.then((readyReg) => {
+          if (readyReg.active) {
+            readyReg.pushManager.getSubscription().then((sub) => {
+              if (sub) {
+                setIsSubscribed(true)
+              }
+            }).catch(() => {})
+          }
+        }).catch(() => {})
+      }).catch((err) => {
+        console.warn('Service Worker registration skipped:', err)
       })
-    }).catch((err) => {
-      console.error('Service Worker registration error:', err)
-    })
+    }
   }, [])
 
 
@@ -87,20 +90,55 @@ export default function NotificationBell() {
       }
 
       if (resPermission === 'granted') {
-        let registration = await navigator.serviceWorker.getRegistration('/sw.js')
+        let registration = await navigator.serviceWorker.getRegistration('/')
         if (!registration) {
-          registration = await navigator.serviceWorker.register('/sw.js')
+          registration = await navigator.serviceWorker.register('/sw.js', { scope: '/' })
         }
-        await navigator.serviceWorker.ready
+
+        const readyReg = await navigator.serviceWorker.ready
+        const targetReg = readyReg.active ? readyReg : registration
+
+        if (!targetReg.active) {
+          // Wait for service worker to activate
+          await new Promise<void>((resolve) => {
+            const worker = targetReg.installing || targetReg.waiting || readyReg.installing
+            if (worker) {
+              worker.addEventListener('statechange', () => {
+                if (worker.state === 'activated' || readyReg.active) resolve()
+              })
+              setTimeout(resolve, 1500)
+            } else {
+              resolve()
+            }
+          })
+        }
+
+        const pushReg = readyReg.active ? readyReg : targetReg
+        if (!pushReg.active) {
+          console.warn('[NotificationBell] Service worker not yet active for push.')
+          setLoading(false)
+          return
+        }
 
         const applicationServerKey = urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
 
-        let subscription = await registration.pushManager.getSubscription()
+        let subscription = await pushReg.pushManager.getSubscription().catch(() => null)
+        if (!subscription && pushReg.active) {
+          try {
+            subscription = await pushReg.pushManager.subscribe({
+              userVisibleOnly: true,
+              applicationServerKey,
+            })
+          } catch (subErr) {
+            console.warn('[NotificationBell] Push subscription deferred or aborted:', subErr)
+            setLoading(false)
+            return
+          }
+        }
+
         if (!subscription) {
-          subscription = await registration.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey,
-          })
+          setLoading(false)
+          return
         }
 
         const subJson = subscription.toJSON()
@@ -121,7 +159,7 @@ export default function NotificationBell() {
         }
       }
     } catch (err) {
-      console.error('Failed to subscribe to Web Push:', err)
+      console.warn('[NotificationBell] Handled push subscription error:', err)
     } finally {
       setLoading(false)
     }
