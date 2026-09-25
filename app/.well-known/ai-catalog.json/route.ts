@@ -16,7 +16,7 @@ export function getAICatalog() {
       {
         identifier: 'urn:air:corplawupdates.in:mcp:server',
         displayName: 'CorpLawUpdates.in WebMCP Server',
-        type: 'application/mcp-server+json',
+        type: 'application/mcp-server-card+json',
         url: 'https://www.corplawupdates.in/.well-known/webmcp',
         description: 'Statutory corporate law tools and intelligence WebMCP server covering MCA, SEBI, RBI, NCLT, and IBC.',
         capabilities: [
@@ -39,7 +39,7 @@ export function getAICatalog() {
       {
         identifier: 'urn:air:corplawupdates.in:tool:roc-fee-calculator',
         displayName: 'MCA Company ROC Fee & Section 454 Penalty Calculator',
-        type: 'application/json',
+        type: 'application/agent-card+json',
         url: 'https://www.corplawupdates.in/api/calculators/webmcp',
         description:
           'Statutory computation of MCA late filing additional fees and Section 454 adjudication penalty exposure for Indian company forms.',
@@ -56,7 +56,7 @@ export function getAICatalog() {
       {
         identifier: 'urn:air:corplawupdates.in:tool:mgt-7-fee-calculator',
         displayName: 'MGT 7 Annual Return Fee & Late Penalty Calculator',
-        type: 'text/html',
+        type: 'application/agent-card+json',
         url: 'https://www.corplawupdates.in/tools/fee-calculator/companies/mgt-7',
         description:
           'Authoritative calculator for Form MGT-7 and MGT-7A Annual Return: Table A normal base fees (₹200–₹600), ₹100/day uncapped delay fee, 60-day AGM statutory deadline, Form MGT-8 PCS certification applicability, and Section 92(5) ROC penalties.',
@@ -74,7 +74,7 @@ export function getAICatalog() {
       {
         identifier: 'urn:air:corplawupdates.in:tool:aoc-4-fee-calculator',
         displayName: 'AOC-4 Fee Calculator — Financial Statements Late Filing Fees',
-        type: 'text/html',
+        type: 'application/agent-card+json',
         url: 'https://www.corplawupdates.in/tools/fee-calculator/companies/aoc-4',
         description:
           'Statutory calculator for Form AOC-4, AOC-4 CFS, and AOC-4 XBRL: Normal base fees (₹200–₹600), statutory ₹100/day delay fees under Section 403, 30-day AGM timeline, and Section 137 ROC non-filing penalties.',
@@ -92,7 +92,7 @@ export function getAICatalog() {
       {
         identifier: 'urn:air:corplawupdates.in:tool:dir-3-kyc-fee-calculator',
         displayName: 'DIR-3 KYC Fee Calculator — Director KYC ₹5,000 Late Fee',
-        type: 'text/html',
+        type: 'application/agent-card+json',
         url: 'https://www.corplawupdates.in/tools/fee-calculator/companies/dir-3-kyc',
         description:
           'Statutory calculator for Director KYC: Nil fee on or before September 30, flat ₹5,000 statutory delay fee for DIN reactivation under Rule 12A, and DSC vs OTP web filing requirements.',
@@ -110,7 +110,7 @@ export function getAICatalog() {
       {
         identifier: 'urn:air:corplawupdates.in:tool:adt-1-fee-calculator',
         displayName: 'ADT-1 Fee Calculator — Auditor Appointment ROC Filing Fee',
-        type: 'text/html',
+        type: 'application/agent-card+json',
         url: 'https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1',
         description:
           'Statutory fee calculator for Form ADT-1 auditor appointment: Table A normal fees (₹200–₹600), 2x to 18x stepped delay fees under Section 403, 15-day AGM deadline, and Section 147 auditor penalty exposure.',
@@ -128,7 +128,7 @@ export function getAICatalog() {
       {
         identifier: 'urn:air:corplawupdates.in:tool:chg-1-fee-calculator',
         displayName: 'CHG-1 Fee Calculator — Charge Creation & Modification Ad Valorem Fees',
-        type: 'text/html',
+        type: 'application/agent-card+json',
         url: 'https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1',
         description:
           'Authoritative calculator for Form CHG-1 charge registration: Normal fees, Chapter VI 3-tier timeline (30d / 60d / 120d), ad valorem additional fees (0.025%–0.05% of loan amount, cap ₹5 Lakh), and Section 86 prosecution.',
@@ -146,7 +146,7 @@ export function getAICatalog() {
       {
         identifier: 'urn:air:corplawupdates.in:tool:dir-12-fee-calculator',
         displayName: 'DIR-12 Fee Calculator — Director Changes Late Filing Fees',
-        type: 'text/html',
+        type: 'application/agent-card+json',
         url: 'https://www.corplawupdates.in/tools/fee-calculator/companies/dir-12',
         description:
           'Statutory fee calculator for Form DIR-12 appointment, resignation, or vacation of directors and KMP: Table A normal fees, 2x to 18x stepped delay fees under Section 403, and 30-day statutory timeline.',
@@ -164,7 +164,7 @@ export function getAICatalog() {
       {
         identifier: 'urn:air:corplawupdates.in:tool:pas-3-fee-calculator',
         displayName: 'PAS-3 Fee Calculator — Return of Allotment Late Fees & Penalties',
-        type: 'text/html',
+        type: 'application/agent-card+json',
         url: 'https://www.corplawupdates.in/tools/fee-calculator/companies/pas-3',
         description:
           'Statutory calculator for Form PAS-3 return of allotment of securities: Table A normal fees, 2x to 18x stepped delay fees, 15-day statutory allotment deadline, and Section 42(9) ₹1,000/day penalties (max ₹25 Lakh).',
@@ -182,7 +182,7 @@ export function getAICatalog() {
       {
         identifier: 'urn:air:corplawupdates.in:tool:pas-6-fee-calculator',
         displayName: 'PAS-6 Fee Calculator — Share Capital Demat Reconciliation',
-        type: 'text/html',
+        type: 'application/agent-card+json',
         url: 'https://www.corplawupdates.in/tools/fee-calculator/companies/pas-6',
         description:
           'Statutory compliance calculator for Form PAS-6 demat reconciliation of share capital: Half-yearly deadlines (May 30 & Nov 29), Rule 9A/9B applicability, PCS audit certification, and Section 450 penalties.',
@@ -200,7 +200,7 @@ export function getAICatalog() {
       {
         identifier: 'urn:air:corplawupdates.in:tool:spice-plus-fee-calculator',
         displayName: 'SPICe+ Fee Calculator — Company Incorporation & Stamp Duty',
-        type: 'text/html',
+        type: 'application/agent-card+json',
         url: 'https://www.corplawupdates.in/tools/fee-calculator/companies/spice-plus',
         description:
           'Statutory fee calculator for Form SPICe+ Part B incorporation: Zero MCA filing fees up to ₹15 Lakh capital, state-wise MoA/AoA electronic stamp duty rates, PAN/TAN fees, and EPFO/ESIC/GST integration.',
@@ -218,7 +218,7 @@ export function getAICatalog() {
       {
         identifier: 'urn:air:corplawupdates.in:tool:dpt-3-fee-calculator',
         displayName: 'DPT-3 Fee Calculator — Return of Deposits Late Filing Fees',
-        type: 'text/html',
+        type: 'application/agent-card+json',
         url: 'https://www.corplawupdates.in/tools/fee-calculator/companies/dpt-3',
         description:
           'Statutory calculator for Form DPT-3 return of deposits and exempted loans: Table A base fees, 2x to 18x stepped delay fees, June 30 statutory deadline, and Section 73/76A corporate penalties.',
@@ -236,7 +236,7 @@ export function getAICatalog() {
       {
         identifier: 'urn:air:corplawupdates.in:tool:inc-20a-fee-calculator',
         displayName: 'INC-20A Fee Calculator — Commencement of Business Late Fees',
-        type: 'text/html',
+        type: 'application/agent-card+json',
         url: 'https://www.corplawupdates.in/tools/fee-calculator/companies/inc-20a',
         description:
           'Statutory calculator for Form INC-20A commencement of business declaration: Table A base fees, 2x to 18x stepped delay fees, 180-day incorporation deadline, and Section 10A strike-off risk.',
@@ -254,7 +254,7 @@ export function getAICatalog() {
       {
         identifier: 'urn:air:corplawupdates.in:tool:msme-1-fee-calculator',
         displayName: 'MSME-1 Fee Calculator — Outstanding Dues Return Half-Yearly',
-        type: 'text/html',
+        type: 'application/agent-card+json',
         url: 'https://www.corplawupdates.in/tools/fee-calculator/companies/msme-1',
         description:
           'Statutory calculator for Form MSME-1 half-yearly return of outstanding vendor dues exceeding 45 days: Base fees, stepped delay fees, April 30 and October 31 deadlines, and Section 405 ROC penalties.',
@@ -272,7 +272,7 @@ export function getAICatalog() {
       {
         identifier: 'urn:air:corplawupdates.in:tool:msme-interest-calculator',
         displayName: 'MSME Interest Calculator — Section 16 Delayed Payment 3x Bank Rate',
-        type: 'text/html',
+        type: 'application/agent-card+json',
         url: 'https://www.corplawupdates.in/tools/fee-calculator/msme',
         description:
           'Statutory calculator for MSME delayed payments under Section 16 of MSMED Act 2006: Monthly compounding at three times RBI benchmark repo rate for invoices unpaid beyond 45 days.',
@@ -290,7 +290,7 @@ export function getAICatalog() {
       {
         identifier: 'urn:air:corplawupdates.in:tool:ibbi-fee-calculator',
         displayName: 'IBBI Fee Calculator — Insolvency Late Filing Fees & Liquidation',
-        type: 'text/html',
+        type: 'application/agent-card+json',
         url: 'https://www.corplawupdates.in/tools/fee-calculator/ibbi',
         description:
           'Statutory calculator for IBBI insolvency filings under CIRP Reg 40B, Liquidation Reg 47B, and IP annual regulatory fees with statutory day-count tiers (₹500 to ₹5,000+).',
@@ -308,7 +308,7 @@ export function getAICatalog() {
       {
         identifier: 'urn:air:corplawupdates.in:tool:llp-fee-calculator',
         displayName: 'LLP Form 8 & Form 11 Late Fee and Penalty Calculator',
-        type: 'application/json',
+        type: 'application/agent-card+json',
         url: 'https://www.corplawupdates.in/api/calculators/webmcp-llp',
         description:
           'Calculates delayed filing additional fees and Section 34/35 adjudication penalties for LLP Form 8 and Form 11 under LLP 2nd Amendment Rules 2022.',
@@ -325,7 +325,7 @@ export function getAICatalog() {
       {
         identifier: 'urn:air:corplawupdates.in:api:regulatory-search',
         displayName: 'Regulatory Intelligence & Circulars Search API',
-        type: 'application/json',
+        type: 'application/agent-card+json',
         url: 'https://www.corplawupdates.in/api/search',
         description:
           'Real-time search and statutory summaries of Indian corporate regulatory circulars and notifications across MCA, SEBI, RBI, NCLT, IBC, and FEMA.',
@@ -342,7 +342,7 @@ export function getAICatalog() {
       {
         identifier: 'urn:air:corplawupdates.in:tool:compliance-calendar',
         displayName: 'Indian Corporate Statutory Compliance Calendar',
-        type: 'application/json',
+        type: 'application/agent-card+json',
         url: 'https://www.corplawupdates.in/api/compliance/webmcp',
         description:
           'Upcoming corporate compliance deadlines and filing schedules across MCA, SEBI, RBI, Income Tax, GST, and Labour Laws.',
@@ -359,7 +359,7 @@ export function getAICatalog() {
       {
         identifier: 'urn:air:corplawupdates.in:tool:rbi-repo-rates',
         displayName: 'RBI Monetary Policy & Benchmark Repo Rates',
-        type: 'application/json',
+        type: 'application/agent-card+json',
         url: 'https://www.corplawupdates.in/api/rbi/webmcp',
         description:
           'Authoritative real-time Reserve Bank of India benchmark Repo Rate, SDF, MSF, MPC policy stance, and scheduled meeting dates.',
@@ -376,7 +376,7 @@ export function getAICatalog() {
       {
         identifier: 'urn:air:corplawupdates.in:tool:cin-decoder',
         displayName: 'Corporate Identification Number (CIN) Statutory Decoder',
-        type: 'text/html',
+        type: 'application/agent-card+json',
         url: 'https://www.corplawupdates.in/tools/cin-decoder',
         description:
           'Decodes 21-digit Indian Corporate Identification Numbers (CIN) into listing status, NIC economic classification, RoC jurisdiction, registration year, and ownership class.',
@@ -393,7 +393,7 @@ export function getAICatalog() {
       {
         identifier: 'urn:air:corplawupdates.in:tool:legal-documents',
         displayName: 'Legal Documents & Secretarial Drafting Suite',
-        type: 'text/html',
+        type: 'application/agent-card+json',
         url: 'https://www.corplawupdates.in/documents',
         description:
           '35+ secretarial drafting templates and statutory agreements formatted per ICSI Secretarial Standards.',
