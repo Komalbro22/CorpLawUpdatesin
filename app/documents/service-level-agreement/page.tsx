@@ -206,7 +206,11 @@ export default function ServiceLevelAgreementPage() {
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-800 border border-blue-200">
               <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
-              DPDP Act 2023 Compliant
+              DPDP Act 2023 & CERT-In Compliant
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-amber-500/15 to-indigo-500/15 text-indigo-900 border border-indigo-200">
+              <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+              Live Legal Preview & Gemini AI Drafter
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
               <FileText className="w-3.5 h-3.5 text-emerald-600" />
@@ -223,8 +227,8 @@ export default function ServiceLevelAgreementPage() {
 
           <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
             Download institutional, legally vetted Service Level Agreement (SLA) templates in Word (.docx) and PDF. 
-            Tailored for cloud computing, IT SaaS, vendor outsourcing, software maintenance, and recruitment services in India, 
-            with enforceable uptime metrics, severity response matrices, and Section 74 liquidated damages remedies.
+            Features real-time statutory paper preview, interactive Gemini AI legal drafter (draft clauses with prompts, customize operational metrics, adapt tone, and generate Hindi / bilingual summaries), 
+            and Section 74 liquidated damages remedies.
           </p>
         </div>
 

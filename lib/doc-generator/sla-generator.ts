@@ -22,6 +22,12 @@ export type SlaType =
   | 'software_maintenance'
   | 'recruitment_hr'
 
+export interface SlaCustomClause {
+  id?: string
+  title: string
+  content: string
+}
+
 export interface SlaFormData {
   slaType: SlaType
   title?: string
@@ -51,6 +57,8 @@ export interface SlaFormData {
   penaltyCap: string // e.g. "20% of monthly billing"
   arbitrationSeat: string // e.g. "New Delhi"
   termMonths: string // e.g. "12"
+  customClauses?: SlaCustomClause[]
+  languageNote?: string
 }
 
 export const SLA_PRESETS: Record<
@@ -530,18 +538,49 @@ export async function buildSlaDocx(data: Partial<SlaFormData>): Promise<Buffer> 
             ],
           }),
 
-          // Clause 6: Dispute Resolution & Arbitration
+          // Dynamically Rendered AI & Custom Clauses (Clauses 6, 7, etc.)
+          ...(data.customClauses && data.customClauses.length > 0
+            ? data.customClauses.flatMap((c, idx) => {
+                const clauseNum = 6 + idx
+                const cTitle = singleLine(c.title) || `SPECIAL OPERATIONAL STIPULATION ${idx + 1}`
+                const cContent = cleanText(c.content)
+                return [
+                  new Paragraph({
+                    spacing: { before: 200, after: 100 },
+                    children: [
+                      new TextRun({
+                        text: `${clauseNum}. ${cTitle.toUpperCase()}`,
+                        bold: true,
+                        size: 22,
+                        color: PRIMARY_COLOR,
+                      }),
+                    ],
+                  }),
+                  new Paragraph({
+                    spacing: { after: 180 },
+                    children: [...safeTextRuns(cContent, { size: 20 })],
+                  }),
+                ]
+              })
+            : []),
+
+          // Governing Law & Arbitration Clause
           new Paragraph({
             spacing: { before: 200, after: 100 },
             children: [
-              new TextRun({ text: '6. GOVERNING LAW & ARBITRATION', bold: true, size: 22, color: PRIMARY_COLOR }),
+              new TextRun({
+                text: `${6 + (data.customClauses?.length || 0)}. GOVERNING LAW & ARBITRATION`,
+                bold: true,
+                size: 22,
+                color: PRIMARY_COLOR,
+              }),
             ],
           }),
           new Paragraph({
             spacing: { after: 280 },
             children: [
               new TextRun({
-                text: `6.1 This Agreement shall be governed by the laws of India. Any dispute arising out of or in connection with this SLA shall be referred to arbitration in accordance with the Arbitration and Conciliation Act, 1996. The seat and venue of arbitration shall be `,
+                text: `${6 + (data.customClauses?.length || 0)}.1 This Agreement shall be governed by the laws of India. Any dispute arising out of or in connection with this SLA shall be referred to arbitration in accordance with the Arbitration and Conciliation Act, 1996. The seat and venue of arbitration shall be `,
                 size: 20,
               }),
               new TextRun({ text: seat, bold: true, size: 20 }),
@@ -551,6 +590,27 @@ export async function buildSlaDocx(data: Partial<SlaFormData>): Promise<Buffer> 
               }),
             ],
           }),
+
+          // Optional Bilingual Executive Summary / Hindi Statutory Note
+          ...(data.languageNote && data.languageNote.trim().length > 0
+            ? [
+                new Paragraph({
+                  spacing: { before: 280, after: 100 },
+                  children: [
+                    new TextRun({
+                      text: `ANNEXURE I: BILINGUAL STATUTORY NOTE / द्विभाषी वैधानिक सारांश`,
+                      bold: true,
+                      size: 22,
+                      color: GOLD_COLOR,
+                    }),
+                  ],
+                }),
+                new Paragraph({
+                  spacing: { after: 200 },
+                  children: [...safeTextRuns(data.languageNote, { size: 19, italics: true })],
+                }),
+              ]
+            : []),
 
           // Signatures Block
           new Paragraph({
@@ -610,6 +670,11 @@ export async function buildSlaDocx(data: Partial<SlaFormData>): Promise<Buffer> 
   return await Packer.toBuffer(doc)
 }
 
+function safePdfText(text: string | null | undefined): string {
+  if (!text) return ''
+  return text.replace(/[^\x20-\x7E\n\r\t]/g, ' ').replace(/\s+/g, ' ').trim()
+}
+
 // ─── PDF Document Generator ─────────────────────────────────────────────────
 export async function buildSlaPdf(data: Partial<SlaFormData>): Promise<Uint8Array> {
   const type = data.slaType || 'it_saas'
@@ -638,7 +703,7 @@ export async function buildSlaPdf(data: Partial<SlaFormData>): Promise<Uint8Arra
   })
   y -= 18
 
-  page.drawText(preset.title, {
+  page.drawText(safePdfText(preset.title), {
     x: 50,
     y,
     size: 10,
@@ -656,12 +721,12 @@ export async function buildSlaPdf(data: Partial<SlaFormData>): Promise<Uint8Arra
   })
   y -= 20
 
-  const clientName = cleanText(data.clientName) || 'ALPHA ENTERPRISES PRIVATE LIMITED'
-  const providerName = cleanText(data.providerName) || 'NEXUS CLOUD SOLUTIONS PRIVATE LIMITED'
-  const effectiveDate = cleanText(data.effectiveDate) || '1st October 2026'
-  const uptime = cleanText(data.uptimeTarget) || preset.uptimeDefault
-  const cap = cleanText(data.penaltyCap) || preset.capDefault
-  const seat = cleanText(data.arbitrationSeat) || 'New Delhi'
+  const clientName = safePdfText(data.clientName) || 'ALPHA ENTERPRISES PRIVATE LIMITED'
+  const providerName = safePdfText(data.providerName) || 'NEXUS CLOUD SOLUTIONS PRIVATE LIMITED'
+  const effectiveDate = safePdfText(data.effectiveDate) || '1st October 2026'
+  const uptime = safePdfText(data.uptimeTarget) || preset.uptimeDefault
+  const cap = safePdfText(data.penaltyCap) || preset.capDefault
+  const seat = safePdfText(data.arbitrationSeat) || 'New Delhi'
 
   // Summary Grid
   page.drawText(`Effective Date: ${effectiveDate}`, { x: 50, y, size: 9, font: fontRegular, color: textDarkRgb })
@@ -701,7 +766,7 @@ export async function buildSlaPdf(data: Partial<SlaFormData>): Promise<Uint8Arra
 
   page.drawText('3. INCIDENT SEVERITY MATRIX', { x: 50, y, size: 10, font: fontBold, color: primaryRgb })
   y -= 14
-  page.drawText('• Severity 1 (Critical): Response within 1 hr | Resolution within 4 hrs (Complete service outage).', {
+  page.drawText(`• Severity 1 (Critical): Response ${safePdfText(data.sev1ResponseTime) || '1 hr'} | Resolution ${safePdfText(data.sev1ResolutionTime) || '4 hrs'} (Core outage).`, {
     x: 50,
     y,
     size: 8.5,
@@ -709,7 +774,7 @@ export async function buildSlaPdf(data: Partial<SlaFormData>): Promise<Uint8Arra
     color: rgb(0.86, 0.15, 0.15),
   })
   y -= 12
-  page.drawText('• Severity 2 (High): Response within 2 hrs | Resolution within 8 hrs (Major feature impairment).', {
+  page.drawText(`• Severity 2 (High): Response ${safePdfText(data.sev2ResponseTime) || '2 hrs'} | Resolution ${safePdfText(data.sev2ResolutionTime) || '8 hrs'} (Feature degraded).`, {
     x: 50,
     y,
     size: 8.5,
@@ -717,7 +782,7 @@ export async function buildSlaPdf(data: Partial<SlaFormData>): Promise<Uint8Arra
     color: rgb(0.85, 0.47, 0.02),
   })
   y -= 12
-  page.drawText('• Severity 3 (Medium): Response within 8 hrs | Resolution within 24 hrs (Partial bug with workaround).', {
+  page.drawText(`• Severity 3 (Medium): Response ${safePdfText(data.sev3ResponseTime) || '8 hrs'} | Resolution ${safePdfText(data.sev3ResolutionTime) || '24 hrs'} (Workaround available).`, {
     x: 50,
     y,
     size: 8.5,
@@ -725,7 +790,7 @@ export async function buildSlaPdf(data: Partial<SlaFormData>): Promise<Uint8Arra
     color: rgb(0.15, 0.39, 0.92),
   })
   y -= 12
-  page.drawText('• Severity 4 (Low): Response within 24 hrs | Resolution within 72 hrs (Cosmetic / documentation inquiry).', {
+  page.drawText(`• Severity 4 (Low): Response ${safePdfText(data.sev4ResponseTime) || '24 hrs'} | Resolution ${safePdfText(data.sev4ResolutionTime) || '72 hrs'} (Cosmetic inquiry).`, {
     x: 50,
     y,
     size: 8.5,
@@ -736,29 +801,90 @@ export async function buildSlaPdf(data: Partial<SlaFormData>): Promise<Uint8Arra
 
   page.drawText('4. DATA PROTECTION & DPDP ACT 2023', { x: 50, y, size: 10, font: fontBold, color: primaryRgb })
   y -= 14
-  page.drawText('The Service Provider operates as a Data Processor adhering to Section 8 of the DPDP Act 2023 with mandatory 6-hour breach notice.', {
+  page.drawText('The Service Provider operates as a Data Processor adhering to Section 8 of DPDP Act 2023 with mandatory 6-hour breach notice.', {
     x: 50,
     y,
     size: 8.5,
     font: fontRegular,
     color: textDarkRgb,
   })
-  y -= 35
+  y -= 30
 
-  // Execution Block
-  page.drawText('EXECUTION & SIGNATURES', { x: 50, y, size: 10, font: fontBold, color: primaryRgb })
-  y -= 20
+  const hasCustomClauses = data.customClauses && data.customClauses.length > 0
 
-  page.drawText('For Client:', { x: 50, y, size: 9, font: fontBold, color: textDarkRgb })
-  page.drawText('For Service Provider:', { x: 300, y, size: 9, font: fontBold, color: textDarkRgb })
-  y -= 35
+  if (!hasCustomClauses) {
+    // Execution Block on Page 1
+    page.drawText('EXECUTION & SIGNATURES', { x: 50, y, size: 10, font: fontBold, color: primaryRgb })
+    y -= 20
 
-  page.drawText('___________________________', { x: 50, y, size: 9, font: fontRegular, color: textMutedRgb })
-  page.drawText('___________________________', { x: 300, y, size: 9, font: fontRegular, color: textMutedRgb })
-  y -= 14
+    page.drawText('For Client:', { x: 50, y, size: 9, font: fontBold, color: textDarkRgb })
+    page.drawText('For Service Provider:', { x: 300, y, size: 9, font: fontBold, color: textDarkRgb })
+    y -= 35
 
-  page.drawText(`Authorized Signatory: ${data.clientSignatoryName || '[Name]'}`, { x: 50, y, size: 8.5, font: fontRegular, color: textDarkRgb })
-  page.drawText(`Authorized Signatory: ${data.providerSignatoryName || '[Name]'}`, { x: 300, y, size: 8.5, font: fontRegular, color: textDarkRgb })
+    page.drawText('___________________________', { x: 50, y, size: 9, font: fontRegular, color: textMutedRgb })
+    page.drawText('___________________________', { x: 300, y, size: 9, font: fontRegular, color: textMutedRgb })
+    y -= 14
+
+    page.drawText(`Authorized Signatory: ${safePdfText(data.clientSignatoryName) || '[Name]'}`, { x: 50, y, size: 8.5, font: fontRegular, color: textDarkRgb })
+    page.drawText(`Authorized Signatory: ${safePdfText(data.providerSignatoryName) || '[Name]'}`, { x: 300, y, size: 8.5, font: fontRegular, color: textDarkRgb })
+  } else {
+    // Pointer on Page 1
+    page.drawText('5. SPECIAL OPERATIONAL STIPULATIONS', { x: 50, y, size: 10, font: fontBold, color: primaryRgb })
+    y -= 14
+    page.drawText('Agreed custom technical stipulations, audit rights, and execution blocks are detailed on Page 2.', {
+      x: 50,
+      y,
+      size: 8.5,
+      font: fontItalic,
+      color: textMutedRgb,
+    })
+
+    // Page 2 for Custom Clauses & Execution
+    const page2 = pdfDoc.addPage([595.28, 841.89])
+    let y2 = height - 50
+
+    page2.drawText('SPECIAL OPERATIONAL STIPULATIONS & EXECUTION', {
+      x: 50,
+      y: y2,
+      size: 14,
+      font: fontBold,
+      color: primaryRgb,
+    })
+    y2 -= 16
+    page2.drawLine({
+      start: { x: 50, y: y2 },
+      end: { x: width - 50, y: y2 },
+      thickness: 1,
+      color: rgb(0.8, 0.84, 0.88),
+    })
+    y2 -= 25
+
+    data.customClauses?.slice(0, 4).forEach((c, idx) => {
+      const clauseNum = 5 + idx
+      const cTitle = safePdfText(c.title).toUpperCase() || `STIPULATION ${idx + 1}`
+      page2.drawText(`${clauseNum}. ${cTitle}`, { x: 50, y: y2, size: 9.5, font: fontBold, color: primaryRgb })
+      y2 -= 14
+      const content = safePdfText(c.content)
+      const previewText = content.length > 200 ? content.slice(0, 197) + '...' : content
+      page2.drawText(previewText, { x: 50, y: y2, size: 8, font: fontRegular, color: textDarkRgb })
+      y2 -= 24
+    })
+
+    y2 -= 15
+    page2.drawText('EXECUTION & SIGNATURES', { x: 50, y: y2, size: 10, font: fontBold, color: primaryRgb })
+    y2 -= 20
+
+    page2.drawText('For Client:', { x: 50, y: y2, size: 9, font: fontBold, color: textDarkRgb })
+    page2.drawText('For Service Provider:', { x: 300, y: y2, size: 9, font: fontBold, color: textDarkRgb })
+    y2 -= 35
+
+    page2.drawText('___________________________', { x: 50, y: y2, size: 9, font: fontRegular, color: textMutedRgb })
+    page2.drawText('___________________________', { x: 300, y: y2, size: 9, font: fontRegular, color: textMutedRgb })
+    y2 -= 14
+
+    page2.drawText(`Authorized Signatory: ${safePdfText(data.clientSignatoryName) || '[Name]'}`, { x: 50, y: y2, size: 8.5, font: fontRegular, color: textDarkRgb })
+    page2.drawText(`Authorized Signatory: ${safePdfText(data.providerSignatoryName) || '[Name]'}`, { x: 300, y: y2, size: 8.5, font: fontRegular, color: textDarkRgb })
+  }
 
   return await pdfDoc.save()
 }
