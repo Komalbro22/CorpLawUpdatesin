@@ -15,6 +15,7 @@ import JsonLd from '@/components/JsonLd'
 import TrackingScripts from '@/components/TrackingScripts'
 import ConsentGatedAnalytics from '@/components/ConsentGatedAnalytics'
 import CookieConsentBanner from '@/components/CookieConsentBanner'
+import AdSenseScript from '@/components/AdSenseScript'
 
 import WebMCPRegistry from '@/components/WebMCPRegistry'
 
@@ -29,6 +30,9 @@ export const metadata: Metadata = {
     template: '%s | CorpLawUpdates.in',
   },
   description: 'Free Indian corporate law updates covering MCA, SEBI, RBI, IFSCA (GIFT City), CCI, Labour Law, NCLT, IBC and FEMA regulatory developments for legal & compliance professionals.',
+  other: {
+    'google-adsense-account': 'ca-pub-8404756575471756',
+  },
 
   authors: [{ name: 'CorpLawUpdates.in' }],
   creator: 'CorpLawUpdates.in',
@@ -89,9 +93,6 @@ export const metadata: Metadata = {
   },
   verification: {
     google: process.env.NEXT_PUBLIC_GSC_VERIFICATION || '',
-  },
-  other: {
-    'google-adsense-account': 'ca-pub-8404756575471756',
   },
 }
 
@@ -161,19 +162,12 @@ export default async function RootLayout({
             'query-input': 'required name=search_term_string',
           },
         }} />
-        {/* Google AdSense Official Script Tag in Head */}
-        <script
-          id="adsbygoogle-init"
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8404756575471756"
-          crossOrigin="anonymous"
-          suppressHydrationWarning
-        />
       </head>
       <body className="font-body bg-slate-50 dark:bg-slate-950 text-navy dark:text-slate-100 antialiased min-h-dvh flex flex-col selection:bg-amber-200/50 selection:text-navy break-words" suppressHydrationWarning>
         <ToastProvider>
           <HideOnAdmin>
             <TrackingScripts />
+            <AdSenseScript />
           </HideOnAdmin>
           <a
             href="#main-content"

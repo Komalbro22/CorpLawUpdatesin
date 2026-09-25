@@ -151,31 +151,54 @@ export function getEditorialDesk(category?: string | null): EditorialDesk {
   return EDITORIAL_DESKS[key] || DEFAULT_EDITORIAL_DESK
 }
 
+export const EDITORIAL_LEAD = {
+  name: 'Komalpreet Singh',
+  role: 'Founder & Lead Regulatory Research Analyst',
+  location: 'Lucknow, Uttar Pradesh, India',
+  email: 'legal@corplawupdates.in',
+  url: `${BASE_URL}/about#editorial-leadership`,
+  bio: 'Specializing in Indian corporate jurisprudence, Companies Act 2013 compliance, SEBI regulations, and RBI directives. Leading statutory research and verification at CorpLawUpdates.in.',
+} as const
+
 export const EDITORIAL_AUTHOR = {
-  name: DEFAULT_EDITORIAL_DESK.name,
-  url: DEFAULT_EDITORIAL_DESK.url,
-  jobTitle: 'Corporate Law Research & Compliance Editors',
-  description: DEFAULT_EDITORIAL_DESK.description,
+  name: EDITORIAL_LEAD.name,
+  organizationName: DEFAULT_EDITORIAL_DESK.name,
+  url: EDITORIAL_LEAD.url,
+  jobTitle: EDITORIAL_LEAD.role,
+  description: EDITORIAL_LEAD.bio,
 } as const
 
 export function getArticleAuthorSchema(category?: string | null) {
   const desk = getEditorialDesk(category)
-  return {
-    '@type': 'Organization' as const,
-    name: desk.name,
-    url: desk.url,
-    description: desk.description,
-    email: desk.email,
-    parentOrganization: {
-      '@type': 'Organization' as const,
-      name: 'CorpLawUpdates.in',
-      url: BASE_URL,
-      sameAs: [
-        'https://x.com/CorpLawUpdates',
-        'https://www.linkedin.com/company/corplawupdates/',
-        'https://whatsapp.com/channel/0029VbCfcUEEgGfGLWOTvV1A',
-        'https://t.me/corplawupdate',
-      ],
+  return [
+    {
+      '@type': 'Person' as const,
+      name: EDITORIAL_LEAD.name,
+      jobTitle: EDITORIAL_LEAD.role,
+      url: EDITORIAL_LEAD.url,
+      worksFor: {
+        '@type': 'Organization' as const,
+        name: 'CorpLawUpdates.in',
+        url: BASE_URL,
+      },
     },
-  }
+    {
+      '@type': 'Organization' as const,
+      name: desk.name,
+      url: desk.url,
+      description: desk.description,
+      email: desk.email,
+      parentOrganization: {
+        '@type': 'Organization' as const,
+        name: 'CorpLawUpdates.in',
+        url: BASE_URL,
+        sameAs: [
+          'https://x.com/CorpLawUpdates',
+          'https://www.linkedin.com/company/corplawupdates/',
+          'https://whatsapp.com/channel/0029VbCfcUEEgGfGLWOTvV1A',
+          'https://t.me/corplawupdate',
+        ],
+      },
+    },
+  ]
 }

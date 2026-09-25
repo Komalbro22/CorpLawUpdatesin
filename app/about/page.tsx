@@ -114,10 +114,66 @@ export default async function AboutPage() {
 
                 {/* 5. How It Works */}
                 <section className="mb-12">
-                    <h2 className="text-3xl font-heading font-bold text-navy dark:text-white mb-4 border-l-4 border-gold pl-4">How It Works</h2>
-                    <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
-                        Every piece of information is curated manually by legal professionals who review circulars, notifications, and orders from regulatory websites daily to provide accurate summaries.
+                    <h2 className="text-3xl font-heading font-bold text-navy dark:text-white mb-4 border-l-4 border-gold pl-4">How It Works & Editorial Methodology</h2>
+                    <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                        Every piece of information published on CorpLawUpdates.in is researched and curated manually by legal researchers. We track official government gazettes, regulatory portals, and statutory press releases daily across MCA, SEBI, RBI, IBBI, and EPFO.
                     </p>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                            <span className="font-bold text-amber-700 dark:text-amber-400 block mb-1">1. Primary Source Sourcing</span>
+                            <p className="text-sm text-slate-600 dark:text-slate-400">Directly fetched from regulatory portals and the official Gazette of India, ensuring zero hearsay.</p>
+                        </div>
+                        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                            <span className="font-bold text-amber-700 dark:text-amber-400 block mb-1">2. Two-Tier Verification</span>
+                            <p className="text-sm text-slate-600 dark:text-slate-400">Statutory amendments are cross-referenced with parent acts (e.g. Companies Act 2013, SEBI Act 1992).</p>
+                        </div>
+                        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                            <span className="font-bold text-amber-700 dark:text-amber-400 block mb-1">3. Plain-English Synthesis</span>
+                            <p className="text-sm text-slate-600 dark:text-slate-400">Complex legalese is converted into actionable, structured takeaways for compliance officers and lawyers.</p>
+                        </div>
+                    </div>
+                </section>
+
+                {/* 5.1 Editorial Leadership & Research Team (E-E-A-T) */}
+                <section id="editorial-leadership" className="mb-12 scroll-mt-24">
+                    <h2 className="text-3xl font-heading font-bold text-navy dark:text-white mb-6 border-l-4 border-gold pl-4">Editorial Leadership & Research Team</h2>
+                    <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                        <div className="flex flex-col sm:flex-row items-start gap-6">
+                            <div className="size-16 sm:size-20 rounded-2xl bg-gradient-to-br from-navy to-slate-800 dark:from-amber-500 dark:to-amber-600 text-white dark:text-slate-950 flex items-center justify-center font-heading font-bold text-2xl sm:text-3xl shrink-0 shadow-md ring-4 ring-amber-400/20">
+                                KS
+                            </div>
+                            <div className="space-y-3 flex-1">
+                                <div>
+                                    <div className="flex flex-wrap items-center gap-2">
+                                        <h3 className="text-2xl font-heading font-bold text-navy dark:text-white">Komalpreet Singh</h3>
+                                        <span className="inline-flex items-center rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-300/80 dark:border-amber-700 px-3 py-0.5 text-xs font-semibold">
+                                            Founder & Lead Regulatory Analyst
+                                        </span>
+                                    </div>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                                        Editorial Desk: Lucknow, Uttar Pradesh, India &bull; Contact: <a href="mailto:legal@corplawupdates.in" className="text-amber-700 dark:text-amber-400 hover:underline">legal@corplawupdates.in</a>
+                                    </p>
+                                </div>
+                                <p className="text-slate-700 dark:text-slate-300 leading-relaxed text-sm sm:text-base">
+                                    Specializing in Indian corporate jurisprudence, statutory notifications, SEBI capital market regulations, and RBI Master Directions. He oversees the regulatory monitoring desk at CorpLawUpdates.in, verifying regulatory developments and authoring actionable intelligence for corporate secretaries, corporate lawyers, and compliance practitioners across India.
+                                </p>
+                                <div className="flex flex-wrap items-center gap-4 pt-2 text-xs font-semibold text-slate-600 dark:text-slate-400">
+                                    <span className="flex items-center gap-1.5">
+                                        <svg className="size-4 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                                        Indian Corporate Law Research
+                                    </span>
+                                    <span className="flex items-center gap-1.5">
+                                        <svg className="size-4 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                                        MCA &amp; ROC Gazette Analysis
+                                    </span>
+                                    <span className="flex items-center gap-1.5">
+                                        <svg className="size-4 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                                        SEBI &amp; RBI Compliance
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </section>
 
                 {/* 6. Connect With Us */}

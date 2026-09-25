@@ -6,6 +6,7 @@ import {
   AlignmentType,
 } from 'docx'
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
+import { cleanText, safeTextRuns } from './docx-utils'
 
 export type ShiftingScope =
   | 'same_city'
@@ -188,10 +189,10 @@ export async function buildRegisteredOfficeBoardResolutionDocx(
         alignment: AlignmentType.LEFT,
         indent: { left: 720 },
         children: [
-          new TextRun({ text: 'Existing Registered Office:\n', bold: true, font: FONT, size: 20 }),
-          new TextRun({ text: `${oldAddr}\n\n`, font: FONT, size: 20 }),
-          new TextRun({ text: 'To New Registered Office:\n', bold: true, font: FONT, size: 20 }),
-          new TextRun({ text: `${newAddr}\n`, font: FONT, size: 20 }),
+          new TextRun({ text: 'Existing Registered Office:', bold: true, font: FONT, size: 20 }),
+          new TextRun({ break: 1, text: cleanText(oldAddr), font: FONT, size: 20 }),
+          new TextRun({ break: 2, text: 'To New Registered Office:', bold: true, font: FONT, size: 20 }),
+          new TextRun({ break: 1, text: cleanText(newAddr), font: FONT, size: 20 }),
         ],
       }),
       new Paragraph({
@@ -549,42 +550,48 @@ export async function buildRegisteredOfficeBoardResolutionDocx(
           new Paragraph({
             children: [
               new TextRun({
-                text: `For ${comp.toUpperCase()}\n\n\n`,
+                text: `For ${cleanText(comp).toUpperCase()}`,
                 bold: true,
                 font: FONT,
                 size: 20,
               }),
               new TextRun({
-                text: '________________________________________\n',
+                break: 3,
+                text: '________________________________________',
                 font: FONT,
                 size: 20,
               }),
-              new TextRun({ text: `${chair}\n`, bold: true, font: FONT, size: 20 }),
-              new TextRun({ text: 'Chairperson / Director\n\n\n', font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: cleanText(chair), bold: true, font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: 'Chairperson / Director', font: FONT, size: 20 }),
             ],
           }),
+          new Paragraph({ text: '' }),
+          new Paragraph({ text: '' }),
 
           // Certification block
           new Paragraph({
             children: [
-              new TextRun({ text: 'CERTIFIED TRUE COPY:\n', bold: true, font: FONT, size: 20 }),
+              new TextRun({ text: 'CERTIFIED TRUE COPY:', bold: true, font: FONT, size: 20 }),
               new TextRun({
-                text: `For ${comp.toUpperCase()}\n\n\n`,
+                break: 1,
+                text: `For ${cleanText(comp).toUpperCase()}`,
                 bold: true,
                 font: FONT,
                 size: 20,
               }),
               new TextRun({
-                text: '________________________________________\n',
+                break: 3,
+                text: '________________________________________',
                 font: FONT,
                 size: 20,
               }),
-              new TextRun({ text: `${dir}\n`, bold: true, font: FONT, size: 20 }),
-              new TextRun({ text: `Director / Authorised Signatory\n`, font: FONT, size: 20 }),
-              new TextRun({ text: `DIN: ${din}\n`, font: FONT, size: 20 }),
-              new TextRun({ text: `Date: ${certDate}\n`, font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: cleanText(dir), bold: true, font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: 'Director / Authorised Signatory', font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: `DIN: ${cleanText(din)}`, font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: `Date: ${cleanText(certDate)}`, font: FONT, size: 20 }),
               new TextRun({
-                text: `Place: ${venue.split(',').pop()?.trim() || 'New Delhi'}`,
+                break: 1,
+                text: `Place: ${cleanText(venue.split(',').pop()?.trim()) || 'New Delhi'}`,
                 font: FONT,
                 size: 20,
               }),
@@ -751,19 +758,28 @@ export async function buildSpecialResolutionDocx(
           new Paragraph({
             children: [
               new TextRun({
-                text: `By Order of the Board of Directors\nFor ${comp.toUpperCase()}\n\n\n`,
+                text: 'By Order of the Board of Directors',
                 bold: true,
                 font: FONT,
                 size: 20,
               }),
               new TextRun({
-                text: '________________________________________\n',
+                break: 1,
+                text: `For ${cleanText(comp).toUpperCase()}`,
+                bold: true,
                 font: FONT,
                 size: 20,
               }),
-              new TextRun({ text: `${dir}\n`, bold: true, font: FONT, size: 20 }),
-              new TextRun({ text: `Director / Authorised Signatory\n`, font: FONT, size: 20 }),
-              new TextRun({ text: `DIN: ${din}\nDate: ${egmDt}`, font: FONT, size: 20 }),
+              new TextRun({
+                break: 3,
+                text: '________________________________________',
+                font: FONT,
+                size: 20,
+              }),
+              new TextRun({ break: 1, text: cleanText(dir), bold: true, font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: 'Director / Authorised Signatory', font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: `DIN: ${cleanText(din)}`, font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: `Date: ${cleanText(egmDt)}`, font: FONT, size: 20 }),
             ],
           }),
           new Paragraph({ text: '' }),
@@ -831,18 +847,20 @@ export async function buildSpecialResolutionDocx(
           new Paragraph({
             children: [
               new TextRun({
-                text: `For ${comp.toUpperCase()}\n\n\n`,
+                text: `For ${cleanText(comp).toUpperCase()}`,
                 bold: true,
                 font: FONT,
                 size: 20,
               }),
               new TextRun({
-                text: '________________________________________\n',
+                break: 3,
+                text: '________________________________________',
                 font: FONT,
                 size: 20,
               }),
-              new TextRun({ text: `${dir}\n`, bold: true, font: FONT, size: 20 }),
-              new TextRun({ text: `Director\nDIN: ${din}`, font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: cleanText(dir), bold: true, font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: 'Director', font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: `DIN: ${cleanText(din)}`, font: FONT, size: 20 }),
             ],
           }),
         ],
@@ -1014,24 +1032,33 @@ export async function buildFormInc26Docx(
             alignment: AlignmentType.RIGHT,
             children: [
               new TextRun({
-                text: `For and on behalf of the Applicant Company\n${comp.toUpperCase()}\n\n\n`,
+                text: 'For and on behalf of the Applicant Company',
                 bold: true,
                 font: FONT,
                 size: 20,
               }),
               new TextRun({
-                text: '________________________________________\n',
+                break: 1,
+                text: cleanText(comp).toUpperCase(),
+                bold: true,
                 font: FONT,
                 size: 20,
               }),
-              new TextRun({ text: `${dir}\n`, bold: true, font: FONT, size: 20 }),
-              new TextRun({ text: `Director (DIN: ${din})\n`, font: FONT, size: 20 }),
               new TextRun({
-                text: `Date: ${data.meetingDate || '15/09/2026'}\n`,
+                break: 3,
+                text: '________________________________________',
                 font: FONT,
                 size: 20,
               }),
-              new TextRun({ text: `Place: ${oldAddr.split(',').pop()?.trim() || 'New Delhi'}`, font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: cleanText(dir), bold: true, font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: `Director (DIN: ${cleanText(din)})`, font: FONT, size: 20 }),
+              new TextRun({
+                break: 1,
+                text: `Date: ${cleanText(data.meetingDate) || '15/09/2026'}`,
+                font: FONT,
+                size: 20,
+              }),
+              new TextRun({ break: 1, text: `Place: ${cleanText(oldAddr.split(',').pop()?.trim()) || 'New Delhi'}`, font: FONT, size: 20 }),
             ],
           }),
         ],
@@ -1108,11 +1135,11 @@ export async function buildBankIntimationLetterDocx(
 
           new Paragraph({
             children: [
-              new TextRun({ text: `Date: ${dt}\n\n`, font: FONT, size: 20 }),
-              new TextRun({ text: 'To,\n', font: FONT, size: 20 }),
-              new TextRun({ text: 'The Branch Manager,\n', bold: true, font: FONT, size: 20 }),
-              new TextRun({ text: `${bName},\n`, font: FONT, size: 20 }),
-              new TextRun({ text: `${bBranch}.\n`, font: FONT, size: 20 }),
+              new TextRun({ text: `Date: ${cleanText(dt)}`, font: FONT, size: 20 }),
+              new TextRun({ break: 2, text: 'To,', font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: 'The Branch Manager,', bold: true, font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: `${cleanText(bName)},`, font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: `${cleanText(bBranch)}.`, font: FONT, size: 20 }),
             ],
           }),
           new Paragraph({ text: '' }),
@@ -1149,10 +1176,10 @@ export async function buildBankIntimationLetterDocx(
           new Paragraph({
             indent: { left: 720 },
             children: [
-              new TextRun({ text: 'Old Address:\n', bold: true, font: FONT, size: 20 }),
-              new TextRun({ text: `${oldAddr}\n\n`, font: FONT, size: 20 }),
-              new TextRun({ text: 'New Address:\n', bold: true, font: FONT, size: 20 }),
-              new TextRun({ text: `${newAddr}\n`, font: FONT, size: 20 }),
+              new TextRun({ text: 'Old Address:', bold: true, font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: cleanText(oldAddr), font: FONT, size: 20 }),
+              new TextRun({ break: 2, text: 'New Address:', bold: true, font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: cleanText(newAddr), font: FONT, size: 20 }),
             ],
           }),
           new Paragraph({ text: '' }),
@@ -1184,27 +1211,30 @@ export async function buildBankIntimationLetterDocx(
           new Paragraph({
             children: [
               new TextRun({
-                text: 'We enclose the following certified supporting documents for your records:\n',
+                text: 'We enclose the following certified supporting documents for your records:',
                 bold: true,
                 font: FONT,
                 size: 20,
               }),
               new TextRun({
-                text: '1. Certified True Copy of Board Resolution dated ' + dt + '\n',
+                break: 1,
+                text: '1. Certified True Copy of Board Resolution dated ' + cleanText(dt),
                 font: FONT,
                 size: 20,
               }),
               new TextRun({
-                text: '2. Copy of e-Form INC-22 filed with ROC along with MCA Challan / SRN Receipt\n',
+                break: 1,
+                text: '2. Copy of e-Form INC-22 filed with ROC along with MCA Challan / SRN Receipt',
                 font: FONT,
                 size: 20,
               }),
               new TextRun({
-                text: '3. Proof of Address for New Premises (Electricity Bill / Lease Agreement)\n',
+                break: 1,
+                text: '3. Proof of Address for New Premises (Electricity Bill / Lease Agreement)',
                 font: FONT,
                 size: 20,
               }),
-              new TextRun({ text: '4. Self-attested copy of Company PAN Card\n', font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: '4. Self-attested copy of Company PAN Card', font: FONT, size: 20 }),
             ],
           }),
           new Paragraph({ text: '' }),
@@ -1212,24 +1242,32 @@ export async function buildBankIntimationLetterDocx(
           new Paragraph({
             children: [
               new TextRun({
-                text: 'Thanking you,\n\nYours faithfully,\n',
+                text: 'Thanking you,',
                 font: FONT,
                 size: 20,
               }),
               new TextRun({
-                text: `For ${comp.toUpperCase()}\n\n\n`,
+                break: 2,
+                text: 'Yours faithfully,',
+                font: FONT,
+                size: 20,
+              }),
+              new TextRun({
+                break: 1,
+                text: `For ${cleanText(comp).toUpperCase()}`,
                 bold: true,
                 font: FONT,
                 size: 20,
               }),
               new TextRun({
-                text: '________________________________________\n',
+                break: 3,
+                text: '________________________________________',
                 font: FONT,
                 size: 20,
               }),
-              new TextRun({ text: `${dir}\n`, bold: true, font: FONT, size: 20 }),
-              new TextRun({ text: `Authorised Signatory / Director\n`, font: FONT, size: 20 }),
-              new TextRun({ text: `DIN: ${din}`, font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: cleanText(dir), bold: true, font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: 'Authorised Signatory / Director', font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: `DIN: ${cleanText(din)}`, font: FONT, size: 20 }),
             ],
           }),
         ],

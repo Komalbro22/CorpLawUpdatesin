@@ -10,6 +10,7 @@ import {
   WidthType,
 } from 'docx'
 import { PDFDocument, PDFFont, PDFPage, StandardFonts, rgb } from 'pdf-lib'
+import { cleanText, safeTextRuns } from './docx-utils'
 
 export type MortgagorType = 'individual' | 'joint' | 'corporate'
 
@@ -267,7 +268,7 @@ export async function buildModtDocx(inputData: Partial<ModtFormData> = {}): Prom
       new TableRow({
         children: [
           new TableCell({
-            width: { size: 8, type: WidthType.PERCENTAGE },
+            width: { size: 720, type: WidthType.DXA },
             children: [
               new Paragraph({
                 children: [new TextRun({ text: `${idx + 1}.`, font: FONT, size: 20 })],
@@ -275,34 +276,34 @@ export async function buildModtDocx(inputData: Partial<ModtFormData> = {}): Prom
             ],
           }),
           new TableCell({
-            width: { size: 32, type: WidthType.PERCENTAGE },
+            width: { size: 2880, type: WidthType.DXA },
             children: [
               new Paragraph({
-                children: [new TextRun({ text: deed.docType, font: FONT, size: 20, bold: true })],
+                children: [new TextRun({ text: cleanText(deed.docType), font: FONT, size: 20, bold: true })],
               }),
             ],
           }),
           new TableCell({
-            width: { size: 25, type: WidthType.PERCENTAGE },
+            width: { size: 2250, type: WidthType.DXA },
             children: [
               new Paragraph({
-                children: [new TextRun({ text: deed.docNo, font: FONT, size: 20 })],
+                children: [new TextRun({ text: cleanText(deed.docNo), font: FONT, size: 20 })],
               }),
             ],
           }),
           new TableCell({
-            width: { size: 15, type: WidthType.PERCENTAGE },
+            width: { size: 1350, type: WidthType.DXA },
             children: [
               new Paragraph({
-                children: [new TextRun({ text: deed.date, font: FONT, size: 20 })],
+                children: [new TextRun({ text: cleanText(deed.date), font: FONT, size: 20 })],
               }),
             ],
           }),
           new TableCell({
-            width: { size: 20, type: WidthType.PERCENTAGE },
+            width: { size: 1800, type: WidthType.DXA },
             children: [
               new Paragraph({
-                children: [new TextRun({ text: deed.executants, font: FONT, size: 18 })],
+                children: [new TextRun({ text: cleanText(deed.executants), font: FONT, size: 18 })],
               }),
             ],
           }),
@@ -604,13 +605,14 @@ export async function buildModtDocx(inputData: Partial<ModtFormData> = {}): Prom
 
           // First Schedule Table
           new Table({
-            width: { size: 100, type: WidthType.PERCENTAGE },
+            width: { size: 9000, type: WidthType.DXA },
+            columnWidths: [720, 2880, 2250, 1350, 1800],
             rows: [
               new TableRow({
                 tableHeader: true,
                 children: [
                   new TableCell({
-                    width: { size: 8, type: WidthType.PERCENTAGE },
+                    width: { size: 720, type: WidthType.DXA },
                     children: [
                       new Paragraph({
                         children: [new TextRun({ text: 'S.No.', bold: true, font: FONT, size: 20 })],
@@ -618,7 +620,7 @@ export async function buildModtDocx(inputData: Partial<ModtFormData> = {}): Prom
                     ],
                   }),
                   new TableCell({
-                    width: { size: 32, type: WidthType.PERCENTAGE },
+                    width: { size: 2880, type: WidthType.DXA },
                     children: [
                       new Paragraph({
                         children: [new TextRun({ text: 'Nature of Document', bold: true, font: FONT, size: 20 })],
@@ -626,7 +628,7 @@ export async function buildModtDocx(inputData: Partial<ModtFormData> = {}): Prom
                     ],
                   }),
                   new TableCell({
-                    width: { size: 25, type: WidthType.PERCENTAGE },
+                    width: { size: 2250, type: WidthType.DXA },
                     children: [
                       new Paragraph({
                         children: [new TextRun({ text: 'Document / Regn. No.', bold: true, font: FONT, size: 20 })],
@@ -634,7 +636,7 @@ export async function buildModtDocx(inputData: Partial<ModtFormData> = {}): Prom
                     ],
                   }),
                   new TableCell({
-                    width: { size: 15, type: WidthType.PERCENTAGE },
+                    width: { size: 1350, type: WidthType.DXA },
                     children: [
                       new Paragraph({
                         children: [new TextRun({ text: 'Date', bold: true, font: FONT, size: 20 })],
@@ -642,7 +644,7 @@ export async function buildModtDocx(inputData: Partial<ModtFormData> = {}): Prom
                     ],
                   }),
                   new TableCell({
-                    width: { size: 20, type: WidthType.PERCENTAGE },
+                    width: { size: 1800, type: WidthType.DXA },
                     children: [
                       new Paragraph({
                         children: [new TextRun({ text: 'Executant / Parties', bold: true, font: FONT, size: 20 })],
@@ -769,14 +771,15 @@ export async function buildModtDocx(inputData: Partial<ModtFormData> = {}): Prom
           new Paragraph({ text: '' }),
           new Paragraph({
             alignment: AlignmentType.RIGHT,
-            children: [
-              new TextRun({
-                text: isCorp ? `(${data.director1Name})\nDirector (DIN: ${data.director1Din})` : `(${data.mortgagorName})\nMortgagor`,
-                bold: true,
-                size: 20,
-                font: FONT,
-              }),
-            ],
+            children: isCorp
+              ? [
+                  new TextRun({ text: `(${cleanText(data.director1Name)})`, bold: true, size: 20, font: FONT }),
+                  new TextRun({ break: 1, text: `Director (DIN: ${cleanText(data.director1Din)})`, bold: true, size: 20, font: FONT }),
+                ]
+              : [
+                  new TextRun({ text: `(${cleanText(data.mortgagorName)})`, bold: true, size: 20, font: FONT }),
+                  new TextRun({ break: 1, text: 'Mortgagor', bold: true, size: 20, font: FONT }),
+                ],
           }),
           new Paragraph({ text: '' }),
 
@@ -786,15 +789,17 @@ export async function buildModtDocx(inputData: Partial<ModtFormData> = {}): Prom
           new Paragraph({ text: '' }),
           new Paragraph({
             children: [
-              new TextRun({ text: '1. Signature: _______________________\n', bold: true, size: 20, font: FONT }),
-              new TextRun({ text: `   Name: ${data.witness1Name}\n   Address: ${data.witness1Address}`, size: 19, font: FONT }),
+              new TextRun({ text: '1. Signature: _______________________', bold: true, size: 20, font: FONT }),
+              new TextRun({ break: 1, text: `   Name: ${cleanText(data.witness1Name)}`, size: 19, font: FONT }),
+              new TextRun({ break: 1, text: `   Address: ${cleanText(data.witness1Address)}`, size: 19, font: FONT }),
             ],
           }),
           new Paragraph({ text: '' }),
           new Paragraph({
             children: [
-              new TextRun({ text: '2. Signature: _______________________\n', bold: true, size: 20, font: FONT }),
-              new TextRun({ text: `   Name: ${data.witness2Name}\n   Address: ${data.witness2Address}`, size: 19, font: FONT }),
+              new TextRun({ text: '2. Signature: _______________________', bold: true, size: 20, font: FONT }),
+              new TextRun({ break: 1, text: `   Name: ${cleanText(data.witness2Name)}`, size: 19, font: FONT }),
+              new TextRun({ break: 1, text: `   Address: ${cleanText(data.witness2Address)}`, size: 19, font: FONT }),
             ],
           }),
         ],
@@ -912,14 +917,16 @@ export async function buildUndertakingDocx(inputData: Partial<ModtFormData> = {}
 
           new Paragraph({
             alignment: AlignmentType.RIGHT,
-            children: [
-              new TextRun({
-                text: isCorp ? `For ${data.companyName.toUpperCase()}\n\n\n(${data.director1Name})\nDeponent / Authorized Signatory` : `(${data.mortgagorName})\nDeponent / Mortgagor`,
-                bold: true,
-                size: 20,
-                font: FONT,
-              }),
-            ],
+            children: isCorp
+              ? [
+                  new TextRun({ text: `For ${cleanText(data.companyName).toUpperCase()}`, bold: true, size: 20, font: FONT }),
+                  new TextRun({ break: 2, text: `(${cleanText(data.director1Name)})`, bold: true, size: 20, font: FONT }),
+                  new TextRun({ break: 1, text: 'Deponent / Authorized Signatory', bold: true, size: 20, font: FONT }),
+                ]
+              : [
+                  new TextRun({ text: `(${cleanText(data.mortgagorName)})`, bold: true, size: 20, font: FONT }),
+                  new TextRun({ break: 1, text: 'Deponent / Mortgagor', bold: true, size: 20, font: FONT }),
+                ],
           }),
           new Paragraph({ text: '' }),
 
@@ -975,12 +982,15 @@ export async function buildLetterOfDepositDocx(inputData: Partial<ModtFormData> 
         children: [
           new Paragraph({
             children: [
-              new TextRun({ text: `Date: ${data.executionDate}\n\n`, size: 20, font: FONT }),
-              new TextRun({ text: 'To,\nThe Branch Manager,\n', font: FONT, size: 21 }),
-              new TextRun({ text: `${data.bankName}\n`, bold: true, font: FONT, size: 21 }),
-              new TextRun({ text: `${data.bankBranch}\n${data.bankAddress}\n\n`, font: FONT, size: 20 }),
+              new TextRun({ text: `Date: ${cleanText(data.executionDate)}`, size: 20, font: FONT }),
+              new TextRun({ break: 2, text: 'To,', font: FONT, size: 21 }),
+              new TextRun({ break: 1, text: 'The Branch Manager,', font: FONT, size: 21 }),
+              new TextRun({ break: 1, text: cleanText(data.bankName), bold: true, font: FONT, size: 21 }),
+              new TextRun({ break: 1, text: cleanText(data.bankBranch), font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: cleanText(data.bankAddress), font: FONT, size: 20 }),
             ],
           }),
+          new Paragraph({ text: '' }),
           new Paragraph({
             children: [
               new TextRun({
@@ -1032,17 +1042,21 @@ export async function buildLetterOfDepositDocx(inputData: Partial<ModtFormData> 
           }),
           new Paragraph({ text: '' }),
           new Paragraph({
-            children: [new TextRun({ text: 'Yours faithfully,\n\n', font: FONT, size: 21 })],
+            children: [new TextRun({ text: 'Yours faithfully,', font: FONT, size: 21 })],
           }),
+          new Paragraph({ text: '' }),
+          new Paragraph({ text: '' }),
           new Paragraph({
-            children: [
-              new TextRun({
-                text: isCorp ? `For ${data.companyName.toUpperCase()}\n\n(${data.director1Name})\nDirector (DIN: ${data.director1Din})` : `(${data.mortgagorName})\nMortgagor / Borrower`,
-                bold: true,
-                font: FONT,
-                size: 20,
-              }),
-            ],
+            children: isCorp
+              ? [
+                  new TextRun({ text: `For ${cleanText(data.companyName).toUpperCase()}`, bold: true, font: FONT, size: 20 }),
+                  new TextRun({ break: 2, text: `(${cleanText(data.director1Name)})`, bold: true, font: FONT, size: 20 }),
+                  new TextRun({ break: 1, text: `Director (DIN: ${cleanText(data.director1Din)})`, font: FONT, size: 20 }),
+                ]
+              : [
+                  new TextRun({ text: `(${cleanText(data.mortgagorName)})`, bold: true, font: FONT, size: 20 }),
+                  new TextRun({ break: 1, text: 'Mortgagor / Borrower', font: FONT, size: 20 }),
+                ],
           }),
         ],
       },
@@ -1145,7 +1159,9 @@ export async function buildChg1ExtractDocx(inputData: Partial<ModtFormData> = {}
           new Paragraph({
             alignment: AlignmentType.RIGHT,
             children: [
-              new TextRun({ text: `For ${data.companyName.toUpperCase()}\n\n\n(${data.director1Name})\nDirector (DIN: ${data.director1Din})`, bold: true, size: 20, font: FONT }),
+              new TextRun({ text: `For ${cleanText(data.companyName).toUpperCase()}`, bold: true, size: 20, font: FONT }),
+              new TextRun({ break: 2, text: `(${cleanText(data.director1Name)})`, bold: true, size: 20, font: FONT }),
+              new TextRun({ break: 1, text: `Director (DIN: ${cleanText(data.director1Din)})`, size: 20, font: FONT }),
             ],
           }),
         ],

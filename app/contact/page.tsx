@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import type { LucideIcon } from 'lucide-react'
-import { Calendar, CheckCircle2, Clock, Lightbulb, Loader2, Mail, Newspaper, Rss } from 'lucide-react'
+import { Calendar, CheckCircle2, Clock, Lightbulb, Loader2, Mail, MapPin, Newspaper, Rss, Scale } from 'lucide-react'
 
 const contactCards: {
     Icon: LucideIcon
@@ -18,6 +18,24 @@ const contactCards: {
         action: {
             label: 'mail@corplawupdates.in',
             href: 'mailto:mail@corplawupdates.in',
+        },
+    },
+    {
+        Icon: MapPin,
+        title: 'Operational & Legal Desk',
+        desc: 'Lucknow, Uttar Pradesh, India.',
+        action: {
+            label: 'legal@corplawupdates.in',
+            href: 'mailto:legal@corplawupdates.in?subject=Editorial%20%26%20Legal%20Inquiry',
+        },
+    },
+    {
+        Icon: Scale,
+        title: 'Grievance & Legal Officer',
+        desc: 'Attn: Legal Desk (Rule 3(11) Information Technology Rules).',
+        action: {
+            label: 'legal@corplawupdates.in',
+            href: 'mailto:legal@corplawupdates.in?subject=Grievance%20Redressal',
         },
     },
     {

@@ -10,6 +10,7 @@ import {
   WidthType,
 } from 'docx'
 import { PDFDocument, PDFFont, PDFPage, StandardFonts, rgb } from 'pdf-lib'
+import { cleanText, safeTextRuns } from './docx-utils'
 
 export type FirmCategory =
   | 'general_at_will'
@@ -873,7 +874,13 @@ export async function buildPartnershipDeedDocx(
         spacing: { after: 120 },
         children: [
           new TextRun({
-            text: `_________________________________________\n${partner.name.toUpperCase()} (PAN: ${partner.pan})`,
+            text: '_________________________________________',
+            font: 'Bookman Old Style',
+            size: 24,
+          }),
+          new TextRun({
+            break: 1,
+            text: `${cleanText(partner.name).toUpperCase()} (PAN: ${cleanText(partner.pan)})`,
             font: 'Bookman Old Style',
             size: 24,
           }),
@@ -899,7 +906,19 @@ export async function buildPartnershipDeedDocx(
       spacing: { after: 60 },
       children: [
         new TextRun({
-          text: `1. Signature: _______________________\nName: ${data.witness1Name}\nAddress: ${data.witness1Address}`,
+          text: '1. Signature: _______________________',
+          font: 'Bookman Old Style',
+          size: 22,
+        }),
+        new TextRun({
+          break: 1,
+          text: `Name: ${cleanText(data.witness1Name)}`,
+          font: 'Bookman Old Style',
+          size: 22,
+        }),
+        new TextRun({
+          break: 1,
+          text: `Address: ${cleanText(data.witness1Address)}`,
           font: 'Bookman Old Style',
           size: 22,
         }),
@@ -909,7 +928,19 @@ export async function buildPartnershipDeedDocx(
       spacing: { after: 120 },
       children: [
         new TextRun({
-          text: `2. Signature: _______________________\nName: ${data.witness2Name}\nAddress: ${data.witness2Address}`,
+          text: '2. Signature: _______________________',
+          font: 'Bookman Old Style',
+          size: 22,
+        }),
+        new TextRun({
+          break: 1,
+          text: `Name: ${cleanText(data.witness2Name)}`,
+          font: 'Bookman Old Style',
+          size: 22,
+        }),
+        new TextRun({
+          break: 1,
+          text: `Address: ${cleanText(data.witness2Address)}`,
           font: 'Bookman Old Style',
           size: 22,
         }),
@@ -1282,18 +1313,24 @@ export async function buildBankMandateDocx(
     new Paragraph({
       spacing: { line: 276, after: 100 },
       children: [
-        new TextRun({
-          text: `Date: ${data.executionDate}\nTo,\nThe Branch Manager,\n${data.bankName || 'The Bank'},\n${data.bankBranch || 'Branch Office'}`,
-          font: 'Bookman Old Style',
-          size: 22,
-        }),
+        new TextRun({ text: `Date: ${cleanText(data.executionDate)}`, font: 'Bookman Old Style', size: 22 }),
+        new TextRun({ break: 2, text: 'To,', font: 'Bookman Old Style', size: 22 }),
+        new TextRun({ break: 1, text: 'The Branch Manager,', bold: true, font: 'Bookman Old Style', size: 22 }),
+        new TextRun({ break: 1, text: `${cleanText(data.bankName) || 'The Bank'},`, font: 'Bookman Old Style', size: 22 }),
+        new TextRun({ break: 1, text: `${cleanText(data.bankBranch) || 'Branch Office'}`, font: 'Bookman Old Style', size: 22 }),
       ],
     }),
     new Paragraph({
       spacing: { line: 276, after: 120 },
       children: [
         new TextRun({
-          text: `Dear Sir/Madam,\n\nRe: Opening of Current Account in the name of "${data.firmName}"`,
+          text: 'Dear Sir/Madam,',
+          font: 'Bookman Old Style',
+          size: 22,
+        }),
+        new TextRun({
+          break: 2,
+          text: `Re: Opening of Current Account in the name of "${cleanText(data.firmName)}"`,
           bold: true,
           font: 'Bookman Old Style',
           size: 22,

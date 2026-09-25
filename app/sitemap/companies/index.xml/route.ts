@@ -17,6 +17,10 @@ export async function GET() {
     totalActive = count || 0
   }
 
+  if (totalActive === 0) {
+    return new NextResponse('No company sitemaps available', { status: 404 })
+  }
+
   const numSitemaps = Math.max(1, Math.ceil(totalActive / 50000))
   const sitemapEntries = Array.from({ length: numSitemaps }).map((_, i) => `
     <sitemap>

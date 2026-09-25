@@ -30,7 +30,7 @@ import FontSizeToggle from '@/components/FontSizeToggle'
 import ArticleImage from '@/components/ArticleImage'
 
 import { QuickAnswer } from '@/components/QuickAnswer'
-import { AlertCircle, BookOpen, CalendarDays, ChevronDown, Clock3, Eye, FileText, Lightbulb, CheckCircle2 } from 'lucide-react'
+import { AlertCircle, BookOpen, CalendarDays, ChevronDown, Clock3, Eye, FileText, Lightbulb, CheckCircle2, Scale } from 'lucide-react'
 import { sanitizeHtml } from '@/lib/sanitize'
 import { mcaForms } from '@/data/mca-forms'
 import ArticleContextTool from '@/components/ArticleContextTool'
@@ -745,6 +745,17 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
 
                 {/* E-E-A-T Editorial Desk Card */}
                 <EditorialAuthorCard category={update.category} articleTitle={update.title} />
+
+                {/* Statutory Legal Disclaimer Box (E-E-A-T & Regulatory Compliance) */}
+                <div className="my-6 rounded-2xl border border-amber-300/80 dark:border-amber-700/60 bg-amber-50/70 dark:bg-amber-950/20 p-5 sm:p-6 text-xs text-amber-950 dark:text-amber-200 leading-relaxed shadow-sm">
+                    <div className="flex items-center gap-2 font-bold text-amber-900 dark:text-amber-300 text-sm mb-2">
+                        <Scale className="size-4 shrink-0 text-amber-600 dark:text-amber-400" aria-hidden="true" />
+                        <span>Statutory &amp; Regulatory Disclaimer</span>
+                    </div>
+                    <p>
+                        The regulatory analysis and statutory interpretations published on CorpLawUpdates.in are compiled exclusively for educational, academic, and professional informational reference. This publication does not constitute formal legal opinion, chartered accountancy certification, or professional corporate secretarial advice. While reasonable editorial care is exercised to verify content against primary gazettes and regulator notifications, applicability varies by individual corporate structure and statutory threshold. Readers and compliance officers are advised to consult a qualified Company Secretary (CS), Chartered Accountant (CA), or Legal Practitioner before executing statutory filings or corporate decisions.
+                    </p>
+                </div>
                 
                 {/* Bottom Share Buttons */}
                 <div className="mt-6 border-t border-slate-100 dark:border-slate-800 pt-4 print:hidden">

@@ -10,6 +10,7 @@ import {
   WidthType,
 } from 'docx'
 import { PDFDocument, PDFFont, PDFPage, StandardFonts, rgb } from 'pdf-lib'
+import { cleanText, safeTextRuns } from './docx-utils'
 
 export type MouType =
   | 'business_partnership'
@@ -824,12 +825,13 @@ export async function buildMouDocx(inputData: Partial<MouFormData> = {}): Promis
 
           // 2-Column Signatures Table
           new Table({
-            width: { size: 100, type: WidthType.PERCENTAGE },
+            width: { size: 9000, type: WidthType.DXA },
+            columnWidths: [4500, 4500],
             rows: [
               new TableRow({
                 children: [
                   new TableCell({
-                    width: { size: 50, type: WidthType.PERCENTAGE },
+                    width: { size: 4500, type: WidthType.DXA },
                     children: [
                       new Paragraph({
                         children: [
@@ -838,7 +840,7 @@ export async function buildMouDocx(inputData: Partial<MouFormData> = {}): Promis
                       }),
                       new Paragraph({
                         children: [
-                          new TextRun({ text: data.partyA.name.toUpperCase(), bold: true, font: FONT, size: 21 }),
+                          new TextRun({ text: cleanText(data.partyA.name).toUpperCase(), bold: true, font: FONT, size: 21 }),
                         ],
                       }),
                       new Paragraph({ text: '' }),
@@ -848,18 +850,18 @@ export async function buildMouDocx(inputData: Partial<MouFormData> = {}): Promis
                       }),
                       new Paragraph({
                         children: [
-                          new TextRun({ text: `Name: ${data.partyA.signatoryName}`, bold: true, font: FONT, size: 20 }),
+                          new TextRun({ text: `Name: ${cleanText(data.partyA.signatoryName)}`, bold: true, font: FONT, size: 20 }),
                         ],
                       }),
                       new Paragraph({
                         children: [
-                          new TextRun({ text: `Designation: ${data.partyA.signatoryDesignation}`, font: FONT, size: 20 }),
+                          new TextRun({ text: `Designation: ${cleanText(data.partyA.signatoryDesignation)}`, font: FONT, size: 20 }),
                         ],
                       }),
                     ],
                   }),
                   new TableCell({
-                    width: { size: 50, type: WidthType.PERCENTAGE },
+                    width: { size: 4500, type: WidthType.DXA },
                     children: [
                       new Paragraph({
                         children: [
@@ -868,7 +870,7 @@ export async function buildMouDocx(inputData: Partial<MouFormData> = {}): Promis
                       }),
                       new Paragraph({
                         children: [
-                          new TextRun({ text: data.partyB.name.toUpperCase(), bold: true, font: FONT, size: 21 }),
+                          new TextRun({ text: cleanText(data.partyB.name).toUpperCase(), bold: true, font: FONT, size: 21 }),
                         ],
                       }),
                       new Paragraph({ text: '' }),
@@ -878,12 +880,12 @@ export async function buildMouDocx(inputData: Partial<MouFormData> = {}): Promis
                       }),
                       new Paragraph({
                         children: [
-                          new TextRun({ text: `Name: ${data.partyB.signatoryName}`, bold: true, font: FONT, size: 20 }),
+                          new TextRun({ text: `Name: ${cleanText(data.partyB.signatoryName)}`, bold: true, font: FONT, size: 20 }),
                         ],
                       }),
                       new Paragraph({
                         children: [
-                          new TextRun({ text: `Designation: ${data.partyB.signatoryDesignation}`, font: FONT, size: 20 }),
+                          new TextRun({ text: `Designation: ${cleanText(data.partyB.signatoryDesignation)}`, font: FONT, size: 20 }),
                         ],
                       }),
                     ],
@@ -904,15 +906,17 @@ export async function buildMouDocx(inputData: Partial<MouFormData> = {}): Promis
           new Paragraph({ text: '' }),
           new Paragraph({
             children: [
-              new TextRun({ text: '1. Signature: _______________________\n', bold: true, font: FONT, size: 20 }),
-              new TextRun({ text: `   Name: ${data.witness1Name}\n   Address: ${data.witness1Address}`, font: FONT, size: 19 }),
+              new TextRun({ text: '1. Signature: _______________________', bold: true, font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: `   Name: ${cleanText(data.witness1Name)}`, font: FONT, size: 19 }),
+              new TextRun({ break: 1, text: `   Address: ${cleanText(data.witness1Address)}`, font: FONT, size: 19 }),
             ],
           }),
           new Paragraph({ text: '' }),
           new Paragraph({
             children: [
-              new TextRun({ text: '2. Signature: _______________________\n', bold: true, font: FONT, size: 20 }),
-              new TextRun({ text: `   Name: ${data.witness2Name}\n   Address: ${data.witness2Address}`, font: FONT, size: 19 }),
+              new TextRun({ text: '2. Signature: _______________________', bold: true, font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: `   Name: ${cleanText(data.witness2Name)}`, font: FONT, size: 19 }),
+              new TextRun({ break: 1, text: `   Address: ${cleanText(data.witness2Address)}`, font: FONT, size: 19 }),
             ],
           }),
         ],
@@ -1030,14 +1034,16 @@ export async function buildNdaAddendumDocx(inputData: Partial<MouFormData> = {})
           new Paragraph({
             alignment: AlignmentType.RIGHT,
             children: [
-              new TextRun({ text: `For ${data.partyA.name.toUpperCase()}\n(${data.partyA.signatoryName})`, bold: true, font: FONT, size: 20 }),
+              new TextRun({ text: `For ${cleanText(data.partyA.name).toUpperCase()}`, bold: true, font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: `(${cleanText(data.partyA.signatoryName)})`, bold: true, font: FONT, size: 20 }),
             ],
           }),
           new Paragraph({ text: '' }),
           new Paragraph({
             alignment: AlignmentType.RIGHT,
             children: [
-              new TextRun({ text: `For ${data.partyB.name.toUpperCase()}\n(${data.partyB.signatoryName})`, bold: true, font: FONT, size: 20 }),
+              new TextRun({ text: `For ${cleanText(data.partyB.name).toUpperCase()}`, bold: true, font: FONT, size: 20 }),
+              new TextRun({ break: 1, text: `(${cleanText(data.partyB.signatoryName)})`, bold: true, font: FONT, size: 20 }),
             ],
           }),
         ],

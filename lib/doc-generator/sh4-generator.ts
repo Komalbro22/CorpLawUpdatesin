@@ -11,6 +11,7 @@ import {
   BorderStyle,
 } from 'docx'
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
+import { cleanText, safeTextRuns } from './docx-utils'
 
 export interface Sh4FormData {
   executionDate?: string
@@ -465,7 +466,29 @@ export async function buildSh4Docx(data: Partial<Sh4FormData> = {}): Promise<Buf
                         alignment: AlignmentType.CENTER,
                         children: [
                           new TextRun({
-                            text: `STAMPS\n(Statutory duty calculated @ 0.015% under Schedule I, Article 62 of Indian Stamp Act, 1899)\n\n[ SPACE FOR AFFIXING SHARE TRANSFER STAMPS / E-STAMP CERTIFICATE / ACKNOWLEDGEMENT ]\n\nNote: Cancel share transfer stamps by writing signature across or punching as required under Section 12 of Indian Stamp Act.`,
+                            text: 'STAMPS',
+                            font: FONT,
+                            size: 18,
+                            italics: true,
+                            bold: true,
+                          }),
+                          new TextRun({
+                            break: 1,
+                            text: '(Statutory duty calculated @ 0.015% under Schedule I, Article 62 of Indian Stamp Act, 1899)',
+                            font: FONT,
+                            size: 18,
+                            italics: true,
+                          }),
+                          new TextRun({
+                            break: 2,
+                            text: '[ SPACE FOR AFFIXING SHARE TRANSFER STAMPS / E-STAMP CERTIFICATE / ACKNOWLEDGEMENT ]',
+                            font: FONT,
+                            size: 18,
+                            italics: true,
+                          }),
+                          new TextRun({
+                            break: 2,
+                            text: 'Note: Cancel share transfer stamps by writing signature across or punching as required under Section 12 of Indian Stamp Act.',
                             font: FONT,
                             size: 18,
                             italics: true,
@@ -744,22 +767,23 @@ export async function buildBoardResolutionDocx(data: Partial<Sh4FormData> = {}):
           }),
           new Paragraph({
             alignment: AlignmentType.RIGHT,
-            spacing: { after: 20 },
+            spacing: { before: 240, after: 20 },
             children: [
-              new TextRun({ text: '\n\n\n________________________________________', font: FONT, size: 20 }),
+              new TextRun({ text: '________________________________________', font: FONT, size: 20 }),
             ],
           }),
           new Paragraph({
             alignment: AlignmentType.RIGHT,
             spacing: { after: 20 },
             children: [
-              new TextRun({ text: directorName, bold: true, font: FONT, size: 20 }),
+              new TextRun({ text: cleanText(directorName), bold: true, font: FONT, size: 20 }),
             ],
           }),
           new Paragraph({
             alignment: AlignmentType.RIGHT,
             children: [
-              new TextRun({ text: `Director / Authorised Signatory\nDIN: ${directorDin}`, font: FONT, size: 18 }),
+              new TextRun({ text: 'Director / Authorised Signatory', font: FONT, size: 18 }),
+              new TextRun({ break: 1, text: `DIN: ${cleanText(directorDin)}`, font: FONT, size: 18 }),
             ],
           }),
 
@@ -767,7 +791,8 @@ export async function buildBoardResolutionDocx(data: Partial<Sh4FormData> = {}):
             alignment: AlignmentType.LEFT,
             spacing: { before: 200 },
             children: [
-              new TextRun({ text: `Date: ${meetingDate}\nPlace: New Delhi`, font: FONT, size: 18 }),
+              new TextRun({ text: `Date: ${cleanText(meetingDate)}`, font: FONT, size: 18 }),
+              new TextRun({ break: 1, text: 'Place: New Delhi', font: FONT, size: 18 }),
             ],
           }),
         ],
