@@ -1,5 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { NextResponse } from 'next/server'
+import { extractGeoFromHeaders } from '@/lib/geo-ip'
 
 const GEMINI_KEYS = [
   process.env.GOOGLE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || '',
@@ -435,13 +436,31 @@ ${customInstructions ? `5. CUSTOM INSTRUCTIONS DRAFTING RULE:
     // Post-process the generated text to clean up bugs
     documentContent = cleanGeneratedLegalContent(documentContent)
 
+    // Extract edge geolocation metadata
+    const geo = extractGeoFromHeaders(request.headers)
+    const enrichedFormData = {
+      ...(form_data || {}),
+      _meta: {
+        ...((form_data && form_data._meta) || {}),
+        geo: geo || {
+          city: 'Direct Access',
+          region: '',
+          regionName: '',
+          country: 'India',
+          countryCode: 'IN',
+          flag: '🇮🇳',
+        },
+        ip,
+      },
+    }
+
     // Save to database
     const { data: saved, error: saveError } = await supabaseAdmin
       .from('generated_documents')
       .insert({
         template_id: template.id,
         template_name: template.name,
-        form_data: form_data || {},
+        form_data: enrichedFormData,
         original_content: documentContent,
         edited_content: documentContent,
         session_id: session_id || null,

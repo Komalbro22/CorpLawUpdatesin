@@ -2,36 +2,53 @@ import { NextResponse } from 'next/server'
 export const dynamic = 'force-dynamic'
 import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
+import { resolveGeoFromIp, GeoLocation } from '@/lib/geo-ip'
 
-export async function GET() {
+export async function GET(request: Request) {
   if (!await verifyAdminSession()) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
   try {
+    const { searchParams } = new URL(request.url)
+    const requestedTimeframe = searchParams.get('timeframe') || 'today' // 'today' | 'week' | 'month' | 'all'
+
     const DAILY_TOKEN_QUOTA = parseInt(process.env.GEMINI_DAILY_TOKEN_QUOTA ?? '1000000', 10)
 
-    const startOfToday = new Date()
+    // Calculate reference time boundaries
+    const now = new Date()
+
+    const startOfToday = new Date(now)
     startOfToday.setUTCHours(0, 0, 0, 0)
     const startOfTodayIso = startOfToday.toISOString()
 
-    // 1. Fetch all documents generated today to compute daily token consumption
-    const { data: todayDocs, error: todayDocsError } = await supabaseAdmin
-      .from('generated_documents')
-      .select('total_tokens, prompt_tokens, completion_tokens, generation_type, created_at')
-      .gte('created_at', startOfTodayIso)
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString()
+    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString()
 
-    if (todayDocsError) {
-      console.error('[Analytics API] Error fetching today\'s documents:', todayDocsError.message)
+    // 1. Fetch recent generated documents (lean columns only to preserve Supabase egress)
+    const { data: allDocs, error: docsError } = await supabaseAdmin
+      .from('generated_documents')
+      .select('id, template_name, total_tokens, prompt_tokens, completion_tokens, ip_address, generation_type, created_at, form_data')
+      .order('created_at', { ascending: false })
+      .limit(1000)
+
+    if (docsError) {
+      console.error('[Analytics API] Error fetching documents:', docsError.message)
       return NextResponse.json({ error: 'Failed to fetch analytics' }, { status: 500 })
     }
 
-    const docsTodayCount = todayDocs?.length || 0
+    const docs = allDocs || []
+
+    // 2. High-level Timeframe Counts
+    const todayDocs = docs.filter(d => d.created_at >= startOfTodayIso)
+    const weekDocs = docs.filter(d => d.created_at >= sevenDaysAgo)
+    const monthDocs = docs.filter(d => d.created_at >= thirtyDaysAgo)
+
     let dailyTokensConsumed = 0
     let aiDocsTodayCount = 0
     let standardDocsTodayCount = 0
 
-    todayDocs?.forEach(doc => {
+    todayDocs.forEach(doc => {
       if (doc.generation_type === 'ai') {
         dailyTokensConsumed += doc.total_tokens || 0
         aiDocsTodayCount++
@@ -42,72 +59,148 @@ export async function GET() {
 
     const remainingTokens = Math.max(0, DAILY_TOKEN_QUOTA - dailyTokensConsumed)
 
-    // 2. Refresh Time: calculate seconds left until Midnight UTC
-    const midnightUtc = new Date()
+    // Midnight UTC refresh timer
+    const midnightUtc = new Date(now)
     midnightUtc.setUTCHours(24, 0, 0, 0)
-    const refreshTimeSeconds = Math.max(0, Math.floor((midnightUtc.getTime() - Date.now()) / 1000))
+    const refreshTimeSeconds = Math.max(0, Math.floor((midnightUtc.getTime() - now.getTime()) / 1000))
 
-    // 3. Last Generation Details
-    const { data: lastGen, error: lastGenError } = await supabaseAdmin
-      .from('generated_documents')
-      .select('template_name, created_at, total_tokens, generation_type')
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle()
+    // 3. Resolve Geolocation for unique IPs in dataset
+    const uniqueIps = Array.from(new Set(docs.map(d => d.ip_address || '127.0.0.1')))
+    const geoMap = new Map<string, GeoLocation>()
 
-    if (lastGenError) {
-      console.error('[Analytics API] Error fetching last generation:', lastGenError.message)
+    // Resolve geo concurrently with a concurrency limit
+    await Promise.all(
+      uniqueIps.map(async ip => {
+        const geo = await resolveGeoFromIp(ip)
+        geoMap.set(ip, geo)
+      })
+    )
+
+    // 4. Select documents for the currently requested timeframe
+    let filteredDocs = docs
+    if (requestedTimeframe === 'today') {
+      filteredDocs = todayDocs
+    } else if (requestedTimeframe === 'week') {
+      filteredDocs = weekDocs
+    } else if (requestedTimeframe === 'month') {
+      filteredDocs = monthDocs
     }
 
-    // 4. Fetch last 1000 documents to compute aggregate statistics (Top IPs, Top Templates)
-    const { data: recentDocs, error: recentDocsError } = await supabaseAdmin
-      .from('generated_documents')
-      .select('template_name, total_tokens, ip_address, generation_type, created_at')
-      .order('created_at', { ascending: false })
-      .limit(1000)
+    const activeCount = filteredDocs.length
 
-    if (recentDocsError) {
-      console.error('[Analytics API] Error fetching recent documents:', recentDocsError.message)
-    }
+    // 5. Aggregate Templates in Selected Timeframe
+    const templateMap = new Map<
+      string,
+      { count: number; aiCount: number; standardCount: number; tokens: number }
+    >()
 
-    // Process Top IPs/Clients
-    const ipCounts: Record<string, { count: number; tokens: number }> = {}
-    recentDocs?.forEach(doc => {
-      const ip = doc.ip_address || 'unknown'
-      if (!ipCounts[ip]) {
-        ipCounts[ip] = { count: 0, tokens: 0 }
-      }
-      ipCounts[ip].count++
+    filteredDocs.forEach(doc => {
+      const name = doc.template_name || 'Unspecified Document'
+      const current = templateMap.get(name) || { count: 0, aiCount: 0, standardCount: 0, tokens: 0 }
+      current.count++
       if (doc.generation_type === 'ai') {
-        ipCounts[ip].tokens += doc.total_tokens || 0
+        current.aiCount++
+        current.tokens += doc.total_tokens || 0
+      } else {
+        current.standardCount++
+      }
+      templateMap.set(name, current)
+    })
+
+    const templateBreakdown = Array.from(templateMap.entries())
+      .map(([name, stats]) => ({
+        name,
+        count: stats.count,
+        aiCount: stats.aiCount,
+        standardCount: stats.standardCount,
+        tokens: stats.tokens,
+        pct: activeCount > 0 ? Math.round((stats.count / activeCount) * 100) : 0,
+      }))
+      .sort((a, b) => b.count - a.count)
+
+    // 6. Aggregate Geolocation in Selected Timeframe
+    const locationMap = new Map<
+      string,
+      {
+        city: string
+        region: string
+        regionName: string
+        country: string
+        countryCode: string
+        flag: string
+        count: number
+      }
+    >()
+
+    filteredDocs.forEach(doc => {
+      // Priority 1: Check embedded geo inside form_data._meta.geo
+      const embeddedGeo = (doc.form_data as any)?._meta?.geo
+      const resolvedGeo = embeddedGeo || geoMap.get(doc.ip_address || '127.0.0.1') || {
+        city: 'Direct Access',
+        region: '',
+        regionName: 'India',
+        country: 'India',
+        countryCode: 'IN',
+        flag: '🇮🇳',
+      }
+
+      const locationKey = `${resolvedGeo.city}#${resolvedGeo.regionName || resolvedGeo.region || resolvedGeo.country}`
+      const existing = locationMap.get(locationKey) || {
+        city: resolvedGeo.city,
+        region: resolvedGeo.region,
+        regionName: resolvedGeo.regionName || resolvedGeo.region || resolvedGeo.country,
+        country: resolvedGeo.country,
+        countryCode: resolvedGeo.countryCode || 'IN',
+        flag: resolvedGeo.flag || '🇮🇳',
+        count: 0,
+      }
+      existing.count++
+      locationMap.set(locationKey, existing)
+    })
+
+    const topLocations = Array.from(locationMap.values())
+      .map(loc => ({
+        ...loc,
+        pct: activeCount > 0 ? Math.round((loc.count / activeCount) * 100) : 0,
+      }))
+      .sort((a, b) => b.count - a.count)
+
+    // 7. Recent Generations (Chronological Feed)
+    const recentGenerations = docs.slice(0, 50).map(doc => {
+      const embeddedGeo = (doc.form_data as any)?._meta?.geo
+      const resolvedGeo = embeddedGeo || geoMap.get(doc.ip_address || '127.0.0.1') || {
+        city: 'Direct Access',
+        region: '',
+        regionName: 'India',
+        country: 'India',
+        countryCode: 'IN',
+        flag: '🇮🇳',
+      }
+
+      return {
+        id: doc.id,
+        template_name: doc.template_name || 'Standard Legal Document',
+        generation_type: doc.generation_type || 'standard',
+        total_tokens: doc.total_tokens || 0,
+        city: resolvedGeo.city,
+        regionName: resolvedGeo.regionName || resolvedGeo.region,
+        country: resolvedGeo.country,
+        flag: resolvedGeo.flag || '🇮🇳',
+        ip: doc.ip_address || 'unknown',
+        created_at: doc.created_at,
       }
     })
 
-    const topClients = Object.entries(ipCounts)
-      .map(([ip, stats]) => ({
-        ip,
-        count: stats.count,
-        tokens: stats.tokens,
-      }))
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 5)
-
-    // Process Top Templates
-    const templateCounts: Record<string, number> = {}
-    recentDocs?.forEach(doc => {
-      const name = doc.template_name || 'Unspecified'
-      templateCounts[name] = (templateCounts[name] || 0) + 1
+    // 8. Hourly Activity Distribution (IST = UTC + 5:30)
+    const hourlyCounts = new Array(24).fill(0)
+    filteredDocs.forEach(doc => {
+      const d = new Date(doc.created_at)
+      // Convert to IST hour
+      const istHours = (d.getUTCHours() + 5 + Math.floor((d.getUTCMinutes() + 30) / 60)) % 24
+      hourlyCounts[istHours]++
     })
 
-    const topTemplates = Object.entries(templateCounts)
-      .map(([name, count]) => ({
-        name,
-        count,
-      }))
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 5)
-
-    // 5. Fetch current limit settings
+    // 9. Fetch current limit settings
     const { data: settingsData, error: settingsError } = await supabaseAdmin
       .from('site_settings')
       .select('key, value')
@@ -123,18 +216,24 @@ export async function GET() {
 
     return NextResponse.json(
       {
+        timeframe: requestedTimeframe,
         overview: {
           dailyTokensConsumed,
           dailyTokenQuota: DAILY_TOKEN_QUOTA,
           remainingTokens,
           refreshTimeSeconds,
-          docsTodayCount,
+          docsTodayCount: todayDocs.length,
           aiDocsTodayCount,
           standardDocsTodayCount,
+          docsWeekCount: weekDocs.length,
+          docsMonthCount: monthDocs.length,
+          docsTotalCount: docs.length,
+          uniqueCitiesCount: locationMap.size,
         },
-        lastGeneration: lastGen || null,
-        topClients,
-        topTemplates,
+        templateBreakdown,
+        topLocations,
+        recentGenerations,
+        hourlyDistribution: hourlyCounts,
         settings: {
           maxRequests,
           maxTokens,
@@ -143,7 +242,7 @@ export async function GET() {
       },
       {
         headers: {
-          'Cache-Control': 'private, max-age=30',
+          'Cache-Control': 'private, max-age=15',
         },
       }
     )
