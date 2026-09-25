@@ -32,6 +32,7 @@ export const metadata: Metadata = {
   description: 'Free Indian corporate law updates covering MCA, SEBI, RBI, IFSCA (GIFT City), CCI, Labour Law, NCLT, IBC and FEMA regulatory developments for legal & compliance professionals.',
   other: {
     'google-adsense-account': 'ca-pub-8404756575471756',
+    'monetag': '350f6f6cece893230af559a511e04841',
   },
 
   authors: [{ name: 'CorpLawUpdates.in' }],
@@ -115,6 +116,7 @@ export default async function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="format-detection" content="telephone=no" />
+        <meta name="monetag" content="350f6f6cece893230af559a511e04841" />
         <JsonLd id="schema-org" data={{
           '@context': 'https://schema.org',
           '@type': 'Organization',
