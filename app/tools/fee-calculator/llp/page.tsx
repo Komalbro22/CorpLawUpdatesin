@@ -8,12 +8,13 @@ import ReaderFeedback from '@/components/ReaderFeedback'
 
 export const metadata: Metadata = {
   title: {
-    absolute: 'LLP Form Fee Calculator: Form 8, 11, 3, 4 & 24 | CorpLaw',
+    absolute: 'LLP Fee Calculator — Form 8, 11, 3, 4 Late Filing Fees & Penalties (FY 2026-27)',
   },
   description:
     'Calculate MCA LLP statutory filing fees, Section 69 late multipliers, and Form 8 & Form 11 annual return default penalties for FY 2026-27.',
   keywords: [
     'LLP fee calculator',
+    'LLP late fee calculator',
     'LLP late filing fee',
     'Form 11 penalty calculator',
     'Form 8 late fee LLP',
@@ -35,7 +36,15 @@ const llpJsonLd = {
     {
       '@type': 'SoftwareApplication',
       '@id': 'https://www.corplawupdates.in/tools/fee-calculator/llp#softwareapplication',
-      name: 'LLP Fee & Late Filing Calculator',
+      name: 'LLP Fee Calculator',
+      alternateName: [
+        'LLP Fee Calculator',
+        'LLP Late Fee Calculator',
+        'LLP Form 11 Fee Calculator',
+        'LLP Form 8 Fee Calculator',
+        'LLP Penalty Calculator',
+        'MCA LLP Fee Calculator'
+      ],
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'Web Browser',
       offers: {

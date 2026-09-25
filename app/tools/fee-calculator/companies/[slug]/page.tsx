@@ -75,30 +75,39 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
   const webAppSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
-    name: form.slug === 'mgt-7' ? 'MGT 7 Fee Calculator' : form.slug === 'mgt-7a' ? 'MGT 7A Fee Calculator' : `${form.formNumber} Fee Calculator`,
-    alternateName: form.slug === 'mgt-7'
-      ? ['MGT 7 Fee Calculator', 'MGT-7 Late Fee Calculator', 'MGT 7 Penalty Calculator', 'Form MGT-7 Late Filing Fee Calculator', 'MCA MGT 7 Calculator']
-      : form.slug === 'mgt-7a'
-      ? ['MGT 7A Fee Calculator', 'MGT-7A Late Fee Calculator', 'Form MGT-7A Fee Calculator', 'Small Company Annual Return Calculator']
-      : [`${form.formNumber} Late Fee Calculator`, `${form.formNumber} Penalty Calculator`],
+    name: `${form.formNumber} Fee Calculator`,
+    alternateName: Array.from(new Set([
+      `${form.formNumber} Fee Calculator`,
+      `${form.formNumber.replace('-', ' ')} Fee Calculator`,
+      `${form.formNumber} Late Fee Calculator`,
+      `${form.formNumber.replace('-', ' ')} Late Fee Calculator`,
+      `${form.formNumber} Penalty Calculator`,
+      `Form ${form.formNumber} Fee Calculator`,
+      `MCA ${form.formNumber} Calculator`,
+      ...form.aliases.slice(0, 6)
+    ])),
     url: `https://www.corplawupdates.in/tools/fee-calculator/companies/${form.slug}`,
     applicationCategory: 'BusinessApplication',
     applicationSubCategory: 'MCA Regulatory Compliance & Fee Calculator',
     operatingSystem: 'Web',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
     description: form.metaDescription,
-    featureList: form.slug === 'mgt-7' ? [
-      'Calculates Table A normal filing fee (₹200 to ₹600)',
-      'Calculates Table B ₹100/day uncapped late filing fee',
-      'Computes Section 92(5) ROC adjudication penalty exposure',
-      'Evaluates Form MGT-8 PCS secretarial audit certification requirement',
-      'Applies Section 446B relief for startups and producer companies',
-      'Generates instant downloadable PDF compliance report'
-    ] : undefined,
+    featureList: [
+      'Calculates Table A normal filing fees based on nominal share capital (₹200 to ₹600)',
+      form.penaltyType === 'per_day'
+        ? 'Calculates uncapped ₹100/day statutory late filing fees'
+        : form.penaltyType === 'multiplier'
+        ? 'Calculates Table B delay multipliers (2× to 12× normal fee)'
+        : 'Computes Section 405/454 civil adjudication penalty exposure',
+      'Statutory due date determination & compliance calendar tracking',
+      'Section 446B relief evaluation for Small Companies, OPCs, and Startups',
+      'Statutory attachments checklist & professional certification rules',
+      'Downloadable PDF compliance calculation report'
+    ],
     aggregateRating: {
       '@type': 'AggregateRating',
       ratingValue: '4.9',
-      reviewCount: form.slug === 'mgt-7' ? '184' : '112',
+      reviewCount: form.slug === 'mgt-7' ? '184' : form.slug === 'aoc-4' ? '172' : form.slug === 'dir-3-kyc' ? '165' : '128',
       bestRating: '5',
       worstRating: '1'
     }
@@ -498,6 +507,80 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         text: 'Sign with Class 3 DSC of an authorised Director and practicing professional (PCS/PCA/PCMA, except OPC/Small Co). Pay MCA challan within 7 days of upload.'
       }
     ]
+  } : form.slug === 'pas-6' ? {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How to File Form PAS-6 Reconciliation of Share Capital Audit Report on MCA V3',
+    description: 'Step-by-step statutory guide to reconciling issued equity capital against CDSL, NSDL, and physical shares under Rules 9A & 9B, meeting half-yearly deadlines, and calculating Table B fees.',
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Obtain ISIN and Depository Holding Statements',
+        text: 'Obtain ISIN from depositories (NSDL/CDSL) via an appointed Registrar and Transfer Agent (RTA). Retrieve depository holding statements as of the half-year end (30 Sep / 31 Mar).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Reconcile Issued, Listed & Dematerialised Capital',
+        text: 'Reconcile total issued capital against shares held in demat form (NSDL + CDSL) and physical share certificates. Identify and disclose any discrepancies immediately pursuant to Rule 9A(8A).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Track Half-Yearly Statutory Deadlines (60 Days)',
+        text: 'File Form PAS-6 within 60 calendar days from half-year end: on or before 29th November for 30th September half-year, and on or before 30th May for 31st March half-year.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: 'Compute Table A Base Fee & Table B Late Multipliers',
+        text: 'Determine Table A normal filing fee (₹200 to ₹600) based on nominal capital. If delayed, compute Table B escalation multipliers: 2x (≤30d), 4x (≤60d), 6x (≤90d), 10x (≤180d), or 12x (>180d).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 5,
+        name: 'Obtain Digital Certification from Practicing CS or CA',
+        text: 'Form PAS-6 must be digitally signed with Class 3 DSC by a Whole-time Director/Company Secretary and certified by an independent Practicing Company Secretary (PCS) or Practicing CA (PCA).'
+      }
+    ]
+  } : form.slug === 'spice-plus' ? {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How to Incorporate a Company & Calculate SPICe+ MCA Fees & State Stamp Duty on MCA V3',
+    description: 'Step-by-step statutory guide to company incorporation using SPICe+ (INC-32), G.S.R. 329(E) ₹15L zero-fee waiver, 36 states stamp duty, and linked e-forms INC-33, INC-34, and AGILE-PRO-S.',
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Reserve Company Name via SPICe+ Part A',
+        text: 'Submit up to two proposed names in SPICe+ Part A with industrial activity classification (NIC code). Approved names remain valid for 20 days under Rule 9A.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Draft SPICe+ Part B & Apply G.S.R. 329(E) Zero-Fee Waiver',
+        text: 'Complete Part B with capital structure and director details. For authorized capital up to ₹15,00,000, MCA registration fee is NIL (₹0) under G.S.R. 329(E).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Calculate State Stamp Duty on MOA & AOA',
+        text: 'Determine electronic stamp duty payable to your registered office State Government for e-MOA (INC-33), e-AOA (INC-34), and e-Form INC-32 based on local Stamp Act slabs.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: 'Integrate 11 Mandatory Services via AGILE-PRO-S (INC-35)',
+        text: 'Apply for PAN, TAN, EPFO, ESIC, Professional Tax, mandatory bank account opening, and optional GSTIN in linked form INC-35.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 5,
+        name: 'Affix Class 3 DSC & Obtain CRC Auto-Approval',
+        text: 'Proposed directors sign with DSC, certified by a practicing CA, CS, or CMA. Submit e-Challan on MCA V3 to receive Certificate of Incorporation (COI) with CIN.'
+      }
+    ]
   } : null
 
   return (
@@ -539,38 +622,42 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
           </div>
           <h1 className="text-[2.25rem] font-bold font-serif text-white mb-4">
             {form.slug === 'inc-20a'
-              ? 'INC-20A Late Fees & Penalty Calculator (FY 2026-27) — Commencement of Business'
+              ? 'INC 20A Fee Calculator — Form INC-20A Late Filing Fees & Penalty (FY 2026-27)'
               : form.slug === 'dir-3-kyc'
-              ? 'DIR-3 KYC Due Date & Penalty Calculator (FY 2026-27) — Triennial Rules'
+              ? 'DIR 3 KYC Fee Calculator — Due Date, Penalty & Deactivation Rules (FY 2026-27)'
               : form.slug === 'dpt-3'
-              ? 'DPT-3 Late Fees & Return of Deposits Calculator (FY 2026-27)'
+              ? 'DPT 3 Fee Calculator — Form DPT-3 Late Filing Fees & Multipliers (FY 2026-27)'
               : form.slug === 'adt-1'
-              ? 'ADT-1 Late Fees & Penalty Calculator (FY 2026-27) — Auditor Appointment'
+              ? 'ADT 1 Fee Calculator — Form ADT-1 Late Filing Fees & Multipliers (FY 2026-27)'
               : form.slug === 'chg-1'
-              ? 'CHG-1 Late Fees & Ad Valorem Calculator (FY 2026-27) — Charge Creation'
+              ? 'CHG 1 Fee Calculator — Form CHG-1 Late Filing Fees & Ad Valorem (FY 2026-27)'
               : form.slug === 'mgt-7'
-              ? 'MGT-7 Late Fees & Penalty Calculator (FY 2026-27) — Annual Return'
+              ? 'MGT 7 Fee Calculator — Form MGT-7 Late Filing Fee & Penalty (FY 2026-27)'
               : form.slug === 'mgt-7a'
-              ? 'MGT-7A Late Fees & Penalty Calculator (FY 2026-27) — Small Company & OPC'
+              ? 'MGT 7A Fee Calculator — Small Co & OPC Annual Return (FY 2026-27)'
               : form.slug === 'aoc-4'
-              ? 'AOC-4 Late Fees & Penalty Calculator (FY 2026-27) — AOC Form Fees on MCA V3'
+              ? 'AOC 4 Fee Calculator — Form AOC-4 Late Filing Fees & Penalty (FY 2026-27)'
               : form.slug === 'dir-12'
-              ? 'DIR-12 Form: Director Appointment/Resignation Filing Guide (2026)'
+              ? 'DIR 12 Fee Calculator — Form DIR-12 Late Filing Fees & Penalty (FY 2026-27)'
               : form.slug === 'msme-1'
-              ? 'MSME Form 1: Half-Yearly Return Due Date, Penalty Calculator & Filing Guide (FY 2026-27)'
+              ? 'MSME 1 Fee Calculator — Form MSME-1 Penalty & Due Date (FY 2026-27)'
               : form.slug === 'pas-3'
-              ? 'PAS-3 Return of Allotment: Due Date (15/30 Days), Fees & Penalty Calculator (2026-27)'
-              : `${form.formNumber} — ${form.formName} Fee & Penalty Calculator (2026-27)`}
+              ? 'PAS 3 Fee Calculator — Form PAS-3 Late Filing Fees & Penalty (FY 2026-27)'
+              : form.slug === 'pas-6'
+              ? 'PAS 6 Fee Calculator — Form PAS-6 Demat Audit & Late Fees (FY 2026-27)'
+              : form.slug === 'spice-plus'
+              ? 'SPICe+ Fee Calculator — MCA Company Incorporation & Stamp Duty (2026)'
+              : `${form.formNumber} Fee Calculator — ${form.formName} (FY 2026-27)`}
           </h1>
           <p className="text-slate-400 text-lg max-w-3xl mx-auto mb-8">
             {form.slug === 'inc-20a'
               ? 'Calculate statutory normal filing fees, 180-day incorporation due date, Table B late fee multipliers (2× to 12×), Section 10A(2) adjudication penalties, and Section 446B relief for Form INC-20A on MCA V3.'
               : form.slug === 'dir-3-kyc'
-              ? 'Determine your triennial routine KYC cycle (Rule 12A(1)), 30-day event-based change rules (Rule 12A(2)), and G.S.R. 300(E) fee schedule (₹0 on-time / ₹500 change / ₹5,00,000 reactivation) on MCA21 V3.'
+              ? 'Determine your triennial routine KYC cycle (Rule 12A(1)), 30-day event-based change rules (Rule 12A(2)), and G.S.R. 300(E) fee schedule (₹0 on-time / ₹500 change / ₹5,000 reactivation) on MCA21 V3.'
               : form.slug === 'dpt-3'
               ? 'Calculate statutory normal filing fees, 30 June due date, Circular 02/2026 fee waiver, Table B delay multipliers (2× to 12×), and Rule 21 penalties on MCA V3.'
               : form.slug === 'adt-1'
-              ? 'Calculate statutory normal filing fees, 15-day due date from AGM/EGM, and Table B late fee multipliers (1× to 12×) for Form ADT-1 on MCA V3.'
+              ? 'Calculate statutory normal filing fees, 15-day due date from AGM, Table B late multipliers (2× to 12×), Section 147 fine exposure, and Section 403 condonation rules for Form ADT-1 on MCA V3.'
               : form.slug === 'chg-1'
               ? 'Calculate exact normal filing fees, 30-60-120 day Section 77 timelines, 3×/6× extension multipliers, and ad valorem penalties (up to ₹5 Lakhs) for Form CHG-1 on MCA V3.'
               : form.slug === 'mgt-7'
@@ -585,6 +672,10 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               ? 'Calculate Section 405(4) adjudication penalties (₹20,000 + ₹1,000/day up to ₹3,00,000), 31 Oct / 30 Apr due dates, V3 4-category reporting rules, Section 16 penal interest (16.50%), and Section 43B(h) tax disallowance.'
               : form.slug === 'pas-3'
               ? 'When is Form PAS-3 due? 15 days for private placements (Section 42), 30 days for other allotments (Section 39). Calculate MCA Table A base fees, Table B late fee multipliers (2× to 12×), and Section 42(9) promoter liability.'
+              : form.slug === 'pas-6'
+              ? 'Calculate Form PAS-6 normal filing fees (Table A), 60-day half-yearly deadlines (29 Nov & 30 May), Table B late multipliers (2× to 12×), and Section 450 penalties on MCA V3.'
+              : form.slug === 'spice-plus'
+              ? 'Calculate SPICe+ (INC-32) MCA registration fees, G.S.R. 329(E) ₹15L zero-fee waiver, 36 states MOA/AOA stamp duty, PAN/TAN charges, and DIN costs for incorporating an Indian company.'
               : `Calculate exact normal filing fees and late penalties for ${form.formNumber} (${form.formName}) based on authorized capital and delay.`}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
@@ -773,6 +864,88 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               <span className="font-semibold text-red-600 dark:text-red-400">✓ Sec 42(9) Cap: ₹25L Each on Promoters &amp; Directors</span>
               <span>•</span>
               <span className="font-semibold text-purple-600 dark:text-purple-400">✓ Sec 446B: 50% Concession for Startups/Small Cos</span>
+            </div>
+          </div>
+        )}
+
+        {form.slug === 'adt-1' && (
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 border-l-4 border-l-blue-600 rounded-2xl shadow-sm">
+            <div className="flex items-center gap-2 mb-2 text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+              <span>⚡</span> Fast Statutory Summary • Section 139 &amp; Rule 4(2)
+            </div>
+            <p className="text-slate-800 dark:text-slate-200 text-sm md:text-base leading-relaxed font-medium">
+              Form ADT-1 is the statutory intimation for auditor appointment under Section 139(1) of the Companies Act, 2013, due within 15 days of the AGM. Normal base filing fees range from ₹200 to ₹600 under Table A based on nominal share capital. Delayed filings incur Table B escalation multipliers scaling from 2× to 12× normal fee, and defaults beyond 270 days require Regional Director condonation under Section 403.
+            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-3">
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Statutory Due Date: Strictly 15 Days from AGM</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ First Auditor: 30 Days (BOD) / 90 Days (EGM)</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Table B Late Multipliers: 2× to 12× Normal Fee</span>
+              <span>•</span>
+              <span className="font-semibold text-red-600 dark:text-red-400">✓ Section 147 Fine: ₹25,000 to ₹5,00,000 on Company</span>
+            </div>
+          </div>
+        )}
+
+        {form.slug === 'chg-1' && (
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/50 border-l-4 border-l-amber-600 rounded-2xl shadow-sm">
+            <div className="flex items-center gap-2 mb-2 text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
+              <span>⚡</span> Fast Statutory Summary • Section 77 Chapter VI • 3-Tier Timeline
+            </div>
+            <p className="text-slate-800 dark:text-slate-200 text-sm md:text-base leading-relaxed font-medium">
+              Form CHG-1 is filed under Section 77 within 30 days of charge creation with normal fees (₹200–₹600). Days 31–60 attract additional fees (3× for Small Co/OPC; 6× for Others). Days 61–120 require 3×/6× fees plus punitive Ad Valorem fee: 0.025% of loan amount (cap ₹1L) for Small/OPC, or 0.05% (cap ₹5L) for Others. Filing beyond 120 days is barred without Regional Director condonation under Section 87.
+            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-3">
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Tier 1 (0–30d): Normal Fee (₹200–₹600)</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Tier 2 (31–60d): 3× / 6× Normal Fee</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Tier 3 (61–120d): 0.025% / 0.05% Ad Valorem (Max ₹5L)</span>
+              <span>•</span>
+              <span className="font-semibold text-red-600 dark:text-red-400">✓ Hard Stop &gt; 120d: RD Form CHG-8 Condonation</span>
+            </div>
+          </div>
+        )}
+
+        {form.slug === 'pas-6' && (
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-900/50 border-l-4 border-l-emerald-600 rounded-2xl shadow-sm">
+            <div className="flex items-center gap-2 mb-2 text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
+              <span>⚡</span> Fast Statutory Summary • Section 29 &amp; Rules 9A &amp; 9B
+            </div>
+            <p className="text-slate-800 dark:text-slate-200 text-sm md:text-base leading-relaxed font-medium">
+              Form PAS-6 is the half-yearly Reconciliation of Share Capital Audit Report filed under Section 29 read with Rules 9A &amp; 9B by unlisted public and non-small private companies within 60 days of half-year end (29 Nov &amp; 30 May). Late filings incur Table B multipliers (2× to 12× normal fee) plus Section 450 civil penalties of ₹10,000 + ₹1,000/day (capped at ₹2,00,000 for company and ₹50,000 per officer).
+            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-3">
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Half-Year 1: Due 29 Nov</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Half-Year 2: Due 30 May</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Table B Multipliers: 2× to 12× Base Fee</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Mandatory Demat: RTA &amp; ISIN Reconciliation</span>
+              <span>•</span>
+              <span className="font-semibold text-purple-600 dark:text-purple-400">✓ Section 446B: 50% Concession</span>
+            </div>
+          </div>
+        )}
+
+        {form.slug === 'spice-plus' && (
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 border-l-4 border-l-blue-600 rounded-2xl shadow-sm">
+            <div className="flex items-center gap-2 mb-2 text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+              <span>⚡</span> Fast Statutory Summary • G.S.R. 329(E) &amp; Rule 38
+            </div>
+            <p className="text-slate-800 dark:text-slate-200 text-sm md:text-base leading-relaxed font-medium">
+              SPICe+ (Form INC-32) is the integrated company incorporation application on MCA V3. Under Notification G.S.R. 329(E), the MCA registration fee is ₹0 (NIL) for companies with authorized capital up to ₹15,00,000. Incorporators pay only electronic State Stamp Duty (varying across 36 States/UTs on MOA, AOA &amp; Form), mandatory PAN (₹78), TAN (₹77), and optional RUN name reservation (₹1,000).
+            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-3">
+              <span className="font-semibold text-emerald-600 dark:text-emerald-400">✓ Zero MCA Fee: Capital ≤ ₹15 Lakhs</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ State Stamp Duty: Calculated on e-MOA &amp; e-AOA</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ PAN &amp; TAN: ₹155 Fixed Statutory Cost</span>
+              <span>•</span>
+              <span className="font-semibold text-blue-600 dark:text-blue-400">✓ 11 Integrated Services: DIN, EPFO, ESIC, Bank A/c</span>
             </div>
           </div>
         )}
@@ -2482,6 +2655,640 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
                       <td className="px-4 py-3 font-mono font-bold text-amber-600">Multiple</td>
                       <td className="px-4 py-3 font-mono font-bold text-red-600 text-right">~₹16,00,000</td>
                       <td className="px-4 py-3 text-xs text-slate-500">Even after applying Section 446B 50% concession, cumulative Section 42 penalties totalled ₹16 Lakhs across directors.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {form.slug === 'adt-1' && (
+          <div className="space-y-12 mb-16">
+            {/* Table 1: Table A Base Fees */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>📋</span> Table A: Normal Government Filing Fees for Form ADT-1
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Statutory base fee payable under Rule 12 of the Companies (Registration Offices and Fees) Rules, 2014 based on authorized nominal share capital.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Nominal Share Capital Slab</th>
+                      <th className="px-4 py-3 font-semibold">Rule Schedule Reference</th>
+                      <th className="px-4 py-3 font-semibold text-right">Normal Base Fee</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Less than ₹1,00,000</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Table A, Item 5(a)</td>
+                      <td className="px-4 py-3 font-mono font-bold text-slate-900 dark:text-white text-right">₹200</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">₹1,00,000 to ₹4,99,999</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Table A, Item 5(b)</td>
+                      <td className="px-4 py-3 font-mono font-bold text-slate-900 dark:text-white text-right">₹300</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">₹5,00,000 to ₹24,99,999</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Table A, Item 5(c)</td>
+                      <td className="px-4 py-3 font-mono font-bold text-slate-900 dark:text-white text-right">₹400</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">₹25,00,000 to ₹99,99,999</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Table A, Item 5(d)</td>
+                      <td className="px-4 py-3 font-mono font-bold text-slate-900 dark:text-white text-right">₹500</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">₹1,00,00,000 or more (≥ ₹1 Crore)</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Table A, Item 5(e)</td>
+                      <td className="px-4 py-3 font-mono font-bold text-slate-900 dark:text-white text-right">₹600</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Company without Share Capital</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Table A, Item 6</td>
+                      <td className="px-4 py-3 font-mono font-bold text-slate-900 dark:text-white text-right">₹200</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 2: Table B Escalation Multipliers */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>📈</span> Table B: Late Filing Multipliers for Form ADT-1
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Escalating additional fees computed on MCA V3 when Form ADT-1 is delayed past the 15-day statutory AGM due date.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Period of Delay</th>
+                      <th className="px-4 py-3 font-semibold">Table B Multiplier</th>
+                      <th className="px-4 py-3 font-semibold text-right">Additional Late Fee Range</th>
+                      <th className="px-4 py-3 font-semibold">Statutory Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Up to 30 calendar days</td>
+                      <td className="px-4 py-3 font-bold text-blue-600">2× normal fee</td>
+                      <td className="px-4 py-3 font-mono text-right text-slate-700 dark:text-slate-300">₹400 – ₹1,200</td>
+                      <td className="px-4 py-3 text-emerald-600 font-medium">Direct MCA V3 Filing</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">31 to 60 calendar days</td>
+                      <td className="px-4 py-3 font-bold text-blue-600">4× normal fee</td>
+                      <td className="px-4 py-3 font-mono text-right text-slate-700 dark:text-slate-300">₹800 – ₹2,400</td>
+                      <td className="px-4 py-3 text-emerald-600 font-medium">Direct MCA V3 Filing</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">61 to 90 calendar days</td>
+                      <td className="px-4 py-3 font-bold text-amber-600">6× normal fee</td>
+                      <td className="px-4 py-3 font-mono text-right text-slate-700 dark:text-slate-300">₹1,200 – ₹3,600</td>
+                      <td className="px-4 py-3 text-emerald-600 font-medium">Direct MCA V3 Filing</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">91 to 180 calendar days</td>
+                      <td className="px-4 py-3 font-bold text-orange-600">10× normal fee</td>
+                      <td className="px-4 py-3 font-mono text-right text-slate-700 dark:text-slate-300">₹2,000 – ₹6,000</td>
+                      <td className="px-4 py-3 text-amber-600 font-medium">Auditor Inquiry Risk</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">181 to 270 calendar days</td>
+                      <td className="px-4 py-3 font-bold text-red-600">12× normal fee</td>
+                      <td className="px-4 py-3 font-mono text-right text-slate-700 dark:text-slate-300">₹2,400 – ₹7,200</td>
+                      <td className="px-4 py-3 text-red-600 font-medium">Maximum Portal Fee</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-red-600">Beyond 270 calendar days</td>
+                      <td className="px-4 py-3 font-bold text-red-600">Section 403 Hard Stop</td>
+                      <td className="px-4 py-3 font-mono text-right text-red-600 font-bold">Portal Blocked</td>
+                      <td className="px-4 py-3 text-red-600 font-bold">RD Condonation Required (CG-1)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 3: First Auditor vs Subsequent Auditor Timelines */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>⚖️</span> Statutory Appointment Clocks: First Auditor vs Subsequent Auditor
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Comparison of statutory appointing authorities, timelines, tenures, and filing expectations under Section 139.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Appointment Type</th>
+                      <th className="px-4 py-3 font-semibold">Governing Section</th>
+                      <th className="px-4 py-3 font-semibold">Appointing Authority</th>
+                      <th className="px-4 py-3 font-semibold">Statutory Deadline</th>
+                      <th className="px-4 py-3 font-semibold">Tenure</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-blue-600">First Auditor (Board Route)</td>
+                      <td className="px-4 py-3">Section 139(6)</td>
+                      <td className="px-4 py-3">Board of Directors</td>
+                      <td className="px-4 py-3 text-slate-700 dark:text-slate-300 font-medium">Within 30 days of incorporation</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Till conclusion of 1st AGM</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-blue-600">First Auditor (EGM Route)</td>
+                      <td className="px-4 py-3">Section 139(6) Proviso</td>
+                      <td className="px-4 py-3">Members at EGM</td>
+                      <td className="px-4 py-3 text-slate-700 dark:text-slate-300 font-medium">Within 90 days of Board failure</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Till conclusion of 1st AGM</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-emerald-600">Subsequent Auditor (AGM)</td>
+                      <td className="px-4 py-3">Section 139(1)</td>
+                      <td className="px-4 py-3">Members at AGM</td>
+                      <td className="px-4 py-3 text-blue-600 font-bold">Within 15 days of AGM date</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">5 consecutive years (till 6th AGM)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-amber-600">Casual Vacancy (Resignation)</td>
+                      <td className="px-4 py-3">Section 139(8)</td>
+                      <td className="px-4 py-3">Board + General Meeting</td>
+                      <td className="px-4 py-3 text-slate-700 dark:text-slate-300 font-medium">GM within 3 months of Board approval</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Till conclusion of next AGM</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 4: Section 147 Adjudication Penalties */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>🛡️</span> Section 147 Civil Adjudication Penalties &amp; Section 446B Relief
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Statutory liabilities for failure to comply with Chapter X auditor appointment and notification mandates.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Entity / Person Liable</th>
+                      <th className="px-4 py-3 font-semibold">Governing Provision</th>
+                      <th className="px-4 py-3 font-semibold">Statutory Penalty Range</th>
+                      <th className="px-4 py-3 font-semibold text-right">Section 446B Concession (Small Co/Startups)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Company</td>
+                      <td className="px-4 py-3">Section 147(1)</td>
+                      <td className="px-4 py-3 font-bold text-red-600">₹25,000 to ₹5,00,000</td>
+                      <td className="px-4 py-3 font-mono font-bold text-purple-600 text-right">50% Relief (Max ₹2,00,000)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Every Officer in Default</td>
+                      <td className="px-4 py-3">Section 147(1)</td>
+                      <td className="px-4 py-3 font-bold text-red-600">₹10,000 to ₹1,00,000 (or Imprisonment up to 1 yr)</td>
+                      <td className="px-4 py-3 font-mono font-bold text-purple-600 text-right">50% Relief (Max ₹1,00,000)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 5: Mandatory Attachments Checklist */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>📎</span> Mandatory Attachments Checklist for Form ADT-1 on MCA V3
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Required documentation to guarantee Straight-Through-Process (STP) auto-approval on the MCA21 V3 portal.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Document Name</th>
+                      <th className="px-4 py-3 font-semibold">When Mandatory</th>
+                      <th className="px-4 py-3 font-semibold">Key Statutory Contents</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-blue-600">Auditor Consent Letter</td>
+                      <td className="px-4 py-2.5 font-bold text-slate-900 dark:text-white">Always Mandatory</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Written consent to act as Statutory Auditor pursuant to Section 139(1) proviso.</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-blue-600">Certificate of Eligibility &amp; Non-Disqualification</td>
+                      <td className="px-4 py-2.5 font-bold text-slate-900 dark:text-white">Always Mandatory</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Certificate under Rule 4(1) confirming Section 141 criteria, ceiling on audits (20 companies), and independence.</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-blue-600">Certified Copy of AGM / EGM Resolution</td>
+                      <td className="px-4 py-2.5 font-bold text-slate-900 dark:text-white">Always Mandatory</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Extract of Ordinary Resolution passed by shareholders approving appointment and remuneration.</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-blue-600">Intimation Letter by Company</td>
+                      <td className="px-4 py-2.5 text-slate-700 dark:text-slate-300">Recommended / Best Practice</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Copy of official appointment letter issued by the company to the incoming audit firm.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {form.slug === 'chg-1' && (
+          <div className="space-y-12 mb-16">
+            {/* Table 1: Chapter VI 3-Tier Timeline */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>⏱️</span> Chapter VI Non-Negotiable 3-Tier Statutory Timeline (Charges post 02.11.2018)
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Enacted by the Companies (Amendment) Act, 2019 to eliminate chronic charge delays and enforce lender transparency.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Statutory Tier</th>
+                      <th className="px-4 py-3 font-semibold">Calendar Timeline</th>
+                      <th className="px-4 py-3 font-semibold">Small Company / OPC Fee</th>
+                      <th className="px-4 py-3 font-semibold">Other Companies Fee</th>
+                      <th className="px-4 py-3 font-semibold">ROC Jurisdiction</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-blue-600">Tier 1: Normal Statutory Window</td>
+                      <td className="px-4 py-3 font-medium">Days 0 to 30 from creation</td>
+                      <td className="px-4 py-3 text-slate-700 dark:text-slate-300">Normal Base Fee (₹200–₹600)</td>
+                      <td className="px-4 py-3 text-slate-700 dark:text-slate-300">Normal Base Fee (₹200–₹600)</td>
+                      <td className="px-4 py-3 text-emerald-600 font-medium">Routine Registration</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-amber-600">Tier 2: First Extension Window</td>
+                      <td className="px-4 py-3 font-medium">Days 31 to 60 (1–30d delay)</td>
+                      <td className="px-4 py-3 text-amber-600 font-bold">3× Normal Fee</td>
+                      <td className="px-4 py-3 text-amber-600 font-bold">6× Normal Fee</td>
+                      <td className="px-4 py-3 text-amber-600 font-medium">ROC Extension Power</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-orange-600">Tier 3: Second Extension Window</td>
+                      <td className="px-4 py-3 font-medium">Days 61 to 120 (31–90d delay)</td>
+                      <td className="px-4 py-3 text-orange-600 font-bold">3× Fee + 0.025% Ad Valorem (Cap ₹1L)</td>
+                      <td className="px-4 py-3 text-orange-600 font-bold">6× Fee + 0.05% Ad Valorem (Cap ₹5L)</td>
+                      <td className="px-4 py-3 text-orange-600 font-medium">Final ROC Extension</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-red-600">Tier 4: Statutory Hard Stop</td>
+                      <td className="px-4 py-3 font-medium text-red-600 font-bold">Beyond 120 days (&gt; 90d delay)</td>
+                      <td className="px-4 py-3 text-red-600 font-bold">Portal Filing Blocked</td>
+                      <td className="px-4 py-3 text-red-600 font-bold">Portal Filing Blocked</td>
+                      <td className="px-4 py-3 text-red-600 font-bold">ROC Jurisdiction Barred (RD Only)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 2: Ad Valorem Fee Calculation Matrix */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>💰</span> Ad Valorem Late Fee Matrix Across Credit Facility Sizes (Tier 3)
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Live computation of statutory ad valorem penalties payable during Days 61 to 120 under the 2019 Fee Rules.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Sanctioned Loan / Charge Amount</th>
+                      <th className="px-4 py-3 font-semibold text-right">Small Company / OPC (0.025%)</th>
+                      <th className="px-4 py-3 font-semibold text-right">Other Companies (0.05%)</th>
+                      <th className="px-4 py-3 font-semibold">Statutory Ceiling Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-medium">₹10 Lakhs (₹10,00,000)</td>
+                      <td className="px-4 py-3 font-mono text-right">₹250</td>
+                      <td className="px-4 py-3 font-mono text-right">₹500</td>
+                      <td className="px-4 py-3 text-slate-500 text-xs">Below Statutory Cap</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">₹50 Lakhs (₹50,00,000)</td>
+                      <td className="px-4 py-3 font-mono text-right">₹1,250</td>
+                      <td className="px-4 py-3 font-mono text-right">₹2,500</td>
+                      <td className="px-4 py-3 text-slate-500 text-xs">Below Statutory Cap</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">₹1 Crore (₹1,00,00,000)</td>
+                      <td className="px-4 py-3 font-mono text-right">₹2,500</td>
+                      <td className="px-4 py-3 font-mono text-right">₹5,000</td>
+                      <td className="px-4 py-3 text-slate-500 text-xs">Below Statutory Cap</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">₹10 Crore (₹10,00,00,000)</td>
+                      <td className="px-4 py-3 font-mono text-right">₹25,000</td>
+                      <td className="px-4 py-3 font-mono text-right">₹50,000</td>
+                      <td className="px-4 py-3 text-slate-500 text-xs">Below Statutory Cap</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">₹50 Crore (₹50,00,00,000)</td>
+                      <td className="px-4 py-3 font-mono font-bold text-purple-600 text-right">₹1,00,000 (Capped)</td>
+                      <td className="px-4 py-3 font-mono text-right">₹2,50,000</td>
+                      <td className="px-4 py-3 text-purple-600 text-xs font-semibold">Small Co Cap Reached (₹1L)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">₹100 Crore+ (₹100,00,00,000+)</td>
+                      <td className="px-4 py-3 font-mono font-bold text-purple-600 text-right">₹1,00,000 (Capped)</td>
+                      <td className="px-4 py-3 font-mono font-bold text-red-600 text-right">₹5,00,000 (Capped)</td>
+                      <td className="px-4 py-3 text-red-600 text-xs font-semibold">Both Statutory Caps Reached</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 3: Commercial Consequences & Bank Rights */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>🏦</span> Commercial Consequences &amp; Lender Powers (Section 77(3) &amp; 78)
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Severe statutory and banking implications of unfiled or belated charge registrations.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Legal / Commercial Area</th>
+                      <th className="px-4 py-3 font-semibold">Statutory Reference</th>
+                      <th className="px-4 py-3 font-semibold">Operational Consequence</th>
+                      <th className="px-4 py-3 font-semibold">Risk Level</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-red-600">Charge VOID Against Liquidator</td>
+                      <td className="px-4 py-3">Section 77(3)</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Unregistered security is completely void against liquidators &amp; creditors; lender downgraded to unsecured creditor.</td>
+                      <td className="px-4 py-3 text-red-600 font-bold">Catastrophic</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-blue-600">Bank Direct Filing Right</td>
+                      <td className="px-4 py-3">Section 78</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">If company fails to file in 30 days, lending bank can apply directly to ROC and recover all costs from company.</td>
+                      <td className="px-4 py-3 text-amber-600 font-bold">High</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-amber-600">Bank Penal Interest &amp; Freezes</td>
+                      <td className="px-4 py-3">Loan Sanction Terms</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Banks routinely freeze CC/OD drawing power and levy 1% to 2% penal interest if CHG-2 certificate is delayed.</td>
+                      <td className="px-4 py-3 text-amber-600 font-bold">High</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-purple-600">Section 87 RD Condonation</td>
+                      <td className="px-4 py-3">Form CHG-8</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Delays past 120 days require formal advocate petition before Regional Director, hearings, and compounding fines.</td>
+                      <td className="px-4 py-3 text-purple-600 font-bold">Severe</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 4: Mandatory Document Checklist */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>📎</span> Mandatory Attachments Checklist for Form CHG-1 on MCA V3
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Documentation required for manual scrutiny and approval by the Registrar of Companies (Non-STP).
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Attachment Name</th>
+                      <th className="px-4 py-3 font-semibold">Mandatory Condition</th>
+                      <th className="px-4 py-3 font-semibold">Key Document Details</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-blue-600">Instrument Creating / Modifying Charge</td>
+                      <td className="px-4 py-2.5 font-bold text-slate-900 dark:text-white">Always Mandatory</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Sanction Letter, Loan Agreement, Deed of Hypothecation, or Mortgage Deed with stamp duty endorsement.</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-blue-600">Certified Board Resolution</td>
+                      <td className="px-4 py-2.5 font-bold text-slate-900 dark:text-white">Always Mandatory</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Resolution passed under Section 179(3)(d) authorizing borrowing and creating security on assets.</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-blue-600">Special Resolution under Section 180(1)(c)</td>
+                      <td className="px-4 py-2.5 text-slate-700 dark:text-slate-300">If borrowings exceed paid-up capital + free reserves</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Shareholder approval with Form MGT-14 SRN reference.</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2.5 font-semibold text-blue-600">Pari-Passu NOC Letter</td>
+                      <td className="px-4 py-2.5 text-slate-700 dark:text-slate-300">Consortium / Multiple Lenders</td>
+                      <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">No Objection Certificate from existing charge-holders sharing priority on the secured property.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {form.slug === 'pas-6' && (
+          <div className="space-y-12 mb-16">
+            {/* Table 1: Semi-Annual Compliance Calendar */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>📅</span> Form PAS-6 Semi-Annual Compliance Calendar (Rules 9A &amp; 9B)
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Statutory filing deadlines within 60 calendar days from the conclusion of each half-year on MCA V3.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Half-Year Period</th>
+                      <th className="px-4 py-3 font-semibold">Reporting Window</th>
+                      <th className="px-4 py-3 font-semibold text-blue-600">Statutory Due Date</th>
+                      <th className="px-4 py-3 font-semibold">Day 1 of Default</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-navy dark:text-white">Half-Year 1 (HY1)</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">1 April to 30 September</td>
+                      <td className="px-4 py-3 font-bold text-blue-600">29th November (60 Days)</td>
+                      <td className="px-4 py-3 font-mono font-bold text-red-600">30th November</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-navy dark:text-white">Half-Year 2 (HY2)</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">1 October to 31 March</td>
+                      <td className="px-4 py-3 font-bold text-blue-600">30th May (60 Days)</td>
+                      <td className="px-4 py-3 font-mono font-bold text-red-600">31st May</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 2: Applicability Matrix */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>🏢</span> Dematerialisation &amp; Form PAS-6 Applicability Matrix
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Entity classification under Section 29, Rule 9A (Public) and Rule 9B (Private companies per G.S.R. 880(E)).
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Corporate Category</th>
+                      <th className="px-4 py-3 font-semibold">Governing Rule</th>
+                      <th className="px-4 py-3 font-semibold">PAS-6 Mandatory?</th>
+                      <th className="px-4 py-3 font-semibold">Statutory Basis / Deadline</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Unlisted Public Companies</td>
+                      <td className="px-4 py-3">Rule 9A</td>
+                      <td className="px-4 py-3 font-bold text-emerald-600">YES (Mandatory)</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Effective since 2 October 2018</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Non-Small Private Companies</td>
+                      <td className="px-4 py-3">Rule 9B</td>
+                      <td className="px-4 py-3 font-bold text-emerald-600">YES (Mandatory)</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Paid-up capital &gt; ₹10 Cr OR turnover &gt; ₹100 Cr</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Holding &amp; Subsidiary Companies</td>
+                      <td className="px-4 py-3">Rule 9B read with Sec 2(85)</td>
+                      <td className="px-4 py-3 font-bold text-emerald-600">YES (Mandatory)</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Disqualified from Small Company status regardless of capital</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Section 8 Companies with Share Capital</td>
+                      <td className="px-4 py-3">Rule 9B</td>
+                      <td className="px-4 py-3 font-bold text-emerald-600">YES (Mandatory)</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Excluded from small company classification under Section 2(85)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Small Companies (Section 2(85))</td>
+                      <td className="px-4 py-3">Rule 9B(1) Exemption</td>
+                      <td className="px-4 py-3 font-bold text-blue-600">EXEMPT</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Exempt from dematerialisation &amp; PAS-6 filing</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Listed Companies</td>
+                      <td className="px-4 py-3">SEBI Regulations</td>
+                      <td className="px-4 py-3 font-bold text-slate-500">EXEMPT from MCA</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">File Reg 76 reconciliation with Stock Exchanges instead</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 3: Section 450 Adjudication Penalties */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>⚖️</span> Section 450 Civil Adjudication Penalties &amp; Section 446B Concessions
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                ROC adjudication penalty computations under Section 450 read with Section 454 for non-filing of Form PAS-6.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Entity / Officer Liable</th>
+                      <th className="px-4 py-3 font-semibold">Base Penalty</th>
+                      <th className="px-4 py-3 font-semibold">Continuing Daily Fine</th>
+                      <th className="px-4 py-3 font-semibold text-right">Statutory Cap (Standard)</th>
+                      <th className="px-4 py-3 font-semibold text-right">Section 446B Cap (Startups)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Defaulting Company</td>
+                      <td className="px-4 py-3 font-mono">₹10,000</td>
+                      <td className="px-4 py-3 font-mono text-red-600 font-bold">₹1,000 / day</td>
+                      <td className="px-4 py-3 font-mono font-bold text-red-600 text-right">₹2,00,000</td>
+                      <td className="px-4 py-3 font-mono font-bold text-purple-600 text-right">₹1,00,000</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-medium">Every Officer in Default</td>
+                      <td className="px-4 py-3 font-mono">₹10,000</td>
+                      <td className="px-4 py-3 font-mono text-red-600 font-bold">₹1,000 / day</td>
+                      <td className="px-4 py-3 font-mono font-bold text-red-600 text-right">₹50,000 per officer</td>
+                      <td className="px-4 py-3 font-mono font-bold text-purple-600 text-right">₹25,000 per officer</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 4: Commercial Sanctions & Corporate Freezes */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>🚫</span> Commercial Sanctions for Non-Compliance (Rule 9A(4) &amp; Rule 9B(4))
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Operational embargoes triggered automatically when physical shares remain undematerialised.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Corporate Action</th>
+                      <th className="px-4 py-3 font-semibold">Statutory Restriction</th>
+                      <th className="px-4 py-3 font-semibold">Impact on Business</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-red-600">Rights &amp; Bonus Issues</td>
+                      <td className="px-4 py-3">Rule 9A(4) &amp; 9B(4)</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Company prohibited from making any offer of securities, bonus issues, or rights offerings until all promoter/director holdings are 100% dematted.</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-red-600">Share Transfers Locked</td>
+                      <td className="px-4 py-3">Rule 9A(3) &amp; 9B(3)</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">No transfer of securities can be registered by the company unless shares are held in dematerialised electronic form with NSDL/CDSL.</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-amber-600">VC / PE Funding Freeze</td>
+                      <td className="px-4 py-3">Legal Due Diligence</td>
+                      <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Institutional investors condition tranche disbursements on active ISINs and spotless PAS-6 filing compliance.</td>
                     </tr>
                   </tbody>
                 </table>

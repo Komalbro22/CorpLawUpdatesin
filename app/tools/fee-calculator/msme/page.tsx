@@ -8,10 +8,19 @@ import ReaderFeedback from '@/components/ReaderFeedback'
 
 export const metadata: Metadata = {
   title: {
-    absolute: 'MSME Delayed Payment Interest Calculator | CorpLaw',
+    absolute: 'MSME Interest Calculator — Section 16 Delayed Payment 3x Bank Rate (2026)',
   },
   description: 'Calculate statutory compound interest with monthly rests on delayed payments to Micro and Small Enterprises under Section 16 of the MSMED Act.',
-  keywords: ['MSME interest calculator', 'MSMED Act Section 16', 'delayed payment calculator', 'MSME Samadhaan interest', '3x Bank Rate calculator', 'Section 15 MSME'],
+  keywords: [
+    'MSME interest calculator',
+    'MSME delayed payment calculator',
+    'MSMED Act Section 16',
+    'delayed payment calculator',
+    'MSME Samadhaan interest',
+    '3x Bank Rate calculator',
+    'Section 15 MSME',
+    'MSME late payment penalty'
+  ],
   alternates: {
     canonical: 'https://www.corplawupdates.in/tools/fee-calculator/msme',
   },
@@ -24,6 +33,13 @@ const msmeJsonLd = {
       '@type': 'WebApplication',
       '@id': 'https://www.corplawupdates.in/tools/fee-calculator/msme#webapplication',
       name: 'MSME Delayed Payment Interest Calculator',
+      alternateName: [
+        'MSME Interest Calculator',
+        'MSME Delayed Payment Calculator',
+        'MSMED Act Section 16 Calculator',
+        'MSME Samadhaan Interest Calculator',
+        'MSME 45 Days Interest Calculator'
+      ],
       url: 'https://www.corplawupdates.in/tools/fee-calculator/msme',
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'All',
