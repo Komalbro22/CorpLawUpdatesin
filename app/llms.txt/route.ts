@@ -58,7 +58,8 @@ ${updatesList}
 ## AI Agent & WebMCP Tools (Machine-Callable APIs)
 CorpLawUpdates.in natively supports the official W3C / Chrome WebMCP standard and provides structured tools for AI agents, Claude Code, Cursor, and LLMs:
 - WebMCP Manifest: ${BASE_URL}/.well-known/webmcp
-- AI Catalog: ${BASE_URL}/.well-known/ai-catalog.json
+- AI Catalog (Agentic Resource Discovery): ${BASE_URL}/.well-known/ai-catalog.json
+- ARD Manifest: ${BASE_URL}/.well-known/ard.json
 - Agent Hub & Integration Guide: ${BASE_URL}/mcp
 
 Available Tools:
