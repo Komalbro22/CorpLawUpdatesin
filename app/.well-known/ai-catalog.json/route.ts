@@ -54,6 +54,24 @@ export function getAICatalog() {
         tags: ['mca', 'roc', 'late-fee', 'penalty', 'section-454', 'companies-act'],
       },
       {
+        identifier: 'urn:air:corplawupdates.in:tool:mgt-7-fee-calculator',
+        displayName: 'MGT 7 Annual Return Fee & Late Penalty Calculator',
+        type: 'text/html',
+        url: 'https://www.corplawupdates.in/tools/fee-calculator/companies/mgt-7',
+        description:
+          'Authoritative calculator for Form MGT-7 and MGT-7A Annual Return: Table A normal base fees (₹200–₹600), ₹100/day uncapped delay fee, 60-day AGM statutory deadline, Form MGT-8 PCS certification applicability, and Section 92(5) ROC penalties.',
+        capabilities: ['MGT7Fee', 'MGT7LateFee', 'AnnualReturnCalculator', 'Section92Penalty'],
+        representativeQueries: [
+          'mgt 7 fee calculator',
+          'calculate mgt 7 late filing fee',
+          'mgt 7 penalty calculator for delayed annual return',
+          'form mgt 7 additional fee for 60 days delay',
+        ],
+        version: '1.0.0',
+        updatedAt: '2026-03-25T00:00:00Z',
+        tags: ['mgt-7', 'mgt7', 'annual-return', 'mca', 'fee-calculator', 'section-92', 'late-fee'],
+      },
+      {
         identifier: 'urn:air:corplawupdates.in:tool:llp-fee-calculator',
         displayName: 'LLP Form 8 & Form 11 Late Fee and Penalty Calculator',
         type: 'application/json',

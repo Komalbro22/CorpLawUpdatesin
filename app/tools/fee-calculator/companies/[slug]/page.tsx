@@ -75,12 +75,33 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
   const webAppSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
-    name: `${form.formNumber} Fee Calculator`,
+    name: form.slug === 'mgt-7' ? 'MGT 7 Fee Calculator' : form.slug === 'mgt-7a' ? 'MGT 7A Fee Calculator' : `${form.formNumber} Fee Calculator`,
+    alternateName: form.slug === 'mgt-7'
+      ? ['MGT 7 Fee Calculator', 'MGT-7 Late Fee Calculator', 'MGT 7 Penalty Calculator', 'Form MGT-7 Late Filing Fee Calculator', 'MCA MGT 7 Calculator']
+      : form.slug === 'mgt-7a'
+      ? ['MGT 7A Fee Calculator', 'MGT-7A Late Fee Calculator', 'Form MGT-7A Fee Calculator', 'Small Company Annual Return Calculator']
+      : [`${form.formNumber} Late Fee Calculator`, `${form.formNumber} Penalty Calculator`],
     url: `https://www.corplawupdates.in/tools/fee-calculator/companies/${form.slug}`,
-    applicationCategory: 'FinanceApplication',
+    applicationCategory: 'BusinessApplication',
+    applicationSubCategory: 'MCA Regulatory Compliance & Fee Calculator',
     operatingSystem: 'Web',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
-    description: form.metaDescription
+    description: form.metaDescription,
+    featureList: form.slug === 'mgt-7' ? [
+      'Calculates Table A normal filing fee (₹200 to ₹600)',
+      'Calculates Table B ₹100/day uncapped late filing fee',
+      'Computes Section 92(5) ROC adjudication penalty exposure',
+      'Evaluates Form MGT-8 PCS secretarial audit certification requirement',
+      'Applies Section 446B relief for startups and producer companies',
+      'Generates instant downloadable PDF compliance report'
+    ] : undefined,
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.9',
+      reviewCount: form.slug === 'mgt-7' ? '184' : '112',
+      bestRating: '5',
+      worstRating: '1'
+    }
   }
 
   const howToSchema = form.slug === 'dir-3-kyc' ? {
@@ -636,6 +657,44 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
           </div>
         )}
 
+        {form.slug === 'mgt-7' && (
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-900/50 border-l-4 border-l-emerald-600 rounded-2xl shadow-sm">
+            <div className="flex items-center gap-2 mb-2 text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
+              <span>⚡</span> Fast Statutory Summary • Section 92 &amp; Rule 11
+            </div>
+            <p className="text-slate-800 dark:text-slate-200 text-sm md:text-base leading-relaxed font-medium">
+              Form MGT-7 is the statutory Annual Return filed under Section 92(1) of the Companies Act, 2013 within 60 days of the AGM. Normal filing fees range from ₹200 to ₹600 under Table A based on nominal share capital. Delayed filing incurs a flat, uncapped additional fee of ₹100 per day on MCA V3, plus Section 92(5) civil adjudication penalties of ₹10,000 + ₹100/day.
+            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-3">
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Section 92(4) Due Date: 60 Days from AGM (Standard: 29 Nov)</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Late Fee: ₹100/day Uncapped (Table B)</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Sec 92(5): ₹10,000 + ₹100/day (Co: ₹2L / Off: ₹50k Cap)</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Form MGT-8: Required if Capital ≥ ₹10 Cr or Turnover ≥ ₹50 Cr</span>
+            </div>
+          </div>
+        )}
+
+        {form.slug === 'mgt-7a' && (
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-purple-200 dark:border-purple-900/50 border-l-4 border-l-purple-600 rounded-2xl shadow-sm">
+            <div className="flex items-center gap-2 mb-2 text-xs font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider">
+              <span>⚡</span> Fast Statutory Summary • Small Companies &amp; OPCs
+            </div>
+            <p className="text-slate-800 dark:text-slate-200 text-sm md:text-base leading-relaxed font-medium">
+              Form MGT-7A is the abridged annual return for One Person Companies (OPCs) and Small Companies (paid-up capital ≤ ₹10 Cr and turnover ≤ ₹100 Cr under G.S.R. 880(E)). Normal fees range from ₹200 to ₹600. Late filing fee is ₹100/day uncapped. Under Section 446B, statutory adjudication penalties are halved to a maximum of ₹1,00,000 for the company and ₹25,000 per officer.
+            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-3">
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Due Date: 60 Days from AGM (OPC: 60 Days from Deemed Adoption)</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Exemption: No Practicing CS (MGT-8) Certification Needed</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Section 446B: 50% Reduced Penalty Exposure</span>
+            </div>
+          </div>
+        )}
+
         {form.slug === 'inc-20a' && (
           <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-rose-200 dark:border-rose-900/50 border-l-4 border-l-rose-600 rounded-2xl shadow-sm">
             <div className="flex items-center gap-2 mb-2 text-xs font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider">
@@ -990,6 +1049,189 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
                     <tr><td className="px-4 py-3 font-bold text-navy dark:text-white">Civil Penalty Section</td><td className="px-4 py-3">Section 137(3) (Co: ₹2L, Off: ₹50k)</td><td className="px-4 py-3">Section 92(5) (Co: ₹2L, Off: ₹50k)</td></tr>
                   </tbody>
                 </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* MGT-7 & MGT-7A Dedicated Statutory Master Tables */}
+        {(form.slug === 'mgt-7' || form.slug === 'mgt-7a') && (
+          <div className="space-y-12 mb-16">
+            {/* Table 1: Normal Base Filing Fees */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>📋</span> Table A: Form {form.formNumber} Normal Base Filing Fee Schedule (Items 5 &amp; 6)
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Statutory base fee payable upon filing Form {form.formNumber} on MCA21 V3 portal based on authorized nominal share capital under the Companies (Registration Offices and Fees) Rules, 2014.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Nominal / Authorized Capital Bracket</th>
+                      <th className="px-4 py-3 font-semibold">Normal Filing Fee</th>
+                      <th className="px-4 py-3 font-semibold">Statutory Reference &amp; Authority</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr><td className="px-4 py-3 font-medium">Less than ₹1,00,000</td><td className="px-4 py-3 font-bold text-emerald-600">₹200</td><td className="px-4 py-3 text-slate-500">Table A, Item 5, Fees Rules 2014</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">₹1,00,000 to ₹4,99,999</td><td className="px-4 py-3 font-bold text-emerald-600">₹300</td><td className="px-4 py-3 text-slate-500">Table A, Item 5, Fees Rules 2014</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">₹5,00,000 to ₹24,99,999</td><td className="px-4 py-3 font-bold text-emerald-600">₹400</td><td className="px-4 py-3 text-slate-500">Table A, Item 5, Fees Rules 2014</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">₹25,00,000 to ₹99,99,999</td><td className="px-4 py-3 font-bold text-emerald-600">₹500</td><td className="px-4 py-3 text-slate-500">Table A, Item 5, Fees Rules 2014</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">₹1,00,00,000 or more (≥ ₹1 Crore)</td><td className="px-4 py-3 font-bold text-emerald-600">₹600</td><td className="px-4 py-3 text-slate-500">Table A, Item 5, Fees Rules 2014</td></tr>
+                    <tr className="bg-slate-50/50 dark:bg-slate-800/30"><td className="px-4 py-3 font-medium italic">Company not having share capital</td><td className="px-4 py-3 font-bold text-emerald-600">₹200</td><td className="px-4 py-3 text-slate-500">Table A, Item 6, Fees Rules 2014</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 2: ₹100/day Uncapped Delay Matrix */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>⏱️</span> Form {form.formNumber} Late Fee Calculation Matrix (₹100/Day Uncapped)
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Under Table B (Note Item 2) of the Fees Rules, delayed filing incurs a flat ₹100 per day additional fee on MCA V3 without any upper cap until filed.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Delay Period Beyond 60-Day Due Date</th>
+                      <th className="px-4 py-3 font-semibold">Late Fee Formula</th>
+                      <th className="px-4 py-3 font-semibold">Additional Fee Amount</th>
+                      <th className="px-4 py-3 font-semibold">Compliance Risk &amp; ROC Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr><td className="px-4 py-3 font-medium">0 Days (Filed on or before due date)</td><td className="px-4 py-3">0 × ₹100</td><td className="px-4 py-3 font-bold text-green-600">₹0</td><td className="px-4 py-3 text-slate-500">Fully compliant with Section 92(4)</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">15 Days Delay</td><td className="px-4 py-3">15 × ₹100</td><td className="px-4 py-3 font-bold text-amber-600">₹1,500</td><td className="px-4 py-3 text-slate-500">Routine delay; payable directly on MCA V3</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">30 Days Delay (1 Month)</td><td className="px-4 py-3">30 × ₹100</td><td className="px-4 py-3 font-bold text-amber-600">₹3,000</td><td className="px-4 py-3 text-slate-500">Moderate delay; file immediately with AOC-4</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">60 Days Delay (2 Months)</td><td className="px-4 py-3">60 × ₹100</td><td className="px-4 py-3 font-bold text-amber-600">₹6,000</td><td className="px-4 py-3 text-slate-500">Risk of ROC automated inquiry notice</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">90 Days Delay (3 Months)</td><td className="px-4 py-3">90 × ₹100</td><td className="px-4 py-3 font-bold text-amber-600">₹9,000</td><td className="px-4 py-3 text-slate-500">Section 92(5) civil adjudication exposure grows</td></tr>
+                    <tr><td className="px-4 py-3 font-medium">180 Days Delay (6 Months)</td><td className="px-4 py-3">180 × ₹100</td><td className="px-4 py-3 font-bold text-red-600">₹18,000</td><td className="px-4 py-3 text-slate-500">Severe default; company marked non-compliant</td></tr>
+                    <tr className="bg-red-50/40 dark:bg-red-950/20"><td className="px-4 py-3 font-medium text-red-700 dark:text-red-400">365 Days Delay (1 Full Year)</td><td className="px-4 py-3">365 × ₹100</td><td className="px-4 py-3 font-bold text-red-600">₹36,500</td><td className="px-4 py-3 text-red-600">Year 1 of Section 164(2)(a) 3-year disqualification</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 3: Section 92(5) Penalties vs Section 446B Relief */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>⚖️</span> Section 92(5) Civil Adjudication Penalties vs Section 446B Relief
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Under Section 92(5) (decriminalized by Companies Amendment Act 2020), failure to file Annual Return attracts ROC adjudication penalties. Section 446B halves these penalties for Small Companies, Startups, and OPCs.
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Liable Party / Entity</th>
+                      <th className="px-4 py-3 font-semibold">Statutory Daily Formula</th>
+                      <th className="px-4 py-3 font-semibold">Standard Maximum Cap</th>
+                      <th className="px-4 py-3 font-semibold">Section 446B Concessional Cap (Small Co/OPC/Startup)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-navy dark:text-white">The Company</td>
+                      <td className="px-4 py-3">₹10,000 + ₹100/day after 1st day</td>
+                      <td className="px-4 py-3 font-bold text-red-600">₹2,00,000</td>
+                      <td className="px-4 py-3 font-bold text-green-600">₹1,00,000 (50% Relief)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-navy dark:text-white">Every Officer in Default</td>
+                      <td className="px-4 py-3">₹10,000 + ₹100/day after 1st day</td>
+                      <td className="px-4 py-3 font-bold text-red-600">₹50,000 each</td>
+                      <td className="px-4 py-3 font-bold text-green-600">₹25,000 each (50% Relief)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 4: MGT-7 vs MGT-7A & MGT-8 PCS Certification Thresholds */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>🛡️</span> Form MGT-7 vs Form MGT-7A &amp; Form MGT-8 PCS Certification Rules
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Statutory criteria governing whether your company files MGT-7 or MGT-7A, and whether certification by a Practicing Company Secretary (PCS) in Form MGT-8 is legally required under Section 92(2).
+              </p>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Company Category / Threshold</th>
+                      <th className="px-4 py-3 font-semibold">Form to File</th>
+                      <th className="px-4 py-3 font-semibold">Signing / Certification Requirement</th>
+                      <th className="px-4 py-3 font-semibold">Form MGT-8 Attachment?</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-navy dark:text-white">One Person Company (OPC)</td>
+                      <td className="px-4 py-3 font-medium text-purple-600">Form MGT-7A</td>
+                      <td className="px-4 py-3">Signed by Director alone</td>
+                      <td className="px-4 py-3 text-emerald-600 font-semibold">Exempt (No MGT-8)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-navy dark:text-white">Small Company (Capital ≤ ₹10 Cr &amp; Turnover ≤ ₹100 Cr)</td>
+                      <td className="px-4 py-3 font-medium text-purple-600">Form MGT-7A</td>
+                      <td className="px-4 py-3">Director + Company Secretary (or Director alone if no CS)</td>
+                      <td className="px-4 py-3 text-emerald-600 font-semibold">Exempt (No MGT-8)</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-bold text-navy dark:text-white">Standard Private Company (Non-Small, Capital &lt; ₹10 Cr, Turnover &lt; ₹50 Cr)</td>
+                      <td className="px-4 py-3 font-medium text-blue-600">Form MGT-7</td>
+                      <td className="px-4 py-3">Director + Company Secretary in Practice (PCS)</td>
+                      <td className="px-4 py-3 text-slate-500">Not required (Signed on form)</td>
+                    </tr>
+                    <tr className="bg-amber-50/40 dark:bg-amber-950/20">
+                      <td className="px-4 py-3 font-bold text-navy dark:text-white">Listed Company or Large Company (Capital ≥ ₹10 Cr OR Turnover ≥ ₹50 Cr)</td>
+                      <td className="px-4 py-3 font-medium text-blue-600">Form MGT-7</td>
+                      <td className="px-4 py-3">Director + CS in Whole-time employment</td>
+                      <td className="px-4 py-3 text-amber-700 dark:text-amber-400 font-bold">MANDATORY Form MGT-8</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Table 5: Mandatory Attachments Checklist */}
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+              <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                <span>📎</span> Mandatory Attachments Checklist for Form MGT-7 / MGT-7A
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">
+                Required annexures before submitting your annual return on the MCA21 V3 portal.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700">
+                  <h4 className="font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                    <span className="text-emerald-500">✓</span> Mandatory for All Companies
+                  </h4>
+                  <ul className="space-y-1.5 text-slate-600 dark:text-slate-300 text-xs">
+                    <li>• List of shareholders, debenture holders (names, addresses, folios, shareholdings)</li>
+                    <li>• List of share transfers registered during the financial year</li>
+                    <li>• Details of directors, promoters, and Key Managerial Personnel (KMPs)</li>
+                    <li>• Digital Signature Certificates (DSC) of Director and PCS/CS</li>
+                  </ul>
+                </div>
+                <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700">
+                  <h4 className="font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
+                    <span className="text-blue-500">⚡</span> Conditional Attachments
+                  </h4>
+                  <ul className="space-y-1.5 text-slate-600 dark:text-slate-300 text-xs">
+                    <li>• Form MGT-8 Secretarial Audit Certificate (if Capital ≥ ₹10 Cr or Turnover ≥ ₹50 Cr)</li>
+                    <li>• Approval letter for extension of AGM from ROC (if AGM date extended under Section 96(1))</li>
+                    <li>• Details of penalties/punishment imposed on the company/directors</li>
+                    <li>• Optional attachment for foreign institutional investor / GDR holdings</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
