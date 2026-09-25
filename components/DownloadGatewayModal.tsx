@@ -1,7 +1,14 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import Script from 'next/script'
 import { CheckCircle2, Download, Mail, Loader2, X, ExternalLink, ShieldCheck, FileText } from 'lucide-react'
+
+declare global {
+  interface Window {
+    adsbygoogle?: Record<string, unknown>[]
+  }
+}
 
 interface DownloadGatewayModalProps {
   isOpen: boolean
@@ -74,6 +81,17 @@ export default function DownloadGatewayModal({
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isOpen, onClose])
+
+  // Trigger Google AdSense display unit when modal opens
+  useEffect(() => {
+    if (isOpen && typeof window !== 'undefined') {
+      try {
+        ;(window.adsbygoogle = window.adsbygoogle || []).push({})
+      } catch (err) {
+        // Suppress expected duplicate adsbygoogle pushes
+      }
+    }
+  }, [isOpen])
 
   if (!isOpen) return null
 
@@ -191,30 +209,53 @@ export default function DownloadGatewayModal({
             )}
           </div>
 
-          {/* SPONSOR / AD SLOT (Professional, high-trust) */}
-          <div className="p-4 rounded-xl border border-amber-500/20 bg-amber-50/50 dark:bg-amber-950/20 relative overflow-hidden">
-            <div className="flex items-center justify-between mb-1.5">
+          {/* SPONSOR / AD SLOT (Live Ad Unit + Corporate Partner Fallback) */}
+          <div className="p-3.5 rounded-xl border border-amber-500/20 bg-amber-50/50 dark:bg-amber-950/20 relative overflow-hidden">
+            <div className="flex items-center justify-between mb-2">
               <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20">
-                Sponsored / Professional Partner
+                Sponsored / Advertisement
               </span>
               <span className="text-[11px] text-slate-400 flex items-center gap-1">
                 <ShieldCheck className="size-3 text-emerald-500" /> MCA &amp; IT Act Compliant
               </span>
             </div>
-            <h4 className="text-sm font-bold text-navy dark:text-white mb-1">
-              Need to Legally E-Sign or Vet This Document?
-            </h4>
-            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-3">
-              Ensure 100% legal enforceability under the Indian Contract Act &amp; Information Technology Act with certified digital signatures and partner CS review.
-            </p>
-            <a
-              href="https://wa.me/919999999999?text=Hi,%20I%20need%20help%20vetting%20a%20corporate%20agreement%20from%20CorpLawUpdates"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700 dark:text-amber-300 hover:text-amber-800 dark:hover:text-amber-200 transition-colors"
-            >
-              Consult Partner CS / Legal Counsel <ExternalLink className="size-3" />
-            </a>
+
+            {/* Live Google AdSense Display Slot */}
+            <div className="w-full min-h-[90px] overflow-hidden flex items-center justify-center my-1">
+              <ins
+                className="adsbygoogle"
+                style={{ display: 'block', width: '100%', minHeight: '90px' }}
+                data-ad-client="ca-pub-8404756575471756"
+                data-ad-format="auto"
+                data-full-width-responsive="true"
+              />
+            </div>
+
+            {/* Professional Fallback Card if ad network doesn't fill */}
+            <div className="pt-2 border-t border-amber-500/15">
+              <h4 className="text-xs sm:text-sm font-bold text-navy dark:text-white mb-1">
+                Need to Legally E-Sign or Vet This Document?
+              </h4>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed mb-2">
+                Ensure 100% legal enforceability under the Indian Contract Act &amp; Information Technology Act with certified digital signatures and partner CS review.
+              </p>
+              <a
+                href="https://wa.me/919999999999?text=Hi,%20I%20need%20help%20vetting%20a%20corporate%20agreement%20from%20CorpLawUpdates"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700 dark:text-amber-300 hover:text-amber-800 dark:hover:text-amber-200 transition-colors"
+              >
+                Consult Partner CS / Legal Counsel <ExternalLink className="size-3" />
+              </a>
+            </div>
+
+            {/* AdSense Script loader for modal */}
+            <Script
+              id="adsense-modal-init"
+              strategy="lazyOnload"
+              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8404756575471756"
+              crossOrigin="anonymous"
+            />
           </div>
 
           {/* EMAIL CAPTURE: 50+ Templates & Friday Digest */}
