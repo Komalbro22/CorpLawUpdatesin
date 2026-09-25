@@ -17,6 +17,10 @@ export const IBBI_FAQS: FAQItem[] = [
     a: 'The Circular specifically operationalizes the levy of late fees for all forms that were due on or before 30.09.2026. Liquidators with any pending past filings, quarterly progress reports, or preliminary reports must clear their backlogs to avoid compounding ₹500/month fees for every month elapsed since the original due date.',
   },
   {
+    q: 'Is there an exemption or fee waiver window until 30th September 2026?',
+    a: 'No. Filing forms before 30th September 2026 does not grant any exemption or waiver from late fees. Circular No. IBBI/LIQ/107/2026 states that each form due on or before 30.09.2026 that is submitted after its individual due date must be accompanied by ₹500/month + GST. The levy commenced immediately on 24th September 2026; 30 September 2026 is merely the cutoff date defining the cohort of past forms subject to the levy, not an amnesty deadline.',
+  },
+  {
     q: 'Is GST applicable on IBBI regulatory filing fees?',
     a: 'Yes. Effective 18th July 2022, following the withdrawal of GST exemptions for statutory regulatory bodies (including SEBI, RBI, and IBBI) under Notification No. 04/2022-Central Tax (Rate), regulatory fees and late filing fees levied by IBBI attract 18% GST (SAC 9991 / 9983). At 18%, the GST on a ₹500 late fee is ₹90, resulting in a total deposit of ₹590 per month of delay per form.',
   },

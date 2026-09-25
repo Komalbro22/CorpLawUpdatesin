@@ -231,7 +231,7 @@ Gross Total Payable to Liquidator: ${formatINR(liquidatorResult.grossPayable)}`;
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     />
                   </div>
-                  <span className="text-[11px] text-slate-500">Cutoff: On or before 30.09.2026</span>
+                  <span className="text-[11px] text-slate-500">Cohort: Forms due on/before 30.09.2026</span>
                 </div>
 
                 <div>
@@ -249,6 +249,13 @@ Gross Total Payable to Liquidator: ${formatINR(liquidatorResult.grossPayable)}`;
                   </div>
                   <span className="text-[11px] text-slate-500">Date deposited on IBBI portal</span>
                 </div>
+              </div>
+
+              <div className="p-3 bg-blue-50/70 dark:bg-blue-950/30 rounded-xl border border-blue-200/60 dark:border-blue-800/40 text-xs text-blue-900 dark:text-blue-200 flex items-start gap-2.5">
+                <span className="font-bold text-blue-600 dark:text-blue-400 mt-0.5">ℹ️</span>
+                <p className="leading-relaxed">
+                  <strong>Clarification on 30.09.2026:</strong> This date is <em>not</em> an exemption or grace period. Under Circular No. IBBI/LIQ/107/2026, any form whose statutory due date was on or before 30.09.2026 attracts ₹500/month + 18% GST calculated from its original due date if submitted after that due date.
+                </p>
               </div>
 
               <div>
