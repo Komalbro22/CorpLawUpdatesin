@@ -890,6 +890,14 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
               </div>
             </div>
 
+            {/* Formula explanation — explains why continuing days = daysDelayed - 1 */}
+            {complianceResult.metadata.daysDelayed > 0 && (
+              <div className="mt-3 text-[10px] text-slate-400 dark:text-slate-500 font-mono border-t border-slate-100 dark:border-slate-800 pt-2">
+                Formula: ₹10,000 base + {Math.max(0, complianceResult.metadata.daysDelayed - 1)} continuing day(s) × ₹100/day
+                <span className="ml-1 text-slate-400">(Act: "each day <em>after the first</em>" — Day 1 = base only)</span>
+              </div>
+            )}
+
             <div className="mt-4 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl text-[11px] text-amber-800 dark:text-amber-300">
               <span className="font-bold">Notice: </span>
               {complianceResult.statutoryPenaltyExposure.reliefCeilingExplanation}

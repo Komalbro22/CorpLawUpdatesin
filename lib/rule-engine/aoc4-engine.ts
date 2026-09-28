@@ -259,6 +259,8 @@ export function calculateSection137Penalty(
     };
   }
 
+  // Section 137(3): ₹10,000 base penalty + ₹100 per day "after the first" of continuing default.
+  // The Act says "each day AFTER the first" — so day 1 counts only as base, days 2+ attract ₹100/day.
   const continuingDays = Math.max(0, daysDelayed - 1);
   const basePenalty = 10000;
   const rawCompany = basePenalty + (continuingDays * 100);
