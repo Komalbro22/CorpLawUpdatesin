@@ -11,7 +11,7 @@ import {
   ShadingType,
   Packer,
 } from 'docx'
-import { PDFDocument, rgb, StandardFonts } from 'pdf-lib'
+import { PDFDocument, PDFFont, PDFPage, rgb, StandardFonts } from 'pdf-lib'
 import { safeTextRuns, cleanText } from './docx-utils'
 
 // ─── SLA Presets & Types ────────────────────────────────────────────────────
@@ -672,219 +672,666 @@ export async function buildSlaDocx(data: Partial<SlaFormData>): Promise<Buffer> 
 
 function safePdfText(text: string | null | undefined): string {
   if (!text) return ''
-  return text.replace(/[^\x20-\x7E\n\r\t]/g, ' ').replace(/\s+/g, ' ').trim()
+  return text
+    .replace(/₹/g, 'Rs. ')
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"')
+    .replace(/[\u2013\u2014]/g, '-')
+    .replace(/•/g, '-')
+    .replace(/[\r\n]+/g, ' ')
+    .replace(/[^\x00-\x7F\xA0-\xFF]/g, '')
+    .trim()
+}
+
+class SlaPdfDocBuilder {
+  doc: PDFDocument
+  fontBold: PDFFont
+  fontRegular: PDFFont
+  fontItalic: PDFFont
+  fontBoldItalic: PDFFont
+  pages: PDFPage[] = []
+  currentPage!: PDFPage
+  y: number = 0
+  margin = 45
+  pageWidth = 595.28
+  pageHeight = 841.89
+  contentWidth = 505.28
+  bottomMargin = 45
+
+  static async create(): Promise<SlaPdfDocBuilder> {
+    const doc = await PDFDocument.create()
+    const fontBold = await doc.embedFont(StandardFonts.TimesRomanBold)
+    const fontRegular = await doc.embedFont(StandardFonts.TimesRoman)
+    const fontItalic = await doc.embedFont(StandardFonts.TimesRomanItalic)
+    const fontBoldItalic = await doc.embedFont(StandardFonts.TimesRomanBoldItalic)
+    const builder = new SlaPdfDocBuilder(doc, fontBold, fontRegular, fontItalic, fontBoldItalic)
+    builder.newPage()
+    return builder
+  }
+
+  constructor(
+    doc: PDFDocument,
+    fontBold: PDFFont,
+    fontRegular: PDFFont,
+    fontItalic: PDFFont,
+    fontBoldItalic: PDFFont
+  ) {
+    this.doc = doc
+    this.fontBold = fontBold
+    this.fontRegular = fontRegular
+    this.fontItalic = fontItalic
+    this.fontBoldItalic = fontBoldItalic
+  }
+
+  newPage(): PDFPage {
+    this.currentPage = this.doc.addPage([this.pageWidth, this.pageHeight])
+    this.pages.push(this.currentPage)
+    this.y = this.pageHeight - this.margin
+    return this.currentPage
+  }
+
+  ensureSpace(neededHeight: number) {
+    if (this.y - neededHeight < this.bottomMargin) {
+      this.newPage()
+    }
+  }
+
+  drawCentered(
+    text: string,
+    font: PDFFont,
+    size: number,
+    color = rgb(0.06, 0.09, 0.16),
+    extraSpacing = 4
+  ) {
+    const clean = safePdfText(text)
+    const words = clean.split(/\s+/).filter(Boolean)
+    let currentLine = ''
+    const lines: string[] = []
+
+    for (const word of words) {
+      const test = currentLine ? `${currentLine} ${word}` : word
+      if (font.widthOfTextAtSize(test, size) > this.contentWidth) {
+        if (currentLine) lines.push(currentLine)
+        currentLine = word
+      } else {
+        currentLine = test
+      }
+    }
+    if (currentLine) lines.push(currentLine)
+
+    for (const line of lines) {
+      this.ensureSpace(size + 3)
+      const textWidth = font.widthOfTextAtSize(line, size)
+      const x = (this.pageWidth - textWidth) / 2
+      this.currentPage.drawText(line, { x, y: this.y, size, font, color })
+      this.y -= size + 3
+    }
+    this.y -= extraSpacing
+  }
+
+  drawDivider(spacing = 8) {
+    this.ensureSpace(spacing * 2 + 1)
+    this.y -= spacing
+    this.currentPage.drawLine({
+      start: { x: this.margin, y: this.y },
+      end: { x: this.pageWidth - this.margin, y: this.y },
+      thickness: 0.75,
+      color: rgb(0.8, 0.84, 0.88),
+    })
+    this.y -= spacing
+  }
+
+  drawHeading(text: string, size = 10.5, color = rgb(0.06, 0.09, 0.16), extraSpacing = 4) {
+    this.ensureSpace(size + 14)
+    this.y -= 4
+    this.drawParagraph(text, { font: this.fontBold, size, color, extraSpacing })
+  }
+
+  drawParagraph(
+    text: string,
+    options: {
+      boldPrefix?: string
+      font?: PDFFont
+      size?: number
+      lineHeight?: number
+      color?: any
+      extraSpacing?: number
+      indent?: number
+      italics?: boolean
+    } = {}
+  ) {
+    const clean = safePdfText(text)
+    const cleanPrefix = options.boldPrefix ? safePdfText(options.boldPrefix) : undefined
+    const size = options.size || 9.5
+    const lineHeight = options.lineHeight || size * 1.38
+    const color = options.color || rgb(0.12, 0.16, 0.22)
+    const extraSpacing = options.extraSpacing ?? 5
+    const indent = options.indent || 0
+    const mainFont = options.font || (options.italics ? this.fontItalic : this.fontRegular)
+
+    const effectiveWidth = this.contentWidth - indent
+    const startX = this.margin + indent
+
+    let prefixWidth = 0
+    let prefixDrawn = false
+
+    if (cleanPrefix) {
+      prefixWidth = this.fontBold.widthOfTextAtSize(cleanPrefix, size)
+    }
+
+    const words = clean.split(/\s+/).filter(Boolean)
+    let currentLine = ''
+
+    const flushLine = (lineText: string, isFirstLine: boolean) => {
+      this.ensureSpace(lineHeight)
+      if (isFirstLine && cleanPrefix && !prefixDrawn) {
+        this.currentPage.drawText(cleanPrefix, {
+          x: startX,
+          y: this.y,
+          size,
+          font: this.fontBold,
+          color,
+        })
+        prefixDrawn = true
+        if (lineText) {
+          this.currentPage.drawText(lineText, {
+            x: startX + prefixWidth,
+            y: this.y,
+            size,
+            font: mainFont,
+            color,
+          })
+        }
+      } else {
+        if (lineText) {
+          this.currentPage.drawText(lineText, {
+            x: startX,
+            y: this.y,
+            size,
+            font: mainFont,
+            color,
+          })
+        }
+      }
+      this.y -= lineHeight
+    }
+
+    let isFirst = true
+    for (const word of words) {
+      const testLine = currentLine ? `${currentLine} ${word}` : word
+      const maxWidth = isFirst && cleanPrefix ? effectiveWidth - prefixWidth : effectiveWidth
+      const measured = mainFont.widthOfTextAtSize(testLine, size)
+
+      if (measured > maxWidth) {
+        flushLine(currentLine, isFirst)
+        isFirst = false
+        currentLine = word
+      } else {
+        currentLine = testLine
+      }
+    }
+
+    if (currentLine || (isFirst && cleanPrefix && !prefixDrawn)) {
+      flushLine(currentLine, isFirst)
+    }
+
+    this.y -= extraSpacing
+  }
+
+  drawTable(
+    headers: string[],
+    widths: number[],
+    rows: { level: string; desc: string; resp: string; reso: string; color?: any }[]
+  ) {
+    const fontSize = 8.5
+    const totalW = widths.reduce((a, b) => a + b, 0)
+    const scaledWidths = widths.map(w => (w / totalW) * this.contentWidth)
+    const headerHeight = 22
+
+    this.ensureSpace(headerHeight + 25)
+
+    // Header Background
+    this.currentPage.drawRectangle({
+      x: this.margin,
+      y: this.y - headerHeight,
+      width: this.contentWidth,
+      height: headerHeight,
+      color: rgb(0.94, 0.96, 0.98),
+      borderColor: rgb(0.8, 0.84, 0.88),
+      borderWidth: 0.5,
+    })
+
+    let curX = this.margin
+    for (let i = 0; i < headers.length; i++) {
+      const textX = curX + 6
+      const textY = this.y - headerHeight + 6
+      this.currentPage.drawText(safePdfText(headers[i]), {
+        x: textX,
+        y: textY,
+        size: fontSize,
+        font: this.fontBold,
+        color: rgb(0.06, 0.09, 0.16),
+      })
+      curX += scaledWidths[i]
+    }
+    this.y -= headerHeight
+
+    for (const r of rows) {
+      const colTexts = [r.level, r.desc, r.resp, r.reso]
+      const colFonts = [this.fontBold, this.fontRegular, this.fontBold, this.fontBold]
+      const colColors = [
+        r.color || rgb(0.12, 0.16, 0.22),
+        rgb(0.12, 0.16, 0.22),
+        rgb(0.12, 0.16, 0.22),
+        rgb(0.12, 0.16, 0.22),
+      ]
+
+      // Calculate lines per column
+      const cellLines: string[][] = []
+      let maxLines = 1
+
+      for (let i = 0; i < 4; i++) {
+        const text = safePdfText(colTexts[i])
+        const colW = scaledWidths[i] - 12
+        const words = text.split(/\s+/).filter(Boolean)
+        const lines: string[] = []
+        let cur = ''
+        const f = colFonts[i]
+
+        for (const w of words) {
+          const test = cur ? `${cur} ${w}` : w
+          if (f.widthOfTextAtSize(test, fontSize) > colW) {
+            if (cur) lines.push(cur)
+            cur = w
+          } else {
+            cur = test
+          }
+        }
+        if (cur) lines.push(cur)
+        cellLines.push(lines)
+        if (lines.length > maxLines) maxLines = lines.length
+      }
+
+      const rowH = Math.max(22, maxLines * 11 + 8)
+      this.ensureSpace(rowH)
+
+      // Row background & border
+      this.currentPage.drawRectangle({
+        x: this.margin,
+        y: this.y - rowH,
+        width: this.contentWidth,
+        height: rowH,
+        color: rgb(1, 1, 1),
+        borderColor: rgb(0.85, 0.88, 0.92),
+        borderWidth: 0.5,
+      })
+
+      let cellX = this.margin
+      for (let i = 0; i < 4; i++) {
+        const lines = cellLines[i]
+        let lineY = this.y - 13
+        for (const l of lines) {
+          this.currentPage.drawText(l, {
+            x: cellX + 6,
+            y: lineY,
+            size: fontSize,
+            font: colFonts[i],
+            color: colColors[i],
+          })
+          lineY -= 11
+        }
+        cellX += scaledWidths[i]
+      }
+
+      this.y -= rowH
+    }
+
+    this.y -= 10
+  }
+
+  drawSignatures(
+    client: { name: string; signatory: string; title: string },
+    provider: { name: string; signatory: string; title: string },
+    date: string
+  ) {
+    const blockHeight = 130
+    this.ensureSpace(blockHeight)
+
+    const colWidth = (this.contentWidth - 24) / 2
+    const leftX = this.margin
+    const rightX = this.margin + colWidth + 24
+
+    this.currentPage.drawText('FOR AND ON BEHALF OF CLIENT:', {
+      x: leftX,
+      y: this.y,
+      size: 9,
+      font: this.fontBold,
+      color: rgb(0.06, 0.09, 0.16),
+    })
+
+    this.currentPage.drawText('FOR AND ON BEHALF OF SERVICE PROVIDER:', {
+      x: rightX,
+      y: this.y,
+      size: 9,
+      font: this.fontBold,
+      color: rgb(0.06, 0.09, 0.16),
+    })
+
+    this.y -= 14
+
+    this.currentPage.drawText(safePdfText(`(${client.name})`), {
+      x: leftX,
+      y: this.y,
+      size: 8,
+      font: this.fontItalic,
+      color: rgb(0.35, 0.4, 0.48),
+    })
+
+    this.currentPage.drawText(safePdfText(`(${provider.name})`), {
+      x: rightX,
+      y: this.y,
+      size: 8,
+      font: this.fontItalic,
+      color: rgb(0.35, 0.4, 0.48),
+    })
+
+    this.y -= 42 // Signature line space
+
+    this.currentPage.drawText('____________________________________', {
+      x: leftX,
+      y: this.y,
+      size: 9,
+      font: this.fontRegular,
+      color: rgb(0.6, 0.65, 0.7),
+    })
+
+    this.currentPage.drawText('____________________________________', {
+      x: rightX,
+      y: this.y,
+      size: 9,
+      font: this.fontRegular,
+      color: rgb(0.6, 0.65, 0.7),
+    })
+
+    this.y -= 15
+
+    this.currentPage.drawText(safePdfText(`Name: ${client.signatory}`), {
+      x: leftX,
+      y: this.y,
+      size: 8.5,
+      font: this.fontBold,
+      color: rgb(0.12, 0.16, 0.22),
+    })
+
+    this.currentPage.drawText(safePdfText(`Name: ${provider.signatory}`), {
+      x: rightX,
+      y: this.y,
+      size: 8.5,
+      font: this.fontBold,
+      color: rgb(0.12, 0.16, 0.22),
+    })
+
+    this.y -= 12
+
+    this.currentPage.drawText(safePdfText(`Designation: ${client.title}`), {
+      x: leftX,
+      y: this.y,
+      size: 8.5,
+      font: this.fontRegular,
+      color: rgb(0.12, 0.16, 0.22),
+    })
+
+    this.currentPage.drawText(safePdfText(`Designation: ${provider.title}`), {
+      x: rightX,
+      y: this.y,
+      size: 8.5,
+      font: this.fontRegular,
+      color: rgb(0.12, 0.16, 0.22),
+    })
+
+    this.y -= 12
+
+    this.currentPage.drawText(safePdfText(`Date: ${date}`), {
+      x: leftX,
+      y: this.y,
+      size: 8.5,
+      font: this.fontRegular,
+      color: rgb(0.12, 0.16, 0.22),
+    })
+
+    this.currentPage.drawText(safePdfText(`Date: ${date}`), {
+      x: rightX,
+      y: this.y,
+      size: 8.5,
+      font: this.fontRegular,
+      color: rgb(0.12, 0.16, 0.22),
+    })
+
+    this.y -= 20
+  }
+
+  applyFooter() {
+    const totalPages = this.pages.length
+    for (let i = 0; i < totalPages; i++) {
+      const page = this.pages[i]
+      const footerText = safePdfText(`Page ${i + 1} of ${totalPages}`)
+      const textWidth = this.fontRegular.widthOfTextAtSize(footerText, 8.5)
+
+      page.drawLine({
+        start: { x: this.margin, y: 32 },
+        end: { x: this.pageWidth - this.margin, y: 32 },
+        thickness: 0.5,
+        color: rgb(0.8, 0.84, 0.88),
+      })
+
+      page.drawText(footerText, {
+        x: (this.pageWidth - textWidth) / 2,
+        y: 20,
+        size: 8.5,
+        font: this.fontRegular,
+        color: rgb(0.4, 0.45, 0.5),
+      })
+    }
+  }
+
+  async finish(): Promise<Uint8Array> {
+    this.applyFooter()
+    return await this.doc.save()
+  }
 }
 
 // ─── PDF Document Generator ─────────────────────────────────────────────────
 export async function buildSlaPdf(data: Partial<SlaFormData>): Promise<Uint8Array> {
-  const type = data.slaType || 'it_saas'
-  const preset = SLA_PRESETS[type] || SLA_PRESETS.it_saas
+  const type = data.slaType || 'cloud_computing'
+  const preset = SLA_PRESETS[type] || SLA_PRESETS.cloud_computing
 
-  const pdfDoc = await PDFDocument.create()
-  const page = pdfDoc.addPage([595.28, 841.89]) // A4
-  const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
-  const fontRegular = await pdfDoc.embedFont(StandardFonts.Helvetica)
-  const fontItalic = await pdfDoc.embedFont(StandardFonts.HelveticaOblique)
+  const effectiveDate = data.effectiveDate || '28 September 2026'
+  const clientName = data.clientName || 'ALPHA ENTERPRISES PRIVATE LIMITED'
+  const clientCin = data.clientCin || 'U72900MH2020PTC123456'
+  const clientAddress = data.clientAddress || '101, Express Towers, Nariman Point, Mumbai - 400021, Maharashtra, India'
+  const clientSignatory = data.clientSignatoryName || 'Rajesh Sharma'
+  const clientSignatoryTitle = data.clientSignatoryTitle || 'Director'
 
-  const { width, height } = page.getSize()
-  let y = height - 50
+  const providerName = data.providerName || 'NEXUS CLOUD SOLUTIONS PRIVATE LIMITED'
+  const providerCin = data.providerCin || 'U72200DL2018PTC654321'
+  const providerAddress = data.providerAddress || 'Plot 45, Okhla Industrial Area Phase-III, New Delhi - 110020, India'
+  const providerSignatory = data.providerSignatoryName || 'Amitabh Sen'
+  const providerSignatoryTitle = data.providerSignatoryTitle || 'Managing Director'
 
-  const primaryRgb = rgb(0.06, 0.09, 0.16) // #0F172A
-  const textMutedRgb = rgb(0.39, 0.45, 0.55) // #64748B
-  const textDarkRgb = rgb(0.12, 0.16, 0.22)
+  const services = data.servicesDescription || preset.servicesDefault
+  const uptime = data.uptimeTarget || preset.uptimeDefault
+  const maintenance = data.maintenanceWindow || preset.maintenanceDefault
+  const credits = data.creditPercentage || preset.creditDefault
+  const cap = data.penaltyCap || preset.capDefault
+  const seat = data.arbitrationSeat || 'New Delhi'
+  const termMonths = data.termMonths || '12'
 
-  // Title
-  page.drawText('SERVICE LEVEL AGREEMENT (SLA)', {
-    x: 50,
-    y,
-    size: 16,
-    font: fontBold,
-    color: primaryRgb,
-  })
-  y -= 18
+  const sev1Resp = data.sev1ResponseTime || '1 Hour'
+  const sev1Reso = data.sev1ResolutionTime || '4 Hours'
+  const sev2Resp = data.sev2ResponseTime || '2 Hours'
+  const sev2Reso = data.sev2ResolutionTime || '8 Hours'
+  const sev3Resp = data.sev3ResponseTime || '8 Hours'
+  const sev3Reso = data.sev3ResolutionTime || '24 Hours'
+  const sev4Resp = data.sev4ResponseTime || '24 Hours'
+  const sev4Reso = data.sev4ResolutionTime || '72 Hours'
 
-  page.drawText(safePdfText(preset.title), {
-    x: 50,
-    y,
-    size: 10,
-    font: fontItalic,
-    color: textMutedRgb,
-  })
-  y -= 25
+  const b = await SlaPdfDocBuilder.create()
 
-  // Horizontal divider
-  page.drawLine({
-    start: { x: 50, y },
-    end: { x: width - 50, y },
-    thickness: 1,
-    color: rgb(0.8, 0.84, 0.88),
-  })
-  y -= 20
+  // Header Title
+  b.drawCentered('SERVICE LEVEL AGREEMENT (SLA)', b.fontBold, 15, rgb(0.06, 0.09, 0.16))
+  b.drawCentered(
+    '[Governed by the Indian Contract Act, 1872 & Information Technology Act, 2000]',
+    b.fontItalic,
+    9.5,
+    rgb(0.39, 0.45, 0.55),
+    6
+  )
+  b.drawDivider(6)
 
-  const clientName = safePdfText(data.clientName) || 'ALPHA ENTERPRISES PRIVATE LIMITED'
-  const providerName = safePdfText(data.providerName) || 'NEXUS CLOUD SOLUTIONS PRIVATE LIMITED'
-  const effectiveDate = safePdfText(data.effectiveDate) || '1st October 2026'
-  const uptime = safePdfText(data.uptimeTarget) || preset.uptimeDefault
-  const cap = safePdfText(data.penaltyCap) || preset.capDefault
-  const seat = safePdfText(data.arbitrationSeat) || 'New Delhi'
+  // Preamble
+  b.drawParagraph(
+    `THIS SERVICE LEVEL AGREEMENT ("Agreement" or "SLA") is entered into on this ${effectiveDate} ("Effective Date"), by and between:`,
+    { size: 9.5, extraSpacing: 6 }
+  )
 
-  // Summary Grid
-  page.drawText(`Effective Date: ${effectiveDate}`, { x: 50, y, size: 9, font: fontRegular, color: textDarkRgb })
-  page.drawText(`Target Uptime: ${uptime}`, { x: 300, y, size: 9, font: fontBold, color: rgb(0.01, 0.52, 0.78) })
-  y -= 15
+  // Parties
+  b.drawParagraph(
+    `1. ${clientName}, a company incorporated under the Companies Act, 2013 (CIN: ${clientCin || '[CIN]'}), having its registered office at ${clientAddress} (hereinafter referred to as the "Client", which expression shall unless repugnant to the context include its successors and permitted assigns); and`,
+    { size: 9.5, indent: 8, extraSpacing: 6 }
+  )
 
-  page.drawText(`Client: ${clientName}`, { x: 50, y, size: 9, font: fontBold, color: textDarkRgb })
-  page.drawText(`Service Provider: ${providerName}`, { x: 300, y, size: 9, font: fontBold, color: textDarkRgb })
-  y -= 15
+  b.drawParagraph(
+    `2. ${providerName}, a company incorporated under the Companies Act, 2013 (CIN: ${providerCin || '[CIN]'}), having its registered office at ${providerAddress} (hereinafter referred to as the "Service Provider", which expression shall unless repugnant to the context include its successors and permitted assigns).`,
+    { size: 9.5, indent: 8, extraSpacing: 10 }
+  )
 
-  page.drawText(`Penalty Cap: ${cap}`, { x: 50, y, size: 9, font: fontRegular, color: textDarkRgb })
-  page.drawText(`Arbitration Seat: ${seat}, India`, { x: 300, y, size: 9, font: fontRegular, color: textDarkRgb })
-  y -= 25
+  // Recitals
+  b.drawParagraph('WHEREAS:', { font: b.fontBold, size: 10, extraSpacing: 4 })
+  b.drawParagraph(
+    `A. The Service Provider is engaged in the professional business of providing technical, IT, cloud, software, and managed enterprise operational services.`,
+    { size: 9.5, indent: 8, extraSpacing: 4 }
+  )
+  b.drawParagraph(
+    `B. The Client desires to engage the Service Provider, and the Service Provider agrees to deliver the Services in accordance with the specific performance standards, service levels, escalation mechanisms, and service credit remedies stipulated herein.`,
+    { size: 9.5, indent: 8, extraSpacing: 10 }
+  )
 
-  // Core Clauses Summary
-  page.drawText('1. STATUTORY COMPLIANCE & GOVERNING LAW', { x: 50, y, size: 10, font: fontBold, color: primaryRgb })
-  y -= 14
-  page.drawText('This agreement is governed by the Indian Contract Act, 1872 (Sections 73-75) and Information Technology Act, 2000.', {
-    x: 50,
-    y,
-    size: 8.5,
-    font: fontRegular,
-    color: textDarkRgb,
-  })
-  y -= 20
+  b.drawParagraph('NOW, THEREFORE, the Parties agree as follows:', { font: b.fontBold, size: 10, extraSpacing: 8 })
 
-  page.drawText('2. SERVICE LEVEL OBJECTIVES & DOWNTIME REMEDIES', { x: 50, y, size: 10, font: fontBold, color: primaryRgb })
-  y -= 14
-  page.drawText(`Uptime target is strictly maintained at ${uptime}. Unscheduled outages trigger liquidated damages via Service Credits.`, {
-    x: 50,
-    y,
-    size: 8.5,
-    font: fontRegular,
-    color: textDarkRgb,
-  })
-  y -= 20
+  // Clause 1
+  b.drawHeading('1. SCOPE OF SERVICES & COMMENCEMENT')
+  b.drawParagraph(
+    `1.1 The Service Provider shall deliver the following designated operational and technology services during the Term of ${termMonths} months: ${services}`,
+    { size: 9.5, extraSpacing: 8 }
+  )
 
-  page.drawText('3. INCIDENT SEVERITY MATRIX', { x: 50, y, size: 10, font: fontBold, color: primaryRgb })
-  y -= 14
-  page.drawText(`• Severity 1 (Critical): Response ${safePdfText(data.sev1ResponseTime) || '1 hr'} | Resolution ${safePdfText(data.sev1ResolutionTime) || '4 hrs'} (Core outage).`, {
-    x: 50,
-    y,
-    size: 8.5,
-    font: fontRegular,
-    color: rgb(0.86, 0.15, 0.15),
-  })
-  y -= 12
-  page.drawText(`• Severity 2 (High): Response ${safePdfText(data.sev2ResponseTime) || '2 hrs'} | Resolution ${safePdfText(data.sev2ResolutionTime) || '8 hrs'} (Feature degraded).`, {
-    x: 50,
-    y,
-    size: 8.5,
-    font: fontRegular,
-    color: rgb(0.85, 0.47, 0.02),
-  })
-  y -= 12
-  page.drawText(`• Severity 3 (Medium): Response ${safePdfText(data.sev3ResponseTime) || '8 hrs'} | Resolution ${safePdfText(data.sev3ResolutionTime) || '24 hrs'} (Workaround available).`, {
-    x: 50,
-    y,
-    size: 8.5,
-    font: fontRegular,
-    color: rgb(0.15, 0.39, 0.92),
-  })
-  y -= 12
-  page.drawText(`• Severity 4 (Low): Response ${safePdfText(data.sev4ResponseTime) || '24 hrs'} | Resolution ${safePdfText(data.sev4ResolutionTime) || '72 hrs'} (Cosmetic inquiry).`, {
-    x: 50,
-    y,
-    size: 8.5,
-    font: fontRegular,
-    color: rgb(0.28, 0.33, 0.41),
-  })
-  y -= 25
+  // Clause 2
+  b.drawHeading('2. SERVICE LEVEL OBJECTIVES (SLOs) & UPTIME COMMITMENT')
+  b.drawParagraph(
+    `2.1 Availability Target: The Service Provider unconditionally warrants that the contracted services shall maintain a minimum monthly uptime of ${uptime}, measured 24 hours a day, 7 days a week, over each calendar billing month ("Measurement Window").`,
+    { size: 9.5, extraSpacing: 4 }
+  )
+  b.drawParagraph(
+    `2.2 Scheduled Maintenance: Uptime measurements shall exclude agreed maintenance windows: ${maintenance}. Any maintenance conducted outside of this permitted window or exceeding the allocated duration shall be deemed Unscheduled Downtime.`,
+    { size: 9.5, extraSpacing: 8 }
+  )
 
-  page.drawText('4. DATA PROTECTION & DPDP ACT 2023', { x: 50, y, size: 10, font: fontBold, color: primaryRgb })
-  y -= 14
-  page.drawText('The Service Provider operates as a Data Processor adhering to Section 8 of DPDP Act 2023 with mandatory 6-hour breach notice.', {
-    x: 50,
-    y,
-    size: 8.5,
-    font: fontRegular,
-    color: textDarkRgb,
-  })
-  y -= 30
+  // Clause 3
+  b.drawHeading('3. INCIDENT SEVERITY CLASSIFICATION & RESPONSE TIMES')
+  b.drawParagraph(
+    `3.1 In the event of any service failure, outage, or defect, the incident shall be classified and remediated in accordance with the statutory matrix below:`,
+    { size: 9.5, extraSpacing: 6 }
+  )
 
-  const hasCustomClauses = data.customClauses && data.customClauses.length > 0
+  b.drawTable(
+    ['Severity Level', 'Definition & Impact', 'Target Response', 'Target Resolution'],
+    [115, 230, 80, 80],
+    [
+      {
+        level: 'Severity 1 (Critical)',
+        desc: 'Core service complete outage, critical production transactions halted, no workaround available.',
+        resp: sev1Resp,
+        reso: sev1Reso,
+        color: rgb(0.86, 0.15, 0.15),
+      },
+      {
+        level: 'Severity 2 (High)',
+        desc: 'Primary functionality severely degraded; operations impaired but secondary workflows functional.',
+        resp: sev2Resp,
+        reso: sev2Reso,
+        color: rgb(0.85, 0.47, 0.02),
+      },
+      {
+        level: 'Severity 3 (Medium)',
+        desc: 'Non-critical function failure or partial feature bug with acceptable operational workaround.',
+        resp: sev3Resp,
+        reso: sev3Reso,
+        color: rgb(0.15, 0.39, 0.92),
+      },
+      {
+        level: 'Severity 4 (Low)',
+        desc: 'Minor cosmetic flaw, UI discrepancy, documentation inquiry, or general technical query.',
+        resp: sev4Resp,
+        reso: sev4Reso,
+        color: rgb(0.28, 0.33, 0.41),
+      },
+    ]
+  )
 
-  if (!hasCustomClauses) {
-    // Execution Block on Page 1
-    page.drawText('EXECUTION & SIGNATURES', { x: 50, y, size: 10, font: fontBold, color: primaryRgb })
-    y -= 20
+  // Clause 4
+  b.drawHeading('4. SERVICE CREDITS & LIQUIDATED DAMAGES')
+  b.drawParagraph(
+    `4.1 If the Service Provider fails to satisfy the agreed Uptime Target or resolution timelines, the Client shall be entitled to receive Service Credits calculated as follows: ${credits}, subject to an aggregate monthly cap of ${cap}.`,
+    { size: 9.5, extraSpacing: 4 }
+  )
+  b.drawParagraph(
+    `4.2 Section 74 Indian Contract Act Compliance: The parties expressly agree that the Service Credits stipulated herein represent a genuine pre-estimate of loss and reasonable compensation under Section 74 of the Indian Contract Act, 1872, and do not constitute an arbitrary penal forfeiture.`,
+    { size: 9.5, italics: true, extraSpacing: 8 }
+  )
 
-    page.drawText('For Client:', { x: 50, y, size: 9, font: fontBold, color: textDarkRgb })
-    page.drawText('For Service Provider:', { x: 300, y, size: 9, font: fontBold, color: textDarkRgb })
-    y -= 35
+  // Clause 5
+  b.drawHeading('5. DATA PROTECTION & CYBERSECURITY COMPLIANCE')
+  b.drawParagraph(
+    `5.1 The Service Provider acts as a Data Processor under the Digital Personal Data Protection Act, 2023 (DPDP Act) and shall implement stringent technical and organizational safeguards under Section 43A of the Information Technology Act, 2000. In the event of any personal data breach or cyber incident, the Service Provider must notify the Client within six (6) hours of discovery.`,
+    { size: 9.5, extraSpacing: 8 }
+  )
 
-    page.drawText('___________________________', { x: 50, y, size: 9, font: fontRegular, color: textMutedRgb })
-    page.drawText('___________________________', { x: 300, y, size: 9, font: fontRegular, color: textMutedRgb })
-    y -= 14
-
-    page.drawText(`Authorized Signatory: ${safePdfText(data.clientSignatoryName) || '[Name]'}`, { x: 50, y, size: 8.5, font: fontRegular, color: textDarkRgb })
-    page.drawText(`Authorized Signatory: ${safePdfText(data.providerSignatoryName) || '[Name]'}`, { x: 300, y, size: 8.5, font: fontRegular, color: textDarkRgb })
-  } else {
-    // Pointer on Page 1
-    page.drawText('5. SPECIAL OPERATIONAL STIPULATIONS', { x: 50, y, size: 10, font: fontBold, color: primaryRgb })
-    y -= 14
-    page.drawText('Agreed custom technical stipulations, audit rights, and execution blocks are detailed on Page 2.', {
-      x: 50,
-      y,
-      size: 8.5,
-      font: fontItalic,
-      color: textMutedRgb,
-    })
-
-    // Page 2 for Custom Clauses & Execution
-    const page2 = pdfDoc.addPage([595.28, 841.89])
-    let y2 = height - 50
-
-    page2.drawText('SPECIAL OPERATIONAL STIPULATIONS & EXECUTION', {
-      x: 50,
-      y: y2,
-      size: 14,
-      font: fontBold,
-      color: primaryRgb,
-    })
-    y2 -= 16
-    page2.drawLine({
-      start: { x: 50, y: y2 },
-      end: { x: width - 50, y: y2 },
-      thickness: 1,
-      color: rgb(0.8, 0.84, 0.88),
-    })
-    y2 -= 25
-
-    data.customClauses?.slice(0, 4).forEach((c, idx) => {
-      const clauseNum = 5 + idx
-      const cTitle = safePdfText(c.title).toUpperCase() || `STIPULATION ${idx + 1}`
-      page2.drawText(`${clauseNum}. ${cTitle}`, { x: 50, y: y2, size: 9.5, font: fontBold, color: primaryRgb })
-      y2 -= 14
-      const content = safePdfText(c.content)
-      const previewText = content.length > 200 ? content.slice(0, 197) + '...' : content
-      page2.drawText(previewText, { x: 50, y: y2, size: 8, font: fontRegular, color: textDarkRgb })
-      y2 -= 24
-    })
-
-    y2 -= 15
-    page2.drawText('EXECUTION & SIGNATURES', { x: 50, y: y2, size: 10, font: fontBold, color: primaryRgb })
-    y2 -= 20
-
-    page2.drawText('For Client:', { x: 50, y: y2, size: 9, font: fontBold, color: textDarkRgb })
-    page2.drawText('For Service Provider:', { x: 300, y: y2, size: 9, font: fontBold, color: textDarkRgb })
-    y2 -= 35
-
-    page2.drawText('___________________________', { x: 50, y: y2, size: 9, font: fontRegular, color: textMutedRgb })
-    page2.drawText('___________________________', { x: 300, y: y2, size: 9, font: fontRegular, color: textMutedRgb })
-    y2 -= 14
-
-    page2.drawText(`Authorized Signatory: ${safePdfText(data.clientSignatoryName) || '[Name]'}`, { x: 50, y: y2, size: 8.5, font: fontRegular, color: textDarkRgb })
-    page2.drawText(`Authorized Signatory: ${safePdfText(data.providerSignatoryName) || '[Name]'}`, { x: 300, y: y2, size: 8.5, font: fontRegular, color: textDarkRgb })
+  // Custom Clauses (Clause 6, 7, etc.)
+  let nextClauseNum = 6
+  if (data.customClauses && data.customClauses.length > 0) {
+    for (const c of data.customClauses) {
+      const cTitle = safePdfText(c.title).toUpperCase() || `SPECIAL OPERATIONAL STIPULATION ${nextClauseNum - 5}`
+      b.drawHeading(`${nextClauseNum}. ${cTitle}`)
+      b.drawParagraph(safePdfText(c.content), { size: 9.5, extraSpacing: 8 })
+      nextClauseNum++
+    }
   }
 
-  return await pdfDoc.save()
+  // Governing Law & Arbitration
+  b.drawHeading(`${nextClauseNum}. GOVERNING LAW & ARBITRATION`)
+  b.drawParagraph(
+    `${nextClauseNum}.1 This Agreement shall be governed by the laws of India. Any dispute arising out of or in connection with this SLA shall be referred to arbitration in accordance with the Arbitration and Conciliation Act, 1996. The seat and venue of arbitration shall be ${seat}, India, and proceedings shall be conducted in English by a sole arbitrator mutually appointed by the parties.`,
+    { size: 9.5, extraSpacing: 10 }
+  )
+
+  // Optional Bilingual Note
+  if (data.languageNote && data.languageNote.trim().length > 0) {
+    b.drawHeading(`ANNEXURE I: BILINGUAL STATUTORY NOTE / द्विभाषी वैधानिक सारांश`, 10, rgb(0.7, 0.45, 0.05))
+    b.drawParagraph(safePdfText(data.languageNote), { size: 9, italics: true, extraSpacing: 10 })
+  }
+
+  // Execution Preamble
+  b.drawParagraph(
+    'IN WITNESS WHEREOF, the parties hereto have executed this Service Level Agreement by their duly authorized representatives on the date first written above.',
+    { font: b.fontBold, size: 9.5, extraSpacing: 14 }
+  )
+
+  // Signature Block
+  b.drawSignatures(
+    { name: clientName, signatory: clientSignatory, title: clientSignatoryTitle },
+    { name: providerName, signatory: providerSignatory, title: providerSignatoryTitle },
+    effectiveDate
+  )
+
+  return await b.finish()
 }
