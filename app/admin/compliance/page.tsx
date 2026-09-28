@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { Lightbulb, Loader2, Plus } from 'lucide-react'
 import { useToast } from '@/components/Toast'
@@ -38,6 +38,8 @@ const emptyForm = {
   regulation_reference: '',
   frequency: 'annual',
   display_order: 0,
+  is_active: true,
+  is_verified: false,
 }
 
 export default function AdminCompliancePage() {
@@ -51,6 +53,7 @@ export default function AdminCompliancePage() {
   const [saving, setSaving] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [pendingCount, setPendingCount] = useState(0)
+  const formRef = useRef<HTMLDivElement>(null)
 
   async function loadEntries() {
     setLoading(true)
@@ -155,15 +158,20 @@ export default function AdminCompliancePage() {
       form_name: entry.form_name,
       compliance_title: entry.compliance_title,
       due_date: entry.due_date,
-      applicable_to: entry.applicable_to,
+      applicable_to: entry.applicable_to || '',
       penalty: entry.penalty || '',
       regulation_reference: entry.regulation_reference || '',
       frequency: entry.frequency,
       display_order: entry.display_order,
+      is_active: entry.is_active,
+      is_verified: entry.is_verified,
     })
     setEditingId(entry.id)
     setShowForm(true)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    // Use requestAnimationFrame to scroll AFTER React re-renders the form
+    requestAnimationFrame(() => {
+      formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
   }
 
   const inputClass =
@@ -234,7 +242,7 @@ export default function AdminCompliancePage() {
 
       {/* Add / Edit Form */}
       {showForm && (
-        <div className="bg-slate-100 border border-amber-500/20 rounded-2xl p-6 mb-2 shadow-card">
+        <div ref={formRef} className="bg-slate-100 border border-amber-500/20 rounded-2xl p-6 mb-2 shadow-card scroll-mt-4">
           <h2 className="font-heading font-bold text-slate-900 mb-4">
             {editingId ? 'Edit entry' : 'New compliance entry'}
           </h2>
@@ -278,6 +286,27 @@ export default function AdminCompliancePage() {
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1">Display Order</label>
               <input type="number" value={form.display_order} onChange={e => setForm(p => ({ ...p, display_order: Number(e.target.value) }))} className={inputClass} />
+            </div>
+            {/* Status toggles — visible in both add and edit mode */}
+            <div className="flex items-center gap-6">
+              <label className="flex items-center gap-2 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={form.is_active}
+                  onChange={e => setForm(p => ({ ...p, is_active: e.target.checked }))}
+                  className="w-4 h-4 accent-amber-500 rounded"
+                />
+                <span className="text-xs font-semibold text-slate-700">Active (Visible on Calendar)</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={form.is_verified}
+                  onChange={e => setForm(p => ({ ...p, is_verified: e.target.checked }))}
+                  className="w-4 h-4 accent-emerald-500 rounded"
+                />
+                <span className="text-xs font-semibold text-slate-700">Verified</span>
+              </label>
             </div>
           </div>
           <div className="flex gap-3 mt-4">
