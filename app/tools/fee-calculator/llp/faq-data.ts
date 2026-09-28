@@ -36,4 +36,20 @@ export const LLP_FAQS: FaqItem[] = [
     q: 'What is the statutory due date for Form 11 and Form 8?',
     a: 'Form 11 (Annual Return) must be filed within 60 days of financial year closure (30 May for FY ending 31 March). Form 8 (Statement of Account & Solvency) must be filed within 30 days from the expiry of 6 months of financial year closure (30 October for FY ending 31 March).',
   },
+  {
+    q: 'What are the MCA government fees for LLP incorporation and registration in Form FiLLiP?',
+    a: 'Under Annexure-A Item 1 of the LLP Rules, 2009, MCA registration fees for Form FiLLiP are based on proposed contribution: ≤ ₹1 Lakh = ₹500; ₹1L to ₹5L = ₹2,000; ₹5L to ₹10L = ₹4,000; and ≥ ₹10 Lakhs = ₹5,000. In addition, mandatory PAN (₹78) and TAN (₹77) electronic processing fees total ₹155. DPIN / DIN for up to 2 designated partners is included at no extra charge. If name reservation is done beforehand via RUN-LLP, an additional ₹200 fee applies.',
+  },
+  {
+    q: 'What are the late filing fees for LLP Form 8 and Form 11 for Small LLPs?',
+    a: 'For Small LLPs (contribution ≤ ₹25L and turnover ≤ ₹40L), the LLP (Second Amendment) Rules, 2022 provide huge concessions: up to 15 days delay = 1× normal fee; 16–30 days = 2×; 31–60 days = 4×; 61–90 days = 6×; 91–180 days = 10×; and 181–360 days = 15×. Beyond 360 days, late fees accumulate at only ₹10 per day (compared to ₹20 per day for non-small LLPs).',
+  },
+  {
+    q: 'What is the statutory due date and late fee for filing Form 3 (LLP Agreement)?',
+    a: 'Under Section 23(2) of the LLP Act, 2008 read with Rule 21(1), Form 3 must be filed strictly within 30 calendar days of the LLP incorporation date (Certificate of Incorporation date). Base filing fees range from ₹500 (contribution ≤ ₹1L) to ₹5,000 (contribution ₹10L–₹25L). If delayed past 30 days, Table B Item 1 additional fees apply, escalating from 2× to a maximum cap of 25× for Small LLPs and 50× for Other LLPs.',
+  },
+  {
+    q: 'What are the government fees for closing or striking off an LLP in Form 24?',
+    a: 'Under Annexure-A Item 5 of the LLP Rules, 2009, the government filing fee for Form 24 (Striking off the Name of LLP under Section 75) is a flat ₹500 for Small LLPs and ₹1,000 for Other LLPs. No late filing fee or daily multiplier applies to Form 24. However, the LLP must have ceased commercial operations for at least 1 year, have zero active bank accounts or creditors, and must have filed Form 8 and Form 11 up to the financial year of cessation.',
+  },
 ];

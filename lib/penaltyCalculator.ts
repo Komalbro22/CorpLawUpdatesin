@@ -3,6 +3,7 @@ import {
   getLLPNormalFee,
   getLLPAdditionalFee,
   getLLPForm3BaseFee,
+  getLLPFiLLiPBaseFee,
   getLLPForm4BaseFee,
   getLLPForm24BaseFee,
   getLLPChargeBaseFee,
@@ -219,6 +220,7 @@ export type LlpFormId =
   | 'Form-5'
   | 'Form-15'
   | 'Form-24'
+  | 'Form-FiLLiP'
   // Legacy aliases
   | 'Form-8'
   | 'Form-11';
@@ -328,6 +330,13 @@ export function getLlpStatutoryDueDate(
     return {
       dueDateStr: `${targetYear}-10-30`,
       formatted: `30 Oct ${targetYear}`,
+    };
+  }
+
+  if (normForm === 'Form-FiLLiP' || normForm === 'FiLLiP') {
+    return {
+      dueDateStr: eventDate || new Date().toISOString().slice(0, 10),
+      formatted: 'Initial Incorporation (No statutory due date)',
     };
   }
 
@@ -606,6 +615,20 @@ export function calculateLlpFee(params: LlpFeeParams): LlpCalculationResult {
       multiplierDesc = 'Additional Filing Fee is N/A for voluntary strike-off applications';
       proceduralNotes =
         'Form 24 Prerequisites: Must have ceased commercial activity for at least 1 year; no active assets, liabilities, or open charges; up-to-date filing of Form 8 and Form 11 completed up to the financial year of cessation; CA-certified Statement of Account within 30 days of application.';
+      break;
+    }
+
+    case 'Form-FiLLiP': {
+      formName = 'Form FiLLiP — Incorporation of Limited Liability Partnership (LLP)';
+      statutoryAuthority = 'Section 11 & Section 12, LLP Act, 2008 read with Rule 8 & Rule 11 and Annexure-A Item 1, LLP Rules, 2009';
+      normalFee = getLLPFiLLiPBaseFee(contribution);
+      lateFee = 0; // Initial incorporation form
+      incrementalFee = 155; // Mandatory PAN ₹78 + TAN ₹77 electronic processing charges
+      baseFeeDesc = `MCA Base Registration Fee under Annexure A Item 1 for contribution ₹${contribution.toLocaleString('en-IN')}`;
+      incrementalFeeDesc = 'Statutory PAN (₹78) & TAN (₹77) electronic processing fees';
+      multiplierDesc = 'Late filing fee is N/A for initial incorporation. Form 3 LLP Agreement must be filed within 30 days of incorporation.';
+      proceduralNotes =
+        'FiLLiP Filing Guide: Includes DPIN/DIN allotment for up to 2 designated partners. Name can be pre-reserved via RUN-LLP (₹200) or integrated directly into FiLLiP. Subsequent mandatory compliance: Form 3 (LLP Agreement) must be executed on non-judicial stamp paper under State Stamp Act (Article 35/46) and filed with ROC strictly within 30 days of incorporation.';
       break;
     }
 

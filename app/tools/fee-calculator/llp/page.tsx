@@ -8,14 +8,40 @@ import ReaderFeedback from '@/components/ReaderFeedback'
 
 export const metadata: Metadata = {
   title: {
-    absolute: 'LLP Fee Calculator — Form 8, 11, 3, 4 Late Filing Fees & Penalties (FY 2026-27)',
+    absolute: 'LLP Fee Calculator — Form 8, Form 11, Form 3 Late Fees & FiLLiP Incorporation (FY 2026-27)',
   },
   description:
-    'Calculate MCA LLP statutory filing fees, Section 69 late multipliers, and Form 8 & Form 11 annual return default penalties for FY 2026-27.',
+    'Calculate MCA LLP statutory filing fees, Form 8 & 11 late multipliers, Form 3 agreement fee, Form 24 strike-off, and Form FiLLiP incorporation costs on MCA V3.',
   keywords: [
     'LLP fee calculator',
     'LLP late fee calculator',
-    'LLP late filing fee',
+    'llp form 8 late fee calculator',
+    'form 11 llp late fees calculator',
+    'llp form 3 late fee calculator',
+    'form 3 llp fees',
+    'llp form 24 fees',
+    'llp form 3 fees',
+    'llp late filing fees',
+    'llp incorporation fees calculator',
+    'form 8 fees',
+    'llp form 3 late fee',
+    'llp registration fees mca',
+    'llp incorporation fees mca',
+    'mca fees for llp registration',
+    'mca fees for llp incorporation',
+    'llp form 8 late fees',
+    'form 11 late fees',
+    'llp form 3 filing fees',
+    'llp form 11 late fees',
+    'late fees for form 8 llp',
+    'form 8 filing fees',
+    'llp calculator',
+    'form 24 llp closure fees',
+    'fillip form fees',
+    'small llp',
+    'form 8 llp due date',
+    'llp form 3 due date',
+    'llp forms due date',
     'Form 11 penalty calculator',
     'Form 8 late fee LLP',
     'Form 3 LLP agreement fee',
@@ -130,6 +156,27 @@ function LLPSEO() {
       <div className="space-y-4 text-slate-600 dark:text-slate-300">
         <div className="border border-slate-200 dark:border-slate-800 rounded-2xl p-5 bg-slate-50/50 dark:bg-slate-900/50">
           <h4 className="font-bold text-navy dark:text-white text-base mb-1">
+            Form FiLLiP — Incorporation of Limited Liability Partnership (LLP)
+          </h4>
+          <p className="text-sm">
+            <strong>Filing Purpose:</strong> Single-window application for LLP name reservation, incorporation, and DPIN/DIN allotment for up to 2 designated partners.<br />
+            <strong>Statutory Base Registration Fees (Annexure-A Item 1):</strong>
+          </p>
+          <ul className="text-xs space-y-1 mt-2 list-disc list-inside">
+            <li>Contribution up to ₹1,00,000 (≤ ₹1 Lakh): <strong>₹500</strong></li>
+            <li>Contribution ₹1,00,001 to ₹5,00,000 (₹1L – ₹5L): <strong>₹2,000</strong></li>
+            <li>Contribution ₹5,00,001 to ₹10,00,000 (₹5L – ₹10L): <strong>₹4,000</strong></li>
+            <li>Contribution ₹10,00,001 to ₹25,00,000 (₹10L – ₹25L): <strong>₹5,000</strong></li>
+            <li>Contribution ₹25,00,001 to ₹1 Crore: <strong>₹10,000</strong></li>
+            <li>Contribution exceeding ₹1 Crore: <strong>₹25,000</strong></li>
+          </ul>
+          <p className="text-xs text-slate-500 mt-2">
+            <strong>Mandatory Associated Fees:</strong> NSDL PAN (₹78) + TAN (₹77) = ₹155. If name is reserved beforehand via RUN-LLP, separate ₹200 fee applies. Subsequent statutory obligation: Form 3 (LLP Agreement) must be submitted within strictly 30 days of incorporation.
+          </p>
+        </div>
+
+        <div className="border border-slate-200 dark:border-slate-800 rounded-2xl p-5 bg-slate-50/50 dark:bg-slate-900/50">
+          <h4 className="font-bold text-navy dark:text-white text-base mb-1">
             Form 11 — Annual Return of LLP
           </h4>
           <p className="text-sm">
@@ -174,6 +221,21 @@ function LLPSEO() {
             Carries a flat application fee of <strong>₹500 for Small LLPs</strong> and <strong>₹1,000 for Other LLPs</strong> (Annexure-A Item 5). Requires at least 1 year of commercial cessation, zero active liabilities, up-to-date Form 8/11 filings, and a CA-certified Statement of Account.
           </p>
         </div>
+
+        <div className="border border-slate-200 dark:border-slate-800 rounded-2xl p-5 bg-teal-50/50 dark:bg-teal-950/20 border-teal-200 dark:border-teal-800/60">
+          <h4 className="font-bold text-teal-950 dark:text-teal-200 text-base mb-1">
+            Small LLP Definition (Section 2(1)(ta)) & Statutory Concessions
+          </h4>
+          <p className="text-sm text-teal-900/90 dark:text-teal-300/90">
+            Inserted by the LLP Amendment Act, 2021, an entity qualifies as a <strong>Small LLP</strong> if: (1) Total contribution does not exceed <strong>₹25 Lakhs</strong> (or up to ₹5 Cr as notified), AND (2) Turnover for the preceding FY does not exceed <strong>₹40 Lakhs</strong> (or up to ₹50 Cr). Small LLPs enjoy:
+          </p>
+          <ul className="text-xs space-y-1 mt-2 list-disc list-inside text-teal-900/80 dark:text-teal-300/80">
+            <li>50% lower base filing fees across event forms (Form 4: ₹50 vs ₹150; Form 24: ₹500 vs ₹1,000).</li>
+            <li>Half the late fee escalation multipliers under Table B (maximum 15× vs 30× for non-small LLPs).</li>
+            <li>₹10 per day additional fee beyond 360 days (compared to ₹20 per day for non-small LLPs).</li>
+            <li>50% reduced civil penalty exposure under Section 76A adjudication proceedings.</li>
+          </ul>
+        </div>
       </div>
 
       <h3 className="text-xl font-bold text-navy dark:text-white mt-8 mb-4">
@@ -209,6 +271,58 @@ export default function LLPFeePage() {
           <p className="text-slate-300 text-lg max-w-2xl leading-relaxed">
             Calculate MCA portal base fees, Section 69 additional late filing fees, and indicative statutory penalty exposure under the Limited Liability Partnership Act, 2008.
           </p>
+        </div>
+      </div>
+
+      {/* Princeton GEO Direct Answer Card */}
+      <div className="max-w-4xl mx-auto px-4 -mt-6 relative z-10 mb-8">
+        <div className="rounded-2xl border-2 border-teal-500/40 bg-white dark:bg-slate-900 p-6 shadow-sm">
+          <div className="flex flex-wrap items-center gap-2 mb-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-teal-800 dark:text-teal-300 bg-teal-100 dark:bg-teal-950/80 px-2 py-0.5 rounded border border-teal-300 dark:border-teal-700">
+              Direct Statutory Summary
+            </span>
+            <span className="text-xs text-slate-500 font-medium">
+              LLP Act, 2008 | LLP (Second Amendment) Rules, 2022 | Section 69 Table B
+            </span>
+          </div>
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+            LLP Filing Due Dates, Late Multipliers & Registration Fees (FY 2026-27)
+          </h2>
+          <div className="mt-3 text-slate-700 dark:text-slate-300 text-sm leading-relaxed space-y-2">
+            <p>
+              <strong>When are Form 11 and Form 8 due?</strong> Form 11 (Annual Return) is due annually within 60 days of FY close on <strong className="text-slate-900 dark:text-white">30th May</strong>. Form 8 (Statement of Account & Solvency) is due within 30 days of 6 months from FY close on <strong className="text-slate-900 dark:text-white">30th October</strong>.
+            </p>
+            <p>
+              <strong>How are late fees calculated?</strong> Under the 2022 Amendment Rules, the old flat ₹100/day fee was replaced with a <strong className="text-slate-900 dark:text-white">slab-multiplier system (1× to 15× for Small LLPs, 1× to 30× for Other LLPs)</strong>. Beyond 360 days, daily additions apply (₹10/day for Small, ₹20/day for Other).
+            </p>
+            <p>
+              <strong>Form 3 (LLP Agreement) Deadline:</strong> Must be executed on State non-judicial stamp paper and filed with ROC strictly <strong className="text-slate-900 dark:text-white">within 30 calendar days of incorporation</strong> (Annexure-A Item 3 base fee: ₹500 to ₹5,000).
+            </p>
+            <p>
+              <strong>LLP Incorporation (FiLLiP) Fees:</strong> Governed by Annexure-A Item 1 based on contribution: ≤ ₹1L = ₹500; ₹1L–₹5L = ₹2,000; ₹5L–₹10L = ₹4,000; ≥ ₹10L = ₹5,000 (plus ₹155 PAN/TAN).
+            </p>
+            <p>
+              <strong>Form 24 Strike-Off (Closure):</strong> Flat government fee of <strong className="text-slate-900 dark:text-white">₹500 for Small LLPs</strong> and <strong className="text-slate-900 dark:text-white">₹1,000 for Other LLPs</strong> (zero late fees).
+            </p>
+          </div>
+          <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-2 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
+            <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-800/60">
+              <span className="text-slate-400 block">Form 11 Due:</span>
+              <strong className="text-teal-700 dark:text-teal-300">30th May</strong>
+            </div>
+            <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-800/60">
+              <span className="text-slate-400 block">Form 8 Due:</span>
+              <strong className="text-teal-700 dark:text-teal-300">30th October</strong>
+            </div>
+            <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-800/60">
+              <span className="text-slate-400 block">Form 3 Due:</span>
+              <strong className="text-teal-700 dark:text-teal-300">Within 30 Days</strong>
+            </div>
+            <div className="p-2 rounded-lg bg-slate-50 dark:bg-slate-800/60">
+              <span className="text-slate-400 block">FiLLiP Fee:</span>
+              <strong className="text-teal-700 dark:text-teal-300">₹500 to ₹5,000</strong>
+            </div>
+          </div>
         </div>
       </div>
 

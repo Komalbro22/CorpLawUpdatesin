@@ -894,9 +894,11 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               <span>⚡</span> Fast Statutory Summary • Section 77 Chapter VI • 3-Tier Timeline
             </div>
             <p className="text-slate-800 dark:text-slate-200 text-sm md:text-base leading-relaxed font-medium">
-              Form CHG-1 is filed under Section 77 within 30 days of charge creation with normal fees (₹200–₹600). Days 31–60 attract additional fees (3× for Small Co/OPC; 6× for Others). Days 61–120 require 3×/6× fees plus punitive Ad Valorem fee: 0.025% of loan amount (cap ₹1L) for Small/OPC, or 0.05% (cap ₹5L) for Others. Filing beyond 120 days is barred without Regional Director condonation under Section 87.
+              Form CHG-1 must be filed <strong>within strictly 30 calendar days</strong> from the date of creation or modification of a charge with normal fees (₹200–₹600). Days 31–60 attract additional fees (3× for Small Co/OPC; 6× for Others). Days 61–120 require 3×/6× base fees plus a punitive <strong>Ad Valorem fee</strong>: 0.025% of loan amount (capped at ₹1 Lakh) for Small/OPC, or 0.05% (capped at ₹5 Lakhs) for Others. Filing beyond 120 days is an absolute statutory hard stop—direct portal filing is blocked, requiring Regional Director condonation in Form CHG-8 under Section 87.
             </p>
             <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-3">
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Timeline: Filed Within 30 Days (Day 0 = Deed Date)</span>
+              <span>•</span>
               <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Tier 1 (0–30d): Normal Fee (₹200–₹600)</span>
               <span>•</span>
               <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Tier 2 (31–60d): 3× / 6× Normal Fee</span>
@@ -904,6 +906,8 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Tier 3 (61–120d): 0.025% / 0.05% Ad Valorem (Max ₹5L)</span>
               <span>•</span>
               <span className="font-semibold text-red-600 dark:text-red-400">✓ Hard Stop &gt; 120d: RD Form CHG-8 Condonation</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Dwelling Interest: Prior Lien / Subsisting Title Disclosure</span>
             </div>
           </div>
         )}

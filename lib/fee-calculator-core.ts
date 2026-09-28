@@ -89,6 +89,20 @@ export function getLLPForm3BaseFee(contribution: number): number {
 }
 
 /**
+ * Discrete base registration fee for Form FiLLiP (LLP Incorporation)
+ * per Annexure-A Item 1, LLP Rules 2009.
+ */
+export function getLLPFiLLiPBaseFee(contribution: number): number {
+  if (contribution < 0) return 500;
+  if (contribution <= 100000)   return 500;   // ≤ ₹1L
+  if (contribution <= 500000)   return 2000;  // ₹1L < x ≤ ₹5L
+  if (contribution <= 1000000)  return 4000;  // ₹5L < x ≤ ₹10L
+  if (contribution <= 2500000)  return 5000;  // ₹10L < x ≤ ₹25L
+  if (contribution <= 10000000) return 10000; // ₹25L < x ≤ ₹1Cr
+  return 25000;                               // > ₹1Cr
+}
+
+/**
  * Discrete base fee for Form 4 (Partner/DP change) per Annexure-A Item 2, LLP Rules 2009.
  */
 export function getLLPForm4BaseFee(isSmallLLP: boolean): number {

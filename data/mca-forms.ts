@@ -896,8 +896,18 @@ export const mcaForms: MCAForm[] = [
       'chg-1 late fees calculator',
       'chg-1 fees calculator',
       'chg 1 ad valorem fee',
+      'ad valorem fees for chg-1',
+      'what is ad valorem fees in mca',
+      'ad valorem fee calculation mca',
       'chg 1 due date',
       'chg-1 due date and penalty',
+      'chg 1 to be filed within how many days',
+      'form chg 1 filing due date',
+      'charge creation after 120 days',
+      'dwelling interest meaning in chg-1',
+      'dwelling interest in charge creation',
+      'chg charges in bank',
+      'roc charge creation penalty',
       'section 77 charge timeline',
       'chg 1 condonation chg 8',
       'small company chg 1 late fee',
@@ -912,10 +922,14 @@ export const mcaForms: MCAForm[] = [
     normalFeeStructure: 'capital_slab',
     baseFeeSlab: 'standard_company_slab',
     concessionApplies: true,
-    metaTitle: 'CHG 1 Fee Calculator — Form CHG-1 Late Filing Fees & Ad Valorem (FY 2026-27)',
-    metaDescription: 'Calculate MCA filing fees, Table B multipliers (3x/6x), and ad valorem late penalties (0.025%/0.05%) for Form CHG-1 charge creation on MCA V3 portal.',
+    metaTitle: 'CHG 1 Fee Calculator — Form CHG-1 Due Date, Late Fees & Ad Valorem (FY 2026-27)',
+    metaDescription: 'Calculate Form CHG-1 MCA filing fees, 30-day statutory due dates, Table B extension multipliers (3x/6x), and ad valorem late fees (0.025%/0.05%) under Section 77.',
     ogDescription: 'Instant statutory calculation of Form CHG-1 filing fees, 30-60-120 day deadlines, extension multipliers, and ad valorem penalties under Section 77.',
     faqItems: [
+      {
+        question: 'Within how many days must Form CHG-1 be filed with the ROC?',
+        answer: 'Pursuant to Section 77(1) of the Companies Act, 2013, Form CHG-1 must be filed within strictly 30 calendar days from the date of creation or modification of the charge (Day 0 being the date of loan agreement or deed execution). If delayed, the ROC can grant a first extension up to 60 days (with 3×/6× fees) and a second extension up to 120 days (with 3×/6× fees plus Ad Valorem penalty). Direct portal filing is completely blocked after 120 days.'
+      },
       {
         question: 'What is the statutory due date for filing Form CHG-1?',
         answer: 'Pursuant to Section 77(1) of the Companies Act, 2013, Form CHG-1 must be filed within 30 calendar days from the date of creation or modification of the charge (i.e. the date when the loan agreement, sanction letter, or deed of hypothecation/mortgage is executed).'
@@ -929,16 +943,28 @@ export const mcaForms: MCAForm[] = [
         answer: 'Under Section 77(1) first proviso, the ROC may permit registration within an additional 30 days (Days 31 to 60 from creation, i.e., 1 to 30 days delay) upon payment of additional fees: Small Companies and OPCs pay 3× the normal filing fee, while Other Companies pay 6× the normal filing fee. No ad valorem fee applies in this first extension window.'
       },
       {
-        question: 'What is the ad valorem fee for CHG-1 filed between 61 and 120 days from creation (Second Extension)?',
-        answer: 'Under Section 77(1) second proviso, if filed within a further period of 60 days (Days 61 to 120 from creation, i.e., 31 to 90 days delay), the company must pay the extension multiplier (3× for Small/OPC, 6× for Others) PLUS an Ad Valorem fee based on the secured loan amount: 0.025% of the charge amount for Small Companies/OPCs (capped at ₹1,00,000) or 0.05% of the charge amount for Other Companies (capped at ₹5,00,000).'
+        question: 'What is an Ad Valorem fee in MCA and how is it calculated for Form CHG-1?',
+        answer: 'An Ad Valorem fee in MCA is a value-based statutory penalty calculated as a percentage of the secured loan facility rather than nominal share capital. Under the 2019 Charge Rules amendment, if CHG-1 is filed in the Second Extension Window (Days 61 to 120 from creation / 31 to 90 days delay), the company must pay: 0.025% of the charge amount for Small Companies/OPCs (capped at ₹1,00,000) or 0.05% of the charge amount for Other Companies (capped at ₹5,00,000), in addition to the 3×/6× normal base fee multiplier.'
       },
       {
         question: 'What are the statutory caps on the ad valorem fee for CHG-1?',
         answer: 'The ad valorem additional fee is subject to strict statutory ceilings under the 2019 Amendment Rules: ₹1,00,000 maximum for Small Companies and One Person Companies (0.025%), and ₹5,00,000 maximum for all other companies (0.05%).'
       },
       {
+        question: 'What does "dwelling interest" mean in Form CHG-1 charge registration?',
+        answer: 'In banking and mortgage documentation, "dwelling interest" refers to an existing, subsisting, or residual equitable right, title, or lien residing in a property or corporate asset. When filing Form CHG-1 on MCA V3, the applicant must disclose whether any prior dwelling interest, negative lien, encumbrance, or pari-passu charge exists in favor of any previous lender or financial institution on that specific asset under Section 77(1).'
+      },
+      {
+        question: 'What are bank CHG charges and why do banks mandate Form CHG-1 registration?',
+        answer: 'Bank CHG charges represent the administrative and legal processing fees debited by lending banks (e.g., SBI, HDFC, ICICI, PNB) to cover ROC charge search reports, documentation verification, and MCA filing expenses. Lending institutions mandate filing Form CHG-1 because Section 77(3) dictates that an unregistered charge is legally VOID against the liquidator and creditors upon winding-up, reducing the bank from a secured creditor to an ordinary unsecured creditor.'
+      },
+      {
         question: 'What happens if Form CHG-1 is not filed within 120 days of charge creation?',
         answer: 'Beyond 120 days from the date of charge creation (delay exceeding 90 days), there is an absolute statutory hard stop under Section 77. The Registrar of Companies (ROC) has NO legal jurisdiction to register the charge or accept late fees. Filing Form CHG-1 directly on the MCA portal is blocked.'
+      },
+      {
+        question: 'Can Form CHG-1 be filed after 120 days of charge creation?',
+        answer: 'Direct filing of Form CHG-1 on MCA V3 is blocked after 120 days. Under Section 77(1) second proviso, the ROC\'s extension authority is exhausted at 120 days. To register after 120 days, the company must file a formal petition under Section 87 to the Regional Director (Central Government) in Form CHG-8 for condonation of delay, obtain an approval order, file Form INC-28, and only then submit Form CHG-1.'
       },
       {
         question: 'Can the ROC condone a delay beyond 120 days for Form CHG-1?',

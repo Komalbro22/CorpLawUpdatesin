@@ -62,7 +62,7 @@ export default function LLPFeeCalc() {
       const params = new URLSearchParams(window.location.search)
       if (params.has('form')) {
         const f = params.get('form') as LlpFormId
-        if (['Form-8-Annual', 'Form-8-Charge', 'Form-11', 'Form-3', 'Form-4', 'Form-5', 'Form-15', 'Form-24', 'Form-8'].includes(f)) {
+        if (['Form-8-Annual', 'Form-8-Charge', 'Form-11', 'Form-3', 'Form-4', 'Form-5', 'Form-15', 'Form-24', 'Form-FiLLiP', 'Form-8'].includes(f)) {
           setFormId(f === 'Form-8' ? 'Form-8-Annual' : f)
         }
       }
@@ -161,6 +161,7 @@ export default function LLPFeeCalc() {
   const isForm8Charge = formId === 'Form-8-Charge'
   const isForm15 = formId === 'Form-15'
   const isForm24 = formId === 'Form-24'
+  const isFiLLiP = formId === 'Form-FiLLiP'
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
@@ -201,11 +202,14 @@ export default function LLPFeeCalc() {
               className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-slate-900 dark:text-slate-100 font-medium"
             >
               <optgroup label="Annual Filings">
-                <option value="Form-8-Annual">Form 8 — Statement of Account & Solvency (Annual)</option>
-                <option value="Form-11">Form 11 — Annual Return of LLP</option>
+                <option value="Form-8-Annual">Form 8 — Statement of Account & Solvency (Annual, Due 30 Oct)</option>
+                <option value="Form-11">Form 11 — Annual Return of LLP (Due 30 May)</option>
+              </optgroup>
+              <optgroup label="Incorporation & Initial Setup">
+                <option value="Form-FiLLiP">Form FiLLiP — LLP Incorporation & Registration Fees</option>
+                <option value="Form-3">Form 3 — LLP Agreement & Changes Therein (Due within 30 days)</option>
               </optgroup>
               <optgroup label="Event-Based Filings">
-                <option value="Form-3">Form 3 — LLP Agreement & Changes Therein</option>
                 <option value="Form-4">Form 4 — Notice of Partner / Designated Partner Change</option>
                 <option value="Form-5">Form 5 — Notice for Change of Name</option>
                 <option value="Form-15">Form 15 — Notice for Change of Registered Office</option>
@@ -386,7 +390,45 @@ export default function LLPFeeCalc() {
             </div>
           )}
 
-          {!isAnnualForm && !isForm24 && (
+          {isFiLLiP && (
+            <div className="md:col-span-2 rounded-2xl bg-teal-50/70 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-800 p-4 sm:p-5">
+              <div className="flex items-start gap-3">
+                <span className="text-xl">🚀</span>
+                <div>
+                  <h4 className="font-bold text-sm text-teal-950 dark:text-teal-200">
+                    Form FiLLiP (LLP Incorporation & Registration) Fee Structure
+                  </h4>
+                  <p className="text-xs text-teal-900/80 dark:text-teal-300/80 mt-1 leading-relaxed">
+                    Statutory registration fee is governed by Annexure-A Item 1 of the LLP Rules, 2009 based on proposed total contribution. 
+                    Includes DPIN / DIN allotment for up to 2 designated partners.
+                  </p>
+                  <div className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                    <div className="p-2 rounded-lg bg-white dark:bg-slate-900 border border-teal-200 dark:border-teal-800">
+                      <span className="text-slate-500 block">≤ ₹1 Lakh:</span>
+                      <span className="font-bold text-slate-900 dark:text-white">₹500</span>
+                    </div>
+                    <div className="p-2 rounded-lg bg-white dark:bg-slate-900 border border-teal-200 dark:border-teal-800">
+                      <span className="text-slate-500 block">₹1L – ₹5L:</span>
+                      <span className="font-bold text-slate-900 dark:text-white">₹2,000</span>
+                    </div>
+                    <div className="p-2 rounded-lg bg-white dark:bg-slate-900 border border-teal-200 dark:border-teal-800">
+                      <span className="text-slate-500 block">₹5L – ₹10L:</span>
+                      <span className="font-bold text-slate-900 dark:text-white">₹4,000</span>
+                    </div>
+                    <div className="p-2 rounded-lg bg-white dark:bg-slate-900 border border-teal-200 dark:border-teal-800">
+                      <span className="text-slate-500 block">≥ ₹10 Lakhs:</span>
+                      <span className="font-bold text-slate-900 dark:text-white">₹5,000</span>
+                    </div>
+                  </div>
+                  <p className="text-[11px] text-teal-800 dark:text-teal-400 mt-2.5">
+                    * Mandatory NSDL PAN (₹78) & TAN (₹77) fees (total ₹155) are automatically added to the MCA Challan. Form 3 (LLP Agreement) must be filed within 30 days of Certificate of Incorporation (COI).
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {!isAnnualForm && !isForm24 && !isFiLLiP && (
             <div className="space-y-2">
               <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                 {formId === 'Form-5'
@@ -406,7 +448,7 @@ export default function LLPFeeCalc() {
           )}
 
           {/* Actual Filing Date */}
-          {!isForm24 && (
+          {!isForm24 && !isFiLLiP && (
             <div className="space-y-2">
               <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                 Actual / Anticipated Filing Date (DD/MM/YYYY)

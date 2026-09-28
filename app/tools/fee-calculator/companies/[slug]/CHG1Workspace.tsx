@@ -1018,25 +1018,31 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
             <li className="flex items-start gap-2">
               <span className="text-blue-600 font-bold">•</span>
               <span>
-                <strong>Section 77(1):</strong> Duty of company to register charges created on its property, assets or undertaking within 30 days of creation.
+                <strong>Section 77(1) Filing Timeline:</strong> Form CHG-1 must be filed within strictly 30 days of loan instrument execution. ROC can grant extensions up to 60 days (3×/6×) and 120 days (with Ad Valorem penalty).
               </span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-blue-600 font-bold">•</span>
               <span>
-                <strong>Section 78 (Bank Right):</strong> If the company fails to register within 30 days, the lender/bank can apply directly. ROC issues 14-day notice to the company and allows bank to recover fees.
+                <strong>Section 78 (Bank Right):</strong> If the company fails to register within 30 days, the lender/bank can apply directly. ROC issues 14-day notice to the company and allows the bank to recover all fees and bank CHG charges.
               </span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-blue-600 font-bold">•</span>
               <span>
-                <strong>Section 77(3) Void Against Liquidator:</strong> An unregistered charge is VOID against the liquidator and other creditors. The bank becomes an unsecured creditor in winding-up.
+                <strong>Section 77(3) Void Against Liquidator:</strong> An unregistered charge is VOID against the liquidator and other creditors. The lending bank is downgraded to an unsecured creditor in liquidation.
               </span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-blue-600 font-bold">•</span>
               <span>
-                <strong>Section 87 (Condonation):</strong> If not registered within 90 days, filing Form CHG-8 with Regional Director is mandatory. ROC has no discretionary power to condone delay beyond 90 days.
+                <strong>Dwelling Interest &amp; Prior Liens:</strong> Companies must disclose whether any prior dwelling interest, equitable lien, or pari-passu encumbrance resides in the property or mortgaged corporate asset.
+              </span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-blue-600 font-bold">•</span>
+              <span>
+                <strong>Section 87 Hard Stop (&gt; 120 Days):</strong> Beyond 120 days from creation (90 days delay), direct ROC filing is barred. Filing Form CHG-8 with the Regional Director for condonation of delay is legally required.
               </span>
             </li>
           </ul>
