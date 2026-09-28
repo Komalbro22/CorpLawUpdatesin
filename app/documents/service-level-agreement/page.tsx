@@ -12,7 +12,13 @@ import {
   Clock,
   Download,
   Users,
-  Sparkles
+  Sparkles,
+  Layers,
+  Cpu,
+  Building2,
+  Headphones,
+  Check,
+  ArrowRight
 } from 'lucide-react'
 import SlaClient from './SlaClient'
 
@@ -20,39 +26,74 @@ const pageUrl = 'https://www.corplawupdates.in/documents/service-level-agreement
 
 const faqs = [
   {
-    question: 'What is a Service Level Agreement (SLA)?',
+    question: 'What is a Service Level Agreement (SLA) and what is it used for?',
     answer:
-      'A Service Level Agreement (SLA) is a legally binding contract (or formal annexure to a Master Services Agreement) between a service provider and a client that defines the exact quality, availability, response times, and performance standards expected of the service, along with predetermined financial remedies (Service Credits) if those standards are not met.',
+      'A Service Level Agreement (SLA) is a legally binding commitment between a service provider and a client that defines the exact quality, availability, response times, and performance standards expected of the service. It is used to align operational expectations, establish objective performance metrics (such as 99.9% uptime), mitigate business risk, and prescribe non-litigious financial remedies (Service Credits) when thresholds are breached.',
   },
   {
-    question: 'What is a service level agreement in cloud computing?',
+    question: 'How is a Service Level Agreement (SLA) classified?',
     answer:
-      'In cloud computing (IaaS, PaaS, SaaS), an SLA specifies infrastructure availability (such as 99.9% or 99.95% uptime), network latency thresholds, data durability, Recovery Time Objectives (RTO), Recovery Point Objectives (RPO), and service credit compensation for unscheduled cloud downtime or API outages.',
+      'Legally, an SLA is classified as an accessory contract or conditional covenant governed by the Indian Contract Act, 1872 (specifically Section 74 regarding liquidated damages). Operationally, SLAs are classified into three types: (1) Customer-based SLA (covering all services delivered to a single customer); (2) Service-based SLA (a standardized baseline SLA across all customers using one service, such as AWS or SaaS); and (3) Multi-level SLA (combining Corporate, Customer, and Service level tiers).',
+  },
+  {
+    question: 'What is the primary purpose of a Service Level Agreement?',
+    answer:
+      'The primary purpose of an SLA is fourfold: (1) Setting objective, measurable benchmarks for service delivery; (2) Allocating operational risk between vendor and client; (3) Establishing automated escalation and resolution timelines for system outages; and (4) Providing pre-determined financial compensation (service fee discounts) without the delay and expense of court litigation.',
+  },
+  {
+    question: 'What are the core components of a Service Level Agreement?',
+    answer:
+      'A comprehensive SLA consists of eight core components: (1) Service Description & Scope; (2) Service Availability & Uptime Metrics; (3) 4-Tier Incident Severity Matrix (P1–P4 response and resolution times); (4) Service Credit & Liquidated Damages calculation formulas; (5) Client Dependencies and Responsibilities; (6) Exclusions & Excused Downtime; (7) Data Privacy & Security (DPDP Act 2023 & CERT-In reporting); and (8) Chronic Failure Exit Rights & Arbitration Governance.',
+  },
+  {
+    question: 'What is the difference between a Service Level Agreement (SLA) and a Contract?',
+    answer:
+      'A Contract (such as a Master Services Agreement) is the overarching legal foundation establishing legal capacity, intellectual property ownership, indemnities, liability caps, and dispute resolution. An SLA is a specialized operational schedule or annexure attached to that contract that specifically measures performance quality, system uptime, and operational remedies.',
+  },
+  {
+    question: 'What is the difference between a Service Agreement and a Service Level Agreement?',
+    answer:
+      'A Service Agreement outlines what services will be provided, commercial pricing, payment terms, and duration. A Service Level Agreement (SLA) defines how well those services must be performed—setting quantifiable technical standards (e.g. 99.95% availability, sub-1 hour P1 incident response) and penalties if the provider falls short.',
+  },
+  {
+    question: 'What is the difference between an SLA and a Memorandum of Understanding (MoU)?',
+    answer:
+      'A Memorandum of Understanding (MoU) records mutual intent and preliminary alignment between parties before a definitive commercial agreement is drafted, and is often non-binding. In contrast, an SLA is a legally enforceable, binding contract with defined financial liabilities and service credit penalties executed under the Indian Contract Act, 1872.',
+  },
+  {
+    question: 'What is a Service Level Agreement in cloud computing (e.g., AWS, Azure, SaaS)?',
+    answer:
+      'In cloud computing (IaaS, PaaS, SaaS), an SLA specifies infrastructure availability (such as 99.9% or 99.99% uptime), network latency thresholds, data durability (e.g. AWS S3 11-nines durability), Recovery Time Objectives (RTO), Recovery Point Objectives (RPO), and tiered service credit rebates for unscheduled cloud downtime or API outages.',
+  },
+  {
+    question: 'How do AWS Service Level Agreements structure service credits?',
+    answer:
+      'AWS SLAs (such as for Amazon EC2 or Amazon S3) calculate Monthly Uptime Percentage (MUP). If MUP drops below 99.99% but remains above 99.0%, AWS provides a 10% service credit; if uptime drops between 99.0% and 95.0%, a 25% credit applies; and if uptime falls below 95.0%, AWS credits 100% of the affected service billing against future invoices.',
+  },
+  {
+    question: 'What should be included in an SLA between two companies?',
+    answer:
+      'An SLA between two enterprise companies must clearly define: authorized corporate representatives, explicit in-scope and out-of-scope boundaries, service availability windows, escalation contact matrix, audit rights for SOC 2 / ISO certifications, data processing protocols under Section 8 of the DPDP Act 2023, Section 74 liquidated damages caps (15%–25%), and arbitration seated under the Arbitration and Conciliation Act, 1996.',
+  },
+  {
+    question: 'What is a BPO Service Level Agreement and what metrics does it measure?',
+    answer:
+      'A BPO (Business Process Outsourcing) SLA governs customer support and back-office operations. It tracks operational metrics including First Contact Resolution (FCR ≥ 85%), Average Handle Time (AHT), Call Abandonment Rate (≤ 3%), Quality Assurance (QA ≥ 92%), and Customer Satisfaction (CSAT ≥ 90%).',
   },
   {
     question: 'Where can I download an SLA template in Word (.docx) and PDF format for India?',
     answer:
-      'You can download professional, legally verified Service Level Agreement templates in editable Microsoft Word (.docx) and printable PDF format directly from this page using the 1-click download buttons above. Formats are available for Cloud/IT SaaS, Vendor Management, Software AMC, and Recruitment workflows.',
+      'You can download professional, legally verified Service Level Agreement templates in editable Microsoft Word (.docx) and printable PDF format directly from this page using the 1-click download buttons above. Formats are fully vetted under Indian contract law for Cloud/IT SaaS, Vendor Management, Software AMC, and Recruitment workflows.',
   },
   {
     question: 'How are SLA penalties or service credits governed under Indian contract law?',
     answer:
-      'Under Indian law, SLA financial remedies are governed by Section 74 of the Indian Contract Act, 1872. Indian courts enforce "liquidated damages" if they represent a genuine pre-estimate of loss suffered due to service failure. If the clause imposes an arbitrary, exorbitant penalty without relation to actual damage, courts may decline to enforce it as a penal forfeiture. Hence, SLAs typically cap service credits at 15% to 25% of monthly billing.',
-  },
-  {
-    question: 'What is the difference between an SLA, an MSA, and an SOW?',
-    answer:
-      'A Master Services Agreement (MSA) establishes the overarching legal and commercial relationship (indemnity, IP ownership, liability caps, termination). A Statement of Work (SOW) defines the specific deliverables, project milestones, and pricing. A Service Level Agreement (SLA) establishes the operational performance metrics, uptime commitments, and remedy mechanisms governing those deliverables.',
+      'Under Indian law, SLA financial remedies are governed by Section 74 of the Indian Contract Act, 1872. Indian courts enforce "liquidated damages" if they represent a genuine pre-estimate of loss suffered due to service failure. If the clause imposes an arbitrary, exorbitant penalty without relation to actual damage, courts will decline to enforce it as a penal forfeiture. Hence, SLAs typically cap service credits at 15% to 25% of monthly billing.',
   },
   {
     question: 'What are the standard incident severity levels in an IT/SaaS SLA?',
     answer:
       'Standard SLAs categorize incidents into four tiers: Severity 1 (Critical: core system outage, response within 1 hour, resolve within 4 hours); Severity 2 (High: major degradation without workaround, response within 2 hours, resolve within 8 hours); Severity 3 (Medium: partial function bug with workaround, response within 8 hours, resolve within 24 hours); and Severity 4 (Low: minor cosmetic query or documentation request, response within 24 hours, resolve within 72 hours).',
-  },
-  {
-    question: 'What is a recruitment service level agreement?',
-    answer:
-      'A Recruitment SLA is an agreement between an employer and a staffing agency that defines hiring turn-around-times (e.g. candidate shortlists within 5 business days), screening standards, interview scheduling coordination, and replacement guarantees (e.g. free candidate replacement if a hired employee leaves within 90 days).',
   },
   {
     question: 'What is the standard stamp duty on a Service Level Agreement in India?',
@@ -62,22 +103,12 @@ const faqs = [
   {
     question: 'Does an SLA need to comply with the Digital Personal Data Protection Act, 2023 (DPDP Act)?',
     answer:
-      'Yes. When an IT, cloud, or SaaS service provider processes personal data belonging to the client or its end-users, the provider acts as a Data Processor under Section 8 of the DPDP Act, 2023. The SLA must stipulate technical security safeguards, data confidentiality, strict breach notification timelines (recommended within 6 hours), and data return/erasure protocols upon contract termination.',
+      'Yes. When an IT, cloud, or SaaS service provider processes personal data belonging to the client or its end-users, the provider acts as a Data Processor under Section 8 of the DPDP Act, 2023. The SLA must stipulate technical security safeguards, data confidentiality, strict breach notification timelines (recommended within 6 hours to align with CERT-In directives), and data erasure protocols upon contract termination.',
   },
   {
     question: 'What is the difference between 99.9% and 99.99% uptime in an SLA?',
     answer:
       '99.9% uptime ("Three Nines") permits up to 43.8 minutes of unscheduled downtime per month (8.76 hours per year). 99.99% uptime ("Four Nines") permits only 4.38 minutes of unscheduled downtime per month (52.6 minutes per year), requiring high-availability multi-region redundancy.',
-  },
-  {
-    question: 'Can a client terminate an SLA immediately upon an uptime breach?',
-    answer:
-      'Typically, single isolated uptime breaches trigger Service Credits rather than immediate termination. However, standard SLAs include a "Chronic Failure" or "Material Breach" clause permitting the client to terminate without penalty if uptime falls below a critical threshold (e.g. below 95% in any single month or below 98% for three consecutive months).',
-  },
-  {
-    question: 'What should be excluded from SLA downtime calculations?',
-    answer:
-      'Standard exclusions include: (1) Agreed scheduled maintenance windows communicated in advance; (2) Force Majeure events (natural disasters, war, government internet shutdowns); (3) Client-caused errors, improper configuration, or hardware failures; and (4) Third-party upstream failures outside provider control (e.g. DNS failure at client domain registrar).',
   },
 ]
 
@@ -94,6 +125,37 @@ const jsonLd = {
       inLanguage: 'en-IN',
       isPartOf: { '@id': 'https://www.corplawupdates.in/#website' },
       about: { '@id': `${pageUrl}#sla` },
+    },
+    {
+      '@type': 'TechArticle',
+      '@id': `${pageUrl}#article`,
+      headline: 'Service Level Agreement (SLA): Format, Legal Definition, Cloud Computing & Download in Word & PDF',
+      description:
+        'Authoritative legal and operational guide on Service Level Agreements (SLA) in India. Covers legal classification, core components, cloud computing metrics (AWS/Azure), BPO benchmarks, Section 74 liquidated damages, and DPDP Act 2023 compliance.',
+      url: pageUrl,
+      inLanguage: 'en-IN',
+      datePublished: '2026-03-01',
+      dateModified: '2026-09-28',
+      author: {
+        '@type': 'Organization',
+        name: 'CorpLawUpdates Legal Editorial Board',
+        url: 'https://www.corplawupdates.in/about',
+      },
+      publisher: {
+        '@type': 'Organization',
+        name: 'CorpLawUpdates.in',
+        url: 'https://www.corplawupdates.in',
+        logo: {
+          '@type': 'ImageObject',
+          url: 'https://www.corplawupdates.in/icon.png',
+        },
+      },
+      about: [
+        { '@type': 'Thing', name: 'Service Level Agreement' },
+        { '@type': 'Thing', name: 'Cloud Computing SLA' },
+        { '@type': 'Thing', name: 'Indian Contract Act 1872 Section 74' },
+        { '@type': 'Thing', name: 'Digital Personal Data Protection Act 2023' },
+      ],
     },
     {
       '@type': 'WebApplication',
@@ -127,25 +189,25 @@ const jsonLd = {
           '@type': 'HowToStep',
           position: 2,
           name: 'Establish Uptime Targets & Measurement Windows',
-          text: 'Specify monthly uptime percentages (e.g., 99.9%) and agreed maintenance windows.',
+          text: 'Specify monthly uptime percentages (e.g., 99.9% or 99.95%) and agreed maintenance windows.',
         },
         {
           '@type': 'HowToStep',
           position: 3,
           name: 'Incorporate Incident Severity Matrix',
-          text: 'Establish 4-tier incident severity definitions with binding response and resolution times.',
+          text: 'Establish 4-tier incident severity definitions (P1-P4) with binding response and resolution times.',
         },
         {
           '@type': 'HowToStep',
           position: 4,
           name: 'Structure Section 74 Service Credits',
-          text: 'Set pre-estimated liquidated damages capped at 15%–25% of monthly billing to ensure legal enforceability.',
+          text: 'Set pre-estimated liquidated damages capped at 15%–25% of monthly billing to ensure legal enforceability under Indian law.',
         },
         {
           '@type': 'HowToStep',
           position: 5,
           name: 'Execute on Non-Judicial Stamp Paper',
-          text: 'Print on appropriate state non-judicial stamp paper (e.g. ₹100–₹500) and execute with authorized signatory signatures.',
+          text: 'Print on appropriate state non-judicial stamp paper (e.g. ₹100–₹500 under Article 5) and execute with authorized corporate signatories.',
         },
       ],
     },
@@ -235,18 +297,14 @@ export default function ServiceLevelAgreementPage() {
         {/* ─── Client Interactive Suite Embed ─────────────────────────────── */}
         <SlaClient />
 
-        {/* ─── GEO Direct-Answer Block (AI Citations) ─────────────────────── */}
-        <div className="bg-white border-l-4 border-amber-500 border-y border-r border-slate-200 rounded-r-2xl p-6 shadow-xs space-y-2">
+        {/* ─── GEO Direct-Answer Block (AI Citations & LLM Grounding) ─────── */}
+        <div className="bg-white border-l-4 border-amber-500 border-y border-r border-slate-200 rounded-r-2xl p-6 shadow-xs space-y-3">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-800">
             <Sparkles className="w-4 h-4 text-amber-600" />
-            <span>Executive Legal Synopsis (SLA in Indian Law)</span>
+            <span>Executive Legal Synopsis (SLA in Indian Law & Global IT)</span>
           </div>
-          <p className="text-xs sm:text-sm text-slate-700 leading-relaxed italic">
-            "A Service Level Agreement (SLA) in India is a legally binding commercial instrument governed by the Indian Contract Act, 1872. 
-            It formalizes measurable performance standards (such as 99.9% uptime, Severity 1 incident response within 1 hour) and pre-agreed 
-            remedies (Service Credits) for service failures. Under Section 74 of the Contract Act, service credits must represent a genuine 
-            pre-estimate of loss rather than an arbitrary penalty, and are typically capped between 15% and 25% of monthly billing. 
-            SLAs involving data processing must strictly integrate security safeguards under the Digital Personal Data Protection Act, 2023."
+          <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+            A <strong>Service Level Agreement (SLA)</strong> is a legally enforceable contract or covenant executed between a service provider and a client that defines quantifiable operational performance standards—such as 99.9% uptime, Severity 1 incident response within 1 hour, and sub-second API latency—along with predetermined financial remedies (Service Credits) if thresholds are breached. Legally, an SLA is classified under the <strong>Indian Contract Act, 1872</strong> as an accessory contract governed by Section 74 (liquidated damages) and Section 73. Operationally, SLAs are classified into three models: <strong>Customer-based SLAs</strong>, <strong>Service-based SLAs</strong>, and <strong>Multi-level SLAs</strong>. In modern technology infrastructure, cloud computing SLAs (e.g. AWS or Azure) establish recovery objectives (RPO/RTO) and data durability, while IT services contracts must strictly integrate data processor safeguards under Section 8 of the <strong>Digital Personal Data Protection Act, 2023 (DPDP Act)</strong>.
           </p>
         </div>
 
@@ -256,192 +314,326 @@ export default function ServiceLevelAgreementPage() {
           {/* Main Content Area (8 Cols) */}
           <div className="lg:col-span-8 space-y-12 text-slate-800 leading-relaxed text-sm sm:text-base">
             
-            {/* Section 1: Meaning & What is an SLA */}
+            {/* Section 1: Meaning, Definition & Classification */}
             <section className="space-y-4">
-              <h2 className="text-2xl font-bold font-heading text-slate-900 border-b border-slate-200 pb-3">
-                1. What is a Service Level Agreement (SLA) and Its Meaning?
+              <h2 className="text-2xl font-bold font-heading text-slate-900 border-b border-slate-200 pb-3 flex items-center gap-2">
+                <FileText className="w-6 h-6 text-amber-600" />
+                1. What is a Service Level Agreement (SLA)? Definition, Classification & Purpose
               </h2>
               <p>
                 A <strong>Service Level Agreement (SLA)</strong> is an enforceable agreement between a service provider 
                 (vendor, software developer, cloud provider, or outsourced agency) and a client that defines the quantitative 
                 and qualitative performance metrics expected during service delivery.
               </p>
-              <p>
-                In Indian commercial law, an SLA can exist as an independent standalone contract or, more commonly, as a critical 
-                annexure/schedule to a <strong>Master Services Agreement (MSA)</strong>. While the MSA establishes high-level legal 
-                obligations (such as intellectual property ownership, indemnification, and liability caps), the SLA governs day-to-day 
-                operational commitments, uptime guarantees, escalation protocols, and financial remedies for delayed performance.
-              </p>
+
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+                <h3 className="font-bold text-slate-900 text-sm sm:text-base">
+                  How is a Service Level Agreement Classified?
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600">
+                  In commercial jurisprudence and enterprise IT governance, a Service Level Agreement is classified under two distinct dimensions:
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                  <div className="p-3 bg-white rounded-lg border border-slate-200">
+                    <span className="text-xs font-bold text-indigo-700 block mb-1">A. Legal Classification</span>
+                    <p className="text-xs text-slate-600">
+                      Under Indian law, an SLA is classified as an <strong>accessory bilateral contract</strong> or a <strong>conditional performance covenant</strong>. Governed by Sections 73 and 74 of the Indian Contract Act, 1872, its financial remedy clauses operate as agreed pre-estimates of liquidated damages.
+                    </p>
+                  </div>
+                  <div className="p-3 bg-white rounded-lg border border-slate-200">
+                    <span className="text-xs font-bold text-indigo-700 block mb-1">B. Operational Classification</span>
+                    <p className="text-xs text-slate-600">
+                      Under ITIL (Information Technology Infrastructure Library) standards, SLAs are classified into three operational categories:
+                    </p>
+                    <ul className="text-xs text-slate-600 list-disc pl-4 mt-1 space-y-1">
+                      <li><strong>Customer-based SLA:</strong> Custom-tailored to cover all services delivered to one specific corporate client.</li>
+                      <li><strong>Service-based SLA:</strong> A single, standardized baseline SLA applied uniformly to all customers using a specific service (e.g. AWS S3, Microsoft 365).</li>
+                      <li><strong>Multi-level SLA:</strong> A tiered contract blending corporate-level, customer-level, and service-level commitments.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-2 pt-2">
+                <h3 className="font-bold text-slate-900 text-sm sm:text-base">
+                  What is a Service Level Agreement Used For and What is its Purpose?
+                </h3>
+                <p>
+                  The foundational purpose of an SLA is to bridge the gap between high-level commercial expectations and day-to-day technical execution. Specifically, an SLA is used for:
+                </p>
+                <ul className="list-disc pl-6 space-y-1.5 text-xs sm:text-sm">
+                  <li><strong>Setting Objective Benchmarks:</strong> Eliminating ambiguity by converting subjective promises ("reliable hosting") into mathematical commitments ("99.95% monthly uptime").</li>
+                  <li><strong>Allocating Operational Risk:</strong> Clarifying which party bears the financial burden of unexpected downtime, network failure, or API degradation.</li>
+                  <li><strong>Establishing Escalation & Incident Response Workflows:</strong> Binding support teams to strict MTTA (Mean Time to Acknowledge) and MTTR (Mean Time to Resolve) timelines based on incident severity.</li>
+                  <li><strong>Providing Non-Litigious Remedies:</strong> Authorizing automated monthly invoice credits (Service Credits) so disputes are resolved commercially without invoking costly court litigation or arbitration.</li>
+                </ul>
+              </div>
             </section>
 
-            {/* Section 2: SLA vs MSA vs SOW Table */}
+            {/* Section 2: SLA vs Contract vs Service Agreement vs MoU */}
             <section className="space-y-4">
-              <h2 className="text-2xl font-bold font-heading text-slate-900 border-b border-slate-200 pb-3">
-                2. Comparative Analysis: SLA vs MSA vs SOW
+              <h2 className="text-2xl font-bold font-heading text-slate-900 border-b border-slate-200 pb-3 flex items-center gap-2">
+                <Layers className="w-6 h-6 text-indigo-600" />
+                2. Comprehensive Comparison: SLA vs Contract vs Service Agreement vs MoU
               </h2>
               <p>
-                In technology and enterprise procurement, professionals often confuse the roles of an SLA, an MSA, and an SOW. 
-                The table below illustrates their distinct legal purposes:
+                Corporate leaders, procurement heads, and legal counsel frequently encounter four related legal instruments. Understanding their distinct boundaries prevents jurisdictional defects and scope ambiguity:
               </p>
 
               <div className="overflow-x-auto border border-slate-200 rounded-2xl">
                 <table className="w-full text-left text-xs sm:text-sm">
                   <thead className="bg-slate-900 text-white font-heading">
                     <tr>
-                      <th className="p-3.5">Contract Document</th>
-                      <th className="p-3.5">Primary Legal Purpose</th>
-                      <th className="p-3.5">Key Clauses Covered</th>
-                      <th className="p-3.5">Amendment Frequency</th>
+                      <th className="p-3.5">Instrument</th>
+                      <th className="p-3.5">Legal Enforceability</th>
+                      <th className="p-3.5">Primary Focus & Scope</th>
+                      <th className="p-3.5">Remedy for Breach</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-200 bg-white">
                     <tr className="hover:bg-slate-50">
                       <td className="p-3.5 font-bold text-slate-900">Master Services Agreement (MSA)</td>
-                      <td className="p-3.5">Governs overarching commercial relationship and legal risk allocation.</td>
-                      <td className="p-3.5">Confidentiality, IP Assignment, Limitation of Liability, Indemnity, Termination.</td>
-                      <td className="p-3.5">Rarely (typically 3–5 year lifespan).</td>
+                      <td className="p-3.5 text-emerald-700 font-semibold">Legally Binding Contract</td>
+                      <td className="p-3.5">High-level legal rights: IP ownership, indemnification, liability caps, warranties, and termination.</td>
+                      <td className="p-3.5">Contract damages, specific performance, injunction, or court litigation.</td>
                     </tr>
                     <tr className="hover:bg-slate-50">
-                      <td className="p-3.5 font-bold text-slate-900">Statement of Work (SOW)</td>
-                      <td className="p-3.5">Specifies project scope, deliverables, timelines, and commercial billing.</td>
-                      <td className="p-3.5">Project milestones, sprint deliverables, billable hours, fee schedule.</td>
-                      <td className="p-3.5">Project-specific (created per project or release).</td>
+                      <td className="p-3.5 font-bold text-slate-900">Service Agreement</td>
+                      <td className="p-3.5 text-emerald-700 font-semibold">Legally Binding Contract</td>
+                      <td className="p-3.5">Commercial scope: specific deliverables, milestones, fee schedule, billing cadence, and payment terms.</td>
+                      <td className="p-3.5">Withholding payment, contract termination for breach, interest on overdue sums.</td>
                     </tr>
                     <tr className="hover:bg-slate-50 bg-amber-50/30">
                       <td className="p-3.5 font-bold text-amber-900">Service Level Agreement (SLA)</td>
-                      <td className="p-3.5 font-semibold">Defines operational performance standards, uptime, and breach credits.</td>
-                      <td className="p-3.5">99.9% Uptime, Severity Matrix, Service Credits, Scheduled Maintenance, DPDP 2023.</td>
-                      <td className="p-3.5">Periodic (reviewed annually or upon scale upgrades).</td>
+                      <td className="p-3.5 text-emerald-700 font-semibold">Legally Binding (Schedule/Annexure)</td>
+                      <td className="p-3.5 font-semibold">Technical performance metrics: 99.9% uptime, P1–P4 severity matrix, MTTR, maintenance windows, and DPDP 2023.</td>
+                      <td className="p-3.5 font-semibold text-amber-900">Predetermined Service Credits deducted from future invoices (Sec 74 liquidated damages).</td>
+                    </tr>
+                    <tr className="hover:bg-slate-50">
+                      <td className="p-3.5 font-bold text-slate-900">Memorandum of Understanding (MoU)</td>
+                      <td className="p-3.5 text-slate-500">Generally Non-Binding (unless formal intent expressed)</td>
+                      <td className="p-3.5">Preliminary roadmap expressing mutual intent to collaborate prior to executing definitive contracts.</td>
+                      <td className="p-3.5">Reputational/relationship termination; damages rarely enforceable unless binding covenants exist.</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
             </section>
 
-            {/* Section 3: SLA in Cloud Computing */}
+            {/* Section 3: Core Components of an SLA Between Two Companies */}
             <section className="space-y-4">
               <h2 className="text-2xl font-bold font-heading text-slate-900 border-b border-slate-200 pb-3 flex items-center gap-2">
-                <Cloud className="w-6 h-6 text-blue-600" />
-                3. Service Level Agreement in Cloud Computing & IT SaaS
+                <Building2 className="w-6 h-6 text-blue-600" />
+                3. The 8 Core Components of an Enterprise SLA Between Two Companies
               </h2>
               <p>
-                In cloud computing (covering Infrastructure-as-a-Service, Platform-as-a-Service, and Software-as-a-Service), 
-                SLAs serve as the foundational trust mechanism between hyperscalers/SaaS providers and Indian enterprise clients.
+                When two corporate entities execute a B2B Service Level Agreement, the document must contain eight structural pillars to ensure operational clarity and judicial enforceability in India:
               </p>
-              <p>
-                A robust cloud computing SLA must define:
-              </p>
-              <ul className="list-disc pl-6 space-y-2">
-                <li>
-                  <strong>Availability Target ("The Nines"):</strong> Most enterprise cloud contracts warrant <strong>99.9%</strong> 
-                  (Three Nines, permitting 43.8 minutes outage/month) or <strong>99.95%</strong> uptime. Mission-critical financial 
-                  and banking workloads often demand <strong>99.99%</strong> (Four Nines, allowing just 4.38 minutes outage/month).
-                </li>
-                <li>
-                  <strong>Recovery Objectives (RPO & RTO):</strong> Recovery Point Objective (RPO) dictates maximum allowable data loss 
-                  measured in time (e.g. max 15 minutes of transactional data). Recovery Time Objective (RTO) dictates how fast systems must 
-                  be restored following disaster declaration (e.g. max 2 hours).
-                </li>
-                <li>
-                  <strong>Scheduled vs Unscheduled Maintenance:</strong> Maintenance windows must be restricted to off-peak hours 
-                  (such as Sunday 01:00 AM to 04:00 AM IST) with mandatory advance written notice (minimum 72 hours). Unnotified downtime 
-                  is classified as an actionable outage triggering service credits.
-                </li>
-              </ul>
-            </section>
 
-            {/* Section 4: 10 Essential Clauses of an Enforceable SLA */}
-            <section className="space-y-4">
-              <h2 className="text-2xl font-bold font-heading text-slate-900 border-b border-slate-200 pb-3">
-                4. The 10 Essential Clauses of an Enforceable Indian SLA
-              </h2>
-              <div className="space-y-4">
-                <div className="p-4 rounded-xl border border-slate-200 bg-white">
-                  <h3 className="font-bold text-slate-900 text-base mb-1">Clause 1: Scope of Services & Explicit Exclusions</h3>
-                  <p className="text-xs sm:text-sm text-slate-600">
-                    Defines exact covered applications, server instances, API endpoints, and support channels. Crucially, it must enumerate 
-                    out-of-scope items to prevent scope creep (e.g. customized third-party integrations, on-premise hardware issues).
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="p-4 rounded-xl border border-slate-200 bg-white space-y-1.5">
+                  <div className="flex items-center gap-2 text-indigo-700 font-bold text-sm">
+                    <span className="w-5 h-5 rounded-full bg-indigo-100 flex items-center justify-center text-xs">1</span>
+                    Scope of Services & Exclusions
+                  </div>
+                  <p className="text-xs text-slate-600">
+                    Defines exact covered software modules, cloud instances, and API endpoints. Explicitly lists out-of-scope tasks (e.g. customized third-party plugins, user network errors) to prevent scope creep.
                   </p>
                 </div>
 
-                <div className="p-4 rounded-xl border border-slate-200 bg-white">
-                  <h3 className="font-bold text-slate-900 text-base mb-1">Clause 2: Uptime Measurement Formula</h3>
-                  <p className="text-xs sm:text-sm text-slate-600">
-                    The legal standard formula is: <code>Uptime % = [(Total Monthly Minutes - Unscheduled Downtime Minutes) / Total Monthly Minutes] × 100</code>. 
-                    Scheduled maintenance and force majeure events are subtracted from the denominator.
+                <div className="p-4 rounded-xl border border-slate-200 bg-white space-y-1.5">
+                  <div className="flex items-center gap-2 text-indigo-700 font-bold text-sm">
+                    <span className="w-5 h-5 rounded-full bg-indigo-100 flex items-center justify-center text-xs">2</span>
+                    Availability & Uptime Targets
+                  </div>
+                  <p className="text-xs text-slate-600">
+                    Guarantees monthly availability percentage (99.9% or 99.95%). Defines the exact measurement formula: <code>[(Total Minutes - Downtime Minutes) / Total Minutes] × 100</code>.
                   </p>
                 </div>
 
-                <div className="p-4 rounded-xl border border-slate-200 bg-white">
-                  <h3 className="font-bold text-slate-900 text-base mb-1">Clause 3: 4-Tier Incident Severity Matrix</h3>
-                  <p className="text-xs sm:text-sm text-slate-600">
-                    Establishes binding response (acknowledgment) and resolution (workaround or fix) timelines across Severity 1 (Critical), 
-                    Severity 2 (High), Severity 3 (Medium), and Severity 4 (Low).
+                <div className="p-4 rounded-xl border border-slate-200 bg-white space-y-1.5">
+                  <div className="flex items-center gap-2 text-indigo-700 font-bold text-sm">
+                    <span className="w-5 h-5 rounded-full bg-indigo-100 flex items-center justify-center text-xs">3</span>
+                    4-Tier Incident Severity Matrix
+                  </div>
+                  <p className="text-xs text-slate-600">
+                    Categorizes incidents into P1 (Critical Outage: 1 hr response / 4 hr fix), P2 (Major Impact: 2 hr response), P3 (Minor Glitch: 8 hr response), and P4 (Support Query: 24 hr response).
                   </p>
                 </div>
 
-                <div className="p-4 rounded-xl border border-slate-200 bg-white">
-                  <h3 className="font-bold text-slate-900 text-base mb-1">Clause 4: Service Credit Deduction Mechanism</h3>
-                  <p className="text-xs sm:text-sm text-slate-600">
-                    Specifies exact percentage reductions credited against future monthly invoices. Structured under Section 74 of the Indian 
-                    Contract Act as pre-estimated liquidated damages and capped at 15%–25% of monthly billing.
+                <div className="p-4 rounded-xl border border-slate-200 bg-white space-y-1.5">
+                  <div className="flex items-center gap-2 text-indigo-700 font-bold text-sm">
+                    <span className="w-5 h-5 rounded-full bg-indigo-100 flex items-center justify-center text-xs">4</span>
+                    Service Credit Remedies (Sec 74)
+                  </div>
+                  <p className="text-xs text-slate-600">
+                    Establishes tiered invoice rebates (e.g. 5% credit for &lt;99.9%, 15% for &lt;98.5%) structured as genuine pre-estimated liquidated damages under Indian Contract Act, capped at 15%–25%.
                   </p>
                 </div>
 
-                <div className="p-4 rounded-xl border border-slate-200 bg-white">
-                  <h3 className="font-bold text-slate-900 text-base mb-1">Clause 5: Data Protection & DPDP Act 2023 Compliance</h3>
-                  <p className="text-xs sm:text-sm text-slate-600">
-                    Mandates the provider’s duties as a Data Processor under Section 8 of the Digital Personal Data Protection Act, 2023. 
-                    Includes data encryption in transit and at rest, employee confidentiality, and a strict 6-hour cybersecurity breach notice.
+                <div className="p-4 rounded-xl border border-slate-200 bg-white space-y-1.5">
+                  <div className="flex items-center gap-2 text-indigo-700 font-bold text-sm">
+                    <span className="w-5 h-5 rounded-full bg-indigo-100 flex items-center justify-center text-xs">5</span>
+                    Client Dependencies & Responsibilities
+                  </div>
+                  <p className="text-xs text-slate-600">
+                    Stipulates the client’s duty to provide timely bug logs, designate authorized IT coordinators, maintain supported client-side hardware, and ensure prompt network connectivity.
                   </p>
                 </div>
 
-                <div className="p-4 rounded-xl border border-slate-200 bg-white">
-                  <h3 className="font-bold text-slate-900 text-base mb-1">Clause 6: Limitation of Liability & Consequential Damage Exclusions</h3>
-                  <p className="text-xs sm:text-sm text-slate-600">
-                    Protects the provider against indirect, punitive, or loss-of-profit damages. Liability is commonly capped at total fees 
-                    paid in the preceding 6 or 12 months, with carve-outs for gross negligence and willful data theft.
+                <div className="p-4 rounded-xl border border-slate-200 bg-white space-y-1.5">
+                  <div className="flex items-center gap-2 text-indigo-700 font-bold text-sm">
+                    <span className="w-5 h-5 rounded-full bg-indigo-100 flex items-center justify-center text-xs">6</span>
+                    Excused Outages & Maintenance
+                  </div>
+                  <p className="text-xs text-slate-600">
+                    Excludes pre-notified scheduled maintenance windows (e.g. Sunday 01:00 AM–04:00 AM IST with 72h advance notice), government internet shutdowns, and Force Majeure events from downtime.
                   </p>
                 </div>
 
-                <div className="p-4 rounded-xl border border-slate-200 bg-white">
-                  <h3 className="font-bold text-slate-900 text-base mb-1">Clause 7: Chronic Failure & Termination Rights</h3>
-                  <p className="text-xs sm:text-sm text-slate-600">
-                    Gives the client an exit right without penalties if the provider experiences chronic outages (e.g. 3 consecutive months of 
-                    sub-98% uptime or 3 Severity 1 breaches in a single quarter).
+                <div className="p-4 rounded-xl border border-slate-200 bg-white space-y-1.5">
+                  <div className="flex items-center gap-2 text-indigo-700 font-bold text-sm">
+                    <span className="w-5 h-5 rounded-full bg-indigo-100 flex items-center justify-center text-xs">7</span>
+                    Data Protection & DPDP Act 2023
+                  </div>
+                  <p className="text-xs text-slate-600">
+                    Appoints the vendor as Data Processor under Section 8 of DPDP Act 2023, requiring AES-256 encryption, role-based access, and mandatory 6-hour cybersecurity breach notice under CERT-In rules.
                   </p>
                 </div>
 
-                <div className="p-4 rounded-xl border border-slate-200 bg-white">
-                  <h3 className="font-bold text-slate-900 text-base mb-1">Clause 8: Transition Assistance & Exit Management</h3>
-                  <p className="text-xs sm:text-sm text-slate-600">
-                    Obligates the provider to assist in transferring data, configuration files, and workflows to the client or an incoming 
-                    vendor over a 60–90 day disengagement window.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-xl border border-slate-200 bg-white">
-                  <h3 className="font-bold text-slate-900 text-base mb-1">Clause 9: Audit & Reporting Rights</h3>
-                  <p className="text-xs sm:text-sm text-slate-600">
-                    Entitles the client to inspect monthly automated uptime logs, SOC 2 Type II compliance reports, and ISO 27001 certifications.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-xl border border-slate-200 bg-white">
-                  <h3 className="font-bold text-slate-900 text-base mb-1">Clause 10: Arbitration & Dispute Resolution</h3>
-                  <p className="text-xs sm:text-sm text-slate-600">
-                    Refers technical disputes to independent technical evaluators and legal disputes to sole arbitrator arbitration under the 
-                    Arbitration and Conciliation Act, 1996 with a fixed seat (e.g. New Delhi, Mumbai, Bengaluru).
+                <div className="p-4 rounded-xl border border-slate-200 bg-white space-y-1.5">
+                  <div className="flex items-center gap-2 text-indigo-700 font-bold text-sm">
+                    <span className="w-5 h-5 rounded-full bg-indigo-100 flex items-center justify-center text-xs">8</span>
+                    Chronic Outage & Exit Transition
+                  </div>
+                  <p className="text-xs text-slate-600">
+                    Grants the client immediate penalty-free contract termination rights if chronic breaches occur (e.g. 3 consecutive months of sub-98% uptime), coupled with 60-day data handover support.
                   </p>
                 </div>
               </div>
             </section>
 
-            {/* Section 5: Section 74 Indian Contract Act Liquidated Damages vs Penalties */}
+            {/* Section 4: SLA in Cloud Computing (AWS, Azure & Enterprise SaaS) */}
+            <section className="space-y-4">
+              <h2 className="text-2xl font-bold font-heading text-slate-900 border-b border-slate-200 pb-3 flex items-center gap-2">
+                <Cloud className="w-6 h-6 text-blue-600" />
+                4. Service Level Agreements in Cloud Computing (AWS, Azure & SaaS)
+              </h2>
+              <p>
+                In cloud computing (covering Infrastructure-as-a-Service, Platform-as-a-Service, and Software-as-a-Service), 
+                SLAs serve as the foundational trust mechanism between hyperscalers/SaaS providers and enterprise clients.
+              </p>
+
+              <div className="p-4 rounded-xl bg-blue-50/50 border border-blue-200 space-y-3">
+                <h3 className="font-bold text-blue-950 text-sm sm:text-base flex items-center gap-2">
+                  <Cpu className="w-4 h-4 text-blue-600" />
+                  How Hyperscalers (AWS / Azure) Structure Cloud SLAs
+                </h3>
+                <p className="text-xs sm:text-sm text-blue-900">
+                  Leading cloud providers like Amazon Web Services (AWS) structure their Service Level Agreements around <strong>Monthly Uptime Percentage (MUP)</strong> across multi-availability-zone deployments. For instance, in the Amazon EC2 and Amazon S3 SLAs:
+                </p>
+                <div className="overflow-x-auto border border-blue-200 rounded-xl bg-white">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-blue-900 text-white font-heading">
+                      <tr>
+                        <th className="p-2.5">Monthly Uptime Percentage</th>
+                        <th className="p-2.5">Permitted Monthly Outage</th>
+                        <th className="p-2.5">AWS Service Credit Percentage</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-blue-100">
+                      <tr>
+                        <td className="p-2.5 font-semibold text-slate-800">99.99% or greater</td>
+                        <td className="p-2.5 font-mono text-slate-600">0 to 4.38 minutes</td>
+                        <td className="p-2.5 font-semibold text-emerald-700">0% (SLA Target Met)</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2.5 font-semibold text-slate-800">99.0% to &lt; 99.99%</td>
+                        <td className="p-2.5 font-mono text-slate-600">4.38 minutes to 7.3 hours</td>
+                        <td className="p-2.5 font-semibold text-amber-700">10% Service Credit</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2.5 font-semibold text-slate-800">95.0% to &lt; 99.0%</td>
+                        <td className="p-2.5 font-mono text-slate-600">7.3 hours to 36.5 hours</td>
+                        <td className="p-2.5 font-semibold text-orange-700">25% Service Credit</td>
+                      </tr>
+                      <tr>
+                        <td className="p-2.5 font-semibold text-slate-800">&lt; 95.0%</td>
+                        <td className="p-2.5 font-mono text-slate-600">Over 36.5 hours</td>
+                        <td className="p-2.5 font-semibold text-red-700">100% Service Credit</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div className="space-y-2 pt-2">
+                <h3 className="font-bold text-slate-900 text-sm sm:text-base">
+                  Critical Cloud Infrastructure Metrics: RPO, RTO & Durability
+                </h3>
+                <ul className="list-disc pl-6 space-y-2 text-xs sm:text-sm">
+                  <li>
+                    <strong>Recovery Point Objective (RPO):</strong> Measures the maximum acceptable age of files recovered from backup storage during a primary database disaster (e.g. max 15 minutes of transactional data loss).
+                  </li>
+                  <li>
+                    <strong>Recovery Time Objective (RTO):</strong> Specifies the maximum tolerable duration of system downtime from disaster declaration until service restoration (e.g. systems restored within 2 hours).
+                  </li>
+                  <li>
+                    <strong>Data Durability vs Availability:</strong> While availability measures whether services are accessible right now (e.g. 99.99%), durability measures whether stored data will persist without corruption. AWS S3 Standard, for example, is architected for <strong>99.999999999% (11 nines)</strong> annual durability.
+                  </li>
+                </ul>
+              </div>
+            </section>
+
+            {/* Section 5: BPO, IT Outsourcing & Recruitment SLAs */}
+            <section className="space-y-4">
+              <h2 className="text-2xl font-bold font-heading text-slate-900 border-b border-slate-200 pb-3 flex items-center gap-2">
+                <Headphones className="w-6 h-6 text-emerald-600" />
+                5. BPO, IT Managed Services & Recruitment Service Level Agreements
+              </h2>
+              <p>
+                Service Level Agreements extend far beyond software code and cloud infrastructure. Outsourced business process vendors and staffing firms require domain-tailored Key Performance Indicators (KPIs):
+              </p>
+
+              <div className="overflow-x-auto border border-slate-200 rounded-2xl">
+                <table className="w-full text-left text-xs sm:text-sm">
+                  <thead className="bg-slate-900 text-white font-heading">
+                    <tr>
+                      <th className="p-3">Outsourcing Vertical</th>
+                      <th className="p-3">Core Operational Metrics</th>
+                      <th className="p-3">Standard SLA Target Threshold</th>
+                      <th className="p-3">Remedy / Penalty Trigger</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200 bg-white">
+                    <tr className="hover:bg-slate-50">
+                      <td className="p-3 font-bold text-slate-900">BPO & Contact Center</td>
+                      <td className="p-3">First Contact Resolution (FCR), Average Handle Time (AHT), Call Abandonment Rate</td>
+                      <td className="p-3 font-mono">FCR ≥ 85%, Abandonment &le; 3%, CSAT ≥ 90%</td>
+                      <td className="p-3 text-xs">5%–10% invoice discount if monthly CSAT drops below 85%.</td>
+                    </tr>
+                    <tr className="hover:bg-slate-50">
+                      <td className="p-3 font-bold text-slate-900">IT Managed Services & AMC</td>
+                      <td className="p-3">Mean Time Between Failures (MTBF), Mean Time to Repair (MTTR), Patch Cadence</td>
+                      <td className="p-3 font-mono">MTTR &le; 2 hours, Security Patches deployed within 14 days</td>
+                      <td className="p-3 text-xs">Per-hour delay deduction against monthly maintenance retainer.</td>
+                    </tr>
+                    <tr className="hover:bg-slate-50">
+                      <td className="p-3 font-bold text-slate-900">Staffing & Recruitment</td>
+                      <td className="p-3">Time-to-Shortlist, Candidate Screening Accuracy, Replacement Guarantee</td>
+                      <td className="p-3 font-mono">Profiles submitted within 5 business days; 90-day replacement warranty</td>
+                      <td className="p-3 text-xs">Free candidate replacement or 100% agency placement fee credit if candidate leaves within 90 days.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            {/* Section 6: Section 74 Indian Contract Act Liquidated Damages vs Penalties */}
             <section className="space-y-4">
               <h2 className="text-2xl font-bold font-heading text-slate-900 border-b border-slate-200 pb-3 flex items-center gap-2">
                 <Scale className="w-6 h-6 text-amber-600" />
-                5. Section 74 Indian Contract Act: Liquidated Damages vs Penalties
+                6. Section 74 Indian Contract Act: Liquidated Damages vs Penalties
               </h2>
               <p>
                 When drafting SLA penalty clauses in India, counsel must navigate the distinction between 
@@ -450,7 +642,7 @@ export default function ServiceLevelAgreementPage() {
               <p>
                 In the landmark decisions of <em>Fateh Chand v. Balkishan Dass (AIR 1963 SC 1405)</em>, 
                 <em>Maula Bux v. Union of India (1969 2 SCC 554)</em>, and <em>ONGC v. Saw Pipes Ltd (2003 5 SCC 705)</em>, 
-                the Supreme Court of India laid down clear principles:
+                the Supreme Court of India established binding principles:
               </p>
               <div className="p-5 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-xs sm:text-sm text-amber-950 space-y-2">
                 <p>
@@ -460,7 +652,7 @@ export default function ServiceLevelAgreementPage() {
                 </p>
                 <p>
                   <strong>2. Prohibition on Penal Forfeitures:</strong> If an SLA clause demands astronomical penalties completely 
-                  disproportionate to the contract value, Indian courts will strike it down as a penal forfeiture and award only reasonable 
+                  disproportionate to the contract value, Indian courts will strike it down as an unenforceable penal forfeiture and award only reasonable 
                   compensation.
                 </p>
                 <p>
@@ -471,10 +663,29 @@ export default function ServiceLevelAgreementPage() {
               </div>
             </section>
 
-            {/* Section 6: Stamp Duty Table Across Indian States */}
+            {/* Section 7: DPDP Act 2023 & CERT-In Cybersecurity Reporting */}
+            <section className="space-y-4">
+              <h2 className="text-2xl font-bold font-heading text-slate-900 border-b border-slate-200 pb-3 flex items-center gap-2">
+                <ShieldCheck className="w-6 h-6 text-blue-600" />
+                7. DPDP Act 2023 & CERT-In Cybersecurity Incident Mandates
+              </h2>
+              <p>
+                Under Section 8 of the <strong>Digital Personal Data Protection Act, 2023 (DPDP Act)</strong>, whenever a cloud, IT, or BPO vendor processes personal data on behalf of an enterprise client (Data Fiduciary), the vendor acts as a <strong>Data Processor</strong>.
+              </p>
+              <p>
+                To maintain statutory compliance, the SLA must incorporate:
+              </p>
+              <ul className="list-disc pl-6 space-y-1.5 text-xs sm:text-sm">
+                <li><strong>Statutory Safeguards:</strong> Mandated technical and organizational measures including TLS 1.3 encryption in transit, AES-256 encryption at rest, and multi-factor authentication.</li>
+                <li><strong>6-Hour CERT-In Incident Notification:</strong> Under CERT-In Directions issued pursuant to Section 70B(6) of the Information Technology Act, 2000, cybersecurity incidents (ransomware, unauthorized data exfiltration, system breaches) must be reported to the client and CERT-In within <strong>6 hours</strong> of detection.</li>
+                <li><strong>Data Erasure on Termination:</strong> Mandatory data return and cryptographic erasure protocols across all hot, cold, and disaster recovery backup media within 30 days of SLA expiration.</li>
+              </ul>
+            </section>
+
+            {/* Section 8: Stamp Duty Table Across Indian States */}
             <section className="space-y-4">
               <h2 className="text-2xl font-bold font-heading text-slate-900 border-b border-slate-200 pb-3">
-                6. Stamp Duty on Service Level Agreements Across Indian States
+                8. Stamp Duty on Service Level Agreements Across Indian States
               </h2>
               <p>
                 Under Section 35 of the Indian Stamp Act, 1899, any agreement that is not duly stamped is inadmissible as evidence in court 
