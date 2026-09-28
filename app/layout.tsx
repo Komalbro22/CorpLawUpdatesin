@@ -111,7 +111,6 @@ export default async function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="format-detection" content="telephone=no" />
-        <meta name="monetag" content="350f6f6cece893230af559a511e04841" />
         <JsonLd id="schema-org" data={{
           '@context': 'https://schema.org',
           '@type': 'Organization',
