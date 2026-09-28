@@ -27,7 +27,8 @@ import {
   X,
   ChevronRight,
   Eye,
-  Scale
+  Scale,
+  ShieldCheck
 } from 'lucide-react'
 import {
   SlaType,
@@ -78,7 +79,7 @@ const QUICK_AI_PROMPTS = [
 ]
 
 export default function SlaClient() {
-  const [activeTab, setActiveTab] = useState<'preview' | 'customizer' | 'calculator' | 'instant'>('preview')
+  const [activeTab, setActiveTab] = useState<'preview' | 'customizer' | 'calculator'>('preview')
   const [selectedPreset, setSelectedPreset] = useState<SlaType>('cloud_computing')
   const [downloadingFormat, setDownloadingFormat] = useState<string | null>(null)
   const [copiedKey, setCopiedKey] = useState<string | null>(null)
@@ -433,10 +434,10 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
   }
 
   return (
-    <div className="bg-white border border-slate-200/80 rounded-3xl shadow-sm overflow-hidden mb-12">
+    <div className="space-y-6 mb-12">
       {/* ─── AI Toast / Success Notification ─────────────────────────────── */}
       {aiSuccessToast && (
-        <div className="bg-gradient-to-r from-amber-500/10 via-amber-500/15 to-emerald-500/10 border-b border-amber-300 px-6 py-3 flex items-center justify-between animate-in fade-in slide-in-from-top-2">
+        <div className="bg-gradient-to-r from-amber-500/10 via-amber-500/15 to-emerald-500/10 border border-amber-300 px-6 py-3 rounded-2xl flex items-center justify-between animate-in fade-in slide-in-from-top-2 shadow-xs">
           <div className="flex items-center gap-2.5 text-xs text-amber-950 font-medium">
             <Sparkles className="w-4 h-4 text-amber-600 flex-shrink-0" />
             <span>
@@ -448,7 +449,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
               <button
                 type="button"
                 onClick={handleUndo}
-                className="text-xs font-semibold text-slate-700 hover:text-slate-900 bg-white/80 border border-slate-300 px-2.5 py-1 rounded-lg flex items-center gap-1 shadow-2xs"
+                className="text-xs font-semibold text-slate-700 hover:text-slate-900 bg-white/80 border border-slate-300 px-2.5 py-1 rounded-lg flex items-center gap-1 shadow-2xs cursor-pointer"
               >
                 <RotateCcw className="w-3 h-3 text-slate-500" /> Undo
               </button>
@@ -456,7 +457,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
             <button
               type="button"
               onClick={() => setAiSuccessToast(null)}
-              className="text-slate-400 hover:text-slate-600 p-1"
+              className="text-slate-400 hover:text-slate-600 p-1 cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -464,73 +465,214 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
         </div>
       )}
 
-      {/* ─── Top Navigation Bar with AI Launch Button ─────────────────────── */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between border-b border-slate-200 bg-slate-50/90 p-2 gap-2">
-        <div className="flex p-1 gap-1.5 flex-wrap sm:flex-nowrap flex-1">
-          <button
-            onClick={() => setActiveTab('preview')}
-            className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
-              activeTab === 'preview'
-                ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 ring-1 ring-slate-900/5'
-                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/60'
-            }`}
-          >
-            <Eye className="w-4 h-4 text-emerald-600" />
-            <span>Live Document Preview</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('customizer')}
-            className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
-              activeTab === 'customizer'
-                ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 ring-1 ring-slate-900/5'
-                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/60'
-            }`}
-          >
-            <Sliders className="w-4 h-4 text-blue-600" />
-            <span>Interactive Customizer</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('calculator')}
-            className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
-              activeTab === 'calculator'
-                ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 ring-1 ring-slate-900/5'
-                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/60'
-            }`}
-          >
-            <Calculator className="w-4 h-4 text-amber-600" />
-            <span>Penalty Calculator</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('instant')}
-            className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
-              activeTab === 'instant'
-                ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 ring-1 ring-slate-900/5'
-                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/60'
-            }`}
-          >
-            <Download className="w-4 h-4 text-indigo-600" />
-            <span>1-Click Presets</span>
-          </button>
+      {/* ─── 1. Interactive 5-Way Industry SLA Framework Switcher ─────────── */}
+      <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 space-y-4">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <div>
+            <h2 className="text-base font-bold text-slate-900 flex items-center gap-2 font-heading">
+              <Scale className="w-5 h-5 text-indigo-600" />
+              Select Industry SLA Framework
+            </h2>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Click an industry framework to instantly update the live contract preview, uptime SLOs, response matrices, and Section 74 damages.
+            </p>
+          </div>
+          <span className="text-xs font-semibold px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-lg border border-indigo-200/80 flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            Active: <strong>{SLA_PRESETS[selectedPreset].shortLabel}</strong>
+          </span>
         </div>
 
-        {/* Gemini AI Drafter Launch Button */}
-        <div className="flex items-center gap-2 px-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+          {(Object.keys(SLA_PRESETS) as SlaType[]).map((key) => {
+            const p = SLA_PRESETS[key]
+            const isSelected = selectedPreset === key
+            return (
+              <button
+                key={key}
+                type="button"
+                onClick={() => handlePresetSelect(key)}
+                className={`p-4 rounded-2xl text-left transition-all border relative flex flex-col justify-between cursor-pointer ${
+                  isSelected
+                    ? 'bg-gradient-to-b from-indigo-50/90 to-white border-indigo-600 shadow-md ring-2 ring-indigo-500/20'
+                    : 'bg-slate-50/70 border-slate-200 hover:border-slate-300 hover:bg-slate-100/50'
+                }`}
+              >
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div
+                      className={`w-8 h-8 rounded-xl flex items-center justify-center ${
+                        isSelected
+                          ? 'bg-indigo-600 text-white shadow-xs'
+                          : 'bg-white border border-slate-200 text-slate-700'
+                      }`}
+                    >
+                      {presetIcons[key]}
+                    </div>
+                    {isSelected ? (
+                      <span className="px-2 py-0.5 bg-indigo-600 text-white text-[10px] font-bold rounded-full shadow-xs tracking-wide">
+                        ACTIVE
+                      </span>
+                    ) : (
+                      <span className="text-[10px] font-semibold text-slate-400">
+                        Select
+                      </span>
+                    )}
+                  </div>
+                  <h3
+                    className={`text-xs font-bold leading-snug ${
+                      isSelected ? 'text-indigo-950' : 'text-slate-900'
+                    }`}
+                  >
+                    {p.shortLabel}
+                  </h3>
+                  <p className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed">
+                    {p.description}
+                  </p>
+                </div>
+
+                <div className="mt-3 pt-2.5 border-t border-slate-200/80 space-y-1">
+                  <p className="text-[10px] font-semibold text-slate-700 flex items-center justify-between">
+                    <span className="text-slate-400">Uptime SLO:</span>
+                    <span className="font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-100">
+                      {p.uptimeDefault}
+                    </span>
+                  </p>
+                  <p className="text-[10px] font-semibold text-slate-600 flex items-center justify-between">
+                    <span className="text-slate-400">Penalty Cap:</span>
+                    <span className="font-mono text-amber-700">{p.capDefault}</span>
+                  </p>
+                </div>
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* ─── 2. Action Downloads Bar (1-Click Statutory Downloads) ───────── */}
+      <div className="bg-slate-900 text-white rounded-3xl p-5 sm:p-6 shadow-xl border border-slate-800 flex flex-wrap items-center justify-between gap-4">
+        <div className="space-y-1 max-w-xl">
+          <div className="flex items-center gap-2">
+            <span className="text-amber-400 text-sm font-bold flex items-center gap-1.5">
+              <Download className="w-4 h-4 text-amber-400" />
+              1-Click Statutory Downloads
+            </span>
+            <span className="text-[11px] bg-indigo-950 text-indigo-300 border border-indigo-700/60 px-2 py-0.5 rounded-full font-medium">
+              {SLA_PRESETS[selectedPreset].shortLabel}
+            </span>
+          </div>
+          <p className="text-xs text-slate-300 leading-relaxed">
+            Institutional commercial agreement formatted under Indian Contract Act 1872 (§ 73, 74 liquidated damages), DPDP Act 2023 data processing covenants, and CERT-In 6-hour cybersecurity reporting.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
           <button
             type="button"
-            onClick={() => setIsAiModalOpen(true)}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 via-amber-600 to-indigo-600 hover:from-amber-600 hover:to-indigo-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition-all hover:shadow-md cursor-pointer"
+            onClick={() => openInstantDownloadGateway(selectedPreset, 'docx')}
+            disabled={downloadingFormat !== null}
+            className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-md transition-all cursor-pointer disabled:opacity-50"
           >
-            <Sparkles className="w-4 h-4 text-amber-200 animate-pulse" />
-            <span>Gemini AI Legal Drafter</span>
-            <span className="text-[10px] bg-white/20 px-1.5 py-0.5 rounded-full font-mono font-medium uppercase">
-              AI Edit
-            </span>
+            <Download className="w-4 h-4" />
+            <span>{downloadingFormat === `${selectedPreset}-docx` ? 'Generating...' : 'Download Word (.docx)'}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => openInstantDownloadGateway(selectedPreset, 'pdf')}
+            disabled={downloadingFormat !== null}
+            className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition-all cursor-pointer disabled:opacity-50"
+          >
+            <FileText className="w-4 h-4 text-rose-400" />
+            <span>{downloadingFormat === `${selectedPreset}-pdf` ? 'Generating...' : 'Download PDF'}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => copyToClipboard(getFullAgreementText(), 'agreement-top')}
+            className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 font-semibold px-3 py-2.5 rounded-xl text-xs transition-colors cursor-pointer"
+          >
+            {copiedKey === 'agreement-top' ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Copied!</span>
+              </>
+            ) : (
+              <>
+                <Copy className="w-3.5 h-3.5 text-slate-400" />
+                <span>Copy Text</span>
+              </>
+            )}
+          </button>
+
+          <button
+            type="button"
+            onClick={handlePrint}
+            className="hidden md:flex items-center justify-center gap-1.5 bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700 font-semibold px-3 py-2.5 rounded-xl text-xs transition-colors cursor-pointer"
+          >
+            <Printer className="w-3.5 h-3.5 text-slate-400" />
+            <span>Print</span>
           </button>
         </div>
       </div>
+
+      {/* ─── 3. Main Workspace Container (Tabs & Sub-Views) ──────────────── */}
+      <div className="bg-white border border-slate-200/80 rounded-3xl shadow-sm overflow-hidden">
+        {/* Navigation Bar with Tabs and AI Drafter Button */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between border-b border-slate-200 bg-slate-50/90 p-2 gap-2">
+          <div className="flex p-1 gap-1.5 flex-wrap sm:flex-nowrap flex-1">
+            <button
+              onClick={() => setActiveTab('preview')}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                activeTab === 'preview'
+                  ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 ring-1 ring-slate-900/5'
+                  : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/60'
+              }`}
+            >
+              <Eye className="w-4 h-4 text-emerald-600" />
+              <span>Live Document Preview</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('customizer')}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                activeTab === 'customizer'
+                  ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 ring-1 ring-slate-900/5'
+                  : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/60'
+              }`}
+            >
+              <Sliders className="w-4 h-4 text-blue-600" />
+              <span>Interactive Customizer</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('calculator')}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                activeTab === 'calculator'
+                  ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 ring-1 ring-slate-900/5'
+                  : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/60'
+              }`}
+            >
+              <Calculator className="w-4 h-4 text-amber-600" />
+              <span>Penalty Calculator</span>
+            </button>
+          </div>
+
+          {/* Gemini AI Drafter Launch Button */}
+          <div className="flex items-center gap-2 px-1">
+            <button
+              type="button"
+              onClick={() => setIsAiModalOpen(true)}
+              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 via-amber-600 to-indigo-600 hover:from-amber-600 hover:to-indigo-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition-all hover:shadow-md cursor-pointer"
+            >
+              <Sparkles className="w-4 h-4 text-amber-200 animate-pulse" />
+              <span>Gemini AI Legal Drafter</span>
+              <span className="text-[10px] bg-white/20 px-1.5 py-0.5 rounded-full font-mono font-medium uppercase">
+                AI Edit
+              </span>
+            </button>
+          </div>
+        </div>
 
       {/* ─── TAB 1: Live SLA Legal Paper Preview ──────────────────────────── */}
       {activeTab === 'preview' && (
@@ -615,8 +757,35 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
             </div>
           </div>
 
+          {/* Statutory Enforceability Assured Banner */}
+          <div className="max-w-4xl mx-auto bg-emerald-50/80 border border-emerald-200/90 rounded-2xl p-4 flex items-start gap-3.5 text-xs text-emerald-950 shadow-2xs">
+            <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <p className="font-bold text-emerald-900 flex items-center gap-2">
+                <span>Statutory Enforceability Assured • Indian Contract Act, 1872 & IT Act, 2000</span>
+                <span className="text-[10px] bg-emerald-100 text-emerald-800 border border-emerald-300 px-2 py-0.5 rounded-full font-mono font-medium">
+                  Verified Format
+                </span>
+              </p>
+              <p className="text-emerald-800 leading-relaxed">
+                This live preview renders a complete, institutional commercial agreement—incorporating the statutory Preamble, Corporate Identity Numbers (CIN), Recitals, 4-tier Incident Severity Matrix, Section 74 liquidated damages covenants, DPDP Act 2023 data processor provisions, and bilateral signature executions. You can edit any party details or metrics in the <strong>Interactive Customizer</strong> or use <strong>Gemini AI Drafter</strong> to insert custom clauses.
+              </p>
+            </div>
+          </div>
+
           {/* ─── Physical Paper Legal Agreement Sheet (A4 styling) ──────────── */}
           <div className="max-w-4xl mx-auto bg-white border border-slate-300 shadow-xl rounded-2xl p-6 sm:p-12 text-slate-900 font-sans print:shadow-none print:border-none print:p-0">
+            {/* Stamp Paper Top Trust Ribbon */}
+            <div className="flex flex-wrap items-center justify-between border-b border-slate-200 pb-3 mb-5 text-[10px] sm:text-[11px] text-slate-500 font-mono gap-2">
+              <span className="flex items-center gap-1.5 text-emerald-700 font-bold">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                VERIFIED INSTITUTIONAL CONTRACT TEMPLATE
+              </span>
+              <span className="text-slate-400">
+                SUITABLE FOR ARTICLE 5 NON-JUDICIAL STAMP PAPER EXECUTION
+              </span>
+            </div>
+
             {/* Stamp Paper Top Header */}
             <div className="border-b-2 border-slate-900 pb-5 mb-6 text-center space-y-2">
               <span className="text-[11px] font-mono uppercase tracking-widest text-slate-500 font-semibold block">
@@ -1324,100 +1493,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
         </div>
       )}
 
-      {/* ─── TAB 4: 1-Click Instant Downloads ─────────────────────────────── */}
-      {activeTab === 'instant' && (
-        <div className="p-6 sm:p-8 space-y-6">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-            <div>
-              <h3 className="text-lg font-bold font-heading text-slate-900">
-                Select Pre-Configured Industry SLA Template
-              </h3>
-              <p className="text-xs text-slate-500">
-                Drafted under the Indian Contract Act 1872 & DPDP Act 2023. Ready for immediate legal execution.
-              </p>
-            </div>
-            <span className="text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200/60 px-2.5 py-1 rounded-full">
-              Updated September 2026
-            </span>
-          </div>
-
-          {/* Preset Selector Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {(Object.keys(SLA_PRESETS) as SlaType[]).map(key => {
-              const p = SLA_PRESETS[key]
-              const isSelected = selectedPreset === key
-              return (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => handlePresetSelect(key)}
-                  className={`text-left p-4 rounded-2xl border transition-all flex flex-col justify-between ${
-                    isSelected
-                      ? 'border-amber-500 bg-amber-500/5 ring-1 ring-amber-500'
-                      : 'border-slate-200 hover:border-slate-300 bg-white'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className={`p-2 rounded-xl ${isSelected ? 'bg-amber-500 text-white' : 'bg-slate-100 text-slate-600'}`}>
-                      {presetIcons[key]}
-                    </span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono">
-                      {p.uptimeDefault}
-                    </span>
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-slate-900 font-heading">
-                      {p.shortLabel}
-                    </h4>
-                    <p className="text-[11px] text-slate-500 mt-1 line-clamp-2 leading-relaxed">
-                      {p.description}
-                    </p>
-                  </div>
-                </button>
-              )
-            })}
-          </div>
-
-          {/* Active Preset Action Card */}
-          <div className="bg-slate-900 text-white rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-            <div className="space-y-2 max-w-xl">
-              <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-xs font-semibold">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Ready-To-Sign Format</span>
-              </div>
-              <h4 className="text-xl font-extrabold font-heading text-white">
-                {SLA_PRESETS[selectedPreset].title}
-              </h4>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                Includes Uptime Target ({SLA_PRESETS[selectedPreset].uptimeDefault}), 4-tier Severity Response Matrix,
-                Service Credit calculation under Section 74 Indian Contract Act, and mandatory DPDP Act 2023 data processing safeguards.
-              </p>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-              <button
-                type="button"
-                onClick={() => openInstantDownloadGateway(selectedPreset, 'docx')}
-                disabled={downloadingFormat !== null}
-                className="flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-5 py-3 rounded-xl text-xs sm:text-sm shadow-md transition-all disabled:opacity-50"
-              >
-                <Download className="w-4 h-4" />
-                <span>{downloadingFormat === `${selectedPreset}-docx` ? 'Generating...' : 'Download Word (.docx)'}</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => openInstantDownloadGateway(selectedPreset, 'pdf')}
-                disabled={downloadingFormat !== null}
-                className="flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 font-bold px-5 py-3 rounded-xl text-xs sm:text-sm transition-all disabled:opacity-50"
-              >
-                <FileText className="w-4 h-4 text-rose-400" />
-                <span>{downloadingFormat === `${selectedPreset}-pdf` ? 'Generating...' : 'Download PDF'}</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      </div>
 
       {/* ─── GEMINI AI LEGAL DRAFTER MODAL / DRAWER ─────────────────────── */}
       {isAiModalOpen && (
