@@ -19,7 +19,8 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const category = (searchParams.get('category') as FirmCategory) || 'general_at_will'
     const format = searchParams.get('format') || 'docx'
-    const doc = searchParams.get('doc') || 'deed'
+    const docParam = searchParams.get('doc') || searchParams.get('type') || 'deed'
+    const doc = docParam === 'rof' ? 'rof-form-1' : docParam
 
     const preset = PARTNERSHIP_PRESETS[category] || PARTNERSHIP_PRESETS.general_at_will
 
@@ -32,7 +33,7 @@ export async function GET(request: Request) {
 
     const firmSlug = (preset.suggestedFirmName || 'Partnership_Firm').replace(/[^a-zA-Z0-9]/g, '_')
 
-    if (doc === 'rof-form-1') {
+    if (doc === 'rof-form-1' || doc === 'form-v' || doc === 'formv') {
       if (format === 'pdf') {
         const pdfBytes = await buildRofForm1Pdf(sampleData)
         return new Response(new Uint8Array(pdfBytes), {

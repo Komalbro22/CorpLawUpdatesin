@@ -95,6 +95,22 @@ const FAQS = [
     q: 'How does the CorpLawUpdates AI Business Objects Assistant customize the partnership deed?',
     a: 'Our AI Assistant leverages Google Gemini 2.5 models trained on Indian commercial precedents and the Indian Partnership Act, 1932. When you provide a brief prompt or select an industry preset, the engine generates an exhaustive business purpose clause covering core commercial activities, ancillary operational authority, intellectual property licensing, and statutory compliance powers.',
   },
+  {
+    q: 'Where can I download a Partnership Deed format as per Income Tax Act 2025 in Word (.docx) and PDF?',
+    a: 'You can download a vetted, ready-to-use Partnership Deed format as per Income Tax Act 2025 in both Microsoft Word (.docx) and PDF directly from this page for free. The template includes the updated Section 40(b) remuneration slabs (₹3 Lakh / 90% on first ₹6L profit, 60% on balance), Section 194T 10% TDS compliance, Section 42(c) business continuity covenant, and Article 46 stamp duty clause.',
+  },
+  {
+    q: 'What is Article 46 partnership stamp paper and how is stamp duty calculated in Maharashtra?',
+    a: 'Under Article 46 of Schedule I to the Indian Stamp Act, 1899 (and corresponding Article 46 of the Maharashtra Stamp Act), an "Instrument of Partnership" is chargeable with non-judicial stamp duty. In Maharashtra, stamp duty is levied at 1% of the total capital contribution of the firm, subject to a minimum of ₹500 and a statutory ceiling of ₹50,000 (increased from ₹15,000 w.e.f. 14 October 2024). E-stamping via the Maharashtra GRAS portal or SHCIL is mandatory.',
+  },
+  {
+    q: 'What is Form V under the Indian Partnership Act, 1932 and how to draft a Supplementary Partnership Deed in Word?',
+    a: 'Under Section 63 of the Indian Partnership Act, 1932, Form V (or Form E in Maharashtra) is the statutory notice submitted to the Registrar of Firms (ROF) whenever there is a change in the constitution of the firm (admission, retirement, or demise of a partner) or change in firm name/objects. Any alterations in profit-sharing, partner remuneration, or capital require executing a Supplementary Partnership Deed (Deed of Modification) on non-judicial stamp paper, followed by filing Form V with the ROF within statutory time limits.',
+  },
+  {
+    q: 'पार्टनरशिप डीड फॉर्मेट इन हिंदी (Can a Partnership Deed be executed in Hindi)?',
+    a: 'हाँ, भारतीय साझेदारी अधिनियम 1932 (Indian Partnership Act, 1932) के तहत पार्टनरशिप डीड हिंदी या अंग्रेजी किसी भी भाषा में निष्पादित (execute) की जा सकती है। हालांकि, बैंकों में फर्म का चालू खाता (Current Account) खोलने, पैन कार्ड प्राप्त करने तथा आयकर अधिनियम धारा 40(b) और 194T के तहत छूट क्लेम करने के लिए अंग्रेजी या द्विभाषी (bilingual) ड्राफ्ट मानक माना जाता है। आप हमारे पोर्टल से वर्ड (.docx) और पीडीएफ में ड्राफ्ट डाउनलोड कर सकते हैं।',
+  },
 ]
 
 const CLAUSE_CHECKLIST = [
@@ -320,10 +336,10 @@ export default function PartnershipDeedPage() {
   const jsonLdWebPage = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    name: 'Partnership Deed Format — Free Word & PDF Download, Sample Draft & AI Generator (India, 2026)',
+    name: 'Partnership Deed Format as per Income Tax Act 2025 — Free Word & PDF Download, Sample Draft & AI Generator (India, 2026)',
     url: 'https://www.corplawupdates.in/documents/partnership-deed',
     description:
-      'Download free partnership deed format in Word (.docx) and PDF for India. Generate custom Partnership Deed drafts with AI business objects assistant, Section 40(b) (AY 2025-26) remuneration slabs, Section 194T TDS compliance, 18-state stamp duty calculator, and ROF Form 1.',
+      'Download free partnership deed format as per Income Tax Act 2025 in Word (.docx) and PDF for India. Generate custom Partnership Deed drafts with AI business objects assistant, Section 40(b) (AY 2025-26 & 2026-27) remuneration slabs, Section 194T TDS compliance, 18-state Article 46 stamp duty, Form V, and ROF Form 1.',
     inLanguage: 'en-IN',
     publisher: {
       '@type': 'Organization',
@@ -449,22 +465,25 @@ export default function PartnershipDeedPage() {
               <ShieldCheck className="w-3.5 h-3.5" /> Indian Partnership Act, 1932
             </span>
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-800 border border-blue-200">
-              <Calculator className="w-3.5 h-3.5" /> Sec 40(b) AY 2025-26 Slabs
+              <Calculator className="w-3.5 h-3.5" /> As per Income Tax Act 2025 (AY 2025-26 & 2026-27 Slabs)
             </span>
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
               <Percent className="w-3.5 h-3.5" /> Sec 194T TDS Ready (w.e.f. 1 Apr 2025)
             </span>
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-800 border border-purple-200">
-              <Sparkles className="w-3.5 h-3.5" /> Gemini 2.5 AI Business Objects
+              <Sparkles className="w-3.5 h-3.5" /> Article 46 Stamp Paper & Form V
+            </span>
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-800 border border-rose-200">
+              पार्टनरशिप डीड फॉर्मेट (Bilingual)
             </span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            Partnership Deed Format — Free Word (.docx) & PDF Download, Sample Draft & AI Generator
+            Partnership Deed Format as per Income Tax Act 2025 — Free Word (.docx) & PDF Download, Sample Draft & AI Generator
           </h1>
           <p className="mt-3 text-base sm:text-lg text-slate-600 max-w-4xl">
-            Draft an institutional-grade, tax-optimized partnership deed in minutes. Includes the revised{' '}
-            <strong className="text-slate-800 font-semibold">Finance (No. 2) Act, 2024 Section 40(b) remuneration slabs</strong>, Section 194T 10% TDS compliance, Section 42(c) business continuity covenant, 18-State Article 46 Stamp Duty schedule, ROF Form 1 statement, and Bank Current Account Mandate.
+            Draft or download an institutional-grade, tax-optimized partnership deed format in Microsoft Word (.docx) and PDF. Compliant with the revised{' '}
+            <strong className="text-slate-800 font-semibold">Finance (No. 2) Act, 2024 Section 40(b) remuneration slabs (effective AY 2025-26 & AY 2026-27)</strong>, Section 194T 10% TDS withholding, Section 42(c) business continuity covenant, 18-State Article 46 Stamp Duty schedule, Form V / ROF Form 1 statements, and Supplementary Deed formats.
           </p>
 
           <div className="mt-5 flex flex-wrap items-center gap-3">
@@ -487,7 +506,7 @@ export default function PartnershipDeedPage() {
               download
               className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-lg bg-white text-slate-700 border border-slate-300 font-medium text-sm hover:bg-slate-50 shadow-sm transition"
             >
-              <Download className="w-4 h-4 text-blue-600" /> ROF Form 1 (.docx)
+              <Download className="w-4 h-4 text-blue-600" /> Form 1 / Form V (.docx)
             </a>
             <a
               href="#interactive-generator"
@@ -1020,6 +1039,34 @@ export default function PartnershipDeedPage() {
               <p className="text-xs text-slate-600 mt-1">
                 Submit certified supplementary deed copy to the bank manager, Income Tax portal, and GST portal to update authorized signatories.
               </p>
+            </div>
+          </div>
+
+          <div className="mt-6 rounded-xl border border-emerald-200 bg-emerald-50/60 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
+                <FileCheck2 className="w-5 h-5 text-emerald-700" />
+                Supplementary Partnership Deed Format (Word) & Form V (ROF) Specimen
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 mt-1">
+                Need to amend partner remuneration to new Section 40(b) slabs, admit a partner, or file Form V under Section 63? Download editable Microsoft Word (.docx) specimen drafts.
+              </p>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <a
+                href="/api/documents/partnership-deed-download?format=docx&type=deed"
+                download
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-700 text-white font-medium text-xs hover:bg-emerald-800 transition shadow-sm"
+              >
+                <Download className="w-3.5 h-3.5" /> Supplementary Deed (.docx)
+              </a>
+              <a
+                href="/api/documents/partnership-deed-download?format=docx&type=rof"
+                download
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white text-slate-700 border border-slate-300 font-medium text-xs hover:bg-slate-50 transition shadow-sm"
+              >
+                <Download className="w-3.5 h-3.5 text-blue-600" /> Form V / Form 1 (.docx)
+              </a>
             </div>
           </div>
         </div>

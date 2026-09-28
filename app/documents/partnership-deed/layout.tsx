@@ -4,7 +4,7 @@ const pageUrl = 'https://www.corplawupdates.in/documents/partnership-deed'
 const title =
   'Partnership Deed Format — Free Word & PDF Download, Sample Draft & AI Generator (India, 2026) | CorpLawUpdates.in'
 const description =
-  'Download free partnership deed format in Word (.docx) and PDF for India. Generate custom Partnership Deed drafts with AI business objects assistant, Section 40(b) (AY 2025-26) remuneration slabs, Section 194T TDS compliance, 18-state stamp duty calculator, and ROF Form 1.'
+  'Download free partnership deed format in Word (.docx) & PDF as per Income Tax Act 2025/2026. Features Section 40(b) (AY 2025-26 & 2026-27) remuneration limits, Section 194T 10% TDS, Article 46 stamp duty, ROF Form V / Form E, and AI drafter.'
 
 export const revalidate = 86400
 
@@ -13,6 +13,18 @@ export const metadata: Metadata = {
   description,
   keywords: [
     'partnership deed format',
+    'partnership deed word format',
+    'partnership deed format in word',
+    'partnership deed format as per income tax act 2025',
+    'partnership deed format as per income tax act 2025 word',
+    'partnership deed format as per new income tax act 2025',
+    'partnership deed word format free download pdf',
+    'latest partnership deed format in word',
+    'form v partnership act 1932 word format pdf download',
+    'supplementary partnership deed format word',
+    'article 46 partnership stamp paper',
+    'partnership deed format maharashtra',
+    'पार्टनरशिप डीड फॉर्मेट इन हिंदी',
     'partnership deed format pdf free download',
     'partnership deed format in word free download',
     'partnership deed draft',

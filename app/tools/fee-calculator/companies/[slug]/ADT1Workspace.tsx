@@ -266,6 +266,50 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
 
   return (
     <div className="space-y-8">
+      {/* ─── GEO Direct-Answer Statutory Synopsis ─────────────────────────── */}
+      <div className="bg-gradient-to-br from-blue-50/90 via-indigo-50/50 to-white dark:from-slate-900 dark:via-blue-950/30 dark:to-slate-900 rounded-3xl p-6 border border-blue-200/80 dark:border-blue-900/60 shadow-sm space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-blue-200/60 dark:border-blue-800/60 pb-3">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wide">
+              Executive Statutory Synopsis • Form ADT-1 Due Date & Late Fees (2026)
+            </h3>
+          </div>
+          <span className="text-[11px] font-mono font-bold bg-blue-600 text-white px-2.5 py-0.5 rounded-full">
+            Section 139(1) • Table B
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div className="bg-white/80 dark:bg-slate-800/80 p-3.5 rounded-2xl border border-blue-100 dark:border-slate-700/80 space-y-1">
+            <span className="font-bold text-blue-900 dark:text-blue-300 block">
+              📅 Statutory Due Date
+            </span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              Strictly <strong>within 15 calendar days</strong> from the date of the meeting (AGM, EGM, or Board Meeting) in which the statutory auditor was appointed.
+            </p>
+          </div>
+
+          <div className="bg-white/80 dark:bg-slate-800/80 p-3.5 rounded-2xl border border-blue-100 dark:border-slate-700/80 space-y-1">
+            <span className="font-bold text-amber-900 dark:text-amber-300 block">
+              ⚡ Is there a ₹100/day penalty?
+            </span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              <strong>NO.</strong> Unlike AOC-4 or MGT-7, ADT-1 is governed by <strong>Table B time-slab multipliers (1× to 12× normal fee)</strong>. Delays &gt; 270 days require CG-1 condonation.
+            </p>
+          </div>
+
+          <div className="bg-white/80 dark:bg-slate-800/80 p-3.5 rounded-2xl border border-blue-100 dark:border-slate-700/80 space-y-1">
+            <span className="font-bold text-emerald-900 dark:text-emerald-300 block">
+              🏢 First Auditor & OPC Mandate
+            </span>
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+              Under <strong>G.S.R. 359(E)</strong>, filing ADT-1 is mandatory for the <strong>First Auditor</strong> of newly incorporated companies within 15 days of the Board Meeting.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* 1. Main Workspace Card */}
       <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 p-6 md:p-8">
         

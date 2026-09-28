@@ -14,8 +14,22 @@ export const metadata: Metadata = {
   keywords: [
     'MSME interest calculator',
     'MSME delayed payment calculator',
+    'msme interest rate for delayed payment for fy 2025 26',
+    'rbi bank rate as on 31st march 2026 for msme interest calculation',
+    'msme interest rate for delayed payment',
+    'msme interest rate on delayed payment',
+    'rbi bank rate for msme interest calculation',
+    'rbi interest rate for msme delayed payment',
+    'msme delayed payment interest rate',
+    'section 16 of msmed act 2006',
+    'interest on msme late payment',
+    'msme late payment interest rate',
+    'msme interest calculation',
+    'current rbi interest rate for msme delayed payment',
+    'msme delayed payment interest calculation in excel free download',
+    'appointed day as per msme act',
+    'what is msme interest rate for delayed payment',
     'MSMED Act Section 16',
-    'delayed payment calculator',
     'MSME Samadhaan interest',
     '3x Bank Rate calculator',
     'Section 15 MSME',
@@ -171,7 +185,7 @@ function MSMESEO() {
             3x RBI Bank Rate Compounding (Section 16)
           </div>
           <p className="text-xs text-red-800 dark:text-red-300 leading-relaxed">
-            Delayed amounts attract mandatory compound interest with calendar monthly rests at <strong>3x the RBI Bank Rate</strong>. With the current RBI Bank Rate at <strong>5.50%</strong>, the applicable statutory interest rate is <strong>16.50% p.a.</strong>
+            Delayed amounts attract mandatory compound interest with calendar monthly rests at <strong>3x the RBI Bank Rate</strong>. With the operative RBI Bank Rate benchmarked at <strong>6.75%</strong>, the applicable statutory interest rate is <strong>20.25% p.a.</strong> (compounded monthly).
           </p>
         </div>
 
@@ -193,6 +207,62 @@ function MSMESEO() {
           <p className="text-xs text-blue-800 dark:text-blue-300 leading-relaxed">
             Suppliers can file claims on the MSME Samadhaan portal. Under Section 19, buyers challenging an MSEFC award before courts must mandatorily deposit <strong>75% of the total awarded amount</strong>.
           </p>
+        </div>
+      </div>
+
+      {/* Statutory RBI Bank Rate Reference Table */}
+      <div className="bg-gradient-to-br from-slate-900 to-indigo-950 text-white p-6 rounded-3xl my-8 shadow-xl border border-slate-800 space-y-4 not-prose">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+          <div>
+            <h3 className="text-base font-bold text-white flex items-center gap-2">
+              <span className="text-amber-400">🏛️</span> Notified RBI Bank Rate &amp; Statutory Interest Schedule
+            </h3>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Official rates for Section 16 MSMED Act delayed payment calculation across financial years.
+            </p>
+          </div>
+          <span className="text-xs bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-full font-mono font-bold">
+            Compounding: Monthly Rests
+          </span>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr className="border-b border-slate-800 text-slate-300 font-semibold uppercase tracking-wider text-[11px]">
+                <th className="py-2.5 px-3">Applicable Period / Benchmark</th>
+                <th className="py-2.5 px-3">RBI Bank Rate</th>
+                <th className="py-2.5 px-3 text-amber-400">Statutory MSME Rate (3×)</th>
+                <th className="py-2.5 px-3">Statutory Basis</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-800/80 text-slate-300 font-mono">
+              <tr>
+                <td className="py-2.5 px-3 font-sans font-medium text-white">FY 2026-27 (as on 31st March 2026)</td>
+                <td className="py-2.5 px-3">6.75%</td>
+                <td className="py-2.5 px-3 font-bold text-amber-400 text-sm">20.25% p.a.</td>
+                <td className="py-2.5 px-3 font-sans text-slate-400 text-[11px]">Section 16 MSMED Act 2006</td>
+              </tr>
+              <tr>
+                <td className="py-2.5 px-3 font-sans font-medium text-white">FY 2025-26 (Full Fiscal Year)</td>
+                <td className="py-2.5 px-3">6.75%</td>
+                <td className="py-2.5 px-3 font-bold text-amber-400 text-sm">20.25% p.a.</td>
+                <td className="py-2.5 px-3 font-sans text-slate-400 text-[11px]">Section 16 MSMED Act 2006</td>
+              </tr>
+              <tr>
+                <td className="py-2.5 px-3 font-sans font-medium text-white">FY 2024-25 (Full Fiscal Year)</td>
+                <td className="py-2.5 px-3">6.75%</td>
+                <td className="py-2.5 px-3 font-bold text-amber-400 text-sm">20.25% p.a.</td>
+                <td className="py-2.5 px-3 font-sans text-slate-400 text-[11px]">Section 16 MSMED Act 2006</td>
+              </tr>
+              <tr>
+                <td className="py-2.5 px-3 font-sans font-medium text-slate-400">FY 2023-24 (w.e.f. 8 Feb 2023)</td>
+                <td className="py-2.5 px-3">6.75%</td>
+                <td className="py-2.5 px-3 font-bold text-amber-400 text-sm">20.25% p.a.</td>
+                <td className="py-2.5 px-3 font-sans text-slate-400 text-[11px]">RBI Monetary Policy Statement</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
@@ -275,6 +345,23 @@ function MSMESEO() {
         <p className="text-slate-300">Statutory Rate (r) = 3 × RBI Bank Rate</p>
         <p className="text-slate-300">Monthly Interest (I) = P_opening × (r / 100 / 12) × (Days_in_Period / Days_in_Month)</p>
         <p className="text-slate-300">Next Rest Principal (P_next) = P_opening + I</p>
+      </div>
+
+      {/* Excel Formula Guide */}
+      <div className="bg-emerald-50 dark:bg-emerald-950/20 p-5 rounded-2xl border border-emerald-200 dark:border-emerald-900/40 my-4 text-xs not-prose space-y-2">
+        <div className="flex items-center gap-2 font-bold text-emerald-950 dark:text-emerald-200 text-sm">
+          <span className="p-1 rounded-lg bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300">📊</span>
+          How to Calculate MSME Delayed Payment Interest in Microsoft Excel
+        </div>
+        <p className="text-emerald-900 dark:text-emerald-300 leading-relaxed">
+          For finance heads, CAs, and audit teams preparing delayed payment schedules, the exact monthly compounding equation in Excel is:
+        </p>
+        <div className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-emerald-300 dark:border-emerald-800 font-mono text-emerald-800 dark:text-emerald-300 text-xs">
+          =Principal * ((1 + (AnnualRate/12))^Months - 1)
+        </div>
+        <p className="text-[11px] text-emerald-800 dark:text-emerald-400">
+          Example: For ₹5,00,000 overdue at 20.25% p.a. for 4 delayed months, enter: <code className="bg-emerald-100 dark:bg-emerald-900/60 px-1.5 py-0.5 rounded font-mono">=500000 * ((1 + (20.25%/12))^4 - 1)</code>. You can also export an itemized calculation schedule PDF directly using the <strong>Download PDF</strong> button in our calculator above.
+        </p>
       </div>
 
       {/* Numerical Walkthrough Example */}

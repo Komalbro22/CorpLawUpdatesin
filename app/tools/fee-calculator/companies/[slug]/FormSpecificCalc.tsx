@@ -16,6 +16,7 @@ import MGT7Workspace from './MGT7Workspace'
 import AOC4Workspace from './AOC4Workspace'
 import DPT3Workspace from './DPT3Workspace'
 import DIR3KYCWorkspace from './DIR3KYCWorkspace'
+import DIR12Workspace from './DIR12Workspace'
 import INC20AWorkspace from './INC20AWorkspace'
 import SPICePlusWorkspace from './SPICePlusWorkspace'
 import PAS6Workspace from './PAS6Workspace'
@@ -78,6 +79,10 @@ export default function FormSpecificCalc({ form }: { form: MCAForm }) {
 
   if (form.slug === 'dir-3-kyc' || form.slug === 'dir-3') {
     return <DIR3KYCWorkspace form={form} />
+  }
+
+  if (form.slug === 'dir-12' || form.slug === 'dir12') {
+    return <DIR12Workspace form={form} />
   }
 
   if (form.slug === 'inc-20a' || form.slug === 'inc20a') {

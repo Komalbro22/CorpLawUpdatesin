@@ -27,6 +27,18 @@ export default function MSMEFAQ() {
       a: 'No. As per Section 23 of the MSMED Act, interest paid or payable by a buyer for delayed payments to an MSME is expressly disallowed as an expenditure/deduction under the Income Tax Act, 1961.'
     },
     {
+      q: 'What is the RBI Bank Rate as on 31st March 2026 for MSME interest calculation?',
+      a: 'As on 31st March 2026 (and throughout FY 2025-26), the notified RBI Bank Rate benchmark is 6.75%. Under Section 16 of the MSMED Act, the statutory MSME delayed payment interest rate is 3 times the Bank Rate, which equals 20.25% per annum, compounded on a calendar monthly rests basis.'
+    },
+    {
+      q: 'What is the MSME delayed payment interest rate for FY 2025-26 and FY 2026-27?',
+      a: 'For FY 2025-26 and FY 2026-27, the applicable statutory interest rate under Section 16 of the MSMED Act is 20.25% per annum (3 × 6.75% RBI Bank Rate) with mandatory calendar monthly compounding. Any contract purporting to fix a lower interest rate is null and void under Section 24.'
+    },
+    {
+      q: 'How to calculate MSME delayed payment interest in Excel?',
+      a: 'To compute compound interest with monthly rests in Excel, use: =Principal * ((1 + (AnnualRate/12))^Months - 1). For example, with ₹1,00,000 principal at 20.25% p.a. for 3 delayed months, the formula =100000*((1 + (20.25%/12))^3 - 1) calculates the compound interest.'
+    },
+    {
       q: 'What are the reporting requirements under Form MSME-1?',
       a: 'Under Section 405(4) of the Companies Act, 2013, specified companies having outstanding dues to Micro and Small enterprises exceeding 45 days must file a half-yearly return in Form MSME-1 with the ROC detailing all outstanding amounts and reasons for delay.'
     }
