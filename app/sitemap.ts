@@ -75,6 +75,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/calendar`, lastModified: latestCalendarDate, changeFrequency: 'monthly' as const, priority: 0.8 },
     { url: `${BASE_URL}/glossary`, lastModified: latestArticleDate, changeFrequency: 'monthly' as const, priority: 0.7 },
     { url: `${BASE_URL}/documents`, lastModified: latestArticleDate, changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${BASE_URL}/documents/board-resolution-for-dividend-declaration`, lastModified: new Date('2026-09-29'), changeFrequency: 'monthly' as const, priority: 0.75 },
 
     { url: `${BASE_URL}/tools`, lastModified: latestArticleDate, changeFrequency: 'monthly' as const, priority: 0.9 },
     { url: `${BASE_URL}/tools/cin-decoder`, lastModified: latestArticleDate, changeFrequency: 'daily' as const, priority: 0.95 },
@@ -119,7 +120,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     docTemplates = data || []
   }
 
-  const documentPages = (docTemplates || []).map(d => ({
+  const documentPages = (docTemplates || []).filter(d => d.slug !== 'board-resolution-dividend').map(d => ({
     url: `${BASE_URL}/documents/${d.slug}`,
     lastModified: d.updated_at ? new Date(d.updated_at) : new Date(),
     changeFrequency: 'monthly' as const,
@@ -135,4 +136,3 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [...staticPages, ...categoryPages, ...articlePages, ...documentPages, ...companyFormPages]
 }
-

@@ -200,6 +200,17 @@ export default async function DocumentsPage() {
 
       {/* Main Content Area */}
       <div className="max-w-6xl mx-auto px-4 py-12 space-y-12">
+
+        <section aria-labelledby="dividend-generator-heading" className="rounded-2xl border border-amber-200 bg-amber-50/70 p-5 dark:border-amber-900/50 dark:bg-amber-950/20 sm:flex sm:items-center sm:justify-between sm:p-7">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wider text-amber-900 dark:text-amber-300">Free Word & PDF generator</p>
+            <h2 id="dividend-generator-heading" className="mt-2 text-xl font-bold text-slate-900 dark:text-white">Board Resolution for Dividend Declaration</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-700 dark:text-slate-300">Create a final-dividend recommendation for the AGM or an interim-dividend declaration under Section 123 of the Companies Act, 2013.</p>
+          </div>
+          <Link href="/documents/board-resolution-for-dividend-declaration" className="mt-4 inline-flex shrink-0 items-center gap-2 rounded-lg bg-navy px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 sm:ml-6 sm:mt-0">
+            Open generator <span aria-hidden="true">→</span>
+          </Link>
+        </section>
         
         {/* FEATURED: AI PARAMETRIC DOCUMENT GENERATOR STUDIO */}
         <section className="bg-gradient-to-r from-slate-900 via-slate-850 to-blue-950 border border-blue-500/30 rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl">

@@ -122,6 +122,11 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: '/documents/board-resolution-dividend',
+        destination: '/documents/board-resolution-for-dividend-declaration',
+        permanent: true,
+      },
+      {
         source: '/:path*',
         has: [
           {

@@ -366,14 +366,14 @@ const NEXT_STEPS: Record<string, {
   'board-resolution-dividend': {
     title: 'After Resolution — Pay Dividend Correctly',
     steps: [
-      { icon: '📅', text: 'Fix record date and publish announcement (listed companies)', note: 'Listed companies: 7 days notice to stock exchange before record date' },
-      { icon: '🏦', text: 'Open separate Unpaid Dividend Account in bank', note: 'Required under Section 124 — must be separate bank account' },
-      { icon: '💰', text: 'Transfer dividend amount to separate account within 5 days of declaration', note: 'Failure to transfer attracts 18% interest per year' },
-      { icon: '📊', text: 'Deduct TDS before paying dividend', note: 'TDS @ 10% if dividend > ₹5,000 per shareholder per year (Section 194)' },
-      { icon: '💳', text: 'Pay dividend within 30 days of declaration', note: 'Late payment: 18% annual interest to shareholders, urgent: true' },
-      { icon: '📧', text: 'Send dividend warrants/ECS to all eligible shareholders', note: 'Physical warrant or NECS transfer within 30 days' },
-      { icon: '🖥️', text: 'File TDS returns (Form 24Q/26Q) for dividend TDS', note: 'Quarterly TDS return showing dividend payments' },
-      { icon: '📄', text: 'Transfer unclaimed dividend to IEPF after 7 years', note: 'Investor Education and Protection Fund — mandatory transfer' },
+      { icon: '📅', text: 'Confirm the entitlement date and shareholder list', note: 'For listed entities, follow current SEBI LODR and stock-exchange notice requirements.' },
+      { icon: '💰', text: 'Deposit declared dividend in a separate scheduled-bank account within 5 days', note: 'Section 123(4) applies to final and interim dividends. For final dividend, count from declaration by members.' },
+      { icon: '📊', text: 'Apply tax withholding requirements in force on the payment date', note: 'Check the current Income-tax Act, threshold, rate, declarations and shareholder-specific facts.' },
+      { icon: '💳', text: 'Pay or dispatch the dividend within 30 days of declaration', note: 'Section 127 sets the general deadline, subject to its statutory exceptions.' },
+      { icon: '📧', text: 'Reconcile payment instructions and evidence for eligible shareholders', note: 'Use verified bank / electronic payment particulars and retain the payment reconciliation.' },
+      { icon: '🏦', text: 'Transfer unpaid or unclaimed dividend to the Unpaid Dividend Account', note: 'Section 124: transfer within 7 days after expiry of the initial 30-day payment period.' },
+      { icon: '🖥️', text: 'Complete applicable tax filings and statutory records', note: 'Confirm the relevant return form and due date under current income-tax requirements.' },
+      { icon: '📄', text: 'Track unclaimed amounts and eventual IEPF transfer obligations', note: 'Follow the applicable timelines and procedures under Sections 124 and 125.' },
     ],
   },
 
@@ -596,9 +596,9 @@ const AI_SUGGESTIONS: Record<string, {
   ],
 
   'board-resolution-dividend': [
-    { label: '+ Add TDS deduction clause', prompt: 'Add explicit clause about TDS deduction at 10% on dividend payments exceeding ₹5,000 per shareholder under Section 194 of Income Tax Act', category: 'add' },
+    { label: '+ Add tax deduction clause', prompt: 'Add a clause requiring tax deduction at source at the rates and thresholds applicable on the payment date, subject to shareholder documentation and current income-tax law. Do not hardcode a rate or threshold.', category: 'add' },
     { label: '+ Add IEPF transfer clause', prompt: 'Add clause about transfer of unclaimed dividend to Investor Education and Protection Fund (IEPF) after 7 years', category: 'add' },
-    { label: '+ Add separate bank account clause', prompt: 'Add clause directing opening of separate Unpaid Dividend Account and transfer of dividend within 5 days', category: 'add' },
+    { label: '+ Add dividend bank deposit clause', prompt: 'Add clause directing deposit of the declared dividend amount in a separate scheduled-bank account within five days under section 123(4). Do not call this the Unpaid Dividend Account; that account is governed separately by section 124 for amounts unpaid or unclaimed after the 30-day payment period.', category: 'add' },
     { label: '↕ Convert to interim dividend', prompt: 'Convert this from final dividend recommendation to interim dividend declaration by the Board under Section 123(3)', category: 'modify' },
     { label: '↕ Convert to final dividend', prompt: 'Convert this to final dividend recommendation by Board to shareholders for approval at AGM', category: 'modify' },
     { label: '+ Add ECS payment clause', prompt: 'Add authorization for payment of dividend through ECS/NECS directly to shareholders bank accounts', category: 'add' },
