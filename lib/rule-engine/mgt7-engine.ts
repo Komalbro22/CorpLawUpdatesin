@@ -170,6 +170,9 @@ export function calculateAdditionalFilingFee(daysDelayed: number): number {
 
 export interface Section92PenaltyResult {
   daysDelayed: number;
+  /** All days of continuing failure — Section 92(5) says "each day during which failure continues" for BOTH company and officer */
+  continuingDays: number;
+  /** @deprecated Use continuingDays — kept for backward compat */
   continuingDaysAfterFirst: number;
   standardCompanyPenalty: number;
   standardPerOfficerPenalty: number;
@@ -183,7 +186,14 @@ export interface Section92PenaltyResult {
 /**
  * Computes the statutory adjudication penalty under Section 92(5) of the Companies Act, 2013.
  *
- * Rule: ₹10,000 initial penalty + ₹100/day for each day AFTER the first day of continuing failure.
+ * Section 92(5) exact text: "the company shall be liable to a penalty of ten thousand rupees and in
+ * case of continuing failure, with a further penalty of one hundred rupees for each day during which
+ * such failure continues, subject to a maximum of two lakh rupees."
+ * Officers in default — same wording: "each day during which such failure continues" (no "after the first").
+ *
+ * This differs from Section 137(3) [AOC-4] where officers use "after the first" — Section 92(5) does NOT.
+ * Both company and officers start counting from Day 1.
+ *
  * Caps: ₹2,00,000 for Company, ₹50,000 per Officer in default.
  */
 export function calculateSection92Penalty(
@@ -193,6 +203,7 @@ export function calculateSection92Penalty(
   if (daysDelayed <= 0) {
     return {
       daysDelayed: 0,
+      continuingDays: 0,
       continuingDaysAfterFirst: 0,
       standardCompanyPenalty: 0,
       standardPerOfficerPenalty: 0,
@@ -204,9 +215,10 @@ export function calculateSection92Penalty(
     };
   }
 
-  const continuingDaysAfterFirst = Math.max(0, daysDelayed - 1);
-  const rawCompany = 10000 + continuingDaysAfterFirst * 100;
-  const rawOfficer = 10000 + continuingDaysAfterFirst * 100;
+  // Section 92(5): "each day during which such failure continues" — ALL days count, no subtraction
+  const allDays = daysDelayed;
+  const rawCompany = 10000 + allDays * 100;
+  const rawOfficer = 10000 + allDays * 100;
 
   const standardCompanyPenalty = Math.min(200000, rawCompany);
   const standardPerOfficerPenalty = Math.min(50000, rawOfficer);
@@ -215,14 +227,15 @@ export function calculateSection92Penalty(
 
   return {
     daysDelayed,
-    continuingDaysAfterFirst,
+    continuingDays: allDays,
+    continuingDaysAfterFirst: allDays, // deprecated alias — equals allDays (no subtraction under s.92(5))
     standardCompanyPenalty,
     standardPerOfficerPenalty,
     standardTotalOfficersPenalty,
     totalStandardExposure,
     companyCapped: rawCompany >= 200000,
     officerCapped: rawOfficer >= 50000,
-    formulaDescription: `₹10,000 initial base penalty + ${continuingDaysAfterFirst} continuing day(s) after first @ ₹100/day (Section 92(5))`
+    formulaDescription: `₹10,000 initial base penalty + ${allDays} day(s) @ ₹100/day (Section 92(5) — "each day during which failure continues")`
   };
 }
 
