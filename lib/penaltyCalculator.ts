@@ -164,19 +164,31 @@ export function calculateCompanyFee(params: CompanyFeeParams): CompanyCalculatio
   if (daysDelayed > 0) {
     const rules = formPenaltyRules[formId];
     if (rules) {
-      // For Section 92 (MGT-7/7A) and Section 137 (AOC-4 family), the ₹100/day applies after the first day
-      const isSec92or137 = ['MGT-7', 'MGT-7A', 'AOC-4', 'AOC-4-XBRL', 'AOC-4-CFS'].includes(formId);
-      const multDays = isSec92or137 ? Math.max(0, daysDelayed - 1) : daysDelayed;
+      /**
+       * STATUTORY WORDING — two different formulas apply:
+       *
+       * Section 137(3) [AOC-4 family]:
+       *   Company:  "₹100 for each day DURING WHICH failure continues" → use daysDelayed (all days)
+       *   Officers: "₹100 for each day AFTER THE FIRST during which failure continues" → use daysDelayed - 1
+       *
+       * Section 92(5) [MGT-7/7A]:
+       *   Both company AND officers: "₹100 for each day DURING WHICH failure continues" → use daysDelayed for both
+       */
+      const isAoc4Family = ['AOC-4', 'AOC-4-XBRL', 'AOC-4-CFS'].includes(formId);
+      // For AOC-4 family: company uses all days, officer uses days-1 ("after the first")
+      // For all other forms: both use all days
+      const companyMultDays = daysDelayed;
+      const officerMultDays = isAoc4Family ? Math.max(0, daysDelayed - 1) : daysDelayed;
 
       if (rules.companyBase !== undefined || rules.companyPerDay !== undefined) {
-        let compPenalty = (rules.companyBase || 0) + (rules.companyPerDay || 0) * multDays;
+        let compPenalty = (rules.companyBase || 0) + (rules.companyPerDay || 0) * companyMultDays;
         if (rules.companyMax !== undefined) {
           compPenalty = Math.min(compPenalty, rules.companyMax);
         }
         companyPenalty = compPenalty;
       }
       if (rules.officerBase !== undefined || rules.officerPerDay !== undefined) {
-        let offPenalty = (rules.officerBase || 0) + (rules.officerPerDay || 0) * multDays;
+        let offPenalty = (rules.officerBase || 0) + (rules.officerPerDay || 0) * officerMultDays;
         if (rules.officerMax !== undefined) {
           offPenalty = Math.min(offPenalty, rules.officerMax);
         }
