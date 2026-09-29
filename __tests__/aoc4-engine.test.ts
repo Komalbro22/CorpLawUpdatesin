@@ -111,7 +111,7 @@ describe('3. Section 137(3) Statutory Penalties Engine', () => {
     expect(p.standardCompanyPenalty).toBe(10000);
     expect(p.standardOfficerPenaltyPerPerson).toBe(10000);
     expect(p.standardTotalOfficersPenalty).toBe(20000); // 2 officers × ₹10,000
-    expect(p.continuingDays).toBe(0);
+    expect(p.officerDays).toBe(0); // 1 day delay: officer "after the first" = 1-1 = 0
   });
 
   test('30 days delay -> Base ₹10,000 + (29 × ₹100) = ₹12,900', () => {
