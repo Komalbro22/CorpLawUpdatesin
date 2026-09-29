@@ -890,11 +890,19 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
               </div>
             </div>
 
-            {/* Formula explanation — explains why continuing days = daysDelayed - 1 */}
+            {/* Two-formula breakdown per exact Section 137(3) statutory wording */}
             {complianceResult.metadata.daysDelayed > 0 && (
-              <div className="mt-3 text-[10px] text-slate-400 dark:text-slate-500 font-mono border-t border-slate-100 dark:border-slate-800 pt-2">
-                Formula: ₹10,000 base + {Math.max(0, complianceResult.metadata.daysDelayed - 1)} continuing day(s) × ₹100/day
-                <span className="ml-1 text-slate-400">(Act: "each day <em>after the first</em>" — Day 1 = base only)</span>
+              <div className="mt-3 border-t border-slate-100 dark:border-slate-800 pt-2 space-y-1">
+                <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
+                  <span className="font-semibold text-slate-600 dark:text-slate-300">Company: </span>
+                  ₹10,000 + {complianceResult.metadata.daysDelayed}d × ₹100 = ₹{(10000 + complianceResult.metadata.daysDelayed * 100).toLocaleString('en-IN')}
+                  <span className="text-[9px] text-slate-400 ml-1">("each day during which" — Day 1 included)</span>
+                </div>
+                <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
+                  <span className="font-semibold text-slate-600 dark:text-slate-300">Each Officer: </span>
+                  ₹10,000 + {Math.max(0, complianceResult.metadata.daysDelayed - 1)}d × ₹100 = ₹{(10000 + Math.max(0, complianceResult.metadata.daysDelayed - 1) * 100).toLocaleString('en-IN')}
+                  <span className="text-[9px] text-slate-400 ml-1">("each day after the first" — Day 1 excluded)</span>
+                </div>
               </div>
             )}
 

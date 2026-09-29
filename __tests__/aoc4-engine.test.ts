@@ -106,19 +106,22 @@ describe('3. Section 137(3) Statutory Penalties Engine', () => {
     expect(p.standardTotalOfficersPenalty).toBe(0);
   });
 
-  test('1 day delay -> Base penalty of ₹10,000 for company, ₹10,000 per officer', () => {
+  test('1 day delay -> Company ₹10,100 (1 day); Officer base ₹10,000 (0 days after first)', () => {
     const p = calculateSection137Penalty(1, 2);
-    expect(p.standardCompanyPenalty).toBe(10000);
-    expect(p.standardOfficerPenaltyPerPerson).toBe(10000);
+    expect(p.standardCompanyPenalty).toBe(10100); // ₹10,000 + (1 × ₹100)
+    expect(p.standardOfficerPenaltyPerPerson).toBe(10000); // ₹10,000 + (0 × ₹100)
     expect(p.standardTotalOfficersPenalty).toBe(20000); // 2 officers × ₹10,000
+    expect(p.companyDays).toBe(1);
     expect(p.officerDays).toBe(0); // 1 day delay: officer "after the first" = 1-1 = 0
   });
 
-  test('30 days delay -> Base ₹10,000 + (29 × ₹100) = ₹12,900', () => {
+  test('30 days delay -> Company ₹13,000 (30 days); Officer ₹12,900 (29 days after first)', () => {
     const p = calculateSection137Penalty(30, 2);
-    expect(p.standardCompanyPenalty).toBe(12900);
-    expect(p.standardOfficerPenaltyPerPerson).toBe(12900);
-    expect(p.standardTotalOfficersPenalty).toBe(25800);
+    expect(p.standardCompanyPenalty).toBe(13000); // ₹10,000 + (30 × ₹100)
+    expect(p.standardOfficerPenaltyPerPerson).toBe(12900); // ₹10,000 + (29 × ₹100)
+    expect(p.standardTotalOfficersPenalty).toBe(25800); // 2 officers × ₹12,900
+    expect(p.companyDays).toBe(30);
+    expect(p.officerDays).toBe(29);
   });
 
   test('Officer penalty caps at statutory limit of ₹50,000', () => {
@@ -329,13 +332,13 @@ describe('7. Comprehensive Compliance Calculation Vectors & Section 446B', () =>
     expect(result.mcaPortalPayable.additionalFilingFee).toBe(3000); // 30 × ₹100
     expect(result.mcaPortalPayable.totalPortalPayable).toBe(3400);
 
-    // Section 137(3) raw: ₹10,000 + (29 × ₹100) = ₹12,900
-    // Section 446B 50% discount: Math.floor(12900 * 0.5) = ₹6,450
+    // Company raw: ₹10,000 + (30 × ₹100) = ₹13,000 → 446B 50%: Math.floor(13000 * 0.5) = ₹6,500
+    // Officer raw: ₹10,000 + (29 × ₹100) = ₹12,900 → 446B 50%: Math.floor(12900 * 0.5) = ₹6,450 each
     expect(result.metadata.section446BEligible).toBe(true);
     expect(result.statutoryPenaltyExposure.section446BApplied).toBe(true);
-    expect(result.statutoryPenaltyExposure.companyIndicativeMaximumExposure).toBe(6450);
+    expect(result.statutoryPenaltyExposure.companyIndicativeMaximumExposure).toBe(6500);
     expect(result.statutoryPenaltyExposure.officersIndicativeMaximumExposure).toBe(12900); // 2 × ₹6,450
-    expect(result.statutoryPenaltyExposure.totalIndicativeMaximumExposure).toBe(19350);
+    expect(result.statutoryPenaltyExposure.totalIndicativeMaximumExposure).toBe(19400);
   });
 
   test('Vector 3: Non-small entity delayed beyond cap -> Section 137(3) standard caps enforced without 446B', () => {

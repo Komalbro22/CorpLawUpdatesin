@@ -235,13 +235,23 @@ export interface Section137PenaltyResult {
   standardTotalStatutoryPenalty: number;
   cappedCompany: boolean;
   cappedOfficer: boolean;
-  continuingDays: number;
+  /** Days counted for company penalty (= total delay days, per Act: "each day during which") */
+  companyDays: number;
+  /** Days counted for officer penalty (= delay days − 1, per Act: "each day after the first") */
+  officerDays: number;
 }
 
 /**
- * Calculates civil adjudication penalties under Section 137(3) of Companies Act, 2013:
- * - Company: ₹10,000 base + ₹100 for each continuing day of default, capped at ₹2,00,000.
- * - MD/CFO/Officer in default: ₹10,000 base + ₹100 for each continuing day, capped at ₹50,000 per person.
+ * Calculates civil adjudication penalties under Section 137(3) of Companies Act, 2013.
+ *
+ * CRITICAL — two DIFFERENT statutory wordings exist in the same sub-section:
+ *   Company:  "₹100 for each day DURING WHICH such failure continues"
+ *             → Day 1 IS included → companyPenalty = ₹10,000 + (daysDelayed × ₹100)
+ *
+ *   Officers: "₹100 for each day AFTER THE FIRST during which failure continues"
+ *             → Day 1 is excluded → officerPenalty = ₹10,000 + ((daysDelayed − 1) × ₹100)
+ *
+ * Caps: Company max ₹2,00,000 | Officer (MD/CFO/Director) max ₹50,000 per person.
  */
 export function calculateSection137Penalty(
   daysDelayed: number,
@@ -255,19 +265,22 @@ export function calculateSection137Penalty(
       standardTotalStatutoryPenalty: 0,
       cappedCompany: false,
       cappedOfficer: false,
-      continuingDays: 0
+      companyDays: 0,
+      officerDays: 0,
     };
   }
 
-  // Section 137(3): ₹10,000 base penalty + ₹100 per day "after the first" of continuing default.
-  // The Act says "each day AFTER the first" — so day 1 counts only as base, days 2+ attract ₹100/day.
-  const continuingDays = Math.max(0, daysDelayed - 1);
   const basePenalty = 10000;
-  const rawCompany = basePenalty + (continuingDays * 100);
+
+  // COMPANY: "each day during which" — all delay days counted from Day 1
+  const companyDays = daysDelayed;
+  const rawCompany = basePenalty + (companyDays * 100);
   const companyPenalty = Math.min(200000, rawCompany);
   const cappedCompany = rawCompany >= 200000;
 
-  const rawOfficer = basePenalty + (continuingDays * 100);
+  // OFFICERS: "each day after the first" — Day 1 excluded, only days 2+ attract ₹100/day
+  const officerDays = Math.max(0, daysDelayed - 1);
+  const rawOfficer = basePenalty + (officerDays * 100);
   const officerPenaltyPerPerson = Math.min(50000, rawOfficer);
   const cappedOfficer = rawOfficer >= 50000;
 
@@ -281,9 +294,11 @@ export function calculateSection137Penalty(
     standardTotalStatutoryPenalty: totalPenalty,
     cappedCompany,
     cappedOfficer,
-    continuingDays
+    companyDays,
+    officerDays,
   };
 }
+
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 5. SMALL COMPANY & SECTION 446B EVALUATOR
