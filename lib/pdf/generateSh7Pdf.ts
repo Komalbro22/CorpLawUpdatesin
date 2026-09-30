@@ -82,7 +82,7 @@ export function generateSh7Pdf(
       `${data.statutoryDeadlineDays} Calendar Days (Due: ${data.statutoryDueDate})`,
       { content: 'Filing Status', styles: { fontStyle: 'bold' as const, fillColor: PDF_PALETTE.lightGray } },
       data.isDelayed
-        ? `DELAYED by ${data.delayDays} day(s)`
+        ? `BELATED by ${data.delayDays} day(s)`
         : 'TIMELY / ON-SCHEDULE (Zero Late Fee)'
     ]
   ]
@@ -104,21 +104,58 @@ export function generateSh7Pdf(
   currentY = (doc as any).lastAutoTable.finalY + 6
 
   // 3. Financial Liability & Fee Matrix
-  const feeRows = [
-    ['Normal MCA e-Form Fee (Table A)', data.feeSlabLabel, formatInr(data.normalFee)],
-    ['Table B Late Filing Multiplier', `${data.lateMultiplier}x (${data.delayDays} days delay)`, formatInr(data.additionalLateFee)],
-    ['Incremental Capital Registration Fee', 'Table of Fees (Incremental Authorized Capital)', formatInr(data.incrementalCapitalRegistrationFee)],
-    ['Estimated State Stamp Duty (MOA)', `Estimated based on registered state (${data.state})`, formatInr(data.estimatedStampDuty)],
-    [
+  const isCapIncrease = data.incrementalCapitalRegistrationFee > 0
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const feeRows: any[] = []
+
+  if (isCapIncrease) {
+    feeRows.push([
+      'Differential Capital Registration Fee (Item II)',
+      'Statutory Fee(New Capital) minus Fee(Existing Capital)',
+      formatInr(data.incrementalCapitalRegistrationFee)
+    ])
+    feeRows.push([
+      'Additional Late Filing Fee (Item B Percentage Rule)',
+      data.isDelayed
+        ? `${data.delayDays} days delay (${data.delayMonths} mo) · ${(data.lateFeePercentage * 100).toFixed(1)}% on differential fee`
+        : 'Filed within 30-day statutory window (Zero late fee)',
+      formatInr(data.additionalLateFee)
+    ])
+    if (data.estimatedStampDuty > 0) {
+      feeRows.push([
+        'Estimated State Stamp Duty (MOA)',
+        `Payable via MCA V3 e-Stamping (${data.state.toUpperCase()})`,
+        formatInr(data.estimatedStampDuty)
+      ])
+    }
+    feeRows.push([
       { content: 'Total MCA Portal e-Challan', styles: { fontStyle: 'bold' as const, fillColor: PDF_PALETTE.lightGray } },
-      { content: 'Normal Fee + Late Fee + Capital Fee + Stamp Duty', styles: { fontStyle: 'bold' as const, fillColor: PDF_PALETTE.lightGray } },
+      { content: 'Differential Capital Fee + Late Fee + Stamp Duty', styles: { fontStyle: 'bold' as const, fillColor: PDF_PALETTE.lightGray } },
       { content: formatInr(data.totalMcaChallanFee), styles: { fontStyle: 'bold' as const, fillColor: PDF_PALETTE.lightGray, textColor: PDF_PALETTE.navy } }
-    ]
-  ]
+    ])
+  } else {
+    feeRows.push([
+      'Normal MCA e-Form Fee (Table A)',
+      data.feeSlabLabel,
+      formatInr(data.normalFee)
+    ])
+    feeRows.push([
+      'Table B Late Filing Multiplier',
+      data.isDelayed
+        ? `${data.lateMultiplier}× normal fee (${data.delayDays} days delay)`
+        : 'Filed within 30-day statutory window (Zero late fee)',
+      formatInr(data.additionalLateFee)
+    ])
+    feeRows.push([
+      { content: 'Total MCA Portal e-Challan', styles: { fontStyle: 'bold' as const, fillColor: PDF_PALETTE.lightGray } },
+      { content: 'Normal Base Fee + Table B Delay Multiplier', styles: { fontStyle: 'bold' as const, fillColor: PDF_PALETTE.lightGray } },
+      { content: formatInr(data.totalMcaChallanFee), styles: { fontStyle: 'bold' as const, fillColor: PDF_PALETTE.lightGray, textColor: PDF_PALETTE.navy } }
+    ])
+  }
 
   autoTable(doc, {
     startY: currentY,
-    head: [['Fee Component', 'Basis / Regulatory Reference', 'Payable Amount (INR)']],
+    head: [['Fee Component (MCA V3 Portal)', 'Basis / Regulatory Reference', 'Payable Amount (INR)']],
     body: cleanTableData(feeRows),
     theme: 'striped',
     headStyles: { fillColor: PDF_PALETTE.navy, textColor: 255, fontStyle: 'bold', fontSize: 8.5 },
@@ -133,21 +170,22 @@ export function generateSh7Pdf(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   currentY = (doc as any).lastAutoTable.finalY + 6
 
-  // 4. Section 64(2) Statutory Adjudication Penalties
+  // 4. Section 64(2) Statutory Adjudication Penalties (Quasi-Judicial ROC Exposure)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const penaltyRows: any[] = [
     [
       'Company Penalty (Section 64(2))',
-      `${formatInr(data.dailyPenaltyRate)}/day x ${data.delayDays} days (Capped at ${formatInr(data.companyPenaltyCap)})`,
+      `${formatInr(data.dailyPenaltyRate)}/day × ${data.delayDays} days (Capped at ${formatInr(data.companyPenaltyCap)})`,
       formatInr(data.companyPenalty)
     ],
     [
       `Officers in Default (${data.numOfficers} persons)`,
-      `${formatInr(data.dailyPenaltyRate)}/day x ${data.delayDays} days (Capped at ${formatInr(data.officerPenaltyCap)} each)`,
+      `${formatInr(data.dailyPenaltyRate)}/day × ${data.delayDays} days (Capped at ${formatInr(data.officerPenaltyCap)} each)`,
       formatInr(data.totalOfficersPenalty)
     ],
     [
-      { content: 'Total Adjudication Liability', styles: { fontStyle: 'bold', fillColor: PDF_PALETTE.lightGray } },
-      { content: data.section446BApplied ? 'Section 446B Concession Applied (50% Relief)' : 'Standard Corporate Penalty Regime', styles: { fontStyle: 'bold', fillColor: PDF_PALETTE.lightGray } },
+      { content: 'Total Adjudication Liability (ROC Sec 454)', styles: { fontStyle: 'bold', fillColor: PDF_PALETTE.lightGray } },
+      { content: data.section446BApplied ? 'Section 446B Concession Active (50% Relief)' : 'Standard Corporate Penalty Regime', styles: { fontStyle: 'bold', fillColor: PDF_PALETTE.lightGray } },
       { content: formatInr(data.totalAdjudicationPenalty), styles: { fontStyle: 'bold', fillColor: PDF_PALETTE.lightGray, textColor: [180, 0, 0] } }
     ]
   ]
@@ -162,7 +200,7 @@ export function generateSh7Pdf(
 
   autoTable(doc, {
     startY: currentY,
-    head: [['Statutory Adjudication Liability', 'Computation Rule & Statutory Ceiling', 'Exposure (INR)']],
+    head: [['Statutory Adjudication Liability (Sec 454)', 'Computation Rule & Statutory Ceiling', 'Exposure (INR)']],
     body: cleanTableData(penaltyRows),
     theme: 'striped',
     headStyles: { fillColor: [180, 50, 50], textColor: 255, fontStyle: 'bold', fontSize: 8.5 },
@@ -223,7 +261,7 @@ export function generateSh7Pdf(
   currentY = (doc as any).lastAutoTable.finalY + 4
 
   // 7. Footer & Disclaimer
-  const disclaimer = 'Statutory Disclaimer: This computation is generated strictly for informational and compliance planning purposes based on the Companies Act, 2013, the Companies (Share Capital and Debentures) Rules, 2014, and the Companies (Registration Offices and Fees) Rules, 2014. Final filing fees, late fees, and stamp duties are subject to official MCA V3 portal validations and state stamp rules.'
+  const disclaimer = 'Statutory Disclaimer: This computation is generated strictly for informational and compliance planning purposes based on the Companies Act, 2013, the Companies (Share Capital and Debentures) Rules, 2014, and the Companies (Registration Offices and Fees) Rules, 2014. Section 64(2) penalties are quasi-judicial adjudication liabilities administered by the ROC under Section 454; they are not paid on the MCA portal filing challan. Final filing fees, late fees, and stamp duties are subject to official MCA V3 portal validations and state stamp rules.'
   renderSafeDisclaimer(doc, disclaimer, currentY, { fontSize: 6.8 })
   renderPageFooters(doc)
 

@@ -9,10 +9,15 @@
  * - Section 55 read with Section 64(1)(c) (Redemption of redeemable preference shares)
  * - Rule 15 of Companies (Share Capital and Debentures) Rules, 2014
  * - Section 64(2) Adjudication Penalty: ₹500/day up to ₹5,00,000 (Company) and ₹1,00,000 (each Officer in default)
- * - Section 446B Concession: 50% penalty relief for Small Companies, OPCs, Startups (DPIIT), and Producer Companies (Company cap ₹2,00,000; Officer cap ₹1,00,000)
- * - Companies (Registration Offices and Fees) Rules, 2014: Table A (Normal filing fee) and Table B (Delay Multipliers 2× to 12×)
- * - Stamp Act / State Stamp Duty rules on MOA Capital Clause alteration.
+ * - Section 446B Concession: 50% penalty relief for Small Companies, OPCs, Startups (DPIIT), and Producer Companies (Company cap ₹2,00,000; Officer cap ₹50,000)
+ * - Companies (Registration Offices and Fees) Rules, 2014:
+ *   - Table of Fees Item II: Differential capital registration fee = Fee(New Capital) - Fee(Existing Capital)
+ *   - Table of Fees Item B: Delay on capital increase = 2.5% per month (first 6 months) + 3.0% per month thereafter
+ *   - Table A & Table B: Standard base fee and 2x to 12x multipliers for non-capital alterations
+ * - Relevant State Stamp Acts for Stamp Duty on MOA Capital Clause alteration.
  */
+
+import { getOtherCompanyIncorporationFee } from '@/lib/fee-calculator-core'
 
 export type Sh7AlterationType =
   | 'increase_authorised_capital'
@@ -56,6 +61,7 @@ export interface Sh7Input {
   numOfficersInDefault?: number // default 2
   mgt14Filed?: boolean
   mgt14Srn?: string
+  requiresAoaAmendment?: boolean // true if AOA requires Special Resolution under Sec 14
 }
 
 export interface Sh7CalculationResult {
@@ -77,6 +83,8 @@ export interface Sh7CalculationResult {
   normalFee: number
   feeSlabLabel: string
   lateMultiplier: number
+  delayMonths: number
+  lateFeePercentage: number
   additionalLateFee: number
   incrementalCapitalRegistrationFee: number
   estimatedStampDuty: number
@@ -99,6 +107,7 @@ export interface Sh7CalculationResult {
   totalFinancialExposure: number
 
   // Checklist & Alerts
+  requiresAoaAmendment: boolean
   warnings: string[]
   criticalBreaches: string[]
   passedChecks: string[]
@@ -132,7 +141,7 @@ export function formatInr(amount: number): string {
 }
 
 /**
- * Computes base MCA filing fee under Table A.
+ * Computes base MCA filing fee under Table A (Items 5 & 6) for non-capital alterations.
  */
 export function calculateSh7BaseFee(
   capital: number,
@@ -155,7 +164,7 @@ export function calculateSh7BaseFee(
 }
 
 /**
- * Computes Table B delay multiplier for Form SH-7.
+ * Computes Table B delay multiplier for non-capital alterations.
  */
 export function calculateSh7LateMultiplier(delayDays: number): {
   multiplier: number
@@ -170,40 +179,71 @@ export function calculateSh7LateMultiplier(delayDays: number): {
 }
 
 /**
- * Calculates MCA registration fee on incremental authorised share capital (Table of Fees).
- * Formula computes statutory registration fee on new capital minus fee paid on old capital.
+ * Calculates statutory MCA registration fee on incremental authorised share capital
+ * per Table of Fees Item II of the Companies (Registration Offices and Fees) Rules, 2014.
+ *
+ * Formula: Differential Registration Fee = RegistrationFee(NewCapital) - RegistrationFee(ExistingCapital)
+ * Uses standard statutory schedule:
+ * - Up to ₹1L: ₹5,000
+ * - ₹1L to ₹5L: ₹5,000 + ₹400 per ₹10,000 or part thereof
+ * - ₹5L to ₹50L: ₹21,000 + ₹300 per ₹10,000 or part thereof
+ * - ₹50L to ₹1Cr: ₹1,56,000 + ₹100 per ₹10,000 or part thereof
+ * - Above ₹1Cr: ₹2,06,000 + ₹75 per ₹10,000 or part thereof
+ * Capped at ₹2,50,00,000.
  */
 export function calculateIncrementalCapitalFee(
   oldCapital: number,
   newCapital: number
 ): number {
   if (newCapital <= oldCapital) return 0
+  const feeOld = getOtherCompanyIncorporationFee(oldCapital, false)
+  const feeNew = getOtherCompanyIncorporationFee(newCapital, false)
+  return Math.max(0, feeNew - feeOld)
+}
 
-  const calculateTotalFeeForCapital = (cap: number): number => {
-    if (cap <= 1500000) return 0 // Zero registration fee up to ₹15 Lakhs for modern incorporations
-    let fee = 0
-    // Slabs:
-    // ₹15L to ₹50L: ₹1,000 per ₹1,00,000 or part thereof
-    if (cap > 1500000) {
-      const taxableChunk = Math.min(cap, 5000000) - 1500000
-      fee += Math.ceil(taxableChunk / 100000) * 1000
+/**
+ * Calculates late fee for Increase in Nominal Share Capital.
+ * Governed by Table of Fees Item B (delay on increase in nominal share capital):
+ * - Delay up to 6 months: 2.5% per month or part thereof on the differential capital fee
+ * - Delay beyond 6 months: 2.5% per month for first 6 months + 3.0% per month or part thereof thereafter
+ */
+export function calculateCapitalIncreaseLateFee(
+  delayDays: number,
+  differentialFee: number
+): {
+  additionalLateFee: number
+  delayMonths: number
+  percentageRate: number
+  description: string
+} {
+  if (delayDays <= 0 || differentialFee <= 0) {
+    return {
+      additionalLateFee: 0,
+      delayMonths: 0,
+      percentageRate: 0,
+      description: 'Filed on or before statutory due date (Zero late fee)'
     }
-    // ₹50L to ₹1 Crore: ₹750 per ₹1,00,000 or part thereof
-    if (cap > 5000000) {
-      const taxableChunk = Math.min(cap, 10000000) - 5000000
-      fee += Math.ceil(taxableChunk / 100000) * 750
-    }
-    // Above ₹1 Crore: ₹500 per ₹1,00,000 or part thereof
-    if (cap > 10000000) {
-      const taxableChunk = cap - 10000000
-      fee += Math.ceil(taxableChunk / 100000) * 500
-    }
-    return Math.min(fee, 25000000) // Statutory ceiling of ₹2.5 Crore
   }
 
-  const feeOld = calculateTotalFeeForCapital(oldCapital)
-  const feeNew = calculateTotalFeeForCapital(newCapital)
-  return Math.max(0, feeNew - feeOld)
+  const delayMonths = Math.ceil(delayDays / 30)
+  let percentageRate = 0
+
+  if (delayMonths <= 6) {
+    percentageRate = delayMonths * 0.025
+  } else {
+    percentageRate = 6 * 0.025 + (delayMonths - 6) * 0.03
+  }
+
+  const additionalLateFee = Math.round(differentialFee * percentageRate)
+  const pctDisplay = (percentageRate * 100).toFixed(1)
+  const description = `Delay of ${delayDays} days (${delayMonths} month${delayMonths > 1 ? 's' : ''}): ${pctDisplay}% on differential registration fee`
+
+  return {
+    additionalLateFee,
+    delayMonths,
+    percentageRate,
+    description
+  }
 }
 
 /**
@@ -217,29 +257,28 @@ export function calculateEstimatedStampDuty(
 
   switch (state) {
     case 'maharashtra':
-      // 0.2% on increase, max ₹50 Lakhs, min ₹1,000
-      return Math.min(5000000, Math.max(1000, Math.round(incrementalCapital * 0.002)))
-    case 'delhi':
-      // 0.15% on incremental capital
-      return Math.round(incrementalCapital * 0.0015)
+      // Bombay Stamp Act Article 10: ₹1,000 for every ₹5,00,000 or part thereof, max ₹50,00,000
+      return Math.min(5000000, Math.ceil(incrementalCapital / 500000) * 1000)
     case 'karnataka':
-      // Approx 0.1% or ₹1,000 per ₹1 Lakh, max ₹5 Lakhs
-      return Math.min(500000, Math.max(1000, Math.round(incrementalCapital * 0.001)))
+      // Karnataka Stamp Act Article 10: ₹1,000 for every ₹5,00,000 or part thereof, max ₹5,00,000
+      return Math.min(500000, Math.ceil(incrementalCapital / 500000) * 1000)
+    case 'delhi':
+      // Delhi Stamp Act: 0.15% on incremental capital
+      return Math.round(incrementalCapital * 0.0015)
     case 'tamil_nadu':
-      // Approx 0.2% on incremental capital
+      // Tamil Nadu: ~0.2% on incremental capital
       return Math.round(incrementalCapital * 0.002)
     case 'gujarat':
-      // Approx 0.15% or max ₹5 Lakhs
+      // Gujarat: 0.15% on incremental capital, max ₹5,00,000
       return Math.min(500000, Math.round(incrementalCapital * 0.0015))
     case 'telangana':
     case 'andhra_pradesh':
-      // Approx 0.15% on incremental capital
-      return Math.round(incrementalCapital * 0.0015)
-    case 'west_bengal':
-      // Slabs approx 0.15%
+      // 0.15% on incremental capital
       return Math.round(incrementalCapital * 0.0015)
     case 'uttar_pradesh':
       return Math.round(incrementalCapital * 0.002)
+    case 'west_bengal':
+      return Math.round(incrementalCapital * 0.0015)
     default:
       // National average ~0.15%
       return Math.round(incrementalCapital * 0.0015)
@@ -260,10 +299,11 @@ export function calculateSh7Compliance(input: Sh7Input): Sh7CalculationResult {
     filingDate,
     numOfficersInDefault = 2,
     mgt14Filed = true,
-    mgt14Srn = ''
+    mgt14Srn = '',
+    requiresAoaAmendment = false
   } = input
 
-  // 1. Calculate Timelines & Statutory Deadlines (30 calendar days)
+  // 1. Calculate Timelines & Statutory Deadlines (30 calendar days under Section 64(1))
   const resDate = parseDateUtc(resolutionDate)
   const filDate = parseDateUtc(filingDate)
 
@@ -275,34 +315,66 @@ export function calculateSh7Compliance(input: Sh7Input): Sh7CalculationResult {
   const delayDays = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)))
   const isDelayed = delayDays > 0
 
-  // 2. Base MCA e-Form Fee (Table A)
-  const effectiveCapital = Math.max(existingAuthorisedCapital, newAuthorisedCapital)
-  const { normalFee, slabLabel } = calculateSh7BaseFee(effectiveCapital, companyType)
-
-  // 3. Late Filing Multiplier (Table B)
-  const { multiplier: lateMultiplier } = calculateSh7LateMultiplier(delayDays)
-  const additionalLateFee = normalFee * lateMultiplier
-
-  // 4. Incremental Registration Fee (only if capital is increased)
   const isCapitalIncrease =
     alterationType === 'increase_authorised_capital' || alterationType === 'govt_order_increase'
-  const incrementalCapital = isCapitalIncrease ? Math.max(0, newAuthorisedCapital - existingAuthorisedCapital) : 0
+
+  const effectiveNewCapital = isCapitalIncrease ? Math.max(existingAuthorisedCapital, newAuthorisedCapital) : existingAuthorisedCapital
+  const incrementalCapital = isCapitalIncrease ? Math.max(0, effectiveNewCapital - existingAuthorisedCapital) : 0
+
+  // 2. Incremental Registration Fee (Table of Fees Item II)
   const incrementalCapitalRegistrationFee = isCapitalIncrease
-    ? calculateIncrementalCapitalFee(existingAuthorisedCapital, newAuthorisedCapital)
+    ? calculateIncrementalCapitalFee(existingAuthorisedCapital, effectiveNewCapital)
     : 0
+
+  // 3. Normal MCA e-Form Fee (Table A)
+  // CRITICAL MCA RULE: When increasing capital, the differential registration fee IS the filing fee;
+  // standard Table A fee is NOT added on top. For non-capital alterations, Table A fee applies.
+  let normalFee = 0
+  let feeSlabLabel = ''
+
+  if (isCapitalIncrease) {
+    normalFee = 0
+    feeSlabLabel = 'Capital Increase: Differential Registration Fee replaces Table A Base Fee'
+  } else {
+    const baseFeeResult = calculateSh7BaseFee(existingAuthorisedCapital, companyType)
+    normalFee = baseFeeResult.normalFee
+    feeSlabLabel = baseFeeResult.slabLabel
+  }
+
+  // 4. Additional Late Filing Fee
+  // For capital increase: 2.5% per month (<= 6 months) or 3% per month thereafter on differential fee
+  // For non-capital alterations: Table B multipliers (2x to 12x) on normal fee
+  let lateMultiplier = 0
+  let delayMonths = 0
+  let lateFeePercentage = 0
+  let additionalLateFee = 0
+
+  if (isCapitalIncrease) {
+    const lateFeeRes = calculateCapitalIncreaseLateFee(delayDays, incrementalCapitalRegistrationFee)
+    additionalLateFee = lateFeeRes.additionalLateFee
+    delayMonths = lateFeeRes.delayMonths
+    lateFeePercentage = lateFeeRes.percentageRate
+    lateMultiplier = 0
+  } else {
+    const lateMultRes = calculateSh7LateMultiplier(delayDays)
+    lateMultiplier = lateMultRes.multiplier
+    delayMonths = Math.ceil(delayDays / 30)
+    additionalLateFee = normalFee * lateMultiplier
+  }
 
   // 5. Estimated Stamp Duty on MOA Alteration
   const estimatedStampDuty = isCapitalIncrease
     ? calculateEstimatedStampDuty(state, incrementalCapital)
     : 0
 
-  // Total MCA e-Challan payment
+  // Total MCA e-Challan payment (Payable immediately on MCA V3 submission)
   const totalMcaChallanFee =
     normalFee + additionalLateFee + incrementalCapitalRegistrationFee + estimatedStampDuty
 
   // 6. Statutory Adjudication Penalties under Section 64(2)
-  // Statute: ₹500/day during which default continues
-  // Company cap: ₹5,00,000 | Officer cap: ₹1,00,000 per officer
+  // Governed by Section 454 adjudication procedure - NEVER paid on form filing challan.
+  // Standard: ₹500/day | Company cap: ₹5,00,000 | Officer cap: ₹1,00,000
+  // Section 446B Relief: 50% discount (₹250/day) | Company cap: ₹2,00,000 | Officer cap: ₹50,000
   const isSmallOrStartup =
     companyType === 'small_company' ||
     companyType === 'opc' ||
@@ -310,28 +382,29 @@ export function calculateSh7Compliance(input: Sh7Input): Sh7CalculationResult {
     companyType === 'producer'
 
   const standardDailyRate = 500
-  const dailyPenaltyRate = isSmallOrStartup ? 250 : 500 // Section 446B gives 50% discount
+  const dailyPenaltyRate = isSmallOrStartup ? 250 : 500
 
   const standardCompanyCap = 500000
   const standardOfficerCap = 100000
 
-  // Section 446B statutory caps: Company max ₹2,00,000, Officer max ₹1,00,000
   const companyPenaltyCap = isSmallOrStartup ? 200000 : standardCompanyCap
-  const officerPenaltyCap = isSmallOrStartup ? 100000 : standardOfficerCap
+  const officerPenaltyCap = isSmallOrStartup ? 50000 : standardOfficerCap
 
   const rawDailyPenalty = delayDays * dailyPenaltyRate
 
   const companyPenalty = isDelayed ? Math.min(rawDailyPenalty, companyPenaltyCap) : 0
   const perOfficerPenalty = isDelayed ? Math.min(rawDailyPenalty, officerPenaltyCap) : 0
-  const totalOfficersPenalty = perOfficerPenalty * Math.max(1, numOfficersInDefault)
+  const numOfficers = Math.max(1, numOfficersInDefault)
+  const totalOfficersPenalty = perOfficerPenalty * numOfficers
   const totalAdjudicationPenalty = companyPenalty + totalOfficersPenalty
 
   // Calculate Section 446B savings
   const standardCompanyPenalty = isDelayed ? Math.min(delayDays * standardDailyRate, standardCompanyCap) : 0
   const standardOfficerPenalty = isDelayed ? Math.min(delayDays * standardDailyRate, standardOfficerCap) : 0
-  const standardTotalPenalty = standardCompanyPenalty + (standardOfficerPenalty * Math.max(1, numOfficersInDefault))
+  const standardTotalPenalty = standardCompanyPenalty + standardOfficerPenalty * numOfficers
   const savingsFrom446B = isSmallOrStartup ? Math.max(0, standardTotalPenalty - totalAdjudicationPenalty) : 0
 
+  // Total Financial Exposure
   const totalFinancialExposure = totalMcaChallanFee + totalAdjudicationPenalty
 
   // 7. Compliance Checks, Warnings, and Breaches
@@ -344,11 +417,11 @@ export function calculateSh7Compliance(input: Sh7Input): Sh7CalculationResult {
   if (isDelayed) {
     if (delayDays > 180) {
       criticalBreaches.push(
-        `Severe Delay of ${delayDays} days beyond 30-day statutory window. Table B additional fee reaches maximum 12× multiplier. ROC may initiate suo-motu Section 454 adjudication proceedings.`
+        `Severe Delay of ${delayDays} days beyond the 30-day statutory window. For capital increases, 3% monthly additional fee applies. ROC may initiate suo-motu Section 454 adjudication proceedings.`
       )
     } else {
       warnings.push(
-        `Filing is delayed by ${delayDays} days past the statutory due date (${statutoryDueDate}). Additional filing fee of ${formatInr(additionalLateFee)} applies on the MCA portal.`
+        `Filing is delayed by ${delayDays} days past the statutory due date (${statutoryDueDate}). Additional filing fee of ${formatInr(additionalLateFee)} applies on the MCA V3 portal.`
       )
     }
   } else {
@@ -356,14 +429,20 @@ export function calculateSh7Compliance(input: Sh7Input): Sh7CalculationResult {
   }
 
   // Check 2: MGT-14 Dependency
-  if (!mgt14Filed) {
-    criticalBreaches.push(
-      'Form MGT-14 has not been filed! Under Section 117(1), the resolution altering the MOA/capital must be filed in Form MGT-14 within 30 days. In MCA V3, Form SH-7 requires the approved SRN of Form MGT-14.'
-    )
-  } else if (!mgt14Srn && isCapitalIncrease) {
-    warnings.push('Ensure you have the approved SRN of Form MGT-14 ready before initiating Form SH-7 on MCA V3.')
+  if (requiresAoaAmendment) {
+    if (!mgt14Filed) {
+      criticalBreaches.push(
+        'Form MGT-14 has not been filed! Amending Articles of Association (AOA) requires a Special Resolution under Section 14. Under Section 117(3)(a), Form MGT-14 must be filed with the ROC within 30 days before filing Form SH-7 on MCA V3.'
+      )
+    } else if (!mgt14Srn) {
+      warnings.push('Ensure you have the approved SRN of Form MGT-14 ready before submitting Form SH-7 on MCA V3.')
+    } else {
+      passedChecks.push(`Form MGT-14 prerequisite satisfied (SRN: ${mgt14Srn}).`)
+    }
   } else {
-    passedChecks.push('Form MGT-14 prerequisite satisfied.')
+    passedChecks.push(
+      'Articles of Association already contain enabling capital alteration clause. Under Section 61(1) read with Section 117(3), an Ordinary Resolution does not require filing Form MGT-14.'
+    )
   }
 
   // Check 3: Section 64(2) Caps hit
@@ -379,24 +458,31 @@ export function calculateSh7Compliance(input: Sh7Input): Sh7CalculationResult {
   }
 
   // Mandatory Attachments List
-  mandatoryAttachments.push('Certified True Copy of Ordinary / Special Resolution passed in General Meeting (EGM/AGM)')
+  if (requiresAoaAmendment) {
+    mandatoryAttachments.push('Certified True Copy of Special Resolution passed under Section 14 altering Articles of Association')
+    mandatoryAttachments.push('Copy of Altered Articles of Association (AOA)')
+  } else {
+    mandatoryAttachments.push('Certified True Copy of Ordinary Resolution passed in General Meeting (EGM/AGM) under Section 61(1)')
+  }
   mandatoryAttachments.push('Copy of Explanatory Statement annexed to the EGM notice pursuant to Section 102')
   mandatoryAttachments.push('Altered Memorandum of Association (MOA) containing revised Capital Clause (Clause V)')
   if (alterationType === 'govt_order_increase') {
-    mandatoryAttachments.push('Certified copy of the Central Government Order under Section 62(4)')
+    mandatoryAttachments.push('Certified copy of the Central Government Order under Section 62(4) & 62(6)')
   }
   if (alterationType === 'redemption_preference_shares') {
-    mandatoryAttachments.push('Certified copy of Board resolution approving redemption of preference shares')
+    mandatoryAttachments.push('Certified copy of Board / General Meeting resolution approving redemption of preference shares')
     mandatoryAttachments.push('Auditor certificate certifying compliance with Section 55 reserves and CRR creation')
   }
-  mandatoryAttachments.push('Copy of Altered Articles of Association (AOA), if share classes or rights were modified')
+  if (alterationType === 'cancellation_diminution') {
+    mandatoryAttachments.push('Declaration of solvency / Confirmation that cancelled shares were not taken or agreed to be taken')
+  }
 
   return {
     alterationType,
     companyType,
     state,
     existingAuthorisedCapital,
-    newAuthorisedCapital,
+    newAuthorisedCapital: effectiveNewCapital,
     incrementalCapital,
     resolutionDate,
     filingDate,
@@ -407,8 +493,10 @@ export function calculateSh7Compliance(input: Sh7Input): Sh7CalculationResult {
     governingSection: 'Section 64(1) read with Section 61(1) and Rule 15',
 
     normalFee,
-    feeSlabLabel: slabLabel,
+    feeSlabLabel,
     lateMultiplier,
+    delayMonths,
+    lateFeePercentage,
     additionalLateFee,
     incrementalCapitalRegistrationFee,
     estimatedStampDuty,
@@ -420,7 +508,7 @@ export function calculateSh7Compliance(input: Sh7Input): Sh7CalculationResult {
     officerPenaltyCap,
     companyPenalty,
     perOfficerPenalty,
-    numOfficers: Math.max(1, numOfficersInDefault),
+    numOfficers,
     totalOfficersPenalty,
     totalAdjudicationPenalty,
     section446BApplied: isSmallOrStartup,
@@ -428,6 +516,7 @@ export function calculateSh7Compliance(input: Sh7Input): Sh7CalculationResult {
 
     totalFinancialExposure,
 
+    requiresAoaAmendment,
     warnings,
     criticalBreaches,
     passedChecks,

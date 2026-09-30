@@ -43,9 +43,9 @@ export function getOtherCompanyIncorporationFee(capital: number, isSpicePlus = f
   if (capital > T1_CAP) {
     additionalFee += Math.ceil((Math.min(capital, T2_CAP) - T1_CAP) / 10000) * 300;
   }
-  // Tier 3: ₹50L–₹1Cr at ₹100/₹1L  (audit-verified: 50 blocks × ₹100 = ₹5,000 for this tier)
+  // Tier 3: ₹50L–₹1Cr at ₹100/₹10K (500 blocks × ₹100 = ₹50,000 for this tier per Table of Fees)
   if (capital > T2_CAP) {
-    additionalFee += Math.ceil((Math.min(capital, T3_CAP) - T2_CAP) / 100000) * 100;
+    additionalFee += Math.ceil((Math.min(capital, T3_CAP) - T2_CAP) / 10000) * 100;
   }
   // Tier 4: above ₹1Cr at ₹75/₹10K
   if (capital > T3_CAP) {

@@ -53,6 +53,7 @@ interface PresetConfig {
   filingDate: string
   numOfficers: number
   mgt14Filed: boolean
+  hasAoaClause: boolean
   description: string
   badge: string
 }
@@ -70,79 +71,84 @@ function getOffsetDateIso(daysOffset: number): string {
 
 const PRESETS: PresetConfig[] = [
   {
-    id: 'growth_round_timely',
-    label: 'Capital Hike: ₹10L to ₹1 Cr (On-Time)',
+    id: 'case_a_delhi_ontime',
+    label: 'Case A: ₹10L to ₹50L (Delhi, On-Time)',
     alterationType: 'increase_authorised_capital',
     companyType: 'normal',
     state: 'delhi',
     existingCapital: 1000000, // ₹10 Lakhs
-    newCapital: 10000000, // ₹1 Crore
+    newCapital: 5000000, // ₹50 Lakhs
     resolutionDate: getOffsetDateIso(-15),
     filingDate: getTodayIso(),
     numOfficers: 2,
     mgt14Filed: true,
-    description: 'Capital increased for Series A round, filed within the 30-day statutory window. Zero late fee and zero Section 64 penalty.',
-    badge: '30-Day Window'
+    hasAoaClause: true,
+    description: '₹40L increase in Delhi filed within 30 days. Differential fee ₹1,20,000 + Stamp ₹6,000 = ₹1,26,000 Challan. ₹0 Penalty.',
+    badge: 'On-Time'
   },
   {
-    id: 'ahmedabad_precedent',
-    label: '45-Day Delay (ROC Ahmedabad Precedent)',
+    id: 'case_b_maharashtra_delay',
+    label: 'Case B: ₹10L to ₹1 Cr (Maharashtra, 15d Delay)',
     alterationType: 'increase_authorised_capital',
     companyType: 'normal',
-    state: 'gujarat',
-    existingCapital: 1500000, // ₹15 Lakhs
-    newCapital: 5000000, // ₹50 Lakhs
+    state: 'maharashtra',
+    existingCapital: 1000000, // ₹10 Lakhs
+    newCapital: 10000000, // ₹1 Crore
+    resolutionDate: getOffsetDateIso(-45), // 30 + 15 days ago
+    filingDate: getTodayIso(),
+    numOfficers: 2,
+    mgt14Filed: true,
+    hasAoaClause: true,
+    description: '15d delay. Differential: ₹1,70,000; 1 mo late fee (2.5%): ₹4,250; Stamp: ₹18,000. Challan: ₹1,92,250. Adjudication: ₹22,500.',
+    badge: '15d Delay'
+  },
+  {
+    id: 'case_c_small_co_446b',
+    label: 'Case C: Small Co ₹20L to ₹60L (Karnataka, 45d Delay)',
+    alterationType: 'increase_authorised_capital',
+    companyType: 'small_company',
+    state: 'karnataka',
+    existingCapital: 2000000, // ₹20 Lakhs
+    newCapital: 6000000, // ₹60 Lakhs
     resolutionDate: getOffsetDateIso(-75), // 30 + 45 days ago
     filingDate: getTodayIso(),
     numOfficers: 2,
     mgt14Filed: true,
-    description: 'Real ROC Ahmedabad Section 454 order: 45 days delayed after EGM, attracting Table B 4× multiplier and daily officer penalties.',
-    badge: 'High Risk'
+    hasAoaClause: true,
+    description: 'Sec 446B applied. Differential: ₹1,00,000; 2 mos late fee (5%): ₹5,000; Stamp: ₹8,000. Challan: ₹1,13,000. Adjudication: ₹33,750.',
+    badge: 'Sec 446B'
   },
   {
-    id: 'startup_446b',
-    label: 'Startup / Small Co (Section 446B 50% Relief)',
+    id: 'case_d_extended_delay',
+    label: 'Case D: 425-Day Extended Delay (3 Officers)',
     alterationType: 'increase_authorised_capital',
-    companyType: 'startup',
-    state: 'karnataka',
+    companyType: 'normal',
+    state: 'delhi',
     existingCapital: 1000000, // ₹10 Lakhs
     newCapital: 5000000, // ₹50 Lakhs
-    resolutionDate: getOffsetDateIso(-90), // 60 days delayed
+    resolutionDate: getOffsetDateIso(-455), // 30 + 425 days ago
     filingDate: getTodayIso(),
-    numOfficers: 2,
+    numOfficers: 3,
     mgt14Filed: true,
-    description: 'DPIIT-recognised startup enjoying 50% penalty concession under Section 446B with reduced statutory caps.',
-    badge: '50% Relief'
+    hasAoaClause: true,
+    description: '425 days delay. Company: ₹2,12,500 (below ₹5L cap). Officers: 3 × ₹1,00,000 cap = ₹3,00,000. Total Adjudication: ₹5,12,500.',
+    badge: 'Extended Default'
   },
   {
-    id: 'stock_split',
-    label: 'Stock Split / Sub-division (Zero Capital Fee)',
+    id: 'case_e_stock_split',
+    label: 'Case E: ₹50L Stock Split / Sub-division (On-Time)',
     alterationType: 'sub_division',
     companyType: 'normal',
     state: 'maharashtra',
     existingCapital: 5000000, // ₹50 Lakhs
-    newCapital: 5000000, // Identical capital
+    newCapital: 5000000,
     resolutionDate: getOffsetDateIso(-20),
     filingDate: getTodayIso(),
     numOfficers: 2,
     mgt14Filed: true,
-    description: 'Sub-division under Section 61(1)(d). Authorised capital remains unchanged, so registration fee on capital is ₹0.',
-    badge: 'Split / Sub-div'
-  },
-  {
-    id: 'pref_redemption',
-    label: 'Redemption of Preference Shares (Sec 55)',
-    alterationType: 'redemption_preference_shares',
-    companyType: 'normal',
-    state: 'tamil_nadu',
-    existingCapital: 10000000, // ₹1 Cr
-    newCapital: 10000000,
-    resolutionDate: getOffsetDateIso(-10),
-    filingDate: getTodayIso(),
-    numOfficers: 2,
-    mgt14Filed: true,
-    description: 'Notice under Section 64(1)(c) for preference share redemption out of profits or fresh issue proceeds.',
-    badge: 'Sec 55 Notice'
+    hasAoaClause: true,
+    description: 'Stock split under Section 61(1)(d). Authorised capital unchanged. Zero capital registration fee, zero stamp duty. Table A: ₹500.',
+    badge: 'Stock Split'
   }
 ]
 
@@ -176,6 +182,7 @@ export default function SH7Workspace({ form }: { form: MCAForm }) {
     setFilingDate(preset.filingDate)
     setNumOfficers(preset.numOfficers)
     setMgt14Filed(preset.mgt14Filed)
+    setHasAoaClause(preset.hasAoaClause)
     setCheckedAttachments({})
     showToast(`Loaded scenario: "${preset.label}"`, 'info')
   }
@@ -187,14 +194,16 @@ export default function SH7Workspace({ form }: { form: MCAForm }) {
       companyType,
       state,
       existingAuthorisedCapital: existingCapital,
-      newAuthorisedCapital: alterationType === 'increase_authorised_capital' || alterationType === 'govt_order_increase'
-        ? newCapital
-        : existingCapital,
+      newAuthorisedCapital:
+        alterationType === 'increase_authorised_capital' || alterationType === 'govt_order_increase'
+          ? newCapital
+          : existingCapital,
       resolutionDate,
       filingDate,
       numOfficersInDefault: numOfficers,
       mgt14Filed,
-      mgt14Srn
+      mgt14Srn,
+      requiresAoaAmendment: !hasAoaClause
     })
   }, [
     alterationType,
@@ -206,7 +215,8 @@ export default function SH7Workspace({ form }: { form: MCAForm }) {
     filingDate,
     numOfficers,
     mgt14Filed,
-    mgt14Srn
+    mgt14Srn,
+    hasAoaClause
   ])
 
   // PDF Download Handler
@@ -226,6 +236,7 @@ export default function SH7Workspace({ form }: { form: MCAForm }) {
 
   // Copy Summary Handler
   const handleCopySummary = () => {
+    const isCapIncrease = result.incrementalCapitalRegistrationFee > 0
     const text = `
 === FORM SH-7 COMPLIANCE & FEE SUMMARY ===
 Governing Section: Section 64(1) read with Section 61(1) of Companies Act, 2013
@@ -238,13 +249,13 @@ Filing Date: ${result.filingDate}
 Status: ${result.isDelayed ? `DELAYED by ${result.delayDays} day(s)` : 'TIMELY (Within 30 days)'}
 
 --- MCA PORTAL E-CHALLAN BREAKDOWN ---
-1. Normal Base Filing Fee (Table A): ${formatInr(result.normalFee)}
-2. Table B Late Fee Multiplier: ${result.lateMultiplier}× (${formatInr(result.additionalLateFee)})
-3. Incremental Capital Registration Fee: ${formatInr(result.incrementalCapitalRegistrationFee)}
-4. Estimated State Stamp Duty on MOA (${result.state}): ${formatInr(result.estimatedStampDuty)}
+${isCapIncrease ? `1. Differential Capital Registration Fee (Item II): ${formatInr(result.incrementalCapitalRegistrationFee)}
+2. Late Additional Fee (Item B: ${(result.lateFeePercentage * 100).toFixed(1)}%): ${formatInr(result.additionalLateFee)}
+3. Estimated State Stamp Duty on MOA (${result.state}): ${formatInr(result.estimatedStampDuty)}` : `1. Table A Normal e-Form Fee: ${formatInr(result.normalFee)}
+2. Table B Delay Multiplier (${result.lateMultiplier}×): ${formatInr(result.additionalLateFee)}`}
 TOTAL MCA E-CHALLAN ESTIMATE: ${formatInr(result.totalMcaChallanFee)}
 
---- SECTION 64(2) ADJUDICATION LIABILITY ---
+--- SECTION 64(2) ADJUDICATION LIABILITY (Quasi-Judicial ROC Exposure) ---
 - Company Penalty: ${formatInr(result.companyPenalty)} (Capped at ${formatInr(result.companyPenaltyCap)})
 - Officers in Default (${result.numOfficers} persons): ${formatInr(result.totalOfficersPenalty)} (Capped at ${formatInr(result.officerPenaltyCap)} each)
 - Total Adjudication Exposure: ${formatInr(result.totalAdjudicationPenalty)}
@@ -258,6 +269,9 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
     showToast('Form SH-7 summary copied to clipboard!', 'success')
   }
 
+  const isCapitalIncrease =
+    alterationType === 'increase_authorised_capital' || alterationType === 'govt_order_increase'
+
   return (
     <div className="space-y-8">
       {/* 1. SCENARIO PRESETS BAR */}
@@ -268,10 +282,10 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
               <Sparkles className="size-4" />
             </span>
             <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-              Instant Regulatory Scenarios & Benchmarks
+              Verified Legal Scenarios & Audit Benchmarks
             </span>
           </div>
-          <span className="text-[11px] text-slate-400">Click any preset to simulate</span>
+          <span className="text-[11px] text-slate-400">Click any preset to test</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2.5">
@@ -300,51 +314,48 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
         <div className="lg:col-span-7 space-y-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-7 shadow-sm">
           <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
             <div className="flex items-center gap-2">
-              <span className="p-2 rounded-xl bg-blue-600 text-white shadow-sm">
+              <span className="p-2 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400">
                 <Coins className="size-5" />
               </span>
               <div>
-                <h3 className="text-lg font-heading font-extrabold text-slate-900 dark:text-white">
-                  Form SH-7 Parameters
+                <h3 className="text-base font-heading font-bold text-slate-900 dark:text-white">
+                  Form SH-7 Parameter Inputs
                 </h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
-                  Section 64(1) Notice of Alteration of Share Capital
+                  Section 64(1) notice of capital alteration under Companies Act, 2013
                 </p>
               </div>
             </div>
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-              MCA V3 Rule Engine
-            </span>
           </div>
 
-          <div className="space-y-5">
+          <div className="space-y-4">
             {/* Nature of Alteration Dropdown */}
             <div className="space-y-1.5">
               <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                Nature of Share Capital Alteration (Section 61 / 62 / 55)
+                Nature of Alteration (Section 61 / Section 62 / Section 55)
               </label>
               <select
                 value={alterationType}
                 onChange={e => setAlterationType(e.target.value as Sh7AlterationType)}
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3.5 py-2.5 text-xs sm:text-sm font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 outline-none"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 outline-none"
               >
                 <option value="increase_authorised_capital">
                   Increase in Authorised Share Capital — Section 61(1)(a)
                 </option>
                 <option value="consolidation_division">
-                  Consolidation of Shares of Larger Denomination — Section 61(1)(b)
+                  Consolidation and Division of Shares into Larger Denomination — Section 61(1)(b)
                 </option>
                 <option value="sub_division">
-                  Sub-division of Shares / Stock Split — Section 61(1)(d)
+                  Sub-division of Shares into Smaller Denomination (Stock Split) — Section 61(1)(d)
                 </option>
                 <option value="cancellation_diminution">
-                  Cancellation of Unissued Shares (Diminution) — Section 61(1)(e)
+                  Cancellation / Diminution of Unissued Share Capital — Section 61(1)(e)
                 </option>
                 <option value="conversion_stock">
-                  Conversion of Paid-up Shares into Stock & vice versa — Section 61(1)(c)
+                  Conversion of Paid-up Shares into Stock & Re-conversion — Section 61(1)(c)
                 </option>
                 <option value="redemption_preference_shares">
-                  Redemption of Redeemable Preference Shares — Section 55 & 64(1)(c)
+                  Notice of Redemption of Redeemable Preference Shares — Section 55 read with 64(1)(c)
                 </option>
                 <option value="govt_order_increase">
                   Capital Increase by Central Govt Order — Section 62(4) & 62(6)
@@ -381,8 +392,8 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
                   className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 outline-none"
                 >
                   <option value="delhi">Delhi (0.15%)</option>
-                  <option value="maharashtra">Maharashtra (0.2%, max ₹50L)</option>
-                  <option value="karnataka">Karnataka (0.1%, max ₹5L)</option>
+                  <option value="maharashtra">Maharashtra (₹1,000 / ₹5L, max ₹50L)</option>
+                  <option value="karnataka">Karnataka (₹1,000 / ₹5L, max ₹5L)</option>
                   <option value="tamil_nadu">Tamil Nadu (0.2%)</option>
                   <option value="gujarat">Gujarat (0.15%, max ₹5L)</option>
                   <option value="telangana">Telangana (0.15%)</option>
@@ -415,7 +426,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
                     className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-medium text-slate-900 dark:text-white"
                   />
                   <div className="flex flex-wrap gap-1 pt-1">
-                    {[1000000, 2500000, 5000000, 10000000].map(v => (
+                    {[1000000, 2000000, 2500000, 5000000].map(v => (
                       <button
                         key={v}
                         type="button"
@@ -428,7 +439,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
                   </div>
                 </div>
 
-                {(alterationType === 'increase_authorised_capital' || alterationType === 'govt_order_increase') && (
+                {isCapitalIncrease && (
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between">
                       <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
@@ -447,12 +458,12 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
                       className="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-medium text-slate-900 dark:text-white"
                     />
                     <div className="flex flex-wrap gap-1 pt-1">
-                      {[5000000, 10000000, 20000000, 50000000].map(v => (
+                      {[5000000, 6000000, 10000000, 20000000].map(v => (
                         <button
                           key={v}
                           type="button"
                           onClick={() => setNewCapital(v)}
-                          className="text-[10px] px-2 py-0.5 rounded bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-amber-400"
+                          className="text-[10px] px-2 py-0.5 rounded bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-emerald-400"
                         >
                           {formatInr(v)}
                         </button>
@@ -462,40 +473,38 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
                 )}
               </div>
 
-              {result.incrementalCapital > 0 && (
-                <div className="flex items-center justify-between p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-xs">
-                  <span className="text-emerald-800 dark:text-emerald-300 font-semibold">
-                    Incremental Capital Addition:
-                  </span>
-                  <span className="text-emerald-900 dark:text-emerald-200 font-extrabold text-sm tabular-nums">
-                    +{formatInr(result.incrementalCapital)}
+              {isCapitalIncrease && (
+                <div className="pt-2 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between text-xs">
+                  <span className="text-slate-500 dark:text-slate-400">Incremental Nominal Capital:</span>
+                  <span className="font-extrabold text-slate-900 dark:text-white tabular-nums">
+                    {formatInr(Math.max(0, newCapital - existingCapital))}
                   </span>
                 </div>
               )}
             </div>
 
-            {/* Date Inputs Grid */}
+            {/* Dates Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                  Date of General Meeting (EGM/AGM Resolution)
+                  General Meeting Date (EGM / AGM)
                 </label>
                 <IndianDateInput
                   value={resolutionDate}
-                  onChange={val => setResolutionDate(val)}
-                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 outline-none"
+                  onChange={setResolutionDate}
+                  className="w-full text-xs"
                 />
-                <span className="text-[11px] text-slate-400">Date shareholders approved MOA alteration</span>
+                <span className="text-[11px] text-slate-400">Day 0 for 30-day statutory window</span>
               </div>
 
               <div className="space-y-1.5">
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                  Actual / Projected Filing Date
+                  Actual / Planned Filing Date
                 </label>
                 <IndianDateInput
                   value={filingDate}
-                  onChange={val => setFilingDate(val)}
-                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 outline-none"
+                  onChange={setFilingDate}
+                  className="w-full text-xs"
                 />
                 <span className="text-[11px] text-slate-400">Date Form SH-7 is uploaded to MCA V3</span>
               </div>
@@ -530,60 +539,69 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
                 </div>
               </div>
 
-              {/* MGT-14 Dependency Toggle */}
+              {/* AOA Enabling Clause Check */}
               <div className="pt-2 border-t border-slate-200 dark:border-slate-700 space-y-2">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <input
                       type="checkbox"
-                      id="mgt14Check"
-                      checked={mgt14Filed}
-                      onChange={e => setMgt14Filed(e.target.checked)}
-                      className="size-4 rounded text-blue-600 accent-blue-600 cursor-pointer"
+                      id="aoaCheck"
+                      checked={hasAoaClause}
+                      onChange={e => setHasAoaClause(e.target.checked)}
+                      className="size-4 rounded text-emerald-600 accent-emerald-600 cursor-pointer"
                     />
-                    <label htmlFor="mgt14Check" className="text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer">
-                      Form MGT-14 filed with ROC? (Section 117)
+                    <label htmlFor="aoaCheck" className="text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer">
+                      AOA already authorizes capital alteration? (Ordinary Resolution)
                     </label>
                   </div>
                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                    mgt14Filed ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300' : 'bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300'
+                    hasAoaClause ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300' : 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300'
                   }`}>
-                    {mgt14Filed ? 'Prerequisite Met' : 'Mandatory Blocker'}
+                    {hasAoaClause ? 'MGT-14 Exempt' : 'AOA Alteration Required'}
                   </span>
                 </div>
-                {mgt14Filed && (
-                  <div className="pl-6">
-                    <input
-                      type="text"
-                      placeholder="Enter Form MGT-14 SRN (e.g. AA1234567)"
-                      value={mgt14Srn}
-                      onChange={e => setMgt14Srn(e.target.value.toUpperCase())}
-                      className="w-full sm:w-64 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs uppercase"
-                    />
-                  </div>
-                )}
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 pl-6 leading-tight">
+                  {hasAoaClause
+                    ? 'Section 61(1) Ordinary Resolution does NOT require Form MGT-14 under Section 117(3).'
+                    : 'AOA alteration requires a Special Resolution under Section 14. Form MGT-14 is MANDATORY within 30 days.'}
+                </p>
               </div>
 
-              {/* AOA Enabling Clause Check */}
-              <div className="pt-2 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="aoaCheck"
-                    checked={hasAoaClause}
-                    onChange={e => setHasAoaClause(e.target.checked)}
-                    className="size-4 rounded text-emerald-600 accent-emerald-600 cursor-pointer"
-                  />
-                  <label htmlFor="aoaCheck" className="text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
-                    Does Articles of Association (AOA) contain enabling clause for capital alteration?
-                  </label>
+              {/* MGT-14 Dependency Toggle (Visible/highlighted if AOA alteration required) */}
+              {!hasAoaClause && (
+                <div className="pt-2 border-t border-slate-200 dark:border-slate-700 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        id="mgt14Check"
+                        checked={mgt14Filed}
+                        onChange={e => setMgt14Filed(e.target.checked)}
+                        className="size-4 rounded text-blue-600 accent-blue-600 cursor-pointer"
+                      />
+                      <label htmlFor="mgt14Check" className="text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer">
+                        Form MGT-14 filed with ROC? (Section 117(3)(a))
+                      </label>
+                    </div>
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                      mgt14Filed ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300' : 'bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300'
+                    }`}>
+                      {mgt14Filed ? 'Prerequisite Met' : 'Mandatory Blocker'}
+                    </span>
+                  </div>
+                  {mgt14Filed && (
+                    <div className="pl-6">
+                      <input
+                        type="text"
+                        placeholder="Enter Form MGT-14 SRN (e.g. AA1234567)"
+                        value={mgt14Srn}
+                        onChange={e => setMgt14Srn(e.target.value.toUpperCase())}
+                        className="w-full sm:w-64 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-1.5 text-xs uppercase"
+                      />
+                    </div>
+                  )}
                 </div>
-                {!hasAoaClause && (
-                  <span className="text-[10px] font-bold text-red-600 dark:text-red-400">
-                    AOA amendment required!
-                  </span>
-                )}
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -651,69 +669,104 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
           {/* MCA E-CHALLAN PAYMENT BREAKDOWN CARD */}
           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm space-y-3.5">
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
-              <h4 className="font-heading font-bold text-sm text-slate-900 dark:text-white flex items-center gap-1.5">
-                <Landmark className="size-4 text-blue-600 dark:text-blue-400" />
-                MCA Portal e-Challan Breakdown
-              </h4>
+              <div>
+                <h4 className="font-heading font-bold text-sm text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <Landmark className="size-4 text-blue-600 dark:text-blue-400" />
+                  MCA Portal e-Challan Breakdown
+                </h4>
+                <p className="text-[10px] text-slate-400">Payable immediately on MCA V3 form upload</p>
+              </div>
               <span className="text-xs font-extrabold text-blue-700 dark:text-blue-400 tabular-nums">
                 {formatInr(result.totalMcaChallanFee)}
               </span>
             </div>
 
             <div className="space-y-2 text-xs">
-              {/* Row 1: Normal Base Fee */}
-              <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 dark:bg-slate-800/50">
-                <div>
-                  <p className="font-semibold text-slate-800 dark:text-slate-200">Table A Normal e-Form Fee</p>
-                  <p className="text-[10px] text-slate-400">{result.feeSlabLabel}</p>
-                </div>
-                <span className="font-bold text-slate-900 dark:text-white tabular-nums">{formatInr(result.normalFee)}</span>
-              </div>
+              {isCapitalIncrease ? (
+                <>
+                  {/* Row 1: Differential Capital Registration Fee */}
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 dark:bg-slate-800/50">
+                    <div>
+                      <p className="font-semibold text-slate-800 dark:text-slate-200">
+                        Differential Capital Registration Fee
+                      </p>
+                      <p className="text-[10px] text-slate-400">
+                        Table of Fees Item II: Fee(New) − Fee(Old)
+                      </p>
+                    </div>
+                    <span className="font-bold text-blue-700 dark:text-blue-400 tabular-nums">
+                      {formatInr(result.incrementalCapitalRegistrationFee)}
+                    </span>
+                  </div>
 
-              {/* Row 2: Table B Late Multiplier */}
-              <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 dark:bg-slate-800/50">
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <p className="font-semibold text-slate-800 dark:text-slate-200">Table B Delay Multiplier</p>
-                    {result.lateMultiplier > 0 && (
-                      <span className="text-[10px] font-extrabold px-1.5 py-0.2 rounded bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
-                        {result.lateMultiplier}×
+                  {/* Row 2: Late Additional Filing Fee (Percentage Rule) */}
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 dark:bg-slate-800/50">
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <p className="font-semibold text-slate-800 dark:text-slate-200">Additional Late Fee</p>
+                        {result.additionalLateFee > 0 && (
+                          <span className="text-[10px] font-extrabold px-1.5 py-0.2 rounded bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+                            {(result.lateFeePercentage * 100).toFixed(1)}% ({result.delayMonths} mo)
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-[10px] text-slate-400">
+                        {result.isDelayed
+                          ? `2.5%/mo (≤6m) or 3%/mo thereafter on differential fee`
+                          : 'Filed within 30-day statutory window (Zero late fee)'}
+                      </p>
+                    </div>
+                    <span className={`font-bold tabular-nums ${result.additionalLateFee > 0 ? 'text-amber-700 dark:text-amber-400' : 'text-slate-500'}`}>
+                      {formatInr(result.additionalLateFee)}
+                    </span>
+                  </div>
+
+                  {/* Row 3: Estimated State Stamp Duty */}
+                  {result.estimatedStampDuty > 0 && (
+                    <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 dark:bg-slate-800/50">
+                      <div>
+                        <p className="font-semibold text-slate-800 dark:text-slate-200">Estimated State Stamp Duty (MOA)</p>
+                        <p className="text-[10px] text-slate-400">Payable via MCA V3 e-Stamping ({result.state.toUpperCase()})</p>
+                      </div>
+                      <span className="font-bold text-emerald-700 dark:text-emerald-400 tabular-nums">
+                        {formatInr(result.estimatedStampDuty)}
                       </span>
-                    )}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  {/* Non-capital alteration: Table A Normal Fee */}
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 dark:bg-slate-800/50">
+                    <div>
+                      <p className="font-semibold text-slate-800 dark:text-slate-200">Table A Normal e-Form Fee</p>
+                      <p className="text-[10px] text-slate-400">{result.feeSlabLabel}</p>
+                    </div>
+                    <span className="font-bold text-slate-900 dark:text-white tabular-nums">
+                      {formatInr(result.normalFee)}
+                    </span>
                   </div>
-                  <p className="text-[10px] text-slate-400">
-                    {result.isDelayed ? `${result.delayDays} days delay` : 'No delay'}
-                  </p>
-                </div>
-                <span className={`font-bold tabular-nums ${result.additionalLateFee > 0 ? 'text-amber-700 dark:text-amber-400' : 'text-slate-500'}`}>
-                  {formatInr(result.additionalLateFee)}
-                </span>
-              </div>
 
-              {/* Row 3: Incremental Capital Fee */}
-              {result.incrementalCapitalRegistrationFee > 0 && (
-                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 dark:bg-slate-800/50">
-                  <div>
-                    <p className="font-semibold text-slate-800 dark:text-slate-200">Incremental Capital Registration Fee</p>
-                    <p className="text-[10px] text-slate-400">Table of Fees (Incremental Authorized Capital)</p>
+                  {/* Table B Delay Multiplier */}
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 dark:bg-slate-800/50">
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <p className="font-semibold text-slate-800 dark:text-slate-200">Table B Delay Multiplier</p>
+                        {result.lateMultiplier > 0 && (
+                          <span className="text-[10px] font-extrabold px-1.5 py-0.2 rounded bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+                            {result.lateMultiplier}×
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-[10px] text-slate-400">
+                        {result.isDelayed ? `${result.delayDays} days delay` : 'No delay'}
+                      </p>
+                    </div>
+                    <span className={`font-bold tabular-nums ${result.additionalLateFee > 0 ? 'text-amber-700 dark:text-amber-400' : 'text-slate-500'}`}>
+                      {formatInr(result.additionalLateFee)}
+                    </span>
                   </div>
-                  <span className="font-bold text-blue-700 dark:text-blue-400 tabular-nums">
-                    {formatInr(result.incrementalCapitalRegistrationFee)}
-                  </span>
-                </div>
-              )}
-
-              {/* Row 4: Estimated State Stamp Duty */}
-              {result.estimatedStampDuty > 0 && (
-                <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 dark:bg-slate-800/50">
-                  <div>
-                    <p className="font-semibold text-slate-800 dark:text-slate-200">Estimated State Stamp Duty (MOA)</p>
-                    <p className="text-[10px] text-slate-400">Payable via MCA V3 e-Stamping ({result.state})</p>
-                  </div>
-                  <span className="font-bold text-emerald-700 dark:text-emerald-400 tabular-nums">
-                    {formatInr(result.estimatedStampDuty)}
-                  </span>
-                </div>
+                </>
               )}
             </div>
           </div>
@@ -721,10 +774,13 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
           {/* SECTION 64(2) ADJUDICATION PENALTY CARD */}
           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm space-y-3.5">
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
-              <h4 className="font-heading font-bold text-sm text-slate-900 dark:text-white flex items-center gap-1.5">
-                <Scale className="size-4 text-red-600 dark:text-red-400" />
-                Section 64(2) Adjudication Liability
-              </h4>
+              <div>
+                <h4 className="font-heading font-bold text-sm text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <Scale className="size-4 text-red-600 dark:text-red-400" />
+                  Section 64(2) Adjudication Liability
+                </h4>
+                <p className="text-[10px] text-slate-400">Quasi-judicial ROC penalty under Sec 454 (NOT on portal challan)</p>
+              </div>
               <span className={`text-xs font-extrabold tabular-nums ${result.totalAdjudicationPenalty > 0 ? 'text-red-600 dark:text-red-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
                 {formatInr(result.totalAdjudicationPenalty)}
               </span>
@@ -770,7 +826,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
             </div>
 
             <p className="text-[11px] text-slate-500 leading-relaxed italic">
-              * Section 64(2) penalties are adjudicated under Section 454 by the ROC. They are independent of MCA portal late fees and must be compounded or paid per adjudication orders.
+              * Section 64(2) penalties are adjudicated under Section 454 by the ROC via Show Cause Notices. They are independent of MCA portal challan fees and are payable from personal funds of officers in default.
             </p>
           </div>
 
@@ -854,7 +910,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
           <strong>ROC Ahmedabad Adjudication Precedent:</strong> In multiple recent adjudication orders under Section 454 for violation of Section 64, the Adjudicating Officer held that the requirement to file Form SH-7 within 30 days is strict and mandatory. The excuse of technical glitches on the MCA V3 portal or delayed finalisation of accounts was rejected where the company had not logged MCA tickets within the 30-day statutory window.
         </p>
         <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
-          <strong>Personal Director Liability:</strong> Because Section 64(2) explicitly levies penalties on <em>every officer who is in default</em> up to ₹1,00,000, company directors cannot claim corporate veil protection against ROC recovery proceedings. Always ensure Form MGT-14 and Form SH-7 are submitted in tandem within 30 days of the General Meeting.
+          <strong>Personal Director Liability:</strong> Because Section 64(2) explicitly levies penalties on <em>every officer who is in default</em> up to ₹1,00,000 (or ₹50,000 under Section 446B), company directors cannot claim corporate veil protection against ROC recovery proceedings. Directors must pay these penalties out of their personal bank accounts.
         </p>
       </div>
     </div>

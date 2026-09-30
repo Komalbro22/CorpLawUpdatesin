@@ -101,8 +101,8 @@ export function calculateMCAFee(params: CalculatorParams): CalculatorResult {
 
   // ─────────────────────────────────────────────────────────────────────────
   // 1. SH-7 (Capital Increase)
-  // Fee = difference in MOA registration fee between new and existing capital.
-  // Late fee: 2.5%/month (≤6 months) or 3%/month (>6 months) on normal fee.
+  // Fee = difference in registration fee between new and existing capital (Table of Fees Item II).
+  // Late fee: 2.5%/month (<=6 months) or 3%/month (>6 months) on differential fee.
   // ─────────────────────────────────────────────────────────────────────────
   if (formSlug === 'sh-7') {
     const existingCapital = capital;
@@ -110,23 +110,24 @@ export function calculateMCAFee(params: CalculatorParams): CalculatorResult {
       return { baseFee: 0, lateFee: 0, stampDuty: 0, adValoremFee: 0, total: 0, warningText: 'New capital must be greater than existing capital.' };
     }
 
-    // Normal fee = differential of MOA registration fee
-    if (isOpcSmall) {
-      baseFee = getOpcSmallIncorporationFee(newCapital) - getOpcSmallIncorporationFee(existingCapital);
-    } else {
-      baseFee = getOtherCompanyIncorporationFee(newCapital) - getOtherCompanyIncorporationFee(existingCapital);
-    }
-    baseFee = Math.max(0, baseFee);
+    // Statutory differential registration fee (Item II, Table of Fees)
+    baseFee = Math.max(0, getOtherCompanyIncorporationFee(newCapital, false) - getOtherCompanyIncorporationFee(existingCapital, false));
 
-    const stampDutyRates: Record<string, number> = { delhi:0.0015, maharashtra:0.002, karnataka:0.001, tamilnadu:0.001, gujarat:0.001, rajasthan:0.001, westbengal:0.001, telangana:0.0015, andhra:0.0015, kerala:0.001, other:0.001 };
-    const stampDutyCaps: Record<string, number> = { maharashtra: 5000000 };
     const increaseAmount = newCapital - existingCapital;
-    stampDuty = Math.ceil(increaseAmount * (stampDutyRates[state] || 0.001));
-    if (stampDutyCaps[state] && stampDuty > stampDutyCaps[state]) stampDuty = stampDutyCaps[state];
+    if (state === 'maharashtra') {
+      stampDuty = Math.min(5000000, Math.ceil(increaseAmount / 500000) * 1000);
+    } else if (state === 'karnataka') {
+      stampDuty = Math.min(500000, Math.ceil(increaseAmount / 500000) * 1000);
+    } else if (state === 'delhi') {
+      stampDuty = Math.round(increaseAmount * 0.0015);
+    } else if (state === 'tamil_nadu' || state === 'tamilnadu' || state === 'uttar_pradesh') {
+      stampDuty = Math.round(increaseAmount * 0.002);
+    } else {
+      stampDuty = Math.round(increaseAmount * 0.0015);
+    }
 
     if (delayDays > 0) {
-      // Table C, Rule 12 Annexure: SH-7 late fee uses per-month percentage formula
-      const monthsLate = Math.ceil(delayDays / 30); // calendar month or part thereof
+      const monthsLate = Math.ceil(delayDays / 30);
       let lateFeeRaw = 0;
       if (monthsLate <= 6) {
         lateFeeRaw = baseFee * 0.025 * monthsLate;
@@ -134,16 +135,12 @@ export function calculateMCAFee(params: CalculatorParams): CalculatorResult {
         lateFeeRaw = baseFee * 0.025 * 6 + baseFee * 0.03 * (monthsLate - 6);
       }
       lateFee = Math.round(lateFeeRaw);
-      warningText = `SH-7 filed ${delayDays} days late (${monthsLate} month${monthsLate > 1 ? 's' : ''}). Late fee: 2.5% per month (up to 6 months) and 3% thereafter. Stamp duty shown is indicative.`;
+      warningText = `SH-7 filed ${delayDays} days late (${monthsLate} month${monthsLate > 1 ? 's' : ''}). Late fee: 2.5% per month (up to 6 months) and 3% thereafter on differential registration fee.`;
     } else {
-      warningText = 'Stamp duty shown is indicative. The MCA portal calculates exact duty at time of filing.';
+      warningText = 'Filed within the 30-day statutory window under Section 64(1). Stamp duty shown is indicative.';
     }
 
-    // Add standard e-form filing fee to the differential MOA fee
-    const eformFee = getNormalFilingFee(newCapital);
-    baseFee += eformFee;
-
-    return { baseFee, lateFee, stampDuty, adValoremFee, total: baseFee + lateFee + stampDuty, warningText };
+    return { baseFee, lateFee, stampDuty, adValoremFee: 0, total: baseFee + lateFee + stampDuty, warningText };
   }
 
   // ─────────────────────────────────────────────────────────────────────────
