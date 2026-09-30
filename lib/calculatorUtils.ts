@@ -71,7 +71,7 @@ export function calculateMCAFee(params: CalculatorParams): CalculatorResult {
     chargeAmount = 0,
   } = params;
 
-  const isOpcSmall = companyType === 'opc' || companyType === 'small';
+  const isOpcSmall = companyType === 'opc' || companyType === 'small' || companyType === 'small_company';
 
   let baseFee = 0;
   let lateFee = 0;
@@ -111,19 +111,33 @@ export function calculateMCAFee(params: CalculatorParams): CalculatorResult {
     }
 
     // Statutory differential registration fee (Item II, Table of Fees)
-    baseFee = Math.max(0, getOtherCompanyIncorporationFee(newCapital, false) - getOtherCompanyIncorporationFee(existingCapital, false));
+    const feeOld = (isOpcSmall && existingCapital <= 5000000)
+      ? getOpcSmallIncorporationFee(existingCapital, false)
+      : getOtherCompanyIncorporationFee(existingCapital, false);
+    const feeNew = (isOpcSmall && newCapital <= 5000000)
+      ? getOpcSmallIncorporationFee(newCapital, false)
+      : getOtherCompanyIncorporationFee(newCapital, false);
+    baseFee = Math.max(0, feeNew - feeOld);
 
     const increaseAmount = newCapital - existingCapital;
     if (state === 'maharashtra') {
       stampDuty = Math.min(5000000, Math.ceil(increaseAmount / 500000) * 1000);
     } else if (state === 'karnataka') {
-      stampDuty = Math.min(500000, Math.ceil(increaseAmount / 500000) * 1000);
+      stampDuty = Math.min(10000000, Math.ceil(increaseAmount / 1000000) * 5000);
     } else if (state === 'delhi') {
-      stampDuty = Math.round(increaseAmount * 0.0015);
-    } else if (state === 'tamil_nadu' || state === 'tamilnadu' || state === 'uttar_pradesh') {
-      stampDuty = Math.round(increaseAmount * 0.002);
+      stampDuty = Math.min(2500000, Math.round(increaseAmount * 0.0015));
+    } else if (state === 'tamil_nadu' || state === 'tamilnadu') {
+      stampDuty = Math.min(500000, Math.ceil(increaseAmount / 1000000) * 500);
+    } else if (state === 'gujarat') {
+      stampDuty = Math.min(500000, Math.round(increaseAmount * 0.005));
+    } else if (state === 'telangana' || state === 'andhra_pradesh' || state === 'andhrapradesh') {
+      stampDuty = Math.min(500000, Math.max(1000, Math.round(increaseAmount * 0.0015)));
+    } else if (state === 'rajasthan') {
+      stampDuty = Math.min(2500000, Math.round(increaseAmount * 0.002));
+    } else if (state === 'uttar_pradesh' || state === 'uttarpradesh' || state === 'west_bengal' || state === 'westbengal' || state === 'kerala' || state === 'haryana') {
+      stampDuty = 0;
     } else {
-      stampDuty = Math.round(increaseAmount * 0.0015);
+      stampDuty = 0;
     }
 
     if (delayDays > 0) {

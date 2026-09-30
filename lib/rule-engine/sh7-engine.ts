@@ -17,7 +17,7 @@
  * - Relevant State Stamp Acts for Stamp Duty on MOA Capital Clause alteration.
  */
 
-import { getOtherCompanyIncorporationFee } from '@/lib/fee-calculator-core'
+import { getOtherCompanyIncorporationFee, getOpcSmallIncorporationFee } from '@/lib/fee-calculator-core'
 
 export type Sh7AlterationType =
   | 'increase_authorised_capital'
@@ -141,26 +141,27 @@ export function formatInr(amount: number): string {
 }
 
 /**
- * Computes base MCA filing fee under Table A (Items 5 & 6) for non-capital alterations.
+ * Computes base MCA filing fee under Table 7 of the official MCA Form SH-7 Instruction Kit
+ * for alterations other than increase in nominal share capital (consolidation, sub-division,
+ * cancellation, conversion into stock, redemption).
+ *
+ * NOTE: Table 7 applies uniformly across ALL companies (no separate Small/OPC concession column):
+ * - Less than ₹1,00,000: ₹200
+ * - ₹1,00,000 to < ₹5,00,000: ₹300
+ * - ₹5,00,000 to < ₹25,00,000: ₹400
+ * - ₹25,00,000 to < ₹1,00,00,000: ₹500
+ * - ₹1,00,00,000 or more: ₹600
  */
 export function calculateSh7BaseFee(
   capital: number,
-  companyType: Sh7CompanyType
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _companyType?: Sh7CompanyType
 ): { normalFee: number; slabLabel: string } {
-  const isSmall = companyType === 'small_company' || companyType === 'opc'
-
-  if (isSmall) {
-    if (capital < 100000) return { normalFee: 50, slabLabel: 'Small/OPC: Capital < ₹1 Lakh (₹50)' }
-    if (capital < 500000) return { normalFee: 100, slabLabel: 'Small/OPC: Capital ₹1L – ₹5L (₹100)' }
-    if (capital < 2500000) return { normalFee: 150, slabLabel: 'Small/OPC: Capital ₹5L – ₹25L (₹150)' }
-    return { normalFee: 200, slabLabel: 'Small/OPC: Capital ₹25L+ (₹200)' }
-  }
-
-  if (capital < 100000) return { normalFee: 200, slabLabel: 'Capital < ₹1 Lakh (₹200)' }
-  if (capital < 500000) return { normalFee: 300, slabLabel: 'Capital ₹1L – ₹5L (₹300)' }
-  if (capital < 2500000) return { normalFee: 400, slabLabel: 'Capital ₹5L – ₹25L (₹400)' }
-  if (capital < 10000000) return { normalFee: 500, slabLabel: 'Capital ₹25L – ₹1 Crore (₹500)' }
-  return { normalFee: 600, slabLabel: 'Capital ₹1 Crore or more (₹600)' }
+  if (capital < 100000) return { normalFee: 200, slabLabel: 'Table 7: Capital < ₹1 Lakh (₹200)' }
+  if (capital < 500000) return { normalFee: 300, slabLabel: 'Table 7: Capital ₹1L – ₹5L (₹300)' }
+  if (capital < 2500000) return { normalFee: 400, slabLabel: 'Table 7: Capital ₹5L – ₹25L (₹400)' }
+  if (capital < 10000000) return { normalFee: 500, slabLabel: 'Table 7: Capital ₹25L – ₹1 Crore (₹500)' }
+  return { normalFee: 600, slabLabel: 'Table 7: Capital ₹1 Crore or more (₹600)' }
 }
 
 /**
@@ -183,21 +184,32 @@ export function calculateSh7LateMultiplier(delayDays: number): {
  * per Table of Fees Item II of the Companies (Registration Offices and Fees) Rules, 2014.
  *
  * Formula: Differential Registration Fee = RegistrationFee(NewCapital) - RegistrationFee(ExistingCapital)
- * Uses standard statutory schedule:
- * - Up to ₹1L: ₹5,000
- * - ₹1L to ₹5L: ₹5,000 + ₹400 per ₹10,000 or part thereof
- * - ₹5L to ₹50L: ₹21,000 + ₹300 per ₹10,000 or part thereof
- * - ₹50L to ₹1Cr: ₹1,56,000 + ₹100 per ₹10,000 or part thereof
- * - Above ₹1Cr: ₹2,06,000 + ₹75 per ₹10,000 or part thereof
- * Capped at ₹2,50,00,000.
+ *
+ * Official MCA SH-7 Instruction Kit Example (OPC ₹10L -> ₹60L):
+ * - Fee on ₹60L under Item I(a) normal scale = ₹1,66,000
+ * - Less Fee on ₹10L under Item I(b) OPC/Small scale = ₹2,000
+ * - Fee payable = ₹1,64,000
+ *
+ * For Small Companies and OPCs:
+ * - Existing capital (up to ₹50L) is computed under Item I(b) concessional schedule.
+ * - New capital exceeding ₹50L uses Item I(a) normal schedule.
  */
 export function calculateIncrementalCapitalFee(
   oldCapital: number,
-  newCapital: number
+  newCapital: number,
+  companyType?: Sh7CompanyType
 ): number {
   if (newCapital <= oldCapital) return 0
-  const feeOld = getOtherCompanyIncorporationFee(oldCapital, false)
-  const feeNew = getOtherCompanyIncorporationFee(newCapital, false)
+  const isOpcSmall = companyType === 'small_company' || companyType === 'opc'
+
+  const feeOld = (isOpcSmall && oldCapital <= 5000000)
+    ? getOpcSmallIncorporationFee(oldCapital, false)
+    : getOtherCompanyIncorporationFee(oldCapital, false)
+
+  const feeNew = (isOpcSmall && newCapital <= 5000000)
+    ? getOpcSmallIncorporationFee(newCapital, false)
+    : getOtherCompanyIncorporationFee(newCapital, false)
+
   return Math.max(0, feeNew - feeOld)
 }
 
@@ -247,7 +259,8 @@ export function calculateCapitalIncreaseLateFee(
 }
 
 /**
- * Estimates state stamp duty on MOA alteration for incremental authorised share capital.
+ * Estimates state stamp duty on MOA alteration for incremental authorised share capital
+ * strictly per Annexure A of the official MCA Form SH-7 Instruction Kit.
  */
 export function calculateEstimatedStampDuty(
   state: IndianState,
@@ -257,31 +270,46 @@ export function calculateEstimatedStampDuty(
 
   switch (state) {
     case 'maharashtra':
-      // Bombay Stamp Act Article 10: ₹1,000 for every ₹5,00,000 or part thereof, max ₹50,00,000
+      // Maharashtra: ₹1,000 for every ₹5,00,000 or part thereof, max ₹50,00,000
       return Math.min(5000000, Math.ceil(incrementalCapital / 500000) * 1000)
-    case 'karnataka':
-      // Karnataka Stamp Act Article 10: ₹1,000 for every ₹5,00,000 or part thereof, max ₹5,00,000
-      return Math.min(500000, Math.ceil(incrementalCapital / 500000) * 1000)
+
     case 'delhi':
-      // Delhi Stamp Act: 0.15% on incremental capital
-      return Math.round(incrementalCapital * 0.0015)
+      // Delhi: 0.15% on incremental capital, max ₹25,00,000
+      return Math.min(2500000, Math.round(incrementalCapital * 0.0015))
+
+    case 'karnataka':
+      // Karnataka (Annexure A): ₹5,000 for every ₹10,00,000 of increase or part thereof, max ₹1,00,00,000 (₹1 Crore)
+      return Math.min(10000000, Math.ceil(incrementalCapital / 1000000) * 5000)
+
     case 'tamil_nadu':
-      // Tamil Nadu: ~0.2% on incremental capital
-      return Math.round(incrementalCapital * 0.002)
+      // Tamil Nadu: ₹500 for every ₹10,00,000 or part thereof, max ₹5,00,000
+      return Math.min(500000, Math.ceil(incrementalCapital / 1000000) * 500)
+
     case 'gujarat':
-      // Gujarat: 0.15% on incremental capital, max ₹5,00,000
-      return Math.min(500000, Math.round(incrementalCapital * 0.0015))
+      // Gujarat: 0.5% on incremental capital, max ₹5,00,000
+      return Math.min(500000, Math.round(incrementalCapital * 0.005))
+
     case 'telangana':
+      // Telangana: 0.15% on incremental capital, min ₹1,000, max ₹5,00,000
+      return Math.min(500000, Math.max(1000, Math.round(incrementalCapital * 0.0015)))
+
     case 'andhra_pradesh':
-      // 0.15% on incremental capital
-      return Math.round(incrementalCapital * 0.0015)
+      // Andhra Pradesh: 0.15% on incremental capital, min ₹1,000, max ₹5,00,000
+      return Math.min(500000, Math.max(1000, Math.round(incrementalCapital * 0.0015)))
+
+    case 'rajasthan':
+      // Rajasthan: 0.2% on incremental capital, max ₹25,00,000
+      return Math.min(2500000, Math.round(incrementalCapital * 0.002))
+
     case 'uttar_pradesh':
-      return Math.round(incrementalCapital * 0.002)
     case 'west_bengal':
-      return Math.round(incrementalCapital * 0.0015)
+    case 'kerala':
+    case 'haryana':
+      // Per Annexure A of MCA SH-7 Instruction Kit, MOA alteration e-stamping is NIL / not collected via MCA portal
+      return 0
+
     default:
-      // National average ~0.15%
-      return Math.round(incrementalCapital * 0.0015)
+      return 0
   }
 }
 
@@ -323,7 +351,7 @@ export function calculateSh7Compliance(input: Sh7Input): Sh7CalculationResult {
 
   // 2. Incremental Registration Fee (Table of Fees Item II)
   const incrementalCapitalRegistrationFee = isCapitalIncrease
-    ? calculateIncrementalCapitalFee(existingAuthorisedCapital, effectiveNewCapital)
+    ? calculateIncrementalCapitalFee(existingAuthorisedCapital, effectiveNewCapital, companyType)
     : 0
 
   // 3. Normal MCA e-Form Fee (Table A)
@@ -374,7 +402,7 @@ export function calculateSh7Compliance(input: Sh7Input): Sh7CalculationResult {
   // 6. Statutory Adjudication Penalties under Section 64(2)
   // Governed by Section 454 adjudication procedure - NEVER paid on form filing challan.
   // Standard: ₹500/day | Company cap: ₹5,00,000 | Officer cap: ₹1,00,000
-  // Section 446B Relief: 50% discount (₹250/day) | Company cap: ₹2,00,000 | Officer cap: ₹50,000
+  // Section 446B Relief: 50% discount (₹250/day) | Company cap: ₹2,00,000 | Officer cap: ₹1,00,000 (statutory ceiling retained)
   const isSmallOrStartup =
     companyType === 'small_company' ||
     companyType === 'opc' ||
@@ -388,7 +416,7 @@ export function calculateSh7Compliance(input: Sh7Input): Sh7CalculationResult {
   const standardOfficerCap = 100000
 
   const companyPenaltyCap = isSmallOrStartup ? 200000 : standardCompanyCap
-  const officerPenaltyCap = isSmallOrStartup ? 50000 : standardOfficerCap
+  const officerPenaltyCap = standardOfficerCap
 
   const rawDailyPenalty = delayDays * dailyPenaltyRate
 

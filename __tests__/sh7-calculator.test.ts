@@ -54,8 +54,18 @@ describe('Form SH-7 Statutory Compliance & Fee Engine', () => {
       expect(calculateIncrementalCapitalFee(1000000, 10000000)).toBe(170000)
     })
 
-    test('Differential calculation between ₹20 Lakhs and ₹60 Lakhs is ₹1,00,000', () => {
-      expect(calculateIncrementalCapitalFee(2000000, 6000000)).toBe(100000)
+    test('Differential calculation between ₹20 Lakhs and ₹60 Lakhs for normal company is ₹1,00,000', () => {
+      expect(calculateIncrementalCapitalFee(2000000, 6000000, 'normal')).toBe(100000)
+    })
+
+    test('MCA SH-7 Instruction Kit Example: OPC ₹10L to ₹60L is ₹1,64,000', () => {
+      // Normal fee on ₹60L = ₹1,66,000 less OPC fee on ₹10L = ₹2,000 -> ₹1,64,000
+      expect(calculateIncrementalCapitalFee(1000000, 6000000, 'opc')).toBe(164000)
+    })
+
+    test('Small Company ₹20L to ₹60L differential is ₹1,44,000', () => {
+      // Normal fee on ₹60L = ₹1,66,000 less Small Co fee on ₹20L = ₹22,000 -> ₹1,44,000
+      expect(calculateIncrementalCapitalFee(2000000, 6000000, 'small_company')).toBe(144000)
     })
   })
 
@@ -137,25 +147,24 @@ describe('Form SH-7 Statutory Compliance & Fee Engine', () => {
 
       expect(result.delayDays).toBe(45)
       expect(result.isDelayed).toBe(true)
-      expect(result.incrementalCapitalRegistrationFee).toBe(100000) // ₹1,66,000 - ₹66,000
+      expect(result.incrementalCapitalRegistrationFee).toBe(144000) // ₹1,66,000 (normal) - ₹22,000 (Small Co)
       expect(result.delayMonths).toBe(2)
       expect(result.lateFeePercentage).toBe(0.05) // 2 months @ 2.5% = 5%
-      expect(result.additionalLateFee).toBe(5000) // 5% of ₹1,00,000
-      expect(result.estimatedStampDuty).toBe(8000) // 8 slabs of ₹5L × ₹1,000
-      expect(result.totalMcaChallanFee).toBe(113000) // 1,00,000 + 5,000 + 8,000
+      expect(result.additionalLateFee).toBe(7200) // 5% of ₹1,44,000
+      expect(result.estimatedStampDuty).toBe(20000) // Karnataka: 4 blocks of ₹10L × ₹5,000 (Annexure A)
+      expect(result.totalMcaChallanFee).toBe(171200) // 1,44,000 + 7,200 + 20,000
 
       // Section 446B Adjudication Exposure (50% Concession)
       expect(result.section446BApplied).toBe(true)
       expect(result.dailyPenaltyRate).toBe(250) // 50% of ₹500
       expect(result.companyPenaltyCap).toBe(200000)
-      expect(result.officerPenaltyCap).toBe(50000) // 50% of ₹1,00,000 cap
+      expect(result.officerPenaltyCap).toBe(100000) // Statutory ceiling under Section 446B
       expect(result.companyPenalty).toBe(11250) // 45 × 250
       expect(result.perOfficerPenalty).toBe(11250) // 45 × 250
       expect(result.totalOfficersPenalty).toBe(22500) // 2 × 11,250
       expect(result.totalAdjudicationPenalty).toBe(33750) // 11,250 + 22,500
-      expect(result.savingsFrom446B).toBe(33750) // Standard 67,500 - 33,750
 
-      expect(result.totalFinancialExposure).toBe(146750) // 1,13,000 + 33,750
+      expect(result.totalFinancialExposure).toBe(204950) // 1,71,200 + 33,750
     })
   })
 
@@ -261,8 +270,70 @@ describe('Form SH-7 Statutory Compliance & Fee Engine', () => {
     })
   })
 
-  describe('8. calculateMCAFee in calculatorUtils integration', () => {
-    test('calculateMCAFee returns identical differential and stamp duty for SH-7', () => {
+  describe('8. Table 7 Uniform Base Fee for Non-Capital Alterations', () => {
+    test('Table 7 applies uniformly across Small Company, OPC, and Normal Company', () => {
+      // Small Company with ₹50L capital doing sub-division gets ₹500 under Table 7 (not ₹200)
+      expect(calculateSh7BaseFee(5000000, 'small_company').normalFee).toBe(500)
+      expect(calculateSh7BaseFee(5000000, 'opc').normalFee).toBe(500)
+      expect(calculateSh7BaseFee(5000000, 'normal').normalFee).toBe(500)
+
+      // Boundaries under Table 7:
+      expect(calculateSh7BaseFee(50000).normalFee).toBe(200) // < ₹1L
+      expect(calculateSh7BaseFee(200000).normalFee).toBe(300) // ₹1L to < ₹5L
+      expect(calculateSh7BaseFee(1000000).normalFee).toBe(400) // ₹5L to < ₹25L
+      expect(calculateSh7BaseFee(5000000).normalFee).toBe(500) // ₹25L to < ₹1Cr
+      expect(calculateSh7BaseFee(10000000).normalFee).toBe(600) // >= ₹1Cr
+    })
+  })
+
+  describe('9. Annexure A State Stamp Duties', () => {
+    test('Karnataka: ₹5,000 per ₹10,00,000 or part thereof, max ₹1 Crore', () => {
+      expect(calculateEstimatedStampDuty('karnataka', 4000000)).toBe(20000) // 4 blocks × ₹5k
+      expect(calculateEstimatedStampDuty('karnataka', 1000000)).toBe(5000)
+      expect(calculateEstimatedStampDuty('karnataka', 2500000000)).toBe(10000000) // Capped at ₹1 Crore
+    })
+
+    test('Maharashtra: ₹1,000 per ₹5,00,000 or part thereof, max ₹50 Lakhs', () => {
+      expect(calculateEstimatedStampDuty('maharashtra', 9000000)).toBe(18000) // 18 blocks × ₹1k
+      expect(calculateEstimatedStampDuty('maharashtra', 3000000000)).toBe(5000000) // Capped at ₹50 Lakhs
+    })
+
+    test('Delhi: 0.15% on incremental capital, max ₹25 Lakhs', () => {
+      expect(calculateEstimatedStampDuty('delhi', 4000000)).toBe(6000) // 0.15% on ₹40L
+      expect(calculateEstimatedStampDuty('delhi', 2000000000)).toBe(2500000) // Capped at ₹25 Lakhs
+    })
+
+    test('Tamil Nadu: ₹500 per ₹10,00,000 or part thereof, max ₹5 Lakhs', () => {
+      expect(calculateEstimatedStampDuty('tamil_nadu', 4000000)).toBe(2000) // 4 blocks × ₹500
+      expect(calculateEstimatedStampDuty('tamil_nadu', 2000000000)).toBe(500000) // Capped at ₹5 Lakhs
+    })
+
+    test('Gujarat: 0.5% on incremental capital, max ₹5 Lakhs', () => {
+      expect(calculateEstimatedStampDuty('gujarat', 2000000)).toBe(10000) // 0.5% of ₹20L
+      expect(calculateEstimatedStampDuty('gujarat', 200000000)).toBe(500000) // Capped at ₹5 Lakhs
+    })
+
+    test('Telangana & Andhra Pradesh: 0.15%, min ₹1,000, max ₹5 Lakhs', () => {
+      expect(calculateEstimatedStampDuty('telangana', 500000)).toBe(1000) // min ₹1,000
+      expect(calculateEstimatedStampDuty('telangana', 4000000)).toBe(6000) // 0.15% of ₹40L
+      expect(calculateEstimatedStampDuty('andhra_pradesh', 500000)).toBe(1000)
+    })
+
+    test('Rajasthan: 0.2%, max ₹25 Lakhs', () => {
+      expect(calculateEstimatedStampDuty('rajasthan', 10000000)).toBe(20000) // 0.2% of ₹1Cr
+    })
+
+    test('Uttar Pradesh, West Bengal, Kerala, Haryana: NIL via MCA portal', () => {
+      expect(calculateEstimatedStampDuty('uttar_pradesh', 4000000)).toBe(0)
+      expect(calculateEstimatedStampDuty('west_bengal', 4000000)).toBe(0)
+      expect(calculateEstimatedStampDuty('kerala', 4000000)).toBe(0)
+      expect(calculateEstimatedStampDuty('haryana', 4000000)).toBe(0)
+      expect(calculateEstimatedStampDuty('other', 4000000)).toBe(0)
+    })
+  })
+
+  describe('10. calculateMCAFee in calculatorUtils integration', () => {
+    test('calculateMCAFee returns identical differential and stamp duty for Normal Company in Delhi', () => {
       const res = calculateMCAFee({
         formSlug: 'sh-7',
         companyType: 'normal',
@@ -276,6 +347,22 @@ describe('Form SH-7 Statutory Compliance & Fee Engine', () => {
       expect(res.lateFee).toBe(0)
       expect(res.stampDuty).toBe(6000)
       expect(res.total).toBe(126000)
+    })
+
+    test('calculateMCAFee returns correct Case C figures for Small Company in Karnataka', () => {
+      const res = calculateMCAFee({
+        formSlug: 'sh-7',
+        companyType: 'small_company',
+        capital: 2000000,
+        newCapital: 6000000,
+        delayDays: 45,
+        state: 'karnataka'
+      })
+
+      expect(res.baseFee).toBe(144000) // ₹1,66,000 - ₹22,000
+      expect(res.lateFee).toBe(7200) // 2 months @ 2.5% = 5% of ₹1,44,000
+      expect(res.stampDuty).toBe(20000) // 4 blocks of ₹10L × ₹5,000
+      expect(res.total).toBe(171200) // 1,44,000 + 7,200 + 20,000
     })
   })
 })

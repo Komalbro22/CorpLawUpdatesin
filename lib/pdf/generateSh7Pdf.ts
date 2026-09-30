@@ -185,7 +185,7 @@ export function generateSh7Pdf(
     ],
     [
       { content: 'Total Adjudication Liability (ROC Sec 454)', styles: { fontStyle: 'bold', fillColor: PDF_PALETTE.lightGray } },
-      { content: data.section446BApplied ? 'Section 446B Concession Active (50% Relief)' : 'Standard Corporate Penalty Regime', styles: { fontStyle: 'bold', fillColor: PDF_PALETTE.lightGray } },
+      { content: data.section446BApplied ? 'Section 446B Concession (Illustrative 50% Relief: ₹250/day)' : 'Standard Corporate Penalty Regime', styles: { fontStyle: 'bold', fillColor: PDF_PALETTE.lightGray } },
       { content: formatInr(data.totalAdjudicationPenalty), styles: { fontStyle: 'bold', fillColor: PDF_PALETTE.lightGray, textColor: [180, 0, 0] } }
     ]
   ]

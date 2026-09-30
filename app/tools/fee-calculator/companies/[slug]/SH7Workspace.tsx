@@ -115,7 +115,7 @@ const PRESETS: PresetConfig[] = [
     numOfficers: 2,
     mgt14Filed: true,
     hasAoaClause: true,
-    description: 'Sec 446B applied. Differential: ₹1,00,000; 2 mos late fee (5%): ₹5,000; Stamp: ₹8,000. Challan: ₹1,13,000. Adjudication: ₹33,750.',
+    description: 'Sec 446B applied. Differential: ₹1,44,000; 2 mos late fee (5%): ₹7,200; Karnataka Stamp: ₹20,000. Challan: ₹1,71,200. Adjudication: ₹33,750.',
     badge: 'Sec 446B'
   },
   {
@@ -391,16 +391,19 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
                   onChange={e => setState(e.target.value as IndianState)}
                   className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 outline-none"
                 >
-                  <option value="delhi">Delhi (0.15%)</option>
+                  <option value="delhi">Delhi (0.15%, max ₹25L)</option>
                   <option value="maharashtra">Maharashtra (₹1,000 / ₹5L, max ₹50L)</option>
-                  <option value="karnataka">Karnataka (₹1,000 / ₹5L, max ₹5L)</option>
-                  <option value="tamil_nadu">Tamil Nadu (0.2%)</option>
-                  <option value="gujarat">Gujarat (0.15%, max ₹5L)</option>
-                  <option value="telangana">Telangana (0.15%)</option>
-                  <option value="andhra_pradesh">Andhra Pradesh (0.15%)</option>
-                  <option value="uttar_pradesh">Uttar Pradesh (0.2%)</option>
-                  <option value="west_bengal">West Bengal (0.15%)</option>
-                  <option value="other">Other States / UTs (~0.15%)</option>
+                  <option value="karnataka">Karnataka (₹5,000 / ₹10L, max ₹1 Cr)</option>
+                  <option value="tamil_nadu">Tamil Nadu (₹500 / ₹10L, max ₹5L)</option>
+                  <option value="gujarat">Gujarat (0.5%, max ₹5L)</option>
+                  <option value="telangana">Telangana (0.15%, min ₹1,000, max ₹5L)</option>
+                  <option value="andhra_pradesh">Andhra Pradesh (0.15%, min ₹1,000, max ₹5L)</option>
+                  <option value="rajasthan">Rajasthan (0.2%, max ₹25L)</option>
+                  <option value="uttar_pradesh">Uttar Pradesh (NIL via MCA Portal)</option>
+                  <option value="west_bengal">West Bengal (NIL via MCA Portal)</option>
+                  <option value="kerala">Kerala (NIL via MCA Portal)</option>
+                  <option value="haryana">Haryana (NIL via MCA Portal)</option>
+                  <option value="other">Other States / UTs (NIL via MCA Portal)</option>
                 </select>
               </div>
             </div>
@@ -787,13 +790,18 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
             </div>
 
             {result.section446BApplied && (
-              <div className="flex items-center justify-between p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-[11px]">
-                <span className="font-bold text-emerald-800 dark:text-emerald-300">
-                  Section 446B Relief Active (50% Concession)
-                </span>
-                <span className="font-extrabold text-emerald-700 dark:text-emerald-400 tabular-nums">
-                  Saved {formatInr(result.savingsFrom446B)}
-                </span>
+              <div className="p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-[11px] space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-emerald-800 dark:text-emerald-300">
+                    Section 446B Relief Active (50% Concession)
+                  </span>
+                  <span className="font-extrabold text-emerald-700 dark:text-emerald-400 tabular-nums">
+                    Saved {formatInr(result.savingsFrom446B)}
+                  </span>
+                </div>
+                <p className="text-[10px] text-emerald-700/80 dark:text-emerald-400/80">
+                  Illustrative 50%-relief calculation: ₹250/day (Section 446B: penalty shall not be more than one-half; Company cap ₹2L, Officer cap ₹1L)
+                </p>
               </div>
             )}
 
