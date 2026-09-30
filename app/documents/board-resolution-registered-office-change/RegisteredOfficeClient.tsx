@@ -717,7 +717,7 @@ ${dir}, Director (DIN: ${din})`
             </div>
 
             {/* Document Simulated Sheet */}
-            <div className="p-6 sm:p-10 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 font-serif leading-relaxed text-sm shadow-inner space-y-6 max-w-4xl mx-auto">
+            <div className="w-full min-w-0 max-w-4xl mx-auto box-border overflow-x-auto break-words p-4 sm:p-8 lg:p-10 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 font-serif leading-relaxed text-sm shadow-inner space-y-6">
               <div className="text-center space-y-1">
                 <h4 className="text-base sm:text-lg font-bold tracking-wide uppercase text-slate-900 dark:text-white">
                   {formData.companyName || 'SAMPLE COMMERCIAL VENTURES PRIVATE LIMITED'}
@@ -901,7 +901,7 @@ ${dir}, Director (DIN: ${din})`
               </div>
             </div>
 
-            <div className="p-6 sm:p-10 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 font-serif leading-relaxed text-sm shadow-inner space-y-6 max-w-4xl mx-auto">
+            <div className="w-full min-w-0 max-w-4xl mx-auto box-border overflow-x-auto break-words p-4 sm:p-8 lg:p-10 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 font-serif leading-relaxed text-sm shadow-inner space-y-6">
               <div className="text-center space-y-1">
                 <h4 className="text-base sm:text-lg font-bold tracking-wide uppercase text-slate-900 dark:text-white">
                   {formData.companyName || 'SAMPLE COMMERCIAL VENTURES PRIVATE LIMITED'}
@@ -996,7 +996,7 @@ ${dir}, Director (DIN: ${din})`
               </div>
             </div>
 
-            <div className="p-6 sm:p-10 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 font-serif leading-relaxed text-sm shadow-inner space-y-4 max-w-4xl mx-auto">
+            <div className="w-full min-w-0 max-w-4xl mx-auto box-border overflow-x-auto break-words p-4 sm:p-8 lg:p-10 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 font-serif leading-relaxed text-sm shadow-inner space-y-4">
               <div className="text-center space-y-1">
                 <p className="font-bold text-base text-slate-900 dark:text-white">FORM NO. INC-26</p>
                 <p className="text-xs italic text-slate-500">[Pursuant to Rule 30 of the Companies (Incorporation) Rules, 2014]</p>

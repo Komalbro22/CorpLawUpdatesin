@@ -1813,10 +1813,10 @@ export default function DocumentGeneratorClient({
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 pb-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="max-w-7xl mx-auto min-w-0 px-4 pb-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
 
         {/* LEFT — Form */}
-        <div className="space-y-6">
+        <div className="min-w-0 space-y-6">
           
           {/* AI Prompter - Conversational Draft Mode */}
           <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
@@ -2809,7 +2809,7 @@ export default function DocumentGeneratorClient({
         </div>
 
         {/* RIGHT — Preview + AI Editor */}
-        <div className="space-y-6">
+        <div className="min-w-0 space-y-6">
           
           {generatedContent ? (
             <>

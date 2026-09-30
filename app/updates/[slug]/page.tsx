@@ -691,7 +691,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                 {update.content && <TableOfContents content={update.content} />}
                 <ErrorBoundary>
                     <div className="article-content" suppressHydrationWarning>
-                        <MarkdownRenderer content={contentPart1} />
+                        <MarkdownRenderer content={contentPart1} enableGazetteDownloadPrompt />
                         
                         {relatedForm && (
                             <div className="my-10 bg-[#0F172A] rounded-[12px] p-8 flex flex-col items-center text-center shadow-lg border border-slate-800 clear-both">
@@ -739,7 +739,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                             </div>
                         )}
                         
-                        {contentPart2 && <MarkdownRenderer content={contentPart2} />}
+                        {contentPart2 && <MarkdownRenderer content={contentPart2} enableGazetteDownloadPrompt />}
                     </div>
                 </ErrorBoundary>
 

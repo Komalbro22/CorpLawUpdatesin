@@ -459,7 +459,7 @@ export default function EquitableMortgageClient() {
       </div>
 
       {/* Main Workstation Body: Left Customizer / Right Live Preview */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[750px]">
+      <div className="grid min-w-0 grid-cols-1 lg:grid-cols-12 min-h-[750px]">
         {/* LEFT COLUMN: Customizer Form Panel (5 cols) */}
         <div className="lg:col-span-5 p-6 bg-slate-50 dark:bg-slate-900/50 border-r border-slate-200 dark:border-slate-800 space-y-6 overflow-y-auto max-h-[850px]">
           <div>
@@ -924,7 +924,7 @@ export default function EquitableMortgageClient() {
         </div>
 
         {/* RIGHT COLUMN: Live Specimen View (7 cols) */}
-        <div className="lg:col-span-7 p-6 bg-white dark:bg-slate-950 flex flex-col justify-between overflow-y-auto max-h-[850px]">
+        <div className="min-w-0 lg:col-span-7 p-4 sm:p-6 bg-white dark:bg-slate-950 flex flex-col justify-between overflow-x-hidden overflow-y-auto max-h-[850px]">
           {activeTab === 'stamp_guide' ? (
             /* Tab 5: State Stamp Duty & Compliance Guide */
             <div className="space-y-6">
@@ -1099,7 +1099,7 @@ export default function EquitableMortgageClient() {
               </div>
 
               {/* Rendered Letterhead / Legal Page Paper Canvas */}
-              <div className="bg-slate-50/50 dark:bg-slate-900/40 p-6 sm:p-8 rounded-xl border border-slate-200/90 dark:border-slate-800 font-serif text-slate-900 dark:text-slate-100 shadow-inner text-xs sm:text-sm leading-relaxed space-y-4">
+              <div className="w-full min-w-0 max-w-full box-border overflow-x-auto break-words bg-slate-50/50 dark:bg-slate-900/40 p-4 sm:p-8 rounded-xl border border-slate-200/90 dark:border-slate-800 font-serif text-slate-900 dark:text-slate-100 shadow-inner text-xs sm:text-sm leading-relaxed space-y-4">
                 {activeTab === 'modt' && (
                   <>
                     <div className="text-center space-y-1 pb-4 border-b border-slate-300 dark:border-slate-700">

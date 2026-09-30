@@ -1100,7 +1100,7 @@ Place: New Delhi`
             </div>
 
             {/* Document Content View */}
-            <div className="p-6 max-h-[750px] overflow-y-auto font-serif text-slate-900 dark:text-slate-100 text-sm leading-relaxed space-y-4">
+            <div className="w-full min-w-0 max-w-full max-h-[750px] overflow-x-auto overflow-y-auto break-words box-border p-4 sm:p-6 font-serif text-slate-900 dark:text-slate-100 text-sm leading-relaxed space-y-4">
               {activeTab === 'resolution' && (
                 <div className="bg-white dark:bg-slate-950 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-inner">
                   <div className="text-center pb-4 border-b border-slate-200 dark:border-slate-800 mb-5">

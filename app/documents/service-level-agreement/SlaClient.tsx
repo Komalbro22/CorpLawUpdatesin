@@ -774,7 +774,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
           </div>
 
           {/* ─── Physical Paper Legal Agreement Sheet (A4 styling) ──────────── */}
-          <div className="max-w-4xl mx-auto bg-white border border-slate-300 shadow-xl rounded-2xl p-6 sm:p-12 text-slate-900 font-sans print:shadow-none print:border-none print:p-0">
+          <div className="w-full min-w-0 max-w-4xl mx-auto box-border overflow-x-hidden break-words bg-white border border-slate-300 shadow-xl rounded-2xl p-4 sm:p-8 lg:p-12 text-slate-900 font-sans print:shadow-none print:border-none print:p-0">
             {/* Stamp Paper Top Trust Ribbon */}
             <div className="flex flex-wrap items-center justify-between border-b border-slate-200 pb-3 mb-5 text-[10px] sm:text-[11px] text-slate-500 font-mono gap-2">
               <span className="flex items-center gap-1.5 text-emerald-700 font-bold">

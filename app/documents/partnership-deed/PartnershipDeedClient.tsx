@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import dynamic from 'next/dynamic'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Download,
   FileText,
@@ -40,6 +41,12 @@ import {
   formatInrCurrency,
   convertNumberToIndianWords,
 } from '@/lib/doc-generator/partnership-deed-generator'
+import { isDownloadPromptSuppressed } from '@/lib/download-prompt-storage'
+
+const LazyDownloadSubscribePrompt = dynamic(
+  () => import('@/components/DownloadSubscribePrompt'),
+  { ssr: false }
+)
 
 const STATE_STAMP_RATES_DEED: Record<
   string,
@@ -155,6 +162,8 @@ const STATE_STAMP_RATES_DEED: Record<
 }
 
 export default function PartnershipDeedClient() {
+  const [downloadPromptOpen, setDownloadPromptOpen] = useState(false)
+  const downloadPromptShownRef = useRef(false)
   const [formData, setFormData] = useState<PartnershipDeedFormData>(DEFAULT_SAMPLE_PARTNERSHIP_DATA)
   const [activeTab, setActiveTab] = useState<'deed' | 'rof-form-1' | 'bank-mandate' | 'stamp-guide'>('deed')
   const [isDownloading, setIsDownloading] = useState<string | null>(null)
@@ -170,6 +179,33 @@ export default function PartnershipDeedClient() {
   const [aiSuccessBadge, setAiSuccessBadge] = useState<string | null>(null)
   const [showAiPrompt, setShowAiPrompt] = useState(false)
   const [customPrompt, setCustomPrompt] = useState('')
+
+  const openDownloadPromptOnce = useCallback(() => {
+    if (downloadPromptShownRef.current || isDownloadPromptSuppressed()) return
+    downloadPromptShownRef.current = true
+    setDownloadPromptOpen(true)
+  }, [])
+
+  useEffect(() => {
+    const handleDirectDownloadClick = (event: MouseEvent) => {
+      if (!(event.target instanceof Element)) return
+      const link = event.target.closest<HTMLAnchorElement>('a[href]')
+      if (!link) return
+
+      try {
+        const linkUrl = new URL(link.href, window.location.href)
+        if (linkUrl.pathname === '/api/documents/partnership-deed-download') {
+          // Leave the anchor's default navigation/download behavior untouched.
+          openDownloadPromptOnce()
+        }
+      } catch {
+        // Ignore malformed URLs and preserve normal link behavior.
+      }
+    }
+
+    document.addEventListener('click', handleDirectDownloadClick)
+    return () => document.removeEventListener('click', handleDirectDownloadClick)
+  }, [openDownloadPromptOnce])
 
   // Profit/loss share validation
   const totalProfitShare = useMemo(() => {
@@ -348,6 +384,7 @@ export default function PartnershipDeedClient() {
       a.click()
       a.remove()
       window.URL.revokeObjectURL(url)
+      openDownloadPromptOnce()
     } catch (err) {
       console.error(err)
       alert('Unable to generate document. Please try again.')
@@ -385,6 +422,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
   const calculatedStampDuty = currentStampConfig.calcDuty(formData.totalCapital)
 
   return (
+    <>
     <div className="space-y-8">
       {/* 1. Category Preset Selector */}
       <div className="space-y-3">
@@ -1024,7 +1062,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
         </div>
 
         {/* RIGHT COLUMN: Live Document Canvas & Auxiliary Tabs (5 cols) */}
-        <div className="lg:col-span-5 space-y-4 sticky top-6">
+        <div className="min-w-0 lg:col-span-5 space-y-4 sticky top-6">
           {/* Tab Navigation */}
           <div className="flex border-b border-slate-200 dark:border-slate-800 gap-1 overflow-x-auto pb-px">
             <button
@@ -1082,31 +1120,35 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
 
           {/* TAB 1: Live Deed Canvas */}
           {activeTab === 'deed' && (
-            <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 max-h-[750px] overflow-y-auto font-serif text-xs leading-relaxed text-slate-800 dark:text-slate-200">
-              <div className="text-center border-b border-slate-200 dark:border-slate-800 pb-3">
-                <h3 className="font-bold text-sm tracking-wide uppercase text-slate-900 dark:text-white font-sans">
+            <div className="mx-auto min-h-[1056px] w-full min-w-0 max-h-[750px] max-w-full overflow-x-hidden overflow-y-auto break-words border border-slate-300 bg-white px-4 py-8 font-serif text-[14px] leading-[1.55] text-black shadow-lg dark:border-slate-300 dark:bg-white dark:text-black sm:px-8 lg:px-14">
+              <div className="mb-6 border-b border-slate-300 pb-5 text-center">
+                <h3 className="font-bold text-lg uppercase tracking-normal text-black">
                   PARTNERSHIP DEED
                 </h3>
-                <p className="font-bold text-xs text-indigo-600 dark:text-indigo-400 font-sans mt-0.5">
+                <p className="mt-1 font-bold text-base text-black">
                   OF {formData.firmName.toUpperCase()}
                 </p>
-                <p className="text-[10px] text-slate-500 font-sans">
+                <p className="mt-2 text-xs italic text-slate-700">
                   Indian Partnership Act, 1932 • Section 40(b) Compliant
                 </p>
               </div>
 
-              <p className="text-justify">
-                THIS DEED OF PARTNERSHIP is made on this <strong>{formData.executionDate}</strong> at{' '}
-                <strong>{formData.executionCity}</strong>, State of <strong>{formData.executionState}</strong> by and between:
+              <p className="mb-4 text-justify">
+                THIS DEED OF PARTNERSHIP is made and executed on this {formData.executionDate} at {formData.executionCity}, State of {formData.executionState}, by and between:
               </p>
 
-              <div className="space-y-2 pl-3 border-l-2 border-indigo-200 dark:border-indigo-800 font-sans text-[11px]">
+              <div className="space-y-3">
                 {formData.partners.map((p, i) => (
                   <p key={i}>
-                    <strong>{i + 1}. {p.name.toUpperCase()}</strong>, {p.fatherOrSpouse}, residing at {p.address} (PAN: {p.pan}) — <em>{i === 0 ? 'First Party' : i === 1 ? 'Second Party' : `Party ${i + 1}`}</em>
+                    <strong>{i + 1}. {p.name.toUpperCase()}</strong>, {p.fatherOrSpouse}, residing at {p.address}, bearing Permanent Account Number (PAN) {p.pan} and Aadhaar/ID No. {p.aadhaarOrId} (hereinafter referred to as the <strong>“{i === 0 ? 'FIRST' : i === 1 ? 'SECOND' : `PARTY NO. ${i + 1}`} PARTY”</strong>, which expression shall unless repugnant to the context include their legal heirs, executors, administrators, and permitted assigns){i < formData.partners.length - 1 ? '; AND' : ';'}
                   </p>
                 ))}
               </div>
+
+              <p className="mt-5 font-bold">WHEREAS:</p>
+              <p className="mt-2 text-justify">A. The Parties hereto have mutually agreed to associate themselves together as partners to carry on commercial business under the name and style of {formData.firmName} under the provisions of the Indian Partnership Act, 1932.</p>
+              <p className="mt-2 text-justify">B. The Parties deem it expedient and necessary to reduce the agreed terms, rights, duties, capital contributions, profit-sharing ratio, and operational management of the partnership firm into writing.</p>
+              <p className="my-4 text-justify font-bold">NOW, THEREFORE, THIS DEED OF PARTNERSHIP WITNESSETH AND IT IS HEREBY MUTUALLY AGREED BY AND BETWEEN THE PARTIES HERETO AS FOLLOWS:</p>
 
               <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
                 <p><strong>1. FIRM NAME:</strong> &quot;{formData.firmName.toUpperCase()}&quot;</p>
@@ -1276,5 +1318,13 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
         </div>
       </div>
     </div>
+    {downloadPromptOpen && (
+      <LazyDownloadSubscribePrompt
+        open={downloadPromptOpen}
+        source="template"
+        onClose={() => setDownloadPromptOpen(false)}
+      />
+    )}
+    </>
   )
 }

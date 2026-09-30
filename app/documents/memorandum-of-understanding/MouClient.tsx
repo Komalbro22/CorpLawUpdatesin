@@ -841,7 +841,7 @@ export default function MouClient() {
         </div>
 
         {/* RIGHT COLUMN: Live Specimen View (7 cols) */}
-        <div className="lg:col-span-7 p-6 bg-white dark:bg-slate-950 flex flex-col justify-between overflow-y-auto max-h-[850px]">
+        <div className="min-w-0 lg:col-span-7 p-4 sm:p-6 bg-white dark:bg-slate-950 flex flex-col justify-between overflow-x-hidden overflow-y-auto max-h-[850px]">
           {activeTab === 'matrix' ? (
             /* Tab 3: Binding vs Non-Binding Matrix & Stamp Guide */
             <div className="space-y-6">
@@ -1046,7 +1046,7 @@ export default function MouClient() {
                 </div>
               </div>
 
-              <div className="bg-slate-50/50 dark:bg-slate-900/40 p-6 sm:p-8 rounded-xl border border-slate-200/90 dark:border-slate-800 font-serif text-slate-900 dark:text-slate-100 shadow-inner text-xs sm:text-sm leading-relaxed space-y-4">
+              <div className="w-full min-w-0 max-w-full box-border overflow-x-auto break-words bg-slate-50/50 dark:bg-slate-900/40 p-4 sm:p-8 rounded-xl border border-slate-200/90 dark:border-slate-800 font-serif text-slate-900 dark:text-slate-100 shadow-inner text-xs sm:text-sm leading-relaxed space-y-4">
                 <div className="text-center space-y-1 pb-4 border-b border-slate-300 dark:border-slate-700">
                   <h3 className="text-base font-bold uppercase underline">
                     NON-DISCLOSURE & CONFIDENTIALITY UNDERTAKING
@@ -1110,7 +1110,7 @@ export default function MouClient() {
               </div>
 
               {/* Rendered Legal Document Paper */}
-              <div className="bg-slate-50/50 dark:bg-slate-900/40 p-6 sm:p-8 rounded-xl border border-slate-200/90 dark:border-slate-800 font-serif text-slate-900 dark:text-slate-100 shadow-inner text-xs sm:text-sm leading-relaxed space-y-4">
+                <div className="w-full min-w-0 max-w-full box-border overflow-x-auto break-words bg-slate-50/50 dark:bg-slate-900/40 p-4 sm:p-8 rounded-xl border border-slate-200/90 dark:border-slate-800 font-serif text-slate-900 dark:text-slate-100 shadow-inner text-xs sm:text-sm leading-relaxed space-y-4">
                 <div className="text-center space-y-1 pb-4 border-b border-slate-300 dark:border-slate-700">
                   <h3 className="text-base sm:text-lg font-bold tracking-wide uppercase underline">
                     {formData.title}

@@ -4,12 +4,34 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 
-import { useEffect, useRef } from 'react'
+import dynamic from 'next/dynamic'
+import { useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkBreaks from 'remark-breaks'
 import rehypeRaw from 'rehype-raw'
 import { sanitizeHtml } from '@/lib/sanitize'
+import { isDownloadPromptSuppressed } from '@/lib/download-prompt-storage'
+
+const LazyDownloadSubscribePrompt = dynamic(
+    () => import('@/components/DownloadSubscribePrompt'),
+    { ssr: false }
+)
+
+function isGazetteDownloadLink(href: unknown): boolean {
+    if (typeof href !== 'string' || typeof window === 'undefined') return false
+
+    try {
+        const url = new URL(href.trim(), window.location.origin)
+        if (url.pathname.toLowerCase().endsWith('.pdf')) return true
+        if (url.hostname.toLowerCase() !== 'drive.google.com') return false
+
+        return /^\/file\/d\/[^/]+(?:\/|$)/i.test(url.pathname)
+            || ((url.pathname === '/open' || url.pathname === '/uc') && url.searchParams.has('id'))
+    } catch {
+        return false
+    }
+}
 
 function parseStyle(styleInput: any, node?: any): React.CSSProperties {
     let styleVal = styleInput;
@@ -278,8 +300,15 @@ function processInlineStyles(styleObj: any, className: string = '', isContainer:
     };
 }
 
-export default function MarkdownRenderer({ content }: { content: string }) {
+export default function MarkdownRenderer({
+    content,
+    enableGazetteDownloadPrompt = false,
+}: {
+    content: string
+    enableGazetteDownloadPrompt?: boolean
+}) {
     const ref = useRef<HTMLDivElement>(null)
+    const [gazettePromptOpen, setGazettePromptOpen] = useState(false)
 
     useEffect(() => {
         if (!ref.current) return
@@ -341,6 +370,7 @@ export default function MarkdownRenderer({ content }: { content: string }) {
     const sanitizedContent = sanitizeHtml(processedContent)
 
     return (
+        <>
         <div ref={ref} suppressHydrationWarning className={`
           article-content prose prose-slate dark:prose-invert max-w-none
           prose-headings:text-navy dark:prose-headings:text-white
@@ -664,6 +694,18 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                                 target={isExternal ? '_blank' : undefined}
                                 rel={isExternal ? 'noopener noreferrer' : undefined}
                                 {...props}
+                                onClick={(event) => {
+                                    props.onClick?.(event)
+                                    if (
+                                        enableGazetteDownloadPrompt
+                                        && !event.defaultPrevented
+                                        && isGazetteDownloadLink(cleanHref)
+                                        && !isDownloadPromptSuppressed()
+                                    ) {
+                                        // Preserve the anchor's native navigation/download behavior.
+                                        setGazettePromptOpen(true)
+                                    }
+                                }}
                             >
                                 {children}
                             </a>
@@ -732,5 +774,13 @@ export default function MarkdownRenderer({ content }: { content: string }) {
                 {sanitizedContent}
             </ReactMarkdown>
         </div>
+        {enableGazetteDownloadPrompt && gazettePromptOpen && (
+            <LazyDownloadSubscribePrompt
+                open={gazettePromptOpen}
+                source="gazette-pdf"
+                onClose={() => setGazettePromptOpen(false)}
+            />
+        )}
+        </>
     )
 }
