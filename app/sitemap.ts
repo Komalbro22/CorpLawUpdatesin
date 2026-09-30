@@ -75,6 +75,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/calendar`, lastModified: latestCalendarDate, changeFrequency: 'monthly' as const, priority: 0.8 },
     { url: `${BASE_URL}/glossary`, lastModified: latestArticleDate, changeFrequency: 'monthly' as const, priority: 0.7 },
     { url: `${BASE_URL}/documents`, lastModified: latestArticleDate, changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${BASE_URL}/documents/employment-agreement`, lastModified: new Date('2026-09-30'), changeFrequency: 'weekly' as const, priority: 0.85 },
+    { url: `${BASE_URL}/documents/partnership-deed`, lastModified: new Date('2026-09-28'), changeFrequency: 'monthly' as const, priority: 0.8 },
+    { url: `${BASE_URL}/documents/service-level-agreement`, lastModified: new Date('2026-09-28'), changeFrequency: 'monthly' as const, priority: 0.8 },
     { url: `${BASE_URL}/documents/board-resolution-for-dividend-declaration`, lastModified: new Date('2026-09-29'), changeFrequency: 'monthly' as const, priority: 0.75 },
 
     { url: `${BASE_URL}/tools`, lastModified: latestArticleDate, changeFrequency: 'monthly' as const, priority: 0.9 },
@@ -120,7 +123,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     docTemplates = data || []
   }
 
-  const documentPages = (docTemplates || []).filter(d => d.slug !== 'board-resolution-dividend').map(d => ({
+  const dedicatedSlugs = new Set([
+    'board-resolution-dividend',
+    'board-resolution-for-dividend-declaration',
+    'employment-agreement',
+    'employment_agreement',
+    'partnership-deed',
+    'service-level-agreement',
+  ])
+  const documentPages = (docTemplates || []).filter(d => !dedicatedSlugs.has(d.slug)).map(d => ({
     url: `${BASE_URL}/documents/${d.slug}`,
     lastModified: d.updated_at ? new Date(d.updated_at) : new Date(),
     changeFrequency: 'monthly' as const,

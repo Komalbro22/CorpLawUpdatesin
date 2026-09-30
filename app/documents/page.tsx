@@ -211,6 +211,19 @@ export default async function DocumentsPage() {
             Open generator <span aria-hidden="true">→</span>
           </Link>
         </section>
+
+        <section aria-labelledby="employment-generator-heading" className="rounded-2xl border border-indigo-200 bg-indigo-50/70 p-5 dark:border-indigo-900/50 dark:bg-indigo-950/20 sm:flex sm:items-center sm:justify-between sm:p-7">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-indigo-200/60 dark:bg-indigo-900/60 text-indigo-950 dark:text-indigo-200 text-[10px] font-bold uppercase tracking-wider mb-1">
+              ✨ Labour Codes (2025/2026) · AI Assistant · Free Word & PDF
+            </div>
+            <h2 id="employment-generator-heading" className="mt-1 text-xl font-bold text-slate-900 dark:text-white">Employment Agreement & Contract Generator (India)</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-700 dark:text-slate-300">Generate a legally vetted Indian employment agreement with AI conversational drafter, Section 2(y) 50% wage parity validation, state stamp duty calculator, and IP assignment.</p>
+          </div>
+          <Link href="/documents/employment-agreement" className="mt-4 inline-flex shrink-0 items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 sm:ml-6 sm:mt-0 shadow-sm transition-colors">
+            Open generator <span aria-hidden="true">→</span>
+          </Link>
+        </section>
         
         {/* FEATURED: AI PARAMETRIC DOCUMENT GENERATOR STUDIO */}
         <section className="bg-gradient-to-r from-slate-900 via-slate-850 to-blue-950 border border-blue-500/30 rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl">
