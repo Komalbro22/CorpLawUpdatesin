@@ -140,10 +140,17 @@ describe('Employment Agreement Generator & Statutory Compliance', () => {
     expect(formatInr(1200000)).toBe('₹12,00,000')
   })
 
-  test('builds valid Microsoft Word (.docx) binary buffer', async () => {
+  test('builds valid Microsoft Word (.docx) binary buffer and valid XML', async () => {
     const buffer = await buildEmploymentAgreementDocx(DEFAULT_SAMPLE_EMPLOYMENT_DATA)
     expect(buffer).toBeInstanceOf(Buffer)
-    expect(buffer.length).toBeGreaterThan(5000) // Valid docx file
+    expect(buffer.length).toBeGreaterThan(5000)
+
+    // Unzip and verify document.xml has dxa tables, not percentage
+    const JSZip = require('jszip')
+    const zip = await JSZip.loadAsync(buffer)
+    const xml = await zip.file('word/document.xml').async('text')
+    expect(xml).toContain('w:type="dxa"')
+    expect(xml).not.toContain('w:type="pct"')
   })
 
   test('builds valid PDF binary document with %PDF header', async () => {

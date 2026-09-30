@@ -61,7 +61,16 @@ export async function POST(request: Request) {
       format: 'docx' | 'pdf'
     }
 
-    const formData = data || DEFAULT_SAMPLE_EMPLOYMENT_DATA
+    const rawData = data || {}
+    const formData: EmploymentAgreementFormData = {
+      ...DEFAULT_SAMPLE_EMPLOYMENT_DATA,
+      ...rawData,
+      salaryStructure: {
+        ...DEFAULT_SAMPLE_EMPLOYMENT_DATA.salaryStructure,
+        ...(rawData.salaryStructure || {}),
+      },
+      providedAssets: rawData.providedAssets || DEFAULT_SAMPLE_EMPLOYMENT_DATA.providedAssets,
+    }
     const cleanEmpName = (formData.employeeName || 'Employee').replace(/[^a-zA-Z0-9]/g, '_')
     const cleanDate = (formData.executionDate || '2026').replace(/[^a-zA-Z0-9]/g, '-')
     const fileSlug = `Employment_Agreement_${cleanEmpName}_${cleanDate}`

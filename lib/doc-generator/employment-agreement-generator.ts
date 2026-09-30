@@ -731,11 +731,19 @@ export function generateEmploymentAgreementMarkdown(data: EmploymentAgreementFor
 }
 
 // ─── DOCX Builder ────────────────────────────────────────────────────────────
+// ─── DOCX Builder ────────────────────────────────────────────────────────────
 export async function buildEmploymentAgreementDocx(data: EmploymentAgreementFormData): Promise<Buffer> {
-  const d = data
-  const stampRule = STATE_STAMP_SCHEDULE[d.state] || STATE_STAMP_SCHEDULE.karnataka
-  const wageRule = checkWageFiftyPercentRule(d.salaryStructure)
-  const sb = d.salaryStructure
+  const d = data || DEFAULT_SAMPLE_EMPLOYMENT_DATA
+  const stateKey = (d.state || 'karnataka').toLowerCase()
+  const stampRule = STATE_STAMP_SCHEDULE[stateKey] || STATE_STAMP_SCHEDULE.karnataka
+  const sb = d.salaryStructure || DEFAULT_SAMPLE_EMPLOYMENT_DATA.salaryStructure
+  const wageRule = checkWageFiftyPercentRule(sb)
+
+  const PRINTABLE_WIDTH_DXA = 9026 // A4 (11906 total - 2880 margins)
+
+  function formatInrDocx(val: number): string {
+    return 'Rs. ' + Number(val || 0).toLocaleString('en-IN')
+  }
 
   const doc = new Document({
     sections: [
@@ -764,7 +772,7 @@ export async function buildEmploymentAgreementDocx(data: EmploymentAgreementForm
             spacing: { after: 240 },
             children: [
               new TextRun({
-                text: `Execution Date: ${d.executionDate} | Place: ${d.executionPlace}`,
+                text: `Execution Date: ${cleanText(d.executionDate)} | Place: ${cleanText(d.executionPlace)}`,
                 italics: true,
                 size: 20,
                 color: '64748B',
@@ -772,13 +780,15 @@ export async function buildEmploymentAgreementDocx(data: EmploymentAgreementForm
             ],
           }),
 
-          // Stamp Duty Callout Table
+          // Stamp Duty Callout Table (DXA based)
           new Table({
-            width: { size: 100, type: WidthType.PERCENTAGE },
+            width: { size: PRINTABLE_WIDTH_DXA, type: WidthType.DXA },
+            columnWidths: [PRINTABLE_WIDTH_DXA],
             rows: [
               new TableRow({
                 children: [
                   new TableCell({
+                    width: { size: PRINTABLE_WIDTH_DXA, type: WidthType.DXA },
                     shading: { type: ShadingType.CLEAR, fill: 'F1F5F9' },
                     borders: {
                       top: { style: BorderStyle.SINGLE, size: 4, color: 'CBD5E1' },
@@ -786,18 +796,19 @@ export async function buildEmploymentAgreementDocx(data: EmploymentAgreementForm
                       left: { style: BorderStyle.SINGLE, size: 16, color: '2563EB' },
                       right: { style: BorderStyle.SINGLE, size: 4, color: 'CBD5E1' },
                     },
+                    margins: { top: 120, bottom: 120, left: 160, right: 160 },
                     children: [
                       new Paragraph({
                         spacing: { before: 80, after: 80 },
                         children: [
                           new TextRun({
-                            text: `STATUTORY STAMP DUTY NOTICE (${stampRule.stateName}): `,
+                            text: `STATUTORY STAMP DUTY NOTICE (${cleanText(stampRule.stateName)}): `,
                             bold: true,
                             size: 18,
                             color: '1E3A8A',
                           }),
                           new TextRun({
-                            text: `Payable at ${formatInr(stampRule.stampDutyAmount)} under ${stampRule.articleRef} via ${stampRule.stampType}.`,
+                            text: `Payable at ${formatInrDocx(stampRule.stampDutyAmount)} under ${cleanText(stampRule.articleRef)} via ${cleanText(stampRule.stampType)}.`,
                             size: 18,
                             color: '334155',
                           }),
@@ -818,7 +829,7 @@ export async function buildEmploymentAgreementDocx(data: EmploymentAgreementForm
             spacing: { after: 120 },
             children: [
               new TextRun({
-                text: `This EMPLOYMENT AGREEMENT ("Agreement") is entered into on this ${d.executionDate}, at ${d.executionPlace}, by and between:`,
+                text: `This EMPLOYMENT AGREEMENT ("Agreement") is entered into on this ${cleanText(d.executionDate)}, at ${cleanText(d.executionPlace)}, by and between:`,
                 size: 22,
               }),
             ],
@@ -830,9 +841,9 @@ export async function buildEmploymentAgreementDocx(data: EmploymentAgreementForm
             spacing: { after: 120 },
             children: [
               new TextRun({ text: '1. ', bold: true, size: 22 }),
-              new TextRun({ text: `${d.employerName}`, bold: true, size: 22 }),
+              new TextRun({ text: `${cleanText(d.employerName)}`, bold: true, size: 22 }),
               new TextRun({
-                text: `, a ${d.employerEntityType}${d.employerRegistrationNumber ? ` (Registration/CIN: ${d.employerRegistrationNumber})` : ''}, having its registered office at ${d.employerRegisteredAddress}, represented herein by ${d.signatoryName}, ${d.signatoryDesignation} (hereinafter referred to as the "Company" or "Employer");`,
+                text: `, a ${cleanText(d.employerEntityType)}${d.employerRegistrationNumber ? ` (Registration/CIN: ${cleanText(d.employerRegistrationNumber)})` : ''}, having its registered office at ${cleanText(d.employerRegisteredAddress)}, represented herein by ${cleanText(d.signatoryName)}, ${cleanText(d.signatoryDesignation)} (hereinafter referred to as the "Company" or "Employer");`,
                 size: 22,
               }),
             ],
@@ -851,9 +862,9 @@ export async function buildEmploymentAgreementDocx(data: EmploymentAgreementForm
             spacing: { after: 200 },
             children: [
               new TextRun({ text: '2. ', bold: true, size: 22 }),
-              new TextRun({ text: `${d.employeeName}`, bold: true, size: 22 }),
+              new TextRun({ text: `${cleanText(d.employeeName)}`, bold: true, size: 22 }),
               new TextRun({
-                text: `${d.employeeFatherOrSpouseName ? `, s/o / d/o / w/o ${d.employeeFatherOrSpouseName}` : ''}, residing at ${d.employeeResidentialAddress}, PAN: ${d.employeePan || '[PAN Required]'} (hereinafter referred to as the "Employee").`,
+                text: `${d.employeeFatherOrSpouseName ? `, s/o / d/o / w/o ${cleanText(d.employeeFatherOrSpouseName)}` : ''}, residing at ${cleanText(d.employeeResidentialAddress)}, PAN: ${cleanText(d.employeePan) || '[PAN Required]'} (hereinafter referred to as the "Employee").`,
                 size: 22,
               }),
             ],
@@ -869,7 +880,7 @@ export async function buildEmploymentAgreementDocx(data: EmploymentAgreementForm
             spacing: { after: 80 },
             children: [
               new TextRun({
-                text: `A. The Company desires to appoint the Employee to the position of ${d.designation} in its ${d.department} department.`,
+                text: `A. The Company desires to appoint the Employee to the position of ${cleanText(d.designation)} in its ${cleanText(d.department)} department.`,
                 size: 20,
               }),
             ],
@@ -896,7 +907,7 @@ export async function buildEmploymentAgreementDocx(data: EmploymentAgreementForm
             spacing: { after: 120 },
             children: [
               new TextRun({
-                text: `1.1 The Company hereby appoints the Employee as ${d.designation}, commencing on the Joining Date of ${d.joiningDate}. The Employee shall report to the ${d.reportingManagerDesignation}. Pursuant to Section 6(1)(f) of the OSH Code, 2020, this contract records all statutory appointment particulars.`,
+                text: `1.1 The Company hereby appoints the Employee as ${cleanText(d.designation)}, commencing on the Joining Date of ${cleanText(d.joiningDate)}. The Employee shall report to the ${cleanText(d.reportingManagerDesignation)}. Pursuant to Section 6(1)(f) of the OSH Code, 2020, this contract records all statutory appointment particulars.`,
                 size: 20,
               }),
             ],
@@ -913,7 +924,7 @@ export async function buildEmploymentAgreementDocx(data: EmploymentAgreementForm
             spacing: { after: 120 },
             children: [
               new TextRun({
-                text: `2.1 The Employee is engaged on a ${d.workMode.replace('_', ' ').toUpperCase()} basis based out of ${d.workLocationCity}. The Employee shall maintain strict data confidentiality and home workstation security in compliance with the Digital Personal Data Protection Act, 2023.`,
+                text: `2.1 The Employee is engaged on a ${(d.workMode || 'hybrid').replace(/_/g, ' ').toUpperCase()} basis based out of ${cleanText(d.workLocationCity)}. The Employee shall maintain strict data confidentiality and home workstation security in compliance with the Digital Personal Data Protection Act, 2023.`,
                 size: 20,
               }),
             ],
@@ -943,7 +954,7 @@ export async function buildEmploymentAgreementDocx(data: EmploymentAgreementForm
                 text: d.isFixedTerm
                   ? `3.1 This is a Fixed-Term Employment contract under Section 2(o) of the Industrial Relations Code, 2020 for ${d.fixedTermDurationMonths || 12} months. Expiry does not constitute retrenchment under Section 2(zh). Pro-rata gratuity is available after 1 year under Section 53 of the Social Security Code.`
                   : d.hasProbation
-                  ? `3.1 The Employee shall serve an initial probation period of ${d.probationMonths} months. Confirmation requires written notification. Either party may terminate during probation on ${d.probationNoticeDays} days' written notice.`
+                  ? `3.1 The Employee shall serve an initial probation period of ${d.probationMonths || 3} months. Confirmation requires written notification. Either party may terminate during probation on ${d.probationNoticeDays || 15} days' written notice.`
                   : `3.1 The Employee is appointed directly as a regular confirmed employee with standard notice terms.`,
                 size: 20,
               }),
@@ -961,7 +972,7 @@ export async function buildEmploymentAgreementDocx(data: EmploymentAgreementForm
             spacing: { after: 120 },
             children: [
               new TextRun({
-                text: `4.1 The Employee shall be paid an annual CTC of ${formatInr(d.annualCtc)} (${numberToWordsInr(d.annualCtc)}) payable monthly. Under Section 2(y) of the Code on Wages, 2019, Basic Salary is set at ${formatInr(sb.basicMonthly)}/month (${wageRule.basicPercentage}% of gross), complying with statutory wage thresholds. Remuneration is disbursed on or before the ${d.paymentDayOfMonth}th of each month subject to statutory tax TDS and EPF deductions.`,
+                text: `4.1 The Employee shall be paid an annual CTC of ${formatInrDocx(d.annualCtc)} (${numberToWordsInr(d.annualCtc)}) payable monthly. Under Section 2(y) of the Code on Wages, 2019, Basic Salary is set at ${formatInrDocx(sb.basicMonthly)}/month (${wageRule.basicPercentage}% of gross), complying with statutory wage thresholds. Remuneration is disbursed on or before the ${d.paymentDayOfMonth || 7}th of each month subject to statutory tax TDS and EPF deductions.`,
                 size: 20,
               }),
             ],
@@ -980,7 +991,7 @@ export async function buildEmploymentAgreementDocx(data: EmploymentAgreementForm
             spacing: { after: 120 },
             children: [
               new TextRun({
-                text: `5.1 All proprietary software, code, and inventions authored by the Employee belong exclusively to the Company under Section 17(c) of the Copyright Act, 1957. The Employee agrees to a non-solicitation covenant for ${d.nonSolicitMonths} months post-termination. Blanket post-employment non-compete covenants are subject to Section 27 of the Indian Contract Act, 1872.`,
+                text: `5.1 All proprietary software, code, and inventions authored by the Employee belong exclusively to the Company under Section 17(c) of the Copyright Act, 1957. The Employee agrees to a non-solicitation covenant for ${d.nonSolicitMonths || 12} months post-termination. Blanket post-employment non-compete covenants are subject to Section 27 of the Indian Contract Act, 1872.`,
                 size: 20,
               }),
             ],
@@ -997,7 +1008,7 @@ export async function buildEmploymentAgreementDocx(data: EmploymentAgreementForm
             spacing: { after: 160 },
             children: [
               new TextRun({
-                text: `6.1 Post-confirmation, either party may terminate this Agreement upon ${d.noticePeriodDays} days' written notice${d.noticePayInLieuPermitted ? ' or payment of basic salary in lieu thereof' : ''}. Termination for cause (gross misconduct, fraud, abandonment) may be effected immediately without notice.`,
+                text: `6.1 Post-confirmation, either party may terminate this Agreement upon ${d.noticePeriodDays || 30} days' written notice${d.noticePayInLieuPermitted ? ' or payment of basic salary in lieu thereof' : ''}. Termination for cause (gross misconduct, fraud, abandonment) may be effected immediately without notice.`,
                 size: 20,
               }),
             ],
@@ -1015,28 +1026,37 @@ export async function buildEmploymentAgreementDocx(data: EmploymentAgreementForm
             ],
           }),
 
-          // Signature Table
+          // Signature Table (DXA based)
           new Table({
-            width: { size: 100, type: WidthType.PERCENTAGE },
+            width: { size: PRINTABLE_WIDTH_DXA, type: WidthType.DXA },
+            columnWidths: [4513, 4513],
+            borders: {
+              top: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+              bottom: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+              left: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+              right: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+              insideHorizontal: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+              insideVertical: { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' },
+            },
             rows: [
               new TableRow({
                 children: [
                   new TableCell({
-                    width: { size: 50, type: WidthType.PERCENTAGE },
+                    width: { size: 4513, type: WidthType.DXA },
                     children: [
-                      new Paragraph({ children: [new TextRun({ text: `For ${d.employerName}`, bold: true })] }),
-                      new Paragraph({ spacing: { before: 400 }, children: [new TextRun({ text: 'Signature: ____________________' })] }),
-                      new Paragraph({ children: [new TextRun({ text: `Name: ${d.signatoryName}` })] }),
-                      new Paragraph({ children: [new TextRun({ text: `Designation: ${d.signatoryDesignation}` })] }),
+                      new Paragraph({ children: [new TextRun({ text: `For ${cleanText(d.employerName)}`, bold: true, size: 20 })] }),
+                      new Paragraph({ spacing: { before: 400 }, children: [new TextRun({ text: 'Signature: ____________________', size: 20 })] }),
+                      new Paragraph({ spacing: { before: 80 }, children: [new TextRun({ text: `Name: ${cleanText(d.signatoryName)}`, size: 20 })] }),
+                      new Paragraph({ children: [new TextRun({ text: `Designation: ${cleanText(d.signatoryDesignation)}`, size: 20 })] }),
                     ],
                   }),
                   new TableCell({
-                    width: { size: 50, type: WidthType.PERCENTAGE },
+                    width: { size: 4513, type: WidthType.DXA },
                     children: [
-                      new Paragraph({ children: [new TextRun({ text: 'Accepted by Employee', bold: true })] }),
-                      new Paragraph({ spacing: { before: 400 }, children: [new TextRun({ text: 'Signature: ____________________' })] }),
-                      new Paragraph({ children: [new TextRun({ text: `Name: ${d.employeeName}` })] }),
-                      new Paragraph({ children: [new TextRun({ text: `Designation: ${d.designation}` })] }),
+                      new Paragraph({ children: [new TextRun({ text: 'Accepted by Employee', bold: true, size: 20 })] }),
+                      new Paragraph({ spacing: { before: 400 }, children: [new TextRun({ text: 'Signature: ____________________', size: 20 })] }),
+                      new Paragraph({ spacing: { before: 80 }, children: [new TextRun({ text: `Name: ${cleanText(d.employeeName)}`, size: 20 })] }),
+                      new Paragraph({ children: [new TextRun({ text: `Designation: ${cleanText(d.designation)}`, size: 20 })] }),
                     ],
                   }),
                 ],
@@ -1051,65 +1071,135 @@ export async function buildEmploymentAgreementDocx(data: EmploymentAgreementForm
             children: [new TextRun({ text: 'ANNEXURE A: SALARY BREAKDOWN TABLE', bold: true, size: 24 })],
           }),
           new Table({
-            width: { size: 100, type: WidthType.PERCENTAGE },
+            width: { size: PRINTABLE_WIDTH_DXA, type: WidthType.DXA },
+            columnWidths: [4226, 2400, 2400],
+            borders: {
+              top: { style: BorderStyle.SINGLE, size: 4, color: 'CBD5E1' },
+              bottom: { style: BorderStyle.SINGLE, size: 4, color: 'CBD5E1' },
+              left: { style: BorderStyle.SINGLE, size: 4, color: 'CBD5E1' },
+              right: { style: BorderStyle.SINGLE, size: 4, color: 'CBD5E1' },
+              insideHorizontal: { style: BorderStyle.SINGLE, size: 4, color: 'E2E8F0' },
+              insideVertical: { style: BorderStyle.SINGLE, size: 4, color: 'E2E8F0' },
+            },
             rows: [
               new TableRow({
+                tableHeader: true,
                 children: [
                   new TableCell({
+                    width: { size: 4226, type: WidthType.DXA },
                     shading: { type: ShadingType.CLEAR, fill: '0F172A' },
-                    children: [new Paragraph({ children: [new TextRun({ text: 'Component', bold: true, color: 'FFFFFF' })] })],
+                    margins: { top: 80, bottom: 80, left: 120, right: 120 },
+                    children: [new Paragraph({ children: [new TextRun({ text: 'Component', bold: true, color: 'FFFFFF', size: 18 })] })],
                   }),
                   new TableCell({
+                    width: { size: 2400, type: WidthType.DXA },
                     shading: { type: ShadingType.CLEAR, fill: '0F172A' },
-                    children: [new Paragraph({ children: [new TextRun({ text: 'Monthly (INR)', bold: true, color: 'FFFFFF' })] })],
+                    margins: { top: 80, bottom: 80, left: 120, right: 120 },
+                    children: [new Paragraph({ children: [new TextRun({ text: 'Monthly (INR)', bold: true, color: 'FFFFFF', size: 18 })] })],
                   }),
                   new TableCell({
+                    width: { size: 2400, type: WidthType.DXA },
                     shading: { type: ShadingType.CLEAR, fill: '0F172A' },
-                    children: [new Paragraph({ children: [new TextRun({ text: 'Annual (INR)', bold: true, color: 'FFFFFF' })] })],
+                    margins: { top: 80, bottom: 80, left: 120, right: 120 },
+                    children: [new Paragraph({ children: [new TextRun({ text: 'Annual (INR)', bold: true, color: 'FFFFFF', size: 18 })] })],
                   }),
                 ],
               }),
               new TableRow({
                 children: [
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'Basic Salary' })] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: formatInr(sb.basicMonthly) })] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: formatInr(sb.basicMonthly * 12) })] })] }),
-                ],
-              }),
-              new TableRow({
-                children: [
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'House Rent Allowance (HRA)' })] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: formatInr(sb.hraMonthly) })] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: formatInr(sb.hraMonthly * 12) })] })] }),
-                ],
-              }),
-              new TableRow({
-                children: [
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'Special Allowance' })] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: formatInr(sb.specialAllowanceMonthly) })] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: formatInr(sb.specialAllowanceMonthly * 12) })] })] }),
-                ],
-              }),
-              new TableRow({
-                children: [
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: 'Employer PF Share' })] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: formatInr(sb.pfEmployerMonthly) })] })] }),
-                  new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: formatInr(sb.pfEmployerMonthly * 12) })] })] }),
-                ],
-              }),
-              new TableRow({
-                children: [
                   new TableCell({
-                    shading: { type: ShadingType.CLEAR, fill: 'F1F5F9' },
-                    children: [new Paragraph({ children: [new TextRun({ text: 'Total Gross Pay', bold: true })] })],
+                    width: { size: 4226, type: WidthType.DXA },
+                    margins: { top: 60, bottom: 60, left: 120, right: 120 },
+                    children: [new Paragraph({ children: [new TextRun({ text: 'Basic Salary (Sec 2(y) Wage Code)', size: 18 })] })],
                   }),
                   new TableCell({
-                    shading: { type: ShadingType.CLEAR, fill: 'F1F5F9' },
-                    children: [new Paragraph({ children: [new TextRun({ text: formatInr(sb.grossMonthly), bold: true })] })],
+                    width: { size: 2400, type: WidthType.DXA },
+                    margins: { top: 60, bottom: 60, left: 120, right: 120 },
+                    children: [new Paragraph({ children: [new TextRun({ text: formatInrDocx(sb.basicMonthly), size: 18 })] })],
                   }),
                   new TableCell({
+                    width: { size: 2400, type: WidthType.DXA },
+                    margins: { top: 60, bottom: 60, left: 120, right: 120 },
+                    children: [new Paragraph({ children: [new TextRun({ text: formatInrDocx(sb.basicMonthly * 12), size: 18 })] })],
+                  }),
+                ],
+              }),
+              new TableRow({
+                children: [
+                  new TableCell({
+                    width: { size: 4226, type: WidthType.DXA },
+                    margins: { top: 60, bottom: 60, left: 120, right: 120 },
+                    children: [new Paragraph({ children: [new TextRun({ text: 'House Rent Allowance (HRA)', size: 18 })] })],
+                  }),
+                  new TableCell({
+                    width: { size: 2400, type: WidthType.DXA },
+                    margins: { top: 60, bottom: 60, left: 120, right: 120 },
+                    children: [new Paragraph({ children: [new TextRun({ text: formatInrDocx(sb.hraMonthly), size: 18 })] })],
+                  }),
+                  new TableCell({
+                    width: { size: 2400, type: WidthType.DXA },
+                    margins: { top: 60, bottom: 60, left: 120, right: 120 },
+                    children: [new Paragraph({ children: [new TextRun({ text: formatInrDocx(sb.hraMonthly * 12), size: 18 })] })],
+                  }),
+                ],
+              }),
+              new TableRow({
+                children: [
+                  new TableCell({
+                    width: { size: 4226, type: WidthType.DXA },
+                    margins: { top: 60, bottom: 60, left: 120, right: 120 },
+                    children: [new Paragraph({ children: [new TextRun({ text: 'Special Allowance', size: 18 })] })],
+                  }),
+                  new TableCell({
+                    width: { size: 2400, type: WidthType.DXA },
+                    margins: { top: 60, bottom: 60, left: 120, right: 120 },
+                    children: [new Paragraph({ children: [new TextRun({ text: formatInrDocx(sb.specialAllowanceMonthly), size: 18 })] })],
+                  }),
+                  new TableCell({
+                    width: { size: 2400, type: WidthType.DXA },
+                    margins: { top: 60, bottom: 60, left: 120, right: 120 },
+                    children: [new Paragraph({ children: [new TextRun({ text: formatInrDocx(sb.specialAllowanceMonthly * 12), size: 18 })] })],
+                  }),
+                ],
+              }),
+              new TableRow({
+                children: [
+                  new TableCell({
+                    width: { size: 4226, type: WidthType.DXA },
+                    margins: { top: 60, bottom: 60, left: 120, right: 120 },
+                    children: [new Paragraph({ children: [new TextRun({ text: 'Employer PF Share (Social Security Code)', size: 18 })] })],
+                  }),
+                  new TableCell({
+                    width: { size: 2400, type: WidthType.DXA },
+                    margins: { top: 60, bottom: 60, left: 120, right: 120 },
+                    children: [new Paragraph({ children: [new TextRun({ text: formatInrDocx(sb.pfEmployerMonthly), size: 18 })] })],
+                  }),
+                  new TableCell({
+                    width: { size: 2400, type: WidthType.DXA },
+                    margins: { top: 60, bottom: 60, left: 120, right: 120 },
+                    children: [new Paragraph({ children: [new TextRun({ text: formatInrDocx(sb.pfEmployerMonthly * 12), size: 18 })] })],
+                  }),
+                ],
+              }),
+              new TableRow({
+                children: [
+                  new TableCell({
+                    width: { size: 4226, type: WidthType.DXA },
                     shading: { type: ShadingType.CLEAR, fill: 'F1F5F9' },
-                    children: [new Paragraph({ children: [new TextRun({ text: formatInr(d.annualCtc), bold: true })] })],
+                    margins: { top: 80, bottom: 80, left: 120, right: 120 },
+                    children: [new Paragraph({ children: [new TextRun({ text: 'Total Gross Pay / Annual CTC', bold: true, size: 18 })] })],
+                  }),
+                  new TableCell({
+                    width: { size: 2400, type: WidthType.DXA },
+                    shading: { type: ShadingType.CLEAR, fill: 'F1F5F9' },
+                    margins: { top: 80, bottom: 80, left: 120, right: 120 },
+                    children: [new Paragraph({ children: [new TextRun({ text: formatInrDocx(sb.grossMonthly), bold: true, size: 18 })] })],
+                  }),
+                  new TableCell({
+                    width: { size: 2400, type: WidthType.DXA },
+                    shading: { type: ShadingType.CLEAR, fill: 'F1F5F9' },
+                    margins: { top: 80, bottom: 80, left: 120, right: 120 },
+                    children: [new Paragraph({ children: [new TextRun({ text: formatInrDocx(d.annualCtc), bold: true, size: 18 })] })],
                   }),
                 ],
               }),
@@ -1124,14 +1214,29 @@ export async function buildEmploymentAgreementDocx(data: EmploymentAgreementForm
 }
 
 // ─── PDF Builder (pdf-lib) ───────────────────────────────────────────────────
+function sanitizePdfText(text: string | null | undefined): string {
+  if (!text) return ''
+  return String(text)
+    .replace(/[₹]/g, 'Rs. ')
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"')
+    .replace(/[\u2013\u2014]/g, '-')
+    .replace(/[\u2026]/g, '...')
+    .replace(/[•]/g, '-')
+    .replace(/[\r\n]+/g, ' ')
+    .replace(/[^\x00-\x7F]/g, '')
+    .trim()
+}
+
 export async function buildEmploymentAgreementPdf(data: EmploymentAgreementFormData): Promise<Uint8Array> {
-  const d = data
-  const stampRule = STATE_STAMP_SCHEDULE[d.state] || STATE_STAMP_SCHEDULE.karnataka
-  const wageRule = checkWageFiftyPercentRule(d.salaryStructure)
-  const sb = d.salaryStructure
+  const d = data || DEFAULT_SAMPLE_EMPLOYMENT_DATA
+  const stateKey = (d.state || 'karnataka').toLowerCase()
+  const stampRule = STATE_STAMP_SCHEDULE[stateKey] || STATE_STAMP_SCHEDULE.karnataka
+  const sb = d.salaryStructure || DEFAULT_SAMPLE_EMPLOYMENT_DATA.salaryStructure
+  const wageRule = checkWageFiftyPercentRule(sb)
 
   function formatInrPdf(val: number): string {
-    return formatInr(val).replace(/₹/g, 'Rs. ')
+    return 'Rs. ' + Number(val || 0).toLocaleString('en-IN')
   }
 
   const pdfDoc = await PDFDocument.create()
@@ -1197,13 +1302,16 @@ export async function buildEmploymentAgreementPdf(data: EmploymentAgreementFormD
   })
   y -= 20
 
-  page.drawText(`Execution Date: ${d.executionDate} | Location: ${d.executionPlace}`, {
-    x: margin,
-    y,
-    size: 9,
-    font: fontOblique,
-    color: rgb(0.39, 0.45, 0.55),
-  })
+  page.drawText(
+    sanitizePdfText(`Execution Date: ${d.executionDate || ''} | Location: ${d.executionPlace || ''}`),
+    {
+      x: margin,
+      y,
+      size: 9,
+      font: fontOblique,
+      color: rgb(0.39, 0.45, 0.55),
+    }
+  )
   y -= 25
 
   // Stamp Duty Notice Box
@@ -1217,11 +1325,11 @@ export async function buildEmploymentAgreementPdf(data: EmploymentAgreementFormD
     borderWidth: 1,
   })
   page.drawText(
-    `STATE STAMP DUTY NOTICE (${stampRule.stateName}): Non-judicial duty of ${formatInrPdf(stampRule.stampDutyAmount)} under ${stampRule.articleRef}`,
+    sanitizePdfText(`STATE STAMP DUTY NOTICE (${stampRule.stateName}): Non-judicial duty of ${formatInrPdf(stampRule.stampDutyAmount)} under ${stampRule.articleRef}`),
     {
       x: margin + 8,
       y: y - 16,
-      size: 8.5,
+      size: 8,
       font: fontBold,
       color: rgb(0.12, 0.23, 0.54),
     }
@@ -1230,8 +1338,8 @@ export async function buildEmploymentAgreementPdf(data: EmploymentAgreementFormD
 
   // Parties intro
   function drawWrappedText(text: string, font: PDFFont, size: number, color = rgb(0.15, 0.15, 0.15)) {
-    const clean = text.replace(/₹/g, 'Rs. ')
-    const words = clean.split(' ')
+    const clean = sanitizePdfText(text)
+    const words = clean.split(/\s+/).filter(Boolean)
     let line = ''
     for (let i = 0; i < words.length; i++) {
       const testLine = line + (line ? ' ' : '') + words[i]
@@ -1253,7 +1361,7 @@ export async function buildEmploymentAgreementPdf(data: EmploymentAgreementFormD
   }
 
   drawWrappedText(
-    `This Employment Agreement is entered into between ${d.employerName} ("Company/Employer") and ${d.employeeName} ("Employee"), PAN: ${d.employeePan || '[PAN Required]'}.`,
+    `This Employment Agreement is entered into between ${d.employerName || 'The Company'} ("Company/Employer") and ${d.employeeName || 'The Employee'} ("Employee"), PAN: ${d.employeePan || '[PAN Required]'}.`,
     fontRegular,
     9.5
   )
@@ -1270,7 +1378,7 @@ export async function buildEmploymentAgreementPdf(data: EmploymentAgreementFormD
   })
   y -= 14
   drawWrappedText(
-    `The Company appoints the Employee in the capacity of ${d.designation} (${d.department}) starting from ${d.joiningDate}. The Employee reports to the ${d.reportingManagerDesignation}. Under Section 6(1)(f) of the OSH Code, 2020, this agreement incorporates all required statutory terms of service.`,
+    `The Company appoints the Employee in the capacity of ${d.designation || 'Employee'} (${d.department || 'General'}) starting from ${d.joiningDate || 'Joining Date'}. The Employee reports to the ${d.reportingManagerDesignation || 'Reporting Manager'}. Under Section 6(1)(f) of the OSH Code, 2020, this agreement incorporates all required statutory terms of service.`,
     fontRegular,
     9
   )
@@ -1287,7 +1395,7 @@ export async function buildEmploymentAgreementPdf(data: EmploymentAgreementFormD
   })
   y -= 14
   drawWrappedText(
-    `The Employee is engaged on a ${d.workMode.replace('_', ' ').toUpperCase()} basis based out of ${d.workLocationCity}. The Employee shall adhere to cybersecurity and data privacy regulations under the Digital Personal Data Protection Act, 2023.`,
+    `The Employee is engaged on a ${(d.workMode || 'hybrid').replace(/_/g, ' ').toUpperCase()} basis based out of ${d.workLocationCity || 'Headquarters'}. The Employee shall adhere to cybersecurity and data privacy regulations under the Digital Personal Data Protection Act, 2023.`,
     fontRegular,
     9
   )
@@ -1314,7 +1422,7 @@ export async function buildEmploymentAgreementPdf(data: EmploymentAgreementFormD
     d.isFixedTerm
       ? `This Fixed-Term contract under Section 2(o) of the Industrial Relations Code, 2020 spans ${d.fixedTermDurationMonths || 12} months. Natural expiry does not constitute retrenchment. Pro-rata gratuity applies after 1 year under Section 53 of the Social Security Code.`
       : d.hasProbation
-      ? `Initial probation is ${d.probationMonths} months. Either party may separate on ${d.probationNoticeDays} days' written notice during probation. Confirmation requires formal written notification.`
+      ? `Initial probation is ${d.probationMonths || 3} months. Either party may separate on ${d.probationNoticeDays || 15} days' written notice during probation. Confirmation requires formal written notification.`
       : `The Employee is a confirmed regular employee with standard separation terms.`,
     fontRegular,
     9
@@ -1332,7 +1440,7 @@ export async function buildEmploymentAgreementPdf(data: EmploymentAgreementFormD
   })
   y -= 14
   drawWrappedText(
-    `Annual CTC: ${formatInrPdf(d.annualCtc)} (${numberToWordsInr(d.annualCtc)}). Under Code on Wages, 2019 Section 2(y), monthly basic pay is ${formatInrPdf(sb.basicMonthly)} (${wageRule.basicPercentage}% of gross). Monthly salary is credited by the ${d.paymentDayOfMonth}th of each calendar month.`,
+    `Annual CTC: ${formatInrPdf(d.annualCtc)} (${numberToWordsInr(d.annualCtc)}). Under Code on Wages, 2019 Section 2(y), monthly basic pay is ${formatInrPdf(sb.basicMonthly)} (${wageRule.basicPercentage}% of gross). Monthly salary is credited by the ${d.paymentDayOfMonth || 7}th of each calendar month.`,
     fontRegular,
     9
   )
@@ -1349,7 +1457,7 @@ export async function buildEmploymentAgreementPdf(data: EmploymentAgreementFormD
   })
   y -= 14
   drawWrappedText(
-    `All works created vest in the Employer under Section 17(c) of the Copyright Act, 1957. A ${d.nonSolicitMonths}-month non-solicitation covenant applies post-employment. NOTE: Under Section 27 of the Indian Contract Act, 1872, post-employment non-compete covenants are void and unenforceable in Indian courts (Percept D'Mark v. Zaheer Khan).`,
+    `All works created vest in the Employer under Section 17(c) of the Copyright Act, 1957. A ${d.nonSolicitMonths || 12}-month non-solicitation covenant applies post-employment. NOTE: Under Section 27 of the Indian Contract Act, 1872, post-employment non-compete covenants are void and unenforceable in Indian courts (Percept D'Mark v. Zaheer Khan).`,
     fontRegular,
     9
   )
@@ -1366,7 +1474,7 @@ export async function buildEmploymentAgreementPdf(data: EmploymentAgreementFormD
   })
   y -= 14
   drawWrappedText(
-    `Post-confirmation notice period: ${d.noticePeriodDays} days${d.noticePayInLieuPermitted ? ' (or basic pay in lieu)' : ''}. Termination for cause (fraud, criminal act, abandonment) is immediate without severance pay.`,
+    `Post-confirmation notice period: ${d.noticePeriodDays || 30} days${d.noticePayInLieuPermitted ? ' (or basic pay in lieu)' : ''}. Termination for cause (fraud, criminal act, abandonment) is immediate without severance pay.`,
     fontRegular,
     9
   )
@@ -1431,17 +1539,17 @@ export async function buildEmploymentAgreementPdf(data: EmploymentAgreementFormD
   })
   y -= 25
 
-  page.drawText(`For ${d.employerName}`, { x: margin, y, size: 9, font: fontBold })
+  page.drawText(sanitizePdfText(`For ${d.employerName || 'The Company'}`), { x: margin, y, size: 9, font: fontBold })
   page.drawText('Accepted by Employee', { x: margin + 260, y, size: 9, font: fontBold })
   y -= 25
   page.drawText('Signature: __________________________', { x: margin, y, size: 8.5, font: fontRegular })
   page.drawText('Signature: __________________________', { x: margin + 260, y, size: 8.5, font: fontRegular })
   y -= 14
-  page.drawText(`Name: ${d.signatoryName}`, { x: margin, y, size: 8.5, font: fontRegular })
-  page.drawText(`Name: ${d.employeeName}`, { x: margin + 260, y, size: 8.5, font: fontRegular })
+  page.drawText(sanitizePdfText(`Name: ${d.signatoryName || ''}`), { x: margin, y, size: 8.5, font: fontRegular })
+  page.drawText(sanitizePdfText(`Name: ${d.employeeName || ''}`), { x: margin + 260, y, size: 8.5, font: fontRegular })
   y -= 14
-  page.drawText(`Title: ${d.signatoryDesignation}`, { x: margin, y, size: 8.5, font: fontRegular })
-  page.drawText(`Title: ${d.designation}`, { x: margin + 260, y, size: 8.5, font: fontRegular })
+  page.drawText(sanitizePdfText(`Title: ${d.signatoryDesignation || ''}`), { x: margin, y, size: 8.5, font: fontRegular })
+  page.drawText(sanitizePdfText(`Title: ${d.designation || ''}`), { x: margin + 260, y, size: 8.5, font: fontRegular })
 
   return await pdfDoc.save()
 }
