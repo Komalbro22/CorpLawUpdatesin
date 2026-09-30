@@ -25,48 +25,53 @@ import {
   Info
 } from 'lucide-react'
 
-export const revalidate = 86400
+export const revalidate = 3600
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getRateSettings()
   const rate = settings.current_repo_rate || '5.25%'
-  const rawDate = settings.current_repo_rate_date || 'August 2026'
-  const cleanDate = rawDate.replace(/\(.*?\)/g, '').replace(/62st/gi, '62nd').trim() || 'August 2026'
+  const rawDate = settings.current_repo_rate_date || 'September 2026'
+  const cleanDate = rawDate.replace(/\(.*?\)/g, '').replace(/62st/gi, '62nd').trim() || 'September 2026'
   const nextMpc = settings.next_mpc_date || 'October 5 to 7, 2026'
   const sdfRate = settings.sdf_rate || '5.00%'
   const msfRate = settings.msf_rate || '5.50%'
 
   return {
-    title: `Current RBI Repo Rate: ${rate} (Active Today) — 62nd MPC Decision, SDF & Loan Rates`,
-    description: `Current RBI repo rate is ${rate}, officially active under a Neutral stance. Check SDF (${sdfRate}), MSF (${msfRate}), Reverse Repo Rate (3.35%), next October MPC meeting schedule (${nextMpc}), and calculate loan EMI impact.`,
+    title: `Current RBI Repo Rate in India: ${rate} (September 2026) | EMI Calculator & Next Oct MPC`,
+    description: `What is the current repo rate of RBI in India? Currently ${rate} as of September 2026. Calculate your home loan EMI, check SDF (${sdfRate}), MSF (${msfRate}), Bank Rate, and next October MPC dates (${nextMpc}).`,
     keywords: [
+      'what is the current repo rate of rbi in india',
       'current repo rate',
       'current rbi repo rate',
-      'rbi repo rate 2026',
-      'repo rate today india',
-      'present repo rate',
-      'next repo rate',
-      'next rbi mpc meeting date',
-      'present reverse repo rate in india 2026',
-      'bank rate india',
-      'current msf rate rbi',
-      '62nd mpc meeting repo rate',
-      'rbi monetary policy rate 2026',
+      'repo rate today',
+      'rbi repo rate september 2026',
+      'current repo rate of india',
+      'rbi repo rate today',
+      'rbi repo rate',
+      'repo rate rbi',
+      'rbi monetary policy current repo rate india',
+      'rbi repo rate next oct',
+      'rbi current standing deposit facility rate september 2026 official sdf msf difference',
+      'rbi repo rate today calculator',
+      'september rbi repo rate 2026',
+      'current interest rate india 2026 rbi repo rate',
+      'current repo rate in kolkata india',
+      'current rbi repo rate and mpc stance september 2026',
+      'sdf loan interest rate',
       'repo rate impact on home loan emi',
-      'sdf rate rbi',
-      'crr slr rates rbi',
+      'bank rate india 2026',
     ],
     alternates: { canonical: 'https://www.corplawupdates.in/rbi/repo-rate' },
     openGraph: {
-      title: `Current RBI Repo Rate: ${rate} (Active Today) — 62nd MPC Decision`,
-      description: `Official RBI benchmark repo rate stands at ${rate} with a Neutral stance. Real GDP projected at 6.7%, CPI 5.0%. View full interest rate corridor, next MPC dates (${nextMpc}), and loan EMI calculator.`,
+      title: `Current RBI Repo Rate in India: ${rate} (September 2026) — Live Status`,
+      description: `Official RBI benchmark repo rate stands at ${rate} in September 2026 with a Neutral stance. View SDF (${sdfRate}), MSF (${msfRate}), next October MPC meeting schedule (${nextMpc}), and calculate loan EMI impact.`,
       url: 'https://www.corplawupdates.in/rbi/repo-rate',
       type: 'article',
     },
     twitter: {
       card: 'summary_large_image',
-      title: `Current RBI Repo Rate: ${rate} (Active Today) — 62nd MPC`,
-      description: `Official RBI repo rate stands at ${rate}. Complete breakdown of SDF, MSF, Bank Rate, next MPC meeting schedule, and interactive EMI calculator.`,
+      title: `Current RBI Repo Rate in India: ${rate} (September 2026)`,
+      description: `Official RBI repo rate stands at ${rate}. Complete breakdown of SDF, MSF, Bank Rate, next October MPC meeting schedule, and interactive EMI calculator.`,
     }
   }
 }
@@ -107,8 +112,8 @@ export default async function RepoRatePage() {
   ])
 
   const repoRate = settings.current_repo_rate || '5.25%'
-  const rawRateDate = settings.current_repo_rate_date || 'August 2026'
-  const cleanRateDate = rawRateDate.replace(/\(.*?\)/g, '').replace(/62st/gi, '62nd').trim() || 'August 2026'
+  const rawRateDate = settings.current_repo_rate_date || 'September 2026'
+  const cleanRateDate = rawRateDate.replace(/\(.*?\)/g, '').replace(/62st/gi, '62nd').trim() || 'September 2026'
   const nextMpc = settings.next_mpc_date || 'October 5 to 7, 2026'
   const stance = settings.mpc_stance || 'Neutral'
   const sdfRate = settings.sdf_rate || '5.00%'
@@ -121,26 +126,18 @@ export default async function RepoRatePage() {
     mainEntity: [
       {
         '@type': 'Question',
-        name: 'What is the current RBI repo rate in India today (2026)?',
+        name: 'What is the current repo rate of RBI in India (September 2026)?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: `The current RBI repo rate is ${repoRate}, decided at the 62nd Monetary Policy Committee (MPC) meeting (August 3 to 5, 2026) under Governor Shri Sanjay Malhotra with a unanimous 6-0 vote and a Neutral stance. Because the MPC convenes bi-monthly, ${repoRate} remains India's operative benchmark lending rate until the next MPC meeting in October 2026.`
+          text: `The current RBI repo rate in India is ${repoRate} as of September 2026. This policy rate was reaffirmed with a Neutral stance by the 6-member Monetary Policy Committee (MPC) chaired by Governor Shri Sanjay Malhotra. Because the MPC reviews interest rates bi-monthly, ${repoRate} remains India's operative benchmark lending rate until the next MPC resolution on ${nextMpc}.`
         }
       },
       {
         '@type': 'Question',
-        name: 'When is the next RBI MPC meeting in 2026?',
+        name: 'When is the next RBI MPC meeting in October 2026?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: `The next RBI Monetary Policy Committee meeting is scheduled for ${nextMpc}. The 3-day meeting concludes with the policy resolution announcement and the Governor's address, followed by detailed meeting minutes published 14 days later.`
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'What is the current Reverse Repo Rate and SDF rate in India in 2026?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: `The fixed reverse repo rate stands at 3.35%, but the operational floor for absorbing surplus bank liquidity under the LAF corridor is the Standing Deposit Facility (SDF) rate at ${sdfRate}. The SDF operates without requiring government securities collateral from the RBI.`
+          text: `The next RBI Monetary Policy Committee meeting is scheduled for ${nextMpc}. The 3-day policy deliberation concludes on October 7, 2026 at 10:00 AM IST with the Governor's policy resolution announcement, followed by detailed meeting minutes published 14 days later.`
         }
       },
       {
@@ -148,23 +145,39 @@ export default async function RepoRatePage() {
         name: 'What are the current SDF, MSF, Bank Rate, CRR, and SLR rates in India?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: `As of 2026, the key benchmark rates are: Policy Repo Rate: ${repoRate}, Standing Deposit Facility (SDF): ${sdfRate}, Marginal Standing Facility (MSF): ${msfRate}, Bank Rate: ${msfRate}, Fixed Reverse Repo Rate: 3.35%, Cash Reserve Ratio (CRR): 4.50%, and Statutory Liquidity Ratio (SLR): 18.00%.`
+          text: `As of September 2026, India's key policy interest rates and reserve requirements are: Policy Repo Rate: ${repoRate}, Standing Deposit Facility (SDF): ${sdfRate}, Marginal Standing Facility (MSF): ${msfRate}, Bank Rate: ${msfRate}, Fixed Reverse Repo Rate: 3.35%, Cash Reserve Ratio (CRR): 4.50%, and Statutory Liquidity Ratio (SLR): 18.00%.`
         }
       },
       {
         '@type': 'Question',
-        name: 'Why did the RBI keep the repo rate unchanged at 5.25% in the 62nd MPC meeting?',
+        name: 'What is the difference between Repo Rate, SDF Rate, and MSF Rate?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'The MPC unanimously retained the repo rate at 5.25% with a Neutral stance to ensure headline CPI inflation (projected at 5.0% for FY 2026-27) converges durably to the 4.0% target amidst food price volatility, supported by strong real GDP growth projected at 6.7%.'
+          text: `The Policy Repo Rate (${repoRate}) is the rate at which RBI lends short-term liquidity to commercial banks against government securities. The Standing Deposit Facility (SDF, ${sdfRate}) is the floor rate at which banks park excess liquidity with RBI without collateral. The Marginal Standing Facility (MSF, ${msfRate}) is the penal ceiling rate for emergency overnight borrowing. Together, SDF and MSF define the 50 bps policy corridor around the repo rate.`
         }
       },
       {
         '@type': 'Question',
-        name: 'How does the RBI repo rate affect home loan and MSME interest rates?',
+        name: 'How does the current repo rate affect floating home loan EMIs?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: `Floating-rate retail home loans are pegged to External Benchmark Lending Rates (EBLR) which track the repo rate. With repo rate at ${repoRate}, home loan interest rates average between 8.40% and 9.35% p.a. For MSMEs, delayed payment interest under Section 16 of the MSMED Act is charged at 3 times the Bank Rate (${msfRate}), totaling 16.50% compounded monthly.`
+          text: `All floating-rate retail home loans sanctioned by commercial banks are mandated by the RBI to be linked to External Benchmark Lending Rates (EBLR/RLLR). With the repo rate at ${repoRate}, home loan interest rates average between 8.40% and 9.35% p.a. across major lenders (SBI, HDFC Bank, ICICI Bank, PNB), keeping monthly borrower EMIs stable.`
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Is the current RBI repo rate different across Indian cities like Kolkata, Mumbai, or Delhi?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `No. The RBI Policy Repo Rate is a national sovereign monetary benchmark determined by the Central Bank and applies uniformly across all states, union territories, and cities in India (including Kolkata, Mumbai, Delhi, Bengaluru, Chennai, and Hyderabad). Individual bank spreads may vary slightly based on credit score, but the base benchmark repo rate is identical nationwide.`
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'What is the current Bank Rate in India, and how does it affect MSMEs?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `The current Bank Rate is ${msfRate} (aligned with the Marginal Standing Facility rate). Under Section 16 of the MSMED Act, 2006, delayed payments to registered MSMEs attract mandatory compound monthly interest at three times the Bank Rate (${(parseFloat(msfRate) * 3).toFixed(2)}% p.a.).`
         }
       },
       {
@@ -268,7 +281,7 @@ export default async function RepoRatePage() {
         <div className="max-w-4xl mx-auto relative z-10 space-y-3">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 mb-1">
             <span className="size-2 rounded-full bg-emerald-400 animate-ping" aria-hidden="true" />
-            Official Benchmark Policy Rate · In Force Today
+            Official Benchmark Policy Rate · In Force September 2026
           </div>
 
           <h1 className="text-5xl md:text-7xl font-heading font-black text-white tracking-tight tabular-nums">
@@ -276,11 +289,11 @@ export default async function RepoRatePage() {
           </h1>
 
           <p className="text-amber-400 font-heading font-bold text-xl md:text-2xl">
-            Current RBI Repo Rate (2026)
+            Current RBI Repo Rate in India (September 2026)
           </p>
 
           <p className="text-slate-300 text-sm max-w-2xl mx-auto leading-relaxed">
-            Reaffirmed at the <strong>62nd MPC Meeting (August 3–5, 2026)</strong> · Chaired by Governor Shri Sanjay Malhotra · Unanimous 6-0 Vote · <strong>{stance} Stance</strong>
+            Reaffirmed by the 6-member Monetary Policy Committee (MPC) · Chaired by Governor Shri Sanjay Malhotra · Unanimous 6-0 Vote · <strong>{stance} Stance</strong>
           </p>
 
           <div className="pt-2 flex flex-wrap items-center justify-center gap-2">
@@ -290,8 +303,40 @@ export default async function RepoRatePage() {
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-white/10 text-slate-200 border border-white/10 backdrop-blur-sm">
               <Clock className="size-3.5 text-amber-400" aria-hidden="true" />
-              Next Decision: October 7, 2026 (10 AM IST)
+              Next MPC Decision: October 7, 2026 (10 AM IST)
             </span>
+          </div>
+
+          {/* QUICK JUMP CLICK MAGNET BUTTONS */}
+          <div className="pt-3 flex flex-wrap items-center justify-center gap-2">
+            <a
+              href="#emi-calculator"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 shadow-md transition-all scale-100 hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <Calculator className="size-3.5 sm:size-4" aria-hidden="true" />
+              <span>Calculate Home Loan EMI</span>
+            </a>
+            <a
+              href="#rates-matrix"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium bg-white/10 hover:bg-white/20 text-white border border-white/15 backdrop-blur-sm transition-colors"
+            >
+              <Layers className="size-3.5 sm:size-4 text-amber-400" aria-hidden="true" />
+              <span>SDF, MSF & CRR Rates</span>
+            </a>
+            <a
+              href="#bank-rates"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium bg-white/10 hover:bg-white/20 text-white border border-white/15 backdrop-blur-sm transition-colors"
+            >
+              <Building2 className="size-3.5 sm:size-4 text-emerald-400" aria-hidden="true" />
+              <span>Bank Lending Rates</span>
+            </a>
+            <a
+              href="#next-mpc"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium bg-white/10 hover:bg-white/20 text-white border border-white/15 backdrop-blur-sm transition-colors"
+            >
+              <Calendar className="size-3.5 sm:size-4 text-blue-400" aria-hidden="true" />
+              <span>Next MPC Timeline</span>
+            </a>
           </div>
         </div>
       </div>
@@ -300,15 +345,27 @@ export default async function RepoRatePage() {
 
         {/* FEATURED SNIPPET / POSITION 0 ANSWER-FIRST QUICK FACTS BOX */}
         <div className="bg-gradient-to-br from-amber-500/10 via-blue-500/5 to-indigo-500/10 dark:from-amber-950/40 dark:via-blue-950/20 dark:to-indigo-950/40 border border-amber-300/80 dark:border-amber-700/60 rounded-2xl p-6 sm:p-7 shadow-sm space-y-4">
+          
+          {/* EXACT-MATCH ANSWER-FIRST BLOCK FOR GOOGLE FEATURED SNIPPET & AI OVERVIEWS */}
+          <div className="bg-white/95 dark:bg-slate-900/95 p-4 sm:p-5 rounded-xl border border-amber-300 dark:border-amber-700/60 shadow-xs space-y-2">
+            <h2 className="font-heading font-extrabold text-base sm:text-lg text-slate-900 dark:text-white flex items-center gap-2">
+              <span className="size-2 rounded-full bg-blue-600 dark:bg-blue-400" aria-hidden="true" />
+              What is the Current Repo Rate of RBI in India? (September 2026)
+            </h2>
+            <p className="text-sm sm:text-base text-slate-700 dark:text-slate-200 leading-relaxed">
+              The current RBI repo rate in India is <strong className="text-blue-700 dark:text-blue-400 font-extrabold text-lg tabular-nums">{repoRate}</strong> as of September 2026. Reaffirmed with a <em>{stance}</em> stance by the 6-member Monetary Policy Committee (MPC) chaired by Governor Shri Sanjay Malhotra, this benchmark lending rate remains active nationwide until the 63rd MPC meeting scheduled for <strong>{nextMpc}</strong>. The Standing Deposit Facility (SDF) stands at <strong className="tabular-nums">{sdfRate}</strong>, the Marginal Standing Facility (MSF) and Bank Rate stand at <strong className="tabular-nums">{msfRate}</strong>, and Fixed Reverse Repo is 3.35%.
+            </p>
+          </div>
+
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-amber-200/80 dark:border-amber-800/40">
             <div className="flex items-center gap-2.5">
               <span className="p-1.5 rounded-lg bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300">
                 <Sparkles className="size-5" aria-hidden="true" />
               </span>
               <div>
-                <h2 className="text-lg sm:text-xl font-heading font-bold text-slate-900 dark:text-white">
+                <h3 className="text-base sm:text-lg font-heading font-bold text-slate-900 dark:text-white">
                   Current RBI Policy Rates & Key Financial Indicators at a Glance
-                </h2>
+                </h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
                   Operative monetary policy rates under the Reserve Bank of India Act & Banking Regulation Act
                 </p>
@@ -465,7 +522,7 @@ export default async function RepoRatePage() {
         </div>
 
         {/* NEXT RBI MPC MEETING SCHEDULE & OUTLOOK (Captures Position 5.1 'next repo rate' queries) */}
-        <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-5">
+        <section id="next-mpc" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-2.5">
               <span className="p-2 rounded-xl bg-amber-100 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300">
@@ -525,12 +582,12 @@ export default async function RepoRatePage() {
         </section>
 
         {/* INTERACTIVE EMI CALCULATOR COMPONENT */}
-        <section>
+        <section id="emi-calculator">
           <RepoEmiCalculator />
         </section>
 
         {/* COMPLETE RBI BENCHMARK POLICY RATES TABLE */}
-        <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-4">
+        <section id="rates-matrix" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <h2 className="text-xl font-heading font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -541,7 +598,7 @@ export default async function RepoRatePage() {
                 All benchmark interest rates and statutory reserve requirements determined under the RBI Act and BR Act.
               </p>
             </div>
-            <span className="text-xs font-semibold text-slate-400 dark:text-slate-500">Updated: August 2026</span>
+            <span className="text-xs font-semibold text-slate-400 dark:text-slate-500">Updated: September 2026</span>
           </div>
 
           <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
@@ -606,7 +663,7 @@ export default async function RepoRatePage() {
         </section>
 
         {/* MAJOR BANKS REPO-LINKED HOME LOAN RATES (EBLR) */}
-        <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-4">
+        <section id="bank-rates" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-4">
           <div>
             <h2 className="text-xl font-heading font-bold text-slate-900 dark:text-white flex items-center gap-2">
               <Building2 className="size-5 text-blue-600 dark:text-blue-400" aria-hidden="true" />
@@ -753,31 +810,35 @@ export default async function RepoRatePage() {
           <div className="space-y-4">
             {[
               {
-                q: 'What is the current RBI repo rate in India today (2026)?',
-                a: `The current RBI repo rate is ${repoRate}. It was reaffirmed at the 62nd Monetary Policy Committee (MPC) meeting held from August 3 to 5, 2026, under the chairmanship of Governor Shri Sanjay Malhotra. The MPC voted unanimously (6-0) to maintain a Neutral stance. Because the MPC reviews rates bi-monthly, ${repoRate} remains India's active statutory benchmark rate until the next MPC meeting in October 2026.`,
+                q: 'What is the current repo rate of RBI in India? (September 2026)',
+                a: `The current RBI repo rate in India is ${repoRate} as of September 2026. This policy rate was reaffirmed at the 62nd Monetary Policy Committee (MPC) meeting under the chairmanship of Governor Shri Sanjay Malhotra with a unanimous 6-0 vote and a Neutral stance. Because the MPC reviews rates bi-monthly, ${repoRate} remains India's operative benchmark lending rate until the next MPC resolution on ${nextMpc}.`,
               },
               {
-                q: 'Why does the RBI repo rate only change every 2 to 3 months?',
-                a: 'Under Section 45ZB of the Reserve Bank of India Act, 1934, the Monetary Policy Committee is statutory mandated to meet at least four times a year, operating on a bi-monthly schedule (every 2 months: February, April, June, August, October, December). Rate decisions remain active throughout the two-month interim between meetings unless an extraordinary off-cycle meeting is convened.',
+                q: 'When is the next RBI MPC meeting in October 2026?',
+                a: `The next RBI Monetary Policy Committee meeting is scheduled for ${nextMpc}. The 3-day policy deliberation concludes on October 7, 2026 at 10:00 AM IST with the Governor's live policy resolution address and interest rate decision. Detailed meeting minutes are published 14 days later.`,
               },
               {
-                q: 'When is the next RBI MPC meeting in 2026?',
-                a: `The next RBI Monetary Policy Committee meeting is scheduled for ${nextMpc}. The 3-day meeting begins with internal evaluations, concluding on the final day with the policy statement announcement by the Governor at 10:00 AM IST. Detailed meeting minutes are published 14 days later.`,
+                q: 'What is the difference between Repo Rate, SDF Rate, and MSF Rate?',
+                a: `The Repo Rate (${repoRate}) is the primary benchmark rate at which RBI injects short-term liquidity to banks against government securities. The Standing Deposit Facility (SDF, ${sdfRate}) is the floor rate at which banks deposit surplus cash with RBI without collateral. The Marginal Standing Facility (MSF, ${msfRate}) is the penal ceiling rate for emergency overnight borrowing. The Fixed Reverse Repo Rate remains at 3.35%.`,
               },
               {
-                q: 'What is the difference between Repo Rate, SDF Rate, and Fixed Reverse Repo Rate?',
-                a: `The Repo Rate (${repoRate}) is the rate at which RBI lends short-term liquidity to banks against collateral. The Standing Deposit Facility (SDF) rate (${sdfRate}) is the operative floor rate at which banks deposit surplus funds with RBI without collateral. The Fixed Reverse Repo Rate (3.35%) is a legacy facility largely superseded by the SDF window.`,
+                q: 'How does the current repo rate affect floating home loan EMIs (SBI, HDFC, ICICI)?',
+                a: `All floating-rate retail loans (home and personal loans) sanctioned by commercial banks are mandated by the RBI to be linked to External Benchmark Lending Rates (EBLR/RLLR). With the repo rate at ${repoRate}, home loan interest rates average between 8.40% and 9.35% p.a. across major lenders (SBI, HDFC Bank, ICICI Bank, PNB, Bank of Baroda). Use our interactive calculator above to check your exact EMI savings.`,
+              },
+              {
+                q: 'Is the RBI repo rate different across Indian cities like Kolkata, Mumbai, or Delhi?',
+                a: 'No. The RBI Policy Repo Rate is a sovereign benchmark determined by the Central Bank and applies uniformly across all states, union territories, and cities in India (including Kolkata, Mumbai, Delhi, Bengaluru, Chennai, and Hyderabad). Individual commercial bank lending spreads may vary based on your credit score and loan category, but the underlying benchmark rate is identical nationwide.',
               },
               {
                 q: 'What is the current Bank Rate in India, and how does it affect MSMEs?',
-                a: `The current Bank Rate is ${msfRate} (aligned with the Marginal Standing Facility rate). Beyond emergency bank borrowing, the Bank Rate serves as the statutory benchmark for commercial penalties. For example, under Section 16 of the MSMED Act, 2006, delayed payments to registered MSMEs attract mandatory compound monthly interest at three times the Bank Rate (${(parseFloat(msfRate) * 3).toFixed(2)}% p.a.).`,
+                a: `The current Bank Rate is ${msfRate} (aligned with the Marginal Standing Facility rate). Beyond emergency borrowing, the Bank Rate serves as the statutory benchmark for commercial penalties. Under Section 16 of the MSMED Act, 2006, delayed payments to registered MSMEs attract mandatory compound monthly interest at three times the Bank Rate (${(parseFloat(msfRate) * 3).toFixed(2)}% p.a.).`,
               },
               {
-                q: 'How does the current repo rate affect floating home loan EMIs?',
-                a: `All floating-rate retail loans (home and personal loans) sanctioned by commercial banks are mandated by the RBI to be linked to External Benchmark Lending Rates (EBLR). With the repo rate at ${repoRate}, home loan interest rates average between 8.40% and 9.35% p.a. across major lenders (SBI, HDFC Bank, ICICI Bank), keeping monthly borrower EMIs stable.`,
+                q: 'Why does the RBI repo rate not change every month?',
+                a: 'Under Section 45ZB of the Reserve Bank of India Act, 1934, the Monetary Policy Committee is statutory mandated to meet at least four times a year, operating on a bi-monthly schedule (every 2 months: February, April, June, August, October, December). Rate decisions remain active throughout the two-month interim between meetings unless an extraordinary off-cycle meeting is convened.',
               },
               {
-                q: 'What were the GDP growth and inflation forecasts in the 62nd MPC resolution?',
+                q: 'What were the GDP growth and inflation forecasts in the latest MPC resolution?',
                 a: 'For FY 2026-27, the RBI MPC projected real GDP growth at 6.7% (Q1: 7.0%, Q2: 6.4%, Q3: 6.5%, Q4: 6.8%) and headline CPI inflation at 5.0% (Q2: 4.7%, Q3: 5.9%, Q4: 5.5%).',
               }
             ].map((faq, i) => (
