@@ -51,6 +51,7 @@ ${updatesList}
 - [Compliance calendar](${BASE_URL}/calendar): Track important statutory filing deadlines across MCA, SEBI, RBI, and Tax authorities.
 - [Document generator](${BASE_URL}/documents): Secretarial drafting tool for Board Resolutions, NDAs, MoUs, Partnership Deeds, and official corporate correspondence formatted per ICSI SS-1.
 - [ROC Fee Calculator](${BASE_URL}/tools/fee-calculator): Calculator for MCA statutory filing fees and ROC late filing penalties.
+- [Form SH-7 Share Capital Alteration Fee Calculator](${BASE_URL}/tools/fee-calculator/companies/sh-7): Calculate Form SH-7 statutory fees, incremental capital registration fee slabs, state stamp duty on MOA, Table B late multipliers, and Section 64(2) adjudication penalties.
 - [LLP Fee Calculator](${BASE_URL}/tools/fee-calculator/llp): Calculator for LLP Form 8 and Form 11 late additional fees and Section 34/35 penalties.
 - [RBI Repo Rate Tracker](${BASE_URL}/tools/repo-rate): Live tracker for RBI Repo Rate, SDF, MSF, and MPC monetary policy statements.
 - [AI Agent Hub & WebMCP Guide](${BASE_URL}/mcp): Developer & AI agent integration hub for WebMCP tools.

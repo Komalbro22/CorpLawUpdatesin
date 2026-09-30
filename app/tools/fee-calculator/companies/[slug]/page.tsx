@@ -581,6 +581,49 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         text: 'Proposed directors sign with DSC, certified by a practicing CA, CS, or CMA. Submit e-Challan on MCA V3 to receive Certificate of Incorporation (COI) with CIN.'
       }
     ]
+  } : form.slug === 'sh-7' ? {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How to File Form SH-7 for Notice of Alteration of Share Capital & Calculate Fees on MCA V3',
+    description: 'Step-by-step statutory guide to calculating Section 64 notice timelines (30 days), Table A base fees, Table B late escalation multipliers (2x to 12x), differential registration fee on authorized capital increase, state stamp duty on MOA, and Section 64(2) adjudication penalties.',
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Verify Articles of Association (AOA) Authorization',
+        text: 'Ensure the company Articles of Association contain an express enabling provision under Section 61. If absent, convene an EGM to alter the AOA under Section 14 first.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Pass Shareholder Resolution & File Pre-requisite Form MGT-14',
+        text: 'Convene an Extraordinary General Meeting (EGM) to pass the Ordinary Resolution (or Special Resolution where required) altering the capital clause of MOA. File Form MGT-14 within 30 days under Section 117 to obtain the approved SRN required by MCA V3.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Calculate 30-Day Statutory Due Date under Section 64(1)',
+        text: 'The statutory 30-calendar-day clock begins on the date the resolution was passed by members (Day 0) or receipt of the Central Government order under Section 62(4).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: 'Compute Table A Base Fee & Incremental Capital Registration Fees',
+        text: 'Determine the Table A normal filing fee (₹200 to ₹600). If increasing authorized capital, compute differential registration fees under the Companies (Registration Offices and Fees) Rules plus applicable State Stamp Duty on MOA.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 5,
+        name: 'Apply Table B Late Multipliers & Section 64(2) Adjudication Exposure',
+        text: 'If filed after 30 days, pay Table B late filing fees (2x to 12x). Evaluate potential Section 64(2) civil adjudication penalties: ₹500/day continuing default (capped at ₹5,00,000 for the company and ₹1,00,000 per defaulting officer; 50% discount under Section 446B for small companies and DPIIT startups).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 6,
+        name: 'Affix Class 3 DSC & File Form SH-7 on MCA V3 Portal',
+        text: 'Attach altered MOA, certified board and EGM resolutions, and MGT-14 SRN acknowledgment. Digitally sign with Class 3 DSC of an authorized director and practicing professional (CA/CS/CMA) for ROC approval.'
+      }
+    ]
   } : null
 
   return (

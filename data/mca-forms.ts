@@ -1281,6 +1281,104 @@ export const mcaForms: MCAForm[] = [
       consequencesOfDelay: '<p>Failure or delay in filing Form INC-20A triggers four cascading legal consequences:</p><ol><li><strong>Operational Freeze (Section 10A(1)):</strong> The company cannot legally commence commercial operations or exercise borrowing powers. Pre-filing agreements are voidable.</li><li><strong>MCA21 Slab Late Fees (Table B):</strong> Escalating multipliers from 2× to 12× normal filing fees.</li><li><strong>Statutory Adjudication Penalties (Section 10A(2)):</strong> Flat ₹50,000 fine on the company plus ₹1,000/day per officer in default (max ₹1,00,000 each), payable from personal funds (halved under Section 446B for Small Companies/Startups).</li><li><strong>Strike-Off Risk (Section 10A(3) / 248(1)(c)):</strong> If delay exceeds 180 days, ROC may initiate name removal and entity dissolution.</li></ol>',
       workedExample: '<div class="space-y-4"><p><strong>Scenario: Private Limited Company (Authorized Capital ₹10 Lakhs, 2 Directors) filing INC-20A 42 Days Late</strong></p><ul><li>Nominal Share Capital: ₹10,00,000 &rarr; Normal Base Fee (Table A, Item 5): <strong>₹400</strong></li><li>Days of Delay: 42 calendar days &rarr; Table B Slab (31 to 60 days): <strong>4× Normal Fee</strong></li><li>Additional Late Fee: 4 × ₹400 = <strong>₹1,600</strong></li><li><strong>Total MCA21 Portal e-Challan:</strong> ₹400 + ₹1,600 = <strong>₹2,000</strong></li><li><strong>Section 10A(2) Adjudication Exposure:</strong> ₹50,000 (Company) + (42 days × ₹1,000 × 2 Directors = ₹84,000) = <strong>₹1,34,000</strong> (Directors pay personally).</li><li><strong>Combined Financial Exposure:</strong> ₹2,000 + ₹1,34,000 = <strong>₹1,36,000</strong>.</li></ul></div>'
     }
+  },
+  {
+    slug: 'sh-7',
+    formNumber: 'SH-7',
+    formName: 'Notice to Registrar of any Alteration of Share Capital',
+    aliases: [
+      'sh 7 fee calculator',
+      'sh-7 fee calculator',
+      'form sh 7 fee calculator',
+      'sh 7 late fee calculator',
+      'sh-7 late fee calculator',
+      'sh 7 penalty calculator',
+      'form sh-7 late filing fee calculator',
+      'mca sh 7 fee calculator',
+      'increase in authorised share capital fee calculator',
+      'increase in authorized capital fee',
+      'sh 7 due date',
+      'sh 7 penalty section 64',
+      'sh 7 late fees mca v3',
+      'form sh 7',
+      'sh-7',
+      'sh7',
+      'alteration of share capital',
+      'section 64 companies act 2013',
+      'form sh 7 filing fees',
+      'stamp duty on increase in authorised capital'
+    ],
+    category: 'event',
+    filedBy: [
+      'Private Limited Companies',
+      'Public Limited Companies (Unlisted & Listed)',
+      'One Person Companies (OPC)',
+      'Small Companies',
+      'DPIIT-Recognized Startups',
+      'Producer Companies',
+      'Section 8 Companies (having Share Capital)'
+    ],
+    dueDate: 'Strictly 30 Calendar Days from General Meeting Resolution (EGM/AGM) or Government Order',
+    section: 'Section 64(1) read with Section 61(1) and Section 62(4) of Companies Act, 2013 & Rule 15, Companies (Share Capital and Debentures) Rules, 2014',
+    penaltyType: 'multiplier',
+    penaltyRate: 'Table B Late Multipliers (2× to 12×) + Section 64(2) Adjudication (₹500/day, Max ₹5L Company & ₹1L per Officer)',
+    normalFeeStructure: 'capital_slab',
+    baseFeeSlab: 'standard_company_slab',
+    concessionApplies: true,
+    metaTitle: 'Form SH-7 Fee Calculator: Authorised Capital Increase, Late Fees & Section 64 Penalty (FY 2026-27)',
+    metaDescription: 'Calculate Form SH-7 MCA portal filing fees, incremental authorized capital fees, state stamp duty on MOA, Table B late multipliers, and Section 64(2) daily penalties.',
+    ogDescription: 'Interactive Form SH-7 Fee Calculator — Notice of Alteration of Share Capital under Section 64. Calculate Table A normal fees, incremental capital registration fee, state stamp duty, and daily adjudication penalty.',
+    faqItems: [
+      {
+        question: 'What is Form SH-7 and when is it required to be filed with the ROC?',
+        answer: 'Form SH-7 is a statutory notice filed with the Registrar of Companies (ROC) pursuant to Section 64(1) of the Companies Act, 2013 and Rule 15 of the Companies (Share Capital and Debentures) Rules, 2014 whenever a company alters its share capital under Section 61(1), increases authorized capital via Central Government order under Section 62(4), or redeems preference shares under Section 55. It officially intimates the government to update the master data and Capital Clause (Clause V) of the Memorandum of Association (MOA).'
+      },
+      {
+        question: 'What is the statutory deadline for filing Form SH-7?',
+        answer: 'Form SH-7 must be filed strictly within 30 calendar days from the date of passing the Ordinary or Special Resolution in the General Meeting (EGM or AGM), or from the date of receipt of the Central Government order under Section 62(4). Day 0 is the resolution date, and Day 1 begins on the following calendar day pursuant to Section 9 of the General Clauses Act. Filing on Day 31 onwards constitutes an operative statutory default.'
+      },
+      {
+        question: 'What are the MCA V3 portal late fees for delayed Form SH-7 filing?',
+        answer: 'Under Table B of the Companies (Registration Offices and Fees) Rules, 2014, late filing of Form SH-7 on the MCA V3 portal incurs tiered escalation multipliers based on the base filing fee: Up to 30 days delay: 2× normal base fee; 31 to 60 days delay: 4× normal base fee; 61 to 90 days delay: 6× normal base fee; 91 to 180 days delay: 10× normal base fee; beyond 180 days delay: 12× normal base fee. Normal base fees range between ₹200 and ₹600 depending on authorized capital.'
+      },
+      {
+        question: 'What is the statutory adjudication penalty under Section 64(2) of the Companies Act, 2013?',
+        answer: 'Separate from MCA portal late fees, Section 64(2) imposes a continuing civil adjudication penalty on the company and every officer who is in default of ₹500 for each day during which the default continues. The penalty is subject to a statutory maximum ceiling of ₹5,00,000 for the company and ₹1,00,000 for each officer in default. Directors must pay their personal penalties out of personal funds.'
+      },
+      {
+        question: 'How is the registration fee calculated on an increase in authorised share capital?',
+        answer: 'Under the Table of Fees of the Companies (Registration Offices and Fees) Rules, 2014, registration fees on capital increase are calculated on the differential incremental capital. The fee payable on the new total capital is calculated under statutory slabs (₹1,000 per ₹1L between ₹15L–₹50L; ₹750 per ₹1L between ₹50L–₹1 Cr; ₹500 per ₹1L above ₹1 Cr, max cap ₹2.5 Crore) and the registration fee already paid on the existing capital is deducted. The resulting net difference is payable via the MCA V3 portal.'
+      },
+      {
+        question: 'Is state stamp duty payable on alteration of MOA for capital increase in Form SH-7?',
+        answer: 'Yes. Increasing authorized capital amends Clause V of the Memorandum of Association, attracting state stamp duty under the relevant State Stamp Act. Stamp duty is collected directly through the MCA V3 portal via electronic payment (e-Stamping). Rates vary significantly by state: e.g., Delhi charges 0.15% on incremental capital; Maharashtra charges 0.2% (min ₹1,00,000, max ₹50 Lakhs); Karnataka charges approx 0.1% (max ₹5 Lakhs).'
+      },
+      {
+        question: 'Is Form MGT-14 mandatory before filing Form SH-7 on MCA V3?',
+        answer: 'Yes. Under Section 117(1) of the Companies Act, 2013, the Special Resolution (or Ordinary Resolution altering MOA) passed in the General Meeting must be filed with the ROC in Form MGT-14 within 30 days. In the MCA V3 portal, Form SH-7 includes a mandatory pre-fill field requiring the approved Service Request Number (SRN) of Form MGT-14. Without filing MGT-14 first, Form SH-7 cannot be submitted.'
+      },
+      {
+        question: 'Does Section 446B relief apply to Section 64(2) penalties for Startups and Small Companies?',
+        answer: 'Yes! Under Section 446B of the Companies Act, 2013, eligible Small Companies (Section 2(85)), One Person Companies (OPC), Producer Companies, and DPIIT-recognized Startups are entitled to a 50% statutory penalty reduction. The daily penalty is reduced to ₹250 per day, and statutory maximum caps are reduced to ₹2,00,000 for the company and ₹1,00,000 for each officer in default.'
+      },
+      {
+        question: 'What happens if a company increases share capital without an enabling clause in its Articles of Association (AOA)?',
+        answer: 'Under Section 61(1), a limited company having a share capital can only alter its capital if such power is explicitly authorised by its Articles of Association (AOA). If the AOA lacks an enabling provision, the company must first amend its Articles under Section 14 by passing a Special Resolution in an EGM and filing Form MGT-14 before altering its capital in Form SH-7. Any capital increase without AOA authority is ultra vires and void.'
+      },
+      {
+        question: 'What mandatory attachments must be uploaded with Form SH-7 on MCA V3?',
+        answer: 'Rule 15 mandates the following attachments: (1) Certified True Copy of the General Meeting Ordinary / Special Resolution approving the alteration, (2) Copy of the Explanatory Statement annexed to the EGM notice pursuant to Section 102, (3) Altered copy of the Memorandum of Association (MOA) reflecting the revised Capital Clause V, (4) Copy of Central Government Order (if alteration is under Section 62(4)), (5) Altered Articles of Association (AOA) if share rights or classes were modified, and (6) Board Resolution authorising director signature.'
+      }
+    ],
+    relatedForms: ['mgt-14', 'pas-3', 'pas-4', 'pas-5', 'inc-24'],
+    filedTogetherWith: ['MGT-14', 'PAS-3'],
+    contentSections: {
+      whatIsThisForm: '<p><strong>Form SH-7</strong> (Notice to Registrar of any Alteration of Share Capital) is the statutory e-Form prescribed under <strong>Section 64(1) of the Companies Act, 2013</strong> and <strong>Rule 15 of the Companies (Share Capital and Debentures) Rules, 2014</strong>. It must be filed by any company having a share capital whenever it executes an alteration of its capital structure under Section 61(1), Section 62(4), or Section 55.</p><p>Under <strong>Section 61(1)</strong>, an alteration of share capital encompasses six distinct corporate actions:</p><ol><li><strong>Increase in Authorised Share Capital:</strong> Expanding the maximum equity or preference nominal capital limit specified in Clause V of the Memorandum of Association.</li><li><strong>Consolidation of Shares:</strong> Consolidating and dividing all or any share capital into shares of larger denomination (e.g., consolidating ten ₹10 shares into one ₹100 share).</li><li><strong>Sub-division of Shares (Stock Split):</strong> Dividing existing shares into shares of smaller denomination (e.g., splitting one ₹10 share into ten ₹1 shares) to boost liquidity and retail participation.</li><li><strong>Cancellation / Diminution of Capital:</strong> Cancelling shares that have not been taken or agreed to be taken by any person.</li><li><strong>Conversion into Stock:</strong> Converting fully paid-up shares into stock and reconverting stock into fully paid-up shares.</li><li><strong>Redemption of Preference Shares:</strong> Reporting the statutory redemption of redeemable preference shares under Section 55.</li></ol>',
+      whoMustFile: '<p>Every company registered under the Companies Act, 2013 having a share capital must file Form SH-7 whenever it alters its capital. This includes:</p><ul><li><strong>Private Limited Companies</strong> (expanding capital for angel, seed, venture capital, or private equity rounds)</li><li><strong>Public Limited Companies (Unlisted & Listed)</strong> (expanding authorized ceiling for rights issues, bonus issues, or institutional placements)</li><li><strong>One Person Companies (OPCs)</strong></li><li><strong>Small Companies</strong></li><li><strong>DPIIT-Recognised Startups</strong></li><li><strong>Producer Companies</strong></li><li><strong>Section 8 Non-Profit Companies</strong> having share capital</li></ul><p><strong>Exempt Entities:</strong> Companies limited by guarantee not having a share capital and Limited Liability Partnerships (LLPs) are exempt from Form SH-7 (LLPs file Form 3 for capital contribution changes).</p>',
+      dueDateExplained: '<h3>The Strict 30-Day Statutory Clock</h3><p>Pursuant to <strong>Section 64(1)</strong>, Form SH-7 must be filed with the Registrar of Companies strictly within <strong>30 calendar days</strong> from the triggering legal event:</p><ul><li><strong>General Meeting Resolution:</strong> The 30-day clock begins running on the exact date when the shareholders passed the resolution in the Extraordinary General Meeting (EGM) or Annual General Meeting (AGM) (Day 0). Day 1 begins on the subsequent day under Section 9 of the General Clauses Act, 1897.</li><li><strong>Government Order (Section 62(4)):</strong> If capital is increased pursuant to an order of the Central Government converting loans/debentures into equity, the 30-day window runs from the date of receipt of the government order.</li></ul><p><strong>No Inherent Extension:</strong> The 30-day deadline cannot be extended by ROC or MCA administrative discretion. Any filing on or after Day 31 triggers automatic Table B escalation multipliers and civil adjudication liabilities.</p>',
+      consequencesOfDelay: '<h3>Triple Exposure Framework for Delayed Form SH-7</h3><p>Failing to file Form SH-7 within the 30-day statutory window exposes the company and its key management to three distinct regulatory liabilities:</p><h4>1. Table B Additional Late Filing Fees (MCA V3 Portal)</h4><p>The MCA V3 system automatically levies compounding multipliers on the base filing fee:</p><ul><li><strong>Delay up to 30 days:</strong> 2× normal base fee</li><li><strong>Delay 31 to 60 days:</strong> 4× normal base fee</li><li><strong>Delay 61 to 90 days:</strong> 6× normal base fee</li><li><strong>Delay 91 to 180 days:</strong> 10× normal base fee</li><li><strong>Delay beyond 180 days:</strong> 12× normal base fee</li></ul><h4>2. Section 64(2) Daily Statutory Adjudication Penalties</h4><p>Under Section 64(2) as amended by the Companies (Amendment) Act, 2019, default triggers severe daily penalties:</p><ul><li><strong>Company:</strong> ₹500 for each day during which default continues, capped at <strong>₹5,00,000</strong>.</li><li><strong>Every Officer in Default:</strong> ₹500 for each day during which default continues, capped at <strong>₹1,00,000 per officer</strong>. Directors must discharge this liability personally.</li><li><strong>Section 446B Relief:</strong> Small Companies, OPCs, DPIIT Startups, and Producer Companies pay 50% reduced penalties (capped at ₹2,00,000 for the company and ₹1,00,000 per officer).</li></ul><h4>3. Freeze on Downstream Share Allotment (Form PAS-3)</h4><p>Under corporate law, a company cannot allot new shares in excess of its existing authorized capital. If Form SH-7 is not filed and approved, the MCA master data will not reflect the increased capital, blocking the company from filing <strong>Form PAS-3</strong> (Return of Allotment). Under Section 42(6), subscription funds cannot be utilised until PAS-3 is submitted, effectively freezing the company’s capital round.</p>',
+      workedExample: '<h4>Scenario 1: Private Limited Series A Round (₹10 Lakhs to ₹1 Crore Capital Increase)</h4><p>A Delhi-based tech startup increases its authorised capital from ₹10 Lakhs to ₹1 Crore at an EGM held on 1st January 2026. The 30-day statutory deadline expires on 31st January 2026. The company files Form SH-7 on 15th March 2026 (43 days delayed, 2 directors):</p><ul><li>Normal Base Filing Fee (Table A): <strong>₹600</strong></li><li>Table B Multiplier (31–60 days delay = 4×): <strong>₹2,400</strong></li><li>Incremental Capital Registration Fee (Table of Fees on ₹90L increase): <strong>₹72,500</strong></li><li>Estimated Delhi State Stamp Duty on MOA (0.15% on ₹90L): <strong>₹13,500</strong></li><li><strong>Total MCA V3 e-Challan: ₹89,000</strong></li><li>Section 64(2) Company Penalty (43 days × ₹500): <strong>₹21,500</strong></li><li>Section 64(2) Officers Penalty (43 days × ₹500 × 2 directors): <strong>₹43,000</strong></li><li><strong>Total Financial Exposure: ₹1,53,500</strong></li></ul><h4>Scenario 2: Small Company Stock Split / Sub-division (Zero Capital Increase)</h4><p>A Small Company executes a 1:10 stock split under Section 61(1)(d). Authorised capital remains ₹10 Lakhs throughout. EGM held on 1st February 2026, filed on 10th February 2026 (On-time):</p><ul><li>Normal Base Filing Fee (Table A Small Company slab): <strong>₹150</strong></li><li>Additional Late Fee: <strong>₹0</strong> (Filed on-schedule)</li><li>Incremental Capital Fee: <strong>₹0</strong> (No capital increase)</li><li>State Stamp Duty: <strong>₹0</strong> (Capital clause amount unchanged)</li><li>Section 64(2) Penalties: <strong>₹0</strong></li><li><strong>Total MCA V3 Challan: ₹150</strong></li></ul>'
+    }
   }
 ]
 

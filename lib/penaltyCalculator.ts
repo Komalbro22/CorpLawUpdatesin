@@ -152,7 +152,7 @@ export function calculateCompanyFee(params: CompanyFeeParams): CompanyCalculatio
     'MGT-14': { companyBase: 10000, companyPerDay: 100, companyMax: 200000, officerBase: 10000, officerPerDay: 100, officerMax: 50000 },
     'MSME-1': { companyBase: 20000, companyPerDay: 1000, companyMax: 300000, officerBase: 20000, officerPerDay: 1000, officerMax: 300000 },
     'PAS-6': { companyBase: 10000, companyPerDay: 1000, companyMax: 200000, officerBase: 10000, officerPerDay: 1000, officerMax: 50000 },
-    'SH-7': { companyBase: 1000, companyPerDay: 500, companyMax: 500000, officerBase: 1000, officerPerDay: 500, officerMax: 500000 },
+    'SH-7': { companyBase: 0, companyPerDay: 500, companyMax: 500000, officerBase: 0, officerPerDay: 500, officerMax: 100000 },
     'ADT-3': { officerBase: 50000, officerPerDay: 500, officerMax: 200000 },
     'CRA-2': { companyBase: 25000, companyPerDay: 1000, companyMax: 500000, officerBase: 10000, officerPerDay: 1000, officerMax: 200000 },
     'CRA-4': { companyBase: 25000, companyPerDay: 1000, companyMax: 500000, officerBase: 10000, officerPerDay: 1000, officerMax: 200000 },
