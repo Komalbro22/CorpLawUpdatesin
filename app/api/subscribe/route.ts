@@ -1,9 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { redis } from '@/lib/redis-cache'
@@ -11,7 +6,7 @@ import { sendEmail, getActiveEmailProvider, parseSender } from '@/lib/email-prov
 
 export async function POST(request: NextRequest) {
     try {
-        const body = await request.json()
+        const body = await request.json().catch(() => ({}))
         const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : ''
 
         const allowedProfessions = new Set(['CA', 'CS', 'CMA', 'Advocate', 'Student', 'Other'])
@@ -46,98 +41,157 @@ export async function POST(request: NextRequest) {
         const rawIp = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
         const clientIp = rawIp.split(',')[0].trim()
         
+        // 1. Redis Rate Limiting (Fault-tolerant)
         const limitKey = `ratelimit:newsletter:${clientIp}`
         if (redis) {
-            const count = await redis.incr(limitKey)
-            if (count === 1) {
-                await redis.expire(limitKey, 3600)
-            }
-            if (count > 3) {
-                return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
+            try {
+                const count = await redis.incr(limitKey)
+                if (count === 1) {
+                    await redis.expire(limitKey, 3600)
+                }
+                if (count > 10) {
+                    return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
+                }
+            } catch (redisErr) {
+                console.warn('[Subscribe] Redis rate limit check failed, proceeding with DB fallback:', redisErr)
             }
         }
 
-        const ipKey = `sub:${clientIp}`
+        // 2. Database Rate Limiting (Fault-tolerant)
+        try {
+            const ipKey = `sub:${clientIp}`
+            const { data: attemptData } = await supabaseAdmin
+                .from('login_attempts')
+                .select('attempts, window_start')
+                .eq('ip', ipKey)
+                .maybeSingle()
 
-        // Rate limiting logic
-        const { data: attemptData } = await supabaseAdmin
-            .from('login_attempts')
-            .select('attempts, window_start')
-            .eq('ip', ipKey)
-            .single()
+            const now = new Date()
 
-        const now = new Date()
+            if (attemptData) {
+                const windowStart = new Date(attemptData.window_start)
+                const diffMs = now.getTime() - windowStart.getTime()
+                const diffHours = diffMs / (1000 * 60 * 60)
 
-        if (attemptData) {
-            const windowStart = new Date(attemptData.window_start)
-            const diffMs = now.getTime() - windowStart.getTime()
-            const diffHours = diffMs / (1000 * 60 * 60)
-
-            if (diffHours <= 1) {
-                if (attemptData.attempts >= 3) {
-                    return NextResponse.json({ error: 'Too many attempts' }, { status: 429 })
+                if (diffHours <= 1) {
+                    if (attemptData.attempts >= 10) {
+                        return NextResponse.json({ error: 'Too many attempts. Please try again later.' }, { status: 429 })
+                    }
+                    await supabaseAdmin
+                        .from('login_attempts')
+                        .update({ attempts: attemptData.attempts + 1 })
+                        .eq('ip', ipKey)
+                } else {
+                    await supabaseAdmin
+                        .from('login_attempts')
+                        .update({ attempts: 1, window_start: now.toISOString() })
+                        .eq('ip', ipKey)
                 }
-                await supabaseAdmin
-                    .from('login_attempts')
-                    .update({ attempts: attemptData.attempts + 1 })
-                    .eq('ip', ipKey)
             } else {
                 await supabaseAdmin
                     .from('login_attempts')
-                    .update({ attempts: 1, window_start: now.toISOString() })
-                    .eq('ip', ipKey)
+                    .insert({ ip: ipKey, attempts: 1, window_start: now.toISOString() })
             }
-        } else {
-            await supabaseAdmin
-                .from('login_attempts')
-                .insert({ ip: ipKey, attempts: 1, window_start: now.toISOString() })
+        } catch (dbRateLimitErr) {
+            console.warn('[Subscribe] Database rate limit check warning:', dbRateLimitErr)
         }
 
-        // Check subscribers
+        // 3. Check existing subscriber status
         const { data: existing, error: existingError } = await supabaseAdmin
             .from('subscribers')
             .select('id, is_active')
             .eq('email', email)
             .maybeSingle()
 
-        if (existingError) throw existingError
+        if (existingError) {
+            console.error('[Subscribe] Error querying subscribers table:', existingError)
+            throw existingError
+        }
 
-        const subscriberMetadata = {
-            profession,
-            profession_other: professionOther,
-            frequency,
-            source,
-            source_page: sourcePage,
+        // Core fields supported by all Supabase schema revisions
+        const corePayload = {
+            email,
+            is_active: true,
+            confirmed: true,
         }
-        const submittedMetadata = {
-            ...(hasProfession ? { profession, profession_other: professionOther } : {}),
-            ...(hasFrequency ? { frequency } : {}),
-            ...(hasSource ? { source } : {}),
-            ...(hasSourcePage ? { source_page: sourcePage } : {}),
-        }
+
+        // Optional metadata from custom forms
+        const optionalMetadata: Record<string, any> = {}
+        if (hasProfession && profession) optionalMetadata.profession = profession
+        if (professionOther) optionalMetadata.profession_other = professionOther
+        if (hasFrequency) optionalMetadata.frequency = frequency
+        if (hasSource) optionalMetadata.source = source
+        if (hasSourcePage && sourcePage) optionalMetadata.source_page = sourcePage
+
+        const hasCustomMetadata = Object.keys(optionalMetadata).length > 0
 
         if (existing) {
             if (existing.is_active) {
-                const { error: updateError } = await supabaseAdmin
-                    .from('subscribers')
-                    .update(submittedMetadata)
-                    .eq('id', existing.id)
-                if (updateError) throw updateError
+                // Already subscribed: update metadata if provided and columns exist
+                if (hasCustomMetadata) {
+                    const { error: updateMetaError } = await supabaseAdmin
+                        .from('subscribers')
+                        .update(optionalMetadata)
+                        .eq('id', existing.id)
+
+                    if (updateMetaError) {
+                        console.warn('[Subscribe] Optional metadata update skipped:', updateMetaError.message)
+                    }
+                }
             } else {
-                const { error: updateError } = await supabaseAdmin
+                // Reactivate inactive subscriber
+                let updateRes = await supabaseAdmin
                     .from('subscribers')
-                    .update({ is_active: true, unsubscribed_at: null, ...subscriberMetadata })
+                    .update({
+                        is_active: true,
+                        unsubscribed_at: null,
+                        confirmed: true,
+                        ...(hasCustomMetadata ? optionalMetadata : {}),
+                    })
                     .eq('id', existing.id)
-                if (updateError) throw updateError
+
+                // If metadata columns don't exist, retry with core fields
+                if (updateRes.error && hasCustomMetadata) {
+                    console.warn('[Subscribe] Retrying reactivation with core fields only:', updateRes.error.message)
+                    updateRes = await supabaseAdmin
+                        .from('subscribers')
+                        .update({
+                            is_active: true,
+                            unsubscribed_at: null,
+                            confirmed: true,
+                        })
+                        .eq('id', existing.id)
+                }
+
+                if (updateRes.error) {
+                    console.error('[Subscribe] Reactivation update failed:', updateRes.error)
+                    throw updateRes.error
+                }
             }
         } else {
-            const { error: insertError } = await supabaseAdmin
+            // New subscriber: insert core record + optional metadata if provided
+            let insertRes = await supabaseAdmin
                 .from('subscribers')
-                .insert({ email, ...subscriberMetadata })
-            if (insertError) throw insertError
+                .insert({
+                    ...corePayload,
+                    ...(hasCustomMetadata ? optionalMetadata : {}),
+                })
+
+            // If metadata columns don't exist in DB schema, fallback gracefully to core payload
+            if (insertRes.error && hasCustomMetadata) {
+                console.warn('[Subscribe] Retrying insert with core fields only:', insertRes.error.message)
+                insertRes = await supabaseAdmin
+                    .from('subscribers')
+                    .insert(corePayload)
+            }
+
+            if (insertRes.error) {
+                console.error('[Subscribe] Subscriber insert failed:', insertRes.error)
+                throw insertRes.error
+            }
         }
 
-        // Keep Supabase signup successful if Brevo contact metadata cannot be updated.
+        // 4. Upsert Contact to Brevo CRM (Non-fatal)
         const brevoApiKey = process.env.BREVO_API_KEY?.trim()
         if (brevoApiKey) {
             try {
@@ -160,70 +214,84 @@ export async function POST(request: NextRequest) {
                 })
 
                 if (!response.ok) {
-                    console.error('[Subscribe] Brevo contact upsert failed with status:', response.status)
+                    console.warn('[Subscribe] Brevo contact upsert response status:', response.status)
                 }
             } catch (brevoError) {
-                console.error('[Subscribe] Brevo contact upsert request failed:',
-                    brevoError instanceof Error ? brevoError.name : 'Unknown error')
+                console.warn('[Subscribe] Brevo contact upsert request error:',
+                    brevoError instanceof Error ? brevoError.message : 'Unknown error')
             }
-        } else {
-            console.warn('[Subscribe] Brevo contact upsert skipped: BREVO_API_KEY is not configured.')
         }
 
-        // Send Welcome Email for new or reactivated subscribers (Non-fatal).
-        if (!existing?.is_active) try {
-            const provider = getActiveEmailProvider()
-            if (provider === 'none') {
-                console.warn('[Subscribe] No active email provider configured. Skipping welcome email.')
-            } else {
-                const { generateWelcomeEmail } = await import('@/lib/email-templates/welcome')
-                const { generateUnsubscribeToken } = await import('@/lib/utils')
-
-                const { data: recentArticles } = await supabaseAdmin
-                    .from('updates')
-                    .select('title, slug, summary, category, published_at')
-                    .not('published_at', 'is', null)
-                    .lte('published_at', new Date().toISOString())
-                    .order('published_at', { ascending: false })
-                    .limit(5)
-
-                const token = generateUnsubscribeToken(email)
-                const welcomeHtml = generateWelcomeEmail({
-                    email,
-                    unsubscribeToken: token,
-                    recentArticles: recentArticles || [],
-                })
-
-                const { email: fromEmail, name: fromName } = parseSender()
-
-                const emailRes = await sendEmail({
-                    from: fromEmail,
-                    fromName,
-                    to: email,
-                    subject: '🎉 Welcome to CorpLawUpdates.in — Your Free Corporate Law Digest',
-                    html: welcomeHtml,
-                })
-
-                if (!emailRes.success) {
-                    console.error(`[Subscribe] Welcome email delivery failed (${emailRes.provider}).`)
+        // 5. Send Welcome Briefing Email (Non-fatal)
+        if (!existing?.is_active) {
+            try {
+                const provider = getActiveEmailProvider()
+                if (provider === 'none') {
+                    console.warn('[Subscribe] No active email provider configured. Skipping welcome email.')
                 } else {
-                    console.log(`[Subscribe] Welcome email sent successfully (Provider: ${emailRes.provider})`)
+                    const welcomePromise = (async () => {
+                        const { generateWelcomeEmail } = await import('@/lib/email-templates/welcome')
+                        const { generateUnsubscribeToken } = await import('@/lib/utils')
+
+                        const { data: recentArticles } = await supabaseAdmin
+                            .from('updates')
+                            .select('title, slug, summary, category, published_at')
+                            .not('published_at', 'is', null)
+                            .lte('published_at', new Date().toISOString())
+                            .order('published_at', { ascending: false })
+                            .limit(5)
+
+                        const token = generateUnsubscribeToken(email)
+                        const welcomeHtml = generateWelcomeEmail({
+                            email,
+                            unsubscribeToken: token,
+                            recentArticles: recentArticles || [],
+                        })
+
+                        const { email: fromEmail, name: fromName } = parseSender()
+
+                        return sendEmail({
+                            from: fromEmail,
+                            fromName,
+                            to: email,
+                            subject: '🎉 Welcome to CorpLawUpdates.in — Your Free Corporate Law Digest',
+                            html: welcomeHtml,
+                        })
+                    })()
+
+                    const emailRes = await Promise.race([
+                        welcomePromise,
+                        new Promise<{ success: boolean; error: string; provider: 'none' }>((resolve) =>
+                            setTimeout(() => resolve({ success: false, error: 'Email delivery timed out', provider: 'none' }), 4000)
+                        ),
+                    ])
+
+                    if (!emailRes.success) {
+                        console.warn(`[Subscribe] Welcome email delivery warning (${emailRes.provider}):`, emailRes.error)
+                    } else {
+                        console.log(`[Subscribe] Welcome email sent successfully (Provider: ${emailRes.provider})`)
+                    }
                 }
+            } catch (welcomeErr: any) {
+                console.warn('[Subscribe] Welcome email exception:', welcomeErr?.message || welcomeErr)
             }
-        } catch (welcomeErr: any) {
-            console.error('[Subscribe] Welcome email exception:', welcomeErr?.name || 'Unknown error')
         }
 
         return NextResponse.json({
             success: true,
             alreadySubscribed: Boolean(existing?.is_active),
             message: existing?.is_active
-                ? 'You are already subscribed! Your email preferences have been updated.'
-                : 'Subscribed! Check your inbox for a welcome email.',
+                ? 'You are already subscribed! Your weekly corporate law briefings are active.'
+                : 'Subscribed! Check your inbox for your welcome briefing.',
         }, { status: 200 })
 
     } catch (err: unknown) {
-        console.error('Subscribe error:', err instanceof Error ? err.name : 'Unknown error')
+        const errorDetail = err && typeof err === 'object' && 'message' in err
+            ? (err as { message: string }).message
+            : err instanceof Error
+            ? err.message
+            : 'Unknown error'
+        console.error('[Subscribe] Fatal error in subscribe route:', errorDetail, err)
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
     }
 }

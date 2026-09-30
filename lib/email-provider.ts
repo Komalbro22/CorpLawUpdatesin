@@ -285,6 +285,9 @@ async function sendViaBrevoSmtp(options: SingleEmailOptions): Promise<SendResult
                 user: smtpUser,
                 pass: smtpKey,
             },
+            connectionTimeout: 5000,
+            greetingTimeout: 5000,
+            socketTimeout: 8000,
         })
 
         const info = await transporter.sendMail({
