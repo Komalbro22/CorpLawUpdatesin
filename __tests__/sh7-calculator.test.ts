@@ -117,8 +117,8 @@ describe('Form SH-7 Statutory Compliance & Fee Engine', () => {
       expect(result.delayMonths).toBe(1)
       expect(result.lateFeePercentage).toBe(0.025) // 1 month @ 2.5%
       expect(result.additionalLateFee).toBe(4250) // 2.5% of ₹1,70,000
-      expect(result.estimatedStampDuty).toBe(18000) // 18 slabs of ₹5L × ₹1,000
-      expect(result.totalMcaChallanFee).toBe(192250) // 1,70,000 + 4,250 + 18,000
+      expect(result.estimatedStampDuty).toBe(27000) // 0.3% of ₹90L (Maharashtra Act 9 of 2025)
+      expect(result.totalMcaChallanFee).toBe(201250) // 1,70,000 + 4,250 + 27,000
 
       // Section 64(2) Adjudication Exposure
       expect(result.dailyPenaltyRate).toBe(500)
@@ -127,7 +127,7 @@ describe('Form SH-7 Statutory Compliance & Fee Engine', () => {
       expect(result.totalOfficersPenalty).toBe(15000) // 2 × 7,500
       expect(result.totalAdjudicationPenalty).toBe(22500) // 7,500 + 15,000
 
-      expect(result.totalFinancialExposure).toBe(214750) // 1,92,250 + 22,500
+      expect(result.totalFinancialExposure).toBe(223750) // 2,01,250 + 22,500
     })
   })
 
@@ -286,16 +286,18 @@ describe('Form SH-7 Statutory Compliance & Fee Engine', () => {
     })
   })
 
-  describe('9. Annexure A State Stamp Duties', () => {
+  describe('9. Annexure A State Stamp Duties & Versioned Registry', () => {
     test('Karnataka: ₹5,000 per ₹10,00,000 or part thereof, max ₹1 Crore', () => {
       expect(calculateEstimatedStampDuty('karnataka', 4000000)).toBe(20000) // 4 blocks × ₹5k
       expect(calculateEstimatedStampDuty('karnataka', 1000000)).toBe(5000)
       expect(calculateEstimatedStampDuty('karnataka', 2500000000)).toBe(10000000) // Capped at ₹1 Crore
     })
 
-    test('Maharashtra: ₹1,000 per ₹5,00,000 or part thereof, max ₹50 Lakhs', () => {
-      expect(calculateEstimatedStampDuty('maharashtra', 9000000)).toBe(18000) // 18 blocks × ₹1k
-      expect(calculateEstimatedStampDuty('maharashtra', 3000000000)).toBe(5000000) // Capped at ₹50 Lakhs
+    test('Maharashtra: 0.3% on incremental capital, max ₹1 Crore (Mah Act 9 of 2025)', () => {
+      expect(calculateEstimatedStampDuty('maharashtra', 9000000, 1000000, 10000000)).toBe(27000) // 0.3% of ₹90L
+      expect(calculateEstimatedStampDuty('maharashtra', 9000000)).toBe(27000)
+      expect(calculateEstimatedStampDuty('maharashtra', 5000000000)).toBe(10000000) // Capped at ₹1 Crore from ₹0
+      expect(calculateEstimatedStampDuty('maharashtra', 5000000000, 1000000, 5001000000)).toBe(9997000) // ₹1 Cr cap minus ₹3k previously paid
     })
 
     test('Delhi: 0.15% on incremental capital, max ₹25 Lakhs', () => {
@@ -308,9 +310,14 @@ describe('Form SH-7 Statutory Compliance & Fee Engine', () => {
       expect(calculateEstimatedStampDuty('tamil_nadu', 2000000000)).toBe(500000) // Capped at ₹5 Lakhs
     })
 
-    test('Gujarat: 0.5% on incremental capital, max ₹5 Lakhs', () => {
+    test('Gujarat: 0.5% with credit for existing capital, max ₹5 Lakhs', () => {
       expect(calculateEstimatedStampDuty('gujarat', 2000000)).toBe(10000) // 0.5% of ₹20L
       expect(calculateEstimatedStampDuty('gujarat', 200000000)).toBe(500000) // Capped at ₹5 Lakhs
+      // Credit mechanism: When old capital has already hit ₹5L cap, incremental duty is ₹0
+      expect(calculateEstimatedStampDuty('gujarat', 100000000, 100000000, 200000000)).toBe(0)
+      // Partial credit: ₹10L (old) to ₹50L (new):
+      // old duty = min(5L, 10L * 0.005 = 5k), new duty = min(5L, 50L * 0.005 = 25k) -> 20,000
+      expect(calculateEstimatedStampDuty('gujarat', 4000000, 1000000, 5000000)).toBe(20000)
     })
 
     test('Telangana & Andhra Pradesh: 0.15%, min ₹1,000, max ₹5 Lakhs', () => {
@@ -347,6 +354,22 @@ describe('Form SH-7 Statutory Compliance & Fee Engine', () => {
       expect(res.lateFee).toBe(0)
       expect(res.stampDuty).toBe(6000)
       expect(res.total).toBe(126000)
+    })
+
+    test('calculateMCAFee returns correct Case B figures for Maharashtra under Act 9 of 2025', () => {
+      const res = calculateMCAFee({
+        formSlug: 'sh-7',
+        companyType: 'normal',
+        capital: 1000000,
+        newCapital: 10000000,
+        delayDays: 15,
+        state: 'maharashtra'
+      })
+
+      expect(res.baseFee).toBe(170000)
+      expect(res.lateFee).toBe(4250)
+      expect(res.stampDuty).toBe(27000)
+      expect(res.total).toBe(201250)
     })
 
     test('calculateMCAFee returns correct Case C figures for Small Company in Karnataka', () => {

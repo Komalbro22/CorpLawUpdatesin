@@ -1,5 +1,6 @@
 import { getNormalFilingFee, getOpcSmallIncorporationFee, getOtherCompanyIncorporationFee } from './fee-calculator-core';
 import { calculateStateStampDuty } from './rule-engine/spice-engine';
+import { calculateEstimatedStampDuty, IndianState } from './rule-engine/sh7-engine';
 
 export interface CalculatorParams {
   formSlug: string;
@@ -120,25 +121,13 @@ export function calculateMCAFee(params: CalculatorParams): CalculatorResult {
     baseFee = Math.max(0, feeNew - feeOld);
 
     const increaseAmount = newCapital - existingCapital;
-    if (state === 'maharashtra') {
-      stampDuty = Math.min(5000000, Math.ceil(increaseAmount / 500000) * 1000);
-    } else if (state === 'karnataka') {
-      stampDuty = Math.min(10000000, Math.ceil(increaseAmount / 1000000) * 5000);
-    } else if (state === 'delhi') {
-      stampDuty = Math.min(2500000, Math.round(increaseAmount * 0.0015));
-    } else if (state === 'tamil_nadu' || state === 'tamilnadu') {
-      stampDuty = Math.min(500000, Math.ceil(increaseAmount / 1000000) * 500);
-    } else if (state === 'gujarat') {
-      stampDuty = Math.min(500000, Math.round(increaseAmount * 0.005));
-    } else if (state === 'telangana' || state === 'andhra_pradesh' || state === 'andhrapradesh') {
-      stampDuty = Math.min(500000, Math.max(1000, Math.round(increaseAmount * 0.0015)));
-    } else if (state === 'rajasthan') {
-      stampDuty = Math.min(2500000, Math.round(increaseAmount * 0.002));
-    } else if (state === 'uttar_pradesh' || state === 'uttarpradesh' || state === 'west_bengal' || state === 'westbengal' || state === 'kerala' || state === 'haryana') {
-      stampDuty = 0;
-    } else {
-      stampDuty = 0;
-    }
+    const normalizedState = (
+      state === 'tamilnadu' ? 'tamil_nadu' :
+      state === 'andhrapradesh' ? 'andhra_pradesh' :
+      state === 'uttarpradesh' ? 'uttar_pradesh' :
+      state === 'westbengal' ? 'west_bengal' : state
+    ) as IndianState;
+    stampDuty = calculateEstimatedStampDuty(normalizedState, increaseAmount, existingCapital, newCapital);
 
     if (delayDays > 0) {
       const monthsLate = Math.ceil(delayDays / 30);

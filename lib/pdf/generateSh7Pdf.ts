@@ -122,9 +122,12 @@ export function generateSh7Pdf(
       formatInr(data.additionalLateFee)
     ])
     if (data.estimatedStampDuty > 0) {
+      const stampBasis = data.stampDutyConfig
+        ? `${data.stampDutyConfig.name}: ${data.stampDutyConfig.rateDescription}`
+        : `Payable via MCA V3 e-Stamping (${data.state.toUpperCase()})`
       feeRows.push([
         'Estimated State Stamp Duty (MOA)',
-        `Payable via MCA V3 e-Stamping (${data.state.toUpperCase()})`,
+        stampBasis,
         formatInr(data.estimatedStampDuty)
       ])
     }
@@ -185,7 +188,7 @@ export function generateSh7Pdf(
     ],
     [
       { content: 'Total Adjudication Liability (ROC Sec 454)', styles: { fontStyle: 'bold', fillColor: PDF_PALETTE.lightGray } },
-      { content: data.section446BApplied ? 'Section 446B Concession (Illustrative 50% Relief: ₹250/day)' : 'Standard Corporate Penalty Regime', styles: { fontStyle: 'bold', fillColor: PDF_PALETTE.lightGray } },
+      { content: data.section446BApplied ? 'Illustrative maximum based on one-half of the statutory penalty rate: ₹250/day (Section 446B: penalty shall not be more than one-half; Company cap ₹2L, Officer statutory cap ₹1L)' : 'Standard Corporate Penalty Regime (Sec 64(2): ₹500/day, Co max ₹5L, Officer max ₹1L)', styles: { fontStyle: 'bold', fillColor: PDF_PALETTE.lightGray } },
       { content: formatInr(data.totalAdjudicationPenalty), styles: { fontStyle: 'bold', fillColor: PDF_PALETTE.lightGray, textColor: [180, 0, 0] } }
     ]
   ]

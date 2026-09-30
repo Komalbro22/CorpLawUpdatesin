@@ -99,7 +99,7 @@ const PRESETS: PresetConfig[] = [
     numOfficers: 2,
     mgt14Filed: true,
     hasAoaClause: true,
-    description: '15d delay. Differential: ₹1,70,000; 1 mo late fee (2.5%): ₹4,250; Stamp: ₹18,000. Challan: ₹1,92,250. Adjudication: ₹22,500.',
+    description: '15d delay in MH. Differential: ₹1,70,000; 1 mo late fee (2.5%): ₹4,250; Mah. Stamp (0.3% per Mah. Act 9 of 2025): ₹27,000. Challan: ₹2,01,250. Adjudication: ₹22,500.',
     badge: '15d Delay'
   },
   {
@@ -328,6 +328,14 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
             </div>
           </div>
 
+          {/* Scope Notice Banner */}
+          <div className="p-3 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200/80 dark:border-blue-900/50 flex items-start gap-2.5">
+            <Info className="size-4 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+            <div className="text-[11px] leading-relaxed text-blue-900 dark:text-blue-200">
+              <span className="font-bold">Statutory Scope:</span> Covers Form SH-7 filed under <strong>Section 64(1)(a) read with Section 61(1)</strong> for Alteration of Share Capital. <em>(Note: Companies limited by guarantee not having share capital increasing number of members under Section 64(1)(b) follow a separate member-slab fee structure per Table of Fees Item I(d)).</em>
+            </div>
+          </div>
+
           <div className="space-y-4">
             {/* Nature of Alteration Dropdown */}
             <div className="space-y-1.5">
@@ -392,10 +400,10 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
                   className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 outline-none"
                 >
                   <option value="delhi">Delhi (0.15%, max ₹25L)</option>
-                  <option value="maharashtra">Maharashtra (₹1,000 / ₹5L, max ₹50L)</option>
+                  <option value="maharashtra">Maharashtra (0.3%, max ₹1 Cr — Mah. Act 9 of 2025)</option>
                   <option value="karnataka">Karnataka (₹5,000 / ₹10L, max ₹1 Cr)</option>
                   <option value="tamil_nadu">Tamil Nadu (₹500 / ₹10L, max ₹5L)</option>
-                  <option value="gujarat">Gujarat (0.5%, max ₹5L)</option>
+                  <option value="gujarat">Gujarat (0.5%, max ₹5L with credit for existing duty)</option>
                   <option value="telangana">Telangana (0.15%, min ₹1,000, max ₹5L)</option>
                   <option value="andhra_pradesh">Andhra Pradesh (0.15%, min ₹1,000, max ₹5L)</option>
                   <option value="rajasthan">Rajasthan (0.2%, max ₹25L)</option>
@@ -726,14 +734,24 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
 
                   {/* Row 3: Estimated State Stamp Duty */}
                   {result.estimatedStampDuty > 0 && (
-                    <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 dark:bg-slate-800/50">
-                      <div>
-                        <p className="font-semibold text-slate-800 dark:text-slate-200">Estimated State Stamp Duty (MOA)</p>
-                        <p className="text-[10px] text-slate-400">Payable via MCA V3 e-Stamping ({result.state.toUpperCase()})</p>
+                    <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/50 space-y-1">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-semibold text-slate-800 dark:text-slate-200">Estimated State Stamp Duty (MOA)</p>
+                          <p className="text-[10px] text-slate-400">
+                            {result.stampDutyConfig?.name || result.state.toUpperCase()} · {result.stampDutyConfig?.rateDescription}
+                          </p>
+                        </div>
+                        <span className="font-bold text-emerald-700 dark:text-emerald-400 tabular-nums">
+                          {formatInr(result.estimatedStampDuty)}
+                        </span>
                       </div>
-                      <span className="font-bold text-emerald-700 dark:text-emerald-400 tabular-nums">
-                        {formatInr(result.estimatedStampDuty)}
-                      </span>
+                      {result.stampDutyConfig && (
+                        <div className="border-t border-slate-200/60 dark:border-slate-700/60 pt-1 text-[9px] text-slate-500 dark:text-slate-400 space-y-0.5">
+                          <p><strong>Source:</strong> {result.stampDutyConfig.legislativeSource}</p>
+                          <p><strong>Status:</strong> {result.stampDutyConfig.mcaAnnexureReference} (Verified: {result.stampDutyConfig.lastVerifiedDate})</p>
+                        </div>
+                      )}
                     </div>
                   )}
                 </>
@@ -800,7 +818,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
                   </span>
                 </div>
                 <p className="text-[10px] text-emerald-700/80 dark:text-emerald-400/80">
-                  Illustrative 50%-relief calculation: ₹250/day (Section 446B: penalty shall not be more than one-half; Company cap ₹2L, Officer cap ₹1L)
+                  Illustrative maximum based on one-half of the statutory penalty rate: ₹250/day (Section 446B: penalty shall not be more than one-half; Company cap ₹2L, Officer statutory cap ₹1L)
                 </p>
               </div>
             )}

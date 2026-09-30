@@ -106,6 +106,11 @@ export interface Sh7CalculationResult {
   // Total Financial Exposure
   totalFinancialExposure: number
 
+  // State Stamp Duty Architecture Metadata
+  stampDutyConfig?: StateStampConfig
+  stampDutyNote?: string
+  statutoryScopeNotice: string
+
   // Checklist & Alerts
   requiresAoaAmendment: boolean
   warnings: string[]
@@ -258,59 +263,214 @@ export function calculateCapitalIncreaseLateFee(
   }
 }
 
+export interface StateStampConfig {
+  stateKey: IndianState
+  name: string
+  rateDescription: string
+  effectiveDate: string
+  legislativeSource: string
+  mcaAnnexureReference: string
+  lastVerifiedDate: string
+  notes: string
+  calculate: (existingCapital: number, newCapital: number) => number
+}
+
+/**
+ * Versioned State Stamp Duty Registry for MOA Alteration on Form SH-7.
+ *
+ * NOTE: The official MCA Form SH-7 Instruction Kit instructs users to refer to the
+ * authentic State/UT Stamp Acts. Where current state legislation has amended stamp duty
+ * schedules (e.g. Maharashtra Act 9 of 2025), current state law supersedes legacy MCA Annexure tables.
+ */
+export const STATE_STAMP_REGISTRY: Record<IndianState, StateStampConfig> = {
+  maharashtra: {
+    stateKey: 'maharashtra',
+    name: 'Maharashtra',
+    rateDescription: '0.3% of increased share capital, max ₹1,00,00,000 (₹1 Crore)',
+    effectiveDate: '2024-10-14 (Ordinance) / 2025-01-01 (Mah. Act 9 of 2025)',
+    legislativeSource: 'Article 10, Schedule I of Maharashtra Stamp Act, 1958 (amended by Maharashtra Act No. IX of 2025)',
+    mcaAnnexureReference: 'Supersedes legacy MCA Annexure A rate (₹1,000 per ₹5 Lakhs, max ₹50 Lakhs)',
+    lastVerifiedDate: '2026-03-31',
+    notes: 'Amended to 0.3% on share capital / increased share capital subject to ₹1 Crore maximum cap. Difference mechanism applies against previous capital.',
+    calculate: (oldCap, newCap) => {
+      if (newCap <= oldCap) return 0
+      return Math.max(0, Math.min(10000000, Math.round(newCap * 0.003)) - Math.min(10000000, Math.round(oldCap * 0.003)))
+    }
+  },
+  karnataka: {
+    stateKey: 'karnataka',
+    name: 'Karnataka',
+    rateDescription: '₹5,000 for every ₹10,00,000 of increase or part thereof, max ₹1,00,00,000 (₹1 Crore)',
+    effectiveDate: '2020-04-01',
+    legislativeSource: 'Article 10, Schedule to Karnataka Stamp Act, 1957',
+    mcaAnnexureReference: 'Matches official MCA Form SH-7 Instruction Kit Annexure A',
+    lastVerifiedDate: '2026-03-31',
+    notes: 'Levied in blocks of ₹10 Lakhs or part thereof on incremental capital.',
+    calculate: (oldCap, newCap) => {
+      const inc = Math.max(0, newCap - oldCap)
+      if (inc <= 0) return 0
+      return Math.min(10000000, Math.ceil(inc / 1000000) * 5000)
+    }
+  },
+  delhi: {
+    stateKey: 'delhi',
+    name: 'Delhi',
+    rateDescription: '0.15% on incremental capital, max ₹25,00,000',
+    effectiveDate: '2010-06-01',
+    legislativeSource: 'Article 10, Schedule 1A, Indian Stamp (Delhi Amendment) Act',
+    mcaAnnexureReference: 'Matches official MCA Form SH-7 Instruction Kit Annexure A',
+    lastVerifiedDate: '2026-03-31',
+    notes: '0.15% of incremental capital capped at ₹25 Lakhs.',
+    calculate: (oldCap, newCap) => {
+      const inc = Math.max(0, newCap - oldCap)
+      if (inc <= 0) return 0
+      return Math.min(2500000, Math.round(inc * 0.0015))
+    }
+  },
+  gujarat: {
+    stateKey: 'gujarat',
+    name: 'Gujarat',
+    rateDescription: '0.5% on capital, less duty on existing capital, max ₹5,00,000',
+    effectiveDate: '2013-04-01',
+    legislativeSource: 'Article 10, Schedule I of Gujarat Stamp Act, 1958 & MCA e-Stamp schedule',
+    mcaAnnexureReference: 'Matches MCA e-Stamp schedule difference and capping mechanism (eStamp_rate.pdf)',
+    lastVerifiedDate: '2026-03-31',
+    notes: '0.5% of increased authorised capital subject to ₹5 Lakh maximum cap, with deduction/credit for duty on existing capital. Once ₹5 Lakh cumulative ceiling is hit, incremental duty is ₹0.',
+    calculate: (oldCap, newCap) => {
+      if (newCap <= oldCap) return 0
+      return Math.max(0, Math.min(500000, Math.round(newCap * 0.005)) - Math.min(500000, Math.round(oldCap * 0.005)))
+    }
+  },
+  tamil_nadu: {
+    stateKey: 'tamil_nadu',
+    name: 'Tamil Nadu',
+    rateDescription: '₹500 for every ₹10,00,000 of increase or part thereof, max ₹5,00,000',
+    effectiveDate: '2018-06-01',
+    legislativeSource: 'Article 10, Tamil Nadu Stamp Act',
+    mcaAnnexureReference: 'Matches official MCA Form SH-7 Instruction Kit Annexure A',
+    lastVerifiedDate: '2026-03-31',
+    notes: 'Levied in blocks of ₹10 Lakhs or part thereof on incremental capital, max ₹5 Lakhs.',
+    calculate: (oldCap, newCap) => {
+      const inc = Math.max(0, newCap - oldCap)
+      if (inc <= 0) return 0
+      return Math.min(500000, Math.ceil(inc / 1000000) * 500)
+    }
+  },
+  telangana: {
+    stateKey: 'telangana',
+    name: 'Telangana',
+    rateDescription: '0.15% on incremental capital, min ₹1,000, max ₹5,00,000',
+    effectiveDate: '2014-06-02',
+    legislativeSource: 'Article 10, Indian Stamp (Telangana Amendment) Act',
+    mcaAnnexureReference: 'Matches official MCA Form SH-7 Instruction Kit Annexure A',
+    lastVerifiedDate: '2026-03-31',
+    notes: '0.15% on increase, subject to statutory minimum ₹1,000 and maximum ₹5 Lakhs.',
+    calculate: (oldCap, newCap) => {
+      const inc = Math.max(0, newCap - oldCap)
+      if (inc <= 0) return 0
+      return Math.min(500000, Math.max(1000, Math.round(inc * 0.0015)))
+    }
+  },
+  andhra_pradesh: {
+    stateKey: 'andhra_pradesh',
+    name: 'Andhra Pradesh',
+    rateDescription: '0.15% on incremental capital, min ₹1,000, max ₹5,00,000',
+    effectiveDate: '2014-06-02',
+    legislativeSource: 'Article 10, Indian Stamp (Andhra Pradesh Amendment) Act',
+    mcaAnnexureReference: 'Matches official MCA Form SH-7 Instruction Kit Annexure A',
+    lastVerifiedDate: '2026-03-31',
+    notes: '0.15% on increase, subject to statutory minimum ₹1,000 and maximum ₹5 Lakhs.',
+    calculate: (oldCap, newCap) => {
+      const inc = Math.max(0, newCap - oldCap)
+      if (inc <= 0) return 0
+      return Math.min(500000, Math.max(1000, Math.round(inc * 0.0015)))
+    }
+  },
+  rajasthan: {
+    stateKey: 'rajasthan',
+    name: 'Rajasthan',
+    rateDescription: '0.2% on incremental capital, max ₹25,00,000',
+    effectiveDate: '2019-07-01',
+    legislativeSource: 'Article 10, Schedule to Rajasthan Stamp Act, 1998',
+    mcaAnnexureReference: 'Matches official MCA Form SH-7 Instruction Kit Annexure A',
+    lastVerifiedDate: '2026-03-31',
+    notes: '0.2% on incremental capital, max ₹25 Lakhs.',
+    calculate: (oldCap, newCap) => {
+      const inc = Math.max(0, newCap - oldCap)
+      if (inc <= 0) return 0
+      return Math.min(2500000, Math.round(inc * 0.002))
+    }
+  },
+  uttar_pradesh: {
+    stateKey: 'uttar_pradesh',
+    name: 'Uttar Pradesh',
+    rateDescription: 'NIL via MCA Portal e-stamping (Physical stamping per state rules)',
+    effectiveDate: 'Current',
+    legislativeSource: 'Annexure A, MCA Form SH-7 Instruction Kit',
+    mcaAnnexureReference: 'MOA alteration e-stamping is NIL / not collected on MCA V3 portal',
+    lastVerifiedDate: '2026-03-31',
+    notes: 'Not integrated for electronic payment on MCA V3 portal challan.',
+    calculate: () => 0
+  },
+  west_bengal: {
+    stateKey: 'west_bengal',
+    name: 'West Bengal',
+    rateDescription: 'NIL via MCA Portal e-stamping (Physical stamping per state rules)',
+    effectiveDate: 'Current',
+    legislativeSource: 'Annexure A, MCA Form SH-7 Instruction Kit',
+    mcaAnnexureReference: 'MOA alteration e-stamping is NIL / not collected on MCA V3 portal',
+    lastVerifiedDate: '2026-03-31',
+    notes: 'Not integrated for electronic payment on MCA V3 portal challan.',
+    calculate: () => 0
+  },
+  kerala: {
+    stateKey: 'kerala',
+    name: 'Kerala',
+    rateDescription: 'NIL via MCA Portal e-stamping (Physical stamping per state rules)',
+    effectiveDate: 'Current',
+    legislativeSource: 'Annexure A, MCA Form SH-7 Instruction Kit',
+    mcaAnnexureReference: 'MOA alteration e-stamping is NIL / not collected on MCA V3 portal',
+    lastVerifiedDate: '2026-03-31',
+    notes: 'Not integrated for electronic payment on MCA V3 portal challan.',
+    calculate: () => 0
+  },
+  haryana: {
+    stateKey: 'haryana',
+    name: 'Haryana',
+    rateDescription: 'NIL via MCA Portal e-stamping (Physical stamping per state rules)',
+    effectiveDate: 'Current',
+    legislativeSource: 'Annexure A, MCA Form SH-7 Instruction Kit',
+    mcaAnnexureReference: 'MOA alteration e-stamping is NIL / not collected on MCA V3 portal',
+    lastVerifiedDate: '2026-03-31',
+    notes: 'Not integrated for electronic payment on MCA V3 portal challan.',
+    calculate: () => 0
+  },
+  other: {
+    stateKey: 'other',
+    name: 'Other States / UTs',
+    rateDescription: 'NIL via MCA Portal (Physical treasury stamping per state rules)',
+    effectiveDate: 'Current',
+    legislativeSource: 'Annexure A, MCA Form SH-7 Instruction Kit',
+    mcaAnnexureReference: 'Not collected on MCA V3 portal',
+    lastVerifiedDate: '2026-03-31',
+    notes: 'Consult local state treasury for physical non-judicial stamp duty requirements.',
+    calculate: () => 0
+  }
+}
+
 /**
  * Estimates state stamp duty on MOA alteration for incremental authorised share capital
- * strictly per Annexure A of the official MCA Form SH-7 Instruction Kit.
+ * using the versioned state stamp registry.
  */
 export function calculateEstimatedStampDuty(
   state: IndianState,
-  incrementalCapital: number
+  incrementalCapital: number,
+  existingCapital: number = 0,
+  newCapital: number = existingCapital + incrementalCapital
 ): number {
   if (incrementalCapital <= 0) return 0
-
-  switch (state) {
-    case 'maharashtra':
-      // Maharashtra: ₹1,000 for every ₹5,00,000 or part thereof, max ₹50,00,000
-      return Math.min(5000000, Math.ceil(incrementalCapital / 500000) * 1000)
-
-    case 'delhi':
-      // Delhi: 0.15% on incremental capital, max ₹25,00,000
-      return Math.min(2500000, Math.round(incrementalCapital * 0.0015))
-
-    case 'karnataka':
-      // Karnataka (Annexure A): ₹5,000 for every ₹10,00,000 of increase or part thereof, max ₹1,00,00,000 (₹1 Crore)
-      return Math.min(10000000, Math.ceil(incrementalCapital / 1000000) * 5000)
-
-    case 'tamil_nadu':
-      // Tamil Nadu: ₹500 for every ₹10,00,000 or part thereof, max ₹5,00,000
-      return Math.min(500000, Math.ceil(incrementalCapital / 1000000) * 500)
-
-    case 'gujarat':
-      // Gujarat: 0.5% on incremental capital, max ₹5,00,000
-      return Math.min(500000, Math.round(incrementalCapital * 0.005))
-
-    case 'telangana':
-      // Telangana: 0.15% on incremental capital, min ₹1,000, max ₹5,00,000
-      return Math.min(500000, Math.max(1000, Math.round(incrementalCapital * 0.0015)))
-
-    case 'andhra_pradesh':
-      // Andhra Pradesh: 0.15% on incremental capital, min ₹1,000, max ₹5,00,000
-      return Math.min(500000, Math.max(1000, Math.round(incrementalCapital * 0.0015)))
-
-    case 'rajasthan':
-      // Rajasthan: 0.2% on incremental capital, max ₹25,00,000
-      return Math.min(2500000, Math.round(incrementalCapital * 0.002))
-
-    case 'uttar_pradesh':
-    case 'west_bengal':
-    case 'kerala':
-    case 'haryana':
-      // Per Annexure A of MCA SH-7 Instruction Kit, MOA alteration e-stamping is NIL / not collected via MCA portal
-      return 0
-
-    default:
-      return 0
-  }
+  const config = STATE_STAMP_REGISTRY[state] || STATE_STAMP_REGISTRY.other
+  return config.calculate(existingCapital, newCapital)
 }
 
 /**
@@ -391,8 +551,9 @@ export function calculateSh7Compliance(input: Sh7Input): Sh7CalculationResult {
   }
 
   // 5. Estimated Stamp Duty on MOA Alteration
+  const stampConfig = STATE_STAMP_REGISTRY[state] || STATE_STAMP_REGISTRY.other
   const estimatedStampDuty = isCapitalIncrease
-    ? calculateEstimatedStampDuty(state, incrementalCapital)
+    ? calculateEstimatedStampDuty(state, incrementalCapital, existingAuthorisedCapital, effectiveNewCapital)
     : 0
 
   // Total MCA e-Challan payment (Payable immediately on MCA V3 submission)
@@ -543,6 +704,12 @@ export function calculateSh7Compliance(input: Sh7Input): Sh7CalculationResult {
     savingsFrom446B,
 
     totalFinancialExposure,
+
+    // State Stamp Duty Architecture Metadata
+    stampDutyConfig: stampConfig,
+    stampDutyNote: isCapitalIncrease ? stampConfig.notes : 'MOA Capital clause unchanged (Zero stamp duty)',
+    statutoryScopeNotice:
+      'Statutory Scope: Form SH-7 filed under Section 64(1)(a) read with Section 61(1) for Share Capital Alteration. (Companies limited by guarantee not having share capital increasing number of members under Section 64(1)(b) are governed by a separate member-slab fee structure).',
 
     requiresAoaAmendment,
     warnings,
