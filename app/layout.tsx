@@ -90,6 +90,9 @@ export const metadata: Metadata = {
   verification: {
     google: process.env.NEXT_PUBLIC_GSC_VERIFICATION || '',
   },
+  other: {
+    'google-adsense-account': 'ca-pub-8404756575471756',
+  },
 }
 
 export default async function RootLayout({
@@ -101,6 +104,12 @@ export default async function RootLayout({
     <html lang="en" data-scroll-behavior="smooth" className={fontVariables} suppressHydrationWarning>
       <head suppressHydrationWarning>
         <ThemeScript />
+        <meta name="google-adsense-account" content="ca-pub-8404756575471756" />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8404756575471756"
+          crossOrigin="anonymous"
+        />
         <link rel="llms" href="/llms.txt" />
         <link rel="describedby" href="/llms.txt" type="text/markdown" />
         <link rel="webmcp" href="/.well-known/webmcp" type="application/json" />
