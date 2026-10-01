@@ -109,7 +109,7 @@ export default function UnifiedCalculator() {
   }, [selectedForm, companyType, capital, delay, isRepeatOffender, newCapital, state, chargeAmount])
 
   const commonForms = useMemo(() => {
-    const commonSlugs = ['aoc-4', 'mgt-7', 'dpt-3', 'adt-1', 'chg-1', 'pas-3', 'pas-6', 'spice-plus', 'msme-1', 'inc-22', 'dir-12', 'dir-3-kyc', 'inc-20a', 'mgt-14']
+    const commonSlugs = ['aoc-4', 'mgt-7', 'dpt-3', 'adt-1', 'chg-1', 'pas-3', 'pas-6', 'spice-plus', 'msme-1', 'inc-22', 'dir-12', 'dir-3-kyc', 'inc-20a', 'mgt-14', 'sh-7']
     return commonSlugs.map(slug => {
       const form = allForms.find(f => f.slug === slug)
       if (!form) return null
@@ -486,7 +486,7 @@ export default function UnifiedCalculator() {
         )}
 
         {/* Dedicated Workspace Cross-Link if applicable */}
-        {(selectedForm.slug === 'mgt-7' || selectedForm.slug === 'mgt-7a' || selectedForm.slug === 'aoc-4' || selectedForm.slug === 'dpt-3' || selectedForm.slug === 'dir-3-kyc' || selectedForm.slug === 'adt-1' || selectedForm.slug === 'chg-1' || selectedForm.slug === 'inc-20a') && (
+        {(selectedForm.slug === 'mgt-7' || selectedForm.slug === 'mgt-7a' || selectedForm.slug === 'aoc-4' || selectedForm.slug === 'dpt-3' || selectedForm.slug === 'dir-3-kyc' || selectedForm.slug === 'adt-1' || selectedForm.slug === 'chg-1' || selectedForm.slug === 'inc-20a' || selectedForm.slug === 'mgt-14' || selectedForm.slug === 'sh-7') && (
           <div className="mt-4 pt-3 border-t border-blue-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs bg-white/70 dark:bg-slate-900/70 p-3 rounded-lg border border-blue-200/60 dark:border-slate-800">
             <div className="flex items-center gap-2">
               <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -498,6 +498,8 @@ export default function UnifiedCalculator() {
                 {selectedForm.slug === 'adt-1' && 'Need 15-day auditor appointment calculator & printable ROC fee report?'}
                 {selectedForm.slug === 'chg-1' && 'Need 30-60-120 day ad-valorem matrices & Regional Director condonation check?'}
                 {selectedForm.slug === 'inc-20a' && 'Need 180-day incorporation countdown, Section 10A(2) per-officer penalties & Section 446B relief?'}
+                {selectedForm.slug === 'mgt-14' && 'Need Section 117 purpose checker, Table B multipliers (2× to 12×), Section 117(2) penalties & 300-day condonation rules?'}
+                {selectedForm.slug === 'sh-7' && 'Need incremental capital registration fees, Table B multipliers, stamp duty on MOA & Section 64(2) penalties?'}
               </span>
             </div>
             <Link
@@ -531,7 +533,7 @@ export default function UnifiedCalculator() {
                   <td className="px-4 py-3 font-bold text-blue-700 dark:text-blue-400">
                     <Link href={`/tools/fee-calculator/companies/${item.form.slug}`} className="hover:underline inline-flex items-center gap-1.5">
                       <span>{item.form.formNumber}</span>
-                      {['mgt-7', 'mgt-7a', 'aoc-4', 'dpt-3', 'dir-3-kyc', 'adt-1', 'chg-1', 'inc-20a', 'pas-6', 'spice-plus', 'dir-12', 'msme-1', 'pas-3'].includes(item.form.slug) && (
+                      {['mgt-7', 'mgt-7a', 'aoc-4', 'dpt-3', 'dir-3-kyc', 'adt-1', 'chg-1', 'inc-20a', 'pas-6', 'spice-plus', 'dir-12', 'msme-1', 'pas-3', 'mgt-14', 'sh-7'].includes(item.form.slug) && (
                         <span className="text-[10px] bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 px-1.5 py-0.5 rounded font-medium">Dedicated</span>
                       )}
                     </Link>

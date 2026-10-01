@@ -717,6 +717,48 @@ export default function CompaniesFeePage() {
               Open Dedicated Workspace →
             </span>
           </Link>
+
+          <Link
+            href="/tools/fee-calculator/companies/mgt-14"
+            className="p-5 rounded-xl border border-indigo-200 dark:border-indigo-900/60 bg-indigo-50/50 dark:bg-indigo-950/20 hover:border-indigo-500 transition-all group flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-indigo-600 text-white">MGT-14</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">Resolutions &amp; Agreements</span>
+              </div>
+              <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors mb-1">
+                Form MGT-14 Workspace
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Section 117 filing clock, Table B escalating multipliers (2× to 12×), Section 117(2) civil penalties, Section 446B relief, and 300-day condonation rules.
+              </p>
+            </div>
+            <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 mt-4 flex items-center gap-1">
+              Open Dedicated Workspace →
+            </span>
+          </Link>
+
+          <Link
+            href="/tools/fee-calculator/companies/sh-7"
+            className="p-5 rounded-xl border border-amber-200 dark:border-amber-900/60 bg-amber-50/50 dark:bg-amber-950/20 hover:border-amber-500 transition-all group flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-amber-600 text-white">SH-7</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">Share Capital Alteration</span>
+              </div>
+              <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors mb-1">
+                Form SH-7 Workspace
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Incremental capital registration fee, Table B multipliers, state stamp duty on MOA, and Section 64(2) adjudication penalties.
+              </p>
+            </div>
+            <span className="text-xs font-bold text-amber-600 dark:text-amber-400 mt-4 flex items-center gap-1">
+              Open Dedicated Workspace →
+            </span>
+          </Link>
         </div>
       </div>
 

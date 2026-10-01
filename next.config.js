@@ -164,11 +164,6 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/tools/fee-calculator/companies/mgt-14',
-        destination: '/tools/fee-calculator/companies',
-        permanent: true,
-      },
-      {
         source: '/tools/fee-calculator/companies/inc-22',
         destination: '/tools/fee-calculator/companies',
         permanent: true,
