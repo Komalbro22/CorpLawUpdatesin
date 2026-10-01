@@ -23,6 +23,7 @@ import PAS6Workspace from './PAS6Workspace'
 import MSME1Workspace from './MSME1Workspace'
 import PAS3Workspace from './PAS3Workspace'
 import SH7Workspace from './SH7Workspace'
+import MGT14Workspace from './MGT14Workspace'
 import IndianDateInput from '@/components/shared/IndianDateInput'
 
 interface ResultRow {
@@ -108,6 +109,10 @@ export default function FormSpecificCalc({ form }: { form: MCAForm }) {
 
   if (form.slug === 'sh-7' || form.slug === 'sh7') {
     return <SH7Workspace form={form} />
+  }
+
+  if (form.slug === 'mgt-14' || form.slug === 'mgt14') {
+    return <MGT14Workspace form={form} />
   }
 
   const isMgt7Family = form.slug === 'mgt-7' || form.slug === 'mgt-7a'

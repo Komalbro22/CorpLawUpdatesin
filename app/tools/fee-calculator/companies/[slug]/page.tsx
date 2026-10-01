@@ -624,6 +624,49 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         text: 'Attach altered MOA, certified board and EGM resolutions, and MGT-14 SRN acknowledgment. Digitally sign with Class 3 DSC of an authorized director and practicing professional (CA/CS/CMA) for ROC approval.'
       }
     ]
+  } : form.slug === 'mgt-14' ? {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How to File Form MGT-14 for Resolutions & Calculate MCA Fees on MCA V3',
+    description: 'Step-by-step statutory guide to calculating Section 117 filing deadlines (30 days / 60 days IFSC), Table A base fees, Table B late multipliers (2x to 12x), Section 117(2) penalties, and 300-day condonation rules.',
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Identify Resolution Category & Section 117 Applicability',
+        text: 'Determine whether the action requires Form MGT-14 under Section 117(3): Special Resolution, Postal Ballot, Managing Director appointment agreement, or Section 179(3) board power (noting that Private Companies are exempt from Section 179(3) per Notification G.S.R. 464(E)).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'Calculate Statutory Due Date (30 Days or 60 Days IFSC)',
+        text: 'The statutory filing clock begins on the day following the resolution date. Standard companies have 30 calendar days; IFSC companies have 60 calendar days pursuant to MCA Notification G.S.R. 8(E)/9(E).'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Determine Nominal Share Capital Base Fee (Table A)',
+        text: 'Compute the normal filing fee (₹200 to ₹600) based on nominal authorized share capital bracket under Table A of Companies (Registration Offices and Fees) Rules, 2014, or flat ₹200 for company without share capital.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: 'Compute Table B Late Multipliers if Delayed',
+        text: 'If filing after the statutory due date, apply Table B escalating multipliers: 2x (≤30d), 4x (≤60d), 6x (≤90d), 10x (≤180d), or 12x (>180d) normal fee.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 5,
+        name: 'Evaluate Section 117(2) Adjudication Exposure & 446B Relief',
+        text: 'Assess potential civil penalty exposure adjudicated by ROC under Section 454: ₹10,000 + ₹100/day continuing default (Company cap: ₹2 Lakhs; Officer cap: ₹50,000). Apply 50% discount under Section 446B for Small Companies and DPIIT Startups.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 6,
+        name: 'Comply with 300-Day Condonation Requirement if Delayed >300 Days',
+        text: 'If event date exceeds 300 days from filing date, direct MCA V3 portal upload is blocked. Apply for Condonation of Delay with Regional Director via Form CG-1, file order in Form INC-28, and cite INC-28 SRN in Form MGT-14.'
+      }
+    ]
   } : null
 
   return (
@@ -690,13 +733,15 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               ? 'PAS 6 Fee Calculator — Form PAS-6 Demat Audit & Late Fees (FY 2026-27)'
               : form.slug === 'spice-plus'
               ? 'SPICe+ Fee Calculator — MCA Company Incorporation & Stamp Duty (2026)'
+              : form.slug === 'mgt-14'
+              ? 'MGT 14 Fee Calculator — Form MGT-14 Filing Fee, Late Fee & Penalty (FY 2026-27)'
               : `${form.formNumber} Fee Calculator — ${form.formName} (FY 2026-27)`}
           </h1>
           <p className="text-slate-400 text-lg max-w-3xl mx-auto mb-8">
             {form.slug === 'inc-20a'
               ? 'Calculate statutory normal filing fees, 180-day incorporation due date, Table B late fee multipliers (2× to 12×), Section 10A(2) adjudication penalties, and Section 446B relief for Form INC-20A on MCA V3.'
               : form.slug === 'dir-3-kyc'
-              ? 'Determine your triennial routine KYC cycle (Rule 12A(1)), 30-day event-based change rules (Rule 12A(2)), and G.S.R. 300(E) fee schedule (₹0 on-time / ₹500 change / ₹5,000 reactivation) on MCA21 V3.'
+              ? 'Determine your triennial routine KYC cycle (Rule 12A(1)), 30-day event-based change rules (Rule 12A(2)), and G.S.R. 300(E) fee schedule (₹0 on-time / ₹500 change / ₹5,00,000 reactivation) on MCA21 V3.'
               : form.slug === 'dpt-3'
               ? 'Calculate statutory normal filing fees, 30 June due date, Circular 02/2026 fee waiver, Table B delay multipliers (2× to 12×), and Rule 21 penalties on MCA V3.'
               : form.slug === 'adt-1'
@@ -719,6 +764,8 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               ? 'Calculate Form PAS-6 normal filing fees (Table A), 60-day half-yearly deadlines (29 Nov & 30 May), Table B late multipliers (2× to 12×), and Section 450 penalties on MCA V3.'
               : form.slug === 'spice-plus'
               ? 'Calculate SPICe+ (INC-32) MCA registration fees, G.S.R. 329(E) ₹15L zero-fee waiver, 36 states MOA/AOA stamp duty, PAN/TAN charges, and DIN costs for incorporating an Indian company.'
+              : form.slug === 'mgt-14'
+              ? 'Calculate exact MCA Form MGT-14 statutory filing fees, Table B late multipliers (2× to 12×), IFSC 60-day deadlines, Section 117(2) adjudication penalties, and 300-day condonation rules on MCA V3.'
               : `Calculate exact normal filing fees and late penalties for ${form.formNumber} (${form.formName}) based on authorized capital and delay.`}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
@@ -993,6 +1040,30 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               <span className="font-semibold text-slate-700 dark:text-slate-300">✓ PAN &amp; TAN: ₹155 Fixed Statutory Cost</span>
               <span>•</span>
               <span className="font-semibold text-blue-600 dark:text-blue-400">✓ 11 Integrated Services: DIN, EPFO, ESIC, Bank A/c</span>
+            </div>
+          </div>
+        )}
+
+        {form.slug === 'mgt-14' && (
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-indigo-200 dark:border-indigo-900/50 border-l-4 border-l-indigo-600 rounded-2xl shadow-sm">
+            <div className="flex items-center gap-2 mb-2 text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
+              <span>⚡</span> Fast Statutory Summary • Section 117 &amp; Rule 24 • Dual Liability Regime
+            </div>
+            <p className="text-slate-800 dark:text-slate-200 text-sm md:text-base leading-relaxed font-medium">
+              Form MGT-14 must be filed with the ROC within <strong>30 calendar days</strong> of passing a Special Resolution or agreement (extended to <strong>60 calendar days</strong> for IFSC companies per G.S.R. 8(E)/9(E)). Normal fees range from ₹200 to ₹600 under Table A based on nominal share capital. Belated filing incurs Table B escalating multipliers (2× to 12× normal fee) plus independent Section 117(2) civil penalties (₹10,000 + ₹100/day, capped at ₹2L for company and ₹50k per officer; 50% discount under Section 446B for small companies). Delays beyond 300 days require Central Government condonation in Form CG-1 and INC-28.
+            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-3">
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Timeline: 30 Days (60 Days for IFSC)</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Normal Fee: ₹200 to ₹600 (Table A)</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Table B Multipliers: 2× to 12× Base Fee</span>
+              <span>•</span>
+              <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Sec 117(2) Penalty: ₹10,000 + ₹100/day</span>
+              <span>•</span>
+              <span className="font-semibold text-emerald-600 dark:text-emerald-400">✓ Pvt Co Exemption: Section 179(3) Routine Board Powers Exempt</span>
+              <span>•</span>
+              <span className="font-semibold text-rose-600 dark:text-rose-400">✓ Delay &gt; 300 Days: Form CG-1 &amp; INC-28 Mandatory</span>
             </div>
           </div>
         )}

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { calculateCompanyFee } from '@/lib/penaltyCalculator';
 import { calculateMgt7Compliance } from '@/lib/rule-engine/mgt7-engine';
+import { calculateMgt14Compliance } from '@/lib/rule-engine/mgt14-engine';
 
 // GET /api/calculators/webmcp
 // WebMCP tool: calculate_roc_late_fee
@@ -122,6 +123,49 @@ export async function GET(req: NextRequest) {
       pcsCertification: mgtResult.pcsCertification,
       formRoutingRecommendation: mgtResult.metadata.formRoutingRecommendation ?? null,
       legalNote: 'MCA21 portal payable consists of Normal Fee + Additional Fee. Section 92(5) statutory penalty exposure requires formal adjudication under Section 454.',
+      unknownFormWarning: null
+    });
+  }
+
+  // Dedicated branch for MGT-14
+  if (form === 'MGT-14') {
+    const isIfsc = searchParams.get('isIfsc') === 'true';
+    const isSmall = companyTypeRaw === 'Small';
+    const isOpc = companyTypeRaw === 'OPC';
+    const isStartup = companyTypeRaw === 'Startup';
+    const isProducer = companyTypeRaw === 'Producer';
+
+    const mgt14CompanyType = isSmall ? 'small_company' : isOpc ? 'opc' : isStartup ? 'startup' : isProducer ? 'producer' : 'normal';
+
+    const now = new Date();
+    const eventDate = new Date(now.getTime() - (30 + daysDelayed) * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+    const filingDate = now.toISOString().split('T')[0];
+
+    const mgt14Res = calculateMgt14Compliance({
+      hasShareCapital: capital > 0,
+      nominalShareCapital: capital,
+      isIfscCompany: isIfsc,
+      companyType: mgt14CompanyType,
+      eventType: 'special_resolution',
+      eventDate,
+      filingDate,
+      numOfficersInDefault: officers
+    });
+
+    return NextResponse.json({
+      form,
+      companyType: companyTypeRaw,
+      authorizedCapitalRupees: capital,
+      daysDelayed,
+      officersCount: officers,
+      normalFee: mgt14Res.normalFee,
+      lateFee: mgt14Res.additionalFee,
+      totalPayable: mgt14Res.totalPortalFee,
+      companyPenalty: mgt14Res.totalCompanyPenalty,
+      officerPenalty: mgt14Res.totalOfficerPenaltyPerPerson,
+      totalPenaltyExposure: mgt14Res.totalStatutoryPenaltyExposure,
+      smallCompanyReliefApplied: mgt14Res.is446BEligible,
+      legalNote: mgt14Res.condonationNote || 'MCA V3 portal fee consists of Table A Normal Fee + Table B Delay Multiplier. Section 117(2) penalty is subject to ROC Section 454 adjudication.',
       unknownFormWarning: null
     });
   }

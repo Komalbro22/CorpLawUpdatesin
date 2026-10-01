@@ -1379,6 +1379,88 @@ export const mcaForms: MCAForm[] = [
       consequencesOfDelay: '<h3>Dual Regulatory Framework for Delayed Form SH-7</h3><p>Failing to file Form SH-7 within the 30-day statutory window exposes the company and its key management to two distinct regulatory tiers:</p><h4>1. MCA V3 Portal Late Filing Fees</h4><p>The additional fee depends on the nature of the filing:</p><ul><li><strong>Capital Increases (Item B):</strong> 2.5% per month or part thereof for the first 6 months, and 3.0% per month or part thereof thereafter on the differential capital registration fee.</li><li><strong>Non-Capital Alterations (Table B):</strong> Escalating multipliers on Table A base fee: Up to 30 days: 2×; 31 to 60 days: 4×; 61 to 90 days: 6×; 91 to 180 days: 10×; beyond 180 days: 12× normal fee.</li></ul><h4>2. Section 64(2) Daily Statutory Adjudication Penalties</h4><p>Under Section 64(2) as amended, default triggers severe daily quasi-judicial penalties adjudicated by the ROC under Section 454:</p><ul><li><strong>Company:</strong> ₹500 for each day during which default continues, capped at <strong>₹5,00,000</strong>.</li><li><strong>Every Officer in Default:</strong> ₹500 for each day during which default continues, capped at <strong>₹1,00,000 per officer</strong>. Directors must discharge this liability personally from private funds.</li><li><strong>Section 446B Relief:</strong> Small Companies, OPCs, DPIIT Startups, and Producer Companies pay 50% reduced penalties: illustrative ₹250/day, capped at ₹2,00,000 for the company and ₹1,00,000 per officer.</li></ul>',
       workedExample: '<h4>Scenario 1: Private Limited Series A Round (₹10 Lakhs to ₹1 Crore in Maharashtra, 15 Days Delayed)</h4><p>A Maharashtra-based company increases its authorised capital from ₹10 Lakhs to ₹1 Crore. EGM resolution is passed, but Form SH-7 is filed 15 days after the 30-day deadline (delay = 15 days, 2 officers in default):</p><ul><li>Differential Capital Registration Fee (Table of Fees Item II): ₹2,06,000 − ₹36,000 = <strong>₹1,70,000</strong></li><li>Table A Normal Fee: <strong>₹0</strong> (Replaced by Differential Registration Fee)</li><li>Additional Late Fee (1 month @ 2.5% on differential fee): <strong>₹4,250</strong></li><li>Maharashtra State Stamp Duty on MOA (0.3% on ₹90 Lakhs increase per Maharashtra Act 9 of 2025): <strong>₹27,000</strong></li><li><strong>Total MCA V3 e-Challan: ₹2,01,250</strong></li><li>Section 64(2) Company Penalty (15 days × ₹500): <strong>₹7,500</strong></li><li>Section 64(2) Officers Penalty (15 days × ₹500 × 2 officers): <strong>₹15,000</strong></li><li><strong>Total Adjudication Liability (ROC Sec 454): ₹22,500</strong></li><li><strong>Total Financial Exposure: ₹2,23,750</strong></li></ul><h4>Scenario 2: Small Company Stock Split / Sub-division (Zero Capital Increase, On-Time)</h4><p>A Small Company executes a 1:10 stock split under Section 61(1)(d). Authorised capital remains ₹50 Lakhs throughout. Filed within 30 days:</p><ul><li>Incremental Capital Registration Fee: <strong>₹0</strong></li><li>Normal Base Filing Fee (Table A): <strong>₹500</strong></li><li>Additional Late Fee: <strong>₹0</strong> (Filed on-schedule)</li><li>State Stamp Duty: <strong>₹0</strong> (Capital clause amount unchanged)</li><li>Section 64(2) Penalties: <strong>₹0</strong></li><li><strong>Total MCA V3 Challan: ₹500</strong></li></ul>'
     }
+  },
+  {
+    slug: 'mgt-14',
+    formNumber: 'MGT-14',
+    formName: 'Filing of Resolutions and Agreements to the Registrar',
+    aliases: [
+      'mgt 14 fee calculator',
+      'mgt-14 fee calculator',
+      'mgt 14 filing fee',
+      'mgt 14 late fee',
+      'mgt 14 additional fee',
+      'mgt 14 additional fees calculator',
+      'mgt 14 due date calculator',
+      'mgt 14 penalty calculator',
+      'mgt 14 fees mca',
+      'mca mgt 14 fee calculator',
+      'mgt 14 300 days',
+      'mgt 14 ifsc company fees',
+      'mgt 14 table b late multiplier',
+      'form mgt 14 filing fees'
+    ],
+    category: 'event',
+    filedBy: [
+      'Companies passing Special Resolutions (Section 117(3)(a))',
+      'Public Limited Companies passing Section 179(3) Board Resolutions',
+      'Companies executing MD / WTD appointment agreements (Section 117(3)(c))',
+      'Companies passing resolutions under Section 180(1)(a) or (c)',
+      'Companies initiating voluntary liquidation under IBC Section 59'
+    ],
+    dueDate: 'Within 30 calendar days from the date of passing resolution or agreement (60 calendar days for IFSC Companies)',
+    section: 'Section 117(1) of Companies Act, 2013 read with Rule 24 of Companies (Management and Administration) Rules, 2014',
+    penaltyType: 'multiplier',
+    penaltyRate: 'Table B Escalating Multipliers (2× to 12×) on MCA Portal + Section 117(2) Adjudication (₹10,000 + ₹100/day)',
+    normalFeeStructure: 'capital_slab',
+    baseFeeSlab: 'standard_company_slab',
+    concessionApplies: true,
+    metaTitle: 'MGT-14 Fee Calculator — MCA Filing Fee, Late Multiplier & Due Date (FY 2026-27)',
+    metaDescription: 'Calculate MCA Form MGT-14 statutory filing fees, Table B late multipliers (2× to 12×), IFSC 60-day deadlines, Section 117(2) penalties, and 300-day condonation rules.',
+    ogDescription: 'Instant statutory calculation of Form MGT-14 normal filing fee, Table B additional fees, Section 117(2) adjudication liabilities, and Section 446B relief.',
+    faqItems: [
+      {
+        question: 'What is the normal filing fee for Form MGT-14 on MCA V3?',
+        answer: 'The normal filing fee is governed by Table A of the Companies (Registration Offices and Fees) Rules, 2014 and is determined by the company\'s Nominal (Authorised) Share Capital: (1) Less than ₹1,00,000: ₹200; (2) ₹1,00,000 to ₹4,99,999: ₹300; (3) ₹5,00,000 to ₹24,99,999: ₹400; (4) ₹25,00,000 to ₹99,99,999: ₹500; (5) ₹1,00,00,000 or more: ₹600. For companies without share capital, the normal fee is a flat ₹200.'
+      },
+      {
+        question: 'What is the statutory deadline / due date for filing Form MGT-14?',
+        answer: 'Pursuant to Section 117(1) of the Companies Act, 2013 read with Rule 24 of the Companies (Management and Administration) Rules, 2014, Form MGT-14 must be filed within 30 calendar days from the date the resolution was passed or the agreement was entered into. For IFSC Private and Public Companies, the statutory window is extended to 60 calendar days pursuant to MCA Notifications G.S.R. 8(E) and 9(E) dated 4th January 2017.'
+      },
+      {
+        question: 'How are Table B additional late filing fees calculated for Form MGT-14?',
+        answer: 'Under Table B of the Companies (Registration Offices and Fees) Rules, 2014, delay beyond the 30-day (or 60-day for IFSC) deadline attracts escalating multipliers on the normal base fee: (1) Up to 30 days delay: 2× normal fee (Total Challan = 3×); (2) 31 to 60 days delay: 4× normal fee (Total Challan = 5×); (3) 61 to 90 days delay: 6× normal fee (Total Challan = 7×); (4) 91 to 180 days delay: 10× normal fee (Total Challan = 11×); (5) More than 180 days delay: 12× normal fee (Total Challan = 13×).'
+      },
+      {
+        question: 'What happens if Form MGT-14 is delayed beyond 300 days on MCA V3?',
+        answer: 'Under the official MCA Form MGT-14 Instruction Kit and Section 460(b), where the event date is not within 300 days of the filing date, direct e-filing on the MCA portal is blocked. The company must first apply to the Central Government / Regional Director for Condonation of Delay via Form CG-1, obtain a formal condonation order, file the order with the ROC in Form INC-28, and cite the approved INC-28 SRN in Form MGT-14.'
+      },
+      {
+        question: 'Are Private Limited Companies required to file Form MGT-14 for Section 179(3) Board Resolutions?',
+        answer: 'NO! Under MCA Exemption Notification No. G.S.R. 464(E) dated 5th June 2015, clause (g) of sub-section (3) of Section 117 does not apply to Private Limited Companies. Therefore, private companies are exempt from filing MGT-14 for routine Section 179(3) Board Resolutions (such as borrowing money, granting loans, investing funds, approving financial statements, or making calls on shares). Only Public Limited Companies must file MGT-14 for Section 179(3) powers.'
+      },
+      {
+        question: 'What is the statutory penalty under Section 117(2) for failure to file MGT-14?',
+        answer: 'Under Section 117(2) of the Companies Act, 2013, default triggers civil adjudication penalties: The Company is liable to a penalty of ₹10,000 plus ₹100 for each day of continuing failure after the first day, capped at ₹2,00,000. Every Officer in Default (including liquidator if any) is liable to ₹10,000 plus ₹100 per day of continuing failure, capped at ₹50,000 per officer. This is independent of the MCA portal filing fee and is adjudicated by the ROC under Section 454.'
+      },
+      {
+        question: 'Does Section 446B relief apply to Section 117(2) penalties for Small Companies and Startups?',
+        answer: 'Yes! Under Section 446B, eligible Small Companies (Section 2(85)), One Person Companies (OPC), Producer Companies, and DPIIT-recognized Startups pay reduced adjudication penalties: not more than one-half (50%) of the penalty specified in Section 117(2), subject to a maximum company ceiling of ₹1,00,000 and officer ceiling of ₹25,000. Note: Section 446B relief applies only to ROC statutory adjudication penalties and does NOT reduce MCA portal filing fees.'
+      },
+      {
+        question: 'Can multiple resolutions passed on different dates be filed in a single Form MGT-14?',
+        answer: 'Under the MCA MGT-14 Instruction Kit, multiple resolutions can be filed in a single form only if all event dates fall within the permissible filing window. If resolutions were passed on dates spanning outside the window, separate MGT-14 filings are mandatory for each distinct resolution date.'
+      }
+    ],
+    relatedForms: ['sh-7', 'pas-3', 'inc-22', 'inc-28', 'mgt-7', 'chg-1'],
+    filedTogetherWith: ['SH-7', 'PAS-3', 'INC-28', 'CG-1'],
+    contentSections: {
+      whatIsThisForm: '<p><strong>Form MGT-14</strong> is the statutory e-Form prescribed under <strong>Section 117(1) of the Companies Act, 2013</strong> and <strong>Rule 24 of the Companies (Management and Administration) Rules, 2014</strong>. It serves as the official mechanism for companies to register specified resolutions and agreements with the Registrar of Companies (ROC).</p><p>Under <strong>Section 117(3)</strong>, Form MGT-14 must be filed for:</p><ol><li><strong>Special Resolutions:</strong> Every special resolution passed by members in an AGM, EGM, or through Postal Ballot under Section 110.</li><li><strong>Managing Director Agreements:</strong> Board resolutions or contracts regarding the appointment, re-appointment, or variation of terms of a Managing Director or Whole-time Director under Section 117(3)(c).</li><li><strong>Borrowing & Financial Powers:</strong> Resolutions passed under Section 180(1)(a) and Section 180(1)(c) by public companies consenting to borrowings beyond capital and reserves.</li><li><strong>Powers of Board (Section 179(3)):</strong> Board resolutions for borrowing, investing, or granting loans (applicable strictly to Public Companies; Private Companies are exempt).</li><li><strong>Voluntary Liquidation:</strong> Resolutions passed for voluntary winding up under Section 59 of the Insolvency and Bankruptcy Code, 2016.</li></ol>',
+      whoMustFile: '<p>Every company registered under the Companies Act, 2013 that passes a resolution or enters into an agreement falling within the purview of Section 117(3) must file Form MGT-14. This includes:</p><ul><li><strong>Public Limited Companies (Listed & Unlisted):</strong> Must file for all special resolutions and routine Section 179(3) board resolutions.</li><li><strong>Private Limited Companies:</strong> Must file for all special resolutions, MD/WTD agreements, and Section 186(3) inter-corporate investment resolutions. Exempt from routine Section 179(3) board resolutions per Notification G.S.R. 464(E).</li><li><strong>One Person Companies (OPCs) & Small Companies:</strong> When passing relevant special resolutions.</li><li><strong>Section 8 Companies & Producer Companies:</strong> Upon passing qualifying resolutions.</li></ul>',
+      dueDateExplained: '<h3>Statutory 30-Day and 60-Day Filing Windows</h3><p>Pursuant to <strong>Section 117(1)</strong>, Form MGT-14 must be filed with the Registrar within:</p><ul><li><strong>Standard Companies:</strong> Strictly within <strong>30 calendar days</strong> from the date of passing of the resolution or entering into the agreement.</li><li><strong>IFSC Companies:</strong> Within <strong>60 calendar days</strong> pursuant to MCA Notifications G.S.R. 8(E) and G.S.R. 9(E) dated 4th January 2017.</li></ul><p>The filing clock starts on the calendar date following the date of the meeting. Filing on or after Day 31 (or Day 61 for IFSC) automatically triggers Table B additional fees.</p>',
+      consequencesOfDelay: '<h3>Dual Consequences of Belated Filing</h3><p>A delayed Form MGT-14 triggers two distinct financial and legal liabilities:</p><h4>1. MCA V3 Table B Additional Fees</h4><p>Escalating multipliers on the Table A base fee: Up to 30 days: 2×; 31 to 60 days: 4×; 61 to 90 days: 6×; 91 to 180 days: 10×; beyond 180 days: 12× normal fee. For filings delayed beyond 300 days, Central Government condonation under Section 460(b) in Form CG-1 is mandatory before filing.</p><h4>2. Section 117(2) Civil Penalties</h4><p>ROC adjudication penalties under Section 454: The company is liable to ₹10,000 + ₹100/day (max ₹2,00,000); every officer in default is liable to ₹10,000 + ₹100/day (max ₹50,000). Eligible Small Companies and Startups receive Section 446B relief (50% reduced penalty).</p>',
+      workedExample: '<h4>Scenario 1: Private Limited Alteration of MOA (₹10 Lakhs Capital, 20 Days Delayed)</h4><p>A Private Limited Company with ₹10 Lakhs nominal capital passes a Special Resolution on 01 October 2026 to alter its Object Clause. Form MGT-14 is filed on 20 November 2026 (Due date was 31 October 2026, delay = 20 days, 2 officers in default):</p><ul><li>Table A Normal Fee: <strong>₹400</strong></li><li>Table B Additional Fee (2× for delay up to 30 days): <strong>₹800</strong></li><li><strong>Total MCA Portal Challan: ₹1,200</strong></li><li>Section 117(2) Company Penalty (₹10,000 + 19 days × ₹100): <strong>₹11,900</strong></li><li>Section 117(2) Officers Penalty (₹11,900 × 2 officers): <strong>₹23,800</strong></li><li><strong>Total Estimated Financial Exposure: ₹36,900</strong></li></ul><h4>Scenario 2: Small Company under Section 446B (45 Days Delayed)</h4><p>A Small Company with ₹25 Lakhs capital files MGT-14 with 45 days delay (4× multiplier):</p><ul><li>Normal Fee (Table A): <strong>₹500</strong></li><li>Additional Late Fee (4×): <strong>₹2,000</strong></li><li><strong>Total MCA Portal Challan: ₹2,500</strong></li><li>Unreduced Penalty: ₹10,000 + 44 × ₹100 = ₹14,400 per person</li><li>Section 446B Relief (50% discount): Company Penalty = <strong>₹7,200</strong>; Officer Penalty = <strong>₹7,200</strong> each</li><li>Section 446B Savings: <strong>₹14,400</strong></li></ul>'
+    }
   }
 ]
 
