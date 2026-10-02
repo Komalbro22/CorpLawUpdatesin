@@ -414,7 +414,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                 </div>}
 
                 <div className="mb-4 flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2 min-w-0"
+                    <div className="flex items-center gap-2 min-w-0">
                         {update.category && <CategoryBadge category={update.category as any} />}
                         {update.category && <Link
                             href={`/category/${update.category.toLowerCase()}`}
