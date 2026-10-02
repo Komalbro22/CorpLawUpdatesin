@@ -4,6 +4,13 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Cookie, ShieldCheck, X, ChevronDown, ChevronUp } from 'lucide-react'
 
+// Type declarations for Google Analytics
+declare global {
+  interface Window {
+    gtag: (...args: any[]) => void
+  }
+}
+
 interface ConsentState {
   necessary: boolean
   analytics: boolean
@@ -49,8 +56,8 @@ export default function CookieConsentBanner() {
       localStorage.setItem('clu_cookie_consent_date_v2', new Date().toISOString())
       
       // Update Google Consent Mode
-      if (typeof window !== 'undefined' && (window as any).gtag) {
-        (window as any).gtag('consent', 'update', {
+      if (typeof window !== 'undefined' && window.gtag) {
+        window.gtag('consent', 'update', {
           ad_storage: consent.advertising ? 'granted' : 'denied',
           ad_user_data: consent.advertising ? 'granted' : 'denied',
           ad_personalization: consent.advertising ? 'granted' : 'denied',

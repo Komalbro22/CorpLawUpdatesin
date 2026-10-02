@@ -3,6 +3,14 @@
 import { useState, useEffect } from 'react'
 import Script from 'next/script'
 
+// Type declarations for Google Analytics
+declare global {
+  interface Window {
+    dataLayer: any[]
+    gtag: (...args: any[]) => void
+  }
+}
+
 export default function TrackingScripts() {
   const [ids, setIds] = useState<{ gaId: string | null; clarityId: string | null } | null>(null)
 
@@ -13,7 +21,7 @@ export default function TrackingScripts() {
       function gtag(...args: any[]) {
         window.dataLayer.push(args)
       }
-      ;(window as any).gtag = gtag
+      window.gtag = gtag
 
       // Check for existing consent
       const savedConsent = localStorage.getItem('clu_cookie_consent_v2')
