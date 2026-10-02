@@ -11,8 +11,7 @@ import ChargesTable from '@/components/ChargesTable'
 import { supabase } from '@/lib/supabase'
 import { Building2, Landmark, Sparkles, FileText, HelpCircle, ShieldCheck, Lock, Binary, MapPin, Calendar, Briefcase, Award } from 'lucide-react'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 3600 // Cache for 1 hour
+export const revalidate = 86400 // Cache for 24 hours to protect Vercel ISR and bandwidth limits
 
 type Props = {
   params: Promise<{ cin: string }>

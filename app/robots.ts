@@ -3,7 +3,8 @@ import { MetadataRoute } from 'next'
 export default function robots(): MetadataRoute.Robots {
   const BASE_URL = 'https://www.corplawupdates.in'
 
-  const aiBots = [
+  // AI & Search Citation Bots allowed on public articles and tools
+  const aiSearchBots = [
     'GPTBot',
     'OAI-SearchBot',
     'ChatGPT-User',
@@ -17,17 +18,34 @@ export default function robots(): MetadataRoute.Robots {
     'Applebot-Extended',
     'cohere-ai',
     'Meta-ExternalAgent',
-    'CCBot',
     'Googlebot-Image',
-    'Bytespider',
-    'FacebookBot',
-    'Amazonbot',
   ]
 
-  const aiRules = aiBots.map(bot => ({
+  // Abusive / non-essential high-frequency scrapers that exhaust Vercel bandwidth
+  const abusiveScrapers = [
+    'Bytespider',
+    'CCBot',
+    'Amazonbot',
+    'FacebookBot',
+    'AhrefsBot',
+    'SemrushBot',
+    'MJ12bot',
+    'DotBot',
+    'PetalBot',
+    'DataForSeoBot',
+    'Barkrowler',
+    'Seekport',
+  ]
+
+  const aiRules = aiSearchBots.map(bot => ({
     userAgent: bot,
     allow: '/',
-    disallow: ['/admin/', '/api/admin/'],
+    disallow: ['/admin/', '/api/admin/', '/sitemap/companies/'],
+  }))
+
+  const scraperRules = abusiveScrapers.map(bot => ({
+    userAgent: bot,
+    disallow: ['/'],
   }))
 
   return {
@@ -36,16 +54,23 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: 'Mediapartners-Google',
         allow: '/',
       },
+      ...scraperRules,
+      ...aiRules,
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin/', '/api/admin/'],
+        disallow: [
+          '/admin/',
+          '/api/admin/',
+          '/sitemap/companies/',
+          '/company/',
+        ],
       },
-      ...aiRules,
     ],
     sitemap: [
       `${BASE_URL}/sitemap.xml`,
     ],
   }
 }
+
 
