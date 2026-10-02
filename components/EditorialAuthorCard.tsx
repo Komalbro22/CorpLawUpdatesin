@@ -51,7 +51,7 @@ export default function EditorialAuthorCard({ category, articleTitle }: Editoria
               Researched &amp; Reviewed by:
             </span>
             <Link
-              href="/about#editorial-leadership"
+              href="/author/komalpreet-singh"
               className="inline-flex items-center gap-1 font-bold text-amber-700 dark:text-amber-400 hover:underline"
             >
               <span>{EDITORIAL_LEAD.name}</span>
@@ -89,7 +89,7 @@ export default function EditorialAuthorCard({ category, articleTitle }: Editoria
             </div>
             <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
               <Scale className="size-4 text-amber-600 dark:text-amber-400 shrink-0" aria-hidden="true" />
-              <span>4-Eye Legal Review</span>
+              <span>Editorial Fact-Check</span>
             </div>
             <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
               <CheckCircle2 className="size-4 text-blue-600 dark:text-blue-400 shrink-0" aria-hidden="true" />

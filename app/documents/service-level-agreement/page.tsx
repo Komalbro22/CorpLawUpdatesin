@@ -288,7 +288,7 @@ export default function ServiceLevelAgreementPage() {
           </h1>
 
           <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-            Download institutional, legally vetted Service Level Agreement (SLA) templates in Word (.docx) and PDF. 
+            Download institutional Service Level Agreement (SLA) templates in Word (.docx) and PDF, prepared using the statutory framework (review required before execution or filing). 
             Features real-time statutory paper preview, interactive Gemini AI legal drafter (draft clauses with prompts, customize operational metrics, adapt tone, and generate Hindi / bilingual summaries), 
             and Section 74 liquidated damages remedies.
           </p>

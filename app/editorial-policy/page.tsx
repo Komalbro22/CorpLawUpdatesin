@@ -73,16 +73,16 @@ export default function EditorialPolicyPage() {
           </div>
 
           <div>
-            <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">4. Editorial Verification & Four-Eye Review Standard</h2>
+            <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">4. Primary-Source Verification &amp; Editorial Fact-Check Standard</h2>
             <p className="mb-3">
-              Every regulatory update published on CorpLawUpdates.in undergoes a strict four-eye editorial verification standard before publication:
+              Every regulatory update published on CorpLawUpdates.in adheres to our Primary-Source Verification &amp; Editorial Fact-Check Standard before publication:
             </p>
             <ul className="list-disc list-inside space-y-2">
               <li>
-                <strong className="text-slate-800 dark:text-slate-200">Primary Source Authentication:</strong> No update is drafted from secondary press reports or unverified social commentary. Every notice is corroborated against official Gazette notifications, regulator circulars (MCA, SEBI, RBI, IBBI, EPFO, CBDT, CBIC), or direct tribunal orders.
+                <strong className="text-slate-800 dark:text-slate-200">Primary Source Authentication:</strong> No update is drafted from secondary press reports, speculative social media, or unverified summaries. Every notice is corroborated against official Gazette notifications, primary regulator circulars (MCA, SEBI, RBI, IBBI, EPFO, CBDT, CBIC), or direct tribunal orders.
               </li>
               <li>
-                <strong className="text-slate-800 dark:text-slate-200">Legal & Compliance Fact-Checking:</strong> Operative provisions, effective dates, penalty clauses, and required statutory filings are independently verified against the parent Act and governing rules.
+                <strong className="text-slate-800 dark:text-slate-200">Parent Act &amp; Statutory Rule Cross-Checking:</strong> Operative provisions, effective dates, penalty clauses, and required statutory filings are independently verified against parent Acts (such as the Companies Act 2013, SEBI Act 1992, RBI Act 1934, IBC 2016) and applicable subordinate rules.
               </li>
               <li>
                 <strong className="text-slate-800 dark:text-slate-200">Continuous Corrigenda Tracking:</strong> When government departments issue subsequent amendments, clarifications, or timeline extensions, our editorial desk updates existing articles with revision timestamps and updated compliance notes.

@@ -8,7 +8,7 @@ import { MVP_DOCUMENTS_META } from '@/lib/doc-generator/ai-engine'
 
 export const metadata: Metadata = {
   title: 'Free Legal Document Generator India — Board Resolutions, Agreements | CorpLawUpdates.in',
-  description: 'Generate legally accurate Indian company documents free. Board resolutions, MOA, director appointments, lease agreements — updated to latest MCA and ICSI Secretarial Standards.',
+  description: 'Generate AI-assisted corporate document drafts based on statutory frameworks and secretarial standards. Board resolutions, MOA, director appointments, agreements — structured for professional review.',
   keywords: ['legal document generator', 'free board resolution generator', 'draft lease agreement india', 'online rent agreement format', 'mca compliance documents'],
   alternates: {
     canonical: 'https://www.corplawupdates.in/documents',
@@ -146,10 +146,7 @@ export default async function DocumentsPage() {
           </h1>
           <p className="text-slate-400 text-lg mb-8 
                         max-w-2xl mx-auto">
-            Generate legally accurate Indian company 
-            documents in seconds. Powered by AI. 
-            Based on ICSI Secretarial Standards 
-            and Companies Act 2013.
+            Generate AI-assisted corporate document drafts based on statutory frameworks and secretarial standards. Structured for professional review and execution.
           </p>
 
           {/* Stats row */}
@@ -218,7 +215,7 @@ export default async function DocumentsPage() {
               ✨ Labour Codes (2025/2026) · AI Assistant · Free Word & PDF
             </div>
             <h2 id="employment-generator-heading" className="mt-1 text-xl font-bold text-slate-900 dark:text-white">Employment Agreement & Contract Generator (India)</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-700 dark:text-slate-300">Generate a legally vetted Indian employment agreement with AI conversational drafter, Section 2(y) 50% wage parity validation, state stamp duty calculator, and IP assignment.</p>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-700 dark:text-slate-300">Generate an Indian employment agreement draft prepared using the statutory framework (review required before execution or filing) with AI conversational drafter, Section 2(y) 50% wage parity validation, state stamp duty calculator, and IP assignment.</p>
           </div>
           <Link href="/documents/employment-agreement" className="mt-4 inline-flex shrink-0 items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 sm:ml-6 sm:mt-0 shadow-sm transition-colors">
             Open generator <span aria-hidden="true">→</span>
@@ -236,7 +233,7 @@ export default async function DocumentsPage() {
                 Multi-Turn AI Document Generator Studio
               </h2>
               <p className="text-sm text-slate-300 mt-1">
-                Generate perfectly formatted Microsoft Word (<code className="text-amber-300">.docx</code>) compliance documents with dynamic agendas, statutory citations & Bookman Old Style 12pt legal layout.
+                Structured for professional review and execution in Microsoft Word (<code className="text-amber-300">.docx</code>) compliance documents with dynamic agendas, statutory citations &amp; Bookman Old Style 12pt legal layout.
               </p>
             </div>
 

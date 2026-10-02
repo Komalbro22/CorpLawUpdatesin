@@ -179,10 +179,10 @@ export default function TermsPage() {
                 {/* SECTION 8 */}
                 <section className="border-t border-slate-100 dark:border-slate-800/80 pt-8">
                     <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">
-                        8. Limitation of Liability & Intermediary Safe Harbor
+                        8. Limitation of Liability &amp; Statutory Protections
                     </h2>
                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                        As an informational corporate intelligence platform, CorpLawUpdates.in claims intermediary safe-harbor protection under <strong>Section 79 of the Information Technology Act, 2000</strong>. CorpLawUpdates.in, its founders, and operators shall not be liable for any direct, indirect, incidental, special, punitive, or consequential damages resulting from reliance on article commentaries, automated calculation models, or AI draft outputs. Your use of this platform is entirely at your own risk.
+                        The platform may rely on applicable statutory protections to the extent available under Indian law. CorpLawUpdates.in, its founders, and operators shall not be liable for any direct, indirect, incidental, special, punitive, or consequential damages resulting from reliance on article commentaries, statutory summaries, automated calculation models, or AI draft outputs. All content and self-service utilities are provided strictly on an &quot;as is&quot; and &quot;as available&quot; basis for educational and reference purposes. Your use of this platform is entirely at your own risk.
                     </p>
                 </section>
 

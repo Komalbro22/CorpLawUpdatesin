@@ -209,7 +209,7 @@ export default function UnifiedCalculator() {
 
     // Safe Disclaimer
     const afterTable = (doc as any).lastAutoTable.finalY + 6
-    const disclaimer = "DISCLAIMER: This is an indicative estimate for planning purposes only based on the Companies (Registration Offices and Fees) Rules, 2014. It does not constitute legal advice or an official fee challan. Actual statutory fees are determined strictly at the time of filing on the MCA21 portal."
+    const disclaimer = "DISCLAIMER: This is an indicative estimate for planning purposes only based on the Companies (Registration Offices and Fees) Rules, 2014. It does not constitute legal advice or an official fee challan. Actual statutory fees are determined strictly at the time of filing on the MCA21 portal. Always verify final challan values on MCA21 portal before filing."
     renderSafeDisclaimer(doc, disclaimer, afterTable, { fontSize: 7 })
 
     renderPageFooters(doc, `Form ${selectedForm.formNumber} MCA Fee Estimate`)

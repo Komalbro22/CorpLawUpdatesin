@@ -251,7 +251,7 @@ export default function EmploymentAgreementPage() {
               Employment Agreement Format India
             </h1>
             <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
-              Generate a legally vetted, customizable Indian employment agreement in Microsoft Word (.docx) and PDF.
+              Generate an Indian employment agreement draft prepared using the statutory framework (review required before execution or filing) in Microsoft Word (.docx) and PDF.
               Fully updated for the <strong>four Labour Codes</strong>, <strong>Section 2(y) 50% wage parity</strong>,
               mandatory appointment terms under the OSH Code, state stamp duty, and enforceable IP/confidentiality covenants.
             </p>
@@ -259,7 +259,7 @@ export default function EmploymentAgreementPage() {
             <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-800">
               <span className="flex items-center gap-1.5 font-medium text-slate-700 dark:text-slate-300">
                 <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                Vetted under Indian Labour Statutes
+                Structured for Statutory Compliance
               </span>
               <span className="flex items-center gap-1.5">
                 <Clock className="w-4 h-4 text-slate-400" />

@@ -16,7 +16,7 @@ import ErrorBoundary from '@/components/ErrorBoundary'
 import TableOfContents from '@/components/TableOfContents'
 import UpdateCard from '@/components/UpdateCard'
 import { calculateReadingTime, formatDate, BASE_URL, extractFirstImage } from '@/lib/utils'
-import { EDITORIAL_AUTHOR, getArticleAuthorSchema, getEditorialDesk } from '@/lib/editorial'
+import { EDITORIAL_AUTHOR, EDITORIAL_LEAD, getArticleAuthorSchema, getEditorialDesk } from '@/lib/editorial'
 import EditorialAuthorCard from '@/components/EditorialAuthorCard'
 import { linkGlossaryTerms } from '@/lib/glossaryLinker'
 import ViewCounter from '@/components/ViewCounter'
@@ -426,11 +426,17 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                     return (
                         <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 rounded-xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 p-2.5 sm:p-3 text-xs">
                             <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                                <span className="flex size-8 items-center justify-center rounded-full bg-navy dark:bg-slate-800 text-white font-bold text-xs shrink-0 border border-slate-700">CL</span>
+                                <span className="flex size-8 items-center justify-center rounded-full bg-navy dark:bg-slate-800 text-white font-bold text-xs shrink-0 border border-slate-700">KS</span>
                                 <div className="min-w-0 flex-1">
-                                    <Link href="/editorial-policy" className="font-bold text-slate-800 dark:text-slate-200 hover:text-amber-700 dark:hover:text-amber-400 transition-colors block truncate">
-                                        {desk.name}
-                                    </Link>
+                                    <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                                        <Link href="/author/komalpreet-singh" className="font-bold text-slate-800 dark:text-slate-200 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+                                            {EDITORIAL_LEAD.name}
+                                        </Link>
+                                        <span className="text-slate-400 dark:text-slate-600">·</span>
+                                        <Link href="/editorial-policy" className="font-medium text-slate-600 dark:text-slate-400 hover:text-amber-700 dark:hover:text-amber-400 transition-colors truncate">
+                                            {desk.name}
+                                        </Link>
+                                    </div>
                                     <span className="block text-[11px] text-slate-500 truncate" title={desk.tagline}>{desk.tagline}</span>
                                 </div>
                             </div>

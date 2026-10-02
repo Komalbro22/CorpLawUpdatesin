@@ -264,7 +264,7 @@ const tools = [
     href: '/tools/circular-summarizer',
     icon: <Bot size={24} />,
     label: 'AI Circular Summarizer',
-    description: 'Paste any SEBI/MCA/RBI circular URL and get an instant plain-English summary with key changes and action items.',
+    description: 'Input SEBI, MCA, or RBI circular notices to extract operative statutory references, compliance action items, and structured briefs prepared for editorial review.',
     badge: 'Coming Soon',
     badgeColor: 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400',
     stats: 'AI powered',

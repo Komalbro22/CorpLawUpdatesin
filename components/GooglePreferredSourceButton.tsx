@@ -203,7 +203,7 @@ export default function GooglePreferredSourceButton({
                                 </span>
 
                                 <span className="whitespace-nowrap font-medium">
-                                    {clicked ? 'Opening Google Preferences...' : 'Add as Preferred Source'}
+                                    {clicked ? 'Opening Google Preferences...' : 'Add to Google Preferred Sources'}
                                 </span>
 
                                 {clicked ? (
@@ -260,7 +260,7 @@ export default function GooglePreferredSourceButton({
                 className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/50 text-slate-200 text-xs font-semibold transition-all group"
             >
                 <GoogleIcon className="w-4 h-4 shrink-0" />
-                <span>Google Preferred Source</span>
+                <span>Follow on Google Preferred Sources</span>
                 <ExternalLink className="w-3.5 h-3.5 text-slate-400 group-hover:text-white transition-colors" />
             </a>
         </div>

@@ -93,7 +93,7 @@ export default async function Footer() {
                             </span>
                         </Link>
                         <p className="text-slate-300 text-base leading-relaxed max-w-md mb-8">
-                            India's first free-to-access intelligence platform for regulatory updates. 
+                            A free corporate-law intelligence platform dedicated to Indian regulatory updates and compliance tools. 
                             Built for Company Secretaries, Chartered Accountants, Cost Accountants (CMA), CS/CA/CMA Students, Legal Enthusiasts, and Compliance Professionals.
                         </p>
                         

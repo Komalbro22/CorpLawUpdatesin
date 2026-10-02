@@ -93,6 +93,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/newsletter`, changeFrequency: 'yearly' as const, priority: 0.5 },
     { url: `${BASE_URL}/partners`, changeFrequency: 'monthly' as const, priority: 0.4 },
     { url: `${BASE_URL}/editorial-policy`, changeFrequency: 'yearly' as const, priority: 0.3 },
+    { url: `${BASE_URL}/author/komalpreet-singh`, lastModified: latestArticleDate, changeFrequency: 'weekly' as const, priority: 0.6 },
     { url: `${BASE_URL}/about`, changeFrequency: 'yearly' as const, priority: 0.3 },
     { url: `${BASE_URL}/contact`, changeFrequency: 'yearly' as const, priority: 0.3 },
     { url: `${BASE_URL}/privacy-policy`, changeFrequency: 'yearly' as const, priority: 0.3 },

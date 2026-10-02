@@ -85,7 +85,7 @@ export const mcaForms: MCAForm[] = [
       }
     ],
     metaTitle: 'MGT 7 Fee Calculator — Form MGT-7 Late Filing Fee & Penalty (FY 2026-27)',
-    metaDescription: 'Calculate exact Form MGT-7 filing fees on MCA V3: Table A normal fees (₹200–₹600), ₹100/day uncapped late filing fee, Section 92(5) ROC penalties & Section 446B relief.',
+    metaDescription: 'Estimate applicable statutory filing fees and late multipliers based on selected assumptions for Form MGT-7 on MCA V3: Table A normal fees (₹200–₹600), ₹100/day uncapped late filing fee, Section 92(5) ROC penalties & Section 446B relief. Always verify final challan values on MCA21 portal before filing.',
     ogDescription: 'Institutional MGT 7 fee calculator for Form MGT-7 normal fees, ₹100/day additional late fee, MGT-8 PCS certification rules, and Section 92(5) ROC penalties on MCA V3.',
     faqItems: [
       { question: 'How is the MGT 7 late fee calculated on MCA V3?', answer: 'Filing Form MGT-7 after the 60-day AGM due date incurs a statutory additional filing fee of flat ₹100 per day without any upper ceiling under Table B (Note Item 2) of the Companies (Registration Offices and Fees) Rules, 2014. For example, a 60-day delay results in an additional fee of ₹6,000 (60 × ₹100) payable on the MCA21 portal on top of the normal base fee.' },

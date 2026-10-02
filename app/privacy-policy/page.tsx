@@ -24,13 +24,13 @@ export default function PrivacyPolicyPage() {
                     Privacy Policy
                 </h1>
                 <p className="text-slate-400 text-sm mb-8">
-                    Last updated: 16 September 2026
+                    Last updated: October 2026
                 </p>
 
                 <section>
                     <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">1. Introduction & Statutory Framework</h2>
                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                        CorpLawUpdates.in ("we", "our", "us") is committed to protecting your privacy and handling your data in accordance with the <strong>Digital Personal Data Protection (DPDP) Act, 2023</strong> and the <strong>Information Technology (Reasonable Security Practices and Procedures and Sensitive Personal Data or Information) Rules, 2011</strong>. This Privacy Policy explains what data we collect, how we use it, your rights, and who we share it with when you visit https://www.corplawupdates.in.
+                        CorpLawUpdates.in (&quot;we&quot;, &quot;our&quot;, &quot;us&quot;) is committed to protecting your privacy and handling your data in accordance with the <strong>Digital Personal Data Protection (DPDP) Act, 2023</strong>, the <strong>DPDP Rules, 2025</strong>, and the <strong>Information Technology (Reasonable Security Practices and Procedures and Sensitive Personal Data or Information) Rules, 2011</strong>. This Privacy Policy explains what data we collect, how we use it, your rights, and who we share it with when you visit https://www.corplawupdates.in.
                     </p>
                 </section>
 
@@ -160,10 +160,15 @@ export default function PrivacyPolicyPage() {
                                     <td className="p-3">IP address, page visits, performance metrics</td>
                                     <td className="p-3">Website hosting and analytics</td>
                                 </tr>
-                                <tr>
+                                <tr className="border-b border-slate-100 dark:border-slate-800/60">
                                     <td className="p-3 font-bold">Google (GA4 + SWG)</td>
                                     <td className="p-3">Page visits, interactions (if GA4 enabled)</td>
                                     <td className="p-3">Traffic analytics and News integration</td>
+                                </tr>
+                                <tr>
+                                    <td className="p-3 font-bold">Google AdSense &amp; Ad Networks</td>
+                                    <td className="p-3">IP address, cookie identifiers, device telemetry</td>
+                                    <td className="p-3">Contextual &amp; personalized ad serving, frequency capping, fraud prevention, and performance reporting</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -173,9 +178,59 @@ export default function PrivacyPolicyPage() {
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
 
                 <section>
-                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">5. Cookies & Analytics Policy</h2>
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">5. Advertising &amp; Google AdSense</h2>
                     <p className="text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">
-                        CorpLawUpdates.in uses essential cookies, device storage, and privacy-respecting analytics to enhance user navigation and measure platform readership in compliance with the Digital Personal Data Protection (DPDP) Act, 2023.
+                        To maintain our corporate law intelligence summaries, compliance trackers, and legal calculators free for the professional community, CorpLawUpdates.in partners with Google AdSense and third-party advertising vendors to display relevant advertisements across our platform.
+                    </p>
+                    <div className="space-y-4 text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                        <div>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-1.5 text-xs uppercase tracking-wide">A. Third-Party Advertising Vendors &amp; Google AdSense</h3>
+                            <p>
+                                Third-party advertising vendors, including Google, use cookies, web beacons, and unique device identifiers to serve advertisements based on your prior visits to this website or other websites across the Internet.
+                            </p>
+                        </div>
+                        <div>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-1.5 text-xs uppercase tracking-wide">B. Advertising Cookies, Web Beacons &amp; IP Addresses</h3>
+                            <p>
+                                Google&apos;s use of advertising cookies (such as DoubleClick cookies) enables it and its partner networks to serve ads to our visitors based on their visits to CorpLawUpdates.in and/or other sites on the Internet. IP addresses and browser telemetry may be used to measure ad impressions, enforce frequency capping, prevent click fraud, and display geo-relevant compliance services.
+                            </p>
+                        </div>
+                        <div>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-1.5 text-xs uppercase tracking-wide">C. Personalized Advertising Choices &amp; Opt-Out</h3>
+                            <p className="mb-2">
+                                You retain complete control over whether ads are personalized to your browsing activity:
+                            </p>
+                            <ul className="list-disc list-inside space-y-1.5 pl-1">
+                                <li>
+                                    <strong>Google Ads Settings:</strong> You can opt out of personalized advertising by visiting Google&apos;s Ads Settings at{' '}
+                                    <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 underline font-semibold">
+                                        https://www.google.com/settings/ads
+                                    </a>.
+                                </li>
+                                <li>
+                                    <strong>Network Advertising Initiative &amp; DAA Opt-Out:</strong> You may also opt out of third-party advertising vendor cookies for personalized advertising by visiting{' '}
+                                    <a href="https://www.aboutads.info/choices" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 underline font-semibold">
+                                        www.aboutads.info/choices
+                                    </a>{' '}
+                                    or{' '}
+                                    <a href="https://www.youronlinechoices.com" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 underline font-semibold">
+                                        www.youronlinechoices.com
+                                    </a>.
+                                </li>
+                                <li>
+                                    <strong>Browser Controls:</strong> You can configure your browser to block or delete third-party cookies at any time. If you opt out of personalized ads, you will still see advertisements, but they will be contextual rather than based on your browsing history.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
+
+                <section>
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">6. Cookies &amp; Analytics Policy</h2>
+                    <p className="text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">
+                        CorpLawUpdates.in uses essential cookies, device storage, and privacy-respecting analytics to enhance user navigation and measure platform readership in compliance with the Digital Personal Data Protection (DPDP) Act, 2023 and the DPDP Rules, 2025.
                     </p>
 
                     <div className="space-y-6 text-slate-600 dark:text-slate-400">
@@ -183,7 +238,8 @@ export default function PrivacyPolicyPage() {
                             <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">A. Categories of Cookies Employed</h3>
                             <ul className="list-disc list-inside space-y-1.5 text-slate-600 dark:text-slate-400">
                                 <li><strong>Strictly Necessary Cookies:</strong> Essential for website navigation, security verification, theme persistence (light/dark mode), and administrative sessions.</li>
-                                <li><strong>Analytics & Performance Cookies:</strong> Used anonymously via Vercel Analytics and Google Analytics (GA4) to analyze traffic density, top performing regulatory circulars, and Core Web Vitals.</li>
+                                <li><strong>Analytics &amp; Performance Cookies:</strong> Used anonymously via Vercel Analytics and Google Analytics (GA4) to analyze traffic density, top performing regulatory circulars, and Core Web Vitals.</li>
+                                <li><strong>Advertising &amp; Targeting Cookies:</strong> Deployed by Google AdSense and its authorized advertising partners to deliver contextual and interest-based ads, manage ad frequency, and prevent invalid traffic/click fraud.</li>
                             </ul>
                         </div>
 
@@ -195,9 +251,9 @@ export default function PrivacyPolicyPage() {
                         </div>
 
                         <div>
-                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">C. European Economic Area (EEA), UK & Swiss Visitors (GDPR)</h3>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">C. European Economic Area (EEA), UK &amp; Swiss Visitors (GDPR)</h3>
                             <p className="leading-relaxed text-sm">
-                                For visitors accessing the site from the European Economic Area (EEA), the United Kingdom, or Switzerland, measurement cookies are managed in compliance with the General Data Protection Regulation (GDPR) and UK GDPR. You may review or modify your consent choices at any time.
+                                For visitors accessing the site from the European Economic Area (EEA), the United Kingdom, or Switzerland, measurement and advertising cookies are managed in compliance with the General Data Protection Regulation (GDPR) and UK GDPR. You may review or modify your consent choices at any time.
                             </p>
                         </div>
 
@@ -207,8 +263,8 @@ export default function PrivacyPolicyPage() {
                                 Residents of California (California Consumer Privacy Act as amended by the CPRA), Colorado, Virginia, Connecticut, Utah, and other US states with comprehensive privacy legislation have specific rights regarding their personal information:
                             </p>
                             <ul className="list-disc list-inside space-y-1.5 text-sm text-slate-600 dark:text-slate-400">
-                                <li><strong>Do Not Sell or Share My Personal Information:</strong> We do not sell or share your personal information for monetary consideration or cross-context behavioral advertising.</li>
-                                <li><strong>Right to Know & Access:</strong> You have the right to request disclosure of the categories and specific pieces of personal information we have collected about you over the past 12 months.</li>
+                                <li><strong>Do Not Sell or Share My Personal Information:</strong> We do not sell or share your personal information for monetary consideration. Users can opt out of cross-context behavioral advertising through Google Ads Settings and browser opt-out signals.</li>
+                                <li><strong>Right to Know &amp; Access:</strong> You have the right to request disclosure of the categories and specific pieces of personal information we have collected about you over the past 12 months.</li>
                                 <li><strong>Right to Delete:</strong> You have the right to request deletion of your personal information, subject to statutory exceptions.</li>
                                 <li><strong>Non-Discrimination:</strong> We will never discriminate against you, deny services, or alter pricing because you exercised your statutory privacy rights.</li>
                             </ul>
@@ -219,7 +275,7 @@ export default function PrivacyPolicyPage() {
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
 
                 <section>
-                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">6. Newsletter & Email Delivery Tracking</h2>
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">7. Newsletter &amp; Email Delivery Tracking</h2>
                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
                         Our newsletters and transactional communications (such as welcome messages and regulatory notifications) use industry-standard email delivery infrastructure provided by Brevo (Sendinblue) and Resend. Standard tracking technology detects when an email is delivered, opened, or links are clicked to ensure high deliverability and measure engagement. This telemetry is used strictly for internal diagnostics and service delivery, and is never sold or shared with any third party. You can unsubscribe or update your email preferences at any time via the one-click unsubscribe link provided in every email.
                     </p>
@@ -228,59 +284,68 @@ export default function PrivacyPolicyPage() {
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
 
                 <section>
-                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">7. Data Retention</h2>
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">8. Data Retention &amp; Purpose Limitation</h2>
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+                        In strict compliance with the purpose limitation and data retention principles under the <strong>Digital Personal Data Protection (DPDP) Act, 2023</strong> and the <strong>DPDP Rules, 2025</strong>, personal data is retained only for the duration necessary to satisfy the specific purpose for which it was collected or until consent is withdrawn:
+                    </p>
                     <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-400">
-                        <li><strong>Subscriber emails</strong> — retained until you unsubscribe. After unsubscribing, your email is marked inactive and deleted within 30 days upon written request.</li>
-                        <li><strong>IP addresses (rate-limiting)</strong> — retained for a short rolling window only (used to detect abuse; not linked to your email)</li>
-                        <li><strong>Generated Documents</strong> — saved draft contents are retained in our database for session retrieval and professional editing purposes. You can request immediate erasure of your documents by contacting us.</li>
+                        <li><strong>Subscriber emails:</strong> Retained until you unsubscribe. After unsubscribing, your email is marked inactive and permanently deleted within 30 days upon written request.</li>
+                        <li><strong>IP addresses &amp; Security Logs:</strong> Retained for a short rolling operational window (maximum 90 days) to prevent bot attacks, enforce rate-limiting, and defend against fraudulent traffic.</li>
+                        <li><strong>Document Generator Data:</strong> Draft inputs entered into client-side generators are processed in real-time. Saved user documents in encrypted databases can be permanently erased upon user request.</li>
                     </ul>
-                    <p className="text-slate-600 dark:text-slate-400 mt-3 italic">To request deletion of your data: legal@corplawupdates.in</p>
+                    <p className="text-slate-600 dark:text-slate-400 mt-3 italic">To request erasure of your data: legal@corplawupdates.in</p>
                 </section>
 
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
 
                 <section>
-                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">8. Your Rights</h2>
-                    <p className="text-slate-600 dark:text-slate-400 mb-3">You have the right to:</p>
-                    <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-400">
-                        <li>Access the personal data we hold about you</li>
-                        <li>Correct inaccurate data</li>
-                        <li>Request deletion of your data (Right to Erasure)</li>
-                        <li>Withdraw consent (unsubscribe) at any time</li>
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">9. Your Rights (DPDP Act, 2023 &amp; DPDP Rules, 2025)</h2>
+                    <p className="text-slate-600 dark:text-slate-400 mb-3">
+                        As a Data Principal under India&apos;s <strong>Digital Personal Data Protection (DPDP) Act, 2023</strong> and <strong>DPDP Rules, 2025</strong>, you enjoy statutory rights regarding your personal data:
+                    </p>
+                    <ul className="list-disc list-inside space-y-2 text-slate-600 dark:text-slate-400">
+                        <li><strong>Right to Access Information:</strong> Obtain a summary of personal data being processed by us and the processing activities undertaken.</li>
+                        <li><strong>Right to Correction &amp; Completion:</strong> Request correction of inaccurate personal data, completion of incomplete data, or updating of outdated records.</li>
+                        <li><strong>Right to Erasure (Right to be Forgotten):</strong> Request deletion of your personal data when the purpose for which it was processed is no longer served.</li>
+                        <li><strong>Right to Grievance Redressal:</strong> Access an effective, readily available grievance redressal mechanism provided by CorpLawUpdates.in.</li>
+                        <li><strong>Right to Nominate:</strong> Nominate another individual who shall, in the event of death or incapacity, exercise your data principal rights in accordance with the DPDP Rules, 2025.</li>
+                        <li><strong>Right to Withdraw Consent:</strong> Revoke consent for newsletter communications or data processing at any time with immediate effect.</li>
                     </ul>
-                    <p className="text-slate-600 dark:text-slate-400 mt-3 italic">To exercise any of these rights, email us at: legal@corplawupdates.in</p>
+                    <p className="text-slate-600 dark:text-slate-400 mt-3 italic">To exercise any statutory right, contact our Grievance Officer at: legal@corplawupdates.in</p>
                 </section>
 
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
 
                 <section>
-                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">9. Children's Privacy</h2>
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">10. Children&apos;s Privacy</h2>
                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                        This site is not intended for persons under 18 years of age. We do not knowingly collect data from minors.
+                        This site is not intended for persons under 18 years of age. We do not knowingly collect, process, or track data from minors in accordance with Section 9 of the DPDP Act, 2023.
                     </p>
                 </section>
 
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
 
                 <section>
-                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">10. Changes to This Policy</h2>
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">11. Changes to This Policy</h2>
                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                        We may update this Privacy Policy from time to time. The "Last updated" date at the top of this page will reflect any changes. For significant changes, we will notify newsletter subscribers via email.
+                        We may update this Privacy Policy from time to time to reflect regulatory notices, judicial interpretations, or technological changes. The &quot;Last updated&quot; date at the top of this page indicates the latest revision.
                     </p>
                 </section>
 
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
 
                 <section>
-                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">11. Contact & Grievance Officer</h2>
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">12. Contact &amp; Grievance Officer</h2>
                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                        For privacy-related queries or to exercise your rights under the Digital Personal Data Protection (DPDP) Act 2023, please contact our designated Grievance Officer:
+                        In accordance with the <strong>Digital Personal Data Protection (DPDP) Act, 2023</strong> and the <strong>DPDP Rules, 2025</strong>, CorpLawUpdates.in has designated a Grievance Officer to address any inquiries, complaints, or rights requests regarding the processing of your personal data:
                     </p>
-                    <div className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl text-slate-600 dark:text-slate-300 space-y-1">
+                    <div className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl text-slate-600 dark:text-slate-300 space-y-1.5 text-sm">
                         <p><strong>Grievance Officer:</strong> Komalpreet Singh</p>
-                        <p><strong>Role:</strong> Founder</p>
-                        <p><strong>Email:</strong> <a href="mailto:legal@corplawupdates.in" className="text-amber-500 hover:underline">legal@corplawupdates.in</a></p>
+                        <p><strong>Role:</strong> Founder &amp; Lead Regulatory Analyst</p>
+                        <p><strong>Desk Location:</strong> Lucknow, Uttar Pradesh, India</p>
+                        <p><strong>Official Email:</strong> <a href="mailto:legal@corplawupdates.in" className="text-amber-500 hover:underline">legal@corplawupdates.in</a></p>
                         <p><strong>Website:</strong> <a href="https://www.corplawupdates.in" className="text-amber-500 hover:underline">www.corplawupdates.in</a></p>
+                        <p><strong>Resolution Timeline:</strong> Grievance communications are acknowledged within 24–48 hours, and substantive resolutions are delivered within statutory deadlines prescribed under the DPDP Rules, 2025 (maximum 30 days).</p>
                     </div>
                 </section>
 

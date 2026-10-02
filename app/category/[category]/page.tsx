@@ -346,7 +346,7 @@ const CATEGORY_RELATED_RESOURCES: Record<string, RelatedResource[]> = {
     sebi: [
         {
             title: 'Share Transfer Deed (Form SH-4) Workstation',
-            description: 'Generate legally vetted Form SH-4 deeds under Section 56 with instant stamp duty computation.',
+            description: 'Generate statutory Form SH-4 drafts under Section 56 with instant stamp duty computation; professional review required before execution.',
             href: '/documents/share-transfer-deed',
             tag: 'Legal Workstation',
         },
@@ -500,7 +500,7 @@ const CATEGORY_RELATED_RESOURCES: Record<string, RelatedResource[]> = {
         },
         {
             title: 'Share Transfer Deed (Form SH-4) Workstation',
-            description: 'Generate legally vetted Form SH-4 transfer deeds with automatic stamp duty calculations under Section 56.',
+            description: 'Generate statutory Form SH-4 transfer deeds with automatic stamp duty calculations under Section 56; professional review required before execution.',
             href: '/documents/share-transfer-deed',
             tag: 'Legal Workstation',
         },

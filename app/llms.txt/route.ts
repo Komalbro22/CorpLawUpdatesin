@@ -31,6 +31,7 @@ export async function GET() {
 ## Site Navigation
 - [Sitemap](${BASE_URL}/sitemap.xml): Complete XML sitemap of all indexed URLs on the platform.
 - [Main Updates Page](${BASE_URL}/updates): The primary feed for all recent corporate law and regulatory updates.
+- [Author Profile & Editorial Leadership](${BASE_URL}/author/komalpreet-singh): Regulatory research background, methodology, and verified author profile for Komalpreet Singh.
 
 ## Authoritative Content by Regulator
 - [MCA regulatory updates](${BASE_URL}/category/mca): Ministry of Corporate Affairs (MCA) circulars, notifications, rules, and Companies Act compliance.

@@ -156,7 +156,7 @@ export const EDITORIAL_LEAD = {
   role: 'Founder & Lead Regulatory Research Analyst',
   location: 'Lucknow, Uttar Pradesh, India',
   email: 'legal@corplawupdates.in',
-  url: `${BASE_URL}/about#editorial-leadership`,
+  url: `${BASE_URL}/author/komalpreet-singh`,
   bio: 'Specializing in Indian corporate jurisprudence, Companies Act 2013 compliance, SEBI regulations, and RBI directives. Leading statutory research and verification at CorpLawUpdates.in.',
 } as const
 

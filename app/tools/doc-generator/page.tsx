@@ -27,7 +27,7 @@ export default function AIDocGeneratorIndexPage() {
           </h1>
 
           <p className="text-lg text-slate-400 leading-relaxed">
-            Generate legally accurate, perfectly formatted Microsoft Word (<code className="text-blue-300">.docx</code>) compliance documents for Indian Companies. Powered by AI trained on the Companies Act, 2013 & Secretarial Standards (SS-1/SS-2).
+            Generate AI-assisted corporate document drafts based on statutory frameworks and secretarial standards. Structured for professional review and execution in Microsoft Word (<code className="text-blue-300">.docx</code>).
           </p>
         </div>
 
@@ -36,10 +36,10 @@ export default function AIDocGeneratorIndexPage() {
           <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-6 space-y-2">
             <div className="flex items-center gap-3 text-blue-400">
               <Scale className="w-6 h-6" />
-              <h3 className="font-bold text-slate-100 text-lg">Zero Hallucinations</h3>
+              <h3 className="font-bold text-slate-100 text-lg">Statutory Grounding</h3>
             </div>
             <p className="text-sm text-slate-400 leading-relaxed">
-              AI applies strict statutory rules and vetted clause structures to guarantee zero invented legalese.
+              AI applies statutory rules and clause structures designed to minimize ungrounded legalese. Prepared using the statutory framework; review required before execution or filing.
             </p>
           </div>
 

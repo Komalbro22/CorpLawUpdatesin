@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'MCA Fee Calculator (V3) & ROC Late Fee Engine | CorpLawUpdates',
-    description: 'Calculate exact MCA21 V3 normal filing fees, Table B late multipliers, ₹100/day uncapped penalties for AOC-4 & MGT-7, and state stamp duty.',
+    description: 'Estimate applicable statutory filing fees and late multipliers based on selected assumptions, Table B late multipliers, ₹100/day uncapped penalties for AOC-4 & MGT-7, and state stamp duty. Always verify final challan values on MCA21 portal before filing.',
     url: 'https://www.corplawupdates.in/tools/fee-calculator/companies',
     siteName: 'CorpLawUpdates',
     locale: 'en_IN',
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'MCA Fee Calculator (V3) & ROC Late Fee Engine | CorpLawUpdates',
-    description: 'Calculate exact MCA21 V3 normal filing fees, Table B late multipliers, ₹100/day uncapped penalties for AOC-4 & MGT-7, and state stamp duty.',
+    description: 'Estimate applicable statutory filing fees and late multipliers based on selected assumptions, Table B late multipliers, ₹100/day uncapped penalties for AOC-4 & MGT-7, and state stamp duty. Always verify final challan values on MCA21 portal before filing.',
   }
 }
 
@@ -806,7 +806,7 @@ export default function CompaniesFeePage() {
         {/* Footnote & Disclaimer */}
         <div className="text-xs text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800 pt-6 mt-8 space-y-2">
           <p>
-            <strong>Statutory Disclaimer:</strong> Fees and penalties computed by this tool are based on the Companies Act, 2013, the Companies (Registration Offices and Fees) Rules, 2014 as amended up to FY 2026-27, and relevant state stamp acts. This calculator is provided for compliance planning and institutional advisory estimation. Official fee challans are generated exclusively upon form upload and pre-scrutiny on the Ministry of Corporate Affairs MCA21 V3 portal.
+            <strong>Statutory Disclaimer:</strong> Fees and penalties computed by this tool are based on the Companies Act, 2013, the Companies (Registration Offices and Fees) Rules, 2014 as amended up to FY 2026-27, and relevant state stamp acts. This calculator is provided for compliance planning and institutional advisory estimation. Official fee challans are generated exclusively upon form upload and pre-scrutiny on the Ministry of Corporate Affairs MCA21 V3 portal. Always verify final challan values on MCA21 portal before filing.
           </p>
           <p>
             © {new Date().getFullYear()} CorpLawUpdates.in — India&apos;s Independent Corporate Law &amp; Regulatory Intelligence Platform.

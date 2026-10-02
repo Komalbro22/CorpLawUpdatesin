@@ -747,13 +747,13 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               : form.slug === 'adt-1'
               ? 'Calculate statutory normal filing fees, 15-day due date from AGM, Table B late multipliers (2× to 12×), Section 147 fine exposure, and Section 403 condonation rules for Form ADT-1 on MCA V3.'
               : form.slug === 'chg-1'
-              ? 'Calculate exact normal filing fees, 30-60-120 day Section 77 timelines, 3×/6× extension multipliers, and ad valorem penalties (up to ₹5 Lakhs) for Form CHG-1 on MCA V3.'
+              ? 'Estimate applicable statutory filing fees and late multipliers based on selected assumptions, 30-60-120 day Section 77 timelines, 3×/6× extension multipliers, and ad valorem penalties (up to ₹5 Lakhs) for Form CHG-1 on MCA V3. Always verify final challan values on MCA21 portal before filing.'
               : form.slug === 'mgt-7'
-              ? 'Calculate exact normal filing fees, 60-day AGM statutory deadlines, ₹100/day uncapped late fees, Form MGT-8 PCS certification, and Section 92(5) adjudication penalties on MCA V3.'
+              ? 'Estimate applicable statutory filing fees and late multipliers based on selected assumptions, 60-day AGM statutory deadlines, ₹100/day uncapped late fees, Form MGT-8 PCS certification, and Section 92(5) adjudication penalties on MCA V3. Always verify final challan values on MCA21 portal before filing.'
               : form.slug === 'mgt-7a'
               ? 'Calculate abridged annual return fees, 60-day due dates, ₹100/day late fees, Small Company limits (₹10 Cr / ₹100 Cr), and Section 446B 50% penalty relief for OPCs and Small Companies on MCA V3.'
               : form.slug === 'aoc-4'
-              ? 'Calculate exact MCA V3 Form AOC-4 fees, Table A normal filing fees (₹200–₹600), ₹100/day uncapped late filing fee, OPC 180-day deadline, and Section 137(3) statutory penalties for FY 2026-27.'
+              ? 'Estimate applicable statutory filing fees and late multipliers based on selected assumptions, Table A normal filing fees (₹200–₹600), ₹100/day uncapped late filing fee, OPC 180-day deadline, and Section 137(3) statutory penalties for FY 2026-27. Always verify final challan values on MCA21 portal before filing.'
               : form.slug === 'dir-12'
               ? 'Complete guide to file DIR-12 within 30 days of director appointment, resignation, or change in designation. Calculate MCA V3 filing fees, Table B late multipliers (2× to 12×), and checklist rules.'
               : form.slug === 'msme-1'
@@ -765,8 +765,8 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               : form.slug === 'spice-plus'
               ? 'Calculate SPICe+ (INC-32) MCA registration fees, G.S.R. 329(E) ₹15L zero-fee waiver, 36 states MOA/AOA stamp duty, PAN/TAN charges, and DIN costs for incorporating an Indian company.'
               : form.slug === 'mgt-14'
-              ? 'Calculate exact MCA Form MGT-14 statutory filing fees, Table B late multipliers (2× to 12×), IFSC 60-day deadlines, Section 117(2) adjudication penalties, and 300-day condonation rules on MCA V3.'
-              : `Calculate exact normal filing fees and late penalties for ${form.formNumber} (${form.formName}) based on authorized capital and delay.`}
+              ? 'Estimate applicable statutory filing fees and late multipliers based on selected assumptions, Table B late multipliers (2× to 12×), IFSC 60-day deadlines, Section 117(2) adjudication penalties, and 300-day condonation rules on MCA V3. Always verify final challan values on MCA21 portal before filing.'
+              : `Estimate applicable statutory filing fees and late multipliers based on selected assumptions for ${form.formNumber} (${form.formName}) based on authorized capital and delay. Always verify final challan values on MCA21 portal before filing.`}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <div className="bg-slate-800/50 border border-slate-700 rounded-full px-4 py-2 text-sm text-slate-300">
@@ -3504,6 +3504,13 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               MSME Interest Calculator →
             </Link>
           </div>
+        </div>
+
+        {/* Explicit Statutory Disclaimer */}
+        <div className="mb-12 rounded-xl border border-amber-200/80 bg-amber-50/70 p-4 text-xs text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/20 dark:text-amber-300">
+          <p className="leading-relaxed">
+            <strong>Statutory Disclaimer:</strong> Fees and late filing multipliers are estimated based on published schedules under the Companies (Registration Offices and Fees) Rules, 2014 and Companies Act, 2013. Always verify final challan values on MCA21 portal before filing.
+          </p>
         </div>
       </div>
 
