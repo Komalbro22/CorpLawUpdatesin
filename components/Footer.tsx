@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { Calendar, Rss, ArrowRight, Mail } from 'lucide-react'
 import GooglePreferredSourceButton from '@/components/GooglePreferredSourceButton'
 import { supabase } from '@/lib/supabase'
+import CookiePreferencesButton from '@/components/CookiePreferencesButton'
 
 export const revalidate = 3600
 
@@ -192,18 +193,7 @@ export default async function Footer() {
                         <Link href="/privacy-policy" className="hover:text-white focus:outline-none focus:underline transition-colors">Privacy</Link>
                         <Link href="/editorial-policy" className="hover:text-white focus:outline-none focus:underline transition-colors">Editorial</Link>
                         <Link href="/terms" className="hover:text-white focus:outline-none focus:underline transition-colors">Terms</Link>
-                        <button
-                            type="button"
-                            onClick={() => {
-                                if (typeof window !== 'undefined') {
-                                    localStorage.removeItem('clu_cookie_consent_v2')
-                                    window.location.reload()
-                                }
-                            }}
-                            className="hover:text-white focus:outline-none focus:underline transition-colors bg-transparent border-0 cursor-pointer text-slate-300 text-[11px] font-semibold uppercase tracking-widest"
-                        >
-                            Cookie Preferences
-                        </button>
+                        <CookiePreferencesButton />
                         <Link href="/api/feed.xml" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-white focus:outline-none focus:underline transition-colors" prefetch={false}>
                             <Rss className="size-3 text-amber-400" aria-hidden="true" /> RSS
                         </Link>
