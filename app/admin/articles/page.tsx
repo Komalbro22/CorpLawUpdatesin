@@ -355,12 +355,15 @@ export default function AdminArticles() {
                                                 />
                                             </td>
                                             <td className="px-6 py-4">
-                                                <Link href={`/admin/articles/${article.id}/edit`} className="font-semibold text-slate-900 hover:text-amber-600 transition-colors block max-w-[300px] truncate" title={article.title}>
-                                                    {article.title}
-                                                </Link>
+                                                <div className="flex items-center gap-2 max-w-[340px]">
+                                                    <Link href={`/admin/articles/${article.id}/edit`} className="font-semibold text-slate-900 hover:text-amber-600 transition-colors block max-w-[300px] truncate" title={article.title}>
+                                                        {article.title}
+                                                    </Link>
+                                                    {article.is_sponsored && <span className="shrink-0 rounded bg-violet-100 px-1.5 py-0.5 text-[9px] font-bold uppercase text-violet-800">Sponsored</span>}
+                                                </div>
                                             </td>
                                             <td className="px-6 py-4">
-                                                <CategoryBadge category={article.category} className="!text-xs" />
+                                                {article.category ? <CategoryBadge category={article.category} className="!text-xs" /> : <span className="text-xs text-slate-500">Uncategorised</span>}
                                             </td>
                                             <td className="px-6 py-4">
                                                 {isPublished ? (
@@ -431,7 +434,7 @@ export default function AdminArticles() {
                                                 checked={selectedIds.has(article.id)}
                                                 onChange={() => toggleSelection(article.id)}
                                             />
-                                            <CategoryBadge category={article.category} className="!text-[11px]" />
+                                            {article.category ? <CategoryBadge category={article.category} className="!text-[11px]" /> : <span className="text-[11px] text-slate-500">Uncategorised</span>}
                                         </div>
                                         {isPublished ? (
                                             <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
@@ -450,6 +453,7 @@ export default function AdminArticles() {
                                     >
                                         {article.title}
                                     </Link>
+                                    {article.is_sponsored && <span className="inline-flex rounded bg-violet-100 px-1.5 py-0.5 text-[9px] font-bold uppercase text-violet-800">Sponsored</span>}
 
                                     <div className="flex items-center justify-between text-xs text-slate-500 pt-1 border-t border-slate-100">
                                         <span>{formatDate(article.updated_at || article.created_at || '')}</span>

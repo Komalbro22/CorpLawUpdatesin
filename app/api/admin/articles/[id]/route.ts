@@ -16,7 +16,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     try {
         const { data: article, error } = await supabaseAdmin
-            .from('updates').select('id, title, slug, summary, content, category, published_at, updated_at, is_featured, effective_date, featured_image_url, impact_level, source_name, source_url, sources, key_change, key_changes, tags, views, seo_title, seo_description, quick_answer, regulation_ref, last_verified, last_amended, key_takeaways, has_steps, steps_json')
+            .from('updates').select('id, title, slug, summary, content, category, published_at, updated_at, is_featured, effective_date, featured_image_url, impact_level, source_name, source_url, sources, key_change, key_changes, tags, views, seo_title, seo_description, quick_answer, regulation_ref, last_verified, last_amended, key_takeaways, has_steps, steps_json, is_sponsored, sponsor_name, contributor_name, hold_external_links, hide_from_listings, noindex')
             .eq('id', (await params).id)
             .single()
 
@@ -44,7 +44,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         const body = parsed.data
 
         const { data: oldArticle, error: fetchError } = await supabaseAdmin
-            .from('updates').select('id, title, slug, summary, content, category, published_at, updated_at, is_featured, effective_date, featured_image_url, impact_level, source_name, source_url, sources, key_change, key_changes, tags, views, seo_title, seo_description, quick_answer, regulation_ref, last_verified, last_amended, key_takeaways, has_steps, steps_json')
+            .from('updates').select('id, title, slug, summary, content, category, published_at, updated_at, is_featured, effective_date, featured_image_url, impact_level, source_name, source_url, sources, key_change, key_changes, tags, views, seo_title, seo_description, quick_answer, regulation_ref, last_verified, last_amended, key_takeaways, has_steps, steps_json, is_sponsored, sponsor_name, contributor_name, hold_external_links, hide_from_listings, noindex')
             .eq('id', (await params).id)
             .single()
 
@@ -53,6 +53,19 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         }
 
         const updateData = { ...body }
+        if (body.category !== undefined) {
+            updateData.category = body.category?.trim() || null
+        }
+        if (body.is_sponsored === false) {
+            updateData.sponsor_name = null
+            updateData.contributor_name = null
+            updateData.hold_external_links = false
+        } else {
+            if (body.sponsor_name !== undefined) updateData.sponsor_name = body.sponsor_name?.trim() || null
+            if (body.hold_external_links !== undefined && body.is_sponsored === undefined) {
+                updateData.hold_external_links = body.hold_external_links
+            }
+        }
         if (body.content !== undefined) {
             updateData.reading_time = calculateReadingTime(body.content || '')
             if (!body.featured_image_url) {
@@ -69,7 +82,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
         if (updateError) throw updateError
 
-        if (body.published_at && updatedArticle?.slug) {
+        if (body.published_at && updatedArticle?.slug && !updatedArticle.noindex) {
             submitArticleToIndexNow(updatedArticle.slug).catch(
                 err => console.error('IndexNow error:', err)
             )

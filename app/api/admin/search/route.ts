@@ -122,7 +122,7 @@ export async function GET(request: Request) {
       title: a.title,
       slug: a.slug,
       summary: a.summary,
-      category: a.category,
+      category: a.category || 'Update',
       date: a.published_at,
       impact: a.impact_level,
       url: `/admin/articles/${a.id}/edit`,

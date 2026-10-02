@@ -16,7 +16,7 @@ interface ArticleRow {
   title: string;
   slug: string;
   summary: string | null;
-  category: string;
+  category: string | null;
   published_at: string;
   updated_at: string | null;
   effective_date: string | null;

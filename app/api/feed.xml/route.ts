@@ -19,6 +19,7 @@ export async function GET() {
         const { data: articles } = await supabase
         .from('updates')
         .select('title, slug, summary, category, published_at')
+        .eq('hide_from_listings', false)
         .not('published_at', 'is', null)
         .lte('published_at', new Date().toISOString())
         .order('published_at', { ascending: false })

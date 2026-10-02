@@ -13,8 +13,9 @@ export async function GET() {
 
   const { data: articles, error } = await supabaseAdmin
     .from('updates')
-    .select('slug, title, published_at')
+    .select('slug, title, published_at, noindex')
     .not('published_at', 'is', null)
+    .neq('noindex', true)
     .gte('published_at', fortyEightHoursAgo.toISOString())
     .order('published_at', { ascending: false })
     .limit(1000)

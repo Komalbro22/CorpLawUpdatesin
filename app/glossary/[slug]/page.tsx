@@ -254,6 +254,7 @@ export default async function GlossaryTermPage({ params }: Props) {
   const { data: smartMatches } = await supabase
     .from('updates')
     .select('title, slug, published_at')
+    .eq('hide_from_listings', false)
     .not('published_at', 'is', null)
     .lte('published_at', new Date().toISOString())
     .or(`title.ilike.%${termName}%,summary.ilike.%${termName}%`)
@@ -264,6 +265,7 @@ export default async function GlossaryTermPage({ params }: Props) {
   const { data: categoryMatches } = await supabase
     .from('updates')
     .select('title, slug, published_at')
+    .eq('hide_from_listings', false)
     .ilike('category', term.category)
     .not('published_at', 'is', null)
     .lte('published_at', new Date().toISOString())

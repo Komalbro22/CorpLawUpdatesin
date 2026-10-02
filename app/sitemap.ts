@@ -14,6 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     published_at: string | null
     updated_at: string | null
     category: string | null
+    noindex: boolean
   }
 
   // Fetch published articles (paginated to handle > 1000 items)
@@ -24,13 +25,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   while (true) {
     const { data, error } = await supabaseAdmin
       .from('updates')
-      .select('slug, published_at, updated_at, category')
+      .select('slug, published_at, updated_at, category, noindex')
       .not('published_at', 'is', null)
       .order('published_at', { ascending: false })
       .range(articlePage * pageSize, (articlePage + 1) * pageSize - 1)
 
     if (error || !data || data.length === 0) break
-    articles.push(...(data as SitemapArticle[]))
+    articles.push(...(data as SitemapArticle[]).filter(article => !article.noindex))
     if (data.length < pageSize) break
     articlePage++
   }
@@ -59,7 +60,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     latestArticleDate = new Date(articles[0].published_at!)
     articles.forEach(article => {
       const artDate = new Date(article.updated_at || article.published_at!)
-      if (article.category) {
+      if (article.category && !article.noindex) {
         const cat = article.category.toLowerCase()
         if (!categoryDates[cat] || artDate > categoryDates[cat]) {
           categoryDates[cat] = artDate

@@ -52,6 +52,7 @@ export default async function AuthorProfilePage() {
     const { data: recentUpdates } = await supabase
       .from('updates')
       .select(UPDATE_LIST_COLUMNS)
+      .eq('hide_from_listings', false)
       .not('published_at', 'is', null)
       .lte('published_at', new Date().toISOString())
       .order('published_at', { ascending: false })

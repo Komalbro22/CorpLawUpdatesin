@@ -26,7 +26,9 @@ export async function GET(request: NextRequest) {
             .from('updates')
             .select('*', { count: 'exact' })
 
-        if (category) {
+        if (category === 'Uncategorised') {
+            query = query.is('category', null)
+        } else if (category) {
             query = query.eq('category', category)
         }
         if (search) {
@@ -60,6 +62,11 @@ export async function GET(request: NextRequest) {
                 categoryCounts[cat] = catCount || 0
             })
         )
+        const { count: uncategorisedCount } = await supabaseAdmin
+            .from('updates')
+            .select('*', { count: 'exact', head: true })
+            .is('category', null)
+        categoryCounts.Uncategorised = uncategorisedCount || 0
 
         const articlesWithCounts = articles?.map(a => {
             const wordCount = a.content ? a.content.replace(/<[^>]*>/g, '').split(/\s+/).length : 0;
@@ -95,11 +102,12 @@ export async function POST(request: NextRequest) {
             seo_title, seo_description, featured_image_url,
             published_at, is_featured, 
             key_change, key_changes, effective_date, impact_level,
-            quick_answer, regulation_ref, last_verified, last_amended, key_takeaways, has_steps, steps_json
+            quick_answer, regulation_ref, last_verified, last_amended, key_takeaways, has_steps, steps_json,
+            is_sponsored, sponsor_name, contributor_name, hold_external_links, hide_from_listings, noindex
         } = body
 
-        if (!title || !summary || !category) {
-            return NextResponse.json({ error: 'Missing required fields: title, summary, category' }, { status: 400 })
+        if (!title || !summary) {
+            return NextResponse.json({ error: 'Missing required fields: title and summary' }, { status: 400 })
         }
 
         let finalSlug = slug || slugify(title)
@@ -128,7 +136,7 @@ export async function POST(request: NextRequest) {
                 slug: finalSlug,
                 summary,
                 content: content || '',
-                category,
+                category: category?.trim() || null,
                 tags: tags || [],
                 source_url,
                 source_name,
@@ -138,6 +146,12 @@ export async function POST(request: NextRequest) {
                 featured_image_url: featured_image_url || extractFirstImage(content || '') || null,
                 published_at,
                 is_featured: is_featured || false,
+                is_sponsored: is_sponsored || false,
+                sponsor_name: is_sponsored ? sponsor_name?.trim() || null : null,
+                contributor_name: is_sponsored ? contributor_name?.trim() || null : null,
+                hold_external_links: is_sponsored ? hold_external_links || false : false,
+                hide_from_listings: hide_from_listings || false,
+                noindex: noindex || false,
                 key_change: key_change || null,
                 key_changes: key_changes || null,
                 effective_date: effective_date || null,
@@ -154,7 +168,7 @@ export async function POST(request: NextRequest) {
             .select()
             .single()
 
-        if (createdArticle?.slug && createdArticle?.published_at) {
+        if (createdArticle?.slug && createdArticle?.published_at && !createdArticle.noindex) {
             submitArticleToIndexNow(createdArticle.slug).catch(
                 err => console.error('IndexNow submit failed:', err)
             )
@@ -168,8 +182,8 @@ export async function POST(request: NextRequest) {
         revalidatePath('/updates', 'layout')
         revalidatePath('/sitemap.xml')
         revalidatePath('/news-sitemap.xml')
-        if (category) {
-            revalidatePath(`/category/${category.toLowerCase()}`)
+        if (category?.trim()) {
+            revalidatePath(`/category/${category.trim().toLowerCase()}`)
         }
 
         return NextResponse.json(createdArticle, { status: 201 })

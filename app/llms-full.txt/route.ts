@@ -7,12 +7,13 @@ export const revalidate = 86400 // 24 hours
 export async function GET() {
   const BASE_URL = 'https://www.corplawupdates.in'
 
-  let recentUpdates: Array<{ title: string; slug: string; category: string; summary: string }> = []
+  let recentUpdates: Array<{ title: string; slug: string; category: string | null; summary: string }> = []
   
   if (supabaseAdmin) {
     const { data } = await supabaseAdmin
       .from('updates')
       .select('title, slug, category, summary')
+      .eq('hide_from_listings', false)
       .not('published_at', 'is', null)
       .lte('published_at', new Date().toISOString())
       .order('published_at', { ascending: false })
@@ -22,7 +23,7 @@ export async function GET() {
   }
 
   const updatesList = recentUpdates.length > 0
-    ? recentUpdates.map(u => `- [${u.title}](${BASE_URL}/updates/${u.slug}): ${u.summary || u.category + ' update'}`).join('\n')
+    ? recentUpdates.map(u => `- [${u.title}](${BASE_URL}/updates/${u.slug}): ${u.summary || `${u.category || 'Corporate law'} update`}`).join('\n')
     : '- [MCA & SEBI Circulars](' + BASE_URL + '/updates): Regulatory compliance updates feed.'
 
   const content = `# CorpLawUpdates.in — Complete Content Map

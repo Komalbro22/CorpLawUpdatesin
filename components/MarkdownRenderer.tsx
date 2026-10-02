@@ -303,9 +303,13 @@ function processInlineStyles(styleObj: any, className: string = '', isContainer:
 export default function MarkdownRenderer({
     content,
     enableGazetteDownloadPrompt = false,
+    sponsoredLinks = false,
+    holdExternalLinks = false,
 }: {
     content: string
     enableGazetteDownloadPrompt?: boolean
+    sponsoredLinks?: boolean
+    holdExternalLinks?: boolean
 }) {
     const ref = useRef<HTMLDivElement>(null)
     const [gazettePromptOpen, setGazettePromptOpen] = useState(false)
@@ -687,13 +691,26 @@ export default function MarkdownRenderer({
                     },
                     a: ({ node, href, children, ...props }: any) => {
                         const cleanHref = typeof href === 'string' ? href.trim() : href;
-                        const isExternal = cleanHref && (cleanHref.startsWith('http://') || cleanHref.startsWith('https://'));
+                        const isHttpUrl = typeof cleanHref === 'string' && /^https?:\/\//i.test(cleanHref)
+                        let isExternal = false
+                        if (typeof cleanHref === 'string' && cleanHref) {
+                            try {
+                                const destination = new URL(cleanHref, 'https://www.corplawupdates.in')
+                                isExternal = ['http:', 'https:'].includes(destination.protocol)
+                                    && !['www.corplawupdates.in', 'corplawupdates.in'].includes(destination.hostname.toLowerCase())
+                            } catch {
+                                isExternal = false
+                            }
+                        }
+                        if (sponsoredLinks && isExternal && holdExternalLinks) {
+                            return <>{children}</>
+                        }
                         return (
                             <a
-                                href={cleanHref}
-                                target={isExternal ? '_blank' : undefined}
-                                rel={isExternal ? 'noopener noreferrer' : undefined}
                                 {...props}
+                                href={cleanHref}
+                                target={(sponsoredLinks ? isExternal : isHttpUrl) ? '_blank' : undefined}
+                                rel={sponsoredLinks && isExternal ? 'sponsored noopener noreferrer' : (isExternal ? 'noopener noreferrer' : undefined)}
                                 onClick={(event) => {
                                     props.onClick?.(event)
                                     if (

@@ -15,6 +15,7 @@ import { Category } from '@/types'
 import SeoScorePanel from '@/components/admin/SeoScorePanel'
 import { optimizeImageClientSide } from '@/lib/image-optimizer'
 import LinkChecker from '@/components/admin/LinkChecker'
+import SponsoredSettings from '@/components/admin/SponsoredSettings'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 
@@ -45,6 +46,12 @@ export default function EditArticle() {
 
     const [publishedAt, setPublishedAt] = useState('')
     const [isFeatured, setIsFeatured] = useState(false)
+    const [isSponsored, setIsSponsored] = useState(false)
+    const [sponsorName, setSponsorName] = useState('')
+    const [contributorName, setContributorName] = useState('')
+    const [holdExternalLinks, setHoldExternalLinks] = useState(false)
+    const [hideFromListings, setHideFromListings] = useState(false)
+    const [noindex, setNoindex] = useState(false)
 
     const [keyChange, setKeyChange] = useState('')
     const [keyChanges, setKeyChanges] = useState<string[]>([])
@@ -107,6 +114,12 @@ export default function EditArticle() {
                 setSeoTitle(data.seo_title || '')
                 setSeoDescription(data.seo_description || '')
                 setIsFeatured(data.is_featured || false)
+                setIsSponsored(data.is_sponsored || false)
+                setSponsorName(data.sponsor_name || '')
+                setContributorName(data.contributor_name || '')
+                setHoldExternalLinks(data.hold_external_links || false)
+                setHideFromListings(data.hide_from_listings || false)
+                setNoindex(data.noindex || false)
                 setKeyChange(data.key_change || '')
                 setKeyChanges(data.key_changes || [])
                 setEffectiveDate(data.effective_date || '')
@@ -155,6 +168,12 @@ export default function EditArticle() {
                     if (parsed.content) setContent(parsed.content)
                     if (parsed.summary) setSummary(parsed.summary)
                     if (parsed.category) setCategory(parsed.category)
+                    setIsSponsored(parsed.isSponsored === true)
+                    setSponsorName(parsed.sponsorName || '')
+                    setContributorName(parsed.contributorName || '')
+                    setHoldExternalLinks(parsed.holdExternalLinks === true)
+                    setHideFromListings(parsed.hideFromListings === true)
+                    setNoindex(parsed.noindex === true)
                     setLastAutosaved(new Date())
                 } else {
                     localStorage.removeItem(AUTOSAVE_KEY)
@@ -169,13 +188,14 @@ export default function EditArticle() {
         const interval = setInterval(() => {
             if (title || content || summary) {
                 localStorage.setItem(AUTOSAVE_KEY, JSON.stringify({
-                    title, slug, content, summary, category
+                    title, slug, content, summary, category, isSponsored, sponsorName, contributorName,
+                    holdExternalLinks, hideFromListings, noindex
                 }))
                 setLastAutosaved(new Date())
             }
         }, 10000)
         return () => clearInterval(interval)
-    }, [title, slug, content, summary, category, pageLoading, AUTOSAVE_KEY])
+    }, [title, slug, content, summary, category, isSponsored, sponsorName, contributorName, holdExternalLinks, hideFromListings, noindex, pageLoading, AUTOSAVE_KEY])
 
     const handleTitleChange = (val: string) => {
         setTitle(val)
@@ -338,8 +358,8 @@ export default function EditArticle() {
     }
 
     const handleSave = async (publishedAtValue: string | null) => {
-        if (!title.trim() || !category || !summary.trim()) {
-            setError('Title, category, and summary are required.')
+        if (!title.trim() || !summary.trim()) {
+            setError('Title and summary are required.')
             return
         }
 
@@ -364,6 +384,12 @@ export default function EditArticle() {
                     seo_description: seoDescription.trim() || null,
                     published_at: publishedAtValue,
                     is_featured: isFeatured,
+                    is_sponsored: isSponsored,
+                    sponsor_name: isSponsored ? sponsorName.trim() || null : null,
+                    contributor_name: isSponsored ? contributorName.trim() || null : null,
+                    hold_external_links: isSponsored && holdExternalLinks,
+                    hide_from_listings: hideFromListings,
+                    noindex,
                     key_change: keyChange.trim() || null,
                     key_changes: keyChanges.filter(k => k.trim()).length > 0 ? keyChanges.filter(k => k.trim()) : null,
                     effective_date: effectiveDate || null,
@@ -489,16 +515,30 @@ export default function EditArticle() {
 
                         {/* Category */}
                         <div>
-                            <label className="block text-sm font-bold text-slate-900  mb-1">Regulator / Category <span className="text-red-500">*</span></label>
+                                <label className="block text-sm font-bold text-slate-900  mb-1">Regulator / Category <span className="text-xs font-normal text-slate-500">(optional)</span></label>
                             <select
                                 value={category}
                                 onChange={(e) => setCategory(e.target.value)}
                                 className="w-full border border-slate-300  rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-none text-slate-900 bg-white bg-slate-50"
                             >
-                                <option value="" disabled>Select a category...</option>
-                                {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
-                            </select>
-                        </div>
+                                    <option value="">No category</option>
+                                    {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                                </select>
+                            </div>
+                            <SponsoredSettings
+                                isSponsored={isSponsored}
+                                sponsorName={sponsorName}
+                                contributorName={contributorName}
+                                holdExternalLinks={holdExternalLinks}
+                                hideFromListings={hideFromListings}
+                                noindex={noindex}
+                                onIsSponsoredChange={setIsSponsored}
+                                onSponsorNameChange={setSponsorName}
+                                onContributorNameChange={setContributorName}
+                                onHoldExternalLinksChange={setHoldExternalLinks}
+                                onHideFromListingsChange={setHideFromListings}
+                                onNoindexChange={setNoindex}
+                            />
                     </div>
 
                     {/* Summary */}

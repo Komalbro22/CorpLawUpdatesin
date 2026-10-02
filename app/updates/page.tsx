@@ -89,6 +89,7 @@ export default async function UpdatesPage({
                 let query = supabase
                     .from('updates')
                     .select(UPDATE_LIST_COLUMNS, { count: 'exact' })
+                    .eq('hide_from_listings', false)
                     .not('published_at', 'is', null)
                     .lte('published_at', new Date().toISOString())
                     .order('published_at', { ascending: false })
@@ -119,6 +120,7 @@ export default async function UpdatesPage({
             const { data } = await supabase
                 .from('updates')
                 .select(UPDATE_LIST_COLUMNS)
+                .eq('hide_from_listings', false)
                 .not('published_at', 'is', null)
                 .lte('published_at', new Date().toISOString())
                 .order('published_at', { ascending: false })

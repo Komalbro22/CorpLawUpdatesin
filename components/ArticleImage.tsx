@@ -26,7 +26,7 @@ export default function ArticleImage({ src, alt, category, priority = false, cla
   const [isLoading, setIsLoading] = useState(true)
   const [imageSrc, setImageSrc] = useState(src)
 
-  const catKey = (category || 'MCA').toUpperCase()
+  const catKey = category ? category.toUpperCase() : 'CORPORATE LAW'
   const theme = REGULATOR_THEMES[catKey] || { bg: 'from-navy via-slate-900 to-slate-950', icon: Newspaper, label: 'Corporate Law Update' }
   const IconComponent = theme.icon
 
@@ -39,7 +39,7 @@ export default function ArticleImage({ src, alt, category, priority = false, cla
             <IconComponent className="w-6 h-6" />
           </div>
           <span className="text-xs font-bold uppercase tracking-[0.18em] text-amber-300/90 font-heading">
-            {catKey} OFFICIAL GAZETTE BRIEF
+            {category ? `${catKey} OFFICIAL GAZETTE BRIEF` : 'CORPORATE LAW UPDATE'}
           </span>
           <span className="text-[11px] font-medium text-slate-300 line-clamp-1 max-w-[90%]">
             {theme.label}

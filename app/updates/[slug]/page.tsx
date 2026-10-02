@@ -52,7 +52,7 @@ export async function generateMetadata(
   
   const { data: update } = await supabase
     .from('updates')
-    .select('title, summary, category, published_at, updated_at, tags, slug, seo_title, seo_description, content, featured_image_url')
+    .select('title, summary, category, published_at, updated_at, tags, slug, seo_title, seo_description, content, featured_image_url, noindex, is_sponsored, contributor_name')
     .ilike('slug', decodedSlug)
     .single()
 
@@ -92,15 +92,17 @@ export async function generateMetadata(
       'corporate law India',
       'CS professional',
       'compliance India',
-      update.category + ' circular 2026',
-    ],
-    authors: [{ name: EDITORIAL_AUTHOR.name, url: EDITORIAL_AUTHOR.url }],
+      update.category ? update.category + ' circular 2026' : null,
+    ].filter(Boolean) as string[],
+    authors: update.is_sponsored && update.contributor_name
+      ? [{ name: update.contributor_name }]
+      : [{ name: EDITORIAL_AUTHOR.name, url: EDITORIAL_AUTHOR.url }],
     alternates: { canonical: canonicalUrl },
     robots: {
-      index: true,
+      index: !update.noindex,
       follow: true,
       googleBot: {
-        index: true,
+        index: !update.noindex,
         follow: true,
         'max-image-preview': 'large',
         'max-snippet': -1,
@@ -114,7 +116,7 @@ export async function generateMetadata(
       type: 'article',
       publishedTime: update.published_at || undefined,
       modifiedTime: update.updated_at || update.published_at || undefined,
-      section: update.category,
+      section: update.category || undefined,
       tags: update.tags || [],
       images: [{ url: imageUrl, width: 1200, height: 630, alt: update.title }],
     },
@@ -153,15 +155,18 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
     // These fields are now included in UPDATE_DETAIL_COLUMNS — no second query needed
     const geoData = update;
 
-    const { data: relatedRes } = await supabase
-        .from('updates')
-        .select(UPDATE_LIST_COLUMNS)
-        .eq('category', update.category)
-        .neq('slug', update.slug)
-        .not('published_at', 'is', null)
-        .lte('published_at', new Date().toISOString())
-        .order('published_at', { ascending: false })
-        .limit(3)
+    const { data: relatedRes } = update.category
+      ? await supabase
+          .from('updates')
+          .select(UPDATE_LIST_COLUMNS)
+          .eq('category', update.category)
+          .eq('hide_from_listings', false)
+          .neq('slug', update.slug)
+          .not('published_at', 'is', null)
+          .lte('published_at', new Date().toISOString())
+          .order('published_at', { ascending: false })
+          .limit(3)
+      : { data: [] }
 
     const related = relatedRes || []
 
@@ -227,6 +232,12 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
 
     const articleUrl = `https://www.corplawupdates.in/updates/${update.slug}`
     const imageUrl = update.featured_image_url || extractFirstImage(update.content || '')
+    const breadcrumbItems = [
+      { name: 'Home', url: 'https://www.corplawupdates.in' },
+      { name: 'Updates', url: 'https://www.corplawupdates.in/updates' },
+      ...(update.category ? [{ name: `${update.category.toUpperCase()} Updates`, url: `https://www.corplawupdates.in/category/${update.category.toLowerCase()}` }] : []),
+      { name: update.title, url: articleUrl },
+    ]
 
     // Auto-extract FAQs for Search Console Rich Results
     const faqs: { question: string; answer: string }[] = []
@@ -353,7 +364,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
             <ArticleContextTool 
                 title={update.title}
                 summary={update.summary}
-                category={update.category}
+                category={update.category || ''}
                 published_at={update.published_at}
                 tags={tagsList}
                 slug={update.slug}
@@ -367,22 +378,19 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                 <ViewCounter slug={update.slug} />
 
             {/* Breadcrumb JSON-LD */}
-            <BreadcrumbJsonLd items={[
-              { name: 'Home',    url: 'https://www.corplawupdates.in' },
-              { name: 'Updates', url: 'https://www.corplawupdates.in/updates' },
-              { name: `${update.category.toUpperCase()} Updates`, url: `https://www.corplawupdates.in/category/${update.category.toLowerCase()}` },
-              { name: update.title, url: articleUrl },
-            ]} />
+            <BreadcrumbJsonLd items={breadcrumbItems} />
 
             {/* 1. BREADCRUMB NAV */}
             <nav className="mb-7 flex flex-wrap items-center gap-1.5 text-sm text-slate-600 dark:text-slate-400 print:hidden" aria-label="Breadcrumb">
                 <Link href="/" className="hover:text-amber-700 dark:hover:text-amber-400 transition-colors font-medium">Home</Link>
                 <span className="text-slate-300 dark:text-slate-700">/</span>
                 <Link href="/updates" className="hover:text-amber-700 dark:hover:text-amber-400 transition-colors font-medium">Updates</Link>
-                <span className="text-slate-300 dark:text-slate-700">/</span>
-                <Link href={`/category/${update.category.toLowerCase()}`} className="hover:text-amber-700 dark:hover:text-amber-400 transition-colors font-medium">
-                    {update.category.toUpperCase()}
-                </Link>
+                {update.category && <>
+                    <span className="text-slate-300 dark:text-slate-700">/</span>
+                    <Link href={`/category/${update.category.toLowerCase()}`} className="hover:text-amber-700 dark:hover:text-amber-400 transition-colors font-medium">
+                        {update.category.toUpperCase()}
+                    </Link>
+                </>}
                 <span className="text-slate-300 dark:text-slate-700">/</span>
                 <span className="text-navy dark:text-slate-200 font-medium truncate max-w-[240px]">
                     {update.title.length > 45 ? update.title.substring(0, 45) + '...' : update.title}
@@ -393,21 +401,27 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
             <header className="mb-8">
                 {/* Signature Gazette Ledger Rail Accent */}
                 <GazetteLedgerRail
-                    category={update.category}
+                    category={update.category || 'UPDATE'}
                     sectionRef={update.source_name || undefined}
                     isMandatory={update.impact_level === 'high'}
                     className="mb-4"
                 />
 
+                {update.is_sponsored && <div className="mb-4 rounded-xl border border-violet-200 bg-violet-50 p-4 text-sm text-violet-950 dark:border-violet-900 dark:bg-violet-950/30 dark:text-violet-100">
+                    <span className="inline-flex rounded-md bg-violet-700 px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-white">Sponsored</span>
+                    {update.sponsor_name && <p className="mt-2 font-semibold">Sponsored by {update.sponsor_name}</p>}
+                    <p className="mt-2">This is a sponsored article. CorpLawUpdates does not necessarily endorse the views or services mentioned. This is general information, not legal advice.</p>
+                </div>}
+
                 <div className="mb-4 flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2 min-w-0">
-                        <CategoryBadge category={update.category as any} />
-                        <Link 
+                    <div className="flex items-center gap-2 min-w-0"
+                        {update.category && <CategoryBadge category={update.category as any} />}
+                        {update.category && <Link
                             href={`/category/${update.category.toLowerCase()}`}
                             className="text-xs font-bold text-slate-700 dark:text-slate-300 hover:text-amber-700 transition-colors uppercase tracking-wider truncate"
                         >
                             {update.category.toUpperCase()} updates
-                        </Link>
+                        </Link>}
                     </div>
                     {/* Font size toggle - client island */}
                     <div className="shrink-0">
@@ -429,9 +443,15 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                                 <span className="flex size-8 items-center justify-center rounded-full bg-navy dark:bg-slate-800 text-white font-bold text-xs shrink-0 border border-slate-700">KS</span>
                                 <div className="min-w-0 flex-1">
                                     <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
-                                        <Link href="/author/komalpreet-singh" className="font-bold text-slate-800 dark:text-slate-200 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
-                                            {EDITORIAL_LEAD.name}
-                                        </Link>
+                                        {update.is_sponsored ? (
+                                            <span className="font-bold text-slate-800 dark:text-slate-200">
+                                                {update.contributor_name || 'Sponsored contributor'}
+                                            </span>
+                                        ) : (
+                                            <Link href="/author/komalpreet-singh" className="font-bold text-slate-800 dark:text-slate-200 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+                                                {EDITORIAL_LEAD.name}
+                                            </Link>
+                                        )}
                                         <span className="text-slate-400 dark:text-slate-600">·</span>
                                         <Link href="/editorial-policy" className="font-medium text-slate-600 dark:text-slate-400 hover:text-amber-700 dark:hover:text-amber-400 transition-colors truncate">
                                             {desk.name}
@@ -697,7 +717,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                 {update.content && <TableOfContents content={update.content} />}
                 <ErrorBoundary>
                     <div className="article-content" suppressHydrationWarning>
-                        <MarkdownRenderer content={contentPart1} enableGazetteDownloadPrompt />
+                        <MarkdownRenderer content={contentPart1} enableGazetteDownloadPrompt sponsoredLinks={!!update.is_sponsored} holdExternalLinks={!!update.hold_external_links} />
                         
                         {relatedForm && (
                             <div className="my-10 bg-[#0F172A] rounded-[12px] p-8 flex flex-col items-center text-center shadow-lg border border-slate-800 clear-both">
@@ -745,12 +765,12 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                             </div>
                         )}
                         
-                        {contentPart2 && <MarkdownRenderer content={contentPart2} enableGazetteDownloadPrompt />}
+                        {contentPart2 && <MarkdownRenderer content={contentPart2} enableGazetteDownloadPrompt sponsoredLinks={!!update.is_sponsored} holdExternalLinks={!!update.hold_external_links} />}
                     </div>
                 </ErrorBoundary>
 
                 {/* E-E-A-T Editorial Desk Card */}
-                <EditorialAuthorCard category={update.category} articleTitle={update.title} />
+                <EditorialAuthorCard category={update.category || undefined} articleTitle={update.title} />
 
                 {/* Statutory Legal Disclaimer Box (E-E-A-T & Regulatory Compliance) */}
                 <div className="my-6 rounded-2xl border border-amber-300/80 dark:border-amber-700/60 bg-amber-50/70 dark:bg-amber-950/20 p-5 sm:p-6 text-xs text-amber-950 dark:text-amber-200 leading-relaxed shadow-sm">
@@ -856,11 +876,11 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
             <div className="mt-8 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-5 print:hidden">
                 <h2 className="mb-3 flex items-center gap-2 text-sm font-bold text-navy dark:text-white">
                     <BookOpen className="h-4 w-4 text-amber-600" aria-hidden />
-                    Browse More {update.category.toUpperCase()} Updates
+                    {update.category ? `Browse More ${update.category.toUpperCase()} Updates` : 'Browse More Updates'}
                 </h2>
                 <div className="flex flex-wrap gap-2">
                     {[
-                        { label: `All ${update.category.toUpperCase()} Updates`, href: `/category/${update.category.toLowerCase()}` },
+                        ...(update.category ? [{ label: `All ${update.category.toUpperCase()} Updates`, href: `/category/${update.category.toLowerCase()}` }] : []),
                         { label: 'All Updates', href: '/updates' },
                         { label: 'Compliance Calendar', href: '/calendar' },
                         { label: 'Newsletter', href: '/newsletter' },
@@ -890,7 +910,11 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
               url: articleUrl,
               datePublished: toISTOffset(update.published_at),
               dateModified: toISTOffset(update.updated_at || update.published_at),
-              author: getArticleAuthorSchema(update.category),
+              author: update.is_sponsored
+                ? (update.contributor_name
+                    ? { '@type': 'Person', name: update.contributor_name }
+                    : { '@type': 'Organization', name: 'CorpLawUpdates.in' })
+                : getArticleAuthorSchema(update.category),
               publisher: {
                 '@type': 'Organization',
                 name: 'CorpLawUpdates.in',
@@ -902,8 +926,8 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
               keywords: [
                 ...(update.tags || []),
                 update.category,
-                `${update.category} circular`,
-                `${update.category} notification`,
+                update.category ? `${update.category} circular` : null,
+                update.category ? `${update.category} notification` : null,
                 'India corporate law',
               ].join(', '),
               inLanguage: 'en-IN',
@@ -941,7 +965,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                     position: (update.key_change ? 2 : 1) + i,
                     name: stripHtml(kc),
                   })) || [])
-                ],
+              ].filter(Boolean),
               }} />
             )}
             {/* 10. FAQ SCHEMA — for Google Search Console Rich Results */}

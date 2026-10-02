@@ -8,7 +8,7 @@ interface UpdateRecord {
   title: string
   slug: string
   summary: string
-  category: string
+  category: string | null
   published_at: string
   impact_level: string
   key_change: string
@@ -84,6 +84,7 @@ export async function GET(request: Request) {
         'published_at, impact_level, key_change'
       )
       .not('published_at', 'is', null)
+      .eq('hide_from_listings', false)
       .lte('published_at', new Date().toISOString())
 
     if (category) {
@@ -111,6 +112,7 @@ export async function GET(request: Request) {
           'published_at, impact_level, key_change'
         )
         .not('published_at', 'is', null)
+        .eq('hide_from_listings', false)
         .lte('published_at', new Date().toISOString())
         .or(`title.ilike.%${escapedQ}%,summary.ilike.%${escapedQ}%,key_change.ilike.%${escapedQ}%`)
 
@@ -134,7 +136,7 @@ export async function GET(request: Request) {
       title: a.title,
       slug: a.slug,
       summary: a.summary,
-      category: a.category,
+      category: a.category || 'Update',
       date: a.published_at,
       impact: a.impact_level,
       url: `/updates/${a.slug}`,

@@ -139,6 +139,7 @@ export default async function HomePage() {
   const latestQuery = supabase
     .from('updates')
     .select(UPDATE_LIST_COLUMNS)
+    .eq('hide_from_listings', false)
     .not('published_at', 'is', null)
     .lte('published_at', new Date().toISOString())
     .order('published_at', { ascending: false })
@@ -148,6 +149,7 @@ export default async function HomePage() {
     supabase
       .from('updates')
       .select(UPDATE_LIST_COLUMNS)
+      .eq('hide_from_listings', false)
       .eq('is_featured', true)
       .not('published_at', 'is', null)
       .lte('published_at', new Date().toISOString())
@@ -157,6 +159,7 @@ export default async function HomePage() {
     supabase
       .from('updates')
       .select(UPDATE_LIST_COLUMNS)
+      .eq('hide_from_listings', false)
       .not('published_at', 'is', null)
       .lte('published_at', new Date().toISOString())
       .gte('published_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
@@ -184,6 +187,7 @@ export default async function HomePage() {
     let fallbackQuery = supabase
       .from('updates')
       .select(UPDATE_LIST_COLUMNS)
+      .eq('hide_from_listings', false)
       .not('published_at', 'is', null)
       .lte('published_at', new Date().toISOString())
       

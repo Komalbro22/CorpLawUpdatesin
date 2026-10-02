@@ -10,6 +10,7 @@ export async function GET(req: NextRequest) {
   let query = supabase
     .from('updates')
     .select('id, slug, title, summary, category, published_at')
+    .eq('hide_from_listings', false)
     .order('published_at', { ascending: false })
     .limit(limit);
 

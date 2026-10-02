@@ -3,7 +3,7 @@ import { Database } from './supabase'
 export type Category = 'MCA' | 'SEBI' | 'RBI' | 'NCLT' | 'IBC' | 'FEMA' | 'CCI' | 'LABOUR' | 'IFSCA'
 
 export interface Update extends Omit<Database['public']['Tables']['updates']['Row'], 'category' | 'key_changes' | 'sources' | 'impact_level'> {
-    category: Category
+    category: Category | null
     key_changes: string[] | null
     sources: { name: string; url: string }[] | null
     impact_level: 'high' | 'medium' | 'low' | null
@@ -26,6 +26,9 @@ export type UpdateListItem = Pick<
     | 'views'
     | 'tags'
     | 'reading_time'
+    | 'is_sponsored'
+    | 'sponsor_name'
+    | 'hide_from_listings'
 > & { content?: string | null }
 
 export interface Subscriber {

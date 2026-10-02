@@ -452,7 +452,7 @@ export type Database = {
       }
       updates: {
         Row: {
-          category: string
+          category: string | null
           content: string | null
           created_at: string | null
           effective_date: string | null
@@ -475,9 +475,15 @@ export type Database = {
           updated_at: string | null
           views: number | null
           reading_time: number | null
+          is_sponsored: boolean
+          sponsor_name: string | null
+          contributor_name: string | null
+          hold_external_links: boolean
+          hide_from_listings: boolean
+          noindex: boolean
         }
         Insert: {
-          category: string
+          category?: string | null
           content?: string | null
           created_at?: string | null
           effective_date?: string | null
@@ -500,9 +506,15 @@ export type Database = {
           updated_at?: string | null
           views?: number | null
           reading_time?: number | null
+          is_sponsored?: boolean
+          sponsor_name?: string | null
+          contributor_name?: string | null
+          hold_external_links?: boolean
+          hide_from_listings?: boolean
+          noindex?: boolean
         }
         Update: {
-          category?: string
+          category?: string | null
           content?: string | null
           created_at?: string | null
           effective_date?: string | null
@@ -525,6 +537,12 @@ export type Database = {
           updated_at?: string | null
           views?: number | null
           reading_time?: number | null
+          is_sponsored?: boolean
+          sponsor_name?: string | null
+          contributor_name?: string | null
+          hold_external_links?: boolean
+          hide_from_listings?: boolean
+          noindex?: boolean
         }
         Relationships: []
       }

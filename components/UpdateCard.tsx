@@ -35,7 +35,7 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
     3 * 24 * 60 * 60 * 1000
   )
 
-  const borderColor = categoryBorderColor[update.category as string] || 'border-t-slate-300'
+  const borderColor = categoryBorderColor[update.category || ''] || 'border-t-slate-300'
 
   const impactStyles: Record<string, string> = {
     high: 'bg-red-100 text-red-800 dark:bg-red-950/50 dark:text-red-300 border border-red-200',
@@ -59,7 +59,7 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
         <ArticleImage
           src={imageUrl}
           alt={update.title}
-          category={update.category}
+          category={update.category || 'UPDATE'}
           priority={priority}
         />
       </span>
@@ -67,13 +67,18 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
       <span className="block p-5 flex flex-col flex-1">
         {/* Signature Gazette Ledger Rail */}
         <GazetteLedgerRail
-          category={update.category}
+          category={update.category || 'UPDATE'}
           sectionRef={update.source_name || undefined}
           isMandatory={update.impact_level === 'high'}
         />
 
         <span className="mb-3 flex items-center gap-2 flex-wrap">
-          <CategoryBadge category={update.category} />
+          {update.category && <CategoryBadge category={update.category} />}
+          {update.is_sponsored && (
+            <span className="rounded-md bg-violet-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-violet-800 ring-1 ring-violet-200 dark:bg-violet-950/50 dark:text-violet-300 dark:ring-violet-900">
+              Sponsored
+            </span>
+          )}
           {isNew && (
             <span className="badge-pulse rounded-md bg-amber-100 dark:bg-amber-900/30 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-900 dark:text-amber-400 ring-1 ring-amber-300 dark:ring-amber-900/50">
               New
