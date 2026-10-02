@@ -8,6 +8,8 @@ export interface DocumentTemplateRecord {
   slug: string
   description: string
   category: string
+  template_content: string
+  ai_system_prompt: string
   regulation_reference?: string
   source?: string
   last_verified?: string
@@ -27,7 +29,7 @@ export const getCachedDocumentTemplate = unstable_cache(
     try {
       const { data, error } = await client
         .from('document_templates')
-        .select('id, name, slug, description, category, regulation_reference, source, last_verified, is_free, is_active, usage_count, tags, fields')
+        .select('id, name, slug, description, category, template_content, ai_system_prompt, regulation_reference, source, last_verified, is_free, is_active, usage_count, tags, fields')
         .eq('slug', slug)
         .eq('is_active', true)
         .single()
