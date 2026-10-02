@@ -544,16 +544,15 @@ export const POST_INCORPORATION_CHECKLIST: ComplianceMilestone[] = [
   },
   {
     id: 'adt1',
-    dayWindow: 'Within 15 days of Board Meeting',
-    deadline: 'Strictly 15 days from Auditor Appointment',
-    action: 'File Form ADT-1 (First Auditor Appointment)',
+    dayWindow: 'Check current MCA instructions for the appointment type',
+    deadline: 'No universal first-auditor ADT-1 deadline is stated here',
+    action: 'Check whether ADT-1 is required for the auditor appointment',
     form: 'ADT-1',
-    statutorySection: 'Section 139(6) read with Rule 4(2)',
+    statutorySection: 'Section 139(1) / Rule 4(2); first auditor: Section 139(6)',
     section: 'Section 139(6)',
-    daysFromIncorporation: 30,
-    penaltySummary: 'Table B multipliers (1x to 12x normal fee); default triggers Section 147 fines (₹25k–₹5L).',
+    penaltySummary: 'Filing requirement and applicable deadline depend on the appointment type; verify current MCA instructions.',
     toolUrl: '/tools/fee-calculator/companies/adt-1',
-    isCritical: true
+    isCritical: false
   },
   {
     id: 'share_certificates',

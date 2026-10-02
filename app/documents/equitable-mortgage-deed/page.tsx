@@ -232,7 +232,7 @@ export default function EquitableMortgagePage() {
                 Companies Act Sec 77 (CHG-1)
               </span>
               <span className="px-3 py-1 rounded-full text-xs font-bold bg-purple-100 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
-                SARFAESI Act Ready
+                SARFAESI Reference Included
               </span>
             </div>
 
@@ -241,7 +241,7 @@ export default function EquitableMortgagePage() {
             </h1>
 
             <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-4xl leading-relaxed">
-              Generate an official, bank-vetted Memorandum of Deposit of Title Deeds (MODT) evidencing creation of an Equitable Mortgage in India. Includes First Schedule Title Deeds checklist, Second Schedule property boundaries, Mortgagor Affidavit, Bank Covering Letter, and Form CHG-1 corporate borrowing resolution.
+              Prepare an editable MODT draft for professional and lender review. The template includes a title-deeds checklist, property-description schedule, mortgagor affidavit, draft bank covering letter, and a related Form CHG-1 board-resolution format. Stamp duty, registration, execution, and lender requirements depend on the transaction and state; verify them before use.
             </p>
           </div>
 
@@ -765,7 +765,7 @@ export default function EquitableMortgagePage() {
             <div>
               <h3 className="text-base font-bold">Availing a Commercial Bank Loan or Overdraft?</h3>
               <p className="text-xs text-slate-300 mt-1 max-w-xl">
-                Draft your Board Resolution under Section 179(3)(d), calculate Section 180(1)(c) statutory borrowing limits, and generate official Bank Covering Letters in minutes.
+                Draft your Board Resolution under Section 179(3)(d), review Section 180(1)(c) borrowing limits, and prepare a bank covering-letter draft for review.
               </p>
             </div>
             <Link

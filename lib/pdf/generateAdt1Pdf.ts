@@ -141,7 +141,7 @@ export function generateAdt1Pdf(data: Adt1PdfData): jsPDF {
     ],
     [
       'STP Processing & Date Validation',
-      'Form ADT-1 may be processed under Straight-Through-Process (STP) subject to MCA V3 back-office system validations. Strict accuracy of meeting dates is required.'
+      'MCA processing and validation status are determined by the MCA system and its current rules. This estimate cannot guarantee STP processing or approval; report the actual appointment date.'
     ],
     [
       'Mandatory Attachment 1: Auditor Written Consent',

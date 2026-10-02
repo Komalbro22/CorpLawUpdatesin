@@ -924,7 +924,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
               <span>STP Workflow</span>
             </div>
             <p className="text-xs text-slate-300 leading-relaxed">
-              Form ADT-1 may be processed under Straight-Through-Process (STP) subject to MCA V3 back-office system validations once the statutory e-Challan is paid.
+              MCA processing and validation status are determined by the MCA system and its current rules; this tool cannot guarantee STP processing or approval.
             </p>
           </div>
         </div>

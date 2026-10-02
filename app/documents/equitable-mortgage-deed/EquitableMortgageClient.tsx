@@ -1403,7 +1403,7 @@ export default function EquitableMortgageClient() {
           <div className="pt-6 mt-6 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
               <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-              <span>Section 58(f) TPA & Stamp Act Compliant</span>
+                <span>References Section 58(f) TPA and applicable Stamp Acts</span>
             </div>
             <div className="flex items-center gap-2">
               <button
