@@ -252,8 +252,8 @@ export function generateChg1Pdf(data: Chg1PdfData): jsPDF {
 
   doc.setFontSize(7.5)
   doc.setTextColor(PDF_PALETTE.gray[0], PDF_PALETTE.gray[1], PDF_PALETTE.gray[2])
-  doc.text('Prepared & Verified by:', 14, finalYSign)
-  doc.text('Approved for Filing by:', pageWidth - 70, finalYSign)
+  doc.text('Prepared automatically for reference/estimation.', 14, finalYSign)
+  doc.text('Acknowledged / Filed by:', pageWidth - 70, finalYSign)
 
   doc.setDrawColor(PDF_PALETTE.lightGray[0], PDF_PALETTE.lightGray[1], PDF_PALETTE.lightGray[2])
   doc.line(14, finalYSign + 10, 75, finalYSign + 10)
@@ -262,12 +262,12 @@ export function generateChg1Pdf(data: Chg1PdfData): jsPDF {
   doc.setFontSize(7)
   doc.setTextColor(PDF_PALETTE.navy[0], PDF_PALETTE.navy[1], PDF_PALETTE.navy[2])
   doc.setFont('helvetica', 'bold')
-  doc.text('Practicing CS / CA / Cost Accountant', 14, finalYSign + 14)
+  doc.text('Professional review: Not performed', 14, finalYSign + 14)
   doc.text('Authorized Director / MD / Secretary', pageWidth - 70, finalYSign + 14)
 
   doc.setFont('helvetica', 'normal')
   doc.setTextColor(PDF_PALETTE.gray[0], PDF_PALETTE.gray[1], PDF_PALETTE.gray[2])
-  doc.text('Membership / COP Number: _______________', 14, finalYSign + 18)
+  doc.text('CorpLawUpdates.in automated calculation', 14, finalYSign + 18)
   doc.text('DIN / PAN Number: _______________', pageWidth - 70, finalYSign + 18)
 
   // 5. Statutory Disclaimer

@@ -301,10 +301,10 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
 
           <div className="bg-white/80 dark:bg-slate-800/80 p-3.5 rounded-2xl border border-blue-100 dark:border-slate-700/80 space-y-1">
             <span className="font-bold text-emerald-900 dark:text-emerald-300 block">
-              🏢 First Auditor & OPC Mandate
+              🏢 First Auditor &amp; OPC Status
             </span>
             <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Under <strong>G.S.R. 359(E)</strong>, filing ADT-1 is mandatory for the <strong>First Auditor</strong> of newly incorporated companies within 15 days of the Board Meeting.
+              Under <strong>Section 139(6)</strong> and Rule 4(2) as clarified by ICSI guidance, filing Form ADT-1 for the <strong>First Auditor</strong> is not statutorily mandatory, although the revised MCA V3 form includes a field/option for First Auditor.
             </p>
           </div>
         </div>
@@ -901,10 +901,10 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
           <div className="bg-slate-900/80 rounded-2xl p-4 border border-indigo-900/50 space-y-2">
             <div className="flex items-center gap-2 text-indigo-300 font-bold text-xs">
               <Sparkles className="w-4 h-4 text-amber-400" />
-              <span>Mandatory for First Auditor</span>
+              <span>First Auditor Legal Position</span>
             </div>
             <p className="text-xs text-slate-300 leading-relaxed">
-              MCA amended Rule 4(2) to explicitly require filing Form ADT-1 for the First Auditor within <strong>15 days</strong> of the Board Meeting under Section 139(6). The historical ambiguity regarding whether a board resolution alone sufficed is now formally extinguished.
+              Under Section 139(6) of the Companies Act, 2013 and Rule 4(2) of Companies (Audit and Auditors) Rules, 2014, and as clarified by ICSI guidance, filing Form ADT-1 for the appointment of the First Auditor is not statutorily mandatory, although the revised MCA V3 form includes a field/option for First Auditor.
             </p>
           </div>
 
@@ -914,17 +914,17 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
               <span>Prohibition of Backdating</span>
             </div>
             <p className="text-xs text-slate-300 leading-relaxed">
-              MCA V3 portal enforces automated date validations preventing retrospective appointment dates. Failure to file ADT-1 locks auditor PAN validation and prevents subsequent annual filing forms (AOC-4 & MGT-7).
+              MCA V3 portal enforces automated date validations preventing retrospective appointment dates. Timely filing facilitates seamless compliance linkage in subsequent annual filings (AOC-4 &amp; MGT-7).
             </p>
           </div>
 
           <div className="bg-slate-900/80 rounded-2xl p-4 border border-indigo-900/50 space-y-2">
             <div className="flex items-center gap-2 text-indigo-300 font-bold text-xs">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>STP Auto-Approval Workflow</span>
+              <span>STP Workflow</span>
             </div>
             <p className="text-xs text-slate-300 leading-relaxed">
-              Form ADT-1 processes via <strong>Straight Through Process (STP)</strong>. Once the e-Challan is paid, the MCA system automatically approves the filing and updates company master records without manual ROC review.
+              Form ADT-1 may be processed under Straight-Through-Process (STP) subject to MCA V3 back-office system validations once the statutory e-Challan is paid.
             </p>
           </div>
         </div>
@@ -1070,9 +1070,9 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
           </h3>
           <div className="grid grid-cols-2 gap-3 text-[11px]">
             <div className="border border-slate-200 rounded p-2.5 bg-slate-50">
-              <p className="font-bold text-slate-900 mb-1">Notification G.S.R. 359(E) (w.e.f. 14-Jul-2025):</p>
+              <p className="font-bold text-slate-900 mb-1">First Auditor Statutory Position:</p>
               <p className="text-slate-600 leading-snug">
-                Filing Form ADT-1 for the First Auditor within 15 days of the Board Meeting is explicitly mandatory. Retroactive dating is blocked on MCA V3.
+                Under Section 139(6) and Rule 4(2) (as clarified by ICSI guidance), filing Form ADT-1 for the First Auditor is not statutorily mandatory, though available as an option on MCA V3.
               </p>
             </div>
             <div className="border border-slate-200 rounded p-2.5 bg-slate-50">
@@ -1080,7 +1080,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
               <p className="text-slate-600 leading-snug">
                 {isCondonation
                   ? 'CRITICAL: Delay exceeds 270 days. Prior condonation approval from Regional Director via Form CG-1 is mandatory before ADT-1 upload.'
-                  : 'Delay is within 270 days. Form ADT-1 is eligible for direct upload and STP auto-approval on the MCA V3 portal.'}
+                  : 'Delay is within 270 days. Form ADT-1 is eligible for upload under STP processing subject to MCA V3 system validations.'}
               </p>
             </div>
           </div>
@@ -1099,14 +1099,11 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
         {/* Section 4: Signature / Verification Block */}
         <div className="pt-4 border-t border-slate-300 mt-6 grid grid-cols-2 gap-8 text-xs">
           <div>
-            <p className="text-slate-500 mb-8">Prepared &amp; Verified By:</p>
-            <div className="border-t border-slate-400 pt-1">
-              <p className="font-bold text-slate-900">Practicing Company Secretary / Auditor</p>
-              <p className="text-[10px] text-slate-500">Membership / COP No.: _____________________</p>
-            </div>
+            <p className="text-slate-500 mb-1">Prepared automatically by CorpLawUpdates.in for estimation/reference purposes.</p>
+            <p className="text-slate-600 font-medium">Professional review: Not performed by CorpLawUpdates.in.</p>
           </div>
           <div className="text-right">
-            <p className="text-slate-500 mb-8">Approved for Filing By:</p>
+            <p className="text-slate-500 mb-8">Acknowledged / Filed By:</p>
             <div className="border-t border-slate-400 pt-1">
               <p className="font-bold text-slate-900">Director / Managing Director / CS</p>
               <p className="text-[10px] text-slate-500">DIN / PAN No.: _____________________</p>

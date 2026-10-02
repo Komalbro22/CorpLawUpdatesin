@@ -161,12 +161,12 @@ export default function GooglePreferredSourceButton({
 
                             {/* Headline */}
                             <h3 className="font-heading text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight leading-snug">
-                                Get Corporate Law Updates First on Google
+                                Add CorpLawUpdates.in to Google Preferred Sources
                             </h3>
 
                             {/* Description */}
                             <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed">
-                                Add <strong className="font-semibold text-slate-900 dark:text-white">CorpLawUpdates.in</strong> as your Preferred Source on Google to see verified MCA, SEBI, RBI & NCLT circulars prioritized whenever you search.
+                                Add <strong className="font-semibold text-slate-900 dark:text-white">CorpLawUpdates.in</strong> to your Google Preferred Sources to see verified MCA, SEBI, RBI & NCLT circulars prioritized when searching on Google.
                             </p>
 
                             {/* Subtle Trust & Search Preview Indicator */}
@@ -174,7 +174,7 @@ export default function GooglePreferredSourceButton({
                                 <span className="inline-flex items-center justify-center size-4 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 font-bold text-[10px]">
                                     ✓
                                 </span>
-                                <span>Official Google Search personalization · 1-click add · No sign-in required</span>
+                                <span>Google Search personalization feature · 1-click add · No sign-in required</span>
                             </div>
                         </div>
 
@@ -203,7 +203,7 @@ export default function GooglePreferredSourceButton({
                                 </span>
 
                                 <span className="whitespace-nowrap font-medium">
-                                    {clicked ? 'Opening Google Preferences...' : 'Add to Google Preferred Sources'}
+                                    {clicked ? 'Opening Google Preferences...' : 'Add CorpLawUpdates.in to Google Preferred Sources'}
                                 </span>
 
                                 {clicked ? (
@@ -240,11 +240,11 @@ export default function GooglePreferredSourceButton({
                     href={GOOGLE_PREFERENCE_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    title="Add CorpLawUpdates.in as your Preferred Source in Google Search"
+                    title="Add CorpLawUpdates.in to Google Preferred Sources"
                     className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold shadow-xs transition-all hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400 active:scale-95"
                 >
                     <GoogleIcon className="w-3.5 h-3.5 shrink-0" />
-                    <span>Follow on Google</span>
+                    <span>Add to Google Preferred Sources</span>
                 </a>
             </div>
         )
@@ -260,7 +260,7 @@ export default function GooglePreferredSourceButton({
                 className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400/50 text-slate-200 text-xs font-semibold transition-all group"
             >
                 <GoogleIcon className="w-4 h-4 shrink-0" />
-                <span>Follow on Google Preferred Sources</span>
+                <span>Add CorpLawUpdates.in to Google Preferred Sources</span>
                 <ExternalLink className="w-3.5 h-3.5 text-slate-400 group-hover:text-white transition-colors" />
             </a>
         </div>

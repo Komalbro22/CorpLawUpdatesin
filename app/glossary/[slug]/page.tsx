@@ -72,23 +72,86 @@ function extractFaqsFromContent(content: string): { q: string; a: string }[] {
   return faqs;
 }
 
+const AGM_STATUTORY_RULE = "Under Section 96(1) of the Companies Act, 2013, the First AGM must be held within 9 months from the closing of the first financial year; subsequent AGMs must be held within 6 months from the closing of the financial year (and not later than 15 months from the previous AGM)."
+
+function getAgmFallbackTerm(slug: string) {
+  return {
+    term: 'Annual General Meeting (AGM)',
+    slug: slug,
+    definition: `An Annual General Meeting (AGM) is a mandatory yearly gathering of a company's shareholders and directors to review financial statements and statutory affairs. ${AGM_STATUTORY_RULE}`,
+    category: 'MCA',
+    keywords: ['AGM', 'Annual General Meeting', 'Section 96', 'Companies Act 2013', 'First AGM', 'Subsequent AGM', 'MCA'],
+    extended_note: `<!-- METADATA {"seo_title": "AGM (Annual General Meeting) — Section 96 Rules & Timelines", "seo_description": "Under Section 96(1) of the Companies Act 2013, First AGM must be held within 9 months of FY end; subsequent AGMs within 6 months. Detailed statutory analysis."} METADATA -->
+
+## Statutory Framework: Section 96 of Companies Act, 2013
+
+Every company other than an One Person Company (OPC) is statutorily required to hold an Annual General Meeting in each calendar year.
+
+### Key Statutory Requirements
+- **First AGM Rule**: Under Section 96(1) of the Companies Act, 2013, the First AGM must be held within 9 months from the closing of the first financial year of the company. When a company holds its first AGM within this period, it is not necessary to hold any AGM in the year of incorporation.
+- **Subsequent AGMs**: Must be held within 6 months from the closing of the financial year (typically by 30th September for financial years closing 31st March).
+- **Maximum Inter-Meeting Gap**: The interval between two consecutive AGMs must not exceed 15 months.
+- **ROC Extension**: The Registrar of Companies may grant an extension up to 3 months for subsequent AGMs for special reasons, but cannot extend the First AGM.
+
+<div class="faq-q">What is the statutory deadline for holding the First AGM under Section 96(1)?</div>
+<div class="faq-a">Under Section 96(1) of the Companies Act, 2013, the First AGM must be held within 9 months from the closing of the first financial year. No extension of time can be granted by the Registrar of Companies for the first AGM.</div>
+
+<div class="faq-q">What is the statutory timeline for subsequent AGMs?</div>
+<div class="faq-a">Subsequent AGMs must be held within 6 months from the closing of the financial year (typically 30th September for FY ending 31st March) and not later than 15 months from the date of the previous AGM.</div>
+`,
+    related_terms: ['Board Meeting', 'Extraordinary General Meeting', 'Financial Year'],
+    created_at: '2024-01-01T00:00:00.000Z',
+    is_verified: true,
+    faqs: [
+      {
+        q: 'What is the statutory deadline for holding the First AGM under Section 96(1)?',
+        a: 'Under Section 96(1) of the Companies Act, 2013, the First AGM must be held within 9 months from the closing of the first financial year.'
+      },
+      {
+        q: 'What is the statutory deadline for subsequent AGMs?',
+        a: 'Subsequent AGMs must be held within 6 months from the closing of the financial year (and not later than 15 months from the previous AGM).'
+      }
+    ],
+    synonyms: ['AGM', 'Annual Meeting']
+  }
+}
+
 export async function generateStaticParams() {
   const { data: terms } = await supabase
     .from('glossary')
     .select('slug')
     .eq('is_verified', true)
 
-  return (terms || []).map((term) => ({
+  const slugs = (terms || []).map((term) => ({
     slug: term.slug,
   }))
+
+  const existing = new Set(slugs.map(s => s.slug))
+  if (!existing.has('agm')) slugs.push({ slug: 'agm' })
+  if (!existing.has('annual-general-meeting')) slugs.push({ slug: 'annual-general-meeting' })
+
+  return slugs
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { data: term } = await supabase
+  const resolvedParams = await params
+  const slug = resolvedParams.slug
+  let { data: term } = await supabase
     .from('glossary')
     .select('term, slug, definition, extended_note')
-    .eq('slug', (await params).slug)
+    .eq('slug', slug)
     .single()
+
+  if (slug === 'agm' || slug === 'annual-general-meeting') {
+    if (!term) {
+      term = getAgmFallbackTerm(slug)
+    } else if (!term.definition || !term.definition.includes('within 9 months')) {
+      term = {
+        ...term,
+        definition: term.definition ? `${term.definition.trim()} ${AGM_STATUTORY_RULE}` : AGM_STATUTORY_RULE
+      }
+    }
+  }
 
   if (!term) {
     return { title: 'Term Not Found | CorpLawUpdates' }
@@ -133,12 +196,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function GlossaryTermPage({ params }: Props) {
+  const resolvedParams = await params
+  const slug = resolvedParams.slug
+
   // Fetch detailed term fields including faqs and synonyms
-  const { data: term } = await supabase
+  let { data: term } = await supabase
     .from('glossary')
     .select('term, slug, definition, category, keywords, extended_note, related_terms, created_at, is_verified, faqs, synonyms')
-    .eq('slug', (await params).slug)
+    .eq('slug', slug)
     .single()
+
+  if (slug === 'agm' || slug === 'annual-general-meeting') {
+    if (!term) {
+      term = getAgmFallbackTerm(slug)
+    } else if (!term.definition || !term.definition.includes('within 9 months')) {
+      term = {
+        ...term,
+        definition: term.definition ? `${term.definition.trim()} ${AGM_STATUTORY_RULE}` : AGM_STATUTORY_RULE
+      }
+    }
+  }
 
   if (!term || !term.is_verified) {
     notFound()

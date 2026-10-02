@@ -22,7 +22,7 @@ const categoryConfig = {
     label: 'Board Resolutions',
     icon: '🏛️',
     color: 'bg-blue-50 border-blue-200 text-blue-700 dark:bg-blue-950/30 dark:border-blue-900/50 dark:text-blue-300',
-    description: 'Certified true copies per ICSI Secretarial Standards'
+    description: 'Draft format for preparing a certified true copy where applicable.'
   },
   commercial_contracts: {
     label: 'Commercial Contracts & Deeds',

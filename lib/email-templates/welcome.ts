@@ -162,7 +162,7 @@ export function generateWelcomeEmail({
               <!-- Headline Banner -->
               <div style="margin-top:28px;">
                 <h1 style="margin:0 0 12px 0;font-family:Georgia,'Times New Roman',Times,serif;font-size:26px;font-weight:700;color:#FFFFFF;line-height:1.3;">
-                  Welcome to India's Premier Corporate Law Intelligence Platform
+                  Welcome to CorpLawUpdates.in — Corporate Law Intelligence Platform
                 </h1>
                 <p style="margin:0;font-size:14px;color:#CBD5E1;line-height:1.6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
                   Your subscription is verified and active for <strong style="color:#FFFFFF;">${email}</strong>. Every Monday morning, our editorial desk delivers actionable, practitioner-grade regulatory analysis straight to your inbox.

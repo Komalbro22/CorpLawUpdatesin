@@ -361,7 +361,7 @@ Place: New Delhi`
           Board Resolution for Bank Loan &amp; Credit Facilities Generator
         </h1>
         <p className="text-slate-300 text-sm md:text-base max-w-4xl leading-relaxed">
-          Draft official, bank-ready Certified True Copies of Board Resolutions for Term Loans, Cash Credit (CC), Overdraft (OD), and LC/BG limits. Features real-time Section 180(1)(c) borrowing limit checks, G.S.R. 464(E) private company exemptions, Form CHG-1 charge extracts, and formal Bank Covering Letters in editable Word (.docx) &amp; printable PDF.
+          Draft working formats for preparing bank-ready Certified True Copies of Board Resolutions for Term Loans, Cash Credit (CC), Overdraft (OD), and LC/BG limits. Features real-time Section 180(1)(c) borrowing limit checks, G.S.R. 464(E) private company exemptions, Form CHG-1 charge extracts, and formal Bank Covering Letters in editable Word (.docx) &amp; printable PDF.
         </p>
       </div>
 

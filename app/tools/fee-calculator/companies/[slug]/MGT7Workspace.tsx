@@ -1279,14 +1279,11 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
         {/* Section 4: Signature / Verification Block */}
         <div className="pt-4 border-t border-slate-300 mt-6 grid grid-cols-2 gap-8 text-xs">
           <div>
-            <p className="text-slate-500 mb-8">Prepared &amp; Verified By:</p>
-            <div className="border-t border-slate-400 pt-1">
-              <p className="font-bold text-slate-900">Practicing Company Secretary / Auditor</p>
-              <p className="text-[10px] text-slate-500">Membership / COP No.: _____________________</p>
-            </div>
+            <p className="text-slate-500 mb-1">Prepared automatically by CorpLawUpdates.in for estimation/reference purposes.</p>
+            <p className="text-slate-600 font-medium">Professional review: Not performed by CorpLawUpdates.in.</p>
           </div>
           <div className="text-right">
-            <p className="text-slate-500 mb-8">Approved for Filing By:</p>
+            <p className="text-slate-500 mb-8">Acknowledged / Filed By:</p>
             <div className="border-t border-slate-400 pt-1">
               <p className="font-bold text-slate-900">Director / Managing Director / CS</p>
               <p className="text-[10px] text-slate-500">DIN / PAN No.: _____________________</p>

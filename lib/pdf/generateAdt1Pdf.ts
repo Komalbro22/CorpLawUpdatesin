@@ -136,12 +136,12 @@ export function generateAdt1Pdf(data: Adt1PdfData): jsPDF {
 
   const complianceRows: any[] = [
     [
-      'Notification G.S.R. 359(E) (w.e.f. 14-Jul-2025)',
-      'MCA amended Rule 4(2) to explicitly require Form ADT-1 for the First Auditor within 15 days of Board Meeting under Section 139(6). Ambiguity resolved; backdating prohibited.'
+      'First Auditor Legal Position',
+      'Under Section 139(6) and Rule 4(2) (as clarified by ICSI guidance), filing Form ADT-1 for First Auditor is not statutorily mandatory, although available as an option on MCA V3.'
     ],
     [
-      'STP Auto-Approval & Backdating Prohibition',
-      'Form ADT-1 processes via Straight Through Process (STP). MCA V3 system validates dates and prevents backdated appointments. Strict accuracy of meeting dates is mandatory.'
+      'STP Processing & Date Validation',
+      'Form ADT-1 may be processed under Straight-Through-Process (STP) subject to MCA V3 back-office system validations. Strict accuracy of meeting dates is required.'
     ],
     [
       'Mandatory Attachment 1: Auditor Written Consent',

@@ -232,7 +232,7 @@ export function decodeCIN(cin: string): CINBreakdown | null {
     smallCompanyEligibility: isPublic
       ? '❌ INELIGIBLE (Public Company): Section 2(85) of Companies Act 2013 strictly excludes Public Limited Companies regardless of capital or turnover.'
       : '✅ ELIGIBLE (Subject to Caps): Private Limited Company eligible for Small Company privileges if Paid-Up Capital ≤ ₹4.00 Cr (and Turnover ≤ ₹40.00 Cr). Statutory upper ceiling limit under Sec 2(85) is up to ₹10 Cr capital & ₹100 Cr turnover.',
-    agmDeadline: `Under Section 96(1), Annual General Meeting (AGM) must be held within 6 months from financial year end (by 30th September).`,
+    agmDeadline: `Under Section 96(1) of the Companies Act, 2013, the First AGM must be held within 9 months from the closing of the first financial year; subsequent AGMs must be held within 6 months from the closing of the financial year (by 30th September) and not later than 15 months from the previous AGM.`,
     boardMeetingGap: `Under Section 173(1), minimum 4 board meetings required per calendar year with maximum gap between consecutive meetings ≤ 120 days.`,
     dir3KycDeadline: `Under Rule 12A, universal annual DIR-3 KYC deadline for all active directors is 30th September.`,
     legalCitations: [

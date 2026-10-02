@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import DOMPurify from 'dompurify'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, notFound } from 'next/navigation'
 import { useToast } from '@/components/Toast'
 import { checkMissingClauses, checkLeaseClauses, getImportanceIcon, getImportanceLabel, formatTemplateSource, type ClauseCheck } from '@/lib/document-clause-checker'
 import { markdownToHtml } from '@/lib/markdown'
@@ -1685,12 +1685,7 @@ export default function DocumentGeneratorClient({
   }
 
   if (!template) {
-    return (
-      <div className="min-h-dvh flex flex-col items-center justify-center text-slate-500 p-4">
-        <h1 className="text-xl font-bold text-navy mb-2">Template Not Found</h1>
-        <p className="text-sm">The requested document template could not be located.</p>
-      </div>
-    )
+    notFound()
   }
 
   const inputClass = `w-full border border-slate-300 

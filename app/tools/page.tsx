@@ -471,7 +471,7 @@ export default function ToolsPage() {
             { href: '/updates', label: 'Latest Updates', desc: 'Daily regulatory briefs' },
             { href: '/category', label: 'Browse by Regulator', desc: 'MCA, SEBI, RBI & more' },
             { href: '/tools/fee-calculator/companies', label: 'MCA Form Calculators', desc: 'MGT-7, AOC-4, DIR-3 & more' },
-            { href: '/tools/doc-generator', label: 'AI Doc Generator', desc: 'Board resolutions & letters' },
+            { href: '/documents', label: 'Legal Document Hub', desc: 'Board resolutions & agreements' },
             { href: '/partners', label: 'List Your Service', desc: 'For CS, CA & Advocates' },
             { href: '/editorial-policy', label: 'Editorial Policy', desc: 'How we verify content' },
           ]}

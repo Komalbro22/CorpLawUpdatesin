@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import { supabaseAdmin } from '@/lib/supabase-server'
 
 interface LayoutProps {
@@ -11,9 +12,7 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
   const slug = resolvedParams?.slug
 
   if (!slug) {
-    return {
-      title: 'Legal Document & Secretarial Draft Generator | CorpLawUpdates.in',
-    }
+    notFound()
   }
 
   // Fetch template from Supabase
@@ -28,9 +27,7 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
   }
 
   if (!template) {
-    return {
-      title: 'Legal Document & Secretarial Draft Generator | CorpLawUpdates.in',
-    }
+    notFound()
   }
 
   // Optimize title/description for SEO based on document type (Next.js applies %s | CorpLawUpdates.in)
@@ -114,7 +111,11 @@ export default async function DocumentLayout({
     template = data
   }
 
-  const docName = template?.name || (slug ? slug.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()) : 'Legal Document')
+  if (!template) {
+    notFound()
+  }
+
+  const docName = template.name
 
   const jsonLd = {
     '@context': 'https://schema.org',

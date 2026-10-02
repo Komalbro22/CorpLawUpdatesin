@@ -2991,7 +2991,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
                 <span>📎</span> Mandatory Attachments Checklist for Form ADT-1 on MCA V3
               </h3>
               <p className="text-xs text-slate-500 mb-4">
-                Required documentation to guarantee Straight-Through-Process (STP) auto-approval on the MCA21 V3 portal.
+                Recommended statutory documentation for STP processing per MCA V3 guidelines on the MCA21 V3 portal.
               </p>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm text-left">

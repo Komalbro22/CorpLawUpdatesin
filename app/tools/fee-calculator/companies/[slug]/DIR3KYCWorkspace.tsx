@@ -128,7 +128,7 @@ Key Statutory Directives:
 • Certification: Mandatory by CA/CS/CMA in practice under Section 448 & 449.
 • Cascading Risk: ${result.cascadingRisk.hasRisk ? result.cascadingRisk.title : 'None detected'}.
 
-Calculated on CorpLawUpdates.in | India's Leading Corporate Law Intelligence
+Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform focused on Indian regulatory updates and compliance tools
     `.trim()
 
     navigator.clipboard.writeText(text)

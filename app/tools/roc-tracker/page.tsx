@@ -727,7 +727,7 @@ export default function ROCTrackerPage() {
                           bg-amber-400/20 text-amber-400 
                           text-xs font-bold px-3 py-1.5 
                           rounded-full mb-4 uppercase">
-            Free · Personalized · Updated June 2026
+            Free · Personalized · Statutory rules verified: October 2026
           </div>
           <h1 className="text-3xl md:text-4xl font-bold 
                          text-white font-heading mb-3">
@@ -737,7 +737,7 @@ export default function ROCTrackerPage() {
                         max-w-xl mx-auto">
             Enter your company details once. 
             Instantly see all personalized 
-            ROC deadlines, exact penalties 
+            ROC deadlines, estimated statutory penalties 
             and CCFS 2026 savings.
           </p>
           
@@ -746,7 +746,7 @@ export default function ROCTrackerPage() {
                           mt-6 flex-wrap">
             {[
               { v: `${dbForms.length || 12}`, l: 'ROC Forms Tracked' },
-              { v: 'Live', l: 'Updated June 2026' },
+              { v: 'Oct 2026', l: 'Statutory rules verified: October 2026' },
               { v: 'CCFS', l: 'Savings Shown' },
               { v: 'Free', l: 'No Registration' },
             ].map(s => (
@@ -796,14 +796,13 @@ export default function ROCTrackerPage() {
               </h2>
               <p className="text-slate-400 text-xs mt-1">
                 {formsLoading 
-                  ? '⏳ Syncing latest MCA compliance rules...'
+                  ? 'Calculations based on verified Companies Act 2013 statutory rules.'
                   : `✔️ ${dbForms.length} MCA forms loaded and active`}
               </p>
             </div>
             {!formsLoading && (
-              <div className="flex items-center gap-2 text-xs font-semibold text-green-400 bg-green-500/10 px-2.5 py-1 rounded-full">
-                <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
-                Live Rules
+              <div className="flex items-center gap-2 text-xs font-semibold text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded-full">
+                Verified Oct 2026
               </div>
             )}
           </div>
@@ -1430,7 +1429,7 @@ export default function ROCTrackerPage() {
               disabled={formsLoading}
               className="flex-1 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-400 bg-[length:200%_auto] hover:bg-right text-navy font-black py-4 rounded-2xl text-sm transition-all duration-300 shadow-lg shadow-amber-400/10 hover:shadow-amber-400/20 hover:-translate-y-0.5 disabled:opacity-50">
               {formsLoading 
-                ? '⏳ Syncing Latest MCA Rules...' 
+                ? 'Loading verified rules...' 
                 : '📋 Calculate My ROC Deadlines →'}
             </button>
             <button

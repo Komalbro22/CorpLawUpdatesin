@@ -166,7 +166,7 @@ export default function PrivacyPolicyPage() {
                                     <td className="p-3">Traffic analytics and News integration</td>
                                 </tr>
                                 <tr>
-                                    <td className="p-3 font-bold">Google AdSense &amp; Ad Networks</td>
+                                    <td className="p-3 font-bold">Google AdSense &amp; Ad Networks (Prospective / Upon Approval)</td>
                                     <td className="p-3">IP address, cookie identifiers, device telemetry</td>
                                     <td className="p-3">Contextual &amp; personalized ad serving, frequency capping, fraud prevention, and performance reporting</td>
                                 </tr>
@@ -180,7 +180,7 @@ export default function PrivacyPolicyPage() {
                 <section>
                     <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">5. Advertising &amp; Google AdSense</h2>
                     <p className="text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">
-                        To maintain our corporate law intelligence summaries, compliance trackers, and legal calculators free for the professional community, CorpLawUpdates.in partners with Google AdSense and third-party advertising vendors to display relevant advertisements across our platform.
+                        To support our platform and maintain our corporate law intelligence summaries, compliance trackers, and legal calculators free for the professional community, CorpLawUpdates.in may use third-party advertising services, including Google AdSense, if and when the site is approved and advertising is enabled.
                     </p>
                     <div className="space-y-4 text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
                         <div>

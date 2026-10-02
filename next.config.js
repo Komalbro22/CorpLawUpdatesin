@@ -120,6 +120,16 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: '/tools/doc-generator',
+        destination: '/documents',
+        permanent: true,
+      },
+      {
+        source: '/tools/doc-generator/:path*',
+        destination: '/documents',
+        permanent: true,
+      },
+      {
         source: '/documents/board-resolution-dividend',
         destination: '/documents/board-resolution-for-dividend-declaration',
         permanent: true,

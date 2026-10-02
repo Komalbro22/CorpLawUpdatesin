@@ -40,16 +40,16 @@ export function calculateCompanyComplianceFlags(company: CompanyMaster): Complia
   if (regDate) {
     const regYear = regDate.getFullYear()
     if (regYear === currentYear || regYear === currentYear - 1) {
-      // First AGM rule: within 9 months from closing of first financial year
-      agmDetail = `First AGM Due: Within 9 months from the end of the first financial year (by 31st December ${regYear + 1}).`
+      // First AGM rule: within 9 months from closing of first financial year per Section 96(1)
+      agmDetail = `Under Section 96(1) of the Companies Act, 2013, the First AGM must be held within 9 months from the closing of the first financial year (by 31st December ${regYear + 1}).`
       agmStatus = 'info'
     } else {
-      // Subsequent AGM: within 6 months from closing of financial year (30th September)
-      agmDetail = `Annual AGM Deadline: 30th September ${currentYear} (within 6 months from end of FY 31-Mar-${currentYear}).`
+      // Subsequent AGM: within 6 months from closing of financial year per Section 96(1)
+      agmDetail = `Under Section 96(1) of the Companies Act, 2013, subsequent AGMs must be held within 6 months from the closing of the financial year (by 30th September ${currentYear}) and not later than 15 months from the previous AGM.`
       agmStatus = 'ok'
     }
   } else {
-    agmDetail = `Standard Annual AGM Deadline: 30th September ${currentYear} (within 6 months of FY end).`
+    agmDetail = `Under Section 96(1) of the Companies Act, 2013, the First AGM must be held within 9 months from the closing of the first financial year; subsequent AGMs must be held within 6 months from the closing of the financial year (and not later than 15 months from the previous AGM).`
   }
 
   flags.push({

@@ -203,7 +203,7 @@ Key Statutory Alerts:
 • CCFS-2026 Exclusion: INC-20A defaults are strictly EXCLUDED from CCFS-2026 amnesty.
 • Personal Payment: Directors must remit penalties from personal funds, NOT company funds.
 
-Calculated on CorpLawUpdates.in | India's Authoritative Corporate Law Intelligence
+Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform focused on Indian regulatory updates and compliance tools
     `.trim()
 
     navigator.clipboard.writeText(text)
