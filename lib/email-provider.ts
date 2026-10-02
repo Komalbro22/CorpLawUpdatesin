@@ -81,14 +81,15 @@ export function parseSender(from?: string, fromName?: string): EmailSenderInfo {
  * 2. Resend REST API (fallback)
  */
 export function getActiveEmailProvider(): 'brevo-api' | 'resend' | 'none' {
-    if (process.env.BREVO_API_KEY && process.env.BREVO_API_KEY.trim()) {
+    const brevoKey = (process.env.BREVO_API_KEY || process.env.BREVO_SMTP_KEY)?.trim()
+    if (brevoKey) {
         return 'brevo-api'
     }
     if (process.env.RESEND_API_KEY && process.env.RESEND_API_KEY.trim()) {
         console.warn('[Email Provider] WARNING: BREVO_API_KEY is missing! Falling back to Resend (free quota may be exhausted). Set BREVO_API_KEY to ensure reliable delivery.')
         return 'resend'
     }
-    console.error('[Email Provider] ERROR: BREVO_API_KEY is not configured in Cloudflare environment secrets.')
+    console.error('[Email Provider] ERROR: BREVO_API_KEY is not configured in environment variables.')
     return 'none'
 }
 
@@ -96,7 +97,7 @@ export function getActiveEmailProvider(): 'brevo-api' | 'resend' | 'none' {
  * Sends a single email via Brevo REST API v3 (POST https://api.brevo.com/v3/smtp/email).
  */
 async function sendViaBrevoApi(options: SingleEmailOptions): Promise<SendResult> {
-    const apiKey = process.env.BREVO_API_KEY?.trim()
+    const apiKey = (process.env.BREVO_API_KEY || process.env.BREVO_SMTP_KEY)?.trim()
     if (!apiKey) {
         return { success: false, error: 'BREVO_API_KEY is not configured', provider: 'brevo-api' }
     }
@@ -151,7 +152,7 @@ async function sendViaBrevoApi(options: SingleEmailOptions): Promise<SendResult>
  * Supports up to 1000 messages per request natively.
  */
 async function sendBatchViaBrevoApi(options: BatchEmailOptions): Promise<BatchSendResult> {
-    const apiKey = process.env.BREVO_API_KEY?.trim()
+    const apiKey = (process.env.BREVO_API_KEY || process.env.BREVO_SMTP_KEY)?.trim()
     const { email: senderEmail, name: senderName } = parseSender(options.from, options.fromName)
     const emails = options.emails
 
