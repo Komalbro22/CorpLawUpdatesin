@@ -258,35 +258,49 @@ export default function PrivacyPolicyPage() {
 
                     <div className="space-y-6 text-slate-600 dark:text-slate-400">
                         <div>
-                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">A. Categories of Cookies Employed</h3>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">A. Cookie Consent Management</h3>
+                            <p className="mb-3 leading-relaxed text-sm">
+                                We use a granular cookie consent banner that allows you to choose which categories of cookies to accept. You can control:
+                            </p>
                             <ul className="list-disc list-inside space-y-1.5 text-slate-600 dark:text-slate-400">
-                                <li><strong>Strictly Necessary Cookies:</strong> Essential for website navigation, security verification, theme persistence (light/dark mode), and administrative sessions.</li>
-                                <li><strong>Analytics &amp; Performance Cookies:</strong> Used anonymously via Vercel Analytics and Google Analytics (GA4) to analyze traffic density, top performing regulatory circulars, and Core Web Vitals.</li>
-                                <li><strong>Advertising &amp; Targeting Cookies:</strong> May be used by Google AdSense and other advertising partners if and when advertising is enabled, subject to applicable consent requirements.</li>
+                                <li><strong>Essential Cookies:</strong> Required for basic site functionality (navigation, security, theme persistence). These cannot be disabled.</li>
+                                <li><strong>Analytics Cookies:</strong> Help us understand how visitors use our site (Google Analytics, Vercel Analytics). You can accept or reject these.</li>
+                                <li><strong>Advertising Cookies:</strong> Used by Google AdSense to serve personalized ads and measure ad performance. You can accept or reject these.</li>
+                                <li><strong>Functional Cookies:</strong> Remember your preferences and enhance site features. You can accept or reject these.</li>
                             </ul>
-                        </div>
-
-                        <div>
-                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">B. Managing Your Browser Cookie Settings</h3>
-                            <p className="leading-relaxed text-sm">
-                                You can control, restrict, or clear cookies through your browser settings (Chrome, Safari, Firefox, Edge).
+                            <p className="mt-3 text-sm italic">
+                                Your consent choices are stored locally on your device and can be changed at any time using the cookie preferences link in our footer.
                             </p>
                         </div>
 
                         <div>
-                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">C. European Economic Area (EEA), UK &amp; Swiss Visitors (GDPR)</h3>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">B. Google Consent Mode v2</h3>
                             <p className="leading-relaxed text-sm">
-                                Advertising is not enabled for these regions unless the required Google-certified consent management platform (CMP), integrated with the IAB Transparency and Consent Framework, has been configured. If enabled, consent options will be available through that CMP.
+                                We have implemented Google Consent Mode v2, which signals your consent preferences to Google's ad and analytics platforms. This ensures that ad serving and analytics collection comply with your choices while allowing us to measure ad conversion effectiveness even when consent is denied.
                             </p>
                         </div>
 
                         <div>
-                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">D. United States State Privacy Disclosures (CPRA, CCPA, CPA, VCDPA)</h3>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">C. Managing Your Browser Cookie Settings</h3>
+                            <p className="leading-relaxed text-sm">
+                                In addition to our consent banner, you can control, restrict, or clear cookies through your browser settings (Chrome, Safari, Firefox, Edge). Note that disabling essential cookies may affect site functionality.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">D. European Economic Area (EEA), UK &amp; Swiss Visitors (GDPR)</h3>
+                            <p className="leading-relaxed text-sm">
+                                Our consent banner implements granular consent options as required by GDPR for EEA, UK, and Swiss visitors. You can accept or reject each cookie category independently. Your consent preferences are respected and can be withdrawn at any time.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">E. United States State Privacy Disclosures (CPRA, CCPA, CPA, VCDPA)</h3>
                             <p className="leading-relaxed text-sm mb-2">
                                 Residents of California (California Consumer Privacy Act as amended by the CPRA), Colorado, Virginia, Connecticut, Utah, and other US states with comprehensive privacy legislation have specific rights regarding their personal information:
                             </p>
                             <ul className="list-disc list-inside space-y-1.5 text-sm text-slate-600 dark:text-slate-400">
-                                <li><strong>Do Not Sell or Share My Personal Information:</strong> We do not sell or share your personal information for monetary consideration. Users can opt out of cross-context behavioral advertising through Google Ads Settings and browser opt-out signals.</li>
+                                <li><strong>Do Not Sell or Share My Personal Information:</strong> We do not sell or share your personal information for monetary consideration. Users can opt out of cross-context behavioral advertising through our consent banner or Google Ads Settings.</li>
                                 <li><strong>Right to Know &amp; Access:</strong> You have the right to request disclosure of the categories and specific pieces of personal information we have collected about you over the past 12 months.</li>
                                 <li><strong>Right to Delete:</strong> You have the right to request deletion of your personal information, subject to statutory exceptions.</li>
                                 <li><strong>Non-Discrimination:</strong> We will never discriminate against you, deny services, or alter pricing because you exercised your statutory privacy rights.</li>
@@ -298,7 +312,7 @@ export default function PrivacyPolicyPage() {
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
 
                 <section>
-                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">7. Newsletter &amp; Email Delivery Tracking</h2>
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">8. Newsletter &amp; Email Delivery Tracking</h2>
                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
                         Our newsletters and transactional communications (such as welcome messages and regulatory notifications) use industry-standard email delivery infrastructure provided by Brevo (Sendinblue) and Resend. Standard tracking technology detects when an email is delivered, opened, or links are clicked to ensure high deliverability and measure engagement. This telemetry is used strictly for internal diagnostics and service delivery, and is never sold or shared with any third party. You can unsubscribe or update your email preferences at any time via the one-click unsubscribe link provided in every email.
                     </p>
@@ -307,7 +321,7 @@ export default function PrivacyPolicyPage() {
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
 
                 <section>
-                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">8. Data Retention &amp; Purpose Limitation</h2>
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">9. Data Retention &amp; Purpose Limitation</h2>
                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
                         In strict compliance with the purpose limitation and data retention principles under the <strong>Digital Personal Data Protection (DPDP) Act, 2023</strong> and the <strong>DPDP Rules, 2025</strong>, personal data is retained only for the duration necessary to satisfy the specific purpose for which it was collected or until consent is withdrawn:
                     </p>
@@ -322,7 +336,7 @@ export default function PrivacyPolicyPage() {
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
 
                 <section>
-                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">9. Your Rights (DPDP Act, 2023 &amp; DPDP Rules, 2025)</h2>
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">10. Your Rights (DPDP Act, 2023 &amp; DPDP Rules, 2025)</h2>
                     <p className="text-slate-600 dark:text-slate-400 mb-3">
                         As a Data Principal under India&apos;s <strong>Digital Personal Data Protection (DPDP) Act, 2023</strong> and <strong>DPDP Rules, 2025</strong>, you enjoy statutory rights regarding your personal data:
                     </p>

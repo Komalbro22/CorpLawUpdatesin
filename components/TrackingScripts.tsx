@@ -7,6 +7,42 @@ export default function TrackingScripts() {
   const [ids, setIds] = useState<{ gaId: string | null; clarityId: string | null } | null>(null)
 
   useEffect(() => {
+    // Initialize Google Consent Mode v2 with default DENIED state
+    if (typeof window !== 'undefined') {
+      window.dataLayer = window.dataLayer || []
+      function gtag(...args: any[]) {
+        window.dataLayer.push(args)
+      }
+      ;(window as any).gtag = gtag
+
+      // Check for existing consent
+      const savedConsent = localStorage.getItem('clu_cookie_consent_v2')
+      let consentState = {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied',
+        functionality_storage: 'denied',
+      }
+
+      if (savedConsent) {
+        try {
+          const parsed = JSON.parse(savedConsent)
+          consentState = {
+            ad_storage: parsed.advertising ? 'granted' : 'denied',
+            ad_user_data: parsed.advertising ? 'granted' : 'denied',
+            ad_personalization: parsed.advertising ? 'granted' : 'denied',
+            analytics_storage: parsed.analytics ? 'granted' : 'denied',
+            functionality_storage: parsed.functional ? 'granted' : 'denied',
+          }
+        } catch {
+          // Invalid consent, keep defaults
+        }
+      }
+
+      gtag('consent', 'default', consentState)
+    }
+
     // Fetch tracker IDs dynamically at runtime
     fetch('/api/settings/trackers')
       .then(async (res) => {
