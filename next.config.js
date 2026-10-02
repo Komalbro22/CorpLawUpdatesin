@@ -1,12 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: process.env.DOCKER_BUILD === '1' ? 'standalone' : undefined,
+  output: 'standalone',
   compress: true,
   poweredByHeader: false,
-  experimental: {
-    optimizeCss: true,
-  },
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',

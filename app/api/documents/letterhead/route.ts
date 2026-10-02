@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
-import sharp from 'sharp'
 
 export async function POST(request: Request) {
   try {

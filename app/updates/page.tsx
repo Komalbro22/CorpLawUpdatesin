@@ -10,7 +10,7 @@ import { unstable_cache } from 'next/cache'
 import ArticleSearchTool from '@/components/ArticleSearchTool'
 import { Building2, TrendingUp, Landmark, ShieldCheck, Users, Scale, Gavel, Globe2, HelpCircle, ChevronDown, Sparkles, BookOpen, CheckCircle2 } from 'lucide-react'
 
-export const revalidate = 60 // 1 minute
+export const revalidate = 3600 // 1 hour (on-demand revalidated via revalidateTag('updates'))
 
 const CURRENT_YEAR = new Date().getFullYear()
 const CURRENT_MONTH = new Date().toLocaleString('en-IN', { month: 'long' })
@@ -79,7 +79,7 @@ export default async function UpdatesPage({
             return data || []
         },
         ['category-counts'],
-        { revalidate: 60, tags: ['updates'] }
+        { revalidate: 3600, tags: ['updates'] }
     )
 
     // Build paginated query using cache dynamically keyed by parameters
@@ -110,7 +110,7 @@ export default async function UpdatesPage({
                 return { data: data || [], count: count || 0 }
             },
             ['paginated-updates', cat, q, String(p)],
-            { revalidate: 60, tags: ['updates'] }
+            { revalidate: 3600, tags: ['updates'] }
         )()
 
     // Fetch top 10 updates using cache for AI ItemList schema

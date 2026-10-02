@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
 import { Document, Packer, Paragraph, TextRun, ImageRun, AlignmentType } from 'docx'
-import sharp from 'sharp'
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 import HTMLtoDOCX from 'html-to-docx'
 import { markdownToHtml } from '@/lib/markdown'
@@ -150,8 +149,6 @@ export async function POST(request: Request) {
     // 1. Fetch and process letterhead image or PDF template
     let letterheadBuffer: Buffer | null = null
     let letterheadPdfDoc: PDFDocument | null = null
-    let imgWidth = 0
-    let imgHeight = 0
     const isLetterheadPdf = letterhead_url && letterhead_url.toLowerCase().endsWith('.pdf')
 
     if (letterhead_url) {
@@ -162,12 +159,7 @@ export async function POST(request: Request) {
           if (isLetterheadPdf) {
             letterheadPdfDoc = await PDFDocument.load(arrayBuffer)
           } else {
-            const rawBuffer = Buffer.from(arrayBuffer)
-            const sharpImg = sharp(rawBuffer)
-            const metadata = await sharpImg.metadata()
-            letterheadBuffer = await sharpImg.png().toBuffer()
-            imgWidth = metadata.width || 0
-            imgHeight = metadata.height || 0
+            letterheadBuffer = Buffer.from(arrayBuffer)
           }
         }
       } catch (err) {
@@ -183,9 +175,14 @@ export async function POST(request: Request) {
       let embeddedImage: any = null
       if (letterheadBuffer) {
         try {
-          embeddedImage = await pdfDoc.embedPng(letterheadBuffer)
-        } catch (err) {
-          console.error('Failed to embed letterhead image in PDF:', err)
+          const isJpg = letterheadBuffer[0] === 0xFF && letterheadBuffer[1] === 0xD8
+          embeddedImage = isJpg ? await pdfDoc.embedJpg(letterheadBuffer) : await pdfDoc.embedPng(letterheadBuffer)
+        } catch {
+          try {
+            embeddedImage = await pdfDoc.embedJpg(letterheadBuffer)
+          } catch (err) {
+            console.error('Failed to embed letterhead image in PDF:', err)
+          }
         }
       }
 

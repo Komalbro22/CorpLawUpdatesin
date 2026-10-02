@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import nodemailer from 'nodemailer'
 import { Resend } from 'resend'
 
 export interface EmailSenderInfo {
@@ -33,7 +32,7 @@ export interface SendResult {
     success: boolean
     messageId?: string
     error?: string
-    provider: 'brevo-api' | 'brevo-smtp' | 'resend' | 'none'
+    provider: 'brevo-api' | 'resend' | 'none'
 }
 
 export interface BatchSendResult {
@@ -47,7 +46,7 @@ export interface BatchSendResult {
         messageId?: string
         error?: string
     }>
-    provider: 'brevo-api' | 'brevo-smtp' | 'resend' | 'none'
+    provider: 'brevo-api' | 'resend' | 'none'
 }
 
 /**
@@ -78,20 +77,18 @@ export function parseSender(from?: string, fromName?: string): EmailSenderInfo {
 
 /**
  * Identifies the prioritized active email delivery provider.
- * 1. Brevo REST API (highest recommendation: 300 free/day, fast HTTP, zero SMTP latency)
- * 2. Brevo SMTP Relay (via nodemailer with smtp-relay.brevo.com)
- * 3. Resend (100 free/day fallback)
+ * 1. Brevo REST API (primary: fast HTTP fetch, zero Node socket latency)
+ * 2. Resend REST API (fallback)
  */
-export function getActiveEmailProvider(): 'brevo-api' | 'brevo-smtp' | 'resend' | 'none' {
+export function getActiveEmailProvider(): 'brevo-api' | 'resend' | 'none' {
     if (process.env.BREVO_API_KEY && process.env.BREVO_API_KEY.trim()) {
         return 'brevo-api'
     }
-    if (process.env.BREVO_SMTP_KEY && process.env.BREVO_SMTP_KEY.trim()) {
-        return 'brevo-smtp'
-    }
     if (process.env.RESEND_API_KEY && process.env.RESEND_API_KEY.trim()) {
+        console.warn('[Email Provider] WARNING: BREVO_API_KEY is missing! Falling back to Resend (free quota may be exhausted). Set BREVO_API_KEY to ensure reliable delivery.')
         return 'resend'
     }
+    console.error('[Email Provider] ERROR: BREVO_API_KEY is not configured in Cloudflare environment secrets.')
     return 'none'
 }
 
@@ -204,27 +201,11 @@ async function sendBatchViaBrevoApi(options: BatchEmailOptions): Promise<BatchSe
             const data = await response.json().catch(() => ({}))
 
             if (!response.ok) {
-                console.warn('[Brevo Batch] Batch API returned error, falling back to individual sends:', data)
-                // Fallback to individual sends for this chunk
-                for (const item of chunk) {
-                    const single = await sendViaBrevoApi({
-                        to: item.to,
-                        subject: item.subject,
-                        html: item.html,
-                        from: senderEmail,
-                        fromName: senderName,
-                        replyTo: options.replyTo,
-                    })
-
-                    if (single.success) {
-                        totalSent++
-                        results.push({ email: item.to, success: true, messageId: single.messageId })
-                    } else {
-                        totalFailed++
-                        results.push({ email: item.to, success: false, error: single.error })
-                    }
-                    await new Promise(r => setTimeout(r, 50))
-                }
+                console.error('[Brevo Batch] Batch API returned error, status:', response.status, data)
+                chunk.forEach(item => {
+                    totalFailed++
+                    results.push({ email: item.to, success: false, error: data?.message || `Brevo batch error status ${response.status}` })
+                })
             } else {
                 const messageIds: string[] = Array.isArray(data?.messageIds) ? data.messageIds : []
                 chunk.forEach((item, idx) => {
@@ -259,99 +240,7 @@ async function sendBatchViaBrevoApi(options: BatchEmailOptions): Promise<BatchSe
     }
 }
 
-/**
- * Sends a single email via Nodemailer using Brevo SMTP relay (smtp-relay.brevo.com:587).
- */
-async function sendViaBrevoSmtp(options: SingleEmailOptions): Promise<SendResult> {
-    const smtpKey = process.env.BREVO_SMTP_KEY?.trim()
-    const smtpUser = (
-        process.env.BREVO_SMTP_LOGIN ||
-        process.env.BREVO_FROM_EMAIL ||
-        'corplawupdatesin@gmail.com'
-    ).trim()
 
-    if (!smtpKey) {
-        return { success: false, error: 'BREVO_SMTP_KEY is not configured', provider: 'brevo-smtp' }
-    }
-
-    const { email: senderEmail, name: senderName } = parseSender(options.from, options.fromName)
-
-    try {
-        const transporter = nodemailer.createTransport({
-            host: 'smtp-relay.brevo.com',
-            port: 587,
-            secure: false, // 587 uses STARTTLS
-            auth: {
-                user: smtpUser,
-                pass: smtpKey,
-            },
-            connectionTimeout: 5000,
-            greetingTimeout: 5000,
-            socketTimeout: 8000,
-        })
-
-        const info = await transporter.sendMail({
-            from: `"${senderName}" <${senderEmail}>`,
-            to: options.to,
-            subject: options.subject,
-            html: options.html,
-            replyTo: options.replyTo,
-        })
-
-        return {
-            success: true,
-            messageId: info.messageId,
-            provider: 'brevo-smtp',
-        }
-    } catch (err: any) {
-        return {
-            success: false,
-            error: err?.message || 'Brevo SMTP error',
-            provider: 'brevo-smtp',
-        }
-    }
-}
-
-/**
- * Sends batch emails via Nodemailer with Brevo SMTP relay.
- */
-async function sendBatchViaBrevoSmtp(options: BatchEmailOptions): Promise<BatchSendResult> {
-    const emails = options.emails
-    let totalSent = 0
-    let totalFailed = 0
-    const results: Array<{ email: string; success: boolean; messageId?: string; error?: string }> = []
-
-    for (const item of emails) {
-        const res = await sendViaBrevoSmtp({
-            to: item.to,
-            subject: item.subject,
-            html: item.html,
-            from: options.from,
-            fromName: options.fromName,
-            replyTo: options.replyTo,
-        })
-
-        if (res.success) {
-            totalSent++
-            results.push({ email: item.to, success: true, messageId: res.messageId })
-        } else {
-            totalFailed++
-            results.push({ email: item.to, success: false, error: res.error })
-        }
-
-        // Small delay to prevent rate issues on SMTP socket
-        await new Promise(r => setTimeout(r, 100))
-    }
-
-    return {
-        success: totalSent > 0,
-        sent: totalSent,
-        failed: totalFailed,
-        total: emails.length,
-        results,
-        provider: 'brevo-smtp',
-    }
-}
 
 /**
  * Sends a single email via Resend.
@@ -485,7 +374,7 @@ async function sendBatchViaResend(options: BatchEmailOptions): Promise<BatchSend
 
 /**
  * Universal single email dispatcher.
- * Intelligently routes to the configured provider (Brevo API > Brevo SMTP > Resend).
+ * Intelligently routes to the configured provider (Brevo API > Resend).
  */
 export async function sendEmail(options: SingleEmailOptions): Promise<SendResult> {
     const provider = getActiveEmailProvider()
@@ -493,14 +382,12 @@ export async function sendEmail(options: SingleEmailOptions): Promise<SendResult
     switch (provider) {
         case 'brevo-api':
             return sendViaBrevoApi(options)
-        case 'brevo-smtp':
-            return sendViaBrevoSmtp(options)
         case 'resend':
             return sendViaResend(options)
         default:
             return {
                 success: false,
-                error: 'No active email provider configured. Please configure BREVO_API_KEY (recommended) or BREVO_SMTP_KEY in your environment variables.',
+                error: 'No active email provider configured. Please configure BREVO_API_KEY in Cloudflare environment variables.',
                 provider: 'none',
             }
     }
@@ -508,7 +395,7 @@ export async function sendEmail(options: SingleEmailOptions): Promise<SendResult
 
 /**
  * Universal batch email dispatcher.
- * Intelligently routes to the configured provider (Brevo API > Brevo SMTP > Resend).
+ * Intelligently routes to the configured provider (Brevo API > Resend).
  */
 export async function sendBatchEmails(options: BatchEmailOptions): Promise<BatchSendResult> {
     const provider = getActiveEmailProvider()
@@ -516,8 +403,6 @@ export async function sendBatchEmails(options: BatchEmailOptions): Promise<Batch
     switch (provider) {
         case 'brevo-api':
             return sendBatchViaBrevoApi(options)
-        case 'brevo-smtp':
-            return sendBatchViaBrevoSmtp(options)
         case 'resend':
             return sendBatchViaResend(options)
         default:
@@ -529,7 +414,7 @@ export async function sendBatchEmails(options: BatchEmailOptions): Promise<Batch
                 results: options.emails.map(e => ({
                     email: e.to,
                     success: false,
-                    error: 'No active email provider configured. Please configure BREVO_API_KEY or BREVO_SMTP_KEY.',
+                    error: 'No active email provider configured. Please configure BREVO_API_KEY in Cloudflare environment variables.',
                 })),
                 provider: 'none',
             }
