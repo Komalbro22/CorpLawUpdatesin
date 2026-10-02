@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { supabaseAdmin } from '@/lib/supabase-server'
+import { getCachedDocumentTemplate } from '@/lib/document-template-cache'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -15,16 +15,7 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
     notFound()
   }
 
-  // Fetch template from Supabase
-  let template = null
-  if (supabaseAdmin) {
-    const { data } = await supabaseAdmin
-      .from('document_templates')
-      .select('name, description, tags, category')
-      .eq('slug', slug)
-      .single()
-    template = data
-  }
+  const template = await getCachedDocumentTemplate(slug)
 
   if (!template) {
     notFound()
@@ -32,7 +23,7 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
 
   // Optimize title/description for SEO based on document type (Next.js applies %s | CorpLawUpdates.in)
   let title = `${template.name} Format (Free Generator)`
-  let description = `${template.description} Create, customize, and edit your document format instantly. Fully verified for compliance under Indian laws and ICSI Secretarial Standards.`
+  let description = `${template.description} Create and customize an editable draft for professional review. Check the stated legal references and suitability for your circumstances before use.`
   let keywords = [template.name, `${template.name} format`, `${template.name} india`, 'generator', 'drafting', 'legal template', 'pdf download']
   
   if (template.tags && Array.isArray(template.tags)) {
@@ -46,11 +37,11 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
     keywords = [...keywords, 'rent agreement generator', 'commercial lease india', '11 month rent agreement']
   } else if (slug.includes('mortgage')) {
     title = `${template.name} Format & Generator`
-    description = `Generate a legally valid ${template.name} under the Transfer of Property Act, 1882. Add custom clauses, specify property details, and download in PDF/Word format instantly.`
+    description = `Draft a ${template.name} referencing the Transfer of Property Act, 1882. Add custom clauses, specify property details, and download in PDF/Word format for review.`
     keywords = [...keywords, 'mortgage deed format', 'TPA 1882', 'property mortgage india']
   } else if (slug.includes('bank-guarantee') || slug.includes('letter-of-credit')) {
     title = `${template.name} Draft Generator`
-    description = `Standard ${template.name} format as per Indian banking norms. Draft and customize financial guarantees and trade finance documents instantly.`
+    description = `Draft a ${template.name} using the template details and review it against applicable Indian banking requirements before execution.`
     keywords = [...keywords, 'bank guarantee format', 'trade finance india']
   } else if (slug === 'special-resolution-registered-office-shifting') {
     title = 'Special Resolution for Shifting Registered Office'
@@ -100,16 +91,11 @@ export default async function DocumentLayout({
 }) {
   const resolvedParams = await params
   const slug = resolvedParams?.slug
-
-  let template: any = null
-  if (slug && supabaseAdmin) {
-    const { data } = await supabaseAdmin
-      .from('document_templates')
-      .select('name, description, category, regulation_reference')
-      .eq('slug', slug)
-      .single()
-    template = data
+  if (!slug) {
+    notFound()
   }
+
+  const template = await getCachedDocumentTemplate(slug)
 
   if (!template) {
     notFound()

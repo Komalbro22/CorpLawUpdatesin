@@ -1525,7 +1525,7 @@ export default function ROCTrackerPage() {
                   )}
                   {profile.hasMSMEDues && !filedForms[`msme-1_${currentYear}`]?.filed && (
                     <li>
-                      <strong>Pending MSME Dues Return:</strong> Outstanding payments to MSMEs exceed 45 days. Must file Form MSME-1 twice a year to avoid fixed penalties up to ₹3,0,000.
+                      <strong>Pending MSME Dues Return:</strong> Outstanding payments to MSMEs exceed 45 days. Must file Form MSME-1 twice a year to avoid fixed penalties up to ₹3,00,000.
                     </li>
                   )}
                   {(profile.hasDeposits || profile.hasPublicDeposits) && !filedForms[`dpt-3_${currentYear}`]?.filed && (
@@ -1699,7 +1699,7 @@ export default function ROCTrackerPage() {
             {activeResultsTab === 'previous' && (
               <div className="bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 text-xs text-slate-600 dark:text-slate-400 space-y-3">
                 <div>
-                  💡 <strong>Prior Year Annual Checklist:</strong> These are the core annual filings for the previous financial year (FY {previousYear}). If you have already filed them, mark them as Filed and input the filing date to compute past fees. If they are still pending, massive penalties will apply.
+                  💡 <strong>Prior Year Annual Checklist:</strong> These are the core annual filings for the previous financial year (FY {previousYear}). If you have already filed them, mark them as Filed and input the filing date to compute past fees. If they are still pending, significant estimated statutory penalties may apply.
                 </div>
                 <div className="flex justify-start">
                   <button
@@ -1921,8 +1921,8 @@ export default function ROCTrackerPage() {
             {/* Disclaimer */}
             <p className="text-xs text-slate-400 
                           text-center">
-              Calculated based on standard rules 
-              as on June 2026. Verify on MCA V3 portal 
+              Calculations use Companies Act 2013 statutory rules incorporated
+              into this tracker. Verify current requirements on the MCA V3 portal
               before filing. Not legal advice.
             </p>
           </div>

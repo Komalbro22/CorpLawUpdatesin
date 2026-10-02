@@ -1,8 +1,8 @@
-﻿import { Metadata } from 'next'
+import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { unstable_cache } from 'next/cache'
 import { supabaseDocuments } from '@/lib/supabase-documents'
 import { supabaseAdmin } from '@/lib/supabase-server'
+import { getCachedDocumentTemplate } from '@/lib/document-template-cache'
 import DocumentGeneratorClient from './DocumentGeneratorClient'
 
 export const revalidate = 86400
@@ -11,22 +11,6 @@ export const dynamicParams = true
 interface PageProps {
   params: Promise<{ slug: string }>
 }
-
-const getTemplate = unstable_cache(
-  async (slug: string) => {
-    const client = supabaseDocuments || supabaseAdmin
-    if (!client) return null
-    const { data } = await client
-      .from('document_templates')
-      .select('*')
-      .eq('slug', slug)
-      .eq('is_active', true)
-      .single()
-    return data
-  },
-  ['document-template-detail'],
-  { revalidate: 86400, tags: ['documents'] }
-)
 
 export async function generateStaticParams() {
   try {
@@ -52,7 +36,7 @@ export default async function DocumentSlugPage({ params }: PageProps) {
     notFound()
   }
 
-  const template = await getTemplate(slug)
+  const template = await getCachedDocumentTemplate(slug)
 
   if (!template) {
     notFound()

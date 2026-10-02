@@ -899,7 +899,7 @@ Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform foc
                 { step: '07', title: 'Enter Subscriber Payment Data', desc: 'Input bank name, IFSC, transaction date, and amount matching subscriber MOA entries.' },
                 { step: '08', title: 'Attach PDFs & Sign with DSC', desc: 'Attach bank statements, photos, board resolution. Sign with Class 3 DSC of authorized director.' },
                 { step: '09', title: 'Practicing Professional Certification', desc: 'Independent practicing CA, CS, or CMA certifies compliance and digitally signs form.' },
-                { step: '10', title: 'Pay e-Challan & Obtain SRN', desc: 'Discharge government fee online. Form is approved on STP (Straight-Through-Processing) basis.' }
+                { step: '10', title: 'Pay e-Challan & Obtain SRN', desc: 'Discharge government fee online. Compliant filings may be processed under Straight-Through-Processing (STP) subject to MCA validations.' }
               ].map((item) => (
                 <div key={item.step} className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 flex gap-3.5">
                   <div className="w-8 h-8 rounded-xl bg-indigo-600 text-white font-black text-xs flex items-center justify-center shrink-0">

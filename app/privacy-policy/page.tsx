@@ -186,13 +186,13 @@ export default function PrivacyPolicyPage() {
                         <div>
                             <h3 className="font-bold text-navy dark:text-slate-200 mb-1.5 text-xs uppercase tracking-wide">A. Third-Party Advertising Vendors &amp; Google AdSense</h3>
                             <p>
-                                Third-party advertising vendors, including Google, use cookies, web beacons, and unique device identifiers to serve advertisements based on your prior visits to this website or other websites across the Internet.
+                                If advertising is enabled, third-party advertising vendors, including Google, may use cookies and similar technologies to serve and measure advertisements. The technologies and choices available depend on the services enabled on this site and your location.
                             </p>
                         </div>
                         <div>
                             <h3 className="font-bold text-navy dark:text-slate-200 mb-1.5 text-xs uppercase tracking-wide">B. Advertising Cookies, Web Beacons &amp; IP Addresses</h3>
                             <p>
-                                Google&apos;s use of advertising cookies (such as DoubleClick cookies) enables it and its partner networks to serve ads to our visitors based on their visits to CorpLawUpdates.in and/or other sites on the Internet. IP addresses and browser telemetry may be used to measure ad impressions, enforce frequency capping, prevent click fraud, and display geo-relevant compliance services.
+                                If Google advertising is enabled, Google and its partners may use advertising cookies and related data for ad delivery, measurement, frequency management, and invalid-traffic prevention, subject to applicable consent requirements and your settings.
                             </p>
                         </div>
                         <div>
@@ -218,7 +218,7 @@ export default function PrivacyPolicyPage() {
                                     </a>.
                                 </li>
                                 <li>
-                                    <strong>Browser Controls:</strong> You can configure your browser to block or delete third-party cookies at any time. If you opt out of personalized ads, you will still see advertisements, but they will be contextual rather than based on your browsing history.
+                                    <strong>Browser Controls:</strong> You can configure your browser to block or delete third-party cookies. Available advertising choices depend on whether advertising is enabled and the consent options presented to you.
                                 </li>
                             </ul>
                         </div>
@@ -239,7 +239,7 @@ export default function PrivacyPolicyPage() {
                             <ul className="list-disc list-inside space-y-1.5 text-slate-600 dark:text-slate-400">
                                 <li><strong>Strictly Necessary Cookies:</strong> Essential for website navigation, security verification, theme persistence (light/dark mode), and administrative sessions.</li>
                                 <li><strong>Analytics &amp; Performance Cookies:</strong> Used anonymously via Vercel Analytics and Google Analytics (GA4) to analyze traffic density, top performing regulatory circulars, and Core Web Vitals.</li>
-                                <li><strong>Advertising &amp; Targeting Cookies:</strong> Deployed by Google AdSense and its authorized advertising partners to deliver contextual and interest-based ads, manage ad frequency, and prevent invalid traffic/click fraud.</li>
+                                <li><strong>Advertising &amp; Targeting Cookies:</strong> May be used by Google AdSense and other advertising partners if and when advertising is enabled, subject to applicable consent requirements.</li>
                             </ul>
                         </div>
 
@@ -253,7 +253,7 @@ export default function PrivacyPolicyPage() {
                         <div>
                             <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">C. European Economic Area (EEA), UK &amp; Swiss Visitors (GDPR)</h3>
                             <p className="leading-relaxed text-sm">
-                                For visitors accessing the site from the European Economic Area (EEA), the United Kingdom, or Switzerland, measurement and advertising cookies are managed in compliance with the General Data Protection Regulation (GDPR) and UK GDPR. You may review or modify your consent choices at any time.
+                                Advertising is not enabled for these regions unless the required Google-certified consent management platform (CMP), integrated with the IAB Transparency and Consent Framework, has been configured. If enabled, consent options will be available through that CMP.
                             </p>
                         </div>
 

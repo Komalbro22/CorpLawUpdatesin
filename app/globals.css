@@ -1468,7 +1468,7 @@ h2, h3, h4 {
   }
 
   body::before {
-    content: "CorpLawUpdates.in  |  India's Free Corporate Law Intelligence Platform  |  corplawupdates.in";
+    content: "CorpLawUpdates.in  |  Indian Corporate Law Intelligence Platform  |  corplawupdates.in";
     display: block;
     text-align: center;
     font-size: 11px;
@@ -2862,4 +2862,3 @@ a.text-gold, .text-gold a {
   transition: all 0.2s ease;
   white-space: nowrap;
 }
-

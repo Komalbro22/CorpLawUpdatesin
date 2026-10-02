@@ -417,7 +417,7 @@ export function generateWelcomeEmail({
                 You are receiving this induction briefing because you subscribed at <a href="${BASE_URL}" style="color:#D4AF37;text-decoration:none;font-weight:600;">corplawupdates.in</a>.
               </p>
               <p style="margin:0 0 14px 0;font-size:11px;color:#64748B;line-height:1.5;">
-                India's Free Corporate Law Intelligence Platform · MCA · SEBI · RBI · NCLT · IBC · FEMA
+                Indian Corporate Law Intelligence Platform · MCA · SEBI · RBI · NCLT · IBC · FEMA
               </p>
               <a href="${unsubscribeUrl}" style="font-size:11px;color:#94A3B8;text-decoration:underline;">
                 Unsubscribe or Update Subscription Preferences

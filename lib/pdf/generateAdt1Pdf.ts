@@ -64,7 +64,7 @@ export function generateAdt1Pdf(data: Adt1PdfData): jsPDF {
 
   parameterRows.push(
     ['Delay Assessment', data.calculatedDelayDays > 0 ? `${data.calculatedDelayDays} Day(s) Overdue` : 'COMPLIANT (Timely Filing)', data.calculatedDelayDays > 0 ? `Delay attracts ${data.multiplier}x Table B multiplier` : 'Filing within statutory 15-day window'],
-    ['MCA Approval Mode', 'Straight Through Process (STP) - Auto Approval', 'Auto-processed upon successful challan generation'],
+    ['Portal Processing', 'STP processing may apply', 'Subject to current MCA V3 validations; confirm the filing status on the portal'],
     ['Section 403 Condonation Status', data.isCondonation ? 'CONDONATION REQUIRED (> 270 Days Delay)' : 'STANDARD E-FILING ELIGIBLE', data.isCondonation ? 'Requires prior Form CG-1 application to RD' : 'Direct upload on MCA V3 allowed']
   )
 
@@ -137,7 +137,7 @@ export function generateAdt1Pdf(data: Adt1PdfData): jsPDF {
   const complianceRows: any[] = [
     [
       'First Auditor Legal Position',
-      'Under Section 139(6) and Rule 4(2) (as clarified by ICSI guidance), filing Form ADT-1 for First Auditor is not statutorily mandatory, although available as an option on MCA V3.'
+      'ICSI FAQs state that Form ADT-1 is not mandatory for the First Auditor. The revised MCA V3 form includes an option to report this appointment. Practice and interpretation may vary; check current MCA instructions and obtain qualified advice before deciding whether to file.'
     ],
     [
       'STP Processing & Date Validation',

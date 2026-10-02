@@ -893,7 +893,7 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
           <div className="flex justify-between items-start">
             <div>
               <div role="heading" aria-level={2} className="text-xl font-bold uppercase tracking-tight text-slate-950">CorpLawUpdates.in</div>
-              <p className="text-[10px] text-slate-600">India\'s Free Corporate Law Intelligence &amp; Statutory Compliance Platform</p>
+              <p className="text-[10px] text-slate-600">A free corporate-law intelligence platform focused on Indian regulatory updates and compliance tools.</p>
             </div>
             <div className="text-right">
               <span className="inline-block bg-slate-100 border border-slate-300 text-slate-800 text-[10px] font-bold px-2 py-0.5 rounded">

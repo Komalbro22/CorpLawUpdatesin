@@ -155,7 +155,7 @@ export default function GooglePreferredSourceButton({
                                 </span>
 
                                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/40 border border-blue-200/60 dark:border-blue-800/40 text-[11px] font-bold text-[#1A73E8] dark:text-blue-400">
-                                    Top Stories & AI Overviews
+                                    Google Search personalization
                                 </span>
                             </div>
 
@@ -166,7 +166,7 @@ export default function GooglePreferredSourceButton({
 
                             {/* Description */}
                             <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed">
-                                Add <strong className="font-semibold text-slate-900 dark:text-white">CorpLawUpdates.in</strong> to your Google Preferred Sources to see verified MCA, SEBI, RBI & NCLT circulars prioritized when searching on Google.
+                                Add <strong className="font-semibold text-slate-900 dark:text-white">CorpLawUpdates.in</strong> to Google Preferred Sources to personalize eligible Google Search results.
                             </p>
 
                             {/* Subtle Trust & Search Preview Indicator */}
@@ -174,7 +174,7 @@ export default function GooglePreferredSourceButton({
                                 <span className="inline-flex items-center justify-center size-4 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 font-bold text-[10px]">
                                     ✓
                                 </span>
-                                <span>Google Search personalization feature · 1-click add · No sign-in required</span>
+                                <span>A Google Search personalization feature · 1-click add</span>
                             </div>
                         </div>
 

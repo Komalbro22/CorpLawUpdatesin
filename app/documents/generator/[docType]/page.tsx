@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, notFound } from 'next/navigation';
 import { MVP_DOCUMENTS_META } from '@/lib/doc-generator/ai-engine';
 import {
   DocumentGenerationPayload,
@@ -29,9 +29,12 @@ import {
 
 export default function DocumentGeneratorWizardPage() {
   const params = useParams();
-  const docType = (params?.docType as MVPDocumentType) || 'board_resolution_additional_director';
-
-  const docMeta = MVP_DOCUMENTS_META.find(d => d.id === docType) || MVP_DOCUMENTS_META[1];
+  const rawDocType = params?.docType as string | undefined;
+  const docMeta = MVP_DOCUMENTS_META.find(d => d.id === rawDocType);
+  if (!docMeta) {
+    notFound();
+  }
+  const docType = docMeta.id;
 
   // Multi-step form state (Step 1: Company, Step 2: Specific Params, Step 3: Preview & Download)
   const [currentStep, setCurrentStep] = useState<number>(1);

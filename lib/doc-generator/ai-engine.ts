@@ -13,7 +13,7 @@ export const MVP_DOCUMENTS_META: MVPDocumentMeta[] = [
   {
     id: 'board_resolution_additional_director',
     title: 'Board Resolution for Appointment of Additional Director',
-    shortDescription: 'Certified true copy of Board Resolution under Section 161(1) for Additional Director.',
+    shortDescription: 'Draft format for preparing a certified true copy of a Board Resolution under Section 161(1), where applicable.',
     actReference: 'Section 161(1) of Companies Act, 2013 read with Rule 8 & 18 of Director Rules 2014 & SS-1',
     category: 'Board Resolutions',
     estimatedMinutes: 2,
@@ -147,7 +147,7 @@ MASTER ICSI SS-1 (REVISED 2024) COMPLIANCE RULES:
    - "concludingText": "By Order of the Board of Directors / For ${company.companyName}".
 
 2. IF DOCUMENT IS "BOARD_RESOLUTION_ADDITIONAL_DIRECTOR":
-   - "documentTitle": "CERTIFIED TRUE COPY OF THE RESOLUTION PASSED AT THE MEETING OF THE BOARD OF DIRECTORS OF ${company.companyName.toUpperCase()}".
+   - "documentTitle": "DRAFT FORMAT FOR CERTIFIED TRUE COPY OF THE RESOLUTION PASSED AT THE MEETING OF THE BOARD OF DIRECTORS OF ${company.companyName.toUpperCase()}".
    - "subTitle": "Passed pursuant to Section 161(1) of the Companies Act, 2013 read with Rule 8 & Rule 18 of Director Rules, 2014 and ICSI SS-1".
    - Ensure all clauses use formal legalese ("RESOLVED THAT pursuant to...", "FURTHER RESOLVED THAT...").
 

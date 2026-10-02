@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
     return {
         name: 'CorpLawUpdates.in',
         short_name: 'CorpLawUpdates',
-        description: "India's Free Corporate Law Intelligence Platform",
+        description: 'A free corporate-law intelligence platform focused on Indian regulatory updates and compliance tools.',
         start_url: '/',
         display: 'standalone',
         background_color: '#0F172A',

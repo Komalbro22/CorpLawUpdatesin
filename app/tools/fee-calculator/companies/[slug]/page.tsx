@@ -146,8 +146,8 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
       {
         '@type': 'HowToStep',
         position: 5,
-        name: 'Remit Prescribed Government Fee for STP Auto-Approval',
-        text: 'Pay the applicable government fee (NIL for on-time routine filing, ₹500 for change update, or ₹5,000 for reactivation) via MCA21 V3 e-Challan. System auto-approves the filing on Straight-Through-Process (STP) basis.'
+        name: 'Remit the Prescribed Government Fee',
+        text: 'Pay the applicable government fee (NIL for on-time routine filing, ₹500 for change update, or ₹5,000 for reactivation) via MCA21 V3 e-Challan. Portal processing and approval status depend on current MCA validations.'
       }
     ]
   } : form.slug === 'adt-1' ? {
@@ -381,7 +381,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         '@type': 'HowToStep',
         position: 6,
         name: 'Submit on MCA V3 & Complete Professional Certification',
-        text: 'Attach bank statement, geo-tagged registered office photos, and board resolution. Obtain Class 3 DSC certification from a practicing CA, CS, or CMA for STP auto-approval.'
+        text: 'Attach the required supporting documents and obtain the applicable digital signatures and professional certification. Portal processing is subject to current MCA validations.'
       }
     ]
   } : form.slug === 'dir-12' ? {
@@ -461,7 +461,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         '@type': 'HowToStep',
         position: 5,
         name: 'Submit Form MSME-1 on MCA V3 Portal by 31 Oct / 30 Apr',
-        text: 'Log into MCA Services -> Company e-Filing -> MSME Form 1. Sign digitally using an authorized Director Class 3 DSC. Portal filing fee is ₹0 (free of cost). Processed via STP auto-approval.'
+        text: 'Log into MCA Services -> Company e-Filing -> MSME Form 1. Sign digitally using an authorized Director Class 3 DSC. Portal filing fee is ₹0 (free of cost). Check the portal for the current processing status.'
       }
     ]
   } : form.slug === 'pas-3' ? {
@@ -577,8 +577,8 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
       {
         '@type': 'HowToStep',
         position: 5,
-        name: 'Affix Class 3 DSC & Obtain CRC Auto-Approval',
-        text: 'Proposed directors sign with DSC, certified by a practicing CA, CS, or CMA. Submit e-Challan on MCA V3 to receive Certificate of Incorporation (COI) with CIN.'
+        name: 'Affix Class 3 DSC & Submit for Processing',
+        text: 'Proposed directors sign with DSC, certified by a practicing CA, CS, or CMA where required. Submit the e-Challan on MCA V3 and follow the portal status for the Certificate of Incorporation (COI) and CIN.'
       }
     ]
   } : form.slug === 'sh-7' ? {
@@ -1842,7 +1842,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
                       <td className="px-4 py-3 font-mono text-xs">Item VII, Annexure</td>
                       <td className="px-4 py-3 text-slate-600 dark:text-slate-400">Filed after 30 June or for deactivated DIN</td>
                       <td className="px-4 py-3 font-bold text-rose-600">₹5,000 flat</td>
-                      <td className="px-4 py-3 text-xs text-slate-500">Non-compounding flat fee. STP auto-approval.</td>
+                      <td className="px-4 py-3 text-xs text-slate-500">Non-compounding flat fee. Processing is subject to current MCA portal validations.</td>
                     </tr>
                   </tbody>
                 </table>
@@ -1972,7 +1972,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
                 <span>📝</span> Step-by-Step Filing Checklist: Form DIR-3 KYC Web on MCA21 V3
               </h3>
               <p className="text-xs text-slate-500 mb-4">
-                Follow this 6-step compliance protocol for seamless Straight-Through-Processing (STP) auto-approval.
+                Follow this 6-step compliance checklist. Portal processing and approval remain subject to current MCA validations.
               </p>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm text-left">
@@ -2017,9 +2017,9 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
                     </tr>
                     <tr>
                       <td className="px-4 py-2.5 font-bold">Step 6</td>
-                      <td className="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">Payment &amp; STP Auto-Approval</td>
+                      <td className="px-4 py-2.5 font-semibold text-slate-900 dark:text-white">Payment &amp; Portal Processing</td>
                       <td className="px-4 py-2.5 text-slate-600 dark:text-slate-400">Pay challan (₹0 / ₹500 / ₹5,000) via Bharatkosh online gateway.</td>
-                      <td className="px-4 py-2.5 text-xs font-bold text-emerald-600">Instant STP approval. DIN marked Active immediately.</td>
+                      <td className="px-4 py-2.5 text-xs font-bold text-emerald-600">Check the MCA portal for processing status and confirmation of DIN status.</td>
                     </tr>
                   </tbody>
                 </table>

@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import type { Metadata, Viewport } from 'next'
 
 export const viewport: Viewport = {
@@ -15,6 +16,7 @@ import JsonLd from '@/components/JsonLd'
 import TrackingScripts from '@/components/TrackingScripts'
 import ConsentGatedAnalytics from '@/components/ConsentGatedAnalytics'
 import CookieConsentBanner from '@/components/CookieConsentBanner'
+import AdSenseLoader from '@/components/AdSenseLoader'
 
 import WebMCPRegistry from '@/components/WebMCPRegistry'
 
@@ -59,14 +61,14 @@ export const metadata: Metadata = {
     locale: 'en_IN',
     url: 'https://www.corplawupdates.in',
     siteName: 'CorpLawUpdates.in',
-    title: 'CorpLawUpdates.in - India\'s Free Corporate Law Intelligence Platform',
+    title: 'CorpLawUpdates.in - Indian Corporate Law Intelligence Platform',
     description: 'Free Indian corporate law updates - MCA, SEBI, RBI, CCI, Labour Law, NCLT, IBC and FEMA regulatory updates for professionals.',
     images: [
       {
-        url: 'https://www.corplawupdates.in/api/og?title=India%27s+Free+Corporate+Law+Intelligence+Platform&category=',
+        url: 'https://www.corplawupdates.in/api/og?title=Indian+Corporate+Law+Intelligence+Platform&category=',
         width: 1200,
         height: 630,
-        alt: 'CorpLawUpdates.in - India\'s Free Corporate Law Intelligence Platform',
+        alt: 'CorpLawUpdates.in - Indian Corporate Law Intelligence Platform',
       },
     ],
   },
@@ -75,11 +77,11 @@ export const metadata: Metadata = {
     site: '@corplawupdates',
     creator: '@corplawupdates',
     title: {
-      default: 'CorpLawUpdates.in - India\'s Free Corporate Law Intelligence Platform',
+      default: 'CorpLawUpdates.in - Indian Corporate Law Intelligence Platform',
       template: '%s | CorpLawUpdates.in',
     },
     description: 'Free MCA, SEBI, RBI, NCLT, IBC and FEMA updates for professionals.',
-    images: ['https://www.corplawupdates.in/api/og?title=India%27s+Free+Corporate+Law+Intelligence+Platform&category='],
+    images: ['https://www.corplawupdates.in/api/og?title=Indian+Corporate+Law+Intelligence+Platform&category='],
   },
   alternates: {
     canonical: 'https://www.corplawupdates.in',
@@ -105,11 +107,6 @@ export default async function RootLayout({
       <head suppressHydrationWarning>
         <ThemeScript />
         <meta name="google-adsense-account" content="ca-pub-8404756575471756" />
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8404756575471756"
-          crossOrigin="anonymous"
-        />
         <link rel="llms" href="/llms.txt" />
         <link rel="describedby" href="/llms.txt" type="text/markdown" />
         <link rel="webmcp" href="/.well-known/webmcp" type="application/json" />
@@ -126,7 +123,7 @@ export default async function RootLayout({
           name: 'CorpLawUpdates.in',
           url: 'https://www.corplawupdates.in',
           logo: 'https://www.corplawupdates.in/icon.png',
-          description: 'India\'s free corporate law intelligence platform providing MCA, SEBI, RBI, NCLT and IBC regulatory updates.',
+          description: 'A free corporate-law intelligence platform focused on Indian regulatory updates and compliance tools.',
           email: 'mail@corplawupdates.in',
           sameAs: [
             'https://x.com/CorpLawUpdates',
@@ -199,6 +196,9 @@ export default async function RootLayout({
         <HideOnAdmin>
           <CookieConsentBanner />
         </HideOnAdmin>
+        <Suspense fallback={null}>
+          <AdSenseLoader />
+        </Suspense>
 
         <Script
           id="pwa-service-worker"

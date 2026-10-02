@@ -724,7 +724,7 @@ export function buildNewsletterTemplateHtml({
                 You are receiving this intelligence briefing because you subscribed at <a href="${SITE_URL}" style="color:#D4AF37;text-decoration:none;font-weight:600;">corplawupdates.in</a>.
               </p>
               <p style="margin:0 0 14px;font-size:11px;color:#64748B;line-height:1.5;">
-                India's Free Corporate Law Intelligence Platform · MCA · SEBI · RBI · NCLT · IBC · FEMA
+                Indian Corporate Law Intelligence Platform · MCA · SEBI · RBI · NCLT · IBC · FEMA
               </p>
               <a href="${unsubscribeUrl}" style="font-size:11px;color:#94A3B8;text-decoration:underline;">
                 Unsubscribe or Update Subscription Preferences
@@ -1045,7 +1045,7 @@ export function buildWeeklyDigestHtml({
                 You are receiving this automated compliance alert because you subscribed at <a href="${SITE_URL}" style="color:#D4AF37;text-decoration:none;font-weight:600;">corplawupdates.in</a>.
               </p>
               <p style="margin:0 0 14px;font-size:11px;color:#64748B;line-height:1.5;">
-                India's Free Corporate Law Intelligence Platform · MCA · SEBI · RBI · NCLT · IBC · FEMA
+                Indian Corporate Law Intelligence Platform · MCA · SEBI · RBI · NCLT · IBC · FEMA
               </p>
               <a href="${unsubscribeUrl}" style="font-size:11px;color:#94A3B8;text-decoration:underline;">
                 Unsubscribe from weekly compliance alerts

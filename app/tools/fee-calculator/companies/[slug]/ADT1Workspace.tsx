@@ -304,7 +304,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
               🏢 First Auditor &amp; OPC Status
             </span>
             <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
-              Under <strong>Section 139(6)</strong> and Rule 4(2) as clarified by ICSI guidance, filing Form ADT-1 for the <strong>First Auditor</strong> is not statutorily mandatory, although the revised MCA V3 form includes a field/option for First Auditor.
+              ICSI FAQs state that Form ADT-1 is not mandatory for the <strong>First Auditor</strong>. The revised MCA V3 form includes an option to report this appointment. Practice and interpretation may vary; check current MCA instructions and obtain qualified advice before deciding whether to file.
             </p>
           </div>
         </div>
@@ -904,7 +904,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
               <span>First Auditor Legal Position</span>
             </div>
             <p className="text-xs text-slate-300 leading-relaxed">
-              Under Section 139(6) of the Companies Act, 2013 and Rule 4(2) of Companies (Audit and Auditors) Rules, 2014, and as clarified by ICSI guidance, filing Form ADT-1 for the appointment of the First Auditor is not statutorily mandatory, although the revised MCA V3 form includes a field/option for First Auditor.
+              ICSI FAQs state that Form ADT-1 is not mandatory for the First Auditor. The revised MCA V3 form includes an option to report this appointment. Practice and interpretation may vary; check current MCA instructions and obtain qualified advice before deciding whether to file.
             </p>
           </div>
 
@@ -914,7 +914,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
               <span>Prohibition of Backdating</span>
             </div>
             <p className="text-xs text-slate-300 leading-relaxed">
-              MCA V3 portal enforces automated date validations preventing retrospective appointment dates. Timely filing facilitates seamless compliance linkage in subsequent annual filings (AOC-4 &amp; MGT-7).
+              MCA V3 may apply appointment-date validations. Check the current form instructions and portal response when preparing a filing; this estimate cannot confirm acceptance or linkage with later annual filings.
             </p>
           </div>
 
@@ -1016,7 +1016,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
               </tr>
               <tr>
                 <td className="p-2 font-bold bg-slate-50 border-r border-slate-200">Processing Route</td>
-                <td className="p-2">Straight Through Process (STP) — Auto Approval upon e-Challan payment</td>
+                <td className="p-2">STP processing may apply, subject to MCA V3 system validations</td>
               </tr>
             </tbody>
           </table>
@@ -1072,7 +1072,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
             <div className="border border-slate-200 rounded p-2.5 bg-slate-50">
               <p className="font-bold text-slate-900 mb-1">First Auditor Statutory Position:</p>
               <p className="text-slate-600 leading-snug">
-                Under Section 139(6) and Rule 4(2) (as clarified by ICSI guidance), filing Form ADT-1 for the First Auditor is not statutorily mandatory, though available as an option on MCA V3.
+                ICSI FAQs state that Form ADT-1 is not mandatory for the First Auditor. The revised MCA V3 form includes an option to report this appointment. Practice and interpretation may vary; check current MCA instructions and obtain qualified advice before deciding whether to file.
               </p>
             </div>
             <div className="border border-slate-200 rounded p-2.5 bg-slate-50">

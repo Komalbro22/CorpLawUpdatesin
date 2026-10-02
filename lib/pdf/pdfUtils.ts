@@ -102,7 +102,7 @@ export function renderDocumentHeader(doc: jsPDF, options: HeaderOptions): number
     subtitle,
     dateLabel = 'Date',
     dateValue,
-    categoryTag = "India's Free Corporate Law Intelligence & Statutory Compliance Platform",
+    categoryTag = 'Indian Corporate Law Intelligence & Statutory Compliance Platform',
     titleColor = PDF_PALETTE.blue
   } = options
 

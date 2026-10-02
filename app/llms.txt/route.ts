@@ -26,7 +26,7 @@ export async function GET() {
     : '- [MCA & SEBI Circulars](' + BASE_URL + '/updates): Regulatory compliance updates feed.'
 
   const content = `# CorpLawUpdates.in
-> India's free corporate law intelligence platform. Primary audience: Company Secretaries, Chartered Accountants, and compliance officers. Provides authoritative regulatory updates across MCA, SEBI, RBI, IBC/IBBI, and FEMA.
+> A free corporate-law intelligence platform focused on Indian regulatory updates and compliance tools. Primary audience: Company Secretaries, Chartered Accountants, and compliance officers. Provides regulatory updates across MCA, SEBI, RBI, IBC/IBBI, and FEMA.
 
 ## Site Navigation
 - [Sitemap](${BASE_URL}/sitemap.xml): Complete XML sitemap of all indexed URLs on the platform.

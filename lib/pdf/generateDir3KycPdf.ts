@@ -115,7 +115,7 @@ export function generateDir3KycPdf(input: Dir3KycPdfData | Dir3KycCalculationRes
     ],
     [
       'DIN Reactivation Fee',
-      'Reactivation of DIN deactivated due to prior non-filing (STP auto-approval)',
+      'Reactivation of DIN deactivated due to prior non-filing (portal processing subject to MCA validations)',
       data.dinStatus === 'deactivated' || data.filingType === 'reactivation' ? 'INR 5,000' : 'N/A'
     ],
     [
