@@ -27,8 +27,6 @@ export default function robots(): MetadataRoute.Robots {
     'CCBot',
     'Amazonbot',
     'FacebookBot',
-    'AhrefsBot',
-    'SemrushBot',
     'MJ12bot',
     'DotBot',
     'PetalBot',
