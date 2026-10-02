@@ -96,34 +96,34 @@ describe('3. Section 92(5) Statutory Penalty Exposure Engine', () => {
     expect(res.continuingDaysAfterFirst).toBe(0);
   });
 
-  test('1 day delay → Company ₹10,000, Officer ₹10,000 (0 continuing days after first)', () => {
+  test('1 day delay → Company ₹10,100, Officer ₹10,100 (1 day of continuing failure)', () => {
     const res = calculateSection92Penalty(1, 2);
-    expect(res.continuingDaysAfterFirst).toBe(0);
-    expect(res.standardCompanyPenalty).toBe(10000);
-    expect(res.standardPerOfficerPenalty).toBe(10000);
-    expect(res.standardTotalOfficersPenalty).toBe(20000);
-    expect(res.totalStandardExposure).toBe(30000);
-  });
-
-  test('2 days delay → Company ₹10,100, Officer ₹10,100 (1 continuing day after first)', () => {
-    const res = calculateSection92Penalty(2, 1);
     expect(res.continuingDaysAfterFirst).toBe(1);
     expect(res.standardCompanyPenalty).toBe(10100);
     expect(res.standardPerOfficerPenalty).toBe(10100);
+    expect(res.standardTotalOfficersPenalty).toBe(20200);
+    expect(res.totalStandardExposure).toBe(30300);
   });
 
-  test('30 days delay → Company ₹12,900 (29 continuing days @ ₹100)', () => {
+  test('2 days delay → Company ₹10,200, Officer ₹10,200 (2 days of continuing failure)', () => {
+    const res = calculateSection92Penalty(2, 1);
+    expect(res.continuingDaysAfterFirst).toBe(2);
+    expect(res.standardCompanyPenalty).toBe(10200);
+    expect(res.standardPerOfficerPenalty).toBe(10200);
+  });
+
+  test('30 days delay → Company ₹13,000 (30 days @ ₹100)', () => {
     const res = calculateSection92Penalty(30, 2);
-    expect(res.continuingDaysAfterFirst).toBe(29);
-    expect(res.standardCompanyPenalty).toBe(12900);
-    expect(res.standardPerOfficerPenalty).toBe(12900);
+    expect(res.continuingDaysAfterFirst).toBe(30);
+    expect(res.standardCompanyPenalty).toBe(13000);
+    expect(res.standardPerOfficerPenalty).toBe(13000);
   });
 
-  test('365 days delay → Company ₹46,400 (364 continuing days @ ₹100)', () => {
+  test('365 days delay → Company ₹46,500 (365 days @ ₹100)', () => {
     const res = calculateSection92Penalty(365, 2);
-    expect(res.continuingDaysAfterFirst).toBe(364);
-    expect(res.standardCompanyPenalty).toBe(46400);
-    expect(res.standardPerOfficerPenalty).toBe(46400);
+    expect(res.continuingDaysAfterFirst).toBe(365);
+    expect(res.standardCompanyPenalty).toBe(46500);
+    expect(res.standardPerOfficerPenalty).toBe(46500);
   });
 
   test('2500 days delay → Reaches Statutory Caps (Company ₹2,00,000, Officer ₹50,000)', () => {
@@ -448,13 +448,13 @@ describe('7. Reconciled Scenario Test Matrix (TV-01 to TV-10)', () => {
     expect(res.mcaPortalPayable.normalFilingFee).toBe(300);
     expect(res.mcaPortalPayable.additionalFilingFee).toBe(1400);
     expect(res.mcaPortalPayable.totalPortalPayable).toBe(1700);
-    // Continuing days after first = 13. Co penalty = 10000 + 1300 = 11300. 2 Officers = 22600. Total = 33900.
-    expect(res.statutoryPenaltyExposure.companyStandardExposure).toBe(11300);
-    expect(res.statutoryPenaltyExposure.officersStandardExposure).toBe(22600);
-    expect(res.statutoryPenaltyExposure.totalStandardExposure).toBe(33900);
+    // Continuing days = 14. Co penalty = 10000 + 1400 = 11400. 2 Officers = 22800. Total = 34200.
+    expect(res.statutoryPenaltyExposure.companyStandardExposure).toBe(11400);
+    expect(res.statutoryPenaltyExposure.officersStandardExposure).toBe(22800);
+    expect(res.statutoryPenaltyExposure.totalStandardExposure).toBe(34200);
   });
 
-  test('TV-03: 2025 Era Small Co (Cap ₹8 Cr, Turnover ₹80 Cr, 30d delay) → Normal ₹600, Addl ₹3,000, Total Portal ₹3,600, 446B Max ₹19,350', () => {
+  test('TV-03: 2025 Era Small Co (Cap ₹8 Cr, Turnover ₹80 Cr, 30d delay) → Normal ₹600, Addl ₹3,000, Total Portal ₹3,600, 446B Max ₹19,500', () => {
     const res = calculateMgt7Compliance({
       formCode: 'MGT-7A',
       nominalCapital: 80000000,
@@ -472,14 +472,14 @@ describe('7. Reconciled Scenario Test Matrix (TV-01 to TV-10)', () => {
     expect(res.mcaPortalPayable.normalFilingFee).toBe(600);
     expect(res.mcaPortalPayable.additionalFilingFee).toBe(3000);
     expect(res.mcaPortalPayable.totalPortalPayable).toBe(3600);
-    // Standard Co: 10000 + 29*100 = 12900 -> 446B Company: 6450
-    // Standard Officer: 12900 -> 446B Per Officer: 6450. 2 Officers: 12900. Total: 19350
-    expect(res.statutoryPenaltyExposure.companyIndicativeMaximumExposure).toBe(6450);
-    expect(res.statutoryPenaltyExposure.officersIndicativeMaximumExposure).toBe(12900);
-    expect(res.statutoryPenaltyExposure.totalIndicativeMaximumExposure).toBe(19350);
+    // Standard Co: 10000 + 30*100 = 13000 -> 446B Company: 6500
+    // Standard Officer: 13000 -> 446B Per Officer: 6500. 2 Officers: 13000. Total: 19500
+    expect(res.statutoryPenaltyExposure.companyIndicativeMaximumExposure).toBe(6500);
+    expect(res.statutoryPenaltyExposure.officersIndicativeMaximumExposure).toBe(13000);
+    expect(res.statutoryPenaltyExposure.totalIndicativeMaximumExposure).toBe(19500);
   });
 
-  test('TV-04: 2025 Era Boundary (Cap ₹10 Cr + ₹1, Turnover ₹50 Cr, 10d delay) → Normal ₹600, Addl ₹1,000, Total Portal ₹1,600, Exposure ₹21,800', () => {
+  test('TV-04: 2025 Era Boundary (Cap ₹10 Cr + ₹1, Turnover ₹50 Cr, 10d delay) → Normal ₹600, Addl ₹1,000, Total Portal ₹1,600, Exposure ₹22,000', () => {
     const res = calculateMgt7Compliance({
       formCode: 'MGT-7',
       nominalCapital: 100000001,
@@ -497,11 +497,11 @@ describe('7. Reconciled Scenario Test Matrix (TV-01 to TV-10)', () => {
     expect(res.mcaPortalPayable.normalFilingFee).toBe(600);
     expect(res.mcaPortalPayable.additionalFilingFee).toBe(1000);
     expect(res.mcaPortalPayable.totalPortalPayable).toBe(1600);
-    // 9 continuing days: Co 10900, 1 Officer 10900 -> Total 21800
-    expect(res.statutoryPenaltyExposure.totalStandardExposure).toBe(21800);
+    // 10 continuing days: Co 11000, 1 Officer 11000 -> Total 22000
+    expect(res.statutoryPenaltyExposure.totalStandardExposure).toBe(22000);
   });
 
-  test('TV-05: 2025 Era Boundary (Cap ₹2 Cr, Turnover ₹100 Cr + ₹1, 20d delay) → Normal ₹600, Addl ₹2,000, Total Portal ₹2,600, Exposure ₹35,700', () => {
+  test('TV-05: 2025 Era Boundary (Cap ₹2 Cr, Turnover ₹100 Cr + ₹1, 20d delay) → Normal ₹600, Addl ₹2,000, Total Portal ₹2,600, Exposure ₹36,000', () => {
     const res = calculateMgt7Compliance({
       formCode: 'MGT-7',
       nominalCapital: 20000000,
@@ -519,11 +519,11 @@ describe('7. Reconciled Scenario Test Matrix (TV-01 to TV-10)', () => {
     expect(res.mcaPortalPayable.normalFilingFee).toBe(600);
     expect(res.mcaPortalPayable.additionalFilingFee).toBe(2000);
     expect(res.mcaPortalPayable.totalPortalPayable).toBe(2600);
-    // 19 continuing days: Co 11900, 2 Officers 23800 -> Total 35700
-    expect(res.statutoryPenaltyExposure.totalStandardExposure).toBe(35700);
+    // 20 continuing days: Co 12000, 2 Officers 24000 -> Total 36000
+    expect(res.statutoryPenaltyExposure.totalStandardExposure).toBe(36000);
   });
 
-  test('TV-06: Holding Co Exclusion (Cap ₹10L, Turnover ₹1 Cr, 15d delay) → Normal ₹400, Addl ₹1,500, Total Portal ₹1,900, Exposure ₹34,200', () => {
+  test('TV-06: Holding Co Exclusion (Cap ₹10L, Turnover ₹1 Cr, 15d delay) → Normal ₹400, Addl ₹1,500, Total Portal ₹1,900, Exposure ₹34,500', () => {
     const res = calculateMgt7Compliance({
       formCode: 'MGT-7',
       nominalCapital: 1000000,
@@ -542,11 +542,11 @@ describe('7. Reconciled Scenario Test Matrix (TV-01 to TV-10)', () => {
     expect(res.mcaPortalPayable.normalFilingFee).toBe(400);
     expect(res.mcaPortalPayable.additionalFilingFee).toBe(1500);
     expect(res.mcaPortalPayable.totalPortalPayable).toBe(1900);
-    // 14 continuing days: Co 11400, 2 Officers 22800 -> Total 34200
-    expect(res.statutoryPenaltyExposure.totalStandardExposure).toBe(34200);
+    // 15 continuing days: Co 11500, 2 Officers 23000 -> Total 34500
+    expect(res.statutoryPenaltyExposure.totalStandardExposure).toBe(34500);
   });
 
-  test('TV-07: Subsidiary Co Exclusion (Cap ₹10L, Turnover ₹1 Cr, 5d delay) → Normal ₹400, Addl ₹500, Total Portal ₹900, Exposure ₹20,800', () => {
+  test('TV-07: Subsidiary Co Exclusion (Cap ₹10L, Turnover ₹1 Cr, 5d delay) → Normal ₹400, Addl ₹500, Total Portal ₹900, Exposure ₹21,000', () => {
     const res = calculateMgt7Compliance({
       formCode: 'MGT-7',
       nominalCapital: 1000000,
@@ -565,11 +565,11 @@ describe('7. Reconciled Scenario Test Matrix (TV-01 to TV-10)', () => {
     expect(res.mcaPortalPayable.normalFilingFee).toBe(400);
     expect(res.mcaPortalPayable.additionalFilingFee).toBe(500);
     expect(res.mcaPortalPayable.totalPortalPayable).toBe(900);
-    // 4 continuing days: Co 10400, 1 Officer 10400 -> Total 20800
-    expect(res.statutoryPenaltyExposure.totalStandardExposure).toBe(20800);
+    // 5 continuing days: Co 10500, 1 Officer 10500 -> Total 21000
+    expect(res.statutoryPenaltyExposure.totalStandardExposure).toBe(21000);
   });
 
-  test('TV-08: Section 8 Exclusion (No share cap, 10d delay) → Normal ₹200, Addl ₹1,000, Total Portal ₹1,200, Exposure ₹32,700', () => {
+  test('TV-08: Section 8 Exclusion (No share cap, 10d delay) → Normal ₹200, Addl ₹1,000, Total Portal ₹1,200, Exposure ₹33,000', () => {
     const res = calculateMgt7Compliance({
       formCode: 'MGT-7',
       nominalCapital: 0,
@@ -587,11 +587,11 @@ describe('7. Reconciled Scenario Test Matrix (TV-01 to TV-10)', () => {
     expect(res.mcaPortalPayable.normalFilingFee).toBe(200);
     expect(res.mcaPortalPayable.additionalFilingFee).toBe(1000);
     expect(res.mcaPortalPayable.totalPortalPayable).toBe(1200);
-    // 9 continuing days: Co 10900, 2 Officers 21800 -> Total 32700
-    expect(res.statutoryPenaltyExposure.totalStandardExposure).toBe(32700);
+    // 10 continuing days: Co 11000, 2 Officers 22000 -> Total 33000
+    expect(res.statutoryPenaltyExposure.totalStandardExposure).toBe(33000);
   });
 
-  test('TV-09: 2022 Era Historical Test (Cap ₹3.5 Cr, Turnover ₹30 Cr, 25d delay) → Normal ₹600, Addl ₹2,500, Total Portal ₹3,100, 446B Max ₹18,600', () => {
+  test('TV-09: 2022 Era Historical Test (Cap ₹3.5 Cr, Turnover ₹30 Cr, 25d delay) → Normal ₹600, Addl ₹2,500, Total Portal ₹3,100, 446B Max ₹18,750', () => {
     const res = calculateMgt7Compliance({
       formCode: 'MGT-7A',
       nominalCapital: 35000000,
@@ -609,11 +609,11 @@ describe('7. Reconciled Scenario Test Matrix (TV-01 to TV-10)', () => {
     expect(res.mcaPortalPayable.normalFilingFee).toBe(600);
     expect(res.mcaPortalPayable.additionalFilingFee).toBe(2500);
     expect(res.mcaPortalPayable.totalPortalPayable).toBe(3100);
-    // 24 continuing days: Standard Co 12400 -> 446B Co 6200; 2 Officers: 24800 -> 446B Off 12400. Total 18600
-    expect(res.statutoryPenaltyExposure.totalIndicativeMaximumExposure).toBe(18600);
+    // 25 continuing days: Standard Co 12500 -> 446B Co 6250; 2 Officers: 25000 -> 446B Off 12500. Total 18750
+    expect(res.statutoryPenaltyExposure.totalIndicativeMaximumExposure).toBe(18750);
   });
 
-  test('TV-10: 2021 Era Historical Test (Cap ₹3.5 Cr, Turnover ₹30 Cr, 25d delay) → Normal ₹600, Addl ₹2,500, Total Portal ₹3,100, Exposure ₹37,200 (No 446B)', () => {
+  test('TV-10: 2021 Era Historical Test (Cap ₹3.5 Cr, Turnover ₹30 Cr, 25d delay) → Normal ₹600, Addl ₹2,500, Total Portal ₹3,100, Exposure ₹37,500 (No 446B)', () => {
     const res = calculateMgt7Compliance({
       formCode: 'MGT-7',
       nominalCapital: 35000000,
@@ -631,8 +631,8 @@ describe('7. Reconciled Scenario Test Matrix (TV-01 to TV-10)', () => {
     expect(res.mcaPortalPayable.normalFilingFee).toBe(600);
     expect(res.mcaPortalPayable.additionalFilingFee).toBe(2500);
     expect(res.mcaPortalPayable.totalPortalPayable).toBe(3100);
-    // 24 continuing days: Co 12400, 2 Officers 24800 -> Total 37200
-    expect(res.statutoryPenaltyExposure.totalStandardExposure).toBe(37200);
+    // 25 continuing days: Co 12500, 2 Officers 25000 -> Total 37500
+    expect(res.statutoryPenaltyExposure.totalStandardExposure).toBe(37500);
   });
 });
 

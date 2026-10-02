@@ -1136,7 +1136,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
                 </table>
               ) : (
                 <div className="p-6 text-center text-slate-600 dark:text-slate-400">
-                  This form uses a {form.normalFeeStructure} fee structure. See calculator above for exact values.
+                  This form uses a {form.normalFeeStructure} fee structure. See calculator above for estimated values.
                 </div>
               )}
             </div>

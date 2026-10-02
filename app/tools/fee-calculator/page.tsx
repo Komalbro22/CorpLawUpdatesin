@@ -176,7 +176,7 @@ function HubFAQ() {
     },
     {
       q: 'Is the GST Calculator available?',
-      a: 'The GST Late Fee Calculator is currently in active development and will be launching soon. It will cover exact penalty and interest calculations for GSTR-1, GSTR-3B, and annual returns.'
+      a: 'The GST Late Fee Calculator is currently in active development and will be launching soon. It will cover statutory penalty and interest estimations for GSTR-1, GSTR-3B, and annual returns.'
     }
   ]
 

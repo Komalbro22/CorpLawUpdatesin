@@ -216,8 +216,8 @@ describe("getOtherCompanyIncorporationFee — SPICe+ MOA fee", () => {
     expect(getOtherCompanyIncorporationFee(20_00_000)).toBe(66_000);
   });
 
-  test("Pvt Ltd, ₹1Cr capital → ₹1,61,000 (verified)", () => {
-    expect(getOtherCompanyIncorporationFee(1_00_00_000)).toBe(1_61_000);
+  test("Pvt Ltd, ₹1Cr capital → ₹2,06,000 (verified per Table A Item 2b)", () => {
+    expect(getOtherCompanyIncorporationFee(1_00_00_000)).toBe(2_06_000);
   });
 
   // Old wrong value was ₹400 (flat slab) — confirm it's gone

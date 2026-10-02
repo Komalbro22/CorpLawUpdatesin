@@ -447,7 +447,7 @@ export default function CompaniesFeePage() {
             MCA Fee Calculator (V3) &amp; ROC Late Fee Penalty Calculator
           </h1>
           <p className="text-slate-300 text-base md:text-lg leading-relaxed max-w-3xl">
-            Institutional calculator for Indian corporate filings. Compute exact Table A normal filing fees, Table B late multipliers, ₹100/day uncapped annual return delays (AOC-4 &amp; MGT-7), ad-valorem charges (CHG-1), and state-wise stamp duty under Companies Act, 2013.
+            Institutional calculator for Indian corporate filings. Estimate applicable Table A normal filing fees, Table B late multipliers, ₹100/day uncapped annual return delays (AOC-4 &amp; MGT-7), ad-valorem charges (CHG-1), and state-wise stamp duty under Companies Act, 2013. Always verify final challan values on MCA21 portal before filing.
           </p>
         </div>
       </div>

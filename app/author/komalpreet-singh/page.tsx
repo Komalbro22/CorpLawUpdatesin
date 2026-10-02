@@ -47,15 +47,21 @@ export const metadata: Metadata = {
 }
 
 export default async function AuthorProfilePage() {
-  const { data: recentUpdates } = await supabase
-    .from('updates')
-    .select(UPDATE_LIST_COLUMNS)
-    .not('published_at', 'is', null)
-    .lte('published_at', new Date().toISOString())
-    .order('published_at', { ascending: false })
-    .limit(8)
-
-  const updatesList = (recentUpdates || []) as unknown as UpdateListItem[]
+  let updatesList: UpdateListItem[] = []
+  try {
+    const { data: recentUpdates } = await supabase
+      .from('updates')
+      .select(UPDATE_LIST_COLUMNS)
+      .not('published_at', 'is', null)
+      .lte('published_at', new Date().toISOString())
+      .order('published_at', { ascending: false })
+      .limit(8)
+    if (recentUpdates) {
+      updatesList = recentUpdates as unknown as UpdateListItem[]
+    }
+  } catch (err) {
+    console.error('Failed to fetch recent updates for author profile:', err)
+  }
 
   const authorJsonLd = {
     '@context': 'https://schema.org',

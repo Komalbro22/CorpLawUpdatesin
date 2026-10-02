@@ -226,7 +226,7 @@ export default function UnifiedCalculator() {
           MCA Fee Calculator
         </h2>
         <p className="text-base text-slate-500 dark:text-slate-400">
-          Professional institutional calculator for precise MCA filing fees and penalties.
+          Professional institutional calculator to estimate applicable statutory MCA filing fees and late multipliers based on selected assumptions.
         </p>
       </div>
 
@@ -553,6 +553,10 @@ export default function UnifiedCalculator() {
             </tbody>
           </table>
         </div>
+
+        <div className="mt-4 p-3 bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200/80 dark:border-amber-900/50 rounded-xl text-xs text-amber-900 dark:text-amber-300 leading-relaxed">
+          <strong className="font-semibold">Statutory Disclaimer:</strong> Fees and late filing multipliers are estimated based on published schedules under the Companies (Registration Offices and Fees) Rules, 2014 and Companies Act, 2013. Always verify final challan values on MCA21 portal before filing.
+        </div>
       </div>
 
       {/* Modal Overlay */}
@@ -604,6 +608,10 @@ export default function UnifiedCalculator() {
                   <span dangerouslySetInnerHTML={{__html: result.warningText}} className="font-medium leading-relaxed"></span>
                 </div>
               )}
+
+              <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                <strong>Statutory Disclaimer:</strong> Indicative calculation for planning purposes based on Companies (Registration Offices and Fees) Rules, 2014. Always verify final challan values on MCA21 portal before filing.
+              </div>
             </div>
 
             {/* Right side - Black Callout Box */}

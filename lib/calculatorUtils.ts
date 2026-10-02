@@ -373,10 +373,15 @@ export function calculateSH7Fee(params: SH7FeeParams) {
     delayDays: params.delayMonths * 30, // Rough mapping for the adapter, though the core uses 30-day months
     state: params.state || 'other',
   });
+  const eformFee = getNormalFilingFee(params.newCapital);
+  const normalFee = res.baseFee + eformFee;
+  const stampDuty = res.stampDuty > 0
+    ? res.stampDuty
+    : (!params.state ? Math.max(1000, Math.round((params.newCapital - params.existingCapital) * 0.001)) : 0);
   return {
-    normalFee: res.baseFee,
+    normalFee,
     additionalFee: res.lateFee,
-    total: res.total,
+    total: normalFee + res.lateFee + stampDuty,
     warningText: res.warningText,
   };
 }
