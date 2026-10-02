@@ -6,9 +6,10 @@ import { getEditorialDesk, EDITORIAL_LEAD } from '@/lib/editorial'
 interface EditorialAuthorCardProps {
   category?: string | null
   articleTitle?: string
+  isSponsored?: boolean
 }
 
-export default function EditorialAuthorCard({ category, articleTitle }: EditorialAuthorCardProps) {
+export default function EditorialAuthorCard({ category, articleTitle, isSponsored = false }: EditorialAuthorCardProps) {
   const desk = getEditorialDesk(category)
 
   const correctionSubject = encodeURIComponent(
@@ -99,13 +100,15 @@ export default function EditorialAuthorCard({ category, articleTitle }: Editoria
 
           {/* Actions: Email + Editorial Policy */}
           <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800/80">
-            <a
-              href={`mailto:${desk.email}?subject=${correctionSubject}`}
-              className="inline-flex items-center gap-2 text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-amber-700 dark:hover:text-amber-400 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-amber-300 rounded-xl px-3.5 py-2 transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
-            >
-              <Mail className="size-3.5 text-amber-600 dark:text-amber-400" aria-hidden="true" />
-              <span>{desk.email}</span>
-            </a>
+            {!isSponsored && (
+              <a
+                href={`mailto:${desk.email}?subject=${correctionSubject}`}
+                className="inline-flex items-center gap-2 text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-amber-700 dark:hover:text-amber-400 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-amber-300 rounded-xl px-3.5 py-2 transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+              >
+                <Mail className="size-3.5 text-amber-600 dark:text-amber-400" aria-hidden="true" />
+                <span>{desk.email}</span>
+              </a>
+            )}
 
             <div className="flex items-center gap-3 text-xs">
               <Link

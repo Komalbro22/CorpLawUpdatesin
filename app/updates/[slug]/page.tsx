@@ -772,8 +772,8 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                     <p className="mt-2">This is a sponsored article. CorpLawUpdates does not necessarily endorse the views or services mentioned. This is general information, not legal advice.</p>
                 </div>}
 
-                {/* E-E-A-T Editorial Desk Card */}
-                <EditorialAuthorCard category={update.category || undefined} articleTitle={update.title} />
+                {/* E-E-A-T Editorial Desk Card (only for non-sponsored articles) */}
+                {!update.is_sponsored && <EditorialAuthorCard category={update.category || undefined} articleTitle={update.title} />}
 
                 {/* Statutory Legal Disclaimer Box (E-E-A-T & Regulatory Compliance) */}
                 <div className="my-6 rounded-2xl border border-amber-300/80 dark:border-amber-700/60 bg-amber-50/70 dark:bg-amber-950/20 p-5 sm:p-6 text-xs text-amber-950 dark:text-amber-200 leading-relaxed shadow-sm">
