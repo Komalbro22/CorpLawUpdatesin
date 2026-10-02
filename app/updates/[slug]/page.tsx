@@ -407,12 +407,6 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                     className="mb-4"
                 />
 
-                {update.is_sponsored && <div className="mb-4 rounded-xl border border-violet-200 bg-violet-50 p-4 text-sm text-violet-950 dark:border-violet-900 dark:bg-violet-950/30 dark:text-violet-100">
-                    <span className="inline-flex rounded-md bg-violet-700 px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-white">Sponsored</span>
-                    {update.sponsor_name && <p className="mt-2 font-semibold">Sponsored by {update.sponsor_name}</p>}
-                    <p className="mt-2">This is a sponsored article. CorpLawUpdates does not necessarily endorse the views or services mentioned. This is general information, not legal advice.</p>
-                </div>}
-
                 <div className="mb-4 flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2 min-w-0">
                         {update.category && <CategoryBadge category={update.category as any} />}
@@ -448,16 +442,18 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                                                 {update.contributor_name || 'Sponsored contributor'}
                                             </span>
                                         ) : (
-                                            <Link href="/author/komalpreet-singh" className="font-bold text-slate-800 dark:text-slate-200 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
-                                                {EDITORIAL_LEAD.name}
-                                            </Link>
+                                            <>
+                                                <Link href="/author/komalpreet-singh" className="font-bold text-slate-800 dark:text-slate-200 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+                                                    {EDITORIAL_LEAD.name}
+                                                </Link>
+                                                <span className="text-slate-400 dark:text-slate-600">·</span>
+                                                <Link href="/editorial-policy" className="font-medium text-slate-600 dark:text-slate-400 hover:text-amber-700 dark:hover:text-amber-400 transition-colors truncate">
+                                                    {desk.name}
+                                                </Link>
+                                            </>
                                         )}
-                                        <span className="text-slate-400 dark:text-slate-600">·</span>
-                                        <Link href="/editorial-policy" className="font-medium text-slate-600 dark:text-slate-400 hover:text-amber-700 dark:hover:text-amber-400 transition-colors truncate">
-                                            {desk.name}
-                                        </Link>
                                     </div>
-                                    <span className="block text-[11px] text-slate-500 truncate" title={desk.tagline}>{desk.tagline}</span>
+                                    {!update.is_sponsored && <span className="block text-[11px] text-slate-500 truncate" title={desk.tagline}>{desk.tagline}</span>}
                                 </div>
                             </div>
                             {geoData?.last_verified && (
@@ -768,6 +764,13 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                         {contentPart2 && <MarkdownRenderer content={contentPart2} enableGazetteDownloadPrompt sponsoredLinks={!!update.is_sponsored} holdExternalLinks={!!update.hold_external_links} />}
                     </div>
                 </ErrorBoundary>
+
+                {/* Sponsored Disclosure (appears at end for sponsored articles) */}
+                {update.is_sponsored && <div className="my-6 rounded-xl border border-violet-200 bg-violet-50 p-4 text-sm text-violet-950 dark:border-violet-900 dark:bg-violet-950/30 dark:text-violet-100">
+                    <span className="inline-flex rounded-md bg-violet-700 px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-white">Sponsored</span>
+                    {update.sponsor_name && <p className="mt-2 font-semibold">Sponsored by {update.sponsor_name}</p>}
+                    <p className="mt-2">This is a sponsored article. CorpLawUpdates does not necessarily endorse the views or services mentioned. This is general information, not legal advice.</p>
+                </div>}
 
                 {/* E-E-A-T Editorial Desk Card */}
                 <EditorialAuthorCard category={update.category || undefined} articleTitle={update.title} />
