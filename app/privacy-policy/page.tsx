@@ -228,7 +228,30 @@ export default function PrivacyPolicyPage() {
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
 
                 <section>
-                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">6. Cookies &amp; Analytics Policy</h2>
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">6. Sponsored Content & Link Attribution</h2>
+                    <p className="text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">
+                        CorpLawUpdates.in may publish sponsored or guest articles submitted by external contributors. These articles are clearly labelled as "Sponsored" and include a disclosure that CorpLawUpdates does not necessarily endorse the views or services mentioned.
+                    </p>
+                    <div className="space-y-4 text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                        <div>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-1.5 text-xs uppercase tracking-wide">A. External Link Attribution in Sponsored Content</h3>
+                            <p>
+                                External links within sponsored articles are marked with <code className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-xs">rel="sponsored noopener noreferrer"</code> attributes in accordance with search engine guidelines for paid content. This ensures that search engines can distinguish between editorial links and paid/sponsored links.
+                            </p>
+                        </div>
+                        <div>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-1.5 text-xs uppercase tracking-wide">B. No Personal Data Collection from Sponsored Content</h3>
+                            <p>
+                                We do not collect or share your personal information with sponsors or external contributors through sponsored articles. Your interaction with sponsored content is governed by this Privacy Policy and is not shared with the sponsor.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
+
+                <section>
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">7. Cookies &amp; Analytics Policy</h2>
                     <p className="text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">
                         CorpLawUpdates.in uses essential cookies, device storage, and privacy-respecting analytics to enhance user navigation and measure platform readership in compliance with the Digital Personal Data Protection (DPDP) Act, 2023 and the DPDP Rules, 2025.
                     </p>

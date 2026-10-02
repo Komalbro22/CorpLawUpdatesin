@@ -34,7 +34,7 @@ export default function EditorialPolicyPage() {
         <h1 className="text-3xl font-heading font-bold text-navy dark:text-slate-100 mb-2">
           Editorial Policy
         </h1>
-        <p className="text-slate-400 text-sm mb-8">Last updated: 31 August 2026</p>
+        <p className="text-slate-400 text-sm mb-8">Last updated: 2 October 2026</p>
 
         <section className="space-y-8 text-slate-600 dark:text-slate-400 leading-relaxed">
           <div>
@@ -163,6 +163,30 @@ export default function EditorialPolicyPage() {
               </Link>{' '}
               are clearly labelled and separate from our regulatory news coverage.
             </p>
+          </div>
+
+          <div>
+            <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">9. Sponsored Content & Guest Articles</h2>
+            <p className="mb-3">
+              CorpLawUpdates.in may publish sponsored or guest articles submitted by external contributors. These are clearly distinguished from our editorial content:
+            </p>
+            <ul className="list-disc list-inside space-y-2">
+              <li>
+                <strong className="text-slate-800 dark:text-slate-200">Clear Labelling:</strong> All sponsored articles display a prominent "Sponsored" badge and disclosure stating that the content is sponsored and that CorpLawUpdates does not necessarily endorse the views or services mentioned.
+              </li>
+              <li>
+                <strong className="text-slate-800 dark:text-slate-200">Author Attribution:</strong> Sponsored articles are attributed to the named contributor rather than CorpLawUpdates editorial staff.
+              </li>
+              <li>
+                <strong className="text-slate-800 dark:text-slate-200">No Editorial Verification Claims:</strong> Sponsored articles do not display our editorial desk verification badges, fact-check claims, or compliance timestamps. These indicators are reserved exclusively for content researched and verified by our editorial team.
+              </li>
+              <li>
+                <strong className="text-slate-800 dark:text-slate-200">Link Attribution:</strong> External links in sponsored articles are marked with <code className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-xs">rel="sponsored"</code> in accordance with search engine guidelines for paid content.
+              </li>
+              <li>
+                <strong className="text-slate-800 dark:text-slate-200">Editorial Standards:</strong> While sponsored content undergoes basic review for factual accuracy and legal compliance, it is not held to the same primary-source verification standard as our editorial news coverage.
+              </li>
+            </ul>
           </div>
         </section>
 

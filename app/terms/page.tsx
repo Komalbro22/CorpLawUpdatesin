@@ -25,7 +25,7 @@ export default function TermsPage() {
                     Terms of Service
                 </h1>
                 <p className="text-slate-300 mt-2 text-sm">
-                    Last updated: 14 June 2026
+                    Last updated: 2 October 2026
                 </p>
             </div>
 
@@ -80,6 +80,23 @@ export default function TermsPage() {
                         <li><strong>Calculator & Fee Estimates:</strong> Statutory fees, additional filing fees, and adjudication penalty estimates are computed based on published statutory schedules. Actual fees depend on MCA V3 system validations and ROC discretion.</li>
                         <li><strong>Public Data & CIN Lookup:</strong> Company search and CIN decoding utilize public corporate records. Users must cross-verify master data on the official MCA portal (<a href="https://www.mca.gov.in" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 hover:underline">mca.gov.in</a>).</li>
                         <li><strong>Limitation of Tool Liability:</strong> We accept no liability for any rejected statutory filings, compliance defaults, or financial losses arising from reliance on tool outputs or generated draft templates.</li>
+                    </ul>
+                </section>
+
+                {/* SECTION 2B */}
+                <section className="border-t border-slate-100 dark:border-slate-800/80 pt-8">
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">
+                        2B. Sponsored Content & Guest Articles
+                    </h2>
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+                        CorpLawUpdates.in may publish sponsored or guest articles submitted by external contributors. These articles are subject to the following terms:
+                    </p>
+                    <ul className="list-disc list-inside space-y-2 text-slate-600 dark:text-slate-400">
+                        <li><strong>Clear Labelling:</strong> All sponsored articles are prominently marked with a "Sponsored" badge and include a disclosure that CorpLawUpdates does not necessarily endorse the views or services mentioned.</li>
+                        <li><strong>Attribution:</strong> Sponsored articles are attributed to the named contributor rather than CorpLawUpdates editorial staff.</li>
+                        <li><strong>Editorial Standards:</strong> While sponsored content undergoes basic review for factual accuracy and legal compliance, it is not held to the same primary-source verification standard as our editorial news coverage.</li>
+                        <li><strong>Link Attribution:</strong> External links in sponsored articles are marked with <code className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-xs">rel="sponsored"</code> in accordance with search engine guidelines for paid content.</li>
+                        <li><strong>No Endorsement:</strong> Publication of sponsored content does not constitute an endorsement by CorpLawUpdates.in of the sponsor, the contributor, or any products, services, or views expressed therein.</li>
                     </ul>
                 </section>
 

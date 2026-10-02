@@ -427,9 +427,33 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                 <h1 id="article-title" className="font-heading text-xl sm:text-2xl md:text-[2.2rem] text-navy dark:text-slate-50 font-bold mb-3 sm:mb-4 leading-snug break-words text-balance">
                     {update.title}
                 </h1>
-                
-                {/* 2. Editorial byline */}
-                {(() => {
+
+                {/* 2. Sponsored byline (only for sponsored articles) */}
+                {update.is_sponsored && (
+                    <div className="mb-4 flex items-center gap-2.5 rounded-xl bg-violet-50 dark:bg-violet-950/30 border border-violet-200 dark:border-violet-900 p-2.5 sm:p-3 text-xs">
+                        <span className="flex size-8 items-center justify-center rounded-full bg-violet-700 text-white font-bold text-xs shrink-0">
+                            <span className="text-[10px]">SP</span>
+                        </span>
+                        <div className="min-w-0 flex-1">
+                            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                                <span className="font-bold text-slate-800 dark:text-slate-200">
+                                    {update.contributor_name || 'Sponsored contributor'}
+                                </span>
+                                {update.sponsor_name && (
+                                    <>
+                                        <span className="text-slate-400 dark:text-slate-600">·</span>
+                                        <span className="font-medium text-violet-700 dark:text-violet-300">
+                                            Sponsored by {update.sponsor_name}
+                                        </span>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* 3. Editorial byline (only for non-sponsored articles) */}
+                {!update.is_sponsored && (() => {
                     const desk = getEditorialDesk(update.category);
                     return (
                         <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 rounded-xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200/80 dark:border-slate-800 p-2.5 sm:p-3 text-xs">
@@ -437,23 +461,15 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                                 <span className="flex size-8 items-center justify-center rounded-full bg-navy dark:bg-slate-800 text-white font-bold text-xs shrink-0 border border-slate-700">KS</span>
                                 <div className="min-w-0 flex-1">
                                     <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
-                                        {update.is_sponsored ? (
-                                            <span className="font-bold text-slate-800 dark:text-slate-200">
-                                                {update.contributor_name || 'Sponsored contributor'}
-                                            </span>
-                                        ) : (
-                                            <>
-                                                <Link href="/author/komalpreet-singh" className="font-bold text-slate-800 dark:text-slate-200 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
-                                                    {EDITORIAL_LEAD.name}
-                                                </Link>
-                                                <span className="text-slate-400 dark:text-slate-600">·</span>
-                                                <Link href="/editorial-policy" className="font-medium text-slate-600 dark:text-slate-400 hover:text-amber-700 dark:hover:text-amber-400 transition-colors truncate">
-                                                    {desk.name}
-                                                </Link>
-                                            </>
-                                        )}
+                                        <Link href="/author/komalpreet-singh" className="font-bold text-slate-800 dark:text-slate-200 hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+                                            {EDITORIAL_LEAD.name}
+                                        </Link>
+                                        <span className="text-slate-400 dark:text-slate-600">·</span>
+                                        <Link href="/editorial-policy" className="font-medium text-slate-600 dark:text-slate-400 hover:text-amber-700 dark:hover:text-amber-400 transition-colors truncate">
+                                            {desk.name}
+                                        </Link>
                                     </div>
-                                    {!update.is_sponsored && <span className="block text-[11px] text-slate-500 truncate" title={desk.tagline}>{desk.tagline}</span>}
+                                    <span className="block text-[11px] text-slate-500 truncate" title={desk.tagline}>{desk.tagline}</span>
                                 </div>
                             </div>
                             {geoData?.last_verified && (
