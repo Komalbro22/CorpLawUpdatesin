@@ -2,6 +2,17 @@ import { unstable_cache } from 'next/cache'
 import { supabaseDocuments } from '@/lib/supabase-documents'
 import { supabaseAdmin } from '@/lib/supabase-server'
 
+export interface DocumentTemplateField {
+  id: string
+  label: string
+  type: 'text' | 'textarea' | 'date' | 'select'
+  placeholder?: string
+  required: boolean
+  help_text?: string
+  options?: string[]
+  pattern?: string
+}
+
 export interface DocumentTemplateRecord {
   id: string
   name: string
@@ -10,14 +21,14 @@ export interface DocumentTemplateRecord {
   category: string
   template_content: string
   ai_system_prompt: string
-  regulation_reference?: string
-  source?: string
-  last_verified?: string
+  regulation_reference: string
+  source: string
+  last_verified: string
   is_free?: boolean
   is_active?: boolean
   usage_count?: number
   tags?: string[]
-  fields?: unknown[]
+  fields: DocumentTemplateField[]
   [key: string]: any
 }
 
@@ -38,7 +49,13 @@ export const getCachedDocumentTemplate = unstable_cache(
         return null
       }
 
-      return data as DocumentTemplateRecord
+      return {
+        ...data,
+        regulation_reference: data.regulation_reference ?? '',
+        source: data.source ?? '',
+        last_verified: data.last_verified ?? '',
+        fields: Array.isArray(data.fields) ? data.fields : [],
+      } as DocumentTemplateRecord
     } catch {
       return null
     }
