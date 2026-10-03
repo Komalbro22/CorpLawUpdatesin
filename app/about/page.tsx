@@ -249,6 +249,7 @@ export default async function AboutPage() {
                             </a>
                         </div>
                     </section>
+                )}
 
                 {/* 7. Site Statistics (Trust Signals) */}
                 <section className="mb-12">
@@ -282,5 +283,30 @@ export default async function AboutPage() {
 
             <NewsletterSection />
         </Layout>
+    )
+}
+                                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                                    </svg>
+                                </a>
+                            )}
+                        </div>
+                    </section>
+                )}
+
+                {/* 7. DISCLAIMER */}
+                <section className="bg-amber-50 dark:bg-amber-950/20 border-2 border-amber-400 dark:border-amber-600/60 p-8 rounded-2xl">
+                    <h3 className="font-bold text-amber-900 dark:text-amber-300 text-xl mb-3 flex items-center">
+                        <svg className="size-6 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        Important Disclaimer
+                    </h3>
+                    <p className="text-amber-950/90 dark:text-amber-200 font-medium leading-relaxed">
+                        The content on CorpLawUpdates.in is for informational purposes only and does not constitute legal advice.
+                        Always consult a qualified legal professional for advice specific to your situation.
+                    </p>
+                </section>
+            </div>
+        </div>
     )
 }
