@@ -82,20 +82,11 @@ export default function EditorialAuthorCard({ category, articleTitle, isSponsore
             </div>
           )}
 
-          {/* Standards Row */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2 border-t border-slate-100 dark:border-slate-800/80">
-            <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
-              <ShieldCheck className="size-4 text-emerald-600 dark:text-emerald-400 shrink-0" aria-hidden="true" />
-              <span>Gazette Verified</span>
-            </div>
-            <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
-              <Scale className="size-4 text-amber-600 dark:text-amber-400 shrink-0" aria-hidden="true" />
-              <span>Editorial Fact-Check</span>
-            </div>
-            <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
-              <CheckCircle2 className="size-4 text-blue-600 dark:text-blue-400 shrink-0" aria-hidden="true" />
-              <span>Independent Editorial</span>
-            </div>
+          {/* Editorial Standards Note */}
+          <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">
+              Corroborated against official Gazette notifications, regulatory circulars, and parent statutory enactments.
+            </p>
           </div>
 
           {/* Actions: Email + Editorial Policy */}
