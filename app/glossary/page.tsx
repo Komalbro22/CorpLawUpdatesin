@@ -8,7 +8,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Legal Glossary — Indian Corporate Law Terms | CorpLawUpdates',
-  description: 'Plain-language definitions of 200+ Indian corporate law terms covering IBC, CIRP, SEBI, MCA, RBI, and FEMA — simplified for professionals, CA, CMA, and law students.',
+  description: 'Plain-language definitions of 180+ Indian corporate law terms covering IBC, CIRP, SEBI, MCA, RBI, and FEMA — simplified for professionals, CA, CMA, and law students.',
   alternates: {
     canonical: 'https://www.corplawupdates.in/glossary',
   },

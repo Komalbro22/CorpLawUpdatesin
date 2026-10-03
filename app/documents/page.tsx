@@ -370,7 +370,7 @@ export default async function DocumentsPage() {
           links={[
             { href: '/tools/fee-calculator', label: 'ROC Fee Calculator', desc: 'Late fees & penalties' },
             { href: '/tools/cin-decoder', label: 'CIN Decoder', desc: 'Decode company CINs' },
-            { href: '/calendar', label: 'Compliance Calendar', desc: '50+ deadlines' },
+            { href: '/calendar', label: 'Compliance Calendar', desc: '90+ deadlines' },
             { href: '/updates', label: 'Latest Updates', desc: 'MCA, SEBI, RBI briefs' },
             { href: '/editorial-policy', label: 'Editorial Policy', desc: 'How we verify content' },
           ]}

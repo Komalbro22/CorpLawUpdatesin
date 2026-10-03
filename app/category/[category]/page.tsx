@@ -150,7 +150,7 @@ const CATEGORY_REGULATORY_FAQS: Record<string, CategoryFAQ[]> = {
         },
         {
             question: 'Where can compliance professionals verify official MCA notifications?',
-            answer: 'Official MCA circulars, notifications, and orders are published directly on the MCA21 portal (mca.gov.in) under the Notifications & Circulars repository. CorpLawUpdates tracks and summarizes them daily with direct links to official gazette copies.',
+            answer: 'Official MCA circulars, notifications, and orders are published directly on the MCA21 portal (mca.gov.in) under the Notifications & Circulars repository. CorpLawUpdates tracks and summarizes them with direct links to official gazette copies.',
         },
         {
             question: 'What is the difference between an MCA notification and a circular?',
@@ -174,7 +174,7 @@ const CATEGORY_REGULATORY_FAQS: Record<string, CategoryFAQ[]> = {
     rbi: [
         {
             question: 'Where can compliance officers find the latest RBI circulars for banks and NBFCs?',
-            answer: 'Official RBI circulars, notifications, and Master Directions are issued on rbi.org.in across the Banking Operations, Non-Banking, and Financial Markets departments. CorpLawUpdates tracks and summarizes all new circulars daily with direct gazette citations and official PDF download links for compliance professionals.',
+            answer: 'Official RBI circulars, notifications, and Master Directions are issued on rbi.org.in across the Banking Operations, Non-Banking, and Financial Markets departments. CorpLawUpdates tracks and summarizes new circulars with direct gazette citations and official PDF download links for compliance professionals.',
         },
         {
             question: 'What is the difference between an RBI circular and a Master Direction?',
@@ -975,7 +975,7 @@ export default async function CategoryPage({
                         <EmptyState
                             icon="📋"
                             title={`Recent ${cat.toUpperCase()} Circulars & Gazette Notifications`}
-                            description={`Official notifications and circulars for ${CATEGORY_FULL_NAMES[cat] || cat.toUpperCase()} are monitored and indexed dynamically in real time. Explore our statutory intelligence guides, regulatory FAQs, and compliance calculators below.`}
+                            description={`Official notifications and circulars for ${CATEGORY_FULL_NAMES[cat] || cat.toUpperCase()} are tracked directly from primary regulatory publications. Explore our statutory intelligence guides, regulatory FAQs, and compliance calculators below.`}
                             actionLabel="Subscribe to Regulatory Alerts"
                             actionHref="/newsletter"
                         />
@@ -1049,7 +1049,7 @@ export default async function CategoryPage({
                             Latest {cat.toUpperCase()} Circulars & Notifications
                         </h2>
                         <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
-                            {new Date().toLocaleString('en-IN', { month: 'long', year: 'numeric' })} · Auto-updated with every new publication
+                            Latest update: {new Date(top5Updates[0].published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
                         </p>
                         <div className="space-y-6">
                             {top5Updates.map((u: any, idx: number) => (

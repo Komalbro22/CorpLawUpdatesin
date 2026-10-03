@@ -471,11 +471,8 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                             </div>
                             {geoData?.last_verified && (
                                 <div className="flex flex-col sm:items-end border-t sm:border-t-0 border-slate-200/60 dark:border-slate-800/60 pt-2 sm:pt-0 shrink-0 whitespace-nowrap">
-                                    <span className="flex items-center gap-1 font-semibold text-emerald-700 dark:text-emerald-400 text-[11px] sm:text-xs whitespace-nowrap">
-                                        <CheckCircle2 className="size-3.5 text-emerald-500 shrink-0" aria-hidden="true" /> Source verified
-                                    </span>
-                                    <span className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 whitespace-nowrap">
-                                        Verified: <span className="tabular-nums font-medium">{formatDate(geoData.last_verified)}</span>
+                                    <span className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                                        Last updated: <span className="tabular-nums font-semibold text-slate-700 dark:text-slate-300">{formatDate(geoData.last_verified)}</span>
                                     </span>
                                 </div>
                             )}

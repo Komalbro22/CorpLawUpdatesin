@@ -871,7 +871,7 @@ export default function MemorandumOfUnderstandingPage() {
                   <ArrowRight className="w-4 h-4 text-slate-400 group-hover:translate-x-1 transition" />
                 </div>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                  Explore 50+ statutory corporate agreements, resolutions, NDAs, and compliance generators.
+                  Explore statutory corporate agreements, resolutions, NDAs, and compliance generators.
                 </p>
               </Link>
             </div>

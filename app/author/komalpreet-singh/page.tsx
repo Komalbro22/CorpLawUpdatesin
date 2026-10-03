@@ -24,14 +24,14 @@ import {
 export const revalidate = 3600 // 1 hour
 
 export const metadata: Metadata = {
-  title: 'Komalpreet Singh – Founder & Lead Regulatory Research Analyst | CorpLawUpdates.in',
+  title: 'Komalpreet Singh – Founder & Independent Author | CorpLawUpdates.in',
   description:
-    'Author profile & research dossier for Komalpreet Singh, Founder and Lead Regulatory Research Analyst at CorpLawUpdates.in. Specializing in MCA, SEBI, RBI, FEMA, and IBC corporate jurisprudence.',
+    'Author profile & research dossier for Komalpreet Singh, Founder and Independent Author at CorpLawUpdates.in. Specializing in MCA, SEBI, RBI, FEMA, and IBC corporate jurisprudence.',
   alternates: {
     canonical: 'https://www.corplawupdates.in/author/komalpreet-singh',
   },
   openGraph: {
-    title: 'Komalpreet Singh – Founder & Lead Regulatory Research Analyst | CorpLawUpdates.in',
+    title: 'Komalpreet Singh – Founder & Independent Author | CorpLawUpdates.in',
     description:
       'Author profile & research dossier for Komalpreet Singh. Specializing in Indian corporate jurisprudence, Companies Act 2013, SEBI circulars, and RBI master directions.',
     url: 'https://www.corplawupdates.in/author/komalpreet-singh',
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Komalpreet Singh – Founder & Lead Regulatory Research Analyst',
+    title: 'Komalpreet Singh – Founder & Independent Author',
     description:
       'Author profile & research dossier for Komalpreet Singh at CorpLawUpdates.in. Tracking MCA, SEBI, RBI, FEMA, and IBC regulations.',
   },
@@ -72,9 +72,9 @@ export default async function AuthorProfilePage() {
     name: 'Komalpreet Singh',
     givenName: 'Komalpreet',
     familyName: 'Singh',
-    jobTitle: 'Founder & Lead Regulatory Research Analyst',
+    jobTitle: 'Founder & Independent Author',
     description:
-      'Lead Regulatory Research Analyst specializing in Indian corporate jurisprudence, Companies Act 2013, SEBI capital market regulations, RBI master directions, FEMA, and IBC restructuring.',
+      'Independent author and legal researcher specializing in Indian corporate jurisprudence, Companies Act 2013, SEBI capital market regulations, RBI master directions, FEMA, and IBC restructuring.',
     url: 'https://www.corplawupdates.in/author/komalpreet-singh',
     email: 'mailto:legal@corplawupdates.in',
     address: {
@@ -176,7 +176,7 @@ export default async function AuthorProfilePage() {
                   </span>
                 </div>
                 <p className="text-base sm:text-lg text-amber-700 dark:text-amber-400 font-medium">
-                  Founder &amp; Lead Regulatory Research Analyst
+                  Founder &amp; Independent Author
                 </p>
                 <div className="flex flex-wrap items-center gap-y-1 gap-x-4 text-xs text-slate-500 dark:text-slate-400 mt-2">
                   <span className="inline-flex items-center gap-1.5">
@@ -193,7 +193,7 @@ export default async function AuthorProfilePage() {
               </div>
 
               <p className="text-slate-700 dark:text-slate-300 leading-relaxed text-sm sm:text-base">
-                Komalpreet Singh is the Founder and Lead Regulatory Research Analyst at CorpLawUpdates.in. He leads the
+                Komalpreet Singh is the Founder and Independent Author at CorpLawUpdates.in. He operates the
                 statutory research desk, tracking official government gazettes, tribunal orders, and regulator circulars
                 across the Ministry of Corporate Affairs (MCA), Securities and Exchange Board of India (SEBI), Reserve
                 Bank of India (RBI), Insolvency and Bankruptcy Board of India (IBBI), and the Foreign Exchange Management

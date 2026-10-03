@@ -8,7 +8,7 @@ const DEFAULT_LINKS: HubLink[] = [
   { href: '/tools', label: 'Compliance Tools', desc: 'Calculators & generators' },
   { href: '/tools/cin-decoder', label: 'CIN Decoder', desc: 'Decode any company CIN' },
   { href: '/documents', label: 'Document Generator', desc: 'ICSI & MCA formats' },
-  { href: '/glossary', label: 'Legal Glossary', desc: '200+ definitions' },
+  { href: '/glossary', label: 'Legal Glossary', desc: '180+ definitions' },
   { href: '/editorial-policy', label: 'Editorial Policy', desc: 'How we verify content' },
 ]
 

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { supabase } from '@/lib/supabase'
+import { getSiteStats } from '@/lib/site-stats'
 
 export const revalidate = 3600
 
@@ -18,6 +19,7 @@ export const metadata: Metadata = {
 }
 
 export default async function AboutPage() {
+    const stats = await getSiteStats()
     const { data: settings } = await supabase
         .from('site_settings')
         .select('key, value')
@@ -116,7 +118,7 @@ export default async function AboutPage() {
                 <section className="mb-12">
                     <h2 className="text-3xl font-heading font-bold text-navy dark:text-white mb-4 border-l-4 border-gold pl-4">How It Works & Editorial Methodology</h2>
                     <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
-                        Every piece of information published on CorpLawUpdates.in is researched and curated independently by our regulatory research analyst. We track official government gazettes, regulatory portals, and statutory press releases daily across MCA, SEBI, RBI, IBBI, and EPFO.
+                        CorpLawUpdates.in is operated by a single independent author. Every regulatory update is researched directly from primary sources including the Gazette of India, MCA, SEBI, RBI, IBBI, and other official regulatory portals.
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
                         <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
@@ -136,7 +138,7 @@ export default async function AboutPage() {
 
                 {/* 5.1 Editorial Leadership & Research Team (E-E-A-T) */}
                 <section id="editorial-leadership" className="mb-12 scroll-mt-24">
-                    <h2 className="text-3xl font-heading font-bold text-navy dark:text-white mb-6 border-l-4 border-gold pl-4">Editorial Leadership & Research Team</h2>
+                    <h2 className="text-3xl font-heading font-bold text-navy dark:text-white mb-6 border-l-4 border-gold pl-4">About the Author & Research Desk</h2>
                     <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
                         <div className="flex flex-col sm:flex-row items-start gap-6">
                             <div className="size-16 sm:size-20 rounded-2xl bg-gradient-to-br from-navy to-slate-800 dark:from-amber-500 dark:to-amber-600 text-white dark:text-slate-950 flex items-center justify-center font-heading font-bold text-2xl sm:text-3xl shrink-0 shadow-md ring-4 ring-amber-400/20">
@@ -147,7 +149,7 @@ export default async function AboutPage() {
                                     <div className="flex flex-wrap items-center gap-2">
                                         <h3 className="text-2xl font-heading font-bold text-navy dark:text-white">Komalpreet Singh</h3>
                                         <span className="inline-flex items-center rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-300/80 dark:border-amber-700 px-3 py-0.5 text-xs font-semibold">
-                                            Founder & Lead Regulatory Analyst
+                                            Founder & Independent Author
                                         </span>
                                     </div>
                                     <p className="text-sm text-slate-500 dark:text-slate-400 font-medium mt-0.5">
@@ -155,7 +157,7 @@ export default async function AboutPage() {
                                     </p>
                                 </div>
                                 <p className="text-slate-700 dark:text-slate-300 leading-relaxed text-sm sm:text-base">
-                                    Specializing in Indian corporate jurisprudence, statutory notifications, SEBI capital market regulations, and RBI Master Directions. He oversees the regulatory monitoring desk at CorpLawUpdates.in, verifying regulatory developments and authoring actionable intelligence for corporate secretaries, corporate lawyers, and compliance practitioners across India.
+                                    Specializing in Indian corporate jurisprudence, statutory notifications, SEBI capital market regulations, and RBI Master Directions. Operating as a single independent author at CorpLawUpdates.in, he tracks regulatory developments and synthesizes actionable intelligence for corporate secretaries, corporate lawyers, and compliance practitioners across India.
                                 </p>
                                 <div className="flex flex-wrap items-center gap-4 pt-2 text-xs font-semibold text-slate-600 dark:text-slate-400">
                                     <span className="flex items-center gap-1.5">
@@ -260,15 +262,15 @@ export default async function AboutPage() {
                     <h2 className="text-3xl font-heading font-bold text-navy dark:text-white mb-6 border-l-4 border-gold pl-4">Site Statistics</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm text-center">
-                            <span className="text-4xl font-heading font-bold text-amber-600 dark:text-amber-400 block mb-2">200+</span>
+                            <span className="text-4xl font-heading font-bold text-amber-600 dark:text-amber-400 block mb-2">{stats.articlesLabel}</span>
                             <span className="text-sm text-slate-600 dark:text-slate-400">Regulatory Updates Published</span>
                         </div>
                         <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm text-center">
-                            <span className="text-4xl font-heading font-bold text-emerald-600 dark:text-emerald-400 block mb-2">180+</span>
+                            <span className="text-4xl font-heading font-bold text-emerald-600 dark:text-emerald-400 block mb-2">{stats.glossaryLabel}</span>
                             <span className="text-sm text-slate-600 dark:text-slate-400">Glossary Definitions Explained</span>
                         </div>
                         <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm text-center">
-                            <span className="text-4xl font-heading font-bold text-blue-600 dark:text-blue-400 block mb-2">90+</span>
+                            <span className="text-4xl font-heading font-bold text-blue-600 dark:text-blue-400 block mb-2">{stats.complianceDeadlinesLabel}</span>
                             <span className="text-sm text-slate-600 dark:text-slate-400">Compliance Deadlines Tracked</span>
                         </div>
                     </div>

@@ -251,7 +251,7 @@ const nextConfig = {
       },
       {
         source: '/search',
-        destination: '/tools/cin-decoder',
+        destination: '/company-search',
         permanent: true,
       },
       {

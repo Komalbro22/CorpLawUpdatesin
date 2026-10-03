@@ -35,7 +35,7 @@ export const EDITORIAL_DESKS: Record<string, EditorialDesk> = {
   RBI: {
     name: 'CorpLaw Banking & Monetary Regulations Desk',
     shortName: 'Banking & RBI Desk',
-    tagline: 'Real-time banking and monetary policy intelligence. Sourced directly from Reserve Bank of India (RBI) notifications, Master Directions, and financial circulars.',
+    tagline: 'Authoritative banking and monetary policy intelligence. Sourced directly from Reserve Bank of India (RBI) notifications, Master Directions, and financial circulars.',
     description: 'Banking and financial regulatory research desk at CorpLawUpdates.in, tracking RBI master directions, NBFC compliance, digital lending guidelines, and payment system directives.',
     email: 'editorial@corplawupdates.in',
     regulators: ['Reserve Bank of India (RBI)', 'Department of Financial Services', 'Gazette of India'],
@@ -85,7 +85,7 @@ export const EDITORIAL_DESKS: Record<string, EditorialDesk> = {
   FEMA: {
     name: 'CorpLaw Foreign Exchange & Cross-Border Desk',
     shortName: 'FEMA & Cross-Border Desk',
-    tagline: 'Real-time cross-border compliance intelligence. Sourced directly from RBI Foreign Exchange Management Act (FEMA) circulars and DGFT trade notices.',
+    tagline: 'Specialized cross-border compliance intelligence. Sourced directly from RBI Foreign Exchange Management Act (FEMA) circulars and DGFT trade notices.',
     description: 'Cross-border investment and foreign exchange research desk at CorpLawUpdates.in, covering FDI policy, Overseas Direct Investment (ODI), ECB regulations, and trade compliance.',
     email: 'editorial@corplawupdates.in',
     regulators: ['RBI Foreign Exchange Department', 'Directorate General of Foreign Trade (DGFT)', 'Ministry of Finance'],
@@ -153,11 +153,11 @@ export function getEditorialDesk(category?: string | null): EditorialDesk {
 
 export const EDITORIAL_LEAD = {
   name: 'Komalpreet Singh',
-  role: 'Founder & Lead Regulatory Research Analyst',
+  role: 'Founder & Independent Author',
   location: 'Lucknow, Uttar Pradesh, India',
   email: 'legal@corplawupdates.in',
   url: `${BASE_URL}/author/komalpreet-singh`,
-  bio: 'Specializing in Indian corporate jurisprudence, Companies Act 2013 compliance, SEBI regulations, and RBI directives. Leading statutory research and verification at CorpLawUpdates.in.',
+  bio: 'Specializing in Indian corporate jurisprudence, Companies Act 2013 compliance, SEBI regulations, and RBI directives. Operating as a single independent author at CorpLawUpdates.in.',
 } as const
 
 export const EDITORIAL_AUTHOR = {

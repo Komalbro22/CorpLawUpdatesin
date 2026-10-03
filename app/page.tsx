@@ -265,7 +265,7 @@ export default async function HomePage() {
             </Link>
 
             <div className="mt-5 flex flex-wrap justify-center items-center gap-x-4 gap-y-1.5 text-[11px] sm:text-xs font-medium text-slate-300">
-              {['No login required', 'Updated daily', 'Built for Indian compliance'].map(item => (
+              {['No login required', 'Primary-source tracking', 'Built for Indian compliance'].map(item => (
                 <span key={item} className="inline-flex items-center gap-1">
                   <CheckCircle2 className="size-3 text-amber-400 shrink-0" aria-hidden="true" />
                   {item}
@@ -476,7 +476,7 @@ export default async function HomePage() {
                 href: '/calendar',
                 icon: '📅',
                 title: 'Compliance Calendar',
-                desc: 'Track 50+ deadlines for MCA, SEBI, RBI, FEMA, and Tax compliance. Export events directly to Google Calendar.',
+                desc: 'Track 90+ deadlines for MCA, SEBI, RBI, FEMA, and Tax compliance. Export events directly to Google Calendar.',
                 badge: 'Community',
                 badgeColor: 'bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300',
               },

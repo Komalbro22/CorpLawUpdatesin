@@ -73,12 +73,12 @@ export default function TermsPage() {
                         2A. Compliance Tools, Calculators & Document Generator Disclaimer
                     </h2>
                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
-                        Our suite of self-service utilities — including the <strong>Legal Document & Template Generator, MCA & ROC Fee Calculator, CIN Decoder, Company Search, ROC Compliance Tracker, Compliance Calendar, and RBI Repo Rate Tracker</strong> — are provided strictly as reference aids:
+                        Our suite of self-service utilities — including the <strong>Legal Document & Template Generator, MCA & ROC Fee Calculator, CIN Decoder, ROC Compliance Tracker, Compliance Calendar, and RBI Repo Rate Tracker</strong> — are provided strictly as reference aids:
                     </p>
                     <ul className="list-disc list-inside space-y-2 text-slate-600 dark:text-slate-400">
                         <li><strong>Draft Templates:</strong> Generated template files and document drafts must be reviewed and certified by a qualified Company Secretary, Advocate, or Chartered Accountant before execution or filing.</li>
                         <li><strong>Calculator & Fee Estimates:</strong> Statutory fees, additional filing fees, and adjudication penalty estimates are computed based on published statutory schedules. Actual fees depend on MCA V3 system validations and ROC discretion.</li>
-                        <li><strong>Public Data & CIN Lookup:</strong> Company search and CIN decoding utilize public corporate records. Users must cross-verify master data on the official MCA portal (<a href="https://www.mca.gov.in" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 hover:underline">mca.gov.in</a>).</li>
+                        <li><strong>Public Data & CIN Lookup:</strong> CIN decoding utilizes public corporate records. Users must cross-verify master data on the official MCA portal (<a href="https://www.mca.gov.in" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 hover:underline">mca.gov.in</a>).</li>
                         <li><strong>Limitation of Tool Liability:</strong> We accept no liability for any rejected statutory filings, compliance defaults, or financial losses arising from reliance on tool outputs or generated draft templates.</li>
                     </ul>
                 </section>

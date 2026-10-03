@@ -280,7 +280,7 @@ export default async function UpdatesPage({
 
                     {/* Answer-First High-Relevance Summary for Google & AI Overviews */}
                     <p id="updates-overview-summary" className="text-slate-200 mt-4 max-w-3xl text-sm md:text-base leading-relaxed">
-                        Track all <strong>latest corporate law updates in India</strong> — including <strong>MCA circulars today</strong>, <strong>SEBI notifications</strong>, <strong>RBI guidelines</strong>, NCLT judgments, IBC amendments, CCI orders, and Labour Laws. Updated daily with simplified analysis for Company Secretaries (CS), Chartered Accountants (CA), Cost Accountants (CMA), legal professionals, and corporate leaders.
+                        Track all <strong>latest corporate law updates in India</strong> — including <strong>MCA circulars today</strong>, <strong>SEBI notifications</strong>, <strong>RBI guidelines</strong>, NCLT judgments, IBC amendments, CCI orders, and Labour Laws. Curated with simplified analysis for Company Secretaries (CS), Chartered Accountants (CA), Cost Accountants (CMA), legal professionals, and corporate leaders.
                     </p>
                     {top10[0] && (
                         <p className="text-slate-300 text-xs mt-3 flex items-center gap-1.5">
@@ -331,7 +331,7 @@ export default async function UpdatesPage({
                         </h2>
                     </div>
                     <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 max-w-3xl">
-                        Our intelligence engine monitors real-time circulars, master directions, and gazette notifications across India's primary corporate and financial regulatory bodies:
+                        Our editorial desk monitors official circulars, master directions, and gazette notifications across India's primary corporate and financial regulatory bodies:
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {[
@@ -405,7 +405,7 @@ export default async function UpdatesPage({
                             Explore Free Corporate Compliance Tools
                         </h3>
                         <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm">
-                            Access our legal document generator, MCA fee calculator, statutory calendar, and company search engine.
+                            Access our legal document generator, MCA fee calculator, statutory calendar, and CIN decoder.
                         </p>
                     </div>
                     <div className="flex flex-wrap gap-2.5">
