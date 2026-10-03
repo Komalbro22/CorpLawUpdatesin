@@ -121,7 +121,7 @@ export default async function AboutPage() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
                         <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
                             <span className="font-bold text-amber-700 dark:text-amber-400 block mb-1">1. Primary Source Sourcing</span>
-                            <p className="text-sm text-slate-600 dark:text-slate-400">Directly fetched from regulatory portals and the official Gazette of India, ensuring zero hearsay.</p>
+                            <p className="text-sm text-slate-600 dark:text-slate-400">Directly fetched from regulatory portals and the official Gazette of India, minimizing reliance on secondary commentary.</p>
                         </div>
                         <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
                             <span className="font-bold text-amber-700 dark:text-amber-400 block mb-1">2. Two-Tier Verification</span>

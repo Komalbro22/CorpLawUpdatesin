@@ -54,6 +54,7 @@ export default async function AuthorProfilePage() {
       .select(UPDATE_LIST_COLUMNS)
       .eq('hide_from_listings', false)
       .not('published_at', 'is', null)
+      .eq('is_sponsored', false)
       .lte('published_at', new Date().toISOString())
       .order('published_at', { ascending: false })
       .limit(8)

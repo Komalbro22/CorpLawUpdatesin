@@ -512,15 +512,7 @@ export default async function HomePage() {
                 badge: 'Free',
                 badgeColor: 'bg-teal-100 text-teal-700 dark:bg-teal-950/50 dark:text-teal-300',
               },
-              {
-                href: '/tools',
-                icon: '🎯',
-                title: 'Daily Corporate Law Quiz',
-                desc: '5 daily quick MCQs covering Companies Act, SEBI guidelines, and RBI updates. Perfect for self-testing and mock practice.',
-                badge: 'Coming Soon',
-                badgeColor: 'bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-400',
-                isLive: false,
-              },
+
             ].map(tool => (
               <HomeToolCard key={tool.title} tool={tool} />
             ))}

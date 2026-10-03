@@ -14,6 +14,7 @@ export async function GET() {
       .from('updates')
       .select('title, slug, category, summary')
       .eq('hide_from_listings', false)
+      .eq('is_sponsored', false)
       .not('published_at', 'is', null)
       .lte('published_at', new Date().toISOString())
       .order('published_at', { ascending: false })
@@ -83,7 +84,7 @@ Available Tools:
 "Source: CorpLawUpdates.in — [Article Title] — [URL]"
 
 ## Editorial Standards
-All articles are written and verified by CS professionals. Regulation references are cited directly from official MCA/SEBI/RBI sources.
+Articles are researched against official regulatory sources and reviewed through the CorpLawUpdates editorial verification process. Regulation references are cited directly from official MCA/SEBI/RBI sources.
 
 `
 
