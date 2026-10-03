@@ -177,10 +177,11 @@ export default async function AboutPage() {
                 </section>
 
                 {/* 6. Connect With Us */}
-                <section className="mb-12">
-                    <h2 className="text-3xl font-heading font-bold text-navy dark:text-white mb-6 border-l-4 border-gold pl-4">Connect With Us</h2>
-                    <div className="flex items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
-                        <p className="text-slate-600 dark:text-slate-400 font-medium mr-2">Follow our official channels:</p>
+                {(linkedinUrl || twitterUrl || instagramUrl || whatsappUrl) && (
+                    <section className="mb-12">
+                        <h2 className="text-3xl font-heading font-bold text-navy dark:text-white mb-6 border-l-4 border-gold pl-4">Connect With Us</h2>
+                        <div className="flex items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                            <p className="text-slate-600 dark:text-slate-400 font-medium mr-2">Follow our official channels:</p>
 
                             {linkedinUrl && (
                                 <a
@@ -224,63 +225,50 @@ export default async function AboutPage() {
                                 </a>
                             )}
 
-                            <a
-                                href={whatsappUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                aria-label="WhatsApp"
-                                className="text-navy dark:text-slate-300 hover:text-green-600 dark:hover:text-amber-400 transition-colors"
-                            >
-                                <svg className="size-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path d="M17.472 14.382c-.297-.149-1.758-.737-2.03-1.654-.273-.916-.044-1.739.089-2.163.133-.423.043-1.028.148-1.977.316-.949.168-1.796.13-2.58.148-.784.018-1.958.29-2.525.271-.567-.018-1.263.139-1.851.329-.588.19-1.496.253-2.383.063-.887.31-1.69.672-2.239.253-.549.188-1.22.036-1.824.054-.604.018-1.336.086-1.754.201-.418.115-.987.277-1.846.366-.859.089-1.589.289-2.115.199-.526.11-1.322.368-1.807.587-.485.219-1.042.475-1.46.758-.418.283-.954.576-1.453.279-.499-.297-.889-.918-1.034-1.484-.145-.566-.287-1.187-.287-1.796 0-.476.119-.766.305-.78.515-.198-.25-.604-.763-1.165-1.038-.561-.275-1.195-.326-1.423-.274-.228.052-.621.097-1.066.232-.445.135-.907.282-1.539.439-.632.157-1.1.314-1.48.512-.381.198-.728.296-1.063.295-.335-.001-.651-.141-.966-.282-.315-.141-.637-.326-.966-.284-.329.042-.649.014-.966.282-.317.268-.651.323-.987.136-.336.187-.546.545-.708.861-.162.316-.248.834-.353 1.252-.105.418-.356.511-.893.432-1.554.079-.661.125-1.688.089-2.077-.036-.389-.228-.995-.586-1.357-.358-.362-.873-.462-1.476-.345-.603.117-1.275.338-1.763.801-.488.463-1.179.838-1.558.746-.379.197-.895.32-1.233.349-.338.029-.782.129-1.248.297-.466.168-.907.367-1.266.784-.359.417-.99.89-1.32 1.262-.33.372-.657.58-1.032.632-.375-.048-.764-.058-1.137-.029-.373.029-.675.326-.922.771-.247.445-.393.962-.393 1.657 0 .695.096 1.21.275 1.537.579.326.304.705.717.705 1.165.001.448.284.942.635 1.383.893 1.572.258.189.188.476.28.797.28 1.425 0 .695-.096 1.21-.275 1.537-.579.326-.304.705-.717.705-1.165-.001-.448-.635-.893-1.383-.893-.479 0-.958-.092-1.383-.28-.425-.188-.845-.567-1.264-.28-.419-.089-.895-.28-1.264-.567-.369-.287-.772-.426-1.223-.533-.451-.107-.851-.293-1.149-.533-.298-.24-.619-.425-.934-.526-.315-.101-.645-.336-.897-.688-.252-.352-.553-.629-.808-.576-.255-.819-.429-1.314-.721-.495-.292-.981-.692-1.288-1.277-.307-.585-.486-1.242-.534-1.783-.048-.541-.238-1.123-.739-1.74-.501-.617-.728-1.464-.925-2.27-.197-.806-.821-1.483-1.529-1.977-.646-.494-1.006-.894-1.476-1.324-.47-.43-.893-.803-1.383-1.289-.49-.486-.964-.945-1.438-1.357-.474-.412-.883-.925-1.085-1.376-.202-.451-.403-.916-.606-1.389-.203-.473-.294-.964-.719-1.432-.425-.468-.851-.933-1.272-1.393-.421-.46-.939-.92-1.385-1.453-.446-.533-.958-1.227-1.323-1.977-.365-.75-.393-1.537-.329-2.187.064-.65.189-1.27.683-1.789 1.34-.519.657-1.025 1.047-1.508 1.354-.483.307-.956.845-1.376 1.389-.42.544-.875 1.066-1.266 1.647-.391.581-.673 1.209-.839 1.734-.166.525-.287 1.077-.28 1.713.007.636.29 1.253.757 1.511.466.258.475.492.699.603 1.051.511.447.198.874.361 1.429.083.555.277.95.816.595 1.484.084.554.483 1.263-.066.891-.637 1.235-1.504.843-.613.207-1.636.312-2.023.608-1.387.296-1.663.352-1.973.057-1.31.305-1.263.515-1.605.789-1.511.447.275.325-1.063.838-1.326.771-1.391.895-.065.565-.874.095-1.743.412-1.438.337-.695.525-1.382.545-1.626.738-.244.193-.327.536-.498.822-.536.286-.038.447-.246.96-.48 1.508-.49.476-.903.389-1.676.089-2.06.08-.431.187-.802.277-1.373.486-.571.209-.957.504-1.49.964-.613.46-.46-1.178-.972-1.714-1.437-.536-.465-1.034-.945-1.478-1.476-.444-.531-.873-1.095-1.195-1.702-.322-.607-.592-1.254-.772-1.889-.18-.635-.335-1.31-.421-1.976-.086-.666-.366-1.403-.743-2.068.377-665.837-1.375-1.566-1.865-2.712.49-.646.874-1.361 1.242-1.876 1.438-.515.196-.529.694-1.294.803-1.977.348-.683.554-1.377 1.019-1.879 1.375-.502.356-.993.635-1.458.865-.465.23-.957.524-1.478.743-.521.219-.952.462-1.437.679-.485.217-.97.42-1.459.883-.489.463-.979.875-1.458 1.221-.583.346-1.15.761-1.698 1.234-1.649.473-.885.842-1.692 1.169-2.416.383.724.838.863 1.424 1.169 2.095.777.85.571.714 1.083 1.169 1.874.757.791.673.842 1.083 1.169 1.874.757.791.673"/>
-                                </svg>
-                            </a>
-
-                            <a
-                                href={telegramUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                aria-label="Telegram"
-                                className="text-navy dark:text-slate-300 hover:text-blue-500 dark:hover:text-amber-400 transition-colors"
-                            >
-                                <svg className="size-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                    <path d="M11.944 0A12 12 0 0 0 0 24a12 12 0 0 0 0-24zm6.724 17.525c-.208.966-.767 2.565-1.467 2.729-.915.915-2.463.917-3.296.605-1.322 1.564-3.808 1.932-4.507.868-.868 1.785-1.654 1.785-1.654s.917-.786 1.785-1.654c.699.606 3.186 1.61 4.507 1.932 4.507.533.833 1.381 1.521 2.763 1.467 2.729-.164.7-1.824-1.259-2.729-1.467-.966-.208-2.563.208-3.529-1.467-.699-1.564-1.228-3.891-1.932-4.507-.868-.868-1.785-.917-1.785-.917s.917.049 1.785.917 1.785c-.868.699-1.564 1.61-1.932 4.507.605 1.322 1.564 3.808 1.932 4.507.833.833 1.381 1.521 2.763 1.467 2.729.164.7 1.824 1.259 2.729 1.467.966.208 2.563.208 3.529 1.467.699 1.564 1.228 3.891 1.932 4.507.868.868 1.785.917 1.785.917s-.917-.049-1.785-.917z"/>
-                                </svg>
-                            </a>
+                            {whatsappUrl && (
+                                <a
+                                    href={whatsappUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label="WhatsApp Channel"
+                                    className="text-navy dark:text-slate-300 hover:text-green-600 dark:hover:text-amber-400 transition-colors"
+                                >
+                                    <svg className="size-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                                    </svg>
+                                </a>
+                            )}
+                            {telegramUrl && (
+                                <a
+                                    href={telegramUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label="Telegram Channel"
+                                    className="text-navy dark:text-slate-300 hover:text-sky-500 dark:hover:text-amber-400 transition-colors"
+                                >
+                                    <svg className="size-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                                    </svg>
+                                </a>
+                            )}
                         </div>
                     </section>
+                )}
 
-                {/* 7. Site Statistics (Trust Signals) */}
-                <section className="mb-12">
-                    <h2 className="text-3xl font-heading font-bold text-navy dark:text-white mb-6 border-l-4 border-gold pl-4">Site Statistics</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm text-center">
-                            <span className="text-4xl font-heading font-bold text-amber-600 dark:text-amber-400 block mb-2">200+</span>
-                            <span className="text-sm text-slate-600 dark:text-slate-400">Regulatory Updates Published</span>
-                        </div>
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm text-center">
-                            <span className="text-4xl font-heading font-bold text-emerald-600 dark:text-emerald-400 block mb-2">50+</span>
-                            <span className="text-sm text-slate-600 dark:text-slate-400">Glossary Terms Explained</span>
-                        </div>
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm text-center">
-                            <span className="text-4xl font-heading font-bold text-blue-600 dark:text-blue-400 block mb-2">10+</span>
-                            <span className="text-sm text-slate-600 dark:text-slate-400">Compliance Tools Available</span>
-                        </div>
-                    </div>
+                {/* 7. DISCLAIMER */}
+                <section className="bg-amber-50 dark:bg-amber-950/20 border-2 border-amber-400 dark:border-amber-600/60 p-8 rounded-2xl">
+                    <h3 className="font-bold text-amber-900 dark:text-amber-300 text-xl mb-3 flex items-center">
+                        <svg className="size-6 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        Important Disclaimer
+                    </h3>
+                    <p className="text-amber-950/90 dark:text-amber-200 font-medium leading-relaxed">
+                        The content on CorpLawUpdates.in is for informational purposes only and does not constitute legal advice.
+                        Always consult a qualified legal professional for advice specific to your situation.
+                    </p>
                 </section>
-
-                {/* 8. Legal & Compliance Disclaimer */}
-                <section className="mb-12">
-                    <h2 className="text-3xl font-heading font-bold text-navy dark:text-white mb-6 border-l-4 border-gold pl-4">Legal & Compliance Disclaimer</h2>
-                    <div className="bg-amber-50 dark:bg-amber-950/20 border-l-4 border-amber-400 dark:border-amber-500 p-6 rounded-r-xl">
-                        <p className="text-sm text-amber-900 dark:text-amber-300 leading-relaxed">
-                            <strong>Disclaimer:</strong> CorpLawUpdates.in is an informational platform and does not provide legal advice, consultation, or professional services. Content is based on publicly available regulatory notifications and should not be considered a substitute for professional legal, accounting, or compliance advice. For specific legal matters, please consult a qualified Company Secretary, Chartered Accountant, or Legal Practitioner.
-                        </p>
-                    </div>
-                </section>
-            </main>
-
-            <NewsletterSection />
-        </Layout>
+            </div>
+        </div>
     )
 }
