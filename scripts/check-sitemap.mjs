@@ -1,25 +1,28 @@
+#!/usr/bin/env node
 // scripts/check-sitemap.mjs
 // Fetches every URL in the sitemap and fails on non-200, redirects, noindex or canonical mismatch.
-
-import { parseStringPromise } from 'xml2js';
 
 const BASE_URL = process.argv.includes('--base')
   ? process.argv[process.argv.indexOf('--base') + 1]
   : 'http://localhost:3000';
 
 async function checkSitemap() {
-  console.log(`Fetching sitemap from ${BASE_URL}/sitemap.xml ...`);
+  console.log(`[check-sitemap] Fetching sitemap from ${BASE_URL}/sitemap.xml ...`);
   const sitemapRes = await fetch(`${BASE_URL}/sitemap.xml`);
   if (!sitemapRes.ok) {
-    console.error(`FAILED to fetch sitemap: HTTP ${sitemapRes.status}`);
+    console.error(`[check-sitemap] FAILED to fetch sitemap: HTTP ${sitemapRes.status}`);
     process.exit(1);
   }
 
   const xmlText = await sitemapRes.text();
-  const parsed = await parseStringPromise(xmlText);
-  const urls = (parsed.urlset?.url || []).map(u => u.loc[0]);
+  const urls = [];
+  const locRegex = /<loc>(https?:\/\/[^<]+)<\/loc>/gi;
+  let match;
+  while ((match = locRegex.exec(xmlText)) !== null) {
+    urls.push(match[1].trim());
+  }
 
-  console.log(`Found ${urls.length} URLs in sitemap.`);
+  console.log(`[check-sitemap] Found ${urls.length} URLs in sitemap.`);
 
   let errors = 0;
   let passed = 0;
@@ -58,7 +61,6 @@ async function checkSitemap() {
       const canonicalMatch = html.match(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i);
       if (canonicalMatch) {
         const canonicalHref = canonicalMatch[1];
-        // Expected canonical is the live production URL for rawUrl
         const expectedCanonical = rawUrl;
         if (canonicalHref !== expectedCanonical) {
           console.error(`[CANONICAL MISMATCH] ${rawUrl} specifies canonical: ${canonicalHref} (expected: ${expectedCanonical})`);
@@ -87,6 +89,6 @@ async function checkSitemap() {
 }
 
 checkSitemap().catch(err => {
-  console.error('Fatal check-sitemap error:', err);
+  console.error('[check-sitemap] Fatal error:', err);
   process.exit(1);
 });
