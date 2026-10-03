@@ -166,7 +166,7 @@ export default function PrivacyPolicyPage() {
                                     <td className="p-3">Traffic analytics and News integration</td>
                                 </tr>
                                 <tr>
-                                    <td className="p-3 font-bold">Google AdSense (Prospective / Upon Approval)</td>
+                                    <td className="p-3 font-bold">Google AdSense &amp; Ad Networks (Prospective / Upon Approval)</td>
                                     <td className="p-3">IP address, cookie identifiers, device telemetry</td>
                                     <td className="p-3">Contextual &amp; personalized ad serving, frequency capping, fraud prevention, and performance reporting</td>
                                 </tr>
@@ -179,21 +179,21 @@ export default function PrivacyPolicyPage() {
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
 
                 <section>
-                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">5. Advertising &amp; Google AdSense</h2>
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">5. Advertising &amp; Ad Networks</h2>
                     <p className="text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">
-                        To support our platform and maintain our corporate law intelligence summaries, compliance trackers, and legal calculators free for the professional community, CorpLawUpdates.in may use third-party advertising services, including Google AdSense, if and when the site is approved and advertising is enabled.
+                        To support our platform and maintain our corporate law intelligence summaries, compliance trackers, and legal calculators free for the professional community, CorpLawUpdates.in may use third-party advertising services, including Google AdSense and other ad networks, if and when the site is approved and advertising is enabled.
                     </p>
                     <div className="space-y-4 text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
                         <div>
-                            <h3 className="font-bold text-navy dark:text-slate-200 mb-1.5 text-xs uppercase tracking-wide">A. Third-Party Advertising Vendors &amp; Google AdSense</h3>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-1.5 text-xs uppercase tracking-wide">A. Third-Party Advertising Vendors &amp; Ad Networks</h3>
                             <p>
-                                If advertising is enabled, third-party advertising vendors, including Google, may use cookies and similar technologies to serve and measure advertisements. The technologies and choices available depend on the services enabled on this site and your location.
+                                If advertising is enabled, third-party advertising vendors, including Google and other ad networks, may use cookies and similar technologies to serve and measure advertisements. The technologies and choices available depend on the services enabled on this site and your location.
                             </p>
                         </div>
                         <div>
                             <h3 className="font-bold text-navy dark:text-slate-200 mb-1.5 text-xs uppercase tracking-wide">B. Advertising Cookies, Web Beacons &amp; IP Addresses</h3>
                             <p>
-                                If Google advertising is enabled, Google and its partners may use advertising cookies and related data for ad delivery, measurement, frequency management, and invalid-traffic prevention, subject to applicable consent requirements and your settings.
+                                If advertising is enabled, ad networks and their partners may use advertising cookies and related data for ad delivery, measurement, frequency management, and invalid-traffic prevention, subject to applicable consent requirements and your settings.
                             </p>
                         </div>
                         <div>
