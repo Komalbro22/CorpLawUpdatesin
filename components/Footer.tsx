@@ -51,7 +51,7 @@ export default async function Footer() {
         .select('*', { count: 'exact', head: true })
         .eq('is_active', true)
 
-    const activeSubscribersCount = subscriberCountRes || 500
+    const activeSubscribersCount = subscriberCountRes && subscriberCountRes > 0 ? subscriberCountRes : null
 
     const social: Record<string, string> = {}
     settings?.forEach(s => {
@@ -174,7 +174,11 @@ export default async function Footer() {
                                 Stay Informed
                             </h3>
                             <p className="text-slate-300 text-xs leading-relaxed mb-4">
-                                Join <span className="tabular-nums font-semibold">{activeSubscribersCount.toLocaleString()}</span>+ professionals receiving our weekly Monday digest.
+                                {activeSubscribersCount ? (
+                                    <>Join <span className="tabular-nums font-semibold">{activeSubscribersCount.toLocaleString()}</span>+ professionals receiving our weekly Monday digest.</>
+                                ) : (
+                                    <>Receive our curated weekly Monday digest of Indian corporate law developments directly in your inbox.</>
+                                )}
                             </p>
                             <Link href="/newsletter" className="flex items-center justify-between bg-amber-500 hover:bg-amber-400 text-navy text-[11px] font-bold px-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 transition-all">
                                 SUBSCRIBE FREE

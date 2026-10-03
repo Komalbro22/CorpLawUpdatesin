@@ -264,12 +264,12 @@ export default async function AboutPage() {
                             <span className="text-sm text-slate-600 dark:text-slate-400">Regulatory Updates Published</span>
                         </div>
                         <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm text-center">
-                            <span className="text-4xl font-heading font-bold text-emerald-600 dark:text-emerald-400 block mb-2">50+</span>
-                            <span className="text-sm text-slate-600 dark:text-slate-400">Glossary Terms Explained</span>
+                            <span className="text-4xl font-heading font-bold text-emerald-600 dark:text-emerald-400 block mb-2">180+</span>
+                            <span className="text-sm text-slate-600 dark:text-slate-400">Glossary Definitions Explained</span>
                         </div>
                         <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm text-center">
-                            <span className="text-4xl font-heading font-bold text-blue-600 dark:text-blue-400 block mb-2">10+</span>
-                            <span className="text-sm text-slate-600 dark:text-slate-400">Compliance Tools Available</span>
+                            <span className="text-4xl font-heading font-bold text-blue-600 dark:text-blue-400 block mb-2">90+</span>
+                            <span className="text-sm text-slate-600 dark:text-slate-400">Compliance Deadlines Tracked</span>
                         </div>
                     </div>
                 </section>
