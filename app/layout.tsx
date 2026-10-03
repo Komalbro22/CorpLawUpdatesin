@@ -148,6 +148,11 @@ export default async function RootLayout({
             areaServed: 'IN',
             availableLanguage: 'English',
           },
+          founder: {
+            '@type': 'Person',
+            name: 'Komalpreet Singh',
+            jobTitle: 'Founder & Lead Regulatory Analyst',
+          },
         }} />
         <JsonLd id="schema-website" data={{
           '@context': 'https://schema.org',

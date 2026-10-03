@@ -255,7 +255,26 @@ export default async function AboutPage() {
                     </section>
                 )}
 
-                {/* 7. DISCLAIMER */}
+                {/* 7. Site Statistics (Trust Signals) */}
+                <section className="mb-12">
+                    <h2 className="text-3xl font-heading font-bold text-navy dark:text-white mb-6 border-l-4 border-gold pl-4">Site Statistics</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm text-center">
+                            <span className="text-4xl font-heading font-bold text-amber-600 dark:text-amber-400 block mb-2">200+</span>
+                            <span className="text-sm text-slate-600 dark:text-slate-400">Regulatory Updates Published</span>
+                        </div>
+                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm text-center">
+                            <span className="text-4xl font-heading font-bold text-emerald-600 dark:text-emerald-400 block mb-2">50+</span>
+                            <span className="text-sm text-slate-600 dark:text-slate-400">Glossary Terms Explained</span>
+                        </div>
+                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm text-center">
+                            <span className="text-4xl font-heading font-bold text-blue-600 dark:text-blue-400 block mb-2">10+</span>
+                            <span className="text-sm text-slate-600 dark:text-slate-400">Compliance Tools Available</span>
+                        </div>
+                    </div>
+                </section>
+
+                {/* 8. DISCLAIMER */}
                 <section className="bg-amber-50 dark:bg-amber-950/20 border-2 border-amber-400 dark:border-amber-600/60 p-8 rounded-2xl">
                     <h3 className="font-bold text-amber-900 dark:text-amber-300 text-xl mb-3 flex items-center">
                         <svg className="size-6 mr-2 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
