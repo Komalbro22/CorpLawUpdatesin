@@ -702,9 +702,6 @@ export async function generateMetadata(
         description,
         keywords,
         alternates: { canonical: url },
-        other: {
-            'revisit-after': '1 day',
-        },
         openGraph: {
             title,
             description,
@@ -929,7 +926,7 @@ export default async function CategoryPage({
                     </p>
 
                     <p className="text-sm text-white/60">
-                        Updated daily · <a href={OFFICIAL_URLS[cat]} target="_blank" rel="noopener noreferrer" className="underline hover:text-white transition-colors">{CATEGORY_FULL_NAMES[cat]} Official Site ↗</a>
+                        {totalCount || 0} updates {latestUpdate ? `· Last updated ${new Date(latestUpdate.published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}` : ''} · We publish here whenever a new notification is issued · <a href={OFFICIAL_URLS[cat]} target="_blank" rel="noopener noreferrer" className="underline hover:text-white transition-colors">{CATEGORY_FULL_NAMES[cat]} Official Site ↗</a>
                     </p>
 
                     {/* Compact focus chips */}
