@@ -62,6 +62,8 @@ export default function robots(): MetadataRoute.Robots {
           '/api/admin/',
           '/sitemap/companies/',
           '/company/',
+          '/bookmarks',
+          '/documents/saved',
         ],
       },
     ],

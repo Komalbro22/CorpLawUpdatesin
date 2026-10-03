@@ -46,72 +46,40 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const latestCalendarDate = compliance_entries?.[0]?.updated_at 
     ? new Date(compliance_entries[0].updated_at)
-    : new Date('2026-05-14')
+    : undefined
+
+  // Fetch latest glossary update
+  const { data: latestGlossary } = await supabaseAdmin
+    .from('glossary')
+    .select('created_at')
+    .order('created_at', { ascending: false })
+    .limit(1)
+
+  const glossaryDate = latestGlossary?.[0]?.created_at
+    ? new Date(latestGlossary[0].created_at)
+    : undefined
 
   const ALL_CATEGORIES = ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci', 'labour', 'ifsca']
-  const categoryDates: Record<string, Date> = {}
-  let latestArticleDate = new Date('2026-05-14')
+  const categoryDates: Record<string, Date | undefined> = {}
 
   ALL_CATEGORIES.forEach(cat => {
-    categoryDates[cat] = latestArticleDate
+    categoryDates[cat] = undefined
   })
   
+  let latestArticleDate: Date | undefined = undefined
+
   if (articles && articles.length > 0) {
-    latestArticleDate = new Date(articles[0].published_at!)
+    latestArticleDate = new Date(articles[0].updated_at || articles[0].published_at!)
     articles.forEach(article => {
       const artDate = new Date(article.updated_at || article.published_at!)
       if (article.category && !article.noindex) {
         const cat = article.category.toLowerCase()
-        if (!categoryDates[cat] || artDate > categoryDates[cat]) {
+        if (!categoryDates[cat] || artDate > categoryDates[cat]!) {
           categoryDates[cat] = artDate
         }
       }
     })
   }
-
-  const staticPages = [
-    { url: BASE_URL, lastModified: latestArticleDate, changeFrequency: 'daily' as const, priority: 1.0 },
-    { url: `${BASE_URL}/updates`, lastModified: latestArticleDate, changeFrequency: 'daily' as const, priority: 0.8 },
-    { url: `${BASE_URL}/category`, lastModified: latestArticleDate, changeFrequency: 'weekly' as const, priority: 0.8 },
-    { url: `${BASE_URL}/calendar`, lastModified: latestCalendarDate, changeFrequency: 'monthly' as const, priority: 0.8 },
-    { url: `${BASE_URL}/glossary`, lastModified: latestArticleDate, changeFrequency: 'monthly' as const, priority: 0.7 },
-    { url: `${BASE_URL}/documents`, lastModified: latestArticleDate, changeFrequency: 'monthly' as const, priority: 0.7 },
-    { url: `${BASE_URL}/documents/employment-agreement`, lastModified: new Date('2026-09-30'), changeFrequency: 'weekly' as const, priority: 0.85 },
-    { url: `${BASE_URL}/documents/partnership-deed`, lastModified: new Date('2026-09-28'), changeFrequency: 'monthly' as const, priority: 0.8 },
-    { url: `${BASE_URL}/documents/service-level-agreement`, lastModified: new Date('2026-09-28'), changeFrequency: 'monthly' as const, priority: 0.8 },
-    { url: `${BASE_URL}/documents/board-resolution-for-dividend-declaration`, lastModified: new Date('2026-09-29'), changeFrequency: 'monthly' as const, priority: 0.75 },
-
-    { url: `${BASE_URL}/tools`, lastModified: latestArticleDate, changeFrequency: 'monthly' as const, priority: 0.9 },
-    { url: `${BASE_URL}/tools/cin-decoder`, lastModified: latestArticleDate, changeFrequency: 'daily' as const, priority: 0.95 },
-    { url: `${BASE_URL}/tools/fee-calculator`, lastModified: latestArticleDate, changeFrequency: 'monthly' as const, priority: 0.9 },
-    { url: `${BASE_URL}/tools/fee-calculator/companies`, lastModified: latestArticleDate, changeFrequency: 'monthly' as const, priority: 0.9 },
-    { url: `${BASE_URL}/tools/fee-calculator/llp`, lastModified: latestArticleDate, changeFrequency: 'monthly' as const, priority: 0.9 },
-    { url: `${BASE_URL}/tools/fee-calculator/msme`, lastModified: latestArticleDate, changeFrequency: 'monthly' as const, priority: 0.9 },
-    { url: `${BASE_URL}/tools/roc-tracker`, lastModified: latestArticleDate, changeFrequency: 'monthly' as const, priority: 0.9 },
-    { url: `${BASE_URL}/rbi/repo-rate`, lastModified: latestArticleDate, changeFrequency: 'weekly' as const, priority: 0.95 },
-    { url: `${BASE_URL}/newsletter`, changeFrequency: 'yearly' as const, priority: 0.5 },
-    { url: `${BASE_URL}/partners`, changeFrequency: 'monthly' as const, priority: 0.4 },
-    { url: `${BASE_URL}/editorial-policy`, changeFrequency: 'yearly' as const, priority: 0.3 },
-    { url: `${BASE_URL}/author/komalpreet-singh`, lastModified: latestArticleDate, changeFrequency: 'weekly' as const, priority: 0.6 },
-    { url: `${BASE_URL}/about`, changeFrequency: 'yearly' as const, priority: 0.3 },
-    { url: `${BASE_URL}/contact`, changeFrequency: 'yearly' as const, priority: 0.3 },
-    { url: `${BASE_URL}/privacy-policy`, changeFrequency: 'yearly' as const, priority: 0.3 },
-    { url: `${BASE_URL}/terms`, changeFrequency: 'yearly' as const, priority: 0.3 },
-  ]
-
-  const categoryPages = Object.entries(categoryDates).map(([cat, date]) => ({
-    url: `${BASE_URL}/category/${cat}`,
-    lastModified: date,
-    changeFrequency: 'daily' as const,
-    priority: 0.8,
-  }))
-
-  const articlePages = (articles || []).map(article => ({
-    url: `${BASE_URL}/updates/${article.slug}`,
-    lastModified: new Date(article.updated_at || article.published_at || new Date().toISOString()),
-    changeFrequency: 'weekly' as const,
-    priority: 0.75,
-  }))
 
   // Fetch active document templates for sitemap SEO indexing
   let docTemplates: any[] = []
@@ -123,26 +91,83 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     docTemplates = data || []
   }
 
+  // Find latest document template date
+  let latestDocDate: Date | undefined = undefined
+  docTemplates.forEach(d => {
+    if (d.updated_at) {
+      const dt = new Date(d.updated_at)
+      if (!latestDocDate || dt > latestDocDate) {
+        latestDocDate = dt
+      }
+    }
+  })
+
+  // Date of board-resolution-dividend in DB for board-resolution-for-dividend-declaration
+  const dividendDbTpl = docTemplates.find(d => d.slug === 'board-resolution-dividend')
+  const dividendDeclarationDate = dividendDbTpl?.updated_at ? new Date(dividendDbTpl.updated_at) : undefined
+
+  // Forms last modified from data/mca-forms.ts
+  const mcaFormsLastMod = new Date('2026-10-02T15:43:00+05:30')
+
+  const staticPages: MetadataRoute.Sitemap = [
+    { url: BASE_URL, ...(latestArticleDate ? { lastModified: latestArticleDate } : {}) },
+    { url: `${BASE_URL}/updates`, ...(latestArticleDate ? { lastModified: latestArticleDate } : {}) },
+    { url: `${BASE_URL}/category`, ...(latestArticleDate ? { lastModified: latestArticleDate } : {}) },
+    { url: `${BASE_URL}/calendar`, ...(latestCalendarDate ? { lastModified: latestCalendarDate } : {}) },
+    { url: `${BASE_URL}/glossary`, ...(glossaryDate ? { lastModified: glossaryDate } : {}) },
+    { url: `${BASE_URL}/documents`, ...(latestDocDate ? { lastModified: latestDocDate } : {}) },
+    { url: `${BASE_URL}/documents/board-resolution-for-dividend-declaration`, ...(dividendDeclarationDate ? { lastModified: dividendDeclarationDate } : {}) },
+
+    { url: `${BASE_URL}/tools`, ...(latestArticleDate ? { lastModified: latestArticleDate } : {}) },
+    { url: `${BASE_URL}/tools/cin-decoder` },
+    { url: `${BASE_URL}/tools/fee-calculator`, lastModified: mcaFormsLastMod },
+    { url: `${BASE_URL}/tools/fee-calculator/companies`, lastModified: mcaFormsLastMod },
+    { url: `${BASE_URL}/tools/fee-calculator/ibbi` },
+    { url: `${BASE_URL}/tools/fee-calculator/llp` },
+    { url: `${BASE_URL}/tools/fee-calculator/msme` },
+    { url: `${BASE_URL}/tools/roc-tracker` },
+    { url: `${BASE_URL}/rbi/repo-rate` },
+    { url: `${BASE_URL}/newsletter` },
+    { url: `${BASE_URL}/partners` },
+    { url: `${BASE_URL}/editorial-policy` },
+    { url: `${BASE_URL}/author/komalpreet-singh`, ...(latestArticleDate ? { lastModified: latestArticleDate } : {}) },
+    { url: `${BASE_URL}/about` },
+    { url: `${BASE_URL}/contact` },
+    { url: `${BASE_URL}/privacy-policy` },
+    { url: `${BASE_URL}/terms` },
+    { url: `${BASE_URL}/disclaimer` },
+  ]
+
+  const categoryPages: MetadataRoute.Sitemap = Object.entries(categoryDates).map(([cat, date]) => ({
+    url: `${BASE_URL}/category/${cat}`,
+    ...(date ? { lastModified: date } : {}),
+  }))
+
+  const articlePages: MetadataRoute.Sitemap = (articles || []).map(article => {
+    const rawDate = article.updated_at || article.published_at
+    return {
+      url: `${BASE_URL}/updates/${article.slug}`,
+      ...(rawDate ? { lastModified: new Date(rawDate) } : {}),
+    }
+  })
+
+  // Dedicated routes or aliases that must not use dynamic [slug] query or redirect
+  // Note: 'board-resolution-dividend' 308 redirects to 'board-resolution-for-dividend-declaration', so it is excluded
   const dedicatedSlugs = new Set([
     'board-resolution-dividend',
     'board-resolution-for-dividend-declaration',
-    'employment-agreement',
-    'employment_agreement',
-    'partnership-deed',
-    'service-level-agreement',
   ])
-  const documentPages = (docTemplates || []).filter(d => !dedicatedSlugs.has(d.slug)).map(d => ({
-    url: `${BASE_URL}/documents/${d.slug}`,
-    lastModified: d.updated_at ? new Date(d.updated_at) : new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.7,
-  }))
 
-  const companyFormPages = mcaForms.map(form => ({
+  const documentPages: MetadataRoute.Sitemap = (docTemplates || [])
+    .filter(d => !dedicatedSlugs.has(d.slug))
+    .map(d => ({
+      url: `${BASE_URL}/documents/${d.slug}`,
+      ...(d.updated_at ? { lastModified: new Date(d.updated_at) } : {}),
+    }))
+
+  const companyFormPages: MetadataRoute.Sitemap = mcaForms.map(form => ({
     url: `${BASE_URL}/tools/fee-calculator/companies/${form.slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.8,
+    lastModified: mcaFormsLastMod,
   }))
 
   return [...staticPages, ...categoryPages, ...articlePages, ...documentPages, ...companyFormPages]
