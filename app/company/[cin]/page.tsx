@@ -173,8 +173,8 @@ export default async function CompanyProfilePage({ params }: Props) {
         '@id': `${pageUrl}#breadcrumb`,
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.corplawupdates.in' },
-          { '@type': 'ListItem', position: 2, name: 'Company Search', item: 'https://www.corplawupdates.in/company-search' },
-          { '@type': 'ListItem', position: 3, name: company.registered_state || 'India', item: 'https://www.corplawupdates.in/company-search' },
+          { '@type': 'ListItem', position: 2, name: 'CIN Decoder', item: 'https://www.corplawupdates.in/tools/cin-decoder' },
+          { '@type': 'ListItem', position: 3, name: company.registered_state || 'India', item: 'https://www.corplawupdates.in/tools/cin-decoder' },
           { '@type': 'ListItem', position: 4, name: company.company_name, item: pageUrl }
         ]
       },
@@ -206,7 +206,7 @@ export default async function CompanyProfilePage({ params }: Props) {
         <nav className="flex flex-wrap items-center gap-1.5 text-xs md:text-sm text-slate-600 dark:text-slate-400" aria-label="Breadcrumb">
           <Link href="/" className="hover:text-gold transition-colors">Home</Link>
           <span>/</span>
-          <Link href="/company-search" className="hover:text-gold transition-colors">Company Search</Link>
+          <Link href="/tools/cin-decoder" className="hover:text-gold transition-colors">CIN Decoder</Link>
           <span>/</span>
           <span className="text-slate-400">{company.registered_state || 'India'}</span>
           <span>/</span>

@@ -72,7 +72,7 @@ export async function submitCompanyToIndexNow(
 ): Promise<boolean> {
   const urls = [
     `${BASE_URL}/company/${cin}`,
-    `${BASE_URL}/company-search`,
+    `${BASE_URL}/tools/cin-decoder`,
     `${BASE_URL}`,
   ]
   return submitToIndexNow(urls)

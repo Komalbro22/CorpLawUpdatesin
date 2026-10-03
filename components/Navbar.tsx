@@ -93,7 +93,7 @@ export default function Navbar() {
     }
 
     const categoryItems = [
-        { href: '/company-search', label: 'Company Lookup',   Icon: Building2, color: 'text-amber-600',  bg: 'hover:bg-amber-50'   },
+        { href: '/tools/cin-decoder', label: 'CIN Decoder',    Icon: Building2, color: 'text-amber-600',  bg: 'hover:bg-amber-50'   },
         { href: '/glossary',       label: 'Legal Glossary',     Icon: GlossaryIcon, color: 'text-amber-600',  bg: 'hover:bg-amber-50'   },
         { href: '/category/mca',   label: 'MCA & Companies Act',Icon: Building2, color: 'text-blue-600',    bg: 'hover:bg-blue-50'    },
         { href: '/category/sebi',  label: 'SEBI Regulations',   Icon: TrendingUp, color: 'text-emerald-600', bg: 'hover:bg-emerald-50' },

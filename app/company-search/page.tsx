@@ -1,9 +1,8 @@
 import { Metadata } from 'next'
-import Link from 'next/link'
-import { redirect } from 'next/navigation'
+import { permanentRedirect } from 'next/navigation'
 
 export const metadata: Metadata = {
-  title: 'Company Search Tool — MCA CIN Lookup & Structure Analyzer',
+  title: 'CIN Decoder Tool — MCA Structure Analyzer',
   description: 'Search and decode any Indian company CIN string into listing status, NIC industry code, state RoC office, incorporation year, and ownership classification.',
   alternates: {
     canonical: 'https://www.corplawupdates.in/tools/cin-decoder',
@@ -11,5 +10,5 @@ export const metadata: Metadata = {
 }
 
 export default function CompanySearchLandingPage() {
-  redirect('/tools/cin-decoder')
+  permanentRedirect('/tools/cin-decoder')
 }

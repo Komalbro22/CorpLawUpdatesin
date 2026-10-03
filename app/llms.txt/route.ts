@@ -49,7 +49,7 @@ export async function GET() {
 ${updatesList}
 
 ## Free Compliance Tools & Resources
-- [Company Search Tool](${BASE_URL}/company-search): Look up any Indian company by CIN or name — view compliance status, registered details, capital structure, and AGM/board meeting deadline flags.
+- [CIN Decoder Tool](${BASE_URL}/tools/cin-decoder): Decode any 21-character Indian Corporate Identification Number (CIN) to reveal company classification, ROC jurisdiction, incorporation year, and NIC industry codes.
 - [Corporate law glossary](${BASE_URL}/glossary): 180+ definitions (IBC, NCLT, MCA, SEBI, RBI, FEMA terminology) of complex legal and corporate law terminology.
 - [Compliance calendar](${BASE_URL}/calendar): Track important statutory filing deadlines across MCA, SEBI, RBI, and Tax authorities.
 - [Document generator](${BASE_URL}/documents): Secretarial drafting tool for Board Resolutions, NDAs, MoUs, Partnership Deeds, and official corporate correspondence formatted per ICSI SS-1.

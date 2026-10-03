@@ -83,7 +83,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     { url: `${BASE_URL}/tools`, lastModified: latestArticleDate, changeFrequency: 'monthly' as const, priority: 0.9 },
     { url: `${BASE_URL}/tools/cin-decoder`, lastModified: latestArticleDate, changeFrequency: 'daily' as const, priority: 0.95 },
-    { url: `${BASE_URL}/company-search`, lastModified: latestArticleDate, changeFrequency: 'daily' as const, priority: 0.9 },
     { url: `${BASE_URL}/tools/fee-calculator`, lastModified: latestArticleDate, changeFrequency: 'monthly' as const, priority: 0.9 },
     { url: `${BASE_URL}/tools/fee-calculator/companies`, lastModified: latestArticleDate, changeFrequency: 'monthly' as const, priority: 0.9 },
     { url: `${BASE_URL}/tools/fee-calculator/llp`, lastModified: latestArticleDate, changeFrequency: 'monthly' as const, priority: 0.9 },

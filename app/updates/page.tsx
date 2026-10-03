@@ -418,8 +418,8 @@ export default async function UpdatesPage({
                         <Link href="/documents" className="text-xs bg-slate-100 dark:bg-slate-800 hover:bg-amber-100 hover:text-amber-800 dark:hover:bg-slate-700 text-navy dark:text-slate-200 font-semibold px-3.5 py-2 rounded-lg transition-colors">
                             Document Generator
                         </Link>
-                        <Link href="/company-search" className="text-xs bg-amber-700 hover:bg-amber-800 text-white font-semibold px-3.5 py-2 rounded-lg transition-colors">
-                            Company Search
+                        <Link href="/tools/cin-decoder" className="text-xs bg-amber-700 hover:bg-amber-800 text-white font-semibold px-3.5 py-2 rounded-lg transition-colors">
+                            CIN Decoder
                         </Link>
                     </div>
                 </div>

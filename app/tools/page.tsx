@@ -121,17 +121,6 @@ const toolsJsonLd = {
             price: '0',
             priceCurrency: 'INR',
           }
-        },
-        {
-          '@type': 'WebApplication',
-          name: 'Company Search',
-          url: 'https://www.corplawupdates.in/company-search',
-          applicationCategory: 'BusinessApplication',
-          offers: {
-            '@type': 'Offer',
-            price: '0',
-            priceCurrency: 'INR',
-          }
         }
       ]
     },
@@ -230,20 +219,6 @@ const tools = [
     tags: ['CIN Lookup', 'ROC Code', 'Company Type', 'State Code'],
     color: 'border-blue-200 hover:border-blue-400 dark:border-slate-800 dark:hover:border-blue-900/50',
     headerBg: 'from-blue-600 to-blue-800',
-  },
-  {
-    id: 'company-search',
-    href: '/company-search',
-    icon: <BookOpen size={24} />,
-    label: 'Company Search & CIN Lookup',
-    description: 'Search 15+ Lakh registered Indian companies by CIN or Name. Instant compliance snapshot, AGM due dates, Small Company status & statutory flags.',
-    badge: 'New',
-    badgeColor: 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300',
-    stats: '15+ Lakh Companies',
-    isLive: true,
-    tags: ['CIN Lookup', 'AGM Due Date', 'Small Company', 'MCA Master Data'],
-    color: 'border-amber-200 hover:border-amber-400 dark:border-slate-800 dark:hover:border-amber-900/50',
-    headerBg: 'from-amber-600 to-amber-800',
   },
   {
     id: 'glossary',
