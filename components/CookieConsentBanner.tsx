@@ -14,12 +14,14 @@ declare global {
 interface ConsentState {
   necessary: boolean
   analytics: boolean
+  advertising: boolean
   functional: boolean
 }
 
 const DEFAULT_CONSENT: ConsentState = {
   necessary: true,
   analytics: false,
+  advertising: false,
   functional: false,
 }
 
@@ -56,6 +58,9 @@ export default function CookieConsentBanner() {
       // Update Google Consent Mode
       if (typeof window !== 'undefined' && window.gtag) {
         window.gtag('consent', 'update', {
+          ad_storage: consent.advertising ? 'granted' : 'denied',
+          ad_user_data: consent.advertising ? 'granted' : 'denied',
+          ad_personalization: consent.advertising ? 'granted' : 'denied',
           analytics_storage: consent.analytics ? 'granted' : 'denied',
           functionality_storage: consent.functional ? 'granted' : 'denied',
         })
@@ -70,6 +75,7 @@ export default function CookieConsentBanner() {
     setConsent({
       necessary: true,
       analytics: true,
+      advertising: true,
       functional: true,
     })
     handleSave()
@@ -98,7 +104,7 @@ export default function CookieConsentBanner() {
             <div className="flex-1 min-w-0">
               <h3 className="font-bold text-white text-xs sm:text-sm mb-0.5 sm:mb-1">Cookie Preferences</h3>
               <p className="text-[11px] sm:text-xs text-slate-300 leading-snug sm:leading-relaxed">
-                We use cookies for analytics per{' '}
+                We use cookies for analytics and ads per{' '}
                 <Link
                   href="/privacy-policy"
                   className="text-amber-400 hover:text-amber-300 font-semibold underline underline-offset-2"
@@ -169,6 +175,29 @@ export default function CookieConsentBanner() {
                   <span
                     className={`inline-block h-3.5 w-3.5 sm:h-4 sm:w-4 transform rounded-full bg-white transition-transform ${
                       consent.analytics ? 'translate-x-4 sm:translate-x-6' : 'translate-x-0.5 sm:translate-x-1'
+                    }`}
+                  />
+                </button>
+              </div>
+
+              {/* Advertising */}
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex-1 min-w-0">
+                  <label className="font-semibold text-white text-xs sm:text-sm">Advertising</label>
+                  <p className="text-[10px] sm:text-xs text-slate-400">Personalized ads</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => updateConsent('advertising', !consent.advertising)}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                    consent.advertising ? 'bg-amber-500' : 'bg-slate-600'
+                  }`}
+                  role="switch"
+                  aria-checked={consent.advertising}
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      consent.advertising ? 'translate-x-6' : 'translate-x-1'
                     }`}
                   />
                 </button>
