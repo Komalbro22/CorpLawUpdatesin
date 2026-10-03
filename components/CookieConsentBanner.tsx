@@ -92,18 +92,18 @@ export default function CookieConsentBanner() {
     <aside
       role="region"
       aria-label="Cookie & Privacy Consent"
-      className="fixed bottom-0 left-0 right-0 z-50 transition-all duration-300 animate-in fade-in slide-in-from-bottom-5 sm:bottom-4 sm:inset-x-4 sm:max-w-4xl sm:mx-auto"
+      className="fixed bottom-0 left-0 right-0 sm:bottom-4 sm:right-4 sm:left-auto sm:max-w-md z-50 transition-all duration-300 animate-in fade-in slide-in-from-bottom-5"
     >
-      <div className="bg-slate-900/95 dark:bg-slate-900/98 backdrop-blur-md text-white p-3 sm:p-6 rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-700/80 dark:border-slate-800">
-        <div className="flex flex-col gap-3 sm:gap-4">
+      <div className="bg-slate-900/95 dark:bg-slate-900/98 backdrop-blur-md text-white p-3 sm:p-4 rounded-t-xl sm:rounded-xl shadow-2xl border border-slate-700/80 dark:border-slate-800">
+        <div className="flex flex-col gap-2.5">
           {/* Header */}
-          <div className="flex items-start gap-2 sm:gap-3">
-            <div className="p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 shrink-0">
-              <Cookie className="size-4 sm:size-5" aria-hidden="true" />
+          <div className="flex items-start gap-2.5">
+            <div className="p-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 shrink-0">
+              <Cookie className="size-4" aria-hidden="true" />
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-white text-xs sm:text-sm mb-0.5 sm:mb-1">Cookie Preferences</h3>
-              <p className="text-[11px] sm:text-xs text-slate-300 leading-snug sm:leading-relaxed">
+              <h3 className="font-bold text-white text-xs mb-0.5">Cookie Preferences</h3>
+              <p className="text-[11px] text-slate-300 leading-snug">
                 We use cookies for analytics and ads per{' '}
                 <Link
                   href="/privacy-policy"
@@ -120,7 +120,7 @@ export default function CookieConsentBanner() {
               className="p-1 text-slate-400 hover:text-slate-200 rounded-lg transition-colors shrink-0"
               aria-label="Dismiss cookie notice"
             >
-              <X className="size-3.5 sm:size-4" aria-hidden="true" />
+              <X className="size-3.5" aria-hidden="true" />
             </button>
           </div>
 
@@ -128,16 +128,16 @@ export default function CookieConsentBanner() {
           <button
             type="button"
             onClick={() => setShowDetails(!showDetails)}
-            className="flex items-center gap-2 text-[11px] sm:text-xs text-slate-400 hover:text-slate-200 transition-colors"
+            className="flex items-center gap-1.5 text-[11px] text-slate-400 hover:text-slate-200 transition-colors self-start"
           >
             {showDetails ? (
               <>
-                <ChevronUp className="size-3.5 sm:size-4" aria-hidden="true" />
+                <ChevronUp className="size-3" aria-hidden="true" />
                 Hide details
               </>
             ) : (
               <>
-                <ChevronDown className="size-3.5 sm:size-4" aria-hidden="true" />
+                <ChevronDown className="size-3" aria-hidden="true" />
                 Customize choices
               </>
             )}
@@ -229,27 +229,27 @@ export default function CookieConsentBanner() {
           )}
 
           {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-2.5 pt-1 sm:pt-2">
+          <div className="flex flex-row items-center justify-end gap-2 pt-1">
             <button
               type="button"
               onClick={handleRejectAll}
-              className="w-full sm:w-auto px-3 sm:px-4 py-2 sm:py-2.5 text-[11px] sm:text-xs font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg sm:rounded-xl transition-colors border border-slate-700"
+              className="px-2.5 py-1.5 text-[11px] font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors border border-slate-700"
             >
               Reject All
             </button>
             <button
               type="button"
               onClick={handleSave}
-              className="w-full sm:w-auto px-3 sm:px-4 py-2 sm:py-2.5 text-[11px] sm:text-xs font-bold text-navy bg-amber-400 hover:bg-amber-300 rounded-lg sm:rounded-xl transition-colors shadow-md shadow-amber-500/10"
+              className="px-2.5 py-1.5 text-[11px] font-bold text-navy bg-amber-400 hover:bg-amber-300 rounded-lg transition-colors shadow-sm"
             >
               Save Preferences
             </button>
             <button
               type="button"
               onClick={handleAcceptAll}
-              className="w-full sm:w-auto px-3 sm:px-4 py-2 sm:py-2.5 text-[11px] sm:text-xs font-bold text-navy bg-emerald-500 hover:bg-emerald-400 rounded-lg sm:rounded-xl transition-colors shadow-md shadow-emerald-500/10 flex items-center justify-center gap-1.5"
+              className="px-2.5 py-1.5 text-[11px] font-bold text-navy bg-emerald-500 hover:bg-emerald-400 rounded-lg transition-colors shadow-sm flex items-center justify-center gap-1"
             >
-              <ShieldCheck className="size-3 sm:size-3.5" aria-hidden="true" />
+              <ShieldCheck className="size-3" aria-hidden="true" />
               Accept All
             </button>
           </div>
