@@ -165,11 +165,7 @@ export default function PrivacyPolicyPage() {
                                     <td className="p-3">Page visits, interactions (if GA4 enabled)</td>
                                     <td className="p-3">Traffic analytics and News integration</td>
                                 </tr>
-                                <tr>
-                                    <td className="p-3 font-bold">Google AdSense &amp; Ad Networks (Prospective / Upon Approval)</td>
-                                    <td className="p-3">IP address, cookie identifiers, device telemetry</td>
-                                    <td className="p-3">Contextual &amp; personalized ad serving, frequency capping, fraud prevention, and performance reporting</td>
-                                </tr>
+
                             </tbody>
                         </table>
                     </div>
@@ -178,57 +174,7 @@ export default function PrivacyPolicyPage() {
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
 
                 <section>
-                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">5. Advertising &amp; Google AdSense</h2>
-                    <p className="text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">
-                        To support our platform and maintain our corporate law intelligence summaries, compliance trackers, and legal calculators free for the professional community, CorpLawUpdates.in may use third-party advertising services, including Google AdSense, if and when the site is approved and advertising is enabled.
-                    </p>
-                    <div className="space-y-4 text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
-                        <div>
-                            <h3 className="font-bold text-navy dark:text-slate-200 mb-1.5 text-xs uppercase tracking-wide">A. Third-Party Advertising Vendors &amp; Google AdSense</h3>
-                            <p>
-                                If advertising is enabled, third-party advertising vendors, including Google, may use cookies and similar technologies to serve and measure advertisements. The technologies and choices available depend on the services enabled on this site and your location.
-                            </p>
-                        </div>
-                        <div>
-                            <h3 className="font-bold text-navy dark:text-slate-200 mb-1.5 text-xs uppercase tracking-wide">B. Advertising Cookies, Web Beacons &amp; IP Addresses</h3>
-                            <p>
-                                If Google advertising is enabled, Google and its partners may use advertising cookies and related data for ad delivery, measurement, frequency management, and invalid-traffic prevention, subject to applicable consent requirements and your settings.
-                            </p>
-                        </div>
-                        <div>
-                            <h3 className="font-bold text-navy dark:text-slate-200 mb-1.5 text-xs uppercase tracking-wide">C. Personalized Advertising Choices &amp; Opt-Out</h3>
-                            <p className="mb-2">
-                                You retain complete control over whether ads are personalized to your browsing activity:
-                            </p>
-                            <ul className="list-disc list-inside space-y-1.5 pl-1">
-                                <li>
-                                    <strong>Google Ads Settings:</strong> You can opt out of personalized advertising by visiting Google&apos;s Ads Settings at{' '}
-                                    <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 underline font-semibold">
-                                        https://www.google.com/settings/ads
-                                    </a>.
-                                </li>
-                                <li>
-                                    <strong>Network Advertising Initiative &amp; DAA Opt-Out:</strong> You may also opt out of third-party advertising vendor cookies for personalized advertising by visiting{' '}
-                                    <a href="https://www.aboutads.info/choices" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 underline font-semibold">
-                                        www.aboutads.info/choices
-                                    </a>{' '}
-                                    or{' '}
-                                    <a href="https://www.youronlinechoices.com" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 underline font-semibold">
-                                        www.youronlinechoices.com
-                                    </a>.
-                                </li>
-                                <li>
-                                    <strong>Browser Controls:</strong> You can configure your browser to block or delete third-party cookies. Available advertising choices depend on whether advertising is enabled and the consent options presented to you.
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-
-                <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
-
-                <section>
-                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">6. Sponsored Content & Link Attribution</h2>
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">5. Sponsored Content & Link Attribution</h2>
                     <p className="text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">
                         CorpLawUpdates.in may publish sponsored or guest articles submitted by external contributors. These articles are clearly labelled as "Sponsored" and include a disclosure that CorpLawUpdates does not necessarily endorse the views or services mentioned.
                     </p>
@@ -251,7 +197,7 @@ export default function PrivacyPolicyPage() {
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
 
                 <section>
-                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">7. Cookies &amp; Analytics Policy</h2>
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">6. Cookies &amp; Analytics Policy</h2>
                     <p className="text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">
                         CorpLawUpdates.in uses essential cookies, device storage, and privacy-respecting analytics to enhance user navigation and measure platform readership in compliance with the Digital Personal Data Protection (DPDP) Act, 2023 and the DPDP Rules, 2025.
                     </p>
@@ -265,7 +211,6 @@ export default function PrivacyPolicyPage() {
                             <ul className="list-disc list-inside space-y-1.5 text-slate-600 dark:text-slate-400">
                                 <li><strong>Essential Cookies:</strong> Required for basic site functionality (navigation, security, theme persistence). These cannot be disabled.</li>
                                 <li><strong>Analytics Cookies:</strong> Help us understand how visitors use our site (Google Analytics, Vercel Analytics). You can accept or reject these.</li>
-                                <li><strong>Advertising Cookies:</strong> Used by Google AdSense to serve personalized ads and measure ad performance. You can accept or reject these.</li>
                                 <li><strong>Functional Cookies:</strong> Remember your preferences and enhance site features. You can accept or reject these.</li>
                             </ul>
                             <p className="mt-3 text-sm italic">
