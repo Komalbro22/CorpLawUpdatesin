@@ -193,6 +193,7 @@ export default async function Footer() {
                         <Link href="/privacy-policy" className="hover:text-white focus:outline-none focus:underline transition-colors">Privacy</Link>
                         <Link href="/editorial-policy" className="hover:text-white focus:outline-none focus:underline transition-colors">Editorial</Link>
                         <Link href="/terms" className="hover:text-white focus:outline-none focus:underline transition-colors">Terms</Link>
+                        <Link href="/disclaimer" className="hover:text-white focus:outline-none focus:underline transition-colors">Disclaimer</Link>
                         <CookiePreferencesButton />
                         <Link href="/api/feed.xml" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-white focus:outline-none focus:underline transition-colors" prefetch={false}>
                             <Rss className="size-3 text-amber-400" aria-hidden="true" /> RSS
