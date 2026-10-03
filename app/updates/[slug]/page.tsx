@@ -54,15 +54,12 @@ export async function generateMetadata(
     .from('updates')
     .select('title, summary, category, published_at, updated_at, tags, slug, seo_title, seo_description, content, featured_image_url, noindex, is_sponsored, contributor_name')
     .ilike('slug', decodedSlug)
+    .not('published_at', 'is', null)
+    .lte('published_at', new Date().toISOString())
     .single()
 
   if (!update) {
-    return { 
-      title: 'Article Not Found', 
-      description: 'The article you are looking for does not exist.',
-      robots: { index: false, follow: true },
-      alternates: { canonical: `https://www.corplawupdates.in/updates/${(await params).slug.toLowerCase()}` }
-    }
+    notFound()
   }
 
   const canonicalUrl = `https://www.corplawupdates.in/updates/${update.slug}`
