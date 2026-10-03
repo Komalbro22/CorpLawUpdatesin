@@ -109,19 +109,6 @@ const calculators = [
     isLive: true,
     color: 'border-indigo-200 hover:border-indigo-400 dark:border-slate-800 dark:hover:border-indigo-900/50',
     headerBg: 'from-indigo-600 to-indigo-900',
-  },
-  {
-    id: 'gst',
-    href: '#',
-    icon: '🧾',
-    label: 'GST Late Fee Calculator',
-    description: 'Calculate late fees and interest for delayed filing of GSTR-1, GSTR-3B, GSTR-9 and GSTR-9C under the CGST Act.',
-    badge: 'Coming Soon',
-    badgeColor: 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300',
-    stats: 'In Development',
-    isLive: false,
-    color: 'border-slate-200 hover:border-slate-300 dark:border-slate-800/50 dark:hover:border-slate-700',
-    headerBg: 'from-slate-500 to-slate-700 opacity-80',
   }
 ]
 
@@ -173,10 +160,6 @@ function HubFAQ() {
     {
       q: 'Why are LLPs and Companies calculated differently?',
       a: 'LLPs and Companies are governed by separate statutory enactments and fee schedules. For LLPs, late filing fees at the MCA portal follow the LLP (Second Amendment) Rules, 2022 slab multipliers (with uncapped ₹10/₹20 daily rates beyond 360 days for Forms 8 & 11), while statutory penalties under Section 34(5)/35(2) require separate ROC adjudication. Companies follow the Companies (Registration Offices and Fees) Rules, 2014.'
-    },
-    {
-      q: 'Is the GST Calculator available?',
-      a: 'The GST Late Fee Calculator is currently in active development and will be launching soon. It will cover statutory penalty and interest estimations for GSTR-1, GSTR-3B, and annual returns.'
     }
   ]
 
