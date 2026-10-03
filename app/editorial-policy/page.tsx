@@ -91,42 +91,42 @@ export default function EditorialPolicyPage() {
           </div>
 
           <div>
-            <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">5. Specialized Regulatory Research Desks</h2>
+            <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3">5. Specialized Regulatory Coverage Areas</h2>
             <p className="mb-3">
-              To ensure deep subject-matter expertise across diverse areas of Indian corporate law, our coverage is organized into specialized regulatory research desks:
+              To ensure comprehensive tracking across key branches of Indian corporate jurisprudence, our research covers nine core regulatory domains:
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div className="rounded-lg border border-slate-200/80 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-3">
-                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">🏛️ MCA & Corporate Compliance Desk</span>
+                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">🏛️ MCA & Corporate Compliance</span>
                 <span className="text-slate-500 dark:text-slate-400">Companies Act 2013, LLP Act, RoC filings, statutory compliance calendars, and MCA circulars.</span>
               </div>
               <div className="rounded-lg border border-slate-200/80 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-3">
-                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">📈 Securities & Capital Markets Desk</span>
+                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">📈 Securities & Capital Markets</span>
                 <span className="text-slate-500 dark:text-slate-400">SEBI LODR, ICDR, PIT, Takeover Regulations, mutual funds, AIFs, and stock exchange circulars.</span>
               </div>
               <div className="rounded-lg border border-slate-200/80 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-3">
-                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">🏦 Banking & Monetary Regulations Desk</span>
+                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">🏦 Banking & Monetary Regulations</span>
                 <span className="text-slate-500 dark:text-slate-400">RBI Master Directions, NBFC regulations, prudential frameworks, digital lending, and payments.</span>
               </div>
               <div className="rounded-lg border border-slate-200/80 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-3">
-                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">⚖️ Insolvency & Bankruptcy Desk</span>
+                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">⚖️ Insolvency & Bankruptcy</span>
                 <span className="text-slate-500 dark:text-slate-400">Insolvency & Bankruptcy Code (IBC 2016), CIRP timelines, liquidation rules, and IBBI notifications.</span>
               </div>
               <div className="rounded-lg border border-slate-200/80 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-3">
-                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">👷 Labour & Employment Law Desk</span>
+                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">👷 Labour & Employment Law</span>
                 <span className="text-slate-500 dark:text-slate-400">EPFO wage ceilings, ESIC compliance, minimum wages, POSH compliance, and Labour Code reforms.</span>
               </div>
               <div className="rounded-lg border border-slate-200/80 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-3">
-                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">🌐 FEMA & Cross-Border Desk</span>
+                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">🌐 FEMA & Cross-Border</span>
                 <span className="text-slate-500 dark:text-slate-400">FDI policy, Overseas Direct Investment (ODI), ECB regulations, and DGFT foreign trade notices.</span>
               </div>
               <div className="rounded-lg border border-slate-200/80 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-3">
-                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">📜 Company Law Tribunal & CCI Desk</span>
+                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">📜 Company Law Tribunal & CCI</span>
                 <span className="text-slate-500 dark:text-slate-400">NCLT & NCLAT bench orders, corporate dispute rulings, and Competition Commission orders.</span>
               </div>
               <div className="rounded-lg border border-slate-200/80 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-3">
-                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">💰 Direct & Indirect Tax Desk</span>
-                <span className="text-slate-500 dark:text-slate-400">CBDT Income Tax circulars, CBIC GST notifications, advance rulings, and statutory rate changes.</span>
+                <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">🏙️ IFSCA (GIFT City)</span>
+                <span className="text-slate-500 dark:text-slate-400">International Financial Services Centres Authority circulars, fund management, and IFSC regulations.</span>
               </div>
             </div>
           </div>

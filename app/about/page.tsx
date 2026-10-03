@@ -116,7 +116,7 @@ export default async function AboutPage() {
                 <section className="mb-12">
                     <h2 className="text-3xl font-heading font-bold text-navy dark:text-white mb-4 border-l-4 border-gold pl-4">How It Works & Editorial Methodology</h2>
                     <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
-                        Every piece of information published on CorpLawUpdates.in is researched and curated manually by legal researchers. We track official government gazettes, regulatory portals, and statutory press releases daily across MCA, SEBI, RBI, IBBI, and EPFO.
+                        Every piece of information published on CorpLawUpdates.in is researched and curated independently by our regulatory research analyst. We track official government gazettes, regulatory portals, and statutory press releases daily across MCA, SEBI, RBI, IBBI, and EPFO.
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
                         <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
