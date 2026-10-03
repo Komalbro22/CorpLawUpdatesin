@@ -249,7 +249,6 @@ export default async function AboutPage() {
                             </a>
                         </div>
                     </section>
-                )}
 
                 {/* 7. Site Statistics (Trust Signals) */}
                 <section className="mb-12">
