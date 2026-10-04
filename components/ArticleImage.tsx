@@ -61,7 +61,7 @@ export default function ArticleImage({ src, alt, category, priority = false, cla
         src={imageSrc}
         alt={alt}
         fill
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
         priority={priority}
         unoptimized={!optimizable}
         referrerPolicy="no-referrer"

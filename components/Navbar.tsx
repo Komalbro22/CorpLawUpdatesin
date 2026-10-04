@@ -4,9 +4,24 @@ import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import GlobalSearch from './GlobalSearch'
+import dynamic from 'next/dynamic'
 import DarkModeToggle from './DarkModeToggle'
 import NotificationBell from './NotificationBell'
+
+const GlobalSearch = dynamic(() => import('./GlobalSearch'), {
+    ssr: false,
+    loading: () => (
+        <button
+            aria-label="Open search"
+            className="flex min-h-[44px] items-center gap-2.5 text-xs font-medium text-slate-500 dark:text-slate-400 bg-slate-100/90 dark:bg-slate-800/90 border border-slate-200/90 dark:border-slate-700/90 rounded-xl px-3 py-1.5 opacity-80"
+        >
+            <svg className="size-3.5 text-slate-400" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <span className="hidden md:block text-slate-600 dark:text-slate-300 font-medium">Search...</span>
+        </button>
+    )
+})
 
 import {
     Building2,
