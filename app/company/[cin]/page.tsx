@@ -9,6 +9,7 @@ import ComplianceFlagCard from '@/components/ComplianceFlagCard'
 import DirectorsTable from '@/components/DirectorsTable'
 import ChargesTable from '@/components/ChargesTable'
 import { supabase } from '@/lib/supabase'
+import JsonLd from '@/components/JsonLd'
 import { Building2, Landmark, Sparkles, FileText, HelpCircle, ShieldCheck, Lock, Binary, MapPin, Calendar, Briefcase, Award } from 'lucide-react'
 
 export const revalidate = 86400 // Cache for 24 hours to protect Vercel ISR and bandwidth limits
@@ -195,10 +196,7 @@ export default async function CompanyProfilePage({ params }: Props) {
 
   return (
     <article className="min-h-dvh bg-slate-50 dark:bg-slate-950 py-8 px-4 sm:px-6 transition-colors duration-200">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph) }}
-      />
+      <JsonLd id={`company-schema-${company.cin}`} data={schemaGraph} />
 
       <div className="max-w-4xl mx-auto space-y-8">
 

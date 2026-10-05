@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getCachedDocumentTemplate } from '@/lib/document-template-cache'
+import JsonLd from '@/components/JsonLd'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -147,10 +148,7 @@ export default async function DocumentLayout({
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd id={`document-template-schema-${slug}`} data={jsonLd} />
       {children}
     </>
   )

@@ -1094,7 +1094,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
             <span className="inline-block bg-slate-900 text-white text-[10px] font-bold px-2 py-0.5 rounded">
               FORM CHG-1 COMPLIANCE MEMO
             </span>
-            <p className="text-[9px] text-slate-500 mt-1">Generated: {formatDateDisplay(new Date())}</p>
+            <p className="text-[9px] text-slate-500 mt-1" suppressHydrationWarning>Generated: <span suppressHydrationWarning>{formatDateDisplay(new Date())}</span></p>
           </div>
         </div>
 

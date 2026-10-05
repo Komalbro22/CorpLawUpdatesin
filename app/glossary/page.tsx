@@ -3,6 +3,7 @@ import { supabase } from '@/lib/supabase'
 import { GLOSSARY_INDEX_COLUMNS } from '@/lib/supabase-queries'
 import GlossaryClient from '@/components/GlossaryClient'
 import HubExploreLinks from '@/components/HubExploreLinks'
+import JsonLd from '@/components/JsonLd'
 
 export const revalidate = 3600
 
@@ -85,16 +86,10 @@ export default async function GlossaryHubPage() {
       </div>
 
       {/* DefinedTermSet JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(glossarySchema) }}
-      />
+      <JsonLd id="glossary-definedterm-schema" data={glossarySchema} />
 
       {/* BreadcrumbList JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
+      <JsonLd id="glossary-breadcrumb-schema" data={breadcrumbSchema} />
     </>
   )
 }

@@ -24,6 +24,7 @@ import {
   Users,
 } from 'lucide-react'
 import MouClient from './MouClient'
+import JsonLd from '@/components/JsonLd'
 
 export const revalidate = 86400
 
@@ -192,22 +193,10 @@ export default function MemorandumOfUnderstandingPage() {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebPage) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdSoftware) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdHowTo) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdFaq) }}
-      />
+      <JsonLd id="mou-webpage-schema" data={jsonLdWebPage} />
+      <JsonLd id="mou-software-schema" data={jsonLdSoftware} />
+      <JsonLd id="mou-howto-schema" data={jsonLdHowTo} />
+      <JsonLd id="mou-faq-schema" data={jsonLdFaq} />
 
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto space-y-10">

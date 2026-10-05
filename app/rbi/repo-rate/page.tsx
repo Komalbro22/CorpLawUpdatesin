@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import { REPO_RATE_HISTORY_COLUMNS } from '@/lib/supabase-queries'
 import RepoEmiCalculator from '@/components/rbi/RepoEmiCalculator'
+import JsonLd from '@/components/JsonLd'
 import {
   Landmark,
   TrendingDown,
@@ -261,18 +262,9 @@ export default async function RepoRatePage() {
   return (
     <div className="min-h-dvh bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-200">
       {/* Schema.org Structured Data Injection */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(datasetSchema) }}
-      />
+      <JsonLd id="repo-rate-faq-schema" data={faqSchema} />
+      <JsonLd id="repo-rate-webpage-schema" data={webpageSchema} />
+      <JsonLd id="repo-rate-dataset-schema" data={datasetSchema} />
 
       {/* HERO SECTION */}
       <div className="bg-navy py-12 px-4 text-center relative overflow-hidden border-b border-navy-700">

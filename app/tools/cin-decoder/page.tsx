@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { decodeCIN } from '@/lib/cin-decoder'
 import { Binary, Sparkles, FileText, HelpCircle, ShieldCheck, MapPin, Calendar, Briefcase, Award, Building2, Download, Search, CheckCircle2, AlertCircle } from 'lucide-react'
 import CinDownloadButton from '@/components/CinDownloadButton'
+import JsonLd from '@/components/JsonLd'
 
 export const dynamic = 'force-dynamic'
 
@@ -129,10 +130,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
 
   return (
     <article className="min-h-dvh bg-slate-50 dark:bg-slate-950 py-8 px-4 sm:px-6 transition-colors duration-200">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaGraph) }}
-      />
+      <JsonLd id="cin-decoder-schema" data={schemaGraph} />
 
       <div className="max-w-4xl mx-auto space-y-8">
         

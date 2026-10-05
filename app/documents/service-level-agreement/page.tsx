@@ -21,6 +21,7 @@ import {
   ArrowRight
 } from 'lucide-react'
 import SlaClient from './SlaClient'
+import JsonLd from '@/components/JsonLd'
 
 const pageUrl = 'https://www.corplawupdates.in/documents/service-level-agreement'
 
@@ -238,10 +239,7 @@ const jsonLd = {
 export default function ServiceLevelAgreementPage() {
   return (
     <div className="min-h-screen bg-slate-50/50 pb-20">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd id="sla-schema" data={jsonLd} />
 
       {/* ─── Breadcrumb ─────────────────────────────────────────────────── */}
       <div className="bg-white border-b border-slate-200">

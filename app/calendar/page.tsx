@@ -3,6 +3,7 @@ import { Suspense } from 'react'
 import { supabase } from '@/lib/supabase'
 import { COMPLIANCE_ENTRY_COLUMNS } from '@/lib/supabase-queries'
 import CalendarPageClient, { type ComplianceEntry } from '@/components/CalendarPageClient'
+import JsonLd from '@/components/JsonLd'
 
 export const revalidate = 1800
 
@@ -160,8 +161,8 @@ export default async function CalendarPage() {
       </section>
 
       {/* JSON-LD Schemas */}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />
+      <JsonLd id="calendar-breadcrumb-schema" data={breadcrumbSchema} />
+      <JsonLd id="calendar-itemlist-schema" data={itemListSchema} />
     </>
   )
 }

@@ -27,6 +27,7 @@ import {
   AlertTriangle,
 } from 'lucide-react'
 import PartnershipDeedClient from './PartnershipDeedClient'
+import JsonLd from '@/components/JsonLd'
 
 export const revalidate = 86400
 
@@ -428,22 +429,10 @@ export default function PartnershipDeedPage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       {/* Schema.org JSON-LD scripts */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebPage) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdSoftware) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdHowTo) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdFaq) }}
-      />
+      <JsonLd id="partnership-deed-webpage-schema" data={jsonLdWebPage} />
+      <JsonLd id="partnership-deed-software-schema" data={jsonLdSoftware} />
+      <JsonLd id="partnership-deed-howto-schema" data={jsonLdHowTo} />
+      <JsonLd id="partnership-deed-faq-schema" data={jsonLdFaq} />
 
       {/* Hero Header */}
       <header className="border-b border-slate-200 bg-white pt-10 pb-8">

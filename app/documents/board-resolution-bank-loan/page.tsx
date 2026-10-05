@@ -1,5 +1,6 @@
 import { HelpCircle, Landmark, Scale, ShieldCheck, FileText, CheckCircle2, Info } from 'lucide-react'
 import BankLoanClient from './BankLoanClient'
+import JsonLd from '@/components/JsonLd'
 
 const pageUrl = 'https://www.corplawupdates.in/documents/board-resolution-bank-loan'
 
@@ -179,10 +180,7 @@ const jsonLd = {
 export default function BankLoanPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd id="bank-loan-schema" data={jsonLd} />
 
       <main className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
         {/* Princeton GEO Direct Answer Block */}

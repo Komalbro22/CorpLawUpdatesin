@@ -1023,8 +1023,8 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
           <div className="text-lg font-bold mt-2">
             FORM {complianceResult.metadata.formCode} — STATUTORY FEE & PENALTY REPORT
           </div>
-          <div className="text-xs text-slate-500">
-            Generated: {new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+          <div className="text-xs text-slate-500" suppressHydrationWarning>
+            Generated: <span suppressHydrationWarning>{new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
           </div>
         </div>
 

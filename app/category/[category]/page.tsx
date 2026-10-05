@@ -9,6 +9,7 @@ import Pagination from '@/components/Pagination'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import EmptyState from '@/components/EmptyState'
+import JsonLd from '@/components/JsonLd'
 
 export const revalidate = 43200 // 12 hours
 
@@ -1211,11 +1212,11 @@ export default async function CategoryPage({
             </section>
 
             {/* All JSON-LD Schemas */}
-            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageSchema) }} />
-            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(definedTermSchema) }} />
-            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-            {faqSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />}
-            {itemListSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />}
+            <JsonLd id="category-collection-schema" data={collectionPageSchema} />
+            <JsonLd id="category-definedterm-schema" data={definedTermSchema} />
+            <JsonLd id="category-breadcrumb-schema" data={breadcrumbSchema} />
+            {faqSchema && <JsonLd id="category-faq-schema" data={faqSchema} />}
+            {itemListSchema && <JsonLd id="category-itemlist-schema" data={itemListSchema} />}
         </div>
     )
 }

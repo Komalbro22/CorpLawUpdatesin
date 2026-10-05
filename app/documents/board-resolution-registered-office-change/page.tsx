@@ -19,6 +19,7 @@ import {
   ExternalLink
 } from 'lucide-react'
 import RegisteredOfficeClient from './RegisteredOfficeClient'
+import JsonLd from '@/components/JsonLd'
 
 const pageUrl =
   'https://www.corplawupdates.in/documents/board-resolution-registered-office-change'
@@ -284,10 +285,7 @@ const jsonLd = {
 export default function RegisteredOfficePage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd id="registered-office-change-schema" data={jsonLd} />
 
       <div className="min-h-dvh bg-slate-50 dark:bg-slate-950 pb-20">
         {/* Interactive Client Component */}

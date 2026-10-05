@@ -8,6 +8,7 @@ import {
   Scale,
 } from 'lucide-react'
 import Sh4DeedClient from './Sh4DeedClient'
+import JsonLd from '@/components/JsonLd'
 
 const pageUrl = 'https://www.corplawupdates.in/documents/share-transfer-deed'
 const mcaPortalUrl = 'https://www.mca.gov.in'
@@ -647,10 +648,7 @@ export default function ShareTransferDeedPage() {
       </section>
 
       {/* Structured Data JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd id="sh4-deed-schema" data={jsonLd} />
     </div>
   )
 }

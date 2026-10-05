@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, CheckCircle2, FileText, Landmark, ShieldCheck } from 'lucide-react'
 import DividendResolutionClient from './DividendResolutionClient'
+import JsonLd from '@/components/JsonLd'
 
 const pageUrl = 'https://www.corplawupdates.in/documents/board-resolution-for-dividend-declaration'
 const title = 'Board Resolution for Dividend Declaration: Free Word & PDF Format'
@@ -108,7 +109,7 @@ const jsonLd = {
 export default function DividendResolutionPage() {
   return (
     <div className="min-h-dvh bg-slate-50 pb-20 dark:bg-slate-950">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
+      <JsonLd id="dividend-resolution-schema" data={jsonLd} />
       <div className="border-b border-slate-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-slate-900 sm:px-6">
         <nav aria-label="Breadcrumb" className="mx-auto flex max-w-6xl items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
           <Link href="/" className="hover:text-slate-900 dark:hover:text-white">Home</Link><span aria-hidden="true">/</span>

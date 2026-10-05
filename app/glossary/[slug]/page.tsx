@@ -6,6 +6,7 @@ import { GLOSSARY_LINK_COLUMNS } from '@/lib/supabase-queries'
 import MarkdownRenderer from '@/components/MarkdownRenderer'
 import { linkGlossaryTerms } from '@/lib/glossaryLinker'
 import TableOfContents from '@/components/TableOfContents'
+import JsonLd from '@/components/JsonLd'
 import { BookOpen, Link2, Search, FileText, HelpCircle, Clock } from 'lucide-react'
 
 export const revalidate = 86400 // Revalidate daily per Supabase egress budget
@@ -791,10 +792,7 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
         };
 
         return (
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(unifiedSchema) }}
-          />
+          <JsonLd id={`glossary-term-schema-${term.slug}`} data={unifiedSchema} />
         );
       })()}
     </article>

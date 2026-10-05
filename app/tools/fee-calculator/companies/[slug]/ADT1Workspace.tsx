@@ -945,8 +945,8 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
             <span className="inline-block px-2.5 py-1 text-[11px] font-bold bg-slate-100 text-slate-800 border border-slate-300 rounded">
               FORM ADT-1 CERTIFICATE
             </span>
-            <p className="text-[10px] text-slate-500 mt-1">
-              Generated: {new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+            <p className="text-[10px] text-slate-500 mt-1" suppressHydrationWarning>
+              Generated: <span suppressHydrationWarning>{new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
             </p>
           </div>
         </div>

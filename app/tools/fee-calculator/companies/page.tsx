@@ -809,7 +809,7 @@ export default function CompaniesFeePage() {
             <strong>Statutory Disclaimer:</strong> Fees and penalties computed by this tool are based on the Companies Act, 2013, the Companies (Registration Offices and Fees) Rules, 2014 as amended up to FY 2026-27, and relevant state stamp acts. This calculator is provided for compliance planning and institutional advisory estimation. Official fee challans are generated exclusively upon form upload and pre-scrutiny on the Ministry of Corporate Affairs MCA21 V3 portal. Always verify final challan values on MCA21 portal before filing.
           </p>
           <p>
-            © {new Date().getFullYear()} CorpLawUpdates.in — India&apos;s Independent Corporate Law &amp; Regulatory Intelligence Platform.
+            © 2026 CorpLawUpdates.in — India&apos;s Independent Corporate Law &amp; Regulatory Intelligence Platform.
           </p>
         </div>
       </div>

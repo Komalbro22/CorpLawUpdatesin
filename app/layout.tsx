@@ -223,6 +223,7 @@ export default async function RootLayout({
           id="google-publisher-sdk"
           src="https://news.google.com/swg/js/v1/publisher.js"
           strategy="lazyOnload"
+          crossOrigin="anonymous"
         />
 
       </body>

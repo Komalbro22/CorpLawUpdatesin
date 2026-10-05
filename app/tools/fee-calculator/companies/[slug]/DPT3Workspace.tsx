@@ -899,8 +899,8 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
               <span className="inline-block bg-slate-100 border border-slate-300 text-slate-800 text-[10px] font-bold px-2 py-0.5 rounded">
                 STATUTORY MEMORANDUM
               </span>
-              <p className="text-[10px] text-slate-500 mt-1">
-                Generated: {new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+              <p className="text-[10px] text-slate-500 mt-1" suppressHydrationWarning>
+                Generated: <span suppressHydrationWarning>{new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
               </p>
             </div>
           </div>

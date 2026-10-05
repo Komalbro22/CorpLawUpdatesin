@@ -8,6 +8,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { unstable_cache } from 'next/cache'
 import ArticleSearchTool from '@/components/ArticleSearchTool'
+import JsonLd from '@/components/JsonLd'
 import { Building2, TrendingUp, Landmark, ShieldCheck, Users, Scale, Gavel, Globe2, HelpCircle, ChevronDown, Sparkles, BookOpen, CheckCircle2 } from 'lucide-react'
 
 export const revalidate = 3600 // 1 hour (on-demand revalidated via revalidateTag('updates'))
@@ -426,10 +427,10 @@ export default async function UpdatesPage({
             </section>
 
             {/* JSON-LD Schemas */}
-            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }} />
-            {itemListSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />}
-            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+            <JsonLd id="updates-breadcrumb-schema" data={breadcrumbSchema} />
+            <JsonLd id="updates-collection-schema" data={collectionSchema} />
+            {itemListSchema && <JsonLd id="updates-itemlist-schema" data={itemListSchema} />}
+            <JsonLd id="updates-faq-schema" data={faqSchema} />
         </div>
     )
 }

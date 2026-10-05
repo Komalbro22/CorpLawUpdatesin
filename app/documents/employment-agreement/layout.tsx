@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import JsonLd from '@/components/JsonLd'
 
 const pageUrl = 'https://www.corplawupdates.in/documents/employment-agreement'
 const title =
@@ -127,10 +128,7 @@ export default function EmploymentAgreementLayout({
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd id="employment-agreement-schema" data={jsonLd} />
       {children}
     </>
   )

@@ -718,7 +718,7 @@ Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform foc
             </div>
             <div className="text-right text-xs text-slate-600">
               <p className="font-bold text-slate-900">FORM DIR-3 KYC WEB ASSESSMENT</p>
-              <p>Generated: {new Date().toLocaleDateString('en-IN')}</p>
+              <p suppressHydrationWarning>Generated: <span suppressHydrationWarning>{new Date().toLocaleDateString('en-IN')}</span></p>
             </div>
           </div>
         </div>

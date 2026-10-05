@@ -19,6 +19,7 @@ import {
   Layers,
   Zap
 } from 'lucide-react';
+import JsonLd from '@/components/JsonLd';
 
 export const metadata: Metadata = {
   title: 'WebMCP AI Agent Hub — Connect AI Agents to Indian Corporate Law Intelligence',
@@ -302,10 +303,7 @@ export default function WebMCPHubPage() {
 
   return (
     <div className="min-h-dvh bg-slate-50 dark:bg-slate-950 text-navy dark:text-slate-100 py-10 px-4 sm:px-6 lg:px-8">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd id="webmcp-schema" data={jsonLd} />
 
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Breadcrumb */}
