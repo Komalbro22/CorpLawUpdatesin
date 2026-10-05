@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import JsonLd from '@/components/JsonLd'
 import HubExploreLinks from '@/components/HubExploreLinks'
-import { FileText, Calculator, Calendar, CalendarDays, Landmark, BookOpen, Bot, CheckSquare, Target, Search } from 'lucide-react'
+import { FileText, Calculator, Calendar, CalendarDays, Landmark, BookOpen, Search } from 'lucide-react'
 
 const ogImageUrl = 'https://www.corplawupdates.in/api/og?title=Free+Corporate+Law+%26+Compliance+Tools&category=Tools'
 
@@ -234,52 +234,9 @@ const tools = [
     color: 'border-teal-200 hover:border-teal-400 dark:border-slate-800 dark:hover:border-teal-900/50',
     headerBg: 'from-teal-600 to-teal-800',
   },
-  {
-    id: 'circular-summarizer',
-    href: '/tools/circular-summarizer',
-    icon: <Bot size={24} />,
-    label: 'AI Circular Summarizer',
-    description: 'Input SEBI, MCA, or RBI circular notices to extract operative statutory references, compliance action items, and structured briefs prepared for editorial review.',
-    badge: 'Coming Soon',
-    badgeColor: 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400',
-    stats: 'AI powered',
-    isLive: false,
-    tags: ['SEBI Circular', 'MCA Notification', 'RBI Circular', 'Summary'],
-    color: 'border-slate-200 hover:border-slate-300 dark:border-slate-800/50 dark:hover:border-slate-700',
-    headerBg: 'from-slate-500 to-slate-700',
-  },
-  {
-    id: 'checklist',
-    href: '/tools/compliance-checklist',
-    icon: <CheckSquare size={24} />,
-    label: 'Compliance Checklist Generator',
-    description: 'Answer 5 questions about your company and get a personalized compliance checklist with all applicable deadlines.',
-    badge: 'Coming Soon',
-    badgeColor: 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400',
-    stats: 'Personalized',
-    isLive: false,
-    tags: ['Pvt Ltd', 'LLP', 'Listed Company', 'OPC', 'Annual Compliance'],
-    color: 'border-slate-200 hover:border-slate-300 dark:border-slate-800/50 dark:hover:border-slate-700',
-    headerBg: 'from-slate-500 to-slate-700',
-  },
-  {
-    id: 'quiz',
-    href: '/tools/cs-quiz',
-    icon: <Target size={24} />,
-    label: 'Daily Corporate Law Quiz',
-    description: '5 quick MCQs every day on Companies Act, SEBI, RBI and business law. Perfect for students, professionals and curious minds. Build your streak!',
-    badge: 'Coming Soon',
-    badgeColor: 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400',
-    stats: 'New questions daily',
-    isLive: false,
-    tags: ['Daily Quiz', 'MCQ', 'Companies Act', 'Anyone Can Play'],
-    color: 'border-slate-200 hover:border-slate-300 dark:border-slate-800/50 dark:hover:border-slate-700',
-    headerBg: 'from-slate-500 to-slate-700',
-  },
 ]
 
 const liveTools = tools.filter(t => t.isLive)
-const comingTools = tools.filter(t => !t.isLive)
 
 export default function ToolsPage() {
   return (
@@ -303,8 +260,7 @@ export default function ToolsPage() {
           <div className="flex justify-center gap-8 flex-wrap">
             {[
               { v: `${liveTools.length}`, l: 'Live Tools' },
-              { v: `${comingTools.length}+`, l: 'Coming Soon' },
-              { v: '100%', l: 'Free' },
+              { v: '100%', l: 'Free Access' },
               { v: '0', l: 'Login Required' },
             ].map(s => (
               <div key={s.l} className="text-center">
@@ -389,53 +345,6 @@ export default function ToolsPage() {
                   </span>
                 </span>
               </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Coming Soon Tools */}
-        <div>
-          <div className="flex items-center gap-3 mb-6">
-            <span className="text-2xl">🚀</span>
-            <h2 className="text-2xl font-bold text-navy dark:text-white font-heading">
-              Coming Soon
-            </h2>
-            <span className="bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 dark:border dark:border-slate-700 text-xs font-bold px-2.5 py-1 rounded-full">
-              {comingTools.length} In Development
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {comingTools.map(tool => (
-              <div key={tool.id}
-                   className="bg-white dark:bg-slate-900/40 border border-dashed border-slate-300 dark:border-slate-800 rounded-2xl p-5 opacity-80">
-                <div className="flex items-start gap-4">
-                  <span className="text-4xl flex-shrink-0 opacity-60">
-                    {tool.icon}
-                  </span>
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-bold text-navy dark:text-slate-200 text-sm">
-                        {tool.label}
-                      </h3>
-                      <span className="text-xs bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 px-2 py-0.5 rounded-full flex-shrink-0">
-                        Coming Soon
-                      </span>
-                    </div>
-                    <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">
-                      {tool.description}
-                    </p>
-                    <div className="flex flex-wrap gap-1 mt-2">
-                      {tool.tags.slice(0, 3).map(tag => (
-                        <span key={tag}
-                              className="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded-full">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
             ))}
           </div>
         </div>
