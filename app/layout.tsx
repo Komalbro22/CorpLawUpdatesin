@@ -105,6 +105,30 @@ export default async function RootLayout({
     <html lang="en" data-scroll-behavior="smooth" className={fontVariables} suppressHydrationWarning>
       <head suppressHydrationWarning>
         <ThemeScript />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(){
+                function isCrossScriptError(msg, url, line) {
+                  var m = (msg || '').toLowerCase();
+                  return (m.indexOf('script error') !== -1) && (!url || line === 0);
+                }
+                window.addEventListener('error', function(e) {
+                  if (isCrossScriptError(e.message, e.filename, e.lineno)) {
+                    if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+                    e.preventDefault();
+                    return true;
+                  }
+                }, true);
+                var prev = window.onerror;
+                window.onerror = function(msg, url, line) {
+                  if (isCrossScriptError(msg, url, line)) return true;
+                  if (prev) return prev.apply(this, arguments);
+                };
+              })();
+            `,
+          }}
+        />
         <meta name="google-adsense-account" content="ca-pub-8404756575471756" />
         <script
           async

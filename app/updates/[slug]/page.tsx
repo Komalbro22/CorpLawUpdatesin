@@ -471,7 +471,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                             </div>
                             {geoData?.last_verified && (
                                 <div className="flex flex-col sm:items-end border-t sm:border-t-0 border-slate-200/60 dark:border-slate-800/60 pt-2 sm:pt-0 shrink-0 whitespace-nowrap">
-                                    <span className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                                    <span className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap" suppressHydrationWarning>
                                         Last updated: <span className="tabular-nums font-semibold text-slate-700 dark:text-slate-300">{formatDate(geoData.last_verified)}</span>
                                     </span>
                                 </div>
@@ -482,7 +482,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
 
                 {/* 3. Meta row */}
                 <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1.5 sm:gap-x-4 sm:gap-y-2 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-                    <time className="publish-date inline-flex items-center gap-1.5" dateTime={update.published_at}>
+                    <time className="publish-date inline-flex items-center gap-1.5" dateTime={update.published_at} suppressHydrationWarning>
                         <CalendarDays className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-400" aria-hidden />
                         {formattedDate}
                     </time>
@@ -491,7 +491,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                         {readTime} min read
                     </span>
                     {wordCount > 0 && (
-                        <span className="read-count inline-flex items-center gap-1.5">
+                        <span className="read-count inline-flex items-center gap-1.5" suppressHydrationWarning>
                             <BookOpen className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-400" aria-hidden />
                             {wordCount.toLocaleString('en-IN')} words
                         </span>
@@ -517,13 +517,13 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                         </span>
                     )}
                     {update.effective_date && (
-                        <span className="inline-flex items-center gap-1 rounded-md border border-green-100 dark:border-green-900/30 bg-green-50 dark:bg-green-950/20 px-2 py-0.5 text-xs font-medium text-green-700">
+                        <span className="inline-flex items-center gap-1 rounded-md border border-green-100 dark:border-green-900/30 bg-green-50 dark:bg-green-950/20 px-2 py-0.5 text-xs font-medium text-green-700" suppressHydrationWarning>
                             <CalendarDays className="h-3 w-3" aria-hidden />
                             Effective: {formatDate(update.effective_date)}
                         </span>
                     )}
                     {geoData?.last_amended && (
-                        <span className="inline-flex items-center gap-1 rounded-md border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 px-2 py-0.5 text-xs font-medium text-slate-600 dark:text-slate-400">
+                        <span className="inline-flex items-center gap-1 rounded-md border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 px-2 py-0.5 text-xs font-medium text-slate-600 dark:text-slate-400" suppressHydrationWarning>
                             <Clock3 className="h-3 w-3" aria-hidden />
                             Last amended: {formatDate(geoData.last_amended)}
                         </span>
