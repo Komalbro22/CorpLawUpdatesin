@@ -23,6 +23,7 @@ export async function GET(req: NextRequest) {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="${filename}"`,
         'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+        'X-Robots-Tag': 'noindex, nofollow',
       },
     })
   } catch (error: any) {

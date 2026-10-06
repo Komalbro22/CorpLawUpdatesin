@@ -275,6 +275,12 @@ const nextConfig = {
         destination: '/.well-known/security.txt',
         permanent: true,
       },
+      // PWA manifest standard aliases
+      {
+        source: '/site.webmanifest',
+        destination: '/manifest.webmanifest',
+        permanent: true,
+      },
     ]
   },
 }

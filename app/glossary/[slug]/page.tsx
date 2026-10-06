@@ -140,7 +140,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const slug = resolvedParams.slug
   let { data: term } = await supabase
     .from('glossary')
-    .select('term, slug, definition, extended_note')
+    .select('term, slug, definition, category, extended_note')
     .eq('slug', slug)
     .single()
 
@@ -182,6 +182,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${term.term} — Legal Definition`,
       description,
       url: `https://www.corplawupdates.in/glossary/${term.slug}`,
+      type: 'article',
+      images: [
+        {
+          url: `https://www.corplawupdates.in/api/og?title=${encodeURIComponent(term.term)}&category=${encodeURIComponent(term.category || 'Glossary')}`,
+          width: 1200,
+          height: 630,
+          alt: `${term.term} — Legal Definition`,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${term.term} — Legal Definition`,
+      description,
+      images: [`https://www.corplawupdates.in/api/og?title=${encodeURIComponent(term.term)}&category=${encodeURIComponent(term.category || 'Glossary')}`],
     },
     robots: {
       index: true,

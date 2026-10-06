@@ -26,7 +26,6 @@ export default function robots(): MetadataRoute.Robots {
     'Bytespider',
     'CCBot',
     'Amazonbot',
-    'FacebookBot',
     'MJ12bot',
     'DotBot',
     'PetalBot',
@@ -56,10 +55,10 @@ export default function robots(): MetadataRoute.Robots {
       ...aiRules,
       {
         userAgent: '*',
-        allow: '/',
+        allow: ['/', '/api/og', '/api/feed.xml'],
         disallow: [
+          '/api/',
           '/admin/',
-          '/api/admin/',
           '/sitemap/companies/',
           '/company/',
           '/bookmarks',

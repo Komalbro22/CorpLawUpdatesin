@@ -25,29 +25,31 @@ import {
 
 export const revalidate = 3600
 
+const currentYear = new Date().getFullYear()
+
 export const metadata: Metadata = {
-  title: 'Corporate Law Updates India 2026',
+  title: `Corporate Law Updates India ${currentYear}`,
   description:
     'Daily MCA, SEBI, RBI, IFSCA (GIFT City), CCI, NCLT, IBC and Labour Law updates for CS, CA and compliance professionals. Free compliance tools included.',
   alternates: { canonical: 'https://www.corplawupdates.in' },
   openGraph: {
-    title: 'Corporate Law Updates India 2026 | CorpLawUpdates.in',
+    title: `Corporate Law Updates India ${currentYear} | CorpLawUpdates.in`,
     description:
       'Daily MCA, SEBI, RBI, IFSCA (GIFT City), CCI, NCLT, IBC and Labour Law updates for CS, CA and compliance professionals.',
     url: 'https://www.corplawupdates.in',
     type: 'website',
     siteName: 'CorpLawUpdates.in',
     locale: 'en_IN',
-    images: [{ url: 'https://www.corplawupdates.in/api/og?title=Corporate+Law+Updates+India+2026&category=', width: 1200, height: 630 }],
+    images: [{ url: `https://www.corplawupdates.in/api/og?title=Corporate+Law+Updates+India+${currentYear}&category=`, width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     site: '@corplawupdates',
     creator: '@corplawupdates',
-    title: 'Corporate Law Updates India 2026 | CorpLawUpdates.in',
+    title: `Corporate Law Updates India ${currentYear} | CorpLawUpdates.in`,
     description:
       'Daily MCA, SEBI, RBI, IFSCA (GIFT City), CCI, NCLT, IBC and Labour Law updates for CS, CA and compliance professionals.',
-    images: ['https://www.corplawupdates.in/api/og?title=Corporate+Law+Updates+India+2026&category='],
+    images: [`https://www.corplawupdates.in/api/og?title=Corporate+Law+Updates+India+${currentYear}&category=`],
   },
 }
 

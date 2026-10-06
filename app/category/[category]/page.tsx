@@ -674,16 +674,16 @@ export async function generateMetadata(
         : `Latest ${categoryName} Circulars, Notifications & Updates Today – India`
 
     let description = isPaginated
-        ? `Browse page ${pageNum} of latest ${categoryName} circulars, notifications, orders and compliance updates issued by ${CATEGORY_FULL_NAMES[cat] || categoryName}.`
-        : `Get the latest ${categoryName} circulars, notifications, orders and regulatory updates today from ${CATEGORY_FULL_NAMES[cat]}. Track all ${categoryName} compliance changes in India.${dynamicSuffix}`
+        ? `Page ${pageNum}: Latest ${categoryName} circulars, notifications and regulatory updates issued by ${CATEGORY_FULL_NAMES[cat] || categoryName}.`
+        : `Latest ${categoryName} circulars, notifications and statutory compliance updates issued by ${CATEGORY_FULL_NAMES[cat] || categoryName} for corporate professionals.`
 
     if (cat === 'rbi') {
         title = isPaginated
             ? `Latest RBI Circulars for Banks & NBFCs Today (2026) – Page ${pageNum}`
             : `Latest RBI Circulars & Notifications Today (2026) – Directives for Banks & NBFCs`
         description = isPaginated
-            ? `Browse page ${pageNum} of latest RBI circulars for banks, NBFC notifications, and Master Directions issued by the Reserve Bank of India.`
-            : `Track all latest RBI circulars for banks, recent notifications & Master Directions (2026). Daily updates for Commercial Banks & NBFCs with official PDF download links.${dynamicSuffix}`
+            ? `Page ${pageNum}: Latest RBI circulars, notifications, and Master Directions issued by the Reserve Bank of India for Banks and NBFCs.`
+            : `Track latest RBI circulars, notifications and Master Directions for Commercial Banks and NBFCs with regulatory analysis and official PDF links.`
     }
 
     const url = isPaginated

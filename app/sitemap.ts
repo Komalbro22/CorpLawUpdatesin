@@ -48,16 +48,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ? new Date(compliance_entries[0].updated_at)
     : undefined
 
-  // Fetch latest glossary update
-  const { data: latestGlossary } = await supabaseAdmin
+  // Fetch verified glossary terms for sitemap SEO indexing
+  const { data: glossaryTerms } = await supabaseAdmin
     .from('glossary')
-    .select('created_at')
-    .order('created_at', { ascending: false })
-    .limit(1)
+    .select('slug, created_at')
+    .eq('is_verified', true)
+    .order('term', { ascending: true })
 
-  const glossaryDate = latestGlossary?.[0]?.created_at
-    ? new Date(latestGlossary[0].created_at)
-    : undefined
+  // Find latest glossary update date
+  let glossaryDate: Date | undefined = undefined
+  ;(glossaryTerms || []).forEach(g => {
+    if (g.created_at) {
+      const dt = new Date(g.created_at)
+      if (!glossaryDate || dt > glossaryDate) {
+        glossaryDate = dt
+      }
+    }
+  })
 
   const ALL_CATEGORIES = ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci', 'labour', 'ifsca']
   const categoryDates: Record<string, Date | undefined> = {}
@@ -170,5 +177,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: mcaFormsLastMod,
   }))
 
-  return [...staticPages, ...categoryPages, ...articlePages, ...documentPages, ...companyFormPages]
+  const glossaryPages: MetadataRoute.Sitemap = (glossaryTerms || [])
+    .filter(g => Boolean(g.slug))
+    .map(g => ({
+      url: `${BASE_URL}/glossary/${g.slug}`,
+      ...(g.created_at ? { lastModified: new Date(g.created_at) } : {}),
+    }))
+
+  return [...staticPages, ...categoryPages, ...articlePages, ...documentPages, ...companyFormPages, ...glossaryPages]
 }

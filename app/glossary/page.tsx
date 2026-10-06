@@ -8,16 +8,32 @@ import JsonLd from '@/components/JsonLd'
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: 'Legal Glossary — Indian Corporate Law Terms | CorpLawUpdates',
+  title: {
+    absolute: 'Legal Glossary — Indian Corporate Law Terms | CorpLawUpdates.in',
+  },
   description: 'Plain-language definitions of 180+ Indian corporate law terms covering IBC, CIRP, SEBI, MCA, RBI, and FEMA — simplified for professionals, CA, CMA, and law students.',
   alternates: {
     canonical: 'https://www.corplawupdates.in/glossary',
   },
   openGraph: {
-    title: 'Legal Glossary — Indian Corporate Law Terms',
+    title: 'Legal Glossary — Indian Corporate Law Terms | CorpLawUpdates.in',
     description: 'Definitions of IBC, SEBI, MCA, RBI, FEMA terms for professionals.',
     url: 'https://www.corplawupdates.in/glossary',
     type: 'website',
+    images: [
+      {
+        url: 'https://www.corplawupdates.in/api/og?title=Indian+Corporate+Law+Legal+Glossary&category=Glossary',
+        width: 1200,
+        height: 630,
+        alt: 'Indian Corporate Law Legal Glossary',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Legal Glossary — Indian Corporate Law Terms | CorpLawUpdates.in',
+    description: 'Definitions of IBC, SEBI, MCA, RBI, FEMA terms for professionals.',
+    images: ['https://www.corplawupdates.in/api/og?title=Indian+Corporate+Law+Legal+Glossary&category=Glossary'],
   },
 }
 

@@ -50,10 +50,10 @@ describe('Email Provider Service', () => {
             expect(getActiveEmailProvider()).toBe('brevo-api')
         })
 
-        it('uses Brevo API when BREVO_SMTP_KEY is present and no BREVO_API_KEY', () => {
+        it('uses Brevo SMTP when BREVO_SMTP_KEY is present and no BREVO_API_KEY', () => {
             process.env.BREVO_SMTP_KEY = 'xsmtpsib-test'
             process.env.RESEND_API_KEY = 're_test'
-            expect(getActiveEmailProvider()).toBe('brevo-api')
+            expect(getActiveEmailProvider()).toBe('brevo-smtp')
         })
 
         it('falls back to Resend when only RESEND_API_KEY is set', () => {

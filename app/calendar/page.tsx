@@ -11,8 +11,8 @@ const CURRENT_YEAR = new Date().getFullYear()
 const NEXT_YEAR = CURRENT_YEAR + 1
 
 export const metadata: Metadata = {
-  title: `Compliance Calendar ${CURRENT_YEAR}-${String(NEXT_YEAR).slice(2)} — MCA, GST, SEBI, Income Tax & Labor Law Due Dates India`,
-  description: `Complete corporate compliance deadline calendar for FY ${CURRENT_YEAR}-${String(NEXT_YEAR).slice(2)}. All MCA & LLP filing due dates, GST GSTR-1 & GSTR-3B deadlines, SEBI LODR compliance, RBI FEMA dates, Income Tax due dates & Labor Laws PF/ESIC for Indian companies. Free for CS & CA professionals.`,
+  title: `Compliance Calendar ${CURRENT_YEAR}-${String(NEXT_YEAR).slice(2)} — MCA, GST, SEBI & Tax Due Dates India`,
+  description: `Corporate compliance calendar for FY ${CURRENT_YEAR}-${String(NEXT_YEAR).slice(2)}. Track MCA, GST, SEBI LODR, RBI, Income Tax and Labour Law due dates in India.`,
   keywords: [
     `compliance calendar ${CURRENT_YEAR}`,
     `compliance calendar ${CURRENT_YEAR}-${String(NEXT_YEAR).slice(2)}`,

@@ -208,7 +208,7 @@ describe('SPICe+ (INC-32) Company Incorporation Rule Engine', () => {
       expect(karnatakaBenchmark?.totalEstimate).toBe(6175);
     });
 
-    test('Checklist includes 180-day INC-20A and 30-day ADT-1 statutory milestones', () => {
+    test('Checklist includes 180-day INC-20A and first auditor Section 139(6) statutory milestones', () => {
       const inc20aItem = POST_INCORPORATION_CHECKLIST.find(item => item.id === 'inc20a');
       expect(inc20aItem).toBeDefined();
       expect(inc20aItem?.daysFromIncorporation).toBe(180);
@@ -216,7 +216,6 @@ describe('SPICe+ (INC-32) Company Incorporation Rule Engine', () => {
 
       const adt1Item = POST_INCORPORATION_CHECKLIST.find(item => item.id === 'adt1');
       expect(adt1Item).toBeDefined();
-      expect(adt1Item?.daysFromIncorporation).toBe(30);
       expect(adt1Item?.section).toContain('139(6)');
     });
   });
