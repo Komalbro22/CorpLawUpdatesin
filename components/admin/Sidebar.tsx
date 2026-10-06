@@ -116,8 +116,18 @@ export default function Sidebar() {
     const pathname = usePathname() || ''
     const [drawerOpen, setDrawerOpen] = useState(false)
     const [collapsed, setCollapsed] = useState(false)
+    const [userRole, setUserRole] = useState<'admin' | 'editor'>('admin')
     const drawerRef = useRef<HTMLDivElement>(null)
     const menuButtonRef = useRef<HTMLButtonElement>(null)
+
+    useEffect(() => {
+        fetch('/api/admin/session')
+            .then(res => res.ok ? res.json() : null)
+            .then(data => {
+                if (data?.role) setUserRole(data.role)
+            })
+            .catch(() => {})
+    }, [])
 
     // Persist collapse state
     useEffect(() => {
@@ -183,7 +193,23 @@ export default function Sidebar() {
     /* ── Section / Link rendering ─────────────────────────── */
     const renderSections = (opts: { onLinkClick?: () => void; iconOnly?: boolean }) => {
         const { onLinkClick, iconOnly = false } = opts
-        return sections.map((section) => {
+
+        // If user is an editor, filter down sections so they cannot see subscribers, settings, or system data
+        const visibleSections = userRole === 'editor'
+            ? [
+                {
+                    label: 'Editorial',
+                    links: [
+                        { href: '/admin/articles', icon: FileText, label: 'All Articles' },
+                        { href: '/admin/articles/new', icon: PenSquare, label: 'New Article' },
+                        { href: '/admin/glossary', icon: BookOpen, label: 'Glossary' },
+                        { href: '/admin/radar', icon: Radio, label: 'Regulator Radar' },
+                    ]
+                }
+            ]
+            : sections
+
+        return visibleSections.map((section) => {
             const hasActive = section.links.some(l => isLinkActive(l.href, pathname))
             return (
                 <div key={section.label} className={iconOnly ? 'mb-3' : 'mb-4'}>

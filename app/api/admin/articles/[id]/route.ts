@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyAdminSession } from '@/lib/admin-auth'
+import { verifyAdminSession, verifyAdminRole } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { submitArticleToIndexNow } from '@/lib/indexnow'
@@ -124,6 +124,10 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     if (!await verifyAdminSession()) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    if (!await verifyAdminRole(['admin'])) {
+        return NextResponse.json({ error: 'Forbidden: Editors are not permitted to delete articles' }, { status: 403 })
     }
 
     try {

@@ -34,6 +34,16 @@ export default function AdminArticles() {
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
     const [deleteConfirm, setDeleteConfirm] = useState<null | string | 'bulk'>(null)
     const [deleting, setDeleting] = useState(false)
+    const [userRole, setUserRole] = useState<'admin' | 'editor'>('admin')
+
+    useEffect(() => {
+        fetch('/api/admin/session')
+            .then(res => res.ok ? res.json() : null)
+            .then(data => {
+                if (data?.role) setUserRole(data.role)
+            })
+            .catch(() => {})
+    }, [])
 
     const fetchArticles = useCallback(async () => {
         setLoading(true)
@@ -288,9 +298,11 @@ export default function AdminArticles() {
                         <button onClick={() => performBulkAction('unpublish')} disabled={deleting} className="bg-amber-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-amber-700 transition-colors disabled:opacity-50">
                             Unpublish
                         </button>
-                        <button onClick={() => setDeleteConfirm('bulk')} disabled={deleting} className="bg-red-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50">
-                            Delete
-                        </button>
+                        {userRole === 'admin' && (
+                            <button onClick={() => setDeleteConfirm('bulk')} disabled={deleting} className="bg-red-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50">
+                                Delete
+                            </button>
+                        )}
                     </div>
                 </div>
             )}
@@ -395,9 +407,11 @@ export default function AdminArticles() {
                                                     <Link href={`/admin/articles/${article.id}/edit`} className="text-xs font-semibold text-slate-600 hover:text-amber-700 px-2 py-1 rounded hover:bg-slate-100 transition-colors">
                                                         Edit
                                                     </Link>
-                                                    <button type="button" onClick={() => setDeleteConfirm(article.id)} className="text-xs font-semibold text-red-500 hover:text-red-700 px-2 py-1 rounded hover:bg-red-50 transition-colors">
-                                                        Delete
-                                                    </button>
+                                                    {userRole === 'admin' && (
+                                                        <button type="button" onClick={() => setDeleteConfirm(article.id)} className="text-xs font-semibold text-red-500 hover:text-red-700 px-2 py-1 rounded hover:bg-red-50 transition-colors">
+                                                            Delete
+                                                        </button>
+                                                    )}
                                                 </div>
                                             </td>
                                         </tr>
@@ -464,13 +478,15 @@ export default function AdminArticles() {
                                             >
                                                 Edit
                                             </Link>
-                                            <button
-                                                type="button"
-                                                onClick={() => setDeleteConfirm(article.id)}
-                                                className="font-semibold text-red-500 hover:text-red-700 text-xs"
-                                            >
-                                                Delete
-                                            </button>
+                                            {userRole === 'admin' && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setDeleteConfirm(article.id)}
+                                                    className="font-semibold text-red-500 hover:text-red-700 text-xs"
+                                                >
+                                                    Delete
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

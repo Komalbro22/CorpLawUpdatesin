@@ -1,20 +1,26 @@
 import { cookies } from 'next/headers'
 import { createHmac, timingSafeEqual } from 'crypto'
+import type { AdminRole } from './utils'
 
-export async function verifyAdminSession(): Promise<boolean> {
+export interface AdminSessionData {
+    role: AdminRole
+    exp: number
+}
+
+export async function getAdminSession(): Promise<AdminSessionData | null> {
     const adminPassword = process.env.ADMIN_PASSWORD
     const adminSalt = process.env.ADMIN_SECRET_SALT
     if (!adminPassword || !adminSalt) {
         console.error('CRITICAL: ADMIN_PASSWORD or ADMIN_SECRET_SALT missing from environment')
-        return false
+        return null
     }
 
     const cookieStore = await cookies()
     const session = cookieStore.get('admin_session')
-    if (!session) return false
+    if (!session) return null
 
     const parts = session.value.split('.')
-    if (parts.length !== 2) return false
+    if (parts.length !== 2) return null
 
     const [payloadB64, signature] = parts
 
@@ -29,20 +35,40 @@ export async function verifyAdminSession(): Promise<boolean> {
         const expBuffer = Buffer.from(expectedSignature, 'hex')
 
         if (sigBuffer.length !== expBuffer.length || !timingSafeEqual(sigBuffer, expBuffer)) {
-            return false
+            return null
         }
     } catch {
-        return false
+        return null
     }
 
     try {
         const payload = JSON.parse(Buffer.from(payloadB64, 'base64').toString())
         if (!payload.exp || Date.now() > payload.exp) {
-            return false
+            return null
         }
-        return true
+        return {
+            role: (payload.role === 'editor' ? 'editor' : 'admin') as AdminRole,
+            exp: payload.exp
+        }
     } catch {
-        return false
+        return null
     }
+}
+
+/**
+ * Returns true if valid session exists (either admin or editor)
+ */
+export async function verifyAdminSession(): Promise<boolean> {
+    const session = await getAdminSession()
+    return session !== null
+}
+
+/**
+ * Returns true only if session has the required role (or super admin)
+ */
+export async function verifyAdminRole(allowedRoles: AdminRole[] = ['admin']): Promise<boolean> {
+    const session = await getAdminSession()
+    if (!session) return false
+    return allowedRoles.includes(session.role)
 }
 

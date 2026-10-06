@@ -32,7 +32,9 @@ export function generateUnsubscribeToken(email: string): string {
         .digest('hex')
 }
 
-export function createAdminSessionToken(): string {
+export type AdminRole = 'admin' | 'editor'
+
+export function createAdminSessionToken(role: AdminRole = 'admin'): string {
     const adminPassword = process.env.ADMIN_PASSWORD
     const adminSalt = process.env.ADMIN_SECRET_SALT
     if (!adminPassword || !adminSalt) {
@@ -40,6 +42,7 @@ export function createAdminSessionToken(): string {
     }
 
     const payload = JSON.stringify({
+        role,
         exp: Date.now() + 24 * 60 * 60 * 1000 // 24 hours
     })
 

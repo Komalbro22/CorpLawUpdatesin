@@ -22,11 +22,19 @@ describe('HMAC-SHA256 Session Tokens', () => {
     expect(parts[1]).toMatch(/^[a-f0-9]{64}$/) // 64 hex char SHA-256 HMAC
   })
 
-  it('payload contains expiration 24 hours in future', () => {
+  it('payload contains expiration 24 hours in future and defaults to admin role', () => {
     const token = createAdminSessionToken()
     const [payloadB64] = token.split('.')
     const payload = JSON.parse(Buffer.from(payloadB64, 'base64').toString('utf-8'))
     expect(payload.exp).toBeGreaterThan(Date.now())
+    expect(payload.role).toBe('admin')
+  })
+
+  it('generates session token with editor role when specified', () => {
+    const token = createAdminSessionToken('editor')
+    const [payloadB64] = token.split('.')
+    const payload = JSON.parse(Buffer.from(payloadB64, 'base64').toString('utf-8'))
+    expect(payload.role).toBe('editor')
   })
 })
 

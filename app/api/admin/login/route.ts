@@ -60,11 +60,15 @@ export async function POST(request: NextRequest) {
         const password = body.password
 
         const adminPassword = process.env.ADMIN_PASSWORD
+        const editorPassword = process.env.EDITOR_PASSWORD
         if (!adminPassword) {
             return NextResponse.json({ error: 'Admin access is not configured' }, { status: 500 })
         }
 
-        if (!safeCompare(password, adminPassword)) {
+        const isAdmin = safeCompare(password, adminPassword)
+        const isEditor = !!editorPassword && safeCompare(password, editorPassword)
+
+        if (!isAdmin && !isEditor) {
             await supabaseAdmin.from('login_attempts').upsert({
                 ip: rateLimitKey,
                 attempts: existingAttempts + 1,
@@ -74,12 +78,14 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Invalid password' }, { status: 401 })
         }
 
+        const role: 'admin' | 'editor' = isAdmin ? 'admin' : 'editor'
+
         // On successful login: clear the DB rate limit record
         await supabaseAdmin.from('login_attempts').delete().eq('ip', rateLimitKey)
         // Note: @upstash/ratelimit sliding window resets automatically; no manual del needed
 
-        const response = NextResponse.json({ success: true })
-        response.cookies.set('admin_session', createAdminSessionToken(), {
+        const response = NextResponse.json({ success: true, role })
+        response.cookies.set('admin_session', createAdminSessionToken(role), {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',

@@ -86,6 +86,37 @@ export async function proxy(request: NextRequest) {
             if (!payload.exp || Date.now() > payload.exp) {
                 return unauthorizedResponse()
             }
+
+            // Editor route access guard
+            if (payload.role === 'editor') {
+                const superAdminPrefixes = [
+                    '/admin/settings',
+                    '/admin/subscribers',
+                    '/admin/newsletter',
+                    '/admin/rates',
+                    '/admin/repo-rate',
+                    '/admin/rule-engine',
+                    '/admin/rule-learning',
+                    '/admin/partner-interests',
+                    '/admin/notifications',
+                    '/api/admin/settings',
+                    '/api/admin/subscribers',
+                    '/api/admin/newsletter',
+                    '/api/admin/rates',
+                    '/api/admin/repo-rate',
+                    '/api/admin/rules',
+                    '/api/admin/partner-interests',
+                    '/api/admin/notifications',
+                ]
+
+                const isBlockedForEditor = superAdminPrefixes.some(prefix => pathname.startsWith(prefix))
+                if (isBlockedForEditor) {
+                    if (isApi) {
+                        return NextResponse.json({ error: 'Forbidden: Access restricted to super administrators' }, { status: 403 })
+                    }
+                    return NextResponse.redirect(new URL('/admin/articles', request.url))
+                }
+            }
         } catch (e) {
             return unauthorizedResponse()
         }
