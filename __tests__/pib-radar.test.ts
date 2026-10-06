@@ -7,7 +7,7 @@ describe('PIB (Press Information Bureau) Regulator Radar Integration', () => {
     const res = await runRegulatorRadar(72, ['PIB'])
     expect(res).toBeDefined()
     expect(res.sources.some(s => s.regulator === 'PIB')).toBe(true)
-  })
+  }, 15000)
 
   it('correctly maps PIB ministry releases to corporate law categories', async () => {
     // Test live or graceful fetchPib with timeout fallback
@@ -24,5 +24,5 @@ describe('PIB (Press Information Bureau) Regulator Radar Integration', () => {
       expect(first.date).toMatch(/^\d{4}-\d{2}-\d{2}$/)
       expect(first.id).toMatch(/^pib_\d+_.+/)
     }
-  })
+  }, 15000)
 })

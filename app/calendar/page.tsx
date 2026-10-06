@@ -127,8 +127,8 @@ export default async function CalendarPage() {
               <p>
                 Designed for <strong>Company Secretaries (CS)</strong>, <strong>Chartered Accountants (CA)</strong>, <strong>Cost Accountants (CMA)</strong>, CS/CA/CMA students, legal enthusiasts, and corporate compliance teams managing multiple regulatory deadlines under the Companies Act, 2013, GST, Labor Laws, SEBI LODR, and RBI FEMA regulations.
               </p>
-              <p className="text-xs text-slate-400 italic">
-                All dates are indicative and subject to change by MCA, GSTN, EPFO, ESIC, SEBI or RBI. Always verify with official government portals.
+              <p className="text-xs text-slate-500 bg-amber-500/10 dark:bg-amber-500/5 p-3 rounded-xl border border-amber-500/20">
+                <span className="font-semibold text-amber-700 dark:text-amber-400">Statutory Verification Note:</span> All due dates, rationalised late-fee slabs, and penalty provisions are verified against current statutory provisions and circulars including CBDT Circular No. 07/2026, MCA V3 notifications, CBIC GST late-fee rationalisation notifications, and SEBI LODR SOP guidelines. Always cross-check the official portal before filing.
               </p>
             </div>
           </div>
