@@ -20,12 +20,18 @@ import {
 } from 'lucide-react'
 import { MCAForm } from '@/data/mca-forms'
 import { useToast } from '@/components/Toast'
+import dynamic from 'next/dynamic'
 import {
   calculateMgt7Compliance,
   Mgt7ComplianceCalculationResult
 } from '@/lib/rule-engine/mgt7-engine'
 import { generateMgt7Pdf } from '@/lib/pdf/generateMgt7Pdf'
 import IndianDateInput from '@/components/shared/IndianDateInput'
+
+const DownloadGatewayModal = dynamic(
+  () => import('@/components/DownloadGatewayModal'),
+  { ssr: false }
+)
 
 interface MGT7WorkspaceProps {
   form: MCAForm
@@ -99,6 +105,7 @@ export default function MGT7Workspace({ form }: MGT7WorkspaceProps) {
 
   // PDF Generation loading
   const [isGeneratingPdf, setIsGeneratingPdf] = useState<boolean>(false)
+  const [isGatewayOpen, setIsGatewayOpen] = useState<boolean>(false)
 
   // ───────────────────────────────────────────────────────────────────────────
   // COMPREHENSIVE ENGINE COMPUTATION
@@ -857,7 +864,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                 <div className="space-y-2 pt-1">
                   <button
                     type="button"
-                    onClick={handleDownloadPdf}
+                    onClick={() => setIsGatewayOpen(true)}
                     disabled={isGeneratingPdf}
                     className="w-full bg-emerald-600 hover:bg-emerald-500 disabled:opacity-60 text-white text-xs md:text-sm font-bold py-3 px-4 rounded-xl transition-all shadow-lg hover:shadow-emerald-600/25 flex items-center justify-center gap-2"
                   >
@@ -1333,6 +1340,15 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
         }
       ` }} />
 
+      {/* Post-Download Newsletter Gateway Modal */}
+      <DownloadGatewayModal
+        isOpen={isGatewayOpen}
+        onClose={() => setIsGatewayOpen(false)}
+        fileName={`CorpLawUpdates_${formCode}_Report_${companyName ? companyName.trim().replace(/[^a-zA-Z0-9]/g, '_') : 'Company'}.pdf`}
+        fileType="pdf"
+        docTitle={`${formCode} Statutory Compliance Assessment`}
+        onProceedDownload={handleDownloadPdf}
+      />
     </div>
   )
 }

@@ -24,6 +24,7 @@ import {
   Briefcase,
   HelpCircle,
 } from 'lucide-react'
+import dynamic from 'next/dynamic'
 import {
   BankLoanFormData,
   DEFAULT_SAMPLE_BANK_LOAN_DATA,
@@ -33,6 +34,11 @@ import {
   calculateBorrowingLimit,
   formatInrCurrency,
 } from '@/lib/doc-generator/bank-loan-generator'
+
+const DownloadGatewayModal = dynamic(
+  () => import('@/components/DownloadGatewayModal'),
+  { ssr: false }
+)
 
 const FACILITY_CONFIG: Record<
   LoanFacilityType,
@@ -125,6 +131,11 @@ export default function BankLoanClient() {
     'resolution' | 'special-resolution' | 'bank-letter' | 'chg1-extract' | 'checklist'
   >('resolution')
   const [isDownloading, setIsDownloading] = useState<string | null>(null)
+  const [isGatewayOpen, setIsGatewayOpen] = useState(false)
+  const [gatewayConfig, setGatewayConfig] = useState<{
+    format: 'docx' | 'pdf' | 'bank-letter'
+    type: 'resolution' | 'special-resolution' | 'bank-letter' | 'chg1-extract'
+  }>({ format: 'docx', type: 'resolution' })
   const [copiedType, setCopiedType] = useState<string | null>(null)
   const [cinLoading, setCinLoading] = useState(false)
   const [cinError, setCinError] = useState<string | null>(null)
@@ -1030,18 +1041,11 @@ Place: New Delhi`
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() =>
-                    handleDownload(
-                      'docx',
-                      activeTab === 'special-resolution'
-                        ? 'special-resolution'
-                        : activeTab === 'bank-letter'
-                        ? 'bank-letter'
-                        : activeTab === 'chg1-extract'
-                        ? 'chg1-extract'
-                        : 'resolution'
-                    )
-                  }
+                  onClick={() => {
+                    const type = activeTab === 'special-resolution' ? 'special-resolution' : activeTab === 'bank-letter' ? 'bank-letter' : activeTab === 'chg1-extract' ? 'chg1-extract' : 'resolution'
+                    setGatewayConfig({ format: 'docx', type })
+                    setIsGatewayOpen(true)
+                  }}
                   disabled={!!isDownloading}
                   className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors flex items-center gap-1.5 shadow-sm"
                 >
@@ -1054,18 +1058,11 @@ Place: New Delhi`
                 {activeTab !== 'checklist' && (
                   <button
                     type="button"
-                    onClick={() =>
-                      handleDownload(
-                        'pdf',
-                        activeTab === 'special-resolution'
-                          ? 'special-resolution'
-                          : activeTab === 'bank-letter'
-                          ? 'bank-letter'
-                          : activeTab === 'chg1-extract'
-                          ? 'chg1-extract'
-                          : 'resolution'
-                      )
-                    }
+                    onClick={() => {
+                      const type = activeTab === 'special-resolution' ? 'special-resolution' : activeTab === 'bank-letter' ? 'bank-letter' : activeTab === 'chg1-extract' ? 'chg1-extract' : 'resolution'
+                      setGatewayConfig({ format: 'pdf', type })
+                      setIsGatewayOpen(true)
+                    }}
                     disabled={!!isDownloading}
                     className="px-3.5 py-2 rounded-xl bg-navy hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white text-xs font-bold transition-colors flex items-center gap-1.5 border border-slate-700 shadow-sm"
                   >
@@ -1401,6 +1398,17 @@ Place: New Delhi`
           </div>
         </div>
       </div>
+
+      <DownloadGatewayModal
+        isOpen={isGatewayOpen}
+        onClose={() => setIsGatewayOpen(false)}
+        fileName={`Bank_Loan_${gatewayConfig.type}_${(formData.companyName || 'Company').replace(/[^a-zA-Z0-9]/g, '_')}.${gatewayConfig.format}`}
+        fileType={gatewayConfig.format === 'docx' ? 'docx' : 'pdf'}
+        docTitle={`Bank Loan ${gatewayConfig.type.replace('-', ' ').toUpperCase()}`}
+        onProceedDownload={() => handleDownload(gatewayConfig.format, gatewayConfig.type)}
+      />
     </div>
   )
 }
+
+

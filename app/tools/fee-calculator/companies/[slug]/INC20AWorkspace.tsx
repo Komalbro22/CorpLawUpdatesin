@@ -45,6 +45,12 @@ import {
 } from '@/lib/rule-engine/inc20a-engine'
 import { generateInc20aPdf } from '@/lib/pdf/generateInc20aPdf'
 import IndianDateInput from '@/components/shared/IndianDateInput'
+import dynamic from 'next/dynamic'
+
+const DownloadGatewayModal = dynamic(
+  () => import('@/components/DownloadGatewayModal'),
+  { ssr: false }
+)
 
 interface PresetConfig {
   id: string
@@ -103,6 +109,7 @@ const PRESETS: PresetConfig[] = [
 export default function INC20AWorkspace({ form }: { form: MCAForm }) {
   const { showToast } = useToast()
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
+  const [isGatewayOpen, setIsGatewayOpen] = useState(false)
   const [activeTab, setActiveTab] = useState<'calculator' | 'benchmarks' | 'attachments' | 'process' | 'comparison'>('calculator')
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -641,7 +648,7 @@ Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform foc
               <div className="mt-6 space-y-2.5">
                 <button
                   type="button"
-                  onClick={handleDownloadPDF}
+                  onClick={() => setIsGatewayOpen(true)}
                   disabled={isGeneratingPDF}
                   className="w-full py-3 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg transition-all"
                 >
@@ -991,6 +998,16 @@ Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform foc
           </div>
         )}
       </div>
+
+      {/* Post-Download Newsletter Gateway Modal */}
+      <DownloadGatewayModal
+        isOpen={isGatewayOpen}
+        onClose={() => setIsGatewayOpen(false)}
+        fileName={`INC-20A_Assessment_${cin || 'Company'}_${new Date().toISOString().split('T')[0]}.pdf`}
+        fileType="pdf"
+        docTitle="Form INC-20A Statutory Assessment Memorandum"
+        onProceedDownload={handleDownloadPDF}
+      />
     </div>
   )
 }

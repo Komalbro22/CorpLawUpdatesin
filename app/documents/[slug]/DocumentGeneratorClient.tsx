@@ -25,6 +25,10 @@ const DocumentRetry = dynamic(
   () => import('@/components/documents/DocumentRetry').then(m => ({ default: m.DocumentRetry })),
   { loading: () => null }
 )
+const DownloadGatewayModal = dynamic(
+  () => import('@/components/DownloadGatewayModal'),
+  { ssr: false }
+)
 
 
 interface Field {
@@ -772,6 +776,8 @@ export default function DocumentGeneratorClient({
   const [letterheadUrl, setLetterheadUrl] = useState<string | null>(null)
   const [letterheadUploading, setLetterheadUploading] = useState(false)
   const [downloading, setDownloading] = useState(false)
+  const [isGatewayOpen, setIsGatewayOpen] = useState(false)
+  const [gatewayFormat, setGatewayFormat] = useState<'docx' | 'pdf'>('pdf')
   const [useAi, setUseAi] = useState(true)
 
 
@@ -2831,16 +2837,22 @@ export default function DocumentGeneratorClient({
                       📋 Copy Text
                     </button>
                     <button
-                      onClick={() => handleDownload('docx')}
+                      onClick={() => {
+                        setGatewayFormat('docx')
+                        setIsGatewayOpen(true)
+                      }}
                       disabled={downloading}
-                      className="text-xs border border-blue-600 text-blue-600 px-3 py-1.5 rounded-lg font-semibold hover:bg-blue-50 disabled:opacity-60"
+                      className="text-xs border border-blue-600 text-blue-600 px-3 py-1.5 rounded-lg font-semibold hover:bg-blue-50 disabled:opacity-60 cursor-pointer"
                     >
                       ⬇️ Word
                     </button>
                     <button
-                      onClick={() => handleDownload('pdf')}
+                      onClick={() => {
+                        setGatewayFormat('pdf')
+                        setIsGatewayOpen(true)
+                      }}
                       disabled={downloading}
-                      className="text-xs bg-red-600 text-white px-4 py-1.5 rounded-lg font-bold hover:bg-red-700 disabled:opacity-60 shadow-sm"
+                      className="text-xs bg-red-600 text-white px-4 py-1.5 rounded-lg font-bold hover:bg-red-700 disabled:opacity-60 shadow-sm cursor-pointer"
                     >
                       ⬇️ Download PDF
                     </button>
@@ -3681,6 +3693,18 @@ export default function DocumentGeneratorClient({
         isOpen={legalCardOpen}
         onClose={() => setLegalCardOpen(false)}
       />
+
+      {/* Universal Post-Download Newsletter & Community Gateway Modal */}
+      {template && (
+        <DownloadGatewayModal
+          isOpen={isGatewayOpen}
+          onClose={() => setIsGatewayOpen(false)}
+          fileName={`${slug}_draft.${gatewayFormat}`}
+          fileType={gatewayFormat}
+          docTitle={`${template.name} (${gatewayFormat.toUpperCase()})`}
+          onProceedDownload={() => handleDownload(gatewayFormat)}
+        />
+      )}
     </div>
   )
 }

@@ -37,10 +37,17 @@ import {
 } from '@/lib/rule-engine/dir3kyc-engine'
 import { generateDir3KycPdf } from '@/lib/pdf/generateDir3KycPdf'
 import IndianDateInput from '@/components/shared/IndianDateInput'
+import dynamic from 'next/dynamic'
+
+const DownloadGatewayModal = dynamic(
+  () => import('@/components/DownloadGatewayModal'),
+  { ssr: false }
+)
 
 export default function DIR3KYCWorkspace({ form }: { form: MCAForm }) {
   const { showToast } = useToast()
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
+  const [isGatewayOpen, setIsGatewayOpen] = useState(false)
 
   // ═══════════════════════════════════════════════════════════════════════════
   // STATE MANAGEMENT
@@ -561,7 +568,7 @@ Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform foc
               <div className="mt-6 space-y-2.5">
                 <button
                   type="button"
-                  onClick={handleDownloadPDF}
+                  onClick={() => setIsGatewayOpen(true)}
                   disabled={isGeneratingPDF}
                   className="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg transition-all"
                 >
@@ -756,6 +763,16 @@ Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform foc
           Statutory Reference: Companies (Appointment and Qualification of Directors) Amendment Rules, 2025 (G.S.R. 943(E)) and Companies (Registration Offices and Fees) Amendment Rules, 2026 (G.S.R. 300(E)).
         </div>
       </div>
+
+      {/* Post-Download Newsletter Gateway Modal */}
+      <DownloadGatewayModal
+        isOpen={isGatewayOpen}
+        onClose={() => setIsGatewayOpen(false)}
+        fileName={`DIR-3_KYC_Assessment_${dinNumber || 'Director'}_${new Date().toISOString().split('T')[0]}.pdf`}
+        fileType="pdf"
+        docTitle="Form DIR-3 KYC Compliance Assessment"
+        onProceedDownload={handleDownloadPDF}
+      />
     </div>
   )
 }
