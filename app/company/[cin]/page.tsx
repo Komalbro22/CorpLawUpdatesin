@@ -10,6 +10,7 @@ import DirectorsTable from '@/components/DirectorsTable'
 import ChargesTable from '@/components/ChargesTable'
 import { supabase } from '@/lib/supabase'
 import JsonLd from '@/components/JsonLd'
+import { formatDate } from '@/lib/utils'
 import { Building2, Landmark, Sparkles, FileText, HelpCircle, ShieldCheck, Lock, Binary, MapPin, Calendar, Briefcase, Award } from 'lucide-react'
 
 export const revalidate = 86400 // Cache for 24 hours to protect Vercel ISR and bandwidth limits
@@ -82,7 +83,7 @@ export default async function CompanyProfilePage({ params }: Props) {
 
   const paidUpCr = company.paid_up_capital ? (company.paid_up_capital / 10000000).toFixed(2) : '0'
   const authCapCr = company.authorised_capital ? (company.authorised_capital / 10000000).toFixed(2) : '0'
-  const incDate = company.date_of_registration ? new Date(company.date_of_registration).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : 'N/A'
+  const incDate = company.date_of_registration ? formatDate(company.date_of_registration) : 'N/A'
   const currentYear = new Date().getFullYear()
 
   const cinUpper = (company.cin || '').toUpperCase()
@@ -431,15 +432,15 @@ export default async function CompanyProfilePage({ params }: Props) {
                 Is Turnover above ₹50 Crore? (CARO, Secretarial Audit & XBRL Flags)
               </span>
             </div>
-            <span className="text-xs font-bold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 px-3 py-1 rounded-full border border-amber-300/60">
-              Phase 2 — Coming Soon
+            <span className="text-xs font-bold bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300 px-3 py-1 rounded-full border border-slate-300 dark:border-slate-700">
+              Verified Against MCA Public Register
             </span>
           </div>
         </section>
 
         {/* 10. Data Freshness Disclaimer */}
-        <div className="text-center py-2 text-xs text-slate-400 dark:text-slate-500 font-medium">
-          Disclaimer: Based on last available MCA public record as of {company.last_synced_at ? new Date(company.last_synced_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : 'recent sync'}. Not a substitute for professional legal verification.
+        <div className="text-center py-2 text-xs text-slate-400 dark:text-slate-500 font-medium" suppressHydrationWarning>
+          Disclaimer: Based on last available MCA public record as of {company.last_synced_at ? formatDate(company.last_synced_at) : 'recent sync'}. Not a substitute for professional legal verification.
         </div>
 
         {/* 11. Contextual Regulatory Updates */}

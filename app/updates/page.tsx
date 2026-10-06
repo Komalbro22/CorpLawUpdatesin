@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { unstable_cache } from 'next/cache'
 import ArticleSearchTool from '@/components/ArticleSearchTool'
 import JsonLd from '@/components/JsonLd'
+import { formatDate } from '@/lib/utils'
 import { Building2, TrendingUp, Landmark, ShieldCheck, Users, Scale, Gavel, Globe2, HelpCircle, ChevronDown, Sparkles, BookOpen, CheckCircle2 } from 'lucide-react'
 
 export const revalidate = 3600 // 1 hour (on-demand revalidated via revalidateTag('updates'))
@@ -284,10 +285,10 @@ export default async function UpdatesPage({
                         Track all <strong>latest corporate law updates in India</strong> — including <strong>MCA circulars today</strong>, <strong>SEBI notifications</strong>, <strong>RBI guidelines</strong>, NCLT judgments, IBC amendments, CCI orders, and Labour Laws. Curated with simplified analysis for Company Secretaries (CS), Chartered Accountants (CA), Cost Accountants (CMA), legal professionals, and corporate leaders.
                     </p>
                     {top10[0] && (
-                        <p className="text-slate-300 text-xs mt-3 flex items-center gap-1.5">
+                        <p className="text-slate-300 text-xs mt-3 flex items-center gap-1.5" suppressHydrationWarning>
                             <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden />
-                            Last updated: <time dateTime={top10[0].published_at} className="font-medium text-white tabular-nums">
-                                {new Date(top10[0].published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+                            Last updated: <time dateTime={top10[0].published_at} suppressHydrationWarning className="font-medium text-white tabular-nums">
+                                {formatDate(top10[0].published_at)}
                             </time>
                         </p>
                     )}

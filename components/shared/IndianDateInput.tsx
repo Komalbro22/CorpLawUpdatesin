@@ -124,6 +124,7 @@ export default function IndianDateInput({
         required={required}
         aria-label={ariaLabel || 'Date in DD/MM/YYYY format'}
         maxLength={10}
+        suppressHydrationWarning
         className="w-full bg-transparent px-3.5 py-2.5 text-sm font-semibold tracking-wide placeholder:text-slate-400 placeholder:font-normal focus:outline-none"
       />
 
@@ -131,6 +132,7 @@ export default function IndianDateInput({
       <div className="flex items-center gap-1.5 pr-2.5 shrink-0 pointer-events-auto">
         {badgeText && (
           <span
+            suppressHydrationWarning
             className="text-[11px] font-semibold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 border border-blue-200/50 dark:border-blue-800/40 px-2 py-0.5 rounded-md select-none whitespace-nowrap hidden sm:inline"
             title={`Selected: ${badgeText}`}
           >
@@ -162,6 +164,7 @@ export default function IndianDateInput({
             onChange={handleNativeDateChange}
             tabIndex={-1}
             aria-hidden="true"
+            suppressHydrationWarning
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
           />
         </div>

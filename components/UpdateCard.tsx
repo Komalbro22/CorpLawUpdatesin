@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { UpdateListItem } from '@/types'
 import { formatDate, calculateReadingTime, extractFirstImage } from '@/lib/utils'
@@ -29,11 +30,14 @@ interface UpdateCardProps {
 export default function UpdateCard({ update, showExcerpt = true, animationDelay = 0, priority = false }: UpdateCardProps) {
   const imageUrl = update.featured_image_url || extractFirstImage(update.content || '')
 
-  const isNew = Boolean(
-    update.published_at &&
-    (Date.now() - new Date(update.published_at).getTime()) <
-    3 * 24 * 60 * 60 * 1000
-  )
+  const [isNew, setIsNew] = useState(false)
+
+  useEffect(() => {
+    if (update.published_at) {
+      const diffMs = Date.now() - new Date(update.published_at).getTime()
+      setIsNew(diffMs > 0 && diffMs < 3 * 24 * 60 * 60 * 1000)
+    }
+  }, [update.published_at])
 
   const borderColor = categoryBorderColor[update.category || ''] || 'border-t-slate-300'
 
@@ -110,10 +114,10 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
             )}
             <span className="flex items-center gap-2 flex-wrap">
               {update.published_at && (
-                <span className="font-medium text-slate-600 dark:text-slate-400 tabular-nums">{formatDate(update.published_at)}</span>
+                <span suppressHydrationWarning className="font-medium text-slate-600 dark:text-slate-400 tabular-nums">{formatDate(update.published_at)}</span>
               )}
               {update.effective_date && (
-                <span className="text-[10px] bg-emerald-50 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-400 px-2 py-0.5 rounded-md font-bold whitespace-nowrap border border-emerald-200 dark:border-emerald-900/30 tabular-nums">
+                <span suppressHydrationWarning className="text-[10px] bg-emerald-50 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-400 px-2 py-0.5 rounded-md font-bold whitespace-nowrap border border-emerald-200 dark:border-emerald-900/30 tabular-nums">
                   Eff. {formatDate(update.effective_date)}
                 </span>
               )}

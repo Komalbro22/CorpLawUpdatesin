@@ -15,6 +15,18 @@ export default function TrackingScripts() {
   const [ids, setIds] = useState<{ gaId: string | null; clarityId: string | null } | null>(null)
 
   useEffect(() => {
+    // Intercept generic cross-origin "Script error." caused by client-side ad-blockers
+    // (e.g. uBlock, Brave Shields) blocking third-party ad network scripts (Google AdSense, DoubleClick, SwG)
+    // so they do not pollute telemetry or Microsoft Clarity with false positive alarms.
+    const handleGlobalScriptError = (event: ErrorEvent) => {
+      const msg = (event.message || '').toLowerCase()
+      if (msg.includes('script error') && (!event.filename || event.lineno === 0)) {
+        event.stopImmediatePropagation?.()
+      }
+    }
+
+    window.addEventListener('error', handleGlobalScriptError, true)
+
     // Initialize Google Consent Mode v2 with default DENIED state
     if (typeof window !== 'undefined') {
       window.dataLayer = window.dataLayer || []
@@ -72,6 +84,10 @@ export default function TrackingScripts() {
       .catch((err) => {
         console.warn('Tracker settings unavailable:', err)
       })
+
+    return () => {
+      window.removeEventListener('error', handleGlobalScriptError, true)
+    }
   }, [])
 
   return (

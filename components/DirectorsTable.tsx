@@ -71,7 +71,7 @@ export default function DirectorsTable({ directors, companyName }: DirectorsTabl
                     </span>
                   </td>
                   <td className="p-3.5 text-slate-600 dark:text-slate-300 font-medium">
-                    <span className="flex items-center gap-1.5">
+                    <span className="flex items-center gap-1.5" suppressHydrationWarning>
                       <Calendar className="w-3.5 h-3.5 text-slate-400" />
                       {d.date_of_appointment ? new Date(d.date_of_appointment).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'N/A'}
                     </span>

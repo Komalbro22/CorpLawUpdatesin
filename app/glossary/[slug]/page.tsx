@@ -7,6 +7,7 @@ import MarkdownRenderer from '@/components/MarkdownRenderer'
 import { linkGlossaryTerms } from '@/lib/glossaryLinker'
 import TableOfContents from '@/components/TableOfContents'
 import JsonLd from '@/components/JsonLd'
+import { formatDate } from '@/lib/utils'
 import { BookOpen, Link2, Search, FileText, HelpCircle, Clock } from 'lucide-react'
 
 export const revalidate = 86400 // Revalidate daily per Supabase egress budget
@@ -499,8 +500,8 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
                   Key Takeaways
                 </Link>
               )}
-              <p className="text-xs text-slate-400 font-medium">
-                Last updated: {new Date(term.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+              <p className="text-xs text-slate-400 font-medium" suppressHydrationWarning>
+                Last updated: {formatDate(term.created_at)}
               </p>
             </div>
           </header>
@@ -556,8 +557,8 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
                 </div>
               )}
 
-              <p className="text-xs text-slate-400 mt-8 text-right font-medium">
-                Last updated: {new Date(term.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+              <p className="text-xs text-slate-400 mt-8 text-right font-medium" suppressHydrationWarning>
+                Last updated: {formatDate(term.created_at)}
               </p>
             </div>
           </section>
@@ -685,8 +686,8 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
                       <h4 className="font-bold text-navy group-hover:text-amber-700 transition-colors duration-150 leading-snug">
                         {article.title}
                       </h4>
-                      <p className="text-xs text-slate-400 mt-2 font-medium">
-                        Published: {new Date(article.published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+                      <p className="text-xs text-slate-400 mt-2 font-medium" suppressHydrationWarning>
+                        Published: {formatDate(article.published_at)}
                       </p>
                     </div>
                     <span className="text-slate-300 group-hover:text-amber-500 group-hover:translate-x-1 transition-all duration-200 text-xl font-light">→</span>

@@ -69,7 +69,7 @@ export default function ChargesTable({ charges, companyName }: ChargesTableProps
                     ₹{amountCr} Crore
                   </td>
                   <td className="p-3.5 text-slate-600 dark:text-slate-300 font-medium">
-                    <span className="flex items-center gap-1.5">
+                    <span className="flex items-center gap-1.5" suppressHydrationWarning>
                       <Calendar className="w-3.5 h-3.5 text-slate-400" />
                       {c.creation_date ? new Date(c.creation_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'N/A'}
                     </span>

@@ -6,6 +6,7 @@ import JsonLd from '@/components/JsonLd'
 import FormSpecificCalc from './FormSpecificCalc'
 import SPICePlusAdditions from './SPICePlusAdditions'
 import ReaderFeedback from '@/components/ReaderFeedback'
+import { formatDate } from '@/lib/utils'
 
 export function generateStaticParams() {
   return mcaForms.map((form) => ({
@@ -3444,8 +3445,8 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
                   </div>
                   <p className="text-slate-600 dark:text-slate-400 text-sm mt-2">{guide.summary}</p>
                   <div className="mt-4 flex justify-between items-center text-sm font-medium pt-4 border-t border-blue-100 dark:border-slate-800">
-                    <span className="text-slate-500">
-                      Published: {new Date(guide.publishedDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    <span className="text-slate-500" suppressHydrationWarning>
+                      Published: {formatDate(guide.publishedDate)}
                     </span>
                     <Link href={guide.slug} className="text-[#1D4ED8] dark:text-blue-400 hover:underline font-bold">
                       Read Full Guide →

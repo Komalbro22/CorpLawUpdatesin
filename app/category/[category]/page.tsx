@@ -10,6 +10,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import EmptyState from '@/components/EmptyState'
 import JsonLd from '@/components/JsonLd'
+import { formatDate } from '@/lib/utils'
 
 export const revalidate = 43200 // 12 hours
 
@@ -906,9 +907,9 @@ export default async function CategoryPage({
                         {latestUpdate && (
                             <>
                                 <span className="text-white/60 text-sm">·</span>
-                                <span className="text-white/70 text-xs">
-                                    Last updated: <time dateTime={latestUpdate.published_at} className="tabular-nums">
-                                        {new Date(latestUpdate.published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                <span className="text-white/70 text-xs" suppressHydrationWarning>
+                                    Last updated: <time dateTime={latestUpdate.published_at} suppressHydrationWarning className="tabular-nums">
+                                        {formatDate(latestUpdate.published_at)}
                                     </time>
                                 </span>
                             </>
@@ -926,8 +927,8 @@ export default async function CategoryPage({
                         {answerFirst.definition}
                     </p>
 
-                    <p className="text-sm text-white/60">
-                        {totalCount || 0} updates {latestUpdate ? `· Last updated ${new Date(latestUpdate.published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}` : ''} · We publish here whenever a new notification is issued · <a href={OFFICIAL_URLS[cat]} target="_blank" rel="noopener noreferrer" className="underline hover:text-white transition-colors">{CATEGORY_FULL_NAMES[cat]} Official Site ↗</a>
+                    <p className="text-sm text-white/60" suppressHydrationWarning>
+                        {totalCount || 0} updates {latestUpdate ? `· Last updated ${formatDate(latestUpdate.published_at)}` : ''} · We publish here whenever a new notification is issued · <a href={OFFICIAL_URLS[cat]} target="_blank" rel="noopener noreferrer" className="underline hover:text-white transition-colors">{CATEGORY_FULL_NAMES[cat]} Official Site ↗</a>
                     </p>
 
                     {/* Compact focus chips */}
@@ -1049,8 +1050,8 @@ export default async function CategoryPage({
                         <h2 className="text-2xl font-bold text-navy dark:text-white mb-2 font-heading">
                             Latest {cat.toUpperCase()} Circulars & Notifications
                         </h2>
-                        <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
-                            Latest update: {new Date(top5Updates[0].published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mb-6" suppressHydrationWarning>
+                            Latest update: {formatDate(top5Updates[0].published_at)}
                         </p>
                         <div className="space-y-6">
                             {top5Updates.map((u: any, idx: number) => (
@@ -1061,8 +1062,8 @@ export default async function CategoryPage({
                                                 {UPDATE_TYPE_LABELS[u.update_type] || u.update_type}
                                             </span>
                                         )}
-                                        <time dateTime={u.published_at} className="text-xs font-medium text-slate-600 dark:text-slate-400 tabular-nums">
-                                            {new Date(u.published_at).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
+                                        <time dateTime={u.published_at} suppressHydrationWarning className="text-xs font-medium text-slate-600 dark:text-slate-400 tabular-nums">
+                                            {formatDate(u.published_at)}
                                         </time>
                                     </div>
                                     <h3 className="text-base font-semibold text-slate-800 dark:text-slate-100 mb-1 leading-snug">

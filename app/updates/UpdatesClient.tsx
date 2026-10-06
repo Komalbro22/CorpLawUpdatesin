@@ -133,9 +133,10 @@ export default function UpdatesClient({
                         <form 
                             onSubmit={(e) => e.preventDefault()}
                             className="relative mb-4"
+                            suppressHydrationWarning
                             toolname="search_legal_updates"
                             tooldescription="Search Indian corporate law circulars, notifications, and regulatory updates across MCA, SEBI, RBI, NCLT, and IBC."
-                            toolautosubmit={true}
+                            data-toolautosubmit="true"
                         >
                             <Search
                                 className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400 pointer-events-none"
@@ -149,6 +150,7 @@ export default function UpdatesClient({
                                 value={search}
                                 onChange={e => handleSearchInput(e.target.value)}
                                 autoComplete="off"
+                                suppressHydrationWarning
                                 className="w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold/30 text-sm text-navy dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-650 transition-shadow duration-200"
                                 toolparamdescription="Search keyword to filter updates."
                             />
@@ -221,10 +223,10 @@ export default function UpdatesClient({
                 <div className="mb-6 flex flex-wrap items-baseline gap-2 text-slate-600 dark:text-slate-400 text-sm md:text-base">
                     <span>
                         Showing{' '}
-                        <span className="font-semibold text-navy dark:text-white tabular-nums">{totalFilteredCount}</span>
+                        <span suppressHydrationWarning className="font-semibold text-navy dark:text-white tabular-nums">{totalFilteredCount}</span>
                         {' '}
                         of{' '}
-                        <span className="font-semibold text-navy dark:text-white tabular-nums">{totalPublishedCount}</span>
+                        <span suppressHydrationWarning className="font-semibold text-navy dark:text-white tabular-nums">{totalPublishedCount}</span>
                     </span>
                     {totalFilteredCount !== totalPublishedCount && (
                         <span className="text-slate-400">· filtered</span>
