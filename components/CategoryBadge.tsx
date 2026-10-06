@@ -10,6 +10,7 @@ const colorMap: Record<Category, string> = {
     CCI: 'bg-indigo-600',
     LABOUR: 'bg-amber-700',
     IFSCA: 'bg-cyan-700',
+    INCOME_TAX: 'bg-emerald-800',
 }
 
 export default function CategoryBadge({ category, className = '' }: { category: Category, className?: string }) {

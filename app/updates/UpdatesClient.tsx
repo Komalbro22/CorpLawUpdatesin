@@ -8,7 +8,7 @@ import Pagination from '@/components/Pagination'
 import { UpdateListItem } from '@/types'
 import EmptyState from '@/components/EmptyState'
 
-const CATEGORIES = ['All', 'MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA', 'CCI', 'LABOUR', 'IFSCA'] as const
+const CATEGORIES = ['All', 'MCA', 'SEBI', 'RBI', 'INCOME_TAX', 'NCLT', 'IBC', 'FEMA', 'CCI', 'LABOUR', 'IFSCA'] as const
 
 interface UpdatesClientProps {
     paginatedUpdates: UpdateListItem[]
@@ -19,6 +19,9 @@ interface UpdatesClientProps {
 
 function parseCategoryParam(raw: string | null): string {
     if (!raw) return 'All'
+    if (raw.toLowerCase() === 'income-tax' || raw.toLowerCase() === 'cbdt' || raw.toLowerCase() === 'income_tax') {
+        return 'INCOME_TAX'
+    }
     const match = CATEGORIES.find(c => c !== 'All' && c.toLowerCase() === raw.toLowerCase())
     return match || 'All'
 }
@@ -200,7 +203,7 @@ export default function UpdatesClient({
                                                     : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-navy dark:hover:text-white'
                                             }`}
                                         >
-                                            <span>{cat}</span>
+                                            <span>{cat === 'INCOME_TAX' ? 'Income Tax' : cat}</span>
                                             <span
                                                 className={`tabular-nums py-0.5 px-2 rounded-md text-xs font-medium ${
                                                     isActive

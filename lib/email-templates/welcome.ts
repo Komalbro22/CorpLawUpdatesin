@@ -22,7 +22,9 @@ const categoryColors: Record<string, { bg: string; text: string; lightBg: string
   cci: { bg: '#4F46E5', text: '#FFFFFF', lightBg: '#EEF2FF' },
   labour: { bg: '#D97706', text: '#FFFFFF', lightBg: '#FFFBEB' },
   ifsca: { bg: '#0891B2', text: '#FFFFFF', lightBg: '#ECFEFF' },
-  income_tax: { bg: '#D97706', text: '#FFFFFF', lightBg: '#FFFBEB' },
+  income_tax: { bg: '#065F46', text: '#FFFFFF', lightBg: '#ECFDF5' },
+  'income-tax': { bg: '#065F46', text: '#FFFFFF', lightBg: '#ECFDF5' },
+  cbdt: { bg: '#065F46', text: '#FFFFFF', lightBg: '#ECFDF5' },
 }
 
 const categoryLabels: Record<string, string> = {
@@ -36,6 +38,8 @@ const categoryLabels: Record<string, string> = {
   labour: 'Labour Law',
   ifsca: 'IFSCA (GIFT City)',
   income_tax: 'Income Tax',
+  'income-tax': 'Income Tax',
+  cbdt: 'CBDT',
 }
 
 export function generateWelcomeEmail({

@@ -19,7 +19,7 @@ import SponsoredSettings from '@/components/admin/SponsoredSettings'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 
-const CATEGORIES: Category[] = ['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA', 'CCI', 'LABOUR', 'IFSCA']
+const CATEGORIES: Category[] = ['MCA', 'SEBI', 'RBI', 'INCOME_TAX', 'NCLT', 'IBC', 'FEMA', 'CCI', 'LABOUR', 'IFSCA']
 
 export default function EditArticle() {
     const router = useRouter()

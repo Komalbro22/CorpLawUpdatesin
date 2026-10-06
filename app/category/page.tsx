@@ -10,6 +10,7 @@ import {
   ShieldCheck,
   Users,
   Coins,
+  Calculator,
   ArrowRight,
 } from 'lucide-react'
 import JsonLd from '@/components/JsonLd'
@@ -19,16 +20,16 @@ import { supabase } from '@/lib/supabase'
 export const revalidate = 43200
 
 export const metadata: Metadata = {
-  title: 'Browse Regulatory Updates by Authority | MCA, SEBI, RBI & More',
+  title: 'Browse Regulatory Updates by Authority | MCA, SEBI, RBI, Income Tax & More',
   description:
-    'Browse corporate law updates by regulator — MCA, SEBI, RBI, IFSCA (GIFT City), NCLT, IBC, FEMA, CCI and Labour Law. Daily circulars, master directions and compliance briefs for CS, CA and legal teams.',
+    'Browse corporate law and tax updates by regulator — MCA, SEBI, RBI, Income Tax (CBDT), IFSCA (GIFT City), NCLT, IBC, FEMA, CCI and Labour Law. Daily circulars, master directions and compliance briefs for CS, CA and legal teams.',
   alternates: {
     canonical: 'https://www.corplawupdates.in/category',
   },
   openGraph: {
     title: 'Browse Regulatory Updates by Authority | CorpLawUpdates.in',
     description:
-      'Browse MCA, SEBI, RBI, IFSCA (GIFT City), NCLT, IBC, FEMA, CCI and Labour Law updates — daily circulars for Indian compliance professionals.',
+      'Browse MCA, SEBI, RBI, Income Tax (CBDT), IFSCA (GIFT City), NCLT, IBC, FEMA, CCI and Labour Law updates — daily circulars for Indian compliance professionals.',
     url: 'https://www.corplawupdates.in/category',
     type: 'website',
     siteName: 'CorpLawUpdates.in',
@@ -143,6 +144,18 @@ const categories = [
     badgeBg: 'bg-slate-500/10 text-slate-700 dark:text-slate-300 border-slate-500/20',
     borderHover: 'hover:border-slate-400/80 dark:hover:border-slate-500/60',
     tags: ['Labour Codes', 'EPF / ECR Returns', 'ESIC Compliance', 'Factory & Wage Rules'],
+  },
+  {
+    slug: 'income-tax',
+    label: 'Income Tax (CBDT)',
+    categoryKey: 'INCOME_TAX',
+    Icon: Calculator,
+    fullName: 'Central Board of Direct Taxes (CBDT)',
+    description: 'CBDT circulars under Section 119, tax audit deadlines (3CA/3CB-3CD), corporate ITR-6 guidelines, transfer pricing (3CEB), and TDS return notifications.',
+    accent: 'bg-emerald-700',
+    badgeBg: 'bg-emerald-600/10 text-emerald-700 dark:text-emerald-400 border-emerald-600/20',
+    borderHover: 'hover:border-emerald-500/80 dark:hover:border-emerald-600/60',
+    tags: ['CBDT Circulars', 'Tax Audit (3CD)', 'ITR-6 Due Dates', 'TDS & TCS Returns'],
   },
 ]
 

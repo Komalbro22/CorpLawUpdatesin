@@ -154,7 +154,7 @@ export default function AdminGlobalSearch() {
     ]
 
     if (activeType === 'articles') {
-      return allOptions.filter(o => ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci', 'labour', 'ifsca'].includes(o.value))
+      return allOptions.filter(o => ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci', 'labour', 'ifsca', 'income_tax'].includes(o.value))
     }
     if (activeType === 'calendar') {
       return allOptions.filter(o => ['mca', 'sebi', 'rbi', 'fema', 'cci', 'labour', 'ifsca', 'income_tax'].includes(o.value))

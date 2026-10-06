@@ -14,7 +14,7 @@ import { formatDate } from '@/lib/utils'
 
 export const revalidate = 43200 // 12 hours
 
-const CATEGORIES = ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci', 'labour', 'ifsca']
+const CATEGORIES = ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci', 'labour', 'ifsca', 'income-tax', 'cbdt']
 
 const CATEGORY_FULL_NAMES: Record<string, string> = {
     mca: 'Ministry of Corporate Affairs',
@@ -27,6 +27,8 @@ const CATEGORY_FULL_NAMES: Record<string, string> = {
     labour: 'Ministry of Labour & Employment',
     'labour-law': 'Ministry of Labour & Employment',
     ifsca: 'International Financial Services Centres Authority',
+    'income-tax': 'Central Board of Direct Taxes (CBDT)',
+    cbdt: 'Central Board of Direct Taxes (CBDT)',
 }
 
 const OFFICIAL_URLS: Record<string, string> = {
@@ -40,6 +42,8 @@ const OFFICIAL_URLS: Record<string, string> = {
     labour: 'https://labour.gov.in',
     'labour-law': 'https://labour.gov.in',
     ifsca: 'https://ifsca.gov.in',
+    'income-tax': 'https://incometaxindia.gov.in',
+    cbdt: 'https://incometaxindia.gov.in',
 }
 
 const WIKIPEDIA_URLS: Record<string, string> = {
@@ -53,6 +57,8 @@ const WIKIPEDIA_URLS: Record<string, string> = {
     labour: 'https://en.wikipedia.org/wiki/Ministry_of_Labour_and_Employment_(India)',
     'labour-law': 'https://en.wikipedia.org/wiki/Ministry_of_Labour_and_Employment_(India)',
     ifsca: 'https://en.wikipedia.org/wiki/International_Financial_Services_Centres_Authority',
+    'income-tax': 'https://en.wikipedia.org/wiki/Central_Board_of_Direct_Taxes',
+    cbdt: 'https://en.wikipedia.org/wiki/Central_Board_of_Direct_Taxes',
 }
 
 const CATEGORY_KEYWORDS: Record<string, string[]> = {
@@ -136,6 +142,28 @@ const CATEGORY_KEYWORDS: Record<string, string[]> = {
         'ifsca guidelines for fme',
         'ifsca aircraft leasing regulations',
         'ifsca market abuse regulations',
+    ],
+    'income-tax': [
+        'cbdt circulars 2026',
+        'income tax notifications India',
+        'latest cbdt orders',
+        'tax audit due date notifications',
+        'ITR filing extensions 2026',
+        'income tax circulars today',
+        'TDS TCS notifications',
+        'section 119 cbdt orders',
+        'income tax compliance calendar',
+    ],
+    cbdt: [
+        'cbdt circulars 2026',
+        'income tax notifications India',
+        'latest cbdt orders',
+        'tax audit due date notifications',
+        'ITR filing extensions 2026',
+        'income tax circulars today',
+        'TDS TCS notifications',
+        'section 119 cbdt orders',
+        'income tax compliance calendar',
     ],
 }
 
@@ -307,6 +335,38 @@ const CATEGORY_REGULATORY_FAQS: Record<string, CategoryFAQ[]> = {
         {
             question: 'What tax benefits are available to units registered under IFSCA in GIFT City?',
             answer: 'Under Section 80LA of the Income-tax Act, eligible IFSC units enjoy a 100% tax exemption on profits for 10 consecutive assessment years out of 15 years. Additional benefits include a concessional Minimum Alternate Tax (MAT) / Alternate Minimum Tax (AMT) rate of 9%, exemption from Dividend Distribution Tax, and GST exemptions on transactions carried out on IFSC exchanges.',
+        },
+    ],
+    'income-tax': [
+        {
+            question: 'What is the statutory role of CBDT under the Income-tax Act, 1961?',
+            answer: 'The Central Board of Direct Taxes (CBDT), functioning under the Department of Revenue in the Ministry of Finance, is the apex statutory authority responsible for the administration and enforcement of direct tax statutes in India, primarily the Income-tax Act, 1961.',
+        },
+        {
+            question: 'Are CBDT Circulars and Notifications legally binding?',
+            answer: 'Under Section 119 of the Income-tax Act, CBDT circulars and instructions are legally binding on all Income Tax authorities and assessing officers. While not strictly binding on taxpayers or courts, circulars that grant relief or extend procedural deadlines are fully enforceable in favor of the taxpayer.',
+        },
+        {
+            question: 'Where can professionals track official CBDT notifications and orders?',
+            answer: 'Official circulars, notifications, and orders are published on the official Income Tax portal (incometaxindia.gov.in) and the e-Filing portal. CorpLawUpdates tracks and summarizes all new circulars with direct gazette citations and statutory compliance context.',
+        },
+        {
+            question: 'What is the difference between a Section 119 order and a statutory notification?',
+            answer: 'Statutory notifications amend the Income-tax Rules, 1962 (such as modifying ITR forms or TDS thresholds) and are published in the Official Gazette. Section 119 orders/circulars provide administrative relaxations, condonation of delay, or extension of statutory filing dates without formally changing the parent Act.',
+        },
+    ],
+    cbdt: [
+        {
+            question: 'What is the statutory role of CBDT under the Income-tax Act, 1961?',
+            answer: 'The Central Board of Direct Taxes (CBDT), functioning under the Department of Revenue in the Ministry of Finance, is the apex statutory authority responsible for the administration and enforcement of direct tax statutes in India, primarily the Income-tax Act, 1961.',
+        },
+        {
+            question: 'Are CBDT Circulars and Notifications legally binding?',
+            answer: 'Under Section 119 of the Income-tax Act, CBDT circulars and instructions are legally binding on all Income Tax authorities and assessing officers. While not strictly binding on taxpayers or courts, circulars that grant relief or extend procedural deadlines are fully enforceable in favor of the taxpayer.',
+        },
+        {
+            question: 'Where can professionals track official CBDT notifications and orders?',
+            answer: 'Official circulars, notifications, and orders are published on the official Income Tax portal (incometaxindia.gov.in) and the e-Filing portal. CorpLawUpdates tracks and summarizes all new circulars with direct gazette citations and statutory compliance context.',
         },
     ],
 }
@@ -513,6 +573,40 @@ const CATEGORY_RELATED_RESOURCES: Record<string, RelatedResource[]> = {
             tag: 'Category Hub',
         },
     ],
+    'income-tax': [
+        {
+            title: 'Compliance Calendar (Income Tax & Audit Deadlines)',
+            description: 'Track Tax Audit Report (Form 3CA/3CB-3CD), ITR-6, TDS returns, and corporate advance tax installments with 1-click sync.',
+            href: '/calendar',
+            tag: 'Compliance Tool',
+        },
+        {
+            title: 'Form AOC-4 Financial Statements Filing Guide',
+            description: 'Section 137 financial statement filing deadlines, XBRL requirements, and reconciliation with tax audit balance sheets.',
+            href: '/tools/fee-calculator/companies/aoc-4',
+            tag: 'Statutory Tool',
+        },
+        {
+            title: 'MCA Company Filing & Fee Calculator',
+            description: 'Cross-check statutory company law annual compliance and ROC late fee slabs alongside income tax obligations.',
+            href: '/tools/fee-calculator/companies',
+            tag: 'Calculator',
+        },
+    ],
+    cbdt: [
+        {
+            title: 'Compliance Calendar (Income Tax & Audit Deadlines)',
+            description: 'Track Tax Audit Report (Form 3CA/3CB-3CD), ITR-6, TDS returns, and corporate advance tax installments with 1-click sync.',
+            href: '/calendar',
+            tag: 'Compliance Tool',
+        },
+        {
+            title: 'Form AOC-4 Financial Statements Filing Guide',
+            description: 'Section 137 financial statement filing deadlines, XBRL requirements, and reconciliation with tax audit balance sheets.',
+            href: '/tools/fee-calculator/companies/aoc-4',
+            tag: 'Statutory Tool',
+        },
+    ],
 }
 
 // Answer-First definition paragraphs for AI Overview + SEO
@@ -619,6 +713,25 @@ const ANSWER_FIRST: Record<string, { definition: string; facts: string[] }> = {
             'IFSCA also regulates global aircraft leasing, ship leasing, global in-house centres (GICs), and cross-border FinTech sandboxes.',
         ],
     },
+    'income-tax': {
+        definition:
+            'Income Tax & CBDT Circulars are statutory directives, notifications, and orders issued by the Central Board of Direct Taxes (CBDT) under the Income-tax Act, 1961. They govern corporate taxation, tax audits (Form 3CA/3CB-3CD), transfer pricing, TDS/TCS compliance, ITR filings, and administrative date extensions under Section 119. This page tracks all latest CBDT circulars, statutory notifications, judicial instructions, and direct tax compliance updates for Chartered Accountants, corporate tax teams, and compliance officers.',
+        facts: [
+            'CBDT is the statutory authority administering the Income-tax Act, 1961 under the Ministry of Finance.',
+            'Under Section 119, CBDT circulars and instructions are legally binding on all Income Tax authorities.',
+            'Key compliance milestones include corporate Tax Audit (Form 3CA/3CB-3CD), corporate ITR-6, quarterly TDS returns (Form 24Q/26Q), and transfer pricing reports (Form 3CEB).',
+            'CBDT notifications amend the Income-tax Rules, 1962, whereas Section 119 orders grant filing extensions and administrative condonations.',
+        ],
+    },
+    cbdt: {
+        definition:
+            'CBDT Circulars & Orders are official regulatory pronouncements issued by the Central Board of Direct Taxes under Section 119 of the Income-tax Act, 1961. They provide statutory guidance, filing extensions, procedural reliefs, and clarifying interpretations on corporate tax assessments, tax audits, transfer pricing, and withholding tax obligations in India. This repository delivers real-time briefings on all official CBDT notifications with direct gazette citations.',
+        facts: [
+            'CBDT functions as the apex direct tax governing body under the Department of Revenue, Ministry of Finance.',
+            'CBDT circulars are binding on all subordinate Income Tax assessing officers.',
+            'Covers statutory compliance across ITR filings, tax audit deadlines, TDS rate revisions, and Advance Tax installments.',
+        ],
+    },
 }
 
 const UPDATE_TYPE_LABELS: Record<string, string> = {
@@ -647,6 +760,9 @@ export async function generateMetadata(
     const rawCat = resolvedParams.category.toLowerCase()
     if (rawCat === 'labour-law') {
         redirect('/category/labour')
+    }
+    if (rawCat === 'cbdt') {
+        redirect('/category/income-tax')
     }
     const cat = rawCat
     const categoryName = cat.toUpperCase()
@@ -738,6 +854,10 @@ export default async function CategoryPage({
         redirect('/category/labour')
     }
 
+    if (cat === 'cbdt') {
+        redirect('/category/income-tax')
+    }
+
     if (originalCat !== cat) {
         redirect(`/category/${cat}`)
     }
@@ -756,11 +876,13 @@ export default async function CategoryPage({
     const from = (currentPage - 1) * ITEMS_PER_PAGE
     const to = from + ITEMS_PER_PAGE - 1
 
+    const dbCategory = (cat === 'income-tax' || cat === 'cbdt') ? 'INCOME_TAX' : cat.toUpperCase()
+
     const categoryBase = (withCount = false) =>
         supabase
             .from('updates')
             .select(UPDATE_LIST_COLUMNS, withCount ? { count: 'exact' } : undefined)
-            .eq('category', cat.toUpperCase())
+            .eq('category', dbCategory)
             .eq('hide_from_listings', false)
             .not('published_at', 'is', null)
             .lte('published_at', now)
@@ -791,6 +913,8 @@ export default async function CategoryPage({
         labour: 'from-amber-600 to-amber-800',
         'labour-law': 'from-amber-600 to-amber-800',
         ifsca: 'from-cyan-700 to-cyan-900',
+        'income-tax': 'from-emerald-700 to-teal-900',
+        cbdt: 'from-emerald-700 to-teal-900',
     }
 
     // ─── JSON-LD Schemas ───────────────────────────────────────────────────────
