@@ -30,49 +30,50 @@ export const revalidate = 3600
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getRateSettings()
-  const rate = settings.current_repo_rate || '5.25%'
-  const rawDate = settings.current_repo_rate_date || 'September 2026'
-  const cleanDate = rawDate.replace(/\(.*?\)/g, '').replace(/62st/gi, '62nd').trim() || 'September 2026'
-  const nextMpc = settings.next_mpc_date || 'October 5 to 7, 2026'
-  const sdfRate = settings.sdf_rate || '5.00%'
-  const msfRate = settings.msf_rate || '5.50%'
+  const rate = settings.current_repo_rate || '5.50%'
+  const rawDate = settings.current_repo_rate_date || 'October 2026 (In Force)'
+  const cleanDate = rawDate.replace(/\(.*?\)/g, '').replace(/62st/gi, '62nd').trim() || 'October 2026'
+  const nextMpc = settings.next_mpc_date || 'December 2 to 4, 2026'
+  const sdfRate = settings.sdf_rate || '5.25%'
+  const msfRate = settings.msf_rate || '5.75%'
 
   return {
-    title: `Current RBI Repo Rate in India: ${rate} (September 2026) | EMI Calculator & Next Oct MPC`,
-    description: `What is the current repo rate of RBI in India? Currently ${rate} as of September 2026. Calculate your home loan EMI, check SDF (${sdfRate}), MSF (${msfRate}), Bank Rate, and next October MPC dates (${nextMpc}).`,
+    title: `Current RBI Repo Rate in India: ${rate} (October 2026) | EMI Calculator & Dec MPC Schedule`,
+    description: `What is the current repo rate of RBI in India? Currently ${rate} following the October 2026 MPC 25 bps hike. Calculate your home loan EMI, check SDF (${sdfRate}), MSF (${msfRate}), Bank Rate, and next December MPC dates (${nextMpc}).`,
     keywords: [
       'what is the current repo rate of rbi in india',
       'current repo rate',
       'current rbi repo rate',
       'repo rate today',
-      'rbi repo rate september 2026',
+      'rbi repo rate october 2026',
+      'october 2026 rbi repo rate hike',
       'current repo rate of india',
       'rbi repo rate today',
       'rbi repo rate',
       'repo rate rbi',
       'rbi monetary policy current repo rate india',
-      'rbi repo rate next oct',
-      'rbi current standing deposit facility rate september 2026 official sdf msf difference',
+      'rbi repo rate next dec',
+      'rbi current standing deposit facility rate october 2026 official sdf msf difference',
       'rbi repo rate today calculator',
-      'september rbi repo rate 2026',
+      'october rbi repo rate 2026',
       'current interest rate india 2026 rbi repo rate',
       'current repo rate in kolkata india',
-      'current rbi repo rate and mpc stance september 2026',
+      'current rbi repo rate and mpc stance october 2026',
       'sdf loan interest rate',
       'repo rate impact on home loan emi',
       'bank rate india 2026',
     ],
     alternates: { canonical: 'https://www.corplawupdates.in/rbi/repo-rate' },
     openGraph: {
-      title: `Current RBI Repo Rate in India: ${rate} (September 2026) — Live Status`,
-      description: `Official RBI benchmark repo rate stands at ${rate} in September 2026 with a Neutral stance. View SDF (${sdfRate}), MSF (${msfRate}), next October MPC meeting schedule (${nextMpc}), and calculate loan EMI impact.`,
+      title: `Current RBI Repo Rate in India: ${rate} (October 2026) — Live Status`,
+      description: `Official RBI benchmark repo rate stands at ${rate} in October 2026 with a Calibrated Tightening stance (+25 bps hike). View SDF (${sdfRate}), MSF (${msfRate}), next December MPC meeting schedule (${nextMpc}), and calculate loan EMI impact.`,
       url: 'https://www.corplawupdates.in/rbi/repo-rate',
       type: 'article',
     },
     twitter: {
       card: 'summary_large_image',
-      title: `Current RBI Repo Rate in India: ${rate} (September 2026)`,
-      description: `Official RBI repo rate stands at ${rate}. Complete breakdown of SDF, MSF, Bank Rate, next October MPC meeting schedule, and interactive EMI calculator.`,
+      title: `Current RBI Repo Rate in India: ${rate} (October 2026)`,
+      description: `Official RBI repo rate stands at ${rate}. Complete breakdown of SDF, MSF, Bank Rate, next December MPC meeting schedule, and interactive EMI calculator.`,
     }
   }
 }
@@ -112,13 +113,13 @@ export default async function RepoRatePage() {
     getRateHistory(),
   ])
 
-  const repoRate = settings.current_repo_rate || '5.25%'
-  const rawRateDate = settings.current_repo_rate_date || 'September 2026'
-  const cleanRateDate = rawRateDate.replace(/\(.*?\)/g, '').replace(/62st/gi, '62nd').trim() || 'September 2026'
-  const nextMpc = settings.next_mpc_date || 'October 5 to 7, 2026'
-  const stance = settings.mpc_stance || 'Neutral'
-  const sdfRate = settings.sdf_rate || '5.00%'
-  const msfRate = settings.msf_rate || '5.50%'
+  const repoRate = settings.current_repo_rate || '5.50%'
+  const rawRateDate = settings.current_repo_rate_date || 'October 2026 (In Force)'
+  const cleanRateDate = rawRateDate.replace(/\(.*?\)/g, '').replace(/62st/gi, '62nd').trim() || 'October 2026'
+  const nextMpc = settings.next_mpc_date || 'December 2 to 4, 2026'
+  const stance = settings.mpc_stance || 'Calibrated Tightening'
+  const sdfRate = settings.sdf_rate || '5.25%'
+  const msfRate = settings.msf_rate || '5.75%'
 
   // Schema.org FAQPage structured data for Google Rich Snippets & AI Overviews
   const faqSchema = {
@@ -127,18 +128,18 @@ export default async function RepoRatePage() {
     mainEntity: [
       {
         '@type': 'Question',
-        name: 'What is the current repo rate of RBI in India (September 2026)?',
+        name: 'What is the current repo rate of RBI in India (October 2026)?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: `The current RBI repo rate in India is ${repoRate} as of September 2026. This policy rate was reaffirmed with a Neutral stance by the 6-member Monetary Policy Committee (MPC) chaired by Governor Shri Sanjay Malhotra. Because the MPC reviews interest rates bi-monthly, ${repoRate} remains India's operative benchmark lending rate until the next MPC resolution on ${nextMpc}.`
+          text: `The current RBI repo rate in India is ${repoRate} as of October 2026. This policy rate was hiked by 25 basis points (from 5.25% to 5.50%) with a shift to a Calibrated Tightening stance by the 6-member Monetary Policy Committee (MPC) chaired by Governor Shri Sanjay Malhotra in its 63rd meeting. Because the MPC reviews interest rates bi-monthly, ${repoRate} remains India's operative benchmark lending rate until the next MPC resolution on ${nextMpc}.`
         }
       },
       {
         '@type': 'Question',
-        name: 'When is the next RBI MPC meeting in October 2026?',
+        name: 'When is the next RBI MPC meeting in December 2026?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: `The next RBI Monetary Policy Committee meeting is scheduled for ${nextMpc}. The 3-day policy deliberation concludes on October 7, 2026 at 10:00 AM IST with the Governor's policy resolution announcement, followed by detailed meeting minutes published 14 days later.`
+          text: `The next RBI Monetary Policy Committee meeting is scheduled for ${nextMpc}. The 3-day policy deliberation concludes on December 4, 2026 at 10:00 AM IST with the Governor's policy resolution announcement, followed by detailed meeting minutes published 14 days later.`
         }
       },
       {
@@ -146,7 +147,7 @@ export default async function RepoRatePage() {
         name: 'What are the current SDF, MSF, Bank Rate, CRR, and SLR rates in India?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: `As of September 2026, India's key policy interest rates and reserve requirements are: Policy Repo Rate: ${repoRate}, Standing Deposit Facility (SDF): ${sdfRate}, Marginal Standing Facility (MSF): ${msfRate}, Bank Rate: ${msfRate}, Fixed Reverse Repo Rate: 3.35%, Cash Reserve Ratio (CRR): 4.50%, and Statutory Liquidity Ratio (SLR): 18.00%.`
+          text: `As of October 2026, India's key policy interest rates and reserve requirements are: Policy Repo Rate: ${repoRate}, Standing Deposit Facility (SDF): ${sdfRate}, Marginal Standing Facility (MSF): ${msfRate}, Bank Rate: ${msfRate}, Fixed Reverse Repo Rate: 3.35%, Cash Reserve Ratio (CRR): 4.50%, and Statutory Liquidity Ratio (SLR): 18.00%.`
         }
       },
       {
@@ -162,7 +163,7 @@ export default async function RepoRatePage() {
         name: 'How does the current repo rate affect floating home loan EMIs?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: `All floating-rate retail home loans sanctioned by commercial banks are mandated by the RBI to be linked to External Benchmark Lending Rates (EBLR/RLLR). With the repo rate at ${repoRate}, home loan interest rates average between 8.40% and 9.35% p.a. across major lenders (SBI, HDFC Bank, ICICI Bank, PNB), keeping monthly borrower EMIs stable.`
+          text: `All floating-rate retail home loans sanctioned by commercial banks are mandated by the RBI to be linked to External Benchmark Lending Rates (EBLR/RLLR). With the repo rate at ${repoRate}, home loan interest rates average between 8.65% and 9.60% p.a. across major lenders (SBI, HDFC Bank, ICICI Bank, PNB), reflecting the 25 bps policy rate increase.`
         }
       },
       {
@@ -186,7 +187,7 @@ export default async function RepoRatePage() {
         name: 'What are the GDP growth and inflation projections by RBI for 2026-27?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'The RBI MPC projects real GDP growth for FY 2026-27 at 6.7% (Q1: 7.0%, Q2: 6.4%, Q3: 6.5%, Q4: 6.8%) and headline CPI inflation at 5.0% (Q2: 4.7%, Q3: 5.9%, Q4: 5.5%).'
+          text: 'The RBI MPC projects real GDP growth for FY 2026-27 at 7.1% (Q2: 7.2%, Q3: 6.9%, Q4: 6.8%, Q1 FY28: 7.1%) and headline CPI inflation at 5.2% (Q2: 4.9%, Q3: 6.0%, Q4: 5.7%, Q1 FY28: 5.6%).'
         }
       }
     ]
@@ -273,7 +274,7 @@ export default async function RepoRatePage() {
         <div className="max-w-4xl mx-auto relative z-10 space-y-3">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 mb-1">
             <span className="size-2 rounded-full bg-emerald-400 animate-ping" aria-hidden="true" />
-            Official Benchmark Policy Rate · In Force September 2026
+            Official Benchmark Policy Rate · In Force October 2026
           </div>
 
           <h1 className="text-5xl md:text-7xl font-heading font-black text-white tracking-tight tabular-nums">
@@ -281,11 +282,11 @@ export default async function RepoRatePage() {
           </h1>
 
           <p className="text-amber-400 font-heading font-bold text-xl md:text-2xl">
-            Current RBI Repo Rate in India (September 2026)
+            Current RBI Repo Rate in India (October 2026)
           </p>
 
           <p className="text-slate-300 text-sm max-w-2xl mx-auto leading-relaxed">
-            Reaffirmed by the 6-member Monetary Policy Committee (MPC) · Chaired by Governor Shri Sanjay Malhotra · Unanimous 6-0 Vote · <strong>{stance} Stance</strong>
+            Unanimously Hiked (+25 bps) by the 6-member Monetary Policy Committee (MPC) · Chaired by Governor Shri Sanjay Malhotra · <strong>{stance} Stance</strong>
           </p>
 
           <div className="pt-2 flex flex-wrap items-center justify-center gap-2">
@@ -295,7 +296,7 @@ export default async function RepoRatePage() {
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-white/10 text-slate-200 border border-white/10 backdrop-blur-sm">
               <Clock className="size-3.5 text-amber-400" aria-hidden="true" />
-              Next MPC Decision: October 7, 2026 (10 AM IST)
+              Next MPC Decision: December 4, 2026 (10 AM IST)
             </span>
           </div>
 
@@ -342,10 +343,10 @@ export default async function RepoRatePage() {
           <div className="bg-white/95 dark:bg-slate-900/95 p-4 sm:p-5 rounded-xl border border-amber-300 dark:border-amber-700/60 shadow-xs space-y-2">
             <h2 className="font-heading font-extrabold text-base sm:text-lg text-slate-900 dark:text-white flex items-center gap-2">
               <span className="size-2 rounded-full bg-blue-600 dark:bg-blue-400" aria-hidden="true" />
-              What is the Current Repo Rate of RBI in India? (September 2026)
+              What is the Current Repo Rate of RBI in India? (October 2026)
             </h2>
             <p className="text-sm sm:text-base text-slate-700 dark:text-slate-200 leading-relaxed">
-              The current RBI repo rate in India is <strong className="text-blue-700 dark:text-blue-400 font-extrabold text-lg tabular-nums">{repoRate}</strong> as of September 2026. Reaffirmed with a <em>{stance}</em> stance by the 6-member Monetary Policy Committee (MPC) chaired by Governor Shri Sanjay Malhotra, this benchmark lending rate remains active nationwide until the 63rd MPC meeting scheduled for <strong>{nextMpc}</strong>. The Standing Deposit Facility (SDF) stands at <strong className="tabular-nums">{sdfRate}</strong>, the Marginal Standing Facility (MSF) and Bank Rate stand at <strong className="tabular-nums">{msfRate}</strong>, and Fixed Reverse Repo is 3.35%.
+              The current RBI repo rate in India is <strong className="text-blue-700 dark:text-blue-400 font-extrabold text-lg tabular-nums">{repoRate}</strong> as of October 2026. At its 63rd meeting on October 7, 2026 (Press Release 2026-2027/1264), the Monetary Policy Committee (MPC) chaired by Governor Shri Sanjay Malhotra voted unanimously to increase the policy repo rate by 25 bps from 5.25% to 5.50%. Consequently, the Standing Deposit Facility (SDF) rate stands adjusted to <strong className="tabular-nums">{sdfRate}</strong>, the Marginal Standing Facility (MSF) and Bank Rate to <strong className="tabular-nums">{msfRate}</strong>, and Fixed Reverse Repo is 3.35%. The MPC also shifted its policy stance to <em>{stance}</em>, signaling that near-term rate cuts are off the table. This benchmark rate remains operative until the 64th MPC resolution on <strong>{nextMpc}</strong>.
             </p>
           </div>
 
@@ -373,7 +374,7 @@ export default async function RepoRatePage() {
             <div className="bg-white/90 dark:bg-slate-900/90 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-0.5">
               <p className="text-slate-500 dark:text-slate-400 text-[11px] font-semibold">Policy Repo Rate</p>
               <p className="text-xl font-heading font-black text-blue-700 dark:text-blue-400 tabular-nums">{repoRate}</p>
-              <p className="text-[10px] text-slate-400">Main lending benchmark</p>
+              <p className="text-[10px] text-slate-400">Hiked by +25 bps</p>
             </div>
             <div className="bg-white/90 dark:bg-slate-900/90 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-0.5">
               <p className="text-slate-500 dark:text-slate-400 text-[11px] font-semibold">Standing Deposit (SDF)</p>
@@ -403,14 +404,14 @@ export default async function RepoRatePage() {
             <div className="bg-white/90 dark:bg-slate-900/90 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 col-span-2 sm:col-span-1 lg:col-span-2 space-y-0.5">
               <p className="text-slate-500 dark:text-slate-400 text-[11px] font-semibold">Next Scheduled MPC Meeting</p>
               <p className="text-base sm:text-lg font-heading font-bold text-amber-700 dark:text-amber-400">{nextMpc}</p>
-              <p className="text-[10px] text-slate-400">63rd MPC meeting & policy announcement</p>
+              <p className="text-[10px] text-slate-400">64th MPC meeting & policy announcement</p>
             </div>
           </div>
 
           <div className="pt-2 text-xs text-slate-600 dark:text-slate-300 flex items-start gap-2 bg-white/50 dark:bg-slate-900/50 p-3 rounded-xl border border-slate-200/50 dark:border-slate-800/50">
             <Info className="size-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" aria-hidden="true" />
             <p>
-              <strong>Why Rates Don&apos;t Change Every Month:</strong> Under Section 45ZB of the RBI Act, the Monetary Policy Committee convenes bi-monthly (every 2 months). The rate of <strong className="tabular-nums">{repoRate}</strong> decided in the 62nd MPC continues as the official national benchmark until the 63rd MPC resolution in October 2026.
+              <strong>Why Rates Don&apos;t Change Every Month:</strong> Under Section 45ZB of the RBI Act, the Monetary Policy Committee convenes bi-monthly (every 2 months). The rate of <strong className="tabular-nums">{repoRate}</strong> decided in the 63rd MPC continues as the official national benchmark until the 64th MPC resolution in December 2026.
             </p>
           </div>
         </div>
@@ -418,10 +419,10 @@ export default async function RepoRatePage() {
         {/* 4 KEY RATE BADGES */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { label: 'Policy Repo Rate', value: repoRate, desc: 'Lending rate to banks', color: 'bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800/40 text-blue-800 dark:text-blue-300', badge: 'Key Benchmark' },
+            { label: 'Policy Repo Rate', value: repoRate, desc: 'Hiked by +25 bps', color: 'bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800/40 text-blue-800 dark:text-blue-300', badge: 'Key Benchmark' },
             { label: 'Standing Deposit (SDF)', value: sdfRate, desc: 'Absorption floor rate', color: 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800/40 text-emerald-800 dark:text-emerald-300', badge: 'Floor Rate' },
             { label: 'MSF / Bank Rate', value: msfRate, desc: 'Emergency ceiling rate', color: 'bg-purple-50 dark:bg-purple-950/30 border-purple-200 dark:border-purple-800/40 text-purple-800 dark:text-purple-300', badge: 'Ceiling Rate' },
-            { label: 'Policy Stance', value: stance, desc: 'Growth-inflation calibrated', color: 'bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800/40 text-amber-800 dark:text-amber-300', badge: 'Unanimous' },
+            { label: 'Policy Stance', value: stance, desc: 'Growth-inflation calibrated', color: 'bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800/40 text-amber-800 dark:text-amber-300', badge: 'Stance Shift' },
           ].map(stat => (
             <div key={stat.label} className={`rounded-2xl border p-5 text-center shadow-sm relative flex flex-col justify-between ${stat.color}`}>
               <div>
@@ -438,7 +439,7 @@ export default async function RepoRatePage() {
           ))}
         </div>
 
-        {/* 62nd MPC MEETING SUMMARY & OFFICIAL RATIONALE BANNER */}
+        {/* 63rd MPC MEETING SUMMARY & OFFICIAL RATIONALE BANNER */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
             <div>
@@ -447,21 +448,21 @@ export default async function RepoRatePage() {
                   <Landmark className="size-5" aria-hidden="true" />
                 </span>
                 <h2 className="text-xl font-heading font-bold text-slate-900 dark:text-white">
-                  62nd MPC Meeting Key Decisions & Official Resolution (August 2026)
+                  63rd MPC Meeting Key Decisions &amp; Official Resolution (October 2026)
                 </h2>
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                Resolution of the Monetary Policy Committee published via RBI Press Release No. 2026-2027/809 on August 5, 2026.
+                Resolution of the Monetary Policy Committee published via RBI Press Release No. 2026-2027/1264 on October 7, 2026.
               </p>
             </div>
             <a
-              href="https://rbidocs.rbi.org.in/rdocs/PressRelease/PDFs/PR80907599DE5FD164918A49085C9D6270116.PDF"
+              href="https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors shrink-0 self-start sm:self-auto"
             >
               <FileText className="size-3.5 text-red-600 dark:text-red-400" aria-hidden="true" />
-              <span>Official RBI PDF (310 KB)</span>
+              <span>Official RBI PR 1264</span>
               <ExternalLink className="size-3 text-slate-400" aria-hidden="true" />
             </a>
           </div>
@@ -471,26 +472,26 @@ export default async function RepoRatePage() {
             <div className="p-5 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200/80 dark:border-blue-800/40 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-blue-900 dark:text-blue-300 uppercase tracking-wider">Real GDP Growth (2026-27)</span>
-                <span className="text-lg font-heading font-black text-blue-800 dark:text-blue-200 tabular-nums">6.7% Projected</span>
+                <span className="text-lg font-heading font-black text-blue-800 dark:text-blue-200 tabular-nums">7.1% Projected</span>
               </div>
               <p className="text-xs text-blue-900/80 dark:text-blue-200/80 leading-relaxed">
-                Projected quarterly trajectory: <strong className="tabular-nums">Q1: 7.0%</strong> | <strong className="tabular-nums">Q2: 6.4%</strong> | <strong className="tabular-nums">Q3: 6.5%</strong> | <strong className="tabular-nums">Q4: 6.8%</strong>. Projected at <strong className="tabular-nums">7.3%</strong> for Q1:2027-28.
+                Projected quarterly trajectory: <strong className="tabular-nums">Q1 (actual): 7.8%</strong> | <strong className="tabular-nums">Q2: 7.2%</strong> | <strong className="tabular-nums">Q3: 6.9%</strong> | <strong className="tabular-nums">Q4: 6.8%</strong>. Projected at <strong className="tabular-nums">7.1%</strong> for Q1:2027-28.
               </p>
               <p className="text-[11px] text-blue-700 dark:text-blue-300">
-                Driven by resilient private consumption, robust services momentum, buoyant capital goods investment, and healthy bank credit flow.
+                Underpinned by robust domestic demand, buoyant services momentum, strong manufacturing, healthy bank credit flows, and government infrastructure investments.
               </p>
             </div>
 
             <div className="p-5 rounded-xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/40 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-amber-900 dark:text-amber-300 uppercase tracking-wider">CPI Inflation (2026-27)</span>
-                <span className="text-lg font-heading font-black text-amber-800 dark:text-amber-200 tabular-nums">5.0% Projected</span>
+                <span className="text-lg font-heading font-black text-amber-800 dark:text-amber-200 tabular-nums">5.2% Projected</span>
               </div>
               <p className="text-xs text-amber-900/80 dark:text-amber-200/80 leading-relaxed">
-                Projected quarterly trajectory: <strong className="tabular-nums">Q2: 4.7%</strong> | <strong className="tabular-nums">Q3: 5.9% (Peak)</strong> | <strong className="tabular-nums">Q4: 5.5%</strong>. Projected at <strong className="tabular-nums">5.3%</strong> for Q1:2027-28.
+                Projected quarterly trajectory: <strong className="tabular-nums">Q2: 4.9%</strong> | <strong className="tabular-nums">Q3: 6.0% (Peak)</strong> | <strong className="tabular-nums">Q4: 5.7%</strong>. Projected at <strong className="tabular-nums">5.6%</strong> for Q1:2027-28.
               </p>
               <p className="text-[11px] text-amber-800 dark:text-amber-300">
-                Headline inflation rose to 4.4% in June due to food and retail fuel price revisions, while Core Inflation (ex-food/fuel) remained low at 3.9%.
+                Headline inflation is expected to average 5.8% across the next three quarters with food spikes (sugar, onion) and crude volatility from West Asia conflicts. Core inflation projected at 4.4%.
               </p>
             </div>
           </div>
@@ -499,21 +500,21 @@ export default async function RepoRatePage() {
           <div className="bg-slate-50 dark:bg-slate-800/40 rounded-xl p-4 border border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 space-y-2 leading-relaxed">
             <p className="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-1.5">
               <ShieldCheck className="size-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
-              Why the MPC Voted to Keep Rates Unchanged with a Neutral Stance:
+              Why the MPC Hiked Rates by 25 bps and Shifted to Calibrated Tightening:
             </p>
             <p>
-              1. <strong>Inflation Vigilance:</strong> While core inflation remains benign (2.3–2.5% excluding precious metals), headline inflation is expected to peak in Q3:2026-27 due to food supply pressures and geopolitical risks in West Asia impacting crude prices. The MPC remains resolute on durably aligning inflation with the 4% target.
+              1. <strong>Inflation Outlook Not Benign:</strong> The MPC noted that headline CPI inflation is expected to average almost 5.8% over the next three quarters, driven by ongoing El Niño conditions, food price spikes, and volatile global energy benchmarks. In this milieu, recalibrating the policy rate was imperative.
             </p>
             <p>
-              2. <strong>Growth Cushion:</strong> Robust domestic demand, capacity utilization, and government infrastructure investments ensure India remains the world&apos;s fastest-growing major economy, giving the MPC headroom to prioritize price stability.
+              2. <strong>Preempting Second-Round Effects:</strong> Monetary policy action acts to curtail second-round effects in inflation expectations and firm-level pricing behaviour, particularly amid strong growth in monetary and credit aggregates.
             </p>
             <p>
-              3. <strong>Unanimous Voting:</strong> All 6 MPC members (Governor Sanjay Malhotra, Dr. Nagesh Kumar, Shri Saugata Bhattacharya, Prof. Ram Singh, Dr. Poonam Gupta, and Shri Indranil Bhattacharyya) voted in unison to maintain the policy rate and neutral stance.
+              3. <strong>Voting Breakdown:</strong> The MPC voted <strong>unanimously (6-0)</strong> to increase the repo rate by 25 bps to 5.50%. On the stance, a 4-2 majority voted to shift to calibrated tightening (signaling that rate cuts are off the table in the near term), while Dr. Nagesh Kumar and Prof. Ram Singh favoured retaining a neutral stance.
             </p>
           </div>
         </div>
 
-        {/* NEXT RBI MPC MEETING SCHEDULE & OUTLOOK (Captures Position 5.1 'next repo rate' queries) */}
+        {/* NEXT RBI MPC MEETING SCHEDULE & OUTLOOK */}
         <section id="next-mpc" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-2.5">
@@ -522,10 +523,10 @@ export default async function RepoRatePage() {
               </span>
               <div>
                 <h2 className="text-xl font-heading font-bold text-slate-900 dark:text-white">
-                  Next RBI MPC Meeting Schedule & Policy Outlook (October 2026)
+                  Next RBI MPC Meeting Schedule &amp; Policy Outlook (December 2026)
                 </h2>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  63rd Monetary Policy Committee Deliberation Timeline and Rate Decision Window
+                  64th Monetary Policy Committee Deliberation Timeline and Rate Decision Window
                 </p>
               </div>
             </div>
@@ -535,7 +536,7 @@ export default async function RepoRatePage() {
           </div>
 
           <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-            The Reserve Bank of India convenes the Monetary Policy Committee bi-monthly. In between scheduled policy meetings, the benchmark repo rate remains unchanged at <strong className="tabular-nums font-bold text-blue-700 dark:text-blue-400">{repoRate}</strong> unless unforeseen macroeconomic shocks necessitate an unscheduled off-cycle intervention. Here is the scheduled timeline and policy dynamics for the upcoming 63rd MPC meeting:
+            The Reserve Bank of India convenes the Monetary Policy Committee bi-monthly. In between scheduled policy meetings, the benchmark repo rate remains unchanged at <strong className="tabular-nums font-bold text-blue-700 dark:text-blue-400">{repoRate}</strong> unless unforeseen macroeconomic shocks necessitate an unscheduled off-cycle intervention. Here is the scheduled timeline and policy dynamics for the upcoming 64th MPC meeting:
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
@@ -545,9 +546,9 @@ export default async function RepoRatePage() {
                 Meeting Roadmap
               </div>
               <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                <strong>October 5, 2026:</strong> Day 1 internal deliberations on domestic liquidity and credit flow.<br />
-                <strong>October 6, 2026:</strong> Day 2 review of global headwinds, crude benchmarks & CPI print.<br />
-                <strong>October 7, 2026 (10:00 AM IST):</strong> Governor&apos;s live policy resolution & press meet.
+                <strong>December 2, 2026:</strong> Day 1 internal deliberations on domestic liquidity and credit flow.<br />
+                <strong>December 3, 2026:</strong> Day 2 review of global headwinds, crude benchmarks &amp; CPI print.<br />
+                <strong>December 4, 2026 (10:00 AM IST):</strong> Governor&apos;s live policy resolution &amp; press address.
               </p>
             </div>
 
@@ -557,7 +558,7 @@ export default async function RepoRatePage() {
                 Key Deciding Factors
               </div>
               <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                The MPC will assess post-monsoon kharif crop arrivals, Q2 retail food prices, crude oil volatility from Middle East geopolitical developments, and federal capex execution before reconsidering the &apos;Neutral&apos; policy stance.
+                The MPC will assess festival demand trends, post-monsoon kharif harvest arrivals, transmission of the 25 bps rate hike across commercial bank lending books, and global rate actions by major central banks.
               </p>
             </div>
 
@@ -567,7 +568,7 @@ export default async function RepoRatePage() {
                 Borrower Impact Window
               </div>
               <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                If the MPC cuts or holds the repo rate in October, commercial banks (SBI, HDFC, ICICI, PNB) are required to reset their external benchmark lending rates (EBLR/RLLR) for home and business loans within their quarterly reset windows.
+                Following the October hike, commercial banks (SBI, HDFC, ICICI, PNB) are adjusting their external benchmark lending rates (EBLR/RLLR) for home and business loans upward by 25 bps within their scheduled reset windows.
               </p>
             </div>
           </div>
@@ -590,7 +591,7 @@ export default async function RepoRatePage() {
                 All benchmark interest rates and statutory reserve requirements determined under the RBI Act and BR Act.
               </p>
             </div>
-            <span className="text-xs font-semibold text-slate-400 dark:text-slate-500">Updated: September 2026</span>
+            <span className="text-xs font-semibold text-slate-400 dark:text-slate-500">Updated: October 2026</span>
           </div>
 
           <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
@@ -668,12 +669,12 @@ export default async function RepoRatePage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
-              { bank: 'State Bank of India (SBI)', type: 'EBLR Benchmark', band: '8.50% – 9.15%', spread: 'Repo + 3.25% onwards' },
-              { bank: 'HDFC Bank', type: 'Repo Benchmark Rate', band: '8.55% – 9.25%', spread: 'Repo + 3.30% onwards' },
-              { bank: 'ICICI Bank', type: 'I-EBLR', band: '8.60% – 9.30%', spread: 'Repo + 3.35% onwards' },
-              { bank: 'Punjab National Bank (PNB)', type: 'RLLR Benchmark', band: '8.45% – 9.10%', spread: 'Repo + 3.20% onwards' },
-              { bank: 'Bank of Baroda (BoB)', type: 'BRLLR', band: '8.40% – 9.05%', spread: 'Repo + 3.15% onwards' },
-              { bank: 'Axis Bank', type: 'Repo Linked EBLR', band: '8.65% – 9.35%', spread: 'Repo + 3.40% onwards' },
+              { bank: 'State Bank of India (SBI)', type: 'EBLR Benchmark', band: '8.75% – 9.40%', spread: 'Repo + 3.25% onwards' },
+              { bank: 'HDFC Bank', type: 'Repo Benchmark Rate', band: '8.80% – 9.50%', spread: 'Repo + 3.30% onwards' },
+              { bank: 'ICICI Bank', type: 'I-EBLR', band: '8.85% – 9.55%', spread: 'Repo + 3.35% onwards' },
+              { bank: 'Punjab National Bank (PNB)', type: 'RLLR Benchmark', band: '8.70% – 9.35%', spread: 'Repo + 3.20% onwards' },
+              { bank: 'Bank of Baroda (BoB)', type: 'BRLLR', band: '8.65% – 9.30%', spread: 'Repo + 3.15% onwards' },
+              { bank: 'Axis Bank', type: 'Repo Linked EBLR', band: '8.90% – 9.60%', spread: 'Repo + 3.40% onwards' },
             ].map(b => (
               <div key={b.bank} className="p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 hover:bg-slate-50 dark:hover:bg-slate-800/70 transition-colors space-y-1.5">
                 <p className="font-heading font-bold text-sm text-slate-900 dark:text-white">{b.bank}</p>
@@ -802,12 +803,12 @@ export default async function RepoRatePage() {
           <div className="space-y-4">
             {[
               {
-                q: 'What is the current repo rate of RBI in India? (September 2026)',
-                a: `The current RBI repo rate in India is ${repoRate} as of September 2026. This policy rate was reaffirmed at the 62nd Monetary Policy Committee (MPC) meeting under the chairmanship of Governor Shri Sanjay Malhotra with a unanimous 6-0 vote and a Neutral stance. Because the MPC reviews rates bi-monthly, ${repoRate} remains India's operative benchmark lending rate until the next MPC resolution on ${nextMpc}.`,
+                q: 'What is the current repo rate of RBI in India? (October 2026)',
+                a: `The current RBI repo rate in India is ${repoRate} as of October 2026. This policy rate was hiked by 25 basis points (from 5.25% to 5.50%) at the 63rd Monetary Policy Committee (MPC) meeting under the chairmanship of Governor Shri Sanjay Malhotra with a unanimous 6-0 vote on the rate hike and a shift to Calibrated Tightening stance (4-2 majority). Because the MPC reviews rates bi-monthly, ${repoRate} remains India's operative benchmark lending rate until the next MPC resolution on ${nextMpc}.`,
               },
               {
-                q: 'When is the next RBI MPC meeting in October 2026?',
-                a: `The next RBI Monetary Policy Committee meeting is scheduled for ${nextMpc}. The 3-day policy deliberation concludes on October 7, 2026 at 10:00 AM IST with the Governor's live policy resolution address and interest rate decision. Detailed meeting minutes are published 14 days later.`,
+                q: 'When is the next RBI MPC meeting in December 2026?',
+                a: `The next RBI Monetary Policy Committee meeting is scheduled for ${nextMpc}. The 3-day policy deliberation concludes on December 4, 2026 at 10:00 AM IST with the Governor's live policy resolution address and interest rate decision. Detailed meeting minutes are published on October 21, 2026.`,
               },
               {
                 q: 'What is the difference between Repo Rate, SDF Rate, and MSF Rate?',
@@ -815,7 +816,7 @@ export default async function RepoRatePage() {
               },
               {
                 q: 'How does the current repo rate affect floating home loan EMIs (SBI, HDFC, ICICI)?',
-                a: `All floating-rate retail loans (home and personal loans) sanctioned by commercial banks are mandated by the RBI to be linked to External Benchmark Lending Rates (EBLR/RLLR). With the repo rate at ${repoRate}, home loan interest rates average between 8.40% and 9.35% p.a. across major lenders (SBI, HDFC Bank, ICICI Bank, PNB, Bank of Baroda). Use our interactive calculator above to check your exact EMI savings.`,
+                a: `All floating-rate retail loans (home and personal loans) sanctioned by commercial banks are mandated by the RBI to be linked to External Benchmark Lending Rates (EBLR/RLLR). With the repo rate at ${repoRate}, home loan interest rates average between 8.65% and 9.60% p.a. across major lenders (SBI, HDFC Bank, ICICI Bank, PNB, Bank of Baroda), reflecting the 25 bps rate increase. Use our interactive calculator above to simulate your exact EMI impact.`,
               },
               {
                 q: 'Is the RBI repo rate different across Indian cities like Kolkata, Mumbai, or Delhi?',
@@ -831,7 +832,7 @@ export default async function RepoRatePage() {
               },
               {
                 q: 'What were the GDP growth and inflation forecasts in the latest MPC resolution?',
-                a: 'For FY 2026-27, the RBI MPC projected real GDP growth at 6.7% (Q1: 7.0%, Q2: 6.4%, Q3: 6.5%, Q4: 6.8%) and headline CPI inflation at 5.0% (Q2: 4.7%, Q3: 5.9%, Q4: 5.5%).',
+                a: 'For FY 2026-27, the RBI MPC projected real GDP growth at 7.1% (Q1 actual: 7.8%, Q2: 7.2%, Q3: 6.9%, Q4: 6.8%, Q1 FY28: 7.1%) and headline CPI inflation at 5.2% (Q2: 4.9%, Q3: 6.0% [Peak], Q4: 5.7%, Q1 FY28: 5.6%). Core inflation is projected at 4.4%.',
               }
             ].map((faq, i) => (
               <div key={i} className="border border-slate-200 dark:border-slate-800 rounded-xl p-5 hover:border-amber-300 dark:hover:border-amber-700/50 bg-slate-50/30 dark:bg-slate-800/20 transition-colors">
@@ -847,7 +848,7 @@ export default async function RepoRatePage() {
           <div className="flex items-center justify-between">
             <h3 className="font-heading font-bold text-navy dark:text-white text-base flex items-center gap-2">
               <FileText className="size-4 text-amber-600 dark:text-amber-400" aria-hidden="true" />
-              In-Depth RBI Analysis & Related Financial Intelligence
+              In-Depth RBI Analysis &amp; Related Financial Intelligence
             </h3>
             <Link href="/category/rbi" className="text-xs font-bold text-amber-600 dark:text-amber-400 hover:underline">
               View All RBI Updates →
@@ -855,24 +856,24 @@ export default async function RepoRatePage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {/* Latest August 2026 MPC Meeting Analysis Card */}
+            {/* Latest October 2026 MPC Meeting Analysis Card */}
             <Link
-              href="/updates/rbi-monetary-policy-august-2026-repo-rate-unchanged"
+              href="/updates/rbi-repo-rate-hike-5-50-percent-october-2026"
               className="p-4 rounded-xl bg-white dark:bg-slate-800 border border-amber-300 dark:border-amber-700/60 hover:border-amber-500 dark:hover:border-amber-500 hover:shadow-md transition-all group flex flex-col justify-between space-y-2 relative overflow-hidden"
             >
               <div>
                 <div className="flex items-center justify-between gap-2">
                   <span className="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1.5">
                     <span className="size-1.5 rounded-full bg-emerald-600 animate-pulse" aria-hidden="true" />
-                    Latest MPC Analysis (62nd)
+                    Latest MPC Analysis (63rd)
                   </span>
                   <ArrowRight className="size-4 text-slate-400 group-hover:text-amber-600 dark:group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all" aria-hidden="true" />
                 </div>
                 <p className="font-heading font-bold text-sm text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors mt-1.5">
-                  RBI MPC August 2026 Meeting — Detailed Analysis
+                  RBI Hikes Repo Rate by 25 bps to 5.50%: October 2026 Analysis
                 </p>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
-                  Full member-wise voting breakdown, GDP & inflation trajectory, neutral policy stance analysis, and borrower EMI impacts.
+                  Full 25 bps rate hike breakdown, shift to calibrated tightening, voting split, GDP &amp; CPI forecasts, and retail loan EMI impacts.
                 </p>
               </div>
             </Link>
@@ -891,7 +892,7 @@ export default async function RepoRatePage() {
                   <ArrowRight className="size-4 text-slate-400 group-hover:text-amber-600 dark:group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all" aria-hidden="true" />
                 </div>
                 <p className="font-heading font-bold text-sm text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors mt-1.5">
-                  Board Resolution for Bank Loan & Credit Facilities
+                  Board Resolution for Bank Loan &amp; Credit Facilities
                 </p>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
                   Ready-to-use Companies Act compliant board resolution draft for availing term loans and cash credit from commercial banks.
@@ -913,7 +914,7 @@ export default async function RepoRatePage() {
                   <ArrowRight className="size-4 text-slate-400 group-hover:text-amber-600 dark:group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all" aria-hidden="true" />
                 </div>
                 <p className="font-heading font-bold text-sm text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors mt-1.5">
-                  Corporate Compliance & Fee Calculators
+                  Corporate Compliance &amp; Fee Calculators
                 </p>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
                   Access ROC fee calculators, CIN decoder, MSME fee estimators, and corporate governance toolkits.
@@ -926,7 +927,7 @@ export default async function RepoRatePage() {
         {/* DISCLAIMER & OFFICIAL ATTRIBUTION */}
         <div className="text-center text-xs text-slate-400 dark:text-slate-500 space-y-1 pt-4 border-t border-slate-200 dark:border-slate-800">
           <p>
-            Last updated: {cleanRateDate} · Official Source: Reserve Bank of India Press Release No. 2026-2027/809
+            Last updated: {cleanRateDate} · Official Source: Reserve Bank of India Press Release No. 2026-2027/1264 &amp; 1265
           </p>
           <p>
             Disclaimer: Content provided for informational and corporate compliance intelligence purposes. For official regulatory circulars, visit rbi.org.in.
