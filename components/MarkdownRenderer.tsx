@@ -365,11 +365,16 @@ export default function MarkdownRenderer({
     }, [content])
 
 
-    // Preprocess content to strip leading indentation from lines starting with ANY HTML tags or comments.
-    // This prevents standard CommonMark parser from treating indented HTML blocks (such as <details>, <summary>, <div>, etc.) as code blocks.
-    const processedContent = content
-        ? content.replace(/^[ \t]+(?=<\/?(?:[a-zA-Z][a-zA-Z0-9:-]*|!--|!DOCTYPE))/gm, '')
-        : ''
+    // Preprocess content:
+    // 1. Strip leading indentation from lines starting with ANY HTML tags or comments so CommonMark won't parse them as code blocks.
+    // 2. Collapse all empty lines inside <svg>...</svg> blocks to prevent CommonMark from closing the HTML block prematurely and dumping SVG inner tags as plaintext/markdown <p>.
+    let processedContent = content || ''
+    if (processedContent) {
+        processedContent = processedContent.replace(/^[ \t]+(?=<\/?(?:[a-zA-Z][a-zA-Z0-9:-]*|!--|!DOCTYPE))/gm, '')
+        processedContent = processedContent.replace(/<svg[\s\S]*?<\/svg>/gi, (svgBlock) => {
+            return svgBlock.replace(/\r\n/g, '\n').replace(/\n\s*\n+/g, '\n')
+        })
+    }
 
     const sanitizedContent = sanitizeHtml(processedContent)
 
@@ -728,6 +733,22 @@ export default function MarkdownRenderer({
                             </a>
                         );
                     },
+                    svg: ({ node, style, className, children, ...props }: any) => {
+                        const styleObj = parseStyle(style, node);
+                        return (
+                            <div suppressHydrationWarning className="w-full my-6 overflow-x-auto flex justify-center">
+                                <svg
+                                    suppressHydrationWarning
+                                    style={{ maxWidth: '100%', height: 'auto', ...styleObj }}
+                                    className={className}
+                                    {...props}
+                                >
+                                    {children}
+                                </svg>
+                            </div>
+                        );
+                    },
+
                     img: ({ node, style, src, alt, border, align, hspace, vspace, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
                         let resolvedSrc = typeof src === 'string' ? src.trim() : (src || '');

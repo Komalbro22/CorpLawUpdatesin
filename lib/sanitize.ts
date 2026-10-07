@@ -12,8 +12,10 @@ const ALLOWED_TAGS = [
   'iframe', 'style',
   // SVG elements for inline charts, badges, and visual diagrams
   'svg', 'path', 'g', 'rect', 'circle', 'ellipse', 'polyline',
-  'polygon', 'line', 'text', 'tspan', 'use', 'defs',
-  'lineargradient', 'radialgradient', 'stop', 'clippath', 'clipPath', 'mask', 'foreignobject', 'foreignObject'
+  'polygon', 'line', 'text', 'tspan', 'use', 'defs', 'marker',
+  'lineargradient', 'radialgradient', 'linearGradient', 'radialGradient', 'stop',
+  'filter', 'feDropShadow', 'fedropshadow', 'feGaussianBlur', 'fegaussianblur',
+  'clippath', 'clipPath', 'mask', 'foreignobject', 'foreignObject'
 ]
 
 const ALLOWED_ATTR = [
@@ -23,9 +25,14 @@ const ALLOWED_ATTR = [
   'bgcolor', 'color', 'loading', 'open',
   // SVG attributes
   'viewbox', 'viewBox', 'fill', 'stroke', 'stroke-width',
-  'stroke-linecap', 'stroke-linejoin', 'd', 'cx', 'cy',
+  'stroke-linecap', 'stroke-linejoin', 'stroke-dasharray', 'd', 'cx', 'cy',
   'r', 'rx', 'ry', 'x', 'y', 'x1', 'y1', 'x2', 'y2', 'points',
-  'transform', 'xmlns', 'aria-hidden', 'role'
+  'transform', 'xmlns', 'aria-hidden', 'aria-label', 'role',
+  'font-size', 'font-weight', 'font-family', 'text-anchor', 'letter-spacing',
+  'stop-color', 'stop-opacity', 'offset', 'opacity',
+  'marker-end', 'marker-start', 'marker-mid',
+  'markerWidth', 'markerHeight', 'markerwidth', 'markerheight', 'refX', 'refY', 'refx', 'refy', 'orient',
+  'stdDeviation', 'stddeviation', 'dx', 'dy', 'flood-color', 'flood-opacity'
 ]
 
 // Server & Client html sanitizer preserving custom inline CSS styles, fonts, SVGs & charts
@@ -114,12 +121,29 @@ export function sanitizeHtml(html: string): string {
     })
   }
 
-  // Client-side: use DOMPurify with SVG & style support
+  // Client-side: use DOMPurify with full SVG & style support
   return DOMPurify.sanitize(html, {
+    USE_PROFILES: { html: true, svg: true, svgFilters: true },
     ALLOWED_TAGS,
     ALLOWED_ATTR,
-    ADD_TAGS: ['style', 'svg', 'path', 'g', 'rect', 'circle', 'polyline', 'polygon', 'line', 'text', 'tspan', 'use', 'defs', 'linearGradient', 'stop', 'clipPath', 'mask', 'foreignObject', 'iframe'],
-    ADD_ATTR: ['style', 'class', 'id', 'target', 'rel', 'open', 'viewBox', 'fill', 'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'd', 'cx', 'cy', 'r', 'rx', 'ry', 'x', 'y', 'x1', 'y1', 'x2', 'y2', 'points', 'transform', 'xmlns', 'aria-hidden'],
+    ADD_TAGS: [
+      'style', 'iframe', 'svg', 'path', 'g', 'rect', 'circle', 'ellipse', 'polyline',
+      'polygon', 'line', 'text', 'tspan', 'use', 'defs', 'marker',
+      'linearGradient', 'radialGradient', 'stop', 'filter', 'feDropShadow', 'fedropshadow',
+      'feGaussianBlur', 'fegaussianblur', 'feOffset', 'feoffset', 'feBlend', 'feblend',
+      'clipPath', 'mask', 'foreignObject'
+    ],
+    ADD_ATTR: [
+      'style', 'class', 'id', 'target', 'rel', 'open', 'loading',
+      'viewBox', 'viewbox', 'fill', 'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-dasharray',
+      'd', 'cx', 'cy', 'r', 'rx', 'ry', 'x', 'y', 'x1', 'y1', 'x2', 'y2', 'points',
+      'transform', 'xmlns', 'aria-hidden', 'aria-label', 'role',
+      'font-size', 'font-weight', 'font-family', 'text-anchor', 'letter-spacing',
+      'stop-color', 'stop-opacity', 'offset', 'opacity',
+      'marker-end', 'marker-start', 'marker-mid',
+      'markerWidth', 'markerHeight', 'markerwidth', 'markerheight', 'refX', 'refY', 'refx', 'refy', 'orient',
+      'stdDeviation', 'stddeviation', 'dx', 'dy', 'flood-color', 'flood-opacity'
+    ],
     ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|data):|[^a-z]|[a-z+.-]+(?:[^a-z+.:-]|$))/i,
     FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover'],
     FORCE_BODY: true,
