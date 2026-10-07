@@ -372,7 +372,10 @@ export default function MarkdownRenderer({
     if (processedContent) {
         processedContent = processedContent.replace(/^[ \t]+(?=<\/?(?:[a-zA-Z][a-zA-Z0-9:-]*|!--|!DOCTYPE))/gm, '')
         processedContent = processedContent.replace(/<svg[\s\S]*?<\/svg>/gi, (svgBlock) => {
-            return svgBlock.replace(/\r\n/g, '\n').replace(/\n\s*\n+/g, '\n')
+            return svgBlock
+                .replace(/\r\n/g, '\n')
+                .replace(/>\s*\n+\s*</g, '><')
+                .replace(/\n+/g, ' ')
         })
     }
 

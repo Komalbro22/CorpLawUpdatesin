@@ -185,6 +185,9 @@ export async function POST(request: NextRequest) {
         if (category?.trim()) {
             revalidatePath(`/category/${category.trim().toLowerCase()}`)
         }
+        if (createdArticle?.slug) {
+            revalidatePath(`/updates/${createdArticle.slug}`, 'page')
+        }
 
         return NextResponse.json(createdArticle, { status: 201 })
     } catch (err: unknown) {

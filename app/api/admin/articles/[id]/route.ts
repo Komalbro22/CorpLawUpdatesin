@@ -106,9 +106,9 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
         if (body.slug !== undefined && body.slug !== oldArticle.slug) {
             revalidatePath(`/updates/${oldArticle.slug}`, 'page')
-            if (updatedArticle?.slug) {
-                revalidatePath(`/updates/${updatedArticle.slug}`, 'page')
-            }
+        }
+        if (updatedArticle?.slug) {
+            revalidatePath(`/updates/${updatedArticle.slug}`, 'page')
         } else if (body.title !== undefined && body.title !== oldArticle.title) {
             revalidatePath(`/updates/${oldArticle.slug}`, 'page')
         } else {

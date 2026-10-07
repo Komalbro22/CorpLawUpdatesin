@@ -1,8 +1,8 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminSession } from '@/lib/admin-auth'
 import { revalidatePath } from 'next/cache'
 
-export async function POST() {
+export async function POST(request: NextRequest) {
   try {
     if (!await verifyAdminSession()) {
       return NextResponse.json(
@@ -11,12 +11,23 @@ export async function POST() {
       )
     }
 
-    // Purge cache for the homepage to update the popular section
-    revalidatePath('/')
+    let targetPath = '/'
+    try {
+      const body = await request.json()
+      if (body?.path) targetPath = body.path
+    } catch {
+      const url = new URL(request.url)
+      if (url.searchParams.get('path')) targetPath = url.searchParams.get('path')!
+    }
+
+    revalidatePath(targetPath)
+    if (targetPath !== '/') {
+      revalidatePath('/', 'layout')
+    }
 
     return NextResponse.json({
       success: true,
-      message: 'Homepage cache revalidated successfully'
+      message: `Cache revalidated successfully for ${targetPath}`
     })
   } catch (error) {
     const err = error as Error & { digest?: string };
@@ -26,7 +37,7 @@ export async function POST() {
 
     console.error('[API Revalidate Error]', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal server error' }, 
       { status: 500 }
     );
   }
