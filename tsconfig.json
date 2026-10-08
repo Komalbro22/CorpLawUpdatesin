@@ -38,8 +38,6 @@
     "lib/**/*.tsx",
     "types/**/*.ts",
     "types/**/*.tsx",
-    "cloudflare/**/*.ts",
-    "cloudflare/**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
@@ -48,6 +46,7 @@
     "**/node_modules/**",
     ".agents",
     ".open-next",
+    "cloudflare",
     ".next",
     "scratch",
     "coverage"
