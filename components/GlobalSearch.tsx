@@ -246,19 +246,24 @@ export default function GlobalSearch() {
             onClick={e => e.stopPropagation()}
           >
             
-            {/* Search input */}
-            <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-200 dark:border-slate-800">
+            {/* Search input with modern semantic <search> element */}
+            <search className="flex items-center gap-3 px-4 py-3 border-b border-slate-200 dark:border-slate-800">
               <svg className="size-5 text-slate-400 flex-shrink-0" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               <input
                 ref={inputRef}
-                type="text"
+                type="search"
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 placeholder="Search articles, compliance deadlines..."
-                className="flex-1 text-navy dark:text-white text-base bg-transparent outline-none placeholder-slate-400 dark:placeholder-slate-500"
+                aria-label="Search articles, compliance deadlines, and terms"
                 autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck={false}
+                enterKeyHint="search"
+                className="flex-1 text-navy dark:text-white text-base bg-transparent outline-none placeholder-slate-400 dark:placeholder-slate-500 [&::-webkit-search-cancel-button]:hidden"
               />
               {loading && (
                 <div className="size-4 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" aria-hidden="true" />
@@ -274,6 +279,15 @@ export default function GlobalSearch() {
               >
                 ✕
               </button>
+            </search>
+
+            {/* Screen reader live region for search results */}
+            <div role="status" aria-live="polite" className="sr-only">
+              {loading
+                ? 'Searching...'
+                : query.length >= 2
+                ? `${results.length} result${results.length === 1 ? '' : 's'} available.`
+                : ''}
             </div>
 
             {/* Filters */}

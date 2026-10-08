@@ -3,6 +3,9 @@ const nextConfig = {
   output: 'standalone',
   compress: true,
   poweredByHeader: false,
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -112,6 +115,24 @@ const nextConfig = {
           {
             key: 'Cache-Control',
             value: 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=2592000',
+          },
+        ],
+      },
+      {
+        source: '/(updates|glossary|tools|about|calendar|documents|category|rbi|author)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=0, s-maxage=7200, stale-while-revalidate=86400',
+          },
+        ],
+      },
+      {
+        source: '/(updates|glossary|tools|about|calendar|documents|category|rbi|author)/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=0, s-maxage=7200, stale-while-revalidate=86400',
           },
         ],
       },

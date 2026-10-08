@@ -7,6 +7,9 @@
    ═══════════════════════════════════ */
 
 :root {
+  color-scheme: light;
+  accent-color: #B45309;
+
   /* Typography Fonts */
   --font-lora: 'Lora', Georgia, serif;
   --font-source-sans: 'Source Sans 3', 'Source Sans Pro', system-ui, -apple-system, sans-serif;
@@ -48,6 +51,9 @@
 
 /* Dark mode overrides */
 .dark {
+  color-scheme: dark;
+  accent-color: #C9A84C;
+
   --bg-primary: #040814;
   --bg-secondary: #111827;
   --bg-card: #0E1626;
@@ -75,6 +81,12 @@
   --surface: #111827;
   --surface-muted: #0E1626;
   --border-subtle: #2D3748;
+}
+
+/* Performance: Content visibility utility for below-the-fold feeds */
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 450px;
 }
 
 /* ═══════════════════════════════════

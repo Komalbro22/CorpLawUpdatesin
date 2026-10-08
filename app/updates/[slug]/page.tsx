@@ -38,7 +38,7 @@ import ReaderFeedback from '@/components/ReaderFeedback'
 
 const stripHtml = (html: string) => html ? html.replace(/<[^>]*>/g, '').trim() : ''
 
-export const revalidate = 3600 // 1 hour
+export const revalidate = 43200 // 12 hours
 
 export async function generateStaticParams() {
     const { data } = await supabase.from('updates').select('slug')

@@ -63,9 +63,9 @@ export async function syncViewsAction(isCron = false) {
             }
         }
         
-        // Purge the homepage cache so the Popular Articles updates instantly
-        revalidatePath('/')
-        revalidatePath('/updates')
+        // Note: We deliberately avoid calling revalidatePath('/') and revalidatePath('/updates')
+        // here to prevent bursting Vercel ISR write limits on routine view syncs.
+        // The pages revalidate on their standard schedule or on explicit publish events.
         
         return { success: true, syncedCount }
     } catch (error) {

@@ -21,7 +21,7 @@ import {
   ExternalLink,
 } from 'lucide-react'
 
-export const revalidate = 3600 // 1 hour
+export const revalidate = 86400 // 24 hours
 
 export const metadata: Metadata = {
   title: 'Komalpreet Singh – Founder & Independent Author | CorpLawUpdates.in',

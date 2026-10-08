@@ -5,7 +5,7 @@ import GlossaryClient from '@/components/GlossaryClient'
 import HubExploreLinks from '@/components/HubExploreLinks'
 import JsonLd from '@/components/JsonLd'
 
-export const revalidate = 3600
+export const revalidate = 86400
 
 export const metadata: Metadata = {
   title: {

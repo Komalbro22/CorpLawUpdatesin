@@ -130,6 +130,8 @@ export default async function RootLayout({
           }}
         />
         <meta name="google-adsense-account" content="ca-pub-8404756575471756" />
+        <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8404756575471756"
@@ -140,6 +142,7 @@ export default async function RootLayout({
         <link rel="webmcp" href="/.well-known/webmcp" type="application/json" />
         <link rel="ai-catalog" href="/.well-known/ai-catalog.json" type="application/json" />
         <link rel="ard" href="/.well-known/ard.json" type="application/json" />
+        <meta name="color-scheme" content="light dark" />
         <meta name="theme-color" content="#0F172A" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
