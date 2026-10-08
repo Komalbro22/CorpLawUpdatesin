@@ -12,6 +12,7 @@ import remarkBreaks from 'remark-breaks'
 import rehypeRaw from 'rehype-raw'
 import { sanitizeHtml } from '@/lib/sanitize'
 import { isDownloadPromptSuppressed } from '@/lib/download-prompt-storage'
+import { getProxiedImageUrl } from '@/lib/image-utils'
 
 const LazyDownloadSubscribePrompt = dynamic(
     () => import('@/components/DownloadSubscribePrompt'),
@@ -760,6 +761,7 @@ export default function MarkdownRenderer({
                                 resolvedSrc = '/' + resolvedSrc;
                             }
                         }
+                        resolvedSrc = getProxiedImageUrl(resolvedSrc) || resolvedSrc;
 
                         return (
                             <img

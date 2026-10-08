@@ -15,3 +15,21 @@ export function canOptimizeImage(src: string): boolean {
     return false
   }
 }
+
+export function getProxiedImageUrl(src?: string | null): string | null {
+  if (!src || typeof src !== 'string') return null
+  const trimmed = src.trim()
+  if (!trimmed) return null
+  if (trimmed.startsWith('/') || trimmed.startsWith('data:') || trimmed.startsWith('blob:')) {
+    return trimmed
+  }
+  try {
+    const url = new URL(trimmed)
+    if (url.hostname === 'i.ibb.co') {
+      return `/api/image-proxy?url=${encodeURIComponent(trimmed)}`
+    }
+    return trimmed
+  } catch {
+    return trimmed
+  }
+}

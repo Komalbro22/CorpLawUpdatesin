@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { Building2, ShieldCheck, Landmark, Scale, AlertTriangle, Globe, Newspaper } from 'lucide-react'
-import { canOptimizeImage } from '@/lib/image-utils'
+import { getProxiedImageUrl } from '@/lib/image-utils'
 
 interface ArticleImageProps {
   src?: string | null
@@ -23,14 +23,21 @@ const REGULATOR_THEMES: Record<string, { bg: string; icon: typeof Building2; lab
 }
 
 export default function ArticleImage({ src, alt, category, priority = false, className = '' }: ArticleImageProps) {
+  const [hasError, setHasError] = useState(false)
   const [isLoading, setIsLoading] = useState(!priority)
-  const [imageSrc, setImageSrc] = useState(src)
+
+  useEffect(() => {
+    setHasError(false)
+    setIsLoading(!priority)
+  }, [src, priority])
 
   const catKey = category ? category.toUpperCase() : 'CORPORATE LAW'
   const theme = REGULATOR_THEMES[catKey] || { bg: 'from-navy via-slate-900 to-slate-950', icon: Newspaper, label: 'Corporate Law Update' }
   const IconComponent = theme.icon
 
-  if (!imageSrc) {
+  const resolvedSrc = getProxiedImageUrl(src)
+
+  if (!resolvedSrc || hasError) {
     return (
       <div className={`w-full h-full bg-gradient-to-br ${theme.bg} flex flex-col items-center justify-center p-6 text-center select-none relative overflow-hidden ${className}`}>
         <div className="absolute inset-0 bg-slate-900/30 backdrop-blur-[1px]" />
@@ -49,37 +56,26 @@ export default function ArticleImage({ src, alt, category, priority = false, cla
     )
   }
 
-  const optimizable = canOptimizeImage(imageSrc)
-
   return (
     <div className={`relative w-full h-full bg-slate-100 dark:bg-slate-900 overflow-hidden ${className}`}>
+      {/* Background skeleton: renders behind the image, never blocking it with z-index */}
       {!priority && isLoading && (
-        <div className="absolute inset-0 bg-slate-200 dark:bg-slate-800 animate-pulse z-10" />
+        <div className="absolute inset-0 bg-slate-200 dark:bg-slate-800 animate-pulse" />
       )}
 
       <Image
-        src={imageSrc}
+        src={resolvedSrc}
         alt={alt}
         fill
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
         priority={priority}
-        unoptimized={!optimizable}
-        referrerPolicy="no-referrer"
-        ref={(img) => {
-          if (img?.complete && isLoading) {
-            setIsLoading(false)
-          }
-        }}
+        unoptimized={true}
         onLoad={() => setIsLoading(false)}
         onError={() => {
           setIsLoading(false)
-          if (imageSrc !== '/images/og-default.png') {
-            setImageSrc('/images/og-default.png')
-          }
+          setHasError(true)
         }}
-        className={`object-cover object-center motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105 ${
-          !priority && isLoading ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'
-        }`}
+        className="relative z-10 object-cover object-center motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105"
       />
     </div>
   )
