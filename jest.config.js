@@ -18,6 +18,7 @@ module.exports = {
         strict: false,
         esModuleInterop: true,
         paths: { '@/*': ['./*'] },
+        rootDir: '.',
       },
     }],
   },

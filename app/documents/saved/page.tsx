@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import DOMPurify from 'dompurify'
 import { getSavedDocuments, deleteSavedDocument, SavedDocument } from '@/lib/saved-documents'
 
 function SavedDocsSkeleton() {
@@ -82,8 +83,8 @@ export default function SavedDocumentsPage() {
                       if (w) {
                         // Sanitize title (HTML-escape) and content (DOMPurify) before injecting
                         const escTitle = doc.title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
-                        const cleanContent = typeof window !== 'undefined' && window.DOMPurify
-                          ? window.DOMPurify.sanitize(doc.content)
+                        const cleanContent = typeof window !== 'undefined'
+                          ? DOMPurify.sanitize(doc.content)
                           : doc.content.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
                         w.document.write(`
                           <html>

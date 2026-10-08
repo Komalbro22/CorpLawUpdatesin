@@ -186,7 +186,7 @@ export default async function HomePage() {
     const excludedIds = popularUpdates.map((u: any) => u.id)
     const fallbackLimit = 3 - popularUpdates.length
     
-    let fallbackQuery = supabase
+    let fallbackQuery: any = supabase
       .from('updates')
       .select(UPDATE_LIST_COLUMNS)
       .eq('hide_from_listings', false)

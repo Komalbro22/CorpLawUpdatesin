@@ -203,7 +203,7 @@ export default function UpdatesClient({
                                                     : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-navy dark:hover:text-white'
                                             }`}
                                         >
-                                            <span>{cat === 'INCOME_TAX' ? 'Income Tax' : cat}</span>
+                                            <span>{(cat as string) === 'INCOME_TAX' ? 'Income Tax' : cat}</span>
                                             <span
                                                 className={`tabular-nums py-0.5 px-2 rounded-md text-xs font-medium ${
                                                     isActive
