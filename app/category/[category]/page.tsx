@@ -14,7 +14,7 @@ import { formatDate } from '@/lib/utils'
 
 export const revalidate = 43200 // 12 hours
 
-const CATEGORIES = ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci', 'labour', 'ifsca', 'income-tax', 'cbdt']
+const CATEGORIES = ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci', 'labour', 'ifsca']
 
 const CATEGORY_FULL_NAMES: Record<string, string> = {
     mca: 'Ministry of Corporate Affairs',
@@ -761,8 +761,8 @@ export async function generateMetadata(
     if (rawCat === 'labour-law') {
         redirect('/category/labour')
     }
-    if (rawCat === 'cbdt') {
-        redirect('/category/income-tax')
+    if (rawCat === 'cbdt' || rawCat === 'income-tax') {
+        redirect('/category')
     }
     const cat = rawCat
     const categoryName = cat.toUpperCase()
@@ -854,8 +854,8 @@ export default async function CategoryPage({
         redirect('/category/labour')
     }
 
-    if (cat === 'cbdt') {
-        redirect('/category/income-tax')
+    if (cat === 'cbdt' || cat === 'income-tax') {
+        redirect('/category')
     }
 
     if (originalCat !== cat) {

@@ -8,7 +8,7 @@ import Pagination from '@/components/Pagination'
 import { UpdateListItem } from '@/types'
 import EmptyState from '@/components/EmptyState'
 
-const CATEGORIES = ['All', 'MCA', 'SEBI', 'RBI', 'INCOME_TAX', 'NCLT', 'IBC', 'FEMA', 'CCI', 'LABOUR', 'IFSCA'] as const
+const CATEGORIES = ['All', 'MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA', 'CCI', 'LABOUR', 'IFSCA'] as const
 
 interface UpdatesClientProps {
     paginatedUpdates: UpdateListItem[]
@@ -20,7 +20,7 @@ interface UpdatesClientProps {
 function parseCategoryParam(raw: string | null): string {
     if (!raw) return 'All'
     if (raw.toLowerCase() === 'income-tax' || raw.toLowerCase() === 'cbdt' || raw.toLowerCase() === 'income_tax') {
-        return 'INCOME_TAX'
+        return 'All'
     }
     const match = CATEGORIES.find(c => c !== 'All' && c.toLowerCase() === raw.toLowerCase())
     return match || 'All'
