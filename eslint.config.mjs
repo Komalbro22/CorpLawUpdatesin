@@ -22,7 +22,7 @@ const config = [
   {
     rules: {
       "@next/next/no-img-element": "warn",
-      "react-hooks/rules-of-hooks": "warn",
+      "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
       "react-hooks/set-state-in-effect": "warn",
       "react-hooks/purity": "warn",
