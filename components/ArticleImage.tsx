@@ -23,7 +23,7 @@ const REGULATOR_THEMES: Record<string, { bg: string; icon: typeof Building2; lab
 }
 
 export default function ArticleImage({ src, alt, category, priority = false, className = '' }: ArticleImageProps) {
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(!priority)
   const [imageSrc, setImageSrc] = useState(src)
 
   const catKey = category ? category.toUpperCase() : 'CORPORATE LAW'
@@ -53,7 +53,7 @@ export default function ArticleImage({ src, alt, category, priority = false, cla
 
   return (
     <div className={`relative w-full h-full bg-slate-100 dark:bg-slate-900 overflow-hidden ${className}`}>
-      {isLoading && (
+      {!priority && isLoading && (
         <div className="absolute inset-0 bg-slate-200 dark:bg-slate-800 animate-pulse z-10" />
       )}
 
@@ -65,6 +65,11 @@ export default function ArticleImage({ src, alt, category, priority = false, cla
         priority={priority}
         unoptimized={!optimizable}
         referrerPolicy="no-referrer"
+        ref={(img) => {
+          if (img?.complete && isLoading) {
+            setIsLoading(false)
+          }
+        }}
         onLoad={() => setIsLoading(false)}
         onError={() => {
           setIsLoading(false)
@@ -73,7 +78,7 @@ export default function ArticleImage({ src, alt, category, priority = false, cla
           }
         }}
         className={`object-cover object-center motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105 ${
-          isLoading ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'
+          !priority && isLoading ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'
         }`}
       />
     </div>

@@ -214,11 +214,11 @@ export default async function HomePage() {
       {/* High-Trust Editorial Navy Hero Banner */}
       <section className="relative w-full overflow-hidden bg-navy text-white py-8 md:py-12 border-b border-slate-800">
         <div
-          className="absolute -top-[40%] -left-[20%] w-[80%] h-[80%] rounded-full bg-amber-500/10 blur-[120px] pointer-events-none"
+          className="absolute -top-[40%] -left-[20%] w-[80%] h-[80%] rounded-full bg-amber-500/10 blur-3xl sm:blur-[120px] pointer-events-none transform-gpu"
           aria-hidden
         />
         <div
-          className="absolute -bottom-[40%] -right-[20%] w-[80%] h-[80%] rounded-full bg-blue-500/10 blur-[120px] pointer-events-none"
+          className="absolute -bottom-[40%] -right-[20%] w-[80%] h-[80%] rounded-full bg-blue-500/10 blur-3xl sm:blur-[120px] pointer-events-none transform-gpu"
           aria-hidden
         />
         <div
@@ -302,7 +302,7 @@ export default async function HomePage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {featuredUpdates.map((update: any, i: number) => (
-                <UpdateCard key={update.id} update={update} animationDelay={i * 80} priority={i < 3} />
+                <UpdateCard key={update.id} update={update} animationDelay={i * 80} priority={i === 0} />
               ))}
             </div>
           </section>
@@ -423,7 +423,7 @@ export default async function HomePage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-10">
               {latestUpdates.map((update: any, i: number) => (
-                <UpdateCard key={update.id} update={update} animationDelay={i * 60} priority={featuredUpdates.length === 0 && i < 3} />
+                <UpdateCard key={update.id} update={update} animationDelay={i * 60} priority={featuredUpdates.length === 0 && i === 0} />
               ))}
             </div>
             <div className="text-center sm:hidden">

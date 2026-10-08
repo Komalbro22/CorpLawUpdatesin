@@ -8,16 +8,13 @@ export const viewport: Viewport = {
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { ToastProvider } from '@/components/Toast'
-import BackToTop from '@/components/BackToTop'
 import HideOnAdmin from '@/components/HideOnAdmin'
 import AnnouncementBar from '@/components/AnnouncementBar'
 import Script from 'next/script'
 import JsonLd from '@/components/JsonLd'
 import TrackingScripts from '@/components/TrackingScripts'
 import ConsentGatedAnalytics from '@/components/ConsentGatedAnalytics'
-import CookieConsentBanner from '@/components/CookieConsentBanner'
-
-import WebMCPRegistry from '@/components/WebMCPRegistry'
+import ClientAuxiliary from '@/components/ClientAuxiliary'
 
 import ThemeScript from '@/components/ThemeScript'
 import { fontVariables } from '@/lib/fonts'
@@ -130,13 +127,7 @@ export default async function RootLayout({
           }}
         />
         <meta name="google-adsense-account" content="ca-pub-8404756575471756" />
-        <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8404756575471756"
-          crossOrigin="anonymous"
-        />
         <link rel="llms" href="/llms.txt" />
         <link rel="describedby" href="/llms.txt" type="text/markdown" />
         <link rel="webmcp" href="/.well-known/webmcp" type="application/json" />
@@ -223,14 +214,10 @@ export default async function RootLayout({
             {children}
           </main>
           <HideOnAdmin><Footer /></HideOnAdmin>
-          <HideOnAdmin><BackToTop /></HideOnAdmin>
-          <HideOnAdmin><WebMCPRegistry /></HideOnAdmin>
+          <HideOnAdmin><ClientAuxiliary /></HideOnAdmin>
         </ToastProvider>
         <HideOnAdmin>
           <ConsentGatedAnalytics />
-        </HideOnAdmin>
-        <HideOnAdmin>
-          <CookieConsentBanner />
         </HideOnAdmin>
 
         <Script
@@ -250,6 +237,14 @@ export default async function RootLayout({
           id="google-publisher-sdk"
           src="https://news.google.com/swg/js/v1/publisher.js"
           strategy="lazyOnload"
+          crossOrigin="anonymous"
+        />
+
+        {/* Google AdSense: Injected with strategy="afterInteractive" so mobile FCP paints instantly without blocking main thread, while remaining 100% visible and detectable to Google AdSense verification review crawlers */}
+        <Script
+          id="google-adsense"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8404756575471756"
+          strategy="afterInteractive"
           crossOrigin="anonymous"
         />
 
