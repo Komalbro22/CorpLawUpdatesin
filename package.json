@@ -1,6 +1,6 @@
 {
   "name": "corplawupdates",
-  "version": "2.51.49",
+  "version": "2.51.50",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -72,7 +72,16 @@
     "@xmldom/xmldom": "^0.8.15",
     "baseline-browser-mapping": "^2.11.28",
     "sharp": "^0.35.5",
-    "image-size": "^2.0.4"
+    "image-size": "^2.0.4",
+    "eslint-plugin-import": {
+      "eslint": "$eslint"
+    },
+    "eslint-plugin-jsx-a11y": {
+      "eslint": "$eslint"
+    },
+    "eslint-plugin-react": {
+      "eslint": "$eslint"
+    }
   },
   "allowScripts": {
     "@parcel/watcher@2.6.0": true,
