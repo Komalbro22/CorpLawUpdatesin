@@ -15,7 +15,7 @@ const config = [
       "*.d.ts",
       "jest.config.js",
       "postcss.config.mjs",
-      "tailwind.config.ts",
+      "tailwind.config.mts",
     ],
   },
   ...nextConfig,

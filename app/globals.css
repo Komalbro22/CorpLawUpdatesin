@@ -3,7 +3,7 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@config '../tailwind.config.ts';
+@config '../tailwind.config.mts';
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
