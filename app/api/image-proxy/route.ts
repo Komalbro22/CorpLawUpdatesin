@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import sharp from 'sharp'
 
 // Allowed image hostnames to prevent open-proxy / SSRF abuse
 const ALLOWED_HOSTS = new Set([
@@ -19,6 +20,7 @@ export const dynamic = 'force-dynamic'
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const targetUrl = searchParams.get('url')
+  const widthParam = searchParams.get('w')
 
   if (!targetUrl) {
     return NextResponse.json({ error: 'Missing url parameter' }, { status: 400 })
@@ -52,17 +54,57 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(new URL('/images/og-default.png', request.url))
     }
 
-    const contentType = response.headers.get('content-type') || 'image/jpeg'
-    const imageBuffer = await response.arrayBuffer()
+    const rawContentType = (response.headers.get('content-type') || 'image/jpeg').toLowerCase()
+    const imageBuffer = Buffer.from(await response.arrayBuffer())
 
-    return new Response(imageBuffer, {
-      status: 200,
-      headers: {
-        'Content-Type': contentType,
-        'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, stale-while-revalidate=86400, immutable',
-        'X-Content-Type-Options': 'nosniff',
-      },
-    })
+    // If SVG or non-raster, serve directly
+    if (rawContentType.includes('svg')) {
+      return new Response(imageBuffer, {
+        status: 200,
+        headers: {
+          'Content-Type': 'image/svg+xml',
+          'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, stale-while-revalidate=86400, immutable',
+          'X-Content-Type-Options': 'nosniff',
+        },
+      })
+    }
+
+    // Target width: default 720 for card thumbnails, max clamped between 100 and 1200
+    let targetWidth = 720
+    if (widthParam) {
+      const parsedW = parseInt(widthParam, 10)
+      if (!isNaN(parsedW) && parsedW >= 100 && parsedW <= 1200) {
+        targetWidth = parsedW
+      }
+    }
+
+    // Modern format WebP optimization with sharp
+    try {
+      const optimizedBuffer = await sharp(imageBuffer)
+        .resize({ width: targetWidth, withoutEnlargement: true })
+        .webp({ quality: 80, effort: 4 })
+        .toBuffer()
+
+      return new Response(optimizedBuffer, {
+        status: 200,
+        headers: {
+          'Content-Type': 'image/webp',
+          'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, stale-while-revalidate=86400, immutable',
+          'X-Content-Type-Options': 'nosniff',
+          'Vary': 'Accept',
+        },
+      })
+    } catch {
+      // Fallback to original buffer if sharp fails
+      return new Response(imageBuffer, {
+        status: 200,
+        headers: {
+          'Content-Type': rawContentType,
+          'Cache-Control': 'public, max-age=31536000, s-maxage=31536000, stale-while-revalidate=86400, immutable',
+          'X-Content-Type-Options': 'nosniff',
+        },
+      })
+    }
   } catch {
     return NextResponse.redirect(new URL('/images/og-default.png', request.url))
   }

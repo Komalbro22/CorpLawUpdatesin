@@ -35,7 +35,7 @@ export default function ArticleImage({ src, alt, category, priority = false, cla
   const theme = REGULATOR_THEMES[catKey] || { bg: 'from-navy via-slate-900 to-slate-950', icon: Newspaper, label: 'Corporate Law Update' }
   const IconComponent = theme.icon
 
-  const resolvedSrc = getProxiedImageUrl(src)
+  const resolvedSrc = getProxiedImageUrl(src, 720)
 
   if (!resolvedSrc || hasError) {
     return (

@@ -377,7 +377,7 @@ export default async function HomePage() {
                       </span>
                     </div>
                     {count > 0 ? (
-                      <span className="mt-2 text-[10px] font-semibold tabular-nums text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/80 px-2 py-0.5 rounded-full border border-slate-200/60 dark:border-slate-700/60">
+                      <span className="mt-2 text-[10px] font-semibold tabular-nums text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800/80 px-2 py-0.5 rounded-full border border-slate-200/60 dark:border-slate-700/60">
                         {count} updates
                       </span>
                     ) : (

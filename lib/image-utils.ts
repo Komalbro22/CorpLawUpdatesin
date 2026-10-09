@@ -16,7 +16,7 @@ export function canOptimizeImage(src: string): boolean {
   }
 }
 
-export function getProxiedImageUrl(src?: string | null): string | null {
+export function getProxiedImageUrl(src?: string | null, width?: number): string | null {
   if (!src || typeof src !== 'string') return null
   const trimmed = src.trim()
   if (!trimmed) return null
@@ -25,8 +25,9 @@ export function getProxiedImageUrl(src?: string | null): string | null {
   }
   try {
     const url = new URL(trimmed)
-    if (url.hostname === 'i.ibb.co') {
-      return `/api/image-proxy?url=${encodeURIComponent(trimmed)}`
+    if (url.hostname === 'i.ibb.co' || url.hostname.endsWith('.supabase.co')) {
+      const wQuery = width ? `&w=${width}` : ''
+      return `/api/image-proxy?url=${encodeURIComponent(trimmed)}${wQuery}`
     }
     return trimmed
   } catch {

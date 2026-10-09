@@ -416,3 +416,45 @@ describe('SEO-002: Knowledge Graph Persistent @id Identifiers', () => {
     expect(org.parentOrganization['@id']).toBe('https://www.corplawupdates.in/#organization')
   })
 })
+
+// ════════════════════════════════════════════════════════════════════════════
+// 11. CSP: Google Ad Traffic Quality iframe allowlisting
+// ════════════════════════════════════════════════════════════════════════════
+describe('CSP: Ad Traffic Quality iframe allowlisting', () => {
+  it('allows https://*.adtrafficquality.google in frame-src directive', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const nextConfig = require('../next.config.js')
+    const headers = await nextConfig.headers()
+    const rootHeader = headers.find((h: any) => h.source === '/(.*)')
+    const csp = rootHeader.headers.find((h: any) => h.key === 'Content-Security-Policy')?.value
+
+    expect(csp).toBeDefined()
+    expect(csp).toContain('frame-src')
+    expect(csp).toMatch(/frame-src[^;]*https:\/\/\*\.adtrafficquality\.google/)
+  })
+})
+
+// ════════════════════════════════════════════════════════════════════════════
+// 12. PERF: Image proxy URL helper with width parameter
+// ════════════════════════════════════════════════════════════════════════════
+describe('PERF: Image Proxy optimization helper', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { getProxiedImageUrl } = require('../lib/image-utils')
+
+  it('proxies i.ibb.co images and appends width query parameter', () => {
+    const raw = 'https://i.ibb.co/xyz/sample.jpg'
+    const proxied = getProxiedImageUrl(raw, 720)
+    expect(proxied).toBe('/api/image-proxy?url=https%3A%2F%2Fi.ibb.co%2Fxyz%2Fsample.jpg&w=720')
+  })
+
+  it('proxies supabase storage images and appends width parameter', () => {
+    const raw = 'https://fcosrsznbxedischtbwe.supabase.co/storage/v1/object/public/updates/image.png'
+    const proxied = getProxiedImageUrl(raw, 400)
+    expect(proxied).toContain('/api/image-proxy?url=')
+    expect(proxied).toContain('&w=400')
+  })
+
+  it('returns local relative paths untouched', () => {
+    expect(getProxiedImageUrl('/images/logo.png')).toBe('/images/logo.png')
+  })
+})
