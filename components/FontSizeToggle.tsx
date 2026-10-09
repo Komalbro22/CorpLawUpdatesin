@@ -52,9 +52,9 @@ export default function FontSizeToggle() {
   }
 
   const buttonLabels: Record<FontSize, string> = {
-    sm: 'Small font size',
-    md: 'Medium font size',
-    lg: 'Large font size',
+    sm: 'A- (Small font size)',
+    md: 'A (Medium font size)',
+    lg: 'A+ (Large font size)',
   }
 
   return (

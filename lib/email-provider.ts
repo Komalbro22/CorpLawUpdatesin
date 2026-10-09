@@ -12,6 +12,7 @@ export interface SingleEmailOptions {
     to: string
     subject: string
     html: string
+    text?: string
     from?: string
     fromName?: string
     replyTo?: string
@@ -132,6 +133,7 @@ async function sendViaBrevoApi(options: SingleEmailOptions): Promise<SendResult>
             to: [{ email: options.to.trim() }],
             subject: options.subject,
             htmlContent: options.html,
+            ...(options.text ? { textContent: options.text } : {}),
         }
 
         if (options.replyTo) {
@@ -307,6 +309,7 @@ async function sendViaBrevoSmtp(options: SingleEmailOptions): Promise<SendResult
             to: options.to.trim(),
             subject: options.subject,
             html: options.html,
+            ...(options.text ? { text: options.text } : {}),
             replyTo: options.replyTo?.trim(),
         })
 
@@ -422,6 +425,7 @@ async function sendViaResend(options: SingleEmailOptions): Promise<SendResult> {
             to: options.to,
             subject: options.subject,
             html: options.html,
+            ...(options.text ? { text: options.text } : {}),
             replyTo: options.replyTo,
         })
 

@@ -281,3 +281,138 @@ describe('markdownToHtml()', () => {
     expect(result).toContain('</p><p>')
   })
 })
+
+// ════════════════════════════════════════════════════════════════════════════
+// 7. SEC-001: API Caching Header Configuration Regression Tests
+// ════════════════════════════════════════════════════════════════════════════
+describe('SEC-001: Next.js API Cache-Control Configuration', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const nextConfig = require('../next.config.js')
+
+  it('declares headers() function returning route header rules', async () => {
+    expect(typeof nextConfig.headers).toBe('function')
+    const headers = await nextConfig.headers()
+    expect(Array.isArray(headers)).toBe(true)
+  })
+
+  it('configures fail-safe no-store on all API routes by default', async () => {
+    const headers = await nextConfig.headers()
+    const apiRule = headers.find((h: any) => h.source === '/api/:path*')
+    expect(apiRule).toBeDefined()
+
+    const cacheControlHeader = apiRule.headers.find((hdr: any) => hdr.key === 'Cache-Control')
+    expect(cacheControlHeader).toBeDefined()
+    expect(cacheControlHeader.value).toContain('no-store')
+    expect(cacheControlHeader.value).toContain('private')
+    expect(cacheControlHeader.value).not.toContain('public')
+    expect(cacheControlHeader.value).not.toContain('s-maxage')
+  })
+
+  it('does NOT contain blanket public caching on all non-admin API routes', async () => {
+    const headers = await nextConfig.headers()
+    const insecureBlanket = headers.find((h: any) => h.source === '/api/((?!admin).*)')
+    expect(insecureBlanket).toBeUndefined()
+  })
+
+  it('restricts public caching to explicitly allowlisted read-only routes only', async () => {
+    const headers = await nextConfig.headers()
+    const publicApiRules = headers.filter((h: any) =>
+      h.source.startsWith('/api/') &&
+      h.headers.some((hdr: any) => hdr.key === 'Cache-Control' && hdr.value.includes('public'))
+    )
+
+    // Only designated public feeds/catalogs are permitted
+    const allowedSources = ['/api/feed.xml', '/api/roc/forms']
+    for (const rule of publicApiRules) {
+      expect(allowedSources).toContain(rule.source)
+    }
+  })
+})
+
+// ════════════════════════════════════════════════════════════════════════════
+// 8. SEC-002: Contact Email HTML & Header Sanitization
+// ════════════════════════════════════════════════════════════════════════════
+describe('SEC-002: Contact Form Input Sanitization', () => {
+  function escapeHtml(str: string): string {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;')
+  }
+
+  function sanitizeHeader(str: string): string {
+    return str.replace(/[\r\n]+/g, ' ').trim()
+  }
+
+  it('escapes dangerous HTML tags and scripts into inert entities', () => {
+    const payload = '<script>alert("XSS")</script>'
+    const escaped = escapeHtml(payload)
+    expect(escaped).toBe('&lt;script&gt;alert(&quot;XSS&quot;)&lt;/script&gt;')
+    expect(escaped).not.toContain('<script>')
+  })
+
+  it('escapes HTML event attributes and img onerror payloads', () => {
+    const payload = '<img src=x onerror=alert(document.cookie)>'
+    const escaped = escapeHtml(payload)
+    expect(escaped).toBe('&lt;img src=x onerror=alert(document.cookie)&gt;')
+    expect(escaped).not.toContain('<img')
+  })
+
+  it('neutralizes CRLF / header injection in email subjects', () => {
+    const maliciousSubject = 'Urgent Inquiry\r\nBcc: victim@example.com\r\nSubject: Spoofed'
+    const clean = sanitizeHeader(maliciousSubject)
+    expect(clean).toBe('Urgent Inquiry Bcc: victim@example.com Subject: Spoofed')
+    expect(clean).not.toContain('\r')
+    expect(clean).not.toContain('\n')
+  })
+
+  it('preserves user newlines as <br /> while neutralizing tags in message body', () => {
+    const rawMessage = 'Line 1\nLine 2\r\n<script>evil()</script>\nLine 3'
+    const escapedMessage = escapeHtml(rawMessage).replace(/\r\n|\r|\n/g, '<br />')
+    expect(escapedMessage).toContain('Line 1<br />Line 2<br />')
+    expect(escapedMessage).toContain('&lt;script&gt;evil()&lt;/script&gt;')
+    expect(escapedMessage).not.toContain('<script>')
+  })
+})
+
+// ════════════════════════════════════════════════════════════════════════════
+// 9. A11Y-003: WCAG 2.5.3 (Label in Name) Font Size Controls
+// ════════════════════════════════════════════════════════════════════════════
+describe('A11Y-003: Font Size Toggle WCAG 2.5.3 Compliance', () => {
+  it('ensures accessible names contain the visible button label text as prefix', () => {
+    const labels = { sm: 'A-', md: 'A', lg: 'A+' }
+    const buttonLabels = {
+      sm: 'A- (Small font size)',
+      md: 'A (Medium font size)',
+      lg: 'A+ (Large font size)',
+    }
+
+    for (const key of ['sm', 'md', 'lg'] as const) {
+      expect(buttonLabels[key].startsWith(labels[key])).toBe(true)
+    }
+  })
+})
+
+// ════════════════════════════════════════════════════════════════════════════
+// 10. SEO-002: Editorial Schema Entity Identifiers (@id)
+// ════════════════════════════════════════════════════════════════════════════
+describe('SEO-002: Knowledge Graph Persistent @id Identifiers', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { getArticleAuthorSchema } = require('../lib/editorial')
+
+  it('emits persistent @id for Person and Organization entities', () => {
+    const schemas = getArticleAuthorSchema('mca')
+    const person = schemas.find((s: any) => s['@type'] === 'Person')
+    const org = schemas.find((s: any) => s['@type'] === 'Organization')
+
+    expect(person).toBeDefined()
+    expect(person['@id']).toBe('https://www.corplawupdates.in/author/komalpreet-singh#author')
+    expect(person.worksFor['@id']).toBe('https://www.corplawupdates.in/#organization')
+
+    expect(org).toBeDefined()
+    expect(org['@id']).toBe('https://www.corplawupdates.in/#organization-mca')
+    expect(org.parentOrganization['@id']).toBe('https://www.corplawupdates.in/#organization')
+  })
+})

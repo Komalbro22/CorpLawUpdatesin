@@ -77,25 +77,58 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Email service unavailable' }, { status: 503 })
     }
 
-    const safeName = String(name).trim().slice(0, 200)
-    const safeSubject = String(subject).trim().slice(0, 200)
-    const safeMessage = String(message).trim().slice(0, 5000)
+    function escapeHtml(str: string): string {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+    }
+
+    function sanitizeHeader(str: string): string {
+      return str.replace(/[\r\n]+/g, ' ').trim()
+    }
+
+    const rawName = String(name).trim().slice(0, 200)
+    const rawSubject = String(subject).trim().slice(0, 200)
+    const rawMessage = String(message).trim().slice(0, 5000)
+
+    const cleanSubject = sanitizeHeader(rawSubject)
+    const escapedName = escapeHtml(rawName)
+    const escapedEmail = escapeHtml(email)
+    const escapedSubject = escapeHtml(cleanSubject)
+    const escapedMessage = escapeHtml(rawMessage).replace(/\r\n|\r|\n/g, '<br />')
+
+    const plainText = [
+      'New Contact Inquiry - CorpLawUpdates.in',
+      '----------------------------------------',
+      `Name:    ${rawName}`,
+      `Email:   ${email}`,
+      `Subject: ${cleanSubject}`,
+      '',
+      'Message:',
+      rawMessage,
+    ].join('\n')
+
+    const htmlBody = `<div style="font-family:sans-serif;line-height:1.6;color:#333;max-width:600px;margin:0 auto;padding:20px;border:1px solid #eee;border-radius:8px;">
+      <h3 style="color:#1e293b;margin-top:0;">New Contact Message</h3>
+      <p><strong>Name:</strong> ${escapedName}</p>
+      <p><strong>Email:</strong> <a href="mailto:${escapedEmail}" style="color:#2563eb;">${escapedEmail}</a></p>
+      <p><strong>Subject:</strong> ${escapedSubject}</p>
+      <hr style="border:none;border-top:1px solid #eee;margin:16px 0;">
+      <p><strong>Message:</strong></p>
+      <div style="background:#f8fafc;padding:12px;border-radius:6px;word-break:break-word;font-size:14px;line-height:1.6;">${escapedMessage}</div>
+    </div>`
 
     const sendRes = await sendEmail({
       from: fromEmail,
       fromName,
       to: toEmail,
       replyTo: email,
-      subject: `[Contact] ${safeSubject}`,
-      html: `<div style="font-family:sans-serif;line-height:1.6;color:#333;">
-        <h3>New Contact Message</h3>
-        <p><strong>Name:</strong> ${safeName}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Subject:</strong> ${safeSubject}</p>
-        <hr style="border:none;border-top:1px solid #eee;margin:16px 0;">
-        <p><strong>Message:</strong></p>
-        <p style="white-space:pre-wrap;background:#f8fafc;padding:12px;border-radius:6px;">${safeMessage}</p>
-      </div>`,
+      subject: `[Contact] ${cleanSubject}`,
+      html: htmlBody,
+      text: plainText,
     })
 
     if (!sendRes.success) {

@@ -363,6 +363,18 @@ export default function MarkdownRenderer({
                 wrapper.appendChild(table)
             }
         })
+
+        // Normalize any malformed lists (ensuring ul/ol have only li children for WCAG 1.3.1)
+        const allLists = ref.current.querySelectorAll('ul, ol')
+        allLists.forEach((list) => {
+            Array.from(list.children).forEach((child) => {
+                if (child.tagName.toLowerCase() !== 'li') {
+                    const li = document.createElement('li')
+                    child.parentNode?.insertBefore(li, child)
+                    li.appendChild(child)
+                }
+            })
+        })
     }, [content])
 
 

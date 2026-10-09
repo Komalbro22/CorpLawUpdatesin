@@ -80,19 +80,31 @@ const nextConfig = {
           { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
         ],
       },
+      // SEC-001: Default fail-closed policy for all API routes (sensitive, mutating, or authenticated)
       {
-        source: '/api/admin/:path*',
+        source: '/api/:path*',
         headers: [
           { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, private' },
           { key: 'Pragma', value: 'no-cache' },
+          { key: 'Expires', value: '0' },
         ],
       },
+      // Explicitly allowlist safe, public, read-only syndicated feeds and catalogs
       {
-        source: '/api/((?!admin).*)',
+        source: '/api/feed.xml',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=300, s-maxage=1800, stale-while-revalidate=86400',
+            value: 'public, max-age=3600, s-maxage=7200, stale-while-revalidate=86400',
+          },
+        ],
+      },
+      {
+        source: '/api/roc/forms',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800',
           },
         ],
       },

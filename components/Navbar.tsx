@@ -40,6 +40,7 @@ import {
     Wrench,
     X,
     Bookmark,
+    Search,
 } from 'lucide-react'
 
 const links = [
@@ -186,7 +187,7 @@ export default function Navbar() {
                                     }
                                 }}
                                 aria-expanded={categoriesOpen}
-                                aria-controls="category-dropdown-menu"
+                                aria-controls={categoriesOpen ? "category-dropdown-menu" : undefined}
                                 aria-haspopup="true"
                                 aria-label="Browse regulatory categories"
                                 className={`relative flex items-center gap-1 text-sm font-medium transition-all duration-200 focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-md px-3 py-2 ${
@@ -250,7 +251,18 @@ export default function Navbar() {
 
                     {/* Mobile header controls */}
                     <div className="flex items-center gap-2 md:hidden">
-                        <GlobalSearch />
+                        <button
+                            type="button"
+                            onClick={() => {
+                                if (typeof window !== 'undefined') {
+                                    window.dispatchEvent(new CustomEvent('cluin-open-search'))
+                                }
+                            }}
+                            aria-label="Open search"
+                            className="flex size-10 items-center justify-center rounded-xl border border-slate-200/90 dark:border-slate-800/90 bg-slate-100/90 dark:bg-slate-800/90 text-slate-700 dark:text-slate-200 shadow-xs hover:bg-slate-200 dark:hover:bg-slate-700 focus:outline-hidden focus:ring-2 focus:ring-amber-400 transition-all"
+                        >
+                            <Search className="size-4.5" aria-hidden="true" />
+                        </button>
                         <button
                             onClick={() => setIsOpen(!isOpen)}
                             className="flex size-10 items-center justify-center rounded-xl border border-slate-200/90 dark:border-slate-800/90 bg-slate-100/90 dark:bg-slate-800/90 text-slate-800 dark:text-white shadow-xs hover:bg-slate-200 dark:hover:bg-slate-700 focus:outline-hidden focus:ring-2 focus:ring-amber-400 transition-all"

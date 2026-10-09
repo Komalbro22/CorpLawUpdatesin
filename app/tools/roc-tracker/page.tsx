@@ -833,10 +833,12 @@ export default function ROCTrackerPage() {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5">
+                  <label htmlFor="roc-company-name" className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5">
                     Company Name
                   </label>
-                  <input type="text"
+                  <input
+                    id="roc-company-name"
+                    type="text"
                     value={profile.companyName || ''}
                     onChange={e => setProfile(p => ({
                       ...p, companyName: e.target.value
@@ -846,10 +848,12 @@ export default function ROCTrackerPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5">
+                  <label htmlFor="roc-cin" className="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1.5">
                     CIN (Corporate Identity Number)
                   </label>
-                  <input type="text"
+                  <input
+                    id="roc-cin"
+                    type="text"
                     value={profile.cin || ''}
                     onChange={e => setProfile(p => ({
                       ...p, cin: e.target.value
@@ -1073,6 +1077,7 @@ export default function ROCTrackerPage() {
                         disabled={csMandatory}
                         checked={csMandatory ? true : (profile.hasCS || false)}
                         onChange={e => setProfile(p => ({ ...p, hasCS: e.target.checked }))}
+                        aria-label="Appointed Whole-time Company Secretary (CS)"
                         className="w-4 h-4 accent-amber-400 disabled:opacity-50 cursor-pointer"
                       />
                     </div>
@@ -1091,6 +1096,7 @@ export default function ROCTrackerPage() {
                         type="checkbox"
                         checked={profile.isListed || false}
                         onChange={e => setProfile(p => ({ ...p, isListed: e.target.checked }))}
+                        aria-label="Listed on stock exchange"
                         className="w-4 h-4 accent-amber-400 cursor-pointer"
                       />
                     </div>
@@ -1116,6 +1122,7 @@ export default function ROCTrackerPage() {
                             setIsSmallCompanyManual(false)
                           }
                         }}
+                        aria-label="Has Subsidiaries, Joint Ventures, or Associates"
                         className="w-4 h-4 accent-amber-400 cursor-pointer"
                       />
                     </div>
@@ -1134,6 +1141,7 @@ export default function ROCTrackerPage() {
                         type="checkbox"
                         checked={profile.hasOfficeChange || false}
                         onChange={e => setProfile(p => ({ ...p, hasOfficeChange: e.target.checked }))}
+                        aria-label="Has changed registered office"
                         className="w-4 h-4 accent-amber-400 cursor-pointer"
                       />
                     </div>
@@ -1152,6 +1160,7 @@ export default function ROCTrackerPage() {
                         type="checkbox"
                         checked={profile.hasDirectorChange || false}
                         onChange={e => setProfile(p => ({ ...p, hasDirectorChange: e.target.checked }))}
+                        aria-label="Has changed directors or Key Managerial Personnel"
                         className="w-4 h-4 accent-amber-400 cursor-pointer"
                       />
                     </div>
@@ -1170,6 +1179,7 @@ export default function ROCTrackerPage() {
                         type="checkbox"
                         checked={profile.hasAuditorAppointment || false}
                         onChange={e => setProfile(p => ({ ...p, hasAuditorAppointment: e.target.checked }))}
+                        aria-label="Has appointed statutory auditor"
                         className="w-4 h-4 accent-amber-400 cursor-pointer"
                       />
                     </div>
@@ -1188,6 +1198,7 @@ export default function ROCTrackerPage() {
                         type="checkbox"
                         checked={profile.hasAuditorResignation || false}
                         onChange={e => setProfile(p => ({ ...p, hasAuditorResignation: e.target.checked }))}
+                        aria-label="Has statutory auditor resigned"
                         className="w-4 h-4 accent-amber-400 cursor-pointer"
                       />
                     </div>
@@ -1206,6 +1217,7 @@ export default function ROCTrackerPage() {
                         type="checkbox"
                         checked={profile.hasBooksOtherPlace || false}
                         onChange={e => setProfile(p => ({ ...p, hasBooksOtherPlace: e.target.checked }))}
+                        aria-label="Keeps books of accounts at other place"
                         className="w-4 h-4 accent-amber-400 cursor-pointer"
                       />
                     </div>
@@ -1224,6 +1236,7 @@ export default function ROCTrackerPage() {
                         type="checkbox"
                         checked={profile.hasDirectorInterest || false}
                         onChange={e => setProfile(p => ({ ...p, hasDirectorInterest: e.target.checked }))}
+                        aria-label="Directors have interest disclosures (Form MBP-1)"
                         className="w-4 h-4 accent-amber-400 cursor-pointer"
                       />
                     </div>
@@ -1251,6 +1264,7 @@ export default function ROCTrackerPage() {
                         type="checkbox"
                         checked={profile.hasDeposits || false}
                         onChange={e => setProfile(p => ({ ...p, hasDeposits: e.target.checked }))}
+                        aria-label="Outstanding Member or Director Loans (Form DPT-3)"
                         className="w-4 h-4 accent-amber-400 cursor-pointer"
                       />
                     </div>
@@ -1269,6 +1283,7 @@ export default function ROCTrackerPage() {
                         type="checkbox"
                         checked={profile.hasPublicDeposits || false}
                         onChange={e => setProfile(p => ({ ...p, hasPublicDeposits: e.target.checked }))}
+                        aria-label="Accepted Public Deposits"
                         className="w-4 h-4 accent-amber-400 cursor-pointer"
                       />
                     </div>
@@ -1287,6 +1302,7 @@ export default function ROCTrackerPage() {
                         type="checkbox"
                         checked={profile.hasMSMEDues || false}
                         onChange={e => setProfile(p => ({ ...p, hasMSMEDues: e.target.checked }))}
+                        aria-label="Outstanding MSME supplier dues exceeding 45 days"
                         className="w-4 h-4 accent-amber-400 cursor-pointer"
                       />
                     </div>
@@ -1314,6 +1330,7 @@ export default function ROCTrackerPage() {
                         type="checkbox"
                         checked={profile.hasForeignShareholders || false}
                         onChange={e => setProfile(p => ({ ...p, hasForeignShareholders: e.target.checked }))}
+                        aria-label="Has Foreign Shareholders or Directors (RBI FLA)"
                         className="w-4 h-4 accent-amber-400 cursor-pointer"
                       />
                     </div>
@@ -1332,6 +1349,7 @@ export default function ROCTrackerPage() {
                         type="checkbox"
                         checked={profile.hasSBO || false}
                         onChange={e => setProfile(p => ({ ...p, hasSBO: e.target.checked }))}
+                        aria-label="Has Significant Beneficial Ownership (SBO) Declarations"
                         className="w-4 h-4 accent-amber-400 cursor-pointer"
                       />
                     </div>
@@ -1350,6 +1368,7 @@ export default function ROCTrackerPage() {
                         type="checkbox"
                         checked={profile.hasShareAllotment || false}
                         onChange={e => setProfile(p => ({ ...p, hasShareAllotment: e.target.checked }))}
+                        aria-label="Has allotted shares (Form PAS-3)"
                         className="w-4 h-4 accent-amber-400 cursor-pointer"
                       />
                     </div>
@@ -1368,6 +1387,7 @@ export default function ROCTrackerPage() {
                         type="checkbox"
                         checked={profile.hasCapitalChange || false}
                         onChange={e => setProfile(p => ({ ...p, hasCapitalChange: e.target.checked }))}
+                        aria-label="Has changed or increased share capital (Form SH-7)"
                         className="w-4 h-4 accent-amber-400 cursor-pointer"
                       />
                     </div>
@@ -1396,6 +1416,7 @@ export default function ROCTrackerPage() {
                         disabled={xbrlMandatory}
                         checked={xbrlMandatory ? true : (profile.isXBRL || false)}
                         onChange={e => setProfile(p => ({ ...p, isXBRL: e.target.checked }))}
+                        aria-label="XBRL filing format required"
                         className="w-4 h-4 accent-amber-400 disabled:opacity-50 cursor-pointer"
                       />
                     </div>
@@ -1414,6 +1435,7 @@ export default function ROCTrackerPage() {
                         type="checkbox"
                         checked={profile.hasResolutions || false}
                         onChange={e => setProfile(p => ({ ...p, hasResolutions: e.target.checked }))}
+                        aria-label="Passed board or special resolutions (Form MGT-14)"
                         className="w-4 h-4 accent-amber-400 cursor-pointer"
                       />
                     </div>

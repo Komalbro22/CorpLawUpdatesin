@@ -393,7 +393,7 @@ export default async function AuthorProfilePage() {
           {updatesList.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {updatesList.map((item, idx) => (
-                <UpdateCard key={item.id} update={item} showExcerpt={false} animationDelay={idx * 50} />
+                <UpdateCard key={item.id} update={item} showExcerpt={false} animationDelay={idx * 50} priority={idx === 0} />
               ))}
             </div>
           ) : (

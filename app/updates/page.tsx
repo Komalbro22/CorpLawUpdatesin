@@ -184,6 +184,7 @@ export default async function UpdatesPage({
         },
         publisher: {
             '@type': 'Organization',
+            '@id': 'https://www.corplawupdates.in/#organization',
             name: 'CorpLawUpdates.in',
             url: 'https://www.corplawupdates.in',
             logo: {

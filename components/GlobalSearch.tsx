@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import Link from 'next/link'
 
 const RECENT_SEARCHES_KEY = 'cluin-recent-searches'
@@ -18,6 +19,12 @@ interface SearchResult {
   url: string
 }
 
+export function openGlobalSearch() {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('cluin-open-search'))
+  }
+}
+
 export default function GlobalSearch() {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<SearchResult[]>([])
@@ -26,12 +33,15 @@ export default function GlobalSearch() {
   const [category, setCategory] = useState('')
   const [type, setType] = useState('all')
   const [isMac, setIsMac] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const [recentSearches, setRecentSearches] = useState<string[]>([])
   const inputRef = useRef<HTMLInputElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const dialogRef = useRef<HTMLDivElement>(null)
+  const previouslyFocusedElement = useRef<HTMLElement | null>(null)
 
   useEffect(() => {
+    setMounted(true)
     setIsMac(/Mac|iPhone|iPad/.test(navigator.userAgent))
     try {
       const stored = localStorage.getItem(RECENT_SEARCHES_KEY)
@@ -40,7 +50,23 @@ export default function GlobalSearch() {
   }, [])
 
   useEffect(() => {
-    if (!open) return
+    function handleOpenEvent() {
+      previouslyFocusedElement.current = document.activeElement as HTMLElement
+      setOpen(true)
+      setTimeout(() => inputRef.current?.focus(), 100)
+    }
+    window.addEventListener('cluin-open-search', handleOpenEvent)
+    return () => window.removeEventListener('cluin-open-search', handleOpenEvent)
+  }, [])
+
+  useEffect(() => {
+    if (!open) {
+      if (previouslyFocusedElement.current) {
+        previouslyFocusedElement.current.focus()
+        previouslyFocusedElement.current = null
+      }
+      return
+    }
     document.body.style.overflow = 'hidden'
     const timer = setTimeout(() => inputRef.current?.focus(), 50)
 
@@ -203,7 +229,8 @@ export default function GlobalSearch() {
       
       {/* Search trigger button */}
       <button
-        onClick={() => {
+        onClick={(e) => {
+          previouslyFocusedElement.current = e.currentTarget
           setOpen(true)
           setTimeout(() => 
             inputRef.current?.focus(), 100
@@ -230,8 +257,8 @@ export default function GlobalSearch() {
         </kbd>
       </button>
 
-      {/* Search modal */}
-      {open && (
+      {/* Search modal rendered in Portal */}
+      {mounted && open && typeof document !== 'undefined' && createPortal(
         <div
           className="fixed inset-0 z-50 bg-black/40 flex items-start justify-center pt-3 sm:pt-20 px-3 sm:px-4"
           role="presentation"
@@ -443,7 +470,8 @@ export default function GlobalSearch() {
               )}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   )

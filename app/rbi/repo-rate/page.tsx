@@ -228,11 +228,12 @@ export default async function RepoRatePage() {
     },
     publisher: {
       '@type': 'Organization',
+      '@id': 'https://www.corplawupdates.in/#organization',
       name: 'CorpLawUpdates.in',
       url: 'https://www.corplawupdates.in',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://www.corplawupdates.in/icon-512.png'
+        url: 'https://www.corplawupdates.in/icon.png'
       }
     }
   }
@@ -253,6 +254,7 @@ export default async function RepoRatePage() {
     },
     publisher: {
       '@type': 'Organization',
+      '@id': 'https://www.corplawupdates.in/#organization',
       name: 'CorpLawUpdates.in',
       url: 'https://www.corplawupdates.in'
     },

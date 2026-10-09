@@ -90,6 +90,23 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
     {
+      '@type': 'WebSite',
+      '@id': 'https://www.corplawupdates.in/#website',
+      url: 'https://www.corplawupdates.in',
+      name: 'CorpLawUpdates.in',
+      description: 'Corporate Law & Regulatory Intelligence for India',
+      publisher: {
+        '@type': 'Organization',
+        '@id': 'https://www.corplawupdates.in/#organization',
+        name: 'CorpLawUpdates.in',
+        url: 'https://www.corplawupdates.in',
+        logo: {
+          '@type': 'ImageObject',
+          url: 'https://www.corplawupdates.in/icon.png',
+        },
+      },
+    },
+    {
       '@type': 'WebPage',
       '@id': `${pageUrl}#webpage`,
       url: pageUrl,
@@ -114,6 +131,7 @@ const jsonLd = {
         'Companies Act, 2013, Section 56; Companies (Share Capital and Debentures) Rules, 2014, Rule 11; Indian Stamp Act, 1899',
       publisher: {
         '@type': 'Organization',
+        '@id': 'https://www.corplawupdates.in/#organization',
         name: 'CorpLawUpdates.in',
         url: 'https://www.corplawupdates.in',
       },

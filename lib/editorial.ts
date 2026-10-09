@@ -173,23 +173,27 @@ export function getArticleAuthorSchema(category?: string | null) {
   return [
     {
       '@type': 'Person' as const,
+      '@id': `${BASE_URL}/author/komalpreet-singh#author`,
       name: EDITORIAL_LEAD.name,
       jobTitle: EDITORIAL_LEAD.role,
       url: EDITORIAL_LEAD.url,
       worksFor: {
         '@type': 'Organization' as const,
+        '@id': `${BASE_URL}/#organization`,
         name: 'CorpLawUpdates.in',
         url: BASE_URL,
       },
     },
     {
       '@type': 'Organization' as const,
+      '@id': `${BASE_URL}/#organization-${category ? category.toLowerCase() : 'editorial'}`,
       name: desk.name,
       url: desk.url,
       description: desk.description,
       email: desk.email,
       parentOrganization: {
         '@type': 'Organization' as const,
+        '@id': `${BASE_URL}/#organization`,
         name: 'CorpLawUpdates.in',
         url: BASE_URL,
         sameAs: [
