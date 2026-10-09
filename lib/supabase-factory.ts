@@ -56,8 +56,8 @@ export function getSupabaseAdminClient(): SupabaseClient {
 export function getSupabaseDocumentsClient(): SupabaseClient | null {
   if (documentsAnonInstance) return documentsAnonInstance
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  const url = process.env.NEXT_PUBLIC_SUPABASE2_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.NEXT_PUBLIC_SUPABASE2_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
   if (!url || !key) return null
 

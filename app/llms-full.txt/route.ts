@@ -36,6 +36,7 @@ export async function GET() {
 - Tools Directory: ${BASE_URL}/tools
 - Document Generator: ${BASE_URL}/documents
 - ROC Fee Calculator: ${BASE_URL}/tools/fee-calculator
+- RBI Repo Rate Tracker: ${BASE_URL}/rbi/repo-rate
 
 ## Regulatory Categories
 - Ministry of Corporate Affairs (MCA): ${BASE_URL}/category/mca

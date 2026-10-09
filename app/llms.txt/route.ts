@@ -57,7 +57,7 @@ ${updatesList}
 - [Form SH-7 Share Capital Alteration Fee Calculator](${BASE_URL}/tools/fee-calculator/companies/sh-7): Calculate Form SH-7 statutory fees, incremental capital registration fee slabs, state stamp duty on MOA, Table B late multipliers, and Section 64(2) adjudication penalties.
 - [Form MGT-14 Resolutions Filing & Late Fee Calculator](${BASE_URL}/tools/fee-calculator/companies/mgt-14): Calculate Form MGT-14 statutory fees, Table B delay multipliers (2× to 12×), IFSC 60-day deadlines, Section 117(2) adjudication penalties, Section 446B relief, and 300-day condonation rules.
 - [LLP Fee Calculator](${BASE_URL}/tools/fee-calculator/llp): Calculator for LLP Form 8 and Form 11 late additional fees and Section 34/35 penalties.
-- [RBI Repo Rate Tracker](${BASE_URL}/tools/repo-rate): Live tracker for RBI Repo Rate, SDF, MSF, and MPC monetary policy statements.
+- [RBI Repo Rate Tracker](${BASE_URL}/rbi/repo-rate): Live tracker for RBI Repo Rate, SDF, MSF, and MPC monetary policy statements.
 - [AI Agent Hub & WebMCP Guide](${BASE_URL}/mcp): Developer & AI agent integration hub for WebMCP tools.
 
 ## AI Agent & WebMCP Tools (Machine-Callable APIs)

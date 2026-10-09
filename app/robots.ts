@@ -55,7 +55,7 @@ export default function robots(): MetadataRoute.Robots {
       ...aiRules,
       {
         userAgent: '*',
-        allow: ['/', '/api/og', '/api/feed.xml'],
+        allow: ['/', '/api/og', '/api/feed.xml', '/api/image-proxy'],
         disallow: [
           '/api/',
           '/admin/',

@@ -151,6 +151,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/tools/repo-rate',
+        destination: '/rbi/repo-rate',
+        permanent: true,
+      },
+      {
         source: '/documents/board-resolution-dividend',
         destination: '/documents/board-resolution-for-dividend-declaration',
         permanent: true,
