@@ -12,11 +12,13 @@ module.exports = {
     // Mock heavy server-only third-party packages
     '^resend$': '<rootDir>/__tests__/__mocks__/resend.ts',
   },
+  transformIgnorePatterns: ['node_modules/(?!(svix|htmlparser2|dom-serializer|entities|domhandler|domutils|domelementtype)/)'],
   transform: {
-    '^.+\\.tsx?$': ['ts-jest', {
+    '^.+\\.(tsx?|mjs|jsx?)$': ['ts-jest', {
       tsconfig: {
         strict: false,
         esModuleInterop: true,
+        allowJs: true,
         paths: { '@/*': ['./*'] },
         rootDir: '.',
       },

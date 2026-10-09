@@ -26,11 +26,12 @@ export async function POST(request: NextRequest) {
 
     try {
         const wh = new Webhook(webhookSecret)
-        event = wh.verify(payload, {
+        const verifiedResult = wh.verify(payload, {
             'svix-id': msgId,
             'svix-timestamp': timestamp,
             'svix-signature': signature,
         })
+        event = verifiedResult || JSON.parse(payload)
     } catch (err: any) {
         console.error('Webhook verification failed:', err.message)
         return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
