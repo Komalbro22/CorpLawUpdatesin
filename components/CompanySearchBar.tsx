@@ -105,7 +105,7 @@ export default function CompanySearchBar({
           onFocus={() => query.trim().length >= 2 && setIsOpen(true)}
           placeholder={placeholder}
           autoFocus={autoFocus}
-          className={`w-full bg-transparent px-3 text-navy dark:text-white font-medium focus:outline-none placeholder:text-slate-400 ${isLarge ? 'text-base md:text-lg' : 'text-sm'}`}
+          className={`w-full bg-transparent px-3 text-navy dark:text-white font-medium focus:outline-hidden placeholder:text-slate-400 ${isLarge ? 'text-base md:text-lg' : 'text-sm'}`}
         />
         {isLoading && <Loader2 className="w-5 h-5 text-amber-500 animate-spin mr-3 shrink-0" />}
         {!isLoading && query.trim() && (

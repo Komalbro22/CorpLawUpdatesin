@@ -23,7 +23,7 @@ export default function EmptyState({
       {actionLabel && actionHref && (
         <Link
           href={actionHref}
-          className="bg-amber-400 text-navy font-bold px-6 py-2.5 rounded-xl text-sm hover:bg-amber-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
+          className="bg-amber-400 text-navy font-bold px-6 py-2.5 rounded-xl text-sm hover:bg-amber-500 transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
         >
           {actionLabel}
         </Link>

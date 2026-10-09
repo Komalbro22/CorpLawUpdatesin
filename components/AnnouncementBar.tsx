@@ -72,7 +72,7 @@ export default function AnnouncementBar() {
       <button
         onClick={handleDismiss}
         aria-label="Dismiss announcement"
-        className="absolute right-3 top-1/2 -translate-y-1/2 rounded p-1 opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-navy/50"
+        className="absolute right-3 top-1/2 -translate-y-1/2 rounded-sm p-1 opacity-70 transition-opacity hover:opacity-100 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-navy/50"
       >
         <X className="h-4 w-4" aria-hidden />
       </button>

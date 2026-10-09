@@ -57,9 +57,9 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
     <Link
       href={`/updates/${update.slug}`}
       style={{ '--delay': `${animationDelay}ms`, transform: 'translate3d(0, 0, 0)' } as React.CSSProperties}
-      className={`animate-fade-up group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200/90 dark:border-slate-800/90 border-t-[3px] bg-white dark:bg-slate-900 shadow-card ring-1 ring-slate-900/[0.04] dark:ring-white/[0.04] ${borderColor} transition-[transform,box-shadow,border-color] duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 motion-safe:hover:-translate-y-1 hover:border-amber-400/40 dark:hover:border-amber-400/30 hover:shadow-card-hover hover:shadow-glow-gold-sm`}
+      className={`animate-fade-up group flex h-full flex-col overflow-hidden rounded-xl border border-slate-200/90 dark:border-slate-800/90 border-t-[3px] bg-white dark:bg-slate-900 shadow-card ring-1 ring-slate-900/4 dark:ring-white/4 ${borderColor} transition-[transform,box-shadow,border-color] duration-200 ease-out focus:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 motion-safe:hover:-translate-y-1 hover:border-amber-400/40 dark:hover:border-amber-400/30 hover:shadow-card-hover hover:shadow-glow-gold-sm`}
     >
-      <span className="relative block w-full aspect-video overflow-hidden bg-slate-100 dark:bg-slate-800 flex-shrink-0">
+      <span className="relative block w-full aspect-video overflow-hidden bg-slate-100 dark:bg-slate-800 shrink-0">
         <ArticleImage
           src={imageUrl}
           alt={update.title}

@@ -7,7 +7,7 @@ export default function CalendarLoading() {
             {/* Hero skeleton */}
             <div className="relative bg-navy text-white overflow-hidden">
                 <div
-                    className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] bg-[size:72px_72px]"
+                    className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] bg-size-[72px_72px]"
                     aria-hidden
                 />
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_80%_at_100%_0%,rgba(245,158,11,0.12),transparent_50%)]" aria-hidden />
@@ -17,13 +17,13 @@ export default function CalendarLoading() {
                         <span>/</span>
                         <span>Compliance Calendar</span>
                     </div>
-                    <div className="h-4 w-32 bg-white/10 rounded mx-auto mb-3 animate-pulse" />
+                    <div className="h-4 w-32 bg-white/10 rounded-sm mx-auto mb-3 animate-pulse" />
                     <h1 className="font-heading text-3xl md:text-4xl font-bold leading-tight max-w-3xl mx-auto">
                         Compliance Calendar {CURRENT_YEAR}-{String(NEXT_YEAR).slice(2)}
                     </h1>
                     <div className="space-y-2 mt-4 max-w-2xl mx-auto">
-                        <div className="h-4 w-full bg-white/10 rounded animate-pulse" />
-                        <div className="h-4 w-5/6 bg-white/10 rounded animate-pulse" />
+                        <div className="h-4 w-full bg-white/10 rounded-sm animate-pulse" />
+                        <div className="h-4 w-5/6 bg-white/10 rounded-sm animate-pulse" />
                     </div>
                 </div>
             </div>

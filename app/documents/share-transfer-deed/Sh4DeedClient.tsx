@@ -190,7 +190,7 @@ DIN: ${din}`
   return (
     <div suppressHydrationWarning className="space-y-10">
       {/* Top Direct Download Hub - Clean light/dark styling */}
-      <div suppressHydrationWarning className="rounded-2xl border border-indigo-200/80 bg-gradient-to-br from-indigo-50/70 via-white to-blue-50/50 p-6 shadow-sm dark:border-slate-800 dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-900 dark:to-indigo-950/30 sm:p-8">
+      <div suppressHydrationWarning className="rounded-2xl border border-indigo-200/80 bg-linear-to-br from-indigo-50/70 via-white to-blue-50/50 p-6 shadow-xs dark:border-slate-800 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-900 dark:to-indigo-950/30 sm:p-8">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-indigo-800 dark:border-indigo-800/60 dark:bg-indigo-950/60 dark:text-indigo-300">
@@ -210,7 +210,7 @@ DIN: ${din}`
             <a
               href="/api/documents/sh4-download?type=blank-docx"
               download="Form_SH-4_Securities_Transfer_Deed_Blank.docx"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 hover:shadow"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-xs transition hover:bg-blue-700 hover:shadow-sm"
             >
               <Download className="h-4 w-4" />
               Download Word (.docx)
@@ -218,7 +218,7 @@ DIN: ${din}`
             <a
               href="/api/documents/sh4-download?type=blank-pdf"
               download="Form_SH-4_Securities_Transfer_Deed_Blank.pdf"
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-800 shadow-xs transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700"
             >
               <FileText className="h-4 w-4 text-red-500" />
               Download PDF
@@ -269,7 +269,7 @@ DIN: ${din}`
       </div>
 
       {/* Main Studio Card */}
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs dark:border-slate-800 dark:bg-slate-900">
         {/* Navigation Tabs Header */}
         <div className="border-b border-slate-200 bg-slate-50/80 px-4 pt-3 dark:border-slate-800 dark:bg-slate-900/80 sm:px-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
@@ -324,13 +324,13 @@ DIN: ${din}`
             <div className="flex items-center gap-2 pb-2">
               <button
                 onClick={handleLoadSample}
-                className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+                className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 shadow-xs transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
               >
                 Load Sample Data
               </button>
               <button
                 onClick={handleClearForm}
-                className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-500 shadow-sm transition hover:bg-slate-50 hover:text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-300"
+                className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-500 shadow-xs transition hover:bg-slate-50 hover:text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-300"
               >
                 Clear
               </button>
@@ -651,7 +651,7 @@ DIN: ${din}`
                     type="text"
                     value={formData.companyName || ''}
                     onChange={(e) => handleInputChange('companyName', e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm font-medium text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm font-medium text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                     placeholder="e.g. SAMPLE COMMERCIAL VENTURES PRIVATE LIMITED"
                   />
                 </div>
@@ -661,7 +661,7 @@ DIN: ${din}`
                     type="text"
                     value={formData.cin || ''}
                     onChange={(e) => handleInputChange('cin', e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm font-mono text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm font-mono text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                     placeholder="e.g. U72900DL2024PTC999999"
                   />
                 </div>
@@ -672,7 +672,7 @@ DIN: ${din}`
                       type="text"
                       value={formData.executionDate || ''}
                       onChange={(e) => handleInputChange('executionDate', e.target.value)}
-                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                       placeholder="DD/MM/YYYY"
                     />
                   </div>
@@ -682,7 +682,7 @@ DIN: ${din}`
                       type="text"
                       value={formData.stockExchange || ''}
                       onChange={(e) => handleInputChange('stockExchange', e.target.value)}
-                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                       placeholder="N/A (Unlisted)"
                     />
                   </div>
@@ -702,7 +702,7 @@ DIN: ${din}`
                       type="text"
                       value={formData.securityClass || ''}
                       onChange={(e) => handleInputChange('securityClass', e.target.value)}
-                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                       placeholder="Equity Shares"
                     />
                   </div>
@@ -712,7 +712,7 @@ DIN: ${din}`
                       type="text"
                       value={formData.nominalValue || ''}
                       onChange={(e) => handleInputChange('nominalValue', e.target.value)}
-                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                       placeholder="10"
                     />
                   </div>
@@ -724,7 +724,7 @@ DIN: ${din}`
                       type="text"
                       value={formData.calledUpValue || ''}
                       onChange={(e) => handleInputChange('calledUpValue', e.target.value)}
-                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                       placeholder="10"
                     />
                   </div>
@@ -734,7 +734,7 @@ DIN: ${din}`
                       type="text"
                       value={formData.paidUpValue || ''}
                       onChange={(e) => handleInputChange('paidUpValue', e.target.value)}
-                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                       placeholder="10"
                     />
                   </div>
@@ -746,7 +746,7 @@ DIN: ${din}`
                       type="text"
                       value={formData.numberOfSecurities || ''}
                       onChange={(e) => handleInputChange('numberOfSecurities', e.target.value)}
-                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                       placeholder="1000"
                     />
                   </div>
@@ -756,7 +756,7 @@ DIN: ${din}`
                       type="text"
                       value={formData.numberOfSecuritiesWords || ''}
                       onChange={(e) => handleInputChange('numberOfSecuritiesWords', e.target.value)}
-                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                       placeholder="One Thousand Only"
                     />
                   </div>
@@ -768,7 +768,7 @@ DIN: ${din}`
                       type="text"
                       value={formData.distinctiveFrom || ''}
                       onChange={(e) => handleInputChange('distinctiveFrom', e.target.value)}
-                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2 text-xs text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2 text-xs text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                       placeholder="1001"
                     />
                   </div>
@@ -778,7 +778,7 @@ DIN: ${din}`
                       type="text"
                       value={formData.distinctiveTo || ''}
                       onChange={(e) => handleInputChange('distinctiveTo', e.target.value)}
-                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2 text-xs text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2 text-xs text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                       placeholder="2000"
                     />
                   </div>
@@ -788,7 +788,7 @@ DIN: ${din}`
                       type="text"
                       value={formData.certificateNumbers || ''}
                       onChange={(e) => handleInputChange('certificateNumbers', e.target.value)}
-                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2 text-xs text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2 text-xs text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                       placeholder="04"
                     />
                   </div>
@@ -807,7 +807,7 @@ DIN: ${din}`
                     type="text"
                     value={formData.consideration || ''}
                     onChange={(e) => handleInputChange('consideration', e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm font-semibold text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm font-semibold text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                     placeholder="e.g. 100000"
                   />
                 </div>
@@ -817,7 +817,7 @@ DIN: ${din}`
                     type="text"
                     value={formData.considerationWords || ''}
                     onChange={(e) => handleInputChange('considerationWords', e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                     placeholder="e.g. One Lakh Rupees Only"
                   />
                 </div>
@@ -841,7 +841,7 @@ DIN: ${din}`
                     type="text"
                     value={formData.transferorName || ''}
                     onChange={(e) => handleInputChange('transferorName', e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                     placeholder="e.g. Sample Transferor (Shri A. K. Sharma)"
                   />
                 </div>
@@ -851,7 +851,7 @@ DIN: ${din}`
                     type="text"
                     value={formData.transferorFolio || ''}
                     onChange={(e) => handleInputChange('transferorFolio', e.target.value)}
-                    className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm font-mono text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm font-mono text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                     placeholder="e.g. SMPL-001"
                   />
                 </div>
@@ -870,7 +870,7 @@ DIN: ${din}`
                       type="text"
                       value={formData.transfereeName || ''}
                       onChange={(e) => handleInputChange('transfereeName', e.target.value)}
-                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                       placeholder="e.g. Sample Transferee (Smt. Priya Verma)"
                     />
                   </div>
@@ -880,7 +880,7 @@ DIN: ${din}`
                       type="text"
                       value={formData.transfereeRelativeName || ''}
                       onChange={(e) => handleInputChange('transfereeRelativeName', e.target.value)}
-                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                       placeholder="e.g. Late Shri M. L. Verma (Father)"
                     />
                   </div>
@@ -890,7 +890,7 @@ DIN: ${din}`
                       type="text"
                       value={formData.transfereeAddress || ''}
                       onChange={(e) => handleInputChange('transfereeAddress', e.target.value)}
-                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                       placeholder="e.g. Flat No. 404, Sample Residency, Sector 14, Gurugram"
                     />
                   </div>
@@ -901,7 +901,7 @@ DIN: ${din}`
                         type="text"
                         value={formData.transfereePincode || ''}
                         onChange={(e) => handleInputChange('transfereePincode', e.target.value)}
-                        className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm font-mono text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                        className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm font-mono text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                         placeholder="122001"
                       />
                     </div>
@@ -911,7 +911,7 @@ DIN: ${din}`
                         type="text"
                         value={formData.transfereeExistingFolio || ''}
                         onChange={(e) => handleInputChange('transfereeExistingFolio', e.target.value)}
-                        className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                        className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                         placeholder="New Member"
                       />
                     </div>
@@ -922,7 +922,7 @@ DIN: ${din}`
                       type="email"
                       value={formData.transfereeEmail || ''}
                       onChange={(e) => handleInputChange('transfereeEmail', e.target.value)}
-                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                       placeholder="transferee.sample@example.com"
                     />
                   </div>
@@ -932,7 +932,7 @@ DIN: ${din}`
                       type="text"
                       value={formData.transfereeOccupation || ''}
                       onChange={(e) => handleInputChange('transfereeOccupation', e.target.value)}
-                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                       placeholder="e.g. Professional / Business (Sample)"
                     />
                   </div>
@@ -985,7 +985,7 @@ DIN: ${din}`
                       type="text"
                       value={formData.witnessName || ''}
                       onChange={(e) => handleInputChange('witnessName', e.target.value)}
-                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                       placeholder="e.g. Sample Witness (Shri R. P. Singh)"
                     />
                   </div>
@@ -995,7 +995,7 @@ DIN: ${din}`
                       type="text"
                       value={formData.witnessAddress || ''}
                       onChange={(e) => handleInputChange('witnessAddress', e.target.value)}
-                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                       placeholder="e.g. 102, Sample Commercial Complex, New Delhi"
                     />
                   </div>
@@ -1005,7 +1005,7 @@ DIN: ${din}`
                       type="text"
                       value={formData.witnessPincode || ''}
                       onChange={(e) => handleInputChange('witnessPincode', e.target.value)}
-                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm font-mono text-slate-900 focus:border-indigo-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                      className="mt-1 w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm font-mono text-slate-900 focus:border-indigo-500 focus:outline-hidden dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                       placeholder="110001"
                     />
                   </div>
@@ -1024,7 +1024,7 @@ DIN: ${din}`
               <button
                 onClick={() => handleDownload('docx')}
                 disabled={isDownloading === 'docx'}
-                className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 disabled:opacity-50"
+                className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-xs transition hover:bg-indigo-700 disabled:opacity-50"
               >
                 <Download className="h-4 w-4" />
                 {isDownloading === 'docx' ? 'Generating Word...' : 'Download Form SH-4 (.docx)'}
@@ -1065,7 +1065,7 @@ DIN: ${din}`
                     type="text"
                     value={calcConsideration}
                     onChange={(e) => setCalcConsideration(e.target.value.replace(/[^0-9.]/g, ''))}
-                    className="w-full rounded-xl border border-slate-300 bg-white py-3 pl-8 pr-4 text-xl font-bold text-slate-900 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="w-full rounded-xl border border-slate-300 bg-white py-3 pl-8 pr-4 text-xl font-bold text-slate-900 shadow-xs focus:border-emerald-500 focus:outline-hidden focus:ring-2 focus:ring-emerald-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                     placeholder="100000"
                   />
                 </div>
@@ -1084,7 +1084,7 @@ DIN: ${din}`
                 </div>
 
                 {/* Calculation Results Card */}
-                <div className="mt-6 rounded-xl border border-emerald-200 bg-white p-5 shadow-sm dark:border-emerald-900/60 dark:bg-slate-900">
+                <div className="mt-6 rounded-xl border border-emerald-200 bg-white p-5 shadow-xs dark:border-emerald-900/60 dark:bg-slate-900">
                   <div className="flex items-center justify-between border-b border-slate-100 pb-3 dark:border-slate-800">
                     <span className="text-sm text-slate-600 dark:text-slate-400">Consideration Value</span>
                     <span className="text-sm font-bold text-slate-900 dark:text-white">₹ {stampDutyResult.formattedConsideration}</span>

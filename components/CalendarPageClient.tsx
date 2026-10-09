@@ -204,7 +204,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
       <span className="inline-flex flex-wrap items-center gap-1.5">
         {entry.form_name}
         <EntryBadges entry={entry} />
-        <span className="inline-flex border border-slate-200 dark:border-slate-700 rounded overflow-hidden shadow-sm">
+        <span className="inline-flex border border-slate-200 dark:border-slate-700 rounded-sm overflow-hidden shadow-xs">
           <a
             href={googleCalendarUrl(entry)}
             target="_blank"
@@ -362,7 +362,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
               placeholder="Search forms or compliance..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="flex-1 sm:w-64 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-amber-400 outline-none"
+              className="flex-1 sm:w-64 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-amber-400 outline-hidden"
             />
             <button
               type="button"
@@ -379,7 +379,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
         </div>
 
         {entries.length === 0 ? (
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
             <EmptyState
               icon="📅"
               title="No compliance deadlines found"
@@ -393,7 +393,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
             {/* DISCLAIMER */}
             <div className="space-y-2">
               <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/40 rounded-xl p-4 flex gap-3 items-start">
-                <span className="text-xl flex-shrink-0" aria-hidden="true">⚠️</span>
+                <span className="text-xl shrink-0" aria-hidden="true">⚠️</span>
                 <p className="text-amber-800 dark:text-amber-300 text-sm leading-relaxed">
                   <strong>Disclaimer:</strong> All dates are indicative and subject to regulatory extensions,
                   amendments or circulars issued by MCA, SEBI, GSTN, EPFO or RBI from time to time. Always verify with
@@ -489,7 +489,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
         )}
 
         {/* COMMUNITY NOTICE */}
-        <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 text-center">
+        <div className="bg-linear-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 text-center">
           <div className="text-3xl mb-2">👥</div>
           <h3 className="font-bold text-green-800 text-lg mb-1">
             Help us keep this calendar accurate

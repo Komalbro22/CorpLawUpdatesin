@@ -24,7 +24,7 @@ export default function IBBIFAQ() {
               }`}
             >
               <button
-                className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 focus:outline-none"
+                className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 focus:outline-hidden"
                 onClick={() => setOpenIndex(isOpen ? null : index)}
               >
                 <span

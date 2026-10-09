@@ -276,7 +276,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                 onClick={() => setFormCode('MGT-7')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                   formCode === 'MGT-7'
-                    ? 'bg-blue-600 text-white shadow-sm'
+                    ? 'bg-blue-600 text-white shadow-xs'
                     : 'text-slate-700 dark:text-slate-300 hover:text-blue-600'
                 }`}
               >
@@ -287,7 +287,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                 onClick={() => setFormCode('MGT-7A')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                   formCode === 'MGT-7A'
-                    ? 'bg-blue-600 text-white shadow-sm'
+                    ? 'bg-blue-600 text-white shadow-xs'
                     : 'text-slate-700 dark:text-slate-300 hover:text-blue-600'
                 }`}
               >
@@ -302,7 +302,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                 onClick={() => setCalcMode('date')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
                   calcMode === 'date'
-                    ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-sm'
+                    ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
@@ -314,7 +314,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                 onClick={() => setCalcMode('days')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
                   calcMode === 'days'
-                    ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-sm'
+                    ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
@@ -327,7 +327,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
 
         {/* Form Routing Guidance Notice if Mismatch */}
         {complianceResult.metadata.formRoutingMismatch && complianceResult.metadata.formRoutingRecommendation && (
-          <div className="mb-8 p-4 bg-amber-50 dark:bg-amber-950/40 border-l-4 border-amber-500 rounded-r-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
+          <div className="mb-8 p-4 bg-amber-50 dark:bg-amber-950/40 border-l-4 border-amber-500 rounded-r-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
             <div className="flex items-start gap-3">
               <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
               <div>
@@ -342,7 +342,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
             <button
               type="button"
               onClick={() => setFormCode(formCode === 'MGT-7' ? 'MGT-7A' : 'MGT-7')}
-              className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-lg bg-amber-600 text-white hover:bg-amber-700 transition-colors shrink-0 shadow-sm"
+              className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-lg bg-amber-600 text-white hover:bg-amber-700 transition-colors shrink-0 shadow-xs"
             >
               Switch to {formCode === 'MGT-7' ? 'MGT-7A' : 'MGT-7'}
               <ArrowRight className="w-3 h-3" />
@@ -378,7 +378,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                     <Calendar className="w-4 h-4" />
                     AGM &amp; Statutory Filing Timelines
                   </span>
-                  <span className="text-[11px] font-semibold text-slate-500 bg-white dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
+                  <span className="text-[11px] font-semibold text-slate-500 bg-white dark:bg-slate-800 px-2 py-0.5 rounded-sm border border-slate-200 dark:border-slate-700">
                     Section 92(4): 60 Days from AGM
                   </span>
                 </div>
@@ -430,21 +430,21 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                       <button
                         type="button"
                         onClick={() => setActualAgmDate('2026-09-30')}
-                        className="text-[11px] px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 hover:bg-blue-200 font-medium transition-colors"
+                        className="text-[11px] px-2 py-0.5 rounded-sm bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 hover:bg-blue-200 font-medium transition-colors"
                       >
                         30 Sept (Std AGM)
                       </button>
                       <button
                         type="button"
                         onClick={() => setActualAgmDate('2025-09-30')}
-                        className="text-[11px] px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 font-medium transition-colors"
+                        className="text-[11px] px-2 py-0.5 rounded-sm bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 font-medium transition-colors"
                       >
                         FY 24-25 AGM
                       </button>
                       <button
                         type="button"
                         onClick={() => setActualAgmDate(new Date().toISOString().slice(0, 10))}
-                        className="text-[11px] px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 font-medium transition-colors"
+                        className="text-[11px] px-2 py-0.5 rounded-sm bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 font-medium transition-colors"
                       >
                         Today
                       </button>
@@ -478,7 +478,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                     <button
                       type="button"
                       onClick={() => setActualFilingDate(new Date().toISOString().slice(0, 10))}
-                      className="text-[11px] px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 font-medium transition-colors"
+                      className="text-[11px] px-2 py-0.5 rounded-sm bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 font-medium transition-colors"
                     >
                       Today
                     </button>
@@ -514,7 +514,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                         onClick={() => setDirectDelayDays(tier.days)}
                         className={`text-xs px-2.5 py-1 rounded-lg border font-medium transition-all ${
                           directDelayDays === tier.days
-                            ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
+                            ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
                             : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-blue-400'
                         }`}
                       >
@@ -537,7 +537,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                     type="checkbox"
                     checked={!hasShareCapital}
                     onChange={(e) => setHasShareCapital(!e.target.checked)}
-                    className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-slate-300"
+                    className="w-4 h-4 rounded-sm text-blue-600 focus:ring-blue-500 border-slate-300"
                   />
                   <span className="text-xs text-slate-600 dark:text-slate-400">
                     Company without Share Capital
@@ -558,7 +558,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                           onClick={() => handleSelectCapitalPreset(preset.value)}
                           className={`p-2.5 rounded-xl border text-center transition-all ${
                             isCurrent
-                              ? 'bg-blue-50 dark:bg-blue-950/40 border-blue-600 text-blue-700 dark:text-blue-300 font-bold ring-2 ring-blue-500/20 shadow-sm'
+                              ? 'bg-blue-50 dark:bg-blue-950/40 border-blue-600 text-blue-700 dark:text-blue-300 font-bold ring-2 ring-blue-500/20 shadow-xs'
                               : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300 font-medium'
                           }`}
                         >
@@ -594,7 +594,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                   <Building2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                   Small Company &amp; PCS Certification Engine (Sec 2(85))
                 </span>
-                <span className="text-[11px] font-semibold text-indigo-700 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 px-2 py-0.5 rounded border border-indigo-200 dark:border-indigo-800">
+                <span className="text-[11px] font-semibold text-indigo-700 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 px-2 py-0.5 rounded-sm border border-indigo-200 dark:border-indigo-800">
                   G.S.R. 880(E) Limits: ₹10 Cr / ₹100 Cr
                 </span>
               </div>
@@ -675,7 +675,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                     type="checkbox"
                     checked={isHoldingCompany}
                     onChange={(e) => setIsHoldingCompany(e.target.checked)}
-                    className="rounded text-blue-600 focus:ring-blue-500"
+                    className="rounded-sm text-blue-600 focus:ring-blue-500"
                   />
                   Holding Co (Sec 2(46))
                 </label>
@@ -684,7 +684,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                     type="checkbox"
                     checked={isSubsidiaryCompany}
                     onChange={(e) => setIsSubsidiaryCompany(e.target.checked)}
-                    className="rounded text-blue-600 focus:ring-blue-500"
+                    className="rounded-sm text-blue-600 focus:ring-blue-500"
                   />
                   Subsidiary Co (Sec 2(87))
                 </label>
@@ -693,7 +693,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                     type="checkbox"
                     checked={isSpecialActBodyCorporate}
                     onChange={(e) => setIsSpecialActBodyCorporate(e.target.checked)}
-                    className="rounded text-blue-600 focus:ring-blue-500"
+                    className="rounded-sm text-blue-600 focus:ring-blue-500"
                   />
                   Special Act Body Corporate
                 </label>
@@ -734,7 +734,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
           <div className="lg:col-span-5 space-y-6">
             
             {/* Dark Navy Results Card */}
-            <div className="bg-gradient-to-b from-slate-900 to-slate-950 text-white rounded-3xl p-6 shadow-2xl border border-slate-800 relative overflow-hidden">
+            <div className="bg-linear-to-b from-slate-900 to-slate-950 text-white rounded-3xl p-6 shadow-2xl border border-slate-800 relative overflow-hidden">
               
               {/* Subtle accent glow */}
               <div className="absolute top-0 right-0 w-40 h-40 bg-blue-500/10 rounded-full blur-2xl pointer-events-none" />
@@ -827,7 +827,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                       Section 92(5) Adjudication Exposure
                     </span>
                     {isSection446B && (
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/30 text-indigo-200 border border-indigo-400/40">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-sm bg-indigo-500/30 text-indigo-200 border border-indigo-400/40">
                         Sec 446B (50% Relief)
                       </span>
                     )}
@@ -913,7 +913,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
       </div>
 
       {/* 2. Interactive Timeline & Delay Slabs Matrix */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 dark:border-slate-800 space-y-4">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 shadow-xs border border-slate-200 dark:border-slate-800 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -984,7 +984,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
       </div>
 
       {/* 3. Mandatory Attachments Checklist for Form MGT-7 / 7A on MCA V3 */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 dark:border-slate-800 space-y-4">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 shadow-xs border border-slate-200 dark:border-slate-800 space-y-4">
         <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
           <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400" />
           Mandatory Attachments Checklist for {formCode} on MCA V3
@@ -1049,7 +1049,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
       </div>
 
       {/* 4. Critical Regulatory Roadmap Banner */}
-      <div className="bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 text-white rounded-3xl p-6 md:p-8 shadow-xl border border-indigo-800/40 space-y-6">
+      <div className="bg-linear-to-br from-indigo-950 via-slate-900 to-slate-950 text-white rounded-3xl p-6 md:p-8 shadow-xl border border-indigo-800/40 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-300 shrink-0">
@@ -1057,7 +1057,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-indigo-500/30 text-indigo-200 border border-indigo-400/40">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-sm bg-indigo-500/30 text-indigo-200 border border-indigo-400/40">
                   Annual Compliance Framework
                 </span>
                 <span className="text-xs text-slate-400">Companies Act, 2013</span>
@@ -1114,7 +1114,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
             </p>
           </div>
           <div className="text-right">
-            <span className="inline-block px-2.5 py-1 text-[11px] font-bold bg-slate-100 text-slate-800 border border-slate-300 rounded">
+            <span className="inline-block px-2.5 py-1 text-[11px] font-bold bg-slate-100 text-slate-800 border border-slate-300 rounded-sm">
               FORM {formCode} CERTIFICATE
             </span>
             <p className="text-[10px] text-slate-500 mt-1" suppressHydrationWarning>

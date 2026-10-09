@@ -189,7 +189,7 @@ export default function AdminPartnerInterestsPage() {
                 </div>
                 <a
                     href="/api/admin/partner-interests?export=csv"
-                    className="inline-flex items-center gap-2 bg-navy text-white text-sm font-semibold px-4 py-2.5 rounded-lg hover:bg-slate-800 transition-colors shadow-sm"
+                    className="inline-flex items-center gap-2 bg-navy text-white text-sm font-semibold px-4 py-2.5 rounded-lg hover:bg-slate-800 transition-colors shadow-xs"
                 >
                     <Download className="w-4 h-4 opacity-90" aria-hidden />
                     Export CSV
@@ -239,7 +239,7 @@ export default function AdminPartnerInterestsPage() {
                         placeholder="Search by firm name, contact, qualification..."
                         value={search}
                         onChange={handleSearchChange}
-                        className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none text-slate-900 bg-white"
+                        className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:outline-hidden text-slate-900 bg-white"
                     />
                 </div>
 
@@ -247,7 +247,7 @@ export default function AdminPartnerInterestsPage() {
                     <select
                         value={statusFilter}
                         onChange={handleStatusFilterChange}
-                        className="w-full sm:w-44 bg-white border border-slate-200 text-slate-700 text-sm rounded-lg px-3.5 py-2.5 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                        className="w-full sm:w-44 bg-white border border-slate-200 text-slate-700 text-sm rounded-lg px-3.5 py-2.5 focus:ring-2 focus:ring-amber-500 focus:outline-hidden"
                     >
                         <option value="all">All Statuses</option>
                         <option value="pending">Pending</option>
@@ -260,7 +260,7 @@ export default function AdminPartnerInterestsPage() {
                     <select
                         value={serviceFilter}
                         onChange={handleServiceFilterChange}
-                        className="w-full sm:w-56 bg-white border border-slate-200 text-slate-700 text-sm rounded-lg px-3.5 py-2.5 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                        className="w-full sm:w-56 bg-white border border-slate-200 text-slate-700 text-sm rounded-lg px-3.5 py-2.5 focus:ring-2 focus:ring-amber-500 focus:outline-hidden"
                     >
                         <option value="all">All Services</option>
                         {SERVICE_OPTIONS.map((opt) => (
@@ -292,7 +292,7 @@ export default function AdminPartnerInterestsPage() {
                                 Array.from({ length: 5 }).map((_, i) => (
                                     <tr key={i} className="animate-pulse">
                                         <td colSpan={7} className="px-6 py-4">
-                                            <div className="h-4 bg-slate-100 rounded w-1/2" />
+                                            <div className="h-4 bg-slate-100 rounded-sm w-1/2" />
                                         </td>
                                     </tr>
                                 ))
@@ -324,7 +324,7 @@ export default function AdminPartnerInterestsPage() {
 
                                         {/* Qualification & Experience */}
                                         <td className="px-6 py-4">
-                                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                                            <span className="inline-flex items-center px-2 py-0.5 rounded-sm text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">
                                                 {item.qualification || 'N/A'}
                                             </span>
                                             <span className="text-xs text-slate-500 ml-2">
@@ -341,7 +341,7 @@ export default function AdminPartnerInterestsPage() {
                                                 ).map((srv, idx) => (
                                                     <span
                                                         key={idx}
-                                                        className="px-2 py-1 rounded text-xs font-medium bg-amber-50 text-amber-900 border border-amber-200 inline-block"
+                                                        className="px-2 py-1 rounded-sm text-xs font-medium bg-amber-50 text-amber-900 border border-amber-200 inline-block"
                                                     >
                                                         {srv}
                                                     </span>
@@ -350,7 +350,7 @@ export default function AdminPartnerInterestsPage() {
                                                     <button
                                                         type="button"
                                                         onClick={() => toggleExpandRow(item.id)}
-                                                        className="px-2 py-0.5 rounded text-xs font-bold bg-amber-100 text-amber-800 hover:bg-amber-200 transition-colors inline-flex items-center gap-1 cursor-pointer"
+                                                        className="px-2 py-0.5 rounded-sm text-xs font-bold bg-amber-100 text-amber-800 hover:bg-amber-200 transition-colors inline-flex items-center gap-1 cursor-pointer"
                                                     >
                                                         {expandedRowIds.has(item.id)
                                                             ? 'Show less'
@@ -359,7 +359,7 @@ export default function AdminPartnerInterestsPage() {
                                                 )}
                                             </div>
                                             {item.additional_notes && (
-                                                <div className="mt-2 text-xs text-slate-500 bg-slate-50 p-2 rounded border border-slate-100 whitespace-normal">
+                                                <div className="mt-2 text-xs text-slate-500 bg-slate-50 p-2 rounded-sm border border-slate-100 whitespace-normal">
                                                     <span className="font-semibold text-slate-700">Notes:</span> {item.additional_notes}
                                                 </div>
                                             )}
@@ -389,7 +389,7 @@ export default function AdminPartnerInterestsPage() {
                                                 onChange={(e) =>
                                                     handleStatusChange(item.id, e.target.value as PartnerInterestStatus)
                                                 }
-                                                className={`text-xs font-bold px-2.5 py-1 rounded-md border focus:outline-none transition-all ${
+                                                className={`text-xs font-bold px-2.5 py-1 rounded-md border focus:outline-hidden transition-all ${
                                                     STATUS_BADGE_STYLES[item.status] || 'bg-slate-100 text-slate-700'
                                                 }`}
                                             >
@@ -405,7 +405,7 @@ export default function AdminPartnerInterestsPage() {
                                         <td className="px-6 py-4 text-right">
                                             <button
                                                 onClick={() => handleDelete(item.id, item.firm_or_individual_name)}
-                                                className="text-red-500 hover:text-red-700 text-xs font-semibold p-1.5 rounded hover:bg-red-50 transition-colors"
+                                                className="text-red-500 hover:text-red-700 text-xs font-semibold p-1.5 rounded-sm hover:bg-red-50 transition-colors"
                                                 title="Delete Submission"
                                             >
                                                 <Trash2 className="w-4 h-4" />

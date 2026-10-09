@@ -61,7 +61,7 @@ export default function DocumentIntentSearch() {
                          border border-white/30 
                          text-white placeholder-slate-400
                          rounded-2xl py-4 pl-12 pr-4
-                         text-sm focus:outline-none
+                         text-sm focus:outline-hidden
                          focus:ring-2 focus:ring-amber-400
                          focus:border-transparent"
               toolparamdescription="Describe the document you need, e.g., 'Board resolution for opening a bank account'."
@@ -76,7 +76,7 @@ export default function DocumentIntentSearch() {
                        transition-colors
                        disabled:opacity-60 
                        flex items-center gap-2
-                       flex-shrink-0"
+                       shrink-0"
           >
             {loading ? (
               <div className="w-4 h-4 border-2 

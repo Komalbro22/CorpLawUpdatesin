@@ -32,7 +32,7 @@ function Toggle({
         type="checkbox"
         checked={checked}
         onChange={event => onChange(event.target.checked)}
-        className="mt-0.5 size-4 rounded border-slate-300 text-amber-600 focus:ring-amber-500"
+        className="mt-0.5 size-4 rounded-sm border-slate-300 text-amber-600 focus:ring-amber-500"
       />
       <span>
         <span className="block text-sm font-semibold text-slate-800">{label}</span>
@@ -44,7 +44,7 @@ function Toggle({
 
 export default function SponsoredSettings(props: SponsoredSettingsProps) {
   return (
-    <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+    <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs">
       <div className="mb-4">
         <h2 className="text-sm font-bold text-slate-900">Sponsored settings</h2>
         <p className="mt-1 text-xs text-slate-500">Use these controls for paid or guest placements. Editorial review and clear disclosure are still required.</p>
@@ -66,7 +66,7 @@ export default function SponsoredSettings(props: SponsoredSettingsProps) {
                 maxLength={200}
                 onChange={event => props.onSponsorNameChange(event.target.value)}
                 placeholder="Company or sponsor name"
-                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm font-normal text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm font-normal text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-amber-400"
               />
             </label>
             <label className="block text-sm font-semibold text-slate-800">
@@ -77,7 +77,7 @@ export default function SponsoredSettings(props: SponsoredSettingsProps) {
                 maxLength={200}
                 onChange={event => props.onContributorNameChange(event.target.value)}
                 placeholder="Name to credit on the article"
-                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm font-normal text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                className="mt-1.5 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm font-normal text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-amber-400"
               />
             </label>
             <Toggle

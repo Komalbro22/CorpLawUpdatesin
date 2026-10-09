@@ -36,26 +36,26 @@ export default function NewsletterPage() {
                     </h2>
                     <ul className="space-y-4">
                         <li className="flex items-start">
-                            <svg className="size-6 text-gold mr-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <svg className="size-6 text-gold mr-3 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
                             <span className="text-slate-700 dark:text-slate-200 font-medium whitespace-pre-line">Weekly digest of top updates</span>
                         </li>
                         <li className="flex items-start">
-                            <svg className="size-6 text-gold mr-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <svg className="size-6 text-gold mr-3 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
                             <span className="text-slate-700 dark:text-slate-200 font-medium">Coverage across MCA, SEBI, RBI, NCLT, IBC, FEMA</span>
                         </li>
                         <li className="flex items-start">
-                            <svg className="size-6 text-gold mr-3 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <svg className="size-6 text-gold mr-3 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
                             <span className="text-slate-700 dark:text-slate-200 font-medium">Free forever, unsubscribe anytime</span>
                         </li>
                     </ul>
 
-                    <div className="mt-8 bg-slate-50 dark:bg-slate-900 p-4 rounded-lg border border-slate-100 dark:border-slate-800 italic text-slate-600 dark:text-slate-300 shadow-sm">
+                    <div className="mt-8 bg-slate-50 dark:bg-slate-900 p-4 rounded-lg border border-slate-100 dark:border-slate-800 italic text-slate-600 dark:text-slate-300 shadow-xs">
                         <span className="font-bold border-r border-slate-300 dark:border-slate-700 pr-2 mr-2 text-navy dark:text-white not-italic">Frequency</span>
                         Sent weekly every Monday morning
                     </div>
@@ -74,7 +74,7 @@ export default function NewsletterPage() {
             </div>
 
             {/* 5. Instant Broadcast Channels (WhatsApp & Telegram) */}
-            <div className="mt-16 bg-gradient-to-br from-slate-900 via-navy to-slate-900 border border-slate-800 text-white rounded-2xl p-8 md:p-10 shadow-xl">
+            <div className="mt-16 bg-linear-to-br from-slate-900 via-navy to-slate-900 border border-slate-800 text-white rounded-2xl p-8 md:p-10 shadow-xl">
                 <div className="max-w-2xl">
                     <span className="inline-flex items-center gap-2 text-xs font-bold text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full uppercase tracking-wider mb-3">
                         ⚡ Real-Time Regulatory Broadcasts

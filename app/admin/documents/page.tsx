@@ -310,7 +310,7 @@ export default function AdminDocumentsPage() {
         </div>
         <button
           onClick={handleOpenCreate}
-          className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-slate-900 px-5 py-2.5 rounded-xl font-semibold transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+          className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-slate-900 px-5 py-2.5 rounded-xl font-semibold transition-all shadow-md hover:shadow-lg focus:outline-hidden focus:ring-2 focus:ring-amber-500/20"
         >
           <Plus className="w-5 h-5" />
           Add New Template
@@ -388,7 +388,7 @@ export default function AdminDocumentsPage() {
             placeholder="Search template name, category, or slug..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 text-sm bg-slate-50 border border-white/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
+            className="w-full pl-10 pr-4 py-2 text-sm bg-slate-50 border border-white/60 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
           />
         </div>
 
@@ -396,7 +396,7 @@ export default function AdminDocumentsPage() {
           <select
             value={categoryFilter}
             onChange={e => setCategoryFilter(e.target.value)}
-            className="flex-1 md:flex-none bg-slate-50 border border-white/60 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
+            className="flex-1 md:flex-none bg-slate-50 border border-white/60 rounded-xl px-4 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
           >
             <option className="bg-slate-100 text-white" value="all">All Categories</option>
             {Object.entries(CATEGORY_LABELS).map(([key, label]) => (
@@ -560,7 +560,7 @@ export default function AdminDocumentsPage() {
 
       {/* Editor Modal */}
       {isModalOpen && editingTemplate && (
-        <div className="fixed inset-0 bg-slate-50/80 backdrop-blur-sm z-50 flex justify-end animate-fade-in">
+        <div className="fixed inset-0 bg-slate-50/80 backdrop-blur-xs z-50 flex justify-end animate-fade-in">
           <div className="bg-slate-100 w-full max-w-4xl h-screen flex flex-col shadow-2xl animate-slide-in overflow-hidden border-l border-white/60 text-slate-800">
             {/* Modal Header */}
             <div className="p-6 border-b border-white/60 flex justify-between items-center bg-slate-50">
@@ -602,7 +602,7 @@ export default function AdminDocumentsPage() {
                         onChange={e =>
                           setEditingTemplate(prev => ({ ...prev, name: e.target.value }))
                         }
-                        className="w-full px-3.5 py-2 bg-slate-50 border border-white/60 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
+                        className="w-full px-3.5 py-2 bg-slate-50 border border-white/60 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
                       />
                     </div>
 
@@ -617,7 +617,7 @@ export default function AdminDocumentsPage() {
                         onChange={e =>
                           setEditingTemplate(prev => ({ ...prev, slug: e.target.value }))
                         }
-                        className="w-full px-3.5 py-2 bg-slate-50 border border-white/60 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
+                        className="w-full px-3.5 py-2 bg-slate-50 border border-white/60 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
                       />
                     </div>
 
@@ -631,7 +631,7 @@ export default function AdminDocumentsPage() {
                         onChange={e =>
                           setEditingTemplate(prev => ({ ...prev, category: e.target.value }))
                         }
-                        className="w-full px-3.5 py-2 bg-slate-50 border border-white/60 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
+                        className="w-full px-3.5 py-2 bg-slate-50 border border-white/60 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
                       >
                         {Object.entries(CATEGORY_LABELS).map(([key, label]) => (
                           <option className="bg-slate-100 text-white" key={key} value={key}>
@@ -655,7 +655,7 @@ export default function AdminDocumentsPage() {
                             display_order: parseInt(e.target.value) || 0,
                           }))
                         }
-                        className="w-full px-3.5 py-2 bg-slate-50 border border-white/60 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
+                        className="w-full px-3.5 py-2 bg-slate-50 border border-white/60 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
                       />
                     </div>
 
@@ -674,7 +674,7 @@ export default function AdminDocumentsPage() {
                             description: e.target.value,
                           }))
                         }
-                        className="w-full px-3.5 py-2 bg-slate-50 border border-white/60 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
+                        className="w-full px-3.5 py-2 bg-slate-50 border border-white/60 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
                       />
                     </div>
                   </div>
@@ -700,7 +700,7 @@ export default function AdminDocumentsPage() {
                             regulation_reference: e.target.value,
                           }))
                         }
-                        className="w-full px-3.5 py-2 bg-slate-50 border border-white/60 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
+                        className="w-full px-3.5 py-2 bg-slate-50 border border-white/60 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
                       />
                     </div>
 
@@ -715,7 +715,7 @@ export default function AdminDocumentsPage() {
                         onChange={e =>
                           setEditingTemplate(prev => ({ ...prev, source: e.target.value }))
                         }
-                        className="w-full px-3.5 py-2 bg-slate-50 border border-white/60 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
+                        className="w-full px-3.5 py-2 bg-slate-50 border border-white/60 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
                       />
                     </div>
 
@@ -732,7 +732,7 @@ export default function AdminDocumentsPage() {
                             last_verified: e.target.value,
                           }))
                         }
-                        className="w-full px-3.5 py-2 bg-slate-50 border border-white/60 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
+                        className="w-full px-3.5 py-2 bg-slate-50 border border-white/60 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
                       />
                     </div>
                   </div>
@@ -784,7 +784,7 @@ export default function AdminDocumentsPage() {
                                 placeholder="e.g. director_name"
                                 value={field.id}
                                 onChange={e => handleUpdateField(idx, 'id', e.target.value)}
-                                className="w-full px-2.5 py-1.5 bg-slate-100 border border-white/60 rounded-lg text-xs font-mono focus:outline-none focus:border-amber-500 text-slate-900"
+                                className="w-full px-2.5 py-1.5 bg-slate-100 border border-white/60 rounded-lg text-xs font-mono focus:outline-hidden focus:border-amber-500 text-slate-900"
                               />
                             </div>
 
@@ -798,7 +798,7 @@ export default function AdminDocumentsPage() {
                                 placeholder="e.g. Appointed Director Name"
                                 value={field.label}
                                 onChange={e => handleUpdateField(idx, 'label', e.target.value)}
-                                className="w-full px-2.5 py-1.5 bg-slate-100 border border-white/60 rounded-lg text-xs focus:outline-none focus:border-amber-500 text-slate-900"
+                                className="w-full px-2.5 py-1.5 bg-slate-100 border border-white/60 rounded-lg text-xs focus:outline-hidden focus:border-amber-500 text-slate-900"
                               />
                             </div>
 
@@ -809,7 +809,7 @@ export default function AdminDocumentsPage() {
                               <select
                                 value={field.type}
                                 onChange={e => handleUpdateField(idx, 'type', e.target.value)}
-                                className="w-full px-2.5 py-1.5 bg-slate-100 border border-white/60 rounded-lg text-xs focus:outline-none focus:border-amber-500 text-slate-900"
+                                className="w-full px-2.5 py-1.5 bg-slate-100 border border-white/60 rounded-lg text-xs focus:outline-hidden focus:border-amber-500 text-slate-900"
                               >
                                 <option className="bg-slate-50 text-slate-900" value="text">Single-line Text</option>
                                 <option className="bg-slate-50 text-slate-900" value="textarea">Multi-line Text</option>
@@ -827,7 +827,7 @@ export default function AdminDocumentsPage() {
                                 placeholder="e.g. Enter name..."
                                 value={field.placeholder || ''}
                                 onChange={e => handleUpdateField(idx, 'placeholder', e.target.value)}
-                                className="w-full px-2.5 py-1.5 bg-slate-100 border border-white/60 rounded-lg text-xs focus:outline-none focus:border-amber-500 text-slate-900"
+                                className="w-full px-2.5 py-1.5 bg-slate-100 border border-white/60 rounded-lg text-xs focus:outline-hidden focus:border-amber-500 text-slate-900"
                               />
                             </div>
 
@@ -840,7 +840,7 @@ export default function AdminDocumentsPage() {
                                 placeholder="Helpful hint visible near the input..."
                                 value={field.help_text || ''}
                                 onChange={e => handleUpdateField(idx, 'help_text', e.target.value)}
-                                className="w-full px-2.5 py-1.5 bg-slate-100 border border-white/60 rounded-lg text-xs focus:outline-none focus:border-amber-500 text-slate-900"
+                                className="w-full px-2.5 py-1.5 bg-slate-100 border border-white/60 rounded-lg text-xs focus:outline-hidden focus:border-amber-500 text-slate-900"
                               />
                             </div>
 
@@ -854,7 +854,7 @@ export default function AdminDocumentsPage() {
                                   placeholder="e.g. Ordinary Resolution, Special Resolution"
                                   value={field.options?.join(', ') || ''}
                                   onChange={e => handleUpdateField(idx, 'options', e.target.value)}
-                                  className="w-full px-2.5 py-1.5 bg-slate-100 border border-white/60 rounded-lg text-xs focus:outline-none focus:border-amber-500 text-slate-900"
+                                  className="w-full px-2.5 py-1.5 bg-slate-100 border border-white/60 rounded-lg text-xs focus:outline-hidden focus:border-amber-500 text-slate-900"
                                 />
                               </div>
                             )}
@@ -865,7 +865,7 @@ export default function AdminDocumentsPage() {
                                 id={`required_${field.id}`}
                                 checked={field.required}
                                 onChange={e => handleUpdateField(idx, 'required', e.target.checked)}
-                                className="rounded text-amber-500 focus:ring-amber-500 bg-slate-100 border-slate-850 w-4 h-4"
+                                className="rounded-sm text-amber-500 focus:ring-amber-500 bg-slate-100 border-slate-850 w-4 h-4"
                               />
                               <label htmlFor={`required_${field.id}`} className="text-xs font-semibold text-slate-700">
                                 This parameter is strictly required to compile this template.
@@ -900,7 +900,7 @@ export default function AdminDocumentsPage() {
                         template_content: e.target.value,
                       }))
                     }
-                    className="w-full px-3.5 py-3 bg-slate-50 border border-white/60 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 leading-relaxed text-slate-900"
+                    className="w-full px-3.5 py-3 bg-slate-50 border border-white/60 rounded-xl text-sm font-mono focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 leading-relaxed text-slate-900"
                   />
                 </div>
 
@@ -920,7 +920,7 @@ export default function AdminDocumentsPage() {
                         ai_system_prompt: e.target.value,
                       }))
                     }
-                    className="w-full px-3.5 py-2 bg-slate-50 border border-white/60 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
+                    className="w-full px-3.5 py-2 bg-slate-50 border border-white/60 rounded-xl text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
                   />
                 </div>
               </div>

@@ -128,7 +128,7 @@ function LLPSEO() {
 
       {/* Distinction Callout Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-10 not-prose">
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
+        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xs">
           <h3 className="font-bold text-slate-800 dark:text-slate-200 mb-2 flex items-center gap-2">
             <span className="w-7 h-7 rounded-lg bg-teal-100 dark:bg-teal-950/60 flex items-center justify-center text-teal-600 dark:text-teal-400 font-bold">💳</span>
             1. Section 69 Additional Filing Fees
@@ -138,7 +138,7 @@ function LLPSEO() {
           </p>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
+        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xs">
           <h3 className="font-bold text-slate-800 dark:text-slate-200 mb-2 flex items-center gap-2">
             <span className="w-7 h-7 rounded-lg bg-amber-100 dark:bg-amber-950/60 flex items-center justify-center text-amber-600 dark:text-amber-400 font-bold">⚖️</span>
             2. Section 34(5) & 35(2) Adjudication Penalties
@@ -276,9 +276,9 @@ export default function LLPFeePage() {
 
       {/* Princeton GEO Direct Answer Card */}
       <div className="max-w-4xl mx-auto px-4 -mt-6 relative z-10 mb-8">
-        <div className="rounded-2xl border-2 border-teal-500/40 bg-white dark:bg-slate-900 p-6 shadow-sm">
+        <div className="rounded-2xl border-2 border-teal-500/40 bg-white dark:bg-slate-900 p-6 shadow-xs">
           <div className="flex flex-wrap items-center gap-2 mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-teal-800 dark:text-teal-300 bg-teal-100 dark:bg-teal-950/80 px-2 py-0.5 rounded border border-teal-300 dark:border-teal-700">
+            <span className="text-xs font-bold uppercase tracking-wider text-teal-800 dark:text-teal-300 bg-teal-100 dark:bg-teal-950/80 px-2 py-0.5 rounded-sm border border-teal-300 dark:border-teal-700">
               Direct Statutory Summary
             </span>
             <span className="text-xs text-slate-500 font-medium">

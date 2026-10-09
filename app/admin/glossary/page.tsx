@@ -158,14 +158,14 @@ export default function AdminGlossaryPage() {
           <p className="text-sm text-slate-500 mt-1">Manage dictionary terms and definitions.</p>
         </div>
         <div className="flex items-center gap-3">
-          <label className="cursor-pointer inline-flex items-center gap-2 bg-slate-800 text-white px-4 py-2 rounded-lg font-medium transition-colors hover:bg-slate-700 shadow-sm opacity-90 hover:opacity-100">
+          <label className="cursor-pointer inline-flex items-center gap-2 bg-slate-800 text-white px-4 py-2 rounded-lg font-medium transition-colors hover:bg-slate-700 shadow-xs opacity-90 hover:opacity-100">
             {isImporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
             {isImporting ? 'Importing...' : 'Import CSV'}
             <input type="file" accept=".csv" className="hidden" onChange={handleFileUpload} disabled={isImporting} />
           </label>
           <Link 
             href="/admin/glossary/new"
-            className="inline-flex items-center gap-2 btn-vibrant-amber text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm"
+            className="inline-flex items-center gap-2 btn-vibrant-amber text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-xs"
           >
             <Plus className="w-4 h-4" />
             Add Term
@@ -182,7 +182,7 @@ export default function AdminGlossaryPage() {
               placeholder="Search terms or categories..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 text-sm bg-slate-100 border border-white/60 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
+              className="w-full pl-9 pr-4 py-2 text-sm bg-slate-100 border border-white/60 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900"
             />
           </div>
           <div className="text-sm text-slate-500 font-medium">
@@ -192,7 +192,7 @@ export default function AdminGlossaryPage() {
 
         <div className="flex-1 overflow-auto">
           <table className="w-full text-left border-collapse">
-            <thead className="sticky top-0 bg-slate-50/90 backdrop-blur-sm shadow-sm z-10">
+            <thead className="sticky top-0 bg-slate-50/90 backdrop-blur-xs shadow-xs z-10">
               <tr>
                 <th className="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-white/60">Term</th>
                 <th className="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-white/60">Category</th>
@@ -219,7 +219,7 @@ export default function AdminGlossaryPage() {
                           <Link 
                             href={`/glossary/${term.slug}`} 
                             target="_blank"
-                            className="text-slate-500 hover:text-amber-500 transition-colors p-0.5 rounded"
+                            className="text-slate-500 hover:text-amber-500 transition-colors p-0.5 rounded-sm"
                             title="View Public Page"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
@@ -232,7 +232,7 @@ export default function AdminGlossaryPage() {
                       </div>
                     </td>
                     <td className="p-4 align-top">
-                      <span className="inline-flex items-center px-2 py-1 rounded text-xs font-bold bg-slate-100 text-slate-700 border border-slate-700">
+                      <span className="inline-flex items-center px-2 py-1 rounded-sm text-xs font-bold bg-slate-100 text-slate-700 border border-slate-700">
                         {term.category}
                       </span>
                     </td>
@@ -253,14 +253,14 @@ export default function AdminGlossaryPage() {
                       <div className="flex items-center justify-end gap-2">
                         <Link 
                           href={`/admin/glossary/${term.id}/edit`}
-                          className="p-1.5 text-slate-500 hover:text-blue-400 hover:bg-slate-100 rounded transition-colors"
+                          className="p-1.5 text-slate-500 hover:text-blue-400 hover:bg-slate-100 rounded-sm transition-colors"
                           title="Edit Term"
                         >
                           <Edit2 className="w-4 h-4" />
                         </Link>
                         <button 
                           onClick={() => handleDelete(term.id)}
-                          className="p-1.5 text-slate-500 hover:text-rose-600 hover:bg-slate-100 rounded transition-colors"
+                          className="p-1.5 text-slate-500 hover:text-rose-600 hover:bg-slate-100 rounded-sm transition-colors"
                           title="Delete Term"
                         >
                           <Trash2 className="w-4 h-4" />

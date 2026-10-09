@@ -179,7 +179,7 @@ export default function AdminFeedbackPage() {
         <button
           type="button"
           onClick={handleExportCsv}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-slate-400 hover:shadow-sm transition-all"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-slate-400 hover:shadow-xs transition-all"
         >
           <Download className="size-4 text-slate-500" />
           Export CSV
@@ -188,7 +188,7 @@ export default function AdminFeedbackPage() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
           <div className="flex items-center justify-between text-slate-500 text-xs font-bold uppercase tracking-wider">
             <span>Total Submissions</span>
             <MessageSquareHeart className="size-4 text-slate-400" />
@@ -199,7 +199,7 @@ export default function AdminFeedbackPage() {
           <p className="text-xs text-slate-400 mt-1">Across all public surfaces</p>
         </div>
 
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
           <div className="flex items-center justify-between text-slate-500 text-xs font-bold uppercase tracking-wider">
             <span>Clarity & Approval</span>
             <ThumbsUp className="size-4 text-emerald-500" />
@@ -210,7 +210,7 @@ export default function AdminFeedbackPage() {
           <p className="text-xs text-slate-400 mt-1">{stats.positive} helpful & clear votes</p>
         </div>
 
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
           <div className="flex items-center justify-between text-slate-500 text-xs font-bold uppercase tracking-wider">
             <span>Issues Reported</span>
             <AlertCircle className="size-4 text-amber-500" />
@@ -221,7 +221,7 @@ export default function AdminFeedbackPage() {
           <p className="text-xs text-slate-400 mt-1">Requiring editorial check</p>
         </div>
 
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
           <div className="flex items-center justify-between text-slate-500 text-xs font-bold uppercase tracking-wider">
             <span>Pending Review</span>
             <Clock className="size-4 text-blue-500" />
@@ -234,7 +234,7 @@ export default function AdminFeedbackPage() {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+      <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-3">
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
           {/* Search Box */}
           <div className="relative flex-1">
@@ -244,7 +244,7 @@ export default function AdminFeedbackPage() {
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Search by title, keywords, comment, or email..."
-              className="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-navy dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500/50"
+              className="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-navy dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-amber-500/50"
             />
           </div>
 
@@ -258,7 +258,7 @@ export default function AdminFeedbackPage() {
                 setTypeFilter(e.target.value)
                 setPage(1)
               }}
-              className="text-xs px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium focus:outline-none"
+              className="text-xs px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium focus:outline-hidden"
             >
               <option value="all">All Surfaces</option>
               <option value="article">Articles Only</option>
@@ -274,7 +274,7 @@ export default function AdminFeedbackPage() {
                 setSentimentFilter(e.target.value)
                 setPage(1)
               }}
-              className="text-xs px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium focus:outline-none"
+              className="text-xs px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium focus:outline-hidden"
             >
               <option value="all">All Sentiments</option>
               <option value="positive">Helpful Only (Positive)</option>
@@ -289,7 +289,7 @@ export default function AdminFeedbackPage() {
                 setStatusFilter(e.target.value)
                 setPage(1)
               }}
-              className="text-xs px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium focus:outline-none"
+              className="text-xs px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium focus:outline-hidden"
             >
               <option value="all">All Statuses</option>
               <option value="pending">Pending</option>
@@ -324,7 +324,7 @@ export default function AdminFeedbackPage() {
             return (
               <div
                 key={item.id}
-                className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm transition-all hover:border-slate-300 dark:hover:border-slate-700 space-y-3"
+                className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs transition-all hover:border-slate-300 dark:hover:border-slate-700 space-y-3"
               >
                 {/* Header line */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">

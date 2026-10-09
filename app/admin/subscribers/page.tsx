@@ -157,7 +157,7 @@ export default function AdminSubscribers() {
                         <button
                             type="button"
                             onClick={handleBulkDelete}
-                            className="inline-flex items-center gap-2 bg-red-600 text-white text-sm font-semibold px-4 py-2.5 rounded-lg hover:bg-red-700 transition-colors duration-200 shadow-sm"
+                            className="inline-flex items-center gap-2 bg-red-600 text-white text-sm font-semibold px-4 py-2.5 rounded-lg hover:bg-red-700 transition-colors duration-200 shadow-xs"
                         >
                             <Trash2 className="w-4 h-4" aria-hidden />
                             Delete ({selected.length})
@@ -165,7 +165,7 @@ export default function AdminSubscribers() {
                     )}
                     <a
                         href="/api/admin/subscribers?export=csv"
-                        className="inline-flex items-center gap-2 bg-navy text-white  border border-transparent  text-sm font-semibold px-4 py-2.5 rounded-lg hover:bg-slate-100  transition-colors duration-200 shadow-sm"
+                        className="inline-flex items-center gap-2 bg-navy text-white  border border-transparent  text-sm font-semibold px-4 py-2.5 rounded-lg hover:bg-slate-100  transition-colors duration-200 shadow-xs"
                     >
                         <Download className="w-4 h-4 opacity-90" aria-hidden />
                         Export CSV
@@ -175,25 +175,25 @@ export default function AdminSubscribers() {
 
             {/* STATS BAR */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="admin-card-glass p-5 rounded-xl border border-slate-200/80  shadow-card ring-1 ring-slate-900/[0.02] flex flex-col gap-2">
+                <div className="admin-card-glass p-5 rounded-xl border border-slate-200/80  shadow-card ring-1 ring-slate-900/2 flex flex-col gap-2">
                     <span className="inline-flex items-center gap-2 text-slate-500  text-sm font-semibold">
                         <Users className="w-4 h-4 text-emerald-600" aria-hidden />
                         Active
                     </span>
                     <span className="text-2xl font-heading font-bold text-slate-900  tabular-nums">{stats.totalActive}</span>
                 </div>
-                <div className="admin-card-glass p-5 rounded-xl border border-slate-200/80  shadow-card ring-1 ring-slate-900/[0.02] flex flex-col gap-2">
+                <div className="admin-card-glass p-5 rounded-xl border border-slate-200/80  shadow-card ring-1 ring-slate-900/2 flex flex-col gap-2">
                     <span className="inline-flex items-center gap-2 text-slate-500  text-sm font-semibold">
                         <UserMinus className="w-4 h-4 text-slate-500" aria-hidden />
                         Inactive
                     </span>
                     <span className="text-2xl font-heading font-bold text-slate-550  tabular-nums">{stats.totalInactive}</span>
                 </div>
-                <div className="admin-card-glass p-5 rounded-xl border border-slate-200/80  shadow-card ring-1 ring-slate-900/[0.02] flex flex-col gap-2">
+                <div className="admin-card-glass p-5 rounded-xl border border-slate-200/80  shadow-card ring-1 ring-slate-900/2 flex flex-col gap-2">
                     <span className="text-emerald-700 dark:text-emerald-400 text-sm font-semibold">New this month</span>
                     <span className="text-2xl font-heading font-bold text-emerald-800 dark:text-emerald-500 tabular-nums">{stats.newThisMonth}</span>
                 </div>
-                <div className="admin-card-glass p-5 rounded-xl border border-slate-200/80  shadow-card ring-1 ring-slate-900/[0.02] flex flex-col gap-2">
+                <div className="admin-card-glass p-5 rounded-xl border border-slate-200/80  shadow-card ring-1 ring-slate-900/2 flex flex-col gap-2">
                     <span className="inline-flex items-center gap-2 text-amber-800 dark:text-amber-400 text-sm font-semibold">
                         <CalendarDays className="w-4 h-4" aria-hidden />
                         This week
@@ -203,7 +203,7 @@ export default function AdminSubscribers() {
             </div>
 
             {/* FILTER BAR */}
-            <div className="admin-card-glass p-4 md:p-5 rounded-xl shadow-card border border-white/60 flex flex-col md:flex-row gap-4 items-stretch md:items-center ring-1 ring-slate-900/[0.02]">
+            <div className="admin-card-glass p-4 md:p-5 rounded-xl shadow-card border border-white/60 flex flex-col md:flex-row gap-4 items-stretch md:items-center ring-1 ring-slate-900/2">
                 <div className="flex-1 w-full relative">
                     <Search
                         className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none"
@@ -214,7 +214,7 @@ export default function AdminSubscribers() {
                         placeholder="Search by email…"
                         value={search}
                         onChange={handleSearchChange}
-                        className="w-full pl-10 pr-4 py-2.5 border border-white/60 rounded-lg text-sm focus:ring-2 focus:ring-gold/45 focus:outline-none text-slate-900  bg-slate-50/50 backdrop-blur-sm transition-shadow"
+                        className="w-full pl-10 pr-4 py-2.5 border border-white/60 rounded-lg text-sm focus:ring-2 focus:ring-gold/45 focus:outline-hidden text-slate-900  bg-slate-50/50 backdrop-blur-xs transition-shadow"
                     />
                 </div>
 
@@ -222,7 +222,7 @@ export default function AdminSubscribers() {
                     <select
                         value={statusFilter}
                         onChange={handleStatusChange}
-                        className="flex-1 md:w-48 appearance-none admin-card-glass text-slate-700  text-sm rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-gold/45 focus:outline-none"
+                        className="flex-1 md:w-48 appearance-none admin-card-glass text-slate-700  text-sm rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-gold/45 focus:outline-hidden"
                     >
                         <option value="all">All Status</option>
                         <option value="active">Active</option>
@@ -232,7 +232,7 @@ export default function AdminSubscribers() {
             </div>
 
             {/* SUBSCRIBERS TABLE & MOBILE CARDS */}
-            <div className="admin-card-glass border border-white/60 overflow-hidden ring-1 ring-slate-900/[0.02]">
+            <div className="admin-card-glass border border-white/60 overflow-hidden ring-1 ring-slate-900/2">
                 {/* DESKTOP TABLE VIEW (hidden on mobile, visible on md+) */}
                 <div className="hidden md:block overflow-x-auto">
                     <table className="w-full text-left text-sm whitespace-nowrap">
@@ -246,7 +246,7 @@ export default function AdminSubscribers() {
                                             if (e.target.checked) setSelected(subscribers.map(s => s.id))
                                             else setSelected([])
                                         }}
-                                        className="rounded border-slate-300 bg-slate-50/50 backdrop-blur-sm text-slate-900 focus:ring-gold cursor-pointer"
+                                        className="rounded-sm border-slate-300 bg-slate-50/50 backdrop-blur-xs text-slate-900 focus:ring-gold cursor-pointer"
                                     />
                                 </th>
                                 <th className="px-6 py-4 font-medium w-[40%]">Email Address</th>
@@ -262,7 +262,7 @@ export default function AdminSubscribers() {
                                     {Array.from({ length: 5 }).map((_, i) => (
                                         <tr key={i} className="animate-pulse">
                                             <td colSpan={6} className="px-6 py-4">
-                                                <div className="h-4 bg-slate-100 rounded w-1/2 max-w-sm" />
+                                                <div className="h-4 bg-slate-100 rounded-sm w-1/2 max-w-sm" />
                                             </td>
                                         </tr>
                                     ))}
@@ -289,7 +289,7 @@ export default function AdminSubscribers() {
                                                         )
                                                     }
                                                 }}
-                                                className="rounded border-slate-300 bg-slate-50/50 backdrop-blur-sm text-slate-900 focus:ring-gold cursor-pointer"
+                                                className="rounded-sm border-slate-300 bg-slate-50/50 backdrop-blur-xs text-slate-900 focus:ring-gold cursor-pointer"
                                             />
                                         </td>
                                         <td className="px-6 py-4 font-medium text-slate-900">
@@ -300,11 +300,11 @@ export default function AdminSubscribers() {
                                         </td>
                                         <td className="px-6 py-4">
                                             {sub.is_active ? (
-                                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-emerald-50 text-emerald-600">
+                                                <span className="inline-flex items-center px-2 py-0.5 rounded-sm text-xs font-bold bg-emerald-50 text-emerald-600">
                                                     Active
                                                 </span>
                                             ) : (
-                                                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-500">
+                                                <span className="inline-flex items-center px-2 py-0.5 rounded-sm text-xs font-bold bg-slate-100 text-slate-500">
                                                     Unsubscribed
                                                 </span>
                                             )}
@@ -363,14 +363,14 @@ export default function AdminSubscribers() {
                                                     setSelected(prev => prev.filter(id => id !== sub.id))
                                                 }
                                             }}
-                                            className="rounded border-slate-300 text-slate-900"
+                                            className="rounded-sm border-slate-300 text-slate-900"
                                         />
                                         {sub.is_active ? (
-                                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-50 text-emerald-600">
+                                            <span className="inline-flex items-center px-2 py-0.5 rounded-sm text-[11px] font-bold bg-emerald-50 text-emerald-600">
                                                 Active
                                             </span>
                                         ) : (
-                                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-slate-100 text-slate-500">
+                                            <span className="inline-flex items-center px-2 py-0.5 rounded-sm text-[11px] font-bold bg-slate-100 text-slate-500">
                                                 Unsubscribed
                                             </span>
                                         )}

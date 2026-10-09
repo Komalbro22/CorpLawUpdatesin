@@ -24,7 +24,7 @@ export default function LLPFAQ() {
               }`}
             >
               <button
-                className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 focus:outline-none"
+                className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 focus:outline-hidden"
                 onClick={() => setOpenIndex(isOpen ? null : index)}
               >
                 <span className={`font-semibold text-lg ${isOpen ? 'text-navy dark:text-white' : 'text-slate-800 dark:text-slate-200'}`}>

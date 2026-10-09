@@ -83,7 +83,7 @@ export default function NewsletterWidget() {
     const activeConfirmed = (savedEmail && !isEditingDifferent) || success
 
     return (
-        <div className="rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-7 shadow-card ring-1 ring-slate-900/[0.02] dark:ring-white/[0.02] transition-all duration-300 hover:shadow-card-hover">
+        <div className="rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-7 shadow-card ring-1 ring-slate-900/2 dark:ring-white/2 transition-all duration-300 hover:shadow-card-hover">
             
             {/* Header / Brand */}
             <div className="flex items-start gap-3.5 mb-4">
@@ -136,7 +136,7 @@ export default function NewsletterWidget() {
                                     href="https://whatsapp.com/channel/0029VbCfcUEEgGfGLWOTvV1A"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1.5 text-xs bg-[#25D366] hover:bg-[#20bd5a] text-white px-3 py-1.5 rounded-lg font-bold shadow-xs hover:opacity-95 transition-all"
+                                    className="inline-flex items-center gap-1.5 text-xs bg-[#25D366] hover:bg-[#20bd5a] text-white px-3 py-1.5 rounded-lg font-bold shadow-2xs hover:opacity-95 transition-all"
                                 >
                                     WhatsApp Channel
                                 </a>
@@ -144,7 +144,7 @@ export default function NewsletterWidget() {
                                     href="https://t.me/corplawupdate"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1.5 text-xs bg-[#229ED9] hover:bg-[#1f8ec4] text-white px-3 py-1.5 rounded-lg font-bold shadow-xs hover:opacity-95 transition-all"
+                                    className="inline-flex items-center gap-1.5 text-xs bg-[#229ED9] hover:bg-[#1f8ec4] text-white px-3 py-1.5 rounded-lg font-bold shadow-2xs hover:opacity-95 transition-all"
                                 >
                                     Telegram Channel
                                 </a>
@@ -211,7 +211,7 @@ export default function NewsletterWidget() {
                             placeholder="you@company.com or ca.firm@gmail.com"
                             aria-invalid={Boolean(error)}
                             aria-describedby={error ? "newsletter-email-error" : undefined}
-                            className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900 dark:text-white text-sm transition-all placeholder:text-slate-400"
+                            className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900 dark:text-white text-sm transition-all placeholder:text-slate-400"
                             required
                             disabled={loading}
                             autoComplete="email"
@@ -224,7 +224,7 @@ export default function NewsletterWidget() {
                             type="checkbox"
                             checked={consent}
                             onChange={e => setConsent(e.target.checked)}
-                            className="mt-0.5 size-4 rounded border-slate-300 dark:border-slate-700 dark:bg-slate-800 text-navy focus:ring-navy dark:focus:ring-amber-500 cursor-pointer"
+                            className="mt-0.5 size-4 rounded-sm border-slate-300 dark:border-slate-700 dark:bg-slate-800 text-navy focus:ring-navy dark:focus:ring-amber-500 cursor-pointer"
                             required
                             disabled={loading}
                         />
@@ -245,7 +245,7 @@ export default function NewsletterWidget() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-navy hover:bg-slate-800 dark:bg-amber-500 dark:hover:bg-amber-400 text-white dark:text-slate-950 font-bold py-3 px-4 rounded-xl transition-all duration-200 disabled:opacity-65 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 active:scale-[0.99]"
+                        className="w-full bg-navy hover:bg-slate-800 dark:bg-amber-500 dark:hover:bg-amber-400 text-white dark:text-slate-950 font-bold py-3 px-4 rounded-xl transition-all duration-200 disabled:opacity-65 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-xs text-sm focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-500 active:scale-[0.99]"
                     >
                         {loading ? (
                             <>

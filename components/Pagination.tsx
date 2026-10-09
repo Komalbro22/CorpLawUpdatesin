@@ -42,7 +42,7 @@ export default function Pagination({ currentPage, totalPages, basePath }: Pagina
                 <Link
                     href={getHref(currentPage - 1)}
                     scroll={false}
-                    className={`${navBtn} text-navy dark:text-slate-200 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-sm`}
+                    className={`${navBtn} text-navy dark:text-slate-200 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-xs`}
                 >
                     <ChevronLeft className="w-4 h-4" aria-hidden />
                     Previous
@@ -63,7 +63,7 @@ export default function Pagination({ currentPage, totalPages, basePath }: Pagina
                         <Link
                             href={getHref(1)}
                             scroll={false}
-                            className="w-10 h-10 flex text-sm font-medium items-center justify-center rounded-lg text-navy dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 border border-transparent hover:border-slate-200 dark:hover:border-slate-700 hover:shadow-sm transition-all duration-200"
+                            className="w-10 h-10 flex text-sm font-medium items-center justify-center rounded-lg text-navy dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 border border-transparent hover:border-slate-200 dark:hover:border-slate-700 hover:shadow-xs transition-all duration-200"
                         >
                             1
                         </Link>
@@ -79,7 +79,7 @@ export default function Pagination({ currentPage, totalPages, basePath }: Pagina
                         className={`w-10 h-10 flex text-sm font-bold items-center justify-center rounded-lg transition-all duration-200 ${
                             currentPage === page
                                 ? 'bg-amber-400 text-navy shadow-md shadow-amber-200/40 ring-1 ring-amber-400/30 scale-[1.05]'
-                                : 'text-navy dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 border border-transparent hover:border-slate-200 dark:hover:border-slate-700 hover:shadow-sm'
+                                : 'text-navy dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 border border-transparent hover:border-slate-200 dark:hover:border-slate-700 hover:shadow-xs'
                         }`}
                         aria-current={currentPage === page ? 'page' : undefined}
                     >
@@ -93,7 +93,7 @@ export default function Pagination({ currentPage, totalPages, basePath }: Pagina
                         <Link
                             href={getHref(totalPages)}
                             scroll={false}
-                            className="w-10 h-10 flex text-sm font-medium items-center justify-center rounded-lg text-navy dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 border border-transparent hover:border-slate-200 dark:hover:border-slate-700 hover:shadow-sm transition-all duration-200"
+                            className="w-10 h-10 flex text-sm font-medium items-center justify-center rounded-lg text-navy dark:text-slate-300 hover:bg-white dark:hover:bg-slate-800 border border-transparent hover:border-slate-200 dark:hover:border-slate-700 hover:shadow-xs transition-all duration-200"
                         >
                             {totalPages}
                         </Link>
@@ -109,7 +109,7 @@ export default function Pagination({ currentPage, totalPages, basePath }: Pagina
                 <Link
                     href={getHref(currentPage + 1)}
                     scroll={false}
-                    className={`${navBtn} text-navy dark:text-slate-200 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-sm`}
+                    className={`${navBtn} text-navy dark:text-slate-200 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-xs`}
                 >
                     Next
                     <ChevronRight className="w-4 h-4" aria-hidden />

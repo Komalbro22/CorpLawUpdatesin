@@ -5,7 +5,7 @@ import { ShieldAlert } from 'lucide-react'
 
 export function StatutoryDisclaimer() {
   return (
-    <div className="bg-brand-slate-blue/30 border border-white/10 rounded-card p-5 flex flex-col sm:flex-row gap-3.5 items-start text-white shadow-sm font-sans">
+    <div className="bg-brand-slate-blue/30 border border-white/10 rounded-card p-5 flex flex-col sm:flex-row gap-3.5 items-start text-white shadow-xs font-sans">
       <ShieldAlert className="h-5 w-5 text-brand-gold mt-0.5 shrink-0" />
       <div>
         <h5 className="text-[10px] font-bold text-brand-gold uppercase tracking-wider mb-1">

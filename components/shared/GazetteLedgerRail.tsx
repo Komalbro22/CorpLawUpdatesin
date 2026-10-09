@@ -37,11 +37,11 @@ export function GazetteLedgerRail({
 
         {/* Monospaced Section / Circular Reference Tag */}
         {sectionRef ? (
-          <span className="font-mono text-xs font-semibold tracking-tight text-slate-700 dark:text-slate-300 break-words line-clamp-1 sm:line-clamp-none">
+          <span className="font-mono text-xs font-semibold tracking-tight text-slate-700 dark:text-slate-300 wrap-break-word line-clamp-1 sm:line-clamp-none">
             {sectionRef}
           </span>
         ) : (
-          <span className={`px-2 py-0.5 text-[11px] font-bold uppercase rounded ${theme.bg} ${theme.text} border ${theme.border}`}>
+          <span className={`px-2 py-0.5 text-[11px] font-bold uppercase rounded-sm ${theme.bg} ${theme.text} border ${theme.border}`}>
             {upperCat}
           </span>
         )}

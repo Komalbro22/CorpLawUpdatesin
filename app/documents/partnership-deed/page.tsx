@@ -479,27 +479,27 @@ export default function PartnershipDeedPage() {
             <a
               href="/api/documents/partnership-deed-download?format=docx&type=deed"
               download
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-emerald-700 text-white font-medium text-sm hover:bg-emerald-800 shadow-sm transition"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-emerald-700 text-white font-medium text-sm hover:bg-emerald-800 shadow-xs transition"
             >
               <Download className="w-4 h-4" /> Download Sample Deed (.docx)
             </a>
             <a
               href="/api/documents/partnership-deed-download?format=pdf&type=deed"
               download
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white text-slate-700 border border-slate-300 font-medium text-sm hover:bg-slate-50 shadow-sm transition"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white text-slate-700 border border-slate-300 font-medium text-sm hover:bg-slate-50 shadow-xs transition"
             >
               <FileText className="w-4 h-4 text-rose-600" /> Download Sample PDF
             </a>
             <a
               href="/api/documents/partnership-deed-download?format=docx&type=rof"
               download
-              className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-lg bg-white text-slate-700 border border-slate-300 font-medium text-sm hover:bg-slate-50 shadow-sm transition"
+              className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-lg bg-white text-slate-700 border border-slate-300 font-medium text-sm hover:bg-slate-50 shadow-xs transition"
             >
               <Download className="w-4 h-4 text-blue-600" /> Form 1 / Form V (.docx)
             </a>
             <a
               href="#interactive-generator"
-              className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-lg bg-slate-900 text-white font-medium text-sm hover:bg-slate-800 shadow-sm transition"
+              className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-lg bg-slate-900 text-white font-medium text-sm hover:bg-slate-800 shadow-xs transition"
             >
               <Sparkles className="w-4 h-4 text-amber-400" /> Jump to AI Generator
             </a>
@@ -508,16 +508,16 @@ export default function PartnershipDeedPage() {
       </header>
 
       {/* Princeton GEO Direct Answer Block */}
-      <section className="bg-gradient-to-b from-slate-100 to-white py-8 border-b border-slate-200">
+      <section className="bg-linear-to-b from-slate-100 to-white py-8 border-b border-slate-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="rounded-2xl border-2 border-emerald-600/30 bg-white p-6 sm:p-8 shadow-sm">
+          <div className="rounded-2xl border-2 border-emerald-600/30 bg-white p-6 sm:p-8 shadow-xs">
             <div className="flex items-start gap-4">
               <div className="p-3 bg-emerald-100 text-emerald-800 rounded-xl shrink-0 hidden sm:block">
                 <Gavel className="w-7 h-7" />
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                  <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-sm border border-emerald-200">
                     Direct Legal Answer
                   </span>
                   <span className="text-xs text-slate-500 font-medium">
@@ -580,7 +580,7 @@ export default function PartnershipDeedPage() {
       <section className="py-12 bg-white border-b border-slate-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mb-8">
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded border border-emerald-200">
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-sm border border-emerald-200">
               Statutory Checklist
             </span>
             <h2 className="mt-2 text-2xl sm:text-3xl font-bold text-slate-900">
@@ -591,7 +591,7 @@ export default function PartnershipDeedPage() {
             </p>
           </div>
 
-          <div className="overflow-x-auto rounded-xl border border-slate-200 shadow-sm">
+          <div className="overflow-x-auto rounded-xl border border-slate-200 shadow-xs">
             <table className="w-full text-left text-sm text-slate-700 border-collapse">
               <thead className="bg-slate-100 text-xs uppercase font-bold text-slate-700 border-b border-slate-200">
                 <tr>
@@ -607,7 +607,7 @@ export default function PartnershipDeedPage() {
                   <tr key={clause.no} className="hover:bg-slate-50 transition">
                     <td className="py-3.5 px-4 font-semibold text-center text-slate-500">{clause.no}</td>
                     <td className="py-3.5 px-4 font-bold text-slate-900">{clause.name}</td>
-                    <td className="py-3.5 px-4 text-xs font-mono text-emerald-800 bg-emerald-50/50 rounded">
+                    <td className="py-3.5 px-4 text-xs font-mono text-emerald-800 bg-emerald-50/50 rounded-sm">
                       {clause.statutoryRef}
                     </td>
                     <td className="py-3.5 px-4 text-xs sm:text-sm text-slate-700">{clause.importance}</td>
@@ -624,7 +624,7 @@ export default function PartnershipDeedPage() {
       <section className="py-12 bg-slate-50 border-b border-slate-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mb-8">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-1 rounded border border-blue-200">
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-1 rounded-sm border border-blue-200">
               State Stamp Schedules
             </span>
             <h2 className="mt-2 text-2xl sm:text-3xl font-bold text-slate-900">
@@ -639,14 +639,14 @@ export default function PartnershipDeedPage() {
             {STAMP_DUTY_TABLE.map((item) => (
               <div
                 key={item.state}
-                className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-blue-400 transition"
+                className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between hover:border-blue-400 transition"
               >
                 <div>
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-slate-900 text-base flex items-center gap-1.5">
                       <MapPin className="w-4 h-4 text-blue-600" /> {item.state}
                     </span>
-                    <span className="text-xs font-semibold px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200">
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded-sm bg-blue-50 text-blue-700 border border-blue-200">
                       {item.limits}
                     </span>
                   </div>
@@ -673,7 +673,7 @@ export default function PartnershipDeedPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             <div className="lg:col-span-7">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded border border-emerald-200">
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-sm border border-emerald-200">
                 Income Tax Act Optimization
               </span>
               <h2 className="mt-2 text-2xl sm:text-3xl font-bold text-slate-900">
@@ -683,7 +683,7 @@ export default function PartnershipDeedPage() {
                 The <strong>Finance (No. 2) Act, 2024</strong> introduced historic revisions to working partner remuneration deduction limits under <strong>Section 40(b)(v)</strong>, effective for Assessment Year 2025-26 and all subsequent financial years. This was the first major slab increase in over 15 years, doubling the base book-profit threshold from ₹3,00,000 to ₹6,00,000.
               </p>
 
-              <div className="mt-6 rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+              <div className="mt-6 rounded-xl border border-slate-200 overflow-hidden shadow-xs">
                 <table className="w-full text-left text-sm border-collapse">
                   <thead className="bg-slate-100 text-xs uppercase font-bold text-slate-700 border-b border-slate-200">
                     <tr>
@@ -787,7 +787,7 @@ export default function PartnershipDeedPage() {
       <section className="py-12 bg-slate-50 border-b border-slate-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mb-8">
-            <span className="text-xs font-bold uppercase tracking-wider text-purple-700 bg-purple-50 px-2.5 py-1 rounded border border-purple-200">
+            <span className="text-xs font-bold uppercase tracking-wider text-purple-700 bg-purple-50 px-2.5 py-1 rounded-sm border border-purple-200">
               New Statutory Compliance
             </span>
             <h2 className="mt-2 text-2xl sm:text-3xl font-bold text-slate-900">
@@ -799,7 +799,7 @@ export default function PartnershipDeedPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
               <div className="w-10 h-10 rounded-lg bg-purple-100 text-purple-800 flex items-center justify-center font-bold text-lg mb-3">
                 10%
               </div>
@@ -809,7 +809,7 @@ export default function PartnershipDeedPage() {
               </p>
             </div>
 
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
               <div className="w-10 h-10 rounded-lg bg-purple-100 text-purple-800 flex items-center justify-center font-bold text-lg mb-3">
                 ₹20k
               </div>
@@ -819,7 +819,7 @@ export default function PartnershipDeedPage() {
               </p>
             </div>
 
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs">
               <div className="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-lg mb-3">
                 10(2A)
               </div>
@@ -840,7 +840,7 @@ export default function PartnershipDeedPage() {
       <section className="py-12 bg-white border-b border-slate-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mb-8">
-            <span className="text-xs font-bold uppercase tracking-wider text-rose-700 bg-rose-50 px-2.5 py-1 rounded border border-rose-200">
+            <span className="text-xs font-bold uppercase tracking-wider text-rose-700 bg-rose-50 px-2.5 py-1 rounded-sm border border-rose-200">
               Procedural Protection
             </span>
             <h2 className="mt-2 text-2xl sm:text-3xl font-bold text-slate-900">
@@ -910,7 +910,7 @@ export default function PartnershipDeedPage() {
       <section className="py-12 bg-slate-50 border-b border-slate-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mb-8">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-700 bg-slate-200 px-2.5 py-1 rounded">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-700 bg-slate-200 px-2.5 py-1 rounded-sm">
               Comparative Analysis
             </span>
             <h2 className="mt-2 text-2xl sm:text-3xl font-bold text-slate-900">
@@ -921,7 +921,7 @@ export default function PartnershipDeedPage() {
             </p>
           </div>
 
-          <div className="overflow-x-auto rounded-xl border border-slate-200 shadow-sm bg-white">
+          <div className="overflow-x-auto rounded-xl border border-slate-200 shadow-xs bg-white">
             <table className="w-full text-left text-sm text-slate-700 border-collapse">
               <thead className="bg-slate-100 text-xs uppercase font-bold text-slate-700 border-b border-slate-200">
                 <tr>
@@ -978,7 +978,7 @@ export default function PartnershipDeedPage() {
       <section className="py-12 bg-white border-b border-slate-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mb-8">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-700 bg-slate-100 px-2.5 py-1 rounded border border-slate-200">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-700 bg-slate-100 px-2.5 py-1 rounded-sm border border-slate-200">
               Post-Execution Maintenance
             </span>
             <h2 className="mt-2 text-2xl sm:text-3xl font-bold text-slate-900">
@@ -1045,14 +1045,14 @@ export default function PartnershipDeedPage() {
               <a
                 href="/api/documents/partnership-deed-download?format=docx&type=deed"
                 download
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-700 text-white font-medium text-xs hover:bg-emerald-800 transition shadow-sm"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-700 text-white font-medium text-xs hover:bg-emerald-800 transition shadow-xs"
               >
                 <Download className="w-3.5 h-3.5" /> Supplementary Deed (.docx)
               </a>
               <a
                 href="/api/documents/partnership-deed-download?format=docx&type=rof"
                 download
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white text-slate-700 border border-slate-300 font-medium text-xs hover:bg-slate-50 transition shadow-sm"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white text-slate-700 border border-slate-300 font-medium text-xs hover:bg-slate-50 transition shadow-xs"
               >
                 <Download className="w-3.5 h-3.5 text-blue-600" /> Form V / Form 1 (.docx)
               </a>
@@ -1065,7 +1065,7 @@ export default function PartnershipDeedPage() {
       <section className="py-12 bg-slate-50 border-b border-slate-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mb-8">
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded border border-emerald-200">
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-sm border border-emerald-200">
               Workflow Guide
             </span>
             <h2 className="mt-2 text-2xl sm:text-3xl font-bold text-slate-900">
@@ -1077,7 +1077,7 @@ export default function PartnershipDeedPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
               <div className="text-xs font-bold text-emerald-700">Step 1</div>
               <h3 className="font-bold text-slate-900 text-sm mt-1">Finalize & Proofread</h3>
               <p className="text-xs text-slate-600 mt-1 leading-relaxed">
@@ -1085,7 +1085,7 @@ export default function PartnershipDeedPage() {
               </p>
             </div>
 
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
               <div className="text-xs font-bold text-emerald-700">Step 2</div>
               <h3 className="font-bold text-slate-900 text-sm mt-1">Procure E-Stamp Paper</h3>
               <p className="text-xs text-slate-600 mt-1 leading-relaxed">
@@ -1093,7 +1093,7 @@ export default function PartnershipDeedPage() {
               </p>
             </div>
 
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
               <div className="text-xs font-bold text-emerald-700">Step 3</div>
               <h3 className="font-bold text-slate-900 text-sm mt-1">Execute & Witness</h3>
               <p className="text-xs text-slate-600 mt-1 leading-relaxed">
@@ -1101,7 +1101,7 @@ export default function PartnershipDeedPage() {
               </p>
             </div>
 
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
               <div className="text-xs font-bold text-emerald-700">Step 4</div>
               <h3 className="font-bold text-slate-900 text-sm mt-1">Notarise before Notary</h3>
               <p className="text-xs text-slate-600 mt-1 leading-relaxed">
@@ -1109,7 +1109,7 @@ export default function PartnershipDeedPage() {
               </p>
             </div>
 
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
               <div className="text-xs font-bold text-emerald-700">Step 5</div>
               <h3 className="font-bold text-slate-900 text-sm mt-1">Obtain Firm PAN & TAN</h3>
               <p className="text-xs text-slate-600 mt-1 leading-relaxed">
@@ -1117,7 +1117,7 @@ export default function PartnershipDeedPage() {
               </p>
             </div>
 
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
               <div className="text-xs font-bold text-emerald-700">Step 6</div>
               <h3 className="font-bold text-slate-900 text-sm mt-1">Open Bank Current Account</h3>
               <p className="text-xs text-slate-600 mt-1 leading-relaxed">
@@ -1125,7 +1125,7 @@ export default function PartnershipDeedPage() {
               </p>
             </div>
 
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
               <div className="text-xs font-bold text-emerald-700">Step 7</div>
               <h3 className="font-bold text-slate-900 text-sm mt-1">File ROF Form 1</h3>
               <p className="text-xs text-slate-600 mt-1 leading-relaxed">
@@ -1133,7 +1133,7 @@ export default function PartnershipDeedPage() {
               </p>
             </div>
 
-            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
               <div className="text-xs font-bold text-emerald-700">Step 8</div>
               <h3 className="font-bold text-slate-900 text-sm mt-1">GST & Udyam Registration</h3>
               <p className="text-xs text-slate-600 mt-1 leading-relaxed">
@@ -1148,7 +1148,7 @@ export default function PartnershipDeedPage() {
       <section className="py-12 bg-white border-b border-slate-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mb-10">
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded border border-emerald-200">
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-sm border border-emerald-200">
               Got Questions?
             </span>
             <h2 className="mt-2 text-2xl sm:text-3xl font-bold text-slate-900 flex items-center gap-2">
@@ -1189,7 +1189,7 @@ export default function PartnershipDeedPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <Link
               href="/documents/memorandum-of-understanding"
-              className="p-4 bg-white rounded-xl border border-slate-200 hover:border-emerald-600 hover:shadow-sm transition block group"
+              className="p-4 bg-white rounded-xl border border-slate-200 hover:border-emerald-600 hover:shadow-xs transition block group"
             >
               <div className="font-bold text-slate-900 text-sm group-hover:text-emerald-700 transition">
                 MoU Generator & Format →
@@ -1201,7 +1201,7 @@ export default function PartnershipDeedPage() {
 
             <Link
               href="/calculators/llp-stamp-duty-calculator"
-              className="p-4 bg-white rounded-xl border border-slate-200 hover:border-emerald-600 hover:shadow-sm transition block group"
+              className="p-4 bg-white rounded-xl border border-slate-200 hover:border-emerald-600 hover:shadow-xs transition block group"
             >
               <div className="font-bold text-slate-900 text-sm group-hover:text-emerald-700 transition">
                 LLP Agreement Stamp Duty →
@@ -1213,7 +1213,7 @@ export default function PartnershipDeedPage() {
 
             <Link
               href="/documents/equitable-mortgage-deed"
-              className="p-4 bg-white rounded-xl border border-slate-200 hover:border-emerald-600 hover:shadow-sm transition block group"
+              className="p-4 bg-white rounded-xl border border-slate-200 hover:border-emerald-600 hover:shadow-xs transition block group"
             >
               <div className="font-bold text-slate-900 text-sm group-hover:text-emerald-700 transition">
                 MODT / Equitable Mortgage Deed →
@@ -1225,7 +1225,7 @@ export default function PartnershipDeedPage() {
 
             <Link
               href="/calculators/company-incorporation-fee-calculator"
-              className="p-4 bg-white rounded-xl border border-slate-200 hover:border-emerald-600 hover:shadow-sm transition block group"
+              className="p-4 bg-white rounded-xl border border-slate-200 hover:border-emerald-600 hover:shadow-xs transition block group"
             >
               <div className="font-bold text-slate-900 text-sm group-hover:text-emerald-700 transition">
                 Company Incorporation Fee →

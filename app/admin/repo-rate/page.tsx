@@ -123,7 +123,7 @@ export default function AdminRepoRatePage() {
         ].map(stat => (
           <div
             key={stat.label}
-            className={`rounded-xl border p-4 text-center shadow-card ring-1 ring-slate-900/[0.02] ${stat.color}`}
+            className={`rounded-xl border p-4 text-center shadow-card ring-1 ring-slate-900/2 ${stat.color}`}
           >
             <div className="text-2xl font-heading font-bold">{stat.value}</div>
             <div className="text-xs font-semibold mt-1 opacity-85">{stat.label}</div>
@@ -145,27 +145,27 @@ export default function AdminRepoRatePage() {
             <input type="text" value={form.repo_rate}
               onChange={e => setForm(p => ({ ...p, repo_rate: e.target.value }))}
               placeholder="e.g. 5.00%"
-              className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900" />
+              className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900" />
           </div>
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-1">SDF Rate</label>
             <input type="text" value={form.sdf_rate}
               onChange={e => setForm(p => ({ ...p, sdf_rate: e.target.value }))}
               placeholder="e.g. 4.75%"
-              className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900" />
+              className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900" />
           </div>
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-1">MSF / Bank Rate</label>
             <input type="text" value={form.msf_rate}
               onChange={e => setForm(p => ({ ...p, msf_rate: e.target.value }))}
               placeholder="e.g. 5.25%"
-              className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900" />
+              className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900" />
           </div>
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-1">Policy Stance</label>
             <select value={form.stance}
               onChange={e => setForm(p => ({ ...p, stance: e.target.value }))}
-              className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900">
+              className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900">
               <option className="bg-slate-100 text-white">Neutral</option>
               <option className="bg-slate-100 text-white">Accommodative</option>
               <option className="bg-slate-100 text-white">Withdrawal</option>
@@ -176,20 +176,20 @@ export default function AdminRepoRatePage() {
             <input type="text" value={form.meeting_name}
               onChange={e => setForm(p => ({ ...p, meeting_name: e.target.value }))}
               placeholder="e.g. August 2026 (62nd MPC)"
-              className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900" />
+              className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900" />
           </div>
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-1">Meeting Date *</label>
             <input type="date" value={form.meeting_date}
               onChange={e => setForm(p => ({ ...p, meeting_date: e.target.value }))}
-              className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900" />
+              className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900" />
           </div>
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-1">Rate Change</label>
             <div className="flex gap-2">
               <select value={form.change_direction}
                 onChange={e => setForm(p => ({ ...p, change_direction: e.target.value }))}
-                className="bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900">
+                className="bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900">
                 <option className="bg-slate-100 text-white" value="unchanged">No Change</option>
                 <option className="bg-slate-100 text-white" value="cut">Rate Cut</option>
                 <option className="bg-slate-100 text-white" value="hike">Rate Hike</option>
@@ -197,7 +197,7 @@ export default function AdminRepoRatePage() {
               <input type="text" value={form.change_amount}
                 onChange={e => setForm(p => ({ ...p, change_amount: e.target.value }))}
                 placeholder="e.g. -0.25%"
-                className="flex-1 bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900" />
+                className="flex-1 bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900" />
             </div>
           </div>
           <div>
@@ -205,7 +205,7 @@ export default function AdminRepoRatePage() {
             <input type="text" value={form.next_mpc_date}
               onChange={e => setForm(p => ({ ...p, next_mpc_date: e.target.value }))}
               placeholder="e.g. August 5-7, 2026"
-              className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900" />
+              className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900" />
           </div>
         </div>
         <div className="px-6 pb-6">

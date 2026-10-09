@@ -71,9 +71,9 @@ export default function FontSizeToggle() {
           onClick={() => changeSize(s)}
           aria-pressed={size === s}
           aria-label={buttonLabels[s]}
-          className={`min-w-[34px] h-8 sm:h-9 px-2 rounded-md text-xs font-bold transition-all duration-150 border focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 active:scale-95
+          className={`min-w-[34px] h-8 sm:h-9 px-2 rounded-md text-xs font-bold transition-all duration-150 border focus:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-400 active:scale-95
             ${size === s
-              ? 'bg-amber-500 dark:bg-amber-400 text-slate-950 font-extrabold border-amber-500 dark:border-amber-400 shadow-sm'
+              ? 'bg-amber-500 dark:bg-amber-400 text-slate-950 font-extrabold border-amber-500 dark:border-amber-400 shadow-xs'
               : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:border-amber-300 hover:text-amber-700 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-slate-800'
             }`}
         >

@@ -114,7 +114,7 @@ export default function ReaderFeedback({
             <button
               type="button"
               onClick={() => setSentiment('positive')}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-emerald-500 hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors shadow-xs"
             >
               <ThumbsUp className="size-3.5 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
               Helpful & Clear
@@ -123,7 +123,7 @@ export default function ReaderFeedback({
             <button
               type="button"
               onClick={() => setSentiment('negative')}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-amber-500 hover:text-amber-700 dark:hover:text-amber-400 transition-colors shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 hover:border-amber-500 hover:text-amber-700 dark:hover:text-amber-400 transition-colors shadow-xs"
             >
               <AlertCircle className="size-3.5 text-amber-600 dark:text-amber-400" aria-hidden="true" />
               Found an Issue
@@ -170,8 +170,8 @@ export default function ReaderFeedback({
                     className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
                       isSelected
                         ? sentiment === 'positive'
-                          ? 'bg-emerald-600 text-white shadow-sm'
-                          : 'bg-amber-600 text-white shadow-sm'
+                          ? 'bg-emerald-600 text-white shadow-xs'
+                          : 'bg-amber-600 text-white shadow-xs'
                         : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-slate-400'
                     }`}
                   >
@@ -193,7 +193,7 @@ export default function ReaderFeedback({
                   ? 'Add any additional thoughts (optional)...'
                   : 'Tell us what was incorrect or missing so we can fix it (optional)...'
               }
-              className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-navy dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500/50"
+              className="w-full text-xs p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-navy dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-amber-500/50"
             />
           </div>
 
@@ -204,7 +204,7 @@ export default function ReaderFeedback({
               value={userEmail}
               onChange={e => setUserEmail(e.target.value)}
               placeholder="Your email if you'd like a reply (optional)"
-              className="text-xs px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-navy dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500/50 max-w-sm"
+              className="text-xs px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-navy dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-amber-500/50 max-w-sm"
             />
 
             <div className="flex items-center gap-2 justify-end">

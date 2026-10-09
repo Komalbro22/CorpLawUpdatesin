@@ -181,7 +181,7 @@ export default function RegulatorRadarModal({ isOpen, onClose }: Props) {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
+    <div className="fixed inset-0 z-70 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs animate-fade-in">
       <div
         className="relative w-full max-w-4xl max-h-[90vh] flex flex-col bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden"
         role="dialog"
@@ -189,7 +189,7 @@ export default function RegulatorRadarModal({ isOpen, onClose }: Props) {
         aria-label="Regulator Radar"
       >
         {/* HEADER */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 bg-gradient-to-r from-amber-50/50 to-orange-50/30">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 bg-linear-to-r from-amber-50/50 to-orange-50/30">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shadow-md shadow-amber-500/20 animate-pulse">
               <Radio className="w-5 h-5" aria-hidden />
@@ -204,7 +204,7 @@ export default function RegulatorRadarModal({ isOpen, onClose }: Props) {
                 <Clock className="w-3.5 h-3.5 text-slate-400" />
                 {lastScanTime ? `Last scanned at ${lastScanTime}` : 'Scanning regulator feeds...'}
                 {unreadCount > 0 && (
-                  <span className="font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200 text-[11px]">
+                  <span className="font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.2 rounded-sm border border-emerald-200 text-[11px]">
                     {unreadCount} unread
                   </span>
                 )}
@@ -218,7 +218,7 @@ export default function RegulatorRadarModal({ isOpen, onClose }: Props) {
               onClick={() => fetchRadar(true)}
               disabled={loading}
               title="Force Fresh Scan (bypasses cache)"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 transition-colors shadow-sm disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 transition-colors shadow-xs disabled:opacity-50"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-amber-600' : 'text-slate-500'}`} />
               <span className="hidden sm:inline">{loading ? 'Scanning...' : 'Scan Now'}</span>
@@ -284,7 +284,7 @@ export default function RegulatorRadarModal({ isOpen, onClose }: Props) {
                 onClick={() => setSelectedRegulator(tab.key)}
                 className={`px-2.5 py-1 rounded-lg font-medium transition-colors shrink-0 ${
                   selectedRegulator === tab.key
-                    ? 'bg-amber-500 text-white font-semibold shadow-sm'
+                    ? 'bg-amber-500 text-white font-semibold shadow-xs'
                     : 'text-slate-600 hover:bg-slate-100'
                 }`}
               >
@@ -360,7 +360,7 @@ export default function RegulatorRadarModal({ isOpen, onClose }: Props) {
 
           {/* EMPTY / ALL CAUGHT UP STATE */}
           {!loading && filteredItems.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-16 text-center space-y-3 bg-white rounded-xl border border-slate-200/80 p-8 shadow-sm">
+            <div className="flex flex-col items-center justify-center py-16 text-center space-y-3 bg-white rounded-xl border border-slate-200/80 p-8 shadow-xs">
               <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100">
                 <Sparkles className="w-7 h-7" />
               </div>
@@ -385,7 +385,7 @@ export default function RegulatorRadarModal({ isOpen, onClose }: Props) {
                 <button
                   type="button"
                   onClick={() => fetchRadar(true)}
-                  className="px-3.5 py-1.5 text-xs font-bold rounded-lg bg-amber-500 hover:bg-amber-600 text-white transition-colors shadow-sm"
+                  className="px-3.5 py-1.5 text-xs font-bold rounded-lg bg-amber-500 hover:bg-amber-600 text-white transition-colors shadow-xs"
                 >
                   Force Re-Scan
                 </button>
@@ -403,7 +403,7 @@ export default function RegulatorRadarModal({ isOpen, onClose }: Props) {
                   className={`p-4 rounded-xl border transition-all duration-200 ${
                     isSeen
                       ? 'bg-white/60 border-slate-200 opacity-60'
-                      : 'bg-white border-amber-200/70 shadow-sm hover:shadow hover:border-amber-400'
+                      : 'bg-white border-amber-200/70 shadow-xs hover:shadow-sm hover:border-amber-400'
                   }`}
                 >
                   <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
@@ -417,7 +417,7 @@ export default function RegulatorRadarModal({ isOpen, onClose }: Props) {
                           📅 {item.rawDateStr || item.date}
                         </span>
                         {!isSeen && (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded">
+                          <span className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded-sm">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
                             New
                           </span>
@@ -445,7 +445,7 @@ export default function RegulatorRadarModal({ isOpen, onClose }: Props) {
                       <button
                         type="button"
                         onClick={() => handleCreateArticle(item)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-amber-500 hover:bg-amber-600 transition-colors shadow-sm w-full sm:w-auto justify-center"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-amber-500 hover:bg-amber-600 transition-colors shadow-xs w-full sm:w-auto justify-center"
                       >
                         <PenSquare className="w-3.5 h-3.5" />
                         <span>Create Article</span>

@@ -153,25 +153,25 @@ export default function AdminCompanyDataPage() {
         <div className="flex flex-wrap bg-slate-100 dark:bg-slate-800 p-1 rounded-xl gap-1">
           <button
             onClick={() => setActiveTab('companies')}
-            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 ${activeTab === 'companies' ? 'bg-white dark:bg-slate-900 text-navy dark:text-amber-400 shadow-sm' : 'text-slate-600 dark:text-slate-400'}`}
+            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 ${activeTab === 'companies' ? 'bg-white dark:bg-slate-900 text-navy dark:text-amber-400 shadow-xs' : 'text-slate-600 dark:text-slate-400'}`}
           >
             <Building2 className="w-3.5 h-3.5" /> Cached Companies ({displayCompanies.length})
           </button>
           <button
             onClick={() => setActiveTab('analytics')}
-            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 ${activeTab === 'analytics' ? 'bg-white dark:bg-slate-900 text-navy dark:text-amber-400 shadow-sm' : 'text-slate-600 dark:text-slate-400'}`}
+            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 ${activeTab === 'analytics' ? 'bg-white dark:bg-slate-900 text-navy dark:text-amber-400 shadow-xs' : 'text-slate-600 dark:text-slate-400'}`}
           >
             <BarChart3 className="w-3.5 h-3.5" /> Analytics & Views
           </button>
           <button
             onClick={() => setActiveTab('health')}
-            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 ${activeTab === 'health' ? 'bg-white dark:bg-slate-900 text-navy dark:text-amber-400 shadow-sm' : 'text-slate-600 dark:text-slate-400'}`}
+            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 ${activeTab === 'health' ? 'bg-white dark:bg-slate-900 text-navy dark:text-amber-400 shadow-xs' : 'text-slate-600 dark:text-slate-400'}`}
           >
             <Database className="w-3.5 h-3.5" /> Storage Health & Eviction
           </button>
           <button
             onClick={() => setActiveTab('rules')}
-            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 ${activeTab === 'rules' ? 'bg-white dark:bg-slate-900 text-navy dark:text-amber-400 shadow-sm' : 'text-slate-600 dark:text-slate-400'}`}
+            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 ${activeTab === 'rules' ? 'bg-white dark:bg-slate-900 text-navy dark:text-amber-400 shadow-xs' : 'text-slate-600 dark:text-slate-400'}`}
           >
             <ShieldCheck className="w-3.5 h-3.5" /> Rules Engine (CRUD)
           </button>
@@ -187,7 +187,7 @@ export default function AdminCompanyDataPage() {
               placeholder="Filter by CIN or Company Name..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2 text-sm w-80 text-navy dark:text-white focus:outline-none"
+              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2 text-sm w-80 text-navy dark:text-white focus:outline-hidden"
             />
             <button
               onClick={loadData}
@@ -197,7 +197,7 @@ export default function AdminCompanyDataPage() {
             </button>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xs">
             {isLoading ? (
               <div className="p-8 text-center text-slate-400"><Loader2 className="w-6 h-6 animate-spin mx-auto" /></div>
             ) : (
@@ -219,7 +219,7 @@ export default function AdminCompanyDataPage() {
                         <div className="font-bold text-navy dark:text-white flex items-center gap-1.5">
                           {c.company_name}
                           {c.is_manually_corrected && (
-                            <span className="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded font-bold">Override</span>
+                            <span className="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded-sm font-bold">Override</span>
                           )}
                         </div>
                         <div className="text-xs text-slate-400 font-mono">{c.cin}</div>
@@ -272,7 +272,7 @@ export default function AdminCompanyDataPage() {
       {activeTab === 'analytics' && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs">
               <div className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
                 <Building2 className="w-4 h-4 text-amber-500" /> Total Cached Companies
               </div>
@@ -280,7 +280,7 @@ export default function AdminCompanyDataPage() {
               <p className="text-xs text-slate-400 mt-1">Stored in Secondary DB (DB2)</p>
             </div>
 
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs">
               <div className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
                 <Eye className="w-4 h-4 text-blue-500" /> Total Page Views
               </div>
@@ -288,7 +288,7 @@ export default function AdminCompanyDataPage() {
               <p className="text-xs text-slate-400 mt-1">Public `/company/[cin]` profile views</p>
             </div>
 
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs">
               <div className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
                 <Download className="w-4 h-4 text-emerald-500" /> PDF Reports Generated
               </div>
@@ -297,7 +297,7 @@ export default function AdminCompanyDataPage() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs">
             <h3 className="text-base font-bold text-navy dark:text-white font-heading mb-4">
               Top Most Visited Companies & Performance Analytics
             </h3>
@@ -323,7 +323,7 @@ export default function AdminCompanyDataPage() {
       {/* Tab 3: Health & Storage */}
       {activeTab === 'health' && (
         <div className="space-y-6">
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs">
             <h2 className="text-lg font-bold text-navy dark:text-white font-heading mb-2">
               DB2 Storage Relation Size & LRU Safeguard
             </h2>
@@ -359,7 +359,7 @@ export default function AdminCompanyDataPage() {
       {activeTab === 'rules' && (
         <div className="space-y-6">
           {/* Add New Rule Form */}
-          <form onSubmit={handleAddRule} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
+          <form onSubmit={handleAddRule} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs space-y-4">
             <h3 className="text-sm font-bold text-navy dark:text-white uppercase tracking-wider">
               Add New Compliance Rule Definition
             </h3>
@@ -408,7 +408,7 @@ export default function AdminCompanyDataPage() {
           </form>
 
           {/* Rules List */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xs">
             <table className="w-full text-left text-xs md:text-sm">
               <thead className="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 font-bold uppercase">
                 <tr>

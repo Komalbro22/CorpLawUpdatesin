@@ -178,7 +178,7 @@ export default function TopBar() {
                 {/* Regulator Radar Link */}
                 <Link
                     href="/admin/radar"
-                    className={`inline-flex items-center gap-1.5 admin-ctx-btn transition-all duration-200 rounded-xl px-3 py-2 text-xs font-semibold shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
+                    className={`inline-flex items-center gap-1.5 admin-ctx-btn transition-all duration-200 rounded-xl px-3 py-2 text-xs font-semibold shadow-xs focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-500 ${
                         isRadarActive
                             ? 'bg-amber-500 text-white font-bold shadow-amber-500/20'
                             : 'text-slate-700 bg-slate-100/90 hover:bg-slate-200/90 border border-slate-200/80 hover:text-slate-900'
@@ -193,7 +193,7 @@ export default function TopBar() {
                 {ctxAction ? (
                     <Link
                         href={ctxAction.href}
-                        className={`hidden sm:inline-flex items-center gap-1.5 admin-ctx-btn rounded-xl px-3 py-2 text-xs font-semibold shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${ctxAction.colorClass}`}
+                        className={`hidden sm:inline-flex items-center gap-1.5 admin-ctx-btn rounded-xl px-3 py-2 text-xs font-semibold shadow-xs focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-500 ${ctxAction.colorClass}`}
                     >
                         <ctxAction.icon className="w-3.5 h-3.5" aria-hidden />
                         {ctxAction.label}
@@ -201,7 +201,7 @@ export default function TopBar() {
                 ) : (
                     <Link
                         href="/admin/articles/new"
-                        className="hidden sm:inline-flex items-center gap-1.5 admin-ctx-btn bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-bold text-xs rounded-xl px-3 py-2 shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+                        className="hidden sm:inline-flex items-center gap-1.5 admin-ctx-btn bg-linear-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-bold text-xs rounded-xl px-3 py-2 shadow-xs transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-500"
                     >
                         <PenSquare className="w-3.5 h-3.5 text-slate-950" aria-hidden />
                         <span>New Article</span>
@@ -213,7 +213,7 @@ export default function TopBar() {
                     href="/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-xl px-3 py-2 transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-xl px-3 py-2 transition-colors shadow-xs focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-500"
                 >
                     <ExternalLink className="w-3.5 h-3.5 text-slate-400 shrink-0" aria-hidden />
                     <span className="hidden sm:inline">Live Site</span>

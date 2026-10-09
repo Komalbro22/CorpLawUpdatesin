@@ -180,7 +180,7 @@ export default function RuleLearningDashboard() {
     <div className="space-y-6 max-w-6xl mx-auto px-4 py-6 text-slate-900">
       
       {/* Header Row */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.06] pb-5">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/6 pb-5">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-center justify-center text-amber-400">
             <Brain className="w-5 h-5 drop-shadow-[0_0_6px_rgba(245,158,11,0.4)]" />
@@ -202,7 +202,7 @@ export default function RuleLearningDashboard() {
 
       {/* Main Content */}
       {loading && items.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 bg-white/[0.01] rounded-2xl border border-white/[0.04] border-dashed">
+        <div className="flex flex-col items-center justify-center py-20 bg-white/1 rounded-2xl border border-white/4 border-dashed">
           <RefreshCw className="h-8 w-8 text-amber-500/50 animate-spin mb-4" />
           <p className="text-slate-500 text-sm">Loading learning queue...</p>
         </div>
@@ -215,7 +215,7 @@ export default function RuleLearningDashboard() {
           </div>
         </div>
       ) : items.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-16 bg-white/[0.01] rounded-2xl border border-white/[0.04] text-center p-6">
+        <div className="flex flex-col items-center justify-center py-16 bg-white/1 rounded-2xl border border-white/4 text-center p-6">
           <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4">
             <Check className="w-5 h-5" />
           </div>
@@ -242,7 +242,7 @@ export default function RuleLearningDashboard() {
                   className={`rounded-xl overflow-hidden border transition-all duration-200 ${
                     isExpanded 
                       ? 'bg-slate-100/90 border-amber-500/30 shadow-[0_4px_20px_-5px_rgba(245,158,11,0.08)]' 
-                      : 'bg-white/[0.02] border-white/[0.06] hover:border-white/10 hover:bg-white/[0.03]'
+                      : 'bg-white/2 border-white/6 hover:border-white/10 hover:bg-white/3'
                   }`}
                 >
                   {/* Card Header Summary */}
@@ -279,7 +279,7 @@ export default function RuleLearningDashboard() {
 
                   {/* Expanded Detail Editor */}
                   {isExpanded && (
-                    <div className="border-t border-white/[0.06] p-5 space-y-6 bg-slate-50/50">
+                    <div className="border-t border-white/6 p-5 space-y-6 bg-slate-50/50">
                       
                       {/* Grid: Instructions vs Template Details */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -290,7 +290,7 @@ export default function RuleLearningDashboard() {
                             <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
                               <HelpCircle className="w-3.5 h-3.5" /> User Instruction
                             </h4>
-                            <div className="bg-white/[0.02] border border-white/[0.06] rounded-xl p-3 text-sm text-slate-700 leading-relaxed font-medium">"{item.original_prompt}"
+                            <div className="bg-white/2 border border-white/6 rounded-xl p-3 text-sm text-slate-700 leading-relaxed font-medium">"{item.original_prompt}"
                             </div>
                           </div>
 
@@ -301,7 +301,7 @@ export default function RuleLearningDashboard() {
                             <select
                               value={editDocType}
                               onChange={(e) => setEditDocType(e.target.value)}
-                              className="w-full bg-slate-100 border border-white/10 rounded-lg px-3 py-2 text-xs font-medium text-slate-900 focus:border-amber-500 focus:outline-none"
+                              className="w-full bg-slate-100 border border-white/10 rounded-lg px-3 py-2 text-xs font-medium text-slate-900 focus:border-amber-500 focus:outline-hidden"
                             >
                               {DOC_TYPE_OPTIONS.map(opt => (
                                 <option key={opt} value={opt}>{opt}</option>
@@ -318,7 +318,7 @@ export default function RuleLearningDashboard() {
                               type="text"
                               value={editIntent}
                               onChange={(e) => setEditIntent(e.target.value)}
-                              className="w-full bg-slate-100 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-900 font-mono focus:border-amber-500 focus:outline-none"
+                              className="w-full bg-slate-100 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-900 font-mono focus:border-amber-500 focus:outline-hidden"
                               placeholder="e.g. ADD_DIRECTOR_AGE_LIMIT"
                             />
                             <p className="text-[10px] text-slate-500 mt-1">Uppercase letters, underscores only. Must start with ADD_, REMOVE_, or REPLACE_.</p>
@@ -334,7 +334,7 @@ export default function RuleLearningDashboard() {
                           rows={6}
                           value={editClause}
                           onChange={(e) => setEditClause(e.target.value)}
-                          className="w-full bg-slate-100 border border-white/10 rounded-xl p-3.5 text-xs text-slate-800 font-mono leading-relaxed focus:border-amber-500 focus:outline-none"
+                          className="w-full bg-slate-100 border border-white/10 rounded-xl p-3.5 text-xs text-slate-800 font-mono leading-relaxed focus:border-amber-500 focus:outline-hidden"
                           placeholder="Clause text containing {{placeholders}}..."
                         />
                         <p className="text-[10px] text-slate-500">Wrap variable placeholders in double braces, e.g. <code className="text-amber-400 font-mono">{"{{age_limit}}"}</code> or <code className="text-amber-400 font-mono">{"{{director_name}}"}</code>.</p>
@@ -342,7 +342,7 @@ export default function RuleLearningDashboard() {
 
                       {/* Variables Schema Configurator */}
                       <div className="space-y-3">
-                        <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
+                        <div className="flex items-center justify-between border-b border-white/6 pb-2">
                           <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest">Variables Schema</h4>
                           <button
                             type="button"
@@ -358,18 +358,18 @@ export default function RuleLearningDashboard() {
                         ) : (
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             {editVars.map((v, idx) => (
-                              <div key={idx} className="flex items-center gap-2 bg-white/[0.01] border border-white/[0.06] p-2.5 rounded-lg">
+                              <div key={idx} className="flex items-center gap-2 bg-white/1 border border-white/6 p-2.5 rounded-lg">
                                 <input
                                   type="text"
                                   value={v.key}
                                   onChange={(e) => handleVarChange(idx, 'key', e.target.value)}
-                                  className="flex-1 bg-slate-100 border border-white/10 rounded px-2.5 py-1.5 text-xs text-slate-900 font-mono focus:border-amber-500 focus:outline-none"
+                                  className="flex-1 bg-slate-100 border border-white/10 rounded-sm px-2.5 py-1.5 text-xs text-slate-900 font-mono focus:border-amber-500 focus:outline-hidden"
                                   placeholder="variable_name"
                                 />
                                 <select
                                   value={v.type}
                                   onChange={(e) => handleVarChange(idx, 'type', e.target.value)}
-                                  className="w-28 bg-slate-100 border border-white/10 rounded px-2 py-1.5 text-xs text-slate-900 focus:border-amber-500 focus:outline-none"
+                                  className="w-28 bg-slate-100 border border-white/10 rounded-sm px-2 py-1.5 text-xs text-slate-900 focus:border-amber-500 focus:outline-hidden"
                                 >
                                   {VARIABLE_TYPES.map(vt => (
                                     <option key={vt} value={vt}>{vt}</option>
@@ -389,7 +389,7 @@ export default function RuleLearningDashboard() {
                       </div>
 
                       {/* Action Bar */}
-                      <div className="flex flex-wrap items-center justify-between border-t border-white/[0.06] pt-4 gap-4">
+                      <div className="flex flex-wrap items-center justify-between border-t border-white/6 pt-4 gap-4">
                         <button
                           disabled={isItemLoading}
                           onClick={() => handleReject(item.id)}

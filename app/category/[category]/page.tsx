@@ -1007,9 +1007,9 @@ export default async function CategoryPage({
     return (
         <div className="min-h-dvh bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
             {/* Category Hero */}
-            <div className={`relative bg-gradient-to-br ${bgColors[cat]} text-white overflow-hidden`}>
+            <div className={`relative bg-linear-to-br ${bgColors[cat]} text-white overflow-hidden`}>
                 <div
-                    className="absolute inset-0 opacity-[0.05] bg-[linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] bg-[size:72px_72px]"
+                    className="absolute inset-0 opacity-[0.05] bg-[linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] bg-size-[72px_72px]"
                     aria-hidden="true"
                 />
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_80%_at_100%_0%,rgba(255,255,255,0.05),transparent_60%)]" aria-hidden="true" />
@@ -1023,7 +1023,7 @@ export default async function CategoryPage({
                     </nav>
 
                     <div className="flex items-center gap-3 mb-4">
-                        <span className="bg-white/20 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase backdrop-blur-sm ring-1 ring-white/30">
+                        <span className="bg-white/20 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase backdrop-blur-xs ring-1 ring-white/30">
                             Regulator
                         </span>
                         <span className="text-white/60 text-sm">·</span>
@@ -1062,7 +1062,7 @@ export default async function CategoryPage({
                             {['Commercial Banks', 'NBFC Directives', 'Master Directions', 'KYC & AML Norms', 'Digital Lending'].map((chip, idx) => (
                                 <span
                                     key={idx}
-                                    className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-white/15 text-white/90 border border-white/10 backdrop-blur-sm"
+                                    className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-white/15 text-white/90 border border-white/10 backdrop-blur-xs"
                                 >
                                     {chip}
                                 </span>
@@ -1097,7 +1097,7 @@ export default async function CategoryPage({
                         )}
                     </section>
                 ) : (
-                    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-card ring-1 ring-slate-900/[0.02] dark:ring-white/[0.02]">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-card ring-1 ring-slate-900/2 dark:ring-white/2">
                         <EmptyState
                             icon="📋"
                             title={`Recent ${cat.toUpperCase()} Circulars & Gazette Notifications`}
@@ -1112,7 +1112,7 @@ export default async function CategoryPage({
             {/* RBI-Specific High-Intent Rates Bar & Semantic Intelligence (Below Circulars) */}
             {cat === 'rbi' && (
                 <section className="max-w-7xl mx-auto px-4 py-4 mb-4">
-                    <div className="bg-gradient-to-br from-slate-900 to-violet-950 text-white rounded-2xl border border-violet-800/40 p-6 md:p-8 shadow-md">
+                    <div className="bg-linear-to-br from-slate-900 to-violet-950 text-white rounded-2xl border border-violet-800/40 p-6 md:p-8 shadow-md">
                         <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
                             <div>
                                 <span className="text-xs font-bold uppercase tracking-wider text-amber-300 bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/20 inline-flex items-center gap-1.5">
@@ -1170,7 +1170,7 @@ export default async function CategoryPage({
             {/* Dynamic Latest Circulars & Notifications (Bottom — FAQ-style for AI) */}
             {top5Updates.length > 0 && (
                 <section className="max-w-7xl mx-auto px-4 py-8 mb-4">
-                    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 md:p-8">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs p-6 md:p-8">
                         <h2 className="text-2xl font-bold text-navy dark:text-white mb-2 font-heading">
                             Latest {cat.toUpperCase()} Circulars & Notifications
                         </h2>
@@ -1182,7 +1182,7 @@ export default async function CategoryPage({
                                 <div key={u.id} className={`${idx !== top5Updates.length - 1 ? 'border-b border-slate-100 dark:border-slate-800 pb-6' : ''}`}>
                                     <div className="flex items-center gap-2 mb-2">
                                         {u.update_type && (
-                                            <span className="text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded">
+                                            <span className="text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded-sm">
                                                 {UPDATE_TYPE_LABELS[u.update_type] || u.update_type}
                                             </span>
                                         )}
@@ -1208,7 +1208,7 @@ export default async function CategoryPage({
             {/* Regulatory FAQs (AI Overview & Search Answers) */}
             {regulatoryFaqs.length > 0 && (
                 <section className="max-w-7xl mx-auto px-4 py-8 mb-4">
-                    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 md:p-8">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs p-6 md:p-8">
                         <div className="flex items-center gap-2 mb-2">
                             <span className="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-950/60 px-2.5 py-0.5 rounded-full border border-amber-300 dark:border-amber-800/60">
                                 Regulatory Intelligence
@@ -1240,7 +1240,7 @@ export default async function CategoryPage({
             {/* Related Compliance Tools & Workstations (Topic Hub) */}
             {relatedResources.length > 0 && (
                 <section className="max-w-7xl mx-auto px-4 py-8 mb-4">
-                    <div className="bg-gradient-to-br from-slate-900 to-slate-950 text-white rounded-2xl border border-slate-800 p-6 md:p-8 shadow-md">
+                    <div className="bg-linear-to-br from-slate-900 to-slate-950 text-white rounded-2xl border border-slate-800 p-6 md:p-8 shadow-md">
                         <div className="flex items-center justify-between flex-wrap gap-2 mb-6">
                             <div>
                                 <span className="text-xs font-bold uppercase tracking-wider text-amber-400 bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/20">
@@ -1263,7 +1263,7 @@ export default async function CategoryPage({
                                 >
                                     <div>
                                         <div className="flex items-center justify-between mb-2">
-                                            <span className="text-[10px] font-semibold tracking-wider uppercase text-amber-300 bg-amber-400/10 px-2 py-0.5 rounded">
+                                            <span className="text-[10px] font-semibold tracking-wider uppercase text-amber-300 bg-amber-400/10 px-2 py-0.5 rounded-sm">
                                                 {res.tag}
                                             </span>
                                             <span className="text-slate-400 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all text-sm font-bold">
@@ -1286,7 +1286,7 @@ export default async function CategoryPage({
 
             {/* Professional SEO Knowledge Footer — "About" Section */}
             <section className="max-w-7xl mx-auto px-4 py-10 border-t border-slate-100 dark:border-slate-800">
-                <div className="bg-slate-50/50 dark:bg-slate-900/60 rounded-2xl border border-slate-200/60 dark:border-slate-800 p-8 shadow-sm">
+                <div className="bg-slate-50/50 dark:bg-slate-900/60 rounded-2xl border border-slate-200/60 dark:border-slate-800 p-8 shadow-xs">
                     {/* Key Facts List */}
                     <h2 className="text-xl font-bold text-navy dark:text-white mb-4 font-heading">
                         About {CATEGORY_FULL_NAMES[cat]} ({cat.toUpperCase()}) — Regulatory Guide

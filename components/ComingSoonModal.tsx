@@ -38,18 +38,18 @@ export default function ComingSoonModal({ open, onClose, title, description }: C
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+      className="fixed inset-0 z-100 flex items-center justify-center p-4"
       role="presentation"
       onClick={onClose}
     >
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" aria-hidden />
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-xs" aria-hidden />
       <div
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="coming-soon-title"
         tabIndex={-1}
-        className="relative w-full max-w-md rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-xl p-6 outline-none"
+        className="relative w-full max-w-md rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-xl p-6 outline-hidden"
         onClick={e => e.stopPropagation()}
       >
         <button

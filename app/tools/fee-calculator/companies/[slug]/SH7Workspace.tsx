@@ -275,7 +275,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
   return (
     <div className="space-y-8">
       {/* 1. SCENARIO PRESETS BAR */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm space-y-3">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="p-1.5 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400">
@@ -296,7 +296,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
               className="text-left p-3 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-amber-400 dark:hover:border-amber-500 hover:bg-amber-50/50 dark:hover:bg-amber-950/20 transition-all group flex flex-col justify-between space-y-1"
             >
               <div className="flex items-center justify-between gap-1">
-                <span className="text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                <span className="text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded-sm bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                   {p.badge}
                 </span>
                 <ChevronRight className="size-3.5 text-slate-400 group-hover:text-amber-600 dark:group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all" />
@@ -311,7 +311,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
       {/* 2. DUAL-COLUMN INTERACTIVE CALCULATOR */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* LEFT COLUMN: CONTROLS & INPUTS (7 Cols) */}
-        <div className="lg:col-span-7 space-y-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-7 shadow-sm">
+        <div className="lg:col-span-7 space-y-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-7 shadow-xs">
           <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
             <div className="flex items-center gap-2">
               <span className="p-2 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400">
@@ -345,7 +345,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
               <select
                 value={alterationType}
                 onChange={e => setAlterationType(e.target.value as Sh7AlterationType)}
-                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 outline-none"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 outline-hidden"
               >
                 <option value="increase_authorised_capital">
                   Increase in Authorised Share Capital — Section 61(1)(a)
@@ -380,7 +380,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
                 <select
                   value={companyType}
                   onChange={e => setCompanyType(e.target.value as Sh7CompanyType)}
-                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 outline-none"
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 outline-hidden"
                 >
                   <option value="normal">Standard Private / Public Limited</option>
                   <option value="small_company">Small Company (Section 2(85))</option>
@@ -397,7 +397,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
                 <select
                   value={state}
                   onChange={e => setState(e.target.value as IndianState)}
-                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 outline-none"
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs font-medium text-slate-900 dark:text-white focus:ring-2 focus:ring-amber-500 outline-hidden"
                 >
                   <option value="delhi">Delhi (0.15%, max ₹25L)</option>
                   <option value="maharashtra">Maharashtra (0.3%, max ₹1 Cr — Mah. Act 9 of 2025)</option>
@@ -442,7 +442,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
                         key={v}
                         type="button"
                         onClick={() => setExistingCapital(v)}
-                        className="text-[10px] px-2 py-0.5 rounded bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-amber-400"
+                        className="text-[10px] px-2 py-0.5 rounded-sm bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-amber-400"
                       >
                         {formatInr(v)}
                       </button>
@@ -474,7 +474,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
                           key={v}
                           type="button"
                           onClick={() => setNewCapital(v)}
-                          className="text-[10px] px-2 py-0.5 rounded bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-emerald-400"
+                          className="text-[10px] px-2 py-0.5 rounded-sm bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:border-emerald-400"
                         >
                           {formatInr(v)}
                         </button>
@@ -540,7 +540,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
                       onClick={() => setNumOfficers(n)}
                       className={`size-7 rounded-lg text-xs font-bold transition-all ${
                         numOfficers === n
-                          ? 'bg-amber-500 text-white shadow-xs'
+                          ? 'bg-amber-500 text-white shadow-2xs'
                           : 'bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-300'
                       }`}
                     >
@@ -559,7 +559,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
                       id="aoaCheck"
                       checked={hasAoaClause}
                       onChange={e => setHasAoaClause(e.target.checked)}
-                      className="size-4 rounded text-emerald-600 accent-emerald-600 cursor-pointer"
+                      className="size-4 rounded-sm text-emerald-600 accent-emerald-600 cursor-pointer"
                     />
                     <label htmlFor="aoaCheck" className="text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer">
                       AOA already authorizes capital alteration? (Ordinary Resolution)
@@ -588,7 +588,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
                         id="mgt14Check"
                         checked={mgt14Filed}
                         onChange={e => setMgt14Filed(e.target.checked)}
-                        className="size-4 rounded text-blue-600 accent-blue-600 cursor-pointer"
+                        className="size-4 rounded-sm text-blue-600 accent-blue-600 cursor-pointer"
                       />
                       <label htmlFor="mgt14Check" className="text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer">
                         Form MGT-14 filed with ROC? (Section 117(3)(a))
@@ -620,10 +620,10 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
         {/* RIGHT COLUMN: REAL-TIME RESULTS & BREAKDOWN CARDS (5 Cols) */}
         <div className="lg:col-span-5 space-y-6">
           {/* STATUTORY DUE DATE & DELAY BANNER */}
-          <div className={`rounded-2xl border p-5 sm:p-6 shadow-sm space-y-3 ${
+          <div className={`rounded-2xl border p-5 sm:p-6 shadow-xs space-y-3 ${
             result.isDelayed
-              ? 'bg-gradient-to-br from-red-500/10 via-rose-500/5 to-amber-500/10 border-red-300 dark:border-red-800'
-              : 'bg-gradient-to-br from-emerald-500/10 via-teal-500/5 to-blue-500/10 border-emerald-300 dark:border-emerald-800'
+              ? 'bg-linear-to-br from-red-500/10 via-rose-500/5 to-amber-500/10 border-red-300 dark:border-red-800'
+              : 'bg-linear-to-br from-emerald-500/10 via-teal-500/5 to-blue-500/10 border-emerald-300 dark:border-emerald-800'
           }`}>
             <div className="flex items-center justify-between">
               <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
@@ -678,7 +678,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
           </div>
 
           {/* MCA E-CHALLAN PAYMENT BREAKDOWN CARD */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm space-y-3.5">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-3.5">
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
               <div>
                 <h4 className="font-heading font-bold text-sm text-slate-900 dark:text-white flex items-center gap-1.5">
@@ -716,7 +716,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
                       <div className="flex items-center gap-1.5">
                         <p className="font-semibold text-slate-800 dark:text-slate-200">Additional Late Fee</p>
                         {result.additionalLateFee > 0 && (
-                          <span className="text-[10px] font-extrabold px-1.5 py-0.2 rounded bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+                          <span className="text-[10px] font-extrabold px-1.5 py-0.2 rounded-sm bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
                             {(result.lateFeePercentage * 100).toFixed(1)}% ({result.delayMonths} mo)
                           </span>
                         )}
@@ -774,7 +774,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
                       <div className="flex items-center gap-1.5">
                         <p className="font-semibold text-slate-800 dark:text-slate-200">Table B Delay Multiplier</p>
                         {result.lateMultiplier > 0 && (
-                          <span className="text-[10px] font-extrabold px-1.5 py-0.2 rounded bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+                          <span className="text-[10px] font-extrabold px-1.5 py-0.2 rounded-sm bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
                             {result.lateMultiplier}×
                           </span>
                         )}
@@ -793,7 +793,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
           </div>
 
           {/* SECTION 64(2) ADJUDICATION PENALTY CARD */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm space-y-3.5">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-3.5">
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
               <div>
                 <h4 className="font-heading font-bold text-sm text-slate-900 dark:text-white flex items-center gap-1.5">
@@ -860,7 +860,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
           <div className="grid grid-cols-2 gap-3">
             <button
               onClick={handleCopySummary}
-              className="flex items-center justify-center gap-1.5 p-3 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200 transition-colors shadow-xs"
+              className="flex items-center justify-center gap-1.5 p-3 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-200 transition-colors shadow-2xs"
             >
               <Copy className="size-4 text-slate-500" />
               <span>Copy Summary</span>
@@ -877,7 +877,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
       </div>
 
       {/* 3. MANDATORY ATTACHMENTS DOSSIER CHECKLIST (RULE 15) */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-7 shadow-sm space-y-4">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-7 shadow-xs space-y-4">
         <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
           <div className="flex items-center gap-2">
             <span className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
@@ -913,7 +913,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
                   type="checkbox"
                   checked={isChecked}
                   onChange={e => setCheckedAttachments(prev => ({ ...prev, [idx]: e.target.checked }))}
-                  className="mt-0.5 size-4 rounded text-emerald-600 accent-emerald-600 cursor-pointer"
+                  className="mt-0.5 size-4 rounded-sm text-emerald-600 accent-emerald-600 cursor-pointer"
                 />
                 <span className={`text-xs leading-relaxed ${isChecked ? 'text-emerald-950 dark:text-emerald-200 font-medium' : 'text-slate-700 dark:text-slate-300'}`}>
                   {att}
@@ -925,7 +925,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
       </div>
 
       {/* 4. ROC ADJUDICATION PRECEDENT INSIGHT BOX */}
-      <div className="bg-gradient-to-br from-amber-500/10 via-blue-500/5 to-purple-500/10 rounded-2xl border border-amber-300 dark:border-amber-700/60 p-6 space-y-3">
+      <div className="bg-linear-to-br from-amber-500/10 via-blue-500/5 to-purple-500/10 rounded-2xl border border-amber-300 dark:border-amber-700/60 p-6 space-y-3">
         <div className="flex items-center gap-2">
           <Scale className="size-5 text-amber-600 dark:text-amber-400" />
           <h4 className="font-heading font-extrabold text-sm sm:text-base text-slate-900 dark:text-white">

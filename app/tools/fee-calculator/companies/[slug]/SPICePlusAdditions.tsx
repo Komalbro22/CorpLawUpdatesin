@@ -21,7 +21,7 @@ export default function SPICePlusAdditions() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 space-y-12">
       {/* Zero Fee Statutory Banner */}
-      <div className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-sm">
+      <div className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xs">
         <div className="flex items-start gap-4">
           <div className="p-3 bg-emerald-100 dark:bg-emerald-900/60 rounded-xl text-emerald-700 dark:text-emerald-400 mt-1">
             <Sparkles className="size-6" />
@@ -40,7 +40,7 @@ export default function SPICePlusAdditions() {
         </div>
         <a
           href="#spice-plus-workspace"
-          className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold whitespace-nowrap transition-colors shadow-sm self-stretch md:self-auto justify-center"
+          className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold whitespace-nowrap transition-colors shadow-xs self-stretch md:self-auto justify-center"
         >
           <span>Calculate Custom Duties</span>
           <ArrowUpRight className="size-4" />
@@ -49,7 +49,7 @@ export default function SPICePlusAdditions() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* 5A: Services Checklist */}
-        <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+        <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2.5 bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 rounded-xl">
@@ -129,7 +129,7 @@ export default function SPICePlusAdditions() {
         </div>
 
         {/* 5B: Stamp Duty Benchmark Table */}
-        <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+        <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2.5 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 rounded-xl">

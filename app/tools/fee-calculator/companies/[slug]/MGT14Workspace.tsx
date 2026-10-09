@@ -306,7 +306,7 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
   return (
     <div className="w-full space-y-8">
       {/* ─── WORKSPACE HEADER ─── */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 p-6 md:p-8 text-white shadow-xl border border-slate-700/60">
+      <div className="relative overflow-hidden rounded-2xl bg-linear-to-br from-slate-900 via-slate-800 to-indigo-950 p-6 md:p-8 text-white shadow-xl border border-slate-700/60">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 text-xs font-semibold mb-3">
@@ -342,7 +342,7 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
             </button>
             <button
               onClick={handleDownloadPdf}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-indigo-600 hover:bg-indigo-500 text-white shadow transition"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm transition"
               title="Download PDF Report"
             >
               <Download className="w-3.5 h-3.5" />
@@ -366,7 +366,7 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
               >
                 <span className="font-semibold text-slate-200">{preset.label.split(':')[0]}:</span>
                 <span className="text-slate-400 group-hover:text-slate-200">{preset.label.split(':')[1]}</span>
-                <span className="ml-1 px-1.5 py-0.5 rounded text-[10px] bg-slate-900 text-indigo-300 border border-slate-700">
+                <span className="ml-1 px-1.5 py-0.5 rounded-sm text-[10px] bg-slate-900 text-indigo-300 border border-slate-700">
                   {preset.badge}
                 </span>
               </button>
@@ -382,13 +382,13 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
         <div className="lg:col-span-7 space-y-6">
           
           {/* Smart Applicability / Purpose Card */}
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm space-y-4">
+          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
                 <FileCheck className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                 1. Purpose & Statutory Applicability
               </h3>
-              <span className="text-xs px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 font-medium border border-indigo-200 dark:border-indigo-800">
+              <span className="text-xs px-2 py-0.5 rounded-sm bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 font-medium border border-indigo-200 dark:border-indigo-800">
                 Section 117(3)
               </span>
             </div>
@@ -405,7 +405,7 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
                     const p = MGT14_PURPOSES.find(item => item.id === e.target.value)
                     if (p) setEventType(p.category)
                   }}
-                  className="w-full text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 p-2.5 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  className="w-full text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 p-2.5 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
                 >
                   {MGT14_PURPOSES.map(p => (
                     <option key={p.id} value={p.id}>
@@ -424,7 +424,7 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
                 }`}>
                   <div className="font-semibold mb-1 flex items-center justify-between">
                     <span>Statutory Authority: {selectedPurpose.sectionRef}</span>
-                    <span className="capitalize px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-[10px]">
+                    <span className="capitalize px-1.5 py-0.5 rounded-sm bg-slate-200 dark:bg-slate-700 text-[10px]">
                       {selectedPurpose.category.replace('_', ' ')}
                     </span>
                   </div>
@@ -435,7 +435,7 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
           </div>
 
           {/* Core Calculator Parameters Card */}
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm space-y-5">
+          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-5">
             <h3 className="text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
               <Scale className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               2. Company Capital & Regulatory Parameters
@@ -483,7 +483,7 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
                   value={nominalShareCapital || ''}
                   onChange={(e) => setNominalShareCapital(Number(e.target.value))}
                   placeholder="e.g. 1000000"
-                  className="w-full text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 p-2.5 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  className="w-full text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 p-2.5 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
                 />
                 <div className="flex flex-wrap gap-1.5 mt-2">
                   {[100000, 500000, 1000000, 2500000, 5000000, 10000000].map(amt => (
@@ -491,7 +491,7 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
                       key={amt}
                       type="button"
                       onClick={() => setNominalShareCapital(amt)}
-                      className="px-2 py-0.5 text-[11px] rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-indigo-50 hover:text-indigo-600 dark:hover:bg-slate-700 transition"
+                      className="px-2 py-0.5 text-[11px] rounded-sm bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-indigo-50 hover:text-indigo-600 dark:hover:bg-slate-700 transition"
                     >
                       {formatInr(amt)}
                     </button>
@@ -508,7 +508,7 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
               <select
                 value={companyType}
                 onChange={(e) => setCompanyType(e.target.value as Mgt14CompanyType)}
-                className="w-full text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 p-2.5 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                className="w-full text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 p-2.5 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
               >
                 <option value="normal">Standard Corporate Entity (Public / Standard Private)</option>
                 <option value="small_company">Small Company (Paid-up Cap ≤ ₹4 Cr & Turnover ≤ ₹40 Cr) [Sec 446B]</option>
@@ -543,7 +543,7 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
           </div>
 
           {/* Event Date vs Filing Date Timeline Card */}
-          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm space-y-4">
+          <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-4">
             <h3 className="text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
               <Calendar className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               3. Event Date vs Filing Date (Statutory Clock)
@@ -557,7 +557,7 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
                 <IndianDateInput
                   value={eventDate}
                   onChange={setEventDate}
-                  className="w-full text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 p-2.5 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  className="w-full text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 p-2.5 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
                 />
               </div>
 
@@ -568,7 +568,7 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
                 <IndianDateInput
                   value={filingDate}
                   onChange={setFilingDate}
-                  className="w-full text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 p-2.5 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  className="w-full text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 p-2.5 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
                 />
               </div>
             </div>
@@ -589,7 +589,7 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
                   max="15"
                   value={numOfficers}
                   onChange={(e) => setNumOfficers(Math.max(1, Number(e.target.value)))}
-                  className="w-full text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 p-2.5 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  className="w-full text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 p-2.5 focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
                 />
               </div>
             )}
@@ -630,7 +630,7 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
         <div className="lg:col-span-5 space-y-6">
           
           {/* Main Total Payable Card */}
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-900 via-indigo-950 to-slate-950 p-6 text-white shadow-xl border border-indigo-700/50">
+          <div className="relative overflow-hidden rounded-2xl bg-linear-to-br from-indigo-900 via-indigo-950 to-slate-950 p-6 text-white shadow-xl border border-indigo-700/50">
             <div className="flex items-center justify-between text-xs text-indigo-300 font-medium mb-1">
               <span>Total MCA V3 Portal Challan</span>
               <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
@@ -687,7 +687,7 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
               </button>
               <button
                 onClick={handleDownloadPdf}
-                className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition shadow-sm"
+                className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition shadow-xs"
               >
                 <Download className="w-3.5 h-3.5" />
                 Download PDF
@@ -707,19 +707,19 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
               </p>
               <div className="pt-2 border-t border-red-200 dark:border-red-900/60 flex items-center justify-between font-semibold">
                 <span>Procedural Form: Form CG-1 → Form INC-28</span>
-                <span className="text-[10px] px-1.5 py-0.5 rounded bg-red-200 dark:bg-red-900">Mandatory</span>
+                <span className="text-[10px] px-1.5 py-0.5 rounded-sm bg-red-200 dark:bg-red-900">Mandatory</span>
               </div>
             </div>
           )}
 
           {/* Separate Section 117(2) Statutory Penalty Card */}
-          <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-sm space-y-3">
+          <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs space-y-3">
             <div className="flex items-center justify-between">
               <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                 Section 117(2) Statutory Penalty Exposure
               </h4>
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+              <span className="text-[10px] px-1.5 py-0.5 rounded-sm bg-amber-50 dark:bg-amber-950 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
                 ROC Adjudication (Sec 454)
               </span>
             </div>
@@ -749,7 +749,7 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
               </div>
 
               {calculationResult.is446BEligible && (
-                <div className="p-2 rounded bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-[11px] text-emerald-800 dark:text-emerald-300 flex justify-between items-center">
+                <div className="p-2 rounded-sm bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-[11px] text-emerald-800 dark:text-emerald-300 flex justify-between items-center">
                   <span>Section 446B Relief Applied (50% reduction):</span>
                   <span className="font-bold font-mono">Saved {formatInr(calculationResult.reliefAmountSaved)}</span>
                 </div>
@@ -765,14 +765,14 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
           </div>
 
           {/* Calculation Steps Explainer Card */}
-          <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-sm space-y-3">
+          <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-xs space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
               <BookOpen className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               How Was This Calculated? (Formula Breakdown)
             </h4>
             <div className="space-y-2 text-xs text-slate-600 dark:text-slate-300">
               {calculationResult.calculationSteps.map((step, idx) => (
-                <div key={idx} className="p-2 rounded bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 leading-relaxed font-sans">
+                <div key={idx} className="p-2 rounded-sm bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 leading-relaxed font-sans">
                   {step}
                 </div>
               ))}
@@ -780,7 +780,7 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
           </div>
 
           {/* Mini Rule-Grounded AI Assistant */}
-          <div className="rounded-xl border border-indigo-200 dark:border-indigo-900/60 bg-gradient-to-br from-indigo-50/50 to-white dark:from-slate-900 dark:to-slate-900/80 p-5 shadow-sm space-y-3">
+          <div className="rounded-xl border border-indigo-200 dark:border-indigo-900/60 bg-linear-to-br from-indigo-50/50 to-white dark:from-slate-900 dark:to-slate-900/80 p-5 shadow-xs space-y-3">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
@@ -797,7 +797,7 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
                 value={aiQuestion}
                 onChange={(e) => setAiQuestion(e.target.value)}
                 placeholder="e.g. Does a private company file MGT-14 for borrowing?"
-                className="w-full text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-2 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 p-2 text-slate-900 dark:text-slate-100 focus:outline-hidden focus:ring-1 focus:ring-indigo-500"
               />
               <button
                 type="submit"
@@ -820,13 +820,13 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
 
       {/* ─── MANDATORY ATTACHMENTS CHECKLIST ─── */}
       {selectedPurpose && selectedPurpose.requiredAttachments.length > 0 && (
-        <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm space-y-4">
+        <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
               <FileText className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
               Mandatory Attachments for {selectedPurpose.sectionRef} Filing ({selectedPurpose.label.split('-')[0]})
             </h3>
-            <span className="text-xs px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium">
+            <span className="text-xs px-2 py-0.5 rounded-sm bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium">
               MCA V3 Form MGT-14 Kit
             </span>
           </div>
@@ -843,7 +843,7 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
       )}
 
       {/* ─── 9-STEP MCA V3 FILING GUIDE ─── */}
-      <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm space-y-4">
+      <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-xs space-y-4">
         <h3 className="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
           <Landmark className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
           How to File Form MGT-14 on MCA V3 Portal (Step-by-Step Practical Workflow)
@@ -896,19 +896,19 @@ export default function MGT14Workspace({ form }: { form: MCAForm }) {
           Authoritative Legal Sources & Verification
         </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-slate-600 dark:text-slate-400">
-          <div className="p-2.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+          <div className="p-2.5 rounded-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
             <span className="font-bold text-slate-800 dark:text-slate-200">Companies Act, 2013 — Section 117</span>
             <p className="mt-0.5 text-[11px]">Primary statutory mandate governing registration of resolutions and agreements with the Registrar.</p>
           </div>
-          <div className="p-2.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+          <div className="p-2.5 rounded-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
             <span className="font-bold text-slate-800 dark:text-slate-200">Companies (Management and Administration) Rules, 2014 — Rule 24</span>
             <p className="mt-0.5 text-[11px]">Prescribes Form MGT-14 and the strict 30-day filing clock.</p>
           </div>
-          <div className="p-2.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+          <div className="p-2.5 rounded-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
             <span className="font-bold text-slate-800 dark:text-slate-200">Companies (Registration Offices and Fees) Rules, 2014 — Table A & Table B</span>
             <p className="mt-0.5 text-[11px]">Governs nominal capital normal fee slabs (₹200–₹600) and escalating delay multipliers (2×–12×).</p>
           </div>
-          <div className="p-2.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+          <div className="p-2.5 rounded-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
             <span className="font-bold text-slate-800 dark:text-slate-200">MCA Exemption Notification G.S.R. 464(E) dated 05.06.2015</span>
             <p className="mt-0.5 text-[11px]">Exempts Private Limited Companies from filing Section 179(3) routine Board Resolutions.</p>
           </div>

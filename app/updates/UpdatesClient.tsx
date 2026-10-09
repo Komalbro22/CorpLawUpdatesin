@@ -127,8 +127,8 @@ export default function UpdatesClient({
 
     return (
         <div className="flex flex-col md:flex-row gap-8 md:gap-10">
-            <aside className="w-full md:w-72 flex-shrink-0">
-                <div className="sticky top-24 bg-white dark:bg-slate-900 p-5 md:p-6 rounded-xl shadow-card border border-slate-200/80 dark:border-slate-800 ring-1 ring-slate-900/[0.03] dark:ring-white/[0.03]">
+            <aside className="w-full md:w-72 shrink-0">
+                <div className="sticky top-24 bg-white dark:bg-slate-900 p-5 md:p-6 rounded-xl shadow-card border border-slate-200/80 dark:border-slate-800 ring-1 ring-slate-900/3 dark:ring-white/3">
                     <div className="mb-6">
                         <label htmlFor="search" className="block text-sm font-semibold text-navy dark:text-slate-200 mb-2">
                             Search
@@ -154,7 +154,7 @@ export default function UpdatesClient({
                                 onChange={e => handleSearchInput(e.target.value)}
                                 autoComplete="off"
                                 suppressHydrationWarning
-                                className="w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 rounded-lg focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold/30 text-sm text-navy dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-650 transition-shadow duration-200"
+                                className="w-full pl-10 pr-3 py-2.5 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-gold/50 focus:border-gold/30 text-sm text-navy dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-650 transition-shadow duration-200"
                                 toolparamdescription="Search keyword to filter updates."
                             />
                         </form>
@@ -199,7 +199,7 @@ export default function UpdatesClient({
                                             onClick={() => handleCategoryClick(cat)}
                                             className={`text-left whitespace-nowrap md:whitespace-normal px-3 py-3 min-h-[44px] rounded-lg text-sm w-full flex justify-between items-center gap-2 transition-colors duration-150 ${
                                                 isActive
-                                                    ? 'bg-navy/5 dark:bg-slate-800 text-navy dark:text-slate-200 font-semibold ring-1 ring-gold/40 shadow-sm'
+                                                    ? 'bg-navy/5 dark:bg-slate-800 text-navy dark:text-slate-200 font-semibold ring-1 ring-gold/40 shadow-xs'
                                                     : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-navy dark:hover:text-white'
                                             }`}
                                         >
@@ -222,7 +222,7 @@ export default function UpdatesClient({
                 </div>
             </aside>
 
-            <div className="flex-grow min-w-0">
+            <div className="grow min-w-0">
                 <div className="mb-6 flex flex-wrap items-baseline gap-2 text-slate-600 dark:text-slate-400 text-sm md:text-base">
                     <span>
                         Showing{' '}
@@ -257,7 +257,7 @@ export default function UpdatesClient({
                         )}
                     </>
                 ) : (
-                    <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-card ring-1 ring-slate-900/[0.03] dark:ring-white/[0.03]">
+                    <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-card ring-1 ring-slate-900/3 dark:ring-white/3">
                         <EmptyState
                             icon="🔍"
                             title="No results found"

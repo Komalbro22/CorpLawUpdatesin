@@ -39,7 +39,7 @@ export default function ArticleImage({ src, alt, category, priority = false, cla
 
   if (!resolvedSrc || hasError) {
     return (
-      <div className={`w-full h-full bg-gradient-to-br ${theme.bg} flex flex-col items-center justify-center p-6 text-center select-none relative overflow-hidden ${className}`}>
+      <div className={`w-full h-full bg-linear-to-br ${theme.bg} flex flex-col items-center justify-center p-6 text-center select-none relative overflow-hidden ${className}`}>
         <div className="absolute inset-0 bg-slate-900/30 backdrop-blur-[1px]" />
         <div className="relative z-10 flex flex-col items-center gap-2">
           <div className="w-12 h-12 rounded-2xl bg-white/10 dark:bg-white/5 border border-white/15 flex items-center justify-center text-amber-400 shadow-md">

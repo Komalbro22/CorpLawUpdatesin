@@ -161,7 +161,7 @@ export default function AdminPushNotificationsPage() {
 
       {/* Metrics Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-xs flex items-center gap-4">
+        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-2xs flex items-center gap-4">
           <div className="p-3 rounded-xl bg-amber-500/10 text-amber-500">
             <Users className="w-6 h-6" />
           </div>
@@ -173,7 +173,7 @@ export default function AdminPushNotificationsPage() {
           </div>
         </div>
 
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-xs flex items-center gap-4">
+        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-2xs flex items-center gap-4">
           <div className="p-3 rounded-xl bg-blue-500/10 text-blue-500">
             <ShieldCheck className="w-6 h-6" />
           </div>
@@ -185,7 +185,7 @@ export default function AdminPushNotificationsPage() {
           </div>
         </div>
 
-        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-xs flex items-center gap-4">
+        <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-2xs flex items-center gap-4">
           <div className="p-3 rounded-xl bg-purple-500/10 text-purple-500">
             <Zap className="w-6 h-6" />
           </div>
@@ -235,7 +235,7 @@ export default function AdminPushNotificationsPage() {
               placeholder="e.g. New MCA Circular: Companies Amendment Rules 2026 Issued"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-navy dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-navy dark:text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-400"
             />
           </div>
 
@@ -249,7 +249,7 @@ export default function AdminPushNotificationsPage() {
               placeholder="Brief executive summary of the circular or judgment..."
               value={body}
               onChange={(e) => setBody(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-navy dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-navy dark:text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-400"
             />
           </div>
 
@@ -263,7 +263,7 @@ export default function AdminPushNotificationsPage() {
                 placeholder="/updates/mca-companies-rules-2026"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-navy dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-navy dark:text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-400"
               />
             </div>
 
@@ -274,7 +274,7 @@ export default function AdminPushNotificationsPage() {
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-navy dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-400"
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-navy dark:text-white text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-400"
               >
                 <option value="all">All Subscribers</option>
                 <option value="mca">MCA Updates Only</option>
@@ -376,7 +376,7 @@ export default function AdminPushNotificationsPage() {
                       )}
                     </td>
                     <td className="px-4 py-3">
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                      <span className="px-2 py-0.5 rounded-sm text-[10px] font-bold uppercase tracking-wider bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
                         {log.category || 'all'}
                       </span>
                     </td>

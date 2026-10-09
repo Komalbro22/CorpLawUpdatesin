@@ -453,7 +453,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
                 key={catKey}
                 type="button"
                 onClick={() => handleCategoryPreset(catKey)}
-                className={`p-3 rounded-xl text-left border transition shadow-sm ${
+                className={`p-3 rounded-xl text-left border transition shadow-xs ${
                   isSelected
                     ? 'border-indigo-600 bg-indigo-50/80 dark:bg-indigo-950/50 dark:border-indigo-500 ring-2 ring-indigo-500/20'
                     : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300 dark:hover:border-slate-700'
@@ -483,13 +483,13 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
       <div className="bg-slate-900 text-white rounded-2xl p-4 sm:p-5 shadow-lg border border-slate-800 flex flex-wrap items-center justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+            <span className="px-2 py-0.5 rounded-sm text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
               Sec 40(b) AY 2025-26 Compliant
             </span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">
+            <span className="px-2 py-0.5 rounded-sm text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">
               Sec 194T TDS Ready
             </span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-500/20 text-purple-400 border border-purple-500/30">
+            <span className="px-2 py-0.5 rounded-sm text-[10px] font-bold bg-purple-500/20 text-purple-400 border border-purple-500/30">
               ROF Form 1 Included
             </span>
           </div>
@@ -541,7 +541,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
         {/* LEFT COLUMN: Interactive Customizer Form (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
           {/* Card 1: Firm Identity & Duration */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
               <Building2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               1. Firm Identity & Location
@@ -556,7 +556,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
                   type="text"
                   value={formData.firmName}
                   onChange={e => handleInputChange('firmName', e.target.value)}
-                  className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 font-semibold"
+                  className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500 font-semibold"
                 />
               </div>
 
@@ -569,7 +569,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
                   value={formData.durationYears || 'At Will'}
                   onChange={e => handleInputChange('durationYears', e.target.value)}
                   placeholder="e.g. At Will or 5 Years"
-                  className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
             </div>
@@ -583,7 +583,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
                   type="text"
                   value={formData.executionDate}
                   onChange={e => handleInputChange('executionDate', e.target.value)}
-                  className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
 
@@ -595,7 +595,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
                   type="text"
                   value={formData.effectiveDate}
                   onChange={e => handleInputChange('effectiveDate', e.target.value)}
-                  className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
             </div>
@@ -609,7 +609,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
                   type="text"
                   value={formData.executionCity}
                   onChange={e => handleInputChange('executionCity', e.target.value)}
-                  className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
 
@@ -621,7 +621,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
                   type="text"
                   value={formData.executionState}
                   onChange={e => handleInputChange('executionState', e.target.value)}
-                  className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
             </div>
@@ -634,13 +634,13 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
                 rows={2}
                 value={formData.principalAddress}
                 onChange={e => handleInputChange('principalAddress', e.target.value)}
-                className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
               />
             </div>
           </div>
 
           {/* Card 2: Business Objects & Gemini AI Assistant */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-xs space-y-3">
             <div className="flex items-center justify-between">
               <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
                 <Briefcase className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
@@ -697,7 +697,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
                       type="button"
                       onClick={() => handlePolishObjects(pill)}
                       disabled={aiLoading}
-                      className="px-2 py-0.5 rounded text-[10px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-400 text-slate-700 dark:text-slate-300 transition"
+                      className="px-2 py-0.5 rounded-sm text-[10px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-400 text-slate-700 dark:text-slate-300 transition"
                     >
                       {pill}
                     </button>
@@ -719,12 +719,12 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
               rows={3}
               value={formData.businessObjects}
               onChange={e => handleInputChange('businessObjects', e.target.value)}
-              className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
           {/* Card 3: Dynamic Multi-Partner Management */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
             <div className="flex items-center justify-between">
               <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
                 <Users className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
@@ -767,7 +767,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
                           type="checkbox"
                           checked={partner.isWorkingPartner}
                           onChange={e => handlePartnerChange(idx, 'isWorkingPartner', e.target.checked)}
-                          className="rounded text-indigo-600"
+                          className="rounded-sm text-indigo-600"
                         />
                         <span>Working Partner (Sec 40(b))</span>
                       </label>
@@ -793,7 +793,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
                         type="text"
                         value={partner.name}
                         onChange={e => handlePartnerChange(idx, 'name', e.target.value)}
-                        className="w-full px-2.5 py-1.5 text-xs rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+                        className="w-full px-2.5 py-1.5 text-xs rounded-sm border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
                       />
                     </div>
                     <div>
@@ -804,7 +804,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
                         type="text"
                         value={partner.fatherOrSpouse}
                         onChange={e => handlePartnerChange(idx, 'fatherOrSpouse', e.target.value)}
-                        className="w-full px-2.5 py-1.5 text-xs rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+                        className="w-full px-2.5 py-1.5 text-xs rounded-sm border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
                       />
                     </div>
                   </div>
@@ -817,7 +817,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
                       type="text"
                       value={partner.address}
                       onChange={e => handlePartnerChange(idx, 'address', e.target.value)}
-                      className="w-full px-2.5 py-1.5 text-xs rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+                      className="w-full px-2.5 py-1.5 text-xs rounded-sm border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
                     />
                   </div>
 
@@ -830,7 +830,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
                         type="text"
                         value={partner.pan}
                         onChange={e => handlePartnerChange(idx, 'pan', e.target.value.toUpperCase())}
-                        className="w-full px-2 py-1 text-xs rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-mono uppercase"
+                        className="w-full px-2 py-1 text-xs rounded-sm border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-mono uppercase"
                       />
                     </div>
                     <div>
@@ -841,7 +841,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
                         type="number"
                         value={partner.capitalAmount}
                         onChange={e => handlePartnerChange(idx, 'capitalAmount', Number(e.target.value))}
-                        className="w-full px-2 py-1 text-xs rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-mono"
+                        className="w-full px-2 py-1 text-xs rounded-sm border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-mono"
                       />
                     </div>
                     <div>
@@ -856,7 +856,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
                           handlePartnerChange(idx, 'profitShare', val)
                           handlePartnerChange(idx, 'lossShare', val)
                         }}
-                        className="w-full px-2 py-1 text-xs rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-mono"
+                        className="w-full px-2 py-1 text-xs rounded-sm border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-mono"
                       />
                     </div>
                     <div>
@@ -867,7 +867,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
                         type="number"
                         value={partner.lossShare}
                         onChange={e => handlePartnerChange(idx, 'lossShare', Number(e.target.value))}
-                        className="w-full px-2 py-1 text-xs rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-mono"
+                        className="w-full px-2 py-1 text-xs rounded-sm border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-mono"
                       />
                     </div>
                   </div>
@@ -882,7 +882,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
           </div>
 
           {/* Card 4: Financials & Section 40(b) Engine */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
               <Calculator className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               4. Section 40(b) Tax Deductibility & Financials
@@ -895,7 +895,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
                   <Calculator className="w-3.5 h-3.5 text-indigo-600" />
                   Section 40(b) Deduction Simulator (AY 2025-26)
                 </span>
-                <span className="text-[10px] font-bold px-2 py-0.5 bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 rounded">
+                <span className="text-[10px] font-bold px-2 py-0.5 bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 rounded-sm">
                   Post-Finance Act 2024
                 </span>
               </div>
@@ -908,7 +908,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
                   type="number"
                   value={calcBookProfit}
                   onChange={e => setCalcBookProfit(Number(e.target.value))}
-                  className="w-full px-3 py-1.5 text-xs rounded border border-indigo-200 dark:border-indigo-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-mono"
+                  className="w-full px-3 py-1.5 text-xs rounded-sm border border-indigo-200 dark:border-indigo-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-mono"
                 />
               </div>
 
@@ -964,7 +964,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
           </div>
 
           {/* Card 5: Banking & Operational Mandate */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
               <Landmark className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               5. Banking Operations & Governance
@@ -1120,7 +1120,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
 
           {/* TAB 1: Live Deed Canvas */}
           {activeTab === 'deed' && (
-            <div className="mx-auto min-h-[1056px] w-full min-w-0 max-h-[750px] max-w-full overflow-x-hidden overflow-y-auto break-words border border-slate-300 bg-white px-4 py-8 font-serif text-[14px] leading-[1.55] text-black shadow-lg dark:border-slate-300 dark:bg-white dark:text-black sm:px-8 lg:px-14">
+            <div className="mx-auto min-h-[1056px] w-full min-w-0 max-h-[750px] max-w-full overflow-x-hidden overflow-y-auto wrap-break-word border border-slate-300 bg-white px-4 py-8 font-serif text-[14px] leading-[1.55] text-black shadow-lg dark:border-slate-300 dark:bg-white dark:text-black sm:px-8 lg:px-14">
               <div className="mb-6 border-b border-slate-300 pb-5 text-center">
                 <h3 className="font-bold text-lg uppercase tracking-normal text-black">
                   PARTNERSHIP DEED
@@ -1178,7 +1178,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
 
           {/* TAB 2: ROF Form 1 Canvas */}
           {activeTab === 'rof-form-1' && (
-            <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 max-h-[750px] overflow-y-auto text-xs leading-relaxed text-slate-800 dark:text-slate-200">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4 max-h-[750px] overflow-y-auto text-xs leading-relaxed text-slate-800 dark:text-slate-200">
               <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
                 <div>
                   <h4 className="font-bold text-sm text-slate-900 dark:text-white">
@@ -1207,7 +1207,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
               <div className="space-y-1 pt-2 border-t border-slate-100 dark:border-slate-800">
                 <p className="font-bold text-slate-900 dark:text-white">PARTNERS JOINING DETAILS:</p>
                 {formData.partners.map((p, i) => (
-                  <div key={i} className="p-2 rounded bg-slate-50 dark:bg-slate-800 text-[11px]">
+                  <div key={i} className="p-2 rounded-sm bg-slate-50 dark:bg-slate-800 text-[11px]">
                     <strong>{p.name}</strong> ({p.fatherOrSpouse}) | Address: {p.address} | Joined: {formData.effectiveDate}
                   </div>
                 ))}
@@ -1221,7 +1221,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
 
           {/* TAB 3: Bank Account Mandate */}
           {activeTab === 'bank-mandate' && (
-            <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 max-h-[750px] overflow-y-auto text-xs leading-relaxed text-slate-800 dark:text-slate-200">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4 max-h-[750px] overflow-y-auto text-xs leading-relaxed text-slate-800 dark:text-slate-200">
               <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
                 <div>
                   <h4 className="font-bold text-sm text-slate-900 dark:text-white">
@@ -1256,7 +1256,7 @@ DRAFTED IN COMPLIANCE WITH INDIAN PARTNERSHIP ACT 1932 & SECTION 40(b) INCOME-TA
 
           {/* TAB 4: Stamp Duty & Section 69 Guide */}
           {activeTab === 'stamp-guide' && (
-            <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 text-xs">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4 text-xs">
               <div className="space-y-1">
                 <h4 className="font-bold text-sm text-slate-900 dark:text-white">
                   State Stamp Duty Calculator (Article 46)

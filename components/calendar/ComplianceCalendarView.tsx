@@ -57,17 +57,17 @@ export default function ComplianceCalendarView({
           <div className="flex gap-2 overflow-x-auto pb-1">
             {upcoming.map(({ entry, date }) => (
               <button key={entry.id} onClick={() => onEntryClick(entry)}
-                className="flex-shrink-0 bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/50 rounded-xl p-3 text-left hover:border-amber-400 dark:hover:border-amber-500 transition-colors min-w-[160px]">
+                className="shrink-0 bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/50 rounded-xl p-3 text-left hover:border-amber-400 dark:hover:border-amber-500 transition-colors min-w-[160px]">
                 <div className="text-xs text-amber-600 dark:text-amber-500 font-bold mb-1">{date?.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</div>
                 <div className="text-xs font-bold text-navy dark:text-white leading-tight">{entry.form_name}</div>
                 <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">{entry.compliance_title}</div>
-                <div className={`text-xs mt-1 px-1.5 py-0.5 rounded border w-fit ${REGULATOR_COLORS[entry.regulator] || REGULATOR_COLORS['other']}`}>{entry.regulator.toUpperCase()}</div>
+                <div className={`text-xs mt-1 px-1.5 py-0.5 rounded-sm border w-fit ${REGULATOR_COLORS[entry.regulator] || REGULATOR_COLORS['other']}`}>{entry.regulator.toUpperCase()}</div>
               </button>
             ))}
           </div>
         </div>
       )}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xs">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
           <button onClick={prevMonth} className="text-slate-400 hover:text-navy dark:hover:text-white p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">◀</button>
           <h2 className="font-bold text-navy dark:text-white text-lg">{MONTHS[currentMonth]} {currentYear}</h2>
@@ -87,7 +87,7 @@ export default function ComplianceCalendarView({
                   <div className="space-y-0.5">
                     {(dayMap[day] || []).slice(0, 2).map(entry => (
                       <button key={entry.id} onClick={() => onEntryClick(entry)}
-                        className={`w-full text-left text-xs px-1 py-0.5 rounded border truncate font-semibold ${REGULATOR_COLORS[entry.regulator] || REGULATOR_COLORS['other']}`}>
+                        className={`w-full text-left text-xs px-1 py-0.5 rounded-sm border truncate font-semibold ${REGULATOR_COLORS[entry.regulator] || REGULATOR_COLORS['other']}`}>
                         {entry.form_name}
                       </button>
                     ))}
@@ -103,7 +103,7 @@ export default function ComplianceCalendarView({
       </div>
       <div className="flex flex-wrap gap-2">
         {Object.entries(REGULATOR_COLORS).map(([reg, cls]) => (
-          <span key={reg} className={`text-xs px-2 py-1 rounded border font-semibold ${cls}`}>{reg.toUpperCase()}</span>
+          <span key={reg} className={`text-xs px-2 py-1 rounded-sm border font-semibold ${cls}`}>{reg.toUpperCase()}</span>
         ))}
       </div>
     </div>

@@ -277,7 +277,7 @@ export default function EmploymentAgreementPage() {
       {/* ─── Main Content Container ────────────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         {/* Direct Answer Box for AI Overviews / AEO */}
-        <section className="bg-gradient-to-br from-indigo-50/80 via-blue-50/50 to-white dark:from-slate-900 dark:via-slate-900/80 dark:to-slate-950 p-6 md:p-8 rounded-2xl border border-indigo-100 dark:border-indigo-950/80 mb-10 shadow-xs">
+        <section className="bg-linear-to-br from-indigo-50/80 via-blue-50/50 to-white dark:from-slate-900 dark:via-slate-900/80 dark:to-slate-950 p-6 md:p-8 rounded-2xl border border-indigo-100 dark:border-indigo-950/80 mb-10 shadow-2xs">
           <div className="flex items-center gap-2 mb-2 text-indigo-700 dark:text-indigo-400 font-bold text-xs uppercase tracking-wider">
             <Scale className="w-4 h-4" />
             Quick Statutory Summary (Direct Answer)

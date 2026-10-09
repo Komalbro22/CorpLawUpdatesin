@@ -65,7 +65,7 @@ export default async function AboutPage() {
                     <h2 className="text-3xl font-heading font-bold text-navy dark:text-white mb-6 border-l-4 border-gold pl-4">Who We Serve</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {['Corporate Lawyers', 'Compliance Officers', 'Professionals', 'Law Students'].map((item) => (
-                            <div key={item} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-xl flex items-center shadow-sm">
+                            <div key={item} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-xl flex items-center shadow-xs">
                                 <svg className="size-6 text-gold mr-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
@@ -79,35 +79,35 @@ export default async function AboutPage() {
                 <section className="mb-12">
                     <h2 className="text-3xl font-heading font-bold text-navy dark:text-white mb-6 border-l-4 border-gold pl-4">What We Cover</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
                             <h3 className="font-bold text-xl text-navy dark:text-white mb-2">MCA</h3>
                             <p className="text-slate-600 dark:text-slate-400">Company law, incorporation, compliance and governance updates</p>
                         </div>
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
                             <h3 className="font-bold text-xl text-navy dark:text-white mb-2">SEBI</h3>
                             <p className="text-slate-600 dark:text-slate-400">Capital markets, listing, investor protection updates</p>
                         </div>
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
                             <h3 className="font-bold text-xl text-navy dark:text-white mb-2">RBI</h3>
                             <p className="text-slate-600 dark:text-slate-400">Banking regulation, FEMA, foreign exchange & monetary policy</p>
                         </div>
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
                             <h3 className="font-bold text-xl text-navy dark:text-white mb-2">NCLT</h3>
                             <p className="text-slate-600 dark:text-slate-400">Insolvency, mergers, acquisitions and corporate disputes</p>
                         </div>
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
                             <h3 className="font-bold text-xl text-navy dark:text-white mb-2">IBC</h3>
                             <p className="text-slate-600 dark:text-slate-400">Insolvency and Bankruptcy Code — Resolution process, liquidation and creditor rights updates</p>
                         </div>
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
                             <h3 className="font-bold text-xl text-navy dark:text-white mb-2">FEMA</h3>
                             <p className="text-slate-600 dark:text-slate-400">Cross-border transactions and foreign investment updates</p>
                         </div>
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
                             <h3 className="font-bold text-xl text-navy dark:text-white mb-2">CCI</h3>
                             <p className="text-slate-600 dark:text-slate-400">Competition Commission of India — Anti-trust, merger control, and market dominance regulations</p>
                         </div>
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
                             <h3 className="font-bold text-xl text-navy dark:text-white mb-2">Labour Law</h3>
                             <p className="text-slate-600 dark:text-slate-400">Labour Codes, EPF ECR filings, ESIC notifications, and statutory employment compliance</p>
                         </div>
@@ -121,15 +121,15 @@ export default async function AboutPage() {
                         CorpLawUpdates.in is operated by a single independent author. Every regulatory update is researched directly from primary sources including the Gazette of India, MCA, SEBI, RBI, IBBI, and other official regulatory portals.
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-                        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
                             <span className="font-bold text-amber-700 dark:text-amber-400 block mb-1">1. Primary Source Sourcing</span>
                             <p className="text-sm text-slate-600 dark:text-slate-400">Directly fetched from regulatory portals and the official Gazette of India, minimizing reliance on secondary commentary.</p>
                         </div>
-                        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
                             <span className="font-bold text-amber-700 dark:text-amber-400 block mb-1">2. Two-Tier Verification</span>
                             <p className="text-sm text-slate-600 dark:text-slate-400">Statutory amendments are cross-referenced with parent acts (e.g. Companies Act 2013, SEBI Act 1992).</p>
                         </div>
-                        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                        <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
                             <span className="font-bold text-amber-700 dark:text-amber-400 block mb-1">3. Plain-English Synthesis</span>
                             <p className="text-sm text-slate-600 dark:text-slate-400">Complex legalese is converted into actionable, structured takeaways for compliance officers and lawyers.</p>
                         </div>
@@ -139,9 +139,9 @@ export default async function AboutPage() {
                 {/* 5.1 Editorial Leadership & Research Team (E-E-A-T) */}
                 <section id="editorial-leadership" className="mb-12 scroll-mt-24">
                     <h2 className="text-3xl font-heading font-bold text-navy dark:text-white mb-6 border-l-4 border-gold pl-4">About the Author & Research Desk</h2>
-                    <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                    <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
                         <div className="flex flex-col sm:flex-row items-start gap-6">
-                            <div className="size-16 sm:size-20 rounded-2xl bg-gradient-to-br from-navy to-slate-800 dark:from-amber-500 dark:to-amber-600 text-white dark:text-slate-950 flex items-center justify-center font-heading font-bold text-2xl sm:text-3xl shrink-0 shadow-md ring-4 ring-amber-400/20">
+                            <div className="size-16 sm:size-20 rounded-2xl bg-linear-to-br from-navy to-slate-800 dark:from-amber-500 dark:to-amber-600 text-white dark:text-slate-950 flex items-center justify-center font-heading font-bold text-2xl sm:text-3xl shrink-0 shadow-md ring-4 ring-amber-400/20">
                                 KS
                             </div>
                             <div className="space-y-3 flex-1">
@@ -182,7 +182,7 @@ export default async function AboutPage() {
                 {(linkedinUrl || twitterUrl || instagramUrl || whatsappUrl) && (
                     <section className="mb-12">
                         <h2 className="text-3xl font-heading font-bold text-navy dark:text-white mb-6 border-l-4 border-gold pl-4">Connect With Us</h2>
-                        <div className="flex items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                        <div className="flex items-center gap-4 bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
                             <p className="text-slate-600 dark:text-slate-400 font-medium mr-2">Follow our official channels:</p>
 
                             {linkedinUrl && (
@@ -261,15 +261,15 @@ export default async function AboutPage() {
                 <section className="mb-12">
                     <h2 className="text-3xl font-heading font-bold text-navy dark:text-white mb-6 border-l-4 border-gold pl-4">Site Statistics</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm text-center">
+                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-xs text-center">
                             <span className="text-4xl font-heading font-bold text-amber-600 dark:text-amber-400 block mb-2">{stats.articlesLabel}</span>
                             <span className="text-sm text-slate-600 dark:text-slate-400">Regulatory Updates Published</span>
                         </div>
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm text-center">
+                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-xs text-center">
                             <span className="text-4xl font-heading font-bold text-emerald-600 dark:text-emerald-400 block mb-2">{stats.glossaryLabel}</span>
                             <span className="text-sm text-slate-600 dark:text-slate-400">Glossary Definitions Explained</span>
                         </div>
-                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-sm text-center">
+                        <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200/80 dark:border-slate-800 shadow-xs text-center">
                             <span className="text-4xl font-heading font-bold text-blue-600 dark:text-blue-400 block mb-2">{stats.complianceDeadlinesLabel}</span>
                             <span className="text-sm text-slate-600 dark:text-slate-400">Compliance Deadlines Tracked</span>
                         </div>

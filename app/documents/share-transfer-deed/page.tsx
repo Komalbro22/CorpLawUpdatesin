@@ -269,7 +269,7 @@ export default function ShareTransferDeedPage() {
               Key parameters, governing provisions, and compliance requirements at a glance:
             </p>
 
-            <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
               <table className="w-full border-collapse bg-white dark:bg-slate-900 text-left text-xs sm:text-sm">
                 <thead className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-semibold">
                   <tr>
@@ -325,7 +325,7 @@ export default function ShareTransferDeedPage() {
           </div>
 
           {/* Statutory Clarification: 0.015% Share Transfer vs 0.005% Share Certificate Issuance */}
-          <div className="mt-14 rounded-2xl border border-indigo-200 bg-gradient-to-br from-indigo-50/50 via-white to-blue-50/40 p-6 shadow-sm dark:border-indigo-900/50 dark:bg-gradient-to-br dark:from-slate-900 dark:via-slate-900 dark:to-indigo-950/20 sm:p-8">
+          <div className="mt-14 rounded-2xl border border-indigo-200 bg-linear-to-br from-indigo-50/50 via-white to-blue-50/40 p-6 shadow-xs dark:border-indigo-900/50 dark:bg-linear-to-br dark:from-slate-900 dark:via-slate-900 dark:to-indigo-950/20 sm:p-8">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white sm:text-lg">
                 <Scale className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
@@ -340,7 +340,7 @@ export default function ShareTransferDeedPage() {
               A very common point of confusion among corporate practitioners and investors is whether stamp duty on shares is <strong>0.005%</strong> (or misread as 0.05%) versus <strong>0.015%</strong>. The Indian Stamp Act, 1899 (amended via the Finance Act, 2019 w.e.f. 1st July 2020) draws a strict statutory distinction based on the nature of the transaction:
             </p>
 
-            <div className="mt-5 overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-xs dark:border-slate-800 dark:bg-slate-900">
+            <div className="mt-5 overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-2xs dark:border-slate-800 dark:bg-slate-900">
               <table className="w-full text-left text-xs sm:text-sm">
                 <thead className="border-b border-slate-200 bg-slate-100/70 text-[11px] font-bold uppercase tracking-wider text-slate-700 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-300">
                   <tr>
@@ -401,7 +401,7 @@ export default function ShareTransferDeedPage() {
             </p>
 
             <div className="mt-6 space-y-4">
-              <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+              <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-slate-900">
                 <div className="flex items-start gap-3">
                   <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-xs font-bold text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">
                     1
@@ -415,7 +415,7 @@ export default function ShareTransferDeedPage() {
                 </div>
               </div>
 
-              <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+              <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-slate-900">
                 <div className="flex items-start gap-3">
                   <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-xs font-bold text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">
                     2
@@ -429,7 +429,7 @@ export default function ShareTransferDeedPage() {
                 </div>
               </div>
 
-              <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+              <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-slate-900">
                 <div className="flex items-start gap-3">
                   <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-xs font-bold text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">
                     3
@@ -443,7 +443,7 @@ export default function ShareTransferDeedPage() {
                 </div>
               </div>
 
-              <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+              <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-slate-900">
                 <div className="flex items-start gap-3">
                   <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-xs font-bold text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">
                     4
@@ -457,7 +457,7 @@ export default function ShareTransferDeedPage() {
                 </div>
               </div>
 
-              <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+              <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-slate-900">
                 <div className="flex items-start gap-3">
                   <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-amber-100 text-xs font-bold text-amber-700 dark:bg-amber-950 dark:text-amber-300">
                     5
@@ -471,7 +471,7 @@ export default function ShareTransferDeedPage() {
                 </div>
               </div>
 
-              <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+              <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-slate-900">
                 <div className="flex items-start gap-3">
                   <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
                     6
@@ -485,7 +485,7 @@ export default function ShareTransferDeedPage() {
                 </div>
               </div>
 
-              <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+              <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-xs dark:border-slate-800 dark:bg-slate-900">
                 <div className="flex items-start gap-3">
                   <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700 dark:bg-blue-950 dark:text-blue-300">
                     7
@@ -627,7 +627,7 @@ export default function ShareTransferDeedPage() {
               Clear, practical answers based on the Companies Act, 2013 and Indian Stamp Act, 1899:
             </p>
 
-            <div className="mt-6 divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white shadow-sm dark:divide-slate-800 dark:border-slate-800 dark:bg-slate-900">
+            <div className="mt-6 divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white shadow-xs dark:divide-slate-800 dark:border-slate-800 dark:bg-slate-900">
               {faqs.map(({ question, answer }) => (
                 <details key={question} className="group p-5">
                   <summary className="cursor-pointer list-none pr-8 text-sm sm:text-base font-semibold text-slate-900 dark:text-white marker:hidden flex items-center justify-between">

@@ -234,7 +234,7 @@ export default function AdminGlobalSearch() {
                             gap-3 px-4 py-3 
                             border-b border-slate-200 ">
               <svg className="w-5 h-5 text-slate-400 
-                              flex-shrink-0" 
+                              shrink-0" 
                    fill="none" viewBox="0 0 24 24"
                    stroke="currentColor">
                 <path strokeLinecap="round" 
@@ -249,7 +249,7 @@ export default function AdminGlobalSearch() {
                 onChange={e => setQuery(e.target.value)}
                 placeholder="Search articles, compliance deadlines..."
                 className="flex-1 text-navy  text-base bg-transparent
-                           outline-none placeholder-slate-400 "
+                           outline-hidden placeholder-slate-400 "
                 autoComplete="off"
               />
               {loading && (
@@ -285,7 +285,7 @@ export default function AdminGlobalSearch() {
                 className="text-xs border border-slate-200 
                            rounded-lg px-2 py-1 
                            bg-white  text-slate-600 
-                           focus:outline-none 
+                           focus:outline-hidden 
                            focus:ring-1 
                            focus:ring-amber-400"
               >
@@ -302,7 +302,7 @@ export default function AdminGlobalSearch() {
                 className="text-xs border border-slate-200 
                            rounded-lg px-2 py-1 
                            bg-white  text-slate-600 
-                           focus:outline-none 
+                           focus:outline-hidden 
                            focus:ring-1 
                            focus:ring-amber-400"
               >
@@ -373,7 +373,7 @@ export default function AdminGlobalSearch() {
                     >
                       {/* Type icon */}
                       <span className="text-lg 
-                                       flex-shrink-0 
+                                       shrink-0 
                                        mt-0.5">
                         {result.type === 'article' 
                           ? '📄' : result.type === 'calendar' ? '📅' : '📖'}
@@ -449,7 +449,7 @@ export default function AdminGlobalSearch() {
 
                       {/* Arrow */}
                       <span className="text-slate-300 
-                                       flex-shrink-0 mt-1">
+                                       shrink-0 mt-1">
                         →
                       </span>
                     </Link>

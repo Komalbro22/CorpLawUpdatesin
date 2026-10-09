@@ -211,7 +211,7 @@ export default function AnalyticsPage() {
           </button>
           <Link
             href="/admin/analytics/articles"
-            className="inline-flex items-center gap-2 bg-gold hover:bg-amber-400 text-slate-950 px-4 py-2.5 rounded-lg font-semibold text-sm shadow-sm transition-colors duration-200"
+            className="inline-flex items-center gap-2 bg-gold hover:bg-amber-400 text-slate-950 px-4 py-2.5 rounded-lg font-semibold text-sm shadow-xs transition-colors duration-200"
           >
           <LineChart className="w-4 h-4" aria-hidden />
           Article performance
@@ -226,7 +226,7 @@ export default function AnalyticsPage() {
           return (
             <div
               key={card.label}
-              className={`rounded-xl p-5 shadow-card ring-1 ring-slate-900/[0.02] ${card.color}`}
+              className={`rounded-xl p-5 shadow-card ring-1 ring-slate-900/2 ${card.color}`}
             >
               <div
                 className={`inline-flex h-10 w-10 items-center justify-center rounded-lg mb-3 ${card.iconBg}`}
@@ -254,7 +254,7 @@ export default function AnalyticsPage() {
             <div className="space-y-3">
               {topArticles.map((article, i) => (
                 <div key={article.slug} className="flex items-start gap-3">
-                  <span className="text-sm font-bold text-slate-500 w-6 flex-shrink-0 tabular-nums pt-0.5">
+                  <span className="text-sm font-bold text-slate-500 w-6 shrink-0 tabular-nums pt-0.5">
                     {i + 1}
                   </span>
                   <div className="flex-1 min-w-0">
@@ -330,7 +330,7 @@ export default function AnalyticsPage() {
                   className="flex items-center justify-between py-2 border-b border-white/60 last:border-0 gap-2"
                 >
                   <span className="text-sm text-slate-800 font-medium truncate">{sub.email}</span>
-                  <span className="text-xs text-slate-500 flex-shrink-0 tabular-nums">
+                  <span className="text-xs text-slate-500 shrink-0 tabular-nums">
                     {new Date(sub.subscribed_at).toLocaleDateString('en-IN', {
                       day: 'numeric',
                       month: 'short',

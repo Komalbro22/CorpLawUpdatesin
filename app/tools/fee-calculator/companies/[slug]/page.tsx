@@ -786,7 +786,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
       <div className="max-w-5xl mx-auto px-4 -mt-8 relative z-10 mb-16">
         {/* Princeton GEO Direct Answer Block (58 Words) */}
         {form.slug === 'dir-3-kyc' && (
-          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 border-l-4 border-l-blue-600 rounded-2xl shadow-sm">
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 border-l-4 border-l-blue-600 rounded-2xl shadow-xs">
             <div className="flex items-center gap-2 mb-2 text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
               <span>⚡</span> Fast Statutory Summary • G.S.R. 943(E) &amp; G.S.R. 300(E)
             </div>
@@ -804,7 +804,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         )}
 
         {form.slug === 'dpt-3' && (
-          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/50 border-l-4 border-l-amber-600 rounded-2xl shadow-sm">
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/50 border-l-4 border-l-amber-600 rounded-2xl shadow-xs">
             <div className="flex items-center gap-2 mb-2 text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
               <span>⚡</span> Fast Statutory Summary • MCA V3 Portal
             </div>
@@ -822,7 +822,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         )}
 
         {form.slug === 'aoc-4' && (
-          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 border-l-4 border-l-blue-600 rounded-2xl shadow-sm">
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 border-l-4 border-l-blue-600 rounded-2xl shadow-xs">
             <div className="flex items-center gap-2 mb-2 text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
               <span>⚡</span> Fast Statutory Summary • MCA V3 Portal
             </div>
@@ -840,7 +840,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         )}
 
         {form.slug === 'mgt-7' && (
-          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-900/50 border-l-4 border-l-emerald-600 rounded-2xl shadow-sm">
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-900/50 border-l-4 border-l-emerald-600 rounded-2xl shadow-xs">
             <div className="flex items-center gap-2 mb-2 text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
               <span>⚡</span> Fast Statutory Summary • Section 92 &amp; Rule 11
             </div>
@@ -860,7 +860,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         )}
 
         {form.slug === 'mgt-7a' && (
-          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-purple-200 dark:border-purple-900/50 border-l-4 border-l-purple-600 rounded-2xl shadow-sm">
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-purple-200 dark:border-purple-900/50 border-l-4 border-l-purple-600 rounded-2xl shadow-xs">
             <div className="flex items-center gap-2 mb-2 text-xs font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider">
               <span>⚡</span> Fast Statutory Summary • Small Companies &amp; OPCs
             </div>
@@ -878,7 +878,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         )}
 
         {form.slug === 'inc-20a' && (
-          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-rose-200 dark:border-rose-900/50 border-l-4 border-l-rose-600 rounded-2xl shadow-sm">
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-rose-200 dark:border-rose-900/50 border-l-4 border-l-rose-600 rounded-2xl shadow-xs">
             <div className="flex items-center gap-2 mb-2 text-xs font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider">
               <span>⚡</span> Fast Statutory Summary • Section 10A &amp; Rule 23A
             </div>
@@ -898,7 +898,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         )}
 
         {form.slug === 'dir-12' && (
-          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 border-l-4 border-l-blue-600 rounded-2xl shadow-sm">
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 border-l-4 border-l-blue-600 rounded-2xl shadow-xs">
             <div className="flex items-center gap-2 mb-2 text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
               <span>⚡</span> Fast Statutory Summary • Sections 168 &amp; 170 &amp; Rule 17
             </div>
@@ -918,7 +918,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         )}
 
         {form.slug === 'msme-1' && (
-          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/50 border-l-4 border-l-amber-600 rounded-2xl shadow-sm">
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/50 border-l-4 border-l-amber-600 rounded-2xl shadow-xs">
             <div className="flex items-center gap-2 mb-2 text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
               <span>⚡</span> Fast Statutory Summary • Section 405 &amp; MSMED Act
             </div>
@@ -938,7 +938,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         )}
 
         {form.slug === 'pas-3' && (
-          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 border-l-4 border-l-blue-600 rounded-2xl shadow-sm">
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 border-l-4 border-l-blue-600 rounded-2xl shadow-xs">
             <div className="flex items-center gap-2 mb-2 text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
               <span>⚡</span> Fast Statutory Summary • Sections 39 &amp; 42 • Dual Deadline Rule
             </div>
@@ -960,7 +960,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         )}
 
         {form.slug === 'adt-1' && (
-          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 border-l-4 border-l-blue-600 rounded-2xl shadow-sm">
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 border-l-4 border-l-blue-600 rounded-2xl shadow-xs">
             <div className="flex items-center gap-2 mb-2 text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
               <span>⚡</span> Fast Statutory Summary • Section 139 &amp; Rule 4(2)
             </div>
@@ -980,7 +980,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         )}
 
         {form.slug === 'chg-1' && (
-          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/50 border-l-4 border-l-amber-600 rounded-2xl shadow-sm">
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-900/50 border-l-4 border-l-amber-600 rounded-2xl shadow-xs">
             <div className="flex items-center gap-2 mb-2 text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
               <span>⚡</span> Fast Statutory Summary • Section 77 Chapter VI • 3-Tier Timeline
             </div>
@@ -1004,7 +1004,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         )}
 
         {form.slug === 'pas-6' && (
-          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-900/50 border-l-4 border-l-emerald-600 rounded-2xl shadow-sm">
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-emerald-200 dark:border-emerald-900/50 border-l-4 border-l-emerald-600 rounded-2xl shadow-xs">
             <div className="flex items-center gap-2 mb-2 text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
               <span>⚡</span> Fast Statutory Summary • Section 29 &amp; Rules 9A &amp; 9B
             </div>
@@ -1026,7 +1026,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         )}
 
         {form.slug === 'spice-plus' && (
-          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 border-l-4 border-l-blue-600 rounded-2xl shadow-sm">
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 border-l-4 border-l-blue-600 rounded-2xl shadow-xs">
             <div className="flex items-center gap-2 mb-2 text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
               <span>⚡</span> Fast Statutory Summary • G.S.R. 329(E) &amp; Rule 38
             </div>
@@ -1046,7 +1046,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         )}
 
         {form.slug === 'mgt-14' && (
-          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-indigo-200 dark:border-indigo-900/50 border-l-4 border-l-indigo-600 rounded-2xl shadow-sm">
+          <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-indigo-200 dark:border-indigo-900/50 border-l-4 border-l-indigo-600 rounded-2xl shadow-xs">
             <div className="flex items-center gap-2 mb-2 text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
               <span>⚡</span> Fast Statutory Summary • Section 117 &amp; Rule 24 • Dual Liability Regime
             </div>
@@ -1085,9 +1085,9 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
       <div className="max-w-5xl mx-auto px-4 mb-20">
         {/* 4D - Quick Reference Panel */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-          <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
             <h3 className="text-xl font-bold text-navy dark:text-white mb-6 flex items-center gap-2">
-              <span className="w-8 h-8 rounded bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600">📌</span>
+              <span className="w-8 h-8 rounded-sm bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600">📌</span>
               Key Facts
             </h3>
             <ul className="space-y-4">
@@ -1112,9 +1112,9 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </ul>
           </div>
           
-          <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
             <h3 className="text-xl font-bold text-navy dark:text-white mb-6 flex items-center gap-2">
-              <span className="w-8 h-8 rounded bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600">📊</span>
+              <span className="w-8 h-8 rounded-sm bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600">📊</span>
               Fee Schedule
             </h3>
             <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800">
@@ -1165,7 +1165,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         {form.slug === 'aoc-4' && (
           <div className="space-y-12 mb-16">
             {/* Table 1: Normal Fees */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>📋</span> Table A: Normal Filing Fee Schedule (Items 5 & 6)
               </h3>
@@ -1194,7 +1194,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 2: ₹100/day Uncapped Delay Matrix */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>⏱️</span> Form AOC-4 Late Fee Calculation Matrix (₹100/Day Uncapped)
               </h3>
@@ -1225,7 +1225,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 3: Section 137(3) Penalty vs Section 446B Relief */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>⚖️</span> Section 137(3) Civil Adjudication Penalties vs Section 446B Relief
               </h3>
@@ -1267,7 +1267,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 4: Form AOC-4 Variants Comparison */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>📑</span> Form AOC-4 Variants: Which Form Applies to Your Company?
               </h3>
@@ -1315,7 +1315,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 5: AOC-4 vs MGT-7 Comparison */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>🔄</span> AOC-4 vs MGT-7: Key Statutory Differences
               </h3>
@@ -1350,7 +1350,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         {(form.slug === 'mgt-7' || form.slug === 'mgt-7a') && (
           <div className="space-y-12 mb-16">
             {/* Table 1: Normal Base Filing Fees */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>📋</span> Table A: Form {form.formNumber} Normal Base Filing Fee Schedule (Items 5 &amp; 6)
               </h3>
@@ -1379,7 +1379,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 2: ₹100/day Uncapped Delay Matrix */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>⏱️</span> Form {form.formNumber} Late Fee Calculation Matrix (₹100/Day Uncapped)
               </h3>
@@ -1410,7 +1410,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 3: Section 92(5) Penalties vs Section 446B Relief */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>⚖️</span> Section 92(5) Civil Adjudication Penalties vs Section 446B Relief
               </h3>
@@ -1446,7 +1446,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 4: MGT-7 vs MGT-7A & MGT-8 PCS Certification Thresholds */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>🛡️</span> Form MGT-7 vs Form MGT-7A &amp; Form MGT-8 PCS Certification Rules
               </h3>
@@ -1494,7 +1494,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 5: Mandatory Attachments Checklist */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>📎</span> Mandatory Attachments Checklist for Form MGT-7 / MGT-7A
               </h3>
@@ -1533,7 +1533,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         {form.slug === 'dpt-3' && (
           <div className="space-y-12 mb-16">
             {/* Table 1: Normal Fees */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>📋</span> Table A: Normal Base Filing Fee Schedule (Items 5 & 6)
               </h3>
@@ -1565,7 +1565,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 2: Table B Multiplier Matrix */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>⏱️</span> Table B: Additional Late Fee Multiplier Matrix (2× to 12×)
               </h3>
@@ -1596,7 +1596,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 3: Rule 21 Procedural Fine vs Section 76A Substantive Penalties */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>⚖️</span> Rule 21 Procedural Fines vs Section 76A Substantive Penalties
               </h3>
@@ -1649,7 +1649,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 4: Circular 02/2026 Waiver Matrix */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>🏛️</span> MCA General Circular No. 02/2026 Fee Waiver & Date Arithmetic (FY 2025-26)
               </h3>
@@ -1697,7 +1697,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 5: Rule 2(1)(c) Master Excluded Receipts */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>📑</span> Rule 2(1)(c) Master Registry: 18 Categories of Excluded Receipts
               </h3>
@@ -1747,7 +1747,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         {form.slug === 'dir-3-kyc' && (
           <div className="space-y-8 mb-16">
             {/* Table 1: Triennial Schedule */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>📅</span> Master Schedule: Triennial Routine KYC Cycle (Rule 12A(1))
               </h3>
@@ -1805,7 +1805,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 2: Fee Schedule under G.S.R. 300(E) */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>💰</span> Statutory Fee Schedule: Form DIR-3 KYC Web (G.S.R. 300(E), Item VII)
               </h3>
@@ -1851,7 +1851,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 3: Old vs New Regime Comparison */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>⚖️</span> Old Annual Regime vs New Triennial Regime Comparison
               </h3>
@@ -1919,7 +1919,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 4: DIN Deactivation vs Section 164 Disqualification */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>🛡️</span> DIN Deactivation vs Director Disqualification (Section 164)
               </h3>
@@ -1968,7 +1968,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 5: Step-by-Step Filing Checklist */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>📝</span> Step-by-Step Filing Checklist: Form DIR-3 KYC Web on MCA21 V3
               </h3>
@@ -2033,7 +2033,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         {form.slug === 'inc-20a' && (
           <div className="space-y-12 mb-16">
             {/* Table 1: Table A Base Normal Fees */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>📋</span> Table A: Normal Base Filing Fee Schedule (Item 5)
               </h3>
@@ -2062,7 +2062,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 2: Table B Multipliers */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>⏱️</span> Table B: Additional Late Fee Multiplier Schedule (2× to 12×)
               </h3>
@@ -2091,7 +2091,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 3: Section 10A(2) Adjudication Penalties vs Section 446B Relief */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>⚖️</span> Section 10A(2) Statutory Penalties vs Section 446B Relief Comparison
               </h3>
@@ -2139,7 +2139,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 4: Operational Freeze, Strike-Off & Escalation Timeline */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>🛡️</span> Operational Freeze, Strike-Off Risk &amp; Escalation Timeline
               </h3>
@@ -2192,7 +2192,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         {form.slug === 'dir-12' && (
           <div className="space-y-12 mb-16">
             {/* Table 1: Mandatory Attachments Checklist */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>📋</span> Form DIR-12 Mandatory Attachments Checklist by Corporate Event
               </h3>
@@ -2257,7 +2257,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 2: Form DIR-12 vs Form DIR-11 Statutory Comparison */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>🛡️</span> Form DIR-12 vs Form DIR-11: Statutory Differences for Resigning Directors
               </h3>
@@ -2305,7 +2305,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 3: Table B Late Multiplier Matrix & Section 172 Exposure */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>⏱️</span> Form DIR-12 Late Fee Multipliers &amp; Section 172 Residuary Penalties
               </h3>
@@ -2370,7 +2370,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         {form.slug === 'msme-1' && (
           <div className="space-y-12 mb-16">
             {/* Table 1: Section 405(4) Adjudication Penalty Matrix */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>⚖️</span> Form MSME-1 Statutory Penalty Schedule under Section 405(4)
               </h3>
@@ -2437,7 +2437,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 2: The V2 vs V3 Disclosure Trap */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>🔄</span> The MCA V3 Disclosure Architecture: Why Clearing Dues Early Still Requires Filing
               </h3>
@@ -2485,7 +2485,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 3: The Triple Compliance Penalty */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>⚡</span> The Triple Penalty for a Single Delayed MSME Invoice
               </h3>
@@ -2532,7 +2532,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         {form.slug === 'pas-3' && (
           <div className="space-y-12 mb-16">
             {/* Table 1: The Two Clocks — Private Placement vs Ordinary Allotments */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>⏱️</span> The Dual Statutory Clocks: Section 42 (15 Days) vs Section 39 (30 Days)
               </h3>
@@ -2590,7 +2590,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 2: MCA Table A Base Fees & Table B Escalation Multipliers */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>📊</span> Table A Normal Filing Fees &amp; Table B Delay Escalation Multipliers
               </h3>
@@ -2641,7 +2641,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 3: Section 42(6) Upstream Rules (The Startup Trap) */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>⚠️</span> The Startup Trap: Upstream Clocks &amp; Fund Utilisation Lock (Section 42(6))
               </h3>
@@ -2689,7 +2689,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 4: Mandatory Document Checklist for MCA V3 */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>📎</span> Mandatory Attachments Checklist for MCA V3 Form PAS-3
               </h3>
@@ -2742,7 +2742,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 5: Real ROC Adjudication Precedents */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>⚖️</span> Real 2026 ROC Adjudication Precedents on Form PAS-3
               </h3>
@@ -2785,7 +2785,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         {form.slug === 'adt-1' && (
           <div className="space-y-12 mb-16">
             {/* Table 1: Table A Base Fees */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>📋</span> Table A: Normal Government Filing Fees for Form ADT-1
               </h3>
@@ -2838,7 +2838,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 2: Table B Escalation Multipliers */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>📈</span> Table B: Late Filing Multipliers for Form ADT-1
               </h3>
@@ -2898,7 +2898,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 3: First Auditor vs Subsequent Auditor Timelines */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>⚖️</span> Statutory Appointment Clocks: First Auditor vs Subsequent Auditor
               </h3>
@@ -2951,7 +2951,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 4: Section 147 Adjudication Penalties */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>🛡️</span> Section 147 Civil Adjudication Penalties &amp; Section 446B Relief
               </h3>
@@ -2987,7 +2987,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 5: Mandatory Attachments Checklist */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>📎</span> Mandatory Attachments Checklist for Form ADT-1 on MCA V3
               </h3>
@@ -3034,7 +3034,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         {form.slug === 'chg-1' && (
           <div className="space-y-12 mb-16">
             {/* Table 1: Chapter VI 3-Tier Timeline */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>⏱️</span> Chapter VI Non-Negotiable 3-Tier Statutory Timeline (Charges post 02.11.2018)
               </h3>
@@ -3087,7 +3087,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 2: Ad Valorem Fee Calculation Matrix */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>💰</span> Ad Valorem Late Fee Matrix Across Credit Facility Sizes (Tier 3)
               </h3>
@@ -3147,7 +3147,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 3: Commercial Consequences & Bank Rights */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>🏦</span> Commercial Consequences &amp; Lender Powers (Section 77(3) &amp; 78)
               </h3>
@@ -3195,7 +3195,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 4: Mandatory Document Checklist */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>📎</span> Mandatory Attachments Checklist for Form CHG-1 on MCA V3
               </h3>
@@ -3242,7 +3242,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         {form.slug === 'pas-6' && (
           <div className="space-y-12 mb-16">
             {/* Table 1: Semi-Annual Compliance Calendar */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>📅</span> Form PAS-6 Semi-Annual Compliance Calendar (Rules 9A &amp; 9B)
               </h3>
@@ -3278,7 +3278,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 2: Applicability Matrix */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>🏢</span> Dematerialisation &amp; Form PAS-6 Applicability Matrix
               </h3>
@@ -3338,7 +3338,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 3: Section 450 Adjudication Penalties */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>⚖️</span> Section 450 Civil Adjudication Penalties &amp; Section 446B Concessions
               </h3>
@@ -3377,7 +3377,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
             </div>
 
             {/* Table 4: Commercial Sanctions & Corporate Freezes */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs overflow-hidden">
               <h3 className="text-lg font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
                 <span>🚫</span> Commercial Sanctions for Non-Compliance (Rule 9A(4) &amp; Rule 9B(4))
               </h3>
@@ -3438,7 +3438,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
                       <span>📄</span> {guide.title}
                     </h3>
                     {guide.isOfficial && (
-                      <span className="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider whitespace-nowrap">
+                      <span className="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded-sm uppercase tracking-wider whitespace-nowrap">
                         CorpLawUpdates Guide
                       </span>
                     )}
@@ -3466,7 +3466,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
           <div className="space-y-4">
             {form.faqItems.map((faq, index) => (
               <details key={index} className="group border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-xl [&_summary::-webkit-details-marker]:hidden">
-                <summary className="flex cursor-pointer items-center justify-between gap-4 p-6 font-semibold text-slate-800 dark:text-slate-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-xl">
+                <summary className="flex cursor-pointer items-center justify-between gap-4 p-6 font-semibold text-slate-800 dark:text-slate-200 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-500 rounded-xl">
                   {faq.question}
                   <span className="transition group-open:rotate-180 text-slate-400">
                     <svg fill="none" height="24" shapeRendering="geometricPrecision" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
@@ -3488,7 +3488,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               const rel = mcaForms.find(f => f.slug === slug)
               if (!rel) return null
               return (
-                <Link key={slug} href={`/tools/fee-calculator/companies/${slug}`} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-6 py-4 rounded-xl shadow-sm hover:shadow-md transition-shadow flex items-center gap-3">
+                <Link key={slug} href={`/tools/fee-calculator/companies/${slug}`} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-6 py-4 rounded-xl shadow-xs hover:shadow-md transition-shadow flex items-center gap-3">
                   <span className="font-bold text-blue-600 dark:text-blue-400">{rel.formNumber}</span>
                   <span className="text-slate-500">— {rel.formName}</span>
                 </Link>

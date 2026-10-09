@@ -214,15 +214,15 @@ export default async function HomePage() {
       {/* High-Trust Editorial Navy Hero Banner */}
       <section className="relative w-full overflow-hidden bg-navy text-white py-8 md:py-12 border-b border-slate-800">
         <div
-          className="absolute -top-[40%] -left-[20%] w-[80%] h-[80%] rounded-full bg-amber-500/10 blur-3xl sm:blur-[120px] pointer-events-none transform-gpu"
+          className="absolute top-[-40%] left-[-20%] w-[80%] h-[80%] rounded-full bg-amber-500/10 blur-3xl sm:blur-[120px] pointer-events-none transform-gpu"
           aria-hidden
         />
         <div
-          className="absolute -bottom-[40%] -right-[20%] w-[80%] h-[80%] rounded-full bg-blue-500/10 blur-3xl sm:blur-[120px] pointer-events-none transform-gpu"
+          className="absolute bottom-[-40%] right-[-20%] w-[80%] h-[80%] rounded-full bg-blue-500/10 blur-3xl sm:blur-[120px] pointer-events-none transform-gpu"
           aria-hidden
         />
         <div
-          className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(rgba(255,255,255,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.12)_1px,transparent_1px)] bg-[size:64px_64px]"
+          className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(rgba(255,255,255,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.12)_1px,transparent_1px)] bg-size-[64px_64px]"
           aria-hidden
         />
 
@@ -244,7 +244,7 @@ export default async function HomePage() {
               {/* 1. Standout Primary CTA */}
               <Link
                 href="/updates"
-                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 px-6 py-3 text-sm font-bold shadow-lg shadow-amber-500/20 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 motion-safe:hover:scale-[1.02] active:scale-[0.98]"
+                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 px-6 py-3 text-sm font-bold shadow-lg shadow-amber-500/20 transition-all focus:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-400 motion-safe:hover:scale-[1.02] active:scale-[0.98]"
               >
                 Browse updates
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
@@ -252,7 +252,7 @@ export default async function HomePage() {
               {/* 2. Distinct Secondary CTA */}
               <Link
                 href="/tools"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-slate-700 hover:border-slate-500 bg-slate-800/80 hover:bg-slate-700/80 px-6 py-3 text-sm font-semibold text-slate-200 hover:text-white transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-slate-700 hover:border-slate-500 bg-slate-800/80 hover:bg-slate-700/80 px-6 py-3 text-sm font-semibold text-slate-200 hover:text-white transition-all focus:outline-hidden focus-visible:ring-2 focus-visible:ring-slate-400"
               >
                 Explore tools
               </Link>
@@ -363,7 +363,7 @@ export default async function HomePage() {
                     key={id}
                     href={`/category/${id.toLowerCase()}`}
                     style={{ '--delay': `${i * 35}ms` } as CSSProperties}
-                    className={`animate-fade-up group flex flex-col items-center justify-between rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-3 sm:p-3.5 text-center shadow-xs ${hoverBorder} ${hoverShadow} hover:shadow-md transition-[transform,box-shadow,border-color] duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 motion-safe:hover:-translate-y-1`}
+                    className={`animate-fade-up group flex flex-col items-center justify-between rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-3 sm:p-3.5 text-center shadow-2xs ${hoverBorder} ${hoverShadow} hover:shadow-md transition-[transform,box-shadow,border-color] duration-200 ease-out focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 motion-safe:hover:-translate-y-1`}
                   >
                     <div className={`size-10 sm:size-11 rounded-xl flex items-center justify-center border ${badgeBg} mb-2.5 transition-transform duration-200 group-hover:scale-110 shadow-2xs`}>
                       <Icon className="size-5" aria-hidden="true" />
@@ -415,7 +415,7 @@ export default async function HomePage() {
               </div>
               <Link
                 href="/updates"
-                className="hidden sm:inline-flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 text-sm font-semibold text-navy dark:text-slate-100 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-800"
+                className="hidden sm:inline-flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 text-sm font-semibold text-navy dark:text-slate-100 shadow-xs transition-colors hover:bg-slate-50 dark:hover:bg-slate-800"
               >
                 View all
                 <ArrowRight className="size-4" aria-hidden="true" />
@@ -451,7 +451,7 @@ export default async function HomePage() {
               </p>
             </div>
             <Link href="/tools"
-                  className="inline-flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 text-sm font-semibold text-navy dark:text-slate-100 shadow-sm transition-colors hover:bg-slate-50 dark:hover:bg-slate-800 whitespace-nowrap self-start md:self-end">
+                  className="inline-flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 text-sm font-semibold text-navy dark:text-slate-100 shadow-xs transition-colors hover:bg-slate-50 dark:hover:bg-slate-800 whitespace-nowrap self-start md:self-end">
               View All Tools <ArrowRight className="size-4" aria-hidden="true" />
             </Link>
           </div>
@@ -514,7 +514,7 @@ export default async function HomePage() {
         </section>
 
         <section className="w-full bg-navy dark:bg-slate-950 py-16 md:py-20 px-4 text-center relative overflow-hidden border-t border-slate-800">
-          <div className="absolute inset-0 opacity-[0.08] bg-[linear-gradient(rgba(255,255,255,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.12)_1px,transparent_1px)] bg-[size:72px_72px]" aria-hidden="true" />
+          <div className="absolute inset-0 opacity-[0.08] bg-[linear-gradient(rgba(255,255,255,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.12)_1px,transparent_1px)] bg-size-[72px_72px]" aria-hidden="true" />
           <div className="max-w-3xl mx-auto flex flex-col items-center relative z-10">
             <Newspaper className="mb-4 size-8 text-gold" aria-hidden="true" />
             <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-3">
@@ -525,7 +525,7 @@ export default async function HomePage() {
             </p>
             <Link
               href="/newsletter"
-              className="inline-flex items-center gap-2 rounded-lg bg-amber-400 px-8 py-3.5 font-bold text-navy shadow-md transition-colors hover:bg-amber-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+              className="inline-flex items-center gap-2 rounded-lg bg-amber-400 px-8 py-3.5 font-bold text-navy shadow-md transition-colors hover:bg-amber-300 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-400"
             >
               Subscribe free
               <ArrowRight className="size-4" aria-hidden="true" />

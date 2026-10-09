@@ -268,7 +268,7 @@ export default function ServiceLevelAgreementPage() {
               <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
               DPDP Act 2023 & CERT-In Compliant
             </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-amber-500/15 to-indigo-500/15 text-indigo-900 border border-indigo-200">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-linear-to-r from-amber-500/15 to-indigo-500/15 text-indigo-900 border border-indigo-200">
               <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
               Live Legal Preview & Gemini AI Drafter
             </span>
@@ -296,7 +296,7 @@ export default function ServiceLevelAgreementPage() {
         <SlaClient />
 
         {/* ─── GEO Direct-Answer Block (AI Citations & LLM Grounding) ─────── */}
-        <div className="bg-white border-l-4 border-amber-500 border-y border-r border-slate-200 rounded-r-2xl p-6 shadow-xs space-y-3">
+        <div className="bg-white border-l-4 border-amber-500 border-y border-r border-slate-200 rounded-r-2xl p-6 shadow-2xs space-y-3">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-800">
             <Sparkles className="w-4 h-4 text-amber-600" />
             <span>Executive Legal Synopsis (SLA in Indian Law & Global IT)</span>
@@ -742,7 +742,7 @@ export default function ServiceLevelAgreementPage() {
           <div className="lg:col-span-4 space-y-6">
             
             {/* Quick Summary Card */}
-            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-4">
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-2xs space-y-4">
               <h3 className="font-heading font-bold text-slate-900 text-base flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5 text-emerald-600" />
                 SLA Compliance Checklist
@@ -772,7 +772,7 @@ export default function ServiceLevelAgreementPage() {
             </div>
 
             {/* Specimen Clause Snippet */}
-            <div className="bg-slate-900 text-white rounded-2xl p-6 shadow-xs space-y-3">
+            <div className="bg-slate-900 text-white rounded-2xl p-6 shadow-2xs space-y-3">
               <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 block font-mono">
                 Standard Enforceable Clause
               </span>
@@ -785,7 +785,7 @@ export default function ServiceLevelAgreementPage() {
             </div>
 
             {/* Related Contract Documents */}
-            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-3">
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-2xs space-y-3">
               <h3 className="font-heading font-bold text-slate-900 text-sm">
                 Related Commercial Templates
               </h3>
@@ -831,7 +831,7 @@ export default function ServiceLevelAgreementPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {faqs.map((faq, idx) => (
-              <div key={idx} className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs space-y-2">
+              <div key={idx} className="bg-white border border-slate-200 rounded-2xl p-5 shadow-2xs space-y-2">
                 <h3 className="font-bold text-slate-900 text-sm sm:text-base font-heading">
                   {faq.question}
                 </h3>

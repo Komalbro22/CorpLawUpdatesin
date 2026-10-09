@@ -168,7 +168,7 @@ Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform foc
       {/* ═════════════════════════════════════════════════════════════════════ */}
       <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
         {/* Header Ribbon with Mode Switcher */}
-        <div className="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 p-6 md:p-8 text-white border-b border-slate-800">
+        <div className="bg-linear-to-r from-slate-900 via-blue-950 to-slate-900 p-6 md:p-8 text-white border-b border-slate-800">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-semibold mb-2">
@@ -295,7 +295,7 @@ Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform foc
                     }}
                     className={`p-3 rounded-xl border text-left transition-all ${
                       allotmentPresetId === preset.id && !customAllotmentDate
-                        ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-500 text-blue-900 dark:text-blue-200 shadow-sm'
+                        ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-500 text-blue-900 dark:text-blue-200 shadow-xs'
                         : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300'
                     }`}
                   >
@@ -336,7 +336,7 @@ Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform foc
                   }}
                   className={`p-3.5 rounded-xl border flex items-center justify-center gap-2 font-semibold text-xs transition-all ${
                     dinStatus === 'active'
-                      ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500 text-emerald-900 dark:text-emerald-200 shadow-sm'
+                      ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500 text-emerald-900 dark:text-emerald-200 shadow-xs'
                       : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300'
                   }`}
                 >
@@ -351,7 +351,7 @@ Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform foc
                   }}
                   className={`p-3.5 rounded-xl border flex items-center justify-center gap-2 font-semibold text-xs transition-all ${
                     dinStatus === 'deactivated'
-                      ? 'bg-rose-50 dark:bg-rose-950/40 border-rose-500 text-rose-900 dark:text-rose-200 shadow-sm'
+                      ? 'bg-rose-50 dark:bg-rose-950/40 border-rose-500 text-rose-900 dark:text-rose-200 shadow-xs'
                       : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300'
                   }`}
                 >
@@ -432,7 +432,7 @@ Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform foc
                   type="checkbox"
                   checked={hasCompanyFilingsPending}
                   onChange={(e) => setHasCompanyFilingsPending(e.target.checked)}
-                  className="mt-1 h-4 w-4 rounded border-amber-300 text-amber-600 focus:ring-amber-500"
+                  className="mt-1 h-4 w-4 rounded-sm border-amber-300 text-amber-600 focus:ring-amber-500"
                 />
                 <div className="text-xs">
                   <span className="font-bold text-slate-900 dark:text-white">
@@ -603,7 +603,7 @@ Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform foc
       {/* ═════════════════════════════════════════════════════════════════════ */}
       {/* SECTION 2: VISUAL TRIENNIAL TIMELINE ROADMAP                          */}
       {/* ═════════════════════════════════════════════════════════════════════ */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 dark:border-slate-800">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 shadow-xs border border-slate-200 dark:border-slate-800">
         <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
           <Calendar className="w-5 h-5 text-blue-600" />
           <span>Statutory Triennial KYC Roadmap (Rule 12A(1))</span>
@@ -667,7 +667,7 @@ Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform foc
       {/* SECTION 3: THE "NON-RESET TRAP" & RULE 12A(2) ADVISOR                 */}
       {/* ═════════════════════════════════════════════════════════════════════ */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 dark:border-slate-800">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 shadow-xs border border-slate-200 dark:border-slate-800">
           <div className="w-10 h-10 rounded-2xl bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center text-amber-600 mb-4">
             <AlertTriangle className="w-5 h-5" />
           </div>
@@ -682,7 +682,7 @@ Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform foc
           </div>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 dark:border-slate-800">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 shadow-xs border border-slate-200 dark:border-slate-800">
           <div className="w-10 h-10 rounded-2xl bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-blue-600 mb-4">
             <Building className="w-5 h-5" />
           </div>

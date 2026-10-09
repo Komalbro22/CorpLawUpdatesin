@@ -95,7 +95,7 @@ export default function TermsPage() {
                         <li><strong>Clear Labelling:</strong> All sponsored articles are prominently marked with a "Sponsored" badge and include a disclosure that CorpLawUpdates does not necessarily endorse the views or services mentioned.</li>
                         <li><strong>Attribution:</strong> Sponsored articles are attributed to the named contributor rather than CorpLawUpdates editorial staff.</li>
                         <li><strong>Editorial Standards:</strong> While sponsored content undergoes basic review for factual accuracy and legal compliance, it is not held to the same primary-source verification standard as our editorial news coverage.</li>
-                        <li><strong>Link Attribution:</strong> External links in sponsored articles are marked with <code className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-xs">rel="sponsored"</code> in accordance with search engine guidelines for paid content.</li>
+                        <li><strong>Link Attribution:</strong> External links in sponsored articles are marked with <code className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded-sm text-xs">rel="sponsored"</code> in accordance with search engine guidelines for paid content.</li>
                         <li><strong>No Endorsement:</strong> Publication of sponsored content does not constitute an endorsement by CorpLawUpdates.in of the sponsor, the contributor, or any products, services, or views expressed therein.</li>
                     </ul>
                 </section>

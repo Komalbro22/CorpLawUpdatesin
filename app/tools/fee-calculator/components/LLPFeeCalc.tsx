@@ -180,7 +180,7 @@ export default function LLPFeeCalc() {
       </div>
 
       {/* Input Workspace */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 sm:p-8 shadow-sm">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 sm:p-8 shadow-xs">
         <div className="border-b border-slate-100 dark:border-slate-800 pb-5 mb-6">
           <h2 className="text-xl font-bold text-navy dark:text-white font-heading">
             1. Select LLP Form & Entity Financials
@@ -199,7 +199,7 @@ export default function LLPFeeCalc() {
             <select
               value={formId}
               onChange={(e) => setFormId(e.target.value as LlpFormId)}
-              className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-slate-900 dark:text-slate-100 font-medium"
+              className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-hidden transition-all text-slate-900 dark:text-slate-100 font-medium"
             >
               <optgroup label="Annual Filings">
                 <option value="Form-8-Annual">Form 8 — Statement of Account & Solvency (Annual, Due 30 Oct)</option>
@@ -231,7 +231,7 @@ export default function LLPFeeCalc() {
               min="0"
               value={contribution}
               onChange={(e) => setContribution(e.target.value)}
-              className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-slate-900 dark:text-slate-100 font-medium"
+              className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-hidden transition-all text-slate-900 dark:text-slate-100 font-medium"
               placeholder="e.g. 1000000"
             />
             <p className="text-[11px] text-slate-400">
@@ -249,7 +249,7 @@ export default function LLPFeeCalc() {
               min="0"
               value={turnover}
               onChange={(e) => setTurnover(e.target.value)}
-              className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-slate-900 dark:text-slate-100 font-medium"
+              className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-hidden transition-all text-slate-900 dark:text-slate-100 font-medium"
               placeholder="e.g. 2000000"
             />
             <p className="text-[11px] text-slate-400">
@@ -288,7 +288,7 @@ export default function LLPFeeCalc() {
               min="2"
               value={dpCount}
               onChange={(e) => setDpCount(e.target.value)}
-              className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-slate-900 dark:text-slate-100 font-medium"
+              className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-hidden transition-all text-slate-900 dark:text-slate-100 font-medium"
             />
             <p className="text-[11px] text-slate-400">
               Used to calculate statutory penalty exposure under Sections 34(5) / 35(2).
@@ -304,7 +304,7 @@ export default function LLPFeeCalc() {
               <select
                 value={financialYear}
                 onChange={(e) => setFinancialYear(e.target.value)}
-                className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-slate-900 dark:text-slate-100 font-medium"
+                className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-hidden transition-all text-slate-900 dark:text-slate-100 font-medium"
               >
                 {FINANCIAL_YEAR_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -327,7 +327,7 @@ export default function LLPFeeCalc() {
                 <select
                   value={form3Modality}
                   onChange={(e) => setForm3Modality(e.target.value as Form3Modality)}
-                  className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-slate-900 dark:text-slate-100 font-medium"
+                  className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-hidden transition-all text-slate-900 dark:text-slate-100 font-medium"
                 >
                   <option value="initial">Initial LLP Agreement (Filing after Incorporation)</option>
                   <option value="modification_no_contrib">Change in LLP Agreement (Without Contribution Change)</option>
@@ -345,7 +345,7 @@ export default function LLPFeeCalc() {
                     min="0"
                     value={cNew}
                     onChange={(e) => setCNew(e.target.value)}
-                    className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-slate-900 dark:text-slate-100 font-medium"
+                    className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-hidden transition-all text-slate-900 dark:text-slate-100 font-medium"
                     placeholder="e.g. 2500000"
                   />
                   <p className="text-[11px] text-slate-400">
@@ -364,7 +364,7 @@ export default function LLPFeeCalc() {
               <select
                 value={form8ChargeModality}
                 onChange={(e) => setForm8ChargeModality(e.target.value as Form8ChargeModality)}
-                className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-slate-900 dark:text-slate-100 font-medium"
+                className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-hidden transition-all text-slate-900 dark:text-slate-100 font-medium"
               >
                 <option value="creation">Creation of Charge (Flat ₹1,000 document fee)</option>
                 <option value="modification">Modification of Charge (Flat ₹1,000 document fee)</option>
@@ -381,7 +381,7 @@ export default function LLPFeeCalc() {
               <select
                 value={form15Scenario}
                 onChange={(e) => setForm15Scenario(e.target.value as Form15Scenario)}
-                className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-all text-slate-900 dark:text-slate-100 font-medium"
+                className="w-full p-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-hidden transition-all text-slate-900 dark:text-slate-100 font-medium"
               >
                 <option value="within_local_limits">Scenario A: Change within same city / town / village (Partner consent date)</option>
                 <option value="outside_local_limits_within_state">Scenario B: Change outside local limits within same State (Partner consent + publication date)</option>
@@ -475,7 +475,7 @@ export default function LLPFeeCalc() {
                     type="checkbox"
                     checked={f24Cessation}
                     onChange={(e) => setF24Cessation(e.target.checked)}
-                    className="rounded text-teal-600 focus:ring-teal-500"
+                    className="rounded-sm text-teal-600 focus:ring-teal-500"
                   />
                   <span>1-Year Commercial Cessation Completed</span>
                 </label>
@@ -484,7 +484,7 @@ export default function LLPFeeCalc() {
                     type="checkbox"
                     checked={f24NoLiabilities}
                     onChange={(e) => setF24NoLiabilities(e.target.checked)}
-                    className="rounded text-teal-600 focus:ring-teal-500"
+                    className="rounded-sm text-teal-600 focus:ring-teal-500"
                   />
                   <span>No Active Assets, Liabilities or Open Charges</span>
                 </label>
@@ -493,7 +493,7 @@ export default function LLPFeeCalc() {
                     type="checkbox"
                     checked={f24FilingsDone}
                     onChange={(e) => setF24FilingsDone(e.target.checked)}
-                    className="rounded text-teal-600 focus:ring-teal-500"
+                    className="rounded-sm text-teal-600 focus:ring-teal-500"
                   />
                   <span>Form 8 & 11 filed up to closure FY</span>
                 </label>
@@ -502,7 +502,7 @@ export default function LLPFeeCalc() {
                     type="checkbox"
                     checked={f24CaStatement}
                     onChange={(e) => setF24CaStatement(e.target.checked)}
-                    className="rounded text-teal-600 focus:ring-teal-500"
+                    className="rounded-sm text-teal-600 focus:ring-teal-500"
                   />
                   <span>CA Statement of Account (within 30d of filing)</span>
                 </label>
@@ -520,7 +520,7 @@ export default function LLPFeeCalc() {
             <button
               type="button"
               onClick={copyShareLink}
-              className="flex-1 sm:flex-initial px-5 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-semibold transition-all flex items-center justify-center gap-2 shadow-xs"
+              className="flex-1 sm:flex-initial px-5 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-semibold transition-all flex items-center justify-center gap-2 shadow-2xs"
             >
               <svg className="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
@@ -606,7 +606,7 @@ export default function LLPFeeCalc() {
             <h4 className="text-lg font-bold text-navy dark:text-white font-heading">
               Four-Tier Calculation Breakdown & Statutory Basis
             </h4>
-            <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xs">
+            <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-2xs">
               <table className="w-full text-left text-sm">
                 <thead className="bg-slate-100/80 dark:bg-slate-800/80 text-xs uppercase font-bold text-slate-600 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800">
                   <tr>

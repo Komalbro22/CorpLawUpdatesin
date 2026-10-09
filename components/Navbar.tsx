@@ -131,8 +131,8 @@ export default function Navbar() {
                 <div className="flex justify-between items-center h-16">
 
                     {/* Logo */}
-                    <Link href="/" className="flex-shrink-0 flex items-center gap-2.5 sm:gap-3 group focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-md p-1">
-                        <span className="block w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden shadow-sm ring-1 ring-amber-500/20 group-hover:ring-amber-500/50 transition-all shrink-0 bg-slate-900">
+                    <Link href="/" className="shrink-0 flex items-center gap-2.5 sm:gap-3 group focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-md p-1">
+                        <span className="block w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden shadow-xs ring-1 ring-amber-500/20 group-hover:ring-amber-500/50 transition-all shrink-0 bg-slate-900">
                             <Image
                                 src="/icon-192.png"
                                 alt="CorpLawUpdates Logo"
@@ -158,7 +158,7 @@ export default function Navbar() {
                             <Link
                                 key={link.href}
                                 href={link.href}
-                                className={`relative inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
+                                className={`relative inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
                                     isActive(link.href)
                                         ? 'text-amber-700 dark:text-amber-400 font-semibold'
                                         : 'text-slate-700 dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800'
@@ -189,7 +189,7 @@ export default function Navbar() {
                                 aria-controls="category-dropdown-menu"
                                 aria-haspopup="true"
                                 aria-label="Browse regulatory categories"
-                                className={`relative flex items-center gap-1 text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-md px-3 py-2 ${
+                                className={`relative flex items-center gap-1 text-sm font-medium transition-all duration-200 focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-md px-3 py-2 ${
                                     isCategoryActive
                                         ? 'text-amber-700 dark:text-amber-400 font-semibold'
                                         : 'text-slate-700 dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800'
@@ -224,7 +224,7 @@ export default function Navbar() {
                                                 href={href}
                                                 role="menuitem"
                                                 onClick={() => setCategoriesOpen(false)}
-                                                className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 focus:outline-none focus:bg-amber-50/80 dark:focus:bg-slate-800/80 ${color} ${bg} dark:hover:bg-slate-800/60`}
+                                                className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 focus:outline-hidden focus:bg-amber-50/80 dark:focus:bg-slate-800/80 ${color} ${bg} dark:hover:bg-slate-800/60`}
                                             >
                                                 <div className="flex items-center gap-2.5">
                                                     <div className="p-1.5 rounded-lg bg-slate-100/80 dark:bg-slate-800/80 shrink-0">
@@ -253,7 +253,7 @@ export default function Navbar() {
                         <GlobalSearch />
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="flex size-10 items-center justify-center rounded-xl border border-slate-200/90 dark:border-slate-800/90 bg-slate-100/90 dark:bg-slate-800/90 text-slate-800 dark:text-white shadow-sm hover:bg-slate-200 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-400 transition-all"
+                            className="flex size-10 items-center justify-center rounded-xl border border-slate-200/90 dark:border-slate-800/90 bg-slate-100/90 dark:bg-slate-800/90 text-slate-800 dark:text-white shadow-xs hover:bg-slate-200 dark:hover:bg-slate-700 focus:outline-hidden focus:ring-2 focus:ring-amber-400 transition-all"
                             aria-expanded={isOpen}
                             aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
                         >

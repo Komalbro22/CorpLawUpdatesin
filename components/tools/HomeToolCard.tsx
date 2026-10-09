@@ -45,7 +45,7 @@ export default function HomeToolCard({ tool }: { tool: HomeToolCardData }) {
   )
 
   const className =
-    'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 hover-card-lift hover:border-amber-400/80 hover:shadow-xl transition-all group flex flex-col justify-between animate-fade-up text-left w-full focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2'
+    'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 hover-card-lift hover:border-amber-400/80 hover:shadow-xl transition-all group flex flex-col justify-between animate-fade-up text-left w-full focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:ring-offset-2'
 
 
   if (isComingSoon) {

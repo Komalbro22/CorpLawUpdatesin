@@ -21,7 +21,7 @@ export default function CinDownloadButton({ cin }: { cin: string }) {
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="inline-flex items-center gap-2 bg-navy hover:bg-slate-800 text-white dark:bg-amber-400 dark:hover:bg-amber-500 dark:text-navy font-bold px-4 py-2 rounded-xl text-xs md:text-sm transition-all shadow-sm active:scale-95 cursor-pointer"
+        className="inline-flex items-center gap-2 bg-navy hover:bg-slate-800 text-white dark:bg-amber-400 dark:hover:bg-amber-500 dark:text-navy font-bold px-4 py-2 rounded-xl text-xs md:text-sm transition-all shadow-xs active:scale-95 cursor-pointer"
       >
         <Download className="size-4" aria-hidden="true" /> Download PDF Certificate
       </button>

@@ -255,7 +255,7 @@ export default async function UpdatesPage({
             {/* High-Authority Editorial Navy Hero */}
             <div className="relative bg-navy text-white overflow-hidden">
                 <div
-                    className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] bg-[size:72px_72px]"
+                    className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] bg-size-[72px_72px]"
                     aria-hidden
                 />
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_80%_at_100%_0%,rgba(245,158,11,0.14),transparent_50%)]" aria-hidden />
@@ -275,7 +275,7 @@ export default async function UpdatesPage({
                         <h1 id="updates-overview-heading" className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-balance">
                             Latest Corporate Law & Regulatory Updates {CURRENT_YEAR}
                         </h1>
-                        <span className="inline-flex items-center w-fit bg-white/10 text-white font-semibold py-2 px-4 rounded-lg text-sm ring-1 ring-white/15 backdrop-blur-sm shadow-sm tabular-nums">
+                        <span className="inline-flex items-center w-fit bg-white/10 text-white font-semibold py-2 px-4 rounded-lg text-sm ring-1 ring-white/15 backdrop-blur-xs shadow-xs tabular-nums">
                             {totalPublishedCount} articles published
                         </span>
                     </div>
@@ -325,7 +325,7 @@ export default async function UpdatesPage({
 
             {/* Regulatory Authority Coverage Taxonomy */}
             <section className="max-w-7xl mx-auto px-4 pb-12">
-                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 md:p-8 shadow-sm">
+                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 md:p-8 shadow-xs">
                     <div className="flex items-center gap-2 mb-3">
                         <BookOpen className="size-5 text-amber-700 dark:text-amber-400" aria-hidden="true" />
                         <h2 className="text-xl font-bold text-navy dark:text-white font-heading">
@@ -354,7 +354,7 @@ export default async function UpdatesPage({
                             >
                                 <div className="flex items-center justify-between mb-1.5">
                                     <span className="font-bold text-sm text-navy dark:text-white group-hover:text-amber-700 dark:group-hover:text-amber-400 transition-colors">{reg.name}</span>
-                                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300">{reg.code}</span>
+                                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-sm bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300">{reg.code}</span>
                                 </div>
                                 <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{reg.desc}</p>
                             </Link>
@@ -381,14 +381,14 @@ export default async function UpdatesPage({
                             <details
                                 key={idx}
                                 open={idx === 0}
-                                className="group rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-sm transition-all duration-200"
+                                className="group rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-xs transition-all duration-200"
                             >
-                                <summary className="cursor-pointer font-semibold text-navy dark:text-slate-100 flex justify-between items-center list-none [&::-webkit-details-marker]:hidden focus:outline-none text-sm md:text-base">
+                                <summary className="cursor-pointer font-semibold text-navy dark:text-slate-100 flex justify-between items-center list-none [&::-webkit-details-marker]:hidden focus:outline-hidden text-sm md:text-base">
                                     <span className="flex items-center gap-2.5">
-                                        <CheckCircle2 className="size-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" aria-hidden="true" />
+                                        <CheckCircle2 className="size-4 text-emerald-600 dark:text-emerald-400 shrink-0" aria-hidden="true" />
                                         {faq.question}
                                     </span>
-                                    <ChevronDown className="size-4 text-slate-400 transition-transform duration-300 group-open:rotate-180 flex-shrink-0 ml-2" aria-hidden="true" />
+                                    <ChevronDown className="size-4 text-slate-400 transition-transform duration-300 group-open:rotate-180 shrink-0 ml-2" aria-hidden="true" />
                                 </summary>
                                 <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-sm text-slate-600 dark:text-slate-300 leading-relaxed pl-6">
                                     {faq.answer}
@@ -401,7 +401,7 @@ export default async function UpdatesPage({
 
             {/* Quick Compliance Tools & Navigation Bar */}
             <section className="max-w-7xl mx-auto px-4 pb-16">
-                <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+                <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xs">
                     <div>
                         <h3 className="text-lg font-bold text-navy dark:text-white font-heading mb-1">
                             Explore Free Corporate Compliance Tools

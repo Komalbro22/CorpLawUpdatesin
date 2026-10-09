@@ -204,7 +204,7 @@ export default function BankLoanPage() {
         {/* 5 Statutory Master Reference Tables */}
         <section className="max-w-5xl mx-auto px-4 py-12 space-y-12">
           {/* Table 1: Section 179(3)(d) vs Section 180(1)(c) */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-xs">
             <h2 className="text-lg md:text-xl font-bold font-serif mb-2 text-navy dark:text-white flex items-center gap-2">
               <Scale className="size-5 text-blue-600" />
               <span>1. Section 179(3)(d) vs Section 180(1)(c): Borrowing Powers &amp; Private Company Exemption</span>
@@ -260,7 +260,7 @@ export default function BankLoanPage() {
           </div>
 
           {/* Table 2: Credit Facility Types & Standard Resolution Covenants */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-xs">
             <h2 className="text-lg md:text-xl font-bold font-serif mb-2 text-navy dark:text-white flex items-center gap-2">
               <Landmark className="size-5 text-emerald-600" />
               <span>2. Commercial Credit Facility Types &amp; Standard Resolution Covenants</span>
@@ -315,7 +315,7 @@ export default function BankLoanPage() {
           </div>
 
           {/* Table 3: Creation of Security: Hypothecation vs Mortgage & Form CHG-1 */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-xs">
             <h2 className="text-lg md:text-xl font-bold font-serif mb-2 text-navy dark:text-white flex items-center gap-2">
               <ShieldCheck className="size-5 text-purple-600" />
               <span>3. Creation of Security: Hypothecation vs Mortgage &amp; Form CHG-1 Timelines</span>
@@ -364,7 +364,7 @@ export default function BankLoanPage() {
           </div>
 
           {/* Table 4: State-Wise Stamp Duty Matrix */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-xs">
             <h2 className="text-lg md:text-xl font-bold font-serif mb-2 text-navy dark:text-white flex items-center gap-2">
               <FileText className="size-5 text-blue-600" />
               <span>4. State-Wise Stamp Duty Schedule on Loan Agreements &amp; Hypothecation Deeds</span>
@@ -431,7 +431,7 @@ export default function BankLoanPage() {
           </div>
 
           {/* Table 5: Mandatory Banking Checklist */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-xs">
             <h2 className="text-lg md:text-xl font-bold font-serif mb-2 text-navy dark:text-white flex items-center gap-2">
               <CheckCircle2 className="size-5 text-emerald-600" />
               <span>5. Mandatory Banking Checklist for Credit Facility Disbursement</span>
@@ -469,7 +469,7 @@ export default function BankLoanPage() {
           </div>
 
           {/* 16 Exhaustive FAQs */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-xs">
             <h2 className="text-xl md:text-2xl font-bold font-serif mb-2 text-navy dark:text-white flex items-center gap-2">
               <HelpCircle className="size-6 text-blue-600" />
               <span>Frequently Asked Questions: Board Resolution for Bank Loans (2026)</span>

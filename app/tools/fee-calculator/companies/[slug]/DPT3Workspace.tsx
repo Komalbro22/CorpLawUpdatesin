@@ -208,7 +208,7 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
               onClick={() => setCalcMode('date')}
               className={`px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition-all flex items-center gap-2 ${
                 calcMode === 'date'
-                  ? 'bg-white dark:bg-slate-900 text-amber-600 dark:text-amber-400 shadow-sm'
+                  ? 'bg-white dark:bg-slate-900 text-amber-600 dark:text-amber-400 shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -220,7 +220,7 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
               onClick={() => setCalcMode('days')}
               className={`px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition-all flex items-center gap-2 ${
                 calcMode === 'days'
-                  ? 'bg-white dark:bg-slate-900 text-amber-600 dark:text-amber-400 shadow-sm'
+                  ? 'bg-white dark:bg-slate-900 text-amber-600 dark:text-amber-400 shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -282,7 +282,7 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
                   <Calendar className="w-4 h-4" />
                   Statutory Filing Timelines
                 </span>
-                <span className="text-[11px] font-semibold text-slate-500 bg-white dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
+                <span className="text-[11px] font-semibold text-slate-500 bg-white dark:bg-slate-800 px-2 py-0.5 rounded-sm border border-slate-200 dark:border-slate-700">
                   Rule 16: On or before 30th June
                 </span>
               </div>
@@ -326,14 +326,14 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
                             <button
                               type="button"
                               onClick={() => setFilingDate('2026-06-30')}
-                              className="text-[11px] px-2 py-0.5 rounded bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 hover:bg-amber-200 font-medium transition-colors"
+                              className="text-[11px] px-2 py-0.5 rounded-sm bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 hover:bg-amber-200 font-medium transition-colors"
                             >
                               30 June (Std Due)
                             </button>
                             <button
                               type="button"
                               onClick={() => setFilingDate('2026-07-31')}
-                              className="text-[11px] px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 hover:bg-blue-200 font-medium transition-colors"
+                              className="text-[11px] px-2 py-0.5 rounded-sm bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 hover:bg-blue-200 font-medium transition-colors"
                             >
                               31 July (Waiver End)
                             </button>
@@ -342,7 +342,7 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
                         <button
                           type="button"
                           onClick={() => setFilingDate(new Date().toISOString().slice(0, 10))}
-                          className="text-[11px] px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 font-medium transition-colors"
+                          className="text-[11px] px-2 py-0.5 rounded-sm bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 font-medium transition-colors"
                         >
                           Today
                         </button>
@@ -387,7 +387,7 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
                           onClick={() => setDirectDelayDays(chip.val)}
                           className={`text-xs px-2.5 py-1 rounded-lg border font-medium transition-all ${
                             directDelayDays === chip.val
-                              ? 'bg-amber-600 text-white border-amber-600 shadow-sm'
+                              ? 'bg-amber-600 text-white border-amber-600 shadow-xs'
                               : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-amber-400'
                           }`}
                         >
@@ -411,7 +411,7 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
                     type="checkbox"
                     checked={!hasShareCapital}
                     onChange={(e) => setHasShareCapital(!e.target.checked)}
-                    className="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 border-slate-300"
+                    className="w-4 h-4 rounded-sm text-amber-600 focus:ring-amber-500 border-slate-300"
                   />
                   <span className="text-xs text-slate-600 dark:text-slate-400">
                     Company without Share Capital (Flat ₹200)
@@ -432,7 +432,7 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
                           onClick={() => setNominalCapital(preset.value)}
                           className={`p-2.5 rounded-xl border text-center transition-all ${
                             isCurrent
-                              ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-600 text-amber-800 dark:text-amber-300 font-bold ring-2 ring-amber-500/20 shadow-sm'
+                              ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-600 text-amber-800 dark:text-amber-300 font-bold ring-2 ring-amber-500/20 shadow-xs'
                               : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300 font-medium'
                           }`}
                         >
@@ -485,7 +485,7 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
           <div className="lg:col-span-5 space-y-6">
             
             {/* The Big Results Card */}
-            <div className="bg-gradient-to-b from-slate-900 to-slate-950 text-white rounded-3xl p-6 shadow-2xl border border-slate-800 relative overflow-hidden">
+            <div className="bg-linear-to-b from-slate-900 to-slate-950 text-white rounded-3xl p-6 shadow-2xl border border-slate-800 relative overflow-hidden">
               
               {/* Subtle accent glow */}
               <div className="absolute top-0 right-0 w-40 h-40 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
@@ -537,7 +537,7 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
                   <div className="flex justify-between items-center text-sm pt-2 border-t border-slate-700/60">
                     <div className="flex items-center gap-1.5">
                       <span className="text-slate-300">Table B Late Fee:</span>
-                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">
+                      <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-amber-500/20 text-amber-300">
                         {result.mcaPortalPayable.tableBMultiplier}× Multiplier
                       </span>
                     </div>
@@ -664,7 +664,7 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
                       <td className="px-4 py-3 text-slate-900 dark:text-slate-200">
                         {slab.slabRange}
                         {slab.isActive && (
-                          <span className="ml-2 text-[10px] bg-amber-500 text-slate-950 font-black px-1.5 py-0.5 rounded uppercase">
+                          <span className="ml-2 text-[10px] bg-amber-500 text-slate-950 font-black px-1.5 py-0.5 rounded-sm uppercase">
                             Active Slab
                           </span>
                         )}
@@ -716,7 +716,7 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
                   onClick={() => setIsPrivateCo(true)}
                   className={`px-3 py-2 text-xs font-bold rounded-xl border transition-all ${
                     isPrivateCo
-                      ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
+                      ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
                       : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-transparent'
                   }`}
                 >
@@ -727,7 +727,7 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
                   onClick={() => setIsPrivateCo(false)}
                   className={`px-3 py-2 text-xs font-bold rounded-xl border transition-all ${
                     !isPrivateCo
-                      ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
+                      ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
                       : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-transparent'
                   }`}
                 >
@@ -745,7 +745,7 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
                     id="startup-check-adv"
                     checked={isStartup}
                     onChange={(e) => setIsStartup(e.target.checked)}
-                    className="w-4 h-4 text-blue-600 rounded border-slate-300"
+                    className="w-4 h-4 text-blue-600 rounded-sm border-slate-300"
                   />
                   <label htmlFor="startup-check-adv" className="text-xs font-medium text-slate-700 dark:text-slate-300 cursor-pointer">
                     DPIIT Recognized Startup (≤ 10 Yrs)
@@ -757,7 +757,7 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
                     id="cond-check-adv"
                     checked={meets3Conditions}
                     onChange={(e) => setMeets3Conditions(e.target.checked)}
-                    className="w-4 h-4 text-blue-600 rounded border-slate-300"
+                    className="w-4 h-4 text-blue-600 rounded-sm border-slate-300"
                   />
                   <label htmlFor="cond-check-adv" className="text-xs font-medium text-slate-700 dark:text-slate-300 cursor-pointer">
                     Meets 3 Conditions (G.S.R. 464(E))
@@ -828,7 +828,7 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
                 value={exclusionSearch}
                 onChange={(e) => setExclusionSearch(e.target.value)}
                 placeholder="Search categories or clauses..."
-                className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 font-medium"
+                className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-800 dark:text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-amber-500 font-medium"
               />
             </div>
           </div>
@@ -846,7 +846,7 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
                     </span>
                     <h4 className="text-xs font-bold text-slate-900 dark:text-white">{ex.title}</h4>
                   </div>
-                  <span className="text-[10px] font-mono text-slate-500 bg-slate-200/60 dark:bg-slate-800 px-2 py-0.5 rounded font-bold">
+                  <span className="text-[10px] font-mono text-slate-500 bg-slate-200/60 dark:bg-slate-800 px-2 py-0.5 rounded-sm font-bold">
                     {ex.subClause}
                   </span>
                 </div>
@@ -896,7 +896,7 @@ Platform: CorpLawUpdates.in • Validated against MCA21 V3 Portal Engine
               <p className="text-[10px] text-slate-600">A free corporate-law intelligence platform focused on Indian regulatory updates and compliance tools.</p>
             </div>
             <div className="text-right">
-              <span className="inline-block bg-slate-100 border border-slate-300 text-slate-800 text-[10px] font-bold px-2 py-0.5 rounded">
+              <span className="inline-block bg-slate-100 border border-slate-300 text-slate-800 text-[10px] font-bold px-2 py-0.5 rounded-sm">
                 STATUTORY MEMORANDUM
               </span>
               <p className="text-[10px] text-slate-500 mt-1" suppressHydrationWarning>

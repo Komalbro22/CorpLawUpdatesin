@@ -211,7 +211,7 @@ export default function GlobalSearch() {
         }}
         aria-label="Open search"
         aria-haspopup="dialog"
-        className="flex min-h-[44px] items-center gap-2.5 text-xs font-medium text-slate-500 dark:text-slate-400 bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200/90 dark:hover:bg-slate-700/90 border border-slate-200/90 dark:border-slate-700/90 rounded-xl px-3 py-1.5 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400"
+        className="flex min-h-[44px] items-center gap-2.5 text-xs font-medium text-slate-500 dark:text-slate-400 bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200/90 dark:hover:bg-slate-700/90 border border-slate-200/90 dark:border-slate-700/90 rounded-xl px-3 py-1.5 transition-colors duration-200 focus:outline-hidden focus:ring-2 focus:ring-amber-400"
       >
         <svg className="size-3.5 text-slate-400 dark:text-slate-400" aria-hidden="true" fill="none" 
              viewBox="0 0 24 24" 
@@ -224,7 +224,7 @@ export default function GlobalSearch() {
         <span className="hidden md:block text-slate-600 dark:text-slate-300 font-medium">
           Search...
         </span>
-        <kbd className="hidden md:flex items-center gap-0.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md px-1.5 py-0.5 font-mono text-[10px] text-slate-400 dark:text-slate-500 font-semibold shadow-xs">
+        <kbd className="hidden md:flex items-center gap-0.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md px-1.5 py-0.5 font-mono text-[10px] text-slate-400 dark:text-slate-500 font-semibold shadow-2xs">
           <span>{isMac ? '⌘' : 'Ctrl'}</span>
           <span>K</span>
         </kbd>
@@ -248,7 +248,7 @@ export default function GlobalSearch() {
             
             {/* Search input with modern semantic <search> element */}
             <search className="flex items-center gap-3 px-4 py-3 border-b border-slate-200 dark:border-slate-800">
-              <svg className="size-5 text-slate-400 flex-shrink-0" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="size-5 text-slate-400 shrink-0" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               <input
@@ -263,7 +263,7 @@ export default function GlobalSearch() {
                 autoCapitalize="off"
                 spellCheck={false}
                 enterKeyHint="search"
-                className="flex-1 text-navy dark:text-white text-base bg-transparent outline-none placeholder-slate-400 dark:placeholder-slate-500 [&::-webkit-search-cancel-button]:hidden"
+                className="flex-1 text-navy dark:text-white text-base bg-transparent outline-hidden placeholder-slate-400 dark:placeholder-slate-500 [&::-webkit-search-cancel-button]:hidden"
               />
               {loading && (
                 <div className="size-4 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" aria-hidden="true" />
@@ -297,7 +297,7 @@ export default function GlobalSearch() {
                 value={type}
                 onChange={e => handleTypeChange(e.target.value)}
                 aria-label="Filter by type"
-                className="text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 focus:outline-none focus:ring-1 focus:ring-amber-400"
+                className="text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 focus:outline-hidden focus:ring-1 focus:ring-amber-400"
               >
                 <option value="all">All Types</option>
                 <option value="articles">Articles</option>
@@ -310,7 +310,7 @@ export default function GlobalSearch() {
                 value={category}
                 onChange={e => setCategory(e.target.value)}
                 aria-label="Filter by category"
-                className="text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 focus:outline-none focus:ring-1 focus:ring-amber-400"
+                className="text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 focus:outline-hidden focus:ring-1 focus:ring-amber-400"
               >
                 <option value="">All Categories</option>
                 {getCategoriesForType(type).map(opt => (
@@ -370,7 +370,7 @@ export default function GlobalSearch() {
                       className="flex items-start gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors border-b border-slate-50 dark:border-slate-800/50 last:border-0 text-left"
                     >
                       {/* Type icon */}
-                      <span className="text-lg flex-shrink-0 mt-0.5" aria-hidden>
+                      <span className="text-lg shrink-0 mt-0.5" aria-hidden>
                         {result.type === 'article' 
                           ? '📄' : result.type === 'calendar' ? '📅' : '📖'}
                       </span>
@@ -417,7 +417,7 @@ export default function GlobalSearch() {
                       </div>
 
                       {/* Arrow */}
-                      <span className="text-slate-300 dark:text-slate-600 flex-shrink-0 mt-1" aria-hidden>
+                      <span className="text-slate-300 dark:text-slate-600 shrink-0 mt-1" aria-hidden>
                         →
                       </span>
                     </Link>
@@ -430,7 +430,7 @@ export default function GlobalSearch() {
             <div className="px-4 py-2 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 flex justify-between items-center">
               <p className="text-xs text-slate-400 dark:text-slate-500">
                 Press{' '}
-                <kbd className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded px-1 font-mono text-xs text-slate-500 dark:text-slate-400">
+                <kbd className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-sm px-1 font-mono text-xs text-slate-500 dark:text-slate-400">
                   ESC
                 </kbd>
                 {' '}to close

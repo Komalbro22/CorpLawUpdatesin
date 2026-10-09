@@ -28,13 +28,13 @@ export default function Error({
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
                     onClick={() => reset()}
-                    className="bg-navy dark:bg-amber-500 text-white dark:text-slate-950 font-bold py-3 px-8 rounded-xl hover:bg-slate-800 dark:hover:bg-amber-400 transition-colors shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+                    className="bg-navy dark:bg-amber-500 text-white dark:text-slate-950 font-bold py-3 px-8 rounded-xl hover:bg-slate-800 dark:hover:bg-amber-400 transition-colors shadow-md focus:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-400"
                 >
                     Try Again
                 </button>
                 <button
                     onClick={() => { window.location.href = '/' }}
-                    className="border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-navy dark:text-slate-200 font-bold py-3 px-8 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors inline-block focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+                    className="border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-navy dark:text-slate-200 font-bold py-3 px-8 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors inline-block focus:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-400"
                 >
                     Go Home
                 </button>

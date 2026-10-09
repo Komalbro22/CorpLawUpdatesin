@@ -12,7 +12,7 @@ export default function CookiePreferencesButton() {
     <button
       type="button"
       onClick={handleClick}
-      className="hover:text-white focus:outline-none focus:underline transition-colors bg-transparent border-0 cursor-pointer text-slate-300 text-[11px] font-semibold uppercase tracking-widest"
+      className="hover:text-white focus:outline-hidden focus:underline transition-colors bg-transparent border-0 cursor-pointer text-slate-300 text-[11px] font-semibold uppercase tracking-widest"
     >
       Cookie Preferences
     </button>

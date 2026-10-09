@@ -235,9 +235,9 @@ export default function EquitableMortgagePage() {
           </div>
 
           {/* Princeton GEO Direct Answer / Quick Answer Box (AI Overview Optimized) */}
-          <div className="bg-gradient-to-br from-indigo-50/90 via-white to-blue-50/70 dark:from-slate-900 dark:via-slate-900 dark:to-indigo-950/40 p-6 rounded-2xl border-2 border-indigo-200 dark:border-indigo-800/80 shadow-md">
+          <div className="bg-linear-to-br from-indigo-50/90 via-white to-blue-50/70 dark:from-slate-900 dark:via-slate-900 dark:to-indigo-950/40 p-6 rounded-2xl border-2 border-indigo-200 dark:border-indigo-800/80 shadow-md">
             <div className="flex items-start gap-3">
-              <div className="p-2.5 rounded-xl bg-indigo-600 text-white shrink-0 shadow-sm mt-0.5">
+              <div className="p-2.5 rounded-xl bg-indigo-600 text-white shrink-0 shadow-xs mt-0.5">
                 <BookOpen className="w-5 h-5" />
               </div>
               <div className="space-y-2 text-sm sm:text-base leading-relaxed text-slate-800 dark:text-slate-200">
@@ -272,7 +272,7 @@ export default function EquitableMortgagePage() {
               </p>
             </div>
 
-            <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
               <table className="w-full text-left text-xs sm:text-sm border-collapse bg-white dark:bg-slate-900">
                 <thead>
                   <tr className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-700">
@@ -351,7 +351,7 @@ export default function EquitableMortgagePage() {
               </p>
             </div>
 
-            <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
               <table className="w-full text-left text-xs sm:text-sm border-collapse bg-white dark:bg-slate-900">
                 <thead>
                   <tr className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-700">
@@ -474,7 +474,7 @@ export default function EquitableMortgagePage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2 shadow-sm">
+              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2 shadow-xs">
                 <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-sm">
                   <FileText className="w-4 h-4" />
                   Step 1: Board Resolution
@@ -492,7 +492,7 @@ export default function EquitableMortgagePage() {
                 </div>
               </div>
 
-              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2 shadow-sm">
+              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2 shadow-xs">
                 <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-bold text-sm">
                   <Clock className="w-4 h-4" />
                   Step 2: 30-Day CHG-1 Window
@@ -500,12 +500,12 @@ export default function EquitableMortgagePage() {
                 <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                   Under <strong>Section 77(1)</strong>, the company must file <strong>e-Form CHG-1</strong> on the MCA portal within 30 days of executing the MODT. Attach certified copy of sanction letter, MODT, and title schedule.
                 </p>
-                <span className="inline-block text-[11px] text-amber-700 dark:text-amber-300 font-medium bg-amber-50 dark:bg-amber-950/50 px-2 py-0.5 rounded">
+                <span className="inline-block text-[11px] text-amber-700 dark:text-amber-300 font-medium bg-amber-50 dark:bg-amber-950/50 px-2 py-0.5 rounded-sm">
                   Max delay: 60 days (+ ad valorem)
                 </span>
               </div>
 
-              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2 shadow-sm">
+              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2 shadow-xs">
                 <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 font-bold text-sm">
                   <AlertCircle className="w-4 h-4" />
                   Consequence of Non-Filing
@@ -513,7 +513,7 @@ export default function EquitableMortgagePage() {
                 <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                   Under <strong>Section 77(3)</strong>, an un-registered mortgage is <strong>VOID against the Official Liquidator and creditors</strong>. In insolvency under IBC 2016, the bank loses secured creditor status!
                 </p>
-                <span className="inline-block text-[11px] text-rose-700 dark:text-rose-300 font-medium bg-rose-50 dark:bg-rose-950/50 px-2 py-0.5 rounded">
+                <span className="inline-block text-[11px] text-rose-700 dark:text-rose-300 font-medium bg-rose-50 dark:bg-rose-950/50 px-2 py-0.5 rounded-sm">
                   Requires RD Condonation (CHG-8)
                 </span>
               </div>
@@ -536,7 +536,7 @@ export default function EquitableMortgagePage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2 shadow-sm">
+              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2 shadow-xs">
                 <h3 className="font-bold text-slate-900 dark:text-white text-sm">
                   1. The Notified Town Rule: K.J. Nathan v. S.V. Maruthi Rao (AIR 1965 SC 430)
                 </h3>
@@ -545,7 +545,7 @@ export default function EquitableMortgagePage() {
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2 shadow-sm">
+              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2 shadow-xs">
                 <h3 className="font-bold text-slate-900 dark:text-white text-sm">
                   2. Recording Past Deposit vs Creating Mortgage: Rachpal Mahraj v. Bhagwandas (AIR 1950 SC 272)
                 </h3>
@@ -554,7 +554,7 @@ export default function EquitableMortgagePage() {
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2 shadow-sm">
+              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2 shadow-xs">
                 <h3 className="font-bold text-slate-900 dark:text-white text-sm">
                   3. Stamp Duty on Deposit of Title Deeds: State of Haryana v. Narvir Singh ((2014) 1 SCC 105)
                 </h3>
@@ -563,7 +563,7 @@ export default function EquitableMortgagePage() {
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2 shadow-sm">
+              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2 shadow-xs">
                 <h3 className="font-bold text-slate-900 dark:text-white text-sm">
                   4. Indispensability of Original Documents: Syndicate Bank v. Estate Officer (AIR 2007 SC 3166)
                 </h3>
@@ -590,7 +590,7 @@ export default function EquitableMortgagePage() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
-              <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-1.5 shadow-sm">
+              <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-1.5 shadow-xs">
                 <span className="font-bold text-indigo-600 dark:text-indigo-400 block text-sm">
                   1. Primary Registered Conveyance Deed
                 </span>
@@ -599,7 +599,7 @@ export default function EquitableMortgagePage() {
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-1.5 shadow-sm">
+              <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-1.5 shadow-xs">
                 <span className="font-bold text-indigo-600 dark:text-indigo-400 block text-sm">
                   2. 30-Year Mother / Link Deeds
                 </span>
@@ -608,7 +608,7 @@ export default function EquitableMortgagePage() {
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-1.5 shadow-sm">
+              <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-1.5 shadow-xs">
                 <span className="font-bold text-indigo-600 dark:text-indigo-400 block text-sm">
                   3. Revenue Records & Mutation Sanctions
                 </span>
@@ -617,7 +617,7 @@ export default function EquitableMortgagePage() {
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-1.5 shadow-sm">
+              <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-1.5 shadow-xs">
                 <span className="font-bold text-indigo-600 dark:text-indigo-400 block text-sm">
                   4. 30-Year Nil Encumbrance Certificate
                 </span>
@@ -626,7 +626,7 @@ export default function EquitableMortgagePage() {
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-1.5 shadow-sm">
+              <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-1.5 shadow-xs">
                 <span className="font-bold text-indigo-600 dark:text-indigo-400 block text-sm">
                   5. Sanctioned Building & Floor Plans
                 </span>
@@ -635,7 +635,7 @@ export default function EquitableMortgagePage() {
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-1.5 shadow-sm">
+              <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-1.5 shadow-xs">
                 <span className="font-bold text-indigo-600 dark:text-indigo-400 block text-sm">
                   6. Property Tax Paid Receipts & NOC
                 </span>
@@ -662,7 +662,7 @@ export default function EquitableMortgagePage() {
             </div>
 
             <div className="space-y-3 text-xs sm:text-sm">
-              <div className="flex items-start gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <div className="flex items-start gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
                 <span className="flex items-center justify-center w-6 h-6 rounded-full bg-teal-100 dark:bg-teal-950 text-teal-700 dark:text-teal-300 font-bold shrink-0 text-xs">
                   1
                 </span>
@@ -676,7 +676,7 @@ export default function EquitableMortgagePage() {
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <div className="flex items-start gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
                 <span className="flex items-center justify-center w-6 h-6 rounded-full bg-teal-100 dark:bg-teal-950 text-teal-700 dark:text-teal-300 font-bold shrink-0 text-xs">
                   2
                 </span>
@@ -690,7 +690,7 @@ export default function EquitableMortgagePage() {
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <div className="flex items-start gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
                 <span className="flex items-center justify-center w-6 h-6 rounded-full bg-teal-100 dark:bg-teal-950 text-teal-700 dark:text-teal-300 font-bold shrink-0 text-xs">
                   3
                 </span>
@@ -704,7 +704,7 @@ export default function EquitableMortgagePage() {
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <div className="flex items-start gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
                 <span className="flex items-center justify-center w-6 h-6 rounded-full bg-teal-100 dark:bg-teal-950 text-teal-700 dark:text-teal-300 font-bold shrink-0 text-xs">
                   4
                 </span>
@@ -736,7 +736,7 @@ export default function EquitableMortgagePage() {
               {FAQS.map((faq, idx) => (
                 <div
                   key={idx}
-                  className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2 shadow-sm"
+                  className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2 shadow-xs"
                 >
                   <h3 className="font-bold text-slate-900 dark:text-white text-sm">
                     {faq.q}
@@ -750,7 +750,7 @@ export default function EquitableMortgagePage() {
           </section>
 
           {/* Related Tools Callout Banner */}
-          <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 rounded-2xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="bg-linear-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 rounded-2xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
               <h3 className="text-base font-bold">Availing a Commercial Bank Loan or Overdraft?</h3>
               <p className="text-xs text-slate-300 mt-1 max-w-xl">

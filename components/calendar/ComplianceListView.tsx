@@ -39,7 +39,7 @@ export function TableSection({
         <span className={`w-3 h-3 rounded-full ${dot} inline-block`} />
         {title}
       </h2>
-      <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+      <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
         <table className="w-full text-sm min-w-[640px]">
           <thead>
             <tr className={color}>
@@ -128,7 +128,7 @@ export function TableSection({
                     <td className="px-3 py-3 text-center">
                       <button
                         onClick={(e) => { e.stopPropagation(); onReport(entryId, entryName) }}
-                        className="text-xs text-slate-400 hover:text-red-500 dark:hover:text-red-400 border border-slate-200 dark:border-slate-700 hover:border-red-300 dark:hover:border-red-500/50 rounded px-2 py-1 transition-colors whitespace-nowrap"
+                        className="text-xs text-slate-400 hover:text-red-500 dark:hover:text-red-400 border border-slate-200 dark:border-slate-700 hover:border-red-300 dark:hover:border-red-500/50 rounded-sm px-2 py-1 transition-colors whitespace-nowrap"
                       >
                         ⚠️ Report
                       </button>

@@ -45,7 +45,7 @@ export default async function ToolUsagePage() {
 
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
                             <Activity className="w-5 h-5" />
@@ -57,7 +57,7 @@ export default async function ToolUsagePage() {
                     </div>
                 </div>
                 {Object.entries(typeCounts).slice(0, 2).map(([type, count]) => (
-                    <div key={type} className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+                    <div key={type} className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs">
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
                                 <Wrench className="w-5 h-5" />
@@ -72,7 +72,7 @@ export default async function ToolUsagePage() {
             </div>
 
             {/* Usage Table */}
-            <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+            <div className="bg-white border border-slate-200 rounded-2xl shadow-xs overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm whitespace-nowrap">
                         <thead className="bg-slate-50 border-b border-slate-200">
@@ -107,7 +107,7 @@ export default async function ToolUsagePage() {
                                         </td>
                                         <td className="px-6 py-4">
                                             {formName !== 'N/A' ? (
-                                                <span className="inline-flex items-center px-2 py-1 rounded bg-blue-50 text-blue-700 text-xs font-bold uppercase">
+                                                <span className="inline-flex items-center px-2 py-1 rounded-sm bg-blue-50 text-blue-700 text-xs font-bold uppercase">
                                                     {formName}
                                                 </span>
                                             ) : (

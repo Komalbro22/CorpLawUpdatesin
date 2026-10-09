@@ -112,7 +112,7 @@ export default function AdminSingleCompanyPage() {
       )}
 
       {/* Raw Record & Details Box */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-bold text-navy dark:text-white uppercase tracking-wider">
             Cached DB2 Record Overview
@@ -145,7 +145,7 @@ export default function AdminSingleCompanyPage() {
       </div>
 
       {/* Directors Master Data */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-3">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs space-y-3">
         <h2 className="text-sm font-bold text-navy dark:text-white uppercase tracking-wider flex items-center gap-2">
           <UserCheck className="w-4 h-4 text-amber-500" /> Board of Directors Master ({directors.length})
         </h2>
@@ -174,7 +174,7 @@ export default function AdminSingleCompanyPage() {
       </div>
 
       {/* Bank Charges Master Data */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-3">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs space-y-3">
         <h2 className="text-sm font-bold text-navy dark:text-white uppercase tracking-wider flex items-center gap-2">
           <Landmark className="w-4 h-4 text-emerald-500" /> Secured Bank Charges & Mortgages ({charges.length})
         </h2>

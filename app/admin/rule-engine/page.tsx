@@ -62,9 +62,9 @@ function RuleCard({ rule, onEdit, onDelete }: { rule: Rule; onEdit: (rule: Rule)
   const hasVars = Object.keys(vars).length > 0
 
   return (
-    <div className="admin-card rounded-xl overflow-hidden border border-white/[0.06] hover:border-amber-500/20 transition-all duration-200">
+    <div className="admin-card rounded-xl overflow-hidden border border-white/6 hover:border-amber-500/20 transition-all duration-200">
       {/* Card Header */}
-      <div className="w-full flex items-start p-4 hover:bg-white/[0.02] transition-colors relative group">
+      <div className="w-full flex items-start p-4 hover:bg-white/2 transition-colors relative group">
         <button
           onClick={() => setExpanded(v => !v)}
           className="flex-1 flex items-start gap-3 text-left"
@@ -103,7 +103,7 @@ function RuleCard({ rule, onEdit, onDelete }: { rule: Rule; onEdit: (rule: Rule)
             </button>
           </div>
 
-          <button onClick={() => setExpanded(v => !v)} className="p-1 text-slate-500 hover:bg-slate-100 rounded">
+          <button onClick={() => setExpanded(v => !v)} className="p-1 text-slate-500 hover:bg-slate-100 rounded-sm">
             {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
         </div>
@@ -111,13 +111,13 @@ function RuleCard({ rule, onEdit, onDelete }: { rule: Rule; onEdit: (rule: Rule)
 
       {/* Expanded Details */}
       {expanded && (
-        <div className="border-t border-white/[0.06] p-4 space-y-4 bg-white/[0.01]">
+        <div className="border-t border-white/6 p-4 space-y-4 bg-white/1">
           {/* Clause Content */}
           <div>
             <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2 flex items-center gap-1.5">
               <FileText className="w-3 h-3" /> Clause Content
             </p>
-            <pre className="bg-black/30 border border-white/[0.06] rounded-lg p-3 text-xs text-slate-700 whitespace-pre-wrap font-mono leading-relaxed max-h-40 overflow-y-auto">
+            <pre className="bg-black/30 border border-white/6 rounded-lg p-3 text-xs text-slate-700 whitespace-pre-wrap font-mono leading-relaxed max-h-40 overflow-y-auto">
               {rule.clauses?.content || '—'}
             </pre>
           </div>
@@ -131,7 +131,7 @@ function RuleCard({ rule, onEdit, onDelete }: { rule: Rule; onEdit: (rule: Rule)
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {Object.entries(vars).map(([k, v]) => (
-                    <span key={k} className="text-xs px-2 py-0.5 rounded bg-violet-500/10 border border-violet-500/20 text-violet-300 font-mono">
+                    <span key={k} className="text-xs px-2 py-0.5 rounded-sm bg-violet-500/10 border border-violet-500/20 text-violet-300 font-mono">
                       {`{{${k}}}`} <span className="text-violet-500">({v})</span>
                     </span>
                   ))}
@@ -177,7 +177,7 @@ function RuleCard({ rule, onEdit, onDelete }: { rule: Rule; onEdit: (rule: Rule)
           </div>
 
           {/* Stats */}
-          <div className="flex gap-4 pt-2 border-t border-white/[0.06]">
+          <div className="flex gap-4 pt-2 border-t border-white/6">
             <div className="text-center">
               <p className="text-lg font-bold text-slate-900">{rule.usage_count}</p>
               <p className="text-[10px] text-slate-500">Total Uses</p>
@@ -249,10 +249,10 @@ function RuleModal({ rule, onClose, onSuccess }: { rule?: Rule; onClose: () => v
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <button className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} aria-label="Close" />
-      <div className="relative w-full max-w-2xl bg-gradient-to-b from-[#0d1627] to-[#080f1e] border border-white/[0.10] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <button className="absolute inset-0 bg-black/70 backdrop-blur-xs" onClick={onClose} aria-label="Close" />
+      <div className="relative w-full max-w-2xl bg-linear-to-b from-[#0d1627] to-[#080f1e] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06] shrink-0">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/6 shrink-0">
           <div className="flex items-center gap-3">
             <div className="admin-icon-amber w-9 h-9 rounded-lg flex items-center justify-center">
               <Plus className="w-4 h-4" />
@@ -278,7 +278,7 @@ function RuleModal({ rule, onClose, onSuccess }: { rule?: Rule; onClose: () => v
               onChange={e => set('intent_name', e.target.value)}
               placeholder="e.g. ADD_PENALTY_CLAUSE"
               required
-              className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 focus:bg-white/[0.06] transition-all font-mono"
+              className="w-full bg-white/4 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-hidden focus:border-amber-500/50 focus:bg-white/6 transition-all font-mono"
             />
             <p className="text-[10px] text-slate-600 mt-1">Will be auto-uppercased and underscored. e.g. ADD_MY_CLAUSE</p>
           </div>
@@ -291,7 +291,7 @@ function RuleModal({ rule, onClose, onSuccess }: { rule?: Rule; onClose: () => v
               onChange={e => set('intent_description', e.target.value)}
               placeholder="e.g. Add a penalty clause for breach of contract"
               required
-              className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all"
+              className="w-full bg-white/4 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-hidden focus:border-amber-500/50 transition-all"
             />
           </div>
 
@@ -302,7 +302,7 @@ function RuleModal({ rule, onClose, onSuccess }: { rule?: Rule; onClose: () => v
               value={form.aliases}
               onChange={e => set('aliases', e.target.value)}
               placeholder="add penalty, add breach penalty, insert penalty clause"
-              className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all"
+              className="w-full bg-white/4 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-hidden focus:border-amber-500/50 transition-all"
             />
             <p className="text-[10px] text-slate-600 mt-1">Comma-separated. Users can type these exact phrases to trigger this rule.</p>
           </div>
@@ -313,7 +313,7 @@ function RuleModal({ rule, onClose, onSuccess }: { rule?: Rule; onClose: () => v
             <select
               value={form.document_type}
               onChange={e => set('document_type', e.target.value)}
-              className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500/50 transition-all"
+              className="w-full bg-white/4 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-hidden focus:border-amber-500/50 transition-all"
             >
               {DOC_TYPE_OPTIONS.map(t => <option key={t} value={t} className="bg-[#0d1627]">{t}</option>)}
             </select>
@@ -328,7 +328,7 @@ function RuleModal({ rule, onClose, onSuccess }: { rule?: Rule; onClose: () => v
               rows={5}
               required
               placeholder="PENALTY: In the event of breach... Use {{variable_name}} for dynamic values."
-              className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all font-mono resize-none leading-relaxed"
+              className="w-full bg-white/4 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-hidden focus:border-amber-500/50 transition-all font-mono resize-none leading-relaxed"
             />
             <p className="text-[10px] text-slate-600 mt-1">Use {`{{variable_name}}`} syntax for dynamic values.</p>
           </div>
@@ -338,14 +338,14 @@ function RuleModal({ rule, onClose, onSuccess }: { rule?: Rule; onClose: () => v
             <div>
               <label className="block text-xs font-semibold text-slate-500 mb-1.5">Category</label>
               <select value={form.clause_category} onChange={e => set('clause_category', e.target.value)}
-                className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500/50 transition-all">
+                className="w-full bg-white/4 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-hidden focus:border-amber-500/50 transition-all">
                 {CATEGORIES.map(c => <option key={c} value={c} className="bg-[#0d1627]">{c}</option>)}
               </select>
             </div>
             <div>
               <label className="block text-xs font-semibold text-slate-500 mb-1.5">Placement Action</label>
               <select value={form.placement_action} onChange={e => set('placement_action', e.target.value)}
-                className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500/50 transition-all">
+                className="w-full bg-white/4 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-hidden focus:border-amber-500/50 transition-all">
                 {PLACEMENT_ACTIONS.map(a => <option key={a} value={a} className="bg-[#0d1627]">{a}</option>)}
               </select>
             </div>
@@ -357,19 +357,19 @@ function RuleModal({ rule, onClose, onSuccess }: { rule?: Rule; onClose: () => v
               <label className="block text-xs font-semibold text-slate-500 mb-1.5">Anchor Keyword</label>
               <input value={form.placement_anchor} onChange={e => set('placement_anchor', e.target.value)}
                 placeholder="TERMINATION"
-                className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all" />
+                className="w-full bg-white/4 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-hidden focus:border-amber-500/50 transition-all" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-slate-500 mb-1.5">Anchor Type</label>
               <select value={form.placement_anchor_type} onChange={e => set('placement_anchor_type', e.target.value)}
-                className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500/50 transition-all">
+                className="w-full bg-white/4 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-hidden focus:border-amber-500/50 transition-all">
                 {ANCHOR_TYPES.map(t => <option key={t} value={t} className="bg-[#0d1627]">{t}</option>)}
               </select>
             </div>
             <div>
               <label className="block text-xs font-semibold text-slate-500 mb-1.5">Fallback</label>
               <select value={form.placement_fallback} onChange={e => set('placement_fallback', e.target.value)}
-                className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:border-amber-500/50 transition-all">
+                className="w-full bg-white/4 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-hidden focus:border-amber-500/50 transition-all">
                 {FALLBACK_OPTIONS.map(f => <option key={f} value={f} className="bg-[#0d1627]">{f}</option>)}
               </select>
             </div>
@@ -380,7 +380,7 @@ function RuleModal({ rule, onClose, onSuccess }: { rule?: Rule; onClose: () => v
             <label className="block text-xs font-semibold text-slate-500 mb-1.5">Variables Schema (JSON)</label>
             <input value={form.variables_raw} onChange={e => set('variables_raw', e.target.value)}
               placeholder='{"name":"STRING","amount":"NUMBER","date":"DATE"}'
-              className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all font-mono" />
+              className="w-full bg-white/4 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-hidden focus:border-amber-500/50 transition-all font-mono" />
             <p className="text-[10px] text-slate-600 mt-1">Types: STRING, NUMBER, DATE, CITY, CURRENCY</p>
           </div>
 
@@ -389,7 +389,7 @@ function RuleModal({ rule, onClose, onSuccess }: { rule?: Rule; onClose: () => v
             <label className="block text-xs font-semibold text-slate-500 mb-1.5">Legal Basis</label>
             <input value={form.legal_basis} onChange={e => set('legal_basis', e.target.value)}
               placeholder="Section 74 of the Indian Contract Act, 1872"
-              className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all" />
+              className="w-full bg-white/4 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-hidden focus:border-amber-500/50 transition-all" />
           </div>
 
           {/* Related Forms + Deadline */}
@@ -398,13 +398,13 @@ function RuleModal({ rule, onClose, onSuccess }: { rule?: Rule; onClose: () => v
               <label className="block text-xs font-semibold text-slate-500 mb-1.5">Related Forms</label>
               <input value={form.related_forms_raw} onChange={e => set('related_forms_raw', e.target.value)}
                 placeholder="DIR-12, MBP-1"
-                className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all" />
+                className="w-full bg-white/4 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-hidden focus:border-amber-500/50 transition-all" />
             </div>
             <div>
               <label className="block text-xs font-semibold text-slate-500 mb-1.5">Compliance Deadline</label>
               <input value={form.compliance_deadline} onChange={e => set('compliance_deadline', e.target.value)}
                 placeholder="Within 30 days of..."
-                className="w-full bg-white/[0.04] border border-white/[0.10] rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all" />
+                className="w-full bg-white/4 border border-white/10 rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-hidden focus:border-amber-500/50 transition-all" />
             </div>
           </div>
 
@@ -417,15 +417,15 @@ function RuleModal({ rule, onClose, onSuccess }: { rule?: Rule; onClose: () => v
         </form>
 
         {/* Modal Footer */}
-        <div className="px-6 py-4 border-t border-white/[0.06] flex items-center justify-end gap-3 shrink-0 bg-black/20">
-          <button onClick={onClose} className="px-4 py-2 text-sm text-slate-500 hover:text-slate-900 rounded-lg hover:bg-white/[0.05] transition-all">
+        <div className="px-6 py-4 border-t border-white/6 flex items-center justify-end gap-3 shrink-0 bg-black/20">
+          <button onClick={onClose} className="px-4 py-2 text-sm text-slate-500 hover:text-slate-900 rounded-lg hover:bg-white/5 transition-all">
             Cancel
           </button>
           <button
             type="submit"
             form="add-rule-form"
             disabled={saving}
-            className="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-semibold text-sm rounded-lg transition-all disabled:opacity-60 disabled:cursor-not-allowed shadow-lg shadow-amber-500/20"
+            className="flex items-center gap-2 px-5 py-2 bg-linear-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-semibold text-sm rounded-lg transition-all disabled:opacity-60 disabled:cursor-not-allowed shadow-lg shadow-amber-500/20"
           >
             {saving ? <RefreshCw className="w-4 h-4 animate-spin" /> : (rule ? <BookOpen className="w-4 h-4" /> : <Plus className="w-4 h-4" />)}
             {saving ? (rule ? 'Saving...' : 'Creating...') : (rule ? 'Save Changes' : 'Create Rule')}
@@ -523,7 +523,7 @@ export default function RuleEnginePage() {
         <button
           onClick={handleAddNew}
           id="add-new-rule-btn"
-          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-semibold text-sm rounded-xl transition-all shadow-lg shadow-amber-500/20 shrink-0"
+          className="flex items-center gap-2 px-5 py-2.5 bg-linear-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-semibold text-sm rounded-xl transition-all shadow-lg shadow-amber-500/20 shrink-0"
         >
           <Plus className="w-4 h-4" />
           Add New Rule
@@ -568,18 +568,18 @@ export default function RuleEnginePage() {
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search rules, intents, clause content..."
-            className="w-full bg-white/[0.04] border border-white/[0.10] rounded-xl pl-9 pr-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-none focus:border-amber-500/50 transition-all"
+            className="w-full bg-white/4 border border-white/10 rounded-xl pl-9 pr-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-600 focus:outline-hidden focus:border-amber-500/50 transition-all"
           />
         </div>
         <select
           value={filterDoc}
           onChange={e => setFilterDoc(e.target.value)}
-          className="bg-white/[0.04] border border-white/[0.10] rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-500/50 transition-all"
+          className="bg-white/4 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-hidden focus:border-amber-500/50 transition-all"
         >
           <option value="ALL" className="bg-[#0d1627]">All Document Types</option>
           {docTypes.map(t => <option key={t} value={t} className="bg-[#0d1627]">{t}</option>)}
         </select>
-        <button onClick={fetchRules} className="flex items-center gap-2 px-4 py-2.5 border border-white/10 text-slate-500 hover:text-slate-900 rounded-xl hover:bg-white/[0.04] transition-all text-sm">
+        <button onClick={fetchRules} className="flex items-center gap-2 px-4 py-2.5 border border-white/10 text-slate-500 hover:text-slate-900 rounded-xl hover:bg-white/4 transition-all text-sm">
           <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           Refresh
         </button>

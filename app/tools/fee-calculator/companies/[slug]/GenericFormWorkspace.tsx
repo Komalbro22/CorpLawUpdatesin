@@ -125,7 +125,7 @@ export default function GenericFormWorkspace({ form }: { form: MCAForm }) {
   }
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 md:p-8">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xs border border-slate-200 dark:border-slate-800 p-6 md:p-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div>
           <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">
@@ -135,7 +135,7 @@ export default function GenericFormWorkspace({ form }: { form: MCAForm }) {
             type="text"
             readOnly
             value={`${form.formNumber} — ${form.formName}`}
-            className="w-full bg-[#F8FAFC] dark:bg-slate-800 border-[1.5px] border-[#CBD5E1] dark:border-slate-700 rounded-lg px-[14px] py-[10px] text-[#64748B] font-medium outline-none"
+            className="w-full bg-[#F8FAFC] dark:bg-slate-800 border-[1.5px] border-[#CBD5E1] dark:border-slate-700 rounded-lg px-[14px] py-[10px] text-[#64748B] font-medium outline-hidden"
           />
         </div>
 
@@ -258,11 +258,11 @@ export default function GenericFormWorkspace({ form }: { form: MCAForm }) {
 
       {/* Modal Overlay for Generic Forms */}
       {showGenericModal && genericResults && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
           <div className="bg-white rounded-xl shadow-2xl flex flex-col md:flex-row w-full max-w-3xl overflow-hidden relative animate-in zoom-in-95 duration-200">
             <button
               onClick={() => setShowGenericModal(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 z-10 p-1 bg-white rounded-full shadow-sm"
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 z-10 p-1 bg-white rounded-full shadow-xs"
             >
               ✕
             </button>

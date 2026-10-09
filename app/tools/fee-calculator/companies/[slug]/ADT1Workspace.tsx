@@ -267,10 +267,10 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
   return (
     <div className="space-y-8">
       {/* ─── GEO Direct-Answer Statutory Synopsis ─────────────────────────── */}
-      <div className="bg-gradient-to-br from-blue-50/90 via-indigo-50/50 to-white dark:from-slate-900 dark:via-blue-950/30 dark:to-slate-900 rounded-3xl p-6 border border-blue-200/80 dark:border-blue-900/60 shadow-sm space-y-4">
+      <div className="bg-linear-to-br from-blue-50/90 via-indigo-50/50 to-white dark:from-slate-900 dark:via-blue-950/30 dark:to-slate-900 rounded-3xl p-6 border border-blue-200/80 dark:border-blue-900/60 shadow-xs space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-blue-200/60 dark:border-blue-800/60 pb-3">
           <div className="flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+            <ShieldCheck className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0" />
             <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wide">
               Executive Statutory Synopsis • Form ADT-1 Due Date & Late Fees (2026)
             </h3>
@@ -337,7 +337,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
               onClick={() => setCalcMode('date')}
               className={`px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition-all flex items-center gap-2 ${
                 calcMode === 'date'
-                  ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-sm'
+                  ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -349,7 +349,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
               onClick={() => setCalcMode('days')}
               className={`px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition-all flex items-center gap-2 ${
                 calcMode === 'days'
-                  ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-sm'
+                  ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -387,7 +387,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
                     <Calendar className="w-4 h-4" />
                     Appointment Timelines
                   </span>
-                  <span className="text-[11px] font-semibold text-slate-500 bg-white dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
+                  <span className="text-[11px] font-semibold text-slate-500 bg-white dark:bg-slate-800 px-2 py-0.5 rounded-sm border border-slate-200 dark:border-slate-700">
                     Rule 4(2): 15 Days from Meeting
                   </span>
                 </div>
@@ -418,21 +418,21 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
                       <button
                         type="button"
                         onClick={() => setMeetingDate('2026-09-30')}
-                        className="text-[11px] px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 hover:bg-blue-200 font-medium transition-colors"
+                        className="text-[11px] px-2 py-0.5 rounded-sm bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 hover:bg-blue-200 font-medium transition-colors"
                       >
                         30 Sept (Std AGM)
                       </button>
                       <button
                         type="button"
                         onClick={() => setMeetingDate('2025-09-30')}
-                        className="text-[11px] px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 font-medium transition-colors"
+                        className="text-[11px] px-2 py-0.5 rounded-sm bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 font-medium transition-colors"
                       >
                         FY 24-25 AGM
                       </button>
                       <button
                         type="button"
                         onClick={() => setMeetingDate(new Date().toISOString().slice(0, 10))}
-                        className="text-[11px] px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 font-medium transition-colors"
+                        className="text-[11px] px-2 py-0.5 rounded-sm bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 font-medium transition-colors"
                       >
                         Today
                       </button>
@@ -453,7 +453,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
                     <button
                       type="button"
                       onClick={() => setFilingDate(new Date().toISOString().slice(0, 10))}
-                      className="text-[11px] px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 font-medium transition-colors"
+                      className="text-[11px] px-2 py-0.5 rounded-sm bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 font-medium transition-colors"
                     >
                       Today
                     </button>
@@ -498,7 +498,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
                         onClick={() => setDirectDelayDays(chip.val)}
                         className={`text-xs px-2.5 py-1 rounded-lg border font-medium transition-all ${
                           directDelayDays === chip.val
-                            ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
+                            ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
                             : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-blue-400'
                         }`}
                       >
@@ -521,7 +521,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
                     type="checkbox"
                     checked={!hasShareCapital}
                     onChange={(e) => setHasShareCapital(!e.target.checked)}
-                    className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-slate-300"
+                    className="w-4 h-4 rounded-sm text-blue-600 focus:ring-blue-500 border-slate-300"
                   />
                   <span className="text-xs text-slate-600 dark:text-slate-400">
                     Company without Share Capital
@@ -542,7 +542,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
                           onClick={() => handleSelectCapitalPreset(preset.value)}
                           className={`p-2.5 rounded-xl border text-center transition-all ${
                             isCurrent
-                              ? 'bg-blue-50 dark:bg-blue-950/40 border-blue-600 text-blue-700 dark:text-blue-300 font-bold ring-2 ring-blue-500/20 shadow-sm'
+                              ? 'bg-blue-50 dark:bg-blue-950/40 border-blue-600 text-blue-700 dark:text-blue-300 font-bold ring-2 ring-blue-500/20 shadow-xs'
                               : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300 font-medium'
                           }`}
                         >
@@ -577,7 +577,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
           <div className="lg:col-span-5 space-y-6">
             
             {/* The Results Card */}
-            <div className="bg-gradient-to-b from-slate-900 to-slate-950 text-white rounded-3xl p-6 shadow-2xl border border-slate-800 relative overflow-hidden">
+            <div className="bg-linear-to-b from-slate-900 to-slate-950 text-white rounded-3xl p-6 shadow-2xl border border-slate-800 relative overflow-hidden">
               
               {/* Subtle accent glow */}
               <div className="absolute top-0 right-0 w-40 h-40 bg-blue-500/10 rounded-full blur-2xl pointer-events-none" />
@@ -730,7 +730,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
       </div>
 
       {/* 2. Interactive Table B Multiplier Slabs Matrix */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 dark:border-slate-800 space-y-4">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 shadow-xs border border-slate-200 dark:border-slate-800 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -814,7 +814,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
       </div>
 
       {/* 3. Mandatory Attachments Checklist for MCA V3 */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 dark:border-slate-800 space-y-4">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 shadow-xs border border-slate-200 dark:border-slate-800 space-y-4">
         <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
           <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400" />
           Mandatory Attachments Checklist for Form ADT-1 on MCA V3
@@ -877,7 +877,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
       </div>
 
       {/* 4. MCA Regulatory Roadmap: Notification G.S.R. 359(E) (w.e.f. 14-Jul-2025) */}
-      <div className="bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-950 text-white rounded-3xl p-6 md:p-8 shadow-xl border border-indigo-800/40 space-y-6">
+      <div className="bg-linear-to-br from-indigo-950 via-slate-900 to-slate-950 text-white rounded-3xl p-6 md:p-8 shadow-xl border border-indigo-800/40 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-300 shrink-0">
@@ -885,7 +885,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-indigo-500/30 text-indigo-200 border border-indigo-400/40">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-sm bg-indigo-500/30 text-indigo-200 border border-indigo-400/40">
                   Critical Regulatory Notice
                 </span>
                 <span className="text-xs text-slate-400">Effective 14 July 2025</span>
@@ -942,7 +942,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
             </p>
           </div>
           <div className="text-right">
-            <span className="inline-block px-2.5 py-1 text-[11px] font-bold bg-slate-100 text-slate-800 border border-slate-300 rounded">
+            <span className="inline-block px-2.5 py-1 text-[11px] font-bold bg-slate-100 text-slate-800 border border-slate-300 rounded-sm">
               FORM ADT-1 CERTIFICATE
             </span>
             <p className="text-[10px] text-slate-500 mt-1" suppressHydrationWarning>
@@ -1069,13 +1069,13 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
             3. Regulatory Guidelines &amp; MCA V3 Checklist
           </h3>
           <div className="grid grid-cols-2 gap-3 text-[11px]">
-            <div className="border border-slate-200 rounded p-2.5 bg-slate-50">
+            <div className="border border-slate-200 rounded-sm p-2.5 bg-slate-50">
               <p className="font-bold text-slate-900 mb-1">First Auditor Statutory Position:</p>
               <p className="text-slate-600 leading-snug">
                 ICSI FAQs state that Form ADT-1 is not mandatory for the First Auditor. The revised MCA V3 form includes an option to report this appointment. Practice and interpretation may vary; check current MCA instructions and obtain qualified advice before deciding whether to file.
               </p>
             </div>
-            <div className="border border-slate-200 rounded p-2.5 bg-slate-50">
+            <div className="border border-slate-200 rounded-sm p-2.5 bg-slate-50">
               <p className="font-bold text-slate-900 mb-1">Section 403 Condonation Status:</p>
               <p className="text-slate-600 leading-snug">
                 {isCondonation
@@ -1085,7 +1085,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
             </div>
           </div>
 
-          <div className="mt-3 border border-slate-200 rounded p-2.5">
+          <div className="mt-3 border border-slate-200 rounded-sm p-2.5">
             <p className="font-bold text-slate-900 text-[11px] mb-1">Mandatory PDF Attachments Verified:</p>
             <ul className="list-disc list-inside text-[10px] text-slate-600 space-y-0.5">
               <li>1. Written Consent letter from statutory auditor under Section 139(1) second proviso.</li>

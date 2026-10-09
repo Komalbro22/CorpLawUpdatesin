@@ -79,7 +79,7 @@ export function ConflictAuditor({ documentText, onAuditComplete }: ConflictAudit
                       <span>{cfg.icon}</span>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className={`text-xs font-semibold px-2 py-0.5 rounded ${cfg.label}`}>
+                          <span className={`text-xs font-semibold px-2 py-0.5 rounded-sm ${cfg.label}`}>
                             {alert.severity}
                           </span>
                         </div>

@@ -25,12 +25,12 @@ export default function CompanyFAQ() {
               key={index} 
               className={`border rounded-2xl overflow-hidden transition-all duration-200 ${
                 isOpen 
-                ? 'border-blue-600 dark:border-blue-500 bg-blue-50/40 dark:bg-slate-800/60 shadow-sm' 
+                ? 'border-blue-600 dark:border-blue-500 bg-blue-50/40 dark:bg-slate-800/60 shadow-xs' 
                 : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300 dark:hover:border-slate-700'
               }`}
             >
               <button
-                className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
+                className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-600"
                 onClick={() => setOpenIndex(isOpen ? null : index)}
                 aria-expanded={isOpen}
               >

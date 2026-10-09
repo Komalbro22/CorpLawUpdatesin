@@ -169,7 +169,7 @@ function MSMESEO() {
 
       {/* Core Statutory Pillars Callout Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 my-8 not-prose">
-        <div className="bg-purple-50 dark:bg-purple-950/20 p-5 rounded-2xl border border-purple-200 dark:border-purple-900/40 shadow-sm">
+        <div className="bg-purple-50 dark:bg-purple-950/20 p-5 rounded-2xl border border-purple-200 dark:border-purple-900/40 shadow-xs">
           <div className="flex items-center gap-2 mb-2 font-bold text-purple-900 dark:text-purple-200 text-sm">
             <span className="p-1.5 rounded-lg bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300">⏱️</span>
             Statutory Payment Limits (Section 15)
@@ -179,7 +179,7 @@ function MSMESEO() {
           </p>
         </div>
 
-        <div className="bg-red-50 dark:bg-red-950/20 p-5 rounded-2xl border border-red-200 dark:border-red-900/40 shadow-sm">
+        <div className="bg-red-50 dark:bg-red-950/20 p-5 rounded-2xl border border-red-200 dark:border-red-900/40 shadow-xs">
           <div className="flex items-center gap-2 mb-2 font-bold text-red-900 dark:text-red-200 text-sm">
             <span className="p-1.5 rounded-lg bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300">📈</span>
             3x RBI Bank Rate Compounding (Section 16)
@@ -189,7 +189,7 @@ function MSMESEO() {
           </p>
         </div>
 
-        <div className="bg-amber-50 dark:bg-amber-950/20 p-5 rounded-2xl border border-amber-200 dark:border-amber-900/40 shadow-sm">
+        <div className="bg-amber-50 dark:bg-amber-950/20 p-5 rounded-2xl border border-amber-200 dark:border-amber-900/40 shadow-xs">
           <div className="flex items-center gap-2 mb-2 font-bold text-amber-900 dark:text-amber-200 text-sm">
             <span className="p-1.5 rounded-lg bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300">🚫</span>
             Tax Disallowance (Section 23 &amp; 43B(h))
@@ -199,7 +199,7 @@ function MSMESEO() {
           </p>
         </div>
 
-        <div className="bg-blue-50 dark:bg-blue-950/20 p-5 rounded-2xl border border-blue-200 dark:border-blue-900/40 shadow-sm">
+        <div className="bg-blue-50 dark:bg-blue-950/20 p-5 rounded-2xl border border-blue-200 dark:border-blue-900/40 shadow-xs">
           <div className="flex items-center gap-2 mb-2 font-bold text-blue-900 dark:text-blue-200 text-sm">
             <span className="p-1.5 rounded-lg bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300">⚖️</span>
             MSEFC Recovery &amp; 75% Pre-Deposit (Section 18 &amp; 19)
@@ -211,7 +211,7 @@ function MSMESEO() {
       </div>
 
       {/* Statutory RBI Bank Rate Reference Table */}
-      <div className="bg-gradient-to-br from-slate-900 to-indigo-950 text-white p-6 rounded-3xl my-8 shadow-xl border border-slate-800 space-y-4 not-prose">
+      <div className="bg-linear-to-br from-slate-900 to-indigo-950 text-white p-6 rounded-3xl my-8 shadow-xl border border-slate-800 space-y-4 not-prose">
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
           <div>
             <h3 className="text-base font-bold text-white flex items-center gap-2">
@@ -360,7 +360,7 @@ function MSMESEO() {
           =Principal * ((1 + (AnnualRate/12))^Months - 1)
         </div>
         <p className="text-[11px] text-emerald-800 dark:text-emerald-400">
-          Example: For ₹5,00,000 overdue at 20.25% p.a. for 4 delayed months, enter: <code className="bg-emerald-100 dark:bg-emerald-900/60 px-1.5 py-0.5 rounded font-mono">=500000 * ((1 + (20.25%/12))^4 - 1)</code>. You can also export an itemized calculation schedule PDF directly using the <strong>Download PDF</strong> button in our calculator above.
+          Example: For ₹5,00,000 overdue at 20.25% p.a. for 4 delayed months, enter: <code className="bg-emerald-100 dark:bg-emerald-900/60 px-1.5 py-0.5 rounded-sm font-mono">=500000 * ((1 + (20.25%/12))^4 - 1)</code>. You can also export an itemized calculation schedule PDF directly using the <strong>Download PDF</strong> button in our calculator above.
         </p>
       </div>
 

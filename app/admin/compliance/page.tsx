@@ -175,7 +175,7 @@ export default function AdminCompliancePage() {
   }
 
   const inputClass =
-    'w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500'
+    'w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm text-slate-900 placeholder:text-slate-500 focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500'
 
   if (loading) {
     return (
@@ -199,12 +199,12 @@ export default function AdminCompliancePage() {
         <div className="flex flex-wrap gap-3">
           <Link
             href="/admin/compliance/suggestions"
-            className="relative inline-flex items-center gap-2 border border-white/60 text-slate-700 px-4 py-2.5 rounded-lg text-sm font-semibold hover:bg-slate-100 transition-colors bg-slate-100 shadow-sm"
+            className="relative inline-flex items-center gap-2 border border-white/60 text-slate-700 px-4 py-2.5 rounded-lg text-sm font-semibold hover:bg-slate-100 transition-colors bg-slate-100 shadow-xs"
           >
             <Lightbulb className="w-4 h-4 text-amber-500" aria-hidden />
             Suggestions
             {pendingCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-bold rounded-full min-w-[1.25rem] h-5 px-1 flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-[10px] font-bold rounded-full min-w-5 h-5 px-1 flex items-center justify-center">
                 {pendingCount}
               </span>
             )}
@@ -216,7 +216,7 @@ export default function AdminCompliancePage() {
               setEditingId(null)
               setForm(emptyForm)
             }}
-            className="inline-flex items-center gap-2 bg-gold hover:bg-amber-400 text-slate-950 font-semibold px-4 py-2.5 rounded-lg text-sm shadow-sm transition-colors"
+            className="inline-flex items-center gap-2 bg-gold hover:bg-amber-400 text-slate-950 font-semibold px-4 py-2.5 rounded-lg text-sm shadow-xs transition-colors"
           >
             <Plus className="w-4 h-4" aria-hidden />
             Add entry
@@ -294,7 +294,7 @@ export default function AdminCompliancePage() {
                   type="checkbox"
                   checked={form.is_active}
                   onChange={e => setForm(p => ({ ...p, is_active: e.target.checked }))}
-                  className="w-4 h-4 accent-amber-500 rounded"
+                  className="w-4 h-4 accent-amber-500 rounded-sm"
                 />
                 <span className="text-xs font-semibold text-slate-700">Active (Visible on Calendar)</span>
               </label>
@@ -303,7 +303,7 @@ export default function AdminCompliancePage() {
                   type="checkbox"
                   checked={form.is_verified}
                   onChange={e => setForm(p => ({ ...p, is_verified: e.target.checked }))}
-                  className="w-4 h-4 accent-emerald-500 rounded"
+                  className="w-4 h-4 accent-emerald-500 rounded-sm"
                 />
                 <span className="text-xs font-semibold text-slate-700">Verified</span>
               </label>
@@ -327,12 +327,12 @@ export default function AdminCompliancePage() {
           placeholder="Search form name or title..."
           value={search}
           onChange={e => setSearch(e.target.value)}
-          className="bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm w-64 text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+          className="bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm w-64 text-slate-900 placeholder:text-slate-500 focus:outline-hidden focus:ring-2 focus:ring-amber-500/20"
         />
         <select
           value={filterRegulator}
           onChange={e => setFilterRegulator(e.target.value)}
-          className="bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+          className="bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-amber-500/20"
         >
           <option value="all" className="bg-slate-100">All Regulators</option>
           {REGULATORS.map(r => <option key={r} value={r} className="bg-slate-100">{r.toUpperCase()}</option>)}
@@ -365,14 +365,14 @@ export default function AdminCompliancePage() {
                   filtered.map(entry => (
                     <tr key={entry.id} className={`transition-colors hover:bg-slate-100/20 ${!entry.is_active ? 'opacity-40 bg-slate-50/30' : ''}`}>
                       <td className="px-4 py-3">
-                        <span className="bg-slate-100 border border-slate-750 text-slate-700 text-xs font-bold px-2 py-1 rounded uppercase">
+                        <span className="bg-slate-100 border border-slate-750 text-slate-700 text-xs font-bold px-2 py-1 rounded-sm uppercase">
                           {entry.regulator}
                         </span>
                       </td>
                       <td className="px-4 py-3 font-mono text-xs text-slate-800 font-bold">
                         {entry.form_name}
                         {entry.created_by?.startsWith('community:') && (
-                          <span className="ml-1 text-[10px] font-bold uppercase text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1 rounded">community</span>
+                          <span className="ml-1 text-[10px] font-bold uppercase text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1 rounded-sm">community</span>
                         )}
                       </td>
                       <td className="px-4 py-3 text-slate-700 max-w-xs">

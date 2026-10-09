@@ -251,7 +251,7 @@ export default function DocumentAnalyticsPage() {
 
   if (error || !overview) {
     return (
-      <div className="p-8 admin-card border border-red-500/20 bg-red-500/[0.02] text-red-600 rounded-2xl max-w-2xl mx-auto my-12">
+      <div className="p-8 admin-card border border-red-500/20 bg-red-500/2 text-red-600 rounded-2xl max-w-2xl mx-auto my-12">
         <h2 className="text-xl font-bold font-heading mb-2">Error Loading Analytics</h2>
         <p className="text-sm">{error || 'An unexpected error occurred while communicating with the analytics engine.'}</p>
         <button
@@ -278,7 +278,7 @@ export default function DocumentAnalyticsPage() {
     <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-8 min-h-screen text-slate-900">
       
       {/* ─── Top Header & Controls ────────────────────────────────────────── */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white border border-slate-200/80 p-6 rounded-2xl shadow-xs">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white border border-slate-200/80 p-6 rounded-2xl shadow-2xs">
         <div>
           <div className="flex items-center gap-2.5">
             <span className="p-2 rounded-xl bg-amber-500/10 text-amber-600 border border-amber-500/20">
@@ -299,7 +299,7 @@ export default function DocumentAnalyticsPage() {
         <div className="flex flex-wrap items-center gap-2 self-stretch md:self-auto justify-end">
           <button
             onClick={handleExportCSV}
-            className="inline-flex items-center gap-1.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all shadow-xs"
+            className="inline-flex items-center gap-1.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all shadow-2xs"
             title="Download CSV"
           >
             <Download className="w-3.5 h-3.5 text-slate-500" />
@@ -309,7 +309,7 @@ export default function DocumentAnalyticsPage() {
           <button
             onClick={() => fetchData(timeframe, true)}
             disabled={refreshing}
-            className="inline-flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white px-3.5 py-2 rounded-xl text-xs font-semibold transition-all disabled:opacity-60 shadow-xs"
+            className="inline-flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white px-3.5 py-2 rounded-xl text-xs font-semibold transition-all disabled:opacity-60 shadow-2xs"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin' : ''}`} />
             {refreshing ? 'Refreshing...' : 'Refresh'}
@@ -328,7 +328,7 @@ export default function DocumentAnalyticsPage() {
                 onClick={() => setTimeframe(tf)}
                 className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
                   isActive
-                    ? 'bg-white text-slate-900 shadow-xs border border-slate-200/60'
+                    ? 'bg-white text-slate-900 shadow-2xs border border-slate-200/60'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
                 }`}
               >
@@ -354,7 +354,7 @@ export default function DocumentAnalyticsPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
         {/* Total Documents */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs">
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-2xs">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
               Documents Created
@@ -376,7 +376,7 @@ export default function DocumentAnalyticsPage() {
         </div>
 
         {/* Unique Access Locations */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs">
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-2xs">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
               Active Access Hubs
@@ -398,7 +398,7 @@ export default function DocumentAnalyticsPage() {
         </div>
 
         {/* Gemini Token Usage */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs">
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-2xs">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
               Daily AI Quota Usage
@@ -428,7 +428,7 @@ export default function DocumentAnalyticsPage() {
         </div>
 
         {/* Quota Refresh Countdown */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs flex flex-col justify-between">
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-2xs flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
               Quota Refresh In
@@ -454,7 +454,7 @@ export default function DocumentAnalyticsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* LEFT COLUMN: Where It Was Accessed From (Geolocation Intelligence) */}
-        <div className="lg:col-span-6 bg-white border border-slate-200 rounded-2xl p-6 shadow-xs flex flex-col">
+        <div className="lg:col-span-6 bg-white border border-slate-200 rounded-2xl p-6 shadow-2xs flex flex-col">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-lg font-bold font-heading text-slate-900 flex items-center gap-2">
@@ -526,7 +526,7 @@ export default function DocumentAnalyticsPage() {
         </div>
 
         {/* RIGHT COLUMN: Which Documents Were Created (Template Breakdown) */}
-        <div className="lg:col-span-6 bg-white border border-slate-200 rounded-2xl p-6 shadow-xs flex flex-col">
+        <div className="lg:col-span-6 bg-white border border-slate-200 rounded-2xl p-6 shadow-2xs flex flex-col">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-lg font-bold font-heading text-slate-900 flex items-center gap-2">
@@ -574,12 +574,12 @@ export default function DocumentAnalyticsPage() {
                       <td className="py-3 text-center">
                         <div className="inline-flex items-center gap-1">
                           {tpl.aiCount > 0 && (
-                            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                            <span className="px-1.5 py-0.5 rounded-sm text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
                               {tpl.aiCount} AI
                             </span>
                           )}
                           {tpl.standardCount > 0 && (
-                            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                            <span className="px-1.5 py-0.5 rounded-sm text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                               {tpl.standardCount} Std
                             </span>
                           )}
@@ -611,7 +611,7 @@ export default function DocumentAnalyticsPage() {
       </div>
 
       {/* ─── Peak Drafting Hours (Hourly Distribution in IST) ─────────────── */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs">
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-2xs">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-lg font-bold font-heading text-slate-900 flex items-center gap-2">
@@ -650,7 +650,7 @@ export default function DocumentAnalyticsPage() {
 
                 {/* Tooltip on hover */}
                 {count > 0 && (
-                  <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-10">
+                  <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-sm opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-10">
                     {hour}:00 IST: {count} {count === 1 ? 'doc' : 'docs'}
                   </div>
                 )}
@@ -661,11 +661,11 @@ export default function DocumentAnalyticsPage() {
         <div className="flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100 mt-2">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-sm bg-amber-500 inline-block" />
+              <span className="w-2.5 h-2.5 rounded-xs bg-amber-500 inline-block" />
               Business Hours (10 AM - 6 PM IST)
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-sm bg-indigo-500 inline-block" />
+              <span className="w-2.5 h-2.5 rounded-xs bg-indigo-500 inline-block" />
               Off-Hours Drafting
             </span>
           </div>
@@ -674,7 +674,7 @@ export default function DocumentAnalyticsPage() {
       </div>
 
       {/* ─── Live Chronological Generation Feed ───────────────────────────── */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-4">
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-2xs space-y-4">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
             <h2 className="text-lg font-bold font-heading text-slate-900 flex items-center gap-2">
@@ -694,7 +694,7 @@ export default function DocumentAnalyticsPage() {
               placeholder="Search by doc, city, or IP..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-amber-500 transition-colors"
+              className="w-full pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-hidden focus:border-amber-500 transition-colors"
             />
           </div>
         </div>
@@ -750,7 +750,7 @@ export default function DocumentAnalyticsPage() {
                       <td className="p-3 font-mono text-[11px] text-slate-600">
                         {gen.ip}
                         {isWhitelisted && (
-                          <span className="ml-1.5 px-1 py-0.5 rounded text-[9px] font-sans font-bold bg-emerald-100 text-emerald-800">
+                          <span className="ml-1.5 px-1 py-0.5 rounded-sm text-[9px] font-sans font-bold bg-emerald-100 text-emerald-800">
                             Whitelist
                           </span>
                         )}
@@ -773,7 +773,7 @@ export default function DocumentAnalyticsPage() {
       </div>
 
       {/* ─── Rate Limiting & Whitelist Settings Form ──────────────────────── */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs">
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-2xs">
         <div className="flex items-center gap-2 mb-2">
           <ShieldAlert className="w-5 h-5 text-rose-600" />
           <h2 className="text-lg font-bold font-heading text-slate-900">
@@ -796,7 +796,7 @@ export default function DocumentAnalyticsPage() {
                 min="1"
                 value={maxRequests}
                 onChange={e => setMaxRequests(e.target.value)}
-                className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-amber-500 transition-colors"
+                className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-hidden focus:border-amber-500 transition-colors"
               />
             </div>
 
@@ -810,7 +810,7 @@ export default function DocumentAnalyticsPage() {
                 min="1"
                 value={maxTokens}
                 onChange={e => setMaxTokens(e.target.value)}
-                className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-amber-500 transition-colors"
+                className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-hidden focus:border-amber-500 transition-colors"
               />
             </div>
           </div>
@@ -825,7 +825,7 @@ export default function DocumentAnalyticsPage() {
               value={whitelistedIps}
               onChange={e => setWhitelistedIps(e.target.value)}
               placeholder="e.g. 127.0.0.1, 192.168.1.100"
-              className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-amber-500 font-mono transition-colors"
+              className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-hidden focus:border-amber-500 font-mono transition-colors"
             />
             <span className="text-[10px] text-slate-500 mt-1 block">
               Comma-separated list of client IP addresses. Useful for internal testing and automated test workers.
@@ -836,7 +836,7 @@ export default function DocumentAnalyticsPage() {
             <button
               type="submit"
               disabled={savingSettings}
-              className="inline-flex items-center gap-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-5 py-2.5 rounded-xl text-xs shadow-xs transition-all disabled:opacity-60"
+              className="inline-flex items-center gap-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-5 py-2.5 rounded-xl text-xs shadow-2xs transition-all disabled:opacity-60"
             >
               {savingSettings ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
               {savingSettings ? 'Saving...' : 'Save Settings'}

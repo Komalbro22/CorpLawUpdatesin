@@ -31,7 +31,7 @@ export default function HubExploreLinks({
           <li key={link.href}>
             <Link
               href={link.href}
-              className="block rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 hover:border-amber-400 dark:hover:border-amber-500 hover:shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-amber-500"
+              className="block rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 hover:border-amber-400 dark:hover:border-amber-500 hover:shadow-xs transition-all focus:outline-hidden focus:ring-2 focus:ring-amber-500"
             >
               <span className="block text-sm font-bold text-navy dark:text-white">{link.label}</span>
               {link.desc && (

@@ -28,7 +28,7 @@ export default function BackToTop() {
                 visible
                     ? 'opacity-100 translate-y-0 pointer-events-auto'
                     : 'opacity-0 translate-y-3 pointer-events-none'
-            } hover:bg-slate-800 hover:shadow-xl motion-safe:hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2`}
+            } hover:bg-slate-800 hover:shadow-xl motion-safe:hover:-translate-y-0.5 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2`}
             aria-label="Back to top"
         >
             <ChevronUp className="w-6 h-6" strokeWidth={2.25} aria-hidden />

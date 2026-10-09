@@ -295,7 +295,7 @@ export default function RegisteredOfficePage() {
         <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 space-y-12">
           
           {/* ─── GEO Direct-Answer Block (AI Citations & LLM Grounding) ─────── */}
-          <div className="bg-white dark:bg-slate-900 border-l-4 border-amber-500 border-y border-r border-slate-200 dark:border-slate-800 rounded-r-2xl p-6 shadow-xs space-y-3">
+          <div className="bg-white dark:bg-slate-900 border-l-4 border-amber-500 border-y border-r border-slate-200 dark:border-slate-800 rounded-r-2xl p-6 shadow-2xs space-y-3">
             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400">
               <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400" />
               <span>Executive Statutory Synopsis (Section 12 & 13 Companies Act, 2013)</span>
@@ -306,7 +306,7 @@ export default function RegisteredOfficePage() {
           </div>
 
           {/* 1. Comparison of 4 Shifting Scopes */}
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 shadow-sm border border-slate-200 dark:border-slate-800 space-y-6">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 shadow-xs border border-slate-200 dark:border-slate-800 space-y-6">
             <div className="space-y-1">
               <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
                 Statutory Scope Breakdown
@@ -392,7 +392,7 @@ export default function RegisteredOfficePage() {
           </div>
 
           {/* 2. Step-by-Step Procedure by Shifting Scope */}
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 shadow-sm border border-slate-200 dark:border-slate-800 space-y-6">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 shadow-xs border border-slate-200 dark:border-slate-800 space-y-6">
             <div className="space-y-1">
               <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
                 Procedural Roadmap
@@ -476,7 +476,7 @@ export default function RegisteredOfficePage() {
           </div>
 
           {/* 3. Limited Liability Partnership (LLP) Shifting */}
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 shadow-sm border border-slate-200 dark:border-slate-800 space-y-6">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 shadow-xs border border-slate-200 dark:border-slate-800 space-y-6">
             <div className="space-y-1">
               <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
                 LLP Compliance Guide
@@ -557,7 +557,7 @@ export default function RegisteredOfficePage() {
           </div>
 
           {/* 5. Post-Shifting Statutory Intimations Checklist */}
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 shadow-sm border border-slate-200 dark:border-slate-800 space-y-6">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 shadow-xs border border-slate-200 dark:border-slate-800 space-y-6">
             <div className="space-y-1">
               <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
                 Post-Shifting Compliance
@@ -614,7 +614,7 @@ export default function RegisteredOfficePage() {
           </div>
 
           {/* 7. Historical Context & International Clarifications */}
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 shadow-sm border border-slate-200 dark:border-slate-800 space-y-4">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 shadow-xs border border-slate-200 dark:border-slate-800 space-y-4">
             <div className="space-y-1">
               <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Jurisdictional Comparative Context
@@ -636,7 +636,7 @@ export default function RegisteredOfficePage() {
           </div>
 
           {/* 8. Comprehensive Legal FAQs */}
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 shadow-sm border border-slate-200 dark:border-slate-800 space-y-6">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-10 shadow-xs border border-slate-200 dark:border-slate-800 space-y-6">
             <div className="space-y-1">
               <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
                 Legal FAQ Knowledge Base

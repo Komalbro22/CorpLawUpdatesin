@@ -124,7 +124,7 @@ export default function DownloadSubscribePrompt({ open, source, onClose }: Downl
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center overflow-y-auto bg-slate-950/65 p-3 backdrop-blur-sm sm:p-5">
+    <div className="fixed inset-0 z-10000 flex items-center justify-center overflow-y-auto bg-slate-950/65 p-3 backdrop-blur-xs sm:p-5">
       <div
         ref={dialogRef}
         role="dialog"
@@ -137,7 +137,7 @@ export default function DownloadSubscribePrompt({ open, source, onClose }: Downl
           type="button"
           onClick={closeAsSkip}
           aria-label="Close and continue"
-          className="absolute right-3 top-3 rounded-lg p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 dark:hover:bg-slate-800 dark:hover:text-white"
+          className="absolute right-3 top-3 rounded-lg p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-500 dark:hover:bg-slate-800 dark:hover:text-white"
         >
           <X className="size-5" aria-hidden="true" />
         </button>
@@ -168,7 +168,7 @@ export default function DownloadSubscribePrompt({ open, source, onClose }: Downl
                 required
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-base text-slate-950 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-base text-slate-950 outline-hidden transition focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
               />
             </div>
 
@@ -181,7 +181,7 @@ export default function DownloadSubscribePrompt({ open, source, onClose }: Downl
                 name="profession"
                 value={profession}
                 onChange={(event) => setProfession(event.target.value)}
-                className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-base text-slate-950 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-base text-slate-950 outline-hidden focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
               >
                 <option value="">Choose one (optional)</option>
                 {professions.map((option) => <option key={option} value={option}>{option}</option>)}
@@ -197,7 +197,7 @@ export default function DownloadSubscribePrompt({ open, source, onClose }: Downl
                     value={professionOther}
                     onChange={(event) => setProfessionOther(event.target.value.slice(0, 60))}
                     placeholder="Please specify (optional)"
-                    className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-base text-slate-950 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                    className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-base text-slate-950 outline-hidden focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
                   />
                 </label>
               )}
@@ -212,7 +212,7 @@ export default function DownloadSubscribePrompt({ open, source, onClose }: Downl
                 name="frequency"
                 value={frequency}
                 onChange={(event) => setFrequency(event.target.value as 'Weekly' | 'Daily')}
-                className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-base text-slate-950 outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-base text-slate-950 outline-hidden focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
               >
                 <option value="Weekly">Weekly</option>
                 <option value="Daily">Daily</option>
@@ -236,7 +236,7 @@ export default function DownloadSubscribePrompt({ open, source, onClose }: Downl
               <button
                 type="button"
                 onClick={closeAsSkip}
-                className="min-h-11 rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+                className="min-h-11 rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-500 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
               >
                 No thanks
               </button>
@@ -244,7 +244,7 @@ export default function DownloadSubscribePrompt({ open, source, onClose }: Downl
                 type="submit"
                 disabled={submitting}
                 aria-busy={submitting}
-                className="min-h-11 rounded-lg bg-amber-500 px-5 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-amber-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600 focus-visible:ring-offset-2 disabled:cursor-wait disabled:opacity-60"
+                className="min-h-11 rounded-lg bg-amber-500 px-5 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-amber-400 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-600 focus-visible:ring-offset-2 disabled:cursor-wait disabled:opacity-60"
               >
                 Subscribe
               </button>
@@ -257,7 +257,7 @@ export default function DownloadSubscribePrompt({ open, source, onClose }: Downl
             <button
               type="button"
               onClick={onClose}
-              className="min-h-11 rounded-lg bg-amber-500 px-5 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-amber-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600 focus-visible:ring-offset-2"
+              className="min-h-11 rounded-lg bg-amber-500 px-5 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-amber-400 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-600 focus-visible:ring-offset-2"
             >
               No thanks
             </button>

@@ -138,7 +138,7 @@ export default function MobileReadingBar({ title }: { title?: string }) {
             {tocOpen && (
                 <div className="fixed inset-0 z-50 md:hidden">
                     <div
-                        className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm animate-fade-in"
+                        className="absolute inset-0 bg-slate-900/60 backdrop-blur-xs animate-fade-in"
                         onClick={() => setTocOpen(false)}
                         aria-hidden="true"
                     />
@@ -153,7 +153,7 @@ export default function MobileReadingBar({ title }: { title?: string }) {
                             </div>
                             <button
                                 onClick={() => setTocOpen(false)}
-                                className="p-1 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+                                className="p-1 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-500"
                                 aria-label="Close table of contents"
                             >
                                 <X className="size-5" aria-hidden="true" />

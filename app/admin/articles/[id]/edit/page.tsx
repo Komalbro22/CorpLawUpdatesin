@@ -453,13 +453,13 @@ export default function EditArticle() {
                 <div className="flex lg:hidden bg-slate-200 rounded-lg p-1">
                     <button
                         onClick={() => setActiveTab('write')}
-                        className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${activeTab === 'write' ? 'bg-white text-slate-900 shadow' : 'text-slate-600'}`}
+                        className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${activeTab === 'write' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600'}`}
                     >
                         Edit
                     </button>
                     <button
                         onClick={() => setActiveTab('preview')}
-                        className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${activeTab === 'preview' ? 'bg-white text-slate-900 shadow' : 'text-slate-600'}`}
+                        className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${activeTab === 'preview' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600'}`}
                     >
                         Preview
                     </button>
@@ -476,13 +476,13 @@ export default function EditArticle() {
                             placeholder="Article title..."
                             value={title}
                             onChange={(e) => handleTitleChange(e.target.value)}
-                            className="w-full bg-transparent font-heading font-bold text-3xl placeholder:text-slate-500 text-slate-900 border-none focus:outline-none focus:ring-0 p-0"
+                            className="w-full bg-transparent font-heading font-bold text-3xl placeholder:text-slate-500 text-slate-900 border-none focus:outline-hidden focus:ring-0 p-0"
                             autoFocus
                         />
                     </div>
 
                     {/* Slug */}
-                    <div className="border border-slate-200/80  rounded-xl p-5 bg-white bg-white shadow-card ring-1 ring-slate-900/[0.02] space-y-4">
+                    <div className="border border-slate-200/80  rounded-xl p-5 bg-white bg-white shadow-card ring-1 ring-slate-900/2 space-y-4">
                         <div>
                             <label className="block text-sm font-bold text-slate-900  mb-1">URL Slug</label>
                             <div className="flex gap-2 items-start">
@@ -493,7 +493,7 @@ export default function EditArticle() {
                                         setSlugEdited(true)
                                         setSlug(e.target.value)
                                     }}
-                                    className="flex-1 border border-slate-300  rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-none font-mono text-slate-900 bg-white bg-slate-50"
+                                    className="flex-1 border border-slate-300  rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-hidden font-mono text-slate-900 bg-white bg-slate-50"
                                 />
                                 {slugEdited && (
                                     <button
@@ -519,7 +519,7 @@ export default function EditArticle() {
                             <select
                                 value={category}
                                 onChange={(e) => setCategory(e.target.value)}
-                                className="w-full border border-slate-300  rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-none text-slate-900 bg-white bg-slate-50"
+                                className="w-full border border-slate-300  rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-hidden text-slate-900 bg-white bg-slate-50"
                             >
                                     <option value="">No category</option>
                                     {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
@@ -542,7 +542,7 @@ export default function EditArticle() {
                     </div>
 
                     {/* Summary */}
-                    <div className="border border-slate-200/80  rounded-xl p-5 bg-white bg-white shadow-card ring-1 ring-slate-900/[0.02]">
+                    <div className="border border-slate-200/80  rounded-xl p-5 bg-white bg-white shadow-card ring-1 ring-slate-900/2">
                         <label className="block text-sm font-bold text-slate-900  mb-1">Summary <span className="text-red-500">*</span></label>
                         <textarea
                             value={summary}
@@ -550,7 +550,7 @@ export default function EditArticle() {
                             maxLength={300}
                             rows={3}
                             placeholder="Brief summary shown in article cards..."
-                            className="w-full border border-slate-300  rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-none text-slate-900 bg-white  resize-none"
+                            className="w-full border border-slate-300  rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-hidden text-slate-900 bg-white  resize-none"
                         />
                         <div className="text-right text-xs text-slate-500  mt-1">
                             {summary.length}/300
@@ -558,7 +558,7 @@ export default function EditArticle() {
                     </div>
 
                     {/* Key Change, Effective Date, Impact Level */}
-                    <div className="border border-slate-200/80  rounded-xl p-5 bg-white bg-white shadow-card ring-1 ring-slate-900/[0.02] space-y-5">
+                    <div className="border border-slate-200/80  rounded-xl p-5 bg-white bg-white shadow-card ring-1 ring-slate-900/2 space-y-5">
                         <div>
                             <label htmlFor="keyChange" className="block text-sm font-semibold text-slate-900  mb-2">
                                 Key Change Pill
@@ -572,7 +572,7 @@ export default function EditArticle() {
                                 value={keyChange}
                                 onChange={(e) => setKeyChange(e.target.value)}
                                 placeholder="e.g. DIR-3 KYC filing fee increased to ₹5,000"
-                                className="w-full border border-slate-300  rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent bg-white"
+                                className="w-full border border-slate-300  rounded-lg px-4 py-3 text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-amber-400 focus:border-transparent bg-white"
                                 maxLength={200}
                             />
                         </div>
@@ -589,11 +589,11 @@ export default function EditArticle() {
                                     <button 
                                         type="button" 
                                         onClick={() => setShowBulkTldr(!showBulkTldr)} 
-                                        className="text-xs bg-slate-100  hover:bg-slate-200  text-slate-900  font-semibold px-2.5 py-1 rounded transition-colors"
+                                        className="text-xs bg-slate-100  hover:bg-slate-200  text-slate-900  font-semibold px-2.5 py-1 rounded-sm transition-colors"
                                     >
                                         {showBulkTldr ? 'Close Bulk Import' : 'Bulk Import Points'}
                                     </button>
-                                    <button type="button" onClick={addKeyChange} className="text-xs bg-slate-100  hover:bg-slate-200  text-slate-700  px-2.5 py-1 rounded transition-colors">+ Add Point</button>
+                                    <button type="button" onClick={addKeyChange} className="text-xs bg-slate-100  hover:bg-slate-200  text-slate-700  px-2.5 py-1 rounded-sm transition-colors">+ Add Point</button>
                                 </div>
                             </div>
 
@@ -605,12 +605,12 @@ export default function EditArticle() {
                                         onChange={(e) => setBulkTldrText(e.target.value)}
                                         placeholder="• Bullet 1&#10;• Bullet 2&#10;• Bullet 3"
                                         rows={4}
-                                        className="w-full px-3 py-2 border border-slate-300  rounded-lg text-xs focus:ring-2 focus:ring-amber-400 focus:outline-none text-slate-900 bg-white bg-white"
+                                        className="w-full px-3 py-2 border border-slate-300  rounded-lg text-xs focus:ring-2 focus:ring-amber-400 focus:outline-hidden text-slate-900 bg-white bg-white"
                                     />
                                     <button 
                                         type="button" 
                                         onClick={handleBulkTldrImport}
-                                        className="w-full py-1.5 text-xs btn-vibrant-amber text-white font-bold rounded-lg transition-colors shadow-sm"
+                                        className="w-full py-1.5 text-xs btn-vibrant-amber text-white font-bold rounded-lg transition-colors shadow-xs"
                                     >
                                         Parse & Import Takeaways
                                     </button>
@@ -624,7 +624,7 @@ export default function EditArticle() {
                                                 value={kc}
                                                 onChange={(e) => updateKeyChange(idx, e.target.value)}
                                                 placeholder={`Key takeaway point ${idx + 1}...`}
-                                                className="flex-1 border border-slate-300  rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent text-slate-900 bg-white bg-slate-50"
+                                                className="flex-1 border border-slate-300  rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-400 focus:border-transparent text-slate-900 bg-white bg-slate-50"
                                             />
                                             <button type="button" onClick={() => removeKeyChange(idx)} className="text-slate-500 hover:text-red-500 px-2">×</button>
                                         </div>
@@ -706,19 +706,19 @@ export default function EditArticle() {
                                         <div className="space-y-2">
                                             <div className="bg-white admin-card-glass  p-2.5 rounded-lg">
                                                 <p className="font-semibold text-slate-900  text-[10px] uppercase mb-0.5">Template 1 — Editorial Board Bio</p>
-                                                <code className="text-slate-600  select-all block bg-slate-55 bg-slate-50 p-1.5 rounded font-mono text-[10px] border border-slate-100">
+                                                <code className="text-slate-600  select-all block bg-slate-55 bg-slate-50 p-1.5 rounded-sm font-mono text-[10px] border border-slate-100">
                                                     *This compliance alert was prepared by the editorial board of CorpLawUpdates.in, specializing in real-time corporate regulatory intelligence in India.*
                                                 </code>
                                             </div>
                                             <div className="bg-white admin-card-glass  p-2.5 rounded-lg">
                                                 <p className="font-semibold text-slate-900  text-[10px] uppercase mb-0.5">Template 2 — Chief Editor Bio</p>
-                                                <code className="text-slate-600  select-all block bg-slate-55  p-1.5 rounded font-mono text-[10px] border border-slate-100">
+                                                <code className="text-slate-600  select-all block bg-slate-55  p-1.5 rounded-sm font-mono text-[10px] border border-slate-100">
                                                     *Factual summary prepared by the Editorial Team at CorpLawUpdates.in.*
                                                 </code>
                                             </div>
                                             <div className="bg-white admin-card-glass  p-2.5 rounded-lg">
                                                 <p className="font-semibold text-slate-900  text-[10px] uppercase mb-0.5">Template 3 — Research Team Bio</p>
-                                                <code className="text-slate-600  select-all block bg-slate-55  p-1.5 rounded font-mono text-[10px] border border-slate-100">
+                                                <code className="text-slate-600  select-all block bg-slate-55  p-1.5 rounded-sm font-mono text-[10px] border border-slate-100">
                                                     *This article has been researched and compiled by the corporate intelligence team at CorpLawUpdates.in to provide verified regulatory updates.*
                                                 </code>
                                             </div>
@@ -740,7 +740,7 @@ export default function EditArticle() {
                                 type="date"
                                 value={effectiveDate}
                                 onChange={(e) => setEffectiveDate(e.target.value)}
-                                className="border border-slate-300  rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent w-full bg-white"
+                                className="border border-slate-300  rounded-lg px-4 py-3 text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-amber-400 focus:border-transparent w-full bg-white"
                             />
                             <p className="text-xs text-slate-500  mt-1">
                                 Shown on article card and page for quick reference
@@ -758,7 +758,7 @@ export default function EditArticle() {
                                 id="impactLevel"
                                 value={impactLevel}
                                 onChange={(e) => setImpactLevel(e.target.value as 'high' | 'medium' | 'low' | '')}
-                                className="w-full border border-slate-300  rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent bg-white"
+                                className="w-full border border-slate-300  rounded-lg px-4 py-3 text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-amber-400 focus:border-transparent bg-white"
                             >
                                 <option value="">Select impact level...</option>
                                 <option value="high">🔴 High Impact — Major regulatory change</option>
@@ -782,7 +782,7 @@ export default function EditArticle() {
                                     onChange={(e) => setQuickAnswer(e.target.value)}
                                     placeholder="Direct 1-2 sentence answer to the most common query about this article..."
                                     rows={2}
-                                    className="w-full border border-slate-300  rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white"
+                                    className="w-full border border-slate-300  rounded-lg px-4 py-3 text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-amber-400 bg-white"
                                 />
                             </div>
 
@@ -794,7 +794,7 @@ export default function EditArticle() {
                                         value={regulationRef}
                                         onChange={(e) => setRegulationRef(e.target.value)}
                                         placeholder="e.g. Section 135 of Companies Act"
-                                        className="w-full border border-slate-300  rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white"
+                                        className="w-full border border-slate-300  rounded-lg px-4 py-3 text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-amber-400 bg-white"
                                     />
                                 </div>
                                 <div>
@@ -803,7 +803,7 @@ export default function EditArticle() {
                                         type="date"
                                         value={lastAmended}
                                         onChange={(e) => setLastAmended(e.target.value)}
-                                        className="w-full border border-slate-300  rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white"
+                                        className="w-full border border-slate-300  rounded-lg px-4 py-3 text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-amber-400 bg-white"
                                     />
                                 </div>
                             </div>
@@ -814,14 +814,14 @@ export default function EditArticle() {
                                     type="date"
                                     value={lastVerified}
                                     onChange={(e) => setLastVerified(e.target.value)}
-                                    className="w-full border border-slate-300  rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white"
+                                    className="w-full border border-slate-300  rounded-lg px-4 py-3 text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-amber-400 bg-white"
                                 />
                             </div>
 
                             <div>
                                 <div className="flex justify-between items-center mb-2">
                                     <label className="block text-sm font-semibold text-slate-900">Key Takeaways (Bullet points)</label>
-                                    <button type="button" onClick={addKeyTakeaway} className="text-xs bg-slate-100  hover:bg-slate-200 text-slate-700  px-2.5 py-1 rounded">+ Add Point</button>
+                                    <button type="button" onClick={addKeyTakeaway} className="text-xs bg-slate-100  hover:bg-slate-200 text-slate-700  px-2.5 py-1 rounded-sm">+ Add Point</button>
                                 </div>
                                 <div className="space-y-2">
                                     {keyTakeaways.map((kt, idx) => (
@@ -831,7 +831,7 @@ export default function EditArticle() {
                                                 value={kt}
                                                 onChange={(e) => updateKeyTakeaway(idx, e.target.value)}
                                                 placeholder={`Takeaway point ${idx + 1}...`}
-                                                className="flex-1 border border-slate-300  rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 text-slate-900 bg-white bg-slate-50"
+                                                className="flex-1 border border-slate-300  rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-400 text-slate-900 bg-white bg-slate-50"
                                             />
                                             <button type="button" onClick={() => removeKeyTakeaway(idx)} className="text-slate-500 hover:text-red-500 px-2">×</button>
                                         </div>
@@ -846,7 +846,7 @@ export default function EditArticle() {
                                         type="checkbox"
                                         checked={hasSteps}
                                         onChange={(e) => setHasSteps(e.target.checked)}
-                                        className="rounded border-slate-300 text-amber-500 focus:ring-amber-500"
+                                        className="rounded-sm border-slate-300 text-amber-500 focus:ring-amber-500"
                                     />
                                     Contains"How-To" Steps (Generates HowTo Schema)
                                 </label>
@@ -855,7 +855,7 @@ export default function EditArticle() {
                                     <div className="space-y-3 bg-slate-50 admin-card-glass  p-4 rounded-xl">
                                         <div className="flex justify-between items-center">
                                             <span className="text-sm font-bold text-slate-900">Steps Builder</span>
-                                            <button type="button" onClick={addStep} className="text-xs bg-amber-100 text-amber-700 hover:bg-amber-200 px-2.5 py-1 rounded">+ Add Step</button>
+                                            <button type="button" onClick={addStep} className="text-xs bg-amber-100 text-amber-700 hover:bg-amber-200 px-2.5 py-1 rounded-sm">+ Add Step</button>
                                         </div>
                                         {stepsJson.map((step, idx) => (
                                             <div key={idx} className="flex gap-3 bg-white bg-slate-50 p-3 rounded-lg border border-slate-200  flex-col sm:flex-row">
@@ -865,14 +865,14 @@ export default function EditArticle() {
                                                         value={step.heading}
                                                         onChange={(e) => updateStep(idx, 'heading', e.target.value)}
                                                         placeholder={`Step ${idx + 1} Heading...`}
-                                                        className="w-full border border-slate-300  rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-amber-400 bg-transparent text-slate-900"
+                                                        className="w-full border border-slate-300  rounded-sm px-3 py-1.5 text-sm focus:outline-hidden focus:ring-1 focus:ring-amber-400 bg-transparent text-slate-900"
                                                     />
                                                     <textarea
                                                         value={step.description}
                                                         onChange={(e) => updateStep(idx, 'description', e.target.value)}
                                                         placeholder={`Step ${idx + 1} Description...`}
                                                         rows={2}
-                                                        className="w-full border border-slate-300  rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-amber-400 bg-transparent resize-none text-slate-900"
+                                                        className="w-full border border-slate-300  rounded-sm px-3 py-1.5 text-sm focus:outline-hidden focus:ring-1 focus:ring-amber-400 bg-transparent resize-none text-slate-900"
                                                     />
                                                 </div>
                                                 <button type="button" onClick={() => removeStep(idx)} className="text-slate-500 hover:text-red-500 pt-1 shrink-0">×</button>
@@ -884,7 +884,7 @@ export default function EditArticle() {
                             </div>
                         </div>
                     {/* Content Markdown */}
-                    <div className="border border-slate-200/80  rounded-xl p-5 bg-white bg-white shadow-card ring-1 ring-slate-900/[0.02]" data-color-mode="dark">
+                    <div className="border border-slate-200/80  rounded-xl p-5 bg-white bg-white shadow-card ring-1 ring-slate-900/2" data-color-mode="dark">
                         {content.includes('ibb.co') && (
                             <div className="text-amber-600 text-sm mt-1 mb-2">
                                 <span><strong>SEO Warning:</strong> Please upload this image directly to our Supabase Storage instead of using 'ibb.co' or third-party hosts.</span>
@@ -912,7 +912,7 @@ export default function EditArticle() {
                                     type="button"
                                     onClick={() => fileInputRef.current?.click()}
                                     disabled={uploadingImage}
-                                    className="text-xs font-medium bg-slate-100  hover:bg-slate-200  text-slate-700  px-3 py-1.5 rounded disabled:opacity-50 flex items-center gap-1 transition-colors"
+                                    className="text-xs font-medium bg-slate-100  hover:bg-slate-200  text-slate-700  px-3 py-1.5 rounded-sm disabled:opacity-50 flex items-center gap-1 transition-colors"
                                 >
                                     {uploadingImage ? '⏳ Uploading...' : '📎 Upload Image'}
                                 </button>
@@ -940,7 +940,7 @@ export default function EditArticle() {
                     </div>
 
                     {/* SEO Fields */}
-                    <div className="border border-slate-200/80  rounded-xl p-5 bg-white bg-white shadow-card ring-1 ring-slate-900/[0.02] space-y-4">
+                    <div className="border border-slate-200/80  rounded-xl p-5 bg-white bg-white shadow-card ring-1 ring-slate-900/2 space-y-4">
                         <h3 className="font-bold text-slate-900  text-sm border-b border-slate-100  pb-2 mb-3">Search Engine Optimization (SEO)</h3>
                         <div>
                             <label className="block text-sm font-semibold text-slate-900  mb-1">SEO Title (max 80 chars)</label>
@@ -949,7 +949,7 @@ export default function EditArticle() {
                                 value={seoTitle}
                                 onChange={(e) => setSeoTitle(e.target.value)}
                                 placeholder="Optimized title for search engines..."
-                                className="w-full border border-slate-300  rounded-lg px-3 py-2 text-sm text-slate-900 bg-white  focus:ring-2 focus:ring-gold focus:outline-none"
+                                className="w-full border border-slate-300  rounded-lg px-3 py-2 text-sm text-slate-900 bg-white  focus:ring-2 focus:ring-gold focus:outline-hidden"
                                 maxLength={80}
                             />
                             <p className="text-xs text-slate-500  mt-1 text-right">{seoTitle.length}/80</p>
@@ -960,7 +960,7 @@ export default function EditArticle() {
                                 value={seoDescription}
                                 onChange={(e) => setSeoDescription(e.target.value)}
                                 placeholder="Brief description to appear in search results..."
-                                className="w-full border border-slate-300  rounded-lg px-3 py-2 text-sm text-slate-900 bg-white  focus:ring-2 focus:ring-gold focus:outline-none resize-none"
+                                className="w-full border border-slate-300  rounded-lg px-3 py-2 text-sm text-slate-900 bg-white  focus:ring-2 focus:ring-gold focus:outline-hidden resize-none"
                                 rows={3}
                                 maxLength={250}
                             />
@@ -969,7 +969,7 @@ export default function EditArticle() {
                     </div>
 
                     {/* Tags */}
-                    <div className="border border-slate-200/80  rounded-xl p-5 bg-white bg-white shadow-card ring-1 ring-slate-900/[0.02]">
+                    <div className="border border-slate-200/80  rounded-xl p-5 bg-white bg-white shadow-card ring-1 ring-slate-900/2">
                         <label className="block text-sm font-bold text-slate-900  mb-1">Tags (press Enter to add)</label>
                         <input
                             type="text"
@@ -978,12 +978,12 @@ export default function EditArticle() {
                             onKeyDown={handleTagKeyDown}
                             onPaste={handleTagPaste}
                             placeholder="Type tag and press Enter or comma, or paste multiple tags separated by commas"
-                            className="w-full border border-slate-300  rounded-lg px-3 py-2 text-sm text-slate-900 bg-white bg-slate-50 focus:ring-2 focus:ring-gold focus:outline-none mb-3"
+                            className="w-full border border-slate-300  rounded-lg px-3 py-2 text-sm text-slate-900 bg-white bg-slate-50 focus:ring-2 focus:ring-gold focus:outline-hidden mb-3"
                             disabled={tags.length >= 10}
                         />
                         <div className="flex flex-wrap gap-2">
                             {tags.map(tag => (
-                                <span key={tag} className="inline-flex items-center gap-1 bg-gold/20 text-slate-900 dark:text-amber-300 text-xs font-medium px-2.5 py-1 rounded">
+                                <span key={tag} className="inline-flex items-center gap-1 bg-gold/20 text-slate-900 dark:text-amber-300 text-xs font-medium px-2.5 py-1 rounded-sm">
                                     {tag}
                                     <button onClick={() => removeTag(tag)} className="text-slate-900 dark:text-amber-300 hover:text-red-500 ml-1">×</button>
                                 </span>
@@ -995,7 +995,7 @@ export default function EditArticle() {
                     </div>
 
                     {/* Source and Advanced */}
-                    <div className="border border-slate-200/80  rounded-xl p-5 bg-white bg-white shadow-card ring-1 ring-slate-900/[0.02] grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div className="border border-slate-200/80  rounded-xl p-5 bg-white bg-white shadow-card ring-1 ring-slate-900/2 grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div className="md:col-span-2">
                             <h3 className="font-bold text-slate-900  text-sm border-b border-slate-100  pb-2 mb-4">Sources & Publishing</h3>
                         </div>
@@ -1007,7 +1007,7 @@ export default function EditArticle() {
                                 value={sourceName}
                                 onChange={(e) => setSourceName(e.target.value)}
                                 placeholder="e.g. MCA Official Circular"
-                                className="w-full border border-slate-300  rounded-lg px-3 py-2 text-sm text-slate-900 bg-white bg-slate-50 focus:ring-2 focus:ring-gold focus:outline-none"
+                                className="w-full border border-slate-300  rounded-lg px-3 py-2 text-sm text-slate-900 bg-white bg-slate-50 focus:ring-2 focus:ring-gold focus:outline-hidden"
                             />
                         </div>
                         <div>
@@ -1017,14 +1017,14 @@ export default function EditArticle() {
                                 value={sourceUrl}
                                 onChange={(e) => setSourceUrl(e.target.value)}
                                 placeholder="https://..."
-                                className="w-full border border-slate-300  rounded-lg px-3 py-2 text-sm text-slate-900 bg-white  focus:ring-2 focus:ring-gold focus:outline-none"
+                                className="w-full border border-slate-300  rounded-lg px-3 py-2 text-sm text-slate-900 bg-white  focus:ring-2 focus:ring-gold focus:outline-hidden"
                             />
                         </div>
 
                         <div className="md:col-span-2 bg-slate-50  p-4 rounded-lg border border-slate-100">
                             <div className="flex justify-between items-center mb-3">
                                 <label className="block text-sm font-bold text-slate-900">Additional Sources</label>
-                                <button type="button" onClick={addSource} className="text-xs bg-white admin-card-glass hover:border-amber-300 dark:hover:border-amber-500 text-slate-700  px-3 py-1.5 rounded transition-colors">+ Add Source</button>
+                                <button type="button" onClick={addSource} className="text-xs bg-white admin-card-glass hover:border-amber-300 dark:hover:border-amber-500 text-slate-700  px-3 py-1.5 rounded-sm transition-colors">+ Add Source</button>
                             </div>
                             <div className="space-y-3">
                                 {sources.map((s, idx) => (
@@ -1035,14 +1035,14 @@ export default function EditArticle() {
                                                 value={s.name}
                                                 onChange={(e) => updateSource(idx, 'name', e.target.value)}
                                                 placeholder="Source Name"
-                                                className="w-full border border-slate-300  rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 text-slate-900 bg-white bg-slate-50"
+                                                className="w-full border border-slate-300  rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-400 text-slate-900 bg-white bg-slate-50"
                                             />
                                             <input
                                                 type="url"
                                                 value={s.url}
                                                 onChange={(e) => updateSource(idx, 'url', e.target.value)}
                                                 placeholder="Source URL"
-                                                className="w-full border border-slate-300  rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 text-slate-900 bg-white"
+                                                className="w-full border border-slate-300  rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-400 text-slate-900 bg-white"
                                             />
                                         </div>
                                         <button type="button" onClick={() => removeSource(idx)} className="text-slate-500 hover:text-red-500 p-2 mt-1 bg-white admin-card-glass">×</button>
@@ -1058,7 +1058,7 @@ export default function EditArticle() {
                                 type="datetime-local"
                                 value={publishedAt}
                                 onChange={(e) => setPublishedAt(e.target.value)}
-                                className="w-full border border-slate-300  rounded-lg px-3 py-2 text-sm text-slate-900 bg-white  focus:ring-2 focus:ring-gold focus:outline-none"
+                                className="w-full border border-slate-300  rounded-lg px-3 py-2 text-sm text-slate-900 bg-white  focus:ring-2 focus:ring-gold focus:outline-hidden"
                             />
                         </div>
                         <div className="flex flex-col justify-center">
@@ -1085,7 +1085,7 @@ export default function EditArticle() {
                 {/* RIGHT COLUMN - PREVIEW */}
                 <div className={`w-full lg:w-[40%] ${activeTab === 'write' ? 'hidden lg:block' : 'block'}`}>
                     <div className="sticky top-24 space-y-6">
-                        <div className="border border-slate-200/80  rounded-xl p-6 bg-white bg-white shadow-card ring-1 ring-slate-900/[0.02] min-h-[600px]">
+                        <div className="border border-slate-200/80  rounded-xl p-6 bg-white bg-white shadow-card ring-1 ring-slate-900/2 min-h-[600px]">
                         <h3 className="text-xs font-bold text-slate-500  uppercase tracking-wider mb-6 pb-4 border-b border-slate-100">Live Preview</h3>
 
                         {!title && !content ? (
@@ -1201,7 +1201,7 @@ export default function EditArticle() {
 
                         {/* Warning */}
                         <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/30 rounded-xl p-4 flex gap-3">
-                            <span className="text-xl flex-shrink-0">⚠️</span>
+                            <span className="text-xl shrink-0">⚠️</span>
                             <div>
                                 <p className="font-semibold text-amber-900 dark:text-amber-300 text-sm">This will modify your content</p>
                                 <p className="text-amber-700 dark:text-amber-400 text-sm mt-1">
@@ -1213,7 +1213,7 @@ export default function EditArticle() {
                         {/* Preview */}
                         <div>
                             <p className="text-xs font-semibold text-slate-500  uppercase tracking-wide mb-2">Preview (first 500 chars):</p>
-                            <div className="bg-slate-50 bg-slate-50 rounded-xl p-4 text-sm font-mono text-slate-700  max-h-40 overflow-y-auto whitespace-pre-wrap break-words border border-slate-100">
+                            <div className="bg-slate-50 bg-slate-50 rounded-xl p-4 text-sm font-mono text-slate-700  max-h-40 overflow-y-auto whitespace-pre-wrap wrap-break-word border border-slate-100">
                                 {cleanPreview.slice(0, 500)}
                                 {cleanPreview.length > 500 && '...'}
                             </div>

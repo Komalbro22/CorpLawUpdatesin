@@ -212,7 +212,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/spic
   return (
     <div id="spice-plus-workspace" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 scroll-mt-6">
       {/* 1. Header Banner */}
-      <div className="bg-gradient-to-r from-[#0F172A] via-[#1E293B] to-[#0F172A] rounded-2xl p-6 sm:p-8 text-white shadow-xl mb-8 border border-slate-800">
+      <div className="bg-linear-to-r from-[#0F172A] via-[#1E293B] to-[#0F172A] rounded-2xl p-6 sm:p-8 text-white shadow-xl mb-8 border border-slate-800">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-400/30 mb-3">
@@ -270,10 +270,10 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/spic
             <button
               key={preset.id}
               onClick={() => handleApplyPreset(preset)}
-              className="p-3 text-left rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-blue-500 dark:hover:border-blue-500 hover:shadow-sm transition-all group flex flex-col justify-between"
+              className="p-3 text-left rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 hover:border-blue-500 dark:hover:border-blue-500 hover:shadow-xs transition-all group flex flex-col justify-between"
             >
               <div>
-                <span className="inline-block px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 mb-1.5">
+                <span className="inline-block px-1.5 py-0.5 rounded-sm text-[10px] font-bold bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 mb-1.5">
                   {preset.badge}
                 </span>
                 <h4 className="text-xs font-bold text-navy dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug">
@@ -292,7 +292,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/spic
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
         {/* Left Column: Interactive Controls (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs">
             <h2 className="text-lg font-bold text-navy dark:text-white mb-5 flex items-center gap-2">
               <Building2 className="size-5 text-blue-600" />
               Company Parameters
@@ -308,7 +308,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/spic
                 placeholder="e.g. Acme Technologies Private Limited"
                 value={proposedName}
                 onChange={e => setProposedName(e.target.value)}
-                className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
@@ -322,7 +322,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/spic
                 <select
                   value={companyType}
                   onChange={e => setCompanyType(e.target.value as CompanyType)}
-                  className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="private_standard">Private Limited (Standard)</option>
                   <option value="one_person_company">One Person Company (OPC)</option>
@@ -349,7 +349,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/spic
                 <select
                   value={stateKey}
                   onChange={e => setStateKey(e.target.value)}
-                  className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 >
                   {sortedStates.map(([key, rule]) => (
                     <option key={key} value={key}>
@@ -376,7 +376,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/spic
                 step="10000"
                 value={capital}
                 onChange={e => setCapital(Math.max(0, Number(e.target.value) || 0))}
-                className="w-full px-3.5 py-2.5 text-base font-bold rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white font-tabular-nums focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2.5"
+                className="w-full px-3.5 py-2.5 text-base font-bold rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white font-tabular-nums focus:outline-hidden focus:ring-2 focus:ring-blue-500 mb-2.5"
               />
 
               {/* Quick Set Capital Buttons */}
@@ -388,7 +388,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/spic
                     onClick={() => setCapital(btn.value)}
                     className={`px-2.5 py-1 text-xs rounded-lg font-medium transition-all ${
                       capital === btn.value
-                        ? 'bg-blue-600 text-white shadow-sm'
+                        ? 'bg-blue-600 text-white shadow-xs'
                         : btn.isHighlight
                         ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800'
                         : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
@@ -414,7 +414,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/spic
                     max="15"
                     value={directorCount}
                     onChange={e => setDirectorCount(Math.max(1, Math.min(15, Number(e.target.value) || 1)))}
-                    className="w-24 px-3.5 py-2 text-sm font-bold rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-tabular-nums focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-24 px-3.5 py-2 text-sm font-bold rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-tabular-nums focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
                   <span className="text-[11px] text-slate-500 leading-tight">
                     {directorCount <= 3 ? (
@@ -440,7 +440,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/spic
                     type="checkbox"
                     checked={reserveNameSeparately}
                     onChange={e => setReserveNameSeparately(e.target.checked)}
-                    className="mt-0.5 rounded text-blue-600 focus:ring-blue-500"
+                    className="mt-0.5 rounded-sm text-blue-600 focus:ring-blue-500"
                   />
                   <div>
                     <span className="font-semibold">Reserve Name first via Part A (₹1,000)</span>
@@ -455,7 +455,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/spic
 
           {/* Savings Highlight Box */}
           {result.isMcaFeeZero && (
-            <div className="bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-transparent border border-emerald-500/20 rounded-2xl p-5 flex items-start gap-3.5">
+            <div className="bg-linear-to-r from-emerald-500/10 via-emerald-500/5 to-transparent border border-emerald-500/20 rounded-2xl p-5 flex items-start gap-3.5">
               <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 shrink-0">
                 <BadgePercent className="size-5" />
               </div>
@@ -574,7 +574,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/spic
       </div>
 
       {/* 4. State Stamp Duty Comparison Table (Hub Benchmark) */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm mb-12">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-xs mb-12">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <div>
             <h3 className="text-xl font-bold text-navy dark:text-white flex items-center gap-2">
@@ -615,7 +615,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/spic
                     <td className="px-4 py-3.5 flex items-center gap-2 text-slate-900 dark:text-white">
                       <span>{hub.stateName}</span>
                       {isSelected && (
-                        <span className="px-1.5 py-0.5 rounded text-[10px] bg-blue-600 text-white font-bold">
+                        <span className="px-1.5 py-0.5 rounded-sm text-[10px] bg-blue-600 text-white font-bold">
                           Selected
                         </span>
                       )}
@@ -657,7 +657,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/spic
       </div>
 
       {/* 5. Mandatory 180-Day Post-Incorporation Compliance Roadmap */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm mb-16">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-xs mb-16">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <div>
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800 mb-2">
@@ -685,11 +685,11 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/spic
             >
               <div>
                 <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300">
+                  <span className="px-2 py-0.5 rounded-sm text-[10px] font-bold uppercase bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300">
                     {item.dayWindow}
                   </span>
                   {item.isCritical && (
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-red-100 dark:bg-red-950/40 text-red-700 dark:text-red-300">
+                    <span className="px-2 py-0.5 rounded-sm text-[10px] font-bold bg-red-100 dark:bg-red-950/40 text-red-700 dark:text-red-300">
                       High Risk
                     </span>
                   )}

@@ -257,7 +257,7 @@ export default function MouClient() {
   return (
     <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl overflow-hidden mb-12">
       {/* Workstation Top Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 border-b border-slate-800">
+      <div className="bg-linear-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 border-b border-slate-800">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2 flex-wrap">
@@ -283,7 +283,7 @@ export default function MouClient() {
             <button
               onClick={() => handleDownload('mou', 'docx')}
               disabled={!!isDownloading}
-              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm transition disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-xs transition disabled:opacity-50"
             >
               <Download className="w-4 h-4" />
               {isDownloading === 'mou-docx' ? 'Generating Word...' : 'Download Word (.docx)'}
@@ -291,7 +291,7 @@ export default function MouClient() {
             <button
               onClick={() => handleDownload('mou', 'pdf')}
               disabled={!!isDownloading}
-              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow-sm transition disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow-xs transition disabled:opacity-50"
             >
               <Download className="w-4 h-4" />
               {isDownloading === 'mou-pdf' ? 'Generating PDF...' : 'Download PDF (.pdf)'}
@@ -331,7 +331,7 @@ export default function MouClient() {
                   onClick={() => handleSelectPreset(typeKey)}
                   className={`p-2.5 rounded-xl text-left border transition flex flex-col justify-between ${
                     isSelected
-                      ? 'bg-indigo-600/30 border-indigo-400 text-white shadow-sm'
+                      ? 'bg-indigo-600/30 border-indigo-400 text-white shadow-xs'
                       : 'bg-slate-800/60 border-slate-700 text-slate-300 hover:bg-slate-800'
                   }`}
                 >
@@ -374,13 +374,13 @@ export default function MouClient() {
               placeholder="e.g. AI SaaS company partnering with a Mumbai logistics firm for warehouse automation, 50-50 revenue split, 1-year pilot..."
               value={aiPrompt}
               onChange={e => setAiPrompt(e.target.value)}
-              className="flex-1 text-xs px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+              className="flex-1 text-xs px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-white placeholder-slate-500 focus:outline-hidden focus:border-indigo-500"
             />
             <button
               type="button"
               onClick={handleAiGenerate}
               disabled={isAiGenerating}
-              className="px-4 py-2 rounded-lg bg-gradient-to-r from-amber-500 to-indigo-600 hover:from-amber-600 hover:to-indigo-700 text-white font-bold text-xs shadow transition disabled:opacity-50 whitespace-nowrap flex items-center justify-center gap-1.5"
+              className="px-4 py-2 rounded-lg bg-linear-to-r from-amber-500 to-indigo-600 hover:from-amber-600 hover:to-indigo-700 text-white font-bold text-xs shadow-sm transition disabled:opacity-50 whitespace-nowrap flex items-center justify-center gap-1.5"
             >
               <Sparkles className="w-3.5 h-3.5" />
               {isAiGenerating ? 'Drafting with AI...' : 'Draft with AI ✨'}
@@ -395,7 +395,7 @@ export default function MouClient() {
                 key={idx}
                 type="button"
                 onClick={() => setAiPrompt(qp)}
-                className="shrink-0 px-2.5 py-1 rounded bg-slate-900/80 hover:bg-slate-700 border border-slate-700 text-slate-300 truncate max-w-xs transition text-left"
+                className="shrink-0 px-2.5 py-1 rounded-sm bg-slate-900/80 hover:bg-slate-700 border border-slate-700 text-slate-300 truncate max-w-xs transition text-left"
               >
                 {qp}
               </button>
@@ -403,7 +403,7 @@ export default function MouClient() {
           </div>
 
           {aiError && (
-            <p className="text-xs text-rose-400 bg-rose-950/40 p-2 rounded border border-rose-800">
+            <p className="text-xs text-rose-400 bg-rose-950/40 p-2 rounded-sm border border-rose-800">
               {aiError}
             </p>
           )}
@@ -415,7 +415,7 @@ export default function MouClient() {
             onClick={() => setActiveTab('mou')}
             className={`px-4 py-2 rounded-t-lg font-semibold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'mou'
-                ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 border-t-2 border-indigo-500 shadow-sm'
+                ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 border-t-2 border-indigo-500 shadow-xs'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
             }`}
           >
@@ -426,7 +426,7 @@ export default function MouClient() {
             onClick={() => setActiveTab('nda')}
             className={`px-4 py-2 rounded-t-lg font-semibold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'nda'
-                ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 border-t-2 border-indigo-500 shadow-sm'
+                ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 border-t-2 border-indigo-500 shadow-xs'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
             }`}
           >
@@ -437,7 +437,7 @@ export default function MouClient() {
             onClick={() => setActiveTab('matrix')}
             className={`px-4 py-2 rounded-t-lg font-semibold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'matrix'
-                ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 border-t-2 border-indigo-500 shadow-sm'
+                ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 border-t-2 border-indigo-500 shadow-xs'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
             }`}
           >
@@ -448,7 +448,7 @@ export default function MouClient() {
             onClick={() => setActiveTab('roadmap')}
             className={`px-4 py-2 rounded-t-lg font-semibold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'roadmap'
-                ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 border-t-2 border-indigo-500 shadow-sm'
+                ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 border-t-2 border-indigo-500 shadow-xs'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
             }`}
           >
@@ -463,7 +463,7 @@ export default function MouClient() {
         {/* LEFT COLUMN: Customizer Panel (5 cols) */}
         <div className="lg:col-span-5 p-6 bg-slate-50 dark:bg-slate-900/50 border-r border-slate-200 dark:border-slate-800 space-y-6 overflow-y-auto max-h-[850px]">
           {/* Document Title & Date */}
-          <div className="space-y-3 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-sm">
+          <div className="space-y-3 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-xs">
             <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">
               Document Particulars & Jurisdiction
             </h4>
@@ -518,7 +518,7 @@ export default function MouClient() {
           </div>
 
           {/* Party A Particulars */}
-          <div className="space-y-3 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-sm">
+          <div className="space-y-3 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-xs">
             <h4 className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider flex items-center justify-between">
               <span>Party A (First Party)</span>
               <span className="text-[10px] text-slate-400">Initiator</span>
@@ -600,7 +600,7 @@ export default function MouClient() {
           </div>
 
           {/* Party B Particulars */}
-          <div className="space-y-3 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-sm">
+          <div className="space-y-3 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-xs">
             <h4 className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider flex items-center justify-between">
               <span>Party B (Second Party)</span>
               <span className="text-[10px] text-slate-400">Collaborator</span>
@@ -682,7 +682,7 @@ export default function MouClient() {
           </div>
 
           {/* Scope & Commercial Terms */}
-          <div className="space-y-3 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-sm">
+          <div className="space-y-3 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-xs">
             <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">
               Collaboration Purpose & Scope
             </h4>
@@ -725,7 +725,7 @@ export default function MouClient() {
           </div>
 
           {/* Responsibilities Builder: Party A */}
-          <div className="space-y-2.5 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-sm">
+          <div className="space-y-2.5 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-xs">
             <div className="flex items-center justify-between">
               <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200">
                 Roles of Party A ({formData.obligationsPartyA.length})
@@ -748,7 +748,7 @@ export default function MouClient() {
                     type="text"
                     value={ob}
                     onChange={e => handleObligationTextChange('A', idx, e.target.value)}
-                    className="flex-1 text-xs px-2.5 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+                    className="flex-1 text-xs px-2.5 py-1.5 rounded-sm border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
                   />
                   {formData.obligationsPartyA.length > 1 && (
                     <button
@@ -765,7 +765,7 @@ export default function MouClient() {
           </div>
 
           {/* Responsibilities Builder: Party B */}
-          <div className="space-y-2.5 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-sm">
+          <div className="space-y-2.5 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-xs">
             <div className="flex items-center justify-between">
               <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200">
                 Roles of Party B ({formData.obligationsPartyB.length})
@@ -788,7 +788,7 @@ export default function MouClient() {
                     type="text"
                     value={ob}
                     onChange={e => handleObligationTextChange('B', idx, e.target.value)}
-                    className="flex-1 text-xs px-2.5 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+                    className="flex-1 text-xs px-2.5 py-1.5 rounded-sm border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
                   />
                   {formData.obligationsPartyB.length > 1 && (
                     <button
@@ -805,7 +805,7 @@ export default function MouClient() {
           </div>
 
           {/* Dispute Resolution & Jurisdiction */}
-          <div className="space-y-3 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-sm">
+          <div className="space-y-3 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-xs">
             <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider flex items-center justify-between">
               <span>Arbitration Seat & Governing Law</span>
               <span className="text-[10px] text-purple-600 dark:text-purple-400 font-semibold">
@@ -914,19 +914,19 @@ export default function MouClient() {
                   If an MoU is purely an expression of mutual intent with NO binding commercial liabilities, it can be printed on company letterhead with nominal stamp paper (₹100 to ₹500 under Article 5 &apos;Agreement&apos;). However, if the MoU contains binding commercial commitments, equity transfer covenants, or penalty clauses, state revenue authorities may treat it as a full-fledged contract and levy ad-valorem stamp duty.
                 </p>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px]">
-                  <div className="p-2.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                  <div className="p-2.5 rounded-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                     <span className="font-bold block text-slate-900 dark:text-white">Maharashtra</span>
                     <span className="text-slate-500">Art. 5(h): ₹500 stamp</span>
                   </div>
-                  <div className="p-2.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                  <div className="p-2.5 rounded-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                     <span className="font-bold block text-slate-900 dark:text-white">Delhi (NCT)</span>
                     <span className="text-slate-500">Art. 5: ₹100 non-judicial</span>
                   </div>
-                  <div className="p-2.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                  <div className="p-2.5 rounded-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                     <span className="font-bold block text-slate-900 dark:text-white">Karnataka</span>
                     <span className="text-slate-500">Art. 5: ₹200 to ₹500</span>
                   </div>
-                  <div className="p-2.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                  <div className="p-2.5 rounded-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                     <span className="font-bold block text-slate-900 dark:text-white">Tamil Nadu</span>
                     <span className="text-slate-500">Art. 5: ₹100 stamp</span>
                   </div>
@@ -947,7 +947,7 @@ export default function MouClient() {
               </div>
 
               <div className="space-y-3 text-xs sm:text-sm">
-                <div className="flex items-start gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div className="flex items-start gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
                   <span className="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold shrink-0 text-xs">
                     1
                   </span>
@@ -961,7 +961,7 @@ export default function MouClient() {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div className="flex items-start gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
                   <span className="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold shrink-0 text-xs">
                     2
                   </span>
@@ -975,7 +975,7 @@ export default function MouClient() {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div className="flex items-start gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
                   <span className="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold shrink-0 text-xs">
                     3
                   </span>
@@ -989,7 +989,7 @@ export default function MouClient() {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div className="flex items-start gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
                   <span className="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold shrink-0 text-xs">
                     4
                   </span>
@@ -1003,7 +1003,7 @@ export default function MouClient() {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div className="flex items-start gap-3 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
                   <span className="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-bold shrink-0 text-xs">
                     5
                   </span>
@@ -1046,7 +1046,7 @@ export default function MouClient() {
                 </div>
               </div>
 
-              <div className="w-full min-w-0 max-w-full box-border overflow-x-auto break-words bg-slate-50/50 dark:bg-slate-900/40 p-4 sm:p-8 rounded-xl border border-slate-200/90 dark:border-slate-800 font-serif text-slate-900 dark:text-slate-100 shadow-inner text-xs sm:text-sm leading-relaxed space-y-4">
+              <div className="w-full min-w-0 max-w-full box-border overflow-x-auto wrap-break-word bg-slate-50/50 dark:bg-slate-900/40 p-4 sm:p-8 rounded-xl border border-slate-200/90 dark:border-slate-800 font-serif text-slate-900 dark:text-slate-100 shadow-inner text-xs sm:text-sm leading-relaxed space-y-4">
                 <div className="text-center space-y-1 pb-4 border-b border-slate-300 dark:border-slate-700">
                   <h3 className="text-base font-bold uppercase underline">
                     NON-DISCLOSURE & CONFIDENTIALITY UNDERTAKING
@@ -1110,7 +1110,7 @@ export default function MouClient() {
               </div>
 
               {/* Rendered Legal Document Paper */}
-                <div className="w-full min-w-0 max-w-full box-border overflow-x-auto break-words bg-slate-50/50 dark:bg-slate-900/40 p-4 sm:p-8 rounded-xl border border-slate-200/90 dark:border-slate-800 font-serif text-slate-900 dark:text-slate-100 shadow-inner text-xs sm:text-sm leading-relaxed space-y-4">
+                <div className="w-full min-w-0 max-w-full box-border overflow-x-auto wrap-break-word bg-slate-50/50 dark:bg-slate-900/40 p-4 sm:p-8 rounded-xl border border-slate-200/90 dark:border-slate-800 font-serif text-slate-900 dark:text-slate-100 shadow-inner text-xs sm:text-sm leading-relaxed space-y-4">
                 <div className="text-center space-y-1 pb-4 border-b border-slate-300 dark:border-slate-700">
                   <h3 className="text-base sm:text-lg font-bold tracking-wide uppercase underline">
                     {formData.title}
@@ -1265,7 +1265,7 @@ export default function MouClient() {
               <button
                 onClick={() => handleDownload('mou', 'docx')}
                 disabled={!!isDownloading}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow transition disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm transition disabled:opacity-50"
               >
                 <Download className="w-3.5 h-3.5" />
                 Word (.docx)
@@ -1273,7 +1273,7 @@ export default function MouClient() {
               <button
                 onClick={() => handleDownload('mou', 'pdf')}
                 disabled={!!isDownloading}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow transition disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow-sm transition disabled:opacity-50"
               >
                 <Download className="w-3.5 h-3.5" />
                 PDF (.pdf)

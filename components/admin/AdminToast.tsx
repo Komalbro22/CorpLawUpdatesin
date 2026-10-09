@@ -58,7 +58,7 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: (id: string)
                 type="button"
                 onClick={dismiss}
                 aria-label="Dismiss notification"
-                className="shrink-0 opacity-60 hover:opacity-100 transition-opacity rounded p-0.5"
+                className="shrink-0 opacity-60 hover:opacity-100 transition-opacity rounded-sm p-0.5"
             >
                 <X className="w-3.5 h-3.5" aria-hidden />
             </button>

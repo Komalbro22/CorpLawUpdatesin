@@ -218,7 +218,7 @@ export default function UnifiedCalculator() {
   }
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-[16px] shadow-sm border border-slate-200 dark:border-slate-800 p-8 w-full max-w-4xl mx-auto mb-16 relative overflow-hidden font-inter transition-colors duration-200">
+    <div className="bg-white dark:bg-slate-900 rounded-[16px] shadow-xs border border-slate-200 dark:border-slate-800 p-8 w-full max-w-4xl mx-auto mb-16 relative overflow-hidden font-inter transition-colors duration-200">
       <div className="absolute top-0 right-0 size-32 bg-blue-50 dark:bg-blue-950/20 rounded-bl-full pointer-events-none" aria-hidden="true" />
       
       <div className="mb-8">
@@ -256,7 +256,7 @@ export default function UnifiedCalculator() {
               onClick={() => setSelectedSlug(item.slug)}
               className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all ${
                 selectedSlug === item.slug
-                  ? 'bg-blue-600 text-white shadow-sm'
+                  ? 'bg-blue-600 text-white shadow-xs'
                   : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
               }`}
             >
@@ -277,7 +277,7 @@ export default function UnifiedCalculator() {
             name="form_slug"
             value={selectedSlug}
             onChange={e => setSelectedSlug(e.target.value)}
-            className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-[4px] px-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm"
+            className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-[4px] px-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-hidden transition-all shadow-xs"
           >
             {allForms.map(form => (
               <option key={form.slug} value={form.slug}>
@@ -295,7 +295,7 @@ export default function UnifiedCalculator() {
             value={companyType}
             onChange={e => setCompanyType(e.target.value)}
             disabled={isSpice || isDir3Kyc || isDir3 || isStk2}
-            className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-[4px] px-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm disabled:bg-slate-50 dark:disabled:bg-slate-800/40 disabled:text-slate-400 dark:disabled:text-slate-500"
+            className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-[4px] px-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-hidden transition-all shadow-xs disabled:bg-slate-50 dark:disabled:bg-slate-800/40 disabled:text-slate-400 dark:disabled:text-slate-500"
           >
             <option value="private">Private Limited Company</option>
             <option value="public">Public Limited Company</option>
@@ -316,7 +316,7 @@ export default function UnifiedCalculator() {
               value={capital}
               onChange={e => setCapital(Number(e.target.value))}
               disabled={isDir3Kyc || isDir3 || isStk2}
-              className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-[4px] pl-8 pr-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm disabled:bg-slate-50 dark:disabled:bg-slate-800/40 disabled:text-slate-400 dark:disabled:text-slate-500 tabular-nums"
+              className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-[4px] pl-8 pr-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-hidden transition-all shadow-xs disabled:bg-slate-50 dark:disabled:bg-slate-800/40 disabled:text-slate-400 dark:disabled:text-slate-500 tabular-nums"
             />
           </div>
         </div>
@@ -331,7 +331,7 @@ export default function UnifiedCalculator() {
             value={delay}
             onChange={e => setDelay(Number(e.target.value))}
             disabled={isSpice || isDir3 || isStk2}
-            className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-[4px] px-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm disabled:bg-slate-50 dark:disabled:bg-slate-800/40 disabled:text-slate-400 dark:disabled:text-slate-500 tabular-nums"
+            className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-[4px] px-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-hidden transition-all shadow-xs disabled:bg-slate-50 dark:disabled:bg-slate-800/40 disabled:text-slate-400 dark:disabled:text-slate-500 tabular-nums"
           />
         </div>
 
@@ -349,7 +349,7 @@ export default function UnifiedCalculator() {
                     min="0"
                     value={newCapital}
                     onChange={e => setNewCapital(Number(e.target.value))}
-                    className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-[4px] pl-8 pr-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm tabular-nums"
+                    className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-[4px] pl-8 pr-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-hidden transition-all shadow-xs tabular-nums"
                   />
                 </div>
               </div>
@@ -360,7 +360,7 @@ export default function UnifiedCalculator() {
                 id="mca-state-select"
                 value={state}
                 onChange={e => setState(e.target.value)}
-                className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-[4px] px-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm"
+                className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-[4px] px-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-hidden transition-all shadow-xs"
               >
                 <option value="andhrapradesh">Andhra Pradesh</option>
                 <option value="bihar">Bihar</option>
@@ -390,7 +390,7 @@ export default function UnifiedCalculator() {
                 min="0"
                 value={chargeAmount}
                 onChange={e => setChargeAmount(Number(e.target.value))}
-                className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-[4px] pl-8 pr-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition-all shadow-sm tabular-nums"
+                className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-[4px] pl-8 pr-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-hidden transition-all shadow-xs tabular-nums"
               />
             </div>
           </div>
@@ -398,14 +398,14 @@ export default function UnifiedCalculator() {
 
         {isInc22Pas3 && (
           <div className="flex flex-col justify-end">
-            <label htmlFor="mca-repeat-offender" className="flex items-center space-x-3 cursor-pointer p-2 rounded hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+            <label htmlFor="mca-repeat-offender" className="flex items-center space-x-3 cursor-pointer p-2 rounded-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
               <input
                 id="mca-repeat-offender"
                 type="checkbox"
                 name="is_repeat_offender"
                 checked={isRepeatOffender}
                 onChange={e => setIsRepeatOffender(e.target.checked)}
-                className="size-5 text-blue-600 border-slate-300 dark:border-slate-700 rounded focus:ring-blue-600 dark:bg-slate-800"
+                className="size-5 text-blue-600 border-slate-300 dark:border-slate-700 rounded-sm focus:ring-blue-600 dark:bg-slate-800"
               />
               <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Apply higher fee (Repeat delay)</span>
             </label>
@@ -414,7 +414,7 @@ export default function UnifiedCalculator() {
       </form>
 
       {/* Live Result Card */}
-      <div className="p-6 rounded-2xl border border-blue-200 dark:border-blue-900/60 bg-gradient-to-br from-blue-50/50 via-white to-slate-50 dark:from-slate-800/90 dark:via-slate-900 dark:to-slate-950 shadow-sm mb-8">
+      <div className="p-6 rounded-2xl border border-blue-200 dark:border-blue-900/60 bg-linear-to-br from-blue-50/50 via-white to-slate-50 dark:from-slate-800/90 dark:via-slate-900 dark:to-slate-950 shadow-xs mb-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-blue-100 dark:border-slate-800">
           <div>
             <span className="text-xs font-bold text-blue-700 dark:text-blue-400 uppercase tracking-wider">Total Portal Payable</span>
@@ -429,7 +429,7 @@ export default function UnifiedCalculator() {
           <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => setIsGatewayOpen(true)}
-              className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm hover:shadow"
+              className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs hover:shadow-sm"
             >
               <svg className="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
               Download PDF Report
@@ -516,7 +516,7 @@ export default function UnifiedCalculator() {
       <div className="mt-8 pt-8 border-t border-slate-200 dark:border-slate-800">
         <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Quick Compare: Common Company Forms</h3>
         <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">See how your current inputs (Company Type, Capital, Delay) affect the most frequently filed MCA forms simultaneously.</p>
-        <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
           <table className="w-full text-left text-sm whitespace-nowrap">
             <thead className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
               <tr>
@@ -534,7 +534,7 @@ export default function UnifiedCalculator() {
                     <Link href={`/tools/fee-calculator/companies/${item.form.slug}`} className="hover:underline inline-flex items-center gap-1.5">
                       <span>{item.form.formNumber}</span>
                       {['mgt-7', 'mgt-7a', 'aoc-4', 'dpt-3', 'dir-3-kyc', 'adt-1', 'chg-1', 'inc-20a', 'pas-6', 'spice-plus', 'dir-12', 'msme-1', 'pas-3', 'mgt-14', 'sh-7'].includes(item.form.slug) && (
-                        <span className="text-[10px] bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 px-1.5 py-0.5 rounded font-medium">Dedicated</span>
+                        <span className="text-[10px] bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 px-1.5 py-0.5 rounded-sm font-medium">Dedicated</span>
                       )}
                     </Link>
                   </td>
@@ -561,14 +561,14 @@ export default function UnifiedCalculator() {
 
       {/* Modal Overlay */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
           <div className="bg-white dark:bg-slate-900 rounded-xl shadow-2xl flex flex-col md:flex-row w-full max-w-3xl overflow-hidden relative animate-in zoom-in-95 duration-200 border border-slate-200 dark:border-slate-800">
             
             {/* Mobile Close Button */}
             <button
               onClick={() => setShowModal(false)}
               aria-label="Close modal"
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 z-10 p-1 md:hidden bg-white dark:bg-slate-800 rounded-full shadow-sm"
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 z-10 p-1 md:hidden bg-white dark:bg-slate-800 rounded-full shadow-xs"
             >
               <svg className="size-6" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
@@ -636,7 +636,7 @@ export default function UnifiedCalculator() {
               
               <button 
                 onClick={() => setIsGatewayOpen(true)} 
-                className="w-full bg-white text-black font-bold py-3.5 px-4 rounded-[6px] hover:bg-slate-100 transition-colors flex items-center justify-center gap-2 shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+                className="w-full bg-white text-black font-bold py-3.5 px-4 rounded-[6px] hover:bg-slate-100 transition-colors flex items-center justify-center gap-2 shadow-lg focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-500"
               >
                  Download Detailed PDF <span aria-hidden="true">→</span>
               </button>

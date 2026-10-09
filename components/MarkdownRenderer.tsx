@@ -274,7 +274,7 @@ function processInlineStyles(styleObj: any, className: string = '', isContainer:
             cLower === '#555' ||
             cLower === '#666'
         ) {
-            classes.push('text-slate-600 dark:!text-slate-300');
+            classes.push('text-slate-600 dark:text-slate-300!');
             delete processedStyle.color;
         }
     }
@@ -291,7 +291,7 @@ function processInlineStyles(styleObj: any, className: string = '', isContainer:
             bLower.includes('#eee') ||
             bLower.includes('#e0e0e0')
         ) {
-            classes.push('dark:!border-slate-800');
+            classes.push('dark:border-slate-800!');
         }
     }
     
@@ -358,7 +358,7 @@ export default function MarkdownRenderer({
         allTables.forEach((table) => {
             if (!table.closest('.overflow-x-auto')) {
                 const wrapper = document.createElement('div')
-                wrapper.className = 'w-full overflow-x-auto my-6 border border-slate-200/80 dark:border-slate-800 rounded-xl shadow-sm scrollbar-thin'
+                wrapper.className = 'w-full overflow-x-auto my-6 border border-slate-200/80 dark:border-slate-800 rounded-xl shadow-xs scrollbar-thin'
                 table.parentNode?.insertBefore(wrapper, table)
                 wrapper.appendChild(table)
             }
@@ -393,17 +393,17 @@ export default function MarkdownRenderer({
           prose-table:text-inherit
           prose-td:text-inherit
           prose-th:text-inherit
-          [&_[style*='background:#0F172A']_p]:!text-slate-100
-          [&_[style*='background:#0F172A']_h3]:!text-amber-400
-          [&_[style*='background:#0F172A']_strong]:!text-amber-400
-          [&_[style*='background:#0f2342']_p]:!text-slate-100
-          [&_[style*='background:#0f2342']_h3]:!text-amber-400
-          [&_[style*='background:#0b1121']_p]:!text-slate-100
-          [&_[style*='background:#0b1121']_h3]:!text-amber-400
-          [&_[style*='background:#0b1121']_div]:!text-slate-100
-          [&_[style*='background:#0b1121']_strong]:!text-amber-400
-          [&_[style*='background:#0b1121']_li]:!text-slate-100
-          prose-headings:font-heading prose-a:no-underline hover:prose-a:underline prose-code:bg-slate-100 dark:prose-code:bg-slate-800 dark:prose-code:text-slate-200 prose-code:px-1 prose-code:rounded prose-img:max-w-full prose-img:h-auto prose-img:rounded-lg prose-img:mx-auto prose-img:block
+          [&_[style*='background:#0F172A']_p]:text-slate-100!
+          [&_[style*='background:#0F172A']_h3]:text-amber-400!
+          [&_[style*='background:#0F172A']_strong]:text-amber-400!
+          [&_[style*='background:#0f2342']_p]:text-slate-100!
+          [&_[style*='background:#0f2342']_h3]:text-amber-400!
+          [&_[style*='background:#0b1121']_p]:text-slate-100!
+          [&_[style*='background:#0b1121']_h3]:text-amber-400!
+          [&_[style*='background:#0b1121']_div]:text-slate-100!
+          [&_[style*='background:#0b1121']_strong]:text-amber-400!
+          [&_[style*='background:#0b1121']_li]:text-slate-100!
+          prose-headings:font-heading prose-a:no-underline prose-a:hover:underline prose-code:bg-slate-100 dark:prose-code:bg-slate-800 dark:prose-code:text-slate-200 prose-code:px-1 prose-code:rounded-sm prose-img:max-w-full prose-img:h-auto prose-img:rounded-lg prose-img:mx-auto prose-img:block
         `}>
             <ReactMarkdown
                 remarkPlugins={[remarkGfm, remarkBreaks]}
@@ -488,7 +488,7 @@ export default function MarkdownRenderer({
                             <details
                                 suppressHydrationWarning
                                 style={processedStyle}
-                                className={`group my-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/40 dark:bg-slate-900/50 p-4 transition-all duration-200 open:shadow-sm dark:!border-slate-800 dark:!bg-slate-900/60 ${processedClassName}`}
+                                className={`group my-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/40 dark:bg-slate-900/50 p-4 transition-all duration-200 open:shadow-xs dark:border-slate-800! dark:bg-slate-900/60! ${processedClassName}`}
                                 {...props}
                             >
                                 {children}
@@ -599,7 +599,7 @@ export default function MarkdownRenderer({
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className, false, true);
                         return (
-                            <div suppressHydrationWarning className="w-full overflow-x-auto my-6 border border-slate-200/80 dark:border-slate-800 rounded-xl shadow-sm scrollbar-thin">
+                            <div suppressHydrationWarning className="w-full overflow-x-auto my-6 border border-slate-200/80 dark:border-slate-800 rounded-xl shadow-xs scrollbar-thin">
                                 <table suppressHydrationWarning style={processedStyle} className={`w-full border-collapse ${processedClassName}`} {...props}>
                                     {children}
                                 </table>

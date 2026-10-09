@@ -1696,7 +1696,7 @@ export default function DocumentGeneratorClient({
 
   const inputClass = `w-full border border-slate-300 
     rounded-xl px-3 py-2.5 text-sm text-navy
-    focus:outline-none focus:ring-2 
+    focus:outline-hidden focus:ring-2 
     focus:ring-amber-400 focus:border-transparent
     bg-white`
 
@@ -1819,8 +1819,8 @@ export default function DocumentGeneratorClient({
         <div className="min-w-0 space-y-6">
           
           {/* AI Prompter - Conversational Draft Mode */}
-          <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-            <div className="bg-gradient-to-r from-amber-400/20 to-amber-500/10 border-b border-slate-200 px-5 py-3.5">
+          <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
+            <div className="bg-linear-to-r from-amber-400/20 to-amber-500/10 border-b border-slate-200 px-5 py-3.5">
               <h3 className="font-bold text-navy text-sm flex items-center gap-2">
                 ✨ AI Conversational Drafting Assistant
               </h3>
@@ -1835,7 +1835,7 @@ export default function DocumentGeneratorClient({
                   value={aiPromptText}
                   onChange={(e) => setAiPromptText(e.target.value)}
                   placeholder="e.g., Draft a lease for 11 months in Mumbai, rent is 30,000, security deposit is 1.5 Lakhs, starting next month..."
-                  className="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent bg-white resize-none"
+                  className="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm text-navy focus:outline-hidden focus:ring-2 focus:ring-amber-400 focus:border-transparent bg-white resize-none"
                 />
               </div>
               
@@ -1876,7 +1876,7 @@ export default function DocumentGeneratorClient({
               <div className="space-y-4">
                 <div className="relative border border-slate-200 rounded-xl p-3 bg-slate-50 flex items-center gap-3">
                   {letterheadUrl.toLowerCase().endsWith('.pdf') ? (
-                    <div className="w-16 h-12 bg-amber-50 border border-amber-200 rounded-lg flex items-center justify-center text-lg flex-shrink-0 select-none">
+                    <div className="w-16 h-12 bg-amber-50 border border-amber-200 rounded-lg flex items-center justify-center text-lg shrink-0 select-none">
                       📕
                     </div>
                   ) : (
@@ -1932,11 +1932,11 @@ export default function DocumentGeneratorClient({
                         onClick={() => handleConfirmLetterheadType(type.id as any)}
                         className={`text-left p-2 border rounded-xl transition-all flex items-center gap-2 group ${
                           letterheadType === type.id
-                            ? 'border-amber-400 bg-amber-50/50 ring-1 ring-amber-400 shadow-sm'
+                            ? 'border-amber-400 bg-amber-50/50 ring-1 ring-amber-400 shadow-xs'
                             : 'border-slate-200 hover:border-amber-300 hover:bg-slate-50'
                         }`}
                       >
-                        <span className="text-base flex-shrink-0">{type.icon}</span>
+                        <span className="text-base shrink-0">{type.icon}</span>
                         <div className="min-w-0">
                           <p className={`text-[10px] font-bold truncate ${letterheadType === type.id ? 'text-amber-800' : 'text-navy'}`}>
                             {type.label}
@@ -1961,7 +1961,7 @@ export default function DocumentGeneratorClient({
                         type="checkbox"
                         checked={suppressCompanyDetails}
                         onChange={(e) => setSuppressCompanyDetails(e.target.checked)}
-                        className="rounded text-amber-500 focus:ring-amber-400 h-3.5 w-3.5 border-slate-300"
+                        className="rounded-sm text-amber-500 focus:ring-amber-400 h-3.5 w-3.5 border-slate-300"
                       />
                       <span className="text-[9px] font-semibold text-slate-600 select-none">
                         Hide duplicates
@@ -1973,7 +1973,7 @@ export default function DocumentGeneratorClient({
                         type="checkbox"
                         checked={autoAdjustMargins}
                         onChange={(e) => setAutoAdjustMargins(e.target.checked)}
-                        className="rounded text-amber-500 focus:ring-amber-400 h-3.5 w-3.5 border-slate-300"
+                        className="rounded-sm text-amber-500 focus:ring-amber-400 h-3.5 w-3.5 border-slate-300"
                       />
                       <span className="text-[9px] font-semibold text-slate-600 select-none">
                         Auto margins
@@ -1985,7 +1985,7 @@ export default function DocumentGeneratorClient({
                         type="checkbox"
                         checked={preserveA4Layout}
                         onChange={(e) => setPreserveA4Layout(e.target.checked)}
-                        className="rounded text-amber-500 focus:ring-amber-400 h-3.5 w-3.5 border-slate-300"
+                        className="rounded-sm text-amber-500 focus:ring-amber-400 h-3.5 w-3.5 border-slate-300"
                       />
                       <span className="text-[9px] font-semibold text-slate-600 select-none">
                         Preserve A4 layout
@@ -1997,7 +1997,7 @@ export default function DocumentGeneratorClient({
                         type="checkbox"
                         checked={maintainEditableText}
                         onChange={(e) => setMaintainEditableText(e.target.checked)}
-                        className="rounded text-amber-500 focus:ring-amber-400 h-3.5 w-3.5 border-slate-300"
+                        className="rounded-sm text-amber-500 focus:ring-amber-400 h-3.5 w-3.5 border-slate-300"
                       />
                       <span className="text-[9px] font-semibold text-slate-600 select-none">
                         Maintain text
@@ -2087,11 +2087,11 @@ export default function DocumentGeneratorClient({
 
           {/* Stamp Duty & Execution Guide */}
           {isStampDutyRequired && (
-            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
               <button
                 type="button"
                 onClick={() => setStampDutyOpen(p => !p)}
-                className="w-full bg-slate-50 border-b border-slate-200 px-5 py-3.5 flex items-center justify-between text-left focus:outline-none"
+                className="w-full bg-slate-50 border-b border-slate-200 px-5 py-3.5 flex items-center justify-between text-left focus:outline-hidden"
               >
                 <div>
                   <h3 className="font-bold text-navy text-sm flex items-center gap-2">
@@ -2115,7 +2115,7 @@ export default function DocumentGeneratorClient({
                     <select
                       value={stampState}
                       onChange={(e) => setStampState(e.target.value)}
-                      className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent bg-white"
+                      className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm text-navy focus:outline-hidden focus:ring-2 focus:ring-amber-400 focus:border-transparent bg-white"
                     >
                       <option value="">Select State...</option>
                       <option value="Delhi">Delhi</option>
@@ -2235,11 +2235,11 @@ export default function DocumentGeneratorClient({
 
           {/* Section 180(1)(c) Calculator */}
           {isBorrowingDoc && (
-            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
               <button
                 type="button"
                 onClick={() => setS180Open(p => !p)}
-                className="w-full bg-slate-50 border-b border-slate-200 px-5 py-3.5 flex items-center justify-between text-left focus:outline-none"
+                className="w-full bg-slate-50 border-b border-slate-200 px-5 py-3.5 flex items-center justify-between text-left focus:outline-hidden"
               >
                 <div>
                   <h3 className="font-bold text-navy text-sm flex items-center gap-2">
@@ -2271,7 +2271,7 @@ export default function DocumentGeneratorClient({
                           placeholder="e.g. 5000000"
                           value={s180PaidUpCapital}
                           onChange={(e) => setS180PaidUpCapital(e.target.value)}
-                          className="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white"
+                          className="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-navy focus:outline-hidden focus:ring-2 focus:ring-amber-400 bg-white"
                         />
                       </div>
                       <div>
@@ -2283,7 +2283,7 @@ export default function DocumentGeneratorClient({
                           placeholder="e.g. 3000000"
                           value={s180FreeReserves}
                           onChange={(e) => setS180FreeReserves(e.target.value)}
-                          className="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white"
+                          className="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-navy focus:outline-hidden focus:ring-2 focus:ring-amber-400 bg-white"
                         />
                       </div>
                     </div>
@@ -2298,7 +2298,7 @@ export default function DocumentGeneratorClient({
                           placeholder="e.g. 2000000"
                           value={s180SecuritiesPremium}
                           onChange={(e) => setS180SecuritiesPremium(e.target.value)}
-                          className="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white"
+                          className="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-navy focus:outline-hidden focus:ring-2 focus:ring-amber-400 bg-white"
                         />
                       </div>
                       <div>
@@ -2310,7 +2310,7 @@ export default function DocumentGeneratorClient({
                           placeholder="e.g. 3000000"
                           value={s180ProposedBorrowing}
                           onChange={(e) => setS180ProposedBorrowing(e.target.value)}
-                          className="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white"
+                          className="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-navy focus:outline-hidden focus:ring-2 focus:ring-amber-400 bg-white"
                         />
                       </div>
                     </div>
@@ -2324,7 +2324,7 @@ export default function DocumentGeneratorClient({
                         placeholder="e.g. 8000000 (excluding temporary bank loans)"
                         value={s180ExistingBorrowing}
                         onChange={(e) => setS180ExistingBorrowing(e.target.value)}
-                        className="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white"
+                        className="w-full border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-navy focus:outline-hidden focus:ring-2 focus:ring-amber-400 bg-white"
                       />
                     </div>
                   </div>
@@ -2415,11 +2415,11 @@ export default function DocumentGeneratorClient({
 
           {/* Registered Office Shifting Compliance Navigator */}
           {isOfficeShiftingDoc && (
-            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
               <button
                 type="button"
                 onClick={() => setOfficeShiftingOpen(p => !p)}
-                className="w-full bg-slate-50 border-b border-slate-200 px-5 py-3.5 flex items-center justify-between text-left focus:outline-none"
+                className="w-full bg-slate-50 border-b border-slate-200 px-5 py-3.5 flex items-center justify-between text-left focus:outline-hidden"
               >
                 <div>
                   <h3 className="font-bold text-navy text-sm flex items-center gap-2">
@@ -2445,7 +2445,7 @@ export default function DocumentGeneratorClient({
                       <select
                         value={shiftingScope}
                         onChange={(e) => setShiftingScope(e.target.value)}
-                        className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm text-navy focus:outline-none focus:ring-2 focus:ring-amber-400 bg-white"
+                        className="w-full border border-slate-300 rounded-xl px-3 py-2.5 text-sm text-navy focus:outline-hidden focus:ring-2 focus:ring-amber-400 bg-white"
                       >
                         <option value="local">Within same town/city (Local Limits)</option>
                         <option value="outside_local">Outside local limits (Same State & ROC)</option>
@@ -2460,7 +2460,7 @@ export default function DocumentGeneratorClient({
                         id="isListedCompany"
                         checked={isListedCompany}
                         onChange={(e) => setIsListedCompany(e.target.checked)}
-                        className="w-4 h-4 rounded text-amber-500 focus:ring-amber-400 border-slate-300 cursor-pointer"
+                        className="w-4 h-4 rounded-sm text-amber-500 focus:ring-amber-400 border-slate-300 cursor-pointer"
                       />
                       <label htmlFor="isListedCompany" className="text-xs font-semibold text-slate-700 cursor-pointer">
                         Is this a Listed Company?
@@ -2633,7 +2633,7 @@ export default function DocumentGeneratorClient({
               onClick={() => setUseAi(p => !p)}
               className={`relative w-12 h-6 rounded-full transition-colors ${useAi ? 'bg-amber-400' : 'bg-slate-300'}`}
             >
-              <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform ${useAi ? 'translate-x-6' : ''}`} />
+              <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-xs transition-transform ${useAi ? 'translate-x-6' : ''}`} />
             </button>
           </div>
 
@@ -2755,7 +2755,7 @@ export default function DocumentGeneratorClient({
               </div>
 
               {generationError && (
-                <div className="bg-red-50 border border-red-200 text-red-800 p-3.5 rounded-xl text-xs font-semibold leading-relaxed flex items-start gap-2.5 shadow-sm animate-fade-in mb-2 text-left">
+                <div className="bg-red-50 border border-red-200 text-red-800 p-3.5 rounded-xl text-xs font-semibold leading-relaxed flex items-start gap-2.5 shadow-xs animate-fade-in mb-2 text-left">
                   <span className="text-sm">⚠️</span>
                   <div className="flex-1">
                     <p className="font-bold">Generation Failed</p>
@@ -2772,7 +2772,7 @@ export default function DocumentGeneratorClient({
               )}
 
               {generationWarning && (
-                <div className="bg-amber-50 border border-amber-200 text-amber-800 p-3.5 rounded-xl text-xs font-semibold leading-relaxed flex items-start gap-2.5 shadow-sm animate-fade-in mb-2 text-left">
+                <div className="bg-amber-50 border border-amber-200 text-amber-800 p-3.5 rounded-xl text-xs font-semibold leading-relaxed flex items-start gap-2.5 shadow-xs animate-fade-in mb-2 text-left">
                   <span className="text-sm">⚡</span>
                   <div className="flex-1">
                     <p className="font-bold">AI Quota Limit — Fallback Active</p>
@@ -2852,7 +2852,7 @@ export default function DocumentGeneratorClient({
                         setIsGatewayOpen(true)
                       }}
                       disabled={downloading}
-                      className="text-xs bg-red-600 text-white px-4 py-1.5 rounded-lg font-bold hover:bg-red-700 disabled:opacity-60 shadow-sm cursor-pointer"
+                      className="text-xs bg-red-600 text-white px-4 py-1.5 rounded-lg font-bold hover:bg-red-700 disabled:opacity-60 shadow-xs cursor-pointer"
                     >
                       ⬇️ Download PDF
                     </button>
@@ -3012,7 +3012,7 @@ export default function DocumentGeneratorClient({
                                     // Scroll to AI editor
                                     document.getElementById('ai-editor')?.scrollIntoView({ behavior: 'smooth' })
                                   }}
-                                  className="flex-shrink-0 text-xs bg-amber-400 hover:bg-amber-500 text-navy font-bold px-3 py-1.5 rounded-lg whitespace-nowrap transition-colors"
+                                  className="shrink-0 text-xs bg-amber-400 hover:bg-amber-500 text-navy font-bold px-3 py-1.5 rounded-lg whitespace-nowrap transition-colors"
                                 >
                                   + Add
                                 </button>
@@ -3080,7 +3080,7 @@ export default function DocumentGeneratorClient({
                   )}
 
                   {missingVariables && missingVariables.length > 0 && requiresInputData && (
-                    <div className="border border-blue-200 bg-blue-50 dark:bg-blue-950/30 dark:border-blue-800 rounded-lg p-4 mb-3 shadow-sm animate-fade-in">
+                    <div className="border border-blue-200 bg-blue-50 dark:bg-blue-950/30 dark:border-blue-800 rounded-lg p-4 mb-3 shadow-xs animate-fade-in">
                       <p className="text-sm font-semibold text-blue-900 dark:text-blue-100 mb-1 flex items-center gap-1">
                         📋 Additional Information Required
                       </p>
@@ -3142,7 +3142,7 @@ export default function DocumentGeneratorClient({
                     <button
                       onClick={() => handleAiEdit()}
                       disabled={editing || !editInstruction.trim()}
-                      className="px-4 py-2 bg-navy text-white rounded-xl text-sm font-semibold hover:bg-navy/90 disabled:opacity-60 flex-shrink-0"
+                      className="px-4 py-2 bg-navy text-white rounded-xl text-sm font-semibold hover:bg-navy/90 disabled:opacity-60 shrink-0"
                     >
                       {editing ? '...' : '→'}
                     </button>
@@ -3254,7 +3254,7 @@ export default function DocumentGeneratorClient({
                            ${step.urgent 
                              ? 'bg-red-50  border border-red-300 ' 
                              : 'bg-white '}`}>
-                      <span className="flex-shrink-0 text-lg mt-0.5">
+                      <span className="shrink-0 text-lg mt-0.5">
                         {step.icon}
                       </span>
                       <div className="min-w-0">
@@ -3297,7 +3297,7 @@ export default function DocumentGeneratorClient({
       {slug === 'lease-agreement' && (
         <div className="border-t border-slate-200 dark:border-slate-800 pt-12 mt-12 space-y-12">
           {/* Section 1: Educational Legal Content */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 md:p-8 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 md:p-8 shadow-xs">
             <h2 className="text-2xl md:text-3xl font-bold font-heading text-navy dark:text-white mb-6 flex items-center gap-2">
               <span>⚖️</span> Immovable Property Lease Law — Transfer of Property Act, 1882
             </h2>
@@ -3334,7 +3334,7 @@ export default function DocumentGeneratorClient({
           </div>
 
           {/* Section 2: FAQs Accordion */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 md:p-8 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 md:p-8 shadow-xs">
             <h2 className="text-2xl md:text-3xl font-bold font-heading text-navy dark:text-white mb-2 text-center">
               Frequently Asked Questions (FAQs)
             </h2>
@@ -3415,7 +3415,7 @@ export default function DocumentGeneratorClient({
           <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl p-6 max-w-2xl w-full max-h-[90vh] flex flex-col relative overflow-hidden">
             
             {/* Decorative colored glow bar at top */}
-            <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-amber-400 via-yellow-500 to-blue-600" />
+            <div className="absolute top-0 left-0 right-0 h-2 bg-linear-to-r from-amber-400 via-yellow-500 to-blue-600" />
             
             <div className="flex items-center justify-between mb-4 mt-2">
               <div>
@@ -3447,7 +3447,7 @@ export default function DocumentGeneratorClient({
                   {pendingLetterheadFile.name.toLowerCase().endsWith('.pdf') ? (
                     <iframe
                       src={`${URL.createObjectURL(pendingLetterheadFile)}#toolbar=0&navpanes=0&scrollbar=0`}
-                      className="w-full h-full border-0 rounded bg-white pointer-events-none z-0"
+                      className="w-full h-full border-0 rounded-sm bg-white pointer-events-none z-0"
                     />
                   ) : (
                     <div className="relative w-full h-full">
@@ -3456,19 +3456,19 @@ export default function DocumentGeneratorClient({
                         alt="Pending upload preview"
                         fill
                         unoptimized={true}
-                        className="object-contain bg-white rounded shadow-sm"
+                        className="object-contain bg-white rounded-sm shadow-xs"
                       />
                     </div>
                   )}
 
                   {/* Scanning overlay bar */}
                   {autoDetecting && (
-                    <div className="absolute left-0 right-0 w-full h-1 bg-gradient-to-r from-amber-400 to-yellow-500 animate-scan shadow-lg shadow-amber-400 z-10" />
+                    <div className="absolute left-0 right-0 w-full h-1 bg-linear-to-r from-amber-400 to-yellow-500 animate-scan shadow-lg shadow-amber-400 z-10" />
                   )}
                   
                   {autoDetecting && (
                     <div className="absolute inset-0 bg-amber-400/5 backdrop-blur-[0.5px] flex flex-col justify-center items-center z-10">
-                      <div className="bg-navy/80 text-white text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded-full shadow animate-pulse">
+                      <div className="bg-navy/80 text-white text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded-full shadow-sm animate-pulse">
                         Scanning structure...
                       </div>
                     </div>
@@ -3488,7 +3488,7 @@ export default function DocumentGeneratorClient({
                     </div>
                     <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
                       <div 
-                        className="h-full bg-gradient-to-r from-amber-400 to-yellow-500 transition-all duration-300 rounded-full" 
+                        className="h-full bg-linear-to-r from-amber-400 to-yellow-500 transition-all duration-300 rounded-full" 
                         style={{ width: `${autoDetectProgress}%` }}
                       />
                     </div>
@@ -3516,9 +3516,9 @@ export default function DocumentGeneratorClient({
                   disabled={autoDetecting}
                   type="button"
                   onClick={() => handleConfirmLetterheadType('full_page')}
-                  className="w-full text-left p-3 border border-slate-200 rounded-2xl hover:border-amber-400 hover:bg-amber-50/30 transition-all flex items-start gap-3 group hover:shadow-sm"
+                  className="w-full text-left p-3 border border-slate-200 rounded-2xl hover:border-amber-400 hover:bg-amber-50/30 transition-all flex items-start gap-3 group hover:shadow-xs"
                 >
-                  <div className="w-8 h-8 rounded-xl bg-amber-100 flex items-center justify-center text-base flex-shrink-0 group-hover:bg-amber-400 transition-colors">
+                  <div className="w-8 h-8 rounded-xl bg-amber-100 flex items-center justify-center text-base shrink-0 group-hover:bg-amber-400 transition-colors">
                     📄
                   </div>
                   <div>
@@ -3536,9 +3536,9 @@ export default function DocumentGeneratorClient({
                   disabled={autoDetecting}
                   type="button"
                   onClick={() => handleConfirmLetterheadType('top_only')}
-                  className="w-full text-left p-3 border border-slate-200 rounded-2xl hover:border-amber-400 hover:bg-amber-50/30 transition-all flex items-start gap-3 group hover:shadow-sm"
+                  className="w-full text-left p-3 border border-slate-200 rounded-2xl hover:border-amber-400 hover:bg-amber-50/30 transition-all flex items-start gap-3 group hover:shadow-xs"
                 >
-                  <div className="w-8 h-8 rounded-xl bg-blue-100 flex items-center justify-center text-base flex-shrink-0 group-hover:bg-blue-400 transition-colors">
+                  <div className="w-8 h-8 rounded-xl bg-blue-100 flex items-center justify-center text-base shrink-0 group-hover:bg-blue-400 transition-colors">
                     🔝
                   </div>
                   <div>
@@ -3556,9 +3556,9 @@ export default function DocumentGeneratorClient({
                   disabled={autoDetecting}
                   type="button"
                   onClick={() => handleConfirmLetterheadType('footer_only')}
-                  className="w-full text-left p-3 border border-slate-200 rounded-2xl hover:border-amber-400 hover:bg-amber-50/30 transition-all flex items-start gap-3 group hover:shadow-sm"
+                  className="w-full text-left p-3 border border-slate-200 rounded-2xl hover:border-amber-400 hover:bg-amber-50/30 transition-all flex items-start gap-3 group hover:shadow-xs"
                 >
-                  <div className="w-8 h-8 rounded-xl bg-orange-100 flex items-center justify-center text-base flex-shrink-0 group-hover:bg-orange-400 transition-colors">
+                  <div className="w-8 h-8 rounded-xl bg-orange-100 flex items-center justify-center text-base shrink-0 group-hover:bg-orange-400 transition-colors">
                     🔽
                   </div>
                   <div>
@@ -3576,9 +3576,9 @@ export default function DocumentGeneratorClient({
                   disabled={autoDetecting}
                   type="button"
                   onClick={() => handleConfirmLetterheadType('top_bottom_footer')}
-                  className="w-full text-left p-3 border border-slate-200 rounded-2xl hover:border-amber-400 hover:bg-amber-50/30 transition-all flex items-start gap-3 group hover:shadow-sm"
+                  className="w-full text-left p-3 border border-slate-200 rounded-2xl hover:border-amber-400 hover:bg-amber-50/30 transition-all flex items-start gap-3 group hover:shadow-xs"
                 >
-                  <div className="w-8 h-8 rounded-xl bg-purple-100 flex items-center justify-center text-base flex-shrink-0 group-hover:bg-purple-400 transition-colors">
+                  <div className="w-8 h-8 rounded-xl bg-purple-100 flex items-center justify-center text-base shrink-0 group-hover:bg-purple-400 transition-colors">
                     🖼️
                   </div>
                   <div>
@@ -3596,9 +3596,9 @@ export default function DocumentGeneratorClient({
                   disabled={autoDetecting}
                   type="button"
                   onClick={() => handleConfirmLetterheadType('logo_only')}
-                  className="w-full text-left p-3 border border-slate-200 rounded-2xl hover:border-amber-400 hover:bg-amber-50/30 transition-all flex items-start gap-3 group hover:shadow-sm"
+                  className="w-full text-left p-3 border border-slate-200 rounded-2xl hover:border-amber-400 hover:bg-amber-50/30 transition-all flex items-start gap-3 group hover:shadow-xs"
                 >
-                  <div className="w-8 h-8 rounded-xl bg-green-100 flex items-center justify-center text-base flex-shrink-0 group-hover:bg-green-400 transition-colors">
+                  <div className="w-8 h-8 rounded-xl bg-green-100 flex items-center justify-center text-base shrink-0 group-hover:bg-green-400 transition-colors">
                     💼
                   </div>
                   <div>
@@ -3616,9 +3616,9 @@ export default function DocumentGeneratorClient({
                   disabled={autoDetecting}
                   type="button"
                   onClick={() => handleConfirmLetterheadType('watermark')}
-                  className="w-full text-left p-3 border border-slate-200 rounded-2xl hover:border-amber-400 hover:bg-amber-50/30 transition-all flex items-start gap-3 group hover:shadow-sm"
+                  className="w-full text-left p-3 border border-slate-200 rounded-2xl hover:border-amber-400 hover:bg-amber-50/30 transition-all flex items-start gap-3 group hover:shadow-xs"
                 >
-                  <div className="w-8 h-8 rounded-xl bg-teal-100 flex items-center justify-center text-base flex-shrink-0 group-hover:bg-teal-400 transition-colors">
+                  <div className="w-8 h-8 rounded-xl bg-teal-100 flex items-center justify-center text-base shrink-0 group-hover:bg-teal-400 transition-colors">
                     ✨
                   </div>
                   <div>
@@ -3636,9 +3636,9 @@ export default function DocumentGeneratorClient({
                   disabled={autoDetecting}
                   type="button"
                   onClick={handleAutoDetect}
-                  className="w-full text-left p-3 border border-dashed border-amber-400 bg-amber-50/10 hover:bg-amber-50/50 rounded-2xl hover:border-amber-500 transition-all flex items-start gap-3 group hover:shadow-sm"
+                  className="w-full text-left p-3 border border-dashed border-amber-400 bg-amber-50/10 hover:bg-amber-50/50 rounded-2xl hover:border-amber-500 transition-all flex items-start gap-3 group hover:shadow-xs"
                 >
-                  <div className="w-8 h-8 rounded-xl bg-amber-400/20 text-amber-600 flex items-center justify-center text-base flex-shrink-0 group-hover:bg-amber-400 group-hover:text-navy transition-colors">
+                  <div className="w-8 h-8 rounded-xl bg-amber-400/20 text-amber-600 flex items-center justify-center text-base shrink-0 group-hover:bg-amber-400 group-hover:text-navy transition-colors">
                     🚀
                   </div>
                   <div>

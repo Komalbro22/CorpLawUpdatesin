@@ -293,7 +293,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/pas-
   return (
     <div id="pas6-workspace" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 scroll-mt-6">
       {/* 1. Header Banner */}
-      <div className="bg-gradient-to-r from-[#0F172A] via-[#1E293B] to-[#0F172A] rounded-2xl p-6 sm:p-8 text-white shadow-xl mb-8 border border-slate-800">
+      <div className="bg-linear-to-r from-[#0F172A] via-[#1E293B] to-[#0F172A] rounded-2xl p-6 sm:p-8 text-white shadow-xl mb-8 border border-slate-800">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 mb-3">
@@ -311,7 +311,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/pas-
           <div className="flex items-center gap-2.5">
             <button
               onClick={handleCopySummary}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700/80 transition-colors shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700/80 transition-colors shadow-xs"
               title="Copy Summary"
             >
               <Copy className="size-4 text-slate-300" />
@@ -350,7 +350,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/pas-
             <button
               key={p.id}
               onClick={() => handleApplyPreset(p)}
-              className="text-left p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-indigo-500/50 dark:hover:border-indigo-500/50 hover:shadow-sm transition-all group relative overflow-hidden"
+              className="text-left p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-indigo-500/50 dark:hover:border-indigo-500/50 hover:shadow-xs transition-all group relative overflow-hidden"
             >
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 group-hover:bg-indigo-50 dark:group-hover:bg-indigo-950 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
@@ -372,7 +372,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/pas-
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-12">
         {/* Left Column: Form Controls */}
         <div className="lg:col-span-7 space-y-6">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-xs space-y-6">
             <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2 pb-3 border-b border-slate-100 dark:border-slate-800">
               <Building2 className="size-4 text-indigo-500" />
               Filing Period & Corporate Profile
@@ -390,7 +390,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/pas-
                     onClick={() => setPeriod('apr_sep')}
                     className={`px-3 py-2.5 rounded-xl text-xs font-medium border text-center transition-all ${
                       period === 'apr_sep'
-                        ? 'bg-indigo-50 dark:bg-indigo-950/60 border-indigo-500 text-indigo-700 dark:text-indigo-300 font-semibold shadow-sm'
+                        ? 'bg-indigo-50 dark:bg-indigo-950/60 border-indigo-500 text-indigo-700 dark:text-indigo-300 font-semibold shadow-xs'
                         : 'border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-slate-700 dark:text-slate-300'
                     }`}
                   >
@@ -401,7 +401,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/pas-
                     onClick={() => setPeriod('oct_mar')}
                     className={`px-3 py-2.5 rounded-xl text-xs font-medium border text-center transition-all ${
                       period === 'oct_mar'
-                        ? 'bg-indigo-50 dark:bg-indigo-950/60 border-indigo-500 text-indigo-700 dark:text-indigo-300 font-semibold shadow-sm'
+                        ? 'bg-indigo-50 dark:bg-indigo-950/60 border-indigo-500 text-indigo-700 dark:text-indigo-300 font-semibold shadow-xs'
                         : 'border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 text-slate-700 dark:text-slate-300'
                     }`}
                   >
@@ -417,7 +417,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/pas-
                 <select
                   value={reportingYear}
                   onChange={(e) => setReportingYear(Number(e.target.value))}
-                  className="w-full px-3 py-2.5 rounded-xl text-xs font-medium border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2.5 rounded-xl text-xs font-medium border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
                 >
                   <option value={2026}>FY 2026-27 (Current Filing Cycle)</option>
                   <option value={2025}>FY 2025-26 (Rule 9B Expansion Year)</option>
@@ -436,7 +436,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/pas-
                   <strong className="text-slate-900 dark:text-white">{result.statutoryDueDate}</strong>
                 </span>
               </div>
-              <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300">
+              <span className="px-2 py-0.5 rounded-sm text-[11px] font-semibold bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300">
                 STP Processing
               </span>
             </div>
@@ -510,7 +510,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/pas-
                   setCompanyType(val)
                   setIsDpiitStartup(val === 'startup')
                 }}
-                className="w-full px-3 py-2.5 rounded-xl text-xs font-medium border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2.5 rounded-xl text-xs font-medium border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
               >
                 <option value="unlisted_public">Unlisted Public Company (Rule 9A Mandatory)</option>
                 <option value="non_small_private">Private Limited (Non-Small, Rule 9B Mandatory)</option>
@@ -543,7 +543,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/pas-
                     onClick={() => setAuthorizedCapital(btn.value)}
                     className={`px-2 py-2 text-xs font-medium rounded-xl border text-center transition-all ${
                       authorizedCapital === btn.value
-                        ? 'bg-indigo-50 dark:bg-indigo-950/60 border-indigo-500 text-indigo-700 dark:text-indigo-300 font-bold shadow-sm'
+                        ? 'bg-indigo-50 dark:bg-indigo-950/60 border-indigo-500 text-indigo-700 dark:text-indigo-300 font-bold shadow-xs'
                         : 'border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300'
                     }`}
                   >
@@ -575,7 +575,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/pas-
           </div>
 
           {/* Demat Reconciliation Module */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-xs space-y-5">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
               <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <PieChart className="size-4 text-indigo-500" />
@@ -682,7 +682,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/pas-
             </div>
 
             {/* Total Exposure Banner */}
-            <div className="bg-gradient-to-br from-slate-900 to-indigo-950 rounded-2xl p-5 text-white shadow-inner">
+            <div className="bg-linear-to-br from-slate-900 to-indigo-950 rounded-2xl p-5 text-white shadow-inner">
               <span className="text-xs font-medium text-slate-300 block mb-1">
                 Total Statutory Liability
               </span>
@@ -761,7 +761,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/pas-
       </div>
 
       {/* 4. Demat Compliance Step-by-Step Roadmap */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm mb-12">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xs mb-12">
         <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
           Statutory Dematerialisation & PAS-6 Roadmap (Rules 9A & 9B)
         </h3>
@@ -777,7 +777,7 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/pas-
             >
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-400">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-sm bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-400">
                     Step {item.step}
                   </span>
                   <span className="text-[10px] text-slate-400 font-mono">{item.deadline}</span>

@@ -457,7 +457,7 @@ export default function EditGlossaryTermPage() {
           <button 
             type="button"
             onClick={() => setIsPreviewOpen(true)}
-            className="inline-flex items-center gap-2 px-5 py-3 bg-slate-100 hover:bg-slate-100 text-white font-semibold rounded-xl border border-white/60 shadow-sm transition-all hover:scale-[1.01] active:scale-[0.99]"
+            className="inline-flex items-center gap-2 px-5 py-3 bg-slate-100 hover:bg-slate-100 text-white font-semibold rounded-xl border border-white/60 shadow-xs transition-all hover:scale-[1.01] active:scale-[0.99]"
           >
             <Eye className="w-4 h-4 text-slate-500" />
             Live Preview
@@ -534,7 +534,7 @@ export default function EditGlossaryTermPage() {
                     type="checkbox" 
                     checked={isVerified}
                     onChange={(e) => setIsVerified(e.target.checked)}
-                    className="w-4 h-4 text-amber-500 rounded border-white/60 bg-slate-100 focus:ring-amber-500"
+                    className="w-4 h-4 text-amber-500 rounded-sm border-white/60 bg-slate-100 focus:ring-amber-500"
                   />
                   <div>
                     <span className="text-sm font-bold text-slate-900">Publish as verified</span>
@@ -548,9 +548,9 @@ export default function EditGlossaryTermPage() {
             <div className="space-y-2 mb-6">
               <label className="text-sm font-semibold text-slate-700 flex justify-between items-center">
                 <span>Definition <span className="text-rose-500">*</span></span>
-                <span className="text-xs font-semibold text-slate-500 bg-slate-50 px-2 py-0.5 rounded">{defWords} words</span>
+                <span className="text-xs font-semibold text-slate-500 bg-slate-50 px-2 py-0.5 rounded-sm">{defWords} words</span>
               </label>
-              <div data-color-mode="dark" className="border border-white/60 rounded-xl overflow-hidden shadow-sm">
+              <div data-color-mode="dark" className="border border-white/60 rounded-xl overflow-hidden shadow-xs">
                 <MDEditor 
                   value={definition}
                   onChange={(val) => setDefinition(val || '')}
@@ -564,9 +564,9 @@ export default function EditGlossaryTermPage() {
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700 flex justify-between items-center">
                 <span>Extended Note (SEO Explanatory Paragraphs)</span>
-                <span className="text-xs font-semibold text-slate-500 bg-slate-50 px-2 py-0.5 rounded">{noteWords} words</span>
+                <span className="text-xs font-semibold text-slate-500 bg-slate-50 px-2 py-0.5 rounded-sm">{noteWords} words</span>
               </label>
-              <div data-color-mode="dark" className="border border-white/60 rounded-xl overflow-hidden shadow-sm">
+              <div data-color-mode="dark" className="border border-white/60 rounded-xl overflow-hidden shadow-xs">
                 <MDEditor 
                   value={extendedNote}
                   onChange={(val) => setExtendedNote(val || '')}
@@ -621,14 +621,14 @@ export default function EditGlossaryTermPage() {
                   </button>
                 </div>
                 <p className="text-xs text-slate-500 leading-relaxed">
-                  Paste your raw questions and answers below. The system will automatically parse lines starting with <code className="bg-amber-500/20 text-amber-300 px-1 py-0.5 rounded font-mono font-bold">Q1.</code> or ending with <code className="bg-amber-500/20 text-amber-300 px-1 py-0.5 rounded font-mono font-bold">?</code> into separate items.
+                  Paste your raw questions and answers below. The system will automatically parse lines starting with <code className="bg-amber-500/20 text-amber-300 px-1 py-0.5 rounded-sm font-mono font-bold">Q1.</code> or ending with <code className="bg-amber-500/20 text-amber-300 px-1 py-0.5 rounded-sm font-mono font-bold">?</code> into separate items.
                 </p>
                 <textarea
                   rows={6}
                   value={bulkFaqText}
                   onChange={(e) => setBulkFaqText(e.target.value)}
                   placeholder={`Example:\nQ1. What is MCA21?\nMCA21 is the online portal...\n\nQ2. How do I file forms?\nLog in and select the relevant e-form...`}
-                  className="w-full p-3 bg-slate-50 border border-white/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-mono text-slate-700"
+                  className="w-full p-3 bg-slate-50 border border-white/60 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-mono text-slate-700"
                 />
                 <div className="flex justify-end gap-2">
                   <button
@@ -644,7 +644,7 @@ export default function EditGlossaryTermPage() {
                       setIsBulkOpen(false);
                       showToast(`Successfully imported ${parsed.length} FAQs!`, 'success');
                     }}
-                    className="px-4 py-2 btn-vibrant-amber text-white text-xs font-bold rounded-lg shadow-sm transition-all"
+                    className="px-4 py-2 btn-vibrant-amber text-white text-xs font-bold rounded-lg shadow-xs transition-all"
                   >
                     Parse & Import ({parseBulkFaqs(bulkFaqText).length} found)
                   </button>
@@ -678,7 +678,7 @@ export default function EditGlossaryTermPage() {
                         value={faq.q}
                         onChange={(e) => handleFaqChange(i, 'q', e.target.value)}
                         placeholder="e.g. What is the scope of CoC?"
-                        className="w-full px-3 py-2 bg-slate-100 border border-white/60 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm text-slate-900"
+                        className="w-full px-3 py-2 bg-slate-100 border border-white/60 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm text-slate-900"
                       />
                     </div>
 
@@ -689,7 +689,7 @@ export default function EditGlossaryTermPage() {
                         value={faq.a}
                         onChange={(e) => handleFaqChange(i, 'a', e.target.value)}
                         placeholder="Provide a clean, descriptive answer..."
-                        className="w-full px-3 py-2 bg-slate-100 border border-white/60 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm text-slate-900"
+                        className="w-full px-3 py-2 bg-slate-100 border border-white/60 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm text-slate-900"
                       />
                     </div>
                   </div>
@@ -804,7 +804,7 @@ export default function EditGlossaryTermPage() {
                 {synonyms.map((syn, index) => (
                   <span 
                     key={index} 
-                    className="inline-flex items-center gap-1.5 bg-slate-100 border border-white/60 text-slate-900 text-xs font-bold px-2.5 py-1.5 rounded-lg shadow-sm"
+                    className="inline-flex items-center gap-1.5 bg-slate-100 border border-white/60 text-slate-900 text-xs font-bold px-2.5 py-1.5 rounded-lg shadow-xs"
                   >
                     {syn}
                     <button 
@@ -845,7 +845,7 @@ export default function EditGlossaryTermPage() {
                 {keywords.map((kw, index) => (
                   <span 
                     key={index} 
-                    className="inline-flex items-center gap-1.5 bg-slate-100 border border-white/60 text-slate-205 text-xs font-semibold px-2.5 py-1.5 rounded-lg shadow-sm"
+                    className="inline-flex items-center gap-1.5 bg-slate-100 border border-white/60 text-slate-205 text-xs font-semibold px-2.5 py-1.5 rounded-lg shadow-xs"
                   >
                     {kw}
                     <button 
@@ -894,7 +894,7 @@ export default function EditGlossaryTermPage() {
                   type="checkbox" 
                   checked={hideDefinition}
                   onChange={(e) => setHideDefinition(e.target.checked)}
-                  className="w-4 h-4 text-amber-500 rounded border-white/60 bg-slate-100 focus:ring-amber-500"
+                  className="w-4 h-4 text-amber-500 rounded-sm border-white/60 bg-slate-100 focus:ring-amber-500"
                 />
                 <div>
                   <span className="text-sm font-semibold text-slate-900">Hide Definition Card</span>
@@ -934,7 +934,7 @@ export default function EditGlossaryTermPage() {
                 <button 
                   type="button" 
                   onClick={() => setShowBulkTldr(!showBulkTldr)} 
-                  className="text-[10px] bg-slate-100 hover:bg-slate-100 text-white font-bold px-2 py-1 rounded transition-colors border border-white/60"
+                  className="text-[10px] bg-slate-100 hover:bg-slate-100 text-white font-bold px-2 py-1 rounded-sm transition-colors border border-white/60"
                 >
                   {showBulkTldr ? 'Close Bulk Import' : 'Bulk Import Points'}
                 </button>
@@ -948,12 +948,12 @@ export default function EditGlossaryTermPage() {
                     onChange={(e) => setBulkTldrText(e.target.value)}
                     placeholder="• Point 1&#10;• Point 2&#10;• Point 3"
                     rows={4}
-                    className="w-full px-3 py-2 bg-slate-100 border border-white/60 rounded-lg text-xs focus:ring-2 focus:ring-amber-400 focus:outline-none text-slate-900"
+                    className="w-full px-3 py-2 bg-slate-100 border border-white/60 rounded-lg text-xs focus:ring-2 focus:ring-amber-400 focus:outline-hidden text-slate-900"
                   />
                   <button 
                     type="button" 
                     onClick={handleBulkTldrImport}
-                    className="w-full py-1.5 text-xs bg-amber-500 text-slate-900 font-bold rounded-lg hover:bg-amber-600 transition-colors shadow-sm"
+                    className="w-full py-1.5 text-xs bg-amber-500 text-slate-900 font-bold rounded-lg hover:bg-amber-600 transition-colors shadow-xs"
                   >
                     Parse & Import Takeaways
                   </button>
@@ -987,7 +987,7 @@ export default function EditGlossaryTermPage() {
                             type="text" 
                             value={pt}
                             onChange={(e) => handleUpdateTldrPoint(idx, e.target.value)}
-                            className="flex-1 bg-transparent border-none p-0 text-slate-700 text-xs focus:ring-0 focus:outline-none"
+                            className="flex-1 bg-transparent border-none p-0 text-slate-700 text-xs focus:ring-0 focus:outline-hidden"
                           />
                           <button 
                             type="button" 
@@ -1011,7 +1011,7 @@ export default function EditGlossaryTermPage() {
 
       {/* Live Preview Modal */}
       {isPreviewOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/80 backdrop-blur-sm flex justify-center p-4 sm:p-6 md:p-10">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/80 backdrop-blur-xs flex justify-center p-4 sm:p-6 md:p-10">
           <div className="relative w-full max-w-4xl bg-slate-50 rounded-3xl shadow-2xl border border-white/60 overflow-hidden flex flex-col my-auto max-h-[90vh]">
             
             {/* Modal Header */}
@@ -1048,7 +1048,7 @@ export default function EditGlossaryTermPage() {
                 </nav>
 
                 {/* Main Card */}
-                <article className="bg-slate-50 border border-slate-805 rounded-2xl p-8 shadow-sm relative overflow-hidden text-left bg-slate-50">
+                <article className="bg-slate-50 border border-slate-805 rounded-2xl p-8 shadow-xs relative overflow-hidden text-left bg-slate-50">
                   {/* Decorative background letter */}
                   <div className="absolute top-0 right-0 p-8 opacity-[0.02] select-none pointer-events-none" aria-hidden="true">
                     <span className="text-9xl font-heading font-bold text-slate-900 leading-none">
@@ -1079,7 +1079,7 @@ export default function EditGlossaryTermPage() {
                       <div className="mt-6 pt-4 border-t border-slate-800 flex flex-wrap gap-1.5 items-center">
                         <span className="text-xs font-semibold text-slate-550 uppercase tracking-wider mr-1.5">Acronyms / Synonyms:</span>
                         {synonyms.map((syn) => (
-                          <span key={syn} className="inline-flex items-center px-2 py-0.5 rounded bg-slate-900 text-slate-700 text-xs font-semibold border border-slate-800">
+                          <span key={syn} className="inline-flex items-center px-2 py-0.5 rounded-sm bg-slate-900 text-slate-700 text-xs font-semibold border border-slate-800">
                             {syn}
                           </span>
                         ))}
@@ -1090,7 +1090,7 @@ export default function EditGlossaryTermPage() {
 
                 {/* Extended Note Section */}
                 {extendedNote && (
-                  <section className="mt-8 bg-slate-900 border border-white/60 rounded-2xl p-8 shadow-sm text-left">
+                  <section className="mt-8 bg-slate-900 border border-white/60 rounded-2xl p-8 shadow-xs text-left">
                     <h3 className="text-xl font-bold text-slate-900 mb-4 font-heading">Understanding {term || 'Term'}</h3>
                     <div className="prose prose-invert max-w-none text-slate-700">
                       <MarkdownRenderer content={extendedNote} />
@@ -1099,7 +1099,7 @@ export default function EditGlossaryTermPage() {
                 )}
 
                 {/* FAQ Section */}
-                <section className="mt-8 bg-slate-900 border border-white/60 rounded-2xl p-8 shadow-sm text-left">
+                <section className="mt-8 bg-slate-900 border border-white/60 rounded-2xl p-8 shadow-xs text-left">
                   <h2 className="text-xl font-bold text-slate-900 mb-6 font-heading">Frequently Asked Questions</h2>
                   <div className="space-y-4">
                     {(faqs.length > 0 ? faqs.map(f => ({ q: f.q, a: f.a })) : [
@@ -1127,13 +1127,13 @@ export default function EditGlossaryTermPage() {
 
                 {/* Related Searches Section */}
                 {keywords.length > 0 && (
-                  <section className="mt-8 bg-slate-900 border border-white/60 rounded-2xl p-8 shadow-sm text-left">
+                  <section className="mt-8 bg-slate-900 border border-white/60 rounded-2xl p-8 shadow-xs text-left">
                     <h3 className="text-lg font-bold text-slate-900 mb-4 font-heading">Related Searches</h3>
                     <div className="flex flex-wrap gap-2">
                       {keywords.map((kw, i) => (
                         <span
                           key={i}
-                          className="text-sm bg-slate-50 text-slate-700 border border-slate-800 px-4 py-2 rounded-full font-medium shadow-sm flex items-center gap-1 cursor-pointer hover:bg-slate-100"
+                          className="text-sm bg-slate-50 text-slate-700 border border-slate-800 px-4 py-2 rounded-full font-medium shadow-xs flex items-center gap-1 cursor-pointer hover:bg-slate-100"
                         >
                           <span>{kw}</span>
                           <span className="text-slate-500 text-xs">↗</span>

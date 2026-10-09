@@ -131,7 +131,7 @@ export default function LinkChecker({
                  className="flex items-center gap-2 
                             px-3 py-1.5 
                             border-t border-slate-100">
-              <span className="flex-shrink-0">
+              <span className="shrink-0">
                 {r.status === 'checking' ? '⏳' :
                  r.status === 'ok' ? '✅' :
                  r.status === 'broken' ? '❌' : '⚠️'}
@@ -141,7 +141,7 @@ export default function LinkChecker({
                 {r.url}
               </span>
               {r.statusCode && (
-                <span className={`flex-shrink-0 
+                <span className={`shrink-0 
                   ${r.status === 'ok' 
                     ? 'text-green-600' 
                     : 'text-red-600'}`}>

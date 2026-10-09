@@ -269,7 +269,7 @@ export default async function RepoRatePage() {
 
       {/* HERO SECTION */}
       <div className="bg-navy py-12 px-4 text-center relative overflow-hidden border-b border-navy-700">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#f59e0b_1px,transparent_1px)] [background-size:16px_16px]" aria-hidden="true" />
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#f59e0b_1px,transparent_1px)] bg-size-[16px_16px]" aria-hidden="true" />
         
         <div className="max-w-4xl mx-auto relative z-10 space-y-3">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 mb-1">
@@ -290,11 +290,11 @@ export default async function RepoRatePage() {
           </p>
 
           <div className="pt-2 flex flex-wrap items-center justify-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-white/10 text-slate-200 border border-white/10 backdrop-blur-sm">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-white/10 text-slate-200 border border-white/10 backdrop-blur-xs">
               <CheckCircle2 className="size-3.5 text-emerald-400" aria-hidden="true" />
               Bi-Monthly Cycle: Rate active until {nextMpc}
             </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-white/10 text-slate-200 border border-white/10 backdrop-blur-sm">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-white/10 text-slate-200 border border-white/10 backdrop-blur-xs">
               <Clock className="size-3.5 text-amber-400" aria-hidden="true" />
               Next MPC Decision: December 4, 2026 (10 AM IST)
             </span>
@@ -304,28 +304,28 @@ export default async function RepoRatePage() {
           <div className="pt-3 flex flex-wrap items-center justify-center gap-2">
             <a
               href="#emi-calculator"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 shadow-md transition-all scale-100 hover:scale-[1.02] active:scale-[0.98]"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-linear-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 shadow-md transition-all scale-100 hover:scale-[1.02] active:scale-[0.98]"
             >
               <Calculator className="size-3.5 sm:size-4" aria-hidden="true" />
               <span>Calculate Home Loan EMI</span>
             </a>
             <a
               href="#rates-matrix"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium bg-white/10 hover:bg-white/20 text-white border border-white/15 backdrop-blur-sm transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium bg-white/10 hover:bg-white/20 text-white border border-white/15 backdrop-blur-xs transition-colors"
             >
               <Layers className="size-3.5 sm:size-4 text-amber-400" aria-hidden="true" />
               <span>SDF, MSF & CRR Rates</span>
             </a>
             <a
               href="#bank-rates"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium bg-white/10 hover:bg-white/20 text-white border border-white/15 backdrop-blur-sm transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium bg-white/10 hover:bg-white/20 text-white border border-white/15 backdrop-blur-xs transition-colors"
             >
               <Building2 className="size-3.5 sm:size-4 text-emerald-400" aria-hidden="true" />
               <span>Bank Lending Rates</span>
             </a>
             <a
               href="#next-mpc"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium bg-white/10 hover:bg-white/20 text-white border border-white/15 backdrop-blur-sm transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium bg-white/10 hover:bg-white/20 text-white border border-white/15 backdrop-blur-xs transition-colors"
             >
               <Calendar className="size-3.5 sm:size-4 text-blue-400" aria-hidden="true" />
               <span>Next MPC Timeline</span>
@@ -337,10 +337,10 @@ export default async function RepoRatePage() {
       <div className="max-w-5xl mx-auto px-4 py-10 space-y-10">
 
         {/* FEATURED SNIPPET / POSITION 0 ANSWER-FIRST QUICK FACTS BOX */}
-        <div className="bg-gradient-to-br from-amber-500/10 via-blue-500/5 to-indigo-500/10 dark:from-amber-950/40 dark:via-blue-950/20 dark:to-indigo-950/40 border border-amber-300/80 dark:border-amber-700/60 rounded-2xl p-6 sm:p-7 shadow-sm space-y-4">
+        <div className="bg-linear-to-br from-amber-500/10 via-blue-500/5 to-indigo-500/10 dark:from-amber-950/40 dark:via-blue-950/20 dark:to-indigo-950/40 border border-amber-300/80 dark:border-amber-700/60 rounded-2xl p-6 sm:p-7 shadow-xs space-y-4">
           
           {/* EXACT-MATCH ANSWER-FIRST BLOCK FOR GOOGLE FEATURED SNIPPET & AI OVERVIEWS */}
-          <div className="bg-white/95 dark:bg-slate-900/95 p-4 sm:p-5 rounded-xl border border-amber-300 dark:border-amber-700/60 shadow-xs space-y-2">
+          <div className="bg-white/95 dark:bg-slate-900/95 p-4 sm:p-5 rounded-xl border border-amber-300 dark:border-amber-700/60 shadow-2xs space-y-2">
             <h2 className="font-heading font-extrabold text-base sm:text-lg text-slate-900 dark:text-white flex items-center gap-2">
               <span className="size-2 rounded-full bg-blue-600 dark:bg-blue-400" aria-hidden="true" />
               What is the Current Repo Rate of RBI in India? (October 2026)
@@ -424,7 +424,7 @@ export default async function RepoRatePage() {
             { label: 'MSF / Bank Rate', value: msfRate, desc: 'Emergency ceiling rate', color: 'bg-purple-50 dark:bg-purple-950/30 border-purple-200 dark:border-purple-800/40 text-purple-800 dark:text-purple-300', badge: 'Ceiling Rate' },
             { label: 'Policy Stance', value: stance, desc: 'Growth-inflation calibrated', color: 'bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800/40 text-amber-800 dark:text-amber-300', badge: 'Stance Shift' },
           ].map(stat => (
-            <div key={stat.label} className={`rounded-2xl border p-5 text-center shadow-sm relative flex flex-col justify-between ${stat.color}`}>
+            <div key={stat.label} className={`rounded-2xl border p-5 text-center shadow-xs relative flex flex-col justify-between ${stat.color}`}>
               <div>
                 <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md bg-white/80 dark:bg-slate-900/80 border border-current/10">
                   {stat.badge}
@@ -440,7 +440,7 @@ export default async function RepoRatePage() {
         </div>
 
         {/* 63rd MPC MEETING SUMMARY & OFFICIAL RATIONALE BANNER */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs p-6 sm:p-8 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
             <div>
               <div className="flex items-center gap-2">
@@ -515,7 +515,7 @@ export default async function RepoRatePage() {
         </div>
 
         {/* NEXT RBI MPC MEETING SCHEDULE & OUTLOOK */}
-        <section id="next-mpc" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-5">
+        <section id="next-mpc" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs p-6 sm:p-8 space-y-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-2.5">
               <span className="p-2 rounded-xl bg-amber-100 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300">
@@ -580,7 +580,7 @@ export default async function RepoRatePage() {
         </section>
 
         {/* COMPLETE RBI BENCHMARK POLICY RATES TABLE */}
-        <section id="rates-matrix" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-4">
+        <section id="rates-matrix" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs p-6 sm:p-8 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <h2 className="text-xl font-heading font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -656,7 +656,7 @@ export default async function RepoRatePage() {
         </section>
 
         {/* MAJOR BANKS REPO-LINKED HOME LOAN RATES (EBLR) */}
-        <section id="bank-rates" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-4">
+        <section id="bank-rates" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs p-6 sm:p-8 space-y-4">
           <div>
             <h2 className="text-xl font-heading font-bold text-slate-900 dark:text-white flex items-center gap-2">
               <Building2 className="size-5 text-blue-600 dark:text-blue-400" aria-hidden="true" />
@@ -689,7 +689,7 @@ export default async function RepoRatePage() {
         </section>
 
         {/* REVERSE REPO RATE VS SDF EXPLAINER (Captures Position 11.4 'reverse repo rate 2026' queries) */}
-        <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-5">
+        <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs p-6 sm:p-8 space-y-5">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-2.5">
               <span className="p-2 rounded-xl bg-purple-100 dark:bg-purple-950/50 text-purple-800 dark:text-purple-300">
@@ -719,7 +719,7 @@ export default async function RepoRatePage() {
                 <h3 className="font-heading font-bold text-emerald-950 dark:text-emerald-200 text-sm">
                   1. Standing Deposit Facility (SDF) — {sdfRate}
                 </h3>
-                <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-emerald-200/80 dark:bg-emerald-900/60 text-emerald-900 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-700">
+                <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-sm bg-emerald-200/80 dark:bg-emerald-900/60 text-emerald-900 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-700">
                   Operative Floor
                 </span>
               </div>
@@ -733,7 +733,7 @@ export default async function RepoRatePage() {
                 <h3 className="font-heading font-bold text-slate-900 dark:text-white text-sm">
                   2. Fixed Reverse Repo Rate — 3.35%
                 </h3>
-                <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600">
+                <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-sm bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-600">
                   Collateralized Window
                 </span>
               </div>
@@ -745,7 +745,7 @@ export default async function RepoRatePage() {
         </section>
 
         {/* RATE HISTORY TABLE */}
-        <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-4">
+        <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs p-6 sm:p-8 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <h2 className="text-xl font-heading font-bold text-navy dark:text-white flex items-center gap-2">
@@ -789,7 +789,7 @@ export default async function RepoRatePage() {
         </section>
 
         {/* FREQUENTLY ASKED QUESTIONS (FAQ) */}
-        <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 sm:p-8 space-y-6">
+        <section className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs p-6 sm:p-8 space-y-6">
           <div>
             <h2 className="text-2xl font-heading font-bold text-navy dark:text-white flex items-center gap-2">
               <HelpCircle className="size-6 text-amber-500" aria-hidden="true" />
@@ -863,7 +863,7 @@ export default async function RepoRatePage() {
             >
               <div>
                 <div className="flex items-center justify-between gap-2">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1.5">
+                  <span className="px-2 py-0.5 rounded-sm text-[10px] font-extrabold uppercase tracking-wider bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1.5">
                     <span className="size-1.5 rounded-full bg-emerald-600 animate-pulse" aria-hidden="true" />
                     Latest MPC Analysis (63rd)
                   </span>
@@ -881,11 +881,11 @@ export default async function RepoRatePage() {
             {/* Board Resolution for Bank Loan / Facility */}
             <Link
               href="/documents/board-resolution-bank-loan"
-              className="p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 hover:border-amber-400 dark:hover:border-amber-500 hover:shadow-sm transition-all group flex flex-col justify-between space-y-2"
+              className="p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 hover:border-amber-400 dark:hover:border-amber-500 hover:shadow-xs transition-all group flex flex-col justify-between space-y-2"
             >
               <div>
                 <div className="flex items-center justify-between gap-2">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider bg-purple-100 dark:bg-purple-950/60 text-purple-900 dark:text-purple-300 border border-purple-200 dark:border-purple-800 flex items-center gap-1">
+                  <span className="px-2 py-0.5 rounded-sm text-[10px] font-extrabold uppercase tracking-wider bg-purple-100 dark:bg-purple-950/60 text-purple-900 dark:text-purple-300 border border-purple-200 dark:border-purple-800 flex items-center gap-1">
                     <Building2 className="size-3" aria-hidden="true" />
                     Legal Template
                   </span>
@@ -903,11 +903,11 @@ export default async function RepoRatePage() {
             {/* All Corporate Compliance Tools */}
             <Link
               href="/tools"
-              className="p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 hover:border-amber-400 dark:hover:border-amber-500 hover:shadow-sm transition-all group flex flex-col justify-between space-y-2"
+              className="p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 hover:border-amber-400 dark:hover:border-amber-500 hover:shadow-xs transition-all group flex flex-col justify-between space-y-2"
             >
               <div>
                 <div className="flex items-center justify-between gap-2">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase tracking-wider bg-blue-100 dark:bg-blue-950/60 text-blue-900 dark:text-blue-300 border border-blue-200 dark:border-blue-800 flex items-center gap-1">
+                  <span className="px-2 py-0.5 rounded-sm text-[10px] font-extrabold uppercase tracking-wider bg-blue-100 dark:bg-blue-950/60 text-blue-900 dark:text-blue-300 border border-blue-200 dark:border-blue-800 flex items-center gap-1">
                     <Calculator className="size-3" aria-hidden="true" />
                     Free Calculators
                   </span>

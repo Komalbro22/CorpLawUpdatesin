@@ -114,7 +114,7 @@ export default function ContactPage() {
             {/* HERO */}
             <div className="relative bg-navy py-12 md:py-14 px-4 text-center overflow-hidden">
                 <div
-                    className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] bg-[size:64px_64px]"
+                    className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] bg-size-[64px_64px]"
                     aria-hidden="true"
                 />
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(245,158,11,0.1),transparent_55%)]" aria-hidden="true" />
@@ -137,7 +137,7 @@ export default function ContactPage() {
                             return (
                             <div
                                 key={card.title}
-                                className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/90 dark:border-slate-800 p-5 flex gap-4 items-start hover:border-amber-400/60 dark:hover:border-amber-500/40 hover:shadow-card transition-all duration-200 ring-1 ring-transparent hover:ring-slate-900/[0.03]"
+                                className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200/90 dark:border-slate-800 p-5 flex gap-4 items-start hover:border-amber-400/60 dark:hover:border-amber-500/40 hover:shadow-card transition-all duration-200 ring-1 ring-transparent hover:ring-slate-900/3"
                             >
                                 <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-800 text-navy dark:text-amber-400 border border-slate-100 dark:border-slate-700">
                                     <CardIcon className="size-5" aria-hidden="true" />
@@ -181,7 +181,7 @@ export default function ContactPage() {
                             <div className="flex flex-wrap gap-3">
                                 <Link
                                     href="/newsletter"
-                                    className="inline-flex items-center gap-2 px-3 py-2 bg-navy text-white text-xs font-semibold rounded-lg hover:bg-slate-800 transition-colors duration-200 shadow-sm"
+                                    className="inline-flex items-center gap-2 px-3 py-2 bg-navy text-white text-xs font-semibold rounded-lg hover:bg-slate-800 transition-colors duration-200 shadow-xs"
                                 >
                                     <Mail className="size-3.5 opacity-90" aria-hidden="true" />
                                     Newsletter
@@ -190,14 +190,14 @@ export default function ContactPage() {
                                     href="/api/feed.xml"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 px-3 py-2 bg-orange-500 text-white text-xs font-semibold rounded-lg hover:bg-orange-600 transition-colors duration-200 shadow-sm"
+                                    className="inline-flex items-center gap-2 px-3 py-2 bg-orange-500 text-white text-xs font-semibold rounded-lg hover:bg-orange-600 transition-colors duration-200 shadow-xs"
                                 >
                                     <Rss className="size-3.5 opacity-90" aria-hidden="true" />
                                     RSS
                                 </a>
                                 <Link
                                     href="/calendar"
-                                    className="inline-flex items-center gap-2 px-3 py-2 bg-amber-400 text-navy text-xs font-semibold rounded-lg hover:bg-amber-500 transition-colors duration-200 shadow-sm"
+                                    className="inline-flex items-center gap-2 px-3 py-2 bg-amber-400 text-navy text-xs font-semibold rounded-lg hover:bg-amber-500 transition-colors duration-200 shadow-xs"
                                 >
                                     <Calendar className="size-3.5 opacity-90" aria-hidden="true" />
                                     Calendar
@@ -222,7 +222,7 @@ export default function ContactPage() {
                     <div>
                         {submitted ? (
                             <div className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 rounded-2xl p-10 text-center flex flex-col items-center justify-center gap-4 min-h-[400px] content-fade-in">
-                                <span className="flex size-16 items-center justify-center rounded-full bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-sm border border-emerald-100 dark:border-emerald-900/40">
+                                <span className="flex size-16 items-center justify-center rounded-full bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-xs border border-emerald-100 dark:border-emerald-900/40">
                                     <CheckCircle2 className="size-9" aria-hidden="true" />
                                 </span>
                                 <h3 className="text-xl font-heading font-bold text-emerald-900 dark:text-emerald-300">
@@ -248,7 +248,7 @@ export default function ContactPage() {
                         ) : (
                             <form
                                 onSubmit={handleSubmit}
-                                className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 p-6 space-y-5 shadow-card ring-1 ring-slate-900/[0.02] dark:ring-white/[0.02]"
+                                className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 p-6 space-y-5 shadow-card ring-1 ring-slate-900/2 dark:ring-white/2"
                             >
                                 <div>
                                     <h2 className="text-xl font-bold text-navy dark:text-white">
@@ -271,7 +271,7 @@ export default function ContactPage() {
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
                                         placeholder="e.g. Rahul Sharma"
-                                        className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-navy dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+                                        className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-navy dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-lg px-4 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-400 focus:border-transparent"
                                     />
                                 </div>
 
@@ -287,7 +287,7 @@ export default function ContactPage() {
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         placeholder="you@example.com"
-                                        className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-navy dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+                                        className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-navy dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-lg px-4 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-400 focus:border-transparent"
                                     />
                                 </div>
 
@@ -301,7 +301,7 @@ export default function ContactPage() {
                                         required
                                         value={subject}
                                         onChange={(e) => setSubject(e.target.value)}
-                                        className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-navy dark:text-slate-100 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
+                                        className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-navy dark:text-slate-100 rounded-lg px-4 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-400 focus:border-transparent"
                                     >
                                         <option value="">Select a subject...</option>
                                         {subjectOptions.map((opt) => (
@@ -324,7 +324,7 @@ export default function ContactPage() {
                                         value={message}
                                         onChange={(e) => setMessage(e.target.value)}
                                         placeholder="Tell us how we can help..."
-                                        className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-navy dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent resize-none"
+                                        className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-navy dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-lg px-4 py-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-400 focus:border-transparent resize-none"
                                     />
                                 </div>
 
@@ -337,7 +337,7 @@ export default function ContactPage() {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="w-full bg-gold hover:bg-amber-400 disabled:opacity-60 text-navy font-bold py-3.5 rounded-lg transition-colors duration-200 text-sm shadow-sm inline-flex items-center justify-center gap-2"
+                                    className="w-full bg-gold hover:bg-amber-400 disabled:opacity-60 text-navy font-bold py-3.5 rounded-lg transition-colors duration-200 text-sm shadow-xs inline-flex items-center justify-center gap-2"
                                 >
                                     {loading && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
                                     {loading ? 'Sending...' : 'Send message'}

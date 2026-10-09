@@ -227,7 +227,7 @@ export default function AdminArticles() {
                 <h1 className="font-heading text-2xl font-bold text-slate-900">All articles</h1>
                 <Link
                     href="/admin/articles/new"
-                    className="inline-flex items-center justify-center gap-2 bg-gold text-slate-900 font-semibold px-4 py-2.5 rounded-lg hover:bg-amber-400 transition-colors duration-200 shadow-sm"
+                    className="inline-flex items-center justify-center gap-2 bg-gold text-slate-900 font-semibold px-4 py-2.5 rounded-lg hover:bg-amber-400 transition-colors duration-200 shadow-xs"
                 >
                     <Plus className="w-4 h-4" aria-hidden />
                     New article
@@ -235,7 +235,7 @@ export default function AdminArticles() {
             </div>
 
             {/* FILTER BAR */}
-            <div className="admin-card-glass p-4 md:p-5 rounded-xl shadow-card border border-white/60 flex flex-col md:flex-row gap-4 items-stretch md:items-center ring-1 ring-slate-900/[0.02]">
+            <div className="admin-card-glass p-4 md:p-5 rounded-xl shadow-card border border-white/60 flex flex-col md:flex-row gap-4 items-stretch md:items-center ring-1 ring-slate-900/2">
                 <div className="flex-1 w-full relative">
                     <Search
                         className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none"
@@ -246,7 +246,7 @@ export default function AdminArticles() {
                         placeholder="Search titles…"
                         value={search}
                         onChange={handleSearchChange}
-                        className="w-full pl-10 pr-4 py-2.5 border border-white/60 rounded-lg text-sm focus:ring-2 focus:ring-gold/45 focus:outline-none text-slate-900  bg-slate-50/50 backdrop-blur-sm transition-shadow"
+                        className="w-full pl-10 pr-4 py-2.5 border border-white/60 rounded-lg text-sm focus:ring-2 focus:ring-gold/45 focus:outline-hidden text-slate-900  bg-slate-50/50 backdrop-blur-xs transition-shadow"
                     />
                 </div>
 
@@ -254,7 +254,7 @@ export default function AdminArticles() {
                     <select
                         value={categoryFilter}
                         onChange={handleCategoryChange}
-                        className="flex-1 md:w-48 appearance-none admin-card-glass text-slate-700  text-sm rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-gold/45 focus:outline-none transition-shadow"
+                        className="flex-1 md:w-48 appearance-none admin-card-glass text-slate-700  text-sm rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-gold/45 focus:outline-hidden transition-shadow"
                     >
                         <option value="All">All Categories</option>
                         {Object.entries(categoryCounts).map(([cat, count]) => (
@@ -269,7 +269,7 @@ export default function AdminArticles() {
                     <select
                         value={statusFilter}
                         onChange={handleStatusChange}
-                        className="flex-1 md:w-40 appearance-none admin-card-glass text-slate-700  text-sm rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-gold/45 focus:outline-none transition-shadow"
+                        className="flex-1 md:w-40 appearance-none admin-card-glass text-slate-700  text-sm rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-gold/45 focus:outline-hidden transition-shadow"
                     >
                         <option value="All">All Status</option>
                         <option value="Published">Published</option>
@@ -308,16 +308,16 @@ export default function AdminArticles() {
             )}
 
             {/* ARTICLES TABLE */}
-            <div className="admin-card-glass border border-white/60 overflow-hidden ring-1 ring-slate-900/[0.02]">
+            <div className="admin-card-glass border border-white/60 overflow-hidden ring-1 ring-slate-900/2">
                 {/* DESKTOP TABLE VIEW (md:block) */}
                 <div className="hidden md:block overflow-x-auto">
                     <table className="w-full text-left text-sm whitespace-nowrap">
-                        <thead className="sticky top-0 z-10 bg-slate-50/95 text-slate-600 border-b border-slate-100 backdrop-blur-sm shadow-sm">
+                        <thead className="sticky top-0 z-10 bg-slate-50/95 text-slate-600 border-b border-slate-100 backdrop-blur-xs shadow-xs">
                             <tr>
                                 <th className="px-6 py-4 w-12">
                                     <input 
                                         type="checkbox" 
-                                        className="rounded border-slate-300 text-slate-900 focus:ring-navy bg-slate-50/50 backdrop-blur-sm cursor-pointer" 
+                                        className="rounded-sm border-slate-300 text-slate-900 focus:ring-navy bg-slate-50/50 backdrop-blur-xs cursor-pointer" 
                                         checked={articles.length > 0 && selectedIds.size === articles.length}
                                         onChange={toggleAll}
                                     />
@@ -337,7 +337,7 @@ export default function AdminArticles() {
                                     {Array.from({ length: 6 }).map((_, i) => (
                                         <tr key={i} className="animate-pulse">
                                             <td colSpan={8} className="px-6 py-4">
-                                                <div className="h-4 bg-slate-100 rounded w-2/3 max-w-md" />
+                                                <div className="h-4 bg-slate-100 rounded-sm w-2/3 max-w-md" />
                                             </td>
                                         </tr>
                                     ))}
@@ -361,7 +361,7 @@ export default function AdminArticles() {
                                             <td className="px-6 py-4">
                                                 <input 
                                                     type="checkbox" 
-                                                    className="rounded border-slate-300 text-slate-900 focus:ring-navy bg-slate-50/50 backdrop-blur-sm cursor-pointer"
+                                                    className="rounded-sm border-slate-300 text-slate-900 focus:ring-navy bg-slate-50/50 backdrop-blur-xs cursor-pointer"
                                                     checked={selectedIds.has(article.id)}
                                                     onChange={() => toggleSelection(article.id)}
                                                 />
@@ -371,19 +371,19 @@ export default function AdminArticles() {
                                                     <Link href={`/admin/articles/${article.id}/edit`} className="font-semibold text-slate-900 hover:text-amber-600 transition-colors block max-w-[300px] truncate" title={article.title}>
                                                         {article.title}
                                                     </Link>
-                                                    {article.is_sponsored && <span className="shrink-0 rounded bg-violet-100 px-1.5 py-0.5 text-[9px] font-bold uppercase text-violet-800">Sponsored</span>}
+                                                    {article.is_sponsored && <span className="shrink-0 rounded-sm bg-violet-100 px-1.5 py-0.5 text-[9px] font-bold uppercase text-violet-800">Sponsored</span>}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
-                                                {article.category ? <CategoryBadge category={article.category} className="!text-xs" /> : <span className="text-xs text-slate-500">Uncategorised</span>}
+                                                {article.category ? <CategoryBadge category={article.category} className="text-xs!" /> : <span className="text-xs text-slate-500">Uncategorised</span>}
                                             </td>
                                             <td className="px-6 py-4">
                                                 {isPublished ? (
-                                                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                                    <span className="inline-flex items-center px-2 py-0.5 rounded-sm text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
                                                         Published
                                                     </span>
                                                 ) : (
-                                                    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
+                                                    <span className="inline-flex items-center px-2 py-0.5 rounded-sm text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
                                                         Draft
                                                     </span>
                                                 )}
@@ -397,18 +397,18 @@ export default function AdminArticles() {
                                             <td className="px-6 py-4">
                                                 <input 
                                                     type="checkbox" 
-                                                    className="rounded border-slate-300 text-amber-500 focus:ring-amber-400 bg-slate-50/50 backdrop-blur-sm cursor-pointer"
+                                                    className="rounded-sm border-slate-300 text-amber-500 focus:ring-amber-400 bg-slate-50/50 backdrop-blur-xs cursor-pointer"
                                                     checked={!!article.is_featured}
                                                     onChange={() => updateFeatured(article.id, !!article.is_featured)}
                                                 />
                                             </td>
                                             <td className="px-6 py-4 text-right">
                                                 <div className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1">
-                                                    <Link href={`/admin/articles/${article.id}/edit`} className="text-xs font-semibold text-slate-600 hover:text-amber-700 px-2 py-1 rounded hover:bg-slate-100 transition-colors">
+                                                    <Link href={`/admin/articles/${article.id}/edit`} className="text-xs font-semibold text-slate-600 hover:text-amber-700 px-2 py-1 rounded-sm hover:bg-slate-100 transition-colors">
                                                         Edit
                                                     </Link>
                                                     {userRole === 'admin' && (
-                                                        <button type="button" onClick={() => setDeleteConfirm(article.id)} className="text-xs font-semibold text-red-500 hover:text-red-700 px-2 py-1 rounded hover:bg-red-50 transition-colors">
+                                                        <button type="button" onClick={() => setDeleteConfirm(article.id)} className="text-xs font-semibold text-red-500 hover:text-red-700 px-2 py-1 rounded-sm hover:bg-red-50 transition-colors">
                                                             Delete
                                                         </button>
                                                     )}
@@ -444,18 +444,18 @@ export default function AdminArticles() {
                                         <div className="flex items-center gap-2">
                                             <input 
                                                 type="checkbox" 
-                                                className="rounded border-slate-300 text-slate-900 focus:ring-navy"
+                                                className="rounded-sm border-slate-300 text-slate-900 focus:ring-navy"
                                                 checked={selectedIds.has(article.id)}
                                                 onChange={() => toggleSelection(article.id)}
                                             />
-                                            {article.category ? <CategoryBadge category={article.category} className="!text-[11px]" /> : <span className="text-[11px] text-slate-500">Uncategorised</span>}
+                                            {article.category ? <CategoryBadge category={article.category} className="text-[11px]!" /> : <span className="text-[11px] text-slate-500">Uncategorised</span>}
                                         </div>
                                         {isPublished ? (
-                                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                            <span className="inline-flex items-center px-2 py-0.5 rounded-sm text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
                                                 Published
                                             </span>
                                         ) : (
-                                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200">
+                                            <span className="inline-flex items-center px-2 py-0.5 rounded-sm text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200">
                                                 Draft
                                             </span>
                                         )}
@@ -467,7 +467,7 @@ export default function AdminArticles() {
                                     >
                                         {article.title}
                                     </Link>
-                                    {article.is_sponsored && <span className="inline-flex rounded bg-violet-100 px-1.5 py-0.5 text-[9px] font-bold uppercase text-violet-800">Sponsored</span>}
+                                    {article.is_sponsored && <span className="inline-flex rounded-sm bg-violet-100 px-1.5 py-0.5 text-[9px] font-bold uppercase text-violet-800">Sponsored</span>}
 
                                     <div className="flex items-center justify-between text-xs text-slate-500 pt-1 border-t border-slate-100">
                                         <span>{formatDate(article.updated_at || article.created_at || '')}</span>
@@ -540,7 +540,7 @@ export default function AdminArticles() {
                                 type="button"
                                 onClick={performDelete}
                                 disabled={deleting}
-                                className="px-4 py-2.5 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors duration-200 shadow-sm disabled:opacity-50 disabled:pointer-events-none"
+                                className="px-4 py-2.5 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors duration-200 shadow-xs disabled:opacity-50 disabled:pointer-events-none"
                             >
                                 {deleting ? 'Deleting…' : 'Delete'}
                             </button>

@@ -65,7 +65,7 @@ export function ArticleLayout({
         <article className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Main Article Body Column */}
-          <div className="lg:col-span-8 bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 md:p-10 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="lg:col-span-8 bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 md:p-10 border border-slate-200 dark:border-slate-800 shadow-xs">
             {/* Signature Gazette Ledger Rail Accent */}
             <GazetteLedgerRail category={category} sectionRef={sourceName} />
 

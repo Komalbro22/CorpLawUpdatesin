@@ -26,7 +26,7 @@ export default function CompanyStatusBadge({ status, size = 'md' }: CompanyStatu
   const sizeClasses = size === 'sm' ? 'px-2 py-0.5 text-xs' : size === 'lg' ? 'px-4 py-1.5 text-sm font-bold' : 'px-3 py-1 text-xs font-semibold'
 
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full border ${colorClasses} ${sizeClasses} shadow-sm`}>
+    <span className={`inline-flex items-center gap-1.5 rounded-full border ${colorClasses} ${sizeClasses} shadow-xs`}>
       <span className={`w-2 h-2 rounded-full ${dotColor}`} />
       <span>{cleanStatus.toUpperCase()}</span>
     </span>

@@ -145,7 +145,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
                 data-toc-id={heading.id}
                 onClick={() => scrollToSection(heading.id)}
                 aria-current={activeId === heading.id ? 'location' : undefined}
-                className={`w-full text-left transition-all duration-150 leading-snug focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 rounded-sm -ml-[1px]
+                className={`w-full text-left transition-all duration-150 leading-snug focus:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-400 rounded-xs -ml-px
                   ${heading.level === 3 
                     ? 'pl-4 text-[12px] py-0.5' 
                     : 'pl-3 text-[13px] py-1 font-normal'
@@ -176,7 +176,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
         className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400
                    border border-slate-200 dark:border-slate-800 hover:border-amber-300 dark:hover:border-amber-700
                    bg-white dark:bg-slate-900 hover:bg-amber-50 dark:hover:bg-amber-950/20
-                   px-4 py-2.5 min-h-[44px] rounded-lg transition-all duration-200 group w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-amber-400"
+                   px-4 py-2.5 min-h-[44px] rounded-lg transition-all duration-200 group w-full sm:w-auto focus:outline-hidden focus:ring-2 focus:ring-amber-400"
       >
         <List className="w-4 h-4 text-amber-600 dark:text-amber-400" aria-hidden />
         <span className="font-medium text-amber-800 dark:text-amber-400">
@@ -194,7 +194,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
                 key={heading.id}
                 onClick={() => scrollToSection(heading.id)}
                 aria-current={activeId === heading.id ? 'location' : undefined}
-                className={`text-sm px-3 py-1.5 rounded-full border transition-all duration-200 text-left min-h-[36px] focus:outline-none focus:ring-2 focus:ring-amber-400
+                className={`text-sm px-3 py-1.5 rounded-full border transition-all duration-200 text-left min-h-[36px] focus:outline-hidden focus:ring-2 focus:ring-amber-400
                   ${heading.level === 3 ? 'text-xs' : ''}
                   ${activeId === heading.id
                     ? 'bg-amber-100 dark:bg-amber-950/50 border-amber-400 text-amber-900 dark:text-amber-300 font-semibold'
@@ -208,7 +208,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
           </div>
           <button
             onClick={() => setMobileOpen(false)}
-            className="mt-4 text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors flex items-center gap-1 min-h-[36px] focus:outline-none focus:ring-2 focus:ring-amber-400 rounded-md px-2"
+            className="mt-4 text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors flex items-center gap-1 min-h-[36px] focus:outline-hidden focus:ring-2 focus:ring-amber-400 rounded-md px-2"
           >
             <X className="w-3 h-3" aria-hidden /> Close
           </button>

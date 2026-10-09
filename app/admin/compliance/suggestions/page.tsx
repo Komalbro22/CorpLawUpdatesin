@@ -214,7 +214,7 @@ export default function AdminSuggestionsPage() {
       ) : (
         <div className="space-y-3">
           {filtered.map(s => (
-            <div key={s.id} className="bg-slate-100 border border-white/60 rounded-2xl overflow-hidden shadow-sm">
+            <div key={s.id} className="bg-slate-100 border border-white/60 rounded-2xl overflow-hidden shadow-xs">
 
               {/* Row summary */}
               <div
@@ -226,7 +226,7 @@ export default function AdminSuggestionsPage() {
                     {typeLabel(s.suggestion_type)}
                   </span>
                   {s.form_name && (
-                    <span className="font-mono text-xs bg-slate-50 px-2 py-1 rounded text-slate-800 border border-white/60 font-bold">
+                    <span className="font-mono text-xs bg-slate-50 px-2 py-1 rounded-sm text-slate-800 border border-white/60 font-bold">
                       {s.form_name}
                     </span>
                   )}
@@ -236,7 +236,7 @@ export default function AdminSuggestionsPage() {
                     </span>
                   )}
                 </div>
-                <div className="flex items-center gap-3 flex-shrink-0">
+                <div className="flex items-center gap-3 shrink-0">
                   <span className="text-xs text-slate-500">
                     {new Date(s.created_at).toLocaleDateString('en-IN')}
                   </span>
@@ -361,7 +361,7 @@ export default function AdminSuggestionsPage() {
                               <label className="text-xs text-slate-500">Regulator</label>
                               <select value={approvalForm.regulator}
                                 onChange={e => setApprovalForm(p => ({ ...p, regulator: e.target.value }))}
-                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500">
+                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded-sm px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500">
                                 <option value="mca" className="bg-slate-100">MCA</option>
                                 <option value="sebi" className="bg-slate-100">SEBI</option>
                                 <option value="rbi" className="bg-slate-100">RBI</option>
@@ -379,25 +379,25 @@ export default function AdminSuggestionsPage() {
                               <label className="text-xs text-slate-500">Form Name</label>
                               <input value={approvalForm.form_name}
                                 onChange={e => setApprovalForm(p => ({ ...p, form_name: e.target.value }))}
-                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
+                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded-sm px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
                             </div>
                             <div className="col-span-2">
                               <label className="text-xs text-slate-500">Title</label>
                               <input value={approvalForm.compliance_title}
                                 onChange={e => setApprovalForm(p => ({ ...p, compliance_title: e.target.value }))}
-                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
+                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded-sm px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
                             </div>
                             <div>
                               <label className="text-xs text-slate-500">Due Date</label>
                               <input value={approvalForm.due_date}
                                 onChange={e => setApprovalForm(p => ({ ...p, due_date: e.target.value }))}
-                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
+                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded-sm px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
                             </div>
                             <div>
                               <label className="text-xs text-slate-500">Frequency</label>
                               <select value={approvalForm.frequency || 'annual'}
                                 onChange={e => setApprovalForm(p => ({ ...p, frequency: e.target.value }))}
-                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500">
+                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded-sm px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500">
                                 {FREQUENCIES.map(f => (
                                   <option key={f.value} value={f.value} className="bg-slate-100">{f.label}</option>
                                 ))}
@@ -407,32 +407,32 @@ export default function AdminSuggestionsPage() {
                               <label className="text-xs text-slate-500">Applicable To</label>
                               <input value={approvalForm.applicable_to}
                                 onChange={e => setApprovalForm(p => ({ ...p, applicable_to: e.target.value }))}
-                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
+                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded-sm px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
                             </div>
                             <div>
                               <label className="text-xs text-slate-500">Penalty</label>
                               <input value={approvalForm.penalty}
                                 onChange={e => setApprovalForm(p => ({ ...p, penalty: e.target.value }))}
-                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
+                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded-sm px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
                             </div>
                             <div>
                               <label className="text-xs text-slate-500">Regulation Reference</label>
                               <input value={approvalForm.regulation_reference}
                                 onChange={e => setApprovalForm(p => ({ ...p, regulation_reference: e.target.value }))}
-                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
+                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded-sm px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
                             </div>
                             <div>
                               <label className="text-xs text-slate-500">Official Link</label>
                               <input value={approvalForm.official_link || ''}
                                 onChange={e => setApprovalForm(p => ({ ...p, official_link: e.target.value }))}
                                 placeholder="https://mca.gov.in/..."
-                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
+                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded-sm px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
                             </div>
                             <div className="col-span-2">
                               <label className="text-xs text-slate-500">Description (optional)</label>
                               <textarea rows={2} value={approvalForm.description || ''}
                                 onChange={e => setApprovalForm(p => ({ ...p, description: e.target.value }))}
-                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
+                                className="w-full bg-slate-50 border border-white/60 text-slate-900 rounded-sm px-2 py-1.5 text-sm mt-0.5 focus:ring-1 focus:ring-amber-500" />
                             </div>
                           </div>
                         </div>
@@ -448,7 +448,7 @@ export default function AdminSuggestionsPage() {
                           value={adminNote}
                           onChange={e => setAdminNote(e.target.value)}
                           placeholder="Optional note for approval, required for rejection..."
-                          className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500/20 placeholder:text-slate-600"
+                          className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 placeholder:text-slate-600"
                         />
                       </div>
                       <div className="flex gap-3">

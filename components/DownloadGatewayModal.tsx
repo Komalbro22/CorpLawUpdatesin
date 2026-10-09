@@ -122,7 +122,7 @@ export default function DownloadGatewayModal({
 
   return (
     <div 
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200"
+      className="fixed inset-0 z-9999 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs animate-in fade-in duration-200"
       role="dialog"
       aria-modal="true"
       aria-labelledby="download-modal-title"
@@ -171,7 +171,7 @@ export default function DownloadGatewayModal({
             {/* Progress Bar */}
             <div className="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
               <div 
-                className="h-full bg-gradient-to-r from-amber-500 to-amber-600 transition-all duration-75 ease-out rounded-full"
+                className="h-full bg-linear-to-r from-amber-500 to-amber-600 transition-all duration-75 ease-out rounded-full"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -256,7 +256,7 @@ export default function DownloadGatewayModal({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your professional email..."
-                    className="flex-1 px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-navy dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    className="flex-1 px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-navy dark:text-white placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-amber-500"
                     required
                   />
                   <button

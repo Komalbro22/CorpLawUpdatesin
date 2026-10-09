@@ -336,7 +336,7 @@ export default function NewsletterPage() {
     if (result) {
         return (
             <div className="max-w-2xl mx-auto content-fade-in">
-                <div className="admin-card-glass rounded-2xl shadow-card border border-white/60 p-10 text-center ring-1 ring-slate-900/[0.02]">
+                <div className="admin-card-glass rounded-2xl shadow-card border border-white/60 p-10 text-center ring-1 ring-slate-900/2">
                     <div className="flex justify-center mb-5">
                         {result.testOnly ? (
                             <span className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-100 dark:bg-violet-950/40 text-violet-700 dark:text-violet-400">
@@ -386,7 +386,7 @@ export default function NewsletterPage() {
                         <div className="mt-8 text-left bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 rounded-xl p-6 w-full mx-auto">
                             <h3 className="text-red-800 dark:text-red-300 font-semibold mb-2 text-lg">Failed Deliveries ({failedList.length})</h3>
                             <p className="text-red-600 dark:text-red-400 text-sm mb-4">The following emails experienced provider rejections or bounces. You can attempt to retry them directly.</p>
-                            <ul className="list-disc ml-5 text-sm text-red-700 dark:text-red-400 mb-6 max-h-40 overflow-y-auto w-full border border-red-200/50 dark:border-red-900/30 bg-slate-50/50 backdrop-blur-sm p-3 rounded shadow-inner">
+                            <ul className="list-disc ml-5 text-sm text-red-700 dark:text-red-400 mb-6 max-h-40 overflow-y-auto w-full border border-red-200/50 dark:border-red-900/30 bg-slate-50/50 backdrop-blur-xs p-3 rounded-sm shadow-inner">
                                 {failedList.map((email, i) => <li key={i} className="py-0.5">{email}</li>)}
                             </ul>
                             <div className="flex justify-end gap-3">
@@ -412,7 +412,7 @@ export default function NewsletterPage() {
                     <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
                         <Link
                             href="/admin/newsletter/history"
-                            className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold rounded-xl transition-colors shadow-sm text-sm"
+                            className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold rounded-xl transition-colors shadow-xs text-sm"
                         >
                             View Campaign History
                         </Link>
@@ -430,7 +430,7 @@ export default function NewsletterPage() {
                                 setCustomSelectedIds([])
                                 setIntroMessage('')
                             }}
-                            className="px-6 py-3 bg-gold text-slate-900 font-semibold rounded-xl hover:bg-amber-400 transition-colors shadow-sm text-sm"
+                            className="px-6 py-3 bg-gold text-slate-900 font-semibold rounded-xl hover:bg-amber-400 transition-colors shadow-xs text-sm"
                         >
                             Compose another send
                         </button>
@@ -458,7 +458,7 @@ export default function NewsletterPage() {
                 <div>
                     <a
                         href="/admin/newsletter/history"
-                        className="inline-flex items-center gap-2 px-4 py-2 border border-white/60 rounded-xl admin-card-glass hover:bg-slate-50  text-sm font-semibold text-slate-700  transition-colors shadow-sm"
+                        className="inline-flex items-center gap-2 px-4 py-2 border border-white/60 rounded-xl admin-card-glass hover:bg-slate-50  text-sm font-semibold text-slate-700  transition-colors shadow-xs"
                     >
                         <History size={16} />
                         View Campaign History
@@ -489,7 +489,7 @@ export default function NewsletterPage() {
                 <div className="lg:col-span-7 space-y-6">
                     
                     {/* MODE TABS BAR */}
-                    <div className="admin-card-glass border border-white/60 p-1 flex ring-1 ring-slate-900/[0.01]">
+                    <div className="admin-card-glass border border-white/60 p-1 flex ring-1 ring-slate-900/1">
                         <button
                             type="button"
                             onClick={() => setModeTab('auto')}
@@ -529,7 +529,7 @@ export default function NewsletterPage() {
                     </div>
 
                     {/* GENERAL METADATA CARD */}
-                    <div className="admin-card-glass border border-white/60 p-6 space-y-5 ring-1 ring-slate-900/[0.02]">
+                    <div className="admin-card-glass border border-white/60 p-6 space-y-5 ring-1 ring-slate-900/2">
                         
                         <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
                             <FileText className="text-amber-500" size={18} />
@@ -546,7 +546,7 @@ export default function NewsletterPage() {
                                 value={subject}
                                 onChange={e => setSubject(e.target.value)}
                                 placeholder="Weekly Corporate Law Update — April 2026"
-                                className="w-full border border-white/60 rounded-lg px-4 py-3 text-slate-900  bg-slate-50/50 backdrop-blur-sm text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
+                                className="w-full border border-white/60 rounded-lg px-4 py-3 text-slate-900  bg-slate-50/50 backdrop-blur-xs text-sm font-semibold focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
                             />
                         </div>
 
@@ -564,7 +564,7 @@ export default function NewsletterPage() {
                                 onChange={e => setPreviewText(e.target.value)}
                                 placeholder="This week's top compliance developments: MCA rules, SEBI circulars..."
                                 maxLength={100}
-                                className="w-full border border-white/60 rounded-lg px-4 py-3 text-slate-900  bg-white  text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
+                                className="w-full border border-white/60 rounded-lg px-4 py-3 text-slate-900  bg-white  text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
                             />
                             <p className="text-[10px] text-slate-500  mt-1 text-right font-medium">
                                 {previewText.length}/100 characters
@@ -589,13 +589,13 @@ export default function NewsletterPage() {
                                     onChange={e => setIncludeDeadlines(e.target.checked)}
                                     className="sr-only peer"
                                 />
-                                <div className="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
+                                <div className="w-9 h-5 bg-slate-200 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500"></div>
                             </label>
                         </div>
                     </div>
 
                     {/* DYNAMIC MODE SPECIFIC FIELDS CONTAINER */}
-                    <div className="admin-card-glass border border-white/60 p-6 ring-1 ring-slate-900/[0.02] min-h-[16rem]">
+                    <div className="admin-card-glass border border-white/60 p-6 ring-1 ring-slate-900/2 min-h-64">
                         
                         {/* ───────────────── AUTO GENERATE TAB ───────────────── */}
                         {modeTab === 'auto' && (
@@ -628,7 +628,7 @@ export default function NewsletterPage() {
                                                             <div className="min-w-0 flex-1">
                                                                 <p className="font-semibold text-slate-900 leading-snug">{art.title}</p>
                                                                 <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-                                                                    <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-1.5 py-0.5 rounded uppercase">
+                                                                    <span className="text-[10px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-1.5 py-0.5 rounded-sm uppercase">
                                                                          {art.category}
                                                                     </span>
                                                                     {art.impact_level && (
@@ -639,7 +639,7 @@ export default function NewsletterPage() {
                                                                         </span>
                                                                     )}
                                                                     {isLead && (
-                                                                        <span className="inline-flex items-center gap-1 text-[10px] font-extrabold bg-amber-500 text-white px-2 py-0.5 rounded-full shadow-xs">
+                                                                        <span className="inline-flex items-center gap-1 text-[10px] font-extrabold bg-amber-500 text-white px-2 py-0.5 rounded-full shadow-2xs">
                                                                             <Star size={10} className="fill-white" />
                                                                             Current Lead Story
                                                                         </span>
@@ -653,7 +653,7 @@ export default function NewsletterPage() {
                                                             title={isLead ? "Currently set as the lead story" : "Set as lead story for this newsletter"}
                                                             className={`shrink-0 flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg border font-semibold transition-all ${
                                                                 isLead
-                                                                    ? 'bg-amber-500 text-white border-amber-600 shadow-sm'
+                                                                    ? 'bg-amber-500 text-white border-amber-600 shadow-xs'
                                                                     : 'bg-white text-slate-700 border-slate-200 hover:border-amber-400 hover:text-amber-600 hover:bg-amber-50/50'
                                                             }`}
                                                         >
@@ -698,7 +698,7 @@ export default function NewsletterPage() {
                                         value={introMessage}
                                         onChange={e => setIntroMessage(e.target.value)}
                                         placeholder="Featured regulatory update: SPICe+ incorporation rules amended. Details inside."
-                                        className="w-full border border-white/60 rounded-lg px-4 py-2.5 text-slate-900  text-sm bg-slate-50/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+                                        className="w-full border border-white/60 rounded-lg px-4 py-2.5 text-slate-900  text-sm bg-slate-50/50 backdrop-blur-xs focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
                                     />
                                     <p className="text-[10px] text-slate-500  mt-1">If blank, the banner defaults to:"Featured update: [first chosen article title]. Read inside."</p>
                                 </div>
@@ -711,7 +711,7 @@ export default function NewsletterPage() {
                                         value={searchQuery}
                                         onChange={e => setSearchQuery(e.target.value)}
                                         placeholder="Type to search published updates..."
-                                        className="w-full border border-white/60 rounded-lg pl-9 pr-4 py-2.5 text-slate-900  bg-white  text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+                                        className="w-full border border-white/60 rounded-lg pl-9 pr-4 py-2.5 text-slate-900  bg-white  text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
                                     />
                                 </div>
 
@@ -746,14 +746,14 @@ export default function NewsletterPage() {
                                                                 {art.title}
                                                             </p>
                                                             <div className="flex items-center gap-2 mt-1 flex-wrap">
-                                                                <span className="text-[9px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-1.5 py-0.5 rounded uppercase">
+                                                                <span className="text-[9px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-1.5 py-0.5 rounded-sm uppercase">
                                                                     {art.category}
                                                                 </span>
                                                                 <span className="text-[10px] text-slate-500 font-medium">
                                                                     {new Date(art.published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
                                                                 </span>
                                                                 {isLead && (
-                                                                    <span className="inline-flex items-center gap-1 text-[10px] font-extrabold bg-amber-500 text-white px-2 py-0.5 rounded-full shadow-xs">
+                                                                    <span className="inline-flex items-center gap-1 text-[10px] font-extrabold bg-amber-500 text-white px-2 py-0.5 rounded-full shadow-2xs">
                                                                         <Star size={10} className="fill-white" />
                                                                         Lead Story
                                                                     </span>
@@ -771,7 +771,7 @@ export default function NewsletterPage() {
                                                             title={isLead ? "Currently set as lead story" : "Set as lead story"}
                                                             className={`shrink-0 flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg border font-semibold transition-all ${
                                                                 isLead
-                                                                    ? 'bg-amber-500 text-white border-amber-600 shadow-sm'
+                                                                    ? 'bg-amber-500 text-white border-amber-600 shadow-xs'
                                                                     : 'bg-white text-slate-700 border-slate-200 hover:border-amber-400 hover:text-amber-600 hover:bg-amber-50/50'
                                                             }`}
                                                         >
@@ -803,14 +803,14 @@ export default function NewsletterPage() {
                                         <button
                                             type="button"
                                             onClick={() => setEditorMode('markdown')}
-                                            className={`px-2.5 py-1 text-[10px] font-bold rounded transition-colors ${editorMode === 'markdown' ? 'admin-card-glass shadow text-slate-900 ' : 'text-slate-500  hover:text-slate-900 dark:hover:text-slate-250'}`}
+                                            className={`px-2.5 py-1 text-[10px] font-bold rounded-sm transition-colors ${editorMode === 'markdown' ? 'admin-card-glass shadow-sm text-slate-900 ' : 'text-slate-500  hover:text-slate-900 dark:hover:text-slate-250'}`}
                                         >
                                             Markdown
                                         </button>
                                         <button
                                             type="button"
                                             onClick={() => setEditorMode('html')}
-                                            className={`px-2.5 py-1 text-[10px] font-bold rounded transition-colors ${editorMode === 'html' ? 'admin-card-glass shadow text-slate-900 ' : 'text-slate-500  hover:text-slate-900 dark:hover:text-slate-250'}`}
+                                            className={`px-2.5 py-1 text-[10px] font-bold rounded-sm transition-colors ${editorMode === 'html' ? 'admin-card-glass shadow-sm text-slate-900 ' : 'text-slate-500  hover:text-slate-900 dark:hover:text-slate-250'}`}
                                         >
                                             HTML
                                         </button>
@@ -836,7 +836,7 @@ export default function NewsletterPage() {
                                             onChange={e => setBody(e.target.value)}
                                             rows={11}
                                             placeholder="<h1>Your custom email structure</h1><p>Body...</p>"
-                                            className="w-full border border-white/60 rounded-lg px-4 py-3 text-slate-900  bg-slate-50/50 backdrop-blur-sm font-mono text-xs focus:outline-none focus:ring-2 focus:ring-amber-500"
+                                            className="w-full border border-white/60 rounded-lg px-4 py-3 text-slate-900  bg-slate-50/50 backdrop-blur-xs font-mono text-xs focus:outline-hidden focus:ring-2 focus:ring-amber-500"
                                         />
                                         <p className="text-[10px] text-slate-500  mt-1">
                                             All styles must be formatted directly in tag style properties: e.g. style="color:#0F172A;"
@@ -849,7 +849,7 @@ export default function NewsletterPage() {
                     </div>
 
                     {/* CAMPAIGN RECIPIENTS & TIMING SETTINGS */}
-                    <div className="admin-card-glass p-6 space-y-6 ring-1 ring-slate-900/[0.02]">
+                    <div className="admin-card-glass p-6 space-y-6 ring-1 ring-slate-900/2">
                         <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
                             <Settings className="text-amber-500" size={18} />
                             <h2 className="font-heading font-bold text-slate-900  text-lg font-sans">Campaign Settings</h2>
@@ -886,7 +886,7 @@ export default function NewsletterPage() {
                                         value={specificEmail}
                                         onChange={e => setSpecificEmail(e.target.value)}
                                         placeholder="subscriber@example.com"
-                                        className="w-full border border-white/60 rounded-lg px-4 py-2.5 text-sm text-slate-900  bg-slate-50/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-amber-505/20 focus:border-amber-500"
+                                        className="w-full border border-white/60 rounded-lg px-4 py-2.5 text-sm text-slate-900  bg-slate-50/50 backdrop-blur-xs focus:outline-hidden focus:ring-2 focus:ring-amber-505/20 focus:border-amber-500"
                                     />
                                 )}
                             </div>
@@ -920,7 +920,7 @@ export default function NewsletterPage() {
                                             type="datetime-local"
                                             value={scheduledAt}
                                             onChange={e => setScheduledAt(e.target.value)}
-                                            className="w-full border border-white/60 rounded-lg px-4 py-2 text-sm text-slate-900  bg-slate-50/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                                            className="w-full border border-white/60 rounded-lg px-4 py-2 text-sm text-slate-900  bg-slate-50/50 backdrop-blur-xs focus:outline-hidden focus:ring-2 focus:ring-amber-500"
                                         />
                                         <p className="text-[10px] text-slate-500  font-medium">Timers process in IST. Please select a valid future date & time.</p>
                                     </div>
@@ -938,7 +938,7 @@ export default function NewsletterPage() {
                                     value={testEmail}
                                     onChange={e => setTestEmail(e.target.value)}
                                     placeholder="Enter test recipient email..."
-                                    className="w-full md:w-60 border border-white/60 rounded-lg px-4 py-2.5 text-xs text-slate-900  bg-slate-50/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                                    className="w-full md:w-60 border border-white/60 rounded-lg px-4 py-2.5 text-xs text-slate-900  bg-slate-50/50 backdrop-blur-xs focus:outline-hidden focus:ring-2 focus:ring-amber-500"
                                 />
                                 <button
                                     type="button"
@@ -983,7 +983,7 @@ export default function NewsletterPage() {
                                     setShowConfirm(true)
                                 }}
                                 disabled={sending || testSending}
-                                className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-gold text-slate-900 rounded-xl font-bold hover:bg-amber-400 transition-all shadow-sm active:scale-95 disabled:opacity-45"
+                                className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-gold text-slate-900 rounded-xl font-bold hover:bg-amber-400 transition-all shadow-xs active:scale-95 disabled:opacity-45"
                             >
                                 {sending ? (
                                     <>
@@ -1027,7 +1027,7 @@ export default function NewsletterPage() {
                             </div>
                             
                             {/* Isolated iframe container for 100% accurate visual testing */}
-                            <div className="relative bg-slate-50/50 /50 h-[38rem] w-full flex flex-col">
+                            <div className="relative bg-slate-50/50 /50 h-152 w-full flex flex-col">
                                 {previewHtml ? (
                                     <iframe
                                         srcDoc={previewHtml}
@@ -1044,7 +1044,7 @@ export default function NewsletterPage() {
                             </div>
                         </div>
                     ) : (
-                        <div className="border border-dashed border-white/60 rounded-2xl h-[42rem] flex flex-col items-center justify-center text-center p-8 bg-slate-50/40 /20 text-slate-500">
+                        <div className="border border-dashed border-white/60 rounded-2xl h-168 flex flex-col items-center justify-center text-center p-8 bg-slate-50/40 /20 text-slate-500">
                             <Mail size={40} className="text-slate-700  mb-3" />
                             <p className="font-bold text-sm text-slate-500">Preview Visualizer Offline</p>
                             <p className="text-xs text-slate-500  max-w-xs mt-1">Please enter a Subject Line in the envelope settings to compile the preview canvas.</p>
@@ -1139,7 +1139,7 @@ export default function NewsletterPage() {
                             <button
                                 type="button"
                                 onClick={() => handleSend(false)}
-                                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 bg-gold text-slate-900 rounded-xl font-bold hover:bg-amber-400 transition-colors text-sm shadow"
+                                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 bg-gold text-slate-900 rounded-xl font-bold hover:bg-amber-400 transition-colors text-sm shadow-sm"
                             >
                                 <Rocket className="w-4 h-4" aria-hidden />
                                 {isScheduled ? 'Schedule' : 'Send now'}

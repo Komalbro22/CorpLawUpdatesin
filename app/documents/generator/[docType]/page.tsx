@@ -323,7 +323,7 @@ export default function DocumentGeneratorWizardPage() {
                   value={companyName}
                   onChange={e => setCompanyName(e.target.value)}
                   placeholder="e.g. ABC PRIVATE LIMITED"
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 text-sm focus:outline-none focus:border-blue-500"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 text-sm focus:outline-hidden focus:border-blue-500"
                 />
               </div>
 
@@ -337,7 +337,7 @@ export default function DocumentGeneratorWizardPage() {
                   onChange={e => setCin(e.target.value.toUpperCase())}
                   placeholder="e.g. U72900MH2021PTC123456"
                   maxLength={21}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 text-sm font-mono focus:outline-none focus:border-blue-500"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 text-sm font-mono focus:outline-hidden focus:border-blue-500"
                 />
                 <p className="text-xs text-slate-500 mt-1">21-character MCA CIN format.</p>
               </div>
@@ -351,7 +351,7 @@ export default function DocumentGeneratorWizardPage() {
                   value={registeredOffice}
                   onChange={e => setRegisteredOffice(e.target.value)}
                   placeholder="Full registered address of the Company..."
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 text-sm focus:outline-none focus:border-blue-500"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 text-sm focus:outline-hidden focus:border-blue-500"
                 />
               </div>
             </div>
@@ -393,7 +393,7 @@ export default function DocumentGeneratorWizardPage() {
                       value={directorName}
                       onChange={e => setDirectorName(e.target.value)}
                       placeholder="e.g. Mr. Rajesh Kumar"
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm focus:outline-hidden focus:border-blue-500"
                     />
                   </div>
 
@@ -405,7 +405,7 @@ export default function DocumentGeneratorWizardPage() {
                       onChange={e => setDin(e.target.value)}
                       placeholder="e.g. 01234567"
                       maxLength={8}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm font-mono focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm font-mono focus:outline-hidden focus:border-blue-500"
                     />
                   </div>
                 </div>
@@ -418,7 +418,7 @@ export default function DocumentGeneratorWizardPage() {
                       value={directorAddress}
                       onChange={e => setDirectorAddress(e.target.value)}
                       placeholder="Full residential address..."
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm focus:outline-hidden focus:border-blue-500"
                     />
                   </div>
                 )}
@@ -429,7 +429,7 @@ export default function DocumentGeneratorWizardPage() {
                     <select
                       value={designationCategory}
                       onChange={e => setDesignationCategory(e.target.value as any)}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm focus:outline-hidden focus:border-blue-500"
                     >
                       <option value="Non-Executive Director">Non-Executive Director</option>
                       <option value="Executive Director">Executive Director</option>
@@ -453,7 +453,7 @@ export default function DocumentGeneratorWizardPage() {
                       type="date"
                       value={meetingDate}
                       onChange={e => setMeetingDate(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm focus:outline-hidden focus:border-blue-500"
                     />
                   </div>
 
@@ -464,7 +464,7 @@ export default function DocumentGeneratorWizardPage() {
                       value={meetingTime}
                       onChange={e => setMeetingTime(e.target.value)}
                       placeholder="e.g. 11:00 AM"
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm focus:outline-hidden focus:border-blue-500"
                     />
                   </div>
 
@@ -475,7 +475,7 @@ export default function DocumentGeneratorWizardPage() {
                       value={serialNumber}
                       onChange={e => setSerialNumber(e.target.value)}
                       placeholder="e.g. 03/2026-27"
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm focus:outline-hidden focus:border-blue-500"
                     />
                   </div>
                 </div>
@@ -487,7 +487,7 @@ export default function DocumentGeneratorWizardPage() {
                     value={meetingVenue}
                     onChange={e => setMeetingVenue(e.target.value)}
                     placeholder="e.g. Registered Office of the Company"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm focus:outline-hidden focus:border-blue-500"
                   />
                 </div>
               </div>
@@ -525,7 +525,7 @@ export default function DocumentGeneratorWizardPage() {
                     onChange={e => setNewAgendaInput(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), handleAddAgenda())}
                     placeholder="Add custom agenda topic (e.g. To approve Q2 Financial Statements)..."
-                    className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-xs focus:outline-none focus:border-blue-500"
+                    className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-xs focus:outline-hidden focus:border-blue-500"
                   />
                   <button
                     onClick={handleAddAgenda}
@@ -549,7 +549,7 @@ export default function DocumentGeneratorWizardPage() {
                     value={authorizedSignatoryName}
                     onChange={e => setAuthorizedSignatoryName(e.target.value)}
                     placeholder="e.g. Ms. Priya Sharma"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm focus:outline-hidden focus:border-blue-500"
                   />
                 </div>
 
@@ -560,7 +560,7 @@ export default function DocumentGeneratorWizardPage() {
                     value={authorizedSignatoryDesignation}
                     onChange={e => setAuthorizedSignatoryDesignation(e.target.value)}
                     placeholder="Director / Company Secretary"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-sm focus:outline-hidden focus:border-blue-500"
                   />
                 </div>
               </div>
@@ -572,7 +572,7 @@ export default function DocumentGeneratorWizardPage() {
                   value={customInstructions}
                   onChange={e => setCustomInstructions(e.target.value)}
                   placeholder="e.g. Include note about filing Form DIR-12 within 30 days..."
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-xs focus:outline-none focus:border-blue-500"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 text-xs focus:outline-hidden focus:border-blue-500"
                 />
               </div>
             </div>

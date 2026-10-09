@@ -670,7 +670,7 @@ export default function ROCTrackerPage() {
     dark:border-slate-700 rounded-xl px-4 py-2.5 
     text-sm text-navy dark:text-slate-100 
     bg-white dark:bg-slate-800 
-    focus:outline-none focus:ring-2 
+    focus:outline-hidden focus:ring-2 
     focus:ring-amber-400`
 
   return (
@@ -787,7 +787,7 @@ export default function ROCTrackerPage() {
                         overflow-hidden mb-8 
                         print:hidden">
           
-          <div className="bg-gradient-to-r from-navy via-slate-900 to-navy
+          <div className="bg-linear-to-r from-navy via-slate-900 to-navy
                           border-b border-slate-200 
                           dark:border-slate-800 
                           px-6 py-5 flex items-center 
@@ -1015,7 +1015,7 @@ export default function ROCTrackerPage() {
                           Paid-up Capital $\le$ ₹10 Cr and Turnover $\le$ ₹100 Cr. Concessions applied: abridged return (MGT-7A) and 50% penalty relief.
                         </p>
                       </div>
-                      <label className="flex items-center gap-2 bg-emerald-500 text-white font-bold text-xs px-4 py-2 rounded-xl cursor-pointer hover:bg-emerald-600 transition-colors shadow-sm self-start md:self-auto">
+                      <label className="flex items-center gap-2 bg-emerald-500 text-white font-bold text-xs px-4 py-2 rounded-xl cursor-pointer hover:bg-emerald-600 transition-colors shadow-xs self-start md:self-auto">
                         <input
                           type="checkbox"
                           checked={isSmallCompanyActive}
@@ -1429,7 +1429,7 @@ export default function ROCTrackerPage() {
             <button
               onClick={handleCalculate}
               disabled={formsLoading}
-              className="flex-1 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-400 bg-[length:200%_auto] hover:bg-right text-navy font-black py-4 rounded-2xl text-sm transition-all duration-300 shadow-lg shadow-amber-400/10 hover:shadow-amber-400/20 hover:-translate-y-0.5 disabled:opacity-50">
+              className="flex-1 bg-linear-to-r from-amber-400 via-amber-500 to-amber-400 bg-size-[200%_auto] hover:bg-right text-navy font-black py-4 rounded-2xl text-sm transition-all duration-300 shadow-lg shadow-amber-400/10 hover:shadow-amber-400/20 hover:-translate-y-0.5 disabled:opacity-50">
               {formsLoading 
                 ? 'Loading verified rules...' 
                 : '📋 Calculate My ROC Deadlines →'}
@@ -1619,7 +1619,7 @@ export default function ROCTrackerPage() {
                               border border-green-200 
                               rounded-2xl p-5 
                               flex items-start gap-3">
-                <span className="text-3xl flex-shrink-0">
+                <span className="text-3xl shrink-0">
                   💡
                 </span>
                 <div>
@@ -1706,7 +1706,7 @@ export default function ROCTrackerPage() {
                 <div className="flex justify-start">
                   <button
                     onClick={handleMarkAllPrevFiled}
-                    className="bg-amber-400 hover:bg-amber-500 text-navy font-bold px-3 py-1.5 rounded-lg text-[11px] transition-all shadow print:hidden">
+                    className="bg-amber-400 hover:bg-amber-500 text-navy font-bold px-3 py-1.5 rounded-lg text-[11px] transition-all shadow-sm print:hidden">
                     ✔️ Mark All Previous Year Checklist as Filed
                   </button>
                 </div>
@@ -1834,7 +1834,7 @@ export default function ROCTrackerPage() {
                                   type="checkbox"
                                   checked={isFiled || false}
                                   onChange={e => handleToggleFiled(d.id, activeResultsTab === 'current' ? currentYear : previousYear, e.target.checked)}
-                                  className="w-4 h-4 accent-emerald-500 rounded"
+                                  className="w-4 h-4 accent-emerald-500 rounded-sm"
                                 />
                                 Mark as Filed
                               </label>
@@ -1845,7 +1845,7 @@ export default function ROCTrackerPage() {
                                   <IndianDateInput
                                     value={(d as any).actualFilingDate ? new Date((d as any).actualFilingDate).toISOString().split('T')[0] : ''}
                                     onChange={val => handleUpdateFilingDate(d.id, activeResultsTab === 'current' ? currentYear : previousYear, val)}
-                                    className="text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                                    className="text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 focus:outline-hidden focus:ring-1 focus:ring-emerald-500"
                                   />
                                 </div>
                               )}
@@ -1858,7 +1858,7 @@ export default function ROCTrackerPage() {
                          !isFiled &&
                          d.currentPenalty > 0 && (
                           <div className="text-right 
-                                          flex-shrink-0 
+                                          shrink-0 
                                           ml-3">
                             <p className="text-xs 
                                           text-slate-400 
@@ -1907,7 +1907,7 @@ export default function ROCTrackerPage() {
                                           dark:text-amber-400 
                                           font-semibold 
                                           underline 
-                                          flex-shrink-0 
+                                          shrink-0 
                                           print:hidden">
                               Guide →
                             </a>
@@ -1990,7 +1990,7 @@ export default function ROCTrackerPage() {
                                  dark:bg-slate-700 
                                  text-navy 
                                  dark:text-white 
-                                 focus:outline-none 
+                                 focus:outline-hidden 
                                  focus:ring-2 
                                  focus:ring-amber-400" />
                   </div>

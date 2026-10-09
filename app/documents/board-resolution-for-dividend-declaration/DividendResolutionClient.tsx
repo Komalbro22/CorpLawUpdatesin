@@ -199,11 +199,11 @@ export default function DividendResolutionClient() {
     if (text && text.trim()) {
       return <span className="font-semibold text-slate-900 dark:text-white underline decoration-amber-500/40 underline-offset-2">{text}</span>
     }
-    return <span className="rounded bg-amber-50 px-1 py-0.5 text-xs font-mono font-medium text-amber-800 dark:bg-amber-950/50 dark:text-amber-300">[{placeholder}]</span>
+    return <span className="rounded-sm bg-amber-50 px-1 py-0.5 text-xs font-mono font-medium text-amber-800 dark:bg-amber-950/50 dark:text-amber-300">[{placeholder}]</span>
   }
 
   return (
-    <section id="generator" className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-7" aria-labelledby="generator-heading">
+    <section id="generator" className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xs dark:border-slate-800 dark:bg-slate-900 sm:p-7" aria-labelledby="generator-heading">
       {/* Header bar with actions */}
       <div className="flex flex-col gap-4 border-b border-slate-200 pb-6 dark:border-slate-800 sm:flex-row sm:items-start sm:justify-between">
         <div>
@@ -257,7 +257,7 @@ export default function DividendResolutionClient() {
           onClick={() => setActiveMobileTab('editor')}
           className={`flex-1 rounded-lg py-2.5 text-xs font-bold transition-all ${
             activeMobileTab === 'editor'
-              ? 'bg-white text-slate-900 shadow-sm dark:bg-slate-900 dark:text-white'
+              ? 'bg-white text-slate-900 shadow-xs dark:bg-slate-900 dark:text-white'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
           }`}
         >
@@ -268,7 +268,7 @@ export default function DividendResolutionClient() {
           onClick={() => setActiveMobileTab('preview')}
           className={`flex-1 rounded-lg py-2.5 text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
             activeMobileTab === 'preview'
-              ? 'bg-navy text-white shadow-sm'
+              ? 'bg-navy text-white shadow-xs'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
           }`}
         >
@@ -295,7 +295,7 @@ export default function DividendResolutionClient() {
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
               <label className={`flex cursor-pointer gap-2.5 rounded-lg border p-3 transition-all ${
                 form.resolutionType === 'final'
-                  ? 'border-amber-600 bg-amber-50/80 shadow-sm dark:border-amber-500 dark:bg-amber-950/40'
+                  ? 'border-amber-600 bg-amber-50/80 shadow-xs dark:border-amber-500 dark:bg-amber-950/40'
                   : 'border-slate-200 bg-white hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800/50'
               }`}>
                 <input
@@ -314,7 +314,7 @@ export default function DividendResolutionClient() {
 
               <label className={`flex cursor-pointer gap-2.5 rounded-lg border p-3 transition-all ${
                 form.resolutionType === 'interim'
-                  ? 'border-amber-600 bg-amber-50/80 shadow-sm dark:border-amber-500 dark:bg-amber-950/40'
+                  ? 'border-amber-600 bg-amber-50/80 shadow-xs dark:border-amber-500 dark:bg-amber-950/40'
                   : 'border-slate-200 bg-white hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800/50'
               }`}>
                 <input
@@ -349,7 +349,7 @@ export default function DividendResolutionClient() {
                 value={form.companyName}
                 onChange={e => setForm(c => ({ ...c, companyName: e.target.value }))}
                 placeholder="e.g. ACME TECHNOLOGIES LIMITED"
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-hidden focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
               />
             </label>
 
@@ -361,7 +361,7 @@ export default function DividendResolutionClient() {
                   value={form.cin}
                   onChange={e => setForm(c => ({ ...c, cin: e.target.value }))}
                   placeholder="U72200MH2018PLC312456"
-                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-mono text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-mono text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-hidden focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
                 />
               </label>
 
@@ -374,7 +374,7 @@ export default function DividendResolutionClient() {
                   value={form.chairperson}
                   onChange={e => setForm(c => ({ ...c, chairperson: e.target.value }))}
                   placeholder="e.g. Rajesh Sharma"
-                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-hidden focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
                 />
               </label>
             </div>
@@ -386,7 +386,7 @@ export default function DividendResolutionClient() {
                 value={form.registeredOffice}
                 onChange={e => setForm(c => ({ ...c, registeredOffice: e.target.value }))}
                 placeholder="Full address as per MCA master data"
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-hidden focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
               />
             </label>
           </div>
@@ -408,7 +408,7 @@ export default function DividendResolutionClient() {
                   value={form.meetingDate}
                   onChange={e => setForm(c => ({ ...c, meetingDate: e.target.value }))}
                   placeholder="e.g. 30 September 2026"
-                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-hidden focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
                 />
               </label>
 
@@ -419,7 +419,7 @@ export default function DividendResolutionClient() {
                   value={form.meetingTime}
                   onChange={e => setForm(c => ({ ...c, meetingTime: e.target.value }))}
                   placeholder="e.g. 11:00 A.M."
-                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-hidden focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
                 />
               </label>
             </div>
@@ -431,7 +431,7 @@ export default function DividendResolutionClient() {
                 value={form.meetingPlace}
                 onChange={e => setForm(c => ({ ...c, meetingPlace: e.target.value }))}
                 placeholder="e.g. Registered Office / Video Conferencing"
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-hidden focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
               />
             </label>
           </div>
@@ -453,7 +453,7 @@ export default function DividendResolutionClient() {
                   value={form.financialYear}
                   onChange={e => setForm(c => ({ ...c, financialYear: e.target.value }))}
                   placeholder="e.g. 2025–26"
-                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-hidden focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
                 />
               </label>
 
@@ -467,7 +467,7 @@ export default function DividendResolutionClient() {
                   onChange={e => setForm(c => ({ ...c, faceValue: e.target.value }))}
                   placeholder="e.g. 10"
                   inputMode="decimal"
-                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-hidden focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
                 />
               </label>
             </div>
@@ -483,7 +483,7 @@ export default function DividendResolutionClient() {
                   onChange={e => setForm(c => ({ ...c, dividendPerShare: e.target.value }))}
                   placeholder="e.g. 2.50"
                   inputMode="decimal"
-                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-hidden focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
                 />
               </label>
 
@@ -497,7 +497,7 @@ export default function DividendResolutionClient() {
                   onChange={e => setForm(c => ({ ...c, eligibleShares: e.target.value }))}
                   placeholder="e.g. 1000000"
                   inputMode="numeric"
-                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-hidden focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
                 />
               </label>
             </div>
@@ -534,7 +534,7 @@ export default function DividendResolutionClient() {
                   value={form.recordDate}
                   onChange={e => setForm(c => ({ ...c, recordDate: e.target.value }))}
                   placeholder="e.g. 15 October 2026"
-                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-hidden focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
                 />
               </label>
 
@@ -545,7 +545,7 @@ export default function DividendResolutionClient() {
                   value={form.paymentDeadline}
                   onChange={e => setForm(c => ({ ...c, paymentDeadline: e.target.value }))}
                   placeholder="e.g. 30 October 2026"
-                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-hidden focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
                 />
               </label>
             </div>
@@ -559,7 +559,7 @@ export default function DividendResolutionClient() {
                 value={form.bankName}
                 onChange={e => setForm(c => ({ ...c, bankName: e.target.value }))}
                 placeholder="e.g. HDFC Bank Limited / ICICI Bank"
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-none focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
+                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 placeholder:text-slate-400 focus:border-amber-700 focus:outline-hidden focus:ring-1 focus:ring-amber-600 dark:border-slate-700 dark:bg-slate-950 dark:text-white"
               />
             </label>
           </div>
@@ -567,7 +567,7 @@ export default function DividendResolutionClient() {
 
         {/* RIGHT COLUMN: Real-Time Live Resolution Draft Preview (7 cols on lg) */}
         <div className={`lg:col-span-7 ${activeMobileTab === 'editor' ? 'hidden lg:block' : 'block'}`}>
-          <div className="sticky top-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
+          <div className="sticky top-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs dark:border-slate-800 dark:bg-slate-950">
             {/* Live Specimen Header Bar */}
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-800 dark:bg-slate-900/90">
               <div className="flex items-center gap-2">
@@ -727,7 +727,7 @@ export default function DividendResolutionClient() {
                   type="button"
                   onClick={() => download('docx')}
                   disabled={!!busy}
-                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-lg bg-navy px-4 py-2.5 text-xs font-semibold text-white hover:bg-slate-800 disabled:cursor-wait disabled:opacity-60 shadow-sm"
+                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-lg bg-navy px-4 py-2.5 text-xs font-semibold text-white hover:bg-slate-800 disabled:cursor-wait disabled:opacity-60 shadow-xs"
                 >
                   {busy === 'docx' ? <LoaderCircle className="size-3.5 animate-spin" /> : <Download className="size-3.5" />}
                   Download Word (.docx)
@@ -736,7 +736,7 @@ export default function DividendResolutionClient() {
                   type="button"
                   onClick={() => download('pdf')}
                   disabled={!!busy}
-                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-xs font-semibold text-slate-800 hover:bg-slate-50 disabled:cursor-wait disabled:opacity-60 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800 shadow-sm"
+                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-xs font-semibold text-slate-800 hover:bg-slate-50 disabled:cursor-wait disabled:opacity-60 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800 shadow-xs"
                 >
                   {busy === 'pdf' ? <LoaderCircle className="size-3.5 animate-spin" /> : <FileText className="size-3.5" />}
                   Download PDF

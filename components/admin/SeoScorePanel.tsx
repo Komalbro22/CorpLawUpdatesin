@@ -127,13 +127,13 @@ export default function SeoScorePanel({
     : 'bg-rose-500'
 
   return (
-    <div className="border border-slate-200/80 dark:border-slate-800 rounded-xl p-5 bg-white dark:bg-slate-900 shadow-card ring-1 ring-slate-900/[0.02]">
+    <div className="border border-slate-200/80 dark:border-slate-800 rounded-xl p-5 bg-white dark:bg-slate-900 shadow-card ring-1 ring-slate-900/2">
       <div className="flex justify-between items-center mb-4">
         <div>
           <h3 className="font-bold text-navy dark:text-slate-100 text-base">Real-time SEO Audit</h3>
           <p className="text-xs text-slate-400 dark:text-slate-500">Continuous scoring as you edit</p>
         </div>
-        <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-sm font-bold shadow-sm ${ratingColor}`}>
+        <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-sm font-bold shadow-xs ${ratingColor}`}>
           <span>🎯</span>
           <span>{score}/100</span>
         </div>

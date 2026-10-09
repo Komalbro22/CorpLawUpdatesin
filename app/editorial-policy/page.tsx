@@ -181,7 +181,7 @@ export default function EditorialPolicyPage() {
                 <strong className="text-slate-800 dark:text-slate-200">No Editorial Verification Claims:</strong> Sponsored articles do not display our editorial desk verification badges, fact-check claims, or compliance timestamps. These indicators are reserved exclusively for content researched and verified by our editorial team.
               </li>
               <li>
-                <strong className="text-slate-800 dark:text-slate-200">Link Attribution:</strong> External links in sponsored articles are marked with <code className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-xs">rel="sponsored"</code> in accordance with search engine guidelines for paid content.
+                <strong className="text-slate-800 dark:text-slate-200">Link Attribution:</strong> External links in sponsored articles are marked with <code className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded-sm text-xs">rel="sponsored"</code> in accordance with search engine guidelines for paid content.
               </li>
               <li>
                 <strong className="text-slate-800 dark:text-slate-200">Editorial Standards:</strong> While sponsored content undergoes basic review for factual accuracy and legal compliance, it is not held to the same primary-source verification standard as our editorial news coverage.

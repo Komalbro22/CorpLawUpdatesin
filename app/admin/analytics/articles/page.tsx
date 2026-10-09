@@ -115,7 +115,7 @@ export default function ArticleAnalyticsPage() {
         ].map(stat => (
           <div
             key={stat.label}
-            className={`rounded-xl border p-4 text-center shadow-card ring-1 ring-slate-900/[0.02] ${stat.color}`}
+            className={`rounded-xl border p-4 text-center shadow-card ring-1 ring-slate-900/2 ${stat.color}`}
           >
             <div className="text-2xl font-heading font-bold text-slate-900 tabular-nums">{stat.value}</div>
             <div className="text-xs font-semibold mt-1 text-slate-700 opacity-90">{stat.label}</div>
@@ -135,13 +135,13 @@ export default function ArticleAnalyticsPage() {
               placeholder="Search titles…"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full bg-slate-50 border border-white/60 rounded-lg pl-10 pr-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-gold/20 transition-shadow"
+              className="w-full bg-slate-50 border border-white/60 rounded-lg pl-10 pr-3 py-2.5 text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-gold/20 transition-shadow"
             />
           </div>
           <select
             value={statusFilter}
             onChange={e => setStatusFilter(e.target.value)}
-            className="bg-slate-50 border border-white/60 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-gold/20"
+            className="bg-slate-50 border border-white/60 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-gold/20"
           >
             <option value="All">All status</option>
             <option value="published">Published</option>

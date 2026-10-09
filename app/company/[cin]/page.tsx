@@ -213,7 +213,7 @@ export default async function CompanyProfilePage({ params }: Props) {
         </nav>
 
         {/* 2. Company Header Banner */}
-        <header className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-200/80 dark:border-slate-800 shadow-sm relative overflow-hidden">
+        <header className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-200/80 dark:border-slate-800 shadow-xs relative overflow-hidden">
           <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
             <div className="flex flex-wrap items-center gap-2">
               <CompanyStatusBadge status={company.company_status} size="lg" />
@@ -227,7 +227,7 @@ export default async function CompanyProfilePage({ params }: Props) {
             <form action={`/api/company/${company.cin}/pdf`} method="POST" target="_blank">
               <button
                 type="submit"
-                className="inline-flex items-center gap-2 bg-navy hover:bg-slate-800 text-white dark:bg-amber-400 dark:hover:bg-amber-500 dark:text-navy font-bold px-4 py-2 rounded-xl text-xs md:text-sm transition-all shadow-sm active:scale-95"
+                className="inline-flex items-center gap-2 bg-navy hover:bg-slate-800 text-white dark:bg-amber-400 dark:hover:bg-amber-500 dark:text-navy font-bold px-4 py-2 rounded-xl text-xs md:text-sm transition-all shadow-xs active:scale-95"
               >
                 <FileText className="size-4" aria-hidden="true" /> Download PDF Report
               </button>
@@ -248,7 +248,7 @@ export default async function CompanyProfilePage({ params }: Props) {
         </header>
 
         {/* 3. Quick Answer Box (AI-SEO GEO Summary) */}
-        <section className="bg-gradient-to-br from-amber-500/10 via-amber-400/5 to-transparent rounded-2xl p-5 md:p-6 border border-amber-300/40 dark:border-amber-500/20 shadow-sm relative">
+        <section className="bg-linear-to-br from-amber-500/10 via-amber-400/5 to-transparent rounded-2xl p-5 md:p-6 border border-amber-300/40 dark:border-amber-500/20 shadow-xs relative">
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="size-4 text-amber-600 dark:text-amber-400 animate-pulse" aria-hidden="true" />
             <h2 className="text-xs font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400">
@@ -262,7 +262,7 @@ export default async function CompanyProfilePage({ params }: Props) {
 
         {/* 4. CIN Structure Decoder Section */}
         {cinDecoded && (
-          <section className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4">
+          <section className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-4">
             <div className="flex items-center gap-2">
               <Binary className="size-5 text-amber-500" aria-hidden="true" />
               <h2 className="text-xl font-bold text-navy dark:text-white font-heading">
@@ -335,7 +335,7 @@ export default async function CompanyProfilePage({ params }: Props) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
           {/* Registered Details Card */}
-          <section className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+          <section className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-xs">
             <h2 className="text-lg font-bold text-navy dark:text-white font-heading mb-4 flex items-center gap-2">
               <Building2 className="size-5 text-amber-500" aria-hidden="true" /> Registered Details
             </h2>
@@ -367,7 +367,7 @@ export default async function CompanyProfilePage({ params }: Props) {
           </section>
 
           {/* Capital Structure Card */}
-          <section className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+          <section className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-xs">
             <h2 className="text-lg font-bold text-navy dark:text-white font-heading mb-4 flex items-center gap-2">
               <Landmark className="size-5 text-emerald-500" aria-hidden="true" /> Capital Structure
             </h2>
@@ -405,7 +405,7 @@ export default async function CompanyProfilePage({ params }: Props) {
         <ChargesTable charges={company.charges || []} companyName={company.company_name} />
 
         {/* 9. Compliance Snapshot Section */}
-        <section className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-6">
+        <section className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-6">
           <div>
             <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 text-xs font-bold px-3 py-1 rounded-full mb-2">
               <ShieldCheck className="size-3.5" aria-hidden="true" /> Differentiator Feature
@@ -445,7 +445,7 @@ export default async function CompanyProfilePage({ params }: Props) {
 
         {/* 11. Contextual Regulatory Updates */}
         {relatedArticles && relatedArticles.length > 0 && (
-          <section className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+          <section className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-xs">
             <h3 className="text-lg font-bold text-navy dark:text-white font-heading mb-4 flex items-center gap-2">
               <FileText className="size-5 text-amber-500" aria-hidden="true" /> Contextual Compliance Articles
             </h3>
@@ -464,7 +464,7 @@ export default async function CompanyProfilePage({ params }: Props) {
         )}
 
         {/* 12. Auto-Generated FAQ Accordion */}
-        <section className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+        <section className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-200/80 dark:border-slate-800 shadow-xs">
           <h3 className="text-xl font-bold text-navy dark:text-white font-heading mb-6 flex items-center gap-2">
             <HelpCircle className="size-5 text-amber-500" aria-hidden="true" /> Frequently Asked Questions
           </h3>

@@ -99,12 +99,12 @@ export default function AdminLogin() {
             <div className="w-full max-w-[440px] mb-6 flex justify-between items-center z-10 px-1">
                 <Link
                     href="/"
-                    className="inline-flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-white transition-all duration-200 group py-1.5 px-3 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/60 backdrop-blur-md shadow-sm"
+                    className="inline-flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-white transition-all duration-200 group py-1.5 px-3 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/60 backdrop-blur-md shadow-xs"
                 >
                     <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-1 text-amber-400" />
                     <span>Return to public website</span>
                 </Link>
-                <div className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-3 py-1 rounded-full shadow-sm backdrop-blur-md">
+                <div className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-3 py-1 rounded-full shadow-xs backdrop-blur-md">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                     <span>System Active</span>
                 </div>
@@ -120,7 +120,7 @@ export default function AdminLogin() {
             >
                 {/* Logo & Header */}
                 <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 mb-4 shadow-lg shadow-amber-500/25 ring-4 ring-amber-500/10">
+                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-linear-to-br from-amber-400 to-amber-600 text-slate-950 mb-4 shadow-lg shadow-amber-500/25 ring-4 ring-amber-500/10">
                         <Lock className="w-6 h-6 text-slate-950 font-extrabold" aria-hidden />
                     </div>
                     <h1 className="font-heading text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex justify-center items-baseline gap-1">
@@ -166,14 +166,14 @@ export default function AdminLogin() {
                                     backgroundColor: '#030712',
                                     color: '#ffffff',
                                 }}
-                                className="block w-full border border-slate-700/90 focus:border-amber-400 focus:ring-4 focus:ring-amber-400/20 rounded-xl px-4 py-3.5 pr-12 text-white placeholder:text-slate-500 transition-all duration-200 text-sm font-medium outline-none shadow-inner"
+                                className="block w-full border border-slate-700/90 focus:border-amber-400 focus:ring-4 focus:ring-amber-400/20 rounded-xl px-4 py-3.5 pr-12 text-white placeholder:text-slate-500 transition-all duration-200 text-sm font-medium outline-hidden shadow-inner"
                                 placeholder="Enter admin passkey..."
                                 disabled={loading}
                             />
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400/40 transition-colors duration-200 cursor-pointer z-10"
+                                className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-white rounded-lg focus:outline-hidden focus:ring-2 focus:ring-amber-400/40 transition-colors duration-200 cursor-pointer z-10"
                                 aria-label={showPassword ? 'Hide passkey' : 'Show passkey'}
                             >
                                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -201,7 +201,7 @@ export default function AdminLogin() {
                             width: '100%',
                             boxSizing: 'border-box',
                         }}
-                        className="w-full mt-2 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-400 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-extrabold py-3.5 px-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-amber-500/35 active:scale-[0.99] transition-all duration-200 disabled:opacity-40 disabled:pointer-events-none flex items-center justify-center gap-2 cursor-pointer text-sm tracking-wide"
+                        className="w-full mt-2 bg-linear-to-r from-amber-400 via-amber-500 to-amber-400 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-extrabold py-3.5 px-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-amber-500/35 active:scale-[0.99] transition-all duration-200 disabled:opacity-40 disabled:pointer-events-none flex items-center justify-center gap-2 cursor-pointer text-sm tracking-wide"
                     >
                         {loading ? (
                             <>

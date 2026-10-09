@@ -356,7 +356,7 @@ Place: New Delhi`
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       {/* Top Banner */}
-      <div className="bg-gradient-to-r from-navy via-slate-900 to-indigo-950 rounded-2xl p-6 md:p-8 text-white mb-8 shadow-xl border border-slate-800">
+      <div className="bg-linear-to-r from-navy via-slate-900 to-indigo-950 rounded-2xl p-6 md:p-8 text-white mb-8 shadow-xl border border-slate-800">
         <div className="flex flex-wrap items-center gap-2 mb-3">
           <span className="bg-blue-600/30 text-blue-300 border border-blue-400/40 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
             Section 179(3)(d) • Mandatory Board Approval
@@ -407,7 +407,7 @@ Place: New Delhi`
                 onClick={() => handleFacilityChange(fac)}
                 className={`p-3 rounded-xl border text-left transition-all ${
                   isSelected
-                    ? 'border-blue-600 bg-blue-50 dark:bg-blue-950/40 shadow-sm ring-1 ring-blue-600'
+                    ? 'border-blue-600 bg-blue-50 dark:bg-blue-950/40 shadow-xs ring-1 ring-blue-600'
                     : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300'
                 }`}
               >
@@ -430,7 +430,7 @@ Place: New Delhi`
         {/* Left Column: Configuration Forms (5 Cols) */}
         <div className="lg:col-span-5 space-y-6">
           {/* Section 1: Company Particulars & CIN Lookup */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-xs">
             <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
               <Building2 className="size-4 text-blue-600" />
               <span>1. Company &amp; Board Meeting Particulars</span>
@@ -448,7 +448,7 @@ Place: New Delhi`
                   onChange={(e) => handleInputChange('cin', e.target.value.toUpperCase())}
                   placeholder="e.g. U72900DL2022PTC123456"
                   maxLength={21}
-                  className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
                 <button
                   type="button"
@@ -472,7 +472,7 @@ Place: New Delhi`
                   type="text"
                   value={formData.companyName}
                   onChange={(e) => handleInputChange('companyName', e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-semibold"
+                  className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 font-semibold"
                 />
               </div>
 
@@ -484,7 +484,7 @@ Place: New Delhi`
                   <select
                     value={formData.companyType}
                     onChange={(e) => handleInputChange('companyType', e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="private">Private Limited (Exempt under Sec 180)</option>
                     <option value="public">Public Limited (Sec 180 Limits Apply)</option>
@@ -500,7 +500,7 @@ Place: New Delhi`
                     value={formData.meetingDate}
                     onChange={(e) => handleInputChange('meetingDate', e.target.value)}
                     placeholder="DD/MM/YYYY"
-                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -513,7 +513,7 @@ Place: New Delhi`
                   type="text"
                   value={formData.registeredOffice}
                   onChange={(e) => handleInputChange('registeredOffice', e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -526,7 +526,7 @@ Place: New Delhi`
                     type="text"
                     value={formData.meetingTime}
                     onChange={(e) => handleInputChange('meetingTime', e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -537,7 +537,7 @@ Place: New Delhi`
                     type="text"
                     value={formData.chairpersonName}
                     onChange={(e) => handleInputChange('chairpersonName', e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -545,7 +545,7 @@ Place: New Delhi`
           </div>
 
           {/* Section 2: Lending Bank & Sanction Parameters */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-xs">
             <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
               <Landmark className="size-4 text-emerald-600" />
               <span>2. Lending Bank &amp; Sanction Terms</span>
@@ -561,7 +561,7 @@ Place: New Delhi`
                     type="text"
                     value={formData.bankName}
                     onChange={(e) => handleInputChange('bankName', e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-semibold"
+                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 font-semibold"
                   />
                 </div>
                 <div>
@@ -572,7 +572,7 @@ Place: New Delhi`
                     type="text"
                     value={formData.bankBranch}
                     onChange={(e) => handleInputChange('bankBranch', e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -586,7 +586,7 @@ Place: New Delhi`
                     type="text"
                     value={formData.sanctionLetterNo}
                     onChange={(e) => handleInputChange('sanctionLetterNo', e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
+                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 font-mono"
                   />
                 </div>
                 <div>
@@ -598,7 +598,7 @@ Place: New Delhi`
                     value={formData.sanctionLetterDate}
                     onChange={(e) => handleInputChange('sanctionLetterDate', e.target.value)}
                     placeholder="DD/MM/YYYY"
-                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -613,7 +613,7 @@ Place: New Delhi`
                     value={formData.loanAmount}
                     onChange={(e) => handleInputChange('loanAmount', Number(e.target.value))}
                     step={100000}
-                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold"
+                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 font-bold"
                   />
                 </div>
                 <div>
@@ -624,7 +624,7 @@ Place: New Delhi`
                     type="text"
                     value={formData.interestRate}
                     onChange={(e) => handleInputChange('interestRate', e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -637,7 +637,7 @@ Place: New Delhi`
                   type="text"
                   value={formData.loanAmountWords}
                   onChange={(e) => handleInputChange('loanAmountWords', e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 italic"
+                  className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 italic"
                 />
               </div>
 
@@ -650,7 +650,7 @@ Place: New Delhi`
                     type="text"
                     value={formData.tenure}
                     onChange={(e) => handleInputChange('tenure', e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -661,7 +661,7 @@ Place: New Delhi`
                     type="text"
                     value={formData.repaymentTerms}
                     onChange={(e) => handleInputChange('repaymentTerms', e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -722,7 +722,7 @@ Place: New Delhi`
                           type="button"
                           onClick={() => handlePolishPurpose(preset)}
                           disabled={aiLoading}
-                          className="px-2 py-0.5 rounded text-[10px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-400 text-slate-700 dark:text-slate-300 transition"
+                          className="px-2 py-0.5 rounded-sm text-[10px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-400 text-slate-700 dark:text-slate-300 transition"
                         >
                           {preset}
                         </button>
@@ -744,14 +744,14 @@ Place: New Delhi`
                   rows={2}
                   value={formData.loanPurpose}
                   onChange={(e) => handleInputChange('loanPurpose', e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs sm:text-sm"
+                  className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500 text-xs sm:text-sm"
                 />
               </div>
             </div>
           </div>
 
           {/* Section 3: Statutory Borrowing Limit Calculator (Sec 180(1)(c)) */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-xs">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <Scale className="size-4 text-purple-600" />
@@ -872,7 +872,7 @@ Place: New Delhi`
           </div>
 
           {/* Section 4: Security Details & Authorised Signatories */}
-          <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-xs">
             <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
               <ShieldCheck className="size-4 text-blue-600" />
               <span>4. Security, Signatories &amp; ROC Form CHG-1</span>
@@ -887,7 +887,7 @@ Place: New Delhi`
                   value={formData.securityDescription}
                   onChange={(e) => handleInputChange('securityDescription', e.target.value)}
                   rows={2}
-                  className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -952,7 +952,7 @@ Place: New Delhi`
                   id="chg1Checkbox"
                   checked={formData.hasChg1Filing}
                   onChange={(e) => handleInputChange('hasChg1Filing', e.target.checked)}
-                  className="rounded text-blue-600 focus:ring-blue-500"
+                  className="rounded-sm text-blue-600 focus:ring-blue-500"
                 />
                 <label
                   htmlFor="chg1Checkbox"
@@ -967,7 +967,7 @@ Place: New Delhi`
 
         {/* Right Column: Multi-Tab Live Preview & Document Actions (7 Cols) */}
         <div className="lg:col-span-7">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden sticky top-6">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs overflow-hidden sticky top-6">
             {/* Tab Navigation Header */}
             <div className="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-800 p-2 flex flex-wrap gap-1.5">
               <button
@@ -975,7 +975,7 @@ Place: New Delhi`
                 onClick={() => setActiveTab('resolution')}
                 className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                   activeTab === 'resolution'
-                    ? 'bg-blue-600 text-white shadow-sm'
+                    ? 'bg-blue-600 text-white shadow-xs'
                     : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50'
                 }`}
               >
@@ -988,7 +988,7 @@ Place: New Delhi`
                 onClick={() => setActiveTab('special-resolution')}
                 className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                   activeTab === 'special-resolution'
-                    ? 'bg-purple-600 text-white shadow-sm'
+                    ? 'bg-purple-600 text-white shadow-xs'
                     : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50'
                 }`}
               >
@@ -1001,7 +1001,7 @@ Place: New Delhi`
                 onClick={() => setActiveTab('bank-letter')}
                 className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                   activeTab === 'bank-letter'
-                    ? 'bg-emerald-600 text-white shadow-sm'
+                    ? 'bg-emerald-600 text-white shadow-xs'
                     : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50'
                 }`}
               >
@@ -1014,7 +1014,7 @@ Place: New Delhi`
                 onClick={() => setActiveTab('chg1-extract')}
                 className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                   activeTab === 'chg1-extract'
-                    ? 'bg-navy text-white shadow-sm'
+                    ? 'bg-navy text-white shadow-xs'
                     : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50'
                 }`}
               >
@@ -1027,7 +1027,7 @@ Place: New Delhi`
                 onClick={() => setActiveTab('checklist')}
                 className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                   activeTab === 'checklist'
-                    ? 'bg-slate-700 text-white shadow-sm'
+                    ? 'bg-slate-700 text-white shadow-xs'
                     : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50'
                 }`}
               >
@@ -1047,7 +1047,7 @@ Place: New Delhi`
                     setIsGatewayOpen(true)
                   }}
                   disabled={!!isDownloading}
-                  className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors flex items-center gap-1.5 shadow-sm"
+                  className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors flex items-center gap-1.5 shadow-xs"
                 >
                   <Download className="size-3.5" />
                   <span>
@@ -1064,7 +1064,7 @@ Place: New Delhi`
                       setIsGatewayOpen(true)
                     }}
                     disabled={!!isDownloading}
-                    className="px-3.5 py-2 rounded-xl bg-navy hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white text-xs font-bold transition-colors flex items-center gap-1.5 border border-slate-700 shadow-sm"
+                    className="px-3.5 py-2 rounded-xl bg-navy hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white text-xs font-bold transition-colors flex items-center gap-1.5 border border-slate-700 shadow-xs"
                   >
                     <Download className="size-3.5" />
                     <span>
@@ -1097,7 +1097,7 @@ Place: New Delhi`
             </div>
 
             {/* Document Content View */}
-            <div className="w-full min-w-0 max-w-full max-h-[750px] overflow-x-auto overflow-y-auto break-words box-border p-4 sm:p-6 font-serif text-slate-900 dark:text-slate-100 text-sm leading-relaxed space-y-4">
+            <div className="w-full min-w-0 max-w-full max-h-[750px] overflow-x-auto overflow-y-auto wrap-break-word box-border p-4 sm:p-6 font-serif text-slate-900 dark:text-slate-100 text-sm leading-relaxed space-y-4">
               {activeTab === 'resolution' && (
                 <div className="bg-white dark:bg-slate-950 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-inner">
                   <div className="text-center pb-4 border-b border-slate-200 dark:border-slate-800 mb-5">

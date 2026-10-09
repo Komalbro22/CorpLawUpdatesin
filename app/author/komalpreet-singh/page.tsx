@@ -155,12 +155,12 @@ export default async function AuthorProfilePage() {
 
       <div className="max-w-5xl mx-auto px-4 pt-10">
         {/* Main Author Hero Card */}
-        <section className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-3xl p-6 sm:p-10 shadow-sm relative overflow-hidden mb-12">
+        <section className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-3xl p-6 sm:p-10 shadow-xs relative overflow-hidden mb-12">
           <div className="absolute top-0 right-0 w-80 h-80 bg-amber-500/5 dark:bg-amber-400/5 rounded-full blur-3xl pointer-events-none" />
 
           <div className="flex flex-col md:flex-row items-start gap-8 relative z-10">
             {/* Avatar badge */}
-            <div className="size-24 sm:size-28 rounded-3xl bg-gradient-to-br from-navy via-slate-850 to-slate-900 dark:from-amber-500 dark:to-amber-600 text-white dark:text-slate-950 flex items-center justify-center font-heading font-extrabold text-3xl sm:text-4xl shadow-xl ring-8 ring-amber-500/10 dark:ring-amber-400/20 shrink-0">
+            <div className="size-24 sm:size-28 rounded-3xl bg-linear-to-br from-navy via-slate-850 to-slate-900 dark:from-amber-500 dark:to-amber-600 text-white dark:text-slate-950 flex items-center justify-center font-heading font-extrabold text-3xl sm:text-4xl shadow-xl ring-8 ring-amber-500/10 dark:ring-amber-400/20 shrink-0">
               KS
             </div>
 
@@ -223,7 +223,7 @@ export default async function AuthorProfilePage() {
               <div className="flex flex-wrap items-center gap-3 pt-3">
                 <a
                   href="mailto:legal@corplawupdates.in?subject=Editorial%20Inquiry%20%2F%20Regulatory%20Research"
-                  className="inline-flex items-center gap-2 rounded-xl bg-navy dark:bg-amber-500 px-4 py-2.5 text-xs font-bold text-white dark:text-slate-950 hover:bg-slate-800 dark:hover:bg-amber-400 transition-colors shadow-sm"
+                  className="inline-flex items-center gap-2 rounded-xl bg-navy dark:bg-amber-500 px-4 py-2.5 text-xs font-bold text-white dark:text-slate-950 hover:bg-slate-800 dark:hover:bg-amber-400 transition-colors shadow-xs"
                 >
                   <Mail className="size-3.5" />
                   Contact Desk
@@ -270,7 +270,7 @@ export default async function AuthorProfilePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-6 space-y-3 shadow-xs">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-6 space-y-3 shadow-2xs">
               <div className="size-10 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center">
                 <FileCheck className="size-5" />
               </div>
@@ -281,7 +281,7 @@ export default async function AuthorProfilePage() {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-6 space-y-3 shadow-xs">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-6 space-y-3 shadow-2xs">
               <div className="size-10 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center">
                 <Scale className="size-5" />
               </div>
@@ -292,7 +292,7 @@ export default async function AuthorProfilePage() {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-6 space-y-3 shadow-xs">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-6 space-y-3 shadow-2xs">
               <div className="size-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
                 <CheckCircle2 className="size-5" />
               </div>
@@ -412,7 +412,7 @@ export default async function AuthorProfilePage() {
           </div>
           <a
             href="mailto:legal@corplawupdates.in"
-            className="inline-flex items-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 px-6 py-3 font-bold text-sm transition-all shrink-0 shadow-sm"
+            className="inline-flex items-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 px-6 py-3 font-bold text-sm transition-all shrink-0 shadow-xs"
           >
             <Mail className="size-4" />
             Email Editorial Desk

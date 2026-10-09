@@ -447,7 +447,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
               onClick={() => setCalcMode('date')}
               className={`px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition-all flex items-center gap-2 ${
                 calcMode === 'date'
-                  ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-sm'
+                  ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -459,7 +459,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
               onClick={() => setCalcMode('days')}
               className={`px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition-all flex items-center gap-2 ${
                 calcMode === 'days'
-                  ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-sm'
+                  ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
@@ -536,7 +536,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
                     onClick={() => setIsSmallOrOpc(false)}
                     className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${
                       !isSmallOrOpc
-                        ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-sm'
+                        ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-xs'
                         : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
@@ -547,7 +547,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
                     onClick={() => setIsSmallOrOpc(true)}
                     className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${
                       isSmallOrOpc
-                        ? 'bg-white dark:bg-slate-900 text-green-600 dark:text-green-400 shadow-sm'
+                        ? 'bg-white dark:bg-slate-900 text-green-600 dark:text-green-400 shadow-xs'
                         : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
@@ -569,28 +569,28 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
                     <button
                       type="button"
                       onClick={() => handleSetPresetCreation(10)}
-                      className="text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-blue-100 dark:hover:bg-blue-900/40"
+                      className="text-[10px] font-semibold px-2 py-0.5 rounded-sm bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-blue-100 dark:hover:bg-blue-900/40"
                     >
                       10d Ago
                     </button>
                     <button
                       type="button"
                       onClick={() => handleSetPresetCreation(45)}
-                      className="text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-amber-100 dark:hover:bg-amber-900/40"
+                      className="text-[10px] font-semibold px-2 py-0.5 rounded-sm bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-amber-100 dark:hover:bg-amber-900/40"
                     >
                       45d (Tier 2)
                     </button>
                     <button
                       type="button"
                       onClick={() => handleSetPresetCreation(90)}
-                      className="text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-rose-100 dark:hover:bg-rose-900/40"
+                      className="text-[10px] font-semibold px-2 py-0.5 rounded-sm bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-rose-100 dark:hover:bg-rose-900/40"
                     >
                       90d (Tier 3)
                     </button>
                     <button
                       type="button"
                       onClick={() => handleSetPresetCreation(130)}
-                      className="text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-red-200 dark:hover:bg-red-900/60 text-red-600"
+                      className="text-[10px] font-semibold px-2 py-0.5 rounded-sm bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-red-200 dark:hover:bg-red-900/60 text-red-600"
                     >
                       130d (Condonation)
                     </button>
@@ -669,7 +669,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
                       onClick={() => setDirectDelayDays(d)}
                       className={`text-xs px-2.5 py-1 rounded-lg font-semibold transition-all ${
                         directDelayDays === d
-                          ? 'bg-blue-600 text-white shadow-sm'
+                          ? 'bg-blue-600 text-white shadow-xs'
                           : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300'
                       }`}
                     >
@@ -713,7 +713,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
                     onClick={() => setChargeAmount(preset.value)}
                     className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all ${
                       chargeAmount === preset.value
-                        ? 'bg-blue-600 text-white shadow-sm'
+                        ? 'bg-blue-600 text-white shadow-xs'
                         : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
                     }`}
                   >
@@ -768,7 +768,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
                         }}
                         className={`text-xs px-2.5 py-1 rounded-lg font-medium transition-all ${
                           hasShareCapital && nominalCapital === preset.value
-                            ? 'bg-blue-600 text-white shadow-sm'
+                            ? 'bg-blue-600 text-white shadow-xs'
                             : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
                         }`}
                       >
@@ -784,7 +784,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
 
           {/* Right Column: Dynamic Live Calculation Card (5 Cols) */}
           <div className="lg:col-span-5 flex flex-col justify-between">
-            <div className="bg-gradient-to-b from-slate-900 to-navy text-white rounded-3xl p-6 shadow-2xl border border-slate-800 relative overflow-hidden">
+            <div className="bg-linear-to-b from-slate-900 to-navy text-white rounded-3xl p-6 shadow-2xl border border-slate-800 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl pointer-events-none" />
 
               {/* Status Header */}
@@ -934,7 +934,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
       </div>
 
       {/* ── 2. Interactive 4-Tier Statutory Timeline Matrix ── */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 md:p-8">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xs border border-slate-200 dark:border-slate-800 p-6 md:p-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-6">
           <div>
             <h3 className="text-lg md:text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
@@ -1091,7 +1091,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
             <p className="text-[10px] text-slate-600 font-medium">India's Statutory Corporate Compliance &amp; Regulatory Intelligence Platform</p>
           </div>
           <div className="text-right">
-            <span className="inline-block bg-slate-900 text-white text-[10px] font-bold px-2 py-0.5 rounded">
+            <span className="inline-block bg-slate-900 text-white text-[10px] font-bold px-2 py-0.5 rounded-sm">
               FORM CHG-1 COMPLIANCE MEMO
             </span>
             <p className="text-[9px] text-slate-500 mt-1" suppressHydrationWarning>Generated: <span suppressHydrationWarning>{formatDateDisplay(new Date())}</span></p>
@@ -1234,13 +1234,13 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
             3. Regulatory Guidelines &amp; MCA V3 Checklist
           </h3>
           <div className="grid grid-cols-2 gap-3 text-[11px]">
-            <div className="border border-slate-200 rounded p-2 bg-slate-50">
+            <div className="border border-slate-200 rounded-sm p-2 bg-slate-50">
               <p className="font-bold text-slate-900 mb-0.5">Section 77 Proviso (Post-2018 Law):</p>
               <p className="text-slate-600 leading-snug">
                 Charges must be registered within 30 days (normal fee), or up to 60 days with additional fee (3×/6×), or up to 120 days with ad valorem fee. Beyond 120 days (delay &gt; 90 days), ROC registration is barred.
               </p>
             </div>
-            <div className="border border-slate-200 rounded p-2 bg-slate-50">
+            <div className="border border-slate-200 rounded-sm p-2 bg-slate-50">
               <p className="font-bold text-slate-900 mb-0.5">Section 87 Condonation Roadmap:</p>
               <p className="text-slate-600 leading-snug">
                 {isCondonation
@@ -1250,7 +1250,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/chg-1`
             </div>
           </div>
 
-          <div className="mt-2 border border-slate-200 rounded p-2">
+          <div className="mt-2 border border-slate-200 rounded-sm p-2">
             <p className="font-bold text-slate-900 text-[11px] mb-0.5">Mandatory PDF Attachments Verified:</p>
             <ul className="list-disc list-inside text-[10px] text-slate-600 space-y-0.5">
               <li>1. Certified true copy of Sanction Letter &amp; Instrument creating charge (Deed of Hypothecation / Mortgage Deed).</li>

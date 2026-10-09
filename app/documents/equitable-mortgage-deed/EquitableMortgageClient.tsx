@@ -343,7 +343,7 @@ export default function EquitableMortgageClient() {
   return (
     <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl overflow-hidden mb-12">
       {/* Top Workstation Header */}
-      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 border-b border-slate-800">
+      <div className="bg-linear-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 border-b border-slate-800">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -366,7 +366,7 @@ export default function EquitableMortgageClient() {
             <button
               onClick={() => handleDownload(activeTab === 'stamp_guide' ? 'modt' : activeTab, 'docx')}
               disabled={!!isDownloading}
-              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm transition disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-xs transition disabled:opacity-50"
             >
               <Download className="w-4 h-4" />
               {isDownloading?.includes('docx') ? 'Generating Word...' : 'Download Word (.docx)'}
@@ -374,7 +374,7 @@ export default function EquitableMortgageClient() {
             <button
               onClick={() => handleDownload(activeTab === 'stamp_guide' ? 'modt' : activeTab, 'pdf')}
               disabled={!!isDownloading}
-              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow-sm transition disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow-xs transition disabled:opacity-50"
             >
               <Download className="w-4 h-4" />
               {isDownloading?.includes('pdf') ? 'Generating PDF...' : 'Download PDF (.pdf)'}
@@ -404,7 +404,7 @@ export default function EquitableMortgageClient() {
             onClick={() => setActiveTab('modt')}
             className={`px-4 py-2 rounded-t-lg font-semibold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'modt'
-                ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 border-t-2 border-indigo-500 shadow-sm'
+                ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 border-t-2 border-indigo-500 shadow-xs'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
             }`}
           >
@@ -415,7 +415,7 @@ export default function EquitableMortgageClient() {
             onClick={() => setActiveTab('undertaking')}
             className={`px-4 py-2 rounded-t-lg font-semibold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'undertaking'
-                ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 border-t-2 border-indigo-500 shadow-sm'
+                ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 border-t-2 border-indigo-500 shadow-xs'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
             }`}
           >
@@ -426,7 +426,7 @@ export default function EquitableMortgageClient() {
             onClick={() => setActiveTab('letter_of_deposit')}
             className={`px-4 py-2 rounded-t-lg font-semibold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'letter_of_deposit'
-                ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 border-t-2 border-indigo-500 shadow-sm'
+                ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 border-t-2 border-indigo-500 shadow-xs'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
             }`}
           >
@@ -437,7 +437,7 @@ export default function EquitableMortgageClient() {
             onClick={() => setActiveTab('chg1_extract')}
             className={`px-4 py-2 rounded-t-lg font-semibold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'chg1_extract'
-                ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 border-t-2 border-indigo-500 shadow-sm'
+                ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 border-t-2 border-indigo-500 shadow-xs'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
             }`}
           >
@@ -448,7 +448,7 @@ export default function EquitableMortgageClient() {
             onClick={() => setActiveTab('stamp_guide')}
             className={`px-4 py-2 rounded-t-lg font-semibold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'stamp_guide'
-                ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 border-t-2 border-indigo-500 shadow-sm'
+                ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 border-t-2 border-indigo-500 shadow-xs'
                 : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
             }`}
           >
@@ -473,7 +473,7 @@ export default function EquitableMortgageClient() {
                 onClick={() => handleInputChange('mortgagorType', 'corporate')}
                 className={`py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition ${
                   formData.mortgagorType === 'corporate'
-                    ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm'
+                    ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-xs'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
                 }`}
               >
@@ -485,7 +485,7 @@ export default function EquitableMortgageClient() {
                 onClick={() => handleInputChange('mortgagorType', 'individual')}
                 className={`py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition ${
                   formData.mortgagorType === 'individual'
-                    ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm'
+                    ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-xs'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
                 }`}
               >
@@ -497,7 +497,7 @@ export default function EquitableMortgageClient() {
                 onClick={() => handleInputChange('mortgagorType', 'joint')}
                 className={`py-2 px-3 rounded-lg flex items-center justify-center gap-1.5 transition ${
                   formData.mortgagorType === 'joint'
-                    ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm'
+                    ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-xs'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
                 }`}
               >
@@ -508,11 +508,11 @@ export default function EquitableMortgageClient() {
           </div>
 
           {/* Section 1: Mortgagor Particulars */}
-          <div className="space-y-3 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-sm">
+          <div className="space-y-3 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-xs">
             <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center justify-between">
               <span>{isCorp ? 'Company Particulars' : 'Mortgagor Details'}</span>
               {isCorp && (
-                <span className="text-[10px] bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded font-mono">
+                <span className="text-[10px] bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-sm font-mono">
                   Sec 77 Mandate
                 </span>
               )}
@@ -587,7 +587,7 @@ export default function EquitableMortgageClient() {
           </div>
 
           {/* Section 2: Bank & Credit Facility */}
-          <div className="space-y-3 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-sm">
+          <div className="space-y-3 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-xs">
             <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center justify-between">
               <span>Lender & Sanctioned Facility</span>
               <span className="text-[10px] text-slate-400">Section 58(a) TPA</span>
@@ -663,7 +663,7 @@ export default function EquitableMortgageClient() {
           </div>
 
           {/* Section 3: Notified Town (Territorial Jurisdiction under Sec 58(f)) */}
-          <div className="space-y-3 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-sm">
+          <div className="space-y-3 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-xs">
             <div className="flex items-center justify-between">
               <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
                 <MapPin className="w-3.5 h-3.5 text-rose-500" />
@@ -722,7 +722,7 @@ export default function EquitableMortgageClient() {
           </div>
 
           {/* Section 4: First Schedule (Title Deeds List) */}
-          <div className="space-y-3 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-sm">
+          <div className="space-y-3 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-xs">
             <div className="flex items-center justify-between">
               <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200">
                 First Schedule: Deposited Title Deeds ({formData.titleDeeds.length})
@@ -763,7 +763,7 @@ export default function EquitableMortgageClient() {
                     placeholder="Document Nature (e.g. Original Sale Deed)"
                     value={deed.docType}
                     onChange={e => handleDeedChange(idx, 'docType', e.target.value)}
-                    className="w-full text-xs px-2.5 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                    className="w-full text-xs px-2.5 py-1.5 rounded-sm border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                   />
                   <div className="grid grid-cols-2 gap-2">
                     <input
@@ -771,14 +771,14 @@ export default function EquitableMortgageClient() {
                       placeholder="Doc / Regn No."
                       value={deed.docNo}
                       onChange={e => handleDeedChange(idx, 'docNo', e.target.value)}
-                      className="w-full text-xs px-2 py-1 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-mono text-[11px]"
+                      className="w-full text-xs px-2 py-1 rounded-sm border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-mono text-[11px]"
                     />
                     <input
                       type="text"
                       placeholder="Date (DD/MM/YYYY)"
                       value={deed.date}
                       onChange={e => handleDeedChange(idx, 'date', e.target.value)}
-                      className="w-full text-xs px-2 py-1 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-[11px]"
+                      className="w-full text-xs px-2 py-1 rounded-sm border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-[11px]"
                     />
                   </div>
                 </div>
@@ -787,7 +787,7 @@ export default function EquitableMortgageClient() {
           </div>
 
           {/* Section 5: Second Schedule (Property Boundaries) */}
-          <div className="space-y-3 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-sm">
+          <div className="space-y-3 bg-white dark:bg-slate-800/80 p-4 rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-xs">
             <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200">
               Second Schedule: Property & Boundaries
             </h4>
@@ -848,7 +848,7 @@ export default function EquitableMortgageClient() {
                         type="button"
                         onClick={() => handlePolishProperty(preset)}
                         disabled={aiLoading}
-                        className="px-2 py-0.5 rounded text-[10px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-400 text-slate-700 dark:text-slate-300 transition"
+                        className="px-2 py-0.5 rounded-sm text-[10px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-400 text-slate-700 dark:text-slate-300 transition"
                       >
                         {preset}
                       </button>
@@ -883,7 +883,7 @@ export default function EquitableMortgageClient() {
                   type="text"
                   value={formData.boundaries.north}
                   onChange={e => handleBoundaryChange('north', e.target.value)}
-                  className="w-full text-[11px] px-2 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+                  className="w-full text-[11px] px-2 py-1.5 rounded-sm border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
                 />
               </div>
               <div>
@@ -894,7 +894,7 @@ export default function EquitableMortgageClient() {
                   type="text"
                   value={formData.boundaries.south}
                   onChange={e => handleBoundaryChange('south', e.target.value)}
-                  className="w-full text-[11px] px-2 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+                  className="w-full text-[11px] px-2 py-1.5 rounded-sm border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
                 />
               </div>
               <div>
@@ -905,7 +905,7 @@ export default function EquitableMortgageClient() {
                   type="text"
                   value={formData.boundaries.east}
                   onChange={e => handleBoundaryChange('east', e.target.value)}
-                  className="w-full text-[11px] px-2 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+                  className="w-full text-[11px] px-2 py-1.5 rounded-sm border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
                 />
               </div>
               <div>
@@ -916,7 +916,7 @@ export default function EquitableMortgageClient() {
                   type="text"
                   value={formData.boundaries.west}
                   onChange={e => handleBoundaryChange('west', e.target.value)}
-                  className="w-full text-[11px] px-2 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
+                  className="w-full text-[11px] px-2 py-1.5 rounded-sm border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
                 />
               </div>
             </div>
@@ -1053,7 +1053,7 @@ export default function EquitableMortgageClient() {
               )}
 
               {/* Cross-Link Card to Bank Loan Resolution */}
-              <div className="p-5 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-indigo-950/40 rounded-xl border border-blue-200 dark:border-blue-800/60 flex items-start justify-between gap-4">
+              <div className="p-5 bg-linear-to-r from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-indigo-950/40 rounded-xl border border-blue-200 dark:border-blue-800/60 flex items-start justify-between gap-4">
                 <div>
                   <h4 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                     <Building2 className="w-4 h-4 text-blue-600" />
@@ -1065,7 +1065,7 @@ export default function EquitableMortgageClient() {
                 </div>
                 <Link
                   href="/documents/board-resolution-bank-loan"
-                  className="shrink-0 px-3.5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition inline-flex items-center gap-1"
+                  className="shrink-0 px-3.5 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-xs transition inline-flex items-center gap-1"
                 >
                   Board Resolution Tool
                   <ExternalLink className="w-3.5 h-3.5" />
@@ -1099,7 +1099,7 @@ export default function EquitableMortgageClient() {
               </div>
 
               {/* Rendered Letterhead / Legal Page Paper Canvas */}
-              <div className="w-full min-w-0 max-w-full box-border overflow-x-auto break-words bg-slate-50/50 dark:bg-slate-900/40 p-4 sm:p-8 rounded-xl border border-slate-200/90 dark:border-slate-800 font-serif text-slate-900 dark:text-slate-100 shadow-inner text-xs sm:text-sm leading-relaxed space-y-4">
+              <div className="w-full min-w-0 max-w-full box-border overflow-x-auto wrap-break-word bg-slate-50/50 dark:bg-slate-900/40 p-4 sm:p-8 rounded-xl border border-slate-200/90 dark:border-slate-800 font-serif text-slate-900 dark:text-slate-100 shadow-inner text-xs sm:text-sm leading-relaxed space-y-4">
                 {activeTab === 'modt' && (
                   <>
                     <div className="text-center space-y-1 pb-4 border-b border-slate-300 dark:border-slate-700">
@@ -1226,7 +1226,7 @@ export default function EquitableMortgageClient() {
                       <p className="text-justify mb-2">
                         <strong>Property:</strong> {formData.propertyDescription} (Plot/Khasra: {formData.surveyOrPlotNo}, Extent: {formData.propertyArea}).
                       </p>
-                      <div className="grid grid-cols-2 gap-2 text-xs bg-white dark:bg-slate-800 p-3 rounded border border-slate-200 dark:border-slate-700">
+                      <div className="grid grid-cols-2 gap-2 text-xs bg-white dark:bg-slate-800 p-3 rounded-sm border border-slate-200 dark:border-slate-700">
                         <div><strong>North:</strong> {formData.boundaries.north}</div>
                         <div><strong>South:</strong> {formData.boundaries.south}</div>
                         <div><strong>East:</strong> {formData.boundaries.east}</div>
@@ -1319,7 +1319,7 @@ export default function EquitableMortgageClient() {
                       <p>{formData.bankAddress}</p>
                     </div>
 
-                    <div className="py-2 font-bold text-xs sm:text-sm bg-slate-100 dark:bg-slate-800 p-2 rounded">
+                    <div className="py-2 font-bold text-xs sm:text-sm bg-slate-100 dark:bg-slate-800 p-2 rounded-sm">
                       Subject: Deposit of Original Title Deeds with intent to create Equitable Mortgage for securing {formData.loanFacilityName} of {formatInrCurrency(formData.loanAmount)} (Sanction Letter: {formData.sanctionLetterNo})
                     </div>
 
@@ -1409,7 +1409,7 @@ export default function EquitableMortgageClient() {
               <button
                 onClick={() => handleDownload(activeTab === 'stamp_guide' ? 'modt' : activeTab, 'docx')}
                 disabled={!!isDownloading}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow transition disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm transition disabled:opacity-50"
               >
                 <Download className="w-3.5 h-3.5" />
                 Word (.docx)
@@ -1417,7 +1417,7 @@ export default function EquitableMortgageClient() {
               <button
                 onClick={() => handleDownload(activeTab === 'stamp_guide' ? 'modt' : activeTab, 'pdf')}
                 disabled={!!isDownloading}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow transition disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-lg shadow-sm transition disabled:opacity-50"
               >
                 <Download className="w-3.5 h-3.5" />
                 PDF (.pdf)

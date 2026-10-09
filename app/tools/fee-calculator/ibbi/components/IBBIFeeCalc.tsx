@@ -134,7 +134,7 @@ Gross Total Payable to Liquidator: ${formatINR(liquidatorResult.grossPayable)}`;
   return (
     <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden mb-12">
       {/* Top Banner Header */}
-      <div className="bg-gradient-to-r from-navy via-indigo-900 to-slate-900 p-6 md:p-8 text-white">
+      <div className="bg-linear-to-r from-navy via-indigo-900 to-slate-900 p-6 md:p-8 text-white">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-semibold tracking-wide uppercase">
             <Sparkles className="w-3.5 h-3.5" />
@@ -156,7 +156,7 @@ Gross Total Payable to Liquidator: ${formatINR(liquidatorResult.grossPayable)}`;
           onClick={() => setActiveTab('liquidation')}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all whitespace-nowrap ${
             activeTab === 'liquidation'
-              ? 'bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-sm border border-slate-200 dark:border-slate-700'
+              ? 'bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-xs border border-slate-200 dark:border-slate-700'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
@@ -171,7 +171,7 @@ Gross Total Payable to Liquidator: ${formatINR(liquidatorResult.grossPayable)}`;
           onClick={() => setActiveTab('cirp')}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all whitespace-nowrap ${
             activeTab === 'cirp'
-              ? 'bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-sm border border-slate-200 dark:border-slate-700'
+              ? 'bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-xs border border-slate-200 dark:border-slate-700'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
@@ -183,7 +183,7 @@ Gross Total Payable to Liquidator: ${formatINR(liquidatorResult.grossPayable)}`;
           onClick={() => setActiveTab('liquidator-fee')}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all whitespace-nowrap ${
             activeTab === 'liquidator-fee'
-              ? 'bg-white dark:bg-slate-800 text-purple-600 dark:text-purple-400 shadow-sm border border-slate-200 dark:border-slate-700'
+              ? 'bg-white dark:bg-slate-800 text-purple-600 dark:text-purple-400 shadow-xs border border-slate-200 dark:border-slate-700'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
@@ -206,7 +206,7 @@ Gross Total Payable to Liquidator: ${formatINR(liquidatorResult.grossPayable)}`;
                   id={liqFormIdAttr}
                   value={liqFormId}
                   onChange={(e) => setLiqFormId(e.target.value as LiquidationFormId)}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-blue-500 focus:outline-hidden"
                 >
                   <option value="LIQ-1">Form LIQ-1 — Progress Report & Appointment Intimation</option>
                   <option value="LIQ-2">Form LIQ-2 — Preliminary Report, Asset Memo & Valuation</option>
@@ -292,7 +292,7 @@ Gross Total Payable to Liquidator: ${formatINR(liquidatorResult.grossPayable)}`;
                     type="checkbox"
                     checked={liqIsCorrection}
                     onChange={(e) => setLiqIsCorrection(e.target.checked)}
-                    className="mt-1 w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-slate-300"
+                    className="mt-1 w-4 h-4 rounded-sm text-blue-600 focus:ring-blue-500 border-slate-300"
                   />
                   <span className="text-xs text-amber-900 dark:text-amber-200 leading-relaxed">
                     <strong>Correction / Updation of Previously Filed Form:</strong> Circular No. IBBI/LIQ/107/2026 mandates that any form submitted after the due date,{' '}
@@ -313,7 +313,7 @@ Gross Total Payable to Liquidator: ${formatINR(liquidatorResult.grossPayable)}`;
                   id={cirpFormIdAttr}
                   value={cirpFormId}
                   onChange={(e) => setCirpFormId(e.target.value as CirpFormId)}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
                 >
                   <option value="CIRP-1">Form CIRP-1 — IRP Appointment & Public Announcement</option>
                   <option value="CIRP-2">Form CIRP-2 — Appointment of Resolution Professional</option>
@@ -376,7 +376,7 @@ Gross Total Payable to Liquidator: ${formatINR(liquidatorResult.grossPayable)}`;
                     type="checkbox"
                     checked={cirpIsCorrection}
                     onChange={(e) => setCirpIsCorrection(e.target.checked)}
-                    className="mt-1 w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300"
+                    className="mt-1 w-4 h-4 rounded-sm text-indigo-600 focus:ring-indigo-500 border-slate-300"
                   />
                   <span className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
                     <strong>Modification Utility Filing:</strong> Form is being updated or resubmitted through the IBBI modification utility after the original due date.
@@ -401,35 +401,35 @@ Gross Total Payable to Liquidator: ${formatINR(liquidatorResult.grossPayable)}`;
                     step="100000"
                     value={realisationAmt}
                     onChange={(e) => setRealisationAmt(Math.max(0, parseFloat(e.target.value) || 0))}
-                    className="w-full pl-8 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold text-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="w-full pl-8 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold text-lg focus:ring-2 focus:ring-purple-500 focus:outline-hidden"
                   />
                 </div>
                 <div className="flex gap-2 mt-2">
                   <button
                     type="button"
                     onClick={() => setRealisationAmt(5000000)}
-                    className="text-xs px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300"
+                    className="text-xs px-2.5 py-1 rounded-sm bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300"
                   >
                     50 Lakhs
                   </button>
                   <button
                     type="button"
                     onClick={() => setRealisationAmt(10000000)}
-                    className="text-xs px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300"
+                    className="text-xs px-2.5 py-1 rounded-sm bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300"
                   >
                     1 Crore
                   </button>
                   <button
                     type="button"
                     onClick={() => setRealisationAmt(100000000)}
-                    className="text-xs px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300"
+                    className="text-xs px-2.5 py-1 rounded-sm bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300"
                   >
                     10 Crores
                   </button>
                   <button
                     type="button"
                     onClick={() => setRealisationAmt(500000000)}
-                    className="text-xs px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300"
+                    className="text-xs px-2.5 py-1 rounded-sm bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-300"
                   >
                     50 Crores
                   </button>
@@ -452,7 +452,7 @@ Gross Total Payable to Liquidator: ${formatINR(liquidatorResult.grossPayable)}`;
                     step="100000"
                     value={distributionAmt}
                     onChange={(e) => setDistributionAmt(Math.max(0, parseFloat(e.target.value) || 0))}
-                    className="w-full pl-8 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold text-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                    className="w-full pl-8 pr-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold text-lg focus:ring-2 focus:ring-purple-500 focus:outline-hidden"
                   />
                 </div>
               </div>
@@ -465,7 +465,7 @@ Gross Total Payable to Liquidator: ${formatINR(liquidatorResult.grossPayable)}`;
                   id={timePeriodAttr}
                   value={timePeriod}
                   onChange={(e) => setTimePeriod(e.target.value as any)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-semibold text-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-semibold text-sm focus:ring-2 focus:ring-purple-500 focus:outline-hidden"
                 >
                   <option value="0-6m">In the first six months (Highest fee percentage: 5.0% / 2.5%)</option>
                   <option value="6-12m">In the next six months (6 to 12 months)</option>
@@ -482,13 +482,13 @@ Gross Total Payable to Liquidator: ${formatINR(liquidatorResult.grossPayable)}`;
 
         {/* Right Column: Institutional Result Card */}
         <div className="lg:col-span-5 flex flex-col">
-          <div className="bg-slate-50 dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 flex-1 flex flex-col justify-between shadow-sm">
+          <div className="bg-slate-50 dark:bg-slate-950 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 flex-1 flex flex-col justify-between shadow-xs">
             <div>
               <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800 mb-4">
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                   {activeTab === 'liquidator-fee' ? 'Statutory Remuneration' : 'Total Late Fee Payable'}
                 </span>
-                <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-semibold bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded">
+                <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-semibold bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-sm">
                   {activeTab === 'liquidator-fee' ? 'Reg 4(2)(b)' : '18% GST Inc.'}
                 </span>
               </div>

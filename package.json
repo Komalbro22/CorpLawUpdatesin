@@ -1,6 +1,6 @@
 {
   "name": "corplawupdates",
-  "version": "2.51.46",
+  "version": "2.51.47",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -49,6 +49,7 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
     "@tailwindcss/typography": "^0.5.20",
     "@types/file-saver": "^2.0.7",
     "@types/html-to-docx": "^1.8.1",
@@ -65,7 +66,7 @@
     "jest": "^30.5.2",
     "pdf-parse": "^2.4.5",
     "postcss": "^8.5.29",
-    "tailwindcss": "^3.4.19",
+    "tailwindcss": "^4.3.3",
     "ts-jest": "^29.4.14",
     "typescript": "npm:@typescript/typescript6@^6.0.2"
   }

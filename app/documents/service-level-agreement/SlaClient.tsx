@@ -437,9 +437,9 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
     <div className="space-y-6 mb-12">
       {/* ─── AI Toast / Success Notification ─────────────────────────────── */}
       {aiSuccessToast && (
-        <div className="bg-gradient-to-r from-amber-500/10 via-amber-500/15 to-emerald-500/10 border border-amber-300 px-6 py-3 rounded-2xl flex items-center justify-between animate-in fade-in slide-in-from-top-2 shadow-xs">
+        <div className="bg-linear-to-r from-amber-500/10 via-amber-500/15 to-emerald-500/10 border border-amber-300 px-6 py-3 rounded-2xl flex items-center justify-between animate-in fade-in slide-in-from-top-2 shadow-2xs">
           <div className="flex items-center gap-2.5 text-xs text-amber-950 font-medium">
-            <Sparkles className="w-4 h-4 text-amber-600 flex-shrink-0" />
+            <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
             <span>
               <strong>Gemini AI Drafter:</strong> {aiSuccessToast}
             </span>
@@ -466,7 +466,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
       )}
 
       {/* ─── 1. Interactive 5-Way Industry SLA Framework Switcher ─────────── */}
-      <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 space-y-4">
+      <div className="bg-white rounded-3xl p-6 shadow-xs border border-slate-200/80 space-y-4">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div>
             <h2 className="text-base font-bold text-slate-900 flex items-center gap-2 font-heading">
@@ -494,7 +494,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                 onClick={() => handlePresetSelect(key)}
                 className={`p-4 rounded-2xl text-left transition-all border relative flex flex-col justify-between cursor-pointer ${
                   isSelected
-                    ? 'bg-gradient-to-b from-indigo-50/90 to-white border-indigo-600 shadow-md ring-2 ring-indigo-500/20'
+                    ? 'bg-linear-to-b from-indigo-50/90 to-white border-indigo-600 shadow-md ring-2 ring-indigo-500/20'
                     : 'bg-slate-50/70 border-slate-200 hover:border-slate-300 hover:bg-slate-100/50'
                 }`}
               >
@@ -503,14 +503,14 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                     <div
                       className={`w-8 h-8 rounded-xl flex items-center justify-center ${
                         isSelected
-                          ? 'bg-indigo-600 text-white shadow-xs'
+                          ? 'bg-indigo-600 text-white shadow-2xs'
                           : 'bg-white border border-slate-200 text-slate-700'
                       }`}
                     >
                       {presetIcons[key]}
                     </div>
                     {isSelected ? (
-                      <span className="px-2 py-0.5 bg-indigo-600 text-white text-[10px] font-bold rounded-full shadow-xs tracking-wide">
+                      <span className="px-2 py-0.5 bg-indigo-600 text-white text-[10px] font-bold rounded-full shadow-2xs tracking-wide">
                         ACTIVE
                       </span>
                     ) : (
@@ -534,7 +534,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                 <div className="mt-3 pt-2.5 border-t border-slate-200/80 space-y-1">
                   <p className="text-[10px] font-semibold text-slate-700 flex items-center justify-between">
                     <span className="text-slate-400">Uptime SLO:</span>
-                    <span className="font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-100">
+                    <span className="font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded-sm border border-indigo-100">
                       {p.uptimeDefault}
                     </span>
                   </p>
@@ -617,7 +617,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
       </div>
 
       {/* ─── 3. Main Workspace Container (Tabs & Sub-Views) ──────────────── */}
-      <div className="bg-white border border-slate-200/80 rounded-3xl shadow-sm overflow-hidden">
+      <div className="bg-white border border-slate-200/80 rounded-3xl shadow-xs overflow-hidden">
         {/* Navigation Bar with Tabs and AI Drafter Button */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between border-b border-slate-200 bg-slate-50/90 p-2 gap-2">
           <div className="flex p-1 gap-1.5 flex-wrap sm:flex-nowrap flex-1">
@@ -625,7 +625,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
               onClick={() => setActiveTab('preview')}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 activeTab === 'preview'
-                  ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 ring-1 ring-slate-900/5'
+                  ? 'bg-white text-slate-900 shadow-2xs border border-slate-200/80 ring-1 ring-slate-900/5'
                   : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/60'
               }`}
             >
@@ -637,7 +637,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
               onClick={() => setActiveTab('customizer')}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 activeTab === 'customizer'
-                  ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 ring-1 ring-slate-900/5'
+                  ? 'bg-white text-slate-900 shadow-2xs border border-slate-200/80 ring-1 ring-slate-900/5'
                   : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/60'
               }`}
             >
@@ -649,7 +649,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
               onClick={() => setActiveTab('calculator')}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 activeTab === 'calculator'
-                  ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80 ring-1 ring-slate-900/5'
+                  ? 'bg-white text-slate-900 shadow-2xs border border-slate-200/80 ring-1 ring-slate-900/5'
                   : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/60'
               }`}
             >
@@ -663,7 +663,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
             <button
               type="button"
               onClick={() => setIsAiModalOpen(true)}
-              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 via-amber-600 to-indigo-600 hover:from-amber-600 hover:to-indigo-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition-all hover:shadow-md cursor-pointer"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-linear-to-r from-amber-500 via-amber-600 to-indigo-600 hover:from-amber-600 hover:to-indigo-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-xs transition-all hover:shadow-md cursor-pointer"
             >
               <Sparkles className="w-4 h-4 text-amber-200 animate-pulse" />
               <span>Gemini AI Legal Drafter</span>
@@ -759,7 +759,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
 
           {/* Statutory Enforceability Assured Banner */}
           <div className="max-w-4xl mx-auto bg-emerald-50/80 border border-emerald-200/90 rounded-2xl p-4 flex items-start gap-3.5 text-xs text-emerald-950 shadow-2xs">
-            <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
             <div className="space-y-1">
               <p className="font-bold text-emerald-900 flex items-center gap-2">
                 <span>Statutory Enforceability Assured • Indian Contract Act, 1872 & IT Act, 2000</span>
@@ -774,7 +774,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
           </div>
 
           {/* ─── Physical Paper Legal Agreement Sheet (A4 styling) ──────────── */}
-          <div className="w-full min-w-0 max-w-4xl mx-auto box-border overflow-x-hidden break-words bg-white border border-slate-300 shadow-xl rounded-2xl p-4 sm:p-8 lg:p-12 text-slate-900 font-sans print:shadow-none print:border-none print:p-0">
+          <div className="w-full min-w-0 max-w-4xl mx-auto box-border overflow-x-hidden wrap-break-word bg-white border border-slate-300 shadow-xl rounded-2xl p-4 sm:p-8 lg:p-12 text-slate-900 font-sans print:shadow-none print:border-none print:p-0">
             {/* Stamp Paper Top Trust Ribbon */}
             <div className="flex flex-wrap items-center justify-between border-b border-slate-200 pb-3 mb-5 text-[10px] sm:text-[11px] text-slate-500 font-mono gap-2">
               <span className="flex items-center gap-1.5 text-emerald-700 font-bold">
@@ -870,7 +870,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                 </h3>
                 <p className="text-xs text-slate-700 leading-relaxed mb-2">
                   <strong>2.1 Availability Target:</strong> The Service Provider warrants that the contracted services shall achieve a minimum availability of{' '}
-                  <span className="font-bold text-sky-700 bg-sky-50 px-1.5 py-0.5 rounded border border-sky-200">{formData.uptimeTarget}</span>, measured 24 hours per day, 7 days per week over each calendar billing month.
+                  <span className="font-bold text-sky-700 bg-sky-50 px-1.5 py-0.5 rounded-sm border border-sky-200">{formData.uptimeTarget}</span>, measured 24 hours per day, 7 days per week over each calendar billing month.
                 </p>
                 <p className="text-xs text-slate-700 leading-relaxed">
                   <strong>2.2 Permitted Maintenance:</strong> Uptime excludes pre-scheduled maintenance conducted during agreed windows: <em>&ldquo;{formData.maintenanceWindow}&rdquo;</em>. Any outage outside permitted windows constitutes unscheduled downtime.
@@ -1084,7 +1084,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
             <button
               type="button"
               onClick={() => setIsAiModalOpen(true)}
-              className="flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow-2xs transition-all"
+              className="flex items-center gap-1.5 bg-linear-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold px-3.5 py-2 rounded-xl text-xs shadow-2xs transition-all"
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>Ask Gemini to Fill / Edit</span>
@@ -1104,7 +1104,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                   type="text"
                   value={formData.clientName}
                   onChange={e => setFormData({ ...formData, clientName: e.target.value })}
-                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-amber-500"
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-hidden focus:border-amber-500"
                 />
               </div>
 
@@ -1115,7 +1115,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                     type="text"
                     value={formData.clientCin || ''}
                     onChange={e => setFormData({ ...formData, clientCin: e.target.value })}
-                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-amber-500 font-mono"
+                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-hidden focus:border-amber-500 font-mono"
                   />
                 </div>
                 <div>
@@ -1124,7 +1124,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                     type="text"
                     value={formData.clientSignatoryName}
                     onChange={e => setFormData({ ...formData, clientSignatoryName: e.target.value })}
-                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-amber-500"
+                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-hidden focus:border-amber-500"
                   />
                 </div>
               </div>
@@ -1135,7 +1135,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                   rows={2}
                   value={formData.clientAddress}
                   onChange={e => setFormData({ ...formData, clientAddress: e.target.value })}
-                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-amber-500"
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-hidden focus:border-amber-500"
                 />
               </div>
             </div>
@@ -1152,7 +1152,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                   type="text"
                   value={formData.providerName}
                   onChange={e => setFormData({ ...formData, providerName: e.target.value })}
-                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-amber-500"
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-hidden focus:border-amber-500"
                 />
               </div>
 
@@ -1163,7 +1163,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                     type="text"
                     value={formData.providerCin || ''}
                     onChange={e => setFormData({ ...formData, providerCin: e.target.value })}
-                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-amber-500 font-mono"
+                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-hidden focus:border-amber-500 font-mono"
                   />
                 </div>
                 <div>
@@ -1172,7 +1172,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                     type="text"
                     value={formData.providerSignatoryName}
                     onChange={e => setFormData({ ...formData, providerSignatoryName: e.target.value })}
-                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-amber-500"
+                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-hidden focus:border-amber-500"
                   />
                 </div>
               </div>
@@ -1183,7 +1183,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                   rows={2}
                   value={formData.providerAddress}
                   onChange={e => setFormData({ ...formData, providerAddress: e.target.value })}
-                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-amber-500"
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-hidden focus:border-amber-500"
                 />
               </div>
             </div>
@@ -1197,7 +1197,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                 type="text"
                 value={formData.uptimeTarget}
                 onChange={e => setFormData({ ...formData, uptimeTarget: e.target.value })}
-                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-amber-500 font-bold"
+                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-hidden focus:border-amber-500 font-bold"
               />
             </div>
 
@@ -1207,7 +1207,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                 type="text"
                 value={formData.penaltyCap}
                 onChange={e => setFormData({ ...formData, penaltyCap: e.target.value })}
-                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-amber-500"
+                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-hidden focus:border-amber-500"
               />
             </div>
 
@@ -1217,7 +1217,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                 type="text"
                 value={formData.creditPercentage}
                 onChange={e => setFormData({ ...formData, creditPercentage: e.target.value })}
-                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-amber-500"
+                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-hidden focus:border-amber-500"
               />
             </div>
 
@@ -1227,7 +1227,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                 type="text"
                 value={formData.arbitrationSeat}
                 onChange={e => setFormData({ ...formData, arbitrationSeat: e.target.value })}
-                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-amber-500"
+                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-hidden focus:border-amber-500"
               />
             </div>
           </div>
@@ -1239,7 +1239,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
               rows={3}
               value={formData.servicesDescription}
               onChange={e => setFormData({ ...formData, servicesDescription: e.target.value })}
-              className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-amber-500 font-mono text-[11px]"
+              className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-hidden focus:border-amber-500 font-mono text-[11px]"
             />
           </div>
 
@@ -1298,14 +1298,14 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                   placeholder="Clause Title (e.g., SOC 2 Annual Audit & Verification Rights)"
                   value={newClauseTitle}
                   onChange={e => setNewClauseTitle(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-900 focus:outline-hidden focus:border-indigo-500"
                 />
                 <textarea
                   rows={2}
                   placeholder="Full legal text of clause..."
                   value={newClauseContent}
                   onChange={e => setNewClauseContent(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-900 focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-900 focus:outline-hidden focus:border-indigo-500"
                 />
                 <div className="flex justify-end gap-2">
                   <button
@@ -1339,7 +1339,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
               placeholder="e.g. यह अनुबंध भारतीय संविदा अधिनियम १८७२ के अंतर्गत विधिक रूप से मान्य है..."
               value={formData.languageNote || ''}
               onChange={e => setFormData({ ...formData, languageNote: e.target.value })}
-              className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-amber-500 font-serif"
+              className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-hidden focus:border-amber-500 font-serif"
             />
           </div>
 
@@ -1358,7 +1358,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                 type="button"
                 onClick={() => openCustomDownloadGateway('docx')}
                 disabled={downloadingFormat !== null}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition-all disabled:opacity-50"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold px-6 py-2.5 rounded-xl text-xs sm:text-sm shadow-xs transition-all disabled:opacity-50"
               >
                 <Download className="w-4 h-4 text-amber-400" />
                 <span>{downloadingFormat === 'custom-docx' ? 'Generating...' : 'Download Word (.docx)'}</span>
@@ -1368,7 +1368,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                 type="button"
                 onClick={() => openCustomDownloadGateway('pdf')}
                 disabled={downloadingFormat !== null}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-rose-600 hover:bg-rose-700 text-white font-bold px-6 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition-all disabled:opacity-50"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-rose-600 hover:bg-rose-700 text-white font-bold px-6 py-2.5 rounded-xl text-xs sm:text-sm shadow-xs transition-all disabled:opacity-50"
               >
                 <FileText className="w-4 h-4" />
                 <span>{downloadingFormat === 'custom-pdf' ? 'Generating...' : 'Download PDF'}</span>
@@ -1403,7 +1403,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                   step="10000"
                   value={calcMonthlyFee}
                   onChange={e => setCalcMonthlyFee(Number(e.target.value))}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-bold text-slate-900 focus:outline-none focus:border-amber-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-bold text-slate-900 focus:outline-hidden focus:border-amber-500"
                 />
               </div>
 
@@ -1415,7 +1415,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                   <select
                     value={calcUptimeTarget}
                     onChange={e => setCalcUptimeTarget(Number(e.target.value))}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:border-amber-500"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-900 focus:outline-hidden focus:border-amber-500"
                   >
                     <option value={99.99}>99.99% (Four Nines — Mission Critical)</option>
                     <option value={99.9}>99.9% (Three Nines — Standard Cloud/SaaS)</option>
@@ -1434,7 +1434,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                     step="0.5"
                     value={calcDowntimeHours}
                     onChange={e => setCalcDowntimeHours(Number(e.target.value))}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-bold text-slate-900 focus:outline-none focus:border-amber-500"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-bold text-slate-900 focus:outline-hidden focus:border-amber-500"
                   />
                 </div>
               </div>
@@ -1502,7 +1502,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-slate-200 pb-4">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-2xl bg-gradient-to-br from-amber-500 to-indigo-600 text-white shadow-sm">
+                <div className="p-2.5 rounded-2xl bg-linear-to-br from-amber-500 to-indigo-600 text-white shadow-xs">
                   <Sparkles className="w-5 h-5" />
                 </div>
                 <div>
@@ -1559,7 +1559,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                 placeholder="e.g. We provide AI APIs to banks in Mumbai. Add 99.95% uptime, 30m Sev-1 response, RBI IT framework compliance, right to quarterly audit, and a Hindi summary for promoters."
                 value={aiPrompt}
                 onChange={e => setAiPrompt(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white transition-colors"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-hidden focus:border-amber-500 focus:bg-white transition-colors"
               />
             </div>
 
@@ -1570,7 +1570,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                 <select
                   value={aiAction}
                   onChange={e => setAiAction(e.target.value as any)}
-                  className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-amber-500"
+                  className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-hidden focus:border-amber-500"
                 >
                   <option value="draft_from_prompt">Full SLA Draft & Tune</option>
                   <option value="add_clause">Add Specific Legal Clause</option>
@@ -1584,7 +1584,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                 <select
                   value={aiTone}
                   onChange={e => setAiTone(e.target.value as any)}
-                  className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-amber-500"
+                  className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-hidden focus:border-amber-500"
                 >
                   <option value="balanced">Balanced Commercial</option>
                   <option value="client_favourable">Customer Favourable (Strict)</option>
@@ -1597,7 +1597,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                 <select
                   value={aiLanguage}
                   onChange={e => setAiLanguage(e.target.value as any)}
-                  className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-none focus:border-amber-500"
+                  className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-800 focus:outline-hidden focus:border-amber-500"
                 >
                   <option value="en">English (Statutory Legal)</option>
                   <option value="bilingual">Bilingual (English + Hindi)</option>
@@ -1609,7 +1609,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
             {/* Error Message */}
             {aiError && (
               <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 text-rose-600 flex-shrink-0" />
+                <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
                 <span>{aiError}</span>
               </div>
             )}
@@ -1632,7 +1632,7 @@ FOR SERVICE PROVIDER: _______________________ (${formData.providerSignatoryName}
                   type="button"
                   onClick={() => handleRunAiAssist()}
                   disabled={isAiLoading || aiPrompt.trim().length < 3}
-                  className="flex items-center gap-2 bg-gradient-to-r from-amber-500 to-indigo-600 hover:from-amber-600 hover:to-indigo-700 text-white font-bold px-5 py-2.5 rounded-xl text-xs shadow-md transition-all disabled:opacity-50 cursor-pointer"
+                  className="flex items-center gap-2 bg-linear-to-r from-amber-500 to-indigo-600 hover:from-amber-600 hover:to-indigo-700 text-white font-bold px-5 py-2.5 rounded-xl text-xs shadow-md transition-all disabled:opacity-50 cursor-pointer"
                 >
                   {isAiLoading ? (
                     <>

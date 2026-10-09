@@ -28,7 +28,7 @@ export default function ComplianceDetailModal({
         </button>
 
         <div className="mb-4">
-          <span className="text-xs font-bold uppercase bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-1 rounded">
+          <span className="text-xs font-bold uppercase bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-1 rounded-sm">
             {selectedEntry.regulator.toUpperCase()}
           </span>
           {selectedEntry.created_by?.startsWith('community:') && (

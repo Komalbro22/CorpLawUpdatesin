@@ -321,9 +321,9 @@ export default function RegulatorRadarPage() {
   return (
     <div className="space-y-6 pb-16 content-fade-in max-w-7xl mx-auto">
       {/* TOP HEADER */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white/70 backdrop-blur-md rounded-2xl p-6 border border-slate-200/80 shadow-sm">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white/70 backdrop-blur-md rounded-2xl p-6 border border-slate-200/80 shadow-xs">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 text-white flex items-center justify-center shadow-lg shadow-amber-500/25 shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-amber-500 to-orange-500 text-white flex items-center justify-center shadow-lg shadow-amber-500/25 shrink-0">
             <Radio className="w-6 h-6 animate-pulse" aria-hidden />
           </div>
           <div>
@@ -360,7 +360,7 @@ export default function RegulatorRadarPage() {
                 onClick={() => handleTimeRangeChange(t.value)}
                 className={`px-2.5 py-1.5 rounded-lg font-bold transition-all ${
                   timeRange === t.value
-                    ? 'bg-white text-amber-700 shadow-sm'
+                    ? 'bg-white text-amber-700 shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -374,8 +374,8 @@ export default function RegulatorRadarPage() {
             onClick={() => setShowConfig(!showConfig)}
             className={`inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl font-bold text-xs transition-colors border ${
               showConfig
-                ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
-                : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200 shadow-sm'
+                ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
+                : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200 shadow-xs'
             }`}
             title="Configure which regulators to scan or mute"
           >
@@ -397,7 +397,7 @@ export default function RegulatorRadarPage() {
             <button
               type="button"
               onClick={markAllAsSeen}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl font-semibold text-sm text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 shadow-sm transition-colors"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl font-semibold text-sm text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 shadow-xs transition-colors"
             >
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
               <span>Mark All Seen</span>
@@ -461,7 +461,7 @@ export default function RegulatorRadarPage() {
                   onClick={() => toggleRegulator(reg.key)}
                   className={`p-3 rounded-xl border text-left transition-all duration-200 flex items-start gap-3 select-none ${
                     isActive
-                      ? 'bg-amber-50/60 border-amber-300 shadow-sm'
+                      ? 'bg-amber-50/60 border-amber-300 shadow-xs'
                       : 'bg-slate-50 border-slate-200 opacity-60 hover:opacity-80'
                   }`}
                 >
@@ -470,7 +470,7 @@ export default function RegulatorRadarPage() {
                       isActive ? 'bg-amber-500 text-white' : 'bg-slate-200 text-slate-400'
                     }`}
                   >
-                    {isActive && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                    {isActive && <Check className="w-3.5 h-3.5 stroke-3" />}
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="font-heading font-bold text-xs text-slate-900 flex items-center justify-between">
@@ -492,7 +492,7 @@ export default function RegulatorRadarPage() {
 
       {/* STATS ROW */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white rounded-xl p-4 border border-slate-200/80 shadow-sm flex items-center gap-3.5">
+        <div className="bg-white rounded-xl p-4 border border-slate-200/80 shadow-xs flex items-center gap-3.5">
           <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 border border-amber-200 flex items-center justify-center shrink-0">
             <Radio className="w-5 h-5" />
           </div>
@@ -502,7 +502,7 @@ export default function RegulatorRadarPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-4 border border-slate-200/80 shadow-sm flex items-center gap-3.5">
+        <div className="bg-white rounded-xl p-4 border border-slate-200/80 shadow-xs flex items-center gap-3.5">
           <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center shrink-0">
             <Sparkles className="w-5 h-5" />
           </div>
@@ -512,7 +512,7 @@ export default function RegulatorRadarPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-4 border border-slate-200/80 shadow-sm flex items-center gap-3.5">
+        <div className="bg-white rounded-xl p-4 border border-slate-200/80 shadow-xs flex items-center gap-3.5">
           <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 border border-blue-200 flex items-center justify-center shrink-0">
             <Building2 className="w-5 h-5" />
           </div>
@@ -524,7 +524,7 @@ export default function RegulatorRadarPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-4 border border-slate-200/80 shadow-sm flex items-center gap-3.5">
+        <div className="bg-white rounded-xl p-4 border border-slate-200/80 shadow-xs flex items-center gap-3.5">
           <div className="w-10 h-10 rounded-xl bg-violet-50 text-violet-600 border border-violet-200 flex items-center justify-center shrink-0">
             <FileCheck className="w-5 h-5" />
           </div>
@@ -536,7 +536,7 @@ export default function RegulatorRadarPage() {
       </div>
 
       {/* FILTER TABS & SEARCH BAR */}
-      <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm space-y-3">
+      <div className="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs space-y-3">
         <div className="flex flex-col md:flex-row items-center justify-between gap-3">
           {/* Regulator Tabs (Only shows tabs for ACTIVE regulators) */}
           <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0">
@@ -598,7 +598,7 @@ export default function RegulatorRadarPage() {
               placeholder="Search circulars, keywords..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:bg-white transition-all"
+              className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-amber-400 focus:bg-white transition-all"
             />
           </div>
         </div>
@@ -655,7 +655,7 @@ export default function RegulatorRadarPage() {
 
       {/* LOADING STATE */}
       {loading && !data && (
-        <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-slate-200 shadow-xs space-y-4">
           <div className="w-12 h-12 border-3 border-amber-500 border-t-transparent rounded-full animate-spin" />
           <div className="text-center space-y-1">
             <h3 className="font-heading font-bold text-base text-slate-900">
@@ -670,8 +670,8 @@ export default function RegulatorRadarPage() {
 
       {/* EMPTY / ALL CAUGHT UP STATE */}
       {!loading && filteredItems.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-slate-200/80 shadow-sm space-y-4 p-8 text-center">
-          <div className="w-16 h-16 rounded-3xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100 shadow-sm">
+        <div className="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-slate-200/80 shadow-xs space-y-4 p-8 text-center">
+          <div className="w-16 h-16 rounded-3xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100 shadow-xs">
             <Sparkles className="w-8 h-8" />
           </div>
           <div className="space-y-1 max-w-md">
@@ -768,7 +768,7 @@ export default function RegulatorRadarPage() {
                     <button
                       type="button"
                       onClick={() => handleCreateArticle(item)}
-                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 shadow-md shadow-amber-500/20 transition-all duration-200"
+                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 shadow-md shadow-amber-500/20 transition-all duration-200"
                     >
                       <PenSquare className="w-4 h-4" />
                       <span>Create Article</span>

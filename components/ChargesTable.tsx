@@ -17,7 +17,7 @@ export default function ChargesTable({ charges, companyName }: ChargesTableProps
   const totalOpenCr = (totalOpenAmount / 10000000).toFixed(2)
 
   return (
-    <section className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4">
+    <section className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800/80 pb-4">
         <div className="flex items-center gap-2.5">
           <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
@@ -58,7 +58,7 @@ export default function ChargesTable({ charges, companyName }: ChargesTableProps
               return (
                 <tr key={c.charge_id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
                   <td className="p-3.5 font-mono font-bold text-slate-700 dark:text-slate-200">
-                    <span className="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded border border-slate-200 dark:border-slate-700">
+                    <span className="bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-sm border border-slate-200 dark:border-slate-700">
                       #{c.charge_id}
                     </span>
                   </td>

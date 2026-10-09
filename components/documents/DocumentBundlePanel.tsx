@@ -49,7 +49,7 @@ export function DocumentBundlePanel({ currentDocType, onAddToBundle }: DocumentB
               <p className="text-sm font-medium text-emerald-900 dark:text-emerald-100 truncate">{rec.name}</p>
               <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-0.5 line-clamp-2">{rec.description}</p>
             </div>
-            <div className="flex gap-1.5 flex-shrink-0">
+            <div className="flex gap-1.5 shrink-0">
               <button
                 onClick={() => onAddToBundle(rec.slug)}
                 className="px-2.5 py-1 text-xs font-medium bg-emerald-500 hover:bg-emerald-600 text-white rounded-md transition-colors"

@@ -143,7 +143,7 @@ export default function CampaignDetails() {
                         <button 
                             onClick={handleSendRemaining} 
                             disabled={sendingRemaining}
-                            className="flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold rounded-lg text-sm transition-colors shadow-sm disabled:opacity-50"
+                            className="flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold rounded-lg text-sm transition-colors shadow-xs disabled:opacity-50"
                         >
                             {sendingRemaining ? <RefreshCw size={16} className="animate-spin" /> : <Rocket size={16} />}
                             {sendingRemaining ? 'Sending Remaining...' : `Send to Remaining (${effectiveUnsent})`}
@@ -184,7 +184,7 @@ export default function CampaignDetails() {
                     <button
                         onClick={handleSendRemaining}
                         disabled={sendingRemaining}
-                        className="flex items-center gap-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold rounded-lg text-sm transition-colors shadow-sm disabled:opacity-50 whitespace-nowrap"
+                        className="flex items-center gap-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold rounded-lg text-sm transition-colors shadow-xs disabled:opacity-50 whitespace-nowrap"
                     >
                         {sendingRemaining ? <RefreshCw size={16} className="animate-spin" /> : <Rocket size={16} />}
                         {sendingRemaining ? 'Sending Remaining...' : `Send to Remaining (${effectiveUnsent})`}
@@ -227,13 +227,13 @@ export default function CampaignDetails() {
                                         placeholder="Search email..." 
                                         value={searchInput}
                                         onChange={(e) => setSearchInput(e.target.value)}
-                                        className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-805 rounded-lg text-sm focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 text-slate-900"
+                                        className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-805 rounded-lg text-sm focus:outline-hidden focus:border-amber-500 focus:ring-1 focus:ring-amber-500 text-slate-900"
                                     />
                                 </form>
                                 <select 
                                     value={statusFilter}
                                     onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
-                                    className="px-3 py-2 bg-slate-50 border border-white/60 rounded-lg text-sm focus:outline-none text-slate-900"
+                                    className="px-3 py-2 bg-slate-50 border border-white/60 rounded-lg text-sm focus:outline-hidden text-slate-900"
                                 >
                                     <option className="bg-slate-100 text-white" value="all">All Status</option>
                                     <option className="bg-slate-100 text-white" value="delivered">Delivered</option>
@@ -299,7 +299,7 @@ export default function CampaignDetails() {
                         </div>
                         <div className="flex-1 overflow-auto bg-slate-50 p-4">
                             {campaign.rendered_html ? (
-                                <div className="bg-white mx-auto shadow-md overflow-hidden rounded border border-white/60" style={{maxWidth: '600px'}}>
+                                <div className="bg-white mx-auto shadow-md overflow-hidden rounded-sm border border-white/60" style={{maxWidth: '600px'}}>
                                     <div 
                                         dangerouslySetInnerHTML={{ __html: sanitizeHtml(campaign.rendered_html) }} 
                                         className="pointer-events-none" // Prevents accidentally clicking links in preview

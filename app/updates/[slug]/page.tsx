@@ -421,7 +421,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                 </div>
 
                 {/* 1. Article Title */}
-                <h1 id="article-title" className="font-heading text-xl sm:text-2xl md:text-[2.2rem] text-navy dark:text-slate-50 font-bold mb-3 sm:mb-4 leading-snug break-words text-balance">
+                <h1 id="article-title" className="font-heading text-xl sm:text-2xl md:text-[2.2rem] text-navy dark:text-slate-50 font-bold mb-3 sm:mb-4 leading-snug wrap-break-word text-balance">
                     {update.title}
                 </h1>
 
@@ -554,7 +554,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                 
                 {/* 5. Legal basis reference */}
                 {geoData?.regulation_ref && (
-                    <div className="mb-5 flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300 shadow-sm">
+                    <div className="mb-5 flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300 shadow-xs">
                         <BookOpen className="h-4 w-4 text-amber-600 shrink-0" aria-hidden />
                         <span><strong className="font-bold">Legal basis:</strong> {geoData.regulation_ref}</span>
                     </div>
@@ -675,8 +675,8 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
 
                     return (
                         <section id="executive-summary" aria-label="Executive Summary" className="mb-6">
-                            <details open className={`group overflow-hidden rounded-xl border ${cardStyles.borderColor} dark:border-slate-800 border-l-[4px] ${cardStyles.borderLeftColor} ${cardStyles.bgColor} shadow-sm transition-all duration-200`}>
-                                <summary className="cursor-pointer p-3.5 sm:p-4 font-bold text-navy dark:text-slate-100 flex justify-between items-center bg-white dark:bg-slate-900 hover:bg-slate-50/80 dark:hover:bg-slate-800/80 transition-colors list-none [&::-webkit-details-marker]:hidden focus:outline-none">
+                            <details open className={`group overflow-hidden rounded-xl border ${cardStyles.borderColor} dark:border-slate-800 border-l-4 ${cardStyles.borderLeftColor} ${cardStyles.bgColor} shadow-xs transition-all duration-200`}>
+                                <summary className="cursor-pointer p-3.5 sm:p-4 font-bold text-navy dark:text-slate-100 flex justify-between items-center bg-white dark:bg-slate-900 hover:bg-slate-50/80 dark:hover:bg-slate-800/80 transition-colors list-none [&::-webkit-details-marker]:hidden focus:outline-hidden">
                                     <div className="flex items-center gap-2.5">
                                         <FileText className={`size-4 sm:size-5 ${cardStyles.iconColor}`} aria-hidden="true" />
                                         <span className="font-heading text-sm sm:text-base font-bold text-navy dark:text-white tracking-tight">Executive Summary</span>
@@ -689,7 +689,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                                         <ChevronDown className="size-4 text-slate-400 transition-transform duration-300 group-open:rotate-180" aria-hidden="true" />
                                     </div>
                                 </summary>
-                                <div className="p-3.5 sm:p-5 border-t border-slate-100 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm space-y-3.5">
+                                <div className="p-3.5 sm:p-5 border-t border-slate-100 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur-xs space-y-3.5">
                                     {hasSummary && (
                                         <p id="article-summary" itemProp="abstract" className="text-xs sm:text-sm text-slate-800 dark:text-slate-200 font-medium leading-relaxed">
                                             {update.summary}
@@ -748,7 +748,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                         )}
 
                         {(update.slug?.includes('ibbi-reg-47b') || update.slug?.includes('liquidation-forms-fee') || update.slug?.includes('delayed-liquidation')) && (
-                            <div className="my-10 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-[16px] p-8 flex flex-col items-center text-center shadow-xl border border-indigo-900/60 clear-both not-prose">
+                            <div className="my-10 bg-linear-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-[16px] p-8 flex flex-col items-center text-center shadow-xl border border-indigo-900/60 clear-both not-prose">
                                 <span className="text-4xl mb-3" aria-hidden>⚖️</span>
                                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold mb-3 border border-emerald-500/30">
                                     <span>Circular No. IBBI/LIQ/107/2026 Compliance</span>
@@ -786,7 +786,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                 {!update.is_sponsored && <EditorialAuthorCard category={update.category || undefined} articleTitle={update.title} />}
 
                 {/* Statutory Legal Disclaimer Box (E-E-A-T & Regulatory Compliance) */}
-                <div className="my-6 rounded-2xl border border-amber-300/80 dark:border-amber-700/60 bg-amber-50/70 dark:bg-amber-950/20 p-5 sm:p-6 text-xs text-amber-950 dark:text-amber-200 leading-relaxed shadow-sm">
+                <div className="my-6 rounded-2xl border border-amber-300/80 dark:border-amber-700/60 bg-amber-50/70 dark:bg-amber-950/20 p-5 sm:p-6 text-xs text-amber-950 dark:text-amber-200 leading-relaxed shadow-xs">
                     <div className="flex items-center gap-2 font-bold text-amber-900 dark:text-amber-300 text-sm mb-2">
                         <Scale className="size-4 shrink-0 text-amber-600 dark:text-amber-400" aria-hidden="true" />
                         <span>Statutory &amp; Regulatory Disclaimer</span>
@@ -858,7 +858,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                         <Link
                             key={tag}
                             href={`/updates?search=${encodeURIComponent(tag.trim())}`}
-                            className="rounded-md border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 px-3 py-1 text-xs text-slate-600 dark:text-slate-400 transition-all duration-200 hover:border-amber-300 hover:bg-amber-50 dark:hover:bg-slate-800 hover:text-amber-700 dark:hover:text-amber-400 hover:shadow-sm"
+                            className="rounded-md border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 px-3 py-1 text-xs text-slate-600 dark:text-slate-400 transition-all duration-200 hover:border-amber-300 hover:bg-amber-50 dark:hover:bg-slate-800 hover:text-amber-700 dark:hover:text-amber-400 hover:shadow-xs"
                         >
                             #{tag.trim()}
                         </Link>

@@ -246,7 +246,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
   return (
     <div className="space-y-8">
       {/* ─── SECTION 1: FORM VARIANT SELECTION TABS ─── */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3 shadow-sm">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-3 shadow-xs">
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-3 mb-3">
           <span className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5 pl-2">
             <Building2 className="w-3.5 h-3.5 text-blue-600" />
@@ -263,7 +263,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
             onClick={() => setFormVariant('AOC-4')}
             className={`flex flex-col p-3 rounded-xl border text-left transition-all ${
               formVariant === 'AOC-4'
-                ? 'border-blue-600 bg-blue-50/70 dark:bg-blue-900/30 text-blue-900 dark:text-blue-200 shadow-sm ring-1 ring-blue-500'
+                ? 'border-blue-600 bg-blue-50/70 dark:bg-blue-900/30 text-blue-900 dark:text-blue-200 shadow-xs ring-1 ring-blue-500'
                 : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/40 text-slate-700 dark:text-slate-300'
             }`}
           >
@@ -283,7 +283,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
             onClick={() => setFormVariant('AOC-4-CFS')}
             className={`flex flex-col p-3 rounded-xl border text-left transition-all ${
               formVariant === 'AOC-4-CFS'
-                ? 'border-blue-600 bg-blue-50/70 dark:bg-blue-900/30 text-blue-900 dark:text-blue-200 shadow-sm ring-1 ring-blue-500'
+                ? 'border-blue-600 bg-blue-50/70 dark:bg-blue-900/30 text-blue-900 dark:text-blue-200 shadow-xs ring-1 ring-blue-500'
                 : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/40 text-slate-700 dark:text-slate-300'
             }`}
           >
@@ -303,7 +303,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
             onClick={() => setFormVariant('AOC-4-XBRL')}
             className={`flex flex-col p-3 rounded-xl border text-left transition-all ${
               formVariant === 'AOC-4-XBRL'
-                ? 'border-blue-600 bg-blue-50/70 dark:bg-blue-900/30 text-blue-900 dark:text-blue-200 shadow-sm ring-1 ring-blue-500'
+                ? 'border-blue-600 bg-blue-50/70 dark:bg-blue-900/30 text-blue-900 dark:text-blue-200 shadow-xs ring-1 ring-blue-500'
                 : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/40 text-slate-700 dark:text-slate-300'
             }`}
           >
@@ -323,7 +323,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
             onClick={() => setFormVariant('AOC-4-NBFC')}
             className={`flex flex-col p-3 rounded-xl border text-left transition-all ${
               formVariant === 'AOC-4-NBFC'
-                ? 'border-blue-600 bg-blue-50/70 dark:bg-blue-900/30 text-blue-900 dark:text-blue-200 shadow-sm ring-1 ring-blue-500'
+                ? 'border-blue-600 bg-blue-50/70 dark:bg-blue-900/30 text-blue-900 dark:text-blue-200 shadow-xs ring-1 ring-blue-500'
                 : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/40 text-slate-700 dark:text-slate-300'
             }`}
           >
@@ -355,7 +355,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
         {/* Left Column: Form Controls (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
           {/* Panel A: Calculation Mode & Timeline */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs">
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4 mb-5">
               <h2 className="text-base font-bold text-navy dark:text-white flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-blue-600" />
@@ -368,7 +368,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
                   onClick={() => setCalcMode('date')}
                   className={`px-3 py-1.5 rounded-md transition-all ${
                     calcMode === 'date'
-                      ? 'bg-white dark:bg-slate-900 text-blue-600 shadow-sm'
+                      ? 'bg-white dark:bg-slate-900 text-blue-600 shadow-xs'
                       : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
                   }`}
                 >
@@ -379,7 +379,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
                   onClick={() => setCalcMode('days')}
                   className={`px-3 py-1.5 rounded-md transition-all ${
                     calcMode === 'days'
-                      ? 'bg-white dark:bg-slate-900 text-blue-600 shadow-sm'
+                      ? 'bg-white dark:bg-slate-900 text-blue-600 shadow-xs'
                       : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
                   }`}
                 >
@@ -398,7 +398,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
                   placeholder="e.g. Acme Legal Tech Private Limited"
-                  className="w-full px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none dark:text-white"
+                  className="w-full px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-hidden dark:text-white"
                 />
               </div>
 
@@ -409,7 +409,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
                 <select
                   value={selectedFY}
                   onChange={(e) => setSelectedFY(e.target.value)}
-                  className="w-full px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none dark:text-white font-medium"
+                  className="w-full px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-hidden dark:text-white font-medium"
                 >
                   <option value="2025-26">FY 2025-26 (Due Oct/Nov 2026)</option>
                   <option value="2024-25">FY 2024-25 (Due Oct/Nov 2025)</option>
@@ -427,7 +427,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
               <select
                 value={companyTypeSelection}
                 onChange={(e) => setCompanyTypeSelection(e.target.value as any)}
-                className="w-full px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none dark:text-white font-medium"
+                className="w-full px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-hidden dark:text-white font-medium"
               >
                 <option value="private_standard">Private Limited Company (Standard)</option>
                 <option value="one_person_company">One Person Company (OPC — 180 Days Deadline)</option>
@@ -459,7 +459,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
                         <select
                           value={agmStatus}
                           onChange={(e) => setAgmStatus(e.target.value as any)}
-                          className="w-full px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none dark:text-white"
+                          className="w-full px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-hidden dark:text-white"
                         >
                           <option value="held">AGM Held Regularly</option>
                           <option value="extended_and_held">Subsequent AGM Extended by ROC & Held</option>
@@ -474,7 +474,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
                         <select
                           value={agmType}
                           onChange={(e) => setAgmType(e.target.value as any)}
-                          className="w-full px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none dark:text-white"
+                          className="w-full px-3.5 py-2 text-sm bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-hidden dark:text-white"
                         >
                           <option value="subsequent">Subsequent AGM (Within 6 Months)</option>
                           <option value="first">First AGM (Within 9 Months — No ROC Ext)</option>
@@ -578,7 +578,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
           </div>
 
           {/* Panel B: Capital Base & Fee Slab Controls */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs">
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4 mb-5">
               <h2 className="text-base font-bold text-navy dark:text-white flex items-center gap-2">
                 <Scale className="w-4 h-4 text-blue-600" />
@@ -589,7 +589,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
                   type="checkbox"
                   checked={!hasShareCapital}
                   onChange={(e) => setHasShareCapital(!e.target.checked)}
-                  className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-4 h-4"
+                  className="rounded-sm border-slate-300 text-blue-600 focus:ring-blue-500 w-4 h-4"
                 />
                 <span className="text-xs text-slate-600 dark:text-slate-400 font-semibold">
                   Without Share Capital (₹200)
@@ -610,7 +610,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
                     type="number"
                     value={nominalCapital || ''}
                     onChange={(e) => setNominalCapital(Math.max(0, parseInt(e.target.value, 10) || 0))}
-                    className="w-full pl-8 pr-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none dark:text-white font-bold"
+                    className="w-full pl-8 pr-4 py-2.5 text-sm bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-hidden dark:text-white font-bold"
                   />
                 </div>
 
@@ -677,7 +677,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
           </div>
 
           {/* Panel C: Small Company, XBRL & Exemption Evaluator */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs">
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4 mb-5">
               <h2 className="text-base font-bold text-navy dark:text-white flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-purple-600" />
@@ -698,7 +698,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
                   value={paidUpCapital || ''}
                   onChange={(e) => setPaidUpCapital(Math.max(0, parseInt(e.target.value, 10) || 0))}
                   placeholder="e.g. 1000000"
-                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none dark:text-white"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-hidden dark:text-white"
                 />
                 <p className="text-[11px] text-slate-400 mt-1">Small Co limit: ≤ ₹10 Cr | XBRL: ≥ ₹5 Cr</p>
               </div>
@@ -712,7 +712,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
                   value={turnoverPrecedingFY || ''}
                   onChange={(e) => setTurnoverPrecedingFY(Math.max(0, parseInt(e.target.value, 10) || 0))}
                   placeholder="e.g. 5000000"
-                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none dark:text-white"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-hidden dark:text-white"
                 />
                 <p className="text-[11px] text-slate-400 mt-1">Small Co limit: ≤ ₹100 Cr | XBRL: ≥ ₹100 Cr</p>
               </div>
@@ -725,7 +725,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
                   type="checkbox"
                   checked={isHoldingCompany}
                   onChange={(e) => setIsHoldingCompany(e.target.checked)}
-                  className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-3.5 h-3.5"
+                  className="rounded-sm border-slate-300 text-blue-600 focus:ring-blue-500 w-3.5 h-3.5"
                 />
                 <span>Holding Company (Sec 2(85) Excl.)</span>
               </label>
@@ -735,7 +735,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
                   type="checkbox"
                   checked={isSubsidiaryCompany}
                   onChange={(e) => setIsSubsidiaryCompany(e.target.checked)}
-                  className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-3.5 h-3.5"
+                  className="rounded-sm border-slate-300 text-blue-600 focus:ring-blue-500 w-3.5 h-3.5"
                 />
                 <span>Subsidiary Company (Sec 2(85) Excl.)</span>
               </label>
@@ -745,7 +745,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
                   type="checkbox"
                   checked={hasSubsidiariesOrJVs}
                   onChange={(e) => setHasSubsidiariesOrJVs(e.target.checked)}
-                  className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-3.5 h-3.5"
+                  className="rounded-sm border-slate-300 text-blue-600 focus:ring-blue-500 w-3.5 h-3.5"
                 />
                 <span>Has Subsidiaries / JVs (AOC-4 CFS Required)</span>
               </label>
@@ -755,7 +755,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
                   type="checkbox"
                   checked={isDormantCompany}
                   onChange={(e) => setIsDormantCompany(e.target.checked)}
-                  className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-3.5 h-3.5"
+                  className="rounded-sm border-slate-300 text-blue-600 focus:ring-blue-500 w-3.5 h-3.5"
                 />
                 <span>Dormant Company (Sec 455 Exemption)</span>
               </label>
@@ -851,7 +851,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
           </div>
 
           {/* Card 2: Section 137(3) Adjudication Exposure */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm font-bold text-navy dark:text-white flex items-center gap-2 uppercase tracking-wider">
                 <ShieldAlert className="w-4 h-4 text-red-600" />
@@ -918,7 +918,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
               type="button"
               onClick={handleDownloadPdf}
               disabled={isGeneratingPdf}
-              className="flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm disabled:opacity-50"
+              className="flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-xs disabled:opacity-50"
             >
               <Download className="w-4 h-4" />
               {isGeneratingPdf ? 'Generating...' : 'Export PDF'}
@@ -927,7 +927,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
             <button
               type="button"
               onClick={handlePrint}
-              className="flex items-center justify-center gap-2 px-4 py-3 bg-slate-800 hover:bg-slate-900 text-white dark:bg-slate-800 dark:hover:bg-slate-700 rounded-xl text-xs font-bold transition-all shadow-sm"
+              className="flex items-center justify-center gap-2 px-4 py-3 bg-slate-800 hover:bg-slate-900 text-white dark:bg-slate-800 dark:hover:bg-slate-700 rounded-xl text-xs font-bold transition-all shadow-xs"
             >
               <Printer className="w-4 h-4" />
               Print Sheet
@@ -936,7 +936,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
             <button
               type="button"
               onClick={handleCopySummary}
-              className="flex items-center justify-center gap-2 px-4 py-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-xl text-xs font-bold transition-all border border-slate-200 dark:border-slate-700 shadow-sm"
+              className="flex items-center justify-center gap-2 px-4 py-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 rounded-xl text-xs font-bold transition-all border border-slate-200 dark:border-slate-700 shadow-xs"
             >
               <Copy className="w-4 h-4" />
               Copy Text
@@ -946,7 +946,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
       </div>
 
       {/* ─── SECTION 3: MANDATORY ATTACHMENTS CHECKLIST ─── */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-xs">
         <h3 className="text-base font-bold text-navy dark:text-white mb-2 flex items-center gap-2">
           <FileText className="w-4 h-4 text-blue-600" />
           Mandatory Attachments & Enclosures Checklist for {complianceResult.metadata.formCode}

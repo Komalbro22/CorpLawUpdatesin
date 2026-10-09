@@ -31,7 +31,7 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
     ref
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-bold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 motion-safe:active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed cursor-pointer'
+      'inline-flex items-center justify-center font-bold rounded-lg transition-all duration-200 focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 motion-safe:active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed cursor-pointer'
 
     const sizeStyles = {
       sm: 'min-h-[38px] px-3.5 py-1.5 text-xs gap-1.5',

@@ -21,11 +21,11 @@ export default function EditorialAuthorCard({ category, articleTitle, isSponsore
   return (
     <section
       aria-label="Editorial Authorship & Verification Standards"
-      className="my-10 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-gradient-to-br from-slate-50 via-white to-amber-50/20 dark:from-slate-900/90 dark:via-slate-900/60 dark:to-slate-950 p-5 sm:p-7 shadow-sm transition-all duration-200"
+      className="my-10 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-linear-to-br from-slate-50 via-white to-amber-50/20 dark:from-slate-900/90 dark:via-slate-900/60 dark:to-slate-950 p-5 sm:p-7 shadow-xs transition-all duration-200"
     >
       <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-5">
         {/* Avatar / Desk Emblem */}
-        <div className="size-12 sm:size-14 rounded-2xl bg-gradient-to-br from-navy to-slate-800 dark:from-amber-500 dark:to-amber-600 text-white dark:text-slate-950 flex items-center justify-center shrink-0 shadow-sm border border-slate-700/50 dark:border-amber-400">
+        <div className="size-12 sm:size-14 rounded-2xl bg-linear-to-br from-navy to-slate-800 dark:from-amber-500 dark:to-amber-600 text-white dark:text-slate-950 flex items-center justify-center shrink-0 shadow-xs border border-slate-700/50 dark:border-amber-400">
           <Scale className="size-6 sm:size-7" aria-hidden="true" />
         </div>
 
@@ -94,7 +94,7 @@ export default function EditorialAuthorCard({ category, articleTitle, isSponsore
             {!isSponsored && (
               <a
                 href={`mailto:${desk.email}?subject=${correctionSubject}`}
-                className="inline-flex items-center gap-2 text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-amber-700 dark:hover:text-amber-400 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-amber-300 rounded-xl px-3.5 py-2 transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+                className="inline-flex items-center gap-2 text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-amber-700 dark:hover:text-amber-400 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-amber-300 rounded-xl px-3.5 py-2 transition-all shadow-xs focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-500"
               >
                 <Mail className="size-3.5 text-amber-600 dark:text-amber-400" aria-hidden="true" />
                 <span>{desk.email}</span>

@@ -197,7 +197,7 @@ export default async function CategoryIndexPage() {
               <Link
                 key={slug}
                 href={`/category/${slug}`}
-                className={`group relative flex flex-col justify-between rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-6 shadow-xs hover:shadow-xl dark:hover:shadow-slate-950/60 ${borderHover} transition-[transform,box-shadow,border-color] duration-200 motion-safe:hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 overflow-hidden`}
+                className={`group relative flex flex-col justify-between rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-6 shadow-2xs hover:shadow-xl dark:hover:shadow-slate-950/60 ${borderHover} transition-[transform,box-shadow,border-color] duration-200 motion-safe:hover:-translate-y-1 focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 overflow-hidden`}
               >
                 {/* Top Subtle Brand Accent Line */}
                 <div className={`absolute top-0 left-0 right-0 h-1 ${accent} opacity-80 group-hover:opacity-100 transition-opacity`} />

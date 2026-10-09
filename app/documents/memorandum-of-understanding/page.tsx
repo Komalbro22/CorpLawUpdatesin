@@ -242,9 +242,9 @@ export default function MemorandumOfUnderstandingPage() {
           </div>
 
           {/* Princeton GEO Direct Answer / Quick Answer Box (AI Overview Optimized) */}
-          <div className="bg-gradient-to-br from-indigo-50/90 via-white to-blue-50/70 dark:from-slate-900 dark:via-slate-900 dark:to-indigo-950/40 p-6 rounded-2xl border-2 border-indigo-200 dark:border-indigo-800/80 shadow-md">
+          <div className="bg-linear-to-br from-indigo-50/90 via-white to-blue-50/70 dark:from-slate-900 dark:via-slate-900 dark:to-indigo-950/40 p-6 rounded-2xl border-2 border-indigo-200 dark:border-indigo-800/80 shadow-md">
             <div className="flex items-start gap-3">
-              <div className="p-2.5 rounded-xl bg-indigo-600 text-white shrink-0 shadow-sm mt-0.5">
+              <div className="p-2.5 rounded-xl bg-indigo-600 text-white shrink-0 shadow-xs mt-0.5">
                 <BookOpen className="w-5 h-5" />
               </div>
               <div className="space-y-2 text-sm sm:text-base leading-relaxed text-slate-800 dark:text-slate-200">
@@ -279,7 +279,7 @@ export default function MemorandumOfUnderstandingPage() {
               </p>
             </div>
 
-            <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
               <table className="w-full text-left text-xs sm:text-sm border-collapse bg-white dark:bg-slate-900">
                 <thead>
                   <tr className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-700">
@@ -354,7 +354,7 @@ export default function MemorandumOfUnderstandingPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {/* Card 1 */}
-              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-3">
                 <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-base">
                   <Users className="w-5 h-5" />
                   1. Business Partnership & Referral
@@ -368,7 +368,7 @@ export default function MemorandumOfUnderstandingPage() {
               </div>
 
               {/* Card 2 */}
-              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-3">
                 <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-base">
                   <Building2 className="w-5 h-5" />
                   2. Joint Venture (JV) Preliminary
@@ -382,7 +382,7 @@ export default function MemorandumOfUnderstandingPage() {
               </div>
 
               {/* Card 3 */}
-              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-3">
                 <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold text-base">
                   <FileCheck2 className="w-5 h-5" />
                   3. Vendor & Service Provider
@@ -396,7 +396,7 @@ export default function MemorandumOfUnderstandingPage() {
               </div>
 
               {/* Card 4 */}
-              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-3">
                 <div className="flex items-center gap-2 text-purple-600 dark:text-purple-400 font-bold text-base">
                   <Cpu className="w-5 h-5" />
                   4. Academic & R&D Tech Sharing
@@ -410,7 +410,7 @@ export default function MemorandumOfUnderstandingPage() {
               </div>
 
               {/* Card 5 */}
-              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-3">
                 <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-bold text-base">
                   <Sparkles className="w-5 h-5" />
                   5. Startup Co-Founders Agreement
@@ -424,7 +424,7 @@ export default function MemorandumOfUnderstandingPage() {
               </div>
 
               {/* Card 6 */}
-              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-3">
                 <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 font-bold text-base">
                   <Landmark className="w-5 h-5" />
                   6. Inter-Company & Subsidiaries
@@ -454,7 +454,7 @@ export default function MemorandumOfUnderstandingPage() {
               </p>
             </div>
 
-            <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
               <table className="w-full text-left text-xs sm:text-sm border-collapse bg-white dark:bg-slate-900">
                 <thead>
                   <tr className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-700">
@@ -797,7 +797,7 @@ export default function MemorandumOfUnderstandingPage() {
               {FAQS.map((faq, idx) => (
                 <div
                   key={idx}
-                  className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2"
+                  className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-2"
                 >
                   <h3 className="font-bold text-slate-900 dark:text-white text-sm sm:text-base flex items-start gap-2">
                     <span className="text-indigo-600 dark:text-indigo-400 shrink-0 font-extrabold">
@@ -821,7 +821,7 @@ export default function MemorandumOfUnderstandingPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <Link
                 href="/documents/equitable-mortgage-deed"
-                className="group p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-500 transition shadow-sm block"
+                className="group p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-500 transition shadow-xs block"
               >
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
@@ -836,7 +836,7 @@ export default function MemorandumOfUnderstandingPage() {
 
               <Link
                 href="/documents/board-resolution-bank-loan"
-                className="group p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-500 transition shadow-sm block"
+                className="group p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-500 transition shadow-xs block"
               >
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
@@ -851,7 +851,7 @@ export default function MemorandumOfUnderstandingPage() {
 
               <Link
                 href="/documents"
-                className="group p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-500 transition shadow-sm block"
+                className="group p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-500 transition shadow-xs block"
               >
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-sm text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400">

@@ -237,7 +237,7 @@ export default function PrivacyPolicyPage() {
                         <div>
                             <h3 className="font-bold text-navy dark:text-slate-200 mb-1.5 text-xs uppercase tracking-wide">A. External Link Attribution in Sponsored Content</h3>
                             <p>
-                                External links within sponsored articles are marked with <code className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-xs">rel="sponsored noopener noreferrer"</code> attributes in accordance with search engine guidelines for paid content. This ensures that search engines can distinguish between editorial links and paid/sponsored links.
+                                External links within sponsored articles are marked with <code className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded-sm text-xs">rel="sponsored noopener noreferrer"</code> attributes in accordance with search engine guidelines for paid content. This ensures that search engines can distinguish between editorial links and paid/sponsored links.
                             </p>
                         </div>
                         <div>

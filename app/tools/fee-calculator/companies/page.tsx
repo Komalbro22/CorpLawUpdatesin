@@ -196,7 +196,7 @@ function CompanySEO() {
         <p className="text-slate-600 dark:text-slate-300 text-sm mb-4">
           Pursuant to Table A of the Companies (Registration Offices and Fees) Rules, 2014, normal filing fees apply uniformly to all companies having share capital (Private Limited, Public Limited, One Person Companies, Small Companies, and Section 8 Companies). For companies not having share capital, Item 6 mandates a flat fee of ₹200.
         </p>
-        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm not-prose">
+        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs not-prose">
           <table className="w-full text-left text-sm">
             <thead className="bg-slate-100 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
               <tr>
@@ -250,7 +250,7 @@ function CompanySEO() {
         <p className="text-slate-600 dark:text-slate-300 text-sm mb-4">
           For event-based forms under Section 403 (such as Form ADT-1, INC-22, DIR-12, PAS-3, MGT-14, and DPT-3), late filing fees escalate according to the delay duration. Delays exceeding 270 days cannot be filed directly without condonation of delay.
         </p>
-        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm not-prose">
+        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs not-prose">
           <table className="w-full text-left text-sm">
             <thead className="bg-slate-100 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
               <tr>
@@ -310,7 +310,7 @@ function CompanySEO() {
       <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-4">
         Under the Companies (Registration Offices and Fees) Second Amendment Rules, 2018, annual compliance documents (Form AOC-4, AOC-4 CFS, AOC-4 XBRL, MGT-7, and MGT-7A) do not follow Table B multipliers. Instead, an uncapped additional fee of <strong>₹100 per day</strong> accumulates from the 61st day after the Annual General Meeting (AGM).
       </p>
-      <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm not-prose mb-8">
+      <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs not-prose mb-8">
         <table className="w-full text-left text-sm">
           <thead className="bg-slate-100 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
             <tr>
@@ -356,7 +356,7 @@ function CompanySEO() {
       <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-4">
         Pursuant to Section 77(1) of the Companies Act, 2013 and Rule 12(3) of the Fees Rules, charges created after 02.11.2018 have three statutory windows. Direct ROC registration is strictly barred after 120 days from creation.
       </p>
-      <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm not-prose mb-8">
+      <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs not-prose mb-8">
         <table className="w-full text-left text-sm">
           <thead className="bg-slate-100 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
             <tr>
@@ -397,7 +397,7 @@ function CompanySEO() {
       </div>
 
       {/* Section 5: Small Company Definition & Section 446B Halving Relief */}
-      <div className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 border border-emerald-200 dark:border-emerald-800 rounded-xl p-6 my-10 not-prose">
+      <div className="bg-linear-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 border border-emerald-200 dark:border-emerald-800 rounded-xl p-6 my-10 not-prose">
         <h3 className="text-lg font-bold text-emerald-900 dark:text-emerald-300 mb-2 flex items-center gap-2">
           <span>🛡️</span> Small Company Expansion (G.S.R. 880(E)) &amp; Section 446B 50% Penalty Relief
         </h3>
@@ -472,7 +472,7 @@ export default function CompaniesFeePage() {
           >
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-blue-600 text-white">MGT-7 &amp; 7A</span>
+                <span className="px-2.5 py-0.5 rounded-sm text-xs font-bold bg-blue-600 text-white">MGT-7 &amp; 7A</span>
                 <span className="text-xs text-slate-500 dark:text-slate-400">Annual Return</span>
               </div>
               <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-1">
@@ -493,7 +493,7 @@ export default function CompaniesFeePage() {
           >
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-indigo-600 text-white">AOC-4 Family</span>
+                <span className="px-2.5 py-0.5 rounded-sm text-xs font-bold bg-indigo-600 text-white">AOC-4 Family</span>
                 <span className="text-xs text-slate-500 dark:text-slate-400">Financial Statements</span>
               </div>
               <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors mb-1">
@@ -514,7 +514,7 @@ export default function CompaniesFeePage() {
           >
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-amber-600 text-white">DPT-3</span>
+                <span className="px-2.5 py-0.5 rounded-sm text-xs font-bold bg-amber-600 text-white">DPT-3</span>
                 <span className="text-xs text-slate-500 dark:text-slate-400">Return of Deposits</span>
               </div>
               <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors mb-1">
@@ -535,7 +535,7 @@ export default function CompaniesFeePage() {
           >
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-sky-600 text-white">DIR-3 KYC</span>
+                <span className="px-2.5 py-0.5 rounded-sm text-xs font-bold bg-sky-600 text-white">DIR-3 KYC</span>
                 <span className="text-xs text-slate-500 dark:text-slate-400">Director Verification</span>
               </div>
               <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors mb-1">
@@ -556,7 +556,7 @@ export default function CompaniesFeePage() {
           >
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-600 text-white">ADT-1</span>
+                <span className="px-2.5 py-0.5 rounded-sm text-xs font-bold bg-emerald-600 text-white">ADT-1</span>
                 <span className="text-xs text-slate-500 dark:text-slate-400">Auditor Appointment</span>
               </div>
               <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors mb-1">
@@ -577,7 +577,7 @@ export default function CompaniesFeePage() {
           >
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-purple-600 text-white">CHG-1</span>
+                <span className="px-2.5 py-0.5 rounded-sm text-xs font-bold bg-purple-600 text-white">CHG-1</span>
                 <span className="text-xs text-slate-500 dark:text-slate-400">Creation of Charge</span>
               </div>
               <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors mb-1">
@@ -598,7 +598,7 @@ export default function CompaniesFeePage() {
           >
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-rose-600 text-white">INC-20A</span>
+                <span className="px-2.5 py-0.5 rounded-sm text-xs font-bold bg-rose-600 text-white">INC-20A</span>
                 <span className="text-xs text-slate-500 dark:text-slate-400">Commencement of Business</span>
               </div>
               <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors mb-1">
@@ -619,7 +619,7 @@ export default function CompaniesFeePage() {
           >
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-orange-600 text-white">SPICe+</span>
+                <span className="px-2.5 py-0.5 rounded-sm text-xs font-bold bg-orange-600 text-white">SPICe+</span>
                 <span className="text-xs text-slate-500 dark:text-slate-400">Company Incorporation</span>
               </div>
               <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors mb-1">
@@ -640,7 +640,7 @@ export default function CompaniesFeePage() {
           >
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-violet-600 text-white">PAS-6</span>
+                <span className="px-2.5 py-0.5 rounded-sm text-xs font-bold bg-violet-600 text-white">PAS-6</span>
                 <span className="text-xs text-slate-500 dark:text-slate-400">Share Capital Reconciliation</span>
               </div>
               <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors mb-1">
@@ -661,7 +661,7 @@ export default function CompaniesFeePage() {
           >
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-blue-600 text-white">DIR-12</span>
+                <span className="px-2.5 py-0.5 rounded-sm text-xs font-bold bg-blue-600 text-white">DIR-12</span>
                 <span className="text-xs text-slate-500 dark:text-slate-400">Director Changes</span>
               </div>
               <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-1">
@@ -682,7 +682,7 @@ export default function CompaniesFeePage() {
           >
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-emerald-600 text-white">MSME-1</span>
+                <span className="px-2.5 py-0.5 rounded-sm text-xs font-bold bg-emerald-600 text-white">MSME-1</span>
                 <span className="text-xs text-slate-500 dark:text-slate-400">Vendor Dues Return</span>
               </div>
               <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors mb-1">
@@ -703,7 +703,7 @@ export default function CompaniesFeePage() {
           >
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-indigo-600 text-white">PAS-3</span>
+                <span className="px-2.5 py-0.5 rounded-sm text-xs font-bold bg-indigo-600 text-white">PAS-3</span>
                 <span className="text-xs text-slate-500 dark:text-slate-400">Return of Allotment</span>
               </div>
               <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors mb-1">
@@ -724,7 +724,7 @@ export default function CompaniesFeePage() {
           >
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-indigo-600 text-white">MGT-14</span>
+                <span className="px-2.5 py-0.5 rounded-sm text-xs font-bold bg-indigo-600 text-white">MGT-14</span>
                 <span className="text-xs text-slate-500 dark:text-slate-400">Resolutions &amp; Agreements</span>
               </div>
               <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors mb-1">
@@ -745,7 +745,7 @@ export default function CompaniesFeePage() {
           >
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-amber-600 text-white">SH-7</span>
+                <span className="px-2.5 py-0.5 rounded-sm text-xs font-bold bg-amber-600 text-white">SH-7</span>
                 <span className="text-xs text-slate-500 dark:text-slate-400">Share Capital Alteration</span>
               </div>
               <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors mb-1">
@@ -777,7 +777,7 @@ export default function CompaniesFeePage() {
             <Link 
               key={form.slug} 
               href={`/tools/fee-calculator/companies/${form.slug}`}
-              className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md hover:border-blue-600 dark:hover:border-blue-500 transition-all flex flex-col h-full group"
+              className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs hover:shadow-md hover:border-blue-600 dark:hover:border-blue-500 transition-all flex flex-col h-full group"
             >
               <div className="mb-3 flex items-center justify-between">
                 <span className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[0.75rem] font-bold px-3 py-1 rounded-full uppercase tracking-wider">

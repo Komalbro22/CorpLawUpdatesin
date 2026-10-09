@@ -236,12 +236,12 @@ export default function Sidebar() {
                                             aria-label={link.label}
                                             className={`relative flex items-center justify-center w-10 h-10 rounded-xl mx-auto transition-all duration-200 ${
                                                 active
-                                                    ? 'bg-amber-50 text-amber-600 shadow-sm border border-amber-100'
+                                                    ? 'bg-amber-50 text-amber-600 shadow-xs border border-amber-100'
                                                     : 'text-slate-400 hover:bg-slate-50 hover:text-slate-700'
                                             }`}
                                         >
                                             {active && (
-                                                <span className="absolute left-0 top-1 bottom-1 w-[3px] rounded-r bg-gradient-to-b from-amber-400 to-orange-500" />
+                                                <span className="absolute left-0 top-1 bottom-1 w-[3px] rounded-r bg-linear-to-b from-amber-400 to-orange-500" />
                                             )}
                                             <Icon className="w-4.5 h-4.5" aria-hidden />
                                         </Link>
@@ -258,12 +258,12 @@ export default function Sidebar() {
                                         onLinkClick ? 'min-h-[44px]' : ''
                                     } ${
                                         active
-                                            ? 'bg-gradient-to-r from-amber-50 to-orange-50/40 text-amber-700 font-bold'
+                                            ? 'bg-linear-to-r from-amber-50 to-orange-50/40 text-amber-700 font-bold'
                                             : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
                                     }`}
                                 >
                                     {active && (
-                                        <span className="absolute left-0 top-1 bottom-1 w-[3px] rounded-r bg-gradient-to-b from-amber-400 to-orange-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
+                                        <span className="absolute left-0 top-1 bottom-1 w-[3px] rounded-r bg-linear-to-b from-amber-400 to-orange-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
                                     )}
                                     <Icon
                                         className={`w-4 h-4 shrink-0 transition-colors ${
@@ -284,10 +284,10 @@ export default function Sidebar() {
     const renderUserArea = (iconOnly = false) => (
         <div className={`flex items-center gap-3 px-4 py-4 ${iconOnly ? 'justify-center px-2' : ''}`}>
             <div className="relative shrink-0">
-                <div className="h-9 w-9 rounded-full bg-gradient-to-br from-amber-100 to-orange-100 border border-amber-200 flex items-center justify-center shadow-sm">
+                <div className="h-9 w-9 rounded-full bg-linear-to-br from-amber-100 to-orange-100 border border-amber-200 flex items-center justify-center shadow-xs">
                     <span className="text-sm font-bold text-amber-700 leading-none">A</span>
                 </div>
-                <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-emerald-400 shadow-sm" />
+                <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white bg-emerald-400 shadow-xs" />
             </div>
             {!iconOnly && (
                 <div className="min-w-0 flex-1">
@@ -355,10 +355,10 @@ export default function Sidebar() {
 
         {/* ── Mobile Drawer ─────────────────────────────── */}
         {drawerOpen && (
-            <div className="fixed inset-0 z-[60] lg:hidden">
+            <div className="fixed inset-0 z-60 lg:hidden">
                 <button
                     type="button"
-                    className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm"
+                    className="absolute inset-0 bg-slate-900/50 backdrop-blur-xs"
                     aria-label="Close menu"
                     onClick={closeDrawer}
                 />
@@ -392,7 +392,7 @@ export default function Sidebar() {
                         <Link
                             href="/admin/articles/new"
                             onClick={closeDrawer}
-                            className="flex items-center justify-center gap-2 w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-bold text-xs shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+                            className="flex items-center justify-center gap-2 w-full py-2.5 px-3 rounded-xl bg-linear-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-bold text-xs shadow-xs transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-500"
                         >
                             <PenSquare className="w-4 h-4 shrink-0 text-slate-950" aria-hidden />
                             <span>New Article</span>
@@ -462,7 +462,7 @@ export default function Sidebar() {
                 {collapsed ? (
                     <Link
                         href="/admin/articles/new"
-                        className="flex items-center justify-center h-9 w-9 mx-auto rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-bold shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+                        className="flex items-center justify-center h-9 w-9 mx-auto rounded-xl bg-linear-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-bold shadow-xs transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-500"
                         title="New Article (⌘N)"
                         aria-label="New Article (⌘N)"
                     >
@@ -471,11 +471,11 @@ export default function Sidebar() {
                 ) : (
                     <Link
                         href="/admin/articles/new"
-                        className="flex items-center gap-2 w-full px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-bold text-xs shadow-sm hover:shadow transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+                        className="flex items-center gap-2 w-full px-3 py-2 rounded-xl bg-linear-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-bold text-xs shadow-xs hover:shadow-sm transition-all focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-500"
                     >
                         <PenSquare className="w-4 h-4 shrink-0 text-slate-950" aria-hidden />
                         <span>New Article</span>
-                        <span className="ml-auto text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-950/10 text-slate-900 border border-amber-950/15">⌘N</span>
+                        <span className="ml-auto text-[10px] font-mono px-1.5 py-0.5 rounded-sm bg-amber-950/10 text-slate-900 border border-amber-950/15">⌘N</span>
                     </Link>
                 )}
             </div>

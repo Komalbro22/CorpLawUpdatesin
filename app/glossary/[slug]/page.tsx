@@ -498,7 +498,7 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
                 <div className="flex flex-wrap gap-1.5 items-center">
                   <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider mr-1.5">Acronyms / Synonyms:</span>
                   {term.synonyms.map((syn: string) => (
-                    <span key={syn} className="inline-flex items-center px-2 py-0.5 rounded bg-slate-50 text-slate-600 text-xs font-semibold border border-slate-100">
+                    <span key={syn} className="inline-flex items-center px-2 py-0.5 rounded-sm bg-slate-50 text-slate-600 text-xs font-semibold border border-slate-100">
                       {syn}
                     </span>
                   ))}
@@ -509,7 +509,7 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
               {parsed.tldr && parsed.tldr.length > 0 && (
                 <Link 
                   href="#key-takeaways" 
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 hover:text-amber-700 bg-amber-50 hover:bg-amber-100/80 border border-amber-250/30 px-3 py-1 rounded-full transition-all shadow-sm active:scale-95"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 hover:text-amber-700 bg-amber-50 hover:bg-amber-100/80 border border-amber-250/30 px-3 py-1 rounded-full transition-all shadow-xs active:scale-95"
                 >
                   <FileText className="h-3 w-3" />
                   Key Takeaways
@@ -522,7 +522,7 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
           </header>
         ) : (
           /* Main Definition Card */
-          <section id="definition" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-sm relative overflow-hidden border-l-[4px] md:border-l-[5px] ${themeStyles.borderLeftColor}`}>
+          <section id="definition" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-xs relative overflow-hidden border-l-4 md:border-l-[5px] ${themeStyles.borderLeftColor}`}>
             {/* Decorative background letter */}
             <div className="absolute top-0 right-0 p-8 opacity-[0.03] select-none pointer-events-none" aria-hidden="true">
               <span className="text-9xl font-heading font-bold text-slate-900 leading-none">
@@ -548,7 +548,7 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
                 {parsed.tldr && parsed.tldr.length > 0 && (
                   <Link 
                     href="#key-takeaways" 
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 hover:text-amber-700 bg-amber-50 hover:bg-amber-100/80 border border-amber-250/30 px-3 py-1 rounded-full transition-all shadow-sm active:scale-95"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 hover:text-amber-700 bg-amber-50 hover:bg-amber-100/80 border border-amber-250/30 px-3 py-1 rounded-full transition-all shadow-xs active:scale-95"
                   >
                     <FileText className="h-3 w-3" />
                     Key Takeaways
@@ -565,7 +565,7 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
                 <div className="mt-6 pt-4 border-t border-slate-100 flex flex-wrap gap-1.5 items-center">
                   <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider mr-1.5">Acronyms / Synonyms:</span>
                   {term.synonyms.map((syn: string) => (
-                    <span key={syn} className="inline-flex items-center px-2 py-0.5 rounded bg-slate-50 text-slate-600 text-xs font-semibold border border-slate-100">
+                    <span key={syn} className="inline-flex items-center px-2 py-0.5 rounded-sm bg-slate-50 text-slate-600 text-xs font-semibold border border-slate-100">
                       {syn}
                     </span>
                   ))}
@@ -581,7 +581,7 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
 
         {/* Executive Takeaways Bullet Card */}
         {parsed.tldr && parsed.tldr.length > 0 && (
-          <section id="key-takeaways" className="bg-gradient-to-br from-amber-50/60 via-amber-50/20 to-transparent rounded-2xl p-6 sm:p-8 border border-amber-250/30 shadow-sm relative overflow-hidden">
+          <section id="key-takeaways" className="bg-linear-to-br from-amber-50/60 via-amber-50/20 to-transparent rounded-2xl p-6 sm:p-8 border border-amber-250/30 shadow-xs relative overflow-hidden">
             <div className="absolute top-0 right-0 p-8 opacity-[0.06] select-none pointer-events-none" aria-hidden="true">
               <FileText className="text-6xl text-amber-500" />
             </div>
@@ -605,7 +605,7 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
 
         {/* Extended Note Section */}
         {term.extended_note && (
-          <section id={`understanding-${term.term.toLowerCase().replace(/[^a-z0-9]/g, '-')}`} className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-sm border-l-[4px] ${themeStyles.borderLeftColor}`}>
+          <section id={`understanding-${term.term.toLowerCase().replace(/[^a-z0-9]/g, '-')}`} className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-xs border-l-4 ${themeStyles.borderLeftColor}`}>
             <h2 className="text-2xl font-bold text-navy mb-6 flex items-center gap-2.5 font-heading group">
               <BookOpen className={`h-6 w-6 ${themeStyles.iconColor}`} aria-hidden />
               <a href={`#understanding-${term.term.toLowerCase().replace(/[^a-z0-9]/g, '-')}`} className="hover:text-amber-700 transition-colors flex items-center gap-1.5">
@@ -621,7 +621,7 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
 
         {/* Frequently Asked Questions (FAQ) Section - Only if not already inline in the text */}
         {!hasInlineFaqs && faqsList.length > 0 && (
-          <section id="frequently-asked-questions-faqs" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-sm border-l-[4px] ${themeStyles.borderLeftColor}`}>
+          <section id="frequently-asked-questions-faqs" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-xs border-l-4 ${themeStyles.borderLeftColor}`}>
             <h2 className="text-2xl font-bold text-navy mb-6 flex items-center gap-2.5 font-heading group">
               <HelpCircle className={`h-6 w-6 ${themeStyles.iconColor}`} aria-hidden />
               <a href="#frequently-asked-questions-faqs" className="hover:text-amber-700 transition-colors flex items-center gap-1.5">
@@ -654,7 +654,7 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
 
         {/* Related Terms */}
         {relatedTermsData.length > 0 && (
-          <section id="related-terms" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-sm border-l-[4px] ${themeStyles.borderLeftColor}`}>
+          <section id="related-terms" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-xs border-l-4 ${themeStyles.borderLeftColor}`}>
             <h2 className="text-2xl font-bold text-navy mb-6 flex items-center gap-2.5 font-heading group">
               <Link2 className={`h-6 w-6 ${themeStyles.iconColor}`} aria-hidden />
               <a href="#related-terms" className="hover:text-amber-700 transition-colors flex items-center gap-1.5">
@@ -667,7 +667,7 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
                 <Link 
                   key={related.slug} 
                   href={`/glossary/${related.slug}`}
-                  className="inline-flex items-center px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium text-navy hover:border-amber-400 hover:text-amber-700 hover:shadow-sm transition-all qol-pill-hover"
+                  className="inline-flex items-center px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium text-navy hover:border-amber-400 hover:text-amber-700 hover:shadow-xs transition-all qol-pill-hover"
                 >
                   {related.term}
                 </Link>
@@ -678,7 +678,7 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
 
         {/* Contextual Analysis & Related Updates */}
         {relatedArticles && relatedArticles.length > 0 && (
-          <section id="contextual-analysis-regulatory-updates" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-sm border-l-[4px] ${themeStyles.borderLeftColor}`}>
+          <section id="contextual-analysis-regulatory-updates" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-xs border-l-4 ${themeStyles.borderLeftColor}`}>
             <h2 className="text-2xl font-bold text-navy mb-4 flex items-center gap-2.5 font-heading group">
               <FileText className={`h-6 w-6 ${themeStyles.iconColor}`} aria-hidden />
               <a href="#contextual-analysis-regulatory-updates" className="hover:text-amber-700 transition-colors flex items-center gap-1.5">
@@ -715,7 +715,7 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
 
         {/* Related Searches */}
         {term.keywords && term.keywords.length > 0 && (
-          <section id="related-searches" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-sm border-l-[4px] ${themeStyles.borderLeftColor}`}>
+          <section id="related-searches" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-xs border-l-4 ${themeStyles.borderLeftColor}`}>
             <h2 className="text-2xl font-bold text-navy mb-4 flex items-center gap-2.5 font-heading group">
               <Search className={`h-6 w-6 ${themeStyles.iconColor}`} aria-hidden />
               <a href="#related-searches" className="hover:text-amber-700 transition-colors flex items-center gap-1.5">
@@ -737,7 +737,7 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
                   <Link
                     key={i}
                     href={linkUrl}
-                    className="text-sm bg-slate-50 text-slate-600 hover:bg-amber-50 hover:text-amber-700 hover:border-amber-300 border border-slate-200/60 px-4 py-2 rounded-full font-medium transition-all shadow-sm flex items-center gap-1 group qol-pill-hover"
+                    className="text-sm bg-slate-50 text-slate-600 hover:bg-amber-50 hover:text-amber-700 hover:border-amber-300 border border-slate-200/60 px-4 py-2 rounded-full font-medium transition-all shadow-xs flex items-center gap-1 group qol-pill-hover"
                   >
                     <span>{kw.trim()}</span>
                     <span className="text-slate-400 group-hover:text-amber-600 transition-colors text-xs">↗</span>

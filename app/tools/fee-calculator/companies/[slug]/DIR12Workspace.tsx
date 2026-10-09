@@ -180,14 +180,14 @@ Calculated via CorpLawUpdates.in`
   return (
     <div className="space-y-8">
       {/* Princeton GEO Direct Answer Block */}
-      <section className="rounded-2xl border-2 border-emerald-600/30 bg-gradient-to-r from-emerald-50/70 via-white to-blue-50/50 p-6 sm:p-7 shadow-sm">
+      <section className="rounded-2xl border-2 border-emerald-600/30 bg-linear-to-r from-emerald-50/70 via-white to-blue-50/50 p-6 sm:p-7 shadow-xs">
         <div className="flex items-start gap-4">
           <div className="p-3 bg-emerald-100 text-emerald-800 rounded-xl shrink-0 hidden sm:block">
             <Scale className="w-7 h-7" />
           </div>
           <div className="flex-1">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100/80 px-2 py-0.5 rounded border border-emerald-300">
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100/80 px-2 py-0.5 rounded-sm border border-emerald-300">
                 Direct Statutory Answer
               </span>
               <span className="text-xs text-slate-500 font-medium">
@@ -232,11 +232,11 @@ Calculated via CorpLawUpdates.in`
       </section>
 
       {/* Main Interactive Calculator Card */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
         <div className="border-b border-slate-200 bg-slate-50/80 p-5 sm:p-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded border border-blue-200">
+              <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-sm border border-blue-200">
                 Interactive Calculator
               </span>
               <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mt-1">
@@ -253,7 +253,7 @@ Calculated via CorpLawUpdates.in`
                 onClick={() => setCalcMode('date')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
                   calcMode === 'date'
-                    ? 'bg-blue-700 text-white shadow-sm'
+                    ? 'bg-blue-700 text-white shadow-xs'
                     : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
                 }`}
               >
@@ -264,7 +264,7 @@ Calculated via CorpLawUpdates.in`
                 onClick={() => setCalcMode('days')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
                   calcMode === 'days'
-                    ? 'bg-blue-700 text-white shadow-sm'
+                    ? 'bg-blue-700 text-white shadow-xs'
                     : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
                 }`}
               >
@@ -377,7 +377,7 @@ Calculated via CorpLawUpdates.in`
                   }}
                   className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
                     capital === preset.value
-                      ? 'bg-slate-900 text-white shadow-sm'
+                      ? 'bg-slate-900 text-white shadow-xs'
                       : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                   }`}
                 >
@@ -387,7 +387,7 @@ Calculated via CorpLawUpdates.in`
             </div>
 
             <div className="max-w-xs">
-              <div className="relative rounded-lg shadow-sm">
+              <div className="relative rounded-lg shadow-xs">
                 <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 text-sm font-semibold">
                   ₹
                 </span>
@@ -482,7 +482,7 @@ Calculated via CorpLawUpdates.in`
           </div>
 
           {/* Results Summary Box */}
-          <div className="mt-6 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 text-white p-5 sm:p-6 shadow-md">
+          <div className="mt-6 rounded-2xl bg-linear-to-br from-slate-900 to-slate-800 text-white p-5 sm:p-6 shadow-md">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 border-b border-slate-700 gap-3">
               <div>
                 <span className="text-xs uppercase font-bold tracking-wider text-emerald-400">

@@ -152,7 +152,7 @@ export default function CookieConsentBanner() {
                   <label className="font-semibold text-white text-xs sm:text-sm">Essential</label>
                   <p className="text-[10px] sm:text-xs text-slate-400">Required (always on)</p>
                 </div>
-                <div className="px-2 sm:px-3 py-1 sm:py-1.5 bg-slate-700 rounded text-[10px] sm:text-xs text-slate-300 shrink-0">
+                <div className="px-2 sm:px-3 py-1 sm:py-1.5 bg-slate-700 rounded-sm text-[10px] sm:text-xs text-slate-300 shrink-0">
                   On
                 </div>
               </div>
@@ -240,14 +240,14 @@ export default function CookieConsentBanner() {
             <button
               type="button"
               onClick={handleSave}
-              className="px-2.5 py-1.5 text-[11px] font-bold text-navy bg-amber-400 hover:bg-amber-300 rounded-lg transition-colors shadow-sm"
+              className="px-2.5 py-1.5 text-[11px] font-bold text-navy bg-amber-400 hover:bg-amber-300 rounded-lg transition-colors shadow-xs"
             >
               Save Preferences
             </button>
             <button
               type="button"
               onClick={handleAcceptAll}
-              className="px-2.5 py-1.5 text-[11px] font-bold text-navy bg-emerald-500 hover:bg-emerald-400 rounded-lg transition-colors shadow-sm flex items-center justify-center gap-1"
+              className="px-2.5 py-1.5 text-[11px] font-bold text-navy bg-emerald-500 hover:bg-emerald-400 rounded-lg transition-colors shadow-xs flex items-center justify-center gap-1"
             >
               <ShieldCheck className="size-3" aria-hidden="true" />
               Accept All

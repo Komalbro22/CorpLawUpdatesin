@@ -76,7 +76,7 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
           <input
             type="text"
             name="search_query"
-            className="block w-full pl-10 pr-3 py-3.5 border border-slate-300 dark:border-slate-800 rounded-xl leading-5 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all shadow-sm text-base"
+            className="block w-full pl-10 pr-3 py-3.5 border border-slate-300 dark:border-slate-800 rounded-xl leading-5 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all shadow-xs text-base"
             placeholder="Search for a legal term or definition..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -92,7 +92,7 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`min-h-[44px] px-4 py-2 rounded-xl text-sm font-bold transition-all focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
+                className={`min-h-[44px] px-4 py-2 rounded-xl text-sm font-bold transition-all focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
                   isActive
                     ? 'bg-amber-600 text-white shadow-md shadow-amber-900/10'
                     : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-navy dark:hover:text-white border border-slate-200 dark:border-slate-700'
@@ -113,7 +113,7 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
                 <a
                   key={letter}
                   href={`#letter-${letter}`}
-                  className="w-10 h-10 flex items-center justify-center rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-navy dark:text-slate-200 font-bold hover:bg-amber-50 dark:hover:bg-amber-950/30 hover:text-amber-700 dark:hover:text-amber-400 hover:border-amber-200 dark:hover:border-amber-800 transition-colors shadow-sm"
+                  className="w-10 h-10 flex items-center justify-center rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-navy dark:text-slate-200 font-bold hover:bg-amber-50 dark:hover:bg-amber-950/30 hover:text-amber-700 dark:hover:text-amber-400 hover:border-amber-200 dark:hover:border-amber-800 transition-colors shadow-xs"
                 >
                   {letter}
                 </a>
@@ -140,7 +140,7 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
               <div key={letter} id={`letter-${letter}`} className="scroll-mt-24">
                 <div className="flex items-center gap-4 mb-6">
                   <h2 className="text-3xl font-heading font-bold text-navy dark:text-white">{letter}</h2>
-                  <div className="h-px bg-slate-200 dark:bg-slate-800 flex-grow"></div>
+                  <div className="h-px bg-slate-200 dark:bg-slate-800 grow"></div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {groupedTerms[letter]
@@ -173,8 +173,8 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
 
       {/* Desktop Sticky Sidebar Navigation */}
       {!search && (
-        <div className="hidden lg:block w-12 flex-shrink-0">
-          <div className="sticky top-24 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-2 shadow-sm flex flex-col gap-1 items-center max-h-[calc(100dvh-120px)] overflow-y-auto hide-scrollbar">
+        <div className="hidden lg:block w-12 shrink-0">
+          <div className="sticky top-24 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-2 shadow-xs flex flex-col gap-1 items-center max-h-[calc(100dvh-120px)] overflow-y-auto hide-scrollbar">
             {alphabet.map((letter) => {
               const hasTerms = groupedTerms[letter]?.length > 0
               return hasTerms ? (

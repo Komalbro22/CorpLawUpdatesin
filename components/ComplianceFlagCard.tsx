@@ -7,21 +7,21 @@ interface ComplianceFlagCardProps {
 }
 
 export default function ComplianceFlagCard({ flag }: ComplianceFlagCardProps) {
-  let icon = <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+  let icon = <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
   let containerBg = 'bg-white border-slate-200/80 dark:bg-slate-900 dark:border-slate-800'
   let badgeBg = 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300'
 
   if (flag.status === 'flag') {
-    icon = <AlertOctagon className="w-5 h-5 text-rose-600 flex-shrink-0" />
+    icon = <AlertOctagon className="w-5 h-5 text-rose-600 shrink-0" />
     containerBg = 'bg-rose-50/40 border-rose-200 dark:bg-rose-950/20 dark:border-rose-900/50'
     badgeBg = 'bg-rose-100 text-rose-800 border-rose-200 dark:bg-rose-950 dark:text-rose-300'
   } else if (flag.status === 'info') {
-    icon = <Info className="w-5 h-5 text-blue-600 flex-shrink-0" />
+    icon = <Info className="w-5 h-5 text-blue-600 shrink-0" />
     badgeBg = 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300'
   }
 
   return (
-    <div className={`p-4 md:p-5 rounded-xl border ${containerBg} shadow-sm transition-all hover:shadow-md`}>
+    <div className={`p-4 md:p-5 rounded-xl border ${containerBg} shadow-xs transition-all hover:shadow-md`}>
       <div className="flex items-start gap-3">
         {icon}
         <div className="flex-1 min-w-0">

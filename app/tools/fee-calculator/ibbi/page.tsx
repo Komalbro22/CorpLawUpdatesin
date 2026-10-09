@@ -179,7 +179,7 @@ export default function IBBICalculatorPage() {
       {/* Main Content Area */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* GEO Direct-Answer Block for Generative Search */}
-        <section className="mb-10 p-6 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50/60 dark:from-slate-900 dark:to-blue-950/30 border border-blue-200 dark:border-blue-900/40 shadow-sm not-prose">
+        <section className="mb-10 p-6 rounded-2xl bg-linear-to-r from-blue-50 to-indigo-50/60 dark:from-slate-900 dark:to-blue-950/30 border border-blue-200 dark:border-blue-900/40 shadow-xs not-prose">
           <div className="flex items-start gap-3.5">
             <span className="p-2 rounded-xl bg-blue-600 text-white shrink-0 mt-0.5">
               <FileCheck className="w-5 h-5" />
@@ -209,7 +209,7 @@ export default function IBBICalculatorPage() {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8 not-prose">
-            <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
               <div className="flex items-center gap-2 mb-3">
                 <span className="p-2 rounded-lg bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400">
                   <Scale className="w-5 h-5" />
@@ -229,7 +229,7 @@ export default function IBBICalculatorPage() {
               </ul>
             </div>
 
-            <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
               <div className="flex items-center gap-2 mb-3">
                 <span className="p-2 rounded-lg bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400">
                   <Clock className="w-5 h-5" />

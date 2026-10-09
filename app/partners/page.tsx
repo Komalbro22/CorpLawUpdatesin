@@ -128,7 +128,7 @@ export default function PartnerInterestPage() {
       {/* HEADER HERO */}
       <section className="bg-navy text-white py-14 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-linear-to-r from-transparent via-white/10 to-transparent"
           aria-hidden="true"
         />
         <div className="max-w-4xl mx-auto text-center relative z-10">
@@ -196,7 +196,7 @@ export default function PartnerInterestPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. Apex Corporate Solutions / CS R. Sharma"
-                    className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
+                    className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-hidden transition-all"
                   />
                 </div>
 
@@ -210,7 +210,7 @@ export default function PartnerInterestPage() {
                       <select
                         value={qualification}
                         onChange={(e) => setQualification(e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all bg-white dark:bg-slate-800 appearance-none"
+                        className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-hidden transition-all bg-white dark:bg-slate-800 appearance-none"
                       >
                         {QUALIFICATIONS.map((q) => (
                           <option key={q} value={q} className="dark:bg-slate-800 dark:text-slate-100">
@@ -233,7 +233,7 @@ export default function PartnerInterestPage() {
                       value={experienceYears}
                       onChange={(e) => setExperienceYears(e.target.value)}
                       placeholder="e.g. 8"
-                      className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
+                      className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-hidden transition-all"
                     />
                   </div>
                 </div>
@@ -249,7 +249,7 @@ export default function PartnerInterestPage() {
                       value={website}
                       onChange={(e) => setWebsite(e.target.value)}
                       placeholder="e.g. https://www.yourfirm.com"
-                      className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
+                      className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-hidden transition-all"
                     />
                     <Globe className="size-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true" />
                   </div>
@@ -277,7 +277,7 @@ export default function PartnerInterestPage() {
                         onClick={() => toggleService(service)}
                         className={`text-xs font-semibold px-3 py-1.5 rounded-full transition-all border ${
                           active
-                            ? 'bg-navy dark:bg-amber-400 text-white dark:text-navy border-navy dark:border-amber-400 shadow-sm'
+                            ? 'bg-navy dark:bg-amber-400 text-white dark:text-navy border-navy dark:border-amber-400 shadow-xs'
                             : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
                         }`}
                       >
@@ -300,7 +300,7 @@ export default function PartnerInterestPage() {
                       onChange={(e) => setCustomService(e.target.value)}
                       onKeyDown={handleAddCustomService}
                       placeholder="e.g. DIR-3 KYC, MGT-14, Secretarial Audit"
-                      className="flex-1 px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
+                      className="flex-1 px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-hidden"
                     />
                     <button
                       type="button"
@@ -322,7 +322,7 @@ export default function PartnerInterestPage() {
                       {selectedServices.map((service) => (
                         <span
                           key={service}
-                          className="inline-flex items-center gap-1 bg-white dark:bg-slate-800 text-navy dark:text-white border border-amber-300 dark:border-amber-500/50 text-xs font-semibold px-2.5 py-1 rounded-md shadow-xs"
+                          className="inline-flex items-center gap-1 bg-white dark:bg-slate-800 text-navy dark:text-white border border-amber-300 dark:border-amber-500/50 text-xs font-semibold px-2.5 py-1 rounded-md shadow-2xs"
                         >
                           {service}
                           <button
@@ -354,7 +354,7 @@ export default function PartnerInterestPage() {
                     <select
                       value={contactPreference}
                       onChange={(e) => setContactPreference(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all bg-white dark:bg-slate-800"
+                      className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-hidden transition-all bg-white dark:bg-slate-800"
                     >
                       {CONTACT_METHODS.map((m) => (
                         <option key={m.value} value={m.value} className="dark:bg-slate-800 dark:text-slate-100">
@@ -376,7 +376,7 @@ export default function PartnerInterestPage() {
                         CONTACT_METHODS.find((m) => m.value === contactPreference)?.placeholder ||
                         'Enter contact value'
                       }
-                      className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
+                      className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-hidden transition-all"
                     />
                   </div>
                 </div>
@@ -391,7 +391,7 @@ export default function PartnerInterestPage() {
                     value={additionalNotes}
                     onChange={(e) => setAdditionalNotes(e.target.value)}
                     placeholder="Tell us more about your practice focus, cities served, or specialized regulatory domain..."
-                    className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
+                    className="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-hidden transition-all"
                   />
                 </div>
               </div>

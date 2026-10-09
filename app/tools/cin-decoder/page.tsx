@@ -144,7 +144,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
         </nav>
 
         {/* Hero Section & Search Form */}
-        <header className="bg-gradient-to-br from-navy via-slate-900 to-slate-950 text-white rounded-3xl p-6 md:p-10 shadow-xl relative overflow-hidden">
+        <header className="bg-linear-to-br from-navy via-slate-900 to-slate-950 text-white rounded-3xl p-6 md:p-10 shadow-xl relative overflow-hidden">
           <div className="max-w-2xl space-y-3 relative z-10">
             <div className="inline-flex items-center gap-2 bg-amber-500/20 text-amber-300 px-3 py-1 rounded-full text-xs font-bold border border-amber-500/30">
               <Binary className="size-3.5" aria-hidden="true" /> 100% Free Statutory MCA Decoder
@@ -173,13 +173,13 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
                   defaultValue={inputCin}
                   placeholder="Enter 21-digit CIN (e.g. L21091MH1945PLC004520)"
                   maxLength={21}
-                  className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl pl-10 pr-4 py-2.5 text-xs md:text-sm text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 uppercase font-mono"
+                  className="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl pl-10 pr-4 py-2.5 text-xs md:text-sm text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-amber-400 uppercase font-mono"
                   required
                 />
               </div>
               <button
                 type="submit"
-                className="bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-navy font-bold px-6 py-2.5 rounded-xl text-xs md:text-sm transition-all shadow-md active:scale-95 flex items-center justify-center gap-2 shrink-0"
+                className="bg-linear-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-navy font-bold px-6 py-2.5 rounded-xl text-xs md:text-sm transition-all shadow-md active:scale-95 flex items-center justify-center gap-2 shrink-0"
               >
                 Decode CIN Now
               </button>
@@ -202,7 +202,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
         </header>
 
         {/* AI-SEO / GEO Summary Box */}
-        <section className="bg-gradient-to-br from-amber-500/10 via-amber-400/5 to-transparent rounded-2xl p-5 md:p-6 border border-amber-300/40 dark:border-amber-500/20 shadow-sm">
+        <section className="bg-linear-to-br from-amber-500/10 via-amber-400/5 to-transparent rounded-2xl p-5 md:p-6 border border-amber-300/40 dark:border-amber-500/20 shadow-xs">
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="size-4 text-amber-600 dark:text-amber-400 animate-pulse" aria-hidden="true" />
             <h2 className="text-xs font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400">
@@ -234,7 +234,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
             {/* 6-Segment Breakdown Cards Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {/* 1. Listing Status */}
-              <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+              <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs">
                 <div className="flex items-center gap-2 text-xs font-bold text-amber-600 dark:text-amber-400 mb-1">
                   <Award className="size-4" aria-hidden="true" /> 1. Listing Status ({breakdown.listingStatus.code})
                 </div>
@@ -243,7 +243,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
               </div>
 
               {/* 2. NIC Industry Code */}
-              <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+              <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs">
                 <div className="flex items-center gap-2 text-xs font-bold text-emerald-600 dark:text-emerald-400 mb-1">
                   <Briefcase className="size-4" aria-hidden="true" /> 2. NIC Code (<span className="tabular-nums">{breakdown.nicCode.code}</span>)
                 </div>
@@ -252,7 +252,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
               </div>
 
               {/* 3. State & RoC Office */}
-              <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+              <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs">
                 <div className="flex items-center gap-2 text-xs font-bold text-blue-600 dark:text-blue-400 mb-1">
                   <MapPin className="size-4" aria-hidden="true" /> 3. State ({breakdown.state.code})
                 </div>
@@ -261,7 +261,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
               </div>
 
               {/* 4. Incorporation Year */}
-              <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+              <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs">
                 <div className="flex items-center gap-2 text-xs font-bold text-purple-600 dark:text-purple-400 mb-1">
                   <Calendar className="size-4" aria-hidden="true" /> 4. Year (<span className="tabular-nums">{breakdown.incorporationYear}</span>)
                 </div>
@@ -270,7 +270,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
               </div>
 
               {/* 5. Ownership Class */}
-              <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+              <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs">
                 <div className="flex items-center gap-2 text-xs font-bold text-indigo-600 dark:text-indigo-400 mb-1">
                   <Building2 className="size-4" aria-hidden="true" /> 5. Ownership ({breakdown.companyType.code})
                 </div>
@@ -279,7 +279,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
               </div>
 
               {/* 6. RoC Registration Serial No */}
-              <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+              <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs">
                 <div className="flex items-center gap-2 text-xs font-bold text-rose-600 dark:text-rose-400 mb-1">
                   <ShieldCheck className="size-4" aria-hidden="true" /> 6. Serial No (<span className="tabular-nums font-mono">{breakdown.registrationNumber}</span>)
                 </div>
@@ -297,7 +297,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
         )}
 
         {/* FAQs */}
-        <section className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+        <section className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 border border-slate-200/80 dark:border-slate-800 shadow-xs">
           <h3 className="text-xl font-bold text-navy dark:text-white font-heading mb-6 flex items-center gap-2">
             <HelpCircle className="size-5 text-amber-500" aria-hidden="true" /> Frequently Asked Questions
           </h3>

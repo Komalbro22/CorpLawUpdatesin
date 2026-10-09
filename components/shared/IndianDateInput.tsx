@@ -125,7 +125,7 @@ export default function IndianDateInput({
         aria-label={ariaLabel || 'Date in DD/MM/YYYY format'}
         maxLength={10}
         suppressHydrationWarning
-        className="w-full bg-transparent px-3.5 py-2.5 text-sm font-semibold tracking-wide placeholder:text-slate-400 placeholder:font-normal focus:outline-none"
+        className="w-full bg-transparent px-3.5 py-2.5 text-sm font-semibold tracking-wide placeholder:text-slate-400 placeholder:font-normal focus:outline-hidden"
       />
 
       {/* Right Controls: Indian Date Badge + Calendar Picker Button */}

@@ -116,7 +116,7 @@ export default function AdminRatesOverridePage() {
                 step="0.01"
                 value={bankRate}
                 onChange={(e) => setBankRate(e.target.value)}
-                className="flex-grow bg-slate-50 border border-white/10 rounded-lg p-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
+                className="grow bg-slate-50 border border-white/10 rounded-lg p-2.5 text-sm text-slate-900 focus:outline-hidden focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
               />
               <button
                 onClick={() => updateSetting('rbi_bank_rate', parseFloat(bankRate), null)}
@@ -143,7 +143,7 @@ export default function AdminRatesOverridePage() {
                 type="number"
                 value={whatsappCount}
                 onChange={(e) => setWhatsappCount(e.target.value)}
-                className="flex-grow bg-slate-50 border border-white/10 rounded-lg p-2.5 text-sm text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
+                className="grow bg-slate-50 border border-white/10 rounded-lg p-2.5 text-sm text-slate-900 focus:outline-hidden focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
               />
               <button
                 onClick={() => updateSetting('whatsapp_member_count', null, whatsappCount)}
@@ -200,7 +200,7 @@ export default function AdminRatesOverridePage() {
                 value={schemeName}
                 onChange={(e) => setSchemeName(e.target.value)}
                 placeholder="e.g. Fresh Start Scheme 2026"
-                className="w-full bg-slate-50 border border-white/10 rounded-lg p-2.5 text-xs text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
+                className="w-full bg-slate-50 border border-white/10 rounded-lg p-2.5 text-xs text-slate-900 focus:outline-hidden focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
               />
             </div>
 
@@ -218,7 +218,7 @@ export default function AdminRatesOverridePage() {
                 value={schemeUrl}
                 onChange={(e) => setSchemeUrl(e.target.value)}
                 placeholder="https://www.mca.gov.in/bin/dms/getdocument..."
-                className="w-full bg-slate-50 border border-white/10 rounded-lg p-2.5 text-xs text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
+                className="w-full bg-slate-50 border border-white/10 rounded-lg p-2.5 text-xs text-slate-900 focus:outline-hidden focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
               />
             </div>
 

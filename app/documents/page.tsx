@@ -217,13 +217,13 @@ export default async function DocumentsPage() {
             <h2 id="employment-generator-heading" className="mt-1 text-xl font-bold text-slate-900 dark:text-white">Employment Agreement & Contract Generator (India)</h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-700 dark:text-slate-300">Generate an Indian employment agreement draft prepared using the statutory framework (review required before execution or filing) with AI conversational drafter, Section 2(y) 50% wage parity validation, state stamp duty calculator, and IP assignment.</p>
           </div>
-          <Link href="/documents/employment-agreement" className="mt-4 inline-flex shrink-0 items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 sm:ml-6 sm:mt-0 shadow-sm transition-colors">
+          <Link href="/documents/employment-agreement" className="mt-4 inline-flex shrink-0 items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 sm:ml-6 sm:mt-0 shadow-xs transition-colors">
             Open generator <span aria-hidden="true">→</span>
           </Link>
         </section>
         
         {/* FEATURED: AI PARAMETRIC DOCUMENT GENERATOR STUDIO */}
-        <section className="bg-gradient-to-r from-slate-900 via-slate-850 to-blue-950 border border-blue-500/30 rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl">
+        <section className="bg-linear-to-r from-slate-900 via-slate-850 to-blue-950 border border-blue-500/30 rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold uppercase tracking-wider mb-2">
@@ -330,7 +330,7 @@ export default async function DocumentsPage() {
                     >
                       <div>
                         <div className="flex items-center justify-between mb-3">
-                          <span className="text-xs font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 uppercase tracking-wider">
+                          <span className="text-xs font-bold px-2 py-0.5 rounded-sm bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                             {template.category?.replace(/_/g, ' ')}
                           </span>
                           {template.is_free && (

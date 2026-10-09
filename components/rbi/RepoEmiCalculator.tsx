@@ -32,11 +32,11 @@ export default function RepoEmiCalculator() {
   }
 
   return (
-    <div className="bg-gradient-to-br from-white via-slate-50 to-amber-50/40 dark:from-slate-900 dark:via-slate-900 dark:to-amber-950/20 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-md p-6 sm:p-8 space-y-6">
+    <div className="bg-linear-to-br from-white via-slate-50 to-amber-50/40 dark:from-slate-900 dark:via-slate-900 dark:to-amber-950/20 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-md p-6 sm:p-8 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/80 dark:border-slate-800 pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="p-2 rounded-xl bg-amber-500 text-white shadow-sm">
+            <span className="p-2 rounded-xl bg-amber-500 text-white shadow-xs">
               <Calculator className="size-5" aria-hidden="true" />
             </span>
             <h3 className="font-heading font-extrabold text-xl text-slate-900 dark:text-white">
@@ -132,7 +132,7 @@ export default function RepoEmiCalculator() {
         </div>
 
         {/* RESULTS CARD */}
-        <div className="lg:col-span-5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 p-5 shadow-sm space-y-4 flex flex-col justify-between">
+        <div className="lg:col-span-5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 p-5 shadow-xs space-y-4 flex flex-col justify-between">
           <div>
             <span className="text-[11px] uppercase tracking-wider font-extrabold text-slate-400 dark:text-slate-500">Current Monthly EMI</span>
             <p className="font-heading font-black text-3xl text-slate-900 dark:text-white mt-0.5 tabular-nums">

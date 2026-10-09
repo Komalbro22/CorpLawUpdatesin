@@ -300,7 +300,7 @@ export default function SettingsPage() {
                             setValues(prev => ({ ...prev, [key]: e.target.value }))
                           }
                           rows={2}
-                          className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-shadow"
+                          className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-shadow"
                           placeholder={`Enter ${setting.label}...`}
                         />
                       ) : (
@@ -310,7 +310,7 @@ export default function SettingsPage() {
                           onChange={e =>
                             setValues(prev => ({ ...prev, [key]: e.target.value }))
                           }
-                          className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-shadow"
+                          className="w-full bg-slate-50 border border-white/60 rounded-lg px-3 py-2 text-sm text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-shadow"
                           placeholder={isUrl ? 'https://' : `Enter ${setting.label}...`}
                         />
                       )}
@@ -330,7 +330,7 @@ export default function SettingsPage() {
                       type="button"
                       onClick={() => saveSetting(key)}
                       disabled={saving[key]}
-                      className={`flex-shrink-0 px-4 py-2 rounded-lg text-sm font-bold transition-colors duration-200 min-w-[5.5rem] inline-flex items-center justify-center gap-1.5 ${saved[key]
+                      className={`shrink-0 px-4 py-2 rounded-lg text-sm font-bold transition-colors duration-200 min-w-22 inline-flex items-center justify-center gap-1.5 ${saved[key]
                           ? 'bg-emerald-600 text-white'
                           : 'btn-vibrant-amber text-white shadow-md shadow-amber-500/10'
                         } disabled:opacity-60`}
@@ -372,7 +372,7 @@ export default function SettingsPage() {
               type="button"
               onClick={handleRevalidateSubmit}
               disabled={revalidateLoading}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-semibold disabled:opacity-50 transition-colors shadow-sm animate-none"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-semibold disabled:opacity-50 transition-colors shadow-xs animate-none"
             >
               {revalidateLoading ? (
                 <>
@@ -415,7 +415,7 @@ export default function SettingsPage() {
               type="button"
               onClick={handleIndexNowSubmit}
               disabled={indexNowLoading}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-slate-900 rounded-lg text-sm font-semibold disabled:opacity-50 transition-colors shadow-sm animate-none"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-slate-900 rounded-lg text-sm font-semibold disabled:opacity-50 transition-colors shadow-xs animate-none"
             >
               {indexNowLoading ? (
                 <>
@@ -475,7 +475,7 @@ export default function SettingsPage() {
               type="button"
               onClick={handleGoogleIndexingSubmit}
               disabled={googleIndexingLoading}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-sm font-semibold disabled:opacity-50 transition-colors shadow-sm"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-sm font-semibold disabled:opacity-50 transition-colors shadow-xs"
             >
               {googleIndexingLoading ? (
                 <>
@@ -507,7 +507,7 @@ export default function SettingsPage() {
                 value={googleTestUrl}
                 onChange={(e) => setGoogleTestUrl(e.target.value)}
                 placeholder="/updates/slug or full https://... URL"
-                className="flex-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
               />
               <button
                 type="button"
@@ -539,7 +539,7 @@ export default function SettingsPage() {
       </div>
 
       {/* ACCOUNT & SECURITY */}
-      <div className="admin-card overflow-hidden border border-rose-500/20 bg-rose-500/[0.02]">
+      <div className="admin-card overflow-hidden border border-rose-500/20 bg-rose-500/2">
         <div className="bg-rose-950/40 border-b border-rose-500/20 px-6 py-4 flex items-center gap-3">
           <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 border border-rose-500/30 text-rose-450 shrink-0">
             <Shield className="w-4 h-4" aria-hidden />

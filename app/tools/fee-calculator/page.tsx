@@ -123,19 +123,19 @@ function HubSEO() {
         Navigating the complex landscape of statutory compliance in India requires careful attention to detail. Whether you are dealing with the Ministry of Corporate Affairs (MCA) for company or LLP filings, calculating delayed payment interest under the MSMED Act, computing delayed electronic form fees under IBBI Liquidation and CIRP regulations, or managing GST late fees with the CBIC, our comprehensive hub provides indicative, up-to-date calculation tools.
       </p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-10 not-prose">
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
           <h3 className="font-bold text-slate-800 dark:text-slate-200 mb-2">Corporate Compliance (MCA)</h3>
           <p className="text-sm text-slate-600 dark:text-slate-400">
             For Companies and LLPs, missing statutory deadlines (like AOC-4, MGT-7, or Form 11) results in compounding penalties. MCA late fees follow distinct multiplier schedules under the Companies Rules and LLP 2nd Amendment Rules.
           </p>
         </div>
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
           <h3 className="font-bold text-slate-800 dark:text-slate-200 mb-2">Insolvency & IBBI Rules</h3>
           <p className="text-sm text-slate-600 dark:text-slate-400">
             For Insolvency Professionals and Liquidators, missing electronic filing deadlines under Regulation 47B (Liquidation) or Regulation 40B (CIRP) attracts ₹500/month plus 18% GST per Circular No. IBBI/LIQ/107/2026.
           </p>
         </div>
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
           <h3 className="font-bold text-slate-800 dark:text-slate-200 mb-2">Taxation & MSME Rules</h3>
           <p className="text-sm text-slate-600 dark:text-slate-400">
             Beyond MCA and IBBI, strict rules govern delayed payments to MSMEs (attracting compound interest at 3 times the RBI Bank Rate under Section 16) and late GST return filings under the CGST Act.
@@ -182,7 +182,7 @@ function HubFAQ() {
               }`}
             >
               <button
-                className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+                className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-400"
                 aria-expanded={isOpen}
                 onClick={() => setOpenIndex(isOpen ? null : index)}
               >
@@ -227,7 +227,7 @@ function HubGuides() {
             <h3 className="font-bold text-lg text-navy dark:text-white mb-2 group-hover:text-[#1D4ED8] dark:group-hover:text-blue-400 transition-colors line-clamp-2">
               {guide.title}
             </h3>
-            <p className="text-sm text-slate-500 dark:text-slate-400 mb-4 line-clamp-3 flex-grow">
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-4 line-clamp-3 grow">
               {guide.summary}
             </p>
             <div className="flex justify-between items-center text-xs font-bold text-slate-400 pt-4 border-t border-slate-100 dark:border-slate-800">
@@ -271,7 +271,7 @@ export default function FeeCalculatorHub() {
                   href={calc.href}
                   className={`group bg-white dark:bg-slate-900 shadow-xl border-2 rounded-2xl overflow-hidden hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 ${calc.color}`}
                 >
-                  <div className={`bg-gradient-to-r ${calc.headerBg} p-5 flex items-center gap-4`}>
+                  <div className={`bg-linear-to-r ${calc.headerBg} p-5 flex items-center gap-4`}>
                     <span className="text-5xl">{calc.icon}</span>
                     <div>
                       <div className="flex items-center gap-2 mb-1">
@@ -308,7 +308,7 @@ export default function FeeCalculatorHub() {
                   key={calc.id}
                   className={`bg-white dark:bg-slate-900/60 shadow-md border-2 border-dashed rounded-2xl overflow-hidden ${calc.color}`}
                 >
-                  <div className={`bg-gradient-to-r ${calc.headerBg} p-5 flex items-center gap-4 grayscale`}>
+                  <div className={`bg-linear-to-r ${calc.headerBg} p-5 flex items-center gap-4 grayscale`}>
                     <span className="text-5xl opacity-70">{calc.icon}</span>
                     <div>
                       <div className="flex items-center gap-2 mb-1">

@@ -125,7 +125,7 @@ export default function GooglePreferredSourceButton({
     if (variant === 'banner') {
         return (
             <div 
-                className={`relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm transition-all duration-300 hover:shadow-md ${className}`}
+                className={`relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-xs transition-all duration-300 hover:shadow-md ${className}`}
                 onClickCapture={trackClick}
             >
                 {/* CSS Rule: Automatically hide fallback button if Google's official SDK renders inside container */}
@@ -138,7 +138,7 @@ export default function GooglePreferredSourceButton({
 
                 {/* Official Google 4-Color Top Hairline Bar */}
                 <div 
-                    className="h-1.5 w-full bg-gradient-to-r from-[#4285F4] via-[#EA4335] via-[#FBBC05] to-[#34A853]" 
+                    className="h-1.5 w-full bg-linear-to-r from-[#4285F4] via-[#EA4335] via-[#FBBC05] to-[#34A853]" 
                     aria-hidden="true" 
                 />
 
@@ -194,11 +194,11 @@ export default function GooglePreferredSourceButton({
                                 href={GOOGLE_PREFERENCE_URL}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className={`google-preferred-fallback-btn inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-xl bg-[#1A73E8] hover:bg-[#1557B0] text-white font-bold text-sm transition-all shadow-sm hover:shadow-md active:scale-[0.98] group ${
+                                className={`google-preferred-fallback-btn inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-xl bg-[#1A73E8] hover:bg-[#1557B0] text-white font-bold text-sm transition-all shadow-xs hover:shadow-md active:scale-[0.98] group ${
                                     isNativeLoaded ? 'hidden' : ''
                                 }`}
                             >
-                                <span className="flex size-6 items-center justify-center rounded-full bg-white shrink-0 shadow-xs">
+                                <span className="flex size-6 items-center justify-center rounded-full bg-white shrink-0 shadow-2xs">
                                     <GoogleIcon className="w-3.5 h-3.5" />
                                 </span>
 
@@ -241,7 +241,7 @@ export default function GooglePreferredSourceButton({
                     target="_blank"
                     rel="noopener noreferrer"
                     title="Add CorpLawUpdates.in to Google Preferred Sources"
-                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold shadow-xs transition-all hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400 active:scale-95"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/80 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold shadow-2xs transition-all hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400 active:scale-95"
                 >
                     <GoogleIcon className="w-3.5 h-3.5 shrink-0" />
                     <span>Add to Google Preferred Sources</span>

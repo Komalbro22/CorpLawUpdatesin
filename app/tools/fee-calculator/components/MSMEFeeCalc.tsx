@@ -184,7 +184,7 @@ export default function MSMEFeeCalc({ initialBankRate = '5.50' }: { initialBankR
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Supplier Enterprise Category</label>
               <select
-                className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm outline-none focus:ring-2 focus:ring-navy"
+                className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm outline-hidden focus:ring-2 focus:ring-navy"
                 value={enterpriseCategory}
                 onChange={(e) => setEnterpriseCategory(e.target.value as any)}
               >
@@ -199,7 +199,7 @@ export default function MSMEFeeCalc({ initialBankRate = '5.50' }: { initialBankR
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Major Activity of Supplier</label>
               <select
-                className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm outline-none focus:ring-2 focus:ring-navy"
+                className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm outline-hidden focus:ring-2 focus:ring-navy"
                 value={majorActivity}
                 onChange={(e) => setMajorActivity(e.target.value as any)}
               >
@@ -213,7 +213,7 @@ export default function MSMEFeeCalc({ initialBankRate = '5.50' }: { initialBankR
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Registration Type</label>
               <select
-                className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm outline-none focus:ring-2 focus:ring-navy"
+                className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm outline-hidden focus:ring-2 focus:ring-navy"
                 value={registrationType}
                 onChange={(e) => setRegistrationType(e.target.value as any)}
               >
@@ -252,7 +252,7 @@ export default function MSMEFeeCalc({ initialBankRate = '5.50' }: { initialBankR
               <input
                 type="number"
                 min="0"
-                className="w-full p-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-semibold outline-none focus:ring-2 focus:ring-navy"
+                className="w-full p-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-semibold outline-hidden focus:ring-2 focus:ring-navy"
                 value={invoiceAmount}
                 onChange={(e) => setInvoiceAmount(e.target.value)}
               />
@@ -270,7 +270,7 @@ export default function MSMEFeeCalc({ initialBankRate = '5.50' }: { initialBankR
               <label className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900">
                 <input
                   type="checkbox"
-                  className="rounded text-navy focus:ring-navy"
+                  className="rounded-sm text-navy focus:ring-navy"
                   checked={hasWrittenObjection}
                   onChange={(e) => setHasWrittenObjection(e.target.checked)}
                 />
@@ -283,7 +283,7 @@ export default function MSMEFeeCalc({ initialBankRate = '5.50' }: { initialBankR
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Date Objection Served</label>
                   <IndianDateInput
-                    className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm outline-none focus:ring-2 focus:ring-navy"
+                    className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm outline-hidden focus:ring-2 focus:ring-navy"
                     value={objectionDate}
                     onChange={(val) => setObjectionDate(val)}
                   />
@@ -293,7 +293,7 @@ export default function MSMEFeeCalc({ initialBankRate = '5.50' }: { initialBankR
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Date Objection Resolved</label>
                   <IndianDateInput
-                    className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm outline-none focus:ring-2 focus:ring-navy"
+                    className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm outline-hidden focus:ring-2 focus:ring-navy"
                     value={objectionResolvedDate}
                     onChange={(val) => setObjectionResolvedDate(val)}
                   />
@@ -316,7 +316,7 @@ export default function MSMEFeeCalc({ initialBankRate = '5.50' }: { initialBankR
               <label className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900">
                 <input
                   type="checkbox"
-                  className="rounded text-navy focus:ring-navy"
+                  className="rounded-sm text-navy focus:ring-navy"
                   checked={hasAgreement}
                   onChange={(e) => setHasAgreement(e.target.checked)}
                 />
@@ -362,7 +362,7 @@ export default function MSMEFeeCalc({ initialBankRate = '5.50' }: { initialBankR
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Intra-Month Rate Strategy</label>
               <select
-                className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm outline-none focus:ring-2 focus:ring-navy"
+                className="w-full p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm outline-hidden focus:ring-2 focus:ring-navy"
                 value={rateStrategy}
                 onChange={(e) => setRateStrategy(e.target.value as RateTransitionStrategy)}
               >
@@ -375,7 +375,7 @@ export default function MSMEFeeCalc({ initialBankRate = '5.50' }: { initialBankR
               <label className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer">
                 <input
                   type="checkbox"
-                  className="rounded text-navy focus:ring-navy"
+                  className="rounded-sm text-navy focus:ring-navy"
                   checked={isManualRateOverride}
                   onChange={(e) => setIsManualRateOverride(e.target.checked)}
                 />
@@ -387,7 +387,7 @@ export default function MSMEFeeCalc({ initialBankRate = '5.50' }: { initialBankR
                   <input
                     type="number"
                     step="0.01"
-                    className="w-full md:w-1/2 p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm outline-none focus:ring-2 focus:ring-navy"
+                    className="w-full md:w-1/2 p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-sm outline-hidden focus:ring-2 focus:ring-navy"
                     placeholder="Enter custom Bank Rate %"
                     value={bankRateOverride}
                     onChange={(e) => setBankRateOverride(e.target.value)}
@@ -413,7 +413,7 @@ export default function MSMEFeeCalc({ initialBankRate = '5.50' }: { initialBankR
         </button>
         <button
           onClick={copyShareLink}
-          className="sm:w-auto px-6 py-3.5 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm text-sm"
+          className="sm:w-auto px-6 py-3.5 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 font-bold rounded-xl transition-all flex items-center justify-center gap-2 shadow-xs text-sm"
         >
           <svg className="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
           {copiedLink ? 'Link Copied!' : 'Share Parameters'}
@@ -444,7 +444,7 @@ export default function MSMEFeeCalc({ initialBankRate = '5.50' }: { initialBankR
             </div>
             <button
               onClick={handleDownloadPdf}
-              className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold rounded-lg transition-all flex items-center gap-2 shadow-sm"
+              className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold rounded-lg transition-all flex items-center gap-2 shadow-xs"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
               Download PDF Report

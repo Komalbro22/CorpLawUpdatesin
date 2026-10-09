@@ -151,7 +151,7 @@ function EditFormPanel({ form, onSave, saving }: {
   })
 
   const inputClass = `w-full border border-slate-200 
-    rounded-xl px-3 py-2 text-sm focus:outline-none 
+    rounded-xl px-3 py-2 text-sm focus:outline-hidden 
     focus:ring-2 focus:ring-amber-400`
 
   return (

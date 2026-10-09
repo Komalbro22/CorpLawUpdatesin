@@ -241,7 +241,7 @@ Generated via CorpLawUpdates.in/tools/fee-calculator/companies/pas-3`
   return (
     <div className="space-y-8">
       {/* 1. Quick Answer Hero Callout (Targets "pas 3 due date" & "15 vs 30 days" search intent) */}
-      <div className="rounded-2xl border-2 border-amber-500/40 bg-gradient-to-br from-amber-50/80 via-white to-amber-50/30 dark:from-slate-900 dark:via-slate-900/90 dark:to-amber-950/20 p-5 sm:p-6 shadow-md shadow-amber-500/5">
+      <div className="rounded-2xl border-2 border-amber-500/40 bg-linear-to-br from-amber-50/80 via-white to-amber-50/30 dark:from-slate-900 dark:via-slate-900/90 dark:to-amber-950/20 p-5 sm:p-6 shadow-md shadow-amber-500/5">
         <div className="flex items-center gap-2.5 mb-3">
           <span className="flex size-7 items-center justify-center rounded-lg bg-amber-500 text-slate-950 font-bold text-sm">
             ⚡
@@ -295,10 +295,10 @@ Generated via CorpLawUpdates.in/tools/fee-calculator/companies/pas-3`
             <button
               key={preset.id}
               onClick={() => applyPreset(preset)}
-              className="text-left rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-3 hover:border-amber-500/50 hover:shadow-sm transition-all group"
+              className="text-left rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-3 hover:border-amber-500/50 hover:shadow-xs transition-all group"
             >
               <div className="flex items-center justify-between mb-1">
-                <span className="text-[10px] font-bold uppercase px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                <span className="text-[10px] font-bold uppercase px-1.5 py-0.5 rounded-sm bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
                   {preset.badge}
                 </span>
                 <ChevronRight className="size-3.5 text-slate-400 group-hover:text-amber-500 transition-colors" />
@@ -318,7 +318,7 @@ Generated via CorpLawUpdates.in/tools/fee-calculator/companies/pas-3`
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Column: Form Controls */}
         <div className="lg:col-span-7 space-y-6">
-          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 sm:p-6 shadow-sm space-y-6">
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 sm:p-6 shadow-xs space-y-6">
             <h3 className="font-heading text-lg font-bold text-navy dark:text-white flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
               <Building2 className="size-5 text-amber-500" />
               Allotment & Company Parameters
@@ -385,7 +385,7 @@ Generated via CorpLawUpdates.in/tools/fee-calculator/companies/pas-3`
                 value={companyType}
                 onChange={e => setCompanyType(e.target.value as Pas3CompanyType)}
                 aria-label="Entity Classification"
-                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:outline-hidden focus:ring-2 focus:ring-amber-500"
               >
                 <option value="normal">Standard Corporate Entity (Private / Public Limited)</option>
                 <option value="small_company">Small Company (Paid-up ≤ ₹4 Cr & Turnover ≤ ₹40 Cr — 50% Penalty Relief)</option>
@@ -444,7 +444,7 @@ Generated via CorpLawUpdates.in/tools/fee-calculator/companies/pas-3`
                   value={authorisedCapital}
                   onChange={e => setAuthorisedCapital(Number(e.target.value))}
                   placeholder="Enter exact authorised capital in INR"
-                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3.5 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3.5 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-hidden focus:ring-2 focus:ring-amber-500"
                 />
               </div>
             )}
@@ -518,7 +518,7 @@ Generated via CorpLawUpdates.in/tools/fee-calculator/companies/pas-3`
                     id="fundsUtilisedCheck"
                     checked={fundsUtilisedBeforeFiling}
                     onChange={e => setFundsUtilisedBeforeFiling(e.target.checked)}
-                    className="mt-1 size-4 rounded text-red-600 accent-red-600 cursor-pointer"
+                    className="mt-1 size-4 rounded-sm text-red-600 accent-red-600 cursor-pointer"
                   />
                   <label htmlFor="fundsUtilisedCheck" className="text-xs text-slate-700 dark:text-slate-300 cursor-pointer">
                     <strong className="text-red-700 dark:text-red-400 block">
@@ -538,7 +538,7 @@ Generated via CorpLawUpdates.in/tools/fee-calculator/companies/pas-3`
                       id="checkAppMoney"
                       checked={checkAppMoneyWindow}
                       onChange={e => setCheckAppMoneyWindow(e.target.checked)}
-                      className="size-4 rounded text-amber-600 accent-amber-600 cursor-pointer"
+                      className="size-4 rounded-sm text-amber-600 accent-amber-600 cursor-pointer"
                     />
                     <label htmlFor="checkAppMoney" className="text-xs text-slate-700 dark:text-slate-300 font-medium cursor-pointer">
                       Verify 60-Day Allotment Window from receipt of application money (Sec 42(6))
@@ -567,7 +567,7 @@ Generated via CorpLawUpdates.in/tools/fee-calculator/companies/pas-3`
                     id="checkBatch"
                     checked={isMultipleAllotments}
                     onChange={e => setIsMultipleAllotments(e.target.checked)}
-                    className="size-4 rounded text-amber-600 accent-amber-600 cursor-pointer"
+                    className="size-4 rounded-sm text-amber-600 accent-amber-600 cursor-pointer"
                   />
                   <label htmlFor="checkBatch" className="text-xs text-slate-700 dark:text-slate-300 font-medium cursor-pointer">
                     Combining multiple allotment dates in this single PAS-3? (Max 5 within 30 days)
@@ -641,8 +641,8 @@ Generated via CorpLawUpdates.in/tools/fee-calculator/companies/pas-3`
             {/* Header with Timeline Status */}
             <div className={`p-5 text-white ${
               result.isDelayed
-                ? 'bg-gradient-to-r from-red-600 via-red-700 to-rose-800'
-                : 'bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-800'
+                ? 'bg-linear-to-r from-red-600 via-red-700 to-rose-800'
+                : 'bg-linear-to-r from-emerald-600 via-emerald-700 to-teal-800'
             }`}>
               <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider mb-2 text-white/80">
                 <span>Statutory Timeline Assessment</span>
@@ -761,7 +761,7 @@ Generated via CorpLawUpdates.in/tools/fee-calculator/companies/pas-3`
                 <button
                   type="button"
                   onClick={handleDownloadPdf}
-                  className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-navy dark:bg-blue-600 hover:bg-slate-800 dark:hover:bg-blue-700 text-white font-bold text-xs transition-colors shadow-sm"
+                  className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-navy dark:bg-blue-600 hover:bg-slate-800 dark:hover:bg-blue-700 text-white font-bold text-xs transition-colors shadow-xs"
                 >
                   <Download className="size-3.5" />
                   <span>Download PDF</span>

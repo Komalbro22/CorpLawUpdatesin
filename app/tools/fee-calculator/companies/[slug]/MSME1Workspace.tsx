@@ -263,7 +263,7 @@ Verified on CorpLawUpdates.in`
   return (
     <div className="space-y-8">
       {/* 1. Header Banner with Next Deadline Alert */}
-      <div className="bg-gradient-to-r from-navy via-slate-900 to-navy text-white rounded-2xl p-6 md:p-8 border border-slate-800 shadow-xl relative overflow-hidden">
+      <div className="bg-linear-to-r from-navy via-slate-900 to-navy text-white rounded-2xl p-6 md:p-8 border border-slate-800 shadow-xl relative overflow-hidden">
         <div className="absolute -right-12 -bottom-12 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10">
           <div>
@@ -311,7 +311,7 @@ Verified on CorpLawUpdates.in`
       </div>
 
       {/* 2. Presets Ribbon */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-xs">
         <div className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3 flex items-center gap-2">
           <Sparkles className="w-3.5 h-3.5 text-amber-500" />
           <span>Real-World Benchmark Scenarios:</span>
@@ -333,7 +333,7 @@ Verified on CorpLawUpdates.in`
               </div>
               <div className="mt-2 flex items-center justify-between text-[10px]">
                 <span className="font-semibold text-blue-600 dark:text-blue-400">Load Preset →</span>
-                <span className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-slate-600 dark:text-slate-400 font-mono">
+                <span className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded-sm text-slate-600 dark:text-slate-400 font-mono">
                   {preset.badge}
                 </span>
               </div>
@@ -384,7 +384,7 @@ Verified on CorpLawUpdates.in`
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Controls Column */}
           <div className="lg:col-span-6 space-y-6">
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-5">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs space-y-5">
               <h3 className="text-base font-bold text-navy dark:text-white flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
                 <Calendar className="w-4 h-4 text-blue-600" />
                 <span>1. Filing Period &amp; Corporate Identity</span>
@@ -484,7 +484,7 @@ Verified on CorpLawUpdates.in`
             </div>
 
             {/* Delay & Invoices Card */}
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-5">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs space-y-5">
               <h3 className="text-base font-bold text-navy dark:text-white flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
                 <Clock className="w-4 h-4 text-rose-600" />
                 <span>2. Delay Beyond Statutory Due Date ({result.dueDateFormatted})</span>
@@ -563,7 +563,7 @@ Verified on CorpLawUpdates.in`
                 : result.riskLevel === 'HIGH'
                 ? 'bg-amber-50/50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-900/50'
                 : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800'
-            } shadow-sm`}>
+            } shadow-xs`}>
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
@@ -680,7 +680,7 @@ Verified on CorpLawUpdates.in`
 
       {/* 5. V3 4-Category Disclosure Assessor Tab */}
       {activeTab === 'v3categories' && (
-        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 md:p-8 shadow-sm space-y-6">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 md:p-8 shadow-xs space-y-6">
           <div>
             <div className="flex items-center gap-2 mb-2 text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
               <span>⚠️</span> The MCA V3 Expanded Disclosure Architecture
@@ -699,7 +699,7 @@ Verified on CorpLawUpdates.in`
                 <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase">
                   Category 1: Paid Within 45 Days
                 </span>
-                <span className="bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded">
+                <span className="bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-sm">
                   Compliant
                 </span>
               </div>
@@ -718,7 +718,7 @@ Verified on CorpLawUpdates.in`
                 <span className="text-xs font-bold text-amber-900 dark:text-amber-200 uppercase">
                   Category 2: Paid After 45 Days (V3 Trap)
                 </span>
-                <span className="bg-amber-200 dark:bg-amber-900 text-amber-800 dark:text-amber-200 text-[10px] font-bold px-2 py-0.5 rounded">
+                <span className="bg-amber-200 dark:bg-amber-900 text-amber-800 dark:text-amber-200 text-[10px] font-bold px-2 py-0.5 rounded-sm">
                   V3 Trigger
                 </span>
               </div>
@@ -739,7 +739,7 @@ Verified on CorpLawUpdates.in`
                 <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase">
                   Category 3: Outstanding &le; 45 Days
                 </span>
-                <span className="bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-[10px] font-bold px-2 py-0.5 rounded">
+                <span className="bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-[10px] font-bold px-2 py-0.5 rounded-sm">
                   Accrued Dues
                 </span>
               </div>
@@ -758,7 +758,7 @@ Verified on CorpLawUpdates.in`
                 <span className="text-xs font-bold text-rose-900 dark:text-rose-200 uppercase">
                   Category 4: Outstanding &gt; 45 Days
                 </span>
-                <span className="bg-rose-200 dark:bg-rose-900 text-rose-800 dark:text-rose-200 text-[10px] font-bold px-2 py-0.5 rounded">
+                <span className="bg-rose-200 dark:bg-rose-900 text-rose-800 dark:text-rose-200 text-[10px] font-bold px-2 py-0.5 rounded-sm">
                   Default Trigger
                 </span>
               </div>
@@ -796,7 +796,7 @@ Verified on CorpLawUpdates.in`
 
       {/* 6. Case Laws & Precedents Tab */}
       {activeTab === 'caselaws' && (
-        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 md:p-8 shadow-sm space-y-6">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 md:p-8 shadow-xs space-y-6">
           <div>
             <div className="flex items-center gap-2 mb-2 text-xs font-bold text-rose-600 uppercase tracking-wider">
               <span>⚖️</span> Enforced Section 454 Adjudication Orders

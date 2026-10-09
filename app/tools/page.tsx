@@ -295,7 +295,7 @@ export default function ToolsPage() {
               <Link
                 key={tool.id}
                 href={tool.href}
-                className="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-amber-500/50 dark:hover:border-amber-500/40 transition-all duration-200 flex flex-col"
+                className="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xs hover:shadow-md hover:border-amber-500/50 dark:hover:border-amber-500/40 transition-all duration-200 flex flex-col"
               >
                 {/* Card header */}
                 <span className="block bg-navy dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 p-5">

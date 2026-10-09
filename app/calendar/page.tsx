@@ -98,7 +98,7 @@ export default async function CalendarPage() {
 
       {/* SEO Knowledge Footer */}
       <section className="max-w-5xl mx-auto px-4 pb-16 pt-4 border-t border-slate-100 dark:border-slate-800">
-        <div className="bg-slate-50/50 dark:bg-slate-900/50 rounded-2xl border border-slate-200/60 dark:border-slate-800 p-8 shadow-sm">
+        <div className="bg-slate-50/50 dark:bg-slate-900/50 rounded-2xl border border-slate-200/60 dark:border-slate-800 p-8 shadow-xs">
           <h2 className="text-xl font-bold text-navy dark:text-white mb-4 font-heading">
             About the Corporate Compliance Calendar {CURRENT_YEAR}
           </h2>
@@ -150,7 +150,7 @@ export default async function CalendarPage() {
               ].map((kw, i) => (
                 <span 
                   key={i} 
-                  className="inline-flex items-center text-[11px] bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-200/80 dark:hover:bg-slate-700 px-2 py-0.5 rounded transition-colors cursor-default"
+                  className="inline-flex items-center text-[11px] bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-200/80 dark:hover:bg-slate-700 px-2 py-0.5 rounded-sm transition-colors cursor-default"
                 >
                   {kw}
                 </span>

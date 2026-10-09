@@ -247,7 +247,7 @@ Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform foc
       {/* ═════════════════════════════════════════════════════════════════════ */}
       <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
         {/* Header Ribbon with Mode Switcher */}
-        <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-6 md:p-8 text-white border-b border-slate-800">
+        <div className="bg-linear-to-r from-slate-900 via-indigo-950 to-slate-900 p-6 md:p-8 text-white border-b border-slate-800">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 text-xs font-semibold mb-2">
@@ -269,7 +269,7 @@ Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform foc
                   key={preset.id}
                   type="button"
                   onClick={() => applyPreset(preset)}
-                  className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/90 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition-all flex items-center gap-1.5 shadow-sm"
+                  className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800/90 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition-all flex items-center gap-1.5 shadow-xs"
                 >
                   <Building className="w-3 h-3 text-indigo-400" />
                   <span>{preset.label}</span>
@@ -467,7 +467,7 @@ Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform foc
                       setIsSmallCompanyConfirmed(e.target.checked)
                       if (e.target.checked) setCompanyClassification('small_company')
                     }}
-                    className="mt-0.5 h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                    className="mt-0.5 h-4 w-4 rounded-sm border-slate-300 text-indigo-600 focus:ring-indigo-500"
                   />
                   <div className="text-xs">
                     <span className="font-semibold text-slate-900 dark:text-white">Small Company (Section 2(85))</span>
@@ -485,7 +485,7 @@ Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform foc
                       setIsDpiitStartup(e.target.checked)
                       if (e.target.checked) setCompanyClassification('startup')
                     }}
-                    className="mt-0.5 h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                    className="mt-0.5 h-4 w-4 rounded-sm border-slate-300 text-indigo-600 focus:ring-indigo-500"
                   />
                   <div className="text-xs">
                     <span className="font-semibold text-slate-900 dark:text-white">DPIIT-Recognized Startup</span>
@@ -513,7 +513,7 @@ Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform foc
                   type="checkbox"
                   checked={hasCommencedBusinessBeforeFiling}
                   onChange={(e) => setHasCommencedBusinessBeforeFiling(e.target.checked)}
-                  className="mt-1 h-4 w-4 rounded border-amber-300 text-rose-600 focus:ring-rose-500"
+                  className="mt-1 h-4 w-4 rounded-sm border-amber-300 text-rose-600 focus:ring-rose-500"
                 />
                 <div className="text-xs">
                   <span className="font-bold text-slate-900 dark:text-white">
@@ -566,7 +566,7 @@ Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform foc
                       <DollarSign className="w-3.5 h-3.5 text-indigo-400" />
                       <span>MCA21 Portal e-Challan Fee</span>
                     </span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-sm bg-indigo-500/20 text-indigo-300">
                       {result.delaySlab.multiplierLabel}
                     </span>
                   </div>
@@ -589,7 +589,7 @@ Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform foc
                       <span>Section 10A(2) Adjudication Exposure</span>
                     </span>
                     {result.isSection446BEligible && (
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-sm bg-emerald-500/20 text-emerald-300">
                         Sec 446B Active
                       </span>
                     )}
@@ -615,7 +615,7 @@ Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform foc
                 </div>
 
                 {/* 3. Combined Financial Exposure Highlight */}
-                <div className="p-4 rounded-2xl bg-gradient-to-br from-indigo-950/60 to-slate-900 border border-indigo-500/40 space-y-1">
+                <div className="p-4 rounded-2xl bg-linear-to-br from-indigo-950/60 to-slate-900 border border-indigo-500/40 space-y-1">
                   <div className="text-[10px] font-bold uppercase tracking-wider text-indigo-300">
                     Total Compliance Financial Liability
                   </div>
@@ -683,7 +683,7 @@ Calculated on CorpLawUpdates.in | A free corporate-law intelligence platform foc
       {/* ═════════════════════════════════════════════════════════════════════ */}
       {/* SECTION 2: STATUTORY TABS & KNOWLEDGE REPOSITORY                      */}
       {/* ═════════════════════════════════════════════════════════════════════ */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200 dark:border-slate-800 space-y-6">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 md:p-8 shadow-xs border border-slate-200 dark:border-slate-800 space-y-6">
         {/* Navigation Tabs */}
         <div className="flex flex-wrap gap-2 border-b border-slate-200 dark:border-slate-800 pb-4">
           {[

@@ -314,7 +314,7 @@ export default function WebMCPHubPage() {
         </nav>
 
         {/* Hero Header */}
-        <header className="relative rounded-3xl bg-gradient-to-br from-navy via-slate-900 to-slate-950 text-white p-8 md:p-12 shadow-2xl overflow-hidden border border-slate-800">
+        <header className="relative rounded-3xl bg-linear-to-br from-navy via-slate-900 to-slate-950 text-white p-8 md:p-12 shadow-2xl overflow-hidden border border-slate-800">
           <div className="relative z-10 max-w-3xl space-y-4">
             <div className="inline-flex items-center gap-2 bg-amber-500/20 text-amber-300 px-3.5 py-1.5 rounded-full text-xs font-bold border border-amber-500/30">
               <Bot className="size-4" aria-hidden="true" />
@@ -365,7 +365,7 @@ export default function WebMCPHubPage() {
 
         {/* Value Prop Badges */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-2">
+          <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-2">
             <div className="size-10 rounded-xl bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold">
               <Zap className="size-5" />
             </div>
@@ -377,7 +377,7 @@ export default function WebMCPHubPage() {
             </p>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-2">
+          <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-2">
             <div className="size-10 rounded-xl bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold">
               <ShieldCheck className="size-5" />
             </div>
@@ -389,7 +389,7 @@ export default function WebMCPHubPage() {
             </p>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-2">
+          <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-2">
             <div className="size-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
               <Layers className="size-5" />
             </div>
@@ -425,7 +425,7 @@ export default function WebMCPHubPage() {
                 <div
                   key={t.id}
                   id={t.id}
-                  className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow duration-200 space-y-4"
+                  className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-xs hover:shadow-md transition-shadow duration-200 space-y-4"
                 >
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
@@ -450,7 +450,7 @@ export default function WebMCPHubPage() {
                       }`}>
                         {t.method}
                       </span>
-                      <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                      <span className="text-[11px] font-mono px-2 py-0.5 rounded-sm bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                         {t.readOnly ? 'readOnly' : 'write'}
                       </span>
                     </div>

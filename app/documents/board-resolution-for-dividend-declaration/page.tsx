@@ -128,7 +128,7 @@ export default function DividendResolutionPage() {
           <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-600 dark:text-slate-300">
             {['Free to use', 'No login required', 'Final and interim formats', 'Word and PDF'].map(item => <span key={item} className="inline-flex items-center gap-1.5"><CheckCircle2 className="size-4 text-emerald-600" aria-hidden="true" />{item}</span>)}
           </div>
-          <a href="#generator" className="mt-7 inline-flex items-center gap-2 rounded-lg bg-navy px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500">Create my resolution <ArrowRight className="size-4" aria-hidden="true" /></a>
+          <a href="#generator" className="mt-7 inline-flex items-center gap-2 rounded-lg bg-navy px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-500">Create my resolution <ArrowRight className="size-4" aria-hidden="true" /></a>
         </div>
       </header>
 
