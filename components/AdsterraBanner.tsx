@@ -1,40 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
-
 export default function AdsterraBanner() {
-  const bannerRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const container = bannerRef.current
-    if (!container) return
-    if (container.dataset.rendered === 'true') return
-
-    try {
-      const confScript = document.createElement('script')
-      confScript.type = 'text/javascript'
-      confScript.innerHTML = `
-        atOptions = {
-          'key' : 'e6f8500f773f74f1f8b28528b11c76ef',
-          'format' : 'iframe',
-          'height' : 90,
-          'width' : 728,
-          'params' : {}
-        };
-      `
-
-      const invokeScript = document.createElement('script')
-      invokeScript.type = 'text/javascript'
-      invokeScript.src = 'https://www.highrevenueformat.com/e6f8500f773f74f1f8b28528b11c76ef/invoke.js'
-
-      container.appendChild(confScript)
-      container.appendChild(invokeScript)
-      container.dataset.rendered = 'true'
-    } catch (e) {
-      console.warn('Adsterra banner initialization failed:', e)
-    }
-  }, [])
-
   return (
     <aside
       aria-label="Sponsored advertisement"
@@ -44,12 +10,17 @@ export default function AdsterraBanner() {
         Advertisement
       </span>
       <div className="w-full flex justify-center items-center overflow-x-auto py-1">
-        <div
-          ref={bannerRef}
-          style={{ width: '728px', minHeight: '90px' }}
-          className="flex justify-center items-center shrink-0"
+        <iframe
+          src="/ads/banner-728x90.html"
+          width="728"
+          height="90"
+          title="Sponsored Advertisement"
+          className="border-0 overflow-hidden shrink-0"
+          scrolling="no"
+          style={{ width: '728px', height: '90px' }}
         />
       </div>
     </aside>
   )
 }
+
