@@ -34,11 +34,26 @@ export async function proxy(request: NextRequest) {
 
     // CSRF Check on state-changing requests to admin API routes
     if (pathname.startsWith('/api/admin') && !isLoginPage && ['POST', 'PUT', 'DELETE', 'PATCH'].includes(request.method.toUpperCase())) {
-        const origin = request.headers.get('origin') || request.headers.get('referer')
-        if (origin) {
-            const host = request.headers.get('host') || 'www.corplawupdates.in'
-            if (!origin.toLowerCase().includes(host.toLowerCase()) && !origin.toLowerCase().includes('localhost')) {
-                return NextResponse.json({ error: 'CSRF Origin check failed' }, { status: 403 })
+        const originHeader = request.headers.get('origin') || request.headers.get('referer')
+        if (originHeader) {
+            try {
+                const originUrl = new URL(originHeader)
+                const hostHeader = (request.headers.get('host') || '').toLowerCase().split(':')[0]
+                const originHostname = originUrl.hostname.toLowerCase()
+
+                const isTrustedHost =
+                    originHostname === hostHeader ||
+                    originHostname === 'corplawupdates.in' ||
+                    originHostname === 'www.corplawupdates.in' ||
+                    originHostname === 'localhost' ||
+                    originHostname === '127.0.0.1' ||
+                    originHostname.endsWith('.vercel.app')
+
+                if (!isTrustedHost) {
+                    return NextResponse.json({ error: 'CSRF Origin check failed' }, { status: 403 })
+                }
+            } catch {
+                return NextResponse.json({ error: 'CSRF Origin check failed: invalid origin' }, { status: 403 })
             }
         }
     }
