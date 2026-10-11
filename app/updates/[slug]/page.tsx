@@ -869,8 +869,8 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
 
             <div id="article-end" className="h-4" aria-hidden />
 
-            {/* Adsterra 728x90 Display Banner (Non-sponsored articles only) */}
-            {!update.is_sponsored && <AdsterraBanner />}
+            {/* Adsterra banner disabled by user */}
+            {/* {!update.is_sponsored && <AdsterraBanner />} */}
 
             {/* Google Preferred Source Callout Banner */}
             <div className="my-8 print:hidden">

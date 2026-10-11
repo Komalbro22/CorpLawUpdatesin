@@ -248,8 +248,8 @@ export default async function RootLayout({
           crossOrigin="anonymous"
         />
 
-        {/* Infolinks Integration: Injected with strategy="lazyOnload" to preserve Core Web Vitals, hidden on admin routes */}
-        <HideOnAdmin>
+        {/* Infolinks Integration disabled by user */}
+        {/* <HideOnAdmin>
           <Script
             id="infolinks-init"
             strategy="lazyOnload"
@@ -262,7 +262,7 @@ export default async function RootLayout({
             src="https://resources.infolinks.com/js/infolinks_main.js"
             strategy="lazyOnload"
           />
-        </HideOnAdmin>
+        </HideOnAdmin> */}
 
       </body>
     </html>
