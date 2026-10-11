@@ -177,7 +177,7 @@ export async function POST(request: NextRequest) {
             )
         }
 
-        try { revalidateTag('updates', 'default') } catch { /* ignore */ }
+        try { revalidateTag('updates') } catch { /* ignore */ }
         revalidatePath('/', 'layout')
         revalidatePath('/updates', 'layout')
         revalidatePath('/sitemap.xml')
@@ -186,8 +186,9 @@ export async function POST(request: NextRequest) {
             revalidatePath(`/category/${category.trim().toLowerCase()}`)
         }
         if (createdArticle?.slug) {
-            revalidatePath(`/updates/${createdArticle.slug}`, 'page')
+            revalidatePath(`/updates/${createdArticle.slug}`)
         }
+        revalidatePath('/updates/[slug]', 'page')
 
         return NextResponse.json(createdArticle, { status: 201 })
     } catch (err: unknown) {

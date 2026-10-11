@@ -73,6 +73,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             }
         }
 
+        updateData.updated_at = new Date().toISOString()
+
         const { data: updatedArticle, error: updateError } = await supabaseAdmin
             .from('updates')
             .update(updateData)
@@ -91,7 +93,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             )
         }
 
-        try { revalidateTag('updates', 'default') } catch { /* ignore */ }
+        try { revalidateTag('updates') } catch { /* ignore */ }
         revalidatePath('/', 'layout')
         revalidatePath('/updates', 'layout')
         revalidatePath('/sitemap.xml')
@@ -105,15 +107,14 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         }
 
         if (body.slug !== undefined && body.slug !== oldArticle.slug) {
-            revalidatePath(`/updates/${oldArticle.slug}`, 'page')
+            revalidatePath(`/updates/${oldArticle.slug}`)
         }
         if (updatedArticle?.slug) {
-            revalidatePath(`/updates/${updatedArticle.slug}`, 'page')
-        } else if (body.title !== undefined && body.title !== oldArticle.title) {
-            revalidatePath(`/updates/${oldArticle.slug}`, 'page')
+            revalidatePath(`/updates/${updatedArticle.slug}`)
         } else {
-            revalidatePath(`/updates/${oldArticle.slug}`, 'page')
+            revalidatePath(`/updates/${oldArticle.slug}`)
         }
+        revalidatePath('/updates/[slug]', 'page')
 
         return NextResponse.json(updatedArticle)
     } catch (err: unknown) {
@@ -148,7 +149,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
             )
         }
 
-        try { revalidateTag('updates', 'default') } catch { /* ignore */ }
+        try { revalidateTag('updates') } catch { /* ignore */ }
         revalidatePath('/', 'layout')
         revalidatePath('/updates', 'layout')
         revalidatePath('/sitemap.xml')
@@ -156,7 +157,10 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         if (deletedArticle?.category) {
             revalidatePath(`/category/${deletedArticle.category.toLowerCase()}`)
         }
-        revalidatePath(`/updates/${deletedArticle.slug}`, 'page')
+        if (deletedArticle?.slug) {
+            revalidatePath(`/updates/${deletedArticle.slug}`)
+        }
+        revalidatePath('/updates/[slug]', 'page')
 
         return NextResponse.json({ success: true, message: 'Article deleted' })
     } catch (err: unknown) {
