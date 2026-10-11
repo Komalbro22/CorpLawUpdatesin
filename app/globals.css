@@ -129,6 +129,8 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    overflow-x: clip;
+    max-width: 100vw;
   }
 
   body {
@@ -138,6 +140,8 @@
       background-color 0.2s ease,
       color 0.2s ease;
     width: 100%;
+    max-width: 100vw;
+    overflow-x: clip;
   }
 
   h1,
@@ -1251,9 +1255,13 @@
   }
 
   .article-content {
-    font-size: var(--article-font-size, 17.5px) !important;
-    line-height: var(--article-line-height, 1.82) !important;
+    font-size: var(--article-font-size, 17px) !important;
+    line-height: var(--article-line-height, 1.78) !important;
     color: #1e293b;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    box-sizing: border-box;
+    max-width: 100%;
   }
 
   /* Enforce font size scaling on all text children inside article-content */
@@ -1268,8 +1276,8 @@
   .article-content div.example-calc,
   .article-content div.faq-a,
   .article-content div.timeline-label {
-    font-size: var(--article-font-size, 17.5px) !important;
-    line-height: var(--article-line-height, 1.82) !important;
+    font-size: var(--article-font-size, 17px) !important;
+    line-height: var(--article-line-height, 1.78) !important;
   }
 
   /* Headings scale proportionally with article font size */
@@ -1309,6 +1317,8 @@
     text-decoration: underline;
     text-underline-offset: 3px;
     transition: color 0.15s;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
   .article-content a:hover {
     color: #b45309;
@@ -1327,25 +1337,45 @@
 
   @media (max-width: 640px) {
     .article-font-sm .article-content {
-      --article-font-size: 14.5px;
-      --article-line-height: 1.72;
+      --article-font-size: 13.5px;
+      --article-line-height: 1.55;
     }
     .article-font-md .article-content {
-      --article-font-size: 16.5px;
-      --article-line-height: 1.78;
+      --article-font-size: 15px;
+      --article-line-height: 1.62;
     }
     .article-font-lg .article-content {
-      --article-font-size: 18px;
-      --article-line-height: 1.82;
+      --article-font-size: 16.5px;
+      --article-line-height: 1.7;
     }
 
+    /* Mobile Heading Scaling with higher specificity so they properly scale on phones */
+    .article-font-sm .article-content h1,
+    .article-font-md .article-content h1,
+    .article-font-lg .article-content h1,
+    .article-content h1 {
+      font-size: 1.45rem !important;
+      line-height: 1.25 !important;
+    }
+
+    .article-font-sm .article-content h2,
+    .article-font-md .article-content h2,
+    .article-font-lg .article-content h2,
     .article-content h2 {
-      font-size: 1.28em;
-      margin-top: 1.8em;
+      font-size: 1.22rem !important;
+      line-height: 1.3 !important;
+      margin-top: 1.4rem !important;
+      margin-bottom: 0.5rem !important;
     }
 
+    .article-font-sm .article-content h3,
+    .article-font-md .article-content h3,
+    .article-font-lg .article-content h3,
     .article-content h3 {
-      font-size: 1.12em;
+      font-size: 1.08rem !important;
+      line-height: 1.35 !important;
+      margin-top: 1.1rem !important;
+      margin-bottom: 0.4rem !important;
     }
   }
 

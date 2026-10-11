@@ -370,7 +370,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
             />
             <article
               id="article-root"
-              className="article-font-md mx-auto w-full max-w-4xl px-4 py-8 sm:py-12"
+              className="article-font-md mx-auto w-full max-w-4xl px-3.5 sm:px-4 py-6 sm:py-12 overflow-x-hidden"
             >
                 <ReadingProgress />
                 <ViewCounter slug={update.slug} />
@@ -422,7 +422,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                 </div>
 
                 {/* 1. Article Title */}
-                <h1 id="article-title" className="font-heading text-xl sm:text-2xl md:text-[2.2rem] text-navy dark:text-slate-50 font-bold mb-3 sm:mb-4 leading-snug wrap-break-word text-balance">
+                <h1 id="article-title" className="font-heading text-lg sm:text-2xl md:text-[2.2rem] text-navy dark:text-slate-50 font-bold mb-3 sm:mb-4 leading-snug break-words text-balance">
                     {update.title}
                 </h1>
 
@@ -677,17 +677,17 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                     return (
                         <section id="executive-summary" aria-label="Executive Summary" className="mb-6">
                             <details open className={`group overflow-hidden rounded-xl border ${cardStyles.borderColor} dark:border-slate-800 border-l-4 ${cardStyles.borderLeftColor} ${cardStyles.bgColor} shadow-xs transition-all duration-200`}>
-                                <summary className="cursor-pointer p-3.5 sm:p-4 font-bold text-navy dark:text-slate-100 flex justify-between items-center bg-white dark:bg-slate-900 hover:bg-slate-50/80 dark:hover:bg-slate-800/80 transition-colors list-none [&::-webkit-details-marker]:hidden focus:outline-hidden">
-                                    <div className="flex items-center gap-2.5">
-                                        <FileText className={`size-4 sm:size-5 ${cardStyles.iconColor}`} aria-hidden="true" />
-                                        <span className="font-heading text-sm sm:text-base font-bold text-navy dark:text-white tracking-tight">Executive Summary</span>
+                                <summary className="cursor-pointer p-3 sm:p-4 font-bold text-navy dark:text-slate-100 flex justify-between items-center gap-2 bg-white dark:bg-slate-900 hover:bg-slate-50/80 dark:hover:bg-slate-800/80 transition-colors list-none [&::-webkit-details-marker]:hidden focus:outline-hidden">
+                                    <div className="flex items-center gap-2 min-w-0">
+                                        <FileText className={`size-4 sm:size-5 ${cardStyles.iconColor} shrink-0`} aria-hidden="true" />
+                                        <span className="font-heading text-xs sm:text-base font-bold text-navy dark:text-white tracking-tight truncate">Executive Summary</span>
                                     </div>
-                                    <div className="flex items-center gap-2 sm:gap-3">
-                                        <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${cardStyles.badgeBg}`}>
+                                    <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+                                        <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${cardStyles.badgeBg}`}>
                                             <span className="size-1.5 rounded-full bg-current opacity-70" />
                                             Key Takeaways
                                         </span>
-                                        <ChevronDown className="size-4 text-slate-400 transition-transform duration-300 group-open:rotate-180" aria-hidden="true" />
+                                        <ChevronDown className="size-4 text-slate-400 transition-transform duration-300 group-open:rotate-180 shrink-0" aria-hidden="true" />
                                     </div>
                                 </summary>
                                 <div className="p-3.5 sm:p-5 border-t border-slate-100 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur-xs space-y-3.5">
@@ -727,17 +727,17 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                         <MarkdownRenderer content={contentPart1} enableGazetteDownloadPrompt sponsoredLinks={!!update.is_sponsored} holdExternalLinks={!!update.hold_external_links} />
                         
                         {relatedForm && (
-                            <div className="my-10 bg-[#0F172A] rounded-[12px] p-8 flex flex-col items-center text-center shadow-lg border border-slate-800 clear-both">
-                                <span className="text-4xl mb-4" aria-hidden>🧮</span>
-                                <h3 className="text-2xl font-bold text-white mb-3">
+                            <div className="my-8 sm:my-10 bg-[#0F172A] rounded-2xl p-5 sm:p-8 flex flex-col items-center text-center shadow-lg border border-slate-800 clear-both">
+                                <span className="text-3xl sm:text-4xl mb-3" aria-hidden>🧮</span>
+                                <h3 className="text-lg sm:text-2xl font-bold text-white mb-2 sm:mb-3">
                                     Calculate Your {relatedForm.formNumber} Fee & Penalty
                                 </h3>
-                                <p className="text-slate-300 text-base max-w-lg mb-8 leading-relaxed">
+                                <p className="text-slate-300 text-xs sm:text-base max-w-lg mb-6 sm:mb-8 leading-relaxed">
                                     Use our free calculator to get the exact filing fee and late penalty for your company in under 30 seconds.
                                 </p>
                                 <Link 
                                     href={`/tools/fee-calculator/companies/${relatedForm.slug}`}
-                                    className="bg-[#1D4ED8] hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg transition-colors inline-block w-full sm:w-auto"
+                                    className="bg-[#1D4ED8] hover:bg-blue-600 text-white font-bold py-2.5 sm:py-3 px-6 sm:px-8 rounded-xl transition-colors inline-block w-full sm:w-auto text-xs sm:text-sm"
                                 >
                                     Open {relatedForm.formNumber} Fee Calculator →
                                 </Link>
@@ -749,20 +749,20 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                         )}
 
                         {(update.slug?.includes('ibbi-reg-47b') || update.slug?.includes('liquidation-forms-fee') || update.slug?.includes('delayed-liquidation')) && (
-                            <div className="my-10 bg-linear-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-[16px] p-8 flex flex-col items-center text-center shadow-xl border border-indigo-900/60 clear-both not-prose">
-                                <span className="text-4xl mb-3" aria-hidden>⚖️</span>
+                            <div className="my-8 sm:my-10 bg-linear-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-2xl p-5 sm:p-8 flex flex-col items-center text-center shadow-xl border border-indigo-900/60 clear-both not-prose">
+                                <span className="text-3xl sm:text-4xl mb-3" aria-hidden>⚖️</span>
                                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold mb-3 border border-emerald-500/30">
                                     <span>Circular No. IBBI/LIQ/107/2026 Compliance</span>
                                 </div>
-                                <h3 className="text-2xl font-bold text-white mb-2">
+                                <h3 className="text-lg sm:text-2xl font-bold text-white mb-2">
                                     Calculate Your Regulation 47B Delayed Filing Fee
                                 </h3>
-                                <p className="text-slate-300 text-sm sm:text-base max-w-xl mb-6 leading-relaxed">
+                                <p className="text-slate-300 text-xs sm:text-base max-w-xl mb-6 leading-relaxed">
                                     Calculate the exact delayed fee for Form LIQ-1 to LIQ-4 (₹500/month + 18% GST) due on or before 30.09.2026, or compute Liquidator remuneration slabs.
                                 </p>
                                 <Link 
                                     href="/tools/fee-calculator/ibbi"
-                                    className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3.5 px-8 rounded-xl transition-all shadow-lg inline-block w-full sm:w-auto"
+                                    className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 sm:py-3.5 px-6 sm:px-8 rounded-xl transition-all shadow-lg inline-block w-full sm:w-auto text-xs sm:text-sm"
                                 >
                                     Open IBBI Regulation 47B Fee Calculator →
                                 </Link>

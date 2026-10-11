@@ -294,6 +294,36 @@ function processInlineStyles(styleObj: any, className: string = '', isContainer:
             classes.push('dark:border-slate-800!');
         }
     }
+
+    // Safety: prevent any child element from forcing horizontal overflow on mobile
+    if (isContainer) {
+        processedStyle.maxWidth = '100%';
+        processedStyle.boxSizing = 'border-box';
+        classes.push('max-w-full');
+        if (processedStyle.width && typeof processedStyle.width === 'string' && processedStyle.width.endsWith('px')) {
+            const num = parseFloat(processedStyle.width);
+            if (num > 320) {
+                processedStyle.maxWidth = '100%';
+                processedStyle.width = '100%';
+            }
+        }
+    }
+
+    // Clamp or adapt inline fontSize to prevent mobile text bloat
+    if (processedStyle.fontSize && typeof processedStyle.fontSize === 'string') {
+        const fsLower = processedStyle.fontSize.toLowerCase().trim();
+        if (
+            fsLower === '1rem' ||
+            fsLower === '1.05rem' ||
+            fsLower === '1.1rem' ||
+            fsLower === '16px' ||
+            fsLower === '17px' ||
+            fsLower === '17.5px' ||
+            fsLower === '18px'
+        ) {
+            delete processedStyle.fontSize;
+        }
+    }
     
     return {
         processedStyle,

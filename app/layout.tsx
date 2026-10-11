@@ -193,7 +193,7 @@ export default async function RootLayout({
           },
         }} />
       </head>
-      <body className="font-body bg-slate-50 dark:bg-slate-950 text-navy dark:text-slate-100 antialiased min-h-dvh flex flex-col selection:bg-amber-200/50 selection:text-navy wrap-break-word" suppressHydrationWarning>
+      <body className="font-body bg-slate-50 dark:bg-slate-950 text-navy dark:text-slate-100 antialiased min-h-dvh flex flex-col selection:bg-amber-200/50 selection:text-navy break-words overflow-x-clip" suppressHydrationWarning>
         <ToastProvider>
           <HideOnAdmin>
             <TrackingScripts />

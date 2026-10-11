@@ -1,6 +1,6 @@
 {
   "name": "corplawupdates",
-  "version": "2.51.58",
+  "version": "2.51.59",
   "private": true,
   "scripts": {
     "dev": "next dev",
