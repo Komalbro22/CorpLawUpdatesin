@@ -35,6 +35,7 @@ import { sanitizeHtml } from '@/lib/sanitize'
 import { mcaForms } from '@/data/mca-forms'
 import ArticleContextTool from '@/components/ArticleContextTool'
 import ReaderFeedback from '@/components/ReaderFeedback'
+import AdsterraBanner from '@/components/AdsterraBanner'
 
 const stripHtml = (html: string) => html ? html.replace(/<[^>]*>/g, '').trim() : ''
 
@@ -867,6 +868,9 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
             )}
 
             <div id="article-end" className="h-4" aria-hidden />
+
+            {/* Adsterra 728x90 Display Banner (Non-sponsored articles only) */}
+            {!update.is_sponsored && <AdsterraBanner />}
 
             {/* Google Preferred Source Callout Banner */}
             <div className="my-8 print:hidden">
