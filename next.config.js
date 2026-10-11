@@ -37,7 +37,7 @@ const nextConfig = {
   async headers() {
     const isDev = process.env.NODE_ENV !== 'production'
     const scriptSrcEval = isDev ? " 'unsafe-eval'" : ""
-    const cspHeader = `default-src 'self'; script-src 'self' 'unsafe-inline'${scriptSrcEval} https://static.cloudflareinsights.com https://www.googletagmanager.com https://va.vercel-scripts.com https://*.clarity.ms https://pagead2.googlesyndication.com https://*.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://tpc.googlesyndication.com https://news.google.com https://*.google.com https://*.adtrafficquality.google https://resources.infolinks.com https://*.infolinks.com https://www.highrevenueformat.com https://*.highrevenueformat.com https://*.adsterra.com https://*.zoologyfibre.com https://zoologyfibre.com https://*.kettledroopingcontinuation.com https://kettledroopingcontinuation.com https://*.protrafficinspector.com https://protrafficinspector.com https://*.effectivecreativeformat.com; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https:; font-src 'self' data:; connect-src 'self' blob: data: https: wss://*.supabase.co https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.adtrafficquality.google https://*.infolinks.com https://*.highrevenueformat.com https://*.adsterra.com https://*.protrafficinspector.com https://protrafficinspector.com https://*.kettledroopingcontinuation.com; frame-src 'self' https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://news.google.com https://*.google.com https://*.adtrafficquality.google https://*.infolinks.com https://www.highrevenueformat.com https://*.highrevenueformat.com https://*.adsterra.com https://*.kettledroopingcontinuation.com https://kettledroopingcontinuation.com https:; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests;`
+    const cspHeader = `default-src 'self'; script-src 'self' 'unsafe-inline'${scriptSrcEval} https://static.cloudflareinsights.com https://www.googletagmanager.com https://va.vercel-scripts.com https://*.clarity.ms https://pagead2.googlesyndication.com https://*.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://tpc.googlesyndication.com https://news.google.com https://*.google.com https://*.adtrafficquality.google https://resources.infolinks.com https://*.infolinks.com; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https:; font-src 'self' data:; connect-src 'self' blob: data: https: wss://*.supabase.co https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.adtrafficquality.google https://*.infolinks.com; frame-src 'self' https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://news.google.com https://*.google.com https://*.adtrafficquality.google https://*.infolinks.com; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests;`
 
     return [
       {
@@ -71,19 +71,6 @@ const nextConfig = {
             // HSTS: enforce HTTPS for 1 year including subdomains
             key: 'Strict-Transport-Security',
             value: 'max-age=31536000; includeSubDomains; preload',
-          },
-        ],
-      },
-      {
-        source: '/ads/:path*',
-        headers: [
-          {
-            key: 'Content-Security-Policy',
-            value: "default-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; frame-src 'self' https: data:; connect-src 'self' https:; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self' https: data:;",
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN',
           },
         ],
       },
