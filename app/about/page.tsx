@@ -38,7 +38,7 @@ export default async function AboutPage() {
 
     const linkedinUrl = social.linkedin_url || ''
     const twitterUrl = social.twitter_url || ''
-    const instagramUrl = social.instagram_url || ''
+    const instagramUrl = social.instagram_url || 'https://www.instagram.com/corplawupdates.in/'
     const whatsappUrl = social.whatsapp_channel || 'https://whatsapp.com/channel/0029VbCfcUEEgGfGLWOTvV1A'
     const telegramUrl = social.telegram_channel || 'https://t.me/corplawupdate'
 

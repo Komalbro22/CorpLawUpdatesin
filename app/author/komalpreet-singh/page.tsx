@@ -103,6 +103,7 @@ export default async function AuthorProfilePage() {
       'https://x.com/CorpLawUpdates',
       'https://whatsapp.com/channel/0029VbCfcUEEgGfGLWOTvV1A',
       'https://t.me/corplawupdate',
+      'https://www.instagram.com/corplawupdates.in/',
     ],
   }
 
@@ -251,6 +252,15 @@ export default async function AuthorProfilePage() {
                   className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 px-3.5 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-sky-500 dark:hover:text-sky-400 transition-colors"
                 >
                   <span>X (Twitter)</span>
+                  <ExternalLink className="size-3" />
+                </a>
+                <a
+                  href="https://www.instagram.com/corplawupdates.in/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/80 px-3.5 py-2.5 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-pink-600 dark:hover:text-pink-400 transition-colors"
+                >
+                  <span>Instagram</span>
                   <ExternalLink className="size-3" />
                 </a>
               </div>
