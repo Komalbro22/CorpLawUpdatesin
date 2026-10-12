@@ -116,6 +116,15 @@ describe('Email Provider Service', () => {
             expect(batchRes.provider).toBe('brevo-api')
             expect(batchRes.results[0].messageId).toBe('<id-1>')
             expect(batchRes.results[1].messageId).toBe('<id-2>')
+
+            // Verify root htmlContent is present to satisfy Brevo API schema requirement
+            const fetchCall = mockFetch.mock.calls[0]
+            const sentPayload = JSON.parse(fetchCall[1].body)
+            expect(sentPayload.htmlContent).toBeDefined()
+            expect(sentPayload.htmlContent).toBe('<p>1</p>')
+            expect(sentPayload.messageVersions).toHaveLength(2)
+            expect(sentPayload.messageVersions[0].htmlContent).toBe('<p>1</p>')
+            expect(sentPayload.messageVersions[1].htmlContent).toBe('<p>2</p>')
         })
     })
 })

@@ -154,6 +154,15 @@ async function sendViaBrevoApi(options: SingleEmailOptions): Promise<SendResult>
 
         if (!response.ok) {
             const errorMsg = data?.message || `Brevo API returned HTTP ${response.status}: ${response.statusText}`
+            console.error('[Brevo API] Single send returned error:', response.status, errorMsg)
+
+            // Fallback to Brevo SMTP if configured
+            const smtpKey = (process.env.BREVO_SMTP_KEY || process.env.BREVO_API_KEY)?.trim()
+            if (smtpKey) {
+                console.warn('[Brevo API] Falling back to Brevo SMTP relay for single email...')
+                return sendViaBrevoSmtp(options)
+            }
+
             return { success: false, error: errorMsg, provider: 'brevo-api' }
         }
 
@@ -163,6 +172,13 @@ async function sendViaBrevoApi(options: SingleEmailOptions): Promise<SendResult>
             provider: 'brevo-api',
         }
     } catch (err: any) {
+        console.error('[Brevo API] Network error:', err?.message || err)
+        // Fallback to Brevo SMTP on network error
+        const smtpKey = (process.env.BREVO_SMTP_KEY || process.env.BREVO_API_KEY)?.trim()
+        if (smtpKey) {
+            console.warn('[Brevo API] Falling back to Brevo SMTP relay after network error...')
+            return sendViaBrevoSmtp(options)
+        }
         return {
             success: false,
             error: err?.message || 'Network error sending via Brevo API',
@@ -198,13 +214,16 @@ async function sendBatchViaBrevoApi(options: BatchEmailOptions): Promise<BatchSe
 
     for (let i = 0; i < emails.length; i += CHUNK_SIZE) {
         const chunk = emails.slice(i, i + CHUNK_SIZE)
+        const baseHtml = chunk[0]?.html || '<p>CorpLawUpdates Regulatory Intelligence</p>'
+        const baseSubject = chunk[0]?.subject || 'CorpLawUpdates Intelligence'
         const payload: any = {
             sender: { name: senderName, email: senderEmail },
-            subject: chunk[0]?.subject || 'CorpLawUpdates Intelligence',
+            subject: baseSubject,
+            htmlContent: baseHtml,
             messageVersions: chunk.map(item => ({
                 to: [{ email: item.to.trim() }],
-                subject: item.subject,
-                htmlContent: item.html,
+                subject: item.subject || baseSubject,
+                htmlContent: item.html || baseHtml,
             })),
         }
 
@@ -227,6 +246,27 @@ async function sendBatchViaBrevoApi(options: BatchEmailOptions): Promise<BatchSe
 
             if (!response.ok) {
                 console.error('[Brevo Batch] Batch API returned error, status:', response.status, data)
+
+                // Fallback to Brevo SMTP relay if configured
+                const smtpKey = (process.env.BREVO_SMTP_KEY || process.env.BREVO_API_KEY)?.trim()
+                if (smtpKey) {
+                    console.warn('[Brevo Batch] Attempting fallback to Brevo SMTP relay for chunk...')
+                    try {
+                        const smtpFallback = await sendBatchViaBrevoSmtp({
+                            emails: chunk,
+                            from: options.from,
+                            fromName: options.fromName,
+                            replyTo: options.replyTo,
+                        })
+                        totalSent += smtpFallback.sent
+                        totalFailed += smtpFallback.failed
+                        results.push(...smtpFallback.results)
+                        continue
+                    } catch (smtpErr) {
+                        console.error('[Brevo Batch] SMTP fallback also failed:', smtpErr)
+                    }
+                }
+
                 chunk.forEach(item => {
                     totalFailed++
                     results.push({ email: item.to, success: false, error: data?.message || `Brevo batch error status ${response.status}` })
@@ -244,6 +284,27 @@ async function sendBatchViaBrevoApi(options: BatchEmailOptions): Promise<BatchSe
             }
         } catch (err: any) {
             console.error('[Brevo Batch] Network error:', err)
+
+            // Fallback to Brevo SMTP relay on network exception
+            const smtpKey = (process.env.BREVO_SMTP_KEY || process.env.BREVO_API_KEY)?.trim()
+            if (smtpKey) {
+                try {
+                    console.warn('[Brevo Batch] Attempting fallback to Brevo SMTP relay after network exception...')
+                    const smtpFallback = await sendBatchViaBrevoSmtp({
+                        emails: chunk,
+                        from: options.from,
+                        fromName: options.fromName,
+                        replyTo: options.replyTo,
+                    })
+                    totalSent += smtpFallback.sent
+                    totalFailed += smtpFallback.failed
+                    results.push(...smtpFallback.results)
+                    continue
+                } catch (smtpErr) {
+                    console.error('[Brevo Batch] SMTP fallback also failed:', smtpErr)
+                }
+            }
+
             chunk.forEach(item => {
                 totalFailed++
                 results.push({ email: item.to, success: false, error: err?.message || 'Batch send network error' })
