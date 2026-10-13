@@ -183,7 +183,6 @@ COST BREAKDOWN:
 - PAN & TAN Allotment: ${formatInr(result.panFee + result.tanFee)}
 ${result.nameReservationFee > 0 ? `- Name Reservation (Part A): ${formatInr(result.nameReservationFee)}\n` : ''}${result.dinAllotmentFee > 0 ? `- Additional DIN Fees: ${formatInr(result.dinAllotmentFee)}\n` : ''}
 TOTAL GOVERNMENT ESTIMATE: ${formatInr(result.totalGovernmentPayable)}
-${result.isMcaFeeZero ? `Savings: ${formatInr(result.mcaFeeSaved)} saved under MCA zero-fee exemption.` : ''}
 Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/spice-plus
     `.trim()
 
@@ -452,23 +451,6 @@ Generated via: https://www.corplawupdates.in/tools/fee-calculator/companies/spic
               </div>
             </div>
           </div>
-
-          {/* Savings Highlight Box */}
-          {result.isMcaFeeZero && (
-            <div className="bg-linear-to-r from-emerald-500/10 via-emerald-500/5 to-transparent border border-emerald-500/20 rounded-2xl p-5 flex items-start gap-3.5">
-              <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 shrink-0">
-                <BadgePercent className="size-5" />
-              </div>
-              <div>
-                <h4 className="text-sm font-bold text-emerald-800 dark:text-emerald-300 mb-1">
-                  100% Zero MCA Filing Fee Applied!
-                </h4>
-                <p className="text-xs text-emerald-700 dark:text-emerald-400/90 leading-relaxed">
-                  Under <strong>G.S.R. 329(E)</strong>, companies with authorized share capital up to <strong>₹15,00,000</strong> pay ₹0 filing fee for SPICe+ (INC-32). You saved approximately <strong>{formatInr(result.mcaFeeSaved)}</strong> in statutory MCA incorporation fees!
-                </p>
-              </div>
-            </div>
-          )}
 
           {/* Statutory Warnings & Rules */}
           {result.warnings.length > 0 && (

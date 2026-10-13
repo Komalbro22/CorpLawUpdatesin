@@ -158,7 +158,7 @@ describe('Form SH-7 Statutory Compliance & Fee Engine', () => {
       expect(result.section446BApplied).toBe(true)
       expect(result.dailyPenaltyRate).toBe(250) // 50% of ₹500
       expect(result.companyPenaltyCap).toBe(200000)
-      expect(result.officerPenaltyCap).toBe(100000) // Statutory ceiling under Section 446B
+      expect(result.officerPenaltyCap).toBe(50000) // One-half of ₹1,00,000 standard ceiling under Section 446B
       expect(result.companyPenalty).toBe(11250) // 45 × 250
       expect(result.perOfficerPenalty).toBe(11250) // 45 × 250
       expect(result.totalOfficersPenalty).toBe(22500) // 2 × 11,250

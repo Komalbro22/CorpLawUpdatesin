@@ -818,7 +818,7 @@ Generated via CorpLawUpdates.in Form SH-7 Fee Calculator
                   </span>
                 </div>
                 <p className="text-[10px] text-emerald-700/80 dark:text-emerald-400/80">
-                  Illustrative maximum based on one-half of the statutory penalty rate: ₹250/day (Section 446B: penalty shall not be more than one-half; Company cap ₹2L, Officer statutory cap ₹1L)
+                  Illustrative maximum based on one-half of the statutory penalty rate: ₹250/day (Section 446B: penalty shall not be more than one-half; Company cap ₹2L, Officer statutory cap ₹50,000)
                 </p>
               </div>
             )}

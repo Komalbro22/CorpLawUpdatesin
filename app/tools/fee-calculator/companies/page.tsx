@@ -689,7 +689,7 @@ export default function CompaniesFeePage() {
                 Form MSME-1 Workspace
               </h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Section 405(4) adjudication penalty engine (₹20k + ₹1k/day max ₹3L each), V3 4-category disclosure assessor, and Section 16 penal compound interest (16.50%).
+                Section 405(4) adjudication penalty engine (₹20k + ₹1k/day max ₹3L each), V3 4-category disclosure assessor, and Section 16 penal compound interest (17.25%).
               </p>
             </div>
             <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 mt-4 flex items-center gap-1">

@@ -111,18 +111,18 @@ describe('MSME Form 1 Statutory Rule Engine', () => {
     });
   });
 
-  describe('Section 16 MSMED Act Compound Interest (16.50% p.a.)', () => {
-    test('Correct interest rate based on RBI Bank Rate 5.50%', () => {
-      expect(CURRENT_RBI_BANK_RATE).toBe(5.50);
-      expect(MSME_PENAL_INTEREST_RATE).toBe(16.50);
+  describe('Section 16 MSMED Act Compound Interest (17.25% p.a.)', () => {
+    test('Correct interest rate based on RBI Bank Rate 5.75%', () => {
+      expect(CURRENT_RBI_BANK_RATE).toBe(5.75);
+      expect(MSME_PENAL_INTEREST_RATE).toBe(17.25);
     });
 
     test('Computes compound interest with monthly rests', () => {
       const principal = 1_000_000; // ₹10 Lakhs
       const delayDays = 60; // approx 2 months
-      const interest = calculateSection16Interest(principal, delayDays, 16.50);
-      expect(interest).toBeGreaterThan(27000);
-      expect(interest).toBeLessThan(29000);
+      const interest = calculateSection16Interest(principal, delayDays, 17.25);
+      expect(interest).toBeGreaterThan(28000);
+      expect(interest).toBeLessThan(30000);
     });
 
     test('Zero principal or zero delay results in ₹0 interest', () => {

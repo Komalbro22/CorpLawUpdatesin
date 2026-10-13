@@ -1406,8 +1406,8 @@ describe("Verified RBI Bank Rate Dataset — [VERIFIED RATE DATA]", () => {
       } else {
         // Last active entry must extend to 9999-12-31
         expect(entry.effectiveTo).toBe("9999-12-31");
-        expect(entry.bankRate).toBe(5.50);
-        expect(entry.statutoryRate).toBe(16.50);
+        expect(entry.bankRate).toBe(5.75);
+        expect(entry.statutoryRate).toBe(17.25);
       }
     }
   });
@@ -1426,14 +1426,14 @@ describe("Verified RBI Bank Rate Dataset — [VERIFIED RATE DATA]", () => {
     }
   });
 
-  test("[VERIFIED RATE DATA] Dynamic fallback rate is 5.50% (MSME rate 16.50%)", () => {
+  test("[VERIFIED RATE DATA] Dynamic fallback rate is 5.75% (MSME rate 17.25%)", () => {
     const calc = calculateMsmeInterest({
       invoiceAmount: 1_00_000,
       deliveryDate: "2026-01-01",
       actualPaymentDate: "2026-04-01"
     });
-    expect(calc.appliedBankRate).toBe(5.50);
-    expect(calc.appliedStatutoryRate).toBe(16.50);
+    expect(calc.appliedBankRate).toBe(5.75);
+    expect(calc.appliedStatutoryRate).toBe(17.25);
   });
 });
 

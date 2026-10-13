@@ -6,7 +6,7 @@
  * - Specified Companies (Furnishing of Information about Payment to Micro and Small Enterprise Suppliers) Order, 2019
  * - MSMED Act, 2006 (Sections 15, 16, 18, 19, 22, 23, 24)
  * - Section 43B(h) Income Tax Act, 1961 (renumbered Sec 37(2)(g) from TY 2026-27)
- * - RBI Bank Rate (5.50% -> 3× Bank Rate = 16.50% p.a. compound monthly)
+ * - RBI Bank Rate (5.75% -> 3× Bank Rate = 17.25% p.a. compound monthly)
  * - MCA V3 Portal 4-category reporting architecture
  * - Real ROC Orders: Natrinai Ventures Ltd (₹9L), Samsung R&D (~₹11.67L)
  */
@@ -80,7 +80,7 @@ export interface Msme1CalculationResult {
 
   // Layer 2: MSMED Act Section 16 Compound Interest
   rbiBankRate: number;
-  msmeInterestRate: number; // 3x Bank Rate = 16.50%
+  msmeInterestRate: number; // 3x Bank Rate = 17.25%
   delayedPrincipal: number;
   penalInterestPayable: number;
   interestTaxDeductible: boolean; // false under Sec 23
@@ -113,8 +113,8 @@ export interface Msme1CalculationResult {
   }[];
 }
 
-export const CURRENT_RBI_BANK_RATE = 5.50; // RBI Press Release MPC Resolution Aug 2026
-export const MSME_PENAL_INTEREST_RATE = 3 * CURRENT_RBI_BANK_RATE; // 16.50% p.a.
+export const CURRENT_RBI_BANK_RATE = 5.75; // RBI Circular DoR.RET.REC.239/12.01.001/2026-27 dated 07.10.2026
+export const MSME_PENAL_INTEREST_RATE = 3 * CURRENT_RBI_BANK_RATE; // 17.25% p.a.
 export const STANDARD_CORPORATE_TAX_RATE = 0.2517; // 25.17% (Base 22% + 10% Surcharge + 4% Cess)
 
 /**
@@ -144,7 +144,7 @@ export function getMsme1DueDate(halfYear: MsmeHalfYear, financialYear: string): 
 
 /**
  * Computes compound interest under Section 16 of MSMED Act:
- * Compound interest with monthly rests at 3× RBI Bank Rate (16.50% p.a.)
+ * Compound interest with monthly rests at 3× RBI Bank Rate (17.25% p.a.)
  */
 export function calculateSection16Interest(principal: number, delayDays: number, annualRate: number = MSME_PENAL_INTEREST_RATE): number {
   if (principal <= 0 || delayDays <= 0) return 0;
@@ -342,7 +342,7 @@ export function calculateMsme1Compliance(params: Msme1CalculationParams): Msme1C
     {
       step: 4,
       title: 'Calculate Section 16 Interest & Section 43B(h) Provision',
-      description: `Provide for compound interest at 16.50% p.a. (3× 5.50% RBI Bank Rate) with monthly rests and mark non-deductible in tax audit return.`,
+      description: `Provide for compound interest at 17.25% p.a. (3× 5.75% RBI Bank Rate) with monthly rests and mark non-deductible in tax audit return.`,
       mandatory: delayedPrincipalAmount > 0
     },
     {

@@ -299,7 +299,7 @@ export default function LLPFeePage() {
               <strong>Form 3 (LLP Agreement) Deadline:</strong> Must be executed on State non-judicial stamp paper and filed with ROC strictly <strong className="text-slate-900 dark:text-white">within 30 calendar days of incorporation</strong> (Annexure-A Item 3 base fee: ₹500 to ₹5,000).
             </p>
             <p>
-              <strong>LLP Incorporation (FiLLiP) Fees:</strong> Governed by Annexure-A Item 1 based on contribution: ≤ ₹1L = ₹500; ₹1L–₹5L = ₹2,000; ₹5L–₹10L = ₹4,000; ≥ ₹10L = ₹5,000 (plus ₹155 PAN/TAN).
+              <strong>LLP Incorporation (FiLLiP) Fees:</strong> Governed by Annexure-A Item 1 based on contribution: ≤ ₹1L = ₹500; ₹1L–₹5L = ₹2,000; ₹5L–₹10L = ₹4,000; ₹10L–₹25L = ₹5,000; ₹25L–₹1Cr = ₹10,000; &gt; ₹1Cr = ₹25,000 (plus ₹155 PAN/TAN).
             </p>
             <p>
               <strong>Form 24 Strike-Off (Closure):</strong> Flat government fee of <strong className="text-slate-900 dark:text-white">₹500 for Small LLPs</strong> and <strong className="text-slate-900 dark:text-white">₹1,000 for Other LLPs</strong> (zero late fees).

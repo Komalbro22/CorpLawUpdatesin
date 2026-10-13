@@ -563,7 +563,7 @@ export const POST_INCORPORATION_CHECKLIST: ComplianceMilestone[] = [
     statutorySection: 'Section 56(4), Companies Act 2013',
     section: 'Section 56(4)',
     daysFromIncorporation: 60,
-    penaltySummary: '₹25,000 to ₹5,00,000 on company; ₹10,000 to ₹1,00,000 on officer.',
+    penaltySummary: '₹50,000 on the company and ₹50,000 on every officer in default (Section 56(6))',
     isCritical: false
   },
   {
@@ -928,9 +928,6 @@ export function calculateSpiceIncorporation(params: SpiceCalculationParams): Spi
 
   // Advisory Warnings
   const warnings: string[] = [];
-  if (isMcaFeeZero) {
-    warnings.push(`🎉 Zero MCA Filing Fee: You saved ₹${baselineFeeWithoutWaiver.toLocaleString('en-IN')} because authorized capital is within the ₹15,00,000 exemption limit under G.S.R. 329(E).`);
-  }
   if (stamp.rule.stateCode === 'KA') {
     warnings.push(`⚠️ Karnataka Stamp Rate: Under the Feb 2024 amendment, AOA stamp duty is levied at ₹5,000 per ₹10 Lakhs of authorized capital.`);
   }

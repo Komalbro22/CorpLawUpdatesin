@@ -563,7 +563,7 @@ export function calculateSh7Compliance(input: Sh7Input): Sh7CalculationResult {
   // 6. Statutory Adjudication Penalties under Section 64(2)
   // Governed by Section 454 adjudication procedure - NEVER paid on form filing challan.
   // Standard: ₹500/day | Company cap: ₹5,00,000 | Officer cap: ₹1,00,000
-  // Section 446B Relief: 50% discount (₹250/day) | Company cap: ₹2,00,000 | Officer cap: ₹1,00,000 (statutory ceiling retained)
+  // Section 446B Relief: 50% discount (₹250/day) | Company cap: ₹2,00,000 | Officer cap: ₹50,000
   const isSmallOrStartup =
     companyType === 'small_company' ||
     companyType === 'opc' ||
@@ -577,7 +577,7 @@ export function calculateSh7Compliance(input: Sh7Input): Sh7CalculationResult {
   const standardOfficerCap = 100000
 
   const companyPenaltyCap = isSmallOrStartup ? 200000 : standardCompanyCap
-  const officerPenaltyCap = standardOfficerCap
+  const officerPenaltyCap = isSmallOrStartup ? 50000 : standardOfficerCap
 
   const rawDailyPenalty = delayDays * dailyPenaltyRate
 

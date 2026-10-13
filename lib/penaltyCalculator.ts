@@ -705,8 +705,8 @@ export type MethodologyStatus =
 export interface RbiBankRateEntry {
   effectiveFrom: string; // YYYY-MM-DD (inclusive)
   effectiveTo: string;   // YYYY-MM-DD (inclusive, '9999-12-31' for current)
-  bankRate: number;      // e.g. 5.50
-  statutoryRate: number; // 3 * bankRate, e.g. 16.50
+  bankRate: number;      // e.g. 5.75
+  statutoryRate: number; // 3 * bankRate, e.g. 17.25
   rbiNotificationReference: string;
   sourceUrl: string;
   verifiedAt: string;
@@ -720,11 +720,11 @@ export const VERIFIED_RBI_BANK_RATE_DATASET: RbiBankRateEntry[] = [
   {
     effectiveFrom: '2025-12-05',
     effectiveTo: '9999-12-31',
-    bankRate: 5.50,
-    statutoryRate: 16.50,
-    rbiNotificationReference: 'RBI Monetary Policy Resolution December 2025',
+    bankRate: 5.75,
+    statutoryRate: 17.25,
+    rbiNotificationReference: 'RBI Circular No. DoR.RET.REC.239/12.01.001/2026-27 (RBI/2026-27/283) dated 07.10.2026',
     sourceUrl: 'https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx',
-    verifiedAt: '2026-08-21'
+    verifiedAt: '2026-10-07'
   },
   {
     effectiveFrom: '2025-06-06',
@@ -1221,8 +1221,8 @@ export function calculateMsmeInterest(params: MsmeInterestParams): MsmeInterestR
       daysPastDueDate: 0,
       interestBearingDays: 0,
       interestAccrualPeriod: { from: '', to: '' },
-      appliedBankRate: 5.50,
-      appliedStatutoryRate: 16.50,
+      appliedBankRate: 5.75,
+      appliedStatutoryRate: 17.25,
       accruedInterest: 0,
       totalPayable: 0,
       schedule: [],
@@ -1255,8 +1255,8 @@ export function calculateMsmeInterest(params: MsmeInterestParams): MsmeInterestR
       daysPastDueDate: 0,
       interestBearingDays: 0,
       interestAccrualPeriod: { from: '', to: '' },
-      appliedBankRate: 5.50,
-      appliedStatutoryRate: 16.50,
+      appliedBankRate: 5.75,
+      appliedStatutoryRate: 17.25,
       accruedInterest: 0,
       totalPayable: invoiceAmount,
       schedule: [],

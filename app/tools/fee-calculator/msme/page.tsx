@@ -5,6 +5,7 @@ import MSMEFeeCalc from '../components/MSMEFeeCalc'
 import MSMEFAQ from './MSMEFAQ'
 import { supabase } from '@/lib/supabase'
 import ReaderFeedback from '@/components/ReaderFeedback'
+import { calculateMsmeInterest } from '@/lib/penaltyCalculator'
 
 export const metadata: Metadata = {
   title: {
@@ -156,6 +157,13 @@ const msmeJsonLd = {
   ]
 }
 
+const msmeWorkedExample = calculateMsmeInterest({
+  invoiceAmount: 1000000,
+  deliveryDate: '2026-01-01',
+  actualPaymentDate: '2026-04-01',
+  bankRateOverride: 5.75,
+})
+
 function MSMESEO() {
   return (
     <article className="prose prose-slate dark:prose-invert max-w-none mb-16">
@@ -185,7 +193,7 @@ function MSMESEO() {
             3x RBI Bank Rate Compounding (Section 16)
           </div>
           <p className="text-xs text-red-800 dark:text-red-300 leading-relaxed">
-            Delayed amounts attract mandatory compound interest with calendar monthly rests at <strong>3x the RBI Bank Rate</strong>. With the operative RBI Bank Rate benchmarked at <strong>6.75%</strong>, the applicable statutory interest rate is <strong>20.25% p.a.</strong> (compounded monthly).
+            Delayed amounts attract mandatory compound interest with calendar monthly rests at <strong>3x the RBI Bank Rate</strong>. With the operative RBI Bank Rate benchmarked at <strong>5.75%</strong>, the applicable statutory interest rate is <strong>17.25% p.a.</strong> (compounded monthly).
           </p>
         </div>
 
@@ -239,26 +247,26 @@ function MSMESEO() {
             <tbody className="divide-y divide-slate-800/80 text-slate-300 font-mono">
               <tr>
                 <td className="py-2.5 px-3 font-sans font-medium text-white">FY 2026-27 (as on 31st March 2026)</td>
-                <td className="py-2.5 px-3">6.75%</td>
-                <td className="py-2.5 px-3 font-bold text-amber-400 text-sm">20.25% p.a.</td>
+                <td className="py-2.5 px-3">5.75%</td>
+                <td className="py-2.5 px-3 font-bold text-amber-400 text-sm">17.25% p.a.</td>
                 <td className="py-2.5 px-3 font-sans text-slate-400 text-[11px]">Section 16 MSMED Act 2006</td>
               </tr>
               <tr>
                 <td className="py-2.5 px-3 font-sans font-medium text-white">FY 2025-26 (Full Fiscal Year)</td>
-                <td className="py-2.5 px-3">6.75%</td>
-                <td className="py-2.5 px-3 font-bold text-amber-400 text-sm">20.25% p.a.</td>
+                <td className="py-2.5 px-3">5.75%</td>
+                <td className="py-2.5 px-3 font-bold text-amber-400 text-sm">17.25% p.a.</td>
                 <td className="py-2.5 px-3 font-sans text-slate-400 text-[11px]">Section 16 MSMED Act 2006</td>
               </tr>
               <tr>
                 <td className="py-2.5 px-3 font-sans font-medium text-white">FY 2024-25 (Full Fiscal Year)</td>
-                <td className="py-2.5 px-3">6.75%</td>
-                <td className="py-2.5 px-3 font-bold text-amber-400 text-sm">20.25% p.a.</td>
+                <td className="py-2.5 px-3">5.75%</td>
+                <td className="py-2.5 px-3 font-bold text-amber-400 text-sm">17.25% p.a.</td>
                 <td className="py-2.5 px-3 font-sans text-slate-400 text-[11px]">Section 16 MSMED Act 2006</td>
               </tr>
               <tr>
                 <td className="py-2.5 px-3 font-sans font-medium text-slate-400">FY 2023-24 (w.e.f. 8 Feb 2023)</td>
-                <td className="py-2.5 px-3">6.75%</td>
-                <td className="py-2.5 px-3 font-bold text-amber-400 text-sm">20.25% p.a.</td>
+                <td className="py-2.5 px-3">5.75%</td>
+                <td className="py-2.5 px-3 font-bold text-amber-400 text-sm">17.25% p.a.</td>
                 <td className="py-2.5 px-3 font-sans text-slate-400 text-[11px]">RBI Monetary Policy Statement</td>
               </tr>
             </tbody>
@@ -360,7 +368,7 @@ function MSMESEO() {
           =Principal * ((1 + (AnnualRate/12))^Months - 1)
         </div>
         <p className="text-[11px] text-emerald-800 dark:text-emerald-400">
-          Example: For ₹5,00,000 overdue at 20.25% p.a. for 4 delayed months, enter: <code className="bg-emerald-100 dark:bg-emerald-900/60 px-1.5 py-0.5 rounded-sm font-mono">=500000 * ((1 + (20.25%/12))^4 - 1)</code>. You can also export an itemized calculation schedule PDF directly using the <strong>Download PDF</strong> button in our calculator above.
+          Example: For ₹5,00,000 overdue at 17.25% p.a. for 4 delayed months, enter: <code className="bg-emerald-100 dark:bg-emerald-900/60 px-1.5 py-0.5 rounded-sm font-mono">=500000 * ((1 + (17.25%/12))^4 - 1)</code>. You can also export an itemized calculation schedule PDF directly using the <strong>Download PDF</strong> button in our calculator above.
         </p>
       </div>
 
@@ -389,29 +397,29 @@ function MSMESEO() {
             <tr>
               <td className="p-2.5 font-sans font-medium">Month 1</td>
               <td className="p-2.5">17 Jan 2026 &rarr; 17 Feb 2026</td>
-              <td className="p-2.5 text-right">31</td>
-              <td className="p-2.5 text-right">16.50%</td>
-              <td className="p-2.5 text-right">₹ 10,00,000</td>
-              <td className="p-2.5 text-right text-red-600 dark:text-red-400 font-bold">₹ 13,750</td>
-              <td className="p-2.5 text-right font-bold">₹ 10,13,750</td>
+              <td className="p-2.5 text-right">{msmeWorkedExample.schedule[0].daysInPeriod}</td>
+              <td className="p-2.5 text-right">{msmeWorkedExample.schedule[0].appliedStatutoryRate.toFixed(2)}%</td>
+              <td className="p-2.5 text-right">₹ {Math.round(msmeWorkedExample.schedule[0].openingPrincipal).toLocaleString('en-IN')}</td>
+              <td className="p-2.5 text-right text-red-600 dark:text-red-400 font-bold">₹ {Math.round(msmeWorkedExample.schedule[0].interestThisMonth).toLocaleString('en-IN')}</td>
+              <td className="p-2.5 text-right font-bold">₹ {Math.round(msmeWorkedExample.schedule[0].totalPayable).toLocaleString('en-IN')}</td>
             </tr>
             <tr>
               <td className="p-2.5 font-sans font-medium">Month 2</td>
               <td className="p-2.5">17 Feb 2026 &rarr; 17 Mar 2026</td>
-              <td className="p-2.5 text-right">28</td>
-              <td className="p-2.5 text-right">16.50%</td>
-              <td className="p-2.5 text-right">₹ 10,13,750</td>
-              <td className="p-2.5 text-right text-red-600 dark:text-red-400 font-bold">₹ 13,939</td>
-              <td className="p-2.5 text-right font-bold">₹ 10,27,689</td>
+              <td className="p-2.5 text-right">{msmeWorkedExample.schedule[1].daysInPeriod}</td>
+              <td className="p-2.5 text-right">{msmeWorkedExample.schedule[1].appliedStatutoryRate.toFixed(2)}%</td>
+              <td className="p-2.5 text-right">₹ {Math.round(msmeWorkedExample.schedule[1].openingPrincipal).toLocaleString('en-IN')}</td>
+              <td className="p-2.5 text-right text-red-600 dark:text-red-400 font-bold">₹ {Math.round(msmeWorkedExample.schedule[1].interestThisMonth).toLocaleString('en-IN')}</td>
+              <td className="p-2.5 text-right font-bold">₹ {Math.round(msmeWorkedExample.schedule[1].totalPayable).toLocaleString('en-IN')}</td>
             </tr>
             <tr>
               <td className="p-2.5 font-sans font-medium">Month 3</td>
               <td className="p-2.5">17 Mar 2026 &rarr; 1 Apr 2026</td>
-              <td className="p-2.5 text-right">15</td>
-              <td className="p-2.5 text-right">16.50%</td>
-              <td className="p-2.5 text-right">₹ 10,27,689</td>
-              <td className="p-2.5 text-right text-red-600 dark:text-red-400 font-bold">₹ 6,864</td>
-              <td className="p-2.5 text-right font-bold text-purple-700 dark:text-purple-300">₹ 10,34,553</td>
+              <td className="p-2.5 text-right">{msmeWorkedExample.schedule[2].daysInPeriod}</td>
+              <td className="p-2.5 text-right">{msmeWorkedExample.schedule[2].appliedStatutoryRate.toFixed(2)}%</td>
+              <td className="p-2.5 text-right">₹ {Math.round(msmeWorkedExample.schedule[2].openingPrincipal).toLocaleString('en-IN')}</td>
+              <td className="p-2.5 text-right text-red-600 dark:text-red-400 font-bold">₹ {Math.round(msmeWorkedExample.schedule[2].interestThisMonth).toLocaleString('en-IN')}</td>
+              <td className="p-2.5 text-right font-bold text-purple-700 dark:text-purple-300">₹ {Math.round(msmeWorkedExample.schedule[2].totalPayable).toLocaleString('en-IN')}</td>
             </tr>
           </tbody>
         </table>
@@ -474,8 +482,9 @@ async function getSettings() {
 
 export default async function MSMEFeePage() {
   const settings = await getSettings()
-  const bankRateStr = settings.rbi_bank_rate ? settings.rbi_bank_rate : '5.50'
-  const bankRateNum = parseFloat(bankRateStr) || 5.50
+  const rawBankRate = settings.rbi_bank_rate
+  const bankRateStr = (!rawBankRate || rawBankRate === '5.50' || rawBankRate === '5.5') ? '5.75' : rawBankRate
+  const bankRateNum = parseFloat(bankRateStr) || 5.75
   const msmeRateNum = bankRateNum * 3
   const nextMpcDate = settings.next_mpc_date || 'Scheduled MPC'
 

@@ -6,7 +6,7 @@ export interface FAQItem {
 export const companyFaqs: FAQItem[] = [
   {
     q: 'What is the normal fee for filing Company ROC forms on MCA V3?',
-    a: 'Under Table A (Items 5 & 6) of the Companies (Registration Offices and Fees) Rules, 2014, normal filing fees are determined uniformly across all corporate types based on nominal (authorized) share capital: ₹200 for capital under ₹1 Lakh; ₹300 for ₹1 Lakh to ₹4,99,999; ₹400 for ₹5 Lakhs to ₹24,99,999; ₹500 for ₹25 Lakhs to ₹99,99,999; and ₹600 for ₹1 Crore or more. Companies without share capital pay a flat fee of ₹200. For new incorporation under SPICe+ (INC-32), government fees are waived (₹0) for nominal capital up to ₹15 Lakhs for Small Companies & OPCs and up to ₹10 Lakhs for other companies.'
+    a: 'Under Table A (Items 5 & 6) of the Companies (Registration Offices and Fees) Rules, 2014, normal filing fees are determined uniformly across all corporate types based on nominal (authorized) share capital: ₹200 for capital under ₹1 Lakh; ₹300 for ₹1 Lakh to ₹4,99,999; ₹400 for ₹5 Lakhs to ₹24,99,999; ₹500 for ₹25 Lakhs to ₹99,99,999; and ₹600 for ₹1 Crore or more. Companies without share capital pay a flat fee of ₹200. For new incorporation under SPICe+ (INC-32), government fees are waived (₹0) for companies with authorized capital up to ₹15,00,000 (₹15 Lakhs) under Notification G.S.R. 329(E).'
   },
   {
     q: 'How is the late fee calculated for Annual Returns (Form AOC-4 and MGT-7)?',
@@ -34,7 +34,7 @@ export const companyFaqs: FAQItem[] = [
   },
   {
     q: 'How is state-wise stamp duty calculated on Form SH-7 and SPICe+?',
-    a: 'Stamp duty is governed by state stamp acts, not the central Companies Act. For Form SH-7 (increase in authorized capital), stamp duty is payable on the incremental capital: for example, Maharashtra charges 0.2% subject to a statutory cap of ₹50 Lakhs, Delhi charges 0.15%, and Karnataka charges 0.5% (capped at ₹5 Lakhs). For SPICe+ (incorporation), stamp duty applies to the Articles of Association (AOA) and Memorandum of Association (MOA) based on the state of the registered office.'
+    a: 'Stamp duty is governed by state stamp acts, not the central Companies Act. For Form SH-7 (increase in authorized capital), stamp duty is payable on the incremental capital: for example, Maharashtra charges 0.3% subject to a statutory cap of ₹1 Crore, Delhi charges 0.15% (capped at ₹25 Lakhs), and Karnataka charges ₹5,000 for every ₹10 Lakhs or part thereof (capped at ₹1 Crore). For SPICe+ (incorporation), stamp duty applies to the Articles of Association (AOA) and Memorandum of Association (MOA) based on the state of the registered office.'
   },
   {
     q: 'What is the statutory deadline for filing Form ADT-1 after auditor appointment?',

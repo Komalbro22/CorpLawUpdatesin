@@ -456,7 +456,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         '@type': 'HowToStep',
         position: 4,
         name: 'Calculate Section 16 Penal Interest & Section 43B(h) Provision',
-        text: 'Compute compound interest at 16.50% p.a. (3× 5.50% RBI Bank Rate) with monthly rests and account for permanent tax disallowance under Section 23 of MSMED Act and Section 43B(h).'
+        text: 'Compute compound interest at 17.25% p.a. (3× 5.75% RBI Bank Rate) with monthly rests and account for permanent tax disallowance under Section 23 of MSMED Act and Section 43B(h).'
       },
       {
         '@type': 'HowToStep',
@@ -758,7 +758,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               : form.slug === 'dir-12'
               ? 'Complete guide to file DIR-12 within 30 days of director appointment, resignation, or change in designation. Calculate MCA V3 filing fees, Table B late multipliers (2× to 12×), and checklist rules.'
               : form.slug === 'msme-1'
-              ? 'Calculate Section 405(4) adjudication penalties (₹20,000 + ₹1,000/day up to ₹3,00,000), 31 Oct / 30 Apr due dates, V3 4-category reporting rules, Section 16 penal interest (16.50%), and Section 43B(h) tax disallowance.'
+              ? 'Calculate Section 405(4) adjudication penalties (₹20,000 + ₹1,000/day up to ₹3,00,000), 31 Oct / 30 Apr due dates, V3 4-category reporting rules, Section 16 penal interest (17.25%), and Section 43B(h) tax disallowance.'
               : form.slug === 'pas-3'
               ? 'When is Form PAS-3 due? 15 days for private placements (Section 42), 30 days for other allotments (Section 39). Calculate MCA Table A base fees, Table B late fee multipliers (2× to 12×), and Section 42(9) promoter liability.'
               : form.slug === 'pas-6'
@@ -923,7 +923,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               <span>⚡</span> Fast Statutory Summary • Section 405 &amp; MSMED Act
             </div>
             <p className="text-slate-800 dark:text-slate-200 text-sm md:text-base leading-relaxed font-medium">
-              Form MSME-1 is a mandatory half-yearly return due 31 October (Apr–Sep) and 30 April (Oct–Mar) for companies with overdue vendor payments exceeding 45 days. Portal filing fee is ₹0. Default attracts Section 405(4) adjudication penalties of ₹20,000 base + ₹1,000/day (capped at ₹3,00,000 each for company and officers) plus Section 16 penal compound interest at 16.50% p.a.
+              Form MSME-1 is a mandatory half-yearly return due 31 October (Apr–Sep) and 30 April (Oct–Mar) for companies with overdue vendor payments exceeding 45 days. Portal filing fee is ₹0. Default attracts Section 405(4) adjudication penalties of ₹20,000 base + ₹1,000/day (capped at ₹3,00,000 each for company and officers) plus Section 16 penal compound interest at 17.25% p.a.
             </p>
             <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-3">
               <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Due Dates: 31 Oct &amp; 30 Apr</span>
@@ -932,7 +932,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               <span>•</span>
               <span className="font-semibold text-slate-700 dark:text-slate-300">✓ Sec 405(4): ₹20,000 + ₹1,000/day (Max ₹3L Each)</span>
               <span>•</span>
-              <span className="font-semibold text-rose-600 dark:text-rose-400">✓ Sec 16 Interest: 16.50% p.a. Monthly Rests</span>
+              <span className="font-semibold text-rose-600 dark:text-rose-400">✓ Sec 16 Interest: 17.25% p.a. Monthly Rests</span>
             </div>
           </div>
         )}
@@ -1335,7 +1335,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
                     <tr><td className="px-4 py-3 font-bold text-navy dark:text-white">Subject Matter</td><td className="px-4 py-3">Audited Financial Statements & Accounts</td><td className="px-4 py-3">Annual Return (Shareholding, Directors, Governance)</td></tr>
                     <tr><td className="px-4 py-3 font-bold text-navy dark:text-white">Governing Section</td><td className="px-4 py-3 font-medium">Section 137, Companies Act 2013</td><td className="px-4 py-3 font-medium">Section 92, Companies Act 2013</td></tr>
                     <tr><td className="px-4 py-3 font-bold text-navy dark:text-white">Statutory Due Date</td><td className="px-4 py-3 font-bold text-blue-600">Within 30 days of AGM (30th October)</td><td className="px-4 py-3 font-bold text-purple-600">Within 60 days of AGM (29th November)</td></tr>
-                    <tr><td className="px-4 py-3 font-bold text-navy dark:text-white">OPC Statutory Due Date</td><td className="px-4 py-3">Within 180 days of FY closure (27th Sept)</td><td className="px-4 py-3">Within 60 days of deemed adoption</td></tr>
+                    <tr><td className="px-4 py-3 font-bold text-navy dark:text-white">OPC Statutory Due Date</td><td className="px-4 py-3">Within 180 days of FY closure (27th Sept)</td><td className="px-4 py-3">Within 60 days of the AGM</td></tr>
                     <tr><td className="px-4 py-3 font-bold text-navy dark:text-white">MCA V3 Late Filing Fee</td><td className="px-4 py-3">Flat ₹100 per day (Uncapped)</td><td className="px-4 py-3">Flat ₹100 per day (Uncapped)</td></tr>
                     <tr><td className="px-4 py-3 font-bold text-navy dark:text-white">Small Company Form</td><td className="px-4 py-3">Form AOC-4 (Cash flow exempt)</td><td className="px-4 py-3">Form MGT-7A (Abridged annual return)</td></tr>
                     <tr><td className="px-4 py-3 font-bold text-navy dark:text-white">Civil Penalty Section</td><td className="px-4 py-3">Section 137(3) (Co: ₹2L, Off: ₹50k)</td><td className="px-4 py-3">Section 92(5) (Co: ₹2L, Off: ₹50k)</td></tr>
@@ -1479,7 +1479,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
                     <tr>
                       <td className="px-4 py-3 font-bold text-navy dark:text-white">Standard Private Company (Non-Small, Capital &lt; ₹10 Cr, Turnover &lt; ₹50 Cr)</td>
                       <td className="px-4 py-3 font-medium text-blue-600">Form MGT-7</td>
-                      <td className="px-4 py-3">Director + Company Secretary in Practice (PCS)</td>
+                      <td className="px-4 py-3">Director + Company Secretary (a PCS signs only where the company has no company secretary in employment)</td>
                       <td className="px-4 py-3 text-slate-500">Not required (Signed on form)</td>
                     </tr>
                     <tr className="bg-amber-50/40 dark:bg-amber-950/20">
@@ -2512,7 +2512,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
                     <tr>
                       <td className="px-4 py-3 font-bold text-amber-600">Layer 2: Commercial Penal Interest</td>
                       <td className="px-4 py-3 font-medium">Section 16, MSMED Act 2006</td>
-                      <td className="px-4 py-3">Compound interest at 3× RBI Bank Rate (16.50% p.a.) with monthly rests</td>
+                      <td className="px-4 py-3">Compound interest at 3× RBI Bank Rate (17.25% p.a.) with monthly rests</td>
                       <td className="px-4 py-3 font-semibold text-amber-600">Payable directly to vendor; permanently NON-DEDUCTIBLE (Sec 23)</td>
                     </tr>
                     <tr>
@@ -2978,8 +2978,8 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
                     <tr>
                       <td className="px-4 py-3 font-medium">Every Officer in Default</td>
                       <td className="px-4 py-3">Section 147(1)</td>
-                      <td className="px-4 py-3 font-bold text-red-600">₹10,000 to ₹1,00,000 (or Imprisonment up to 1 yr)</td>
-                      <td className="px-4 py-3 font-mono font-bold text-purple-600 text-right">50% Relief (Max ₹1,00,000)</td>
+                      <td className="px-4 py-3 font-bold text-red-600">₹10,000 to ₹1,00,000 (Only monetary penalty applies: ₹25,000 on the company + ₹5,000 per officer in default, per Section 147(1))</td>
+                      <td className="px-4 py-3 font-mono font-bold text-purple-600 text-right">50% Relief (Max ₹50,000)</td>
                     </tr>
                   </tbody>
                 </table>

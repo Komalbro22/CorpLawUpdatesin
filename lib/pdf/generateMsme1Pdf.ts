@@ -247,7 +247,7 @@ export function generateMsme1Pdf(
   currentY = (doc as any).lastAutoTable.finalY + 6;
 
   // 6. Disclaimer & Footers
-  const disclaimerText = 'Statutory Note: Form MSME-1 incurs INR 0 portal fee upon submission. Penalties under Section 405(4) of the Companies Act, 2013 (INR 20,000 base + INR 1,000 per day continuing default, capped at INR 3,00,000 each for company and officers) are levied through civil adjudication under Section 454. Precedent orders include Natrinai Ventures Ltd (INR 9 Lakhs) and Samsung R&D India (~INR 11.67 Lakhs). Section 16 penal compound interest is payable directly to MSME vendors at 3× RBI Bank Rate (16.50% p.a.).';
+  const disclaimerText = 'Statutory Note: Form MSME-1 incurs INR 0 portal fee upon submission. Penalties under Section 405(4) of the Companies Act, 2013 (INR 20,000 base + INR 1,000 per day continuing default, capped at INR 3,00,000 each for company and officers) are levied through civil adjudication under Section 454. Precedent orders include Natrinai Ventures Ltd (INR 9 Lakhs) and Samsung R&D India (~INR 11.67 Lakhs). Section 16 penal compound interest is payable directly to MSME vendors at 3× RBI Bank Rate (17.25% p.a.).';
   renderSafeDisclaimer(doc, disclaimerText, currentY);
   renderPageFooters(doc, 'Form MSME-1 Half-Yearly Return | CorpLawUpdates.in');
 

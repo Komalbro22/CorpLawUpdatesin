@@ -38,7 +38,7 @@ export const LLP_FAQS: FaqItem[] = [
   },
   {
     q: 'What are the MCA government fees for LLP incorporation and registration in Form FiLLiP?',
-    a: 'Under Annexure-A Item 1 of the LLP Rules, 2009, MCA registration fees for Form FiLLiP are based on proposed contribution: ≤ ₹1 Lakh = ₹500; ₹1L to ₹5L = ₹2,000; ₹5L to ₹10L = ₹4,000; and ≥ ₹10 Lakhs = ₹5,000. In addition, mandatory PAN (₹78) and TAN (₹77) electronic processing fees total ₹155. DPIN / DIN for up to 2 designated partners is included at no extra charge. If name reservation is done beforehand via RUN-LLP, an additional ₹200 fee applies.',
+    a: 'Under Annexure-A Item 1 of the LLP Rules, 2009, MCA registration fees for Form FiLLiP are based on proposed contribution: ≤ ₹1L = ₹500; ₹1L–₹5L = ₹2,000; ₹5L–₹10L = ₹4,000; ₹10L–₹25L = ₹5,000; ₹25L–₹1Cr = ₹10,000; > ₹1Cr = ₹25,000. In addition, mandatory PAN (₹78) and TAN (₹77) electronic processing fees total ₹155. DPIN / DIN for up to 2 designated partners is included at no extra charge. If name reservation is done beforehand via RUN-LLP, an additional ₹200 fee applies.',
   },
   {
     q: 'What are the late filing fees for LLP Form 8 and Form 11 for Small LLPs?',

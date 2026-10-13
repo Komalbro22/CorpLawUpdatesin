@@ -12,7 +12,7 @@ import {
 import { generateMsmePdf } from '@/lib/pdf/generateMsmePdf'
 import IndianDateInput from '@/components/shared/IndianDateInput'
 
-export default function MSMEFeeCalc({ initialBankRate = '5.50' }: { initialBankRate?: string }) {
+export default function MSMEFeeCalc({ initialBankRate = '5.75' }: { initialBankRate?: string }) {
   // Step 1: Supplier Eligibility State
   const [enterpriseCategory, setEnterpriseCategory] = useState<'micro' | 'small' | 'medium' | 'large' | 'not_sure'>('micro')
   const [majorActivity, setMajorActivity] = useState<'manufacturing' | 'services' | 'trading_retail_wholesale' | 'not_sure'>('manufacturing')
@@ -128,7 +128,7 @@ export default function MSMEFeeCalc({ initialBankRate = '5.50' }: { initialBankR
       hasAgreement,
       agreedPaymentDate: hasAgreement ? agreedPaymentDate : undefined,
       actualPaymentDate,
-      bankRateOverride: isManualRateOverride ? parseFloat(bankRateOverride) || 5.50 : null,
+      bankRateOverride: isManualRateOverride ? parseFloat(bankRateOverride) || 5.75 : null,
       rateStrategy
     })
 

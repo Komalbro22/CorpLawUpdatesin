@@ -229,7 +229,7 @@ MCA V3 Portal Fee: ₹0 (Free of cost)
 Section 405(4) Company Penalty: ₹${result.companyPenalty.toLocaleString('en-IN')}
 Section 405(4) Officers Penalty (${result.numOfficers}x): ₹${result.totalOfficersPenalty.toLocaleString('en-IN')}
 Total Section 405 Exposure: ₹${result.totalSection405Exposure.toLocaleString('en-IN')}
-Section 16 Compound Interest (16.50% p.a.): ₹${result.penalInterestPayable.toLocaleString('en-IN')}
+Section 16 Compound Interest (17.25% p.a.): ₹${result.penalInterestPayable.toLocaleString('en-IN')}
 Section 43B(h) Tax Cash Outflow: ₹${result.estimatedTaxCashOutflow.toLocaleString('en-IN')}
 Total Combined Statutory Exposure: ₹${(result.totalSection405Exposure + result.penalInterestPayable + result.estimatedTaxCashOutflow).toLocaleString('en-IN')}
 Verified on CorpLawUpdates.in`
@@ -282,7 +282,7 @@ Verified on CorpLawUpdates.in`
               Form MSME-1 Half-Yearly Return &amp; Penalty Calculator
             </h2>
             <p className="text-slate-300 text-sm max-w-2xl leading-relaxed">
-              Calculate Section 405(4) adjudication exposure (₹20,000 base + ₹1,000/day), Section 16 MSMED Act compound interest at 16.50% p.a., Section 43B(h) tax disallowances, and V3 4-category disclosure obligations.
+              Calculate Section 405(4) adjudication exposure (₹20,000 base + ₹1,000/day), Section 16 MSMED Act compound interest at 17.25% p.a., Section 43B(h) tax disallowances, and V3 4-category disclosure obligations.
             </p>
           </div>
 
@@ -533,7 +533,7 @@ Verified on CorpLawUpdates.in`
                     className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-800 dark:text-slate-200 font-bold"
                   />
                   <p className="text-[11px] text-slate-500 mt-1">
-                    Used to calculate Section 16 penal compound interest (16.50% p.a.) and Section 43B(h) tax disallowance.
+                    Used to calculate Section 16 penal compound interest (17.25% p.a.) and Section 43B(h) tax disallowance.
                   </p>
                 </div>
 
@@ -635,7 +635,7 @@ Verified on CorpLawUpdates.in`
 
                 <div className="flex justify-between items-center">
                   <span className="text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
-                    <span>📈</span> Section 16 MSMED Interest (16.50%)
+                    <span>📈</span> Section 16 MSMED Interest (17.25%)
                   </span>
                   <span className="font-bold text-amber-600 dark:text-amber-400">
                     ₹{result.penalInterestPayable.toLocaleString('en-IN')}

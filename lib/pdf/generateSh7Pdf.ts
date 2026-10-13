@@ -188,7 +188,7 @@ export function generateSh7Pdf(
     ],
     [
       { content: 'Total Adjudication Liability (ROC Sec 454)', styles: { fontStyle: 'bold', fillColor: PDF_PALETTE.lightGray } },
-      { content: data.section446BApplied ? 'Illustrative maximum based on one-half of the statutory penalty rate: ₹250/day (Section 446B: penalty shall not be more than one-half; Company cap ₹2L, Officer statutory cap ₹1L)' : 'Standard Corporate Penalty Regime (Sec 64(2): ₹500/day, Co max ₹5L, Officer max ₹1L)', styles: { fontStyle: 'bold', fillColor: PDF_PALETTE.lightGray } },
+      { content: data.section446BApplied ? 'Illustrative maximum based on one-half of the statutory penalty rate: ₹250/day (Section 446B: penalty shall not be more than one-half; Company cap ₹2L, Officer statutory cap ₹50,000)' : 'Standard Corporate Penalty Regime (Sec 64(2): ₹500/day, Co max ₹5L, Officer max ₹1L)', styles: { fontStyle: 'bold', fillColor: PDF_PALETTE.lightGray } },
       { content: formatInr(data.totalAdjudicationPenalty), styles: { fontStyle: 'bold', fillColor: PDF_PALETTE.lightGray, textColor: [180, 0, 0] } }
     ]
   ]
