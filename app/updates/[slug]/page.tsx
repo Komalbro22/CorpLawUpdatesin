@@ -255,7 +255,24 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
             }
         }
 
-        // 2. If no <details><summary> FAQs were found, fallback to text markers (Q1, Q2, Question 1, etc.)
+        // 2. Try extracting HTML <h3> or <h4> question headings under a FAQ section
+        if (faqs.length === 0) {
+            const faqSectionMatch = update.content.match(/<h[23][^>]*>(?:Frequently Asked Questions|FAQs|FAQ)[\s\S]*$/i)
+            if (faqSectionMatch) {
+                const faqSection = faqSectionMatch[0]
+                const headingRegex = /<h[34]\b[^>]*>([\s\S]*?)<\/h[34]>\s*<p\b[^>]*>([\s\S]*?)<\/p>/gi
+                let hMatch: RegExpExecArray | null
+                while ((hMatch = headingRegex.exec(faqSection)) !== null) {
+                    const q = cleanText(hMatch[1].replace(/<[^>]*>/g, ''))
+                    const a = cleanText(hMatch[2].replace(/<[^>]*>/g, ''))
+                    if (q && a && q.length > 5 && a.length > 5 && (q.includes('?') || /^(what|when|from|where|how|why|is|will|can|does|do)/i.test(q))) {
+                        faqs.push({ question: q, answer: a })
+                    }
+                }
+            }
+        }
+
+        // 3. If no <details><summary> or <h3> FAQs were found, fallback to text markers (Q1, Q2, Question 1, etc.)
         if (faqs.length === 0) {
             // Convert HTML rich text to plain text, preserving paragraph breaks
             const plainText = update.content

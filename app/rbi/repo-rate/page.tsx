@@ -38,9 +38,32 @@ export async function generateMetadata(): Promise<Metadata> {
   const msfRate = settings.msf_rate || '5.75%'
 
   return {
-    title: `Current RBI Repo Rate in India: ${rate} (October 2026) | EMI Calculator & Dec MPC Schedule`,
-    description: `What is the current repo rate of RBI in India? Currently ${rate} following the October 2026 MPC 25 bps hike. Calculate your home loan EMI, check SDF (${sdfRate}), MSF (${msfRate}), Bank Rate, and next December MPC dates (${nextMpc}).`,
+    title: `Current RBI Repo Rate in India: ${rate} (Effective Date: 7 Oct 2026) | Loan Reset, SDF, MSF & Next MPC`,
+    description: `The new RBI repo rate of ${rate} is effective immediately from 7 October 2026 (commercial bank loan resets from 8 October 2026). Check SDF (${sdfRate}), MSF (${msfRate}), Bank Rate, home loan EMI calculator, and next December MPC dates (${nextMpc}).`,
     keywords: [
+      'new repo rate effective date',
+      'rbi repo rate effective date',
+      'rbi repo rate implementation date',
+      'from when it will be effective',
+      'repo rate effective date',
+      'repo rate changes in 2026',
+      'repo rate 2026',
+      'rbi monetary policy next date 2026',
+      'repo rate change effective date',
+      'rbi new repo rate effective date',
+      'new repo rate of rbi effective date',
+      'new repo rate applicable from which date',
+      'new repo rate implementation date',
+      'repo rate 5.50 effective date',
+      'msf and sdf rate',
+      'sdf and msf rate',
+      'revised repo rate effective date',
+      'when new repo rate will be applicable',
+      'repo rate kitna hai 2026',
+      'will repo rate increase in 2026',
+      'repo rate change date 2026',
+      'sbi repo rate today',
+      'pnb sms interest rate modified 08 10 2026',
       'what is the current repo rate of rbi in india',
       'current repo rate',
       'current rbi repo rate',
@@ -50,30 +73,23 @@ export async function generateMetadata(): Promise<Metadata> {
       'current repo rate of india',
       'rbi repo rate today',
       'rbi repo rate',
-      'repo rate rbi',
-      'rbi monetary policy current repo rate india',
-      'rbi repo rate next dec',
       'rbi current standing deposit facility rate october 2026 official sdf msf difference',
-      'rbi repo rate today calculator',
-      'october rbi repo rate 2026',
-      'current interest rate india 2026 rbi repo rate',
-      'current repo rate in kolkata india',
-      'current rbi repo rate and mpc stance october 2026',
       'sdf loan interest rate',
       'repo rate impact on home loan emi',
       'bank rate india 2026',
+      'kab se lagu hoga repo rate',
     ],
     alternates: { canonical: 'https://www.corplawupdates.in/rbi/repo-rate' },
     openGraph: {
-      title: `Current RBI Repo Rate in India: ${rate} (October 2026) — Live Status`,
-      description: `Official RBI benchmark repo rate stands at ${rate} in October 2026 with a Calibrated Tightening stance (+25 bps hike). View SDF (${sdfRate}), MSF (${msfRate}), next December MPC meeting schedule (${nextMpc}), and calculate loan EMI impact.`,
+      title: `Current RBI Repo Rate in India: ${rate} (Effective Date: 7 Oct 2026) — Live Status`,
+      description: `Official RBI benchmark repo rate stands at ${rate} in October 2026 with a Calibrated Tightening stance (+25 bps hike). Effective immediately from 7 October 2026 (bank loan resets from 8 October 2026). View SDF (${sdfRate}), MSF (${msfRate}), next December MPC meeting schedule (${nextMpc}), and calculate loan EMI impact.`,
       url: 'https://www.corplawupdates.in/rbi/repo-rate',
       type: 'article',
     },
     twitter: {
       card: 'summary_large_image',
-      title: `Current RBI Repo Rate in India: ${rate} (October 2026)`,
-      description: `Official RBI repo rate stands at ${rate}. Complete breakdown of SDF, MSF, Bank Rate, next December MPC meeting schedule, and interactive EMI calculator.`,
+      title: `Current RBI Repo Rate: ${rate} (Effective Date: 7 Oct 2026)`,
+      description: `Official RBI repo rate stands at ${rate}, effective immediately from 7 October 2026. Complete breakdown of SDF (${sdfRate}), MSF (${msfRate}), Bank Rate, bank loan reset timelines, next December MPC meeting schedule, and interactive EMI calculator.`,
     }
   }
 }
@@ -128,10 +144,34 @@ export default async function RepoRatePage() {
     mainEntity: [
       {
         '@type': 'Question',
+        name: 'From which date is the new RBI repo rate effective? (Effective Date & Implementation Schedule)',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `The new policy repo rate of ${repoRate} is effective immediately from 7 October 2026 for all RBI and interbank liquidity operations. For commercial bank retail borrowers (home loans, car loans, MSME credit) linked to External Benchmark Lending Rates (EBLR/RLLR), the revised rate takes effect from 8 October 2026 or on the borrower's next scheduled interest reset date (typically the 1st of the subsequent month or quarter).`
+        }
+      },
+      {
+        '@type': 'Question',
         name: 'What is the current repo rate of RBI in India (October 2026)?',
         acceptedAnswer: {
           '@type': 'Answer',
           text: `The current RBI repo rate in India is ${repoRate} as of October 2026. This policy rate was hiked by 25 basis points (from 5.25% to 5.50%) with a shift to a Calibrated Tightening stance by the 6-member Monetary Policy Committee (MPC) chaired by Governor Shri Sanjay Malhotra in its 63rd meeting. Because the MPC reviews interest rates bi-monthly, ${repoRate} remains India's operative benchmark lending rate until the next MPC resolution on ${nextMpc}.`
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Why did banks (SBI, PNB, HDFC, Bank of Baroda) send SMS stating interest rate modified from 08/10/2026?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `Under RBI guidelines on External Benchmark Linked Lending Rates (EBLR), commercial banks are required to adjust floating loan interest rates in tandem with repo rate revisions. When RBI hiked the repo rate by 25 bps on 7 October 2026, leading public and private banks (including SBI, Punjab National Bank, HDFC Bank, and Bank of Baroda) updated their benchmark lending rates effective from 8 October 2026. Borrowers received automated SMS notifications alerting them of this mandatory benchmark revision.`
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'What are the current SDF, MSF, Bank Rate, CRR, and SLR rates in India?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `Following the October 2026 policy hike, India's key policy interest rates and reserve requirements are: Policy Repo Rate: ${repoRate}, Standing Deposit Facility (SDF): ${sdfRate}, Marginal Standing Facility (MSF): ${msfRate}, Bank Rate: ${msfRate}, Fixed Reverse Repo Rate: 3.35%, Cash Reserve Ratio (CRR): 4.50%, and Statutory Liquidity Ratio (SLR): 18.00%.`
         }
       },
       {
@@ -144,10 +184,26 @@ export default async function RepoRatePage() {
       },
       {
         '@type': 'Question',
-        name: 'What are the current SDF, MSF, Bank Rate, CRR, and SLR rates in India?',
+        name: 'Will the RBI repo rate increase further or decrease in December 2026?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: `As of October 2026, India's key policy interest rates and reserve requirements are: Policy Repo Rate: ${repoRate}, Standing Deposit Facility (SDF): ${sdfRate}, Marginal Standing Facility (MSF): ${msfRate}, Bank Rate: ${msfRate}, Fixed Reverse Repo Rate: 3.35%, Cash Reserve Ratio (CRR): 4.50%, and Statutory Liquidity Ratio (SLR): 18.00%.`
+          text: `Rate cuts are ruled out in the near term because the MPC shifted its monetary policy stance to 'Calibrated Tightening'. With headline CPI inflation projected to average 5.8% over Q2-Q4 FY27 (peaking at 6.0% in Q3), economists and policy analysts project either a rate pause (hold at 5.50%) or a potential 25 bps follow-up hike, but no rate cuts until mid-2027.`
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'How does the current repo rate affect floating home loan EMIs (SBI, HDFC, ICICI, PNB)?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `All floating-rate retail home loans sanctioned by commercial banks are mandated by the RBI to be linked to External Benchmark Lending Rates (EBLR/RLLR). With the repo rate at ${repoRate}, home loan interest rates average between 8.65% and 9.60% p.a. across major lenders (SBI, HDFC Bank, ICICI Bank, PNB). A 25 bps hike adds approximately ₹16 per lakh in monthly EMI on a 20-year loan (approx. ₹480/month on a ₹30 lakh loan).`
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'RBI Repo Rate 2026: Kab Se Lagu Hoga Aur Loan Par Kya Asar Padega? (यह कब से लागू होगा?)',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `RBI का नया रेपो रेट 5.50% 7 अक्टूबर 2026 से तुरंत लागू (Effective Immediately) हो चुका है। बैंकों के होम लोन और पर्सनल लोन (EBLR/RLLR) पर यह 8 अक्टूबर 2026 या अगली रीसेट तारीख से लागू हो रहा है। 25 बेसिस पॉइंट की बढ़ोतरी से 20 साल के होम लोन पर प्रति 1 लाख रुपये पर लगभग ₹16 प्रति माह की EMI बढ़ोतरी होगी (यानी ₹30 लाख के लोन पर लगभग ₹480/महीना अधिक EMI)।`
         }
       },
       {
@@ -156,14 +212,6 @@ export default async function RepoRatePage() {
         acceptedAnswer: {
           '@type': 'Answer',
           text: `The Policy Repo Rate (${repoRate}) is the rate at which RBI lends short-term liquidity to commercial banks against government securities. The Standing Deposit Facility (SDF, ${sdfRate}) is the floor rate at which banks park excess liquidity with RBI without collateral. The Marginal Standing Facility (MSF, ${msfRate}) is the penal ceiling rate for emergency overnight borrowing. Together, SDF and MSF define the 50 bps policy corridor around the repo rate.`
-        }
-      },
-      {
-        '@type': 'Question',
-        name: 'How does the current repo rate affect floating home loan EMIs?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: `All floating-rate retail home loans sanctioned by commercial banks are mandated by the RBI to be linked to External Benchmark Lending Rates (EBLR/RLLR). With the repo rate at ${repoRate}, home loan interest rates average between 8.65% and 9.60% p.a. across major lenders (SBI, HDFC Bank, ICICI Bank, PNB), reflecting the 25 bps policy rate increase.`
         }
       },
       {
@@ -292,9 +340,13 @@ export default async function RepoRatePage() {
           </p>
 
           <div className="pt-2 flex flex-wrap items-center justify-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-white/10 text-slate-200 border border-white/10 backdrop-blur-xs">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 backdrop-blur-xs">
               <CheckCircle2 className="size-3.5 text-emerald-400" aria-hidden="true" />
-              Bi-Monthly Cycle: Rate active until {nextMpc}
+              Effective Date: Immediately from 7 October 2026
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-white/10 text-slate-200 border border-white/10 backdrop-blur-xs">
+              <Building2 className="size-3.5 text-blue-400" aria-hidden="true" />
+              Bank Loan Resets: From 8 October 2026 onwards
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-white/10 text-slate-200 border border-white/10 backdrop-blur-xs">
               <Clock className="size-3.5 text-amber-400" aria-hidden="true" />
@@ -305,10 +357,17 @@ export default async function RepoRatePage() {
           {/* QUICK JUMP CLICK MAGNET BUTTONS */}
           <div className="pt-3 flex flex-wrap items-center justify-center gap-2">
             <a
-              href="#emi-calculator"
+              href="#effective-date"
               className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-linear-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 shadow-md transition-all scale-100 hover:scale-[1.02] active:scale-[0.98]"
             >
-              <Calculator className="size-3.5 sm:size-4" aria-hidden="true" />
+              <Clock className="size-3.5 sm:size-4 text-slate-950" aria-hidden="true" />
+              <span>Effective Date &amp; Schedule</span>
+            </a>
+            <a
+              href="#emi-calculator"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/10 hover:bg-white/20 text-white border border-white/15 backdrop-blur-xs transition-colors"
+            >
+              <Calculator className="size-3.5 sm:size-4 text-amber-400" aria-hidden="true" />
               <span>Calculate Home Loan EMI</span>
             </a>
             <a
@@ -345,10 +404,10 @@ export default async function RepoRatePage() {
           <div className="bg-white/95 dark:bg-slate-900/95 p-4 sm:p-5 rounded-xl border border-amber-300 dark:border-amber-700/60 shadow-2xs space-y-2">
             <h2 className="font-heading font-extrabold text-base sm:text-lg text-slate-900 dark:text-white flex items-center gap-2">
               <span className="size-2 rounded-full bg-blue-600 dark:bg-blue-400" aria-hidden="true" />
-              What is the Current Repo Rate of RBI in India? (October 2026)
+              What is the Current Repo Rate &amp; Effective Date of RBI in India? (October 2026)
             </h2>
             <p className="text-sm sm:text-base text-slate-700 dark:text-slate-200 leading-relaxed">
-              The current RBI repo rate in India is <strong className="text-blue-700 dark:text-blue-400 font-extrabold text-lg tabular-nums">{repoRate}</strong> as of October 2026. At its 63rd meeting on October 7, 2026 (Press Release 2026-2027/1264), the Monetary Policy Committee (MPC) chaired by Governor Shri Sanjay Malhotra voted unanimously to increase the policy repo rate by 25 bps from 5.25% to 5.50%. Consequently, the Standing Deposit Facility (SDF) rate stands adjusted to <strong className="tabular-nums">{sdfRate}</strong>, the Marginal Standing Facility (MSF) and Bank Rate to <strong className="tabular-nums">{msfRate}</strong>, and Fixed Reverse Repo is 3.35%. The MPC also shifted its policy stance to <em>{stance}</em>, signaling that near-term rate cuts are off the table. This benchmark rate remains operative until the 64th MPC resolution on <strong>{nextMpc}</strong>.
+              The current RBI repo rate in India is <strong className="text-blue-700 dark:text-blue-400 font-extrabold text-lg tabular-nums">{repoRate}</strong>, which took effect with <strong className="text-emerald-700 dark:text-emerald-400 font-bold">immediate effect on 7 October 2026</strong> for all central bank and interbank liquidity operations. For commercial bank retail loans (home, personal, car, and MSME credit) linked to External Benchmark Lending Rates (EBLR/RLLR), bank loan rate resets take effect from <strong>8 October 2026 onwards</strong> or on the borrower&apos;s scheduled monthly/quarterly reset cycle. At its 63rd meeting on October 7, 2026 (Press Release 2026-2027/1264), the Monetary Policy Committee (MPC) chaired by Governor Shri Sanjay Malhotra voted unanimously to increase the policy repo rate by 25 bps from 5.25% to 5.50%. Consequently, the Standing Deposit Facility (SDF) rate stands adjusted to <strong className="tabular-nums">{sdfRate}</strong>, the Marginal Standing Facility (MSF) and Bank Rate to <strong className="tabular-nums">{msfRate}</strong>, and Fixed Reverse Repo is 3.35%. The MPC also shifted its policy stance to <em>{stance}</em>, signaling that near-term rate cuts are off the table. This benchmark rate remains operative until the 64th MPC resolution on <strong>{nextMpc}</strong>.
             </p>
           </div>
 
@@ -417,6 +476,97 @@ export default async function RepoRatePage() {
             </p>
           </div>
         </div>
+
+        {/* EFFECTIVE DATE & IMPLEMENTATION TIMELINE SECTION (Directly targets "new repo rate effective date" & "rbi repo rate implementation date") */}
+        <section id="effective-date" className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs p-6 sm:p-8 space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
+            <div className="flex items-center gap-2.5">
+              <span className="p-2 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300">
+                <Clock className="size-5" aria-hidden="true" />
+              </span>
+              <div>
+                <h2 className="text-xl font-heading font-bold text-slate-900 dark:text-white">
+                  When Is the New RBI Repo Rate Effective From? (Effective Date &amp; Implementation Dates)
+                </h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Official operational timelines for RBI market operations, commercial bank EBLR loan resets, and next MPC meeting.
+                </p>
+              </div>
+            </div>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 shrink-0 self-start sm:self-auto">
+              <span className="size-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
+              In Force Immediately
+            </span>
+          </div>
+
+          {/* 4 TIMELINE CARDS */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 space-y-1.5">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm text-[10px] font-extrabold uppercase bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200">
+                1. Announcement
+              </span>
+              <p className="font-heading font-black text-sm text-slate-900 dark:text-white">7 October 2026</p>
+              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                63rd MPC meeting resolution announced by Governor Shri Sanjay Malhotra via RBI Press Release 2026-2027/1264.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl border border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/50 dark:bg-emerald-950/20 space-y-1.5">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm text-[10px] font-extrabold uppercase bg-emerald-200 dark:bg-emerald-900/60 text-emerald-900 dark:text-emerald-200">
+                2. RBI Operations
+              </span>
+              <p className="font-heading font-black text-sm text-emerald-800 dark:text-emerald-300">Immediate Effect (7 Oct 2026)</p>
+              <p className="text-xs text-emerald-900/80 dark:text-emerald-300/80 leading-relaxed">
+                Operative repo rate (5.50%), SDF floor (5.25%), MSF ceiling (5.75%), and Bank Rate took effect same-day across all RBI windows.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl border border-blue-200 dark:border-blue-800/60 bg-blue-50/50 dark:bg-blue-950/20 space-y-1.5">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm text-[10px] font-extrabold uppercase bg-blue-200 dark:bg-blue-900/60 text-blue-900 dark:text-blue-200">
+                3. Bank Loan Resets
+              </span>
+              <p className="font-heading font-black text-sm text-blue-800 dark:text-blue-300">8 October 2026 onwards</p>
+              <p className="text-xs text-blue-900/80 dark:text-blue-300/80 leading-relaxed">
+                Commercial banks (SBI, PNB, HDFC, ICICI, BoB) update external benchmark lending rates (EBLR/RLLR) w.e.f. 08/10/2026 or on scheduled reset cycles.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl border border-amber-200 dark:border-amber-800/60 bg-amber-50/50 dark:bg-amber-950/20 space-y-1.5">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm text-[10px] font-extrabold uppercase bg-amber-200 dark:bg-amber-900/60 text-amber-900 dark:text-amber-200">
+                4. Next Policy Decision
+              </span>
+              <p className="font-heading font-black text-sm text-amber-800 dark:text-amber-300">4 December 2026 (10 AM)</p>
+              <p className="text-xs text-amber-900/80 dark:text-amber-300/80 leading-relaxed">
+                64th MPC meeting convenes 2 to 4 December 2026. Minutes of the October meeting released on 21 October 2026.
+              </p>
+            </div>
+          </div>
+
+          {/* BANK SMS NOTIFICATION & RESET DATE EXPLAINER */}
+          <div className="p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 space-y-2.5">
+            <div className="flex items-center gap-2">
+              <Building2 className="size-4 text-blue-600 dark:text-blue-400 shrink-0" aria-hidden="true" />
+              <h3 className="font-heading font-bold text-sm sm:text-base text-slate-900 dark:text-white">
+                Why Did Banks (SBI, PNB, HDFC, Bank of Baroda) Send SMS Alerting Interest Rate Changes From 08/10/2026?
+              </h3>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              If you received an SMS from your bank (such as <em>&quot;Dear Customer, interest rate on your loan account is revised w.e.f. 08/10/2026...&quot;</em>), this is the direct result of the RBI&apos;s 25 bps rate hike. Under RBI regulations, all floating-rate retail loans (home loans, loan against property, personal loans, and MSME credit) sanctioned after 1 October 2019 are linked to External Benchmark Lending Rates (EBLR or RLLR).
+            </p>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              When the RBI changes the repo rate, banks are required to pass the revision into their benchmark without delay. Leading banks updated their benchmark effective <strong>8 October 2026</strong>. For existing borrowers, the actual adjustment in monthly EMI or repayment tenure reflects on the customer&apos;s next scheduled reset date (monthly or quarterly cycle).
+            </p>
+            <div className="pt-1 flex flex-wrap items-center gap-3 text-xs">
+              <a href="#emi-calculator" className="font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1">
+                Calculate your exact revised EMI →
+              </a>
+              <span className="text-slate-300 dark:text-slate-700">·</span>
+              <a href="#bank-rates" className="font-bold text-slate-700 dark:text-slate-300 hover:underline">
+                View bank-by-bank EBLR spreads →
+              </a>
+            </div>
+          </div>
+        </section>
 
         {/* 4 KEY RATE BADGES */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -805,20 +955,40 @@ export default async function RepoRatePage() {
           <div className="space-y-4">
             {[
               {
+                q: 'From which date is the new RBI repo rate effective? (Effective Date & Implementation Schedule)',
+                a: `The new policy repo rate of ${repoRate} is effective immediately from 7 October 2026 for all RBI and interbank liquidity operations. For commercial bank retail borrowers (home loans, car loans, MSME credit) linked to External Benchmark Lending Rates (EBLR/RLLR), the revised rate takes effect from 8 October 2026 or on the borrower's next scheduled interest reset date (typically the 1st of the subsequent month or quarter).`,
+              },
+              {
                 q: 'What is the current repo rate of RBI in India? (October 2026)',
                 a: `The current RBI repo rate in India is ${repoRate} as of October 2026. This policy rate was hiked by 25 basis points (from 5.25% to 5.50%) at the 63rd Monetary Policy Committee (MPC) meeting under the chairmanship of Governor Shri Sanjay Malhotra with a unanimous 6-0 vote on the rate hike and a shift to Calibrated Tightening stance (4-2 majority). Because the MPC reviews rates bi-monthly, ${repoRate} remains India's operative benchmark lending rate until the next MPC resolution on ${nextMpc}.`,
+              },
+              {
+                q: 'Why did banks (SBI, PNB, HDFC, Bank of Baroda) send SMS stating interest rate modified from 08/10/2026?',
+                a: 'Under RBI guidelines on External Benchmark Linked Lending Rates (EBLR), commercial banks are required to adjust floating loan interest rates in tandem with repo rate revisions. When RBI hiked the repo rate by 25 bps on 7 October 2026, leading public and private banks (including SBI, Punjab National Bank, HDFC Bank, and Bank of Baroda) updated their benchmark lending rates effective from 8 October 2026. Borrowers received automated SMS notifications alerting them of this mandatory benchmark revision.',
+              },
+              {
+                q: 'What are the current SDF, MSF, Bank Rate, CRR, and SLR rates in India?',
+                a: `Following the October 2026 policy hike, India's key policy interest rates and reserve requirements are: Policy Repo Rate: ${repoRate}, Standing Deposit Facility (SDF): ${sdfRate}, Marginal Standing Facility (MSF): ${msfRate}, Bank Rate: ${msfRate}, Fixed Reverse Repo Rate: 3.35%, Cash Reserve Ratio (CRR): 4.50%, and Statutory Liquidity Ratio (SLR): 18.00%.`,
               },
               {
                 q: 'When is the next RBI MPC meeting in December 2026?',
                 a: `The next RBI Monetary Policy Committee meeting is scheduled for ${nextMpc}. The 3-day policy deliberation concludes on December 4, 2026 at 10:00 AM IST with the Governor's live policy resolution address and interest rate decision. Detailed meeting minutes are published on October 21, 2026.`,
               },
               {
-                q: 'What is the difference between Repo Rate, SDF Rate, and MSF Rate?',
-                a: `The Repo Rate (${repoRate}) is the primary benchmark rate at which RBI injects short-term liquidity to banks against government securities. The Standing Deposit Facility (SDF, ${sdfRate}) is the floor rate at which banks deposit surplus cash with RBI without collateral. The Marginal Standing Facility (MSF, ${msfRate}) is the penal ceiling rate for emergency overnight borrowing. The Fixed Reverse Repo Rate remains at 3.35%.`,
+                q: 'Will the RBI repo rate increase further or decrease in December 2026?',
+                a: "Rate cuts are ruled out in the near term because the MPC shifted its monetary policy stance to 'Calibrated Tightening'. With headline CPI inflation projected to average 5.8% over Q2-Q4 FY27 (peaking at 6.0% in Q3), economists and policy analysts project either a rate pause (hold at 5.50%) or a potential 25 bps follow-up hike, but no rate cuts until mid-2027.",
               },
               {
-                q: 'How does the current repo rate affect floating home loan EMIs (SBI, HDFC, ICICI)?',
-                a: `All floating-rate retail loans (home and personal loans) sanctioned by commercial banks are mandated by the RBI to be linked to External Benchmark Lending Rates (EBLR/RLLR). With the repo rate at ${repoRate}, home loan interest rates average between 8.65% and 9.60% p.a. across major lenders (SBI, HDFC Bank, ICICI Bank, PNB, Bank of Baroda), reflecting the 25 bps rate increase. Use our interactive calculator above to simulate your exact EMI impact.`,
+                q: 'How does the current repo rate affect floating home loan EMIs (SBI, HDFC, ICICI, PNB)?',
+                a: `All floating-rate retail loans (home and personal loans) sanctioned by commercial banks are mandated by the RBI to be linked to External Benchmark Lending Rates (EBLR/RLLR). With the repo rate at ${repoRate}, home loan interest rates average between 8.65% and 9.60% p.a. across major lenders (SBI, HDFC Bank, ICICI Bank, PNB, Bank of Baroda), reflecting the 25 bps rate increase. A 25 bps hike adds approximately ₹16 per lakh in monthly EMI on a 20-year loan (approx. ₹480/month on a ₹30 lakh loan). Use our interactive calculator above to simulate your exact EMI impact.`,
+              },
+              {
+                q: 'RBI Repo Rate 2026: Kab Se Lagu Hoga Aur Loan Par Kya Asar Padega? (यह कब से लागू होगा?)',
+                a: 'RBI का नया रेपो रेट 5.50% 7 अक्टूबर 2026 से तुरंत लागू (Effective Immediately) हो चुका है। बैंकों के होम लोन और पर्सनल लोन (EBLR/RLLR) पर यह 8 अक्टूबर 2026 या अगली रीसेट तारीख से लागू हो रहा है। 25 बेसिस पॉइंट की बढ़ोतरी से 20 साल के होम लोन पर प्रति 1 लाख रुपये पर लगभग ₹16 प्रति माह की EMI बढ़ोतरी होगी (यानी ₹30 लाख के लोन पर लगभग ₹480/महीना अधिक EMI)।',
+              },
+              {
+                q: 'What is the difference between Repo Rate, SDF Rate, and MSF Rate?',
+                a: `The Repo Rate (${repoRate}) is the primary benchmark rate at which RBI injects short-term liquidity to banks against government securities. The Standing Deposit Facility (SDF, ${sdfRate}) is the floor rate at which banks deposit surplus cash with RBI without collateral. The Marginal Standing Facility (MSF, ${msfRate}) is the penal ceiling rate for emergency overnight borrowing. The Fixed Reverse Repo Rate remains at 3.35%.`,
               },
               {
                 q: 'Is the RBI repo rate different across Indian cities like Kolkata, Mumbai, or Delhi?',

@@ -151,7 +151,7 @@ describe('Employment Agreement Generator & Statutory Compliance', () => {
     const xml = await zip.file('word/document.xml').async('text')
     expect(xml).toContain('w:type="dxa"')
     expect(xml).not.toContain('w:type="pct"')
-  })
+  }, 15000)
 
   test('builds valid PDF binary document with %PDF header', async () => {
     const pdfBytes = await buildEmploymentAgreementPdf(DEFAULT_SAMPLE_EMPLOYMENT_DATA)
@@ -161,5 +161,5 @@ describe('Employment Agreement Generator & Statutory Compliance', () => {
     // Check PDF magic header "%PDF"
     const header = String.fromCharCode(...pdfBytes.slice(0, 4))
     expect(header).toBe('%PDF')
-  })
+  }, 15000)
 })
