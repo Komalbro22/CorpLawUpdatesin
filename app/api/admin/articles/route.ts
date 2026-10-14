@@ -177,7 +177,7 @@ export async function POST(request: NextRequest) {
             )
         }
 
-        try { revalidateTag('updates') } catch { /* ignore */ }
+        try { (revalidateTag as any)('updates') } catch { /* ignore */ }
         revalidatePath('/', 'layout')
         revalidatePath('/updates', 'layout')
         revalidatePath('/sitemap.xml')

@@ -120,6 +120,9 @@ export default function AdminSuggestionsPage() {
         setEditingApproval(null)
         setAdminNote('')
         await loadSuggestions()
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('admin-badge-refresh'))
+        }
       } else {
         showToast('Failed to update suggestion.', 'error')
       }

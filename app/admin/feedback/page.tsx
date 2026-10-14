@@ -112,6 +112,9 @@ export default function AdminFeedbackPage() {
       showToast(`Status updated to ${newStatus}`, 'success')
       // Refresh stats quietly
       fetchFeedback()
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('admin-badge-refresh'))
+      }
     } catch (err: any) {
       showToast('Failed to update status', 'error')
     } finally {
@@ -132,6 +135,9 @@ export default function AdminFeedbackPage() {
       setItems(prev => prev.filter(item => item.id !== id))
       showToast('Feedback deleted', 'success')
       fetchFeedback()
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('admin-badge-refresh'))
+      }
     } catch (err: any) {
       showToast('Failed to delete feedback', 'error')
     } finally {

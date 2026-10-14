@@ -52,7 +52,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             return NextResponse.json({ error: 'Article not found' }, { status: 404 })
         }
 
-        const updateData = { ...body }
+        const updateData: Record<string, any> = { ...body }
         if (body.category !== undefined) {
             updateData.category = body.category?.trim() || null
         }
@@ -93,7 +93,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             )
         }
 
-        try { revalidateTag('updates') } catch { /* ignore */ }
+        try { (revalidateTag as any)('updates') } catch { /* ignore */ }
         revalidatePath('/', 'layout')
         revalidatePath('/updates', 'layout')
         revalidatePath('/sitemap.xml')
@@ -149,7 +149,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
             )
         }
 
-        try { revalidateTag('updates') } catch { /* ignore */ }
+        try { (revalidateTag as any)('updates') } catch { /* ignore */ }
         revalidatePath('/', 'layout')
         revalidatePath('/updates', 'layout')
         revalidatePath('/sitemap.xml')

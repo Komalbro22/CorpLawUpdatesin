@@ -169,6 +169,9 @@ export default function AdminArticles() {
             }
             setDeleteConfirm(null)
             fetchArticles()
+            if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('admin-badge-refresh'))
+            }
         } catch (err) {
             console.error('Delete failed:', err)
             showToast('Delete failed', 'error')
@@ -196,6 +199,9 @@ export default function AdminArticles() {
             }
             setSelectedIds(new Set())
             fetchArticles()
+            if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('admin-badge-refresh'))
+            }
         } catch (err) {
             console.error(`${action} failed:`, err)
             showToast(`${action} failed`, 'error')

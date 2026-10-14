@@ -137,6 +137,9 @@ export default function AdminPartnerInterestsPage() {
                     prev.map((item) => (item.id === id ? { ...item, status: newStatus } : item))
                 )
                 showToast(`Status updated to "${newStatus}"`, 'success')
+                if (typeof window !== 'undefined') {
+                    window.dispatchEvent(new CustomEvent('admin-badge-refresh'))
+                }
             } else {
                 const data = await res.json()
                 showToast(`Failed: ${data.error || 'Could not update status'}`, 'error')

@@ -143,6 +143,9 @@ export default function RuleLearningDashboard() {
       setExpandedId(null)
       // Remove approved item from list
       setItems(prev => prev.filter(item => item.id !== itemId))
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('admin-badge-refresh'))
+      }
     } catch (err: any) {
       showToast(err.message || 'Error approving rule', 'error')
     } finally {
@@ -169,6 +172,9 @@ export default function RuleLearningDashboard() {
       showToast('Suggestion discarded.', 'success')
       setExpandedId(null)
       setItems(prev => prev.filter(item => item.id !== itemId))
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('admin-badge-refresh'))
+      }
     } catch (err: any) {
       showToast(err.message || 'Error rejecting rule', 'error')
     } finally {

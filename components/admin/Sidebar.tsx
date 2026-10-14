@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
@@ -117,8 +117,43 @@ export default function Sidebar() {
     const [drawerOpen, setDrawerOpen] = useState(false)
     const [collapsed, setCollapsed] = useState(false)
     const [userRole, setUserRole] = useState<'admin' | 'editor'>('admin')
+    const [badgeCounts, setBadgeCounts] = useState<Record<string, number>>({})
     const drawerRef = useRef<HTMLDivElement>(null)
     const menuButtonRef = useRef<HTMLButtonElement>(null)
+
+    const fetchBadgeCounts = useCallback(async () => {
+        try {
+            const res = await fetch('/api/admin/badge-counts')
+            if (res.ok) {
+                const data = await res.json()
+                if (data?.counts) {
+                    setBadgeCounts(data.counts)
+                }
+            }
+        } catch {
+            // Silently keep UI operational
+        }
+    }, [])
+
+    useEffect(() => {
+        fetchBadgeCounts()
+
+        const onFocus = () => fetchBadgeCounts()
+        window.addEventListener('focus', onFocus)
+
+        const onCustomRefresh = () => fetchBadgeCounts()
+        window.addEventListener('admin-badge-refresh', onCustomRefresh)
+
+        const timer = setInterval(fetchBadgeCounts, 60000)
+
+        return () => {
+            window.removeEventListener('focus', onFocus)
+            window.removeEventListener('admin-badge-refresh', onCustomRefresh)
+            clearInterval(timer)
+        }
+    }, [fetchBadgeCounts])
+
+    const totalPendingCount = Object.values(badgeCounts).reduce((sum, count) => sum + (count || 0), 0)
 
     useEffect(() => {
         fetch('/api/admin/session')
@@ -227,13 +262,14 @@ export default function Sidebar() {
                         {section.links.map(link => {
                             const active = isLinkActive(link.href, pathname)
                             const Icon = link.icon
+                            const badgeCount = badgeCounts[link.href] || 0
                             if (iconOnly) {
                                 return (
                                     <div key={link.href} className="admin-nav-tooltip px-2">
                                         <Link
                                             href={link.href}
                                             onClick={onLinkClick}
-                                            aria-label={link.label}
+                                            aria-label={`${link.label}${badgeCount > 0 ? ` (${badgeCount} pending)` : ''}`}
                                             className={`relative flex items-center justify-center w-10 h-10 rounded-xl mx-auto transition-all duration-200 ${
                                                 active
                                                     ? 'bg-amber-50 text-amber-600 shadow-xs border border-amber-100'
@@ -244,8 +280,18 @@ export default function Sidebar() {
                                                 <span className="absolute left-0 top-1 bottom-1 w-[3px] rounded-r bg-linear-to-b from-amber-400 to-orange-500" />
                                             )}
                                             <Icon className="w-4.5 h-4.5" aria-hidden />
+                                            {badgeCount > 0 && (
+                                                <span
+                                                    className="absolute -top-1 -right-1 flex h-4.5 min-w-[18px] px-1 items-center justify-center rounded-full bg-amber-500 text-[10px] font-bold text-white shadow-xs border-2 border-white tabular-nums leading-none"
+                                                    aria-label={`${badgeCount} new or pending items`}
+                                                >
+                                                    {badgeCount > 99 ? '99+' : badgeCount}
+                                                </span>
+                                            )}
                                         </Link>
-                                        <span className="admin-tooltip-label">{link.label}</span>
+                                        <span className="admin-tooltip-label">
+                                            {link.label}{badgeCount > 0 ? ` (${badgeCount})` : ''}
+                                        </span>
                                     </div>
                                 )
                             }
@@ -272,6 +318,15 @@ export default function Sidebar() {
                                         aria-hidden
                                     />
                                     <span className="truncate">{link.label}</span>
+                                    {badgeCount > 0 && (
+                                        <span
+                                            className="ml-auto inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-[11px] font-bold rounded-full bg-amber-500 text-white shadow-xs group-hover:bg-amber-600 transition-colors tabular-nums shrink-0 leading-none"
+                                            title={`${badgeCount} new or pending item${badgeCount === 1 ? '' : 's'}`}
+                                            aria-label={`${badgeCount} new or pending items`}
+                                        >
+                                            {badgeCount > 99 ? '99+' : badgeCount}
+                                        </span>
+                                    )}
                                 </Link>
                             )
                         })}
@@ -343,12 +398,15 @@ export default function Sidebar() {
                     ref={menuButtonRef}
                     type="button"
                     onClick={() => setDrawerOpen(true)}
-                    className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors"
+                    className="relative inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors"
                     aria-expanded={drawerOpen}
                     aria-controls="admin-mobile-drawer"
-                    aria-label="Open admin menu"
+                    aria-label={`Open admin menu${totalPendingCount > 0 ? ` (${totalPendingCount} pending items)` : ''}`}
                 >
                     <Menu className="h-5 w-5" aria-hidden />
+                    {totalPendingCount > 0 && (
+                        <span className="absolute top-2 right-2 flex h-2.5 w-2.5 rounded-full bg-amber-500 ring-2 ring-white" />
+                    )}
                 </button>
             </div>
         </div>
