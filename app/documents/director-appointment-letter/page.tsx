@@ -232,13 +232,14 @@ export default function DirectorAppointmentPage() {
               <Layers className="w-5 h-5 text-emerald-600" />
               Director Appointment &amp; MCA Filing Lifecycle
             </h2>
-            <div className="relative aspect-1200/630 w-full overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800">
+            <div className="w-full overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800">
               <Image
                 src="/images/documents/director-appointment-letter-format.svg"
                 alt="Director appointment letter format India compliance framework infographic"
-                fill
+                width={1200}
+                height={630}
                 unoptimized
-                className="object-contain"
+                className="w-full h-auto"
                 priority
               />
             </div>

@@ -44,7 +44,7 @@
   <rect x="60" y="172" width="1080" height="3" fill="url(#gold)" rx="1.5" />
 
   <!-- 3 Fact Cards -->
-  <!-- Card 1: Statutory Framework & Suraj Lamp -->
+  <!-- Card 1: Statutory Framework &amp; Suraj Lamp -->
   <g transform="translate(60, 195)">
     <rect width="340" height="375" rx="14" fill="url(#cardBg)" stroke="#334155" stroke-width="1.5" />
     <rect x="0" y="0" width="340" height="6" fill="#F59E0B" rx="3" />
@@ -84,7 +84,7 @@
     </text>
   </g>
 
-  <!-- Card 2: Maharashtra Registration & Stamp Duty -->
+  <!-- Card 2: Maharashtra Registration &amp; Stamp Duty -->
   <g transform="translate(430, 195)">
     <rect width="340" height="375" rx="14" fill="url(#cardBg)" stroke="#334155" stroke-width="1.5" />
     <rect x="0" y="0" width="340" height="6" fill="#10B981" rx="3" />
@@ -127,7 +127,7 @@
     </text>
   </g>
 
-  <!-- Card 3: NRI Execution & Revocation -->
+  <!-- Card 3: NRI Execution &amp; Revocation -->
   <g transform="translate(800, 195)">
     <rect width="340" height="375" rx="14" fill="url(#cardBg)" stroke="#334155" stroke-width="1.5" />
     <rect x="0" y="0" width="340" height="6" fill="#38BDF8" rx="3" />

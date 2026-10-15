@@ -18,6 +18,7 @@ import {
   Gavel,
   Calculator,
   HelpCircle,
+  ChevronRight,
 } from 'lucide-react'
 import LeaseClient from './LeaseClient'
 
@@ -100,46 +101,65 @@ export default function LeaseAgreementPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-dvh bg-slate-50 dark:bg-slate-950 pb-20 transition-colors">
       {/* JSON-LD Schema: strictly FAQPage, zero aggregateRating */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
+      {/* Breadcrumb Navigation */}
+      <div className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+        <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
+          <nav className="flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400">
+            <Link href="/" className="hover:text-slate-900 dark:hover:text-white transition">
+              Home
+            </Link>
+            <ChevronRight className="h-3 w-3" />
+            <Link href="/documents" className="hover:text-slate-900 dark:hover:text-white transition">
+              Documents
+            </Link>
+            <ChevronRight className="h-3 w-3" />
+            <span className="font-semibold text-slate-900 dark:text-slate-100">
+              Rent / Lease Agreement
+            </span>
+          </nav>
+        </div>
+      </div>
+
       {/* Hero Header */}
-      <section className="border-b border-slate-800 bg-gradient-to-b from-slate-900 to-slate-950 py-12 sm:py-16">
+      <header className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 py-10 sm:py-14">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-4 max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold">
-              <ShieldCheck className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-50/70 px-3.5 py-1 text-xs font-semibold text-amber-800 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-400">
+              <ShieldCheck className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
               Transfer of Property Act, 1882 &amp; Indian Easements Act, 1882
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
+            <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl dark:text-white">
               Rent / Lease Agreement Format (India) — Free Generator
             </h1>
 
-            <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
+            <p className="text-base text-slate-600 sm:text-lg dark:text-slate-300">
               Generate an enforceable, court-ready 11-month Leave &amp; License or registered Lease Deed
               in Word (.docx) and PDF. Includes Maharashtra 0.25% stamp duty calculator, Model Tenancy Act
               caveats, digital stamping guidance, and AI custom clause drafter.
             </p>
 
-            <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400 pt-2">
+            <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 dark:text-slate-400 pt-2">
               <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Free Word &amp; PDF Downloads
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> Free Word &amp; PDF Downloads
               </span>
               <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Maharashtra Digital Stamping Ready
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> Maharashtra Digital Stamping Ready
               </span>
               <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Built-in AI Custom Clause Drafter
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> Built-in AI Custom Clause Drafter
               </span>
             </div>
           </div>
         </div>
-      </section>
+      </header>
 
       {/* Main Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
@@ -147,21 +167,21 @@ export default function LeaseAgreementPage() {
         <LeaseClient />
 
         {/* Infographic Section */}
-        <div className="my-16 border border-slate-800 rounded-2xl overflow-hidden bg-slate-900 shadow-xl">
-          <div className="p-4 sm:p-6 border-b border-slate-800 flex items-center justify-between">
+        <div className="my-16 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-sm">
+          <div className="p-4 sm:p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
             <div>
-              <h2 className="text-base sm:text-lg font-bold text-white">
+              <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
                 Rent &amp; Lease Agreement Legal Architecture in India
               </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 Statutory comparison: Transfer of Property Act vs Easements Act &amp; Maharashtra Duty Formula
               </p>
             </div>
-            <span className="text-[11px] font-semibold text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full">
+            <span className="text-[11px] font-semibold text-amber-700 dark:text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full">
               Legal Infographic
             </span>
           </div>
-          <div className="p-2 sm:p-4 bg-slate-950 flex items-center justify-center">
+          <div className="p-2 sm:p-4 bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
             <Image
               src="/images/documents/rent-agreement-format-india.svg"
               alt="Rent Agreement Format India Legal Architecture"
@@ -177,41 +197,41 @@ export default function LeaseAgreementPage() {
         <div className="mt-16 space-y-12 max-w-4xl">
           {/* Guide Section 1 */}
           <section className="space-y-4">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               1. Legal Framework: Transfer of Property Act vs Indian Easements Act
             </h2>
-            <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm sm:text-base">
               Under Indian jurisprudence, residential and commercial tenancy arrangements derive their validity
               from two distinct statutory regimes:
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-2.5">
-                <div className="flex items-center gap-2 text-amber-400 font-bold text-sm">
+              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 space-y-2.5 shadow-sm">
+                <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400 font-bold text-sm">
                   <Gavel className="w-4 h-4" />
                   <span>Lease Deed (TPA, 1882)</span>
                 </div>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                   Defined under <strong>Section 105 of the Transfer of Property Act, 1882</strong> as a transfer of a
                   right to enjoy immovable property for a certain time in consideration of price paid or promised.
                   A lease creates an <em>interest in the property</em> and transfers exclusive possession to the lessee.
                 </p>
-                <div className="text-[11px] text-slate-400 border-t border-slate-800 pt-2">
+                <div className="text-[11px] text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800 pt-2">
                   <strong>Section 106 Notice:</strong> 15 days for monthly tenancies, 6 months for agricultural /
                   manufacturing leases.
                 </div>
               </div>
 
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-2.5">
-                <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm">
+              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 space-y-2.5 shadow-sm">
+                <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold text-sm">
                   <ShieldCheck className="w-4 h-4" />
                   <span>Leave &amp; License (Easements Act, 1882)</span>
                 </div>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                   Defined under <strong>Section 52 of the Indian Easements Act, 1882</strong> as a grant of permission
                   to do something upon immovable property which would, in the absence of such right, be unlawful.
                   A license confers a <em>mere personal privilege</em> without creating any legal estate or tenancy.
                 </p>
-                <div className="text-[11px] text-slate-400 border-t border-slate-800 pt-2">
+                <div className="text-[11px] text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800 pt-2">
                   <strong>Maharashtra Convention:</strong> In Maharashtra, contracts are strictly Leave &amp; License
                   to prevent archaic tenant protections under the Rent Control Act.
                 </div>
@@ -221,23 +241,23 @@ export default function LeaseAgreementPage() {
 
           {/* Guide Section 2 */}
           <section className="space-y-4">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               2. The 11-Month Convention: Section 17(1)(d) Registration Act, 1908
             </h2>
-            <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm sm:text-base">
               The overwhelming prevalence of 11-month rental contracts across India is a deliberate legal construct
               rooted in <strong>Section 17(1)(d) of the Registration Act, 1908</strong>. Under this provision, leases
               of immovable property from year to year, or for any term <em>exceeding one year</em>, or reserving a
               yearly rent, are <strong>compulsorily registrable</strong>.
             </p>
-            <div className="bg-slate-900 border-l-4 border-amber-500 rounded-r-xl p-5 space-y-2 text-xs sm:text-sm text-slate-300">
-              <p className="font-semibold text-white">Why 11 Months and Not 12?</p>
+            <div className="bg-white dark:bg-slate-900 border-l-4 border-amber-500 border border-slate-200 dark:border-slate-800 rounded-r-xl p-5 space-y-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300 shadow-sm">
+              <p className="font-semibold text-slate-900 dark:text-white">Why 11 Months and Not 12?</p>
               <p>
                 By restricting the tenure to eleven (11) months, parties avoid mandatory registration before the
                 Sub-Registrar of Assurances. This saves substantial registration surcharges and cumbersome physical
                 appearances while keeping the document admissible under the Indian Evidence Act.
               </p>
-              <p className="text-amber-300 font-medium">
+              <p className="text-amber-700 dark:text-amber-300 font-medium">
                 Note on Stamp Duty: Even if an 11-month deed is unregistered, stamp duty is legally mandatory.
                 An unstamped or deficiently stamped agreement cannot be impounded as primary evidence in court.
               </p>
@@ -246,40 +266,40 @@ export default function LeaseAgreementPage() {
 
           {/* Guide Section 3 */}
           <section className="space-y-4">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               3. Maharashtra Stamp Duty Formula &amp; Digital Mandate (July 2025)
             </h2>
-            <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm sm:text-base">
               Maharashtra maintains one of the most clearly codified stamp duty schedules in India for Leave and
               License agreements under Article 36A / 5(g-a) of the Maharashtra Stamp Act:
             </p>
 
             {/* Table */}
-            <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900">
+            <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
               <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="bg-slate-800/80 text-slate-200 border-b border-slate-700">
+                <thead className="bg-slate-100 dark:bg-slate-800/80 text-slate-900 dark:text-slate-200 border-b border-slate-200 dark:border-slate-700">
                   <tr>
                     <th className="p-3.5 font-semibold">Agreement Tenure</th>
                     <th className="p-3.5 font-semibold">Applicable Stamp Duty Rate</th>
                     <th className="p-3.5 font-semibold">Registration Fee</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800 text-slate-300">
+                <tbody className="divide-y divide-slate-200 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
                   <tr>
-                    <td className="p-3.5 font-medium text-white">Up to 5 Years (&le; 60 months)</td>
+                    <td className="p-3.5 font-medium text-slate-900 dark:text-white">Up to 5 Years (&le; 60 months)</td>
                     <td className="p-3.5">
-                      <strong className="text-amber-400">0.25%</strong> of (Total Rent + Non-refundable deposit + 10%
+                      <strong className="text-amber-700 dark:text-amber-400">0.25%</strong> of (Total Rent + Non-refundable deposit + 10%
                       notional annual interest on refundable deposit)
                     </td>
                     <td className="p-3.5">₹1,000 (Urban) / ₹500 (Rural)</td>
                   </tr>
                   <tr>
-                    <td className="p-3.5 font-medium text-white">5 Years to 10 Years</td>
+                    <td className="p-3.5 font-medium text-slate-900 dark:text-white">5 Years to 10 Years</td>
                     <td className="p-3.5">0.50% of the calculated taxable base</td>
                     <td className="p-3.5">₹1,000 (Urban) / ₹500 (Rural)</td>
                   </tr>
                   <tr>
-                    <td className="p-3.5 font-medium text-white">Above 10 Years</td>
+                    <td className="p-3.5 font-medium text-slate-900 dark:text-white">Above 10 Years</td>
                     <td className="p-3.5">1.00% of the calculated taxable base</td>
                     <td className="p-3.5">₹1,000 (Urban) / ₹500 (Rural)</td>
                   </tr>
@@ -288,28 +308,28 @@ export default function LeaseAgreementPage() {
             </div>
 
             {/* Worked Example */}
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-2 text-xs sm:text-sm">
-              <h3 className="font-bold text-white text-sm flex items-center gap-2">
-                <Calculator className="w-4 h-4 text-emerald-400" />
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 space-y-2 text-xs sm:text-sm shadow-sm">
+              <h3 className="font-bold text-slate-900 dark:text-white text-sm flex items-center gap-2">
+                <Calculator className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                 Worked Example (Mumbai 24-Month Lease):
               </h3>
-              <p className="text-slate-300">
+              <p className="text-slate-600 dark:text-slate-300">
                 Consider a monthly rent of <strong>₹25,000</strong> for <strong>24 months</strong> with a refundable
                 security deposit of <strong>₹2,00,000</strong>:
               </p>
-              <ul className="list-disc pl-5 space-y-1 text-slate-300">
+              <ul className="list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-300">
                 <li>Total Rent = ₹25,000 &times; 24 months = <strong>₹6,00,000</strong></li>
                 <li>Notional 10% Interest on Deposit = ₹2,00,000 &times; 10% &times; 2 years = <strong>₹40,000</strong></li>
                 <li>Taxable Base = ₹6,00,000 + ₹40,000 = <strong>₹6,40,000</strong></li>
                 <li>
                   Stamp Duty (0.25%) = ₹6,40,000 &times; 0.25% ={' '}
-                  <strong className="text-amber-400">₹1,600</strong>
+                  <strong className="text-amber-700 dark:text-amber-400">₹1,600</strong>
                 </li>
               </ul>
             </div>
 
-            <div className="p-4 bg-emerald-950/40 border border-emerald-600/50 rounded-xl text-xs sm:text-sm text-emerald-200 space-y-1">
-              <span className="font-bold block text-emerald-300">
+            <div className="p-4 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-600/50 rounded-xl text-xs sm:text-sm text-emerald-800 dark:text-emerald-200 space-y-1">
+              <span className="font-bold block text-emerald-900 dark:text-emerald-300">
                 Mandatory Digital Stamping (W.e.f. 1 July 2025):
               </span>
               <p className="leading-relaxed">
@@ -322,14 +342,14 @@ export default function LeaseAgreementPage() {
 
           {/* Guide Section 4 */}
           <section className="space-y-4">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               4. Stamp Duty in Other States (State-Specific Legislation)
             </h2>
-            <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm sm:text-base">
               Stamp duty is a state subject under Entry 63 of the State List (List II) of the Seventh Schedule to
               the Constitution of India. Rates vary widely across jurisdictions:
             </p>
-            <ul className="list-disc pl-5 space-y-2 text-xs sm:text-sm text-slate-300">
+            <ul className="list-disc pl-5 space-y-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
               <li>
                 <strong>Delhi (NCT):</strong> Leases up to 11 months typically require 2% on average annual rent or
                 ₹100/₹500 non-judicial e-stamp depending on classification.
@@ -343,23 +363,23 @@ export default function LeaseAgreementPage() {
                 levied via e-stamping counters.
               </li>
             </ul>
-            <p className="text-xs text-slate-400 italic">
+            <p className="text-xs text-slate-500 dark:text-slate-400 italic">
               Always verify current local notification rates under your respective State Stamp Act prior to execution.
             </p>
           </section>
 
           {/* Guide Section 5 */}
           <section className="space-y-4">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               5. Model Tenancy Act, 2021: Scope and Essential Caveats
             </h2>
-            <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm sm:text-base">
               The Union Cabinet approved the <strong>Model Tenancy Act (MTA), 2021</strong> on 2 June 2021 to balance
               the rights of landlords and tenants and replace archaic post-colonial rent control laws.
             </p>
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-3 text-xs sm:text-sm">
-              <h3 className="font-bold text-white">Key Tenets of the Model Tenancy Act:</h3>
-              <ul className="list-disc pl-5 space-y-1.5 text-slate-300">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 space-y-3 text-xs sm:text-sm shadow-sm">
+              <h3 className="font-bold text-slate-900 dark:text-white">Key Tenets of the Model Tenancy Act:</h3>
+              <ul className="list-disc pl-5 space-y-1.5 text-slate-600 dark:text-slate-300">
                 <li>
                   <strong>Mandatory Written Agreement:</strong> No tenancy is lawful without a registered formal contract
                   submitted to the local Rent Authority within 2 months.
@@ -376,7 +396,7 @@ export default function LeaseAgreementPage() {
                   <strong>Subletting Ban:</strong> Prohibits subletting without prior supplementary agreement.
                 </li>
               </ul>
-              <div className="p-3 bg-amber-950/40 border border-amber-600/40 rounded-lg text-amber-200 text-xs">
+              <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-600/40 rounded-lg text-amber-900 dark:text-amber-200 text-xs">
                 <strong>Crucial Legal Caveat:</strong> The MTA is a <em>model law</em>. It has no direct legal force
                 unless individual state legislatures enact corresponding state tenancy statutes. States such as Andhra
                 Pradesh, Tamil Nadu, and UP have aligned legislation, while other states continue under legacy laws.
@@ -386,15 +406,15 @@ export default function LeaseAgreementPage() {
 
           {/* Guide Section 6 */}
           <section className="space-y-4">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               6. Tenant Police Verification: Step-by-Step Procedure
             </h2>
-            <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
+            <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm sm:text-base">
               Tenant police verification is mandatory in metropolitan jurisdictions (Delhi, Mumbai, Bengaluru,
               Gurugram, Pune) to ensure security and prevent unlawful occupancy:
             </p>
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-2 text-xs sm:text-sm">
-              <ol className="list-decimal pl-5 space-y-2 text-slate-300">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 space-y-2 text-xs sm:text-sm shadow-sm">
+              <ol className="list-decimal pl-5 space-y-2 text-slate-600 dark:text-slate-300">
                 <li>
                   <strong>Collect Documents:</strong> Tenant’s government ID (Aadhaar/Passport/Voter ID), permanent
                   address proof, employment letter/ID card, and 2 passport photos.
@@ -414,11 +434,11 @@ export default function LeaseAgreementPage() {
 
           {/* Guide Section 7 */}
           <section className="space-y-4">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               7. Complete 7-Step Execution Checklist
             </h2>
-            <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-3 text-xs sm:text-sm">
-              <ol className="list-decimal pl-5 space-y-2.5 text-slate-300">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 space-y-3 text-xs sm:text-sm shadow-sm">
+              <ol className="list-decimal pl-5 space-y-2.5 text-slate-600 dark:text-slate-300">
                 <li>
                   <strong>Choose Agreement Type:</strong> Select 11-month Leave &amp; License (for Maharashtra) or
                   standard Rent Agreement based on property location.
@@ -454,8 +474,8 @@ export default function LeaseAgreementPage() {
           {/* FAQs Section */}
           <section className="space-y-6 pt-4">
             <div className="flex items-center gap-2">
-              <HelpCircle className="w-5 h-5 text-amber-400" />
-              <h2 className="text-2xl font-extrabold text-white tracking-tight">
+              <HelpCircle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+              <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                 Frequently Asked Questions (Rent &amp; Lease Agreements)
               </h2>
             </div>
@@ -464,47 +484,47 @@ export default function LeaseAgreementPage() {
               {FAQS.map((faq, idx) => (
                 <div
                   key={idx}
-                  className="bg-slate-900 border border-slate-800 rounded-xl p-5 space-y-2 hover:border-slate-700 transition"
+                  className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 space-y-2 hover:border-slate-300 dark:hover:border-slate-700 transition shadow-sm"
                 >
-                  <h3 className="font-bold text-white text-sm sm:text-base">{faq.q}</h3>
-                  <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">{faq.a}</p>
+                  <h3 className="font-bold text-slate-900 dark:text-white text-sm sm:text-base">{faq.q}</h3>
+                  <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed">{faq.a}</p>
                 </div>
               ))}
             </div>
           </section>
 
           {/* Related Documents Navigation */}
-          <section className="border-t border-slate-800 pt-8 space-y-4">
-            <h3 className="text-base font-bold text-white uppercase tracking-wider">
+          <section className="border-t border-slate-200 dark:border-slate-800 pt-8 space-y-4">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-wider">
               Related Corporate &amp; Property Documents:
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
               <Link
                 href="/documents/equitable-mortgage-deed"
-                className="p-3 bg-slate-900 border border-slate-800 hover:border-amber-500/50 rounded-xl text-slate-300 hover:text-white transition flex items-center justify-between"
+                className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-amber-500/50 rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition flex items-center justify-between shadow-sm"
               >
                 <span>Equitable Mortgage Deed</span>
-                <ArrowRight className="w-3.5 h-3.5 text-amber-400" />
+                <ArrowRight className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
               </Link>
               <Link
                 href="/documents/partnership-deed"
-                className="p-3 bg-slate-900 border border-slate-800 hover:border-amber-500/50 rounded-xl text-slate-300 hover:text-white transition flex items-center justify-between"
+                className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-amber-500/50 rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition flex items-center justify-between shadow-sm"
               >
                 <span>Partnership Deed</span>
-                <ArrowRight className="w-3.5 h-3.5 text-amber-400" />
+                <ArrowRight className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
               </Link>
               <Link
                 href="/documents/non-disclosure-agreement"
-                className="p-3 bg-slate-900 border border-slate-800 hover:border-amber-500/50 rounded-xl text-slate-300 hover:text-white transition flex items-center justify-between"
+                className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-amber-500/50 rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition flex items-center justify-between shadow-sm"
               >
                 <span>Non-Disclosure Agreement</span>
-                <ArrowRight className="w-3.5 h-3.5 text-amber-400" />
+                <ArrowRight className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
               </Link>
             </div>
           </section>
 
           {/* Statutory Disclaimer */}
-          <footer className="border-t border-slate-800 pt-6 text-[11px] text-slate-400 leading-relaxed">
+          <footer className="border-t border-slate-200 dark:border-slate-800 pt-6 text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
             <p>
               <strong>Statutory Legal Disclaimer:</strong> The documents and information provided on this page are
               for educational and self-help reference purposes under the Transfer of Property Act, 1882, the Indian

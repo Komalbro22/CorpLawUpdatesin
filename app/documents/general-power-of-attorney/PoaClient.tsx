@@ -110,17 +110,17 @@ export default function PoaClient() {
       })
 
       if (!res.ok) {
-        throw new Error(`Server returned error code ${res.status}`)
+        throw new Error(`Download failed with status ${res.status}`)
       }
 
       const blob = await res.blob()
       const url = window.URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      const safeName = (formData.attorneyName || 'Attorney')
+      const safeName = (formData.principalName || 'Principal')
         .replace(/[^a-zA-Z0-9_-]/g, '_')
         .substring(0, 25)
-      a.download = `Power_of_Attorney_${safeName}.${format}`
+      a.download = `Power_Of_Attorney_${safeName}.${format}`
       document.body.appendChild(a)
       a.click()
       window.URL.revokeObjectURL(url)
@@ -136,14 +136,14 @@ export default function PoaClient() {
   return (
     <div className="space-y-6">
       {/* Mobile Tab Toggle */}
-      <div className="flex sm:hidden p-1 bg-slate-900 border border-slate-800 rounded-xl">
+      <div className="flex sm:hidden p-1 bg-slate-100 border border-slate-200 dark:bg-slate-900 dark:border-slate-800 rounded-xl">
         <button
           type="button"
           onClick={() => setActiveMobileTab('form')}
           className={`flex-1 py-2.5 text-xs font-semibold rounded-lg transition ${
             activeMobileTab === 'form'
               ? 'bg-amber-500 text-slate-950 shadow-sm'
-              : 'text-slate-400 hover:text-white'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           1. Edit Terms
@@ -154,7 +154,7 @@ export default function PoaClient() {
           className={`flex-1 py-2.5 text-xs font-semibold rounded-lg transition ${
             activeMobileTab === 'preview'
               ? 'bg-amber-500 text-slate-950 shadow-sm'
-              : 'text-slate-400 hover:text-white'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           2. Live Preview
@@ -169,23 +169,23 @@ export default function PoaClient() {
           }`}
         >
           {/* Section 1: Classification & Revocability */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
-            <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
-              <Gavel className="w-4 h-4 text-amber-400" />
-              <h2 className="text-sm font-bold text-white uppercase tracking-wider">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
+            <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+              <Gavel className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+              <h2 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
                 1. POA Type &amp; Revocability Classification
               </h2>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
+                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 block mb-1">
                   POA Classification:
                 </label>
                 <select
                   value={formData.poaType}
                   onChange={e => handleInputChange('poaType', e.target.value as PoaType)}
-                  className="w-full bg-slate-950 border border-slate-700 text-white rounded-lg p-2.5 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg p-2.5 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
                 >
                   <option value="General Power of Attorney">General Power of Attorney (GPA)</option>
                   <option value="Special Power of Attorney">Special Power of Attorney (SPA)</option>
@@ -193,13 +193,13 @@ export default function PoaClient() {
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
+                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 block mb-1">
                   Revocability Nature:
                 </label>
                 <select
                   value={formData.revocability}
                   onChange={e => handleInputChange('revocability', e.target.value as PoaRevocability)}
-                  className="w-full bg-slate-950 border border-slate-700 text-white rounded-lg p-2.5 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg p-2.5 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
                 >
                   <option value="Revocable">Revocable at Will of Principal</option>
                   <option value="Irrevocable (Coupled with Interest — Sec 202)">
@@ -210,8 +210,8 @@ export default function PoaClient() {
             </div>
 
             {formData.revocability.includes('Irrevocable') && (
-              <div className="p-3 bg-amber-950/40 border border-amber-600/50 rounded-lg text-xs text-amber-200 flex items-start gap-2">
-                <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+              <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-600/50 rounded-lg text-xs text-amber-900 dark:text-amber-200 flex items-start gap-2">
+                <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
                 <span>
                   <strong>Section 202 Mandate:</strong> Under Indian Contract Act, agency is irrevocable ONLY if the
                   agent has an existing pecuniary or proprietary interest in the subject property. General POAs without
@@ -222,31 +222,31 @@ export default function PoaClient() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
-                <label className="text-xs font-medium text-slate-400 block mb-1">Date of Execution:</label>
+                <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">Date of Execution:</label>
                 <input
                   type="text"
                   value={formData.executionDate}
                   onChange={e => handleInputChange('executionDate', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
                   placeholder="e.g. 15th October 2026"
                 />
               </div>
               <div>
-                <label className="text-xs font-medium text-slate-400 block mb-1">Execution City:</label>
+                <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">Execution City:</label>
                 <input
                   type="text"
                   value={formData.executionCity}
                   onChange={e => handleInputChange('executionCity', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
                   placeholder="e.g. Mumbai"
                 />
               </div>
               <div>
-                <label className="text-xs font-medium text-slate-400 block mb-1">State:</label>
+                <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">State:</label>
                 <select
                   value={formData.executionState}
                   onChange={e => handleInputChange('executionState', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
                 >
                   {INDIAN_STATES.map(s => (
                     <option key={s} value={s}>
@@ -259,44 +259,44 @@ export default function PoaClient() {
           </div>
 
           {/* Section 2: Principal (Grantor) */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <User className="w-4 h-4 text-emerald-400" />
-                <h2 className="text-sm font-bold text-white uppercase tracking-wider">
+                <User className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                <h2 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
                   2. Principal (Grantor of Power)
                 </h2>
               </div>
-              <label className="flex items-center gap-1.5 cursor-pointer text-xs text-slate-300">
+              <label className="flex items-center gap-1.5 cursor-pointer text-xs text-slate-700 dark:text-slate-300">
                 <input
                   type="checkbox"
                   checked={formData.isNri}
                   onChange={e => handleInputChange('isNri', e.target.checked)}
-                  className="rounded border-slate-700 text-amber-500 focus:ring-amber-500"
+                  className="rounded border-slate-300 dark:border-slate-700 text-amber-500 focus:ring-amber-500"
                 />
-                <Globe className="w-3.5 h-3.5 text-amber-400" />
+                <Globe className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
                 <span>NRI Executing Abroad</span>
               </label>
             </div>
 
             {formData.isNri && (
-              <div className="p-3 bg-blue-950/40 border border-blue-600/50 rounded-lg text-xs text-blue-200 space-y-2">
-                <div className="flex items-center gap-1.5 font-semibold text-blue-300">
+              <div className="p-3 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-600/50 rounded-lg text-xs text-blue-900 dark:text-blue-200 space-y-2">
+                <div className="flex items-center gap-1.5 font-semibold text-blue-800 dark:text-blue-300">
                   <Globe className="w-4 h-4" />
                   <span>NRI 3-Month Stamping Rule (Section 18, Indian Stamp Act, 1899)</span>
                 </div>
-                <p className="text-slate-300 leading-relaxed">
+                <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
                   Execute before the Indian Consulate or a Notary Public abroad (with Apostille if required), courier
                   the original to India, and submit to the District Registrar / Collector of Stamps for adjudication &amp;
                   stamping <strong>within 3 months (90 days)</strong> of its receipt in India.
                 </p>
                 <div>
-                  <label className="text-[11px] text-slate-400 block mb-1">Country of Residence:</label>
+                  <label className="text-[11px] text-slate-600 dark:text-slate-400 block mb-1">Country of Residence:</label>
                   <input
                     type="text"
                     value={formData.nriCountry || ''}
                     onChange={e => handleInputChange('nriCountry', e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-700 text-white rounded p-1.5 text-xs outline-none"
+                    className="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded p-1.5 text-xs outline-none"
                     placeholder="e.g. United Arab Emirates (Dubai) / USA / UK"
                   />
                 </div>
@@ -305,94 +305,94 @@ export default function PoaClient() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="text-xs font-medium text-slate-400 block mb-1">Principal Legal Name:</label>
+                <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">Principal Legal Name:</label>
                 <input
                   type="text"
                   value={formData.principalName}
                   onChange={e => handleInputChange('principalName', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
                 />
               </div>
               <div>
-                <label className="text-xs font-medium text-slate-400 block mb-1">Father's / Spouse's Name:</label>
+                <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">Father's / Spouse's Name:</label>
                 <input
                   type="text"
                   value={formData.principalFatherOrSpouse}
                   onChange={e => handleInputChange('principalFatherOrSpouse', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
-                <label className="text-xs font-medium text-slate-400 block mb-1">Age (Years):</label>
+                <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">Age (Years):</label>
                 <input
                   type="text"
                   value={formData.principalAge}
                   onChange={e => handleInputChange('principalAge', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
                 />
               </div>
               <div>
-                <label className="text-xs font-medium text-slate-400 block mb-1">PAN (Optional):</label>
+                <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">PAN (Optional):</label>
                 <input
                   type="text"
                   value={formData.principalPan || ''}
                   onChange={e => handleInputChange('principalPan', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none uppercase"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none uppercase"
                   placeholder="ABCDE1234F"
                 />
               </div>
               <div>
-                <label className="text-xs font-medium text-slate-400 block mb-1">Aadhaar (Masked):</label>
+                <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">Aadhaar (Masked):</label>
                 <input
                   type="text"
                   value={formData.principalAadhaar || ''}
                   onChange={e => handleInputChange('principalAadhaar', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
                   placeholder="XXXX-XXXX-1234"
                 />
               </div>
             </div>
 
             <div>
-              <label className="text-xs font-medium text-slate-400 block mb-1">Residential Address:</label>
+              <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">Residential Address:</label>
               <textarea
                 value={formData.principalAddress}
                 onChange={e => handleInputChange('principalAddress', e.target.value)}
                 rows={2}
-                className="w-full bg-slate-950 border border-slate-700 text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none resize-none"
+                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none resize-none"
               />
             </div>
           </div>
 
           {/* Section 3: Attorney (Agent) */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
-            <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
-              <User className="w-4 h-4 text-blue-400" />
-              <h2 className="text-sm font-bold text-white uppercase tracking-wider">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
+            <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+              <User className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              <h2 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
                 3. Attorney / Agent (Grantee of Power)
               </h2>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="text-xs font-medium text-slate-400 block mb-1">Attorney Legal Name:</label>
+                <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">Attorney Legal Name:</label>
                 <input
                   type="text"
                   value={formData.attorneyName}
                   onChange={e => handleInputChange('attorneyName', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
                 />
               </div>
               <div>
-                <label className="text-xs font-medium text-slate-400 block mb-1">Relationship to Principal:</label>
+                <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">Relationship to Principal:</label>
                 <input
                   type="text"
                   value={formData.attorneyRelationship}
                   onChange={e => handleInputChange('attorneyRelationship', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
                   placeholder="e.g. Son / Brother / Spouse / Advocate"
                 />
               </div>
@@ -400,141 +400,141 @@ export default function PoaClient() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
-                <label className="text-xs font-medium text-slate-400 block mb-1">Father's / Spouse's Name:</label>
+                <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">Father's / Spouse's Name:</label>
                 <input
                   type="text"
                   value={formData.attorneyFatherOrSpouse}
                   onChange={e => handleInputChange('attorneyFatherOrSpouse', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
                 />
               </div>
               <div>
-                <label className="text-xs font-medium text-slate-400 block mb-1">Age (Years):</label>
+                <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">Age (Years):</label>
                 <input
                   type="text"
                   value={formData.attorneyAge}
                   onChange={e => handleInputChange('attorneyAge', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
                 />
               </div>
               <div>
-                <label className="text-xs font-medium text-slate-400 block mb-1">PAN (Optional):</label>
+                <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">PAN (Optional):</label>
                 <input
                   type="text"
                   value={formData.attorneyPan || ''}
                   onChange={e => handleInputChange('attorneyPan', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none uppercase"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none uppercase"
                   placeholder="XYZPA5432M"
                 />
               </div>
             </div>
 
             <div>
-              <label className="text-xs font-medium text-slate-400 block mb-1">Attorney Residence Address:</label>
+              <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">Attorney Residence Address:</label>
               <textarea
                 value={formData.attorneyAddress}
                 onChange={e => handleInputChange('attorneyAddress', e.target.value)}
                 rows={2}
-                className="w-full bg-slate-950 border border-slate-700 text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none resize-none"
+                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none resize-none"
               />
             </div>
           </div>
 
           {/* Section 4: Powers Granted */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
-            <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
-              <FileCheck className="w-4 h-4 text-purple-400" />
-              <h2 className="text-sm font-bold text-white uppercase tracking-wider">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
+            <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+              <FileCheck className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+              <h2 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
                 4. Specific Powers Conferred
               </h2>
             </div>
 
             <div className="space-y-2.5">
-              <label className="flex items-start gap-2.5 p-2 rounded-lg bg-slate-950/60 border border-slate-800 cursor-pointer text-xs">
+              <label className="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 cursor-pointer text-xs">
                 <input
                   type="checkbox"
                   checked={formData.powerBankAccounts}
                   onChange={e => handleInputChange('powerBankAccounts', e.target.checked)}
-                  className="mt-0.5 rounded border-slate-700 text-amber-500 focus:ring-amber-500"
+                  className="mt-0.5 rounded border-slate-300 dark:border-slate-700 text-amber-500 focus:ring-amber-500"
                 />
                 <div>
-                  <strong className="text-white block">Operate Bank Accounts:</strong>
-                  <span className="text-slate-400">
+                  <strong className="text-slate-900 dark:text-white block">Operate Bank Accounts:</strong>
+                  <span className="text-slate-600 dark:text-slate-400">
                     Sign cheques, manage savings/current/FD accounts, execute RTGS/NEFT instructions.
                   </span>
                 </div>
               </label>
 
-              <label className="flex items-start gap-2.5 p-2 rounded-lg bg-slate-950/60 border border-slate-800 cursor-pointer text-xs">
+              <label className="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 cursor-pointer text-xs">
                 <input
                   type="checkbox"
                   checked={formData.powerProperty}
                   onChange={e => handleInputChange('powerProperty', e.target.checked)}
-                  className="mt-0.5 rounded border-slate-700 text-amber-500 focus:ring-amber-500"
+                  className="mt-0.5 rounded border-slate-300 dark:border-slate-700 text-amber-500 focus:ring-amber-500"
                 />
                 <div>
-                  <strong className="text-white block">Manage &amp; Let Out Immovable Property:</strong>
-                  <span className="text-slate-400">
+                  <strong className="text-slate-900 dark:text-white block">Manage &amp; Let Out Immovable Property:</strong>
+                  <span className="text-slate-600 dark:text-slate-400">
                     Supervise property, let out on lease/leave &amp; license, collect rents, pay property tax.
                   </span>
                 </div>
               </label>
 
-              <label className="flex items-start gap-2.5 p-2 rounded-lg bg-slate-950/60 border border-slate-800 cursor-pointer text-xs">
+              <label className="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 cursor-pointer text-xs">
                 <input
                   type="checkbox"
                   checked={formData.powerTaxAuthorities}
                   onChange={e => handleInputChange('powerTaxAuthorities', e.target.checked)}
-                  className="mt-0.5 rounded border-slate-700 text-amber-500 focus:ring-amber-500"
+                  className="mt-0.5 rounded border-slate-300 dark:border-slate-700 text-amber-500 focus:ring-amber-500"
                 />
                 <div>
-                  <strong className="text-white block">Represent Before Tax &amp; Govt. Authorities:</strong>
-                  <span className="text-slate-400">
+                  <strong className="text-slate-900 dark:text-white block">Represent Before Tax &amp; Govt. Authorities:</strong>
+                  <span className="text-slate-600 dark:text-slate-400">
                     Appear before Income Tax, GST, Municipal Ward, Registrar of Companies, and Revenue officers.
                   </span>
                 </div>
               </label>
 
-              <label className="flex items-start gap-2.5 p-2 rounded-lg bg-slate-950/60 border border-slate-800 cursor-pointer text-xs">
+              <label className="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 cursor-pointer text-xs">
                 <input
                   type="checkbox"
                   checked={formData.powerLitigation}
                   onChange={e => handleInputChange('powerLitigation', e.target.checked)}
-                  className="mt-0.5 rounded border-slate-700 text-amber-500 focus:ring-amber-500"
+                  className="mt-0.5 rounded border-slate-300 dark:border-slate-700 text-amber-500 focus:ring-amber-500"
                 />
                 <div>
-                  <strong className="text-white block">Represent in Court &amp; Engage Advocates:</strong>
-                  <span className="text-slate-400">
+                  <strong className="text-slate-900 dark:text-white block">Represent in Court &amp; Engage Advocates:</strong>
+                  <span className="text-slate-600 dark:text-slate-400">
                     Institute and defend civil/criminal suits, sign plaints, affidavits, and appoint legal counsel.
                   </span>
                 </div>
               </label>
 
-              <label className="flex items-start gap-2.5 p-2 rounded-lg bg-slate-950/60 border border-slate-800 cursor-pointer text-xs">
+              <label className="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 cursor-pointer text-xs">
                 <input
                   type="checkbox"
                   checked={formData.powerRegistration}
                   onChange={e => handleInputChange('powerRegistration', e.target.checked)}
-                  className="mt-0.5 rounded border-slate-700 text-amber-500 focus:ring-amber-500"
+                  className="mt-0.5 rounded border-slate-300 dark:border-slate-700 text-amber-500 focus:ring-amber-500"
                 />
                 <div>
-                  <strong className="text-white block">Execute &amp; Register Documents:</strong>
-                  <span className="text-slate-400">
+                  <strong className="text-slate-900 dark:text-white block">Execute &amp; Register Documents:</strong>
+                  <span className="text-slate-600 dark:text-slate-400">
                     Present deeds and admit execution before the Sub-Registrar of Assurances.
                   </span>
                 </div>
               </label>
 
-              <label className="flex items-start gap-2.5 p-2 rounded-lg bg-slate-950/60 border border-slate-800 cursor-pointer text-xs">
+              <label className="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 cursor-pointer text-xs">
                 <input
                   type="checkbox"
                   checked={formData.powerMoneys}
                   onChange={e => handleInputChange('powerMoneys', e.target.checked)}
-                  className="mt-0.5 rounded border-slate-700 text-amber-500 focus:ring-amber-500"
+                  className="mt-0.5 rounded border-slate-300 dark:border-slate-700 text-amber-500 focus:ring-amber-500"
                 />
                 <div>
-                  <strong className="text-white block">Recover Moneys &amp; Issue Valid Receipts:</strong>
-                  <span className="text-slate-400">
+                  <strong className="text-slate-900 dark:text-white block">Recover Moneys &amp; Issue Valid Receipts:</strong>
+                  <span className="text-slate-600 dark:text-slate-400">
                     Demand, sue for, collect all debts, sums, dues and grant binding legal discharges.
                   </span>
                 </div>
@@ -543,30 +543,30 @@ export default function PoaClient() {
 
             {/* Conditional Property Details */}
             {formData.powerProperty && (
-              <div className="mt-4 pt-4 border-t border-slate-800 space-y-3 bg-slate-950/50 p-3.5 rounded-xl border border-slate-800">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-amber-400">
+              <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-800 space-y-3 bg-slate-50 dark:bg-slate-950/50 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-amber-700 dark:text-amber-400">
                   <Home className="w-3.5 h-3.5" />
                   <span>Property Details (For Schedule of Property):</span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="text-[11px] text-slate-400 block mb-1">Unit / Plot / Survey No.:</label>
+                    <label className="text-[11px] text-slate-600 dark:text-slate-400 block mb-1">Unit / Plot / Survey No.:</label>
                     <input
                       type="text"
                       value={formData.propertySurveyOrFlatNo || ''}
                       onChange={e => handleInputChange('propertySurveyOrFlatNo', e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-700 text-white rounded p-1.5 text-xs outline-none"
+                      className="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded p-1.5 text-xs outline-none"
                       placeholder="e.g. Unit 302 / Survey 44"
                     />
                   </div>
                   <div>
-                    <label className="text-[11px] text-slate-400 block mb-1">Building / Society:</label>
+                    <label className="text-[11px] text-slate-600 dark:text-slate-400 block mb-1">Building / Society:</label>
                     <input
                       type="text"
                       value={formData.propertyBuilding || ''}
                       onChange={e => handleInputChange('propertyBuilding', e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-700 text-white rounded p-1.5 text-xs outline-none"
+                      className="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded p-1.5 text-xs outline-none"
                       placeholder="e.g. Trade Tower Co-op Society"
                     />
                   </div>
@@ -574,30 +574,30 @@ export default function PoaClient() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
-                    <label className="text-[11px] text-slate-400 block mb-1">City:</label>
+                    <label className="text-[11px] text-slate-600 dark:text-slate-400 block mb-1">City:</label>
                     <input
                       type="text"
                       value={formData.propertyCity || ''}
                       onChange={e => handleInputChange('propertyCity', e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-700 text-white rounded p-1.5 text-xs outline-none"
+                      className="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded p-1.5 text-xs outline-none"
                     />
                   </div>
                   <div>
-                    <label className="text-[11px] text-slate-400 block mb-1">State:</label>
+                    <label className="text-[11px] text-slate-600 dark:text-slate-400 block mb-1">State:</label>
                     <input
                       type="text"
                       value={formData.propertyState || ''}
                       onChange={e => handleInputChange('propertyState', e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-700 text-white rounded p-1.5 text-xs outline-none"
+                      className="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded p-1.5 text-xs outline-none"
                     />
                   </div>
                   <div>
-                    <label className="text-[11px] text-slate-400 block mb-1">Area (sq. ft.):</label>
+                    <label className="text-[11px] text-slate-600 dark:text-slate-400 block mb-1">Area (sq. ft.):</label>
                     <input
                       type="text"
                       value={formData.propertyArea || ''}
                       onChange={e => handleInputChange('propertyArea', e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-700 text-white rounded p-1.5 text-xs outline-none"
+                      className="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded p-1.5 text-xs outline-none"
                     />
                   </div>
                 </div>
@@ -605,35 +605,35 @@ export default function PoaClient() {
             )}
 
             <div>
-              <label className="text-xs font-medium text-slate-400 block mb-1">
+              <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">
                 Other Bespoke Powers (Optional):
               </label>
               <textarea
                 value={formData.otherPowers || ''}
                 onChange={e => handleInputChange('otherPowers', e.target.value)}
                 rows={2}
-                className="w-full bg-slate-950 border border-slate-700 text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none resize-none"
+                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none resize-none"
                 placeholder="e.g. Specific authority to appear before municipal board for water connection..."
               />
             </div>
           </div>
 
           {/* Section 5: Duration */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
-            <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
-              <Calendar className="w-4 h-4 text-emerald-400" />
-              <h2 className="text-sm font-bold text-white uppercase tracking-wider">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
+            <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+              <Calendar className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              <h2 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
                 5. Duration of Authority
               </h2>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="text-xs font-medium text-slate-400 block mb-1">Duration Mode:</label>
+                <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">Duration Mode:</label>
                 <select
                   value={formData.durationMode}
                   onChange={e => handleInputChange('durationMode', e.target.value as any)}
-                  className="w-full bg-slate-950 border border-slate-700 text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
                 >
                   <option value="Until Revoked in Writing">Until Revoked in Writing</option>
                   <option value="Fixed Period">Fixed Expiry Date</option>
@@ -641,12 +641,12 @@ export default function PoaClient() {
               </div>
               {formData.durationMode === 'Fixed Period' && (
                 <div>
-                  <label className="text-xs font-medium text-slate-400 block mb-1">Valid Until Date:</label>
+                  <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">Valid Until Date:</label>
                   <input
                     type="text"
                     value={formData.validUntilDate || ''}
                     onChange={e => handleInputChange('validUntilDate', e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-700 text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white rounded-lg p-2 text-xs focus:ring-1 focus:ring-amber-500 outline-none"
                     placeholder="e.g. 31st October 2027"
                   />
                 </div>
@@ -655,14 +655,14 @@ export default function PoaClient() {
           </div>
 
           {/* Maharashtra Stamp Duty Guide Box */}
-          <div className="bg-slate-900 border border-amber-500/30 rounded-2xl p-5 shadow-sm space-y-3">
-            <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
-              <Gavel className="w-4 h-4 text-amber-400" />
-              <h3 className="text-xs sm:text-sm font-bold text-white">
+          <div className="bg-amber-50/70 dark:bg-slate-900 border border-amber-300 dark:border-amber-500/30 rounded-2xl p-5 shadow-sm space-y-3">
+            <div className="flex items-center gap-2 border-b border-amber-200 dark:border-slate-800 pb-2">
+              <Gavel className="w-4 h-4 text-amber-700 dark:text-amber-400" />
+              <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
                 Maharashtra Stamp Duty Reference (Article 48)
               </h3>
             </div>
-            <ul className="text-xs text-slate-300 space-y-1.5 list-disc pl-5">
+            <ul className="text-xs text-slate-700 dark:text-slate-300 space-y-1.5 list-disc pl-5">
               <li>
                 <strong>To Close Relatives (Father, Mother, Spouse, Son, Daughter, Brother, Sister):</strong>{' '}
                 Flat <strong>₹500</strong> stamp duty without consideration.
@@ -702,14 +702,14 @@ export default function PoaClient() {
           }`}
         >
           {/* Action Header Card */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm space-y-4 sticky top-6 z-20">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-sm space-y-4 sticky top-6 z-20">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-amber-400" />
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                   Live Document Preview
                 </h3>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   Court-admissible text ready for non-judicial stamp paper &amp; notarial attestation
                 </p>
               </div>
@@ -719,11 +719,11 @@ export default function PoaClient() {
                 <button
                   type="button"
                   onClick={handleCopyText}
-                  className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 inline-flex items-center gap-1.5 transition"
+                  className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 inline-flex items-center gap-1.5 transition"
                 >
                   {isCopied ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                      <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                       Copied!
                     </>
                   ) : (
@@ -736,7 +736,7 @@ export default function PoaClient() {
                 <button
                   type="button"
                   onClick={handlePrint}
-                  className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 inline-flex items-center gap-1.5 transition"
+                  className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 inline-flex items-center gap-1.5 transition"
                 >
                   <Printer className="w-3.5 h-3.5" />
                   Print
@@ -754,7 +754,7 @@ export default function PoaClient() {
                   type="button"
                   disabled={isDownloading === 'pdf'}
                   onClick={() => handleDownload('pdf')}
-                  className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 text-slate-200 text-xs font-bold rounded-lg border border-slate-700 inline-flex items-center gap-1.5 transition"
+                  className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 disabled:opacity-50 text-white text-xs font-bold rounded-lg border border-slate-700 inline-flex items-center gap-1.5 transition"
                 >
                   <Download className="w-3.5 h-3.5 text-red-400" />
                   {isDownloading === 'pdf' ? 'Generating PDF...' : 'PDF'}
@@ -763,19 +763,33 @@ export default function PoaClient() {
             </div>
 
             {downloadError && (
-              <div className="p-2.5 bg-red-950/60 border border-red-800 rounded-lg text-xs text-red-200">
+              <div className="p-2.5 bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 rounded-lg text-xs text-red-800 dark:text-red-200">
                 {downloadError}
               </div>
             )}
 
-            {/* Clean LegalDocRenderer Canvas */}
-            <div className="bg-slate-950 border border-slate-800 rounded-xl p-5 sm:p-6 max-h-[750px] overflow-y-auto text-slate-100 shadow-inner">
-              <LegalDocRenderer content={markdownText} />
+            {/* Clean LegalDocRenderer Canvas with Real Paper Styling */}
+            <div className="bg-slate-100/70 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 rounded-xl p-4 sm:p-6 max-h-[750px] overflow-y-auto shadow-inner font-serif">
+              <div className="mx-auto max-w-3xl rounded-xl border border-slate-300 bg-white p-6 sm:p-10 shadow-sm dark:border-slate-700 dark:bg-slate-900 text-slate-900 dark:text-slate-100 text-xs sm:text-sm leading-relaxed space-y-4">
+                <div className="border-b border-slate-200 pb-3 dark:border-slate-800 text-center">
+                  <span className="text-[10px] font-sans font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+                    Official Document Preview &bull; Statutory Format
+                  </span>
+                </div>
+
+                <div className="pt-2">
+                  <LegalDocRenderer id="poa-doc-preview" content={markdownText} />
+                </div>
+
+                <div className="pt-6 border-t border-slate-200 dark:border-slate-800 font-sans text-[11px] text-slate-500 text-center">
+                  Generated via CorpLawUpdates.in &bull; Ready for execution on non-judicial stamp paper or notarial attestation
+                </div>
+              </div>
             </div>
 
-            <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1">
+            <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 pt-1">
               <span className="flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                 Powers of Attorney Act, 1882 compliant
               </span>
               <span>Notary Attestation &amp; Stamping Recommended</span>

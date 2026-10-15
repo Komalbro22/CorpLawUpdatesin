@@ -44,7 +44,7 @@
   <rect x="60" y="172" width="1080" height="3" fill="url(#gold3)" rx="1.5" />
 
   <!-- 3 Main Pillars / Fact Cards -->
-  <!-- Card 1: Contract Act & On-Demand Rule -->
+  <!-- Card 1: Contract Act &amp; On-Demand Rule -->
   <g transform="translate(60, 195)">
     <rect width="340" height="375" rx="14" fill="url(#cardBg3)" stroke="#334155" stroke-width="1.5" />
     <rect x="0" y="0" width="340" height="6" fill="#8B5CF6" rx="3" />
@@ -90,7 +90,7 @@
     </text>
   </g>
 
-  <!-- Card 2: Types & Practical Pitfalls -->
+  <!-- Card 2: Types &amp; Practical Pitfalls -->
   <g transform="translate(430, 195)">
     <rect width="340" height="375" rx="14" fill="url(#cardBg3)" stroke="#334155" stroke-width="1.5" />
     <rect x="0" y="0" width="340" height="6" fill="#F59E0B" rx="3" />

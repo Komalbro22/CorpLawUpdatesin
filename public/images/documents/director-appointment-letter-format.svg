@@ -90,7 +90,7 @@
     </text>
   </g>
 
-  <!-- Card 2: Letter & Roles -->
+  <!-- Card 2: Letter &amp; Roles -->
   <g transform="translate(430, 195)">
     <rect width="340" height="375" rx="14" fill="url(#cardBg2)" stroke="#334155" stroke-width="1.5" />
     <rect x="0" y="0" width="340" height="6" fill="#F59E0B" rx="3" />

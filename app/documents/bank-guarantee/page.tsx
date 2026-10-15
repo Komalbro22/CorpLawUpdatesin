@@ -236,13 +236,14 @@ export default function BankGuaranteePage() {
               <Layers className="w-5 h-5 text-blue-600" />
               Bank Guarantee Lifecycle &amp; Invocation Framework
             </h2>
-            <div className="relative aspect-1200/630 w-full overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800">
+            <div className="w-full overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800">
               <Image
                 src="/images/documents/bank-guarantee-format-india.svg"
                 alt="Bank guarantee format India legal and stamp duty framework infographic"
-                fill
+                width={1200}
+                height={630}
                 unoptimized
-                className="object-contain"
+                className="w-full h-auto"
                 priority
               />
             </div>

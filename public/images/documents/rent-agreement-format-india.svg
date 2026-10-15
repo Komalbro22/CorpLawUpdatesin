@@ -87,7 +87,7 @@
     </text>
   </g>
 
-  <!-- Card 2: Maharashtra Duty & Digital Mandate -->
+  <!-- Card 2: Maharashtra Duty &amp; Digital Mandate -->
   <g transform="translate(430, 195)">
     <rect width="340" height="375" rx="14" fill="url(#cardBg)" stroke="#334155" stroke-width="1.5" />
     <rect x="0" y="0" width="340" height="6" fill="#10B981" rx="3" />
@@ -95,7 +95,7 @@
       2. Maharashtra Formula
     </text>
     <text x="24" y="68" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
-      Stamp Duty Rate: 0.25% (&le; 5 Years)
+      Stamp Duty Rate: 0.25% (&#8804; 5 Years)
     </text>
     <text x="24" y="94" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
       Taxable Base Calculation:
@@ -119,7 +119,7 @@
       &#8226; Mandatory w.e.f. 1 July 2025 in MH
     </text>
     <text x="24" y="268" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
-      &#8226; Physical franking invalid; &le; ₹5,000 fine
+      &#8226; Physical franking invalid; &#8804; ₹5,000 fine
     </text>
     <text x="24" y="292" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
       &#8226; Flat fee: ₹1,000 (urban) / ₹500 (rural)
@@ -130,7 +130,7 @@
     </text>
   </g>
 
-  <!-- Card 3: Execution & MTA 2021 Rules -->
+  <!-- Card 3: Execution &amp; MTA 2021 Rules -->
   <g transform="translate(800, 195)">
     <rect width="340" height="375" rx="14" fill="url(#cardBg)" stroke="#334155" stroke-width="1.5" />
     <rect x="0" y="0" width="340" height="6" fill="#38BDF8" rx="3" />

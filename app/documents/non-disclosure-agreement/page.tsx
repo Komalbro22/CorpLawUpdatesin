@@ -238,13 +238,14 @@ export default function NdaPage() {
               <Layers className="w-5 h-5 text-amber-600" />
               Non-Disclosure Agreement Legal Architecture at a Glance
             </h2>
-            <div className="relative aspect-1200/630 w-full overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800">
+            <div className="w-full overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800">
               <Image
                 src="/images/documents/non-disclosure-agreement-format-india.svg"
                 alt="Non-disclosure agreement format India legal guide infographic"
-                fill
+                width={1200}
+                height={630}
                 unoptimized
-                className="object-contain"
+                className="w-full h-auto"
                 priority
               />
             </div>
