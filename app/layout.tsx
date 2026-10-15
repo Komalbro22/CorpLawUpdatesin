@@ -155,6 +155,8 @@ export default async function RootLayout({
         />
         {/* Clickio Consent Main tag */}
         <script async type="text/javascript" src="https://clickiocmp.com/t/consent_250831.js" />
+        {/* Clickio Web Vitals Monitoring */}
+        <script defer data-cfasync="false" src="https://s.clickiocdn.com/t/250831_wv.js" />
         <link rel="dns-prefetch" href="https://clickiocmp.com" />
         <link rel="preconnect" href="https://clickiocmp.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://clickiocdn.com" />
