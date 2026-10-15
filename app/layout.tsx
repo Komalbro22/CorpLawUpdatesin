@@ -129,14 +129,7 @@ export default async function RootLayout({
         />
         <meta name="google-adsense-account" content="ca-pub-8404756575471756" />
         <meta name="monetag" content="53e830deaec95301a49eb4b797c9cbc8" />
-        {/* Monetag In-Page Push (Zone: 12038087) — Placed after <head> tag as required by Monetag installation scanner */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(s){s.dataset.zone='12038087',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`
-          }}
-        />
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
-        <link rel="dns-prefetch" href="https://nap5k.com" />
         <link rel="preconnect" href="https://i.ibb.co" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://i.ibb.co" />
         <link rel="preconnect" href="https://fcosrsznbxedischtbwe.supabase.co" crossOrigin="anonymous" />
