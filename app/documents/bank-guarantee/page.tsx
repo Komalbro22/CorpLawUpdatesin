@@ -241,6 +241,7 @@ export default function BankGuaranteePage() {
                 src="/images/documents/bank-guarantee-format-india.svg"
                 alt="Bank guarantee format India legal and stamp duty framework infographic"
                 fill
+                unoptimized
                 className="object-contain"
                 priority
               />

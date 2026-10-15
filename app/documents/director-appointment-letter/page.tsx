@@ -237,6 +237,7 @@ export default function DirectorAppointmentPage() {
                 src="/images/documents/director-appointment-letter-format.svg"
                 alt="Director appointment letter format India compliance framework infographic"
                 fill
+                unoptimized
                 className="object-contain"
                 priority
               />

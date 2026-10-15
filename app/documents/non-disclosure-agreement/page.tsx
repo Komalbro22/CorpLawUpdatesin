@@ -243,6 +243,7 @@ export default function NdaPage() {
                 src="/images/documents/non-disclosure-agreement-format-india.svg"
                 alt="Non-disclosure agreement format India legal guide infographic"
                 fill
+                unoptimized
                 className="object-contain"
                 priority
               />

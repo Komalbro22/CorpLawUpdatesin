@@ -20,6 +20,7 @@ import {
   DirectorDesignation,
   generateDirectorAppointmentMarkdown,
 } from '@/lib/doc-generator/director-appointment-generator'
+import LegalDocRenderer, { cleanMarkdownForClipboard } from '@/components/documents/LegalDocRenderer'
 
 const DESIGNATIONS: DirectorDesignation[] = [
   'Additional Director',
@@ -99,10 +100,11 @@ export default function DirectorAppointmentClient() {
     }
   }
 
-  // Copy Preview
+  // Copy Clean Text without markdown syntax tokens
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(markdownText)
+      const cleanText = cleanMarkdownForClipboard(markdownText)
+      await navigator.clipboard.writeText(cleanText)
       setIsCopied(true)
       setTimeout(() => setIsCopied(false), 2000)
     } catch {
@@ -110,8 +112,11 @@ export default function DirectorAppointmentClient() {
     }
   }
 
-  // Print
+  // Print using rendered document styles
   const handlePrint = () => {
+    const previewEl = document.getElementById('director-appointment-doc-preview')
+    if (!previewEl) return
+
     const printWindow = window.open('', '_blank')
     if (!printWindow) return
 
@@ -122,23 +127,18 @@ export default function DirectorAppointmentClient() {
           <title>Appointment Letter - ${formData.directorName}</title>
           <style>
             body { font-family: 'Times New Roman', Times, serif; font-size: 11pt; line-height: 1.5; margin: 40px; color: #111; }
-            h1 { font-size: 16pt; text-align: center; margin-bottom: 4px; }
-            h2 { font-size: 13pt; margin-top: 14px; }
-            h3 { font-size: 11.5pt; margin-top: 12px; }
+            h1 { font-size: 14pt; text-align: center; margin-bottom: 8px; font-weight: bold; text-transform: uppercase; }
+            h2 { font-size: 12pt; text-align: center; margin: 10px 0 4px 0; font-weight: bold; }
+            h3, h4 { font-size: 11pt; margin: 10px 0 4px 0; font-weight: bold; }
             p { margin: 6px 0; text-align: justify; }
             blockquote { margin: 6px 0; padding-left: 12px; border-left: 2px solid #0056b3; font-style: italic; }
             hr { border: none; border-top: 1px solid #ccc; margin: 16px 0; }
+            ul, ol { padding-left: 24px; margin: 6px 0; }
+            li { text-align: justify; margin: 3px 0; }
           </style>
         </head>
         <body>
-          <div>
-            ${markdownText
-              .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-              .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-              .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
-              .replace(/\*(.*?)\*/gim, '<em>$1</em>')
-              .replace(/\n\n/gim, '<p></p>')}
-          </div>
+          ${previewEl.innerHTML}
         </body>
       </html>
     `)
@@ -147,7 +147,7 @@ export default function DirectorAppointmentClient() {
     setTimeout(() => {
       printWindow.print()
       printWindow.close()
-    }, 400)
+    }, 300)
   }
 
   return (
@@ -480,10 +480,8 @@ export default function DirectorAppointmentClient() {
               </span>
             </div>
 
-            <div className="whitespace-pre-line text-justify font-serif space-y-3">
-              {markdownText
-                .replace(/^# (.*$)/gim, '')
-                .replace(/^---/gim, '')}
+            <div className="pt-2">
+              <LegalDocRenderer id="director-appointment-doc-preview" content={markdownText} />
             </div>
 
             <div className="pt-6 border-t border-slate-200 dark:border-slate-800 font-sans text-[11px] text-slate-500 text-center">

@@ -28,7 +28,7 @@
   <g transform="translate(60, 45)">
     <rect width="320" height="32" rx="16" fill="#1E293B" stroke="#10B981" stroke-width="1.5" />
     <text x="160" y="21" fill="#34D399" font-family="system-ui, sans-serif" font-size="13" font-weight="700" text-anchor="middle" letter-spacing="1">
-      COMPANIES ACT, 2013 &bull; STATUTORY GUIDE
+      COMPANIES ACT, 2013 &#8226; STATUTORY GUIDE
     </text>
   </g>
 
@@ -37,7 +37,7 @@
     Director Appointment Compliance Architecture in India
   </text>
   <text x="60" y="152" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="16" font-weight="500">
-    Sections 149, 152, 161, 164, 166, 170 &amp; Schedule IV &bull; DIR-2 Consent &bull; 30-Day DIR-12 ROC Filing
+    Sections 149, 152, 161, 164, 166, 170 &amp; Schedule IV &#8226; DIR-2 Consent &#8226; 30-Day DIR-12 ROC Filing
   </text>
 
   <!-- Gold Divider -->
@@ -56,10 +56,10 @@
       Active DIN (Director ID)
     </text>
     <text x="24" y="94" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
-      &bull; Sections 153&ndash;159 Companies Act
+      &#8226; Sections 153&#8211;159 Companies Act
     </text>
     <text x="24" y="118" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
-      &bull; Appointment without DIN is VOID
+      &#8226; Appointment without DIN is VOID
     </text>
 
     <line x1="24" y1="140" x2="316" y2="140" stroke="#334155" stroke-width="1" />
@@ -68,10 +68,10 @@
       Form DIR-2 Written Consent
     </text>
     <text x="24" y="196" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
-      &bull; Section 152(5) mandatory consent
+      &#8226; Section 152(5) mandatory consent
     </text>
     <text x="24" y="220" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
-      &bull; Must be obtained prior to board meeting
+      &#8226; Must be obtained prior to board meeting
     </text>
 
     <line x1="24" y1="242" x2="316" y2="242" stroke="#334155" stroke-width="1" />
@@ -80,13 +80,13 @@
       Non-Disqualification &amp; MBP-1
     </text>
     <text x="24" y="298" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
-      &bull; Section 164 disqualification declaration
+      &#8226; Section 164 disqualification declaration
     </text>
     <text x="24" y="322" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
-      &bull; Form MBP-1 disclosure under Sec 184(1)
+      &#8226; Form MBP-1 disclosure under Sec 184(1)
     </text>
     <text x="24" y="346" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
-      &bull; Table disclosure at first board meeting
+      &#8226; Table disclosure at first board meeting
     </text>
   </g>
 
@@ -102,10 +102,10 @@
       Additional Director (Sec 161(1))
     </text>
     <text x="24" y="94" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
-      &bull; Appointed by Board between AGMs
+      &#8226; Appointed by Board between AGMs
     </text>
     <text x="24" y="118" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
-      &bull; Office holds only until next AGM
+      &#8226; Office holds only until next AGM
     </text>
 
     <line x1="24" y1="140" x2="316" y2="140" stroke="#334155" stroke-width="1" />
@@ -114,13 +114,13 @@
       Independent Director (Schedule IV)
     </text>
     <text x="24" y="196" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
-      &bull; Formal appointment letter MANDATORY
+      &#8226; Formal appointment letter MANDATORY
     </text>
     <text x="24" y="220" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
-      &bull; Committees, fiduciary duties &amp; fees
+      &#8226; Committees, fiduciary duties &amp; fees
     </text>
     <text x="24" y="244" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
-      &bull; Sec 149(7) independence declaration
+      &#8226; Sec 149(7) independence declaration
     </text>
 
     <line x1="24" y1="266" x2="316" y2="266" stroke="#334155" stroke-width="1" />
@@ -129,10 +129,10 @@
       Letterhead &amp; No Stamp Duty
     </text>
     <text x="24" y="322" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
-      &bull; Issued on company&apos;s formal letterhead
+      &#8226; Issued on company&apos;s formal letterhead
     </text>
     <text x="24" y="346" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
-      &bull; No stamp duty on appointment letter itself
+      &#8226; No stamp duty on appointment letter itself
     </text>
   </g>
 
@@ -148,13 +148,13 @@
       Form DIR-12 Filing
     </text>
     <text x="24" y="94" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
-      &bull; Section 170(2) statutory timeline
+      &#8226; Section 170(2) statutory timeline
     </text>
     <text x="24" y="118" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
-      &bull; Within 30 days of appointment date
+      &#8226; Within 30 days of appointment date
     </text>
     <text x="24" y="142" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
-      &bull; Attach: Board Resolution, DIR-2, MBP-1
+      &#8226; Attach: Board Resolution, DIR-2, MBP-1
     </text>
 
     <line x1="24" y1="165" x2="316" y2="165" stroke="#334155" stroke-width="1" />
@@ -163,10 +163,10 @@
       Register of Directors &amp; KMP
     </text>
     <text x="24" y="221" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
-      &bull; Update statutory register (Sec 170(1))
+      &#8226; Update statutory register (Sec 170(1))
     </text>
     <text x="24" y="245" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
-      &bull; Maintained at Registered Office
+      &#8226; Maintained at Registered Office
     </text>
 
     <line x1="24" y1="268" x2="316" y2="268" stroke="#334155" stroke-width="1" />
@@ -175,15 +175,15 @@
       Duties of Directors (Sec 166)
     </text>
     <text x="24" y="324" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
-      &bull; Fiduciary care, good faith, no conflict
+      &#8226; Fiduciary care, good faith, no conflict
     </text>
     <text x="24" y="348" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
-      &bull; Penal fine &#8377;1L to &#8377;5L for breach
+      &#8226; Penal fine &#8377;1L to &#8377;5L for breach
     </text>
   </g>
 
   <!-- Footer Tag -->
   <text x="600" y="605" fill="#64748B" font-family="system-ui, sans-serif" font-size="12" font-weight="500" text-anchor="middle">
-    CorpLawUpdates.in &bull; Verified Indian Corporate Law Intelligence &bull; Word (.docx) &amp; PDF Generator
+    CorpLawUpdates.in &#8226; Verified Indian Corporate Law Intelligence &#8226; Word (.docx) &amp; PDF Generator
   </text>
 </svg>
