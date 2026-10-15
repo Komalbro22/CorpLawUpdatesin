@@ -199,6 +199,10 @@ export default async function Footer() {
                         <Link href="/terms" className="hover:text-white focus:outline-hidden focus:underline transition-colors">Terms</Link>
                         <Link href="/disclaimer" className="hover:text-white focus:outline-hidden focus:underline transition-colors">Disclaimer</Link>
                         <CookiePreferencesButton />
+                        <style dangerouslySetInnerHTML={{ __html: `body.clickio-cmp-in-scope .clickio-cmp-settings-display { display: inherit !important; }` }} />
+                        <a className="clickio-cmp-settings-text clickio-cmp-settings-display hover:text-white focus:outline-hidden focus:underline transition-colors" style={{ display: 'none' }} href="#">
+                            Your Privacy Choices
+                        </a>
                         <Link href="/api/feed.xml" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-white focus:outline-hidden focus:underline transition-colors" prefetch={false}>
                             <Rss className="size-3 text-amber-400" aria-hidden="true" /> RSS
                         </Link>

@@ -440,7 +440,7 @@ describe('CSP: Ad Traffic Quality iframe allowlisting', () => {
     expect(csp).toMatch(/frame-src[^;]*https:\/\/\*\.adtrafficquality\.google/)
   })
 
-  it('allows Monetag and nap5k domains in script-src, connect-src, and frame-src directives', async () => {
+  it('allows Clickio CMP and CDN domains in script-src, connect-src, and frame-src directives', async () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const nextConfig = require('../next.config.js')
     const headers = await nextConfig.headers()
@@ -448,8 +448,8 @@ describe('CSP: Ad Traffic Quality iframe allowlisting', () => {
     const csp = rootHeader.headers.find((h: any) => h.key === 'Content-Security-Policy')?.value
 
     expect(csp).toBeDefined()
-    expect(csp).toContain('https://nap5k.com')
-    expect(csp).toContain('https://*.monetag.com')
+    expect(csp).toContain('https://clickiocmp.com')
+    expect(csp).toContain('https://*.clickiocdn.com')
   })
 })
 

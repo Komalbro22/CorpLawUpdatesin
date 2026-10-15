@@ -1,6 +1,7 @@
 import React from 'react';
 /* eslint-disable react/no-unescaped-entities */
 import Link from 'next/link';
+import Script from 'next/script';
 
 export const metadata = {
     title: 'Privacy Policy | CorpLawUpdates.in',
@@ -256,6 +257,13 @@ export default function PrivacyPolicyPage() {
                     <p className="text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">
                         CorpLawUpdates.in uses essential cookies, device storage, and privacy-respecting analytics to enhance user navigation and measure platform readership in compliance with the Digital Personal Data Protection (DPDP) Act, 2023 and the DPDP Rules, 2025.
                     </p>
+
+                    {/* Clickio Dynamic Cookie List Embed */}
+                    <div className="my-6 p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/30">
+                        <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">Automated Cookie Inventory</h3>
+                        <div className="clickio-cookie-list" />
+                        <Script async src="https://clickiocdn.com/t/cookie-list/embed.js?site_id=250831" strategy="lazyOnload" />
+                    </div>
 
                     <div className="space-y-6 text-slate-600 dark:text-slate-400">
                         <div>
