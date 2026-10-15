@@ -90,6 +90,7 @@ export const metadata: Metadata = {
   },
   other: {
     'google-adsense-account': 'ca-pub-8404756575471756',
+    'monetag': '53e830deaec95301a49eb4b797c9cbc8',
   },
 }
 
@@ -127,6 +128,7 @@ export default async function RootLayout({
           }}
         />
         <meta name="google-adsense-account" content="ca-pub-8404756575471756" />
+        <meta name="monetag" content="53e830deaec95301a49eb4b797c9cbc8" />
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="preconnect" href="https://i.ibb.co" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://i.ibb.co" />
