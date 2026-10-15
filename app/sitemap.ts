@@ -2,9 +2,7 @@ import { MetadataRoute } from 'next'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { mcaForms } from '@/data/mca-forms'
 
-// Dynamic generation so new articles immediately reflect in sitemap without static ISR delays
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+export const revalidate = 3600 // 1 hour edge cache; on-demand revalidated via revalidatePath('/sitemap.xml') on article publish
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const BASE_URL = 'https://www.corplawupdates.in'

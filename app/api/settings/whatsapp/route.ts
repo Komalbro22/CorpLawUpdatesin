@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabase'
 import { NextResponse } from "next/server";
 
-export const revalidate = 0
+export const revalidate = 3600 // 1 hour edge cache
 
 export async function GET() {
 

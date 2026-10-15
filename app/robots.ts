@@ -37,7 +37,7 @@ export default function robots(): MetadataRoute.Robots {
   const aiRules = aiSearchBots.map(bot => ({
     userAgent: bot,
     allow: '/',
-    disallow: ['/admin/', '/api/admin/', '/sitemap/companies/'],
+    disallow: ['/admin/', '/api/admin/', '/sitemap/companies/', '/company/', '/api/'],
   }))
 
   const scraperRules = abusiveScrapers.map(bot => ({
@@ -50,12 +50,13 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: 'Mediapartners-Google',
         allow: '/',
+        disallow: ['/admin/', '/api/admin/'],
       },
       ...scraperRules,
       ...aiRules,
       {
         userAgent: '*',
-        allow: ['/', '/api/og', '/api/feed.xml', '/api/image-proxy'],
+        allow: ['/', '/api/og', '/api/feed.xml'],
         disallow: [
           '/api/',
           '/admin/',

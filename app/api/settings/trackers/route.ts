@@ -1,7 +1,7 @@
 import { getSetting } from '@/lib/settings'
 import { NextResponse } from 'next/server'
 
-export const revalidate = 0
+export const revalidate = 86400 // 24 hours edge cache
 
 export async function GET() {
   try {

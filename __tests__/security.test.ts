@@ -321,8 +321,15 @@ describe('SEC-001: Next.js API Cache-Control Configuration', () => {
       h.headers.some((hdr: any) => hdr.key === 'Cache-Control' && hdr.value.includes('public'))
     )
 
-    // Only designated public feeds/catalogs are permitted
-    const allowedSources = ['/api/feed.xml', '/api/roc/forms']
+    // Only designated public feeds/catalogs, static image proxy, and public settings are permitted
+    const allowedSources = [
+      '/api/feed.xml',
+      '/api/roc/forms',
+      '/api/image-proxy',
+      '/api/settings/announcement',
+      '/api/settings/trackers',
+      '/api/settings/whatsapp',
+    ]
     for (const rule of publicApiRules) {
       expect(allowedSources).toContain(rule.source)
     }

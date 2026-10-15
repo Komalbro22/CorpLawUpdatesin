@@ -45,6 +45,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: canonicalUrl,
       type: 'website',
     },
+    robots: {
+      index: false,
+      follow: false,
+    },
     twitter: {
       card: 'summary_large_image',
       title,

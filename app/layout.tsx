@@ -249,22 +249,6 @@ export default async function RootLayout({
           crossOrigin="anonymous"
         />
 
-        {/* Infolinks Integration disabled by user */}
-        {/* <HideOnAdmin>
-          <Script
-            id="infolinks-init"
-            strategy="lazyOnload"
-            dangerouslySetInnerHTML={{
-              __html: `var infolinks_pid = 3448562; var infolinks_wsid = 0;`,
-            }}
-          />
-          <Script
-            id="infolinks-core"
-            src="https://resources.infolinks.com/js/infolinks_main.js"
-            strategy="lazyOnload"
-          />
-        </HideOnAdmin> */}
-
       </body>
     </html>
   )

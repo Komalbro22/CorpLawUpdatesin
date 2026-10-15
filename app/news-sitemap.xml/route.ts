@@ -1,8 +1,7 @@
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { NextResponse } from 'next/server'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+export const revalidate = 1800 // 30 minutes edge cache; on-demand revalidated via revalidatePath('/news-sitemap.xml')
 
 export async function GET() {
   const BASE_URL = 'https://www.corplawupdates.in'
@@ -71,7 +70,7 @@ export async function GET() {
   return new NextResponse(xml, {
     headers: {
       'Content-Type': 'application/xml',
-      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Cache-Control': 'public, max-age=300, s-maxage=1800, stale-while-revalidate=3600',
     },
   })
 }

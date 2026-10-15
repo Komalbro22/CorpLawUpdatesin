@@ -37,7 +37,7 @@ const nextConfig = {
   async headers() {
     const isDev = process.env.NODE_ENV !== 'production'
     const scriptSrcEval = isDev ? " 'unsafe-eval'" : ""
-    const cspHeader = `default-src 'self'; script-src 'self' 'unsafe-inline'${scriptSrcEval} https://static.cloudflareinsights.com https://www.googletagmanager.com https://va.vercel-scripts.com https://*.clarity.ms https://pagead2.googlesyndication.com https://*.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://tpc.googlesyndication.com https://news.google.com https://*.google.com https://*.adtrafficquality.google https://resources.infolinks.com https://*.infolinks.com; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https:; font-src 'self' data:; connect-src 'self' blob: data: https: wss://*.supabase.co https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.adtrafficquality.google https://*.infolinks.com; frame-src 'self' https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://news.google.com https://*.google.com https://*.adtrafficquality.google https://*.infolinks.com; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests;`
+    const cspHeader = `default-src 'self'; script-src 'self' 'unsafe-inline'${scriptSrcEval} https://static.cloudflareinsights.com https://www.googletagmanager.com https://va.vercel-scripts.com https://*.clarity.ms https://pagead2.googlesyndication.com https://*.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://tpc.googlesyndication.com https://news.google.com https://*.google.com https://*.adtrafficquality.google; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https:; font-src 'self' data:; connect-src 'self' blob: data: https: wss://*.supabase.co https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.adtrafficquality.google; frame-src 'self' https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://news.google.com https://*.google.com https://*.adtrafficquality.google; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests;`
 
     return [
       {
@@ -109,6 +109,42 @@ const nextConfig = {
         ],
       },
       {
+        source: '/api/image-proxy',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, s-maxage=31536000, stale-while-revalidate=86400, immutable',
+          },
+        ],
+      },
+      {
+        source: '/api/settings/announcement',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=60, s-maxage=300, stale-while-revalidate=600',
+          },
+        ],
+      },
+      {
+        source: '/api/settings/trackers',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800',
+          },
+        ],
+      },
+      {
+        source: '/api/settings/whatsapp',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400',
+          },
+        ],
+      },
+      {
         source: '/(images|fonts)/:path*',
         headers: [
           {
@@ -122,7 +158,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=0, s-maxage=7200, stale-while-revalidate=86400',
+            value: 'public, max-age=300, s-maxage=86400, stale-while-revalidate=604800',
           },
         ],
       },
@@ -131,7 +167,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=0, s-maxage=7200, stale-while-revalidate=86400',
+            value: 'public, max-age=300, s-maxage=86400, stale-while-revalidate=604800',
           },
         ],
       },
