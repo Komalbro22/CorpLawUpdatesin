@@ -562,7 +562,7 @@ DIN: ${din}`
                     [ Space for affixing Share Transfer Stamps / attaching e-Stamping Certificate ]
                   </p>
                   <p className="mt-1 text-[11px] text-slate-600 dark:text-slate-400">
-                    Duty calculated @ 0.015% under Schedule I, Article 62 of Indian Stamp Act, 1899. Stamps must be cancelled across under Section 12.
+                    Duty calculated @ 0.015% under Schedule I, Article 56A of Indian Stamp Act, 1899. Stamps must be cancelled across under Section 12.
                   </p>
                 </div>
               </div>
@@ -1055,7 +1055,7 @@ DIN: ${din}`
                   Total Consideration Amount (₹)
                 </label>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">
-                  For gift transfers without monetary consideration, enter Fair Market Value (FMV) or face value.
+                  Duty is 0.015% of consideration. For genuine gifts with nil consideration, stamp duty on Form SH-4 is ₹0.
                 </p>
                 <div className="relative mt-1">
                   <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-lg font-bold text-slate-400">

@@ -165,12 +165,43 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     'board-resolution-for-dividend-declaration',
   ])
 
-  const documentPages: MetadataRoute.Sitemap = (docTemplates || [])
-    .filter(d => !dedicatedSlugs.has(d.slug))
-    .map(d => ({
-      url: `${BASE_URL}/documents/${d.slug}`,
-      ...(d.updated_at ? { lastModified: new Date(d.updated_at) } : {}),
-    }))
+  // Exclude unbuilt dead slugs returning 404/incomplete until fully developed to protect crawl budget
+  const unbuiltSlugs = new Set([
+    'lease-agreement',
+    'general-power-of-attorney',
+    'consultancy-agreement',
+    'joint-venture-agreement',
+    'simple-mortgage-deed',
+  ])
+
+  // Dedicated generator pages with full legal guides and interactive tools
+  const dedicatedDocSlugs = [
+    'share-transfer-deed',
+    'partnership-deed',
+    'non-disclosure-agreement',
+    'director-appointment-letter',
+    'bank-guarantee',
+  ]
+
+  const docDatesMap = new Map<string, Date | undefined>()
+
+  ;(docTemplates || []).forEach(d => {
+    if (!dedicatedSlugs.has(d.slug) && !unbuiltSlugs.has(d.slug)) {
+      docDatesMap.set(d.slug, d.updated_at ? new Date(d.updated_at) : undefined)
+    }
+  })
+
+  // Ensure all 5 core dedicated generator pages are always present in the sitemap
+  dedicatedDocSlugs.forEach(slug => {
+    if (!docDatesMap.has(slug)) {
+      docDatesMap.set(slug, new Date('2026-10-14T22:00:00+05:30'))
+    }
+  })
+
+  const documentPages: MetadataRoute.Sitemap = Array.from(docDatesMap.entries()).map(([slug, lastModified]) => ({
+    url: `${BASE_URL}/documents/${slug}`,
+    ...(lastModified ? { lastModified } : {}),
+  }))
 
   const companyFormPages: MetadataRoute.Sitemap = mcaForms.map(form => ({
     url: `${BASE_URL}/tools/fee-calculator/companies/${form.slug}`,

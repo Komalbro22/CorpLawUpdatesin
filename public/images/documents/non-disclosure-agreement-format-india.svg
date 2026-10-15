@@ -1,0 +1,188 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="50%" stop-color="#1E293B" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+    <linearGradient id="cardBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#0F172A" stop-opacity="0.9" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)" />
+
+  <!-- Grid subtle overlay -->
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#334155" stroke-width="0.5" stroke-opacity="0.3" />
+  </pattern>
+  <rect width="1200" height="630" fill="url(#grid)" />
+
+  <!-- Top Badge -->
+  <g transform="translate(60, 45)">
+    <rect width="280" height="32" rx="16" fill="#1E293B" stroke="#D97706" stroke-width="1.5" />
+    <text x="140" y="21" fill="#F59E0B" font-family="system-ui, sans-serif" font-size="13" font-weight="700" text-anchor="middle" letter-spacing="1">
+      CORPLAWUPDATES.IN &bull; STATUTORY GUIDE
+    </text>
+  </g>
+
+  <!-- Header Section -->
+  <text x="60" y="118" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="34" font-weight="800">
+    Non-Disclosure Agreement (NDA) Legal Architecture in India
+  </text>
+  <text x="60" y="152" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="16" font-weight="500">
+    Governed by the Indian Contract Act, 1872 &bull; No Standalone &ldquo;NDA Act&rdquo; in India &bull; Enforceability Checklist
+  </text>
+
+  <!-- Gold Divider -->
+  <rect x="60" y="172" width="1080" height="3" fill="url(#gold)" rx="1.5" />
+
+  <!-- 3 Main Pillars / Fact Cards -->
+  <!-- Card 1: Statutory Foundation -->
+  <g transform="translate(60, 195)">
+    <rect width="340" height="375" rx="14" fill="url(#cardBg)" stroke="#334155" stroke-width="1.5" />
+    <rect x="0" y="0" width="340" height="6" fill="#F59E0B" rx="3" />
+    <text x="24" y="38" fill="#F59E0B" font-family="system-ui, sans-serif" font-size="18" font-weight="700">
+      1. Contractual Basis
+    </text>
+    <text x="24" y="68" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Indian Contract Act, 1872
+    </text>
+    <text x="24" y="94" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13" line-height="1.4">
+      &bull; Enforced as an ordinary contract (Sec 10)
+    </text>
+    <text x="24" y="118" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Requires offer, acceptance & consideration
+    </text>
+    <text x="24" y="142" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Mutual disclosure or access to business secrets
+    </text>
+
+    <line x1="24" y1="165" x2="316" y2="165" stroke="#334155" stroke-width="1" />
+
+    <text x="24" y="195" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Section 27: Restraint of Trade
+    </text>
+    <text x="24" y="221" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Non-compete post-employment is VOID
+    </text>
+    <text x="24" y="245" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Reasonable confidentiality is VALID
+    </text>
+    <text x="24" y="269" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Protects proprietary trade secrets
+    </text>
+
+    <line x1="24" y1="292" x2="316" y2="292" stroke="#334155" stroke-width="1" />
+
+    <text x="24" y="322" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Digital Data & IT Act, 2000
+    </text>
+    <text x="24" y="348" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Sec 43A / 72A data security & DPDP Act 2023
+    </text>
+  </g>
+
+  <!-- Card 2: Essential Clauses -->
+  <g transform="translate(430, 195)">
+    <rect width="340" height="375" rx="14" fill="url(#cardBg)" stroke="#334155" stroke-width="1.5" />
+    <rect x="0" y="0" width="340" height="6" fill="#38BDF8" rx="3" />
+    <text x="24" y="38" fill="#38BDF8" font-family="system-ui, sans-serif" font-size="18" font-weight="700">
+      2. Core Enforceable Clauses
+    </text>
+
+    <text x="24" y="68" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Definition & Exclusions
+    </text>
+    <text x="24" y="94" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Specific scope (code, financials, client data)
+    </text>
+    <text x="24" y="118" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Excludes public info & prior known data
+    </text>
+
+    <line x1="24" y1="140" x2="316" y2="140" stroke="#334155" stroke-width="1" />
+
+    <text x="24" y="170" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Remedies & Injunctions
+    </text>
+    <text x="24" y="196" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Specific Relief Act, 1963 (Injunctions)
+    </text>
+    <text x="24" y="220" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Damages alone inadequate for IP breach
+    </text>
+
+    <line x1="24" y1="242" x2="316" y2="242" stroke="#334155" stroke-width="1" />
+
+    <text x="24" y="272" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Dispute Resolution & Survival
+    </text>
+    <text x="24" y="298" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Arbitration Act, 1996 with designated seat
+    </text>
+    <text x="24" y="322" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; 2 to 5 years standard survival period
+    </text>
+    <text x="24" y="346" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; No transfer of underlying IP rights
+    </text>
+  </g>
+
+  <!-- Card 3: Stamping & Execution -->
+  <g transform="translate(800, 195)">
+    <rect width="340" height="375" rx="14" fill="url(#cardBg)" stroke="#334155" stroke-width="1.5" />
+    <rect x="0" y="0" width="340" height="6" fill="#10B981" rx="3" />
+    <text x="24" y="38" fill="#10B981" font-family="system-ui, sans-serif" font-size="18" font-weight="700">
+      3. Stamping & Execution
+    </text>
+
+    <text x="24" y="68" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Stamp Duty (State Subject)
+    </text>
+    <text x="24" y="94" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Non-judicial stamp paper / e-Stamping
+    </text>
+    <text x="24" y="118" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Typical range: &#8377;100 to &#8377;500 across states
+    </text>
+    <text x="24" y="142" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Check executing state&apos;s specific Stamp Act
+    </text>
+
+    <line x1="24" y1="165" x2="316" y2="165" stroke="#334155" stroke-width="1" />
+
+    <text x="24" y="195" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Registration Not Required
+    </text>
+    <text x="24" y="221" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; No registration needed at Sub-Registrar
+    </text>
+    <text x="24" y="245" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Proper stamping makes it fully admissible
+    </text>
+
+    <line x1="24" y1="268" x2="316" y2="268" stroke="#334155" stroke-width="1" />
+
+    <text x="24" y="298" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Supreme Court 2023 Ruling
+    </text>
+    <text x="24" y="324" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Unstamped arbitration clause is NOT void
+    </text>
+    <text x="24" y="348" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Court impounds and cures duty deficit
+    </text>
+  </g>
+
+  <!-- Footer Tag -->
+  <text x="600" y="605" fill="#64748B" font-family="system-ui, sans-serif" font-size="12" font-weight="500" text-anchor="middle">
+    CorpLawUpdates.in &bull; Verified Indian Corporate Law Intelligence &bull; Word (.docx) &amp; PDF Generator
+  </text>
+</svg>

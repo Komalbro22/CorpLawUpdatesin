@@ -1,0 +1,189 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="50%" stop-color="#1E293B" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <linearGradient id="gold3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+    <linearGradient id="cardBg3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#0F172A" stop-opacity="0.9" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg3)" />
+
+  <!-- Subtle grid overlay -->
+  <pattern id="grid3" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#334155" stroke-width="0.5" stroke-opacity="0.3" />
+  </pattern>
+  <rect width="1200" height="630" fill="url(#grid3)" />
+
+  <!-- Top Badge -->
+  <g transform="translate(60, 45)">
+    <rect width="360" height="32" rx="16" fill="#1E293B" stroke="#8B5CF6" stroke-width="1.5" />
+    <text x="180" y="21" fill="#C4B5FD" font-family="system-ui, sans-serif" font-size="13" font-weight="700" text-anchor="middle" letter-spacing="1">
+      INDIAN CONTRACT ACT &bull; MAHARASHTRA 2026 STAMP ACT
+    </text>
+  </g>
+
+  <!-- Header Section -->
+  <text x="60" y="118" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="34" font-weight="800">
+    Bank Guarantee (BG) Legal &amp; Stamp Duty Framework
+  </text>
+  <text x="60" y="152" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="16" font-weight="500">
+    Sections 124&ndash;147 Contract Act &bull; The On-Demand Invocation Rule &bull; Maharashtra Art 34A (July 2026)
+  </text>
+
+  <!-- Gold Divider -->
+  <rect x="60" y="172" width="1080" height="3" fill="url(#gold3)" rx="1.5" />
+
+  <!-- 3 Main Pillars / Fact Cards -->
+  <!-- Card 1: Contract Act & On-Demand Rule -->
+  <g transform="translate(60, 195)">
+    <rect width="340" height="375" rx="14" fill="url(#cardBg3)" stroke="#334155" stroke-width="1.5" />
+    <rect x="0" y="0" width="340" height="6" fill="#8B5CF6" rx="3" />
+    <text x="24" y="38" fill="#C4B5FD" font-family="system-ui, sans-serif" font-size="18" font-weight="700">
+      1. Statutory Guarantee Structure
+    </text>
+
+    <text x="24" y="68" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Tripartite Contract (Sec 126)
+    </text>
+    <text x="24" y="94" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Surety: Issuing Scheduled Bank
+    </text>
+    <text x="24" y="118" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Principal Debtor: The Applicant
+    </text>
+    <text x="24" y="142" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Creditor: The Beneficiary
+    </text>
+
+    <line x1="24" y1="165" x2="316" y2="165" stroke="#334155" stroke-width="1" />
+
+    <text x="24" y="195" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      The On-Demand Rule
+    </text>
+    <text x="24" y="221" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; BG is independent of underlying contract
+    </text>
+    <text x="24" y="245" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Bank must pay on invocation demand
+    </text>
+    <text x="24" y="269" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; No inquiry into commercial dispute
+    </text>
+
+    <line x1="24" y1="292" x2="316" y2="292" stroke="#334155" stroke-width="1" />
+
+    <text x="24" y="322" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      2 Narrow Injunction Exceptions
+    </text>
+    <text x="24" y="348" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Established Fraud &amp; Irretrievable Injustice
+    </text>
+  </g>
+
+  <!-- Card 2: Types & Practical Pitfalls -->
+  <g transform="translate(430, 195)">
+    <rect width="340" height="375" rx="14" fill="url(#cardBg3)" stroke="#334155" stroke-width="1.5" />
+    <rect x="0" y="0" width="340" height="6" fill="#F59E0B" rx="3" />
+    <text x="24" y="38" fill="#F59E0B" font-family="system-ui, sans-serif" font-size="18" font-weight="700">
+      2. Guarantee Types &amp; Invocations
+    </text>
+
+    <text x="24" y="68" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Three Standard BG Types
+    </text>
+    <text x="24" y="94" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Financial: Secures loan / credit payment
+    </text>
+    <text x="24" y="118" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Performance: Secures contractual tender SLAs
+    </text>
+    <text x="24" y="142" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Advance Payment: Secures mobilization cash
+    </text>
+
+    <line x1="24" y1="165" x2="316" y2="165" stroke="#334155" stroke-width="1" />
+
+    <text x="24" y="195" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Validity vs Claim Period
+    </text>
+    <text x="24" y="221" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Validity Period: Duration of performance
+    </text>
+    <text x="24" y="245" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Claim Period: Window to lodge written demand
+    </text>
+    <text x="24" y="269" fill="#F87171" font-family="system-ui, sans-serif" font-size="13" font-weight="600">
+      &bull; Expired BG CANNOT be invoked!
+    </text>
+
+    <line x1="24" y1="292" x2="316" y2="292" stroke="#334155" stroke-width="1" />
+
+    <text x="24" y="322" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Modern Electronic BGs (e-BG)
+    </text>
+    <text x="24" y="348" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Issued via NeSL with digital e-stamping
+    </text>
+  </g>
+
+  <!-- Card 3: Maharashtra July 2026 Stamp Duty -->
+  <g transform="translate(800, 195)">
+    <rect width="340" height="375" rx="14" fill="url(#cardBg3)" stroke="#334155" stroke-width="1.5" />
+    <rect x="0" y="0" width="340" height="6" fill="#10B981" rx="3" />
+    <text x="24" y="38" fill="#10B981" font-family="system-ui, sans-serif" font-size="18" font-weight="700">
+      3. Stamp Duty: Maharashtra Art 34A
+    </text>
+
+    <text x="24" y="68" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Current Rates (w.e.f. 22 July 2026)
+    </text>
+    <text x="24" y="94" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Up to &#8377;5 Lakh: 0.1% (min &#8377;500)
+    </text>
+    <text x="24" y="118" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Above &#8377;5 Lakh: 0.3% (max &#8377;20 Lakh)
+    </text>
+    <text x="24" y="142" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Public Works / Govt Corp: Flat &#8377;500
+    </text>
+
+    <line x1="24" y1="165" x2="316" y2="165" stroke="#334155" stroke-width="1" />
+
+    <text x="24" y="195" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Renewal &amp; Extension Duty
+    </text>
+    <text x="24" y="221" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Without amount increase: 0.25% (max &#8377;25k)
+    </text>
+    <text x="24" y="245" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Letter of Guarantee (other): Flat &#8377;500
+    </text>
+
+    <line x1="24" y1="268" x2="316" y2="268" stroke="#334155" stroke-width="1" />
+
+    <text x="24" y="298" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Prior Position (Pre-July 2026)
+    </text>
+    <text x="24" y="324" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; Was under Article 5(h): 0.1% up to &#8377;10L
+    </text>
+    <text x="24" y="348" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &bull; 0.2% above &#8377;10L (Replaced by Article 34A)
+    </text>
+  </g>
+
+  <!-- Footer Tag -->
+  <text x="600" y="605" fill="#64748B" font-family="system-ui, sans-serif" font-size="12" font-weight="500" text-anchor="middle">
+    CorpLawUpdates.in &bull; Verified Indian Corporate Law Intelligence &bull; Word (.docx) &amp; PDF Generator
+  </text>
+</svg>

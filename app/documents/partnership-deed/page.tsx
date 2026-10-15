@@ -98,7 +98,7 @@ const FAQS = [
   },
   {
     q: 'Where can I download a Partnership Deed format as per Income Tax Act 2025 in Word (.docx) and PDF?',
-    a: 'You can download a vetted, ready-to-use Partnership Deed format as per Income Tax Act 2025 in both Microsoft Word (.docx) and PDF directly from this page for free. The template includes the updated Section 40(b) remuneration slabs (₹3 Lakh / 90% on first ₹6L profit, 60% on balance), Section 194T 10% TDS compliance, Section 42(c) business continuity covenant, and Article 46 stamp duty clause.',
+    a: 'You can download a vetted, ready-to-use Partnership Deed format as per Income Tax Act 2025 in both Microsoft Word (.docx) and PDF directly from this page for free. The template incorporates the verified statutory cross-references for Tax Year 2026-27 onwards — including Section 35(e) [formerly Section 40(b)] working-partner remuneration slabs (₹3 Lakh / 90% on first ₹6L profit, 60% on balance), Section 393(3) Table Sl. No. 7 / Section 194T 10% TDS compliance, Section 42(c) business continuity covenant, and state-wise Article 46 stamp duty schedules. Under Section 536 repeal-and-savings, existing deeds remain valid without fresh stamp paper, but a supplementary deed is recommended to update statutory citations.',
   },
   {
     q: 'What is Article 46 partnership stamp paper and how is stamp duty calculated in Maharashtra?',
@@ -783,7 +783,138 @@ export default function PartnershipDeedPage() {
         </div>
       </section>
 
-      {/* Section 5: Section 194T TDS Compliance (from 1 April 2025) */}
+      {/* Section 5: Partnership Taxation under the Income-tax Act, 2025 */}
+      <section className="py-12 bg-white border-b border-slate-200">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mb-8">
+            <span className="text-xs font-bold uppercase tracking-wider text-amber-800 bg-amber-50 px-2.5 py-1 rounded-sm border border-amber-300">
+              Income-tax Act, 2025 Direct Tax Code
+            </span>
+            <h2 className="mt-2 text-2xl sm:text-3xl font-bold text-slate-900">
+              Partnership Taxation under the Income-tax Act, 2025
+            </h2>
+            <p className="mt-3 text-slate-700 text-sm sm:text-base leading-relaxed">
+              The <strong>Income-tax Act, 2025</strong> (Parliament approval 12 August 2025; Presidential assent 21 August 2025) comes into force on <strong>1 April 2026</strong> (Tax Year 2026-27), replacing the Income-tax Act, 1961. It is a revenue-neutral re-codification: <strong>tax rates and the substantive firm-taxation rules are unchanged</strong> &mdash; only section numbers and the AY/PY framework change (assessment year + previous year become a single <strong>&ldquo;tax year&rdquo;</strong>). A deed drafted with correct clauses under the 1961 Act remains valid; only the statutory citations need updating.
+            </p>
+          </div>
+
+          {/* Verified Section Mapping Table */}
+          <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xs">
+            <div className="border-b border-slate-200 bg-slate-900 px-5 py-4 text-white">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <h3 className="text-base font-bold sm:text-lg text-amber-400">
+                    Verified Section Mapping (1961 Act &rarr; 2025 Act)
+                  </h3>
+                  <p className="mt-0.5 text-xs text-slate-300">
+                    Confirmed against professional section-mapping references. Do not alter statutory section numbers.
+                  </p>
+                </div>
+                <span className="rounded-full bg-amber-400/10 px-3 py-1 text-xs font-medium text-amber-300 border border-amber-400/20">
+                  Effective 1 April 2026
+                </span>
+              </div>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs sm:text-sm">
+                <thead className="border-b border-slate-200 bg-slate-50 text-slate-700">
+                  <tr>
+                    <th className="p-3.5 sm:p-4 font-bold text-slate-900">Subject</th>
+                    <th className="p-3.5 sm:p-4 font-bold text-slate-900">Income-tax Act, 1961</th>
+                    <th className="p-3.5 sm:p-4 font-bold text-slate-900">Income-tax Act, 2025</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-200">
+                  <tr className="hover:bg-slate-50/60">
+                    <td className="p-3.5 sm:p-4 font-medium text-slate-900">
+                      Partner remuneration / interest deduction limits (slabs)
+                    </td>
+                    <td className="p-3.5 sm:p-4 font-mono text-slate-700">Section 40(b)</td>
+                    <td className="p-3.5 sm:p-4 font-mono font-bold text-emerald-700">Section 35(e)</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50/60 bg-slate-50/30">
+                    <td className="p-3.5 sm:p-4 font-medium text-slate-900">
+                      TDS on salary, remuneration, commission, bonus, interest paid to a partner (10%, ₹20,000 threshold)
+                    </td>
+                    <td className="p-3.5 sm:p-4 font-mono text-slate-700">Section 194T</td>
+                    <td className="p-3.5 sm:p-4 font-mono font-bold text-purple-700">
+                      Section 393(3), Table Sl. No. 7 <span className="text-xs font-normal text-slate-500">(payment code 1067)</span>
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-slate-50/60">
+                    <td className="p-3.5 sm:p-4 font-medium text-slate-900">
+                      Partner remuneration / interest taxable as business income in partner&apos;s hands
+                    </td>
+                    <td className="p-3.5 sm:p-4 font-mono text-slate-700">Section 28(v)</td>
+                    <td className="p-3.5 sm:p-4 font-mono font-bold text-slate-900">Section 26(2)(g)</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50/60 bg-slate-50/30">
+                    <td className="p-3.5 sm:p-4 font-medium text-slate-900">
+                      Charge of tax on the firm (30%)
+                    </td>
+                    <td className="p-3.5 sm:p-4 font-mono text-slate-700">Section 167A</td>
+                    <td className="p-3.5 sm:p-4 font-mono font-bold text-slate-900">Section 324</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50/60">
+                    <td className="p-3.5 sm:p-4 font-medium text-slate-900">
+                      Conditions for assessment as a firm
+                    </td>
+                    <td className="p-3.5 sm:p-4 font-mono text-slate-700">Section 184</td>
+                    <td className="p-3.5 sm:p-4 font-mono font-bold text-slate-900">Section 325</td>
+                  </tr>
+                  <tr className="hover:bg-amber-50/40 bg-amber-50/20">
+                    <td className="p-3.5 sm:p-4 font-medium text-slate-900">
+                      Partner&apos;s profit-share exemption
+                    </td>
+                    <td className="p-3.5 sm:p-4 font-mono text-slate-700">Section 10(2A)</td>
+                    <td className="p-3.5 sm:p-4">
+                      <span className="inline-flex items-center rounded-sm bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-800 border border-amber-200">
+                        NOT CHECKED &mdash; verify before relying
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* What Stays the Same & What the Deed Should Do */}
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-5 sm:p-6 shadow-xs">
+              <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                What Stays the Same
+              </h3>
+              <p className="mt-3 text-xs sm:text-sm text-slate-700 leading-relaxed">
+                The <strong>Section 40(b) slab formula</strong> (₹3,00,000 or 90% of book profit on the first ₹6,00,000; 60% on the balance), the <strong>12% p.a. interest-on-capital ceiling</strong>, the <strong>10% TDS rate and ₹20,000 aggregate threshold</strong>, and the <strong>30% flat firm tax rate</strong> &mdash; all carried forward unchanged in substance.
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-indigo-200 bg-indigo-50/40 p-5 sm:p-6 shadow-xs">
+              <h3 className="text-base font-bold text-indigo-950 flex items-center gap-2">
+                <FileText className="w-5 h-5 text-indigo-700 shrink-0" />
+                What the Deed Should Do
+              </h3>
+              <ul className="mt-3 space-y-2 text-xs sm:text-sm text-indigo-950 leading-relaxed">
+                <li className="flex items-start gap-2">
+                  <span className="font-bold text-indigo-700 shrink-0">1.</span>
+                  <span>Cite the <strong>2025-Act section numbers</strong> for any deed executed for Tax Year 2026-27 onwards.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="font-bold text-indigo-700 shrink-0">2.</span>
+                  <span>Keep the <strong>quantification rule</strong> &mdash; name working partners and state exact rupee figures or the precise slab formula (vague <em>&ldquo;as per Section 40(b)&rdquo;</em> drafting gets disallowed).</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="font-bold text-indigo-700 shrink-0">3.</span>
+                  <span>Note that under the new Act&apos;s repeal-and-savings (<strong>Section 536</strong>), existing deeds&apos; 1961-Act references are generally read as their 2025-Act counterparts, so <strong>no fresh deed on new stamp paper is needed solely because of the new Act</strong> &mdash; but a <strong>supplementary deed</strong> is advisable to update remuneration/interest clauses to the new citations and limits.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 6: Section 194T TDS Compliance (from 1 April 2025) */}
       <section className="py-12 bg-slate-50 border-b border-slate-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mb-8">

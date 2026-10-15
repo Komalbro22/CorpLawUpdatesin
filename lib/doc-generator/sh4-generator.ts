@@ -474,7 +474,7 @@ export async function buildSh4Docx(data: Partial<Sh4FormData> = {}): Promise<Buf
                           }),
                           new TextRun({
                             break: 1,
-                            text: '(Statutory duty calculated @ 0.015% under Schedule I, Article 62 of Indian Stamp Act, 1899)',
+                            text: '(Statutory duty calculated @ 0.015% under Schedule I, Article 56A of Indian Stamp Act, 1899)',
                             font: FONT,
                             size: 18,
                             italics: true,
@@ -1075,7 +1075,7 @@ export async function buildSh4Pdf(data: Partial<Sh4FormData> = {}): Promise<Uint
   y2 -= 6
 
   // Value of Stamp Affixed Box
-  page2.drawText(`Value of stamp affixed: INR ${d.stampDutyAmount} (Duty calculated @ 0.015% under Schedule I, Article 62 of Indian Stamp Act, 1899)`, {
+  page2.drawText(`Value of stamp affixed: INR ${d.stampDutyAmount} (Duty calculated @ 0.015% under Schedule I, Article 56A of Indian Stamp Act, 1899)`, {
     x: margin,
     y: y2,
     size: 8.5,

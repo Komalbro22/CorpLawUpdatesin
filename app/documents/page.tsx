@@ -221,6 +221,160 @@ export default async function DocumentsPage() {
             Open generator <span aria-hidden="true">→</span>
           </Link>
         </section>
+
+        {/* CORE INTERACTIVE DOCUMENT GENERATORS */}
+        <section className="rounded-3xl border border-slate-200 bg-white p-6 md:p-8 dark:border-slate-800 dark:bg-slate-900 shadow-sm space-y-6">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 text-xs font-bold uppercase tracking-wider mb-2 border border-emerald-200 dark:border-emerald-900/50">
+                ✨ Interactive Legal Generators · Word (.docx) & PDF
+              </div>
+              <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white">
+                Statutory Document Drafting Engines
+              </h2>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                Full-featured legal draft generators with real-time statutory validation, state stamp duty calculators, live previews, and instant downloads.
+              </p>
+            </div>
+            <span className="text-xs font-semibold px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200 dark:border-blue-900/50 whitespace-nowrap">
+              Updated October 2026
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <Link
+              href="/documents/non-disclosure-agreement"
+              className="group rounded-2xl border border-slate-200 bg-slate-50/50 p-5 hover:border-blue-500 hover:bg-white hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-950/50 dark:hover:border-blue-500 dark:hover:bg-slate-900 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between text-xs font-bold text-blue-600 dark:text-blue-400 mb-2">
+                  <span>AGREEMENTS</span>
+                  <span className="bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 px-2 py-0.5 rounded text-[10px]">FREE</span>
+                </div>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors mb-2">
+                  Non-Disclosure Agreement (NDA)
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 mb-3">
+                  Unilateral or mutual confidentiality deed with Indian Contract Act Section 27 carve-outs, IP assignment, and state stamp duty guides.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-slate-200/60 dark:border-slate-800/80 flex items-center justify-between text-xs text-slate-500">
+                <span>Contract Act, 1872</span>
+                <span className="font-bold text-blue-600 group-hover:translate-x-1 transition-transform">Generate →</span>
+              </div>
+            </Link>
+
+            <Link
+              href="/documents/director-appointment-letter"
+              className="group rounded-2xl border border-slate-200 bg-slate-50/50 p-5 hover:border-emerald-500 hover:bg-white hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-950/50 dark:hover:border-emerald-500 dark:hover:bg-slate-900 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between text-xs font-bold text-emerald-600 dark:text-emerald-400 mb-2">
+                  <span>APPOINTMENTS</span>
+                  <span className="bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 px-2 py-0.5 rounded text-[10px]">FREE</span>
+                </div>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 transition-colors mb-2">
+                  Director Appointment Letter
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 mb-3">
+                  Letter of appointment for directors &amp; independent directors under Companies Act, 2013 and Schedule IV, with DIR-12 compliance checklist.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-slate-200/60 dark:border-slate-800/80 flex items-center justify-between text-xs text-slate-500">
+                <span>Companies Act, 2013</span>
+                <span className="font-bold text-emerald-600 group-hover:translate-x-1 transition-transform">Generate →</span>
+              </div>
+            </Link>
+
+            <Link
+              href="/documents/bank-guarantee"
+              className="group rounded-2xl border border-slate-200 bg-slate-50/50 p-5 hover:border-indigo-500 hover:bg-white hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-950/50 dark:hover:border-indigo-500 dark:hover:bg-slate-900 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between text-xs font-bold text-indigo-600 dark:text-indigo-400 mb-2">
+                  <span>BANKING &amp; FINANCE</span>
+                  <span className="bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 px-2 py-0.5 rounded text-[10px]">FREE</span>
+                </div>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 transition-colors mb-2">
+                  Bank Guarantee (BG) Format
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 mb-3">
+                  Performance, financial &amp; advance payment BG format with Maharashtra Article 34A (July 2026) stamp duty calculator &amp; invocation safeguards.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-slate-200/60 dark:border-slate-800/80 flex items-center justify-between text-xs text-slate-500">
+                <span>Contract Act §126</span>
+                <span className="font-bold text-indigo-600 group-hover:translate-x-1 transition-transform">Generate →</span>
+              </div>
+            </Link>
+
+            <Link
+              href="/documents/share-transfer-deed"
+              className="group rounded-2xl border border-slate-200 bg-slate-50/50 p-5 hover:border-amber-500 hover:bg-white hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-950/50 dark:hover:border-amber-500 dark:hover:bg-slate-900 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between text-xs font-bold text-amber-600 dark:text-amber-400 mb-2">
+                  <span>COMPANY DRAFTS</span>
+                  <span className="bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 px-2 py-0.5 rounded text-[10px]">FREE</span>
+                </div>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-amber-600 transition-colors mb-2">
+                  Form SH-4 Share Transfer Deed
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 mb-3">
+                  Physical securities transfer deed under Section 56 with real-time 0.015% Indian Stamp Act calculator and Section 9B(b) compliance.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-slate-200/60 dark:border-slate-800/80 flex items-center justify-between text-xs text-slate-500">
+                <span>Companies Act §56</span>
+                <span className="font-bold text-amber-600 group-hover:translate-x-1 transition-transform">Generate →</span>
+              </div>
+            </Link>
+
+            <Link
+              href="/documents/partnership-deed"
+              className="group rounded-2xl border border-slate-200 bg-slate-50/50 p-5 hover:border-purple-500 hover:bg-white hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-950/50 dark:hover:border-purple-500 dark:hover:bg-slate-900 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between text-xs font-bold text-purple-600 dark:text-purple-400 mb-2">
+                  <span>COMMERCIAL CONTRACTS</span>
+                  <span className="bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 px-2 py-0.5 rounded text-[10px]">FREE</span>
+                </div>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-purple-600 transition-colors mb-2">
+                  Partnership Deed Format
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 mb-3">
+                  Partnership deed format aligned with Section 40(b) and the Income-tax Act, 2025 with dynamic partner remuneration &amp; profit ratio rules.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-slate-200/60 dark:border-slate-800/80 flex items-center justify-between text-xs text-slate-500">
+                <span>Partnership Act, 1932</span>
+                <span className="font-bold text-purple-600 group-hover:translate-x-1 transition-transform">Generate →</span>
+              </div>
+            </Link>
+
+            <Link
+              href="/documents/board-resolution-for-dividend-declaration"
+              className="group rounded-2xl border border-slate-200 bg-slate-50/50 p-5 hover:border-cyan-500 hover:bg-white hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-950/50 dark:hover:border-cyan-500 dark:hover:bg-slate-900 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between text-xs font-bold text-cyan-600 dark:text-cyan-400 mb-2">
+                  <span>BOARD RESOLUTIONS</span>
+                  <span className="bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 px-2 py-0.5 rounded text-[10px]">FREE</span>
+                </div>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-cyan-600 transition-colors mb-2">
+                  Board Resolution: Dividend
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 mb-3">
+                  Statutory board resolution for interim and final dividend declaration under Section 123 of the Companies Act, 2013 and SS-1.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-slate-200/60 dark:border-slate-800/80 flex items-center justify-between text-xs text-slate-500">
+                <span>Companies Act §123</span>
+                <span className="font-bold text-cyan-600 group-hover:translate-x-1 transition-transform">Generate →</span>
+              </div>
+            </Link>
+          </div>
+        </section>
         
         {/* FEATURED: AI PARAMETRIC DOCUMENT GENERATOR STUDIO */}
         <section className="bg-linear-to-r from-slate-900 via-slate-850 to-blue-950 border border-blue-500/30 rounded-3xl p-6 md:p-8 space-y-6 shadow-2xl">

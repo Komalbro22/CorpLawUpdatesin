@@ -57,7 +57,7 @@ const faqs = [
   {
     question: 'How is stamp duty calculated for a gift of shares without monetary consideration?',
     answer:
-      'When shares are gifted without consideration, stamp duty @ 0.015% is payable on the Fair Market Value (FMV) or the face value / net asset value of the shares on the date of execution of Form SH-4. In addition, the tax implications of Section 56(2)(x) of the Income Tax Act, 1961 must be reviewed if the gift is made to non-relatives.',
+      'For a genuine gift with no consideration, no stamp duty is payable on the Form SH-4 transfer instrument itself — the duty is 0.015% of the consideration, and where consideration is nil the deed needs no share transfer stamps (per the Finance Ministry DEA FAQ on the amended Stamp Act; this changed the pre-July-2020 position where states charged duty on market value). Execute the SH-4 showing consideration as nil and the nature as gift, and lodge it with the share certificate. Two cautions: (1) if anything of value passes in return (money, loan set-off, reciprocal shares), it is not a gift — 0.015% applies on that consideration; (2) review Section 56(2)(x) of the Income-tax Act, 1961 for income-tax on gifts to non-relatives. A separate gift deed is optional and may attract duty under the State Stamp Act where executed — check before executing one.',
   },
   {
     question: 'What documents must be attached with Form SH-4?',
@@ -67,7 +67,7 @@ const faqs = [
   {
     question: 'Who is responsible for paying stamp duty on share transfer?',
     answer:
-      'Under Section 9A of the Indian Stamp Act, 1899, the transferee (buyer) is generally liable to pay stamp duty in the case of a transfer of securities for consideration. However, the parties may mutually agree otherwise in their share purchase agreement.',
+      'For an off-market transfer of securities in physical form via Form SH-4, stamp duty is payable by the transferor (seller) on the consideration amount, under Section 9B(b) of the Indian Stamp Act, 1899 (as amended by the Finance Act, 2019). The parties may mutually agree otherwise in their share purchase agreement. (Note: for delivery-based transfers through a stock exchange, the buyer bears the duty — that is a different regime and does not apply to physical SH-4 transfers.)',
   },
   {
     question: 'How are physical share transfer stamps cancelled?',
@@ -310,7 +310,7 @@ export default function ShareTransferDeedPage() {
                   <tr>
                     <td className="p-3.5 sm:p-4 font-semibold text-slate-900 dark:text-white">Stamp Duty Rate</td>
                     <td className="p-3.5 sm:p-4">Indian Stamp Act, 1899 (Article 56A, Finance Act 2019)</td>
-                    <td className="p-3.5 sm:p-4 font-semibold text-emerald-600 dark:text-emerald-400">0.015% (₹15 per ₹1 Lakh consideration / FMV)</td>
+                    <td className="p-3.5 sm:p-4 font-semibold text-emerald-600 dark:text-emerald-400">0.015% (₹15 per ₹1 Lakh consideration)</td>
                   </tr>
                   <tr className="bg-slate-50/50 dark:bg-slate-800/30">
                     <td className="p-3.5 sm:p-4 font-semibold text-slate-900 dark:text-white">Lodging Deadline</td>
@@ -455,7 +455,7 @@ export default function ShareTransferDeedPage() {
                   <div>
                     <h4 className="font-bold text-slate-900 dark:text-white">Pay Stamp Duty @ 0.015% & Cancel Stamps</h4>
                     <p className="mt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                      Calculate stamp duty at 0.015% of the total consideration amount (or FMV in case of gift). Affix physical adhesive Share Transfer Stamps or attach an e-Stamping certificate from Stock Holding Corporation of India (SHCIL) or state treasury portal. Under Section 12 of the Indian Stamp Act, 1899, physical stamps must be cancelled by writing signature or drawing lines across them.
+                      Calculate stamp duty at 0.015% of the total consideration amount under Section 9B(b) &amp; Article 56A (for genuine gifts with nil consideration, no share transfer stamps are payable on Form SH-4). Affix physical adhesive Share Transfer Stamps or attach an e-Stamping certificate from Stock Holding Corporation of India (SHCIL) or state treasury portal. Under Section 12 of the Indian Stamp Act, 1899, physical stamps must be cancelled by writing signature or drawing lines across them.
                     </p>
                   </div>
                 </div>
