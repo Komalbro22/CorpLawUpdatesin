@@ -38,6 +38,12 @@ export interface DirectorAppointmentFormData {
   signatoryName: string
   signatoryDesignation: string
   meetingDate?: string
+  customClauses?: Array<{
+    id: string
+    title: string
+    text: string
+    riskWarning?: string | null
+  }>
 }
 
 export const DEFAULT_SAMPLE_DIRECTOR_APPOINTMENT_DATA: DirectorAppointmentFormData = {
@@ -139,6 +145,19 @@ ${isIndependent ? '6' : '5'}.4 The Company shall file **Form DIR-12** with the R
 
 ### **${isIndependent ? '7' : '6'}. Confidentiality and Insider Trading**
 ${isIndependent ? '7' : '6'}.1 You shall maintain strict confidentiality concerning all non-public commercial, financial, operational, and strategic information acquired during the course of your directorship and shall not disclose the same to any third party without prior Board sanction.
+
+${
+  data.customClauses && data.customClauses.length > 0
+    ? data.customClauses
+        .map(
+          (c, idx) => `### **Custom Term ${idx + 1}: ${c.title}**
+${c.text}
+*[AI-Drafted Custom Clause — review before signing]*
+`
+        )
+        .join('\n')
+    : ''
+}
 
 ### **${isIndependent ? '8' : '7'}. Governing Law**
 ${isIndependent ? '8' : '7'}.1 This letter of appointment and any dispute arising hereunder shall be governed by and construed in accordance with the laws of the Republic of India and subject to the exclusive jurisdiction of the competent civil courts at the Company's registered office.

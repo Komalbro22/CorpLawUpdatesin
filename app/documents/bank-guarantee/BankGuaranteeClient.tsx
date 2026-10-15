@@ -25,6 +25,7 @@ import {
   generateBankGuaranteeMarkdown,
 } from '@/lib/doc-generator/bank-guarantee-generator'
 import LegalDocRenderer, { cleanMarkdownForClipboard } from '@/components/documents/LegalDocRenderer'
+import AiClauseBuilder, { CustomClauseItem } from '@/components/documents/AiClauseBuilder'
 
 export default function BankGuaranteeClient() {
   const [formData, setFormData] = useState<BankGuaranteeFormData>(
@@ -50,6 +51,28 @@ export default function BankGuaranteeClient() {
     val: BankGuaranteeFormData[K]
   ) => {
     setFormData(prev => ({ ...prev, [key]: val }))
+  }
+
+  const handleAddClause = (clause: CustomClauseItem) => {
+    setFormData(prev => ({
+      ...prev,
+      customClauses: [
+        ...(prev.customClauses || []),
+        {
+          id: clause.id,
+          title: clause.title,
+          text: clause.text,
+          riskWarning: clause.riskWarning,
+        },
+      ],
+    }))
+  }
+
+  const handleRemoveClause = (id: string) => {
+    setFormData(prev => ({
+      ...prev,
+      customClauses: (prev.customClauses || []).filter(c => c.id !== id),
+    }))
   }
 
   // Handle Amount Change with Auto Words Calculation
@@ -559,6 +582,21 @@ export default function BankGuaranteeClient() {
                 </div>
               </div>
             </div>
+
+            {/* AI Custom Clause Drafter */}
+            <AiClauseBuilder
+              documentType="Bank Guarantee"
+              existingClauseTitles={[
+                'Bank Guarantee Undertaking',
+                'Unconditional Demand Payment',
+                'Invocation Procedure & Turnaround',
+                'Validity and Claim Period',
+                'Governing Law & Stamp Duty',
+              ]}
+              customClauses={formData.customClauses || []}
+              onAddClause={handleAddClause}
+              onRemoveClause={handleRemoveClause}
+            />
           </div>
         </div>
 

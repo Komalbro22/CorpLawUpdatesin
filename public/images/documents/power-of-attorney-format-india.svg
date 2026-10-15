@@ -1,0 +1,174 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="50%" stop-color="#1E293B" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+    <linearGradient id="cardBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#0F172A" stop-opacity="0.9" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)" />
+
+  <!-- Grid subtle overlay -->
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#334155" stroke-width="0.5" stroke-opacity="0.3" />
+  </pattern>
+  <rect width="1200" height="630" fill="url(#grid)" />
+
+  <!-- Top Badge -->
+  <g transform="translate(60, 45)">
+    <rect width="320" height="32" rx="16" fill="#1E293B" stroke="#D97706" stroke-width="1.5" />
+    <text x="160" y="21" fill="#F59E0B" font-family="system-ui, sans-serif" font-size="13" font-weight="700" text-anchor="middle" letter-spacing="1">
+      CORPLAWUPDATES.IN &#8226; STATUTORY GUIDE
+    </text>
+  </g>
+
+  <!-- Header Section -->
+  <text x="60" y="118" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="34" font-weight="800">
+    Power of Attorney (POA) Legal Architecture in India
+  </text>
+  <text x="60" y="152" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="16" font-weight="500">
+    Powers of Attorney Act, 1882 &#8226; Suraj Lamp (2011) Doctrine &#8226; NRI 3-Month Stamping &#8226; MH Article 48
+  </text>
+
+  <!-- Gold Divider -->
+  <rect x="60" y="172" width="1080" height="3" fill="url(#gold)" rx="1.5" />
+
+  <!-- 3 Fact Cards -->
+  <!-- Card 1: Statutory Framework & Suraj Lamp -->
+  <g transform="translate(60, 195)">
+    <rect width="340" height="375" rx="14" fill="url(#cardBg)" stroke="#334155" stroke-width="1.5" />
+    <rect x="0" y="0" width="340" height="6" fill="#F59E0B" rx="3" />
+    <text x="24" y="38" fill="#F59E0B" font-family="system-ui, sans-serif" font-size="18" font-weight="700">
+      1. Legal Foundation
+    </text>
+    <text x="24" y="68" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Powers of Attorney Act, 1882
+    </text>
+    <text x="24" y="94" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; Agency governed by ICA 1872 (Sec 182-238)
+    </text>
+    <text x="24" y="118" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; Sec 202: Irrevocable ONLY if coupled
+    </text>
+    <text x="36" y="140" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      with an existing financial interest.
+    </text>
+    <text x="24" y="170" fill="#EF4444" font-family="system-ui, sans-serif" font-size="14" font-weight="700">
+      Suraj Lamp Doctrine (2011 SC)
+    </text>
+    <text x="24" y="196" fill="#FCA5A5" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; GPA does NOT transfer property title.
+    </text>
+    <text x="24" y="220" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; Sale requires registered conveyance deed.
+    </text>
+    <text x="24" y="244" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; Agent can sign sale deed for principal,
+    </text>
+    <text x="36" y="266" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      but GPA itself is NEVER a sale.
+    </text>
+    <rect x="20" y="318" width="300" height="40" rx="8" fill="#0F172A" stroke="#334155" />
+    <text x="170" y="343" fill="#F87171" font-family="system-ui, sans-serif" font-size="12" font-weight="600" text-anchor="middle">
+      GPA Sales Legally Void for Title
+    </text>
+  </g>
+
+  <!-- Card 2: Maharashtra Registration & Stamp Duty -->
+  <g transform="translate(430, 195)">
+    <rect width="340" height="375" rx="14" fill="url(#cardBg)" stroke="#334155" stroke-width="1.5" />
+    <rect x="0" y="0" width="340" height="6" fill="#10B981" rx="3" />
+    <text x="24" y="38" fill="#10B981" font-family="system-ui, sans-serif" font-size="18" font-weight="700">
+      2. MH Duty: Article 48
+    </text>
+    <text x="24" y="68" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Compulsory Registration (2013)
+    </text>
+    <text x="24" y="94" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; Irrevocable property POA compulsorily
+    </text>
+    <text x="36" y="116" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      registrable in Maharashtra since 1 Apr 2013.
+    </text>
+    <text x="24" y="146" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Stamp Duty Slabs (Article 48):
+    </text>
+    <text x="24" y="172" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; Sale power to CLOSE RELATIVES:
+    </text>
+    <text x="36" y="194" fill="#34D399" font-family="system-ui, sans-serif" font-size="13" font-weight="600">
+      Flat &#8377;500 (without consideration)
+    </text>
+    <text x="24" y="220" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; Sale power to NON-RELATIVES /
+    </text>
+    <text x="36" y="242" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      DEVELOPER or FOR CONSIDERATION:
+    </text>
+    <text x="36" y="264" fill="#F59E0B" font-family="system-ui, sans-serif" font-size="13" font-weight="600">
+      Same as Conveyance (Art 25)
+    </text>
+    <text x="24" y="290" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; General non-property power: &#8377;500 / person
+    </text>
+    <rect x="20" y="318" width="300" height="40" rx="8" fill="#0F172A" stroke="#334155" />
+    <text x="170" y="343" fill="#34D399" font-family="system-ui, sans-serif" font-size="12" font-weight="600" text-anchor="middle">
+      Close Relatives: Flat &#8377;500 Duty
+    </text>
+  </g>
+
+  <!-- Card 3: NRI Execution & Revocation -->
+  <g transform="translate(800, 195)">
+    <rect width="340" height="375" rx="14" fill="url(#cardBg)" stroke="#334155" stroke-width="1.5" />
+    <rect x="0" y="0" width="340" height="6" fill="#38BDF8" rx="3" />
+    <text x="24" y="38" fill="#38BDF8" font-family="system-ui, sans-serif" font-size="18" font-weight="700">
+      3. NRI Execution &amp; Revocation
+    </text>
+    <text x="24" y="68" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      NRI Protocol (Sec 18 Indian Stamp Act)
+    </text>
+    <text x="24" y="94" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      1. Execute before Indian Embassy / Notary
+    </text>
+    <text x="24" y="118" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      2. Apostille / Consulate attestation
+    </text>
+    <text x="24" y="142" fill="#38BDF8" font-family="system-ui, sans-serif" font-size="13" font-weight="600">
+      3. Stamp in India within 3 MONTHS
+    </text>
+    <text x="36" y="164" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      of receipt before District Collector.
+    </text>
+    <text x="24" y="194" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Revocation Procedure
+    </text>
+    <text x="24" y="220" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; Execute formal Deed of Revocation
+    </text>
+    <text x="24" y="244" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; Written notice to agent, banks &amp; registry
+    </text>
+    <text x="24" y="268" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; Public notice in English + vernacular daily
+    </text>
+    <rect x="20" y="318" width="300" height="40" rx="8" fill="#0F172A" stroke="#334155" />
+    <text x="170" y="343" fill="#38BDF8" font-family="system-ui, sans-serif" font-size="12" font-weight="600" text-anchor="middle">
+      Section 18 Stamping Window: 90 Days
+    </text>
+  </g>
+
+  <!-- Footer Disclaimer -->
+  <text x="600" y="605" fill="#64748B" font-family="system-ui, sans-serif" font-size="12" text-anchor="middle">
+    For statutory educational reference only &#8226; Powers of Attorney Act, 1882 &#8226; Indian Contract Act, 1872 &#8226; Not legal advice
+  </text>
+</svg>

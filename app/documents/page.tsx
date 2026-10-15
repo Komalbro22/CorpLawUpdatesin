@@ -373,6 +373,50 @@ export default async function DocumentsPage() {
                 <span className="font-bold text-cyan-600 group-hover:translate-x-1 transition-transform">Generate →</span>
               </div>
             </Link>
+
+            <Link
+              href="/documents/lease-agreement"
+              className="group rounded-2xl border border-slate-200 bg-slate-50/50 p-5 hover:border-orange-500 hover:bg-white hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-950/50 dark:hover:border-orange-500 dark:hover:bg-slate-900 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between text-xs font-bold text-orange-600 dark:text-orange-400 mb-2">
+                  <span>REAL ESTATE &amp; PROPERTY</span>
+                  <span className="bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 px-2 py-0.5 rounded text-[10px]">FREE</span>
+                </div>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-orange-600 transition-colors mb-2">
+                  Rent / Lease Agreement Generator
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 mb-3">
+                  11-month Leave &amp; License and registered Lease Deed with Maharashtra 0.25% stamp duty calculator &amp; Model Tenancy Act guidance.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-slate-200/60 dark:border-slate-800/80 flex items-center justify-between text-xs text-slate-500">
+                <span>Easements Act §52 / TPA</span>
+                <span className="font-bold text-orange-600 group-hover:translate-x-1 transition-transform">Generate →</span>
+              </div>
+            </Link>
+
+            <Link
+              href="/documents/general-power-of-attorney"
+              className="group rounded-2xl border border-slate-200 bg-slate-50/50 p-5 hover:border-teal-500 hover:bg-white hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-950/50 dark:hover:border-teal-500 dark:hover:bg-slate-900 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between text-xs font-bold text-teal-600 dark:text-teal-400 mb-2">
+                  <span>COMMERCIAL CONTRACTS</span>
+                  <span className="bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 px-2 py-0.5 rounded text-[10px]">FREE</span>
+                </div>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-teal-600 transition-colors mb-2">
+                  Power of Attorney (GPA &amp; SPA)
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 mb-3">
+                  General &amp; Special Power of Attorney format with Suraj Lamp (2011) title safeguards, Maharashtra Article 48 rules &amp; NRI protocol.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-slate-200/60 dark:border-slate-800/80 flex items-center justify-between text-xs text-slate-500">
+                <span>POA Act, 1882</span>
+                <span className="font-bold text-teal-600 group-hover:translate-x-1 transition-transform">Generate →</span>
+              </div>
+            </Link>
           </div>
         </section>
         

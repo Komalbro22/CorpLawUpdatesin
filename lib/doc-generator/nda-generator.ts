@@ -47,6 +47,12 @@ export interface NdaFormData {
   disputeResolution: 'arbitration' | 'courts'
   arbitrationCity?: string
   includeNonSolicit?: boolean
+  customClauses?: Array<{
+    id: string
+    title: string
+    text: string
+    riskWarning?: string | null
+  }>
 }
 
 export const DEFAULT_SAMPLE_NDA_DATA: NdaFormData = {
@@ -100,6 +106,23 @@ export function generateNdaMarkdown(data: NdaFormData): string {
 
   const partyATitle = isMutual ? 'PARTY OF THE FIRST PART ("DISCLOSING / RECEIVING PARTY")' : 'DISCLOSING PARTY'
   const partyBTitle = isMutual ? 'PARTY OF THE SECOND PART ("RECEIVING / DISCLOSING PARTY")' : 'RECEIVING PARTY'
+
+  let customClausesMd = ''
+  if (data.customClauses && data.customClauses.length > 0) {
+    customClausesMd =
+      data.customClauses
+        .map(
+          (c, idx) =>
+            '#### **Custom Clause ' +
+            (idx + 1) +
+            ': ' +
+            c.title +
+            '**\n' +
+            c.text +
+            '\n*[AI-Drafted Custom Clause — review before signing]*\n'
+        )
+        .join('\n\n') + '\n\n'
+  }
 
   return `# NON-DISCLOSURE AND CONFIDENTIALITY AGREEMENT
 
@@ -201,7 +224,7 @@ ${data.includeNonSolicit ? '9' : '8'}.2 **Governing Law:** This Agreement shall 
       }, ${data.governingState}** shall have exclusive jurisdiction over all matters arising hereunder.`
 }
 
-#### **Clause ${data.includeNonSolicit ? '10' : '9'}: Miscellaneous Provisions**
+${customClausesMd}#### **Clause ${data.includeNonSolicit ? '10' : '9'}: Miscellaneous Provisions**
 - **Section 27 Compliance:** The covenants herein are intended solely for the protection of legitimate trade secrets and shall not be construed as an unlawful restraint of trade under Section 27 of the Indian Contract Act, 1872.
 - **IT Act & DPDP Compliance:** Disclosures involving digital sensitive data shall adhere to Section 43A and Section 72A of the Information Technology Act, 2000 and the Digital Personal Data Protection Act, 2023.
 - **Stamp Duty:** Non-judicial stamp duty under the relevant State Stamp Act shall be borne equally or as mutually agreed.

@@ -167,11 +167,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Exclude unbuilt dead slugs returning 404/incomplete until fully developed to protect crawl budget
   const unbuiltSlugs = new Set([
-    'lease-agreement',
-    'general-power-of-attorney',
     'consultancy-agreement',
     'joint-venture-agreement',
     'simple-mortgage-deed',
+    'english-mortgage-deed',
+    'mortgage-conditional-sale',
+    'letter-of-credit',
   ])
 
   // Dedicated generator pages with full legal guides and interactive tools
@@ -181,6 +182,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     'non-disclosure-agreement',
     'director-appointment-letter',
     'bank-guarantee',
+    'lease-agreement',
+    'general-power-of-attorney',
   ]
 
   const docDatesMap = new Map<string, Date | undefined>()

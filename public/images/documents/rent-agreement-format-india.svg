@@ -1,0 +1,177 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="50%" stop-color="#1E293B" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+    <linearGradient id="cardBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#0F172A" stop-opacity="0.9" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)" />
+
+  <!-- Grid subtle overlay -->
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#334155" stroke-width="0.5" stroke-opacity="0.3" />
+  </pattern>
+  <rect width="1200" height="630" fill="url(#grid)" />
+
+  <!-- Top Badge -->
+  <g transform="translate(60, 45)">
+    <rect width="320" height="32" rx="16" fill="#1E293B" stroke="#D97706" stroke-width="1.5" />
+    <text x="160" y="21" fill="#F59E0B" font-family="system-ui, sans-serif" font-size="13" font-weight="700" text-anchor="middle" letter-spacing="1">
+      CORPLAWUPDATES.IN &#8226; STATUTORY GUIDE
+    </text>
+  </g>
+
+  <!-- Header Section -->
+  <text x="60" y="118" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="34" font-weight="800">
+    Rent &amp; Lease Agreement Legal Framework in India
+  </text>
+  <text x="60" y="152" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="16" font-weight="500">
+    Transfer of Property Act, 1882 &#8226; Indian Easements Act, 1882 &#8226; 11-Month Convention &#8226; E-Stamping Rules
+  </text>
+
+  <!-- Gold Divider -->
+  <rect x="60" y="172" width="1080" height="3" fill="url(#gold)" rx="1.5" />
+
+  <!-- 3 Main Pillars / Fact Cards -->
+  <!-- Card 1: Statutory Architecture -->
+  <g transform="translate(60, 195)">
+    <rect width="340" height="375" rx="14" fill="url(#cardBg)" stroke="#334155" stroke-width="1.5" />
+    <rect x="0" y="0" width="340" height="6" fill="#F59E0B" rx="3" />
+    <text x="24" y="38" fill="#F59E0B" font-family="system-ui, sans-serif" font-size="18" font-weight="700">
+      1. Legal Classification
+    </text>
+    <text x="24" y="68" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Lease vs Leave &amp; License
+    </text>
+    <text x="24" y="94" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; Lease (TPA Sec 105): transfers interest in
+    </text>
+    <text x="36" y="116" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      property with exclusive possession.
+    </text>
+    <text x="24" y="142" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; License (Easements Act Sec 52): mere
+    </text>
+    <text x="36" y="164" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      permission to occupy; no interest created.
+    </text>
+    <text x="24" y="194" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      The 11-Month Convention
+    </text>
+    <text x="24" y="220" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; Registration Act Sec 17(1)(d): leases
+    </text>
+    <text x="36" y="242" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &gt; 1 year are compulsorily registrable.
+    </text>
+    <text x="24" y="268" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; 11-month deeds avoid compulsory registry,
+    </text>
+    <text x="36" y="290" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      but stamp duty remains payable.
+    </text>
+    <rect x="20" y="318" width="300" height="40" rx="8" fill="#0F172A" stroke="#334155" />
+    <text x="170" y="343" fill="#38BDF8" font-family="system-ui, sans-serif" font-size="12" font-weight="600" text-anchor="middle">
+      Maharashtra uses Leave &amp; License Deeds
+    </text>
+  </g>
+
+  <!-- Card 2: Maharashtra Duty & Digital Mandate -->
+  <g transform="translate(430, 195)">
+    <rect width="340" height="375" rx="14" fill="url(#cardBg)" stroke="#334155" stroke-width="1.5" />
+    <rect x="0" y="0" width="340" height="6" fill="#10B981" rx="3" />
+    <text x="24" y="38" fill="#10B981" font-family="system-ui, sans-serif" font-size="18" font-weight="700">
+      2. Maharashtra Formula
+    </text>
+    <text x="24" y="68" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Stamp Duty Rate: 0.25% (&le; 5 Years)
+    </text>
+    <text x="24" y="94" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      Taxable Base Calculation:
+    </text>
+    <text x="24" y="118" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; Total Rent payable for entire tenure
+    </text>
+    <text x="24" y="142" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; Plus Non-refundable deposit (if any)
+    </text>
+    <text x="24" y="166" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; Plus 10% notional annual interest
+    </text>
+    <text x="36" y="188" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      on refundable deposit for tenure period
+    </text>
+    <text x="24" y="218" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Compulsory Digital Stamping
+    </text>
+    <text x="24" y="244" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; Mandatory w.e.f. 1 July 2025 in MH
+    </text>
+    <text x="24" y="268" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; Physical franking invalid; &le; ₹5,000 fine
+    </text>
+    <text x="24" y="292" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; Flat fee: ₹1,000 (urban) / ₹500 (rural)
+    </text>
+    <rect x="20" y="318" width="300" height="40" rx="8" fill="#0F172A" stroke="#334155" />
+    <text x="170" y="343" fill="#34D399" font-family="system-ui, sans-serif" font-size="12" font-weight="600" text-anchor="middle">
+      IGR Portal Aadhaar E-Registration
+    </text>
+  </g>
+
+  <!-- Card 3: Execution & MTA 2021 Rules -->
+  <g transform="translate(800, 195)">
+    <rect width="340" height="375" rx="14" fill="url(#cardBg)" stroke="#334155" stroke-width="1.5" />
+    <rect x="0" y="0" width="340" height="6" fill="#38BDF8" rx="3" />
+    <text x="24" y="38" fill="#38BDF8" font-family="system-ui, sans-serif" font-size="18" font-weight="700">
+      3. Execution &amp; Model Tenancy
+    </text>
+    <text x="24" y="68" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Model Tenancy Act, 2021 (Cabinet)
+    </text>
+    <text x="24" y="94" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; Security deposit capped at 2 months&#8217;
+    </text>
+    <text x="36" y="116" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      rent (residential) / 6 months (commercial)
+    </text>
+    <text x="24" y="142" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      &#8226; State adoption is fragmented (not pan-India)
+    </text>
+    <text x="24" y="172" fill="#E2E8F0" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+      Execution Step-by-Step
+    </text>
+    <text x="24" y="198" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      1. Both parties sign every single page
+    </text>
+    <text x="24" y="222" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      2. 2 independent adult witnesses
+    </text>
+    <text x="24" y="246" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      3. Complete Tenant Police Verification
+    </text>
+    <text x="24" y="270" fill="#94A3B8" font-family="system-ui, sans-serif" font-size="13">
+      4. Handover verified fixtures inventory
+    </text>
+    <rect x="20" y="318" width="300" height="40" rx="8" fill="#0F172A" stroke="#334155" />
+    <text x="170" y="343" fill="#FBBF24" font-family="system-ui, sans-serif" font-size="12" font-weight="600" text-anchor="middle">
+      Police Verification Required in Delhi &amp; MH
+    </text>
+  </g>
+
+  <!-- Footer Disclaimer -->
+  <text x="600" y="605" fill="#64748B" font-family="system-ui, sans-serif" font-size="12" text-anchor="middle">
+    For statutory educational reference only &#8226; Indian Stamp Act, 1899 &amp; State Stamp Acts &#8226; Not legal advice
+  </text>
+</svg>

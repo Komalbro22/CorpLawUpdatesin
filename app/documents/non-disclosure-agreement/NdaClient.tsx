@@ -29,6 +29,7 @@ import {
   generateNdaMarkdown,
 } from '@/lib/doc-generator/nda-generator'
 import LegalDocRenderer, { cleanMarkdownForClipboard } from '@/components/documents/LegalDocRenderer'
+import AiClauseBuilder, { CustomClauseItem } from '@/components/documents/AiClauseBuilder'
 
 const INDIAN_STATES = [
   'Maharashtra',
@@ -60,6 +61,28 @@ export default function NdaClient() {
 
   const updateField = <K extends keyof NdaFormData>(key: K, val: NdaFormData[K]) => {
     setFormData(prev => ({ ...prev, [key]: val }))
+  }
+
+  const handleAddClause = (clause: CustomClauseItem) => {
+    setFormData(prev => ({
+      ...prev,
+      customClauses: [
+        ...(prev.customClauses || []),
+        {
+          id: clause.id,
+          title: clause.title,
+          text: clause.text,
+          riskWarning: clause.riskWarning,
+        },
+      ],
+    }))
+  }
+
+  const handleRemoveClause = (id: string) => {
+    setFormData(prev => ({
+      ...prev,
+      customClauses: (prev.customClauses || []).filter(c => c.id !== id),
+    }))
   }
 
   // Handle Download Trigger
@@ -594,6 +617,24 @@ export default function NdaClient() {
                 </label>
               </div>
             </div>
+
+            {/* AI Custom Clause Drafter */}
+            <AiClauseBuilder
+              documentType="Non-Disclosure Agreement"
+              existingClauseTitles={[
+                'Confidential Information Definition',
+                'Exclusions from Confidentiality',
+                'Non-Disclosure Obligations',
+                'Permitted Disclosures',
+                'Return and Destruction of Information',
+                'Non-Solicitation Covenant',
+                'Governing Law and Dispute Resolution',
+                'Miscellaneous Provisions',
+              ]}
+              customClauses={formData.customClauses || []}
+              onAddClause={handleAddClause}
+              onRemoveClause={handleRemoveClause}
+            />
           </div>
         </div>
 

@@ -44,6 +44,12 @@ export interface BankGuaranteeFormData {
   signatory2Name?: string
   signatory2Designation?: string
   signatory2PaNumber?: string
+  customClauses?: Array<{
+    id: string
+    title: string
+    text: string
+    riskWarning?: string | null
+  }>
 }
 
 export function numberToWordsIndian(num: number): string {
@@ -257,6 +263,19 @@ ${
 *(d)* Unless a written demand or claim is presented to us on or before **${
     data.claimPeriodDate
   }**, all rights of the Beneficiary under this guarantee shall be forfeited and the Bank shall be fully released and discharged from all liabilities hereunder, whether the physical instrument is returned to us or not.
+
+${
+  data.customClauses && data.customClauses.length > 0
+    ? data.customClauses
+        .map(
+          (c, idx) => `#### **Custom Clause ${idx + 1}: ${c.title}**
+${c.text}
+*[AI-Drafted Custom Clause — review before signing]*
+`
+        )
+        .join('\n')
+    : ''
+}
 
 #### **5. Governing Law & Stamp Duty**
 5.1 This Guarantee shall be governed by and construed in accordance with the laws of India.  

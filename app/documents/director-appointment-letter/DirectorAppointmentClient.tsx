@@ -21,6 +21,7 @@ import {
   generateDirectorAppointmentMarkdown,
 } from '@/lib/doc-generator/director-appointment-generator'
 import LegalDocRenderer, { cleanMarkdownForClipboard } from '@/components/documents/LegalDocRenderer'
+import AiClauseBuilder, { CustomClauseItem } from '@/components/documents/AiClauseBuilder'
 
 const DESIGNATIONS: DirectorDesignation[] = [
   'Additional Director',
@@ -49,6 +50,28 @@ export default function DirectorAppointmentClient() {
     val: DirectorAppointmentFormData[K]
   ) => {
     setFormData(prev => ({ ...prev, [key]: val }))
+  }
+
+  const handleAddClause = (clause: CustomClauseItem) => {
+    setFormData(prev => ({
+      ...prev,
+      customClauses: [
+        ...(prev.customClauses || []),
+        {
+          id: clause.id,
+          title: clause.title,
+          text: clause.text,
+          riskWarning: clause.riskWarning,
+        },
+      ],
+    }))
+  }
+
+  const handleRemoveClause = (id: string) => {
+    setFormData(prev => ({
+      ...prev,
+      customClauses: (prev.customClauses || []).filter(c => c.id !== id),
+    }))
   }
 
   // Handle Designation Change to set default statutory terms
@@ -464,6 +487,23 @@ export default function DirectorAppointmentClient() {
                 </div>
               </div>
             </div>
+
+            {/* AI Custom Clause Drafter */}
+            <AiClauseBuilder
+              documentType="Director Appointment Letter"
+              existingClauseTitles={[
+                'Role & Statutory Functions',
+                'Board Committees',
+                'Director Fiduciary Duties',
+                'Remuneration and Expenses',
+                'Disclosures and Form DIR-2/MBP-1',
+                'Confidentiality & Insider Trading',
+                'Governing Law',
+              ]}
+              customClauses={formData.customClauses || []}
+              onAddClause={handleAddClause}
+              onRemoveClause={handleRemoveClause}
+            />
           </div>
         </div>
 
