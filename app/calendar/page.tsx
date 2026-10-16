@@ -86,6 +86,32 @@ export default async function CalendarPage() {
 
   return (
     <>
+      {/* Urgent Statutory Deadline Advisory Callout */}
+      <div className="max-w-5xl mx-auto px-4 pt-6 pb-2">
+        <div className="bg-amber-500/10 dark:bg-amber-500/5 border border-amber-500/30 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-center gap-3">
+            <span className="flex h-3 w-3 relative shrink-0">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+            </span>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">
+                Statutory Extension Alert
+              </p>
+              <p className="text-sm font-semibold text-navy dark:text-white">
+                EPFO has extended the September 2026 ECR filing &amp; PF contribution due date to <strong>31 October 2026</strong> (Circular No. e-704368).
+              </p>
+            </div>
+          </div>
+          <a
+            href="/updates/epfo-september-2026-ecr-deadline-extended-31-october-2026"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-navy dark:text-white bg-amber-400/20 hover:bg-amber-400/30 border border-amber-500/40 px-3 py-1.5 rounded-lg whitespace-nowrap transition-colors"
+          >
+            Read Circular &amp; Filing Rules &rarr;
+          </a>
+        </div>
+      </div>
+
       <Suspense fallback={
         <div className="space-y-4 max-w-5xl mx-auto px-4 py-8">
           {Array.from({ length: 5 }).map((_, i) => (

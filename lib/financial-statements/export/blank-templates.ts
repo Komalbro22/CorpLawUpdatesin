@@ -229,11 +229,16 @@ function getBlankRatios(): RatioResult[] {
     section: r.section,
     numeratorLabel: r.numeratorLabel,
     denominatorLabel: r.denominatorLabel,
+    currentNumerator: 0,
+    currentDenominator: 0,
+    prevNumerator: 0,
+    prevDenominator: 0,
     formulaDescription: r.formulaDescription,
     statutoryReference: r.statutoryReference,
     currentValue: null,
     prevValue: null,
     variancePct: null,
+    isMeaningful: false,
     varianceExceeds25: false,
     explanation: ''
   }))
