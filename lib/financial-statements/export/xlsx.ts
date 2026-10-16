@@ -6,6 +6,7 @@ import {
   RatioResult,
   ValidationIssue
 } from '../types'
+import { resolveAllStatutoryNotes } from '../canonical-notes'
 
 interface CellData {
   value: string | number
@@ -194,7 +195,14 @@ export async function generateFinancialStatementsXlsxBlob(params: {
     []
   ]
 
-  for (const note of Object.values(notes)) {
+  const resolvedNotes = resolveAllStatutoryNotes({
+    workspace,
+    balanceSheetRows,
+    plRows,
+    scope: 'all'
+  })
+
+  for (const note of resolvedNotes) {
     if (note.status === 'not_applicable') continue
     notesRows.push([{ value: `Note ${note.noteNumber}: ${note.title}`, bold: true }])
     if (note.items && note.items.length > 0) {
@@ -211,6 +219,106 @@ export async function generateFinancialStatementsXlsxBlob(params: {
         ])
       })
     }
+
+    // March 2021 Disclosures in Excel:
+    // Promoter Shareholding
+    if (note.promoterShareholding && note.promoterShareholding.length > 0) {
+      notesRows.push([])
+      notesRows.push([{ value: 'Promoter Shareholding Disclosure (March 2021 Amendment):', bold: true }])
+      notesRows.push([
+        { value: 'Promoter Name', bold: true, fill: 'F8FAFC' },
+        { value: 'Shares (Current)', bold: true, fill: 'F8FAFC', align: 'right' },
+        { value: '% Total', bold: true, fill: 'F8FAFC', align: 'right' },
+        { value: 'Shares (Prev)', bold: true, fill: 'F8FAFC', align: 'right' },
+        { value: '% Total', bold: true, fill: 'F8FAFC', align: 'right' },
+        { value: '% Change in Year', bold: true, fill: 'F8FAFC', align: 'right' }
+      ])
+      note.promoterShareholding.forEach(p => {
+        notesRows.push([
+          p.promoterName,
+          { value: p.sharesHeldCurrent, type: 'n', align: 'right' },
+          { value: `${p.percentageCurrent.toFixed(2)}%`, align: 'right' },
+          { value: p.sharesHeldPrev, type: 'n', align: 'right' },
+          { value: `${p.percentagePrev.toFixed(2)}%`, align: 'right' },
+          { value: `${p.pctChangeDuringYear >= 0 ? '+' : ''}${p.pctChangeDuringYear.toFixed(2)}%`, align: 'right' }
+        ])
+      })
+    }
+
+    // Trade Payables Ageing
+    if (note.tradePayablesAgeing && note.tradePayablesAgeing.length > 0) {
+      notesRows.push([])
+      notesRows.push([{ value: 'Trade Payables Ageing Schedule (March 2021 Amendment):', bold: true }])
+      notesRows.push([
+        { value: 'Category', bold: true, fill: 'F8FAFC' },
+        { value: '< 1 Year', bold: true, fill: 'F8FAFC', align: 'right' },
+        { value: '1-2 Years', bold: true, fill: 'F8FAFC', align: 'right' },
+        { value: '2-3 Years', bold: true, fill: 'F8FAFC', align: 'right' },
+        { value: '> 3 Years', bold: true, fill: 'F8FAFC', align: 'right' },
+        { value: 'Total', bold: true, fill: 'F8FAFC', align: 'right' }
+      ])
+      note.tradePayablesAgeing.forEach(a => {
+        notesRows.push([
+          a.category.toUpperCase().replace(/_/g, ' '),
+          { value: a.lessThan1Year, type: 'n', align: 'right' },
+          { value: a.oneToTwoYears, type: 'n', align: 'right' },
+          { value: a.twoToThreeYears, type: 'n', align: 'right' },
+          { value: a.moreThan3Years, type: 'n', align: 'right' },
+          { value: a.total, type: 'n', align: 'right' }
+        ])
+      })
+    }
+
+    // CWIP Ageing (Note 15)
+    if (note.cwipAgeing && note.cwipAgeing.length > 0) {
+      notesRows.push([])
+      notesRows.push([{ value: 'CWIP Ageing Schedule (March 2021 Amendment):', bold: true }])
+      notesRows.push([
+        { value: 'CWIP Status', bold: true, fill: 'F8FAFC' },
+        { value: '< 1 Year', bold: true, fill: 'F8FAFC', align: 'right' },
+        { value: '1-2 Years', bold: true, fill: 'F8FAFC', align: 'right' },
+        { value: '2-3 Years', bold: true, fill: 'F8FAFC', align: 'right' },
+        { value: '> 3 Years', bold: true, fill: 'F8FAFC', align: 'right' },
+        { value: 'Total', bold: true, fill: 'F8FAFC', align: 'right' }
+      ])
+      note.cwipAgeing.forEach(c => {
+        notesRows.push([
+          c.status === 'in_progress' ? 'Projects in Progress' : 'Projects Temporarily Suspended',
+          { value: c.lessThan1Year, type: 'n', align: 'right' },
+          { value: c.oneToTwoYears, type: 'n', align: 'right' },
+          { value: c.twoToThreeYears, type: 'n', align: 'right' },
+          { value: c.moreThan3Years, type: 'n', align: 'right' },
+          { value: c.total, type: 'n', align: 'right' }
+        ])
+      })
+    }
+
+    // Trade Receivables Ageing
+    if (note.tradeReceivablesAgeing && note.tradeReceivablesAgeing.length > 0) {
+      notesRows.push([])
+      notesRows.push([{ value: 'Trade Receivables Ageing Schedule (March 2021 Amendment):', bold: true }])
+      notesRows.push([
+        { value: 'Category', bold: true, fill: 'F8FAFC' },
+        { value: '< 6 Months', bold: true, fill: 'F8FAFC', align: 'right' },
+        { value: '6m - 1 Year', bold: true, fill: 'F8FAFC', align: 'right' },
+        { value: '1-2 Years', bold: true, fill: 'F8FAFC', align: 'right' },
+        { value: '2-3 Years', bold: true, fill: 'F8FAFC', align: 'right' },
+        { value: '> 3 Years', bold: true, fill: 'F8FAFC', align: 'right' },
+        { value: 'Total', bold: true, fill: 'F8FAFC', align: 'right' }
+      ])
+      note.tradeReceivablesAgeing.forEach(a => {
+        notesRows.push([
+          a.category.toUpperCase().replace(/_/g, ' '),
+          { value: a.lessThan6Months, type: 'n', align: 'right' },
+          { value: a.sixMonthsToOneYear, type: 'n', align: 'right' },
+          { value: a.oneToTwoYears, type: 'n', align: 'right' },
+          { value: a.twoToThreeYears, type: 'n', align: 'right' },
+          { value: a.moreThan3Years, type: 'n', align: 'right' },
+          { value: a.total, type: 'n', align: 'right' }
+        ])
+      })
+    }
+
     notesRows.push([])
   }
   sheets.push({ name: 'Notes to Accounts', rows: notesRows, colWidths: [50, 22, 22] })

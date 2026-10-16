@@ -103,7 +103,7 @@ export default function ProfitLossBuilderClient() {
           includeBalanceSheet: false,
           includeProfitLoss: true,
           includeCashFlow: false,
-          includeNotes: false,
+          includeNotes: true,
           includeRatios: false,
           isDraft: false
         }

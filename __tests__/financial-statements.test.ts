@@ -18,6 +18,10 @@ import { generateFinancialStatementsPdf } from '@/lib/financial-statements/expor
 import { generateFinancialStatementsXlsxBlob } from '@/lib/financial-statements/export/xlsx'
 import { generateFinancialStatementsDocxBlob } from '@/lib/financial-statements/export/docx'
 import { BLANK_TEMPLATES_CATALOG } from '@/lib/financial-statements/export/blank-templates'
+import {
+  resolveAllStatutoryNotes,
+  CANONICAL_STATUTORY_NOTES
+} from '@/lib/financial-statements/canonical-notes'
 
 describe('Schedule III Financial Statements Suite', () => {
   describe('Division I Schema Integrity', () => {
@@ -327,4 +331,114 @@ describe('Schedule III Financial Statements Suite', () => {
       expect(totalCombinations).toBe(12) // 4 templates x 3 formats (PDF, XLSX, DOCX)
     })
   })
+
+  describe('Statutory Notes to Accounts & March 2021 Disclosures', () => {
+    it('defines exactly 39 canonical statutory notes in sequential order', () => {
+      expect(CANONICAL_STATUTORY_NOTES.length).toBe(39)
+      CANONICAL_STATUTORY_NOTES.forEach((n, idx) => {
+        expect(n.noteNumber).toBe(idx + 1)
+      })
+
+      // Balance Sheet notes: 1-26
+      const bsNotes = CANONICAL_STATUTORY_NOTES.filter(n => n.section === 'balance_sheet')
+      expect(bsNotes.length).toBe(26)
+      expect(bsNotes[0].id).toBe('note_1')
+      expect(bsNotes[0].title).toBe('Share Capital')
+      expect(bsNotes[0].hasPromoterShareholding).toBe(true)
+
+      // Note 10: Trade Payables Ageing
+      const note10 = CANONICAL_STATUTORY_NOTES.find(n => n.noteNumber === 10)
+      expect(note10?.hasTradePayablesAgeing).toBe(true)
+
+      // Note 15: CWIP Ageing
+      const note15 = CANONICAL_STATUTORY_NOTES.find(n => n.noteNumber === 15)
+      expect(note15?.hasCwipAgeing).toBe(true)
+
+      // Note 23: Trade Receivables Ageing
+      const note23 = CANONICAL_STATUTORY_NOTES.find(n => n.noteNumber === 23)
+      expect(note23?.hasTradeReceivablesAgeing).toBe(true)
+
+      // Profit & Loss notes: 27-39
+      const plNotes = CANONICAL_STATUTORY_NOTES.filter(n => n.section === 'profit_loss')
+      expect(plNotes.length).toBe(13)
+      expect(plNotes[0].id).toBe('note_27')
+      expect(plNotes[0].title).toBe('Revenue from Operations')
+      expect(plNotes[12].id).toBe('note_39')
+      expect(plNotes[12].title).toBe('Earnings Per Equity Share (AS 20)')
+    })
+
+    it('resolves all 39 notes with March 2021 disclosures even on empty workspace notes', () => {
+      const emptyWorkspace: any = {
+        profile: SAMPLE_PRIVATE_COMPANY_FIXTURE.profile,
+        trialBalance: [],
+        manualDirectEntries: {},
+        notes: {}
+      }
+
+      const allNotes = resolveAllStatutoryNotes({
+        workspace: emptyWorkspace,
+        scope: 'all'
+      })
+
+      expect(allNotes.length).toBe(39)
+      expect(allNotes[0].noteNumber).toBe(1)
+      expect(allNotes[0].promoterShareholding).toBeDefined()
+      expect(allNotes[0].promoterShareholding?.length).toBeGreaterThanOrEqual(1)
+
+      const n10 = allNotes.find(n => n.noteNumber === 10)
+      expect(n10?.tradePayablesAgeing).toBeDefined()
+      expect(n10?.tradePayablesAgeing?.length).toBeGreaterThanOrEqual(2)
+
+      const n15 = allNotes.find(n => n.noteNumber === 15)
+      expect(n15?.cwipAgeing).toBeDefined()
+      expect(n15?.cwipAgeing?.length).toBeGreaterThanOrEqual(2)
+
+      const n23 = allNotes.find(n => n.noteNumber === 23)
+      expect(n23?.tradeReceivablesAgeing).toBeDefined()
+      expect(n23?.tradeReceivablesAgeing?.length).toBeGreaterThanOrEqual(4)
+
+      const n39 = allNotes.find(n => n.noteNumber === 39)
+      expect(n39?.items.length).toBeGreaterThanOrEqual(2)
+    })
+
+    it('resolves standalone P&L notes (Notes 27-39) when scope is profit_loss', () => {
+      const plNotes = resolveAllStatutoryNotes({
+        workspace: SAMPLE_PRIVATE_COMPANY_FIXTURE,
+        scope: 'profit_loss'
+      })
+
+      expect(plNotes.length).toBe(13)
+      expect(plNotes[0].noteNumber).toBe(27)
+      expect(plNotes[12].noteNumber).toBe(39)
+    })
+
+    it('includes all 39 notes in full multi-statement PDF export (after ratios)', () => {
+      const balances = computeHeadBalances(SAMPLE_PRIVATE_COMPANY_FIXTURE.trialBalance)
+      const bsRows = generateBalanceSheetStatement(balances)
+      const plRows = generateProfitLossStatement(balances)
+      const cfs = computeIndirectCashFlow(balances, SAMPLE_PRIVATE_COMPANY_FIXTURE.supplementaryCashFlow, plRows)
+      const ratios = computeScheduleIIIRatios(balances)
+
+      const doc = generateFinancialStatementsPdf({
+        workspace: SAMPLE_PRIVATE_COMPANY_FIXTURE,
+        balanceSheetRows: bsRows,
+        plRows,
+        cashFlowResult: cfs,
+        ratios,
+        options: {
+          includeBalanceSheet: true,
+          includeProfitLoss: true,
+          includeCashFlow: true,
+          includeNotes: true,
+          includeRatios: true
+        }
+      })
+
+      expect(doc).toBeDefined()
+      // Full pack: Face statements (3-4 pages) + Ratios (1 page) + Notes 1-39 (multiple pages)
+      const totalPages = (doc as any).internal.getNumberOfPages()
+      expect(totalPages).toBeGreaterThanOrEqual(7)
+    })
+  })
 })
+

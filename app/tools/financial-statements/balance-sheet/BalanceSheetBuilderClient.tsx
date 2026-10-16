@@ -979,6 +979,33 @@ export default function BalanceSheetBuilderClient() {
               )}
             </div>
 
+            {/* Note 15: Capital Work-in-Progress (CWIP) Ageing */}
+            <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/60">
+              <div className="flex items-center justify-between mb-2">
+                <span className="font-bold text-sm text-slate-900 dark:text-white">
+                  Note 15: CWIP Ageing Schedule
+                </span>
+                <span className="text-xs px-2 py-0.5 rounded bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 font-semibold">
+                  2021 Mandate
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">
+                Mandatory ageing for projects in progress and suspended projects across &lt;1 yr, 1-2 yrs, 2-3 yrs, and &gt;3 yrs.
+              </p>
+              {workspace.notes.note_15?.cwipAgeing ? (
+                <div className="text-xs font-mono bg-slate-50 dark:bg-slate-900 p-2.5 rounded border border-slate-200 dark:border-slate-700">
+                  {workspace.notes.note_15.cwipAgeing.map((a, i) => (
+                    <div key={i} className="flex justify-between py-0.5">
+                      <span>{a.status === 'in_progress' ? 'Projects in Progress' : 'Temporarily Suspended'}</span>
+                      <span className="font-semibold">{formatCurrencyAmount(a.total, profile.presentationUnit, true)}</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-xs text-slate-400 italic">Configured automatically in statutory notes export.</div>
+              )}
+            </div>
+
             {/* Ratios Preview Card */}
             <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/60">
               <div className="flex items-center justify-between mb-2">

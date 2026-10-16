@@ -5,12 +5,14 @@ import { generateFinancialStatementsDocxBlob } from './docx'
 import {
   WorkspaceState,
   StatementRowValue,
-  CashFlowStatementResult
+  CashFlowStatementResult,
+  RatioResult
 } from '../types'
 import {
   DIVISION_1_BALANCE_SHEET_HEADS,
   DIVISION_1_PL_HEADS
 } from '../division-1-schema'
+import { SCHEDULE_III_RATIOS } from '../ratios'
 
 export type BlankTemplateType =
   | 'balance_sheet'
@@ -220,6 +222,23 @@ function getBlankCashFlowResult(): CashFlowStatementResult {
   }
 }
 
+function getBlankRatios(): RatioResult[] {
+  return SCHEDULE_III_RATIOS.map(r => ({
+    id: r.id,
+    name: r.name,
+    section: r.section,
+    numeratorLabel: r.numeratorLabel,
+    denominatorLabel: r.denominatorLabel,
+    formulaDescription: r.formulaDescription,
+    statutoryReference: r.statutoryReference,
+    currentValue: null,
+    prevValue: null,
+    variancePct: null,
+    varianceExceeds25: false,
+    explanation: ''
+  }))
+}
+
 /**
  * Downloads one of the 12 blank templates in PDF, XLSX, or DOCX directly in browser.
  */
@@ -234,18 +253,24 @@ export async function downloadBlankTemplate(
 
   const filePrefix = `blank_schedule_iii_${templateType}`
 
+  const isBs = templateType === 'balance_sheet'
+  const isPl = templateType === 'profit_loss'
+  const isCfs = templateType === 'cash_flow'
+  const isNotes = templateType === 'notes_to_accounts'
+
   if (format === 'pdf') {
     const doc = generateFinancialStatementsPdf({
       workspace: ws,
-      balanceSheetRows: templateType === 'balance_sheet' ? bsRows : [],
-      plRows: templateType === 'profit_loss' ? plRows : [],
-      cashFlowResult: templateType === 'cash_flow' ? cfsResult : undefined,
+      balanceSheetRows: (isBs || isNotes) ? bsRows : [],
+      plRows: (isPl || isBs || isNotes) ? plRows : [],
+      cashFlowResult: (isCfs || isBs) ? cfsResult : undefined,
+      ratios: isBs ? getBlankRatios() : undefined,
       options: {
-        includeBalanceSheet: templateType === 'balance_sheet',
-        includeProfitLoss: templateType === 'profit_loss',
-        includeCashFlow: templateType === 'cash_flow',
-        includeNotes: templateType === 'notes_to_accounts',
-        includeRatios: false,
+        includeBalanceSheet: isBs,
+        includeProfitLoss: isPl || isBs,
+        includeCashFlow: isCfs || isBs,
+        includeNotes: isNotes || isBs || isPl,
+        includeRatios: isBs,
         isDraft: false
       }
     })
@@ -253,17 +278,18 @@ export async function downloadBlankTemplate(
   } else if (format === 'xlsx') {
     const blob = await generateFinancialStatementsXlsxBlob({
       workspace: ws,
-      balanceSheetRows: templateType === 'balance_sheet' ? bsRows : [],
-      plRows: templateType === 'profit_loss' ? plRows : [],
-      cashFlowResult: templateType === 'cash_flow' ? cfsResult : undefined
+      balanceSheetRows: (isBs || isNotes) ? bsRows : [],
+      plRows: (isPl || isBs || isNotes) ? plRows : [],
+      cashFlowResult: (isCfs || isBs) ? cfsResult : undefined,
+      ratios: isBs ? getBlankRatios() : undefined
     })
     saveAs(blob, `${filePrefix}.xlsx`)
   } else if (format === 'docx') {
     const blob = await generateFinancialStatementsDocxBlob({
       workspace: ws,
-      balanceSheetRows: templateType === 'balance_sheet' ? bsRows : [],
-      plRows: templateType === 'profit_loss' ? plRows : [],
-      cashFlowResult: templateType === 'cash_flow' ? cfsResult : undefined
+      balanceSheetRows: (isBs || isNotes) ? bsRows : [],
+      plRows: (isPl || isBs || isNotes) ? plRows : [],
+      cashFlowResult: (isCfs || isBs) ? cfsResult : undefined
     })
     saveAs(blob, `${filePrefix}.docx`)
   }

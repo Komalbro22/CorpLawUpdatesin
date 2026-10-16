@@ -8,6 +8,7 @@ import {
 } from '../types'
 import { formatCurrencyAmount } from '../calculations'
 import { cleanPdfText, PDF_PALETTE } from '@/lib/pdf/pdfUtils'
+import { resolveAllStatutoryNotes } from '../canonical-notes'
 
 export interface PdfExportOptions {
   includeBalanceSheet?: boolean
@@ -383,15 +384,23 @@ export function generateFinancialStatementsPdf(params: {
   // 5. NOTES TO ACCOUNTS & 2021 DISCLOSURES
   // -------------------------------------------------------------------------
   if (opt.includeNotes) {
-    const noteKeys = Object.keys(notes)
-    if (noteKeys.length > 0) {
+    const notesScope: 'all' | 'profit_loss' =
+      (!opt.includeBalanceSheet && opt.includeProfitLoss) ? 'profit_loss' : 'all'
+
+    const resolvedNotes = resolveAllStatutoryNotes({
+      workspace,
+      balanceSheetRows,
+      plRows,
+      scope: notesScope
+    })
+
+    if (resolvedNotes.length > 0) {
       let notesY = renderSectionHeader(
         'NOTES FORMING PART OF THE FINANCIAL STATEMENTS',
         'Significant Accounting Policies & Statutory Disclosures (Schedule III)'
       )
 
-      for (const key of noteKeys) {
-        const note = notes[key]
+      for (const note of resolvedNotes) {
         if (!note || note.status === 'not_applicable') continue
 
         // Check if we need a new page
@@ -433,6 +442,10 @@ export function generateFinancialStatementsPdf(params: {
 
         // Promoter shareholding disclosure
         if (note.promoterShareholding && note.promoterShareholding.length > 0) {
+          if (notesY > pageHeight - 35) {
+            doc.addPage()
+            notesY = 22
+          }
           doc.setFont('helvetica', 'bold')
           doc.setFontSize(7.5)
           doc.setTextColor(PDF_PALETTE.blue[0], PDF_PALETTE.blue[1], PDF_PALETTE.blue[2])
@@ -462,6 +475,10 @@ export function generateFinancialStatementsPdf(params: {
 
         // Trade Payables Ageing
         if (note.tradePayablesAgeing && note.tradePayablesAgeing.length > 0) {
+          if (notesY > pageHeight - 35) {
+            doc.addPage()
+            notesY = 22
+          }
           doc.setFont('helvetica', 'bold')
           doc.setFontSize(7.5)
           doc.setTextColor(PDF_PALETTE.blue[0], PDF_PALETTE.blue[1], PDF_PALETTE.blue[2])
@@ -489,8 +506,45 @@ export function generateFinancialStatementsPdf(params: {
           notesY = (doc as any).lastAutoTable.finalY + 4
         }
 
+        // Capital Work-in-Progress (CWIP) Ageing (Note 15)
+        if (note.cwipAgeing && note.cwipAgeing.length > 0) {
+          if (notesY > pageHeight - 35) {
+            doc.addPage()
+            notesY = 22
+          }
+          doc.setFont('helvetica', 'bold')
+          doc.setFontSize(7.5)
+          doc.setTextColor(PDF_PALETTE.blue[0], PDF_PALETTE.blue[1], PDF_PALETTE.blue[2])
+          doc.text('CWIP Ageing Schedule (March 2021 Amendment):', 14, notesY)
+          notesY += 3.5
+
+          const cwipAgeRows = note.cwipAgeing.map(a => [
+            cleanPdfText(a.status === 'in_progress' ? 'Projects in Progress' : 'Projects Temporarily Suspended'),
+            formatCurrencyAmount(a.lessThan1Year, profile.presentationUnit),
+            formatCurrencyAmount(a.oneToTwoYears, profile.presentationUnit),
+            formatCurrencyAmount(a.twoToThreeYears, profile.presentationUnit),
+            formatCurrencyAmount(a.moreThan3Years, profile.presentationUnit),
+            formatCurrencyAmount(a.total, profile.presentationUnit)
+          ])
+
+          autoTable(doc, {
+            startY: notesY,
+            margin: { left: 14, right: 14 },
+            head: [['CWIP Status', '< 1 Year', '1-2 Years', '2-3 Years', '> 3 Years', 'Total']],
+            body: cwipAgeRows,
+            theme: 'plain',
+            styles: { fontSize: 7, cellPadding: 1.5 },
+            headStyles: { fillColor: [248, 250, 252], textColor: [15, 23, 42], fontStyle: 'bold' }
+          })
+          notesY = (doc as any).lastAutoTable.finalY + 4
+        }
+
         // Trade Receivables Ageing
         if (note.tradeReceivablesAgeing && note.tradeReceivablesAgeing.length > 0) {
+          if (notesY > pageHeight - 35) {
+            doc.addPage()
+            notesY = 22
+          }
           doc.setFont('helvetica', 'bold')
           doc.setFontSize(7.5)
           doc.setTextColor(PDF_PALETTE.blue[0], PDF_PALETTE.blue[1], PDF_PALETTE.blue[2])
