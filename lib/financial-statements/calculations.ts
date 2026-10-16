@@ -288,11 +288,22 @@ export function generateProfitLossStatement(
         const tax = result.find(r => r.headId === 'total_tax_expense')
         currentAmount = (pbt?.currentAmount || 0) - (tax?.currentAmount || 0)
         prevAmount = (pbt?.prevAmount || 0) - (tax?.prevAmount || 0)
+      } else if (head.id === 'profit_discontinued_ops') {
+        const pPre = getBal('profit_discontinuing_ops_pre_tax')
+        const tDisc = getBal('tax_discontinuing_ops')
+        const direct = getBal('profit_discontinued_ops')
+        if (pPre.current !== 0 || tDisc.current !== 0 || pPre.prev !== 0 || tDisc.prev !== 0) {
+          currentAmount = pPre.current - tDisc.current
+          prevAmount = pPre.prev - tDisc.prev
+        } else {
+          currentAmount = direct.current
+          prevAmount = direct.prev
+        }
       } else if (head.id === 'profit_for_period') {
         const pco = result.find(r => r.headId === 'profit_continuing_ops')
-        const disc = getBal('profit_discontinued_ops')
-        currentAmount = (pco?.currentAmount || 0) + disc.current
-        prevAmount = (pco?.prevAmount || 0) + disc.prev
+        const disc = result.find(r => r.headId === 'profit_discontinued_ops')
+        currentAmount = (pco?.currentAmount || 0) + (disc?.currentAmount || 0)
+        prevAmount = (pco?.prevAmount || 0) + (disc?.prevAmount || 0)
       }
     } else {
       const b = getBal(head.id)

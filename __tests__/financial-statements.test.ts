@@ -42,16 +42,39 @@ describe('Schedule III Financial Statements Suite', () => {
 
     it('contains all canonical Profit & Loss heads in statutory order', () => {
       const ids = DIVISION_1_PL_HEADS.map(h => h.id)
-      expect(ids).toContain('rev_operations')
-      expect(ids).toContain('other_income')
-      expect(ids).toContain('total_income')
-      expect(ids).toContain('exp_materials_consumed')
-      expect(ids).toContain('exp_employee_benefits')
-      expect(ids).toContain('exp_finance_costs')
-      expect(ids).toContain('exp_depreciation_amortization')
-      expect(ids).toContain('total_expenses')
-      expect(ids).toContain('profit_before_tax')
-      expect(ids).toContain('profit_for_period')
+      expect(ids).toContain('rev_operations') // I
+      expect(ids).toContain('other_income') // II
+      expect(ids).toContain('total_income') // III
+      expect(ids).toContain('exp_materials_consumed') // IV.a
+      expect(ids).toContain('exp_purchases_stock') // IV.b
+      expect(ids).toContain('exp_changes_inventories') // IV.c
+      expect(ids).toContain('exp_employee_benefits') // IV.d
+      expect(ids).toContain('exp_finance_costs') // IV.e
+      expect(ids).toContain('exp_depreciation_amortization') // IV.f
+      expect(ids).toContain('exp_other_expenses') // IV.g
+      expect(ids).toContain('total_expenses') // IV
+      expect(ids).toContain('profit_before_exceptional') // V
+      expect(ids).toContain('exceptional_items') // VI
+      expect(ids).toContain('profit_before_extraordinary') // VII
+      expect(ids).toContain('extraordinary_items') // VIII
+      expect(ids).toContain('profit_before_tax') // IX
+      expect(ids).toContain('tax_current') // X.1
+      expect(ids).toContain('tax_deferred') // X.2
+      expect(ids).toContain('total_tax_expense') // X
+      expect(ids).toContain('profit_continuing_ops') // XI
+      expect(ids).toContain('profit_discontinuing_ops_pre_tax') // XII
+      expect(ids).toContain('tax_discontinuing_ops') // XIII
+      expect(ids).toContain('profit_discontinued_ops') // XIV
+      expect(ids).toContain('profit_for_period') // XV
+      expect(ids).toContain('eps_basic') // XVI.1
+      expect(ids).toContain('eps_diluted') // XVI.2
+
+      // Verify statutory labels
+      const line3 = DIVISION_1_PL_HEADS.find(h => h.id === 'total_income')
+      expect(line3?.label).toBe('Total Revenue (I + II)')
+
+      const line5 = DIVISION_1_PL_HEADS.find(h => h.id === 'profit_before_exceptional')
+      expect(line5?.label).toBe('Profit before exceptional and extraordinary items and tax (III - IV)')
     })
   })
 

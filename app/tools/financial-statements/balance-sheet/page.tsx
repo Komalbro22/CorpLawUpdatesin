@@ -96,7 +96,7 @@ export default function BalanceSheetPage() {
       {/* Hero Header */}
       <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 py-10 sm:py-12">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center gap-2 text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">
+          <div className="flex items-center gap-2 text-xs font-semibold text-gold uppercase tracking-wider mb-2">
             <span>Companies Act, 2013</span>
             <span>•</span>
             <span>Schedule III Division I</span>
@@ -104,8 +104,8 @@ export default function BalanceSheetPage() {
             <span className="text-emerald-600 dark:text-emerald-400">100% Client-Side Privacy</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Free Schedule III Balance Sheet Builder and Format Downloads
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-navy dark:text-white tracking-tight">
+            Schedule III Balance Sheet Builder
           </h1>
 
           <p className="mt-3 text-base text-slate-600 dark:text-slate-300 max-w-4xl leading-relaxed">

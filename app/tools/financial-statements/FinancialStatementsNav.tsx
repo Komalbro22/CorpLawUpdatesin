@@ -68,11 +68,11 @@ export default function FinancialStatementsNav({ onResetWorkspace }: { onResetWo
                 href={item.href}
                 className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-colors ${
                   item.match
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800'
+                    ? 'bg-navy text-white shadow-sm ring-1 ring-gold-accent/40 dark:bg-slate-800 dark:text-gold-accent dark:ring-gold-accent/60'
+                    : 'text-slate-600 hover:text-navy hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800'
                 }`}
               >
-                <Icon className="w-4 h-4" />
+                <Icon className={`w-4 h-4 ${item.match ? 'text-gold-accent' : ''}`} />
                 <span>{item.label}</span>
               </Link>
             )

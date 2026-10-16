@@ -255,10 +255,10 @@ export default function CashFlowBuilderClient() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left: Statement Presentation (7 cols) */}
         <div className="lg:col-span-7 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
-          <div className="bg-slate-900 text-white p-3.5 text-center">
-            <h3 className="font-bold text-sm">CASH FLOW STATEMENT (INDIRECT METHOD)</h3>
-            <p className="text-xs text-slate-400">
-              For the year ended {profile.financialYearEnd || '31st March 2026'} | In {profile.presentationUnit.toUpperCase()}
+          <div className="bg-navy text-white p-3.5 text-center border-b border-gold-accent/20">
+            <h3 className="font-bold text-sm text-gold-accent">CASH FLOW STATEMENT (INDIRECT METHOD)</h3>
+            <p className="text-xs text-slate-300">
+              {`For the year ended ${profile.financialYearEnd || '31st March 2026'} | In ${profile.presentationUnit.toUpperCase()}`}
             </p>
           </div>
 

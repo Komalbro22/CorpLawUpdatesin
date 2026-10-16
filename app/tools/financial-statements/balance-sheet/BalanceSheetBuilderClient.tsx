@@ -448,10 +448,12 @@ export default function BalanceSheetBuilderClient() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5">
+              <label htmlFor="company-cin-input" className="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5">
                 Corporate Identification Number (CIN)
               </label>
               <input
+                id="company-cin-input"
+                aria-label="Corporate Identification Number (CIN)"
                 type="text"
                 value={profile.cin || ''}
                 onChange={e => updateProfile({ cin: e.target.value.toUpperCase() })}
@@ -491,7 +493,7 @@ export default function BalanceSheetBuilderClient() {
                 onChange={e => updateProfile({ framework: e.target.value as any })}
                 className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
               >
-                <option value="division-1">Division I: Companies (AS) Rules, 2006 (Non-Ind AS)</option>
+                <option value="division-1">Division I: Companies (Accounting Standards) Rules, 2006 (Non-Ind AS)</option>
                 <option value="division-2">Division II: Companies (Ind AS) Rules, 2015</option>
                 <option value="division-3-nbfc">Division III: Relevant Ind AS NBFCs (Out of scope)</option>
               </select>
@@ -1109,15 +1111,15 @@ export default function BalanceSheetBuilderClient() {
 
           {/* Balance Sheet Statement Table Preview */}
           <div className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
-            <div className="bg-slate-900 text-white p-4 text-center">
+            <div className="bg-navy text-white p-4 text-center border-b border-gold-accent/20">
               <h2 className="text-base font-bold tracking-wide">
                 {profile.companyName || 'COMPANY NAME'}
               </h2>
-              <h3 className="text-sm font-semibold text-blue-300 mt-0.5">
-                BALANCE SHEET AS AT {profile.financialYearEnd || '31ST MARCH 2026'}
+              <h3 className="text-sm font-semibold text-gold-accent mt-0.5">
+                {`BALANCE SHEET AS AT ${(profile.financialYearEnd || '31ST MARCH 2026').toUpperCase()}`}
               </h3>
-              <p className="text-xs text-slate-400 italic mt-0.5">
-                Prepared in accordance with Schedule III Division I of Companies Act, 2013 (Amounts in INR {profile.presentationUnit.toUpperCase()})
+              <p className="text-xs text-slate-300 italic mt-0.5">
+                {`Prepared in accordance with Schedule III Division I of Companies Act, 2013 (Amounts in INR ${profile.presentationUnit.toUpperCase()})`}
               </p>
             </div>
 

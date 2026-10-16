@@ -427,11 +427,11 @@ export const DIVISION_1_PL_HEADS: ScheduleHead[] = [
     normalBalance: 'credit',
     defaultNoteNumber: 28
   },
-  // III. Total Income
+  // III. Total Revenue (I + II)
   {
     id: 'total_income',
     code: 'III',
-    label: 'TOTAL INCOME (I + II)',
+    label: 'Total Revenue (I + II)',
     section: 'revenue',
     category: 'Income',
     level: 1,
@@ -464,7 +464,7 @@ export const DIVISION_1_PL_HEADS: ScheduleHead[] = [
   {
     id: 'exp_changes_inventories',
     code: 'IV.c',
-    label: 'Changes in inventories of finished goods, work-in-progress and stock-in-trade',
+    label: 'Changes in inventories of finished goods, work-in-progress and Stock-in-Trade',
     section: 'expenses',
     category: 'Expenses',
     level: 3,
@@ -494,7 +494,7 @@ export const DIVISION_1_PL_HEADS: ScheduleHead[] = [
   {
     id: 'exp_depreciation_amortization',
     code: 'IV.f',
-    label: 'Depreciation and amortization expense',
+    label: 'Depreciation and amortisation expense',
     section: 'expenses',
     category: 'Expenses',
     level: 3,
@@ -515,7 +515,7 @@ export const DIVISION_1_PL_HEADS: ScheduleHead[] = [
   {
     id: 'total_expenses',
     code: 'IV',
-    label: 'TOTAL EXPENSES',
+    label: 'Total expenses',
     section: 'expenses',
     category: 'Expenses',
     level: 1,
@@ -536,10 +536,10 @@ export const DIVISION_1_PL_HEADS: ScheduleHead[] = [
   {
     id: 'profit_before_exceptional',
     code: 'V',
-    label: 'Profit / (Loss) before exceptional items and tax (III - IV)',
+    label: 'Profit before exceptional and extraordinary items and tax (III - IV)',
     section: 'tax_and_profit',
     category: 'Profit / Loss',
-    level: 2,
+    level: 1,
     normalBalance: 'credit',
     isSubtotal: true
   },
@@ -558,10 +558,10 @@ export const DIVISION_1_PL_HEADS: ScheduleHead[] = [
   {
     id: 'profit_before_extraordinary',
     code: 'VII',
-    label: 'Profit / (Loss) before extraordinary items and tax (V - VI)',
+    label: 'Profit before extraordinary items and tax (V - VI)',
     section: 'tax_and_profit',
     category: 'Profit / Loss',
-    level: 2,
+    level: 1,
     normalBalance: 'credit',
     isSubtotal: true
   },
@@ -580,7 +580,7 @@ export const DIVISION_1_PL_HEADS: ScheduleHead[] = [
   {
     id: 'profit_before_tax',
     code: 'IX',
-    label: 'Profit / (Loss) before tax (PBT) (VII - VIII)',
+    label: 'Profit before tax (VII - VIII)',
     section: 'tax_and_profit',
     category: 'Profit / Loss',
     level: 1,
@@ -592,7 +592,7 @@ export const DIVISION_1_PL_HEADS: ScheduleHead[] = [
   {
     id: 'tax_current',
     code: 'X.1',
-    label: 'Current tax expense',
+    label: 'Current tax',
     section: 'tax_and_profit',
     category: 'Tax expense',
     level: 3,
@@ -601,7 +601,7 @@ export const DIVISION_1_PL_HEADS: ScheduleHead[] = [
   {
     id: 'tax_deferred',
     code: 'X.2',
-    label: 'Deferred tax expense / (benefit)',
+    label: 'Deferred tax',
     section: 'tax_and_profit',
     category: 'Tax expense',
     level: 3,
@@ -610,7 +610,7 @@ export const DIVISION_1_PL_HEADS: ScheduleHead[] = [
   {
     id: 'total_tax_expense',
     code: 'X',
-    label: 'Total tax expense',
+    label: 'Tax expense',
     section: 'tax_and_profit',
     category: 'Tax expense',
     level: 2,
@@ -619,11 +619,11 @@ export const DIVISION_1_PL_HEADS: ScheduleHead[] = [
     subtotalChildren: ['tax_current', 'tax_deferred']
   },
 
-  // XI. Profit / (Loss) for the period from continuing operations (IX - X)
+  // XI. Profit/(Loss) for the period from continuing operations (IX - X)
   {
     id: 'profit_continuing_ops',
     code: 'XI',
-    label: 'Profit / (Loss) from continuing operations (IX - X)',
+    label: 'Profit/(Loss) for the period from continuing operations (IX - X)',
     section: 'tax_and_profit',
     category: 'Profit / Loss',
     level: 1,
@@ -631,28 +631,72 @@ export const DIVISION_1_PL_HEADS: ScheduleHead[] = [
     isSubtotal: true
   },
 
-  // XII & XIII & XIV Discontinued operations
+  // XII. Profit/(loss) from discontinuing operations
   {
-    id: 'profit_discontinued_ops',
-    code: 'XIV',
-    label: 'Profit / (Loss) from discontinuing operations (after tax)',
+    id: 'profit_discontinuing_ops_pre_tax',
+    code: 'XII',
+    label: 'Profit/(loss) from discontinuing operations',
     section: 'tax_and_profit',
-    category: 'Profit / Loss',
+    category: 'Discontinuing operations',
     level: 2,
     normalBalance: 'credit',
     defaultNoteNumber: 38
   },
+  // XIII. Tax expense of discontinuing operations
+  {
+    id: 'tax_discontinuing_ops',
+    code: 'XIII',
+    label: 'Tax expense of discontinuing operations',
+    section: 'tax_and_profit',
+    category: 'Discontinuing operations',
+    level: 2,
+    normalBalance: 'debit',
+    defaultNoteNumber: 38
+  },
+  // XIV. Profit/(loss) from discontinuing operations (after tax) (XII - XIII)
+  {
+    id: 'profit_discontinued_ops',
+    code: 'XIV',
+    label: 'Profit/(loss) from discontinuing operations (after tax) (XII - XIII)',
+    section: 'tax_and_profit',
+    category: 'Discontinuing operations',
+    level: 1,
+    normalBalance: 'credit',
+    isSubtotal: true
+  },
 
-  // XV. Profit / (Loss) for the period (XI + XIV)
+  // XV. Profit/(Loss) for the period (XI + XIV)
   {
     id: 'profit_for_period',
     code: 'XV',
-    label: 'PROFIT / (LOSS) FOR THE PERIOD (PAT) (XI + XIV)',
+    label: 'Profit/(Loss) for the period (XI + XIV)',
     section: 'tax_and_profit',
     category: 'Profit / Loss',
     level: 1,
     normalBalance: 'credit',
     isGrandTotal: true
+  },
+
+  // XVI. Earnings per equity share: (1) Basic, (2) Diluted
+  {
+    id: 'eps_basic',
+    code: 'XVI.1',
+    label: 'Earnings per equity share: Basic (₹)',
+    section: 'tax_and_profit',
+    category: 'Earnings Per Share',
+    level: 2,
+    normalBalance: 'credit',
+    defaultNoteNumber: 39
+  },
+  {
+    id: 'eps_diluted',
+    code: 'XVI.2',
+    label: 'Earnings per equity share: Diluted (₹)',
+    section: 'tax_and_profit',
+    category: 'Earnings Per Share',
+    level: 2,
+    normalBalance: 'credit',
+    defaultNoteNumber: 39
   }
 ]
 

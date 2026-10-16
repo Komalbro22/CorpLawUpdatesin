@@ -3,6 +3,7 @@ import Link from 'next/link'
 import JsonLd from '@/components/JsonLd'
 import HubExploreLinks from '@/components/HubExploreLinks'
 import FinancialStatementsNav from './FinancialStatementsNav'
+import BlankTemplatesDownloadGrid from './BlankTemplatesDownloadGrid'
 import {
   FileSpreadsheet,
   PieChart,
@@ -17,7 +18,6 @@ import {
   FileText,
   Lock
 } from 'lucide-react'
-import { BLANK_TEMPLATES_CATALOG } from '@/lib/financial-statements/export/blank-templates'
 
 const canonicalUrl = 'https://www.corplawupdates.in/tools/financial-statements'
 const ogImageUrl = 'https://www.corplawupdates.in/api/og?title=Financial+Statements+Builder+%26+Schedule+III+Formats&category=Tools'
@@ -104,7 +104,7 @@ export default function FinancialStatementsHubPage() {
       title: 'Schedule III Balance Sheet Builder',
       badge: 'Division I & 2021 Amendments',
       icon: FileSpreadsheet,
-      badgeColor: 'bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300',
+      badgeColor: 'bg-amber-50 text-gold dark:bg-amber-950/60 dark:text-gold-accent border border-amber-200/60 dark:border-amber-800/40',
       description:
         'Convert trial balances into vertical Schedule III Part I balance sheets. Includes promoter shareholding, trade ageing schedules, CWIP, and 11 statutory ratios.',
       action: 'Open Balance Sheet Builder'
@@ -114,7 +114,7 @@ export default function FinancialStatementsHubPage() {
       title: 'Statement of Profit and Loss Builder',
       badge: 'Schedule III Part II',
       icon: PieChart,
-      badgeColor: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300',
+      badgeColor: 'bg-blue-50 text-navy dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/40',
       description:
         'Classify revenues and expenses by nature, compute PBT, provision for taxes (AS-22), and reconcile profit into the retained earnings roll-forward bridge.',
       action: 'Open Profit & Loss Builder'
@@ -124,7 +124,7 @@ export default function FinancialStatementsHubPage() {
       title: 'Cash Flow Statement Builder (Indirect)',
       badge: 'AS-3 / Ind AS 7',
       icon: ArrowRightLeft,
-      badgeColor: 'bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300',
+      badgeColor: 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/40',
       description:
         'Reconcile net profit to operating cash flows via working capital movements, supplemented with actual non-cash and investing inputs. Includes Section 2(40) exemption checker.',
       action: 'Open Cash Flow Builder'
@@ -138,7 +138,7 @@ export default function FinancialStatementsHubPage() {
       {/* Hero Header */}
       <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 py-10 sm:py-14">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center gap-2 text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">
+          <div className="flex items-center gap-2 text-xs font-semibold text-gold uppercase tracking-wider mb-2">
             <span>Companies Act, 2013</span>
             <span>•</span>
             <span>Statutory Compliance Suite</span>
@@ -146,7 +146,7 @@ export default function FinancialStatementsHubPage() {
             <span className="text-emerald-600 dark:text-emerald-400">Zero Server Data Upload</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-navy dark:text-white tracking-tight">
             Financial Statements Builder — Schedule III Formats and Tools
           </h1>
 
@@ -160,11 +160,11 @@ export default function FinancialStatementsHubPage() {
               100% Client-Side Privacy (Zero uploads)
             </span>
             <span className="inline-flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">
-              <Scale className="w-3.5 h-3.5 text-blue-600" />
+              <Scale className="w-3.5 h-3.5 text-navy dark:text-blue-400" />
               March 2021 MCA Disclosures Integrated
             </span>
             <span className="inline-flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">
-              <FileSpreadsheet className="w-3.5 h-3.5 text-amber-600" />
+              <FileSpreadsheet className="w-3.5 h-3.5 text-gold" />
               12 Blank Download Packs (PDF, XLSX, DOCX)
             </span>
           </div>
@@ -183,7 +183,7 @@ export default function FinancialStatementsHubPage() {
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 flex items-center justify-center text-blue-600">
+                    <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/60 flex items-center justify-center text-gold dark:text-gold-accent">
                       <Icon className="w-5 h-5" />
                     </div>
                     <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${tool.badgeColor}`}>
@@ -191,7 +191,7 @@ export default function FinancialStatementsHubPage() {
                     </span>
                   </div>
 
-                  <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
+                  <h2 className="text-lg font-bold text-navy dark:text-white mb-2">
                     {tool.title}
                   </h2>
                   <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
@@ -201,10 +201,10 @@ export default function FinancialStatementsHubPage() {
 
                 <Link
                   href={tool.href}
-                  className="w-full py-2.5 px-4 bg-slate-900 hover:bg-blue-600 text-white rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-2 group"
+                  className="w-full py-2.5 px-4 bg-navy hover:bg-[#152e56] text-white border border-gold-accent/30 rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-2 group shadow-sm"
                 >
                   <span>{tool.action}</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                  <ArrowRight className="w-3.5 h-3.5 text-gold-accent group-hover:translate-x-0.5 transition-transform" />
                 </Link>
               </div>
             )
@@ -215,7 +215,7 @@ export default function FinancialStatementsHubPage() {
         <div className="mt-14 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8">
           <div className="mb-6">
             <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <Scale className="w-5 h-5 text-blue-600" />
+              <Scale className="w-5 h-5 text-navy dark:text-gold-accent" />
               Schedule III: Division I (AS) vs Division II (Ind AS) Matrix
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
@@ -226,10 +226,10 @@ export default function FinancialStatementsHubPage() {
           <div className="overflow-x-auto border border-slate-200 dark:border-slate-800 rounded-xl">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="bg-slate-100 dark:bg-slate-800 font-bold text-slate-700 dark:text-slate-300">
+                <tr className="bg-navy text-white font-bold">
                   <th className="p-3 w-40">Parameter</th>
-                  <th className="p-3">Division I (Companies AS Rules, 2006)</th>
-                  <th className="p-3">Division II (Companies Ind AS Rules, 2015)</th>
+                  <th className="p-3">Division I (Companies (Accounting Standards) Rules, 2006)</th>
+                  <th className="p-3">Division II (Companies (Ind AS) Rules, 2015)</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -245,7 +245,7 @@ export default function FinancialStatementsHubPage() {
                 <tr>
                   <td className="p-3 font-semibold text-slate-900 dark:text-white">Equity Section</td>
                   <td className="p-3 text-slate-600 dark:text-slate-400">
-                    "Shareholders' Funds" (Share Capital, Reserves and Surplus, Share Warrants).
+                    "Shareholders' Funds" (Share Capital, Reserves and Surplus, Money received against share warrants).
                   </td>
                   <td className="p-3 text-slate-600 dark:text-slate-400">
                     "Equity" (Equity Share Capital and Other Equity), Statement of Changes in Equity (SOCIE) mandatory.
@@ -272,7 +272,7 @@ export default function FinancialStatementsHubPage() {
                 <tr>
                   <td className="p-3 font-semibold text-slate-900 dark:text-white">Cash Flow Standard</td>
                   <td className="p-3 text-slate-600 dark:text-slate-400">
-                    Accounting Standard 3 (AS-3). Section 2(40) exemption applies for OPCs and small companies.
+                    Accounting Standard 3 (AS-3). Section 2(40) exemption applies for OPCs, small companies, and dormant companies.
                   </td>
                   <td className="p-3 text-slate-600 dark:text-slate-400">
                     Ind AS 7. Mandatory for all Ind AS entities without exemption.
@@ -287,96 +287,72 @@ export default function FinancialStatementsHubPage() {
           </div>
         </div>
 
-        {/* 12 Blank Download Templates Showcase */}
+        {/* 12 Blank Download Templates Showcase with Direct Client Downloads */}
         <div className="mt-14 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <Download className="w-5 h-5 text-blue-600" />
+              <h2 className="text-xl font-bold text-navy dark:text-white flex items-center gap-2">
+                <Download className="w-5 h-5 text-gold" />
                 Statutory Blank Template Packs (12 Files)
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                Print-ready empty formats with statutory headings, formula-linked Excel sheets, and editable Word documents.
+                Direct 1-click downloads for print-ready empty formats with statutory headings, formula-linked Excel sheets, and editable Word documents.
               </p>
             </div>
             <Link
               href="/tools/financial-statements/balance-sheet"
-              className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1"
+              className="text-xs font-semibold text-navy hover:text-gold dark:text-gold-accent flex items-center gap-1 transition-colors"
             >
               Open Builder to Generate →
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {BLANK_TEMPLATES_CATALOG.map(t => (
-              <div
-                key={t.id}
-                className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 flex flex-col justify-between"
-              >
-                <div>
-                  <h3 className="font-bold text-sm text-slate-900 dark:text-white">{t.title}</h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-3">{t.description}</p>
-                </div>
-                <div className="flex items-center gap-2 pt-2 border-t border-slate-200 dark:border-slate-700">
-                  <span className="text-[11px] font-semibold text-slate-500 mr-1">Formats:</span>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300">
-                    PDF
-                  </span>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
-                    Excel (.xlsx)
-                  </span>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300">
-                    Word (.docx)
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
+          <BlankTemplatesDownloadGrid />
         </div>
 
         {/* High Level 4-Step Workflow */}
-        <div className="mt-14 bg-gradient-to-r from-slate-900 to-blue-950 rounded-2xl p-6 sm:p-8 text-white">
-          <h2 className="text-xl font-bold mb-2">How It Works: 4 Simple Steps</h2>
+        <div className="mt-14 bg-navy rounded-2xl p-6 sm:p-8 text-white border border-gold-accent/20 shadow-md">
+          <h2 className="text-xl font-bold mb-2 text-gold-accent">How It Works: 4 Simple Steps</h2>
           <p className="text-xs text-slate-300 mb-6 max-w-2xl">
             Prepare review-ready Schedule III financial statements without sharing sensitive company numbers with third-party servers.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs">
-            <div className="p-4 bg-white/10 rounded-xl backdrop-blur-sm">
-              <span className="w-6 h-6 rounded-full bg-blue-500 text-white font-bold flex items-center justify-center text-[11px] mb-2">
+            <div className="p-4 bg-white/10 rounded-xl backdrop-blur-sm border border-white/10">
+              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gold-accent text-navy font-bold text-[11px] mb-2 shadow">
                 1
               </span>
-              <strong className="block text-sm mb-1">Company Setup</strong>
+              <strong className="block text-sm mb-1 text-white">Step 1: Company Setup</strong>
               <p className="text-slate-300">
                 Enter company name, CIN, financial year-end date, and choose presentation units.
               </p>
             </div>
 
-            <div className="p-4 bg-white/10 rounded-xl backdrop-blur-sm">
-              <span className="w-6 h-6 rounded-full bg-blue-500 text-white font-bold flex items-center justify-center text-[11px] mb-2">
+            <div className="p-4 bg-white/10 rounded-xl backdrop-blur-sm border border-white/10">
+              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gold-accent text-navy font-bold text-[11px] mb-2 shadow">
                 2
               </span>
-              <strong className="block text-sm mb-1">Paste Trial Balance</strong>
+              <strong className="block text-sm mb-1 text-white">Step 2: Paste Trial Balance</strong>
               <p className="text-slate-300">
                 Paste tab-separated columns from Excel or Tally. Unmapped ledgers are flagged instantly.
               </p>
             </div>
 
-            <div className="p-4 bg-white/10 rounded-xl backdrop-blur-sm">
-              <span className="w-6 h-6 rounded-full bg-blue-500 text-white font-bold flex items-center justify-center text-[11px] mb-2">
+            <div className="p-4 bg-white/10 rounded-xl backdrop-blur-sm border border-white/10">
+              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gold-accent text-navy font-bold text-[11px] mb-2 shadow">
                 3
               </span>
-              <strong className="block text-sm mb-1">Verify Disclosures</strong>
+              <strong className="block text-sm mb-1 text-white">Step 3: Verify Disclosures</strong>
               <p className="text-slate-300">
                 Check promoter holding, trade ageing schedules, CWIP, and 11 statutory ratios.
               </p>
             </div>
 
-            <div className="p-4 bg-white/10 rounded-xl backdrop-blur-sm">
-              <span className="w-6 h-6 rounded-full bg-blue-500 text-white font-bold flex items-center justify-center text-[11px] mb-2">
+            <div className="p-4 bg-white/10 rounded-xl backdrop-blur-sm border border-white/10">
+              <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gold-accent text-navy font-bold text-[11px] mb-2 shadow">
                 4
               </span>
-              <strong className="block text-sm mb-1">Export Files</strong>
+              <strong className="block text-sm mb-1 text-white">Step 4: Export Files</strong>
               <p className="text-slate-300">
                 Download formatted PDF, formula-linked Excel (.xlsx), and Word (.docx) directly.
               </p>

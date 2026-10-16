@@ -104,8 +104,8 @@ export default function ProfitLossPage() {
             <span className="text-emerald-600 dark:text-emerald-400">100% Client-Side Privacy</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Free Schedule III Profit and Loss Statement Builder
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-navy dark:text-white tracking-tight">
+            Schedule III Statement of Profit and Loss Builder
           </h1>
 
           <p className="mt-3 text-base text-slate-600 dark:text-slate-300 max-w-4xl leading-relaxed">
@@ -118,11 +118,11 @@ export default function ProfitLossPage() {
               Zero server data transmission
             </span>
             <span className="inline-flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded">
-              <Scale className="w-3.5 h-3.5 text-blue-600" />
+              <Scale className="w-3.5 h-3.5 text-navy dark:text-blue-400" />
               Retained earnings &amp; reserves bridge
             </span>
             <span className="inline-flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded">
-              <FileSpreadsheet className="w-3.5 h-3.5 text-amber-600" />
+              <FileSpreadsheet className="w-3.5 h-3.5 text-gold" />
               Formula Excel, PDF &amp; Word exports
             </span>
           </div>
@@ -139,76 +139,150 @@ export default function ProfitLossPage() {
         {/* Section 1: Statutory Order and Line Classification */}
         <section className="space-y-4">
           <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
-            <BookOpen className="w-5 h-5 text-blue-600" />
-            1. Statutory Structure of Schedule III Part II
+            <BookOpen className="w-5 h-5 text-navy dark:text-gold-accent" />
+            1. Statutory Structure of Schedule III Part II (Division I)
           </h2>
           <p>
             Schedule III Division I Part II prescribes the strict order of presentation for the Statement of Profit and Loss for non-Ind AS companies:
           </p>
-          <div className="overflow-x-auto border border-slate-200 dark:border-slate-800 rounded-xl">
+          <div className="overflow-x-auto border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="bg-slate-100 dark:bg-slate-800 font-bold text-slate-700 dark:text-slate-300">
-                  <th className="p-3 w-16">Ref</th>
+                <tr className="bg-navy text-white font-bold">
+                  <th className="p-3 w-16">Item</th>
                   <th className="p-3">Statutory Particulars</th>
-                  <th className="p-3">Accounting Standard Basis &amp; Inclusions</th>
+                  <th className="p-3">Accounting Standard Basis &amp; Statutory Inclusions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                 <tr>
-                  <td className="p-3 font-mono font-bold">I.</td>
+                  <td className="p-3 font-mono font-bold text-navy dark:text-gold-accent">I.</td>
                   <td className="p-3 font-semibold">Revenue from operations</td>
                   <td className="p-3 text-slate-600 dark:text-slate-400">Sale of products, sale of services, and other operating revenues (net of GST/trade discounts).</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-mono font-bold">II.</td>
+                  <td className="p-3 font-mono font-bold text-navy dark:text-gold-accent">II.</td>
                   <td className="p-3 font-semibold">Other income</td>
                   <td className="p-3 text-slate-600 dark:text-slate-400">Interest on fixed deposits, dividend income, net gain on sale of investments, foreign exchange differences.</td>
                 </tr>
-                <tr className="bg-slate-50 dark:bg-slate-800/40 font-bold">
-                  <td className="p-3 font-mono">III.</td>
-                  <td className="p-3">Total Income (I + II)</td>
+                <tr className="bg-amber-50/70 dark:bg-amber-950/30 font-bold text-slate-900 dark:text-white">
+                  <td className="p-3 font-mono text-gold dark:text-gold-accent">III.</td>
+                  <td className="p-3">Total Revenue (I + II)</td>
                   <td className="p-3">Sum of operating turnover and other income.</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-mono font-bold">IV.</td>
+                  <td className="p-3 font-mono font-bold text-navy dark:text-gold-accent" rowSpan={8}>IV.</td>
                   <td className="p-3 font-semibold">Expenses:</td>
-                  <td className="p-3 text-slate-600 dark:text-slate-400">
-                    <ul className="list-disc pl-4 space-y-0.5">
-                      <li>Cost of materials consumed</li>
-                      <li>Purchases of Stock-in-Trade</li>
-                      <li>Changes in inventories of finished goods, WIP and Stock-in-Trade</li>
-                      <li>Employee benefits expense (salaries, PF, gratuity, director remuneration)</li>
-                      <li>Finance costs (bank interest, processing charges)</li>
-                      <li>Depreciation and amortization expense</li>
-                      <li>Other expenses (rent, rates, audit fees, professional charges)</li>
-                    </ul>
-                  </td>
+                  <td className="p-3 text-slate-500 italic">Operating and administrative costs classified strictly by nature:</td>
                 </tr>
-                <tr className="bg-slate-50 dark:bg-slate-800/40 font-bold">
-                  <td className="p-3 font-mono">IV.</td>
-                  <td className="p-3">Total Expenses</td>
-                  <td className="p-3">Sum of all expenses classified by nature.</td>
+                <tr className="bg-slate-50/50 dark:bg-slate-800/20">
+                  <td className="p-3 pl-6 font-medium">• Cost of materials consumed</td>
+                  <td className="p-3 text-slate-600 dark:text-slate-400">Raw materials, components, and direct consumption items.</td>
                 </tr>
-                <tr>
-                  <td className="p-3 font-mono font-bold">V.</td>
-                  <td className="p-3 font-semibold">Profit before exceptional items and tax (III - IV)</td>
+                <tr className="bg-slate-50/50 dark:bg-slate-800/20">
+                  <td className="p-3 pl-6 font-medium">• Purchases of Stock-in-Trade</td>
+                  <td className="p-3 text-slate-600 dark:text-slate-400">Finished goods purchased for direct resale without processing.</td>
+                </tr>
+                <tr className="bg-slate-50/50 dark:bg-slate-800/20">
+                  <td className="p-3 pl-6 font-medium">• Changes in inventories of finished goods, work-in-progress and Stock-in-Trade</td>
+                  <td className="p-3 text-slate-600 dark:text-slate-400">Opening inventory minus closing inventory differential.</td>
+                </tr>
+                <tr className="bg-slate-50/50 dark:bg-slate-800/20">
+                  <td className="p-3 pl-6 font-medium">• Employee benefits expense</td>
+                  <td className="p-3 text-slate-600 dark:text-slate-400">Salaries, wages, bonus, PF/gratuity contributions, and staff welfare.</td>
+                </tr>
+                <tr className="bg-slate-50/50 dark:bg-slate-800/20">
+                  <td className="p-3 pl-6 font-medium">• Finance costs</td>
+                  <td className="p-3 text-slate-600 dark:text-slate-400">Interest expense, loan processing fees, bank borrowing charges.</td>
+                </tr>
+                <tr className="bg-slate-50/50 dark:bg-slate-800/20">
+                  <td className="p-3 pl-6 font-medium">• Depreciation and amortisation expense</td>
+                  <td className="p-3 text-slate-600 dark:text-slate-400">Depreciation on PPE and amortisation of intangible assets.</td>
+                </tr>
+                <tr className="bg-slate-50/50 dark:bg-slate-800/20">
+                  <td className="p-3 pl-6 font-medium">• Other expenses</td>
+                  <td className="p-3 text-slate-600 dark:text-slate-400">Rent, rates, taxes, auditor remuneration, legal and professional fees.</td>
+                </tr>
+                <tr className="bg-slate-100 dark:bg-slate-800 font-bold text-slate-900 dark:text-white">
+                  <td className="p-3 font-mono text-navy dark:text-gold-accent">IV.</td>
+                  <td className="p-3">Total expenses</td>
+                  <td className="p-3">Sum of all expense line items classified by nature.</td>
+                </tr>
+                <tr className="font-semibold">
+                  <td className="p-3 font-mono font-bold text-navy dark:text-gold-accent">V.</td>
+                  <td className="p-3">Profit before exceptional and extraordinary items and tax (III − IV)</td>
                   <td className="p-3 text-slate-600 dark:text-slate-400">Operating profit before exceptional adjustments.</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-mono font-bold">IX.</td>
-                  <td className="p-3 font-semibold">Profit before tax (PBT)</td>
-                  <td className="p-3 text-slate-600 dark:text-slate-400">Profit after exceptional and extraordinary items.</td>
+                  <td className="p-3 font-mono font-bold text-navy dark:text-gold-accent">VI.</td>
+                  <td className="p-3 font-semibold">Exceptional items</td>
+                  <td className="p-3 text-slate-600 dark:text-slate-400">Items of income or expense within ordinary activities that require separate disclosure by virtue of size or incidence (AS-5).</td>
+                </tr>
+                <tr className="font-semibold">
+                  <td className="p-3 font-mono font-bold text-navy dark:text-gold-accent">VII.</td>
+                  <td className="p-3">Profit before extraordinary items and tax (V − VI)</td>
+                  <td className="p-3 text-slate-600 dark:text-slate-400">Subtotal after exceptional items.</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-mono font-bold">X.</td>
-                  <td className="p-3 font-semibold">Tax expense</td>
-                  <td className="p-3 text-slate-600 dark:text-slate-400">Current tax and deferred tax charge / (credit) under AS-22.</td>
+                  <td className="p-3 font-mono font-bold text-navy dark:text-gold-accent">VIII.</td>
+                  <td className="p-3 font-semibold">Extraordinary items</td>
+                  <td className="p-3 text-slate-600 dark:text-slate-400">Events clearly distinct from ordinary activities (e.g. losses from unforeseen natural calamities) (AS-5).</td>
                 </tr>
-                <tr className="bg-blue-50 dark:bg-blue-950/40 font-bold text-blue-900 dark:text-blue-200">
-                  <td className="p-3 font-mono">XV.</td>
-                  <td className="p-3">Profit / (Loss) for the period (PAT)</td>
-                  <td className="p-3">Final bottom-line net profit after tax.</td>
+                <tr className="bg-slate-50 dark:bg-slate-800/60 font-bold text-slate-900 dark:text-white">
+                  <td className="p-3 font-mono text-navy dark:text-gold-accent">IX.</td>
+                  <td className="p-3">Profit before tax (VII − VIII)</td>
+                  <td className="p-3 text-slate-600 dark:text-slate-400">Statutory Profit Before Tax (PBT).</td>
+                </tr>
+                <tr>
+                  <td className="p-3 font-mono font-bold text-navy dark:text-gold-accent" rowSpan={3}>X.</td>
+                  <td className="p-3 font-semibold">Tax expense:</td>
+                  <td className="p-3 text-slate-500 italic">Provisions for tax under the Income-tax Act, 1961 and AS-22:</td>
+                </tr>
+                <tr className="bg-slate-50/50 dark:bg-slate-800/20">
+                  <td className="p-3 pl-6 font-medium">(1) Current tax</td>
+                  <td className="p-3 text-slate-600 dark:text-slate-400">Income tax payable for the current financial year.</td>
+                </tr>
+                <tr className="bg-slate-50/50 dark:bg-slate-800/20">
+                  <td className="p-3 pl-6 font-medium">(2) Deferred tax</td>
+                  <td className="p-3 text-slate-600 dark:text-slate-400">Deferred tax charge or credit arising from timing differences under AS-22.</td>
+                </tr>
+                <tr className="font-semibold">
+                  <td className="p-3 font-mono font-bold text-navy dark:text-gold-accent">XI.</td>
+                  <td className="p-3">Profit/(Loss) for the period from continuing operations (IX − X)</td>
+                  <td className="p-3 text-slate-600 dark:text-slate-400">Operating result from ongoing business activities after tax.</td>
+                </tr>
+                <tr>
+                  <td className="p-3 font-mono font-bold text-navy dark:text-gold-accent">XII.</td>
+                  <td className="p-3 font-semibold">Profit/(loss) from discontinuing operations</td>
+                  <td className="p-3 text-slate-600 dark:text-slate-400">Pre-tax result attributable to discontinuing operations under AS-24.</td>
+                </tr>
+                <tr>
+                  <td className="p-3 font-mono font-bold text-navy dark:text-gold-accent">XIII.</td>
+                  <td className="p-3 font-semibold">Tax expense of discontinuing operations</td>
+                  <td className="p-3 text-slate-600 dark:text-slate-400">Current and deferred tax specifically attributable to discontinuing operations.</td>
+                </tr>
+                <tr className="font-semibold">
+                  <td className="p-3 font-mono font-bold text-navy dark:text-gold-accent">XIV.</td>
+                  <td className="p-3">Profit/(loss) from discontinuing operations (after tax) (XII − XIII)</td>
+                  <td className="p-3 text-slate-600 dark:text-slate-400">Net after-tax result from discontinuing operations.</td>
+                </tr>
+                <tr className="bg-navy text-white font-bold">
+                  <td className="p-3 font-mono text-gold-accent">XV.</td>
+                  <td className="p-3">Profit/(Loss) for the period (XI + XIV)</td>
+                  <td className="p-3 text-slate-200">Final statutory bottom-line Profit After Tax (PAT) transferred to Reserves &amp; Surplus.</td>
+                </tr>
+                <tr>
+                  <td className="p-3 font-mono font-bold text-navy dark:text-gold-accent" rowSpan={3}>XVI.</td>
+                  <td className="p-3 font-semibold">Earnings per equity share:</td>
+                  <td className="p-3 text-slate-500 italic">Calculated in accordance with Accounting Standard 20 (AS-20):</td>
+                </tr>
+                <tr className="bg-slate-50/50 dark:bg-slate-800/20">
+                  <td className="p-3 pl-6 font-medium">(1) Basic (₹)</td>
+                  <td className="p-3 text-slate-600 dark:text-slate-400">Profit attributable to equity shareholders divided by weighted average number of equity shares.</td>
+                </tr>
+                <tr className="bg-slate-50/50 dark:bg-slate-800/20">
+                  <td className="p-3 pl-6 font-medium">(2) Diluted (₹)</td>
+                  <td className="p-3 text-slate-600 dark:text-slate-400">EPS adjusted for potential dilution from stock options, warrants, or convertible instruments.</td>
                 </tr>
               </tbody>
             </table>

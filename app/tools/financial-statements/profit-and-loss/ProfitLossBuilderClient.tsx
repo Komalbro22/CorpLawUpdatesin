@@ -208,15 +208,15 @@ export default function ProfitLossBuilderClient() {
 
       {/* Statement Table View */}
       <div className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
-        <div className="bg-slate-900 text-white p-4 text-center">
+        <div className="bg-navy text-white p-4 text-center border-b border-gold-accent/20">
           <h2 className="text-base font-bold tracking-wide">
             {profile.companyName || 'COMPANY NAME'}
           </h2>
-          <h3 className="text-sm font-semibold text-blue-300 mt-0.5">
-            STATEMENT OF PROFIT AND LOSS FOR THE YEAR ENDED {profile.financialYearEnd || '31ST MARCH 2026'}
+          <h3 className="text-sm font-semibold text-gold-accent mt-0.5">
+            {`STATEMENT OF PROFIT AND LOSS FOR THE YEAR ENDED ${(profile.financialYearEnd || '31ST MARCH 2026').toUpperCase()}`}
           </h3>
-          <p className="text-xs text-slate-400 italic mt-0.5">
-            Prepared in accordance with Schedule III Division I of Companies Act, 2013 (Amounts in INR {profile.presentationUnit.toUpperCase()})
+          <p className="text-xs text-slate-300 italic mt-0.5">
+            {`Prepared in accordance with Schedule III Division I of Companies Act, 2013 (Amounts in INR ${profile.presentationUnit.toUpperCase()})`}
           </p>
         </div>
 
