@@ -124,6 +124,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/documents/board-resolution-for-dividend-declaration`, ...(dividendDeclarationDate ? { lastModified: dividendDeclarationDate } : {}) },
 
     { url: `${BASE_URL}/tools`, ...(latestArticleDate ? { lastModified: latestArticleDate } : {}) },
+    { url: `${BASE_URL}/tools/financial-statements` },
+    { url: `${BASE_URL}/tools/financial-statements/balance-sheet` },
+    { url: `${BASE_URL}/tools/financial-statements/profit-and-loss` },
+    { url: `${BASE_URL}/tools/financial-statements/cash-flow-statement` },
     { url: `${BASE_URL}/tools/cin-decoder` },
     { url: `${BASE_URL}/tools/fee-calculator`, lastModified: mcaFormsLastMod },
     { url: `${BASE_URL}/tools/fee-calculator/companies`, lastModified: mcaFormsLastMod },

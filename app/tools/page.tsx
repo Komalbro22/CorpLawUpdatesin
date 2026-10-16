@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import JsonLd from '@/components/JsonLd'
 import HubExploreLinks from '@/components/HubExploreLinks'
-import { FileText, Calculator, Calendar, CalendarDays, Landmark, BookOpen, Search } from 'lucide-react'
+import { FileText, Calculator, Calendar, CalendarDays, Landmark, BookOpen, Search, FileSpreadsheet } from 'lucide-react'
 
 const ogImageUrl = 'https://www.corplawupdates.in/api/og?title=Free+Corporate+Law+%26+Compliance+Tools&category=Tools'
 
@@ -45,6 +45,17 @@ const toolsJsonLd = {
       description: 'Free interactive compliance and corporate law tools open to everyone. Access our AI document generator, MCA late fee calculator, compliance calendar, repo rate tracker, and glossary.',
       url: 'https://www.corplawupdates.in/tools',
       hasPart: [
+        {
+          '@type': 'WebApplication',
+          name: 'Schedule III Financial Statements Builder',
+          url: 'https://www.corplawupdates.in/tools/financial-statements',
+          applicationCategory: 'BusinessApplication',
+          offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'INR',
+          }
+        },
         {
           '@type': 'WebApplication',
           name: 'Legal Document Generator',
@@ -136,6 +147,20 @@ const toolsJsonLd = {
 
 
 const tools = [
+  {
+    id: 'financial-statements',
+    href: '/tools/financial-statements',
+    icon: <FileSpreadsheet size={24} />,
+    label: 'Financial Statements Builder (Schedule III)',
+    description: 'Prepare Division I & II Balance Sheets, Profit & Loss statements, and indirect Cash Flows from your trial balance. Includes 2021 amendments, ageing schedules, ratios, and formula Excel/PDF downloads.',
+    badge: 'New · Free',
+    badgeColor: 'bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300',
+    stats: 'Division I & II • 12 Templates',
+    isLive: true,
+    tags: ['Balance Sheet', 'Profit & Loss', 'Cash Flow', 'Schedule III', 'Ratio Analysis', 'Excel Download'],
+    color: 'border-blue-200 hover:border-blue-400 dark:border-slate-800 dark:hover:border-blue-900/50',
+    headerBg: 'from-blue-600 to-blue-800',
+  },
   {
     id: 'documents',
     href: '/documents',
