@@ -45,6 +45,8 @@ export async function POST(request: Request) {
             leadArticleId,
             includeDeadlines = false,
             introMessage,
+            editorsNote,
+            deadlinesThisWeek,
             previewOnly // true if only rendering for admin composer preview
         } = body
 
@@ -123,6 +125,43 @@ export async function POST(request: Request) {
             }
         }
 
+        // Fetch this week's deadlines from calendar for Deadlines This Week box if not explicitly passed
+        let resolvedDeadlinesThisWeek: any[] | null = deadlinesThisWeek || null
+        if (!resolvedDeadlinesThisWeek && isCuratedNewsletter) {
+            try {
+                const now = new Date()
+                const dayOfWeek = now.getDay()
+                const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek
+                const currentMonday = new Date(now)
+                currentMonday.setDate(now.getDate() + mondayOffset)
+                currentMonday.setHours(0, 0, 0, 0)
+
+                const nextSunday = new Date(currentMonday)
+                nextSunday.setDate(currentMonday.getDate() + 6)
+                nextSunday.setHours(23, 59, 59, 999)
+
+                const { data: rawEntries } = await supabaseAdmin
+                    .from('compliance_entries')
+                    .select('id, form_name, compliance_title, due_date, regulator, applicable_to, penalty')
+                    .eq('is_active', true)
+
+                const inWeek = (rawEntries || [])
+                    .map((e: any) => ({ ...e, parsedDate: parseDueDate(e.due_date) }))
+                    .filter((e: any) => e.parsedDate && e.parsedDate >= currentMonday && e.parsedDate <= nextSunday)
+                    .sort((a: any, b: any) => a.parsedDate.getTime() - b.parsedDate.getTime())
+
+                if (inWeek.length > 0) {
+                    resolvedDeadlinesThisWeek = inWeek.map((e: any) => ({
+                        dateDay: `${e.parsedDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} (${e.parsedDate.toLocaleDateString('en-IN', { weekday: 'short' })})`,
+                        title: `${e.compliance_title} (${e.form_name})`,
+                        tip: e.penalty ? `Penalty: ${e.penalty}` : (e.applicable_to || 'Mandatory compliance')
+                    }))
+                }
+            } catch (wErr) {
+                console.warn('Failed to auto-fetch weekly deadlines:', wErr)
+            }
+        }
+
         // 5. Handle previewOnly rendering
         if (previewOnly) {
             const html = isCuratedNewsletter 
@@ -134,7 +173,9 @@ export async function POST(request: Request) {
                     unsubscribeUrl: '#',
                     upcomingDeadlines,
                     leadArticleId,
-                    includeDeadlines
+                    includeDeadlines,
+                    editorsNote,
+                    deadlinesThisWeek: resolvedDeadlinesThisWeek
                   })
                 : buildEmailHtml({
                     subject,
@@ -161,7 +202,9 @@ export async function POST(request: Request) {
                 unsubscribeUrl: unsubUrl,
                 upcomingDeadlines,
                 leadArticleId,
-                includeDeadlines
+                includeDeadlines,
+                editorsNote,
+                deadlinesThisWeek: resolvedDeadlinesThisWeek
             })
         }
 

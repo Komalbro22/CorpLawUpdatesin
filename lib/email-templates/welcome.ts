@@ -353,7 +353,7 @@ export function generateWelcomeEmail({
                       Prefer instant alerts on your smartphone?
                     </div>
                     <p style="margin:0;font-size:12px;color:#15803D;line-height:1.5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-                      Join 2,000+ corporate compliance practitioners in our verified WhatsApp and Telegram channels for instant circular alerts as they break.
+                      Join compliance professionals in our verified WhatsApp and Telegram channels for instant circular alerts as they break.
                     </p>
                   </td>
                 </tr>

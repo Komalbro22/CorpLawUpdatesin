@@ -75,10 +75,12 @@ export async function GET(request: Request) {
         console.log(`Found ${weeklyDeadlines.length} compliance deadlines for the week.`)
 
         // 6. Broadcast configuration
-        const subject = `📅 Weekly Compliance Digest: ${startDateStr} - ${endDateStr} Deadlines`
-        const previewText = weeklyDeadlines.length > 0
-            ? `Stay compliant! This week has ${weeklyDeadlines.length} key statutory due dates across MCA, GST, SEBI & Income Tax.`
-            : `Enjoy a peaceful week! No major corporate or tax compliance due dates are scheduled this week.`
+        const topDeadline = weeklyDeadlines.length > 0 ? weeklyDeadlines[0] : null
+        const otherCount = weeklyDeadlines.length - 1
+        const subject = topDeadline
+            ? `${topDeadline.compliance_title} (${topDeadline.form_name}) + ${otherCount} more deadlines`
+            : `Weekly Corporate Law & Compliance Briefing`
+        const previewText = `${startDateStr} · Stay compliant with ${weeklyDeadlines.length} key statutory due dates across MCA, GST, SEBI & Income Tax.`
 
         const sendNow = searchParams.get('sendNow') === 'true'
 

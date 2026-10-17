@@ -74,6 +74,7 @@ export default function NewsletterPage() {
     const [leadArticleId, setLeadArticleId] = useState<string>('')
     const [includeDeadlines, setIncludeDeadlines] = useState<boolean>(false)
     const [introMessage, setIntroMessage] = useState('')
+    const [editorsNote, setEditorsNote] = useState('')
     
     // Live template preview
     const [previewHtml, setPreviewHtml] = useState('')
@@ -122,25 +123,25 @@ export default function NewsletterPage() {
             .then(data => {
                 if (data.articles) {
                     setAutoArticles(data.articles)
-                    if (data.articles.length > 0) {
-                        setLeadArticleId(data.articles[0].id)
-                    }
-                    
-                    // Set intelligent default subject
                     const todayStr = new Date().toLocaleDateString('en-IN', {
                         day: 'numeric',
                         month: 'short',
                         year: 'numeric'
                     })
-                    setSubject(`Weekly Corporate Law Update — ${todayStr}`)
-                    
-                    // Set default preview text and lead story based on top article
+
+                    // Set intelligent default subject leading with top story headline
                     if (data.articles.length > 0) {
                         const topArt = data.articles[0]
+                        const otherCount = data.articles.length - 1
                         setLeadArticleId(topArt.id)
-                        setPreviewText(`This week's top update: ${topArt.title}. Read details inside.`)
+                        const smartSubject = otherCount > 0 
+                            ? `${topArt.title} + ${otherCount} more updates`
+                            : topArt.title
+                        setSubject(smartSubject)
+                        setPreviewText(`${todayStr} · Curated weekly intelligence across MCA, SEBI, RBI & Tax`)
                     } else {
-                        setPreviewText('Stay updated with this week\'s corporate compliance and regulatory updates.')
+                        setSubject(`Weekly Corporate Law Update — ${todayStr}`)
+                        setPreviewText(`${todayStr} · Curated weekly intelligence across MCA, SEBI, RBI & Tax`)
                     }
                 }
                 setLoadingAuto(false)
@@ -164,17 +165,16 @@ export default function NewsletterPage() {
                 month: 'short',
                 year: 'numeric'
             })
-            setSubject(prev => (!prev || prev.startsWith('Weekly Corporate Law') || prev.startsWith('Curated Compliance'))
-                ? `Curated Compliance & Regulatory Updates — ${todayStr}`
-                : prev
-            )
             
-            if (!leadArticleId || !customSelectedIds.includes(leadArticleId)) {
-                const topChosen = availableArticles.find(a => customSelectedIds.includes(a.id))
-                if (topChosen) {
-                    setLeadArticleId(topChosen.id)
-                    setPreviewText(`This week's top update: ${topChosen.title}. Read details inside.`)
-                }
+            const topChosen = availableArticles.find(a => customSelectedIds.includes(a.id))
+            if (topChosen) {
+                const otherCount = customSelectedIds.length - 1
+                const smartSubject = otherCount > 0 
+                    ? `${topChosen.title} + ${otherCount} more updates`
+                    : topChosen.title
+                setSubject(smartSubject)
+                setLeadArticleId(topChosen.id)
+                setPreviewText(`${todayStr} · Curated compliance intelligence across MCA, SEBI, RBI & Tax`)
             }
         }
     }, [modeTab, customSelectedIds, availableArticles, leadArticleId])
@@ -191,6 +191,7 @@ export default function NewsletterPage() {
                 previewOnly: true,
                 newsletterMode: modeTab === 'legacy' ? undefined : modeTab,
                 introMessage: modeTab === 'custom' ? introMessage : undefined,
+                editorsNote: editorsNote.trim() || undefined,
                 selectedArticleIds: modeTab === 'custom' ? customSelectedIds : undefined,
                 leadArticleId: leadArticleId || undefined,
                 includeDeadlines,
@@ -222,7 +223,7 @@ export default function NewsletterPage() {
         }, 800)
         return () => clearTimeout(timer)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [subject, previewText, introMessage, customSelectedIds, leadArticleId, includeDeadlines, modeTab, body, editorMode])
+    }, [subject, previewText, introMessage, editorsNote, customSelectedIds, leadArticleId, includeDeadlines, modeTab, body, editorMode])
 
     async function handleSend(testOnly: boolean, retryList?: string[]) {
         setError('')
@@ -262,6 +263,7 @@ export default function NewsletterPage() {
                 leadArticleId: leadArticleId || undefined,
                 includeDeadlines,
                 introMessage: modeTab === 'custom' ? introMessage : undefined,
+                editorsNote: editorsNote.trim() || undefined,
                 body: modeTab === 'legacy' ? body.trim() : undefined,
                 mode: modeTab === 'legacy' ? editorMode : undefined,
             }
@@ -328,7 +330,16 @@ export default function NewsletterPage() {
             if (modeTab === 'custom' && !customSelectedIds.includes(art.id)) {
                 setCustomSelectedIds(prev => [...prev, art.id])
             }
-            setPreviewText(`This week's top update: ${art.title.slice(0, 75)}... Read details inside.`)
+            const count = modeTab === 'auto' ? autoArticles.length : (customSelectedIds.includes(art.id) ? customSelectedIds.length : customSelectedIds.length + 1)
+            const otherCount = Math.max(0, count - 1)
+            const smartSubject = otherCount > 0 ? `${art.title} + ${otherCount} more updates` : art.title
+            setSubject(smartSubject)
+            const todayStr = new Date().toLocaleDateString('en-IN', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            })
+            setPreviewText(`${todayStr} · Curated weekly intelligence across MCA, SEBI, RBI & Tax`)
         }
     }
 
@@ -429,6 +440,7 @@ export default function NewsletterPage() {
                                 setScheduledAt('')
                                 setCustomSelectedIds([])
                                 setIntroMessage('')
+                                setEditorsNote('')
                             }}
                             className="px-6 py-3 bg-gold text-slate-900 font-semibold rounded-xl hover:bg-amber-400 transition-colors shadow-xs text-sm"
                         >
@@ -545,7 +557,7 @@ export default function NewsletterPage() {
                                 type="text"
                                 value={subject}
                                 onChange={e => setSubject(e.target.value)}
-                                placeholder="Weekly Corporate Law Update — April 2026"
+                                placeholder="RBI's new forex curbs + 14 more updates"
                                 className="w-full border border-white/60 rounded-lg px-4 py-3 text-slate-900  bg-slate-50/50 backdrop-blur-xs text-sm font-semibold focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
                             />
                         </div>
@@ -562,12 +574,29 @@ export default function NewsletterPage() {
                                 type="text"
                                 value={previewText}
                                 onChange={e => setPreviewText(e.target.value)}
-                                placeholder="This week's top compliance developments: MCA rules, SEBI circulars..."
+                                placeholder="19 Oct 2026 · Curated weekly intelligence across MCA, SEBI, RBI & Tax"
                                 maxLength={100}
                                 className="w-full border border-white/60 rounded-lg px-4 py-3 text-slate-900  bg-white  text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
                             />
                             <p className="text-[10px] text-slate-500  mt-1 text-right font-medium">
                                 {previewText.length}/100 characters
+                            </p>
+                        </div>
+
+                        {/* Editor's Note */}
+                        <div>
+                            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                                ✍️ Editor&apos;s Note (Top 2-Line First-Person Note)
+                            </label>
+                            <input
+                                type="text"
+                                value={editorsNote}
+                                onChange={e => setEditorsNote(e.target.value)}
+                                placeholder="The one thing I'd read first this week is... (leave blank to auto-generate from lead story)"
+                                className="w-full border border-white/60 rounded-lg px-4 py-3 text-slate-900 bg-white text-sm focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
+                            />
+                            <p className="text-[11px] text-slate-500 mt-1">
+                                Conversational 2-line first-person recommendation placed at the top above the executive memo.
                             </p>
                         </div>
 

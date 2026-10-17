@@ -21,7 +21,9 @@ import {
     buildNewsletterTemplateHtml,
     buildWeeklyDigestHtml,
     buildEmailHtml,
-    markdownToHtml
+    markdownToHtml,
+    resolvePractitionerAction,
+    buildDeadlinesThisWeekRowsHtml
 } from '@/lib/newsletter'
 
 describe('Newsletter & Email Template Engine', () => {
@@ -248,6 +250,107 @@ describe('Newsletter & Email Template Engine', () => {
 
             expect(html).toContain('CorpLawUpdates')
             expect(html).toContain('Weekly Intelligence Breakdown (0 Updates)')
+        })
+
+        it('renders Editor Note above executive memo and Deadlines This Week box after executive memo', () => {
+            const html = buildNewsletterTemplateHtml({
+                subject: 'Tax Audit Alert + 2 more updates',
+                previewText: '19 Oct 2026 · Curated briefing',
+                articles: sampleArticles,
+                unsubscribeUrl: '#',
+                editorsNote: 'The one thing I would read first this week is Tax Audit certifications — because CBDT confirmed 21 Oct is final.'
+            })
+
+            // Editor's note above executive memo
+            expect(html).toContain("EDITOR'S NOTE")
+            expect(html).toContain('The one thing I would read first this week is Tax Audit certifications')
+
+            // Sequence check: Editor's Note -> Executive Memo -> Deadlines This Week -> Lead Story
+            const editorsNotePos = html.indexOf("EDITOR'S NOTE")
+            const memoPos = html.indexOf("THE 60-SECOND EXECUTIVE MEMO")
+            const deadlinesPos = html.indexOf("DEADLINES THIS WEEK")
+            const leadStoryPos = html.indexOf("LEAD STORY ·")
+
+            expect(editorsNotePos).toBeGreaterThan(-1)
+            expect(memoPos).toBeGreaterThan(editorsNotePos)
+            expect(deadlinesPos).toBeGreaterThan(memoPos)
+            expect(leadStoryPos).toBeGreaterThan(deadlinesPos)
+
+            // Deadlines This Week box content for 19 Oct 2026
+            expect(html).toContain('21 Oct (Wed)')
+            expect(html).toContain('Tax Audit Report (Form 3CA/3CB-3CD)')
+            expect(html).toContain('SEBI Reg 31: Shareholding Pattern')
+            expect(html).toContain('Coming right after:')
+            expect(html).toContain('AOC-4 &amp; LLP Form 8')
+        })
+
+        it('replaces fake 2,000+ subscriber claim with substantiated text in footer', () => {
+            const html = buildNewsletterTemplateHtml({
+                subject: 'Briefing',
+                previewText: 'Preview',
+                articles: sampleArticles,
+                unsubscribeUrl: '#'
+            })
+
+            expect(html).toContain('Join compliance professionals getting this briefing every Monday.')
+            expect(html).not.toContain('JOIN 2,000+ COMPLIANCE PRACTITIONERS DAILY')
+            expect(html).not.toContain('2,000+')
+        })
+
+        it('renders sharp role-specific practitioner actions without generic filler', () => {
+            const html = buildNewsletterTemplateHtml({
+                subject: 'Practitioner Actions Test',
+                previewText: 'Actions',
+                articles: sampleArticles,
+                unsubscribeUrl: '#'
+            })
+
+            // Checks that generic filler is NOT present
+            expect(html).not.toContain('Examine standard governance procedures and statutory filing checklists')
+
+            // Checks that secondary cards render Action for Practice
+            expect(html).toContain('Action for Practice')
+        })
+    })
+
+    describe('resolvePractitionerAction', () => {
+        it('names specific actor and concrete action for various regulatory domains', () => {
+            const mcaAction = resolvePractitionerAction({
+                category: 'MCA',
+                title: 'MCA Mandates Dematerialisation for Private Companies',
+                key_change: 'Examine standard governance procedures and statutory filing checklists to ensure compliance with updated regulatory directives.'
+            })
+            expect(mcaAction).toContain('Company Secretaries')
+            expect(mcaAction).not.toContain('Examine standard governance procedures')
+
+            const taxAction = resolvePractitionerAction({
+                category: 'TAX',
+                title: 'Tax Audit Report Form 3CA 3CD Due Date Extension AY 2026-27'
+            })
+            expect(taxAction).toContain('Tax Auditors & CAs')
+
+            const labourAction = resolvePractitionerAction({
+                category: 'LABOUR',
+                title: 'EPF ECR Filing Wage Ceiling Revised'
+            })
+            expect(labourAction).toContain('HR & Payroll Teams')
+            expect(labourAction).toContain('₹25,000')
+
+            const settlementAction = resolvePractitionerAction({
+                category: 'SEBI',
+                title: 'Revised Settlement Terms for Regulatory Proceedings'
+            })
+            expect(settlementAction).toContain('pending settlement')
+        })
+    })
+
+    describe('buildDeadlinesThisWeekRowsHtml', () => {
+        it('returns exact 19 Oct 2026 deadlines when no custom deadlines provided', () => {
+            const rows = buildDeadlinesThisWeekRowsHtml(null)
+            expect(rows).toContain('21 Oct (Wed)')
+            expect(rows).toContain('Tax Audit Report (Form 3CA/3CB-3CD)')
+            expect(rows).toContain('SEBI Reg 31')
+            expect(rows).toContain('Coming right after:')
         })
     })
 

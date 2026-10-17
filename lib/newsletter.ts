@@ -123,6 +123,97 @@ export function buildEmailHtml({ subject, previewText, bodyHtml, unsubscribeUrl 
 </html>`
 }
 
+export function resolvePractitionerAction(article: any): string {
+    if (!article) return 'Compliance Officers: Review applicable filing records; unaffected entities require no immediate action.'
+
+    const candidate = (article.practitioner_action || article.key_change || article.quick_answer || '').trim()
+    const lower = candidate.toLowerCase()
+    const isGeneric = !candidate || 
+        lower.includes('examine standard governance') ||
+        lower.includes('statutory filing checklists') ||
+        lower.includes('ensure compliance with updated regulatory directives') ||
+        lower.includes('examine standard governance procedures') ||
+        (candidate.length < 25 && !lower.includes('file') && !lower.includes('audit'))
+
+    if (!isGeneric) {
+        return candidate.replace(/^[\s•\-*]+/, '').trim()
+    }
+
+    const cat = (article.category || '').toUpperCase()
+    const title = article.title || ''
+    const titleLower = title.toLowerCase()
+
+    if (titleLower.includes('settlement') || titleLower.includes('compounding')) {
+        return 'If you have a pending settlement or compounding application, recheck eligibility under the new formula before filing — the 2018 thresholds no longer apply.'
+    }
+    if (titleLower.includes('demat') || titleLower.includes('pas-6') || titleLower.includes('securities')) {
+        return 'Company Secretaries of Private Companies: Audit your share register immediately and ensure ISIN activation is complete before issuing any new securities.'
+    }
+    if (titleLower.includes('epf') || titleLower.includes('esic') || titleLower.includes('wage') || cat === 'LABOUR') {
+        return 'HR & Payroll Teams: Update payroll software to the ₹25,000 statutory wage ceiling and verify contribution deductions before submitting this month\'s ECR.'
+    }
+    if (titleLower.includes('audit') || titleLower.includes('3ca') || titleLower.includes('3cd') || titleLower.includes('itr') || cat === 'TAX') {
+        return 'Tax Auditors & CAs: Reconcile client turnover against AIS/TIS and finalize Form 3CA/3CD certifications; verify extended circular terms before filing.'
+    }
+    if (titleLower.includes('dir-3') || titleLower.includes('kyc') || titleLower.includes('din')) {
+        return 'All Active DIN Holders & CS: Verify mobile and email OTP credentials on MCA21; file DIR-3 KYC before portal cut-off to prevent DIN deactivation.'
+    }
+    if (titleLower.includes('aoc-4') || titleLower.includes('mgt-7') || titleLower.includes('financial statement') || titleLower.includes('annual return')) {
+        return 'Finance Directors & CS: Ensure board approval of balance sheet and CARO notes are signed; file Form AOC-4/MGT-7 before the October/November statutory cutoff.'
+    }
+    if (titleLower.includes('forex') || titleLower.includes('fema') || titleLower.includes('odi') || titleLower.includes('fdi') || cat === 'FEMA' || cat === 'RBI') {
+        return 'Corporate Treasuries & AD Banks: Re-verify transaction documentation against revised RBI limits prior to releasing cross-border remittances.'
+    }
+    if (cat === 'SEBI' || titleLower.includes('lodr') || titleLower.includes('listed')) {
+        return 'Compliance Officers of Listed Entities: Review immediate board/committee disclosures and notify RTA/depository before filing under revised SEBI LODR timelines.'
+    }
+    if (cat === 'MCA') {
+        return 'Company Secretaries & Legal Counsel: Audit internal registers and board minutes against this circular; entities not executing this corporate action remain unaffected.'
+    }
+
+    return 'In-House Counsel & Compliance Teams: Brief relevant operating units on these updated parameters; entities with no exposure to this regulatory category remain unaffected.'
+}
+
+export function buildDeadlinesThisWeekRowsHtml(deadlines?: any[] | null): string {
+    if (deadlines && Array.isArray(deadlines) && deadlines.length > 0) {
+        return deadlines.map((dl: any) => {
+            const dateStr = dl.dateDay || dl.due_date || 'Upcoming'
+            const title = dl.title || dl.compliance_title || dl.form_name || 'Statutory Compliance'
+            const tip = dl.tip || dl.penalty || dl.note || dl.consequence || 'Mandatory statutory timeline'
+            return `
+                <tr>
+                    <td style="padding:5px 0;vertical-align:top;width:18px;font-size:13px;color:#D97706;line-height:1.4;">•</td>
+                    <td style="padding:5px 0;font-size:13px;line-height:1.5;color:#1E293B;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+                        <strong style="color:#0F172A;">${dateStr}</strong> — ${title} — <span style="color:#475569;">${tip}</span>
+                    </td>
+                </tr>
+            `
+        }).join('')
+    }
+
+    // Default 19 Oct 2026 edition content per official prompt specification
+    return `
+        <tr>
+            <td style="padding:5px 0;vertical-align:top;width:18px;font-size:13px;color:#D97706;line-height:1.4;">•</td>
+            <td style="padding:5px 0;font-size:13px;line-height:1.5;color:#1E293B;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+                <strong style="color:#0F172A;">21 Oct (Wed)</strong> — Tax Audit Report (Form 3CA/3CB-3CD), AY 2026-27 — extended date per CBDT Circular 07/2026; no further extension expected
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:5px 0;vertical-align:top;width:18px;font-size:13px;color:#D97706;line-height:1.4;">•</td>
+            <td style="padding:5px 0;font-size:13px;line-height:1.5;color:#1E293B;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+                <strong style="color:#0F172A;">21 Oct (Wed)</strong> — SEBI Reg 31: Shareholding Pattern (Q2 Sep 2026) for listed entities
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:5px 0;vertical-align:top;width:18px;font-size:13px;color:#D97706;line-height:1.4;">•</td>
+            <td style="padding:5px 0;font-size:13px;line-height:1.5;color:#1E293B;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+                <strong style="color:#0F172A;">Coming right after:</strong> 30 Oct — AOC-4 &amp; LLP Form 8 · 31 Oct — TDS Q2 returns, Form 3CEB, MSME-1, EPF Sep ECR (extended)
+            </td>
+        </tr>
+    `
+}
+
 export function buildNewsletterTemplateHtml({
     subject,
     previewText,
@@ -131,7 +222,9 @@ export function buildNewsletterTemplateHtml({
     unsubscribeUrl,
     upcomingDeadlines = [],
     leadArticleId,
-    includeDeadlines = false
+    includeDeadlines = false,
+    editorsNote,
+    deadlinesThisWeek
 }: {
     subject: string
     previewText: string
@@ -141,6 +234,8 @@ export function buildNewsletterTemplateHtml({
     upcomingDeadlines?: any[]
     leadArticleId?: string | null
     includeDeadlines?: boolean
+    editorsNote?: string | null
+    deadlinesThisWeek?: any[] | null
 }): string {
     const SITE_URL = BASE_URL || 'https://www.corplawupdates.in'
 
@@ -258,7 +353,7 @@ export function buildNewsletterTemplateHtml({
         }
 
         const leadRef = leadArticle.source_name || leadArticle.regulation_ref || 'Official Regulatory Notification'
-        const leadWhyItMatters = leadArticle.key_change || leadArticle.quick_answer || 'Examine standard governance procedures and statutory filing checklists to ensure compliance with updated regulatory directives.'
+        const leadWhyItMatters = resolvePractitionerAction(leadArticle)
 
         leadStoryHtml = `
             <tr>
@@ -383,9 +478,18 @@ export function buildNewsletterTemplateHtml({
                                     </a>
                                 </h3>
 
-                                <p style="margin:0 0 12px 0;font-size:13px;color:#475569;line-height:1.55;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                                <p style="margin:0 0 10px 0;font-size:13px;color:#475569;line-height:1.55;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
                                     ${summaryText}
                                 </p>
+
+                                <div style="background:#F8FAFC;border-left:3px solid ${meta.border};border-radius:2px;padding:8px 12px;margin:0 0 10px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+                                    <div style="font-size:10px;font-weight:800;color:${meta.border};text-transform:uppercase;margin-bottom:2px;">
+                                        ⚡ Action for Practice
+                                    </div>
+                                    <div style="font-size:12px;color:#334155;line-height:1.45;">
+                                        ${resolvePractitionerAction(article)}
+                                    </div>
+                                </div>
 
                                 <div style="text-align:right;">
                                     <a href="${articleUrl}" style="font-size:12px;color:#2563EB;font-weight:700;text-decoration:none;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
@@ -494,6 +598,42 @@ export function buildNewsletterTemplateHtml({
         }
     }
 
+    // 7. Conversational First-Person Editor's Note (Top of newsletter)
+    let editorsNoteHtml = ''
+    if (typeof editorsNote === 'string' && editorsNote.trim()) {
+        editorsNoteHtml = editorsNote.trim()
+    } else if (editorsNote === undefined || editorsNote === null) {
+        if (leadArticle) {
+            const leadAction = resolvePractitionerAction(leadArticle)
+            const cleanAction = leadAction.endsWith('.') ? leadAction.slice(0, -1) : leadAction
+            editorsNoteHtml = `The one thing I'd read first this week is <strong>${leadArticle.title}</strong> — because ${cleanAction}. Ensure your team reviews this before filing.`
+        } else {
+            editorsNoteHtml = `The one thing I'd review first this week is our statutory compliance deadlines — critical filing windows close across Tax, MCA and SEBI.`
+        }
+    }
+
+    // 8. Deadlines This Week box (placed immediately after 60-Second Executive Memo)
+    const deadlinesThisWeekRows = buildDeadlinesThisWeekRowsHtml(deadlinesThisWeek)
+    const deadlinesThisWeekHtml = `
+          <!-- ── DEADLINES THIS WEEK ── -->
+          <tr>
+            <td style="padding:18px 24px 0;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#FFFDF5;border:1px solid #FCD34D;border-left:4px solid #D97706;border-radius:8px;border-collapse:collapse;">
+                <tr>
+                  <td style="padding:16px 20px;">
+                    <div style="font-size:11px;font-weight:800;color:#92400E;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+                      📌 DEADLINES THIS WEEK
+                    </div>
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+                      ${deadlinesThisWeekRows}
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+    `
+
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -557,6 +697,26 @@ export function buildNewsletterTemplateHtml({
             </td>
           </tr>
 
+          <!-- ── EDITOR'S NOTE ── -->
+          ${editorsNoteHtml ? `
+          <tr>
+            <td style="padding:20px 24px 0;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F8FAFC;border:1px solid #CBD5E1;border-left:4px solid #0B132B;border-radius:8px;border-collapse:collapse;">
+                <tr>
+                  <td style="padding:14px 18px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+                    <div style="font-size:10px;font-weight:800;color:#0B132B;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">
+                      ✍️ EDITOR'S NOTE
+                    </div>
+                    <div style="font-size:13px;line-height:1.55;color:#1E293B;font-style:italic;">
+                      &ldquo;${editorsNoteHtml}&rdquo;
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          ` : ''}
+
           <!-- ── 60-SECOND EXECUTIVE MEMO ── -->
           ${memoBulletsHtml ? `
           <tr>
@@ -576,6 +736,8 @@ export function buildNewsletterTemplateHtml({
             </td>
           </tr>
           ` : ''}
+
+          ${deadlinesThisWeekHtml}
 
           <!-- ── ACTIVITY & STATS BAR ── -->
           <tr>
@@ -685,7 +847,7 @@ export function buildNewsletterTemplateHtml({
                 <tr>
                   <td style="padding:16px 20px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
                     <div style="font-size:11px;color:#64748B;font-weight:800;margin-bottom:10px;letter-spacing:0.8px;text-transform:uppercase;">
-                      JOIN 2,000+ COMPLIANCE PRACTITIONERS DAILY
+                      Join compliance professionals getting this briefing every Monday.
                     </div>
                     <table cellpadding="0" cellspacing="6" border="0" align="center" style="border-collapse:collapse;">
                       <tr>

@@ -129,6 +129,12 @@ export default async function RootLayout({
         />
         <meta name="google-adsense-account" content="ca-pub-8404756575471756" />
         <meta name="monetag" content="53e830deaec95301a49eb4b797c9cbc8" />
+        {/* Google AdSense Script inside <head> */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8404756575471756"
+          crossOrigin="anonymous"
+        />
         {/* Clickio Web Vitals Monitoring */}
         <script defer data-cfasync="false" src="https://s.clickiocdn.com/t/250831_wv.js" />
         <link rel="dns-prefetch" href="https://clickiocdn.com" />
@@ -250,15 +256,6 @@ export default async function RootLayout({
           strategy="lazyOnload"
           crossOrigin="anonymous"
         />
-
-        {/* Google AdSense: Injected with strategy="afterInteractive" so mobile FCP paints instantly without blocking main thread, while remaining 100% visible and detectable to Google AdSense verification review crawlers */}
-        <Script
-          id="google-adsense"
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8404756575471756"
-          strategy="afterInteractive"
-          crossOrigin="anonymous"
-        />
-
 
       </body>
     </html>
