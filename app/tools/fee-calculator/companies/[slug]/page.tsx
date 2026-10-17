@@ -77,16 +77,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
     name: `${form.formNumber} Fee Calculator`,
-    alternateName: Array.from(new Set([
-      `${form.formNumber} Fee Calculator`,
-      `${form.formNumber.replace('-', ' ')} Fee Calculator`,
-      `${form.formNumber} Late Fee Calculator`,
-      `${form.formNumber.replace('-', ' ')} Late Fee Calculator`,
-      `${form.formNumber} Penalty Calculator`,
-      `Form ${form.formNumber} Fee Calculator`,
-      `MCA ${form.formNumber} Calculator`,
-      ...form.aliases.slice(0, 6)
-    ])),
+    alternateName: [`Form ${form.formNumber} Filing Fee Calculator`],
     url: `https://www.corplawupdates.in/tools/fee-calculator/companies/${form.slug}`,
     applicationCategory: 'BusinessApplication',
     applicationSubCategory: 'MCA Regulatory Compliance & Fee Calculator',
@@ -104,14 +95,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
       'Section 446B relief evaluation for Small Companies, OPCs, and Startups',
       'Statutory attachments checklist & professional certification rules',
       'Downloadable PDF compliance calculation report'
-    ],
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.9',
-      reviewCount: form.slug === 'mgt-7' ? '184' : form.slug === 'aoc-4' ? '172' : form.slug === 'dir-3-kyc' ? '165' : '128',
-      bestRating: '5',
-      worstRating: '1'
-    }
+    ]
   }
 
   const howToSchema = form.slug === 'dir-3-kyc' ? {

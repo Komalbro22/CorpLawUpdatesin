@@ -77,13 +77,6 @@ const companyJsonLd = {
         'State-Wise MOA/AOA Stamp Duty Estimation for SH-7 & SPICe+',
         'Instant Executive PDF Breakdown Export & MCA V3 Compliance Reports'
       ],
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: '4.9',
-        ratingCount: '1280',
-        bestRating: '5',
-        worstRating: '1'
-      },
       author: {
         '@type': 'Organization',
         name: 'CorpLawUpdates Legal Editorial Board',

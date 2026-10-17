@@ -48,13 +48,7 @@ const msmeJsonLd = {
       '@type': 'WebApplication',
       '@id': 'https://www.corplawupdates.in/tools/fee-calculator/msme#webapplication',
       name: 'MSME Delayed Payment Interest Calculator',
-      alternateName: [
-        'MSME Interest Calculator',
-        'MSME Delayed Payment Calculator',
-        'MSMED Act Section 16 Calculator',
-        'MSME Samadhaan Interest Calculator',
-        'MSME 45 Days Interest Calculator'
-      ],
+      alternateName: ['MSMED Act Section 16 Interest Calculator'],
       url: 'https://www.corplawupdates.in/tools/fee-calculator/msme',
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'All',

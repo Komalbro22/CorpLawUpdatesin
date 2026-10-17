@@ -57,14 +57,7 @@ const ibbiJsonLd = {
       '@type': 'WebApplication',
       '@id': 'https://www.corplawupdates.in/tools/fee-calculator/ibbi#webapp',
       name: 'IBBI Fee Calculator',
-      alternateName: [
-        'IBBI Fee Calculator',
-        'IBBI Delayed Filing Fee Calculator',
-        'IBBI Liquidation Fee Calculator',
-        'Regulation 47B Fee Calculator',
-        'IBBI Late Fee Calculator',
-        'Insolvency Professional Fee Calculator'
-      ],
+      alternateName: ['IBBI Liquidation & CIRP Filing Fee Calculator'],
       url: 'https://www.corplawupdates.in/tools/fee-calculator/ibbi',
       applicationCategory: 'BusinessApplication',
       applicationSubCategory: 'Insolvency & Bankruptcy Compliance Fee Calculator',

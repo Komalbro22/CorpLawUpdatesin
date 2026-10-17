@@ -63,14 +63,7 @@ const llpJsonLd = {
       '@type': 'SoftwareApplication',
       '@id': 'https://www.corplawupdates.in/tools/fee-calculator/llp#softwareapplication',
       name: 'LLP Fee Calculator',
-      alternateName: [
-        'LLP Fee Calculator',
-        'LLP Late Fee Calculator',
-        'LLP Form 11 Fee Calculator',
-        'LLP Form 8 Fee Calculator',
-        'LLP Penalty Calculator',
-        'MCA LLP Fee Calculator'
-      ],
+      alternateName: ['LLP Late Filing Fee Calculator'],
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'Web Browser',
       offers: {
