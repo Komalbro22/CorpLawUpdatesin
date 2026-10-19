@@ -453,7 +453,7 @@ export default async function GlossaryTermPage({ params }: Props) {
   // Consolidated content outline for Table of Contents sidebar extraction
   const combinedContent = `
 ${!parsed.hideDefinition ? '## Definition' : ''}
-${term.extended_note ? `## Understanding ${term.term}\n${parsed.cleanContent}` : ''}
+${term.extended_note && parsed.cleanContent ? `## Understanding ${term.term}\n${parsed.cleanContent}` : ''}
 ${!hasInlineFaqs && faqsList.length > 0 ? `## Frequently Asked Questions (FAQs)` : ''}
 ${relatedTermsData.length > 0 ? `## Related Terms` : ''}
 ${relatedArticles && relatedArticles.length > 0 ? `## Contextual Analysis & Regulatory Updates` : ''}
@@ -604,7 +604,7 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
         )}
 
         {/* Extended Note Section */}
-        {term.extended_note && (
+        {term.extended_note && parsed.cleanContent && (
           <section id={`understanding-${term.term.toLowerCase().replace(/[^a-z0-9]/g, '-')}`} className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-xs border-l-4 ${themeStyles.borderLeftColor}`}>
             <h2 className="text-2xl font-bold text-navy mb-6 flex items-center gap-2.5 font-heading group">
               <BookOpen className={`h-6 w-6 ${themeStyles.iconColor}`} aria-hidden />
