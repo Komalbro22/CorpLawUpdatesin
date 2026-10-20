@@ -136,6 +136,13 @@ export default async function RootLayout({
           crossOrigin="anonymous"
         />
         {/* Clickio Web Vitals Monitoring */}
+        {/* Ahrefs Web Analytics */}
+        <script
+          async
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="/euoA9NQAbsgFUSEx0PkKQ"
+        />
+        <link rel="dns-prefetch" href="https://analytics.ahrefs.com" />
         <script defer data-cfasync="false" src="https://s.clickiocdn.com/t/250831_wv.js" />
         <link rel="dns-prefetch" href="https://clickiocdn.com" />
         <link rel="preconnect" href="https://clickiocdn.com" crossOrigin="anonymous" />
