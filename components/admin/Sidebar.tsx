@@ -17,6 +17,7 @@ import {
     Mail,
     Menu,
     PenSquare,
+    Plus,
     Radio,
     ScrollText,
     Settings,
@@ -49,6 +50,7 @@ const sections: SidebarSection[] = [
             { href: '/admin/radar',          icon: Radio,           label: 'Regulator Radar' },
             { href: '/admin/articles',       icon: FileText,        label: 'All Articles'    },
             { href: '/admin/glossary',       icon: BookOpen,        label: 'Glossary'        },
+            { href: '/admin/glossary/new',   icon: Plus,            label: 'New Term'        },
             { href: '/admin/documents',      icon: ScrollText,      label: 'Documents'       },
         ],
     },
@@ -96,6 +98,9 @@ const sections: SidebarSection[] = [
 function isLinkActive(linkHref: string, pathname: string): boolean {
     if (linkHref === '/admin/articles') {
         return pathname.startsWith('/admin/articles') && pathname !== '/admin/articles/new'
+    }
+    if (linkHref === '/admin/glossary') {
+        return pathname.startsWith('/admin/glossary') && pathname !== '/admin/glossary/new'
     }
     if (linkHref === '/admin/compliance') {
         return pathname.startsWith('/admin/compliance') && !pathname.includes('/suggestions')
@@ -235,9 +240,11 @@ export default function Sidebar() {
                 {
                     label: 'Editorial',
                     links: [
+                        { href: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
                         { href: '/admin/articles', icon: FileText, label: 'All Articles' },
                         { href: '/admin/articles/new', icon: PenSquare, label: 'New Article' },
                         { href: '/admin/glossary', icon: BookOpen, label: 'Glossary' },
+                        { href: '/admin/glossary/new', icon: Plus, label: 'New Term' },
                         { href: '/admin/radar', icon: Radio, label: 'Regulator Radar' },
                     ]
                 }

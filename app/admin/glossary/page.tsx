@@ -30,8 +30,15 @@ export default function AdminGlossaryPage() {
   const [statusFilter, setStatusFilter] = useState<'all' | 'verified' | 'draft'>('all')
   const [categoryFilter, setCategoryFilter] = useState<string>('all')
   const [isImporting, setIsImporting] = useState(false)
+  const [userRole, setUserRole] = useState<'admin' | 'editor'>('admin')
 
   useEffect(() => {
+    fetch('/api/admin/session')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data?.role) setUserRole(data.role)
+      })
+      .catch(() => {})
     fetchTerms()
   }, [])
 
@@ -200,11 +207,13 @@ export default function AdminGlossaryPage() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <label className="cursor-pointer inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3 py-2 rounded-xl border border-slate-200 transition-colors">
-            {isImporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-            {isImporting ? 'Importing...' : 'Import CSV'}
-            <input type="file" accept=".csv" className="hidden" onChange={handleFileUpload} disabled={isImporting} />
-          </label>
+          {userRole === 'admin' && (
+            <label className="cursor-pointer inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3 py-2 rounded-xl border border-slate-200 transition-colors">
+              {isImporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+              {isImporting ? 'Importing...' : 'Import CSV'}
+              <input type="file" accept=".csv" className="hidden" onChange={handleFileUpload} disabled={isImporting} />
+            </label>
+          )}
           <Link 
             href="/admin/glossary/new"
             className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-slate-950 px-4 py-2 rounded-xl text-sm font-bold shadow-xs transition-colors"
@@ -382,19 +391,22 @@ export default function AdminGlossaryPage() {
                         <div className="flex items-center justify-end gap-1">
                           <Link
                             href={`/admin/glossary/${term.id}/edit`}
-                            className="p-1.5 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:text-navy hover:bg-slate-100 rounded-lg transition-colors border border-transparent hover:border-slate-200"
                             title="Edit Term in CMS"
                           >
-                            <Edit2 className="w-4 h-4" />
+                            <Edit2 className="w-3.5 h-3.5 text-blue-600" />
+                            <span>Edit</span>
                           </Link>
-                          <button
-                            type="button"
-                            onClick={() => handleDelete(term.id, term.term)}
-                            className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                            title="Delete Term"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
+                          {userRole === 'admin' && (
+                            <button
+                              type="button"
+                              onClick={() => handleDelete(term.id, term.term)}
+                              className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                              title="Delete Term"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>

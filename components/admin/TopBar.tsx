@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { ChevronRight, Download, ExternalLink, Home, PenSquare, Radio, TrendingUp, Users } from 'lucide-react'
+import { ChevronRight, Download, ExternalLink, Home, PenSquare, Radio, TrendingUp, Users, BookOpen, Plus } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import AdminGlobalSearch from './AdminGlobalSearch'
@@ -66,8 +66,14 @@ interface CtxAction {
 }
 
 function getContextualAction(pathname: string): CtxAction | null {
-    if (pathname === '/admin/articles' || pathname.startsWith('/admin/articles/')) {
+    if (pathname === '/admin/articles' || (pathname.startsWith('/admin/articles/') && !pathname.endsWith('/new') && !pathname.endsWith('/edit'))) {
         return { label: 'New Article', href: '/admin/articles/new', icon: PenSquare, colorClass: 'text-white btn-vibrant-amber' }
+    }
+    if (pathname === '/admin/glossary') {
+        return { label: 'New Term', href: '/admin/glossary/new', icon: Plus, colorClass: 'text-white btn-vibrant-amber' }
+    }
+    if (pathname === '/admin/glossary/new' || (pathname.startsWith('/admin/glossary/') && pathname.endsWith('/edit'))) {
+        return { label: 'All Terms', href: '/admin/glossary', icon: BookOpen, colorClass: 'text-white btn-vibrant-amber' }
     }
     if (pathname === '/admin/subscribers') {
         return { label: 'Export CSV', href: '/api/admin/subscribers?export=csv', icon: Download, colorClass: 'text-white btn-vibrant-amber' }

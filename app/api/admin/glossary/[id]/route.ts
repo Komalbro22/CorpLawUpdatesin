@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { revalidatePath } from 'next/cache'
 import { glossarySchema } from '@/lib/admin-schemas'
-import { verifyAdminSession } from '@/lib/admin-auth'
+import { verifyAdminSession, verifyAdminRole } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 
 export async function GET(
@@ -238,8 +238,8 @@ export async function DELETE(
 ) {
   try {
     void cookies()
-    if (!await verifyAdminSession()) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    if (!await verifyAdminRole(['admin'])) {
+      return NextResponse.json({ error: 'Forbidden: Editors are not permitted to delete glossary entries' }, { status: 403 })
     }
 
     const { id } = await params

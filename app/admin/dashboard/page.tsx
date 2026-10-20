@@ -6,6 +6,7 @@ import {
     ArrowRight,
     BarChart3,
     Bell,
+    BookOpen,
     Calendar,
     CalendarDays,
     CheckCircle2,
@@ -16,6 +17,7 @@ import {
     Layers,
     PenLine,
     PenSquare,
+    Plus,
     Radio,
     ShieldCheck,
     Sparkles,
@@ -42,6 +44,16 @@ const CATEGORY_STYLES: Record<string, { bg: string; text: string; border: string
     LABOUR: { bg: 'bg-orange-50', text: 'text-orange-700', border: 'border-orange-200' },
 }
 
+interface RecentGlossaryItem {
+    id: string
+    term: string
+    slug: string
+    category: string
+    is_verified: boolean
+    created_at: string
+    extended_note?: string | null
+}
+
 export default async function AdminDashboard() {
     const now = new Date()
     const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString()
@@ -63,6 +75,8 @@ export default async function AdminDashboard() {
         calcStatsRes,
         publishedThisWeekRes,
         subscribersThisWeekRes,
+        glossaryListRes,
+        glossaryCountRes,
     ] = await Promise.all([
         supabaseAdmin.from('updates').select('*', { count: 'exact', head: true }).not('published_at', 'is', null),
         supabaseAdmin.from('updates').select('*', { count: 'exact', head: true }).is('published_at', null),
@@ -73,6 +87,8 @@ export default async function AdminDashboard() {
         supabaseAdmin.from('calculator_usage').select('calculator_type, input_data, result_data').order('created_at', { ascending: false }).limit(500),
         supabaseAdmin.from('updates').select('*', { count: 'exact', head: true }).not('published_at', 'is', null).gte('created_at', sevenDaysAgo),
         supabaseAdmin.from('subscribers').select('*', { count: 'exact', head: true }).eq('is_active', true).gte('subscribed_at', sevenDaysAgo),
+        supabaseAdmin.from('glossary').select('id, term, slug, category, is_verified, created_at, extended_note').order('created_at', { ascending: false }).limit(6),
+        supabaseAdmin.from('glossary').select('*', { count: 'exact', head: true }),
     ])
 
     const publishedCount = publishedRes.count ?? 0
@@ -84,6 +100,8 @@ export default async function AdminDashboard() {
     const calcStats = calcStatsRes.data || []
     const publishedThisWeek = publishedThisWeekRes.count ?? 0
     const subscribersThisWeek = subscribersThisWeekRes.count ?? 0
+    const recentGlossary = (glossaryListRes?.data as RecentGlossaryItem[] | null) || []
+    const totalGlossaryCount = glossaryCountRes?.count ?? 0
 
     const firstDbError =
         publishedRes.error ||
@@ -92,7 +110,9 @@ export default async function AdminDashboard() {
         gensRes.error ||
         articlesListRes.error ||
         subscribersListRes.error ||
-        calcStatsRes.error
+        calcStatsRes.error ||
+        glossaryListRes.error ||
+        glossaryCountRes.error
 
     // Group calculator usage statistics
     const statsMap: Record<string, number> = {}
@@ -202,7 +222,7 @@ export default async function AdminDashboard() {
                 </div>
 
                 {/* FAST ACTION COMMAND RIBBON */}
-                <div className="mt-5 pt-5 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-2.5">
+                <div className="mt-5 pt-5 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2 sm:gap-2.5">
                     {/* Primary Action CTA */}
                     <Link
                         href="/admin/articles/new"
@@ -210,6 +230,15 @@ export default async function AdminDashboard() {
                     >
                         <PenSquare className="w-3.5 h-3.5 text-slate-950 shrink-0" />
                         <span>New Article</span>
+                    </Link>
+
+                    {/* New Glossary Term CTA */}
+                    <Link
+                        href="/admin/glossary/new"
+                        className="inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold px-3 py-2.5 rounded-xl text-xs shadow-xs transition-all duration-150 active:scale-95 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-amber-500"
+                    >
+                        <BookOpen className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                        <span>New Term</span>
                     </Link>
 
                     {/* Secondary Actions */}
@@ -545,6 +574,192 @@ export default async function AdminDashboard() {
                                                     className="font-semibold text-amber-700 hover:underline text-xs"
                                                 >
                                                     Edit Article &rarr;
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </div>
+
+                    {/* RECENT LEGAL GLOSSARY ENTRIES CARD */}
+                    <div className="bg-white/90 backdrop-blur-xl border border-slate-200/90 rounded-2xl p-5 sm:p-6 shadow-xs">
+                        <div className="flex items-center justify-between mb-4">
+                            <div>
+                                <h2 className="text-base sm:text-lg font-heading font-bold text-slate-900 flex items-center gap-2">
+                                    <BookOpen className="w-5 h-5 text-amber-500 shrink-0" />
+                                    <span>Legal Glossary Entries</span>
+                                    <span className="text-xs font-semibold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
+                                        {totalGlossaryCount} total
+                                    </span>
+                                </h2>
+                                <p className="text-xs text-slate-500 mt-0.5">Authoritative definitions, statutory acronyms, and CMS articles</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Link
+                                    href="/admin/glossary/new"
+                                    className="inline-flex items-center gap-1 text-xs font-bold text-slate-950 bg-amber-400 hover:bg-amber-500 px-2.5 py-1.5 rounded-lg transition-colors shadow-2xs"
+                                >
+                                    <Plus className="w-3.5 h-3.5" />
+                                    <span>New Term</span>
+                                </Link>
+                                <Link
+                                    href="/admin/glossary"
+                                    className="inline-flex items-center gap-1 text-xs font-semibold text-slate-700 hover:text-slate-900 transition-colors bg-slate-100 hover:bg-slate-200 px-2.5 py-1.5 rounded-lg border border-slate-200/80"
+                                >
+                                    <span>Manage All</span>
+                                    <ArrowRight className="w-3.5 h-3.5" />
+                                </Link>
+                            </div>
+                        </div>
+
+                        {/* DESKTOP TABLE VIEW (sm: and up) */}
+                        <div className="hidden sm:block overflow-hidden border border-slate-200/70 rounded-xl">
+                            <table className="w-full text-left text-sm border-collapse">
+                                <thead>
+                                    <tr className="bg-slate-50/80 border-b border-slate-200/70 text-slate-500 text-xs uppercase tracking-wider font-semibold">
+                                        <th className="px-4 py-3">Term &amp; Slug</th>
+                                        <th className="px-3 py-3">Category</th>
+                                        <th className="px-3 py-3">Content Depth</th>
+                                        <th className="px-3 py-3">Status</th>
+                                        <th className="px-4 py-3 text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-100">
+                                    {(!recentGlossary || recentGlossary.length === 0) && (
+                                        <tr>
+                                            <td colSpan={5} className="py-8 text-center text-slate-500 text-sm">
+                                                No glossary terms found. Click &quot;New Term&quot; to add your first legal term.
+                                            </td>
+                                        </tr>
+                                    )}
+                                    {recentGlossary?.map(term => {
+                                        const catStyle = CATEGORY_STYLES[term.category] || {
+                                            bg: 'bg-slate-100',
+                                            text: 'text-slate-700',
+                                            border: 'border-slate-200',
+                                        }
+                                        const hasArticle = Boolean(term.extended_note && (term.extended_note?.length || 0) > 300)
+
+                                        return (
+                                            <tr key={term.id} className="hover:bg-slate-50/60 transition-colors group">
+                                                <td className="px-4 py-3 max-w-[280px]">
+                                                    <Link
+                                                        href={`/admin/glossary/${term.id}/edit`}
+                                                        className="font-semibold text-slate-900 group-hover:text-amber-700 transition-colors line-clamp-1 block"
+                                                        title={term.term}
+                                                    >
+                                                        {term.term}
+                                                    </Link>
+                                                    <span className="text-[11px] text-slate-400 font-mono block mt-0.5">
+                                                        /glossary/{term.slug}
+                                                    </span>
+                                                </td>
+                                                <td className="px-3 py-3 whitespace-nowrap">
+                                                    <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold border ${catStyle.bg} ${catStyle.text} ${catStyle.border}`}>
+                                                        {term.category || 'GENERAL'}
+                                                    </span>
+                                                </td>
+                                                <td className="px-3 py-3 whitespace-nowrap">
+                                                    {hasArticle ? (
+                                                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                                                            ★ Full Article ({Math.round((term.extended_note?.length || 0) / 5)}w)
+                                                        </span>
+                                                    ) : (
+                                                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">
+                                                            Definition only
+                                                        </span>
+                                                    )}
+                                                </td>
+                                                <td className="px-3 py-3 whitespace-nowrap">
+                                                    {term.is_verified ? (
+                                                        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+                                                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                                            Live
+                                                        </span>
+                                                    ) : (
+                                                        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
+                                                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                                                            Draft
+                                                        </span>
+                                                    )}
+                                                </td>
+                                                <td className="px-4 py-3 text-right whitespace-nowrap">
+                                                    <div className="inline-flex items-center gap-1">
+                                                        <Link
+                                                            href={`/admin/glossary/${term.id}/edit`}
+                                                            className="text-xs font-semibold text-slate-600 hover:text-amber-700 px-2 py-1 rounded-sm hover:bg-slate-100 transition-colors"
+                                                        >
+                                                            Edit
+                                                        </Link>
+                                                        {term.slug && term.is_verified && (
+                                                            <a
+                                                                href={`/glossary/${term.slug}`}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="text-slate-400 hover:text-slate-700 p-1 rounded-sm hover:bg-slate-100 transition-colors"
+                                                                title="View Public Glossary Page"
+                                                            >
+                                                                <ExternalLink className="w-3.5 h-3.5" />
+                                                            </a>
+                                                        )}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* MOBILE RESPONSIVE CARDS VIEW (< sm) */}
+                        <div className="sm:hidden space-y-2.5">
+                            {recentGlossary?.map(term => {
+                                const catStyle = CATEGORY_STYLES[term.category] || {
+                                    bg: 'bg-slate-100',
+                                    text: 'text-slate-700',
+                                    border: 'border-slate-200',
+                                }
+                                const hasArticle = Boolean(term.extended_note && term.extended_note.length > 300)
+
+                                return (
+                                    <div
+                                        key={term.id}
+                                        className="bg-slate-50/70 border border-slate-200/80 rounded-xl p-3.5 space-y-2"
+                                    >
+                                        <div className="flex items-center justify-between gap-2">
+                                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${catStyle.bg} ${catStyle.text} ${catStyle.border}`}>
+                                                {term.category || 'GENERAL'}
+                                            </span>
+                                            {term.is_verified ? (
+                                                <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                                    Live
+                                                </span>
+                                            ) : (
+                                                <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
+                                                    Draft
+                                                </span>
+                                            )}
+                                        </div>
+
+                                        <Link
+                                            href={`/admin/glossary/${term.id}/edit`}
+                                            className="font-bold text-slate-900 text-sm line-clamp-2 block hover:text-amber-700"
+                                        >
+                                            {term.term}
+                                        </Link>
+                                        <p className="text-[11px] text-slate-400 font-mono">/glossary/{term.slug}</p>
+
+                                        <div className="flex items-center justify-between text-xs text-slate-500 pt-1 border-t border-slate-200/60">
+                                            <span>{hasArticle ? 'Full Article' : 'Definition'}</span>
+                                            <div className="flex items-center gap-2">
+                                                <Link
+                                                    href={`/admin/glossary/${term.id}/edit`}
+                                                    className="font-semibold text-amber-700 hover:underline text-xs"
+                                                >
+                                                    Edit Term &rarr;
                                                 </Link>
                                             </div>
                                         </div>
