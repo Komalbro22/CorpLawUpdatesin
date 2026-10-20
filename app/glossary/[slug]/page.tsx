@@ -27,6 +27,8 @@ function parseMetadata(content: string) {
         seoTitle: metadata.seo_title || '',
         seoDescription: metadata.seo_description || '',
         tldr: Array.isArray(metadata.tldr) ? metadata.tldr : [],
+        fullForm: metadata.full_form || "",
+        keyNumbers: Array.isArray(metadata.key_numbers) ? metadata.key_numbers : [],
         cleanContent
       }
     } catch (e) {
@@ -38,6 +40,8 @@ function parseMetadata(content: string) {
     seoTitle: '',
     seoDescription: '',
     tldr: [],
+    fullForm: "",
+    keyNumbers: [],
     cleanContent: content
   }
 }
@@ -490,9 +494,15 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
                 {readingTime} min read
               </span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-heading font-bold text-navy mb-4">
+            <h1 className="text-4xl md:text-5xl font-heading font-bold text-navy mb-2">
               {term.term}
             </h1>
+            {parsed.fullForm && (
+              <p className="text-base sm:text-lg font-medium text-slate-600 mb-4">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-400 mr-2">Full Form:</span>
+                <span className="text-slate-800 font-semibold">{parsed.fullForm}</span>
+              </p>
+            )}
             <div className="flex flex-wrap gap-4 items-center justify-between border-b border-slate-200/80 pb-5">
               {term.synonyms && term.synonyms.length > 0 ? (
                 <div className="flex flex-wrap gap-1.5 items-center">
@@ -545,6 +555,12 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
                 <h1 className="text-3xl md:text-4xl font-heading font-bold text-navy m-0">
                   {term.term}
                 </h1>
+                {parsed.fullForm && (
+                  <div className="w-full text-sm font-medium text-slate-600 mt-1">
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400 mr-1.5">Full Form:</span>
+                    <span className="text-slate-800 font-semibold">{parsed.fullForm}</span>
+                  </div>
+                )}
                 {parsed.tldr && parsed.tldr.length > 0 && (
                   <Link 
                     href="#key-takeaways" 
@@ -600,6 +616,28 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
                 </li>
               ))}
             </ul>
+          </section>
+        )}
+
+        {/* Structured Key Numbers Card */}
+        {parsed.keyNumbers && parsed.keyNumbers.length > 0 && !processedExtendedNote.includes('num-card') && !processedExtendedNote.includes('Key Numbers at a Glance') && (
+          <section id="key-numbers" className={`bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/60 shadow-xs border-l-4 ${themeStyles.borderLeftColor}`}>
+            <h2 className="text-xl font-bold text-navy mb-4 flex items-center gap-2 font-heading group">
+              <span className="w-1.5 h-5 bg-amber-500 rounded-full"></span>
+              <a href="#key-numbers" className="hover:text-amber-700 transition-colors flex items-center gap-1.5">
+                Key Numbers at a Glance
+                <span className="opacity-0 group-hover:opacity-100 text-slate-400 text-xs font-normal transition-opacity duration-150 select-none">🔗</span>
+              </a>
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {parsed.keyNumbers.map((kn: { label?: string; value?: string; detail?: string }, idx: number) => (
+                <div key={idx} className="bg-slate-50 border border-slate-200/70 rounded-xl p-4 text-center">
+                  <div className="text-2xl sm:text-3xl font-extrabold text-navy font-heading">{kn.value}</div>
+                  <div className="text-xs sm:text-sm font-semibold text-slate-700 mt-1">{kn.label}</div>
+                  {kn.detail && <div className="text-[11px] text-slate-500 mt-0.5">{kn.detail}</div>}
+                </div>
+              ))}
+            </div>
           </section>
         )}
 

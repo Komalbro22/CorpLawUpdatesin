@@ -39,11 +39,24 @@ export const articleSchema = z.object({
 export const glossarySchema = z.object({
   term: z.string().min(1).max(300).optional(),
   slug: z.string().regex(/^[a-z0-9-]+$/).max(200).optional(),
-  definition: z.string().max(10000).optional(),
+  definition: z.string().max(20000).optional(),
   category: z.string().max(100).optional(),
   keywords: z.array(z.string().max(100)).nullable().optional(),
-  synonyms: z.array(z.string().max(100)).nullable().optional(),
-  is_verified: z.boolean().optional()
+  synonyms: z.array(z.string().max(200)).nullable().optional(),
+  is_verified: z.boolean().optional(),
+  related_terms: z.array(z.string().max(200)).nullable().optional(),
+  extended_note: z.string().max(2000000).nullable().optional(),
+  faqs: z.any().nullable().optional(),
+  // Structured metadata / partial update helpers
+  dirtyFields: z.array(z.string()).optional(),
+  full_form: z.string().max(500).nullable().optional(),
+  key_numbers: z.any().nullable().optional(),
+  tldr: z.array(z.string().max(1000)).nullable().optional(),
+  seo_title: z.string().max(500).nullable().optional(),
+  seo_description: z.string().max(2000).nullable().optional(),
+  hide_definition: z.boolean().optional(),
+  body: z.string().max(2000000).nullable().optional(),
+  cleanContent: z.string().max(2000000).nullable().optional()
 })
 
 export const complianceSchema = z.object({
@@ -77,4 +90,3 @@ export const documentTemplateSchema = z.object({
   category: z.string().max(100).nullable().optional(),
   price: z.number().nullable().optional()
 })
-

@@ -1,16 +1,55 @@
+/* eslint-disable */
 'use client'
 
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
-import { ArrowLeft, Save, Sparkles, CheckCircle2, AlertTriangle, HelpCircle, Plus, Trash2, X, Loader2, Eye } from 'lucide-react'
+import { 
+  ArrowLeft, Save, Sparkles, CheckCircle2, AlertTriangle, HelpCircle, Plus, 
+  Trash2, X, Loader2, Eye, ExternalLink, FileText, Layers, Hash, Calendar, 
+  Clock, BookOpen, AlertCircle, RefreshCw, Upload, Check
+} from 'lucide-react'
 import { useToast } from '@/components/Toast'
-import MarkdownRenderer from '@/components/MarkdownRenderer'
+import { slugify, formatDate } from '@/lib/utils'
+import { smartCleanContent } from '@/lib/html-to-markdown'
+import { optimizeImageClientSide } from '@/lib/image-optimizer'
+import CategoryBadge from '@/components/CategoryBadge'
+import { Category } from '@/types'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 
-const CATEGORIES = ['IBC', 'NCLT', 'MCA', 'SEBI', 'RBI', 'FEMA', 'CCI', 'LABOUR', 'IFSCA', 'GENERAL']
+const CATEGORIES: Category[] = ['MCA', 'SEBI', 'RBI', 'IBC', 'NCLT', 'FEMA', 'CCI', 'LABOUR', 'IFSCA', 'INCOME_TAX']
+
+interface KeyNumberItem {
+  value: string
+  label: string
+  detail?: string
+}
+
+interface FaqItem {
+  q: string
+  a: string
+}
+
+interface InitialValues {
+  term: string
+  slug: string
+  category: string
+  isVerified: boolean
+  definition: string
+  extendedNote: string
+  hideDefinition: boolean
+  seoTitle: string
+  seoDescription: string
+  fullForm: string
+  tldrPoints: string[]
+  keyNumbers: KeyNumberItem[]
+  keywords: string[]
+  synonyms: string[]
+  relatedTerms: string
+  faqs: FaqItem[]
+}
 
 const parseMetadata = (content: string) => {
   const match = content.match(/^\s*<!--\s*METADATA\s*([\s\S]*?)\s*METADATA\s*-->/)
@@ -22,18 +61,22 @@ const parseMetadata = (content: string) => {
         hideDefinition: !!metadata.hide_definition,
         seoTitle: metadata.seo_title || '',
         seoDescription: metadata.seo_description || '',
+        fullForm: metadata.full_form || '',
         tldr: Array.isArray(metadata.tldr) ? metadata.tldr : [],
+        keyNumbers: Array.isArray(metadata.key_numbers) ? metadata.key_numbers : [],
         cleanContent
       }
     } catch (e) {
-      console.error("Error parsing metadata:", e)
+      console.error('Error parsing metadata:', e)
     }
   }
   return {
     hideDefinition: false,
     seoTitle: '',
     seoDescription: '',
+    fullForm: '',
     tldr: [],
+    keyNumbers: [],
     cleanContent: content
   }
 }
@@ -46,40 +89,70 @@ export default function EditGlossaryTermPage() {
 
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
-  const [isPreviewOpen, setIsPreviewOpen] = useState(false)
+  const [activeMobileTab, setActiveMobileTab] = useState<'edit' | 'seo' | 'preview'>('edit')
+
+  // Form Fields
   const [term, setTerm] = useState('')
   const [slug, setSlug] = useState('')
   const [slugEdited, setSlugEdited] = useState(false)
-  const [category, setCategory] = useState('GENERAL')
+  const [category, setCategory] = useState<string>('MCA')
   const [isVerified, setIsVerified] = useState(false)
+  const [createdAt, setCreatedAt] = useState<string>('')
 
-  // Markdown Content Fields
+  // Structured Content Fields
+  const [fullForm, setFullForm] = useState('')
   const [definition, setDefinition] = useState('')
   const [extendedNote, setExtendedNote] = useState('')
-
-  // Premium Layout & SEO Metadata states
   const [hideDefinition, setHideDefinition] = useState(false)
-  const [seoTitle, setSeoTitle] = useState('')
-  const [seoDescription, setSeoDescription] = useState('')
+
+  // Executive Takeaways (TL;DR)
   const [tldrPoints, setTldrPoints] = useState<string[]>([])
   const [tldrInput, setTldrInput] = useState('')
   const [bulkTldrText, setBulkTldrText] = useState('')
   const [showBulkTldr, setShowBulkTldr] = useState(false)
 
-  // Tag inputs
-  const [keywords, setKeywords] = useState<string[]>([])
-  const [keywordInput, setKeywordInput] = useState('')
+  // Key Numbers at a Glance
+  const [keyNumbers, setKeyNumbers] = useState<KeyNumberItem[]>([])
 
+  // FAQs
+  const [faqs, setFaqs] = useState<FaqItem[]>([])
+  const [bulkFaqText, setBulkFaqText] = useState('')
+  const [showBulkFaq, setShowBulkFaq] = useState(false)
+
+  // Acronyms / Synonyms
   const [synonyms, setSynonyms] = useState<string[]>([])
   const [synonymInput, setSynonymInput] = useState('')
 
+  // Tags / Keywords
+  const [keywords, setKeywords] = useState<string[]>([])
+  const [keywordInput, setKeywordInput] = useState('')
+
+  // Related Terms
   const [relatedTerms, setRelatedTerms] = useState('')
 
-  // FAQ creator
-  const [faqs, setFaqs] = useState<{ q: string; a: string }[]>([])
+  // SEO Fields
+  const [seoTitle, setSeoTitle] = useState('')
+  const [seoDescription, setSeoDescription] = useState('')
+  const [serpDevice, setSerpDevice] = useState<'desktop' | 'mobile'>('desktop')
 
+  // HTML Cleaner & Image Uploading states
+  const [showCleanConfirm, setShowCleanConfirm] = useState(false)
+  const [cleanPreview, setCleanPreview] = useState('')
+  const [cleanStats, setCleanStats] = useState<{
+    tagsRemoved: number
+    tablesKept: number
+    styledDivsKept: number
+  } | null>(null)
+  const [uploadingImage, setUploadingImage] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // Baseline initial state for partial save tracking
+  const [initialValues, setInitialValues] = useState<InitialValues | null>(null)
+
+  // Fetch Term
   const fetchTermDetails = useCallback(async () => {
     try {
+      setIsLoading(true)
       const res = await fetch(`/api/admin/glossary/${id}`)
       const json = await res.json()
 
@@ -91,32 +164,53 @@ export default function EditGlossaryTermPage() {
 
       const data = json.term
       if (data) {
-        setTerm(data.term || '')
-        setSlug(data.slug || '')
-        setSlugEdited(true)
-        setCategory(data.category || 'GENERAL')
-        setIsVerified(data.is_verified || false)
-        setDefinition(data.definition || '')
-        
         const rawNote = data.extended_note || ''
         const parsed = parseMetadata(rawNote)
-        setExtendedNote(parsed.cleanContent)
-        setHideDefinition(parsed.hideDefinition)
-        setSeoTitle(parsed.seoTitle)
-        setSeoDescription(parsed.seoDescription)
-        setTldrPoints(parsed.tldr)
 
-        setKeywords(data.keywords || [])
-        setSynonyms(data.synonyms || [])
-        setRelatedTerms(data.related_terms ? data.related_terms.join(', ') : '')
-        
-        // Load custom FAQs
-        if (data.faqs && Array.isArray(data.faqs)) {
-          setFaqs(data.faqs.map((f: { q?: string; question?: string; a?: string; answer?: string }) => ({
-            q: f.q || f.question || '',
-            a: f.a || f.answer || ''
-          })))
+        const initVals: InitialValues = {
+          term: data.term || '',
+          slug: data.slug || '',
+          category: data.category || 'MCA',
+          isVerified: !!data.is_verified,
+          definition: data.definition || '',
+          extendedNote: parsed.cleanContent,
+          hideDefinition: parsed.hideDefinition,
+          seoTitle: parsed.seoTitle,
+          seoDescription: parsed.seoDescription,
+          fullForm: parsed.fullForm,
+          tldrPoints: parsed.tldr,
+          keyNumbers: parsed.keyNumbers,
+          keywords: data.keywords || [],
+          synonyms: data.synonyms || [],
+          relatedTerms: data.related_terms ? data.related_terms.join(', ') : '',
+          faqs: Array.isArray(data.faqs)
+            ? data.faqs.map((f: any) => ({
+                q: f.q || f.question || '',
+                a: f.a || f.answer || ''
+              }))
+            : []
         }
+
+        setTerm(initVals.term)
+        setSlug(initVals.slug)
+        setSlugEdited(true)
+        setCategory(initVals.category)
+        setIsVerified(initVals.isVerified)
+        setCreatedAt(data.created_at || '')
+        setDefinition(initVals.definition)
+        setExtendedNote(initVals.extendedNote)
+        setHideDefinition(initVals.hideDefinition)
+        setSeoTitle(initVals.seoTitle)
+        setSeoDescription(initVals.seoDescription)
+        setFullForm(initVals.fullForm)
+        setTldrPoints(initVals.tldrPoints)
+        setKeyNumbers(initVals.keyNumbers)
+        setKeywords(initVals.keywords)
+        setSynonyms(initVals.synonyms)
+        setRelatedTerms(initVals.relatedTerms)
+        setFaqs(initVals.faqs)
+
+        setInitialValues(initVals)
       }
     } catch (e) {
       console.error(e)
@@ -126,12 +220,11 @@ export default function EditGlossaryTermPage() {
     }
   }, [id, router, showToast])
 
-  // Fetch the term by ID on mount
   useEffect(() => {
     fetchTermDetails()
   }, [fetchTermDetails])
 
-  // Live word counter helper (strips HTML tags)
+  // Word count & reading time calculation
   const getWordCount = (text: string): number => {
     if (!text) return 0
     const clean = text.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
@@ -141,187 +234,89 @@ export default function EditGlossaryTermPage() {
   const defWords = getWordCount(definition)
   const noteWords = getWordCount(extendedNote)
   const totalWords = defWords + noteWords
-  const isSubstantial = totalWords >= 300
+  const readingTime = Math.max(1, Math.round(totalWords / 200))
 
-  // Slug generator
-  const generateSlug = (text: string) => {
-    return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '')
-  }
+  // Determine dirty fields against initial values
+  const dirtyFields = useMemo(() => {
+    if (!initialValues) return []
+    const list: string[] = []
+    if (term !== initialValues.term) list.push('term')
+    if (slug !== initialValues.slug) list.push('slug')
+    if (category !== initialValues.category) list.push('category')
+    if (isVerified !== initialValues.isVerified) list.push('is_verified')
+    if (definition !== initialValues.definition) list.push('definition')
+    if (extendedNote !== initialValues.extendedNote) list.push('body')
+    if (hideDefinition !== initialValues.hideDefinition) list.push('hide_definition')
+    if (seoTitle !== initialValues.seoTitle) list.push('seo_title')
+    if (seoDescription !== initialValues.seoDescription) list.push('seo_description')
+    if (fullForm !== initialValues.fullForm) list.push('full_form')
+    if (JSON.stringify(tldrPoints) !== JSON.stringify(initialValues.tldrPoints)) list.push('tldr')
+    if (JSON.stringify(keyNumbers) !== JSON.stringify(initialValues.keyNumbers)) list.push('key_numbers')
+    if (JSON.stringify(keywords) !== JSON.stringify(initialValues.keywords)) list.push('keywords')
+    if (JSON.stringify(synonyms) !== JSON.stringify(initialValues.synonyms)) list.push('synonyms')
+    if (relatedTerms !== initialValues.relatedTerms) list.push('related_terms')
+    if (JSON.stringify(faqs) !== JSON.stringify(initialValues.faqs)) list.push('faqs')
+    return list
+  }, [
+    initialValues, term, slug, category, isVerified, definition, extendedNote,
+    hideDefinition, seoTitle, seoDescription, fullForm, tldrPoints, keyNumbers,
+    keywords, synonyms, relatedTerms, faqs
+  ])
 
+  // Handlers
   const handleTermChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value
     setTerm(val)
     if (!slugEdited) {
-      setSlug(generateSlug(val))
+      setSlug(slugify(val))
     }
   }
 
-  // Key tag additions with comma/semicolon/newline splitting
-  const handleKeywordKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      const val = keywordInput.trim()
-      if (val) {
-        const items = val
-          .split(/[,;\n]/)
-          .map(item => item.trim())
-          .filter(item => item && !keywords.includes(item))
-        
-        if (items.length > 0) {
-          setKeywords([...keywords, ...items])
-        }
-        setKeywordInput('')
-      }
-    }
-  }
-
-  const handleKeywordPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
-    e.preventDefault()
-    const pastedData = e.clipboardData.getData('text')
-    const items = pastedData
-      .split(/[,;\n]/)
-      .map(item => item.trim())
-      .filter(item => item && !keywords.includes(item))
-    
-    if (items.length > 0) {
-      setKeywords([...keywords, ...items])
-    }
-    setKeywordInput('')
-  }
-
-  const handleRemoveKeyword = (index: number) => {
-    setKeywords(keywords.filter((_, i) => i !== index))
-  }
-
+  // Synonyms tag input
   const handleSynonymKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' || e.key === ',') {
       e.preventDefault()
       const val = synonymInput.trim()
       if (val) {
-        const items = val
-          .split(/[,;\n]/)
-          .map(item => item.trim())
-          .filter(item => item && !synonyms.includes(item))
-        
-        if (items.length > 0) {
-          setSynonyms([...synonyms, ...items])
-        }
+        const items = val.split(/[,\n]/).map(s => s.trim()).filter(s => s && !synonyms.includes(s))
+        if (items.length > 0) setSynonyms([...synonyms, ...items])
         setSynonymInput('')
       }
+    } else if (e.key === 'Backspace' && !synonymInput && synonyms.length > 0) {
+      setSynonyms(synonyms.slice(0, -1))
     }
-  }
-
-  const handleSynonymPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
-    e.preventDefault()
-    const pastedData = e.clipboardData.getData('text')
-    const items = pastedData
-      .split(/[,;\n]/)
-      .map(item => item.trim())
-      .filter(item => item && !synonyms.includes(item))
-    
-    if (items.length > 0) {
-      setSynonyms([...synonyms, ...items])
-    }
-    setSynonymInput('')
   }
 
   const handleRemoveSynonym = (index: number) => {
     setSynonyms(synonyms.filter((_, i) => i !== index))
   }
 
-  // FAQ management
-  const [bulkFaqText, setBulkFaqText] = useState('')
-  const [isBulkOpen, setIsBulkOpen] = useState(false)
-
-  const parseBulkFaqs = (text: string): { q: string; a: string }[] => {
-    const lines = text.split('\n')
-    const items: { q: string; a: string }[] = []
-    let currentQ = ''
-    let currentA: string[] = []
-
-    const commitCurrent = () => {
-      if (currentQ.trim()) {
-        items.push({
-          q: currentQ.trim(),
-          a: currentA.join('\n').trim()
-        })
+  // Keywords tag input
+  const handleKeywordKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault()
+      const val = keywordInput.trim()
+      if (val) {
+        const items = val.split(/[,\n]/).map(s => s.trim()).filter(s => s && !keywords.includes(s))
+        if (items.length > 0) setKeywords([...keywords, ...items])
+        setKeywordInput('')
       }
-      currentQ = ''
-      currentA = []
+    } else if (e.key === 'Backspace' && !keywordInput && keywords.length > 0) {
+      setKeywords(keywords.slice(0, -1))
     }
-
-    for (const line of lines) {
-      const trimmed = line.trim()
-      if (!trimmed) continue
-
-      // Skip emojis or layout headers
-      if (
-        trimmed.startsWith('💻') || 
-        trimmed.startsWith('⚖') || 
-        trimmed.startsWith('📈') || 
-        trimmed.startsWith('🔍') || 
-        trimmed.startsWith('✔')
-      ) {
-        continue
-      }
-
-      // Question matches:
-      // 1. Starts with Q1., Q2., Q.1, Q.2, Q:, Q1: (case-insensitive)
-      // 2. Or is a short sentence ending with a question mark"?"
-      const isQuestionMarker = /^(?:Q|Question)\s*[\d\.]*[:\.]?\s+/i.test(trimmed)
-      const isQuestionEnding = trimmed.endsWith('?') && trimmed.length < 200
-
-      if (isQuestionMarker || isQuestionEnding) {
-        commitCurrent()
-        let cleanQ = trimmed
-        if (isQuestionMarker) {
-          cleanQ = trimmed.replace(/^(?:Q|Question)\s*[\d\.]*[:\.-]?\s*/i, '').trim()
-        }
-        currentQ = cleanQ
-      } else {
-        if (!currentQ && trimmed.endsWith('?') && trimmed.length < 200) {
-          currentQ = trimmed
-        } else if (currentQ) {
-          currentA.push(trimmed)
-        }
-      }
-    }
-
-    commitCurrent()
-    return items
   }
 
-  const handleAddFaq = () => {
-    setFaqs([...faqs, { q: '', a: '' }])
+  const handleRemoveKeyword = (index: number) => {
+    setKeywords(keywords.filter((_, i) => i !== index))
   }
 
-  const handleFaqChange = (index: number, field: 'q' | 'a', value: string) => {
-    const updated = [...faqs]
-    updated[index][field] = value
-    setFaqs(updated)
-  }
-
-  const handleRemoveFaq = (index: number) => {
-    setFaqs(faqs.filter((_, i) => i !== index))
-  }
-
-  // TL;DR / Key Takeaways handlers
+  // TLDR point handlers
   const handleAddTldrPoint = () => {
     const val = tldrInput.trim()
     if (val) {
       setTldrPoints([...tldrPoints, val])
       setTldrInput('')
     }
-  }
-
-  const handleRemoveTldrPoint = (index: number) => {
-    setTldrPoints(tldrPoints.filter((_, i) => i !== index))
-  }
-
-  const handleUpdateTldrPoint = (index: number, value: string) => {
-    const updated = [...tldrPoints]
-    updated[index] = value
-    setTldrPoints(updated)
   }
 
   const handleBulkTldrImport = () => {
@@ -331,93 +326,222 @@ export default function EditGlossaryTermPage() {
     for (const line of lines) {
       let trimmed = line.trim()
       if (!trimmed) continue
-      // Clean prefix bullets (- * • + 1. etc.)
-      trimmed = trimmed
-        .replace(/^(?:[-*•+>]|\d+\.|\d+\))\s*/, '')
-        .trim()
-      if (trimmed) {
-        parsed.push(trimmed)
-      }
+      trimmed = trimmed.replace(/^(?:[-*•+>]|\d+\.|\d+\))\s*/, '').trim()
+      if (trimmed) parsed.push(trimmed)
     }
     if (parsed.length > 0) {
       setTldrPoints([...tldrPoints, ...parsed])
       setBulkTldrText('')
       setShowBulkTldr(false)
-      showToast(`Imported ${parsed.length} key takeaways successfully!`, 'success')
+      showToast(`Imported ${parsed.length} takeaway points!`, 'success')
+    }
+  }
+
+  // Key Numbers handlers
+  const handleAddKeyNumber = () => {
+    setKeyNumbers([...keyNumbers, { value: '', label: '', detail: '' }])
+  }
+
+  const handleUpdateKeyNumber = (index: number, field: keyof KeyNumberItem, val: string) => {
+    const updated = [...keyNumbers]
+    updated[index] = { ...updated[index], [field]: val }
+    setKeyNumbers(updated)
+  }
+
+  const handleRemoveKeyNumber = (index: number) => {
+    setKeyNumbers(keyNumbers.filter((_, i) => i !== index))
+  }
+
+  // FAQs handlers
+  const handleAddFaq = () => {
+    setFaqs([...faqs, { q: '', a: '' }])
+  }
+
+  const handleUpdateFaq = (index: number, field: 'q' | 'a', val: string) => {
+    const updated = [...faqs]
+    updated[index] = { ...updated[index], [field]: val }
+    setFaqs(updated)
+  }
+
+  const handleRemoveFaq = (index: number) => {
+    setFaqs(faqs.filter((_, i) => i !== index))
+  }
+
+  const handleBulkFaqImport = () => {
+    if (!bulkFaqText.trim()) return
+    const lines = bulkFaqText.split('\n')
+    const items: FaqItem[] = []
+    let currentQ = ''
+    let currentA: string[] = []
+
+    const commit = () => {
+      if (currentQ.trim() && currentA.join(' ').trim()) {
+        items.push({ q: currentQ.trim(), a: currentA.join('\n').trim() })
+      }
+      currentQ = ''
+      currentA = []
+    }
+
+    for (const line of lines) {
+      const trimmed = line.trim()
+      if (!trimmed) continue
+      const isQuestionMarker = /^(?:Q|Question)\s*[\d\.]*[:\.-]?\s+/i.test(trimmed)
+      const isQuestionEnding = trimmed.endsWith('?') && trimmed.length < 200
+
+      if (isQuestionMarker || isQuestionEnding) {
+        commit()
+        currentQ = trimmed.replace(/^(?:Q|Question)\s*[\d\.]*[:\.-]?\s*/i, '').trim()
+      } else {
+        if (!currentQ && trimmed.endsWith('?') && trimmed.length < 200) {
+          currentQ = trimmed
+        } else if (currentQ) {
+          currentA.push(trimmed)
+        }
+      }
+    }
+    commit()
+
+    if (items.length > 0) {
+      setFaqs([...faqs, ...items])
+      setBulkFaqText('')
+      setShowBulkFaq(false)
+      showToast(`Imported ${items.length} FAQs successfully!`, 'success')
     } else {
-      showToast('No valid bullet points found in the text.', 'info')
+      showToast('No valid Q&A pairs found.', 'info')
     }
   }
 
-  // Serialize metadata to HTML comment at top of extended_note
-  const serializeMetadata = (
-    hideDef: boolean,
-    title: string,
-    desc: string,
-    points: string[],
-    note: string
-  ): string => {
-    const hasMeta = hideDef || title.trim() || desc.trim() || points.length > 0
-    if (!hasMeta) return note
-
-    const metaObj = {
-      hide_definition: hideDef,
-      seo_title: title.trim(),
-      seo_description: desc.trim(),
-      tldr: points.filter(Boolean)
-    }
-
-    return `<!-- METADATA\n${JSON.stringify(metaObj, null, 2)}\nMETADATA -->\n\n${note.trim()}`
+  // HTML Cleaner
+  const handleCleanHtml = () => {
+    if (!extendedNote.trim()) return
+    const { cleaned, stats } = smartCleanContent(extendedNote)
+    setCleanPreview(cleaned)
+    setCleanStats(stats)
+    setShowCleanConfirm(true)
   }
 
-  // Submit form
-  const handleSubmit = async (e?: React.FormEvent | React.MouseEvent) => {
-    if (e) e.preventDefault()
+  const confirmCleanHtml = () => {
+    setExtendedNote(cleanPreview)
+    setShowCleanConfirm(false)
+    setCleanPreview('')
+    setCleanStats(null)
+    showToast('HTML cleaned successfully while preserving styled elements!', 'success')
+  }
+
+  // Image Upload
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploadingImage(true)
+    try {
+      const { file: optimizedFile, originalSize, optimizedSize, savingsPercent } = await optimizeImageClientSide(file)
+      const formData = new FormData()
+      formData.append('file', optimizedFile)
+
+      const res = await fetch('/api/admin/articles/upload-image', {
+        method: 'POST',
+        body: formData
+      })
+
+      if (res.ok) {
+        const data = await res.json()
+        const imageMarkdown = `\n![${term || 'image'}](${data.url})\n`
+        setExtendedNote(prev => prev + imageMarkdown)
+        const origMb = (originalSize / (1024 * 1024)).toFixed(2)
+        const optKb = (optimizedSize / 1024).toFixed(0)
+        showToast(`Uploaded optimized image! (${origMb}MB → ${optKb}KB, saved ${savingsPercent}%)`, 'success')
+      } else {
+        showToast('Image upload failed', 'error')
+      }
+    } catch (err) {
+      showToast('Image upload failed', 'error')
+    } finally {
+      setUploadingImage(false)
+      if (fileInputRef.current) fileInputRef.current.value = ''
+    }
+  }
+
+  // PARTIAL-SAVE SUBMISSION: Only send fields that were actually modified!
+  const handleSubmit = async (overrideVerified?: boolean) => {
     if (!term.trim()) {
       showToast('Term name is required', 'error')
       return
     }
-    if (!definition.trim()) {
-      showToast('Term definition is required', 'error')
+
+    const dirty = [...dirtyFields]
+    if (overrideVerified !== undefined && overrideVerified !== isVerified) {
+      if (!dirty.includes('is_verified')) dirty.push('is_verified')
+    }
+
+    if (dirty.length === 0) {
+      showToast('No changes detected to save.', 'info')
       return
     }
 
     setIsSaving(true)
 
-    const payload = {
-      term: term.trim(),
-      slug: slug.trim(),
-      definition: definition,
-      extended_note: serializeMetadata(hideDefinition, seoTitle, seoDescription, tldrPoints, extendedNote),
-      category,
-      is_verified: isVerified,
-      keywords,
-      synonyms,
-      related_terms: relatedTerms.split(',').map(s => s.trim()).filter(Boolean),
-      faqs: faqs.filter(f => f.q.trim() && f.a.trim())
+    // Build payload with ONLY dirty fields + dirtyFields manifest
+    const payload: Record<string, any> = {
+      dirtyFields: dirty
     }
 
+    if (dirty.includes('term')) payload.term = term.trim()
+    if (dirty.includes('slug')) payload.slug = slug.trim()
+    if (dirty.includes('category')) payload.category = category
+    if (dirty.includes('is_verified')) payload.is_verified = overrideVerified !== undefined ? overrideVerified : isVerified
+    if (dirty.includes('definition')) payload.definition = definition
+    if (dirty.includes('body')) payload.body = extendedNote
+    if (dirty.includes('hide_definition')) payload.hide_definition = hideDefinition
+    if (dirty.includes('seo_title')) payload.seo_title = seoTitle.trim()
+    if (dirty.includes('seo_description')) payload.seo_description = seoDescription.trim()
+    if (dirty.includes('full_form')) payload.full_form = fullForm.trim()
+    if (dirty.includes('tldr')) payload.tldr = tldrPoints.filter(Boolean)
+    if (dirty.includes('key_numbers')) payload.key_numbers = keyNumbers.filter(k => k.value.trim() && k.label.trim())
+    if (dirty.includes('keywords')) payload.keywords = keywords
+    if (dirty.includes('synonyms')) payload.synonyms = synonyms
+    if (dirty.includes('related_terms')) payload.related_terms = relatedTerms.split(',').map(s => s.trim()).filter(Boolean)
+    if (dirty.includes('faqs')) payload.faqs = faqs.filter(f => f.q.trim() && f.a.trim())
+
     try {
-      const res = await fetch(`/api/admin/glossary/${(await params).id}`, {
+      const res = await fetch(`/api/admin/glossary/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(payload)
       })
-      const json = await res.json()
-      const updated = json.term
 
+      const json = await res.json()
       if (!res.ok) {
-        showToast('Error updating glossary term: ' + (json.error || 'Update failed'), 'error')
-      } else if (!updated) {
-        showToast('Error updating glossary term: no rows updated', 'error')
+        showToast('Error saving changes: ' + (json.error || 'Update failed'), 'error')
       } else {
-        showToast('Glossary term updated successfully!', 'success')
-        router.push('/admin/glossary')
-        router.refresh()
+        if (overrideVerified !== undefined) {
+          setIsVerified(overrideVerified)
+        }
+        showToast(`Saved ${dirty.length} modified field(s) successfully!`, 'success')
+
+        // Update baseline initial values so dirty count clears
+        setInitialValues({
+          term: dirty.includes('term') ? term.trim() : initialValues!.term,
+          slug: dirty.includes('slug') ? slug.trim() : initialValues!.slug,
+          category: dirty.includes('category') ? category : initialValues!.category,
+          isVerified: dirty.includes('is_verified') ? (overrideVerified !== undefined ? overrideVerified : isVerified) : initialValues!.isVerified,
+          definition: dirty.includes('definition') ? definition : initialValues!.definition,
+          extendedNote: dirty.includes('body') ? extendedNote : initialValues!.extendedNote,
+          hideDefinition: dirty.includes('hide_definition') ? hideDefinition : initialValues!.hideDefinition,
+          seoTitle: dirty.includes('seo_title') ? seoTitle.trim() : initialValues!.seoTitle,
+          seoDescription: dirty.includes('seo_description') ? seoDescription.trim() : initialValues!.seoDescription,
+          fullForm: dirty.includes('full_form') ? fullForm.trim() : initialValues!.fullForm,
+          tldrPoints: dirty.includes('tldr') ? tldrPoints.filter(Boolean) : initialValues!.tldrPoints,
+          keyNumbers: dirty.includes('key_numbers') ? keyNumbers : initialValues!.keyNumbers,
+          keywords: dirty.includes('keywords') ? keywords : initialValues!.keywords,
+          synonyms: dirty.includes('synonyms') ? synonyms : initialValues!.synonyms,
+          relatedTerms: dirty.includes('related_terms') ? relatedTerms : initialValues!.relatedTerms,
+          faqs: dirty.includes('faqs') ? faqs : initialValues!.faqs
+        })
       }
     } catch (e) {
       console.error(e)
-      showToast('Failed to connect to database', 'error')
+      showToast('Network error while saving.', 'error')
     } finally {
       setIsSaving(false)
     }
@@ -427,749 +551,812 @@ export default function EditGlossaryTermPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)] text-slate-500">
         <Loader2 className="w-10 h-10 text-amber-500 animate-spin mb-4" />
-        <p className="font-semibold">Loading term details...</p>
+        <p className="font-semibold text-slate-700">Loading glossary entry...</p>
       </div>
     )
   }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto min-h-screen text-slate-800">
-      {/* Top Bar */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-        <div className="flex items-center gap-4">
-          <Link 
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto min-h-screen text-slate-800">
+      {/* TOP HEADER */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 border-b border-slate-200/80 pb-4">
+        <div className="flex items-center gap-3">
+          <Link
             href="/admin/glossary"
-            className="p-2 bg-slate-100 hover:bg-slate-100 rounded-xl transition-colors border border-white/60"
+            className="p-2 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors border border-slate-200/60"
             title="Back to Glossary list"
           >
-            <ArrowLeft className="w-5 h-5 text-slate-900" />
+            <ArrowLeft className="w-5 h-5 text-slate-700" />
           </Link>
           <div>
-            <h1 className="text-3xl font-extrabold text-slate-900 flex items-center gap-2 font-heading">
-              Edit Glossary Term
-              <Sparkles className="w-5 h-5 text-amber-500 fill-amber-500 animate-pulse" />
-            </h1>
-            <p className="text-sm text-slate-500 mt-0.5">Revise details and fine-tune your legal terminology.</p>
+            <div className="flex items-center gap-2">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-navy font-heading">
+                Edit Glossary Term
+              </h1>
+              {category && <CategoryBadge category={category as Category} />}
+              {isVerified ? (
+                <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  <CheckCircle2 className="w-3 h-3" /> Live
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+                  Draft
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-slate-500 mt-0.5 flex items-center gap-2">
+              <span>Editing: <strong>{term}</strong></span>
+              {createdAt && (
+                <span>· Created: {formatDate(createdAt)}</span>
+              )}
+            </p>
           </div>
         </div>
 
-        <div className="flex gap-2.5">
-          <button 
-            type="button"
-            onClick={() => setIsPreviewOpen(true)}
-            className="inline-flex items-center gap-2 px-5 py-3 bg-slate-100 hover:bg-slate-100 text-white font-semibold rounded-xl border border-white/60 shadow-xs transition-all hover:scale-[1.01] active:scale-[0.99]"
-          >
-            <Eye className="w-4 h-4 text-slate-500" />
-            Live Preview
-          </button>
+        <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto justify-end">
+          {slug && (
+            <a
+              href={`/glossary/${slug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg border border-slate-200/80 transition-colors"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              View Live Page
+            </a>
+          )}
 
-          <button 
-            onClick={handleSubmit}
+          {dirtyFields.length > 0 && (
+            <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-md bg-amber-50 text-amber-800 border border-amber-200/60 animate-pulse">
+              <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
+              {dirtyFields.length} unsaved change{dirtyFields.length > 1 ? 's' : ''}
+            </span>
+          )}
+
+          <button
+            type="button"
+            onClick={() => handleSubmit()}
             disabled={isSaving}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-600 disabled:bg-amber-300 text-slate-900 font-semibold rounded-xl shadow-md shadow-amber-500/10 transition-all hover:scale-[1.01] active:scale-[0.99]"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-600 active:scale-98 text-slate-950 font-bold rounded-xl shadow-xs transition-all disabled:opacity-50 text-sm"
           >
-            <Save className="w-4 h-4" />
-            {isSaving ? 'Updating...' : 'Update Term'}
+            {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            {isSaving ? 'Saving...' : 'Save Changes'}
           </button>
         </div>
       </div>
 
-      {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        {/* Left Column: Rich inputs */}
-        <div className="lg:col-span-2 space-y-6">
-          
-          {/* Card: Basic Info */}
-          <div className="admin-card p-6">
-            <h2 className="text-lg font-bold text-slate-900 mb-4 pb-2 border-b border-white/60 flex items-center gap-2">
-              <span className="w-1.5 h-4 bg-amber-500 rounded-full"></span>
-              Term Definition & Details
-            </h2>
+      {/* MOBILE TABS */}
+      <div className="flex lg:hidden bg-slate-100 rounded-lg p-1 mb-6 border border-slate-200">
+        <button
+          type="button"
+          onClick={() => setActiveMobileTab('edit')}
+          className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-all ${
+            activeMobileTab === 'edit' ? 'bg-white text-navy shadow-xs' : 'text-slate-600'
+          }`}
+        >
+          Editor & Content
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveMobileTab('seo')}
+          className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-all ${
+            activeMobileTab === 'seo' ? 'bg-white text-navy shadow-xs' : 'text-slate-600'
+          }`}
+        >
+          SEO & Meta
+        </button>
+      </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-              <div className="space-y-1.5">
-                <label className="text-sm font-semibold text-slate-700">Term Name <span className="text-rose-500">*</span></label>
-                <input 
-                  required
-                  type="text" 
-                  value={term}
-                  onChange={handleTermChange}
-                  placeholder="e.g. Committee of Creditors"
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-white/60 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-medium text-slate-900"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-sm font-semibold text-slate-700">URL Slug <span className="text-rose-500">*</span></label>
-                <input 
-                  required
-                  type="text" 
-                  value={slug}
-                  onChange={(e) => {
-                    setSlug(e.target.value)
-                    setSlugEdited(true)
-                  }}
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-white/60 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-mono text-slate-500"
-                />
-              </div>
+      {/* TWO COLUMN WORKSPACE */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* LEFT COLUMN: CORE EDITORIAL CONTENT (65%) */}
+        <div className={`lg:col-span-8 space-y-6 ${activeMobileTab === 'seo' ? 'hidden lg:block' : 'block'}`}>
+          {/* Term Title & Slug */}
+          <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs space-y-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+                Term Name (Page H1) <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={term}
+                onChange={handleTermChange}
+                placeholder="e.g. Key Managerial Personnel (KMP)"
+                className="w-full bg-slate-50/50 border border-slate-300 rounded-xl px-4 py-2.5 text-xl font-heading font-bold text-navy focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-amber-400"
+              />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-              <div className="space-y-1.5">
-                <label className="text-sm font-semibold text-slate-700">Category <span className="text-rose-500">*</span></label>
-                <select 
-                  required
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+              {/* Slug */}
+              <div>
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  URL Slug
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={slug}
+                    onChange={(e) => {
+                      setSlugEdited(true)
+                      setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]+/g, '-'))
+                    }}
+                    className="flex-1 bg-slate-50/50 border border-slate-300 rounded-lg px-3 py-1.5 text-sm font-mono text-slate-800 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-amber-400"
+                  />
+                  {slugEdited && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSlugEdited(false)
+                        setSlug(slugify(term))
+                      }}
+                      className="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded-lg border border-slate-200"
+                      title="Reset slug from Term"
+                    >
+                      <RefreshCw className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+                <p className="text-[11px] text-slate-400 font-mono mt-1">
+                  /glossary/{slug || '...'}
+                </p>
+              </div>
+
+              {/* Category */}
+              <div>
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  Regulator / Category
+                </label>
+                <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-white/60 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-medium text-slate-800"
+                  className="w-full bg-slate-50/50 border border-slate-300 rounded-lg px-3 py-1.5 text-sm font-semibold text-slate-800 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-amber-400"
                 >
-                  {CATEGORIES.map(cat => <option className="bg-slate-100 text-white" key={cat} value={cat}>{cat}</option>)}
+                  {CATEGORIES.map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                  <option value="GENERAL">GENERAL</option>
                 </select>
               </div>
+            </div>
+          </div>
 
-              <div className="space-y-1.5 flex flex-col justify-end">
-                <label className="flex items-center gap-3 cursor-pointer p-3 border border-white/60 rounded-xl hover:bg-slate-100/50 transition-colors bg-slate-50">
-                  <input 
-                    type="checkbox" 
-                    checked={isVerified}
-                    onChange={(e) => setIsVerified(e.target.checked)}
-                    className="w-4 h-4 text-amber-500 rounded-sm border-white/60 bg-slate-100 focus:ring-amber-500"
-                  />
-                  <div>
-                    <span className="text-sm font-bold text-slate-900">Publish as verified</span>
-                    <p className="text-xs text-slate-500">Makes term visible on the public glossary.</p>
-                  </div>
+          {/* Full Form & Acronyms / Synonyms */}
+          <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs space-y-4">
+            <h3 className="text-sm font-bold text-navy flex items-center gap-2 border-b border-slate-100 pb-2">
+              <BookOpen className="w-4 h-4 text-amber-500" />
+              Full Form & Synonyms
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Full Form
+                  <span className="text-slate-400 font-normal ml-1">(shown under title & powers abbreviation search)</span>
                 </label>
+                <input
+                  type="text"
+                  value={fullForm}
+                  onChange={(e) => setFullForm(e.target.value)}
+                  placeholder="e.g. Key Managerial Personnel"
+                  className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900 focus:ring-2 focus:ring-amber-400 focus:outline-hidden bg-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Acronyms / Synonyms
+                  <span className="text-slate-400 font-normal ml-1">(powers pill chips on page)</span>
+                </label>
+                <div className="border border-slate-300 rounded-lg p-2 bg-white flex flex-wrap gap-1.5 items-center min-h-[38px]">
+                  {synonyms.map((syn, idx) => (
+                    <span
+                      key={idx}
+                      className="inline-flex items-center gap-1 bg-slate-100 text-slate-800 text-xs font-medium px-2 py-0.5 rounded-md border border-slate-200"
+                    >
+                      {syn}
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveSynonym(idx)}
+                        className="text-slate-400 hover:text-red-500"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                  <input
+                    type="text"
+                    value={synonymInput}
+                    onChange={(e) => setSynonymInput(e.target.value)}
+                    onKeyDown={handleSynonymKeyDown}
+                    placeholder={synonyms.length === 0 ? "Type and press Enter or comma..." : "Add more..."}
+                    className="flex-1 min-w-[120px] text-xs bg-transparent border-none outline-hidden p-0.5 text-slate-800"
+                  />
+                </div>
               </div>
             </div>
+          </div>
 
-            {/* MDEditor for Definition */}
-            <div className="space-y-2 mb-6">
-              <label className="text-sm font-semibold text-slate-700 flex justify-between items-center">
-                <span>Definition <span className="text-rose-500">*</span></span>
-                <span className="text-xs font-semibold text-slate-500 bg-slate-50 px-2 py-0.5 rounded-sm">{defWords} words</span>
+          {/* Primary Definition (Summary Card) */}
+          <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs space-y-3">
+            <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+              <label className="text-sm font-bold text-navy flex items-center gap-2">
+                <FileText className="w-4 h-4 text-amber-500" />
+                Primary Definition
+                <span className="text-xs font-normal text-slate-400">(concise statutory summary)</span>
               </label>
-              <div data-color-mode="dark" className="border border-white/60 rounded-xl overflow-hidden shadow-xs">
-                <MDEditor 
-                  value={definition}
-                  onChange={(val) => setDefinition(val || '')}
-                  height={220}
-                  preview="edit"
-                />
-              </div>
-            </div>
-
-            {/* MDEditor for Extended Note */}
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-slate-700 flex justify-between items-center">
-                <span>Extended Note (SEO Explanatory Paragraphs)</span>
-                <span className="text-xs font-semibold text-slate-500 bg-slate-50 px-2 py-0.5 rounded-sm">{noteWords} words</span>
-              </label>
-              <div data-color-mode="dark" className="border border-white/60 rounded-xl overflow-hidden shadow-xs">
-                <MDEditor 
-                  value={extendedNote}
-                  onChange={(val) => setExtendedNote(val || '')}
-                  height={260}
-                  preview="edit"
-                />
-              </div>
-              <p className="text-xs text-slate-500 mt-1">Use HTML or Markdown tables, styling, bullets, and links to make this definition premium.</p>
-            </div>
-          </div>
-
-          {/* Card: FAQ Builder */}
-          <div className="admin-card p-6">
-            <div className="flex justify-between items-center pb-2 border-b border-white/60 mb-4">
-              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <span className="w-1.5 h-4 bg-amber-500 rounded-full"></span>
-                Frequently Asked Questions (FAQ)
-              </h2>
-              <div className="flex gap-2">
-                <button 
-                  type="button" 
-                  onClick={() => setIsBulkOpen(!isBulkOpen)}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-slate-900 bg-slate-900 hover:bg-slate-100 px-3 py-2 rounded-lg transition-colors border border-slate-805"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-500 animate-pulse" />
-                  Bulk Import
-                </button>
-                <button 
-                  type="button" 
-                  onClick={handleAddFaq}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-500 hover:text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 px-3 py-2 rounded-lg transition-colors border border-amber-500/20"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  Add FAQ
-                </button>
-              </div>
-            </div>
-
-            {isBulkOpen && (
-              <div className="mb-6 p-4 border border-amber-500/20 bg-amber-500/5 rounded-xl space-y-3">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
-                    <Sparkles className="w-4 h-4 text-amber-500 fill-amber-500" />
-                    Bulk Import FAQs
-                  </h3>
-                  <button 
-                    type="button"
-                    onClick={() => setIsBulkOpen(false)}
-                    className="text-xs font-bold text-slate-500 hover:text-slate-800"
-                  >
-                    Cancel
-                  </button>
-                </div>
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  Paste your raw questions and answers below. The system will automatically parse lines starting with <code className="bg-amber-500/20 text-amber-300 px-1 py-0.5 rounded-sm font-mono font-bold">Q1.</code> or ending with <code className="bg-amber-500/20 text-amber-300 px-1 py-0.5 rounded-sm font-mono font-bold">?</code> into separate items.
-                </p>
-                <textarea
-                  rows={6}
-                  value={bulkFaqText}
-                  onChange={(e) => setBulkFaqText(e.target.value)}
-                  placeholder={`Example:\nQ1. What is MCA21?\nMCA21 is the online portal...\n\nQ2. How do I file forms?\nLog in and select the relevant e-form...`}
-                  className="w-full p-3 bg-slate-50 border border-white/60 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-mono text-slate-700"
-                />
-                <div className="flex justify-end gap-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const parsed = parseBulkFaqs(bulkFaqText);
-                      if (parsed.length === 0) {
-                        showToast('No FAQs could be parsed from the text.', 'error');
-                        return;
-                      }
-                      setFaqs([...faqs, ...parsed]);
-                      setBulkFaqText('');
-                      setIsBulkOpen(false);
-                      showToast(`Successfully imported ${parsed.length} FAQs!`, 'success');
-                    }}
-                    className="px-4 py-2 btn-vibrant-amber text-white text-xs font-bold rounded-lg shadow-xs transition-all"
-                  >
-                    Parse & Import ({parseBulkFaqs(bulkFaqText).length} found)
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {faqs.length === 0 ? (
-              <div className="text-center py-8 bg-slate-50/50 border border-white/60 border-dashed rounded-xl flex flex-col items-center justify-center">
-                <HelpCircle className="w-8 h-8 text-slate-500 mb-2" />
-                <p className="text-sm text-slate-500 font-medium">No custom FAQs defined.</p>
-                <p className="text-xs text-slate-500 mt-1 max-w-md">The system will automatically generate 3 optimized legal FAQs in the public view and Google FAQ schemas.</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {faqs.map((faq, i) => (
-                  <div key={i} className="p-4 border border-slate-800 rounded-xl bg-slate-900/40 space-y-3 relative">
-                    <button 
-                      type="button"
-                      onClick={() => handleRemoveFaq(i)}
-                      className="absolute top-3 right-3 text-slate-500 hover:text-rose-600 transition-colors p-1 hover:bg-slate-100 rounded-lg border border-transparent hover:border-white/60"
-                      title="Remove Item"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                    
-                    <div className="space-y-1 pr-8">
-                      <label className="text-xs font-bold text-slate-500 uppercase tracking-wide">Question {i + 1}</label>
-                      <input 
-                        type="text" 
-                        value={faq.q}
-                        onChange={(e) => handleFaqChange(i, 'q', e.target.value)}
-                        placeholder="e.g. What is the scope of CoC?"
-                        className="w-full px-3 py-2 bg-slate-100 border border-white/60 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm text-slate-900"
-                      />
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-slate-500 uppercase tracking-wide">Answer</label>
-                      <textarea 
-                        rows={2}
-                        value={faq.a}
-                        onChange={(e) => handleFaqChange(i, 'a', e.target.value)}
-                        placeholder="Provide a clean, descriptive answer..."
-                        className="w-full px-3 py-2 bg-slate-100 border border-white/60 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm text-slate-900"
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Right Column: SEO Stats & Special Linkings */}
-        <div className="space-y-6">
-          
-          {/* Card: SEO Indexing Progress */}
-          <div className="admin-card p-6">
-            <h3 className="text-base font-bold text-slate-900 mb-4 flex items-center gap-2">
-              <span className="w-1.5 h-4 bg-amber-500 rounded-full"></span>
-              Google SEO Index Status
-            </h3>
-
-            {isSubstantial ? (
-              <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl mb-6">
-                <div className="flex gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
-                  <div>
-                    <h4 className="font-bold text-emerald-300 text-sm">SEO Indexing Eligible</h4>
-                    <p className="text-xs text-emerald-400 mt-1 leading-relaxed">
-                      Excellent! The combined definition and note contains <strong>{totalWords} words</strong>. Google will index this page.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="p-4 bg-slate-50/45 border border-slate-855 rounded-xl mb-6">
-                <div className="flex gap-2">
-                  <AlertTriangle className="w-5 h-5 text-slate-500 shrink-0" />
-                  <div>
-                    <h4 className="font-bold text-slate-800 text-sm">Noindex Active (Thin Content)</h4>
-                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                      Current combined length: <strong>{totalWords}/300 words</strong>. Write {300 - totalWords} more words to make it indexable and remove `noindex` tag.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Progress Bar */}
-            <div className="space-y-1 mb-6">
-              <div className="flex justify-between text-xs font-semibold text-slate-500">
-                <span>Indexing Milestone Progress</span>
-                <span>{Math.min(100, Math.round((totalWords / 300) * 100))}%</span>
-              </div>
-              <div className="w-full bg-slate-50 rounded-full h-2">
-                <div 
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    isSubstantial ? 'bg-emerald-500' : 'bg-amber-500'
-                  }`}
-                  style={{ width: `${Math.min(100, (totalWords / 300) * 100)}%` }}
-                ></div>
-              </div>
-            </div>
-
-            {/* Checklist */}
-            <div className="space-y-3">
-              <h4 className="text-xs font-bold text-slate-505 uppercase tracking-wider">SEO Best Practices Checklist</h4>
-              <div className="space-y-2.5">
-                <div className="flex items-center gap-2 text-sm">
-                  <span className={`w-2 h-2 rounded-full ${term.trim() ? 'bg-emerald-500' : 'bg-slate-700'}`}></span>
-                  <span className={term.trim() ? 'text-slate-800 font-medium' : 'text-slate-500'}>Term Name entered</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <span className={`w-2 h-2 rounded-full ${isSubstantial ? 'bg-emerald-500' : 'bg-slate-700'}`}></span>
-                  <span className={isSubstantial ? 'text-slate-800 font-medium' : 'text-slate-500'}>At least 300 words ({totalWords})</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <span className={`w-2 h-2 rounded-full ${extendedNote.trim() ? 'bg-emerald-500' : 'bg-slate-700'}`}></span>
-                  <span className={extendedNote.trim() ? 'text-slate-800 font-medium' : 'text-slate-500'}>Extended note explanation added</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <span className={`w-2 h-2 rounded-full ${synonyms.length > 0 ? 'bg-emerald-500' : 'bg-slate-700'}`}></span>
-                  <span className={synonyms.length > 0 ? 'text-slate-800 font-medium' : 'text-slate-500'}>Synonyms/Acronyms listed ({synonyms.length})</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <span className={`w-2 h-2 rounded-full ${keywords.length > 0 ? 'bg-emerald-500' : 'bg-slate-700'}`}></span>
-                  <span className={keywords.length > 0 ? 'text-slate-800 font-medium' : 'text-slate-500'}>Keywords configured ({keywords.length})</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Card: Synonyms & Acronyms for Auto-linking */}
-          <div className="admin-card p-6">
-            <h3 className="text-base font-bold text-slate-900 mb-2 flex items-center gap-2">
-              <span className="w-1.5 h-4 bg-amber-500 rounded-full"></span>
-              Auto-Link Synonyms & Acronyms
-            </h3>
-            <p className="text-xs text-slate-500 mb-4">
-              Explicit list of alternate words or acronyms (e.g. <strong>CoC</strong>, <strong>COC</strong>) that should automatically link to this glossary term in article updates.
-            </p>
-
-            <input 
-              type="text" 
-              value={synonymInput}
-              onChange={(e) => setSynonymInput(e.target.value)}
-              onKeyDown={handleSynonymKeyDown}
-              onPaste={handleSynonymPaste}
-              className="w-full px-4 py-2 bg-slate-900 border border-white/60 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-medium text-slate-900"
-              placeholder="Add synonym (e.g. CoC, ADR) and press Enter"
-            />
-            
-            {synonyms.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-3 p-3 bg-slate-50/50 border border-slate-855 rounded-xl">
-                {synonyms.map((syn, index) => (
-                  <span 
-                    key={index} 
-                    className="inline-flex items-center gap-1.5 bg-slate-100 border border-white/60 text-slate-900 text-xs font-bold px-2.5 py-1.5 rounded-lg shadow-xs"
-                  >
-                    {syn}
-                    <button 
-                      type="button" 
-                      onClick={() => handleRemoveSynonym(index)}
-                      className="text-slate-500 hover:text-rose-600 transition-colors p-0.5 rounded-full hover:bg-slate-100"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Card: Keywords (Search queries) */}
-          <div className="admin-card p-6">
-            <h3 className="text-base font-bold text-slate-900 mb-2 flex items-center gap-2">
-              <span className="w-1.5 h-4 bg-amber-500 rounded-full"></span>
-              Search Query Keywords
-            </h3>
-            <p className="text-xs text-slate-500 mb-4">
-              Add query keywords (e.g. &apos;CIRP full form&apos;, &apos;insolvency process&apos;) to rank search engines.
-            </p>
-
-            <input 
-              type="text" 
-              value={keywordInput}
-              onChange={(e) => setKeywordInput(e.target.value)}
-              onKeyDown={handleKeywordKeyDown}
-              onPaste={handleKeywordPaste}
-              className="w-full px-4 py-2 bg-slate-900 border border-white/60 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-medium text-slate-900"
-              placeholder="Add keyword query (comma-separated also supported) and press Enter"
-            />
-            
-            {keywords.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-3 p-3 bg-slate-50/50 border border-slate-855 rounded-xl">
-                {keywords.map((kw, index) => (
-                  <span 
-                    key={index} 
-                    className="inline-flex items-center gap-1.5 bg-slate-100 border border-white/60 text-slate-205 text-xs font-semibold px-2.5 py-1.5 rounded-lg shadow-xs"
-                  >
-                    {kw}
-                    <button 
-                      type="button" 
-                      onClick={() => handleRemoveKeyword(index)}
-                      className="text-slate-500 hover:text-rose-600 transition-colors p-0.5 rounded-full hover:bg-slate-100"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Card: Related Terms */}
-          <div className="admin-card p-6">
-            <h3 className="text-base font-bold text-slate-900 mb-2 flex items-center gap-2">
-              <span className="w-1.5 h-4 bg-amber-500 rounded-full"></span>
-              Related Term Links
-            </h3>
-            <p className="text-xs text-slate-500 mb-4">
-              Link other exact term names at the bottom of the definition.
-            </p>
-
-            <input 
-              type="text" 
-              value={relatedTerms}
-              onChange={(e) => setRelatedTerms(e.target.value)}
-              className="w-full px-4 py-2 bg-slate-900 border border-slate-805 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm font-medium text-slate-900"
-              placeholder="e.g. CIRP, Insolvency (comma separated)"
-            />
-          </div>
-
-          {/* Card: SEO, TL;DR & Layout Controls */}
-          <div className="admin-card p-6 space-y-5">
-            <h3 className="text-base font-bold text-slate-900 flex items-center gap-2 border-b border-white/60 pb-2.5">
-              <span className="w-1.5 h-4 bg-amber-500 rounded-full"></span>
-              Layout & SEO Optimization
-            </h3>
-
-            {/* Layout Hiding */}
-            <div className="space-y-1.5">
-              <label className="flex items-center gap-3 cursor-pointer p-3 border border-white/60 rounded-xl hover:bg-slate-100/50 transition-colors bg-slate-50">
-                <input 
-                  type="checkbox" 
+              <label className="inline-flex items-center gap-2 cursor-pointer text-xs font-semibold text-slate-600">
+                <input
+                  type="checkbox"
                   checked={hideDefinition}
                   onChange={(e) => setHideDefinition(e.target.checked)}
-                  className="w-4 h-4 text-amber-500 rounded-sm border-white/60 bg-slate-100 focus:ring-amber-500"
+                  className="rounded-sm border-slate-300 text-amber-500 focus:ring-amber-500 w-3.5 h-3.5"
                 />
-                <div>
-                  <span className="text-sm font-semibold text-slate-900">Hide Definition Card</span>
-                  <p className="text-xs text-slate-500">If you have styled a long, detailed article below, hide the simple top definition.</p>
-                </div>
+                Hide Definition Card on page (use when Body has full layout)
               </label>
             </div>
-
-            {/* SEO Custom Title */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-405 uppercase tracking-wider block">Custom SEO Title</label>
-              <input 
-                type="text" 
-                value={seoTitle}
-                onChange={(e) => setSeoTitle(e.target.value)}
-                placeholder="Custom HTML page title for Google & AI search"
-                className="w-full px-4 py-2 bg-slate-900 border border-slate-805 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm text-slate-900"
-              />
+            <textarea
+              value={definition}
+              onChange={(e) => setDefinition(e.target.value)}
+              rows={3}
+              placeholder="Under Section 2(51) of Companies Act, 2013, KMP includes..."
+              className="w-full border border-slate-300 rounded-lg p-3 text-sm text-slate-900 focus:ring-2 focus:ring-amber-400 focus:outline-hidden bg-white leading-relaxed resize-y"
+            />
+            <div className="text-right text-[11px] text-slate-400">
+              {defWords} words · {definition.length} characters
             </div>
+          </div>
 
-            {/* SEO Custom Description */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-405 uppercase tracking-wider block">Custom SEO Description</label>
-              <textarea 
-                value={seoDescription}
-                onChange={(e) => setSeoDescription(e.target.value)}
-                placeholder="Custom meta description for search snippets"
-                rows={3}
-                className="w-full px-4 py-2 bg-slate-900 border border-slate-805 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-sm resize-none text-slate-900 animate-none"
-              />
-            </div>
-
-            {/* TL;DR Executive Takeaways */}
-            <div className="space-y-3 pt-2.5 border-t border-white/60">
-              <div className="flex justify-between items-center">
-                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Key Takeaways (TL;DR)</label>
-                <button 
-                  type="button" 
-                  onClick={() => setShowBulkTldr(!showBulkTldr)} 
-                  className="text-[10px] bg-slate-100 hover:bg-slate-100 text-white font-bold px-2 py-1 rounded-sm transition-colors border border-white/60"
+          {/* Executive Takeaways (TL;DR) */}
+          <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs space-y-4">
+            <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+              <label className="text-sm font-bold text-navy flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-amber-500" />
+                Executive Takeaways (TL;DR)
+                <span className="text-xs font-normal text-slate-400">({tldrPoints.length} points)</span>
+              </label>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowBulkTldr(!showBulkTldr)}
+                  className="text-xs font-semibold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-lg border border-slate-200 transition-colors"
                 >
                   {showBulkTldr ? 'Close Bulk Import' : 'Bulk Import Points'}
                 </button>
               </div>
+            </div>
 
-              {showBulkTldr ? (
-                <div className="space-y-2 bg-slate-50 border border-white/60 p-3.5 rounded-xl">
-                  <span className="text-[10px] text-slate-500 block font-medium">Paste bullet points here (e.g. copied from Chat/Doc). Each line will become a bullet takeaway.</span>
-                  <textarea 
-                    value={bulkTldrText}
-                    onChange={(e) => setBulkTldrText(e.target.value)}
-                    placeholder="• Point 1&#10;• Point 2&#10;• Point 3"
-                    rows={4}
-                    className="w-full px-3 py-2 bg-slate-100 border border-white/60 rounded-lg text-xs focus:ring-2 focus:ring-amber-400 focus:outline-hidden text-slate-900"
+            {showBulkTldr && (
+              <div className="bg-amber-50/50 border border-amber-200 rounded-xl p-3.5 space-y-2">
+                <p className="text-xs text-amber-900 font-medium">
+                  Paste bullet points copied from notes, chats, or statutory circulars. Prefix bullets (•, -, *, 1.) will be cleanly stripped.
+                </p>
+                <textarea
+                  value={bulkTldrText}
+                  onChange={(e) => setBulkTldrText(e.target.value)}
+                  placeholder="• KMP defined under Section 2(51)&#10;• Section 203 mandates KMP for listed companies&#10;• Vacancy must be filled within 6 months"
+                  rows={4}
+                  className="w-full border border-amber-200 rounded-lg p-2.5 text-xs text-slate-900 bg-white focus:outline-hidden focus:ring-2 focus:ring-amber-400 font-mono"
+                />
+                <button
+                  type="button"
+                  onClick={handleBulkTldrImport}
+                  className="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs transition-colors"
+                >
+                  Import Takeaways
+                </button>
+              </div>
+            )}
+
+            <div className="space-y-2">
+              {tldrPoints.map((point, idx) => (
+                <div key={idx} className="flex gap-2 items-center">
+                  <span className="text-amber-500 font-bold select-none text-xs w-4 text-center">•</span>
+                  <input
+                    type="text"
+                    value={point}
+                    onChange={(e) => {
+                      const updated = [...tldrPoints]
+                      updated[idx] = e.target.value
+                      setTldrPoints(updated)
+                    }}
+                    placeholder={`Takeaway ${idx + 1}...`}
+                    className="flex-1 border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-900 focus:ring-2 focus:ring-amber-400 focus:outline-hidden bg-white"
                   />
-                  <button 
-                    type="button" 
-                    onClick={handleBulkTldrImport}
-                    className="w-full py-1.5 text-xs bg-amber-500 text-slate-900 font-bold rounded-lg hover:bg-amber-600 transition-colors shadow-xs"
+                  <button
+                    type="button"
+                    onClick={() => setTldrPoints(tldrPoints.filter((_, i) => i !== idx))}
+                    className="text-slate-400 hover:text-red-500 p-1"
+                    title="Remove point"
                   >
-                    Parse & Import Takeaways
+                    <Trash2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
-              ) : (
-                <div className="space-y-2">
-                  <div className="flex gap-2">
-                    <input 
-                      type="text" 
-                      value={tldrInput}
-                      onChange={(e) => setTldrInput(e.target.value)}
-                      placeholder="Add key takeaway point..."
-                      className="flex-1 px-3 py-1.5 bg-slate-900 border border-white/60 rounded-lg text-xs text-slate-900"
-                      onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddTldrPoint(); } }}
+              ))}
+
+              <div className="flex gap-2 pt-1">
+                <input
+                  type="text"
+                  value={tldrInput}
+                  onChange={(e) => setTldrInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      handleAddTldrPoint()
+                    }
+                  }}
+                  placeholder="Add a new takeaway point..."
+                  className="flex-1 border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-900 focus:ring-2 focus:ring-amber-400 focus:outline-hidden bg-white"
+                />
+                <button
+                  type="button"
+                  onClick={handleAddTldrPoint}
+                  className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-xs border border-slate-200 transition-colors"
+                >
+                  + Add Point
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Key Numbers at a Glance */}
+          <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs space-y-4">
+            <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+              <label className="text-sm font-bold text-navy flex items-center gap-2">
+                <Hash className="w-4 h-4 text-amber-500" />
+                Key Numbers at a Glance
+                <span className="text-xs font-normal text-slate-400">(structured stat cards)</span>
+              </label>
+              <button
+                type="button"
+                onClick={handleAddKeyNumber}
+                className="text-xs font-semibold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-lg border border-slate-200 transition-colors"
+              >
+                + Add Metric Card
+              </button>
+            </div>
+
+            {keyNumbers.length === 0 ? (
+              <p className="text-xs text-slate-400 italic">
+                No key numbers added. If added, they will render as high-impact statutory metric cards.
+              </p>
+            ) : (
+              <div className="space-y-3">
+                {keyNumbers.map((kn, idx) => (
+                  <div key={idx} className="flex flex-col sm:flex-row gap-2 sm:items-center bg-slate-50/60 p-2.5 rounded-xl border border-slate-200/70">
+                    <input
+                      type="text"
+                      value={kn.value}
+                      onChange={(e) => handleUpdateKeyNumber(idx, 'value', e.target.value)}
+                      placeholder="Value (e.g. ₹10Cr, 30 days)"
+                      className="w-full sm:w-1/4 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-bold text-navy bg-white focus:ring-1 focus:ring-amber-400 focus:outline-hidden"
                     />
-                    <button 
-                      type="button" 
-                      onClick={handleAddTldrPoint} 
-                      className="bg-slate-100 hover:bg-slate-100 text-slate-700 border border-white/60 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-colors"
+                    <input
+                      type="text"
+                      value={kn.label}
+                      onChange={(e) => handleUpdateKeyNumber(idx, 'label', e.target.value)}
+                      placeholder="Label (e.g. Paid-up capital threshold)"
+                      className="w-full sm:w-1/2 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-medium text-slate-800 bg-white focus:ring-1 focus:ring-amber-400 focus:outline-hidden"
+                    />
+                    <input
+                      type="text"
+                      value={kn.detail || ''}
+                      onChange={(e) => handleUpdateKeyNumber(idx, 'detail', e.target.value)}
+                      placeholder="Detail/Section (optional)"
+                      className="w-full sm:w-1/4 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs text-slate-600 bg-white focus:ring-1 focus:ring-amber-400 focus:outline-hidden"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveKeyNumber(idx)}
+                      className="text-slate-400 hover:text-red-500 self-end sm:self-center p-1"
+                      title="Remove metric"
                     >
-                      Add
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
+                ))}
+              </div>
+            )}
+          </div>
 
-                  {tldrPoints.length > 0 ? (
-                    <div className="space-y-2 bg-slate-50/50 p-2.5 rounded-xl border border-slate-800">
-                      {tldrPoints.map((pt, idx) => (
-                        <div key={idx} className="flex gap-2 items-start group">
-                          <span className="text-amber-500 text-xs font-bold pt-0.5">•</span>
-                          <input 
-                            type="text" 
-                            value={pt}
-                            onChange={(e) => handleUpdateTldrPoint(idx, e.target.value)}
-                            className="flex-1 bg-transparent border-none p-0 text-slate-700 text-xs focus:ring-0 focus:outline-hidden"
-                          />
-                          <button 
-                            type="button" 
-                            onClick={() => handleRemoveTldrPoint(idx)} 
-                            className="text-slate-550 hover:text-rose-600 opacity-0 group-hover:opacity-100 transition-opacity text-xs"
-                          >
-                            ×
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <span className="text-[11px] text-slate-500 italic block text-center py-2">No key takeaways added yet. Use single entry or Bulk Import!</span>
-                  )}
+          {/* Body — Partial HTML & Markdown Editor */}
+          <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs space-y-3" data-color-mode="light">
+            <div className="flex flex-wrap justify-between items-center gap-2 border-b border-slate-100 pb-3">
+              <div>
+                <label className="text-sm font-bold text-navy flex items-center gap-2">
+                  <Layers className="w-4 h-4 text-amber-500" />
+                  Body (Partial-HTML & Markdown)
+                </label>
+                <p className="text-xs text-slate-400">
+                  Full article-style content. Supports raw styled HTML, code mode, Markdown, and custom components.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleCleanHtml}
+                  title="Clean pasted HTML while preserving styled cards, tables, and colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold border border-slate-300 text-slate-700 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors"
+                >
+                  🧹 Clean HTML
+                </button>
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={handleImageUpload}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploadingImage}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg border border-slate-200 transition-colors disabled:opacity-50"
+                >
+                  <Upload className="w-3.5 h-3.5" />
+                  {uploadingImage ? 'Uploading...' : 'Upload Image'}
+                </button>
+              </div>
+            </div>
+
+            {/* Clean HTML Preview Confirmation */}
+            {showCleanConfirm && cleanStats && (
+              <div className="bg-amber-50 border border-amber-300 rounded-xl p-4 space-y-3">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h4 className="text-sm font-bold text-amber-900">HTML Clean Preview Ready</h4>
+                    <p className="text-xs text-amber-800 mt-0.5">
+                      Stripped {cleanStats.tagsRemoved} junk tags · Preserved {cleanStats.tablesKept} tables & {cleanStats.styledDivsKept} styled containers.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowCleanConfirm(false)}
+                    className="text-amber-800 hover:text-amber-950"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
                 </div>
-              )}
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={confirmCleanHtml}
+                    className="px-4 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg text-xs"
+                  >
+                    Apply Cleaned Content
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowCleanConfirm(false)}
+                    className="px-3 py-1.5 bg-white border border-slate-300 text-slate-700 rounded-lg text-xs"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+
+            <div className="border border-slate-200 rounded-xl overflow-hidden">
+              <MDEditor
+                value={extendedNote}
+                onChange={(val) => setExtendedNote(val || '')}
+                height={550}
+                preview="edit"
+                hideToolbar={false}
+                previewOptions={{
+                  rehypePlugins: [[require('rehype-raw')]]
+                }}
+              />
+            </div>
+
+            <div className="flex justify-between items-center text-xs text-slate-400 pt-1">
+              <span>{noteWords} words · {readingTime} min read</span>
+              <span>Styled HTML paste directly supported</span>
+            </div>
+          </div>
+
+          {/* FAQs Management */}
+          <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs space-y-4">
+            <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+              <label className="text-sm font-bold text-navy flex items-center gap-2">
+                <HelpCircle className="w-4 h-4 text-amber-500" />
+                Frequently Asked Questions ({faqs.length})
+              </label>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowBulkFaq(!showBulkFaq)}
+                  className="text-xs font-semibold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-lg border border-slate-200 transition-colors"
+                >
+                  {showBulkFaq ? 'Close Bulk Import' : 'Bulk Import FAQs'}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleAddFaq}
+                  className="text-xs font-semibold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-2.5 py-1 rounded-lg border border-slate-200 transition-colors"
+                >
+                  + Add FAQ
+                </button>
+              </div>
+            </div>
+
+            {showBulkFaq && (
+              <div className="bg-amber-50/50 border border-amber-200 rounded-xl p-3.5 space-y-2">
+                <p className="text-xs text-amber-900 font-medium">
+                  Paste questions and answers formatted as Q1. / Answer or Question: / Answer: or lines ending in '?'.
+                </p>
+                <textarea
+                  value={bulkFaqText}
+                  onChange={(e) => setBulkFaqText(e.target.value)}
+                  placeholder="Q1. Who must appoint a KMP?&#10;Under Section 203, all listed companies and public companies with paid-up capital of ₹10 Cr or more must appoint full-time KMP.&#10;&#10;Q2. What is the penalty for default?&#10;The company faces a fine of ₹1 Lakh to ₹5 Lakh."
+                  rows={6}
+                  className="w-full border border-amber-200 rounded-lg p-2.5 text-xs text-slate-900 bg-white focus:outline-hidden focus:ring-2 focus:ring-amber-400 font-mono"
+                />
+                <button
+                  type="button"
+                  onClick={handleBulkFaqImport}
+                  className="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-lg text-xs transition-colors"
+                >
+                  Parse & Import FAQs
+                </button>
+              </div>
+            )}
+
+            {faqs.length === 0 ? (
+              <p className="text-xs text-slate-400 italic">
+                No manual FAQs entered. Dynamic baseline FAQs will be automatically generated unless added here.
+              </p>
+            ) : (
+              <div className="space-y-3">
+                {faqs.map((faq, idx) => (
+                  <div key={idx} className="bg-slate-50/60 p-3 rounded-xl border border-slate-200/70 space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs font-bold text-navy">Question {idx + 1}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveFaq(idx)}
+                        className="text-slate-400 hover:text-red-500 p-1"
+                        title="Remove FAQ"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                    <input
+                      type="text"
+                      value={faq.q}
+                      onChange={(e) => handleUpdateFaq(idx, 'q', e.target.value)}
+                      placeholder="e.g. What is the appointment timeline for a KMP vacancy?"
+                      className="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-900 bg-white focus:ring-1 focus:ring-amber-400 focus:outline-hidden"
+                    />
+                    <textarea
+                      value={faq.a}
+                      onChange={(e) => handleUpdateFaq(idx, 'a', e.target.value)}
+                      rows={2}
+                      placeholder="Under Section 203(4), any vacancy must be filled within 6 months..."
+                      className="w-full border border-slate-300 rounded-lg p-2.5 text-xs text-slate-800 bg-white focus:ring-1 focus:ring-amber-400 focus:outline-hidden"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Search Keywords & Related Terms */}
+          <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs space-y-4">
+            <h3 className="text-sm font-bold text-navy flex items-center gap-2 border-b border-slate-100 pb-2">
+              <Hash className="w-4 h-4 text-amber-500" />
+              Search Keywords & Related Terms
+            </h3>
+
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Search Keywords (Related Searches on page)
+                </label>
+                <div className="border border-slate-300 rounded-lg p-2 bg-white flex flex-wrap gap-1.5 items-center min-h-[38px]">
+                  {keywords.map((kw, idx) => (
+                    <span
+                      key={idx}
+                      className="inline-flex items-center gap-1 bg-slate-100 text-slate-800 text-xs font-medium px-2 py-0.5 rounded-md border border-slate-200"
+                    >
+                      {kw}
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveKeyword(idx)}
+                        className="text-slate-400 hover:text-red-500"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                  <input
+                    type="text"
+                    value={keywordInput}
+                    onChange={(e) => setKeywordInput(e.target.value)}
+                    onKeyDown={handleKeywordKeyDown}
+                    placeholder={keywords.length === 0 ? "Type keyword and press Enter..." : "Add keyword..."}
+                    className="flex-1 min-w-[120px] text-xs bg-transparent border-none outline-hidden p-0.5 text-slate-800"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Related Terms
+                  <span className="text-slate-400 font-normal ml-1">(comma-separated exact term names for reciprocal cards)</span>
+                </label>
+                <input
+                  type="text"
+                  value={relatedTerms}
+                  onChange={(e) => setRelatedTerms(e.target.value)}
+                  placeholder="e.g. Board of Directors, Whole-Time Director, Company Secretary"
+                  className="w-full border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-900 bg-white focus:ring-1 focus:ring-amber-400 focus:outline-hidden"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN: SEO, SERP PREVIEW, PUBLISHING (35%) */}
+        <div className={`lg:col-span-4 space-y-6 lg:sticky lg:top-6 ${activeMobileTab === 'edit' ? 'hidden lg:block' : 'block'}`}>
+          {/* Publishing & Verification Card */}
+          <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs space-y-4">
+            <h3 className="text-sm font-bold text-navy flex items-center justify-between border-b border-slate-100 pb-2">
+              <span>Publishing & Status</span>
+              <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${
+                isVerified ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'
+              }`}>
+                {isVerified ? 'Live on Site' : 'Draft'}
+              </span>
+            </h3>
+
+            <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-200/60">
+              <div>
+                <p className="text-xs font-bold text-slate-800">Publish in Directory & Sitemap</p>
+                <p className="text-[11px] text-slate-500 mt-0.5">
+                  {isVerified ? 'Included in sitemap.xml & crawlable' : 'Hidden from sitemap.xml'}
+                </p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={isVerified}
+                  onChange={(e) => setIsVerified(e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-slate-200 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+              </label>
+            </div>
+
+            <div className="text-xs text-slate-500 space-y-1 pt-1 border-t border-slate-100">
+              <div className="flex justify-between">
+                <span>Reading Time:</span>
+                <span className="font-semibold text-slate-700">{readingTime} min read</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Total Words:</span>
+                <span className="font-semibold text-slate-700">{totalWords} words</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Unsaved Fields:</span>
+                <span className="font-semibold text-amber-700">{dirtyFields.length}</span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => handleSubmit()}
+              disabled={isSaving}
+              className="w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl shadow-xs transition-colors flex items-center justify-center gap-2 text-sm disabled:opacity-50"
+            >
+              {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+              {isSaving ? 'Saving Changes...' : 'Save Glossary Entry'}
+            </button>
+          </div>
+
+          {/* SEO & Search Engine Optimization Card */}
+          <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs space-y-4">
+            <h3 className="text-sm font-bold text-navy flex items-center gap-2 border-b border-slate-100 pb-2">
+              <Sparkles className="w-4 h-4 text-amber-500" />
+              Search Engine Optimization (SEO)
+            </h3>
+
+            {/* SEO Title */}
+            <div>
+              <div className="flex justify-between items-center mb-1">
+                <label className="text-xs font-semibold text-slate-700">SEO Title</label>
+                <span className={`text-[10px] font-mono font-semibold ${
+                  seoTitle.length > 80 ? 'text-red-500' : 'text-slate-400'
+                }`}>
+                  {seoTitle.length}/80
+                </span>
+              </div>
+              <input
+                type="text"
+                value={seoTitle}
+                onChange={(e) => setSeoTitle(e.target.value)}
+                placeholder={`${term} — Meaning, Definition | CorpLawUpdates`}
+                className={`w-full border rounded-lg px-3 py-2 text-xs text-slate-900 bg-white focus:outline-hidden ${
+                  seoTitle.length > 80 ? 'border-red-400 focus:ring-1 focus:ring-red-400' : 'border-slate-300 focus:ring-1 focus:ring-amber-400'
+                }`}
+              />
+              <p className="text-[11px] text-slate-400 mt-0.5">
+                Keep ≤ 80 characters. Add primary search keywords (e.g. 'full form', section number).
+              </p>
+            </div>
+
+            {/* SEO Meta Description */}
+            <div>
+              <div className="flex justify-between items-center mb-1">
+                <label className="text-xs font-semibold text-slate-700">SEO Meta Description</label>
+                <span className={`text-[10px] font-mono font-semibold ${
+                  seoDescription.length > 250 ? 'text-red-500' : 'text-slate-400'
+                }`}>
+                  {seoDescription.length}/250
+                </span>
+              </div>
+              <textarea
+                value={seoDescription}
+                onChange={(e) => setSeoDescription(e.target.value)}
+                rows={3}
+                placeholder="Comprehensive overview of statutory rules, penalties, and compliance checklists..."
+                className={`w-full border rounded-lg p-2.5 text-xs text-slate-900 bg-white focus:outline-hidden resize-none ${
+                  seoDescription.length > 250 ? 'border-red-400 focus:ring-1 focus:ring-red-400' : 'border-slate-300 focus:ring-1 focus:ring-amber-400'
+                }`}
+              />
+              <p className="text-[11px] text-slate-400 mt-0.5">
+                Keep ≤ 250 characters. Concise factual summary for Google SERP & AI overviews.
+              </p>
+            </div>
+
+            {/* Google SERP Snippet Preview */}
+            <div className="pt-2 border-t border-slate-100">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-[11px] font-bold uppercase text-slate-500 tracking-wider">
+                  Google Search Preview
+                </span>
+                <div className="flex bg-slate-100 rounded-md p-0.5 text-[10px] font-bold">
+                  <button
+                    type="button"
+                    onClick={() => setSerpDevice('desktop')}
+                    className={`px-2 py-0.5 rounded-sm transition-colors ${
+                      serpDevice === 'desktop' ? 'bg-white text-navy shadow-xs' : 'text-slate-500'
+                    }`}
+                  >
+                    Desktop
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSerpDevice('mobile')}
+                    className={`px-2 py-0.5 rounded-sm transition-colors ${
+                      serpDevice === 'mobile' ? 'bg-white text-navy shadow-xs' : 'text-slate-500'
+                    }`}
+                  >
+                    Mobile
+                  </button>
+                </div>
+              </div>
+
+              <div className="bg-slate-50/70 p-3 rounded-xl border border-slate-200/80 font-sans text-left space-y-1">
+                <div className="text-[11px] text-slate-500 truncate flex items-center gap-1">
+                  <span>https://www.corplawupdates.in</span>
+                  <span>›</span>
+                  <span>glossary</span>
+                  <span>›</span>
+                  <span className="text-slate-700 font-semibold">{slug || 'term'}</span>
+                </div>
+                <div className="text-sm font-semibold text-blue-700 hover:underline line-clamp-2 leading-snug cursor-pointer">
+                  {seoTitle || `${term || 'Term'} — Meaning, Definition | CorpLawUpdates Legal Glossary`}
+                </div>
+                <div className="text-xs text-slate-600 line-clamp-3 leading-relaxed">
+                  {seoDescription || definition || 'Comprehensive statutory compliance guide, definitions, and legal overview under Indian Corporate Law.'}
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Live Preview Modal */}
-      {isPreviewOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/80 backdrop-blur-xs flex justify-center p-4 sm:p-6 md:p-10">
-          <div className="relative w-full max-w-4xl bg-slate-50 rounded-3xl shadow-2xl border border-white/60 overflow-hidden flex flex-col my-auto max-h-[90vh]">
-            
-            {/* Modal Header */}
-            <div className="flex justify-between items-center px-8 py-5 bg-slate-100 border-b border-slate-855 shrink-0">
-              <div>
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                  <Eye className="w-3.5 h-3.5" />
-                  Interactive Preview
-                </span>
-                <h2 className="text-lg font-bold text-slate-900 mt-1 font-heading">Live Public View Simulation</h2>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsPreviewOpen(false)}
-                className="p-2 hover:bg-slate-100 rounded-xl transition-colors border border-white/60"
-              >
-                <X className="w-5 h-5 text-slate-500" />
-              </button>
-            </div>
-
-            {/* Modal Content - scrollable */}
-            <div className="flex-1 overflow-y-auto px-8 py-10 bg-slate-100/60">
-              <div className="max-w-3xl mx-auto text-left">
-                
-                {/* Simulated Breadcrumb */}
-                <nav className="mb-8 text-sm text-slate-500 font-medium select-none pointer-events-none">
-                  <ol className="flex items-center space-x-2">
-                    <li>Home</li>
-                    <li><span aria-hidden="true" className="mx-1">›</span></li>
-                    <li>Glossary</li>
-                    <li><span aria-hidden="true" className="mx-1">›</span></li>
-                    <li className="text-slate-900 font-semibold">{term || 'New Term'}</li>
-                  </ol>
-                </nav>
-
-                {/* Main Card */}
-                <article className="bg-slate-50 border border-slate-805 rounded-2xl p-8 shadow-xs relative overflow-hidden text-left bg-slate-50">
-                  {/* Decorative background letter */}
-                  <div className="absolute top-0 right-0 p-8 opacity-[0.02] select-none pointer-events-none" aria-hidden="true">
-                    <span className="text-9xl font-heading font-bold text-slate-900 leading-none">
-                      {(term || 'N').charAt(0).toUpperCase()}
-                    </span>
-                  </div>
-
-                  <div className="relative z-10">
-                    <div className="flex flex-wrap gap-2 items-center mb-4">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 uppercase tracking-wide">
-                        {category}
-                      </span>
-                    </div>
-                    
-                    <h1 className="text-3xl md:text-4xl font-heading font-bold text-slate-900 mb-6">
-                      {term || 'Committee of Creditors'}
-                    </h1>
-                    
-                    <div className="prose prose-invert max-w-none text-slate-800">
-                      {definition ? (
-                        <MarkdownRenderer content={definition} />
-                      ) : (
-                        <p className="text-slate-550 italic">No definition written yet. Use the editor to write the definition.</p>
-                      )}
-                    </div>
-
-                    {synonyms.length > 0 && (
-                      <div className="mt-6 pt-4 border-t border-slate-800 flex flex-wrap gap-1.5 items-center">
-                        <span className="text-xs font-semibold text-slate-550 uppercase tracking-wider mr-1.5">Acronyms / Synonyms:</span>
-                        {synonyms.map((syn) => (
-                          <span key={syn} className="inline-flex items-center px-2 py-0.5 rounded-sm bg-slate-900 text-slate-700 text-xs font-semibold border border-slate-800">
-                            {syn}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </article>
-
-                {/* Extended Note Section */}
-                {extendedNote && (
-                  <section className="mt-8 bg-slate-900 border border-white/60 rounded-2xl p-8 shadow-xs text-left">
-                    <h3 className="text-xl font-bold text-slate-900 mb-4 font-heading">Understanding {term || 'Term'}</h3>
-                    <div className="prose prose-invert max-w-none text-slate-700">
-                      <MarkdownRenderer content={extendedNote} />
-                    </div>
-                  </section>
-                )}
-
-                {/* FAQ Section */}
-                <section className="mt-8 bg-slate-900 border border-white/60 rounded-2xl p-8 shadow-xs text-left">
-                  <h2 className="text-xl font-bold text-slate-900 mb-6 font-heading">Frequently Asked Questions</h2>
-                  <div className="space-y-4">
-                    {(faqs.length > 0 ? faqs.map(f => ({ q: f.q, a: f.a })) : [
-                      {
-                        q: `What is ${term || 'Term'} in Indian corporate law?`,
-                        a: definition ? definition.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() : 'Definition will be displayed here...'
-                      },
-                      {
-                        q: `Why is ${term || 'Term'} important for compliance?`,
-                        a: `${term || 'Term'} is governed under Indian ${category} law. Understanding this concept is essential for ensuring regulatory compliance, avoiding penalties, and making corporate decisions in India.`
-                      }
-                    ]).map((faq, i) => (
-                      <div key={i} className="border border-slate-800 rounded-xl p-4 bg-slate-100/40">
-                        <h4 className="font-semibold text-slate-900 flex items-center justify-between">
-                          <span>{faq.q || 'Question...'}</span>
-                          <span className="text-slate-550 text-[10px]">▼</span>
-                        </h4>
-                        <p className="mt-3 text-slate-700 text-sm leading-relaxed border-t border-slate-855/50 pt-3">
-                          {faq.a || 'Answer will be displayed here...'}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-
-                {/* Related Searches Section */}
-                {keywords.length > 0 && (
-                  <section className="mt-8 bg-slate-900 border border-white/60 rounded-2xl p-8 shadow-xs text-left">
-                    <h3 className="text-lg font-bold text-slate-900 mb-4 font-heading">Related Searches</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {keywords.map((kw, i) => (
-                        <span
-                          key={i}
-                          className="text-sm bg-slate-50 text-slate-700 border border-slate-800 px-4 py-2 rounded-full font-medium shadow-xs flex items-center gap-1 cursor-pointer hover:bg-slate-100"
-                        >
-                          <span>{kw}</span>
-                          <span className="text-slate-500 text-xs">↗</span>
-                        </span>
-                      ))}
-                    </div>
-                  </section>
-                )}
-
-              </div>
-            </div>
-
-            {/* Modal Footer */}
-            <div className="px-8 py-4 bg-slate-100 border-t border-slate-855 flex justify-end gap-3 shrink-0">
-              <button
-                type="button"
-                onClick={() => setIsPreviewOpen(false)}
-                className="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold rounded-xl text-sm border border-white/60 transition-colors"
-              >
-                Close Preview
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setIsPreviewOpen(false)
-                  handleSubmit()
-                }}
-                className="px-6 py-2.5 btn-vibrant-amber text-white font-semibold rounded-xl text-sm transition-colors shadow-md shadow-amber-500/10"
-              >
-                Save & Publish
-              </button>
-            </div>
-
-          </div>
-        </div>
-      )}
     </div>
   )
 }
