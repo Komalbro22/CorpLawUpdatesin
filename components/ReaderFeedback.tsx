@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { ThumbsUp, AlertCircle, CheckCircle2, Send } from 'lucide-react'
 
 interface ReaderFeedbackProps {
-  contextType: 'article' | 'calculator' | 'document'
+  contextType: 'article' | 'calculator' | 'document' | 'glossary'
   contextTitle: string
   contextUrl?: string
 }

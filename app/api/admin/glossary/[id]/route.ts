@@ -140,6 +140,8 @@ async function handleGlossaryUpdate(
         mergedMeta.hide_definition = !!rawBody.hide_definition
       }
 
+      mergedMeta.updated_at = new Date().toISOString()
+
       const finalBody = isBodyDirty
         ? (rawBody.body !== undefined ? rawBody.body : rawBody.cleanContent)
         : existingCleanBody
@@ -148,6 +150,10 @@ async function handleGlossaryUpdate(
       dbUpdates.extended_note = hasMeta
         ? `<!-- METADATA\n${JSON.stringify(mergedMeta, null, 2)}\nMETADATA -->\n\n${(finalBody || '').trim()}`
         : (finalBody || '')
+    } else {
+      // Stamp updated_at on existing metadata even if body was untouched
+      const mergedMeta = { ...existingMeta, updated_at: new Date().toISOString() }
+      dbUpdates.extended_note = `<!-- METADATA\n${JSON.stringify(mergedMeta, null, 2)}\nMETADATA -->\n\n${(existingCleanBody || '').trim()}`
     }
 
     // 5. Handle standard database columns with strict partial-save

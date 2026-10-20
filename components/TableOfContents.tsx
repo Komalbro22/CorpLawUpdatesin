@@ -11,9 +11,11 @@ interface Heading {
 
 interface TableOfContentsProps {
   content: string
+  inline?: boolean
+  hideMobile?: boolean
 }
 
-export default function TableOfContents({ content }: TableOfContentsProps) {
+export default function TableOfContents({ content, inline = false, hideMobile = false }: TableOfContentsProps) {
   const [headings, setHeadings] = useState<Heading[]>([])
   const [activeId, setActiveId] = useState<string>('')
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -220,7 +222,7 @@ export default function TableOfContents({ content }: TableOfContentsProps) {
   return (
     <>
       {Sidebar}
-      {MobilePanel}
+      {!hideMobile && MobilePanel}
     </>
   )
 }
