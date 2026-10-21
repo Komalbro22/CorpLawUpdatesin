@@ -6,6 +6,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { CheckCircle2, Loader2, Mail, Calendar, ArrowRight, ShieldCheck } from 'lucide-react'
+import { trackEvent } from '@/lib/gtag'
 
 export default function NewsletterWidget() {
     const [email, setEmail] = useState('')
@@ -71,6 +72,7 @@ export default function NewsletterWidget() {
 
             setSavedEmail(cleanEmail)
             setIsAlreadySubscribed(Boolean(data.alreadySubscribed))
+            trackEvent('sign_up', { method: 'Newsletter' })
             setSuccess(true)
             setIsEditingDifferent(false)
         } catch (err: any) {

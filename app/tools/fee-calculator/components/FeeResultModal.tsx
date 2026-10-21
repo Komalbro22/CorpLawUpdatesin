@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { trackEvent } from '@/lib/gtag'
 
 interface FeeResultModalProps {
   isOpen: boolean
@@ -23,6 +24,16 @@ export default function FeeResultModal({
   showWarning,
   warningText
 }: FeeResultModalProps) {
+  useEffect(() => {
+    if (isOpen) {
+      trackEvent('calculate_fee', {
+        event_category: 'Tool',
+        event_label: 'ROC Fee Calculator',
+        value: totalFee,
+      })
+    }
+  }, [isOpen, totalFee])
+
   if (!isOpen) return null
 
   const formatCurrency = (amount: number) => {

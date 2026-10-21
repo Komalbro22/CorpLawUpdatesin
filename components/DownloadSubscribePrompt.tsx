@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useId, useRef, useState } from 'react'
 import { X } from 'lucide-react'
+import { trackEvent } from '@/lib/gtag'
 import { markDownloadPromptSkipped, markDownloadPromptSubscribed } from '@/lib/download-prompt-storage'
 
 export { DOWNLOAD_PROMPT_SKIP_DAYS, isDownloadPromptSuppressed, markDownloadPromptSkipped, markDownloadPromptSubscribed } from '@/lib/download-prompt-storage'
@@ -113,6 +114,7 @@ export default function DownloadSubscribePrompt({ open, source, onClose }: Downl
 
       markDownloadPromptSubscribed()
       setSubscribed(true)
+      trackEvent('sign_up', { method: 'Download Prompt' })
     } catch {
       setError('We could not connect right now. Your download has started; please try again later.')
     } finally {

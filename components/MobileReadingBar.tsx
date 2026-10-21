@@ -117,7 +117,8 @@ export default function MobileReadingBar({ title }: { title?: string }) {
     }
 
     function shareWhatsApp() {
-        const url = window.location.href
+        const rawUrl = window.location.href
+        const url = `${rawUrl}${rawUrl.includes('?') ? '&' : '?'}utm_source=whatsapp&utm_medium=social`
         const text = `*${title || 'CorpLaw Update'}*\nRead full article: ${url}`
         window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank')
     }

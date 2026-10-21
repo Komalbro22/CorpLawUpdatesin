@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { CheckCircle2, Download, Mail, Loader2, X, FileText, Heart, Share2, Copy, Check } from 'lucide-react'
+import { trackEvent } from '@/lib/gtag'
 
 interface DownloadGatewayModalProps {
   isOpen: boolean
@@ -52,6 +53,8 @@ export default function DownloadGatewayModal({
           if (!hasTriggeredRef.current) {
             hasTriggeredRef.current = true
             setDownloadTriggered(true)
+    trackEvent('generate_lead', { event_category: 'Document', event_label: docTitle || fileName || 'Document Download' })
+            trackEvent('generate_lead', { event_category: 'Document', event_label: docTitle || fileName || 'Document Download' })
             onProceedDownload()
           }
         }
@@ -87,6 +90,7 @@ export default function DownloadGatewayModal({
 
   const handleManualDownload = () => {
     setDownloadTriggered(true)
+    trackEvent('generate_lead', { event_category: 'Document', event_label: docTitle || fileName || 'Document Download' })
     onProceedDownload()
   }
 
@@ -110,6 +114,7 @@ export default function DownloadGatewayModal({
       const data = await res.json()
       if (res.ok) {
         setSubscribed(true)
+        trackEvent('sign_up', { method: 'Download Gateway' })
       } else {
         setSubError(data.error || 'Unable to subscribe. Please try again.')
       }

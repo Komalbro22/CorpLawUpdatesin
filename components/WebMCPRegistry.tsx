@@ -14,6 +14,7 @@
  */
 
 import { useEffect } from 'react';
+import { trackEvent } from '@/lib/gtag';
 import { decodeCIN } from '@/lib/cin-decoder';
 
 type ToolDefinition = WebMCPTool;
@@ -331,6 +332,9 @@ export default function WebMCPRegistry() {
           });
 
           const data = await res.json().catch(() => ({ message: 'Unknown error.' }));
+          if (res.ok) {
+            trackEvent('sign_up', { method: 'WebMCP' });
+          }
           return {
             success: res.ok,
             message: (data as { message?: string }).message ?? (res.ok ? 'Subscribed successfully.' : 'Subscription failed.'),

@@ -105,7 +105,7 @@ export function buildEmailHtml({ subject, previewText, bodyHtml, unsubscribeUrl 
           <tr>
             <td style="background:#0B132B;padding:24px 32px;text-align:center;border-top:1px solid #1E293B;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
               <p style="margin:0 0 6px;font-size:12px;color:#94A3B8;">
-                You are receiving this communication because you are subscribed to <a href="${SITE_URL}" style="color:#D4AF37;text-decoration:none;font-weight:600;">CorpLawUpdates.in</a>.
+                You are receiving this communication because you are subscribed to <a href="${SITE_URL}?utm_source=newsletter&utm_medium=email" style="color:#D4AF37;text-decoration:none;font-weight:600;">CorpLawUpdates.in</a>.
               </p>
               <p style="margin:0 0 14px;font-size:11px;color:#64748B;">
                 New Delhi · Mumbai · MCA · SEBI · RBI · NCLT · IBC · FEMA
@@ -343,7 +343,7 @@ export function buildNewsletterTemplateHtml({
     if (leadArticle) {
         const leadCat = (leadArticle.category || 'MCA').toUpperCase()
         const meta = REGULATOR_COLORS[leadCat] || REGULATOR_COLORS.OTHER
-        const leadUrl = `${SITE_URL}/updates/${leadArticle.slug}`
+        const leadUrl = `${SITE_URL}/updates/${leadArticle.slug}?utm_source=newsletter&utm_medium=email&utm_campaign=weekly_digest`
         const leadDate = leadArticle.published_at 
             ? new Date(leadArticle.published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
             : editionDateStr
@@ -432,7 +432,7 @@ export function buildNewsletterTemplateHtml({
     const secondaryCardsHtml = secondaryArticles.map(article => {
         const cat = (article.category || 'MCA').toUpperCase()
         const meta = REGULATOR_COLORS[cat] || REGULATOR_COLORS.OTHER
-        const articleUrl = `${SITE_URL}/updates/${article.slug}`
+        const articleUrl = `${SITE_URL}/updates/${article.slug}?utm_source=newsletter&utm_medium=email&utm_campaign=weekly_digest`
         const dateStr = article.published_at 
             ? new Date(article.published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
             : ''
@@ -1132,7 +1132,7 @@ export function buildWeeklyDigestHtml({
                           </p>
                         </td>
                         <td align="right" style="padding-left:14px;white-space:nowrap;">
-                          <a href="${SITE_URL}/calendar" style="display:inline-block;background:#D4AF37;color:#0B132B;font-weight:800;font-size:12px;padding:8px 16px;border-radius:6px;text-decoration:none;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+                          <a href="${SITE_URL}/calendar?utm_source=newsletter&utm_medium=email&utm_campaign=weekly_digest" style="display:inline-block;background:#D4AF37;color:#0B132B;font-weight:800;font-size:12px;padding:8px 16px;border-radius:6px;text-decoration:none;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
                             Open Calendar →
                           </a>
                         </td>
@@ -1205,7 +1205,7 @@ export function buildWeeklyDigestHtml({
           <tr>
             <td style="background:#0B132B;padding:26px 32px;text-align:center;border-top:1px solid #1E293B;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
               <p style="margin:0 0 8px;font-size:12px;color:#94A3B8;">
-                You are receiving this automated compliance alert because you subscribed at <a href="${SITE_URL}" style="color:#D4AF37;text-decoration:none;font-weight:600;">corplawupdates.in</a>.
+                You are receiving this automated compliance alert because you subscribed at <a href="${SITE_URL}?utm_source=newsletter&utm_medium=email&utm_campaign=weekly_digest" style="color:#D4AF37;text-decoration:none;font-weight:600;">corplawupdates.in</a>.
               </p>
               <p style="margin:0 0 14px;font-size:11px;color:#64748B;line-height:1.5;">
                 Indian Corporate Law Intelligence Platform · MCA · SEBI · RBI · NCLT · IBC · FEMA

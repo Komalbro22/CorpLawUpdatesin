@@ -162,61 +162,38 @@ export default async function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="format-detection" content="telephone=no" />
-        <JsonLd id="schema-org" data={{
+        <JsonLd id="schema-brand" data={{
           '@context': 'https://schema.org',
-          '@type': 'Organization',
-          name: 'CorpLawUpdates.in',
-          url: 'https://www.corplawupdates.in',
-          logo: 'https://www.corplawupdates.in/icon.png',
-          description: 'A free corporate-law intelligence platform focused on Indian regulatory updates and compliance tools.',
-          email: 'mail@corplawupdates.in',
-          sameAs: [
-            'https://x.com/CorpLawUpdates',
-            'https://www.linkedin.com/company/corplawupdates/',
-            'https://whatsapp.com/channel/0029VbCfcUEEgGfGLWOTvV1A',
-            'https://t.me/corplawupdate',
-            'https://www.instagram.com/corplawupdates.in/',
-          ],
-          knowsAbout: [
-            'Corporate Law in India',
-            'Companies Act 2013',
-            'Ministry of Corporate Affairs (MCA)',
-            'Securities and Exchange Board of India (SEBI)',
-            'Reserve Bank of India (RBI)',
-            'Insolvency and Bankruptcy Code (IBC)',
-            'National Company Law Tribunal (NCLT)',
-            'Foreign Exchange Management Act (FEMA)'
-          ],
-          contactPoint: {
-            '@type': 'ContactPoint',
-            email: 'mail@corplawupdates.in',
-            contactType: 'Customer Support',
-            areaServed: 'IN',
-            availableLanguage: 'English',
-          },
-          founder: {
-            '@type': 'Person',
-            name: 'Komalpreet Singh',
-            jobTitle: 'Founder & Lead Regulatory Analyst',
-          },
-        }} />
-        <JsonLd id="schema-website" data={{
-          '@context': 'https://schema.org',
-          '@type': 'WebSite',
-          name: 'CorpLawUpdates.in',
-          url: 'https://www.corplawupdates.in',
-          description: 'Free Indian corporate law updates',
-          inLanguage: 'en-IN',
-          potentialAction: {
-            '@type': 'SearchAction',
-            target: {
-              '@type': 'EntryPoint',
-              urlTemplate: 'https://www.corplawupdates.in/updates?search={search_term_string}',
+          '@graph': [
+            {
+              '@type': 'NewsMediaOrganization',
+              '@id': 'https://www.corplawupdates.in/#organization',
+              name: 'CorpLawUpdates.in',
+              alternateName: 'CorpLawUpdates',
+              url: 'https://www.corplawupdates.in/',
+              logo: {
+                '@type': 'ImageObject',
+                url: 'https://www.corplawupdates.in/icon-192.png',
+                width: 192,
+                height: 192,
+              },
+              sameAs: [
+                'https://www.linkedin.com/company/corplawupdates/',
+                'https://x.com/CorpLawUpdates',
+                'https://whatsapp.com/channel/0029VbCfcUEEgGfGLWOTvV1A',
+              ],
             },
-            'query-input': 'required name=search_term_string',
-          },
+            {
+              '@type': 'WebSite',
+              '@id': 'https://www.corplawupdates.in/#website',
+              url: 'https://www.corplawupdates.in/',
+              name: 'CorpLawUpdates.in',
+              alternateName: 'CorpLawUpdates',
+              publisher: { '@id': 'https://www.corplawupdates.in/#organization' },
+            },
+          ],
         }} />
-      </head>
+        </head>
       <body className="font-body bg-slate-50 dark:bg-slate-950 text-navy dark:text-slate-100 antialiased min-h-dvh flex flex-col selection:bg-amber-200/50 selection:text-navy break-words overflow-x-clip" suppressHydrationWarning>
         <ToastProvider>
           <HideOnAdmin>

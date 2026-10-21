@@ -46,9 +46,9 @@ export default function ArticleActions({
     }
 
     const shareLinks = {
-        twitter: `https://twitter.com/intent/tweet?text=${encoded.title}&url=${encoded.url}`,
-        linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encoded.url}`,
-        whatsapp: `https://wa.me/?text=${encoded.both}`,
+        twitter: `https://twitter.com/intent/tweet?text=${encoded.title}&url=${encodeURIComponent(`${url}${url.includes('?') ? '&' : '?'}utm_source=twitter&utm_medium=social`)}`,
+        linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`${url}${url.includes('?') ? '&' : '?'}utm_source=linkedin&utm_medium=social`)}`,
+        whatsapp: `https://wa.me/?text=${encodeURIComponent(`${title} ${url}${url.includes('?') ? '&' : '?'}utm_source=whatsapp&utm_medium=social`)}`,
     }
 
     async function copyLink() {
