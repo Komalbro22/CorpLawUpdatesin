@@ -33,7 +33,7 @@ export async function GET() {
             category: {
               type: 'string',
               description: 'Filter by regulator: MCA, SEBI, RBI, NCLT, IBC, FEMA, CCI, LABOUR, IFSCA',
-              enum: ['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA', 'CCI', 'LABOUR', 'IFSCA'],
+              enum: ['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA', 'CCI', 'LABOUR', 'IFSCA', 'TAXATION'],
             },
             limit: {
               type: 'number',

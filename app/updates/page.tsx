@@ -347,6 +347,7 @@ export default async function UpdatesPage({
                             { name: 'NCLT Orders', code: 'NCLT', desc: 'National Company Law Tribunal orders, company petition decisions & appeals', href: '/category/nclt', color: 'border-l-orange-600' },
                             { name: 'IBC Updates', code: 'IBC', desc: 'Insolvency and Bankruptcy Board of India (IBBI) regulations & CIRP processes', href: '/category/ibc', color: 'border-l-red-600' },
                             { name: 'FEMA Regulations', code: 'FEMA', desc: 'Foreign Exchange Management Act, FDI, ODI, ECB & cross-border remittances', href: '/category/fema', color: 'border-l-teal-600' },
+                            { name: 'Taxation Updates', code: 'TAXATION', desc: 'Direct & indirect taxes: CBDT circulars, CBIC customs notifications & GSTN compliance', href: '/category/taxation', color: 'border-l-rose-600' },
                         ].map(reg => (
                             <Link
                                 key={reg.code}

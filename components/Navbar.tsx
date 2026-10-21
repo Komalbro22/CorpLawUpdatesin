@@ -41,6 +41,7 @@ import {
     X,
     Bookmark,
     Search,
+    Receipt,
 } from 'lucide-react'
 
 const links = [
@@ -114,6 +115,7 @@ export default function Navbar() {
         { href: '/category/mca',   label: 'MCA & Companies Act',Icon: Building2, color: 'text-blue-600',    bg: 'hover:bg-blue-50'    },
         { href: '/category/sebi',  label: 'SEBI Regulations',   Icon: TrendingUp, color: 'text-emerald-600', bg: 'hover:bg-emerald-50' },
         { href: '/category/rbi',   label: 'RBI Directives',     Icon: Landmark,  color: 'text-violet-600',  bg: 'hover:bg-violet-50'  },
+        { href: '/category/taxation', label: 'Taxation (CBDT/GST)', Icon: Receipt, color: 'text-rose-600', bg: 'hover:bg-rose-50' },
         { href: '/category/ibc',   label: 'IBC Insolvency',     Icon: Gavel,     color: 'text-red-600',     bg: 'hover:bg-red-50'     },
         { href: '/category/fema',  label: 'FEMA & Foreign Trade',Icon: Globe2,   color: 'text-teal-600',    bg: 'hover:bg-teal-50'    },
         { href: '/rbi/repo-rate',  label: 'Current Repo Rate',  Icon: Landmark,  color: 'text-indigo-600',   bg: 'hover:bg-indigo-50'   },

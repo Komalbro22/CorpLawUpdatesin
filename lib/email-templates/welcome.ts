@@ -25,6 +25,7 @@ const categoryColors: Record<string, { bg: string; text: string; lightBg: string
   income_tax: { bg: '#065F46', text: '#FFFFFF', lightBg: '#ECFDF5' },
   'income-tax': { bg: '#065F46', text: '#FFFFFF', lightBg: '#ECFDF5' },
   cbdt: { bg: '#065F46', text: '#FFFFFF', lightBg: '#ECFDF5' },
+  taxation: { bg: '#BE123C', text: '#FFFFFF', lightBg: '#FFF1F2' },
 }
 
 const categoryLabels: Record<string, string> = {
@@ -38,6 +39,7 @@ const categoryLabels: Record<string, string> = {
   labour: 'Labour Law',
   ifsca: 'IFSCA (GIFT City)',
   income_tax: 'Income Tax',
+  taxation: 'Taxation',
   'income-tax': 'Income Tax',
   cbdt: 'CBDT',
 }

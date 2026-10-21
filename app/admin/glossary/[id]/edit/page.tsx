@@ -19,7 +19,7 @@ import { Category } from '@/types'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 
-const CATEGORIES: Category[] = ['MCA', 'SEBI', 'RBI', 'IBC', 'NCLT', 'FEMA', 'CCI', 'LABOUR', 'IFSCA', 'INCOME_TAX']
+const CATEGORIES: Category[] = ['MCA', 'SEBI', 'RBI', 'IBC', 'NCLT', 'FEMA', 'CCI', 'LABOUR', 'IFSCA', 'TAXATION']
 
 interface KeyNumberItem {
   value: string
@@ -712,7 +712,7 @@ export default function EditGlossaryTermPage() {
                   className="w-full bg-slate-50/50 border border-slate-300 rounded-lg px-3 py-1.5 text-sm font-semibold text-slate-800 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-amber-400"
                 >
                   {CATEGORIES.map(cat => (
-                    <option key={cat} value={cat}>{cat}</option>
+                    <option key={cat} value={cat}>{cat === 'TAXATION' ? 'Taxation' : cat}</option>
                   ))}
                   <option value="GENERAL">GENERAL</option>
                 </select>

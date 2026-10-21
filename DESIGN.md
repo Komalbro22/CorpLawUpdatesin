@@ -26,6 +26,7 @@ colors:
   category-cci: "#6366F1"
   category-labour: "#F59E0B"
   category-ifsca: "#0E7490"
+  category-taxation: "#BE123C"
   dark-bg-primary: "#040814"
   dark-bg-card: "#0E1626"
   dark-bg-surface: "#111827"

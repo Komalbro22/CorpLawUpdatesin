@@ -152,7 +152,7 @@ export function resolvePractitionerAction(article: any): string {
     if (titleLower.includes('epf') || titleLower.includes('esic') || titleLower.includes('wage') || cat === 'LABOUR') {
         return 'HR & Payroll Teams: Update payroll software to the ₹25,000 statutory wage ceiling and verify contribution deductions before submitting this month\'s ECR.'
     }
-    if (titleLower.includes('audit') || titleLower.includes('3ca') || titleLower.includes('3cd') || titleLower.includes('itr') || cat === 'TAX') {
+    if (titleLower.includes('audit') || titleLower.includes('3ca') || titleLower.includes('3cd') || titleLower.includes('itr') || cat === 'TAX' || cat === 'TAXATION') {
         return 'Tax Auditors & CAs: Reconcile client turnover against AIS/TIS and finalize Form 3CA/3CD certifications; verify extended circular terms before filing.'
     }
     if (titleLower.includes('dir-3') || titleLower.includes('kyc') || titleLower.includes('din')) {
@@ -258,14 +258,15 @@ export function buildNewsletterTemplateHtml({
         CCI: { bg: '#4F46E5', text: '#FFFFFF', border: '#4338CA', lightBg: '#EEF2FF' },
         LABOUR: { bg: '#D97706', text: '#FFFFFF', border: '#B45309', lightBg: '#FFFBEB' },
         IFSCA: { bg: '#0891B2', text: '#FFFFFF', border: '#0E7490', lightBg: '#ECFEFF' },
+        TAXATION: { bg: '#BE123C', text: '#FFFFFF', border: '#9F1239', lightBg: '#FFF1F2' },
         TAX: { bg: '#B45309', text: '#FFFFFF', border: '#92400E', lightBg: '#FFFBEB' },
         OTHER: { bg: '#475569', text: '#FFFFFF', border: '#334155', lightBg: '#F8FAFC' }
     }
 
     // 1. Stats and Category Counts
     const totalCount = articles.length
-    const categories = ['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA', 'CCI', 'LABOUR', 'IFSCA']
-    const catCounts: Record<string, number> = { MCA: 0, SEBI: 0, RBI: 0, NCLT: 0, IBC: 0, FEMA: 0, CCI: 0, LABOUR: 0, IFSCA: 0 }
+    const categories = ['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA', 'CCI', 'LABOUR', 'IFSCA', 'TAXATION']
+    const catCounts: Record<string, number> = { MCA: 0, SEBI: 0, RBI: 0, NCLT: 0, IBC: 0, FEMA: 0, CCI: 0, LABOUR: 0, IFSCA: 0, TAXATION: 0 }
     let highImpactCount = 0
 
     articles.forEach(art => {

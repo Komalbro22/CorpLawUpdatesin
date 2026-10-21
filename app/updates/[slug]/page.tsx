@@ -403,7 +403,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                 {update.category && <>
                     <span className="text-slate-300 dark:text-slate-700">/</span>
                     <Link href={`/category/${update.category.toLowerCase()}`} className="hover:text-amber-700 dark:hover:text-amber-400 transition-colors font-medium">
-                        {update.category.toUpperCase()}
+                        {update.category === 'TAXATION' ? 'Taxation' : update.category.toUpperCase()}
                     </Link>
                 </>}
                 <span className="text-slate-300 dark:text-slate-700">/</span>
@@ -429,7 +429,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                             href={`/category/${update.category.toLowerCase()}`}
                             className="text-xs font-bold text-slate-700 dark:text-slate-300 hover:text-amber-700 transition-colors uppercase tracking-wider truncate"
                         >
-                            {update.category.toUpperCase()} updates
+                            {update.category === 'TAXATION' ? 'Taxation' : update.category.toUpperCase()} updates
                         </Link>}
                     </div>
                     {/* Font size toggle - client island */}
@@ -910,11 +910,11 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
             <div className="mt-8 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-5 print:hidden">
                 <h2 className="mb-3 flex items-center gap-2 text-sm font-bold text-navy dark:text-white">
                     <BookOpen className="h-4 w-4 text-amber-600" aria-hidden />
-                    {update.category ? `Browse More ${update.category.toUpperCase()} Updates` : 'Browse More Updates'}
+                    {update.category ? `Browse More ${update.category === 'TAXATION' ? 'Taxation' : update.category.toUpperCase()} Updates` : 'Browse More Updates'}
                 </h2>
                 <div className="flex flex-wrap gap-2">
                     {[
-                        ...(update.category ? [{ label: `All ${update.category.toUpperCase()} Updates`, href: `/category/${update.category.toLowerCase()}` }] : []),
+                        ...(update.category ? [{ label: `All ${update.category === 'TAXATION' ? 'Taxation' : update.category.toUpperCase()} Updates`, href: `/category/${update.category.toLowerCase()}` }] : []),
                         { label: 'All Updates', href: '/updates' },
                         { label: 'Compliance Calendar', href: '/calendar' },
                         { label: 'Newsletter', href: '/newsletter' },

@@ -20,6 +20,7 @@ const categories = [
     { id: 'CCI',    name: 'CCI Updates' },
     { id: 'LABOUR', name: 'Labour Law Updates' },
     { id: 'IFSCA',  name: 'IFSCA (GIFT City)' },
+    { id: 'TAXATION', name: 'Taxation (CBDT & GST)' },
 ]
 
 const categoryBadges: Record<string, string> = {
@@ -32,6 +33,7 @@ const categoryBadges: Record<string, string> = {
     CCI:    'bg-category-cci text-white',
     LABOUR: 'bg-category-labour text-white',
     IFSCA:  'bg-category-ifsca text-white',
+    TAXATION: 'bg-category-taxation text-white',
 }
 
 export default async function Footer() {

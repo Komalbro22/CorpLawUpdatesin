@@ -10,7 +10,7 @@ const colorMap: Record<Category, string> = {
     CCI: 'bg-indigo-600',
     LABOUR: 'bg-amber-700',
     IFSCA: 'bg-cyan-700',
-    INCOME_TAX: 'bg-emerald-800',
+    TAXATION: 'bg-rose-700',
 }
 
 export default function CategoryBadge({ category, className = '' }: { category: Category, className?: string }) {
@@ -18,7 +18,7 @@ export default function CategoryBadge({ category, className = '' }: { category: 
         <span
             className={`inline-block text-white rounded-full px-2 py-0.5 text-xs font-semibold ${colorMap[category]} ${className}`}
         >
-            {category}
+            {category === 'TAXATION' ? 'Taxation' : category}
         </span>
     )
 }

@@ -44,6 +44,7 @@ export async function GET() {
 - [IFSCA / GIFT City updates](${BASE_URL}/category/ifsca): International Financial Services Centres Authority (IFSCA) circulars, regulations, Fund Management Entities (FMEs), IFSC Banking Units (IBUs), and GIFT City compliance.
 - [CCI regulations](${BASE_URL}/category/cci): Competition Commission of India (CCI) orders, merger control approvals, combination regulations, Section 3/4 anti-trust filings, and competition law updates.
 - [Labour Law updates](${BASE_URL}/category/labour): Ministry of Labour & Employment notifications, 4 Labour Codes implementation, EPF ECR filings, ESIC compliance, and statutory employment rules.
+- [Taxation updates](${BASE_URL}/category/taxation): Direct and indirect tax intelligence, Central Board of Direct Taxes (CBDT) notifications, CBIC customs circulars, and GSTN e-invoicing compliance.
 
 ## Recent Corporate Law Circulars & Updates
 ${updatesList}

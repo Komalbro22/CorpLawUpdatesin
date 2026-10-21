@@ -82,7 +82,13 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             .select()
             .single()
 
-        if (updateError) throw updateError
+        if (updateError || !updatedArticle) {
+            console.error('[Admin Articles PUT] Update failed:', updateError)
+            return NextResponse.json({ 
+                error: updateError?.message || 'Failed to update article in database', 
+                details: updateError 
+            }, { status: 400 })
+        }
 
         if (body.published_at && updatedArticle?.slug && !updatedArticle.noindex) {
             submitArticleToIndexNow(updatedArticle.slug).catch(

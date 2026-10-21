@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
 
         if (error) throw error
 
-        const categories = ['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA', 'CCI', 'LABOUR', 'IFSCA']
+        const categories = ['MCA', 'SEBI', 'RBI', 'NCLT', 'IBC', 'FEMA', 'CCI', 'LABOUR', 'IFSCA', 'TAXATION']
         const categoryCounts: Record<string, number> = {}
 
         await Promise.all(
@@ -167,6 +167,14 @@ export async function POST(request: NextRequest) {
             })
             .select()
             .single()
+
+        if (error || !createdArticle) {
+            console.error('[Admin Articles POST] Insert failed:', error)
+            return NextResponse.json({ 
+                error: error?.message || 'Failed to create article in database', 
+                details: error 
+            }, { status: 400 })
+        }
 
         if (createdArticle?.slug && createdArticle?.published_at && !createdArticle.noindex) {
             submitArticleToIndexNow(createdArticle.slug).catch(

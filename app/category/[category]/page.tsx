@@ -14,7 +14,7 @@ import { formatDate } from '@/lib/utils'
 
 export const revalidate = 43200 // 12 hours
 
-const CATEGORIES = ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci', 'labour', 'ifsca']
+const CATEGORIES = ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci', 'labour', 'ifsca', 'taxation']
 
 const CATEGORY_FULL_NAMES: Record<string, string> = {
     mca: 'Ministry of Corporate Affairs',
@@ -27,6 +27,7 @@ const CATEGORY_FULL_NAMES: Record<string, string> = {
     labour: 'Ministry of Labour & Employment',
     'labour-law': 'Ministry of Labour & Employment',
     ifsca: 'International Financial Services Centres Authority',
+    taxation: 'Central Board of Direct Taxes (CBDT), CBIC & GSTN',
     'income-tax': 'Central Board of Direct Taxes (CBDT)',
     cbdt: 'Central Board of Direct Taxes (CBDT)',
 }
@@ -42,6 +43,7 @@ const OFFICIAL_URLS: Record<string, string> = {
     labour: 'https://labour.gov.in',
     'labour-law': 'https://labour.gov.in',
     ifsca: 'https://ifsca.gov.in',
+    taxation: 'https://incometaxindia.gov.in',
     'income-tax': 'https://incometaxindia.gov.in',
     cbdt: 'https://incometaxindia.gov.in',
 }
@@ -57,6 +59,7 @@ const WIKIPEDIA_URLS: Record<string, string> = {
     labour: 'https://en.wikipedia.org/wiki/Ministry_of_Labour_and_Employment_(India)',
     'labour-law': 'https://en.wikipedia.org/wiki/Ministry_of_Labour_and_Employment_(India)',
     ifsca: 'https://en.wikipedia.org/wiki/International_Financial_Services_Centres_Authority',
+    taxation: 'https://en.wikipedia.org/wiki/Taxation_in_India',
     'income-tax': 'https://en.wikipedia.org/wiki/Central_Board_of_Direct_Taxes',
     cbdt: 'https://en.wikipedia.org/wiki/Central_Board_of_Direct_Taxes',
 }
@@ -131,6 +134,18 @@ const CATEGORY_KEYWORDS: Record<string, string[]> = {
         'epfo circulars 2026',
         'esic notifications',
         '4 labour codes compliance India',
+    ],
+    taxation: [
+        'taxation updates India 2026',
+        'cbdt notifications 2026',
+        'cbic customs circulars',
+        'gst notifications updates',
+        'income tax circulars today',
+        'tds exemption notifications',
+        'gstn e-invoicing advisories',
+        'direct tax circulars cbdt',
+        'indirect tax circulars cbic',
+        'corporate tax compliance 2026',
     ],
     ifsca: [
         'ifsca circulars 2026',
@@ -317,6 +332,24 @@ const CATEGORY_REGULATORY_FAQS: Record<string, CategoryFAQ[]> = {
         {
             question: 'Where are official EPFO and ESIC circulars published?',
             answer: 'EPFO circulars are published at epfindia.gov.in and ESIC circulars at esic.gov.in, tracking monthly ECR filing guidelines, contribution rates, and social security updates.',
+        },
+    ],
+    taxation: [
+        {
+            question: 'What regulatory authorities are covered under Taxation on CorpLawUpdates.in?',
+            answer: 'Our Taxation hub delivers unified coverage across direct and indirect taxation: Central Board of Direct Taxes (CBDT) for corporate income tax, TDS/TCS, transfer pricing, and DTAA treaties; Central Board of Indirect Taxes and Customs (CBIC) for customs tariffs, FTA duty concessions, and central excise; and the GST Council / GSTN for e-invoicing, reverse charge mechanism (RCM), and GST return compliance.',
+        },
+        {
+            question: 'Are CBDT circulars and notifications legally binding on taxpayers and assessing officers?',
+            answer: 'Under Section 119 of the Income-tax Act, 1961, CBDT circulars and instructions are statutory directives legally binding on all subordinate Income Tax authorities and assessing officers. While taxpayers may challenge unfavorable circulars in court, benevolent circulars extending statutory deadlines, granting procedural relief, or clarifying exemptions are fully binding in favor of the taxpayer.',
+        },
+        {
+            question: 'What is the difference between a statutory tax notification and an administrative circular?',
+            answer: 'Statutory tax notifications amend parent rules (such as the Income-tax Rules, 1962, Customs Tariff Rules, or CGST Rules) and take legal force upon publication in the Gazette of India. Circulars provide administrative interpretations, operational guidelines, or date condonations to ensure consistent implementation by tax officers across India.',
+        },
+        {
+            question: 'What are the key corporate tax and GST filing deadlines tracked in 2026?',
+            answer: 'Key statutory deadlines include quarterly TDS payments (Challan 281 by 7th of following month), quarterly TDS statements (Form 24Q/26Q), corporate Tax Audit (Form 3CA/3CB-3CD) by 30 September, corporate ITR-6 by 31 October, monthly GSTR-1/GSTR-3B filings, and phase-wise mandatory e-invoicing for B2B and RCM transactions.',
         },
     ],
     ifsca: [
@@ -547,6 +580,26 @@ const CATEGORY_RELATED_RESOURCES: Record<string, RelatedResource[]> = {
             tag: 'Category Hub',
         },
     ],
+    taxation: [
+        {
+            title: 'Compliance Calendar (Income Tax, TDS & GST Deadlines)',
+            description: 'Track corporate advance tax installments, monthly TDS remittances, tax audit cutoffs, and GSTR return dates with 1-click sync.',
+            href: '/calendar',
+            tag: 'Compliance Tool',
+        },
+        {
+            title: 'MCA Corporate Law & Filing Fee Calculator',
+            description: 'Cross-check ROC company filing deadlines and late fee multipliers alongside corporate tax obligations.',
+            href: '/tools/fee-calculator/companies',
+            tag: 'Calculator',
+        },
+        {
+            title: 'FEMA & Cross-Border Transactions Hub',
+            description: 'Monitor cross-border remittances, DTAA withholding rates, and foreign exchange compliance complementary to international tax rules.',
+            href: '/category/fema',
+            tag: 'Category Hub',
+        },
+    ],
     ifsca: [
         {
             title: 'FEMA & Cross-Border Capital Notifications',
@@ -702,6 +755,17 @@ const ANSWER_FIRST: Record<string, { definition: string; facts: string[] }> = {
             'The Code on Wages standardizes minimum wages, bonus payments, and timely salary disbursements across India.',
         ],
     },
+    taxation: {
+        definition:
+            'Taxation Updates cover official circulars, notifications, statutory orders, and compliance guidelines issued across direct and indirect tax regimes in India. This unified hub delivers comprehensive coverage of Central Board of Direct Taxes (CBDT) notifications under the Income-tax Act, 1961 (corporate tax, TDS/TCS, transfer pricing, and DTAA tax treaties), Central Board of Indirect Taxes and Customs (CBIC) notifications (customs tariffs, FTA concessions, central excise), and Goods and Services Tax Network (GSTN) / GST Council directives (e-invoicing, reverse charge mechanism, ITC compliance).',
+        facts: [
+            'CBDT regulates direct taxes including Corporate Tax, Income Tax, TDS/TCS, and International Taxation under the Income-tax Act, 1961.',
+            'CBIC administers indirect taxes including Customs Duty, Foreign Trade Agreements (FTAs), and Central Excise.',
+            'GST Council and GSTN issue statutory rules and portal advisories governing e-invoicing, RCM self-invoicing, and GSTR compliance.',
+            'Under Section 119 of the Income-tax Act, CBDT circulars grant binding administrative relaxations and statutory filing deadline extensions.',
+            'Customs notifications issued by CBIC under the Customs Act, 1962 take immediate statutory effect upon publication in the Official Gazette.',
+        ],
+    },
     ifsca: {
         definition:
             'IFSCA Regulations, Circulars, and Guidelines are statutory directives issued by the International Financial Services Centres Authority under the IFSCA Act, 2019. Headquartered in GIFT City, Gandhinagar, IFSCA is India’s unified statutory regulator governing financial products, financial services, and financial institutions in International Financial Services Centres (IFSCs). This page tracks all latest IFSCA circulars, regulations, consultation papers, and compliance updates for Fund Management Entities (FMEs), IFSC Banking Units (IBUs), Capital Market Intermediaries, and FinTech entities.',
@@ -762,7 +826,7 @@ export async function generateMetadata(
         redirect('/category/labour')
     }
     if (rawCat === 'cbdt' || rawCat === 'income-tax') {
-        redirect('/category')
+        redirect('/category/taxation')
     }
     const cat = rawCat
     const categoryName = cat.toUpperCase()
@@ -793,7 +857,14 @@ export async function generateMetadata(
         ? `Page ${pageNum}: Latest ${categoryName} circulars, notifications and regulatory updates issued by ${CATEGORY_FULL_NAMES[cat] || categoryName}.`
         : `Latest ${categoryName} circulars, notifications and statutory compliance updates issued by ${CATEGORY_FULL_NAMES[cat] || categoryName} for corporate professionals.`
 
-    if (cat === 'rbi') {
+    if (cat === 'taxation') {
+        title = isPaginated
+            ? `Latest Taxation Updates (CBDT, CBIC & GST) 2026 – Page ${pageNum}`
+            : `Latest Taxation Updates (CBDT, CBIC & GST) Today – India`
+        description = isPaginated
+            ? `Page ${pageNum}: Latest direct and indirect tax notifications, CBDT circulars, CBIC customs orders and GST compliance updates.`
+            : `Latest direct and indirect tax notifications, CBDT circulars, CBIC customs duty orders and GST compliance updates for corporate professionals.`
+    } else     if (cat === 'rbi') {
         title = isPaginated
             ? `Latest RBI Circulars for Banks & NBFCs Today (2026) – Page ${pageNum}`
             : `Latest RBI Circulars & Notifications Today (2026) – Directives for Banks & NBFCs`
@@ -855,7 +926,7 @@ export default async function CategoryPage({
     }
 
     if (cat === 'cbdt' || cat === 'income-tax') {
-        redirect('/category')
+        redirect('/category/taxation')
     }
 
     if (originalCat !== cat) {
@@ -876,7 +947,7 @@ export default async function CategoryPage({
     const from = (currentPage - 1) * ITEMS_PER_PAGE
     const to = from + ITEMS_PER_PAGE - 1
 
-    const dbCategory = (cat === 'income-tax' || cat === 'cbdt') ? 'INCOME_TAX' : cat.toUpperCase()
+    const dbCategory = (cat === 'income-tax' || cat === 'cbdt' || cat === 'taxation') ? 'TAXATION' : cat.toUpperCase()
 
     const categoryBase = (withCount = false) =>
         supabase
@@ -913,6 +984,7 @@ export default async function CategoryPage({
         labour: 'from-amber-600 to-amber-800',
         'labour-law': 'from-amber-600 to-amber-800',
         ifsca: 'from-cyan-700 to-cyan-900',
+        taxation: 'from-rose-800 to-rose-950',
         'income-tax': 'from-emerald-700 to-teal-900',
         cbdt: 'from-emerald-700 to-teal-900',
     }
@@ -1005,7 +1077,7 @@ export default async function CategoryPage({
         'itemListElement': [
             { '@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': 'https://www.corplawupdates.in' },
             { '@type': 'ListItem', 'position': 2, 'name': 'Categories', 'item': 'https://www.corplawupdates.in/category' },
-            { '@type': 'ListItem', 'position': 3, 'name': `${cat.toUpperCase()} Updates`, 'item': `https://www.corplawupdates.in/category/${cat}` },
+            { '@type': 'ListItem', 'position': 3, 'name': `${cat === 'taxation' ? 'Taxation' : cat.toUpperCase()} Updates`, 'item': `https://www.corplawupdates.in/category/${cat}` },
         ],
     }
 
@@ -1024,7 +1096,7 @@ export default async function CategoryPage({
                     <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-white/60 text-xs mb-4">
                         <Link href="/" className="hover:text-white transition-colors">Home</Link>
                         <span>/</span>
-                        <span className="text-white/80">{cat.toUpperCase()} Updates</span>
+                        <span className="text-white/80">{cat === 'taxation' ? 'Taxation' : cat.toUpperCase()} Updates</span>
                     </nav>
 
                     <div className="flex items-center gap-3 mb-4">
@@ -1048,6 +1120,8 @@ export default async function CategoryPage({
                     <h1 className="font-heading text-4xl md:text-5xl font-bold mb-3 animate-fade-up">
                         {cat === 'rbi'
                             ? 'Latest RBI Circulars & Notifications for Banks (2026)'
+                            : cat === 'taxation'
+                            ? 'Latest Taxation Updates, Circulars & Notifications (CBDT, CBIC & GST)'
                             : `Latest ${cat.toUpperCase()} Circulars, Notifications & Updates`}
                     </h1>
 

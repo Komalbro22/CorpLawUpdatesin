@@ -58,6 +58,7 @@ const config: Config = {
           cci:  '#4338CA',
           labour: '#B45309',
           ifsca:  '#0E7490',
+          taxation: '#BE123C',
         },
         brand: {
           navy:       '#0B1F3A',  // Primary dark navy background

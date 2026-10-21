@@ -48,6 +48,7 @@ export async function GET() {
 - Competition Commission of India (CCI): ${BASE_URL}/category/cci
 - Labour Law (Ministry of Labour & Employment): ${BASE_URL}/category/labour
 - International Financial Services Centres Authority (IFSCA / GIFT City): ${BASE_URL}/category/ifsca
+- Taxation (CBDT, CBIC & GST): ${BASE_URL}/category/taxation
 
 ## Full Regulatory Articles & Updates (Latest 50)
 ${updatesList}

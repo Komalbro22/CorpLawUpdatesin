@@ -23,6 +23,7 @@ export async function GET(request: NextRequest) {
         cci: '#6366f1',
         labour: '#f59e0b',
         ifsca: '#0e7490',
+        taxation: '#be123c',
       }
 
       const categoryColor = categoryColors[category.toLowerCase()] || '#f59e0b'

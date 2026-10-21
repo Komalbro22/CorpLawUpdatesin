@@ -136,6 +136,7 @@ export default function AdminGlobalSearch() {
     cci: 'bg-indigo-100 text-indigo-700  ',
     labour: 'bg-amber-100 text-amber-700  ',
     income_tax: 'bg-amber-100 text-amber-700  ',
+    taxation: 'bg-rose-100 text-rose-700  ',
   }
 
   // Get categories options dynamically based on search type
@@ -151,16 +152,17 @@ export default function AdminGlobalSearch() {
       { value: 'labour', label: 'Labour Law' },
       { value: 'ifsca', label: 'IFSCA (GIFT City)' },
       { value: 'income_tax', label: 'Income Tax' },
+      { value: 'taxation', label: 'Taxation' },
     ]
 
     if (activeType === 'articles') {
-      return allOptions.filter(o => ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci', 'labour', 'ifsca', 'income_tax'].includes(o.value))
+      return allOptions.filter(o => ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci', 'labour', 'ifsca', 'taxation'].includes(o.value))
     }
     if (activeType === 'calendar') {
       return allOptions.filter(o => ['mca', 'sebi', 'rbi', 'fema', 'cci', 'labour', 'ifsca', 'income_tax'].includes(o.value))
     }
     if (activeType === 'glossary') {
-      return allOptions.filter(o => ['mca', 'sebi', 'rbi', 'ibc', 'fema', 'cci', 'labour', 'ifsca'].includes(o.value))
+      return allOptions.filter(o => ['mca', 'sebi', 'rbi', 'ibc', 'fema', 'cci', 'labour', 'ifsca', 'taxation'].includes(o.value))
     }
     return allOptions
   }

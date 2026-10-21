@@ -10,6 +10,7 @@ import {
   ShieldCheck,
   Users,
   Coins,
+  Receipt,
   ArrowRight,
 } from 'lucide-react'
 import JsonLd from '@/components/JsonLd'
@@ -19,9 +20,9 @@ import { supabase } from '@/lib/supabase'
 export const revalidate = 43200
 
 export const metadata: Metadata = {
-  title: 'Browse Regulatory Updates by Authority | MCA, SEBI, RBI, IFSCA & More',
+  title: 'Browse Regulatory Updates by Authority | MCA, SEBI, RBI, Taxation & More',
   description:
-    'Browse corporate law updates by regulator — MCA, SEBI, RBI, IFSCA (GIFT City), NCLT, IBC, FEMA, CCI and Labour Law. Daily circulars, master directions and compliance briefs for CS, CA and legal teams.',
+    'Browse corporate law updates by regulator — MCA, SEBI, RBI, Taxation (CBDT & GST), IFSCA (GIFT City), NCLT, IBC, FEMA, CCI and Labour Law. Daily circulars, master directions and compliance briefs for CS, CA and legal teams.',
   alternates: {
     canonical: 'https://www.corplawupdates.in/category',
   },
@@ -143,6 +144,18 @@ const categories = [
     badgeBg: 'bg-slate-500/10 text-slate-700 dark:text-slate-300 border-slate-500/20',
     borderHover: 'hover:border-slate-400/80 dark:hover:border-slate-500/60',
     tags: ['Labour Codes', 'EPF / ECR Returns', 'ESIC Compliance', 'Factory & Wage Rules'],
+  },
+  {
+    slug: 'taxation',
+    label: 'Taxation',
+    categoryKey: 'TAXATION',
+    Icon: Receipt,
+    fullName: 'Central Board of Direct Taxes (CBDT), CBIC & GSTN',
+    description: 'Direct & indirect tax notifications, CBDT circulars, TDS/TCS rules, transfer pricing, CBIC customs tariffs, and GSTN e-invoicing compliance.',
+    accent: 'bg-rose-600',
+    badgeBg: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+    borderHover: 'hover:border-rose-400/80 dark:hover:border-rose-500/60',
+    tags: ['CBDT Notifications', 'CBIC Customs & FTA', 'GST & e-Invoicing', 'TDS & Corporate Tax'],
   },
 ]
 

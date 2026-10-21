@@ -21,6 +21,7 @@ import {
   TrendingUp,
   Users,
   Coins,
+  Receipt,
 } from 'lucide-react'
 
 export const revalidate = 3600
@@ -134,6 +135,15 @@ const categoryMeta = [
     badgeBg: 'bg-slate-500/10 text-slate-700 dark:text-slate-300 border-slate-500/20',
     hoverBorder: 'hover:border-slate-400/80 dark:hover:border-slate-500/60',
     hoverShadow: 'hover:shadow-slate-500/5',
+  },
+  {
+    id: 'TAXATION',
+    label: 'Taxation',
+    shortDesc: 'CBDT, CBIC & GST',
+    Icon: Receipt,
+    badgeBg: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
+    hoverBorder: 'hover:border-rose-400/80 dark:hover:border-rose-500/60',
+    hoverShadow: 'hover:shadow-rose-500/5',
   },
 ]
 
@@ -355,7 +365,7 @@ export default async function HomePage() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-9 gap-2.5 sm:gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 gap-2.5 sm:gap-3">
               {categoryMeta.map(({ id, label, Icon, badgeBg, hoverBorder, hoverShadow, shortDesc }, i) => {
                 const count = countsMap[id] ?? 0
                 return (
@@ -541,7 +551,8 @@ export default async function HomePage() {
               <Link href="/category/mca" className="text-gold hover:underline font-medium">MCA</Link>,{' '}
               <Link href="/category/sebi" className="text-gold hover:underline font-medium">SEBI</Link>,{' '}
               <Link href="/category/rbi" className="text-gold hover:underline font-medium">RBI</Link>,{' '}
-              <Link href="/category/cci" className="text-gold hover:underline font-medium">CCI</Link>, and{' '}
+              <Link href="/category/cci" className="text-gold hover:underline font-medium">CCI</Link>,{' '}
+              <Link href="/category/taxation" className="text-gold hover:underline font-medium">Taxation</Link>, and{' '}
               <Link href="/category/labour" className="text-gold hover:underline font-medium">Labour Law</Link>{' '}
               updates with free tools including the{' '}
               <Link href="/documents" className="text-gold hover:underline font-medium">Document Generator</Link>,{' '}

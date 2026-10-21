@@ -19,7 +19,7 @@ import SponsoredSettings from '@/components/admin/SponsoredSettings'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 
-const CATEGORIES: Category[] = ['MCA', 'SEBI', 'RBI', 'INCOME_TAX', 'NCLT', 'IBC', 'FEMA', 'CCI', 'LABOUR', 'IFSCA']
+const CATEGORIES: Category[] = ['MCA', 'SEBI', 'RBI', 'TAXATION', 'NCLT', 'IBC', 'FEMA', 'CCI', 'LABOUR', 'IFSCA']
 
 export default function EditArticle() {
     const router = useRouter()
@@ -522,7 +522,7 @@ export default function EditArticle() {
                                 className="w-full border border-slate-300  rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold focus:outline-hidden text-slate-900 bg-white bg-slate-50"
                             >
                                     <option value="">No category</option>
-                                    {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                                    {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat === 'TAXATION' ? 'Taxation' : cat}</option>)}
                                 </select>
                             </div>
                             <SponsoredSettings
