@@ -651,15 +651,17 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
 
                   {/* Due Date & Delay Details */}
                   {statutoryDueDate && (
-                    <div className="pt-2 border-t border-slate-700/80 flex justify-between items-center text-xs text-slate-400">
-                      <span>Statutory Due Date:</span>
-                      <span className="font-semibold text-slate-200">
-                        {formatDateDisplay(statutoryDueDate)}
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
-                      Due date reckoned as MCA21 computes it (event day counted); see the of/from note.
-                    </p>
+                    <>
+                      <div className="pt-2 border-t border-slate-700/80 flex justify-between items-center text-xs text-slate-400">
+                        <span>Statutory Due Date:</span>
+                        <span className="font-semibold text-slate-200">
+                          {formatDateDisplay(statutoryDueDate)}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
+                        Due date reckoned as MCA21 computes it (event day counted); see the of/from note.
+                      </p>
+                    </>
                   )}
 
                   <div className="flex justify-between items-center text-xs text-slate-400">
