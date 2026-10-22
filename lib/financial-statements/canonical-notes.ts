@@ -533,6 +533,74 @@ export function resolveAllStatutoryNotes(params: {
 
     if (existing?.items && existing.items.length > 0) {
       items = existing.items
+    } else if (meta.id === 'note_2') {
+      // NOTE 2: Reserves and Surplus intelligent breakdown
+      // Route entered reserves (e.g. General Reserve) to "General Reserve",
+      // the current-year PAT roll-forward to "Surplus in Statement of Profit and Loss",
+      // and only an actual securities-premium balance to "Securities Premium Account".
+      const tbRows = (workspace.trialBalance || []).filter(
+        r => !r.isExcluded && r.mappedHeadId === 'reserves_surplus'
+      )
+
+      let secPremCur = 0
+      let secPremPrev = 0
+      let genResCur = 0
+      let genResPrev = 0
+      let surplusCur = 0
+      let surplusPrev = 0
+
+      for (const row of tbRows) {
+        const name = (row.ledgerName || '').trim()
+        const curNet = (row.currentCredit || 0) - (row.currentDebit || 0)
+        const prevNet = (row.prevCredit || 0) - (row.prevDebit || 0)
+        const sign = row.isContra ? -1 : 1
+        const netC = curNet * sign
+        const netP = prevNet * sign
+
+        if (/securities\s*premium|share\s*premium/i.test(name)) {
+          secPremCur += netC
+          secPremPrev += netP
+        } else if (/surplus|retained|profit|p&l|p\s*\/\s*l/i.test(name)) {
+          surplusCur += netC
+          surplusPrev += netP
+        } else {
+          // General Reserve and any other statutory reserves entered
+          genResCur += netC
+          genResPrev += netP
+        }
+      }
+
+      // Roll Current Year PAT from Statement of Profit and Loss into Surplus
+      const patRow = plRows.find(r => r.headId === 'profit_for_period')
+      if (patRow) {
+        surplusCur += patRow.currentAmount || 0
+        surplusPrev += patRow.prevAmount || 0
+      }
+
+      const curTotal = stRow?.currentAmount || 0
+      const prevTotal = stRow?.prevAmount || 0
+      const calculatedSumCur = secPremCur + genResCur + surplusCur
+
+      // If no TB rows were entered (e.g. direct entry on BS face), allocate based on presence of PAT
+      if (tbRows.length === 0 && (curTotal !== 0 || prevTotal !== 0)) {
+        if (patRow && patRow.currentAmount !== 0) {
+          surplusCur = patRow.currentAmount
+          genResCur = curTotal - surplusCur
+        } else {
+          genResCur = curTotal
+        }
+        surplusPrev = patRow?.prevAmount || 0
+        genResPrev = prevTotal - surplusPrev
+      } else if (curTotal !== 0 && Math.abs(calculatedSumCur - curTotal) > 0.01) {
+        // If there's an unexplained rounding discrepancy or manual addition, reconcile to surplus
+        surplusCur += (curTotal - calculatedSumCur)
+      }
+
+      items = [
+        { id: 'rs_1', label: 'Securities Premium Account', currentAmount: secPremCur, prevAmount: secPremPrev },
+        { id: 'rs_2', label: 'General Reserve', currentAmount: genResCur, prevAmount: genResPrev },
+        { id: 'rs_3', label: 'Surplus in Statement of Profit and Loss', currentAmount: surplusCur, prevAmount: surplusPrev }
+      ]
     } else {
       // Create default breakdown items
       const curTotal = stRow?.currentAmount || 0

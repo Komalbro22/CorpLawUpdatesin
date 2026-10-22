@@ -112,7 +112,7 @@ export default function CashFlowBuilderClient() {
           includeBalanceSheet: false,
           includeProfitLoss: false,
           includeCashFlow: true,
-          includeNotes: false,
+          includeNotes: true,
           includeRatios: false,
           isDraft: Math.abs(cfs.discrepancy) > 1.0
         }
@@ -153,7 +153,14 @@ export default function CashFlowBuilderClient() {
         workspace,
         balanceSheetRows,
         plRows,
-        cashFlowResult
+        cashFlowResult,
+        options: {
+          includeBalanceSheet: false,
+          includeProfitLoss: false,
+          includeCashFlow: true,
+          includeNotes: true,
+          includeRatios: false
+        }
       })
       const safeName = (profile.companyName || 'Cash-Flow').replace(/[^a-zA-Z0-9_-]/g, '_')
       saveAs(blob, `${safeName}_Cash_Flow.docx`)

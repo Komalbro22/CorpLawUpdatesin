@@ -144,6 +144,7 @@ export function runFullStatementValidation(params: {
   // -------------------------------------------------------------------------
   const seenLedgers = new Set<string>()
   for (const row of trialBalance) {
+    if (row.isExcluded) continue
     const key = row.ledgerName.trim().toLowerCase()
     if (key && seenLedgers.has(key)) {
       issues.push({

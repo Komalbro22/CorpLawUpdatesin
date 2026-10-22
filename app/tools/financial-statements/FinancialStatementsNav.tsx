@@ -49,9 +49,8 @@ export default function FinancialStatementsNav({ onResetWorkspace }: { onResetWo
       clearWorkspaceStorage()
       if (onResetWorkspace) {
         onResetWorkspace()
-      } else {
-        window.location.reload()
       }
+      window.location.reload()
     }
   }
 

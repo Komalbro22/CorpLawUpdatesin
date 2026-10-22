@@ -195,7 +195,7 @@ export default function BalanceSheetBuilderClient() {
         prev
           ? {
               ...prev,
-              trialBalance: [...prev.trialBalance, ...parsedRows]
+              trialBalance: parsedRows
             }
           : prev
       )
@@ -256,6 +256,7 @@ export default function BalanceSheetBuilderClient() {
   const clearTrialBalance = () => {
     if (confirm('Clear all trial balance ledger accounts?')) {
       setWorkspace(prev => (prev ? { ...prev, trialBalance: [] } : prev))
+      setPasteInputText('')
     }
   }
 
@@ -317,7 +318,14 @@ export default function BalanceSheetBuilderClient() {
         balanceSheetRows,
         plRows,
         cashFlowResult,
-        ratios
+        ratios,
+        options: {
+          includeBalanceSheet: true,
+          includeProfitLoss: true,
+          includeCashFlow: true,
+          includeNotes: true,
+          includeRatios: true
+        }
       })
       const safeName = (profile.companyName || 'Balance-Sheet').replace(/[^a-zA-Z0-9_-]/g, '_')
       saveAs(blob, `${safeName}_Statements.docx`)

@@ -439,6 +439,204 @@ describe('Schedule III Financial Statements Suite', () => {
       const totalPages = (doc as any).internal.getNumberOfPages()
       expect(totalPages).toBeGreaterThanOrEqual(7)
     })
+
+    it('routes Note 2 components accurately: General Reserve to General Reserve, PAT to Surplus, and premium to Securities Premium', () => {
+      // Test case from audit: General Reserve 5,00,000 + PAT 5,25,000 -> Total R&S 10,25,000
+      const testWorkspace: any = {
+        profile: {
+          companyName: 'Test Company',
+          framework: 'division-1',
+          presentationUnit: 'rupees',
+          financialYearEnd: '2026-03-31',
+          comparativeYearEnd: '2025-03-31'
+        },
+        trialBalance: [
+          {
+            id: 'tb_gen_res',
+            ledgerName: 'General Reserve',
+            currentDebit: 0,
+            currentCredit: 500000,
+            prevDebit: 0,
+            prevCredit: 400000,
+            mappedHeadId: 'reserves_surplus',
+            confidence: 'high'
+          }
+        ],
+        notes: {}
+      }
+
+      const mockBsRows: any[] = [
+        {
+          headId: 'reserves_surplus',
+          noteNumber: 2,
+          currentAmount: 1025000,
+          prevAmount: 400000
+        }
+      ]
+
+      const mockPlRows: any[] = [
+        {
+          headId: 'profit_for_period',
+          noteNumber: 39,
+          currentAmount: 525000,
+          prevAmount: 0
+        }
+      ]
+
+      const notes = resolveAllStatutoryNotes({
+        workspace: testWorkspace,
+        balanceSheetRows: mockBsRows,
+        plRows: mockPlRows,
+        scope: 'balance_sheet'
+      })
+
+      const note2 = notes.find(n => n.noteNumber === 2)
+      expect(note2).toBeDefined()
+      expect(note2?.items).toBeDefined()
+
+      const secPremItem = note2?.items.find(i => i.id === 'rs_1')
+      const genResItem = note2?.items.find(i => i.id === 'rs_2')
+      const surplusItem = note2?.items.find(i => i.id === 'rs_3')
+
+      // Securities Premium should be 0 because no premium ledger was entered
+      expect(secPremItem?.currentAmount).toBe(0)
+
+      // General Reserve should reflect the entered 5,00,000
+      expect(genResItem?.currentAmount).toBe(500000)
+
+      // Surplus should reflect the PAT roll-forward of 5,25,000
+      expect(surplusItem?.currentAmount).toBe(525000)
+
+      // Total of Note 2 items should match the Face Balance Sheet (10,25,000)
+      const totalNote2 = (note2?.items || []).reduce((s, it) => s + it.currentAmount, 0)
+      expect(totalNote2).toBe(1025000)
+    })
+  })
+
+  describe('22 Oct Audit Remediations', () => {
+    it('Fix 1: Word (.docx) export generates Cash Flow Statement and Notes to Accounts when requested', async () => {
+      const balances = computeHeadBalances(SAMPLE_PRIVATE_COMPANY_FIXTURE.trialBalance)
+      const bsRows = generateBalanceSheetStatement(balances)
+      const plRows = generateProfitLossStatement(balances)
+      const cfs = computeIndirectCashFlow(balances, SAMPLE_PRIVATE_COMPANY_FIXTURE.supplementaryCashFlow, plRows)
+
+      // Page-specific Cash Flow Word export
+      const cfDocxBlob = await generateFinancialStatementsDocxBlob({
+        workspace: SAMPLE_PRIVATE_COMPANY_FIXTURE,
+        balanceSheetRows: bsRows,
+        plRows,
+        cashFlowResult: cfs,
+        options: {
+          includeBalanceSheet: false,
+          includeProfitLoss: false,
+          includeCashFlow: true,
+          includeNotes: true,
+          includeRatios: false
+        }
+      })
+
+      expect(cfDocxBlob).toBeDefined()
+      expect(cfDocxBlob.size).toBeGreaterThan(5000)
+
+      // Full pack Word export (BS + PL + CF + Ratios + Notes)
+      const fullDocxBlob = await generateFinancialStatementsDocxBlob({
+        workspace: SAMPLE_PRIVATE_COMPANY_FIXTURE,
+        balanceSheetRows: bsRows,
+        plRows,
+        cashFlowResult: cfs,
+        ratios: computeScheduleIIIRatios(balances),
+        options: {
+          includeBalanceSheet: true,
+          includeProfitLoss: true,
+          includeCashFlow: true,
+          includeNotes: true,
+          includeRatios: true
+        }
+      })
+
+      expect(fullDocxBlob).toBeDefined()
+      // Full pack docx must be significantly larger than single-statement
+      expect(fullDocxBlob.size).toBeGreaterThan(cfDocxBlob.size)
+    })
+
+    it('Fix 4: Rule 5 validation skips excluded rows and does not block duplicate excluded accounts', () => {
+      const workspaceWithDuplicates: any = {
+        profile: {
+          companyType: 'private',
+          framework: 'division-1',
+          financialYearEnd: '2026-03-31'
+        },
+        trialBalance: [
+          {
+            id: 'tb_1',
+            ledgerName: 'Bank Current Account',
+            currentDebit: 100000,
+            currentCredit: 0,
+            mappedHeadId: 'cash_and_equivalents',
+            isExcluded: false
+          },
+          {
+            id: 'tb_2_dup_excluded',
+            ledgerName: 'Bank Current Account',
+            currentDebit: 100000,
+            currentCredit: 0,
+            mappedHeadId: 'cash_and_equivalents',
+            isExcluded: true // EXCLUDED from statement calculation
+          }
+        ],
+        notes: {}
+      }
+
+      const issues = runFullStatementValidation({
+        workspace: workspaceWithDuplicates,
+        balanceSheetRows: [],
+        plRows: []
+      })
+
+      // Rule 5 should NOT fire because the duplicate row is marked isExcluded
+      const rule5Issue = issues.find(i => i.ruleNumber === 5)
+      expect(rule5Issue).toBeUndefined()
+    })
+
+    it('Fix 4: Rule 5 validation still flags duplicate accounts when NOT excluded', () => {
+      const workspaceWithActiveDuplicates: any = {
+        profile: {
+          companyType: 'private',
+          framework: 'division-1',
+          financialYearEnd: '2026-03-31'
+        },
+        trialBalance: [
+          {
+            id: 'tb_1',
+            ledgerName: 'Bank Current Account',
+            currentDebit: 100000,
+            currentCredit: 0,
+            mappedHeadId: 'cash_and_equivalents',
+            isExcluded: false
+          },
+          {
+            id: 'tb_2_dup_active',
+            ledgerName: 'Bank Current Account',
+            currentDebit: 100000,
+            currentCredit: 0,
+            mappedHeadId: 'cash_and_equivalents',
+            isExcluded: false // ACTIVE duplicate
+          }
+        ],
+        notes: {}
+      }
+
+      const issues = runFullStatementValidation({
+        workspace: workspaceWithActiveDuplicates,
+        balanceSheetRows: [],
+        plRows: []
+      })
+
+      // Rule 5 MUST fire when active duplicates exist
+      const rule5Issue = issues.find(i => i.ruleNumber === 5)
+      expect(rule5Issue).toBeDefined()
+      expect(rule5Issue?.severity).toBe('blocking')
+    })
   })
 })
 

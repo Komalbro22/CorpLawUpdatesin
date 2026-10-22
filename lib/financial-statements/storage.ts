@@ -46,16 +46,21 @@ export const INITIAL_WORKSPACE: WorkspaceState = {
   lastUpdated: new Date().toISOString()
 }
 
+export function getFreshInitialWorkspace(): WorkspaceState {
+  return JSON.parse(JSON.stringify(INITIAL_WORKSPACE))
+}
+
 export function loadWorkspaceFromStorage(): WorkspaceState {
-  if (typeof window === 'undefined') return INITIAL_WORKSPACE
+  if (typeof window === 'undefined') return getFreshInitialWorkspace()
 
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return INITIAL_WORKSPACE
+    if (!raw) return getFreshInitialWorkspace()
     const parsed = JSON.parse(raw)
     return {
-      ...INITIAL_WORKSPACE,
+      ...getFreshInitialWorkspace(),
       ...parsed,
+      trialBalance: Array.isArray(parsed.trialBalance) ? parsed.trialBalance : [],
       profile: {
         ...DEFAULT_PROFILE,
         ...(parsed.profile || {})
@@ -63,7 +68,7 @@ export function loadWorkspaceFromStorage(): WorkspaceState {
     }
   } catch (e) {
     console.error('Failed to parse financial statements workspace from localStorage:', e)
-    return INITIAL_WORKSPACE
+    return getFreshInitialWorkspace()
   }
 }
 

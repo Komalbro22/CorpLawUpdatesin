@@ -142,7 +142,14 @@ export default function ProfitLossBuilderClient() {
       const blob = await generateFinancialStatementsDocxBlob({
         workspace,
         balanceSheetRows,
-        plRows
+        plRows,
+        options: {
+          includeBalanceSheet: false,
+          includeProfitLoss: true,
+          includeCashFlow: false,
+          includeNotes: true,
+          includeRatios: false
+        }
       })
       const safeName = (profile.companyName || 'Profit-Loss').replace(/[^a-zA-Z0-9_-]/g, '_')
       saveAs(blob, `${safeName}_Profit_Loss.docx`)
