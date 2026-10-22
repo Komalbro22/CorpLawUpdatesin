@@ -146,7 +146,7 @@ export default function FinancialStatementsHubPage() {
             <span className="text-emerald-600 dark:text-emerald-400">Zero Server Data Upload</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-navy dark:text-white tracking-tight">
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-navy dark:text-white tracking-tight break-words">
             Financial Statements Builder — Schedule III Formats and Tools
           </h1>
 
@@ -172,14 +172,14 @@ export default function FinancialStatementsHubPage() {
       </div>
 
       {/* Main Suite Cards */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
+      <div className="max-w-6xl mx-auto px-3.5 sm:px-6 py-8 sm:py-10 overflow-x-hidden">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {toolCards.map(tool => {
             const Icon = tool.icon
             return (
               <div
                 key={tool.href}
-                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between"
+                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">

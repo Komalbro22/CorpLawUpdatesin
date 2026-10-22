@@ -762,7 +762,7 @@ export default function ROCTrackerPage() {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="w-full max-w-4xl mx-auto px-3.5 sm:px-4 py-6 sm:py-8 overflow-x-hidden">
 
         {/* Print header */}
         <div className="hidden print:block mb-6">
@@ -1508,7 +1508,7 @@ export default function ROCTrackerPage() {
                   <div className="text-2xl mb-1">
                     {stat.icon}
                   </div>
-                  <div className="text-xl font-black">
+                  <div className="text-base sm:text-xl font-black tabular-nums break-words">
                     {stat.value}
                   </div>
                   <div className="text-white/70 text-xs">

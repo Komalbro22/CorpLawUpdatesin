@@ -246,12 +246,12 @@ export default function FeeCalculatorHub() {
     <div className="min-h-dvh bg-slate-50 dark:bg-slate-950 transition-colors duration-200 pb-20">
       <JsonLd data={hubJsonLd as any} />
 
-      <div className="bg-navy py-16 px-4 border-b border-slate-800">
+      <div className="bg-navy py-12 sm:py-16 px-3.5 sm:px-4 border-b border-slate-800">
         <div className="max-w-4xl mx-auto text-center">
           <Link href="/tools" className="text-slate-400 hover:text-white transition-colors text-sm font-semibold mb-6 inline-flex items-center gap-2">
             ← Back to All Tools
           </Link>
-          <h1 className="text-4xl md:text-6xl font-bold text-white font-heading mb-6 mt-4">
+          <h1 className="text-2xl sm:text-4xl md:text-6xl font-bold text-white font-heading mb-4 sm:mb-6 mt-4 break-words">
             Compliance Fee Calculators
           </h1>
           <p className="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto">
@@ -261,7 +261,7 @@ export default function FeeCalculatorHub() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 -mt-10 relative z-10 mb-16">
+      <div className="max-w-5xl mx-auto px-3.5 sm:px-4 -mt-8 sm:-mt-10 relative z-10 mb-12 sm:mb-16 overflow-x-hidden">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {calculators.map(calc => {
             if (calc.isLive) {
@@ -271,15 +271,15 @@ export default function FeeCalculatorHub() {
                   href={calc.href}
                   className={`group bg-white dark:bg-slate-900 shadow-xl border-2 rounded-2xl overflow-hidden hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 ${calc.color}`}
                 >
-                  <div className={`bg-linear-to-r ${calc.headerBg} p-5 flex items-center gap-4`}>
-                    <span className="text-5xl">{calc.icon}</span>
+                  <div className={`bg-linear-to-r ${calc.headerBg} p-4 sm:p-5 flex items-center gap-3 sm:gap-4`}>
+                    <span className="text-3xl sm:text-5xl shrink-0">{calc.icon}</span>
                     <div>
                       <div className="flex items-center gap-2 mb-1">
                         <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${calc.badgeColor}`}>
                           {calc.badge}
                         </span>
                       </div>
-                      <h3 className="text-white font-bold text-xl leading-snug">
+                      <h3 className="text-white font-bold text-lg sm:text-xl leading-snug break-words">
                         {calc.label}
                       </h3>
                       <p className="text-white/70 text-xs mt-1 font-medium tracking-wide">
@@ -287,7 +287,7 @@ export default function FeeCalculatorHub() {
                       </p>
                     </div>
                   </div>
-                  <div className="p-6 flex flex-col h-full">
+                  <div className="p-4 sm:p-6 flex flex-col h-full">
                     <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-6">
                       {calc.description}
                     </p>

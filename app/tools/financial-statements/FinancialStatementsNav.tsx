@@ -55,17 +55,17 @@ export default function FinancialStatementsNav({ onResetWorkspace }: { onResetWo
   }
 
   return (
-    <div className="mb-8 border-b border-slate-200 dark:border-slate-800 pb-4">
+    <div className="mb-6 sm:mb-8 border-b border-slate-200 dark:border-slate-800 pb-3 sm:pb-4 w-full overflow-hidden">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         {/* Navigation tabs */}
-        <nav className="flex flex-wrap items-center gap-2">
+        <nav className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto no-scrollbar pb-1 max-w-full">
           {navItems.map(item => {
             const Icon = item.icon
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium shrink-0 transition-colors ${
                   item.match
                     ? 'bg-navy text-white shadow-sm ring-1 ring-gold-accent/40 dark:bg-slate-800 dark:text-gold-accent dark:ring-gold-accent/60'
                     : 'text-slate-600 hover:text-navy hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800'
@@ -82,7 +82,7 @@ export default function FinancialStatementsNav({ onResetWorkspace }: { onResetWo
         <div className="flex items-center gap-3">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-            <span>Local Browser Only • Zero Server Upload</span>
+            <span className="hidden sm:inline">Local Browser Only • Zero Server Upload</span><span className="sm:hidden">Local Only • Zero Upload</span>
           </div>
           <button
             onClick={handleClear}

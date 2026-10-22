@@ -257,7 +257,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
           </span>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 sm:gap-2">
           <button
             type="button"
             onClick={() => setFormVariant('AOC-4')}
@@ -268,7 +268,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
             }`}
           >
             <div className="flex items-center justify-between">
-              <span className="text-sm font-bold">AOC-4</span>
+              <span className="text-xs sm:text-sm font-bold">AOC-4</span>
               {formVariant === 'AOC-4' && (
                 <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
               )}
@@ -288,7 +288,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
             }`}
           >
             <div className="flex items-center justify-between">
-              <span className="text-sm font-bold">AOC-4 CFS</span>
+              <span className="text-xs sm:text-sm font-bold">AOC-4 CFS</span>
               {formVariant === 'AOC-4-CFS' && (
                 <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
               )}
@@ -308,7 +308,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
             }`}
           >
             <div className="flex items-center justify-between">
-              <span className="text-sm font-bold">AOC-4 XBRL</span>
+              <span className="text-xs sm:text-sm font-bold">AOC-4 XBRL</span>
               {formVariant === 'AOC-4-XBRL' && (
                 <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
               )}
@@ -328,7 +328,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
             }`}
           >
             <div className="flex items-center justify-between">
-              <span className="text-sm font-bold">AOC-4 NBFC</span>
+              <span className="text-xs sm:text-sm font-bold">AOC-4 NBFC</span>
               {formVariant === 'AOC-4-NBFC' && (
                 <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
               )}
@@ -615,7 +615,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
                 </div>
 
                 {/* Capital Quick Presets */}
-                <div className="grid grid-cols-5 gap-1.5 mb-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-1.5 mb-4">
                   {CAPITAL_PRESETS.map((preset) => (
                     <button
                       key={preset.label}
@@ -810,7 +810,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
             </div>
 
             <div className="mb-6">
-              <div className="text-4xl font-extrabold text-navy dark:text-white font-serif tracking-tight">
+              <div className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-navy dark:text-white font-serif tracking-tight tabular-nums break-words">
                 ₹ {complianceResult.mcaPortalPayable.totalPortalPayable.toLocaleString('en-IN')}
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">

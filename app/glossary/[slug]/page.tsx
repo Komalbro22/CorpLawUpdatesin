@@ -455,33 +455,33 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
       {combinedContent && <TableOfContents content={combinedContent} />}
 
       {/* CENTERED MAIN CONTENT CONTAINER */}
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+      <main className="w-full max-w-4xl mx-auto px-3.5 sm:px-6 py-6 sm:py-10 overflow-x-hidden">
         
         {/* Breadcrumb */}
-        <nav className="mb-6 flex flex-wrap items-center gap-1.5 text-xs sm:text-sm text-slate-500 dark:text-slate-400 print:hidden" aria-label="Breadcrumb">
+        <nav className="mb-6 flex flex-wrap items-center gap-1.5 text-xs sm:text-sm text-slate-500 dark:text-slate-400 print:hidden min-w-0" aria-label="Breadcrumb">
           <Link href="/" className="hover:text-amber-600 transition-colors">Home</Link>
           <span className="text-slate-300 dark:text-slate-700">/</span>
           <Link href="/glossary" className="hover:text-amber-600 transition-colors">Glossary</Link>
           <span className="text-slate-300 dark:text-slate-700">/</span>
-          <span className="text-slate-800 dark:text-slate-200 font-semibold truncate max-w-[260px] sm:max-w-md">{term.term}</span>
+          <span className="text-slate-800 dark:text-slate-200 font-semibold truncate max-w-[170px] xs:max-w-[220px] sm:max-w-md">{term.term}</span>
         </nav>
 
         {/* HERO EXECUTIVE MASTHEAD (Centered) */}
-        <header className="mb-8 bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-800 shadow-xs relative overflow-hidden">
+        <header className="mb-8 bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 border border-slate-200/80 dark:border-slate-800 shadow-xs relative overflow-hidden">
           <div className={`absolute top-0 right-0 w-96 h-96 bg-linear-to-br ${themeStyles.headerGlow} rounded-full blur-3xl pointer-events-none -mr-20 -mt-20`} />
 
           <div className="relative z-10">
             {/* Meta tags & timestamps */}
-            <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${themeStyles.badgeBg} border`}>
+            <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 mb-4">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <span className={`inline-flex items-center px-2.5 sm:px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${themeStyles.badgeBg} border`}>
                   {term.category}
                 </span>
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700">
+                <span className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 rounded-full text-xs font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700">
                   <Clock className="h-3.5 w-3.5 text-slate-400" />
                   {readingTime} min read
                 </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800">
+                <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full text-xs font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                   Verified Statutory Term
                 </span>
@@ -497,24 +497,24 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
             </div>
 
             {/* Term Title */}
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-extrabold text-navy dark:text-slate-50 tracking-tight mb-3">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold text-navy dark:text-slate-50 tracking-tight mb-3 break-words text-balance">
               {term.term}
             </h1>
 
             {/* Full Form Pill / Callout */}
             {parsed.fullForm && (
-              <div className="inline-flex flex-wrap items-center gap-2 mb-4 bg-slate-100/80 dark:bg-slate-800/80 px-3.5 py-1.5 rounded-xl border border-slate-200/60 dark:border-slate-700">
-                <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400">Full Form:</span>
-                <span className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100">{parsed.fullForm}</span>
+              <div className="inline-flex flex-wrap items-center gap-1.5 sm:gap-2 mb-4 bg-slate-100/80 dark:bg-slate-800/80 px-3 py-1.5 sm:px-3.5 rounded-xl border border-slate-200/60 dark:border-slate-700 max-w-full">
+                <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400 shrink-0">Full Form:</span>
+                <span className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100 break-words">{parsed.fullForm}</span>
               </div>
             )}
 
             {/* Acronyms & Synonyms */}
             {term.synonyms && term.synonyms.length > 0 && (
-              <div className="flex flex-wrap items-center gap-2 mb-5">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-5">
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1">Acronyms / Synonyms:</span>
                 {term.synonyms.map((syn: string) => (
-                  <span key={syn} className="inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold border border-slate-200/80 dark:border-slate-700">
+                  <span key={syn} className="inline-flex items-center px-2 sm:px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold border border-slate-200/80 dark:border-slate-700">
                     {syn}
                   </span>
                 ))}
@@ -522,14 +522,14 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
             )}
 
             {/* Direct Down Action Toolbar: PDF Dossier, Copy, WhatsApp, LinkedIn, Save, Feedback */}
-            <div className="pt-4 border-t border-slate-200/80 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+            <div className="pt-4 border-t border-slate-200/80 dark:border-slate-800 flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 w-full">
               <GlossaryActions data={pdfData} url={canonicalUrl} compact={true} />
             </div>
           </div>
         </header>
 
         {/* CENTERED ARTICLE CONTENT */}
-        <article id="article-root" className="article-content space-y-8">
+        <article id="article-root" className="article-content space-y-6 sm:space-y-8 w-full max-w-full overflow-x-hidden break-words">
           
           {/* 1. STATUTORY DEFINITION CARD */}
           {!parsed.hideDefinition && (
@@ -546,7 +546,7 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
                   <span>Statutory Meaning &amp; Definition</span>
                 </h2>
                 
-                <div className="text-slate-700 dark:text-slate-300 leading-relaxed text-base sm:text-lg font-serif italic border-l-2 border-slate-200 dark:border-slate-700 pl-4 py-1 my-3 bg-slate-50/50 dark:bg-slate-800/30 rounded-r-xl">
+                <div className="text-slate-700 dark:text-slate-300 leading-relaxed text-base sm:text-lg font-serif italic border-l-2 border-slate-200 dark:border-slate-700 pl-3 sm:pl-4 py-1 my-3 bg-slate-50/50 dark:bg-slate-800/30 rounded-r-xl break-words">
                   <MarkdownRenderer content={processedDefinition} />
                 </div>
               </div>
@@ -555,19 +555,19 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
 
           {/* 2. EXECUTIVE TAKEAWAYS CARD */}
           {parsed.tldr && parsed.tldr.length > 0 && (
-            <section id="executive-takeaways" className="bg-linear-to-br from-amber-50/70 via-amber-50/30 to-white dark:from-amber-950/20 dark:via-slate-900 dark:to-slate-900 rounded-2xl p-6 sm:p-8 border border-amber-200/80 dark:border-amber-900/50 shadow-xs relative overflow-hidden">
+            <section id="executive-takeaways" className="bg-linear-to-br from-amber-50/70 via-amber-50/30 to-white dark:from-amber-950/20 dark:via-slate-900 dark:to-slate-900 rounded-2xl p-4 sm:p-6 lg:p-8 border border-amber-200/80 dark:border-amber-900/50 shadow-xs relative overflow-hidden break-words">
               <div className="absolute top-0 right-0 p-8 opacity-[0.06] select-none pointer-events-none" aria-hidden="true">
                 <FileText className="text-6xl text-amber-500" />
               </div>
               
-              <h2 className="text-xl sm:text-2xl font-bold text-navy dark:text-slate-50 mb-5 flex items-center gap-2.5 font-heading">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-navy dark:text-slate-50 mb-4 sm:mb-5 flex items-center gap-2.5 font-heading">
                 <span className="w-1.5 h-5 bg-amber-500 rounded-full" />
                 <span>Executive Takeaways</span>
               </h2>
 
-              <ul className="space-y-3.5">
+              <ul className="space-y-3 sm:space-y-3.5">
                 {parsed.tldr.map((point: string, idx: number) => (
-                  <li key={idx} className="flex items-start gap-3 text-slate-800 dark:text-slate-200 text-sm sm:text-base leading-relaxed">
+                  <li key={idx} className="flex items-start gap-2.5 sm:gap-3 text-slate-800 dark:text-slate-200 text-sm sm:text-base leading-relaxed break-words">
                     <span className="text-amber-500 font-bold select-none pt-0.5">•</span>
                     <span>{point}</span>
                   </li>
@@ -578,17 +578,17 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
 
           {/* 3. STRUCTURED KEY NUMBERS CARD */}
           {parsed.keyNumbers && parsed.keyNumbers.length > 0 && !processedExtendedNote.includes('num-card') && !processedExtendedNote.includes('Key Numbers at a Glance') && (
-            <section id="key-numbers-at-a-glance" className={`bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-800 shadow-xs border-l-4 ${themeStyles.borderLeftColor}`}>
-              <h2 className="text-xl sm:text-2xl font-bold text-navy dark:text-slate-50 mb-5 flex items-center gap-2 font-heading">
+            <section id="key-numbers-at-a-glance" className={`bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-6 lg:p-8 border border-slate-200/80 dark:border-slate-800 shadow-xs border-l-4 ${themeStyles.borderLeftColor} break-words`}>
+              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-navy dark:text-slate-50 mb-4 sm:mb-5 flex items-center gap-2 font-heading">
                 <span className="w-1.5 h-5 bg-amber-500 rounded-full" />
                 <span>Key Numbers at a Glance</span>
               </h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-3.5">
                 {parsed.keyNumbers.map((kn: { label?: string; value?: string; detail?: string }, idx: number) => (
-                  <div key={idx} className="bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 rounded-xl p-4 text-center">
-                    <div className="text-2xl sm:text-3xl font-extrabold text-navy dark:text-amber-400 font-heading">{kn.value}</div>
-                    <div className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 mt-1">{kn.label}</div>
-                    {kn.detail && <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-snug">{kn.detail}</div>}
+                  <div key={idx} className="bg-slate-50 dark:bg-slate-800/70 border border-slate-200/80 dark:border-slate-700 rounded-xl p-3 sm:p-4 text-center">
+                    <div className="text-xl sm:text-2xl md:text-3xl font-extrabold text-navy dark:text-amber-400 font-heading tabular-nums break-words">{kn.value}</div>
+                    <div className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 mt-1 break-words">{kn.label}</div>
+                    {kn.detail && <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-snug break-words">{kn.detail}</div>}
                   </div>
                 ))}
               </div>
@@ -597,14 +597,14 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
 
           {/* 4. EXTENDED STATUTORY COMMENTARY & ANALYSIS */}
           {term.extended_note && parsed.cleanContent && (
-            <section id={`understanding-${term.term.toLowerCase().replace(/[^a-z0-9]/g, '-')}`} className={`bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 lg:p-10 border border-slate-200/80 dark:border-slate-800 shadow-xs border-l-4 ${themeStyles.borderLeftColor}`}>
-              <h2 className="text-2xl sm:text-3xl font-bold text-navy dark:text-slate-50 mb-6 flex items-center gap-2.5 font-heading">
-                <BookOpen className={`h-6 w-6 ${themeStyles.iconColor}`} aria-hidden />
+            <section id={`understanding-${term.term.toLowerCase().replace(/[^a-z0-9]/g, '-')}`} className={`bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-6 lg:p-10 border border-slate-200/80 dark:border-slate-800 shadow-xs border-l-4 ${themeStyles.borderLeftColor} break-words overflow-x-hidden`}>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-navy dark:text-slate-50 mb-5 sm:mb-6 flex items-center gap-2.5 font-heading">
+                <BookOpen className={`h-5 w-5 sm:h-6 sm:w-6 ${themeStyles.iconColor}`} aria-hidden />
                 <span>Understanding {term.term}</span>
               </h2>
               
               {/* Partial-HTML styled content with full responsiveness */}
-              <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:text-navy dark:prose-headings:text-slate-100 prose-p:leading-relaxed prose-li:leading-relaxed text-slate-800 dark:text-slate-200">
+              <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-heading prose-headings:font-bold prose-headings:text-navy dark:prose-headings:text-slate-100 prose-p:leading-relaxed prose-li:leading-relaxed text-slate-800 dark:text-slate-200 w-full overflow-x-hidden break-words">
                 <MarkdownRenderer content={processedExtendedNote} />
               </div>
             </section>
@@ -612,19 +612,19 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
 
           {/* 5. FREQUENTLY ASKED QUESTIONS */}
           {faqsList.length > 0 && (
-            <section id="frequently-asked-questions-faqs" className="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-800 shadow-xs">
-              <h2 className="text-xl sm:text-2xl font-bold text-navy dark:text-slate-50 mb-6 flex items-center gap-2.5 font-heading">
+            <section id="frequently-asked-questions-faqs" className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-6 lg:p-8 border border-slate-200/80 dark:border-slate-800 shadow-xs break-words">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-navy dark:text-slate-50 mb-5 sm:mb-6 flex items-center gap-2.5 font-heading">
                 <span className="w-1.5 h-5 bg-amber-500 rounded-full" />
                 <span>Frequently Asked Questions (FAQs)</span>
               </h2>
 
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {faqsList.map((faq, idx) => (
-                  <div key={idx} className="border border-slate-200/80 dark:border-slate-700/80 rounded-xl p-4 sm:p-5 bg-slate-50/50 dark:bg-slate-800/40">
-                    <h3 className="font-bold text-navy dark:text-slate-100 text-base mb-2">
+                  <div key={idx} className="border border-slate-200/80 dark:border-slate-700/80 rounded-xl p-3.5 sm:p-5 bg-slate-50/50 dark:bg-slate-800/40">
+                    <h3 className="font-bold text-navy dark:text-slate-100 text-sm sm:text-base mb-1.5 sm:mb-2 break-words">
                       {faq.q}
                     </h3>
-                    <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed break-words">
                       {faq.a}
                     </p>
                   </div>
@@ -635,30 +635,30 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
 
           {/* 6. CONTEXTUAL ANALYSIS & RELATED REGULATORY CIRCULARS */}
           {relatedArticles && relatedArticles.length > 0 && (
-            <section id="contextual-analysis-regulatory-updates" className="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-800 shadow-xs">
-              <h2 className="text-xl sm:text-2xl font-bold text-navy dark:text-slate-50 mb-2 flex items-center gap-2.5 font-heading">
-                <FileText className={`h-6 w-6 ${themeStyles.iconColor}`} aria-hidden />
+            <section id="contextual-analysis-regulatory-updates" className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-6 lg:p-8 border border-slate-200/80 dark:border-slate-800 shadow-xs break-words">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-navy dark:text-slate-50 mb-2 flex items-center gap-2.5 font-heading">
+                <FileText className={`h-5 w-5 sm:h-6 sm:w-6 ${themeStyles.iconColor}`} aria-hidden />
                 <span>Contextual Analysis &amp; Regulatory Circulars</span>
               </h2>
-              <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">
+              <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mb-4 sm:mb-6">
                 Recent analysis and regulatory updates related to <strong>{term.category}</strong>:
               </p>
-              <div className="space-y-3.5">
+              <div className="space-y-2.5 sm:space-y-3.5">
                 {relatedArticles.map((article: { title: string; slug: string; published_at: string }) => (
                   <Link 
                     key={article.slug} 
                     href={`/updates/${article.slug}`}
-                    className="group flex items-center justify-between p-4 border border-slate-200/80 dark:border-slate-800 rounded-xl bg-slate-50/40 dark:bg-slate-800/40 hover:bg-amber-50/20 dark:hover:bg-amber-950/20 hover:border-amber-400 transition-all duration-150"
+                    className="group flex items-center justify-between p-3 sm:p-4 border border-slate-200/80 dark:border-slate-800 rounded-xl bg-slate-50/40 dark:bg-slate-800/40 hover:bg-amber-50/20 dark:hover:bg-amber-950/20 hover:border-amber-400 transition-all duration-150 gap-3"
                   >
-                    <div>
-                      <h4 className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-amber-700 dark:group-hover:text-amber-400 transition-colors text-sm sm:text-base leading-snug">
+                    <div className="min-w-0 flex-1">
+                      <h4 className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-amber-700 dark:group-hover:text-amber-400 transition-colors text-xs sm:text-base leading-snug break-words">
                         {article.title}
                       </h4>
-                      <p className="text-xs text-slate-400 dark:text-slate-500 mt-1" suppressHydrationWarning>
+                      <p className="text-[11px] sm:text-xs text-slate-400 dark:text-slate-500 mt-1" suppressHydrationWarning>
                         Published: {formatDate(article.published_at)}
                       </p>
                     </div>
-                    <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-all shrink-0 ml-3" />
+                    <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-all shrink-0 ml-2" />
                   </Link>
                 ))}
               </div>
@@ -667,17 +667,17 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
 
           {/* 7. RELATED STATUTORY TERMS */}
           {relatedTermsData.length > 0 && (
-            <section id="related-statutory-terms" className="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-800 shadow-xs">
-              <h2 className="text-xl font-bold text-navy dark:text-slate-50 mb-4 flex items-center gap-2 font-heading">
-                <Sparkles className="w-5 h-5 text-amber-500" />
+            <section id="related-statutory-terms" className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-6 lg:p-8 border border-slate-200/80 dark:border-slate-800 shadow-xs break-words">
+              <h2 className="text-lg sm:text-xl font-bold text-navy dark:text-slate-50 mb-3 sm:mb-4 flex items-center gap-2 font-heading">
+                <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-500" />
                 <span>Related Statutory Terms</span>
               </h2>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2">
                 {relatedTermsData.map((rel) => (
                   <Link
                     key={rel.slug}
                     href={`/glossary/${rel.slug}`}
-                    className="px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-amber-50 dark:hover:bg-amber-950/40 text-slate-800 dark:text-slate-200 hover:text-amber-700 text-xs sm:text-sm font-semibold border border-slate-200/80 dark:border-slate-700 hover:border-amber-300 transition-all"
+                    className="px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-amber-50 dark:hover:bg-amber-950/40 text-slate-800 dark:text-slate-200 hover:text-amber-700 text-xs sm:text-sm font-semibold border border-slate-200/80 dark:border-slate-700 hover:border-amber-300 transition-all break-words"
                   >
                     {rel.term} &rarr;
                   </Link>
@@ -688,12 +688,12 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
 
           {/* 8. RELATED SEARCHES */}
           {term.keywords && term.keywords.length > 0 && (
-            <section id="related-searches" className="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-800 shadow-xs">
-              <h2 className="text-xl font-bold text-navy dark:text-slate-50 mb-4 flex items-center gap-2 font-heading">
-                <Search className={`h-5 w-5 ${themeStyles.iconColor}`} />
+            <section id="related-searches" className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-6 lg:p-8 border border-slate-200/80 dark:border-slate-800 shadow-xs break-words">
+              <h2 className="text-lg sm:text-xl font-bold text-navy dark:text-slate-50 mb-3 sm:mb-4 flex items-center gap-2 font-heading">
+                <Search className={`h-4 w-4 sm:h-5 sm:w-5 ${themeStyles.iconColor}`} />
                 <span>Related Searches</span>
               </h2>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2">
                 {term.keywords.map((kw: string, i: number) => {
                   const matchedTerm = allOtherTerms?.find(
                     (ot) => ot.term.toLowerCase() === kw.trim().toLowerCase()
@@ -706,7 +706,7 @@ ${term.keywords && term.keywords.length > 0 ? `## Related Searches` : ''}
                     <Link
                       key={i}
                       href={linkUrl}
-                      className="text-xs sm:text-sm bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-amber-50 hover:text-amber-700 border border-slate-200/80 dark:border-slate-700 px-3.5 py-1.5 rounded-full font-medium transition-all"
+                      className="text-xs sm:text-sm bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-amber-50 hover:text-amber-700 border border-slate-200/80 dark:border-slate-700 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full font-medium transition-all break-words"
                     >
                       {kw.trim()}
                     </Link>

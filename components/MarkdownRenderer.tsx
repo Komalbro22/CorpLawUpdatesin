@@ -427,7 +427,7 @@ export default function MarkdownRenderer({
     return (
         <>
         <div ref={ref} suppressHydrationWarning className={`
-          article-content prose prose-slate dark:prose-invert max-w-none
+          article-content prose prose-slate dark:prose-invert max-w-none w-full break-words overflow-x-hidden prose-pre:overflow-x-auto prose-pre:max-w-full
           prose-headings:text-navy dark:prose-headings:text-white
           prose-p:text-slate-700 dark:prose-p:text-slate-300
           prose-strong:text-inherit dark:prose-strong:text-amber-400

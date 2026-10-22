@@ -63,7 +63,7 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
 
   return (
-    <div className="max-w-6xl mx-auto py-12 px-4 flex flex-col lg:flex-row gap-8 relative">
+    <div className="w-full max-w-6xl mx-auto py-6 sm:py-12 px-3.5 sm:px-4 flex flex-col lg:flex-row gap-6 lg:gap-8 relative overflow-x-hidden">
       <div className="flex-1 w-full max-w-4xl mx-auto">
         {/* Search Bar */}
         <form 
@@ -85,14 +85,14 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
         </form>
 
         {/* Category Tabs */}
-        <div className="flex flex-wrap gap-2 mb-8 justify-center border-b border-slate-200 dark:border-slate-800 pb-6">
+        <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-6 sm:mb-8 justify-center border-b border-slate-200 dark:border-slate-800 pb-4 sm:pb-6">
           {categories.map((cat) => {
             const isActive = activeCategory === cat
             return (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`min-h-[44px] px-4 py-2 rounded-xl text-sm font-bold transition-all focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
+                className={`min-h-[38px] sm:min-h-[44px] px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold transition-all focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
                   isActive
                     ? 'bg-amber-600 text-white shadow-md shadow-amber-900/10'
                     : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-navy dark:hover:text-white border border-slate-200 dark:border-slate-700'
@@ -106,7 +106,7 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
 
         {/* Mobile A-Z Navigation (only show on small screens) */}
         {!search && (
-          <div className="flex lg:hidden flex-wrap gap-2 justify-center mb-12">
+          <div className="flex lg:hidden flex-wrap gap-1.5 sm:gap-2 justify-center mb-8 sm:mb-12">
             {alphabet.map((letter) => {
               const hasTerms = groupedTerms[letter]?.length > 0
               return hasTerms ? (
@@ -120,7 +120,7 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
               ) : (
                 <span
                   key={letter}
-                  className="w-10 h-10 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 text-slate-300 dark:text-slate-700 font-medium cursor-not-allowed"
+                  className="size-8 sm:size-10 text-xs sm:text-sm flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 text-slate-300 dark:text-slate-700 font-medium cursor-not-allowed"
                 >
                   {letter}
                 </span>
@@ -130,7 +130,7 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
         )}
 
         {/* Terms List */}
-        <div className="space-y-12">
+        <div className="space-y-8 sm:space-y-12">
           {letters.length === 0 ? (
             <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 border-dashed">
               <p className="text-slate-500 dark:text-slate-400">No legal terms found matching &quot;{search}&quot;</p>
@@ -138,28 +138,28 @@ export default function GlossaryClient({ terms }: { terms: GlossaryTerm[] }) {
           ) : (
             letters.map((letter) => (
               <div key={letter} id={`letter-${letter}`} className="scroll-mt-24">
-                <div className="flex items-center gap-4 mb-6">
-                  <h2 className="text-3xl font-heading font-bold text-navy dark:text-white">{letter}</h2>
+                <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+                  <h2 className="text-2xl sm:text-3xl font-heading font-bold text-navy dark:text-white">{letter}</h2>
                   <div className="h-px bg-slate-200 dark:bg-slate-800 grow"></div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4">
                   {groupedTerms[letter]
                     .sort((a, b) => a.term.localeCompare(b.term))
                     .map((t) => (
                     <Link 
                       key={t.id} 
                       href={`/glossary/${t.slug}`}
-                      className="block group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 hover:border-amber-300 dark:hover:border-amber-700 hover:shadow-card transition-all"
+                      className="block group bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5 hover:border-amber-300 dark:hover:border-amber-700 hover:shadow-card transition-all"
                     >
-                      <div className="flex justify-between items-start mb-2">
-                        <h3 className="font-bold text-navy dark:text-white text-lg group-hover:text-amber-700 dark:group-hover:text-amber-400 transition-colors">
+                      <div className="flex justify-between items-start gap-2 mb-2">
+                        <h3 className="font-bold text-navy dark:text-white text-base sm:text-lg group-hover:text-amber-700 dark:group-hover:text-amber-400 transition-colors break-words">
                           {t.term}
                         </h3>
-                        <span className="text-xs font-semibold px-2 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                        <span className="shrink-0 text-xs font-semibold px-2 py-0.5 sm:py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
                           {t.category}
                         </span>
                       </div>
-                      <p className="text-slate-500 dark:text-slate-400 text-sm line-clamp-2 leading-relaxed">
+                      <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm line-clamp-2 leading-relaxed break-words">
                         {stripHtml(t.definition)}
                       </p>
                     </Link>

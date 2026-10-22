@@ -149,7 +149,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
             <div className="inline-flex items-center gap-2 bg-amber-500/20 text-amber-300 px-3 py-1 rounded-full text-xs font-bold border border-amber-500/30">
               <Binary className="size-3.5" aria-hidden="true" /> 100% Free Statutory MCA Decoder
             </div>
-            <h1 className="text-2xl md:text-4xl font-heading font-bold text-white leading-snug">
+            <h1 className="text-xl sm:text-2xl md:text-4xl font-heading font-bold text-white leading-snug break-words">
               Corporate Identification Number (CIN) Decoder
             </h1>
             <p className="text-xs md:text-sm text-slate-300 leading-relaxed">
@@ -191,13 +191,13 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
             </form>
 
             {/* Quick Sample Short-cuts */}
-            <div className="pt-2 flex flex-wrap items-center gap-2 text-xs">
+            <div className="pt-2 flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs">
               <span className="text-slate-400 text-[11px] font-semibold">Try sample CINs:</span>
               {sampleCins.map((s) => (
                 <Link
                   key={s.cin}
                   href={`/tools/cin-decoder?cin=${s.cin}`}
-                  className="bg-white/10 hover:bg-white/20 text-slate-200 px-2.5 py-1 rounded-lg text-[11px] font-mono transition-colors"
+                  className="bg-white/10 hover:bg-white/20 text-slate-200 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg text-[10px] sm:text-[11px] font-mono transition-colors break-all"
                 >
                   {s.cin}
                 </Link>
@@ -237,9 +237,9 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
             </div>
 
             {/* 6-Segment Breakdown Cards Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
               {/* 1. Listing Status */}
-              <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs">
+              <div className="p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs break-words">
                 <div className="flex items-center gap-2 text-xs font-bold text-amber-600 dark:text-amber-400 mb-1">
                   <Award className="size-4" aria-hidden="true" /> 1. Listing Status ({breakdown.listingStatus.code})
                 </div>

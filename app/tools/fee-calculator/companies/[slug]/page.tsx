@@ -681,7 +681,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
       </div>
 
       {/* 4B - Hero Section */}
-      <div className="bg-navy py-12 px-4 border-b border-slate-800">
+      <div className="bg-navy py-8 sm:py-12 px-3.5 sm:px-4 border-b border-slate-800 overflow-x-hidden">
         <div className="max-w-5xl mx-auto text-center">
           <div className="flex items-center justify-center gap-3 mb-6 flex-wrap">
             <span className="bg-green-400/20 text-green-400 text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">
@@ -691,7 +691,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               {form.category.replace('_', ' ')}
             </span>
           </div>
-          <h1 className="text-[2.25rem] font-bold font-serif text-white mb-4">
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-[2.25rem] font-bold font-serif text-white mb-3 sm:mb-4 break-words leading-tight">
             {form.slug === 'inc-20a'
               ? 'INC 20A Fee Calculator — Form INC-20A Late Filing Fees & Penalty (FY 2026-27)'
               : form.slug === 'dir-3-kyc'
@@ -722,7 +722,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               ? 'MGT 14 Fee Calculator — Form MGT-14 Filing Fee, Late Fee & Penalty (FY 2026-27)'
               : `${form.formNumber} Fee Calculator — ${form.formName} (FY 2026-27)`}
           </h1>
-          <p className="text-slate-400 text-lg max-w-3xl mx-auto mb-8">
+          <p className="text-slate-400 text-sm sm:text-base md:text-lg max-w-3xl mx-auto mb-6 sm:mb-8 leading-relaxed break-words">
             {form.slug === 'inc-20a'
               ? 'Calculate statutory normal filing fees, 180-day incorporation due date, Table B late fee multipliers (2× to 12×), Section 10A(2) adjudication penalties, and Section 446B relief for Form INC-20A on MCA V3.'
               : form.slug === 'dir-3-kyc'
@@ -753,8 +753,8 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               ? 'Estimate applicable statutory filing fees and late multipliers based on selected assumptions, Table B late multipliers (2× to 12×), IFSC 60-day deadlines, Section 117(2) adjudication penalties, and 300-day condonation rules on MCA V3. Always verify final challan values on MCA21 portal before filing.'
               : `Estimate applicable statutory filing fees and late multipliers based on selected assumptions for ${form.formNumber} (${form.formName}) based on authorized capital and delay. Always verify final challan values on MCA21 portal before filing.`}
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <div className="bg-slate-800/50 border border-slate-700 rounded-full px-4 py-2 text-sm text-slate-300">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
+            <div className="bg-slate-800/50 border border-slate-700 rounded-full px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm text-slate-300">
               📅 <span className="font-semibold text-white ml-1">Due:</span> {form.dueDate}
             </div>
             <div className="bg-slate-800/50 border border-slate-700 rounded-full px-4 py-2 text-sm text-slate-300">
@@ -767,7 +767,7 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 -mt-8 relative z-10 mb-16">
+      <div className="max-w-5xl mx-auto px-3.5 sm:px-4 -mt-6 sm:-mt-8 relative z-10 mb-12 sm:mb-16 overflow-x-hidden">
         {/* Princeton GEO Direct Answer Block (58 Words) */}
         {form.slug === 'dir-3-kyc' && (
           <div className="mb-6 p-6 bg-white dark:bg-slate-900 border border-blue-200 dark:border-blue-900/50 border-l-4 border-l-blue-600 rounded-2xl shadow-xs">

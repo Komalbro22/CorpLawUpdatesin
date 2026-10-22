@@ -277,7 +277,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
     <div>
       {/* HERO */}
       <div className="bg-navy py-12 px-4 text-center">
-        <h1 className="text-3xl md:text-4xl font-heading font-bold text-white mb-3">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-heading font-bold text-white mb-2 sm:mb-3 break-words">
           Compliance Calendar 2026
         </h1>
         <p className="text-slate-300 max-w-2xl mx-auto text-lg">
@@ -295,7 +295,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-10 space-y-10">
+      <div className="max-w-6xl mx-auto px-3.5 sm:px-4 py-6 sm:py-10 space-y-6 sm:space-y-10 overflow-x-hidden">
 
         {/* EXPORT COMPLIANCE CALENDAR */}
         <div className="flex flex-wrap items-center gap-3 p-4 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800/40 rounded-xl">
@@ -406,7 +406,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
             </div>
 
             {/* QUICK LINKS */}
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-3">
               {[
                 { label: 'Income Tax', href: '#incometax', color: 'bg-orange-50 dark:bg-orange-950/30 border-orange-200 dark:border-orange-800/40 text-orange-700 dark:text-orange-400', icon: '📊' },
                 { label: 'GST',        href: '#gst',       color: 'bg-cyan-50 dark:bg-cyan-950/30 border-cyan-200 dark:border-cyan-800/40 text-cyan-700 dark:text-cyan-400',       icon: '🧾' },
@@ -419,9 +419,9 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
                 <Link
                   key={item.label}
                   href={item.href}
-                  className={`flex flex-col items-center justify-center gap-2 p-4 rounded-xl border font-medium text-sm text-center hover:shadow-md transition-shadow ${item.color}`}
+                  className={`flex flex-col items-center justify-center gap-1.5 sm:gap-2 p-2.5 sm:p-4 rounded-xl border font-medium text-xs sm:text-sm text-center hover:shadow-md transition-shadow ${item.color}`}
                 >
-                  <span className="text-2xl" aria-hidden="true">{item.icon}</span>
+                  <span className="text-xl sm:text-2xl" aria-hidden="true">{item.icon}</span>
                   {item.label}
                 </Link>
               ))}

@@ -88,12 +88,12 @@ export default function GlossaryActions({
 
   if (compact) {
     return (
-      <div className="flex flex-wrap items-center gap-1.5 text-xs print:hidden">
+      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs print:hidden w-full">
         {/* Download PDF Button */}
         <button
           onClick={handleDownloadPdf}
           disabled={isGeneratingPdf}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold transition-all shadow-xs active:scale-95 disabled:opacity-50"
+          className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold transition-all shadow-xs active:scale-95 disabled:opacity-50 shrink-0"
           title="Download formatted Corporate Law Dossier PDF"
         >
           {isGeneratingPdf ? (
@@ -107,7 +107,7 @@ export default function GlossaryActions({
         {/* Copy Link */}
         <button
           onClick={handleCopyLink}
-          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition-colors border border-slate-200/80 active:scale-95"
+          className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition-colors border border-slate-200/80 active:scale-95 shrink-0"
           title="Copy Link"
         >
           {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
@@ -119,10 +119,11 @@ export default function GlossaryActions({
           href={shareLinks.whatsapp}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-medium transition-colors border border-emerald-200/80"
+          className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-medium transition-colors border border-emerald-200/80 shrink-0"
           title="Share via WhatsApp"
         >
-          <span>WhatsApp</span>
+          <span className="hidden xs:inline">WhatsApp</span>
+          <span className="xs:hidden">WA</span>
         </a>
 
         {/* LinkedIn */}
@@ -130,16 +131,17 @@ export default function GlossaryActions({
           href={shareLinks.linkedin}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-800 font-medium transition-colors border border-blue-200/80"
+          className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-800 font-medium transition-colors border border-blue-200/80 shrink-0"
           title="Share on LinkedIn"
         >
-          <span>LinkedIn</span>
+          <span className="hidden xs:inline">LinkedIn</span>
+          <span className="xs:hidden">In</span>
         </a>
 
         {/* Bookmark */}
         <button
           onClick={toggleBookmark}
-          className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg transition-colors border ${
+          className={`inline-flex items-center gap-1 px-2 sm:px-2.5 py-1.5 rounded-lg transition-colors border shrink-0 ${
             bookmarked 
               ? 'bg-amber-50 text-amber-800 border-amber-300 font-semibold' 
               : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200/80'
@@ -153,11 +155,11 @@ export default function GlossaryActions({
         {showFeedbackLink && (
           <a
             href="#reader-feedback"
-            className="inline-flex items-center gap-1 text-slate-500 hover:text-slate-800 px-2 py-1.5 text-xs transition-colors"
+            className="inline-flex items-center gap-1 text-slate-500 hover:text-slate-800 px-1.5 sm:px-2 py-1.5 text-xs transition-colors shrink-0"
             title="Report error or suggestion"
           >
             <MessageSquare className="w-3.5 h-3.5 text-amber-600" />
-            <span className="hidden md:inline">Feedback</span>
+            <span className="hidden sm:inline">Feedback</span>
           </a>
         )}
       </div>

@@ -269,12 +269,12 @@ export default function ToolsPage() {
       <JsonLd data={toolsJsonLd as any} />
 
       {/* Hero Banner */}
-      <div className="bg-navy py-16 px-4 border-b border-slate-800">
+      <div className="bg-navy py-12 sm:py-16 px-3.5 sm:px-4 border-b border-slate-800">
         <div className="max-w-5xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 bg-amber-400/20 text-amber-300 text-xs font-bold px-3.5 py-1.5 rounded-full mb-5 uppercase tracking-wider border border-amber-400/30">
             🛠️ Free Tools · No Login Required
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white font-heading mb-4 tracking-tight">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold text-white font-heading mb-4 tracking-tight break-words">
             Compliance Tools Hub
           </h1>
           <p className="text-slate-200 text-base md:text-lg max-w-2xl mx-auto mb-8 font-normal leading-relaxed">
@@ -282,7 +282,7 @@ export default function ToolsPage() {
           </p>
 
           {/* Stats row */}
-          <div className="flex justify-center gap-8 flex-wrap">
+          <div className="flex justify-center gap-4 sm:gap-8 flex-wrap">
             {[
               { v: `${liveTools.length}`, l: 'Live Tools' },
               { v: '100%', l: 'Free Access' },
@@ -301,7 +301,7 @@ export default function ToolsPage() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-12">
+      <div className="max-w-6xl mx-auto px-3.5 sm:px-4 py-8 sm:py-12 overflow-x-hidden">
 
         {/* Live Tools */}
         <div className="mb-12">
@@ -323,18 +323,18 @@ export default function ToolsPage() {
                 className="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-xs hover:shadow-md hover:border-amber-500/50 dark:hover:border-amber-500/40 transition-all duration-200 flex flex-col"
               >
                 {/* Card header */}
-                <span className="block bg-navy dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 p-5">
-                  <span className="flex items-center gap-4">
-                    <span className="size-12 rounded-xl bg-white/10 dark:bg-slate-800 flex items-center justify-center text-amber-400 shrink-0">
+                <span className="block bg-navy dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 p-4 sm:p-5">
+                  <span className="flex items-center gap-3 sm:gap-4 min-w-0">
+                    <span className="size-10 sm:size-12 rounded-xl bg-white/10 dark:bg-slate-800 flex items-center justify-center text-amber-400 shrink-0">
                       {tool.icon}
                     </span>
-                    <span className="block min-w-0">
+                    <span className="block min-w-0 flex-1">
                       <span className="flex items-center gap-2 mb-1">
                         <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${tool.badgeColor}`}>
                           {tool.badge}
                         </span>
                       </span>
-                      <span className="block text-white font-bold text-lg leading-snug">
+                      <span className="block text-white font-bold text-base sm:text-lg leading-snug break-words">
                         {tool.label}
                       </span>
                       <span className="block text-slate-300 dark:text-slate-400 text-xs mt-0.5">
@@ -345,7 +345,7 @@ export default function ToolsPage() {
                 </span>
 
                 {/* Card body */}
-                <span className="block p-5 flex-1">
+                <span className="block p-4 sm:p-5 flex-1">
                   <span className="block text-slate-600 dark:text-slate-300 text-sm mb-4 leading-relaxed">
                     {tool.description}
                   </span>
