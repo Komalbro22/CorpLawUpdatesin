@@ -69,7 +69,7 @@ const itemListSchema = {
     { '@type': 'ListItem', position: 4, name: 'TDS Challan Deposit Due Date (Monthly) - 7th of every month' },
     { '@type': 'ListItem', position: 5, name: 'MCA DIR-3 KYC Director Verification Due Date - 30th September annually' },
     { '@type': 'ListItem', position: 6, name: 'MCA DPT-3 ROC Return Due Date - 30th June annually' },
-    { '@type': 'ListItem', position: 7, name: 'MCA AOC-4 Company Accounts due date - 30 days from AGM' },
+    { '@type': 'ListItem', position: 7, name: 'MCA AOC-4 Company Accounts due date - within 30 days of AGM (29 October for 30 Sep AGM)' },
     { '@type': 'ListItem', position: 8, name: 'MCA MGT-7 Company Annual Return due date - 60 days from AGM' }
   ]
 }

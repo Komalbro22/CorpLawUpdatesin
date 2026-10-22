@@ -668,7 +668,7 @@ export function computeAoc4StatutoryDueDate(input: Aoc4DateInput): Aoc4DueDateOu
     return {
       standardAgmLastDate,
       effectiveAgmTargetDate: standardAgmLastDate,
-      statutoryDueDate: addCalendarDays(standardAgmLastDate, 30),
+      statutoryDueDate: addCalendarDays(standardAgmLastDate, 29),
       basisExplanation: 'Invalid: Section 96(1) third proviso explicitly prohibits ROC extension for First AGM',
       isOpcFiling: false,
       validationError: 'ROC extension cannot be granted for the First Annual General Meeting under Section 96(1) proviso.'
@@ -681,18 +681,18 @@ export function computeAoc4StatutoryDueDate(input: Aoc4DateInput): Aoc4DueDateOu
       return {
         standardAgmLastDate,
         effectiveAgmTargetDate: standardAgmLastDate,
-        statutoryDueDate: addCalendarDays(standardAgmLastDate, 30),
+        statutoryDueDate: addCalendarDays(standardAgmLastDate, 29),
         basisExplanation: 'Missing actual AGM date',
         isOpcFiling: false,
         validationError: 'Actual AGM date is required when AGM status is "Held".'
       };
     }
-    const dueDate = addCalendarDays(input.actualAgmDate, 30);
+    const dueDate = addCalendarDays(input.actualAgmDate, 29);
     return {
       standardAgmLastDate,
       effectiveAgmTargetDate: input.actualAgmDate,
       statutoryDueDate: dueDate,
-      basisExplanation: `30 days from actual ${input.agmType === 'first' ? 'First ' : ''}AGM date (${formatDateISO(input.actualAgmDate)}) per Section 137(1)`,
+      basisExplanation: `Within 30 days of actual ${input.agmType === 'first' ? 'First ' : ''}AGM date (${formatDateISO(input.actualAgmDate)}) per Section 137(1) — MCA reckons AGM + 29 days`,
       isOpcFiling: false
     };
   }
@@ -703,18 +703,18 @@ export function computeAoc4StatutoryDueDate(input: Aoc4DateInput): Aoc4DueDateOu
       return {
         standardAgmLastDate,
         effectiveAgmTargetDate: standardAgmLastDate,
-        statutoryDueDate: addCalendarDays(standardAgmLastDate, 30),
+        statutoryDueDate: addCalendarDays(standardAgmLastDate, 29),
         basisExplanation: 'Missing actual AGM date for extended meeting',
         isOpcFiling: false,
         validationError: 'Actual AGM date is required when AGM status is "Extended & Held".'
       };
     }
-    const dueDate = addCalendarDays(input.actualAgmDate, 30);
+    const dueDate = addCalendarDays(input.actualAgmDate, 29);
     return {
       standardAgmLastDate,
       effectiveAgmTargetDate: input.actualAgmDate,
       statutoryDueDate: dueDate,
-      basisExplanation: `30 days from actual extended AGM date (${formatDateISO(input.actualAgmDate)}) pursuant to ROC extension under Section 96(1)`,
+      basisExplanation: `Within 30 days of actual extended AGM date (${formatDateISO(input.actualAgmDate)}) pursuant to ROC extension under Section 96(1) — MCA reckons AGM + 29 days`,
       isOpcFiling: false
     };
   }
@@ -725,12 +725,12 @@ export function computeAoc4StatutoryDueDate(input: Aoc4DateInput): Aoc4DueDateOu
     ? input.rocApprovedExtendedLastDate
     : standardAgmLastDate;
 
-  const dueDate = addCalendarDays(effectiveAgmTargetDate, 30);
+  const dueDate = addCalendarDays(effectiveAgmTargetDate, 29);
   return {
     standardAgmLastDate,
     effectiveAgmTargetDate,
     statutoryDueDate: dueDate,
-    basisExplanation: `30 days from statutory deadline on which ${input.agmType === 'first' ? 'First ' : ''}AGM ought to have been held (${formatDateISO(effectiveAgmTargetDate)}) per Section 137(2)`,
+    basisExplanation: `Within 30 days of statutory deadline on which ${input.agmType === 'first' ? 'First ' : ''}AGM ought to have been held (${formatDateISO(effectiveAgmTargetDate)}) per Section 137(2) — MCA reckons target date + 29 days`,
     isOpcFiling: false
   };
 }

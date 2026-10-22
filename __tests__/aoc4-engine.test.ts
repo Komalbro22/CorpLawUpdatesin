@@ -141,7 +141,7 @@ describe('3. Section 137(3) Statutory Penalties Engine', () => {
 });
 
 describe('4. Deterministic Due Date Engine (Section 137(1) & 3rd Proviso)', () => {
-  test('Standard company with AGM on 30th September -> Due date 30th October (30 days)', () => {
+  test('Standard company with AGM on 30th September -> Due date 29th October (within 30 days of AGM)', () => {
     const res = computeAoc4StatutoryDueDate({
       financialYearEnd: new Date('2026-03-31'),
       isOnePersonCompany: false,
@@ -149,7 +149,7 @@ describe('4. Deterministic Due Date Engine (Section 137(1) & 3rd Proviso)', () =
       agmStatus: 'held',
       actualAgmDate: new Date('2026-09-30')
     });
-    expect(res.statutoryDueDate.toISOString().slice(0, 10)).toBe('2026-10-30');
+    expect(res.statutoryDueDate.toISOString().slice(0, 10)).toBe('2026-10-29');
     expect(res.isOpcFiling).toBe(false);
   });
 
@@ -164,7 +164,7 @@ describe('4. Deterministic Due Date Engine (Section 137(1) & 3rd Proviso)', () =
     expect(res.isOpcFiling).toBe(true);
   });
 
-  test('Subsequent AGM with ROC Extension to 31st December -> Due date 30th January', () => {
+  test('Subsequent AGM with ROC Extension to 31st December -> Due date 29th January', () => {
     const res = computeAoc4StatutoryDueDate({
       financialYearEnd: new Date('2026-03-31'),
       isOnePersonCompany: false,
@@ -173,7 +173,7 @@ describe('4. Deterministic Due Date Engine (Section 137(1) & 3rd Proviso)', () =
       actualAgmDate: new Date('2026-12-31'),
       rocApprovedExtendedLastDate: new Date('2026-12-31')
     });
-    expect(res.statutoryDueDate.toISOString().slice(0, 10)).toBe('2027-01-30');
+    expect(res.statutoryDueDate.toISOString().slice(0, 10)).toBe('2027-01-29');
   });
 
   test('First AGM ROC extension is statutorily prohibited under Section 96(1) proviso', () => {
@@ -319,8 +319,8 @@ describe('7. Comprehensive Compliance Calculation Vectors & Section 446B', () =>
       financialYearEnd: new Date('2026-03-31'),
       agmType: 'subsequent',
       agmStatus: 'held',
-      actualAgmDate: new Date('2026-09-30'), // Due date: 2026-10-30
-      actualFilingDate: new Date('2026-11-29'), // 30 days delay (Oct has 31 days: 1 day in Oct + 29 in Nov = 30 days)
+      actualAgmDate: new Date('2026-09-30'), // Due date: 2026-10-29
+      actualFilingDate: new Date('2026-11-28'), // 30 days delay (Oct has 31 days: 2 days in Oct + 28 in Nov = 30 days)
       isPrivateCompany: true,
       paidUpCapital: 1000000,
       turnoverPrecedingFY: 5000000,

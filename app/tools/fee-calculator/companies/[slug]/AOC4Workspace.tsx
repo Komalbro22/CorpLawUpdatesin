@@ -131,7 +131,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
       } else {
         const baseAgm = new Date(actualAgmDate)
         const computedDue = new Date(baseAgm)
-        computedDue.setDate(computedDue.getDate() + 30)
+        computedDue.setDate(computedDue.getDate() + 29)
         filingDateToUse = new Date(computedDue)
         filingDateToUse.setDate(filingDateToUse.getDate() + Math.max(0, directDelayDays))
       }
@@ -493,7 +493,7 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
                             onChange={setActualAgmDate}
                           />
                           <p className="text-[11px] text-slate-400 mt-1">
-                            AOC-4 due exactly 30 days after this date per Sec 137(1).
+                            AOC-4 due within 30 days of the AGM per Sec 137(1) — MCA reckons the last date as AGM + 29 days (30 September AGM → 29 October).
                           </p>
                         </div>
                       )}
@@ -848,6 +848,9 @@ export default function AOC4Workspace({ form }: AOC4WorkspaceProps) {
                 {complianceResult.metadata.statutoryDueDate}
               </span>
             </div>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2 px-1 leading-relaxed">
+              Due date reckoned as MCA21 computes it (event day counted); see the of/from note.
+            </p>
           </div>
 
           {/* Card 2: Section 137(3) Adjudication Exposure */}

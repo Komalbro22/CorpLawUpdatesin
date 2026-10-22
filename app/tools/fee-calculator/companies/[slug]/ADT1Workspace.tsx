@@ -154,7 +154,7 @@ export default function ADT1Workspace({ form }: ADT1WorkspaceProps) {
     const meeting = new Date(meetingDate)
     // 15 days from meeting date (meeting date + 15 days)
     const due = new Date(meeting)
-    due.setDate(due.getDate() + 15)
+    due.setDate(due.getDate() + 14)
 
     const filing = filingDate ? new Date(filingDate) : new Date()
     
@@ -442,6 +442,9 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
                     value={meetingDate}
                     onChange={setMeetingDate}
                   />
+                  <p className="text-[11px] text-slate-400 mt-1">
+                    Form ADT-1 due within 15 days of the meeting per Sec 139(1) — MCA reckons the last date as meeting + 14 days (30 September AGM → 14 October).
+                  </p>
                 </div>
 
                 {/* Actual / Proposed Filing Date */}
@@ -654,6 +657,9 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/adt-1`
                         {formatDateDisplay(statutoryDueDate)}
                       </span>
                     </div>
+                    <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
+                      Due date reckoned as MCA21 computes it (event day counted); see the of/from note.
+                    </p>
                   )}
 
                   <div className="flex justify-between items-center text-xs text-slate-400">

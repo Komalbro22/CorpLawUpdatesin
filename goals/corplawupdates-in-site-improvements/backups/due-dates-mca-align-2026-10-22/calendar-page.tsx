@@ -1,0 +1,194 @@
+import { Metadata } from 'next'
+import { Suspense } from 'react'
+import { supabase } from '@/lib/supabase'
+import { COMPLIANCE_ENTRY_COLUMNS } from '@/lib/supabase-queries'
+import CalendarPageClient, { type ComplianceEntry } from '@/components/CalendarPageClient'
+import JsonLd from '@/components/JsonLd'
+
+export const revalidate = 43200 // 12 hours
+
+const CURRENT_YEAR = new Date().getFullYear()
+const NEXT_YEAR = CURRENT_YEAR + 1
+
+export const metadata: Metadata = {
+  title: `Compliance Calendar ${CURRENT_YEAR}-${String(NEXT_YEAR).slice(2)} — MCA, GST, SEBI & Tax Due Dates India`,
+  description: `Corporate compliance calendar for FY ${CURRENT_YEAR}-${String(NEXT_YEAR).slice(2)}. Track MCA, GST, SEBI LODR, RBI, Income Tax and Labour Law due dates in India.`,
+  keywords: [
+    `compliance calendar ${CURRENT_YEAR}`,
+    `compliance calendar ${CURRENT_YEAR}-${String(NEXT_YEAR).slice(2)}`,
+    `MCA filing due dates ${CURRENT_YEAR}`,
+    `GST due dates ${CURRENT_YEAR}`,
+    `Labor Law deadlines ${CURRENT_YEAR}`,
+    `EPF ESIC monthly returns ${CURRENT_YEAR}`,
+    `SEBI compliance calendar ${CURRENT_YEAR}`,
+    `company compliance deadlines India ${CURRENT_YEAR}`,
+    'CS professional compliance dates',
+    `MGT-7 due date ${CURRENT_YEAR}`,
+    `AOC-4 due date ${CURRENT_YEAR}`,
+    `DIR-3 KYC due date ${CURRENT_YEAR}`,
+    `income tax due dates companies ${CURRENT_YEAR}`,
+    `FEMA compliance dates ${CURRENT_YEAR}`,
+    'MSME-1 due date',
+    'PAS-3 filing deadline',
+    'DPT-3 due date',
+    'corporate compliance calendar India',
+    'ROC filing deadlines India',
+    'SEBI LODR compliance deadlines',
+    'RBI compliance due dates',
+    'MSME-1 due date',
+    'Professional Tax due dates'
+  ],
+  alternates: { canonical: 'https://www.corplawupdates.in/calendar' },
+  openGraph: {
+    title: `Compliance Calendar ${CURRENT_YEAR}-${String(NEXT_YEAR).slice(2)} — All MCA GST SEBI RBI Due Dates India`,
+    description: `Complete compliance deadline calendar for Indian companies. MCA, GST, SEBI, RBI, Income Tax and Labor Laws due dates for FY ${CURRENT_YEAR}-${String(NEXT_YEAR).slice(2)} in one place.`,
+    url: 'https://www.corplawupdates.in/calendar',
+    images: [{ url: `https://www.corplawupdates.in/api/og?title=${encodeURIComponent(`Compliance Calendar ${CURRENT_YEAR}-${String(NEXT_YEAR).slice(2)}`)}&category=`, width: 1200, height: 630 }],
+  },
+}
+
+// JSON-LD Schemas
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.corplawupdates.in' },
+    { '@type': 'ListItem', position: 2, name: `Compliance Calendar ${CURRENT_YEAR}`, item: 'https://www.corplawupdates.in/calendar' },
+  ],
+}
+
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  'name': `Key Corporate Compliance Deadlines India ${CURRENT_YEAR}`,
+  'description': 'Latest GST, MCA, ROC, Income Tax, and Labor Law deadline due dates.',
+  'itemListElement': [
+    { '@type': 'ListItem', position: 1, name: 'GSTR-1 Outward Supplies Due Date (Monthly) - 11th of every month' },
+    { '@type': 'ListItem', position: 2, name: 'GSTR-3B Tax Return Due Date (Monthly) - 20th of every month' },
+    { '@type': 'ListItem', position: 3, name: 'EPF (PF) & ESIC Monthly Deposit Due Date - 15th of every month' },
+    { '@type': 'ListItem', position: 4, name: 'TDS Challan Deposit Due Date (Monthly) - 7th of every month' },
+    { '@type': 'ListItem', position: 5, name: 'MCA DIR-3 KYC Director Verification Due Date - 30th September annually' },
+    { '@type': 'ListItem', position: 6, name: 'MCA DPT-3 ROC Return Due Date - 30th June annually' },
+    { '@type': 'ListItem', position: 7, name: 'MCA AOC-4 Company Accounts due date - 30 days from AGM' },
+    { '@type': 'ListItem', position: 8, name: 'MCA MGT-7 Company Annual Return due date - 60 days from AGM' }
+  ]
+}
+
+export default async function CalendarPage() {
+  const { data } = await supabase
+    .from('compliance_entries')
+    .select(COMPLIANCE_ENTRY_COLUMNS)
+    .eq('is_active', true)
+    .order('regulator')
+    .order('display_order')
+
+  const rawEntries = data || []
+
+  return (
+    <>
+      {/* Urgent Statutory Deadline Advisory Callout */}
+      <div className="max-w-5xl mx-auto px-4 pt-6 pb-2">
+        <div className="bg-amber-500/10 dark:bg-amber-500/5 border border-amber-500/30 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-center gap-3">
+            <span className="flex h-3 w-3 relative shrink-0">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+            </span>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">
+                Statutory Extension Alert
+              </p>
+              <p className="text-sm font-semibold text-navy dark:text-white">
+                EPFO has extended the September 2026 ECR filing &amp; PF contribution due date to <strong>31 October 2026</strong> (Circular No. e-704368).
+              </p>
+            </div>
+          </div>
+          <a
+            href="/updates/epfo-september-2026-ecr-deadline-extended-31-october-2026"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-navy dark:text-white bg-amber-400/20 hover:bg-amber-400/30 border border-amber-500/40 px-3 py-1.5 rounded-lg whitespace-nowrap transition-colors"
+          >
+            Read Circular &amp; Filing Rules &rarr;
+          </a>
+        </div>
+      </div>
+
+      <Suspense fallback={
+        <div className="space-y-4 max-w-5xl mx-auto px-4 py-8">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="h-12 bg-slate-100 rounded-lg animate-pulse" />
+          ))}
+        </div>
+      }>
+        <CalendarPageClient entries={(rawEntries || []) as ComplianceEntry[]} />
+      </Suspense>
+
+      {/* SEO Knowledge Footer */}
+      <section className="max-w-5xl mx-auto px-4 pb-16 pt-4 border-t border-slate-100 dark:border-slate-800">
+        <div className="bg-slate-50/50 dark:bg-slate-900/50 rounded-2xl border border-slate-200/60 dark:border-slate-800 p-8 shadow-xs">
+          <h2 className="text-xl font-bold text-navy dark:text-white mb-4 font-heading">
+            About the Corporate Compliance Calendar {CURRENT_YEAR}
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 text-sm text-slate-500 leading-relaxed">
+            <div className="space-y-3">
+              <p>
+                The <strong>Corporate Compliance Calendar {CURRENT_YEAR}-{String(NEXT_YEAR).slice(2)}</strong> tracks all key regulatory filing deadlines for Indian companies under:
+              </p>
+              <ul className="space-y-1 list-none">
+                {[
+                  'MCA / ROC / LLP filings — MGT-7, AOC-4, DIR-3 KYC, DPT-3, LLP Form 11 & Form 8',
+                  'GST filings — GSTR-1 (Outward Supplies), GSTR-3B (Returns & Tax Payment), CMP-08',
+                  'SEBI LODR deadlines — Quarterly results, governance reports, shareholding patterns',
+                  'Income Tax due dates — Corporate ITR, Tax Audit Form 3CD, TDS returns & monthly deposits',
+                  'Labor Laws compliance — Monthly EPF (PF) & ESIC return filings and PT deposits',
+                  'RBI & FEMA compliance dates — FLA annual return, ECB, FDI, ODI return filings',
+                ].map((f, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <span className="text-gold mt-0.5">✓</span>
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="space-y-3">
+              <p>
+                Designed for <strong>Company Secretaries (CS)</strong>, <strong>Chartered Accountants (CA)</strong>, <strong>Cost Accountants (CMA)</strong>, CS/CA/CMA students, legal enthusiasts, and corporate compliance teams managing multiple regulatory deadlines under the Companies Act, 2013, GST, Labor Laws, SEBI LODR, and RBI FEMA regulations.
+              </p>
+              <p className="text-xs text-slate-500 bg-amber-500/10 dark:bg-amber-500/5 p-3 rounded-xl border border-amber-500/20">
+                <span className="font-semibold text-amber-700 dark:text-amber-400">Statutory Verification Note:</span> All due dates, rationalised late-fee slabs, and penalty provisions are verified against current statutory provisions and circulars including CBDT Circular No. 07/2026, MCA V3 notifications, CBIC GST late-fee rationalisation notifications, and SEBI LODR SOP guidelines. Always cross-check the official portal before filing.
+              </p>
+            </div>
+          </div>
+
+          {/* SEO Compliance Keywords Directory */}
+          <div className="mt-8 pt-6 border-t border-slate-200/60 dark:border-slate-800">
+            <h3 className="text-xs font-bold text-navy dark:text-white uppercase tracking-wider mb-3 font-semibold">
+              Frequently Searched Compliances & Due Dates
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {[
+                "GST due dates 2026-27", "GSTR-1 outward supply monthly deadline", "GSTR-3B monthly tax payment return",
+                "EPF ECR monthly return filing", "ESIC monthly deposit date", "MCA company annual return dates",
+                "LLP Form 11 annual return", "LLP Form 8 account & solvency statement", "AOC-4 financial statement filing",
+                "MGT-7 annual return ROC", "DIR-3 KYC director verification date", "TDS monthly deposit challan 281",
+                "Corporate Income Tax ITR filing", "Tax Audit Form 3CD deadline", "SEBI LODR quarterly compliance Reg 33",
+                "RBI FEMA annual returns", "FLA return FDI compliance", "DPT-3 outstanding loans return",
+                "MSME-1 half yearly return filing", "Professional Tax return monthly due date"
+              ].map((kw, i) => (
+                <span 
+                  key={i} 
+                  className="inline-flex items-center text-[11px] bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-slate-200/80 dark:hover:bg-slate-700 px-2 py-0.5 rounded-sm transition-colors cursor-default"
+                >
+                  {kw}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* JSON-LD Schemas */}
+      <JsonLd id="calendar-breadcrumb-schema" data={breadcrumbSchema} />
+      <JsonLd id="calendar-itemlist-schema" data={itemListSchema} />
+    </>
+  )
+}
