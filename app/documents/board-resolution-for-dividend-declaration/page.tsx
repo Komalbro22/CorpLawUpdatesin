@@ -8,7 +8,7 @@ const pageUrl = 'https://www.corplawupdates.in/documents/board-resolution-for-di
 const title = 'Board Resolution for Dividend Declaration: Free Word & PDF Format'
 const description = 'Draft a board resolution for final or interim dividend declaration in India. Free editable Word and PDF downloads, specimen wording, Companies Act Section 123 guide and payment checklist.'
 
-export const revalidate = 86400
+export const revalidate = false
 export const metadata: Metadata = {
   title,
   description,

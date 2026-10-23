@@ -5,7 +5,7 @@ import { COMPLIANCE_ENTRY_COLUMNS } from '@/lib/supabase-queries'
 import CalendarPageClient, { type ComplianceEntry } from '@/components/CalendarPageClient'
 import JsonLd from '@/components/JsonLd'
 
-export const revalidate = 43200 // 12 hours
+export const revalidate = 86400 // 24 hours fallback; instant on-demand via revalidateComplianceMutation
 
 const CURRENT_YEAR = new Date().getFullYear()
 const NEXT_YEAR = CURRENT_YEAR + 1

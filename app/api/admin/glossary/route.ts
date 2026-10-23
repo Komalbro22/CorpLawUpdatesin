@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
-import { revalidatePath } from 'next/cache'
+import { revalidateGlossaryMutation } from '@/lib/content-revalidation'
 import { glossarySchema } from '@/lib/admin-schemas'
 import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
@@ -123,11 +123,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: error?.message || 'Creation failed' }, { status: 500 })
     }
 
-    revalidatePath('/glossary', 'layout')
-    revalidatePath('/sitemap.xml')
-    if (data.slug) {
-      revalidatePath(`/glossary/${data.slug}`, 'page')
-    }
+    revalidateGlossaryMutation(data.slug)
 
     return NextResponse.json({ term: data })
   } catch (error) {

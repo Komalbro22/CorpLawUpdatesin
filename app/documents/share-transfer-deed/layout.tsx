@@ -4,7 +4,7 @@ const pageUrl = 'https://www.corplawupdates.in/documents/share-transfer-deed'
 const title = 'Form SH-4 Share Transfer Deed Format: Word & PDF Download (2026)'
 const description = 'Download official MCA Form SH-4 share transfer deed format in Word (.docx) and PDF. Includes 0.015% stamp duty calculator, 60-day lodging checklist, specimen board resolution & legal guide under Section 56.'
 
-export const revalidate = 86400
+export const revalidate = false
 
 export const metadata: Metadata = {
   title,

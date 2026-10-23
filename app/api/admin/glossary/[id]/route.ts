@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
-import { revalidatePath } from 'next/cache'
+import { revalidateGlossaryMutation } from '@/lib/content-revalidation'
 import { glossarySchema } from '@/lib/admin-schemas'
 import { verifyAdminSession, verifyAdminRole } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
@@ -209,13 +209,8 @@ async function handleGlossaryUpdate(
       return NextResponse.json({ error: updateError?.message || 'Update failed' }, { status: 500 })
     }
 
-    // 8. Revalidate ISR caches
-    revalidatePath('/glossary', 'layout')
-    revalidatePath('/sitemap.xml')
-    revalidatePath(`/glossary/${oldTerm.slug}`, 'page')
-    if (updated.slug && updated.slug !== oldTerm.slug) {
-      revalidatePath(`/glossary/${updated.slug}`, 'page')
-    }
+    // 8. Revalidate ISR caches (scoped)
+    revalidateGlossaryMutation(updated.slug, oldTerm.slug)
 
     return NextResponse.json({ term: updated })
   } catch (error) {
@@ -264,11 +259,7 @@ export async function DELETE(
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    revalidatePath('/glossary', 'layout')
-    revalidatePath('/sitemap.xml')
-    if (term?.slug) {
-      revalidatePath(`/glossary/${term.slug}`, 'page')
-    }
+    revalidateGlossaryMutation(term?.slug)
 
     return NextResponse.json({ success: true })
   } catch (error) {

@@ -19,7 +19,7 @@ import {
 import EquitableMortgageClient from './EquitableMortgageClient'
 import JsonLd from '@/components/JsonLd'
 
-export const revalidate = 86400
+export const revalidate = false
 
 const FAQS = [
   {

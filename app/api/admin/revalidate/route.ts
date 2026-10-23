@@ -20,10 +20,7 @@ export async function POST(request: NextRequest) {
       if (url.searchParams.get('path')) targetPath = url.searchParams.get('path')!
     }
 
-    revalidatePath(targetPath)
-    if (targetPath !== '/') {
-      revalidatePath('/', 'layout')
-    }
+    revalidatePath(targetPath, 'page')
 
     return NextResponse.json({
       success: true,

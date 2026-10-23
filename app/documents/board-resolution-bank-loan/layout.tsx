@@ -6,7 +6,7 @@ const title =
 const description =
   'Download official board resolution format for availing bank loan (Term Loan, Cash Credit, Overdraft, LC/BG) in Word (.docx) and PDF. Includes Section 180(1)(c) limit calculator, Form CHG-1 charge checklist & Bank Covering Letter.'
 
-export const revalidate = 86400
+export const revalidate = false
 
 export const metadata: Metadata = {
   title,

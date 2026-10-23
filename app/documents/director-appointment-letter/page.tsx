@@ -27,7 +27,7 @@ import {
 import DirectorAppointmentClient from './DirectorAppointmentClient'
 import JsonLd from '@/components/JsonLd'
 
-export const revalidate = 86400
+export const revalidate = false
 
 const pageUrl = 'https://www.corplawupdates.in/documents/director-appointment-letter'
 

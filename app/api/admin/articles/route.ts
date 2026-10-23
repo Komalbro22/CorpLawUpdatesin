@@ -4,11 +4,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
-import { revalidatePath, revalidateTag } from 'next/cache'
 import { slugify, calculateReadingTime, extractFirstImage } from '@/lib/utils'
 import { submitArticleToIndexNow } from '@/lib/indexnow'
 import { submitArticleToGoogleIndexing } from '@/lib/google-indexing'
 import { articleSchema } from '@/lib/admin-schemas'
+import { revalidateArticleMutation } from '@/lib/content-revalidation'
 
 export async function GET(request: NextRequest) {
     if (!await verifyAdminSession()) {
@@ -185,18 +185,10 @@ export async function POST(request: NextRequest) {
             )
         }
 
-        try { (revalidateTag as any)('updates') } catch { /* ignore */ }
-        revalidatePath('/', 'layout')
-        revalidatePath('/updates', 'layout')
-        revalidatePath('/sitemap.xml')
-        revalidatePath('/news-sitemap.xml')
-        if (category?.trim()) {
-            revalidatePath(`/category/${category.trim().toLowerCase()}`)
-        }
-        if (createdArticle?.slug) {
-            revalidatePath(`/updates/${createdArticle.slug}`)
-        }
-        revalidatePath('/updates/[slug]', 'page')
+        revalidateArticleMutation({
+            slug: createdArticle?.slug,
+            category: category?.trim() || createdArticle?.category,
+        })
 
         return NextResponse.json(createdArticle, { status: 201 })
     } catch (err: unknown) {

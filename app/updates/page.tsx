@@ -12,7 +12,7 @@ import JsonLd from '@/components/JsonLd'
 import { formatDate } from '@/lib/utils'
 import { Building2, TrendingUp, Landmark, ShieldCheck, Users, Scale, Gavel, Globe2, HelpCircle, ChevronDown, Sparkles, BookOpen, CheckCircle2 } from 'lucide-react'
 
-export const revalidate = 3600 // 1 hour (on-demand revalidated via revalidateTag('updates'))
+export const revalidate = 86400 // 24 hours fallback; instant on-demand via revalidateArticleMutation
 
 const CURRENT_YEAR = new Date().getFullYear()
 const CURRENT_MONTH = new Date().toLocaleString('en-IN', { month: 'long' })

@@ -4,11 +4,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminSession, verifyAdminRole } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
-import { revalidatePath, revalidateTag } from 'next/cache'
 import { submitArticleToIndexNow } from '@/lib/indexnow'
 import { submitArticleToGoogleIndexing } from '@/lib/google-indexing'
 import { calculateReadingTime, extractFirstImage } from '@/lib/utils'
 import { articleSchema } from '@/lib/admin-schemas'
+import { revalidateArticleMutation } from '@/lib/content-revalidation'
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     if (!await verifyAdminSession()) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -99,28 +99,12 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             )
         }
 
-        try { (revalidateTag as any)('updates') } catch { /* ignore */ }
-        revalidatePath('/', 'layout')
-        revalidatePath('/updates', 'layout')
-        revalidatePath('/sitemap.xml')
-        revalidatePath('/news-sitemap.xml')
-
-        if (updatedArticle?.category) {
-            revalidatePath(`/category/${updatedArticle.category.toLowerCase()}`)
-        }
-        if (oldArticle?.category && oldArticle.category !== updatedArticle?.category) {
-            revalidatePath(`/category/${oldArticle.category.toLowerCase()}`)
-        }
-
-        if (body.slug !== undefined && body.slug !== oldArticle.slug) {
-            revalidatePath(`/updates/${oldArticle.slug}`)
-        }
-        if (updatedArticle?.slug) {
-            revalidatePath(`/updates/${updatedArticle.slug}`)
-        } else {
-            revalidatePath(`/updates/${oldArticle.slug}`)
-        }
-        revalidatePath('/updates/[slug]', 'page')
+        revalidateArticleMutation({
+            slug: updatedArticle?.slug || oldArticle.slug,
+            category: updatedArticle?.category || oldArticle.category,
+            oldSlug: oldArticle.slug,
+            oldCategory: oldArticle.category,
+        })
 
         return NextResponse.json(updatedArticle)
     } catch (err: unknown) {
@@ -155,18 +139,10 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
             )
         }
 
-        try { (revalidateTag as any)('updates') } catch { /* ignore */ }
-        revalidatePath('/', 'layout')
-        revalidatePath('/updates', 'layout')
-        revalidatePath('/sitemap.xml')
-        revalidatePath('/news-sitemap.xml')
-        if (deletedArticle?.category) {
-            revalidatePath(`/category/${deletedArticle.category.toLowerCase()}`)
-        }
-        if (deletedArticle?.slug) {
-            revalidatePath(`/updates/${deletedArticle.slug}`)
-        }
-        revalidatePath('/updates/[slug]', 'page')
+        revalidateArticleMutation({
+            slug: deletedArticle?.slug,
+            category: deletedArticle?.category,
+        })
 
         return NextResponse.json({ success: true, message: 'Article deleted' })
     } catch (err: unknown) {

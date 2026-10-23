@@ -3,7 +3,7 @@ import { cookies } from 'next/headers'
 import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { invalidateCache } from '@/lib/redis-cache'
-import { revalidatePath } from 'next/cache'
+import { revalidateComplianceMutation } from '@/lib/content-revalidation'
 
 export async function PATCH(
   request: Request,
@@ -94,8 +94,7 @@ export async function PATCH(
 
         // Invalidate active calendar entries cache and revalidate pages
         await invalidateCache('compliance_entries:active')
-        revalidatePath('/calendar')
-        revalidatePath('/sitemap.xml')
+        revalidateComplianceMutation()
 
         return NextResponse.json({ success: true, action: 'approved' })
       }

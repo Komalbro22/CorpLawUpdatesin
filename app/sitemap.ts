@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { mcaForms } from '@/data/mca-forms'
 
-export const revalidate = 3600 // 1 hour edge cache; on-demand revalidated via revalidatePath('/sitemap.xml') on article publish
+export const revalidate = 86400 // 24 hours fallback; instant on-demand on content publish
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const BASE_URL = 'https://www.corplawupdates.in'

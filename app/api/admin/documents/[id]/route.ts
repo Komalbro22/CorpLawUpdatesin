@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
-import { revalidatePath } from 'next/cache'
+import { revalidateDocumentMutation } from '@/lib/content-revalidation'
 import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { documentTemplateSchema } from '@/lib/admin-schemas'
@@ -74,12 +74,7 @@ export async function PUT(
       return NextResponse.json({ error: 'Update failed' }, { status: 500 })
     }
 
-    revalidatePath('/documents', 'layout')
-    revalidatePath('/sitemap.xml')
-    revalidatePath(`/documents/${oldTemplate.slug}`, 'page')
-    if (body.slug && body.slug !== oldTemplate.slug) {
-      revalidatePath(`/documents/${body.slug}`, 'page')
-    }
+    revalidateDocumentMutation(body.slug || oldTemplate.slug, oldTemplate.slug)
 
     return NextResponse.json({ template: data })
   } catch (error) {
@@ -113,11 +108,7 @@ export async function DELETE(
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    revalidatePath('/documents', 'layout')
-    revalidatePath('/sitemap.xml')
-    if (template?.slug) {
-      revalidatePath(`/documents/${template.slug}`, 'page')
-    }
+    revalidateDocumentMutation(template?.slug)
 
     return NextResponse.json({ success: true })
   } catch (error) {
@@ -154,11 +145,7 @@ export async function PATCH(
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    revalidatePath('/documents', 'layout')
-    revalidatePath('/sitemap.xml')
-    if (data?.slug) {
-      revalidatePath(`/documents/${data.slug}`, 'page')
-    }
+    revalidateDocumentMutation(data?.slug)
 
     return NextResponse.json({ template: data })
   } catch (error) {

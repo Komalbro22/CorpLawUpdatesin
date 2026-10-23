@@ -16,7 +16,7 @@ import GlossaryActions from '@/components/GlossaryActions'
 import ReaderFeedback from '@/components/ReaderFeedback'
 import { GlossaryPdfData } from '@/lib/pdf/generateGlossaryPdf'
 
-export const revalidate = 86400 // Revalidate daily per Supabase egress budget
+export const revalidate = false // Fully static; instant on-demand via revalidateGlossaryMutation
 
 type Props = {
   params: Promise<{ slug: string }>

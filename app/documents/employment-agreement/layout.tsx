@@ -7,7 +7,7 @@ const title =
 const description =
   'Download free employment agreement format in Word (.docx) & PDF for India. Built under Indian Contract Act 1872, 4 Labour Codes (2025/2026), Section 2(y) 50% wage rule, OSH Code appointment terms, Article 5 stamp duty, and AI drafting assistant.'
 
-export const revalidate = 86400
+export const revalidate = false
 
 export const metadata: Metadata = {
   title,

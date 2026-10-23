@@ -35,7 +35,7 @@ import {
   formatInr,
 } from '@/lib/doc-generator/employment-agreement-generator'
 
-export const revalidate = 86400
+export const revalidate = false
 
 const FAQS = [
   {

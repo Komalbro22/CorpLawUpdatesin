@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
-import { revalidatePath } from 'next/cache'
+import { revalidateDocumentMutation } from '@/lib/content-revalidation'
 import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { documentTemplateSchema } from '@/lib/admin-schemas'
@@ -67,11 +67,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    revalidatePath('/documents', 'layout')
-    revalidatePath('/sitemap.xml')
-    if (data?.slug) {
-      revalidatePath(`/documents/${data.slug}`, 'page')
-    }
+    revalidateDocumentMutation(data?.slug)
 
     return NextResponse.json({ template: data })
   } catch (error) {

@@ -3,7 +3,7 @@ import { cookies } from 'next/headers'
 import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { invalidateCache } from '@/lib/redis-cache'
-import { revalidatePath } from 'next/cache'
+import { revalidateComplianceMutation } from '@/lib/content-revalidation'
 import { complianceSchema } from '@/lib/admin-schemas'
 
 export async function GET() {
@@ -70,8 +70,7 @@ export async function POST(request: Request) {
 
       // Invalidate active calendar entries cache
       await invalidateCache('compliance_entries:active')
-      revalidatePath('/calendar')
-      revalidatePath('/sitemap.xml')
+      revalidateComplianceMutation()
 
       return NextResponse.json({ entry: data })
       } catch (error) {

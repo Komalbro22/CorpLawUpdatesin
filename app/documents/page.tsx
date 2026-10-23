@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   },
 }
 
-export const revalidate = 86400
+export const revalidate = false // Fully static; instant on-demand via revalidateDocumentMutation
 
 const categoryConfig = {
   board_resolution: {

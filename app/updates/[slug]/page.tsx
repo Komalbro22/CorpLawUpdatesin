@@ -39,7 +39,7 @@ import AdsterraBanner from '@/components/AdsterraBanner'
 
 const stripHtml = (html: string) => html ? html.replace(/<[^>]*>/g, '').trim() : ''
 
-export const revalidate = 43200 // 12 hours
+export const revalidate = 86400 // 24 hours fallback; instant on-demand via revalidateArticleMutation
 
 export async function generateStaticParams() {
     const { data } = await supabase.from('updates').select('slug')

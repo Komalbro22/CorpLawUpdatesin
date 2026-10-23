@@ -23,7 +23,7 @@ import {
 import BankGuaranteeClient from './BankGuaranteeClient'
 import JsonLd from '@/components/JsonLd'
 
-export const revalidate = 86400
+export const revalidate = false
 
 const pageUrl = 'https://www.corplawupdates.in/documents/bank-guarantee'
 

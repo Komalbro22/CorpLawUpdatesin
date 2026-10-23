@@ -6,7 +6,7 @@ const title =
 const description =
   'Download free MoU format in Word (.docx) and PDF for India. Generate custom Memorandum of Understanding drafts with AI purpose assistant. Covers Business Partnership, Joint Venture, Vendor, Co-Founders, State Stamp Duty (Article 5), and Indian Contract Act 1872 enforceability.'
 
-export const revalidate = 86400
+export const revalidate = false
 
 export const metadata: Metadata = {
   title,

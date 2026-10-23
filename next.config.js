@@ -81,6 +81,9 @@ const nextConfig = {
         source: '/admin/:path*',
         headers: [
           { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+          { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, private' },
+          { key: 'Pragma', value: 'no-cache' },
+          { key: 'Expires', value: '0' },
         ],
       },
       // SEC-001: Default fail-closed policy for all API routes (sensitive, mutating, or authenticated)
@@ -156,8 +159,9 @@ const nextConfig = {
           },
         ],
       },
+      // Public root listings & static tools: edge-cache for 24 hours with stale-while-revalidate
       {
-        source: '/(updates|glossary|tools|about|calendar|documents|category|rbi|author)',
+        source: '/',
         headers: [
           {
             key: 'Cache-Control',
@@ -166,7 +170,17 @@ const nextConfig = {
         ],
       },
       {
-        source: '/(updates|glossary|tools|about|calendar|documents|category|rbi|author)/:path*',
+        source: '/(updates|glossary|tools|about|calendar|documents|category|rbi|author|newsletter)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=300, s-maxage=86400, stale-while-revalidate=604800',
+          },
+        ],
+      },
+      // Fixed subpaths for interactive tools & calculators (static client tools)
+      {
+        source: '/(tools|rbi)/:path*',
         headers: [
           {
             key: 'Cache-Control',

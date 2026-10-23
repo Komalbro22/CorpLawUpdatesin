@@ -5,7 +5,7 @@ import { supabaseAdmin } from '@/lib/supabase-server'
 import { getCachedDocumentTemplate } from '@/lib/document-template-cache'
 import DocumentGeneratorClient from './DocumentGeneratorClient'
 
-export const revalidate = 86400
+export const revalidate = false // Fully static; instant on-demand via revalidateDocumentMutation
 export const dynamicParams = true
 
 interface PageProps {

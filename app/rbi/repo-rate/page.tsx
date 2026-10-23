@@ -26,7 +26,7 @@ import {
   Info
 } from 'lucide-react'
 
-export const revalidate = 43200 // 12 hours
+export const revalidate = 86400 // 24 hours fallback
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getRateSettings()

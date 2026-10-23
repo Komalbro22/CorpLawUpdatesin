@@ -5,7 +5,7 @@ const title = 'MODT (Memorandum of Deposit of Title Deeds): Meaning, Format, Dra
 const description =
   'What is MODT? Full form, meaning, stamp duty & format under Section 58(f) Transfer of Property Act. Download free MODT sample draft in Word (.docx) and PDF. Includes State Stamp Duty rates & Form CHG-1 filing checklist.'
 
-export const revalidate = 86400
+export const revalidate = false
 
 export const metadata: Metadata = {
   title,

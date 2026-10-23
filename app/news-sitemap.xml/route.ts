@@ -1,7 +1,7 @@
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { NextResponse } from 'next/server'
 
-export const revalidate = 1800 // 30 minutes edge cache; on-demand revalidated via revalidatePath('/news-sitemap.xml')
+export const revalidate = 3600 // 1 hour edge cache; instant on-demand on article publish
 
 export async function GET() {
   const BASE_URL = 'https://www.corplawupdates.in'

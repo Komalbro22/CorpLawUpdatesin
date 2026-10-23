@@ -6,7 +6,7 @@ const title =
 const description =
   'Download free partnership deed format in Word (.docx) & PDF as per Income Tax Act 2025/2026. Features Section 40(b) (AY 2025-26 & 2026-27) remuneration limits, Section 194T 10% TDS, Article 46 stamp duty, ROF Form V / Form E, and AI drafter.'
 
-export const revalidate = 86400
+export const revalidate = false
 
 export const metadata: Metadata = {
   title,

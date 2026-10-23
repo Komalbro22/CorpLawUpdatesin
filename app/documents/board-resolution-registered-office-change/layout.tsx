@@ -7,7 +7,7 @@ const title =
 const description =
   'Download official Board Resolution format for shifting of registered office in Word (.docx) & PDF. Covers same city (local limits), outside local limits, different RoC, and inter-state shifting with Form INC-22 checklist, Special Resolution, Form INC-26 newspaper notice, Form 15 for LLP, and Section 12 & 13 Companies Act 2013 compliance.'
 
-export const revalidate = 86400
+export const revalidate = false
 
 export const metadata: Metadata = {
   title,
