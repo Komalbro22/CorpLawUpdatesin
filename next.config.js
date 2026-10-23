@@ -192,6 +192,37 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // 301 Permanent redirects for duplicate drafted article slugs -> live "-2" articles (24 Oct 2026)
+      {
+        source: '/updates/rbi-operational-risk-second-amendment-directions-2026',
+        destination: '/updates/rbi-operational-risk-second-amendment-directions-2026-2',
+        permanent: true,
+      },
+      {
+        source: '/updates/rbi-operational-risk-second-amendment-directions-2026/',
+        destination: '/updates/rbi-operational-risk-second-amendment-directions-2026-2',
+        permanent: true,
+      },
+      {
+        source: '/updates/rbi-leverage-ratio-eleventh-amendment-final-directions-2026',
+        destination: '/updates/rbi-leverage-ratio-eleventh-amendment-final-directions-2026-2',
+        permanent: true,
+      },
+      {
+        source: '/updates/rbi-leverage-ratio-eleventh-amendment-final-directions-2026/',
+        destination: '/updates/rbi-leverage-ratio-eleventh-amendment-final-directions-2026-2',
+        permanent: true,
+      },
+      {
+        source: '/updates/sebi-research-analyst-call-recording-relaxation-institutional-clients-2026',
+        destination: '/updates/sebi-research-analyst-call-recording-relaxation-institutional-clients-2026-2',
+        permanent: true,
+      },
+      {
+        source: '/updates/sebi-research-analyst-call-recording-relaxation-institutional-clients-2026/',
+        destination: '/updates/sebi-research-analyst-call-recording-relaxation-institutional-clients-2026-2',
+        permanent: true,
+      },
       {
         source: '/tools/doc-generator',
         destination: '/documents',

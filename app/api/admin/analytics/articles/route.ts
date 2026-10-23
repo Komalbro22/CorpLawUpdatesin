@@ -59,6 +59,11 @@ export async function GET() {
         },
       })
 
+      const REDIRECTED_SLUG_MAP: Record<string, string> = {
+        'rbi-operational-risk-second-amendment-directions-2026': 'rbi-operational-risk-second-amendment-directions-2026-2',
+        'rbi-leverage-ratio-eleventh-amendment-final-directions-2026': 'rbi-leverage-ratio-eleventh-amendment-final-directions-2026-2',
+        'sebi-research-analyst-call-recording-relaxation-institutional-clients-2026': 'sebi-research-analyst-call-recording-relaxation-institutional-clients-2026-2',
+      }
       if (articlesReport.rows) {
         articlesReport.rows.forEach(row => {
           const path = row.dimensionValues?.[0]?.value || ''
@@ -66,6 +71,10 @@ export async function GET() {
           const views = parseInt(row.metricValues?.[0]?.value || '0', 10)
           if (slug && views > 0) {
             gaArticleViews[slug] = (gaArticleViews[slug] || 0) + views
+            const targetSlug = REDIRECTED_SLUG_MAP[slug]
+            if (targetSlug) {
+              gaArticleViews[targetSlug] = (gaArticleViews[targetSlug] || 0) + views
+            }
           }
         })
       }
