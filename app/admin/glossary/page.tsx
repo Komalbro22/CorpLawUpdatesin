@@ -165,7 +165,8 @@ export default function AdminGlossaryPage() {
   }
 
   const allCategories = useMemo(() => {
-    const set = new Set<string>()
+    const defaultCategories = ['MCA', 'SEBI', 'RBI', 'IBC', 'NCLT', 'FEMA', 'CCI', 'LABOUR', 'IFSCA', 'TAXATION']
+    const set = new Set<string>(defaultCategories)
     terms.forEach(t => {
       if (t.category) set.add(t.category)
     })

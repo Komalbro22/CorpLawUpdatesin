@@ -196,7 +196,7 @@ async function handleGlossaryUpdate(
       }
     }
     if (isDirty('definition')) dbUpdates.definition = rawBody.definition || ''
-    if (isDirty('category')) dbUpdates.category = (rawBody.category || 'GENERAL').trim()
+    if (isDirty('category')) dbUpdates.category = (rawBody.category || 'MCA').trim().toUpperCase()
     if (isDirty('keywords')) dbUpdates.keywords = rawBody.keywords || []
     if (isDirty('synonyms')) dbUpdates.synonyms = rawBody.synonyms || []
     if (isDirty('is_verified')) dbUpdates.is_verified = Boolean(rawBody.is_verified)

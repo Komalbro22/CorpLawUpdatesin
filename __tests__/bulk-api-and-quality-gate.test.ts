@@ -234,6 +234,51 @@ describe('800-Word Content Quality Gate & Bulk APIs', () => {
       expect(data.skipped).toBe(1)
       expect(data.results[0].status).toBe('skipped')
     })
+
+    it('accepts terms for all 4 new categories (CCI, TAXATION, LABOUR, IFSCA)', async () => {
+      const mockSelect = jest.fn().mockReturnValue({
+        in: jest.fn().mockResolvedValue({ data: [] }),
+      })
+      let insertedPayloads: any[] = []
+      const mockInsert = jest.fn().mockImplementation((items: any[]) => {
+        insertedPayloads = items
+        return {
+          select: jest.fn().mockResolvedValue({
+            data: items.map((it, idx) => ({ id: `id-${idx}`, slug: it.slug, term: it.term })),
+            error: null,
+          }),
+        }
+      })
+
+      ;(supabaseAdmin.from as jest.Mock).mockReturnValue({
+        select: mockSelect,
+        insert: mockInsert,
+      })
+
+      const req = new NextRequest('http://localhost:3000/api/admin/glossary/bulk', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          terms: [
+            { term: 'Cartel', slug: 'cartel', category: 'CCI', definition: 'An association of producers...' },
+            { term: 'Advance Ruling', slug: 'advance-ruling', category: 'TAXATION', definition: 'A written decision by authority...' },
+            { term: 'Standing Orders', slug: 'standing-orders', category: 'LABOUR', definition: 'Rules relating to matters of work...' },
+            { term: 'FinTech Entity', slug: 'fintech-entity', category: 'IFSCA', definition: 'Entities licensed under IFSCA framework...' },
+          ],
+        }),
+      })
+
+      const res = await bulkGlossaryPost(req)
+      expect(res.status).toBe(200)
+      const data = await res.json()
+      expect(data.success).toBe(true)
+      expect(data.succeeded).toBe(4)
+      expect(insertedPayloads).toHaveLength(4)
+      expect(insertedPayloads[0].category).toBe('CCI')
+      expect(insertedPayloads[1].category).toBe('TAXATION')
+      expect(insertedPayloads[2].category).toBe('LABOUR')
+      expect(insertedPayloads[3].category).toBe('IFSCA')
+    })
   })
 
   describe('3. POST /api/admin/articles/bulk', () => {

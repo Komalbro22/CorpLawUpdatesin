@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
       query = query.or(`term.ilike.%${search}%,definition.ilike.%${search}%`)
     }
     if (category) {
-      query = query.eq('category', category)
+      query = query.ilike('category', category)
     }
 
     query = query.order('term', { ascending: true })
@@ -131,7 +131,7 @@ export async function POST(request: NextRequest) {
       term,
       slug,
       definition: rawBody.definition || '',
-      category: (rawBody.category || 'GENERAL').trim(),
+      category: (rawBody.category || 'MCA').trim().toUpperCase(),
       keywords: rawBody.keywords || [],
       synonyms: rawBody.synonyms || [],
       is_verified: rawBody.is_verified || false,

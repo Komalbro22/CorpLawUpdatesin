@@ -197,7 +197,7 @@ export async function POST(request: NextRequest) {
         term: termName,
         slug,
         definition: item.definition || '',
-        category: (item.category || 'GENERAL').trim(),
+        category: (item.category || 'MCA').trim().toUpperCase(),
         keywords: item.keywords || [],
         synonyms: item.synonyms || [],
         is_verified: item.is_verified !== undefined ? !!item.is_verified : true,
