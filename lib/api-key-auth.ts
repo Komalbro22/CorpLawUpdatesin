@@ -244,7 +244,7 @@ async function checkIpLockout(ip: string): Promise<{ locked: boolean; retryAfter
 /**
  * Record an invalid API key attempt from an IP address
  */
-async function recordInvalidKeyAttempt(ip: string): Promise<void> {
+export async function recordInvalidKeyAttempt(ip: string): Promise<void> {
   const now = Date.now()
   const current = inMemoryIpViolations.get(ip) || { count: 0 }
   const newCount = current.count + 1
@@ -301,7 +301,7 @@ function checkRateLimit(keyId: string, isNewsletterSend: boolean = false): { ok:
 /**
  * Throttled update of api_keys.last_used_at (at most once every 60 seconds per key)
  */
-async function touchLastUsed(keyId: string): Promise<void> {
+export async function touchLastUsed(keyId: string): Promise<void> {
   const now = Date.now()
   const lastTouch = keyLastUsedCache.get(keyId) || 0
 
@@ -525,8 +525,8 @@ export async function verifyAdminOrKey(
     }
   }
 
-  // Throttled update of last_used_at
-  void touchLastUsed(keyRecord.id)
+  // Throttled update of last_used_at (guaranteed write in serverless)
+  await touchLastUsed(keyRecord.id)
 
   return {
     success: true,

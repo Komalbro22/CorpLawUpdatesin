@@ -31,9 +31,29 @@ export async function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl
     const isAdminRoute = pathname.startsWith('/admin') || pathname.startsWith('/api/admin')
     const isLoginPage = pathname === '/admin/login' || pathname === '/api/admin/login'
+    const isApi = pathname.startsWith('/api/')
+    const authHeader = request.headers.get('authorization')
+    const hasBearerKey = isApi && !!authHeader && authHeader.startsWith('Bearer ')
 
-    // CSRF Check on state-changing requests to admin API routes
-    if (pathname.startsWith('/api/admin') && !isLoginPage && ['POST', 'PUT', 'DELETE', 'PATCH'].includes(request.method.toUpperCase())) {
+    // Security: Reject API keys passed in query strings on admin routes
+    if (pathname.startsWith('/api/admin')) {
+        const searchParams = request.nextUrl.searchParams
+        if (searchParams.has('key') || searchParams.has('api_key') || searchParams.has('token')) {
+            return NextResponse.json(
+                {
+                    error: {
+                        code: 'INVALID_TRANSPORT',
+                        message: 'API keys must be passed exclusively via Authorization: Bearer header. Query string keys are forbidden for security.',
+                    },
+                },
+                { status: 400 }
+            )
+        }
+    }
+
+    // CSRF Check on state-changing requests to admin API routes (session cookies only)
+    // Server-to-server API key requests are immune to CSRF and should not be blocked by Origin header
+    if (pathname.startsWith('/api/admin') && !isLoginPage && !hasBearerKey && ['POST', 'PUT', 'DELETE', 'PATCH'].includes(request.method.toUpperCase())) {
         const originHeader = request.headers.get('origin') || request.headers.get('referer')
         if (originHeader) {
             try {
@@ -59,12 +79,20 @@ export async function proxy(request: NextRequest) {
     }
 
     if (isAdminRoute && !isLoginPage) {
+        // If request provides an Authorization: Bearer <key> for an admin API route, allow it to pass to route handlers
+        // Individual route handlers enforce their own opt-in and required scope checks (verifyAdminOrKey)
+        if (hasBearerKey) {
+            return NextResponse.next()
+        }
+
         const session = request.cookies.get('admin_session')
-        const isApi = pathname.startsWith('/api/')
         
         const unauthorizedResponse = () => {
             if (isApi) {
-                return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+                return NextResponse.json(
+                    { error: { code: 'UNAUTHORIZED', message: 'Authentication required via session cookie or Bearer API key.' } },
+                    { status: 401 }
+                )
             }
             return NextResponse.redirect(new URL('/admin/login', request.url))
         }
