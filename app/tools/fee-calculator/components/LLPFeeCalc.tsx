@@ -163,6 +163,10 @@ export default function LLPFeeCalc() {
   const isForm24 = formId === 'Form-24'
   const isFiLLiP = formId === 'Form-FiLLiP'
 
+  const scopeCoverText = isAnnualForm
+    ? `${formId === 'Form-8-Annual' ? 'Form 8' : 'Form 11'} — FY ${financialYear} only`
+    : result?.formName || 'Selected filing';
+
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
       {/* Notice Banner */}
@@ -542,6 +546,15 @@ export default function LLPFeeCalc() {
         </div>
       </div>
 
+      {/* Scope Note: Single Form & Single FY Clarification */}
+      <div className="bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200/80 dark:border-blue-800/80 text-blue-950 dark:text-blue-200 p-4 sm:p-5 rounded-2xl text-sm flex items-start gap-3">
+        <span className="text-xl shrink-0 mt-0.5">ℹ️</span>
+        <div className="leading-relaxed">
+          <strong className="font-semibold text-blue-900 dark:text-blue-100">Scope Note: </strong>
+          This result is for <strong>ONE form for ONE financial year</strong> — the form and FY you selected above. MCA charges the normal fee and the additional (late) fee separately for every form and every year. If filings for more than one year are pending (for example Form 8 for FY 2023-24 and FY 2024-25), run this calculator once for each year and each form and add the results — that total is what you will pay at the MCA portal.
+        </div>
+      </div>
+
       {/* Live Results Card */}
       {result && (
         <div className="bg-white dark:bg-slate-900 border-2 border-teal-500/20 dark:border-teal-500/30 rounded-3xl p-5 sm:p-8 shadow-lg space-y-8">
@@ -564,16 +577,21 @@ export default function LLPFeeCalc() {
 
           {/* Top 3 Metric Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="bg-teal-50/60 dark:bg-teal-950/20 border border-teal-200 dark:border-teal-900/40 p-5 rounded-2xl">
-              <span className="text-xs font-bold text-teal-800 dark:text-teal-300 uppercase tracking-wider block mb-1">
-                Total MCA Portal Payable
-              </span>
-              <div className="text-3xl font-extrabold text-teal-900 dark:text-teal-100 font-heading">
-                ₹ {result.totalPayable.toLocaleString('en-IN')}
+            <div className="bg-teal-50/60 dark:bg-teal-950/20 border border-teal-200 dark:border-teal-900/40 p-5 rounded-2xl flex flex-col justify-between">
+              <div>
+                <span className="text-xs font-bold text-teal-800 dark:text-teal-300 uppercase tracking-wider block mb-1">
+                  Total MCA Portal Payable
+                </span>
+                <div className="text-3xl font-extrabold text-teal-900 dark:text-teal-100 font-heading">
+                  ₹ {result.totalPayable.toLocaleString('en-IN')}
+                </div>
+                <span className="text-[11px] text-teal-700 dark:text-teal-400 mt-1 block">
+                  Tier 1 + Tier 2 + Tier 3 Fees
+                </span>
               </div>
-              <span className="text-[11px] text-teal-700 dark:text-teal-400 mt-1 block">
-                Tier 1 + Tier 2 + Tier 3 Fees
-              </span>
+              <div className="mt-3 pt-2.5 border-t border-teal-200/70 dark:border-teal-800/70 text-[11px] text-teal-950 dark:text-teal-200 leading-tight">
+                <strong>Covers:</strong> {scopeCoverText} (one filing). Fees for other pending years or forms are not included in this figure.
+              </div>
             </div>
 
             <div className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 p-5 rounded-2xl">
@@ -653,7 +671,10 @@ export default function LLPFeeCalc() {
                   )}
                   <tr className="bg-teal-50/50 dark:bg-teal-950/30 font-bold border-t-2 border-teal-500/20">
                     <td className="p-3.5 sm:px-5 text-teal-900 dark:text-teal-200">
-                      TOTAL MCA PORTAL PAYABLE AMOUNT
+                      <div>TOTAL MCA PORTAL PAYABLE AMOUNT</div>
+                      <div className="text-[11px] font-normal text-teal-800 dark:text-teal-300 mt-1">
+                        Covers: {scopeCoverText} (one filing). Fees for other pending years or forms are not included in this figure.
+                      </div>
                     </td>
                     <td className="p-3.5 sm:px-5 text-xs text-teal-700 dark:text-teal-400 font-normal">
                       Amount payable at MCA portal checkout upon filing

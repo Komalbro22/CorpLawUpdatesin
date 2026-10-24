@@ -9,6 +9,10 @@ export const LLP_FAQS: FaqItem[] = [
     a: 'Under Section 69 of the LLP Act, 2008 read with the LLP (Second Amendment) Rules, 2022 (effective 1 April 2022), late filing fees at the MCA portal are calculated using a slab-multiplier schedule (1× to 15× for Small LLPs and 1× to 30× for Other LLPs). For Form 8 (Annual Statement) and Form 11 (Annual Return), delays beyond 360 days attract the maximum multiplier plus an uncapped daily addition of ₹10/day for Small LLPs and ₹20/day for Other LLPs.',
   },
   {
+    q: 'Is this late fee for one year or the total for all pending years?',
+    a: "One year. The additional fee under the LLP Rules is charged per form, per financial year, on that filing's own period of delay. If an LLP has not filed Form 8 or Form 11 for several years, each year's form is filed (and charged) separately — calculate each year here and add them for the consolidated total payable. Note that for Form 8 and Form 11 the fee is not capped at one year of delay: beyond 360 days, ₹10 per day (Small LLP) or ₹20 per day (Other LLP) keeps adding for every extra day until the form is filed.",
+  },
+  {
     q: 'Was the flat ₹100 per day penalty abolished for LLPs?',
     a: 'No. The additional filing fee payable at the MCA portal checkout was transitioned to a slab-multiplier system under Section 69. However, the substantive Limited Liability Partnership Act, 2008 maintains separate statutory adjudication penalties: Section 34(5) for Statement of Account defaults and Section 35(2) for Annual Return defaults prescribe ₹100 per day during continuance of default (capped at ₹1,00,000 for the LLP entity and ₹50,000 for each Designated Partner). These penalties require formal ROC adjudication under Section 76A and are not collected at portal checkout.',
   },

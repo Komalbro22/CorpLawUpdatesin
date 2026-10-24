@@ -82,8 +82,7 @@ export async function DELETE(
 
       // Invalidate active calendar entries cache
       await invalidateCache('compliance_entries:active')
-      revalidatePath('/calendar')
-      revalidatePath('/sitemap.xml')
+      revalidateComplianceMutation()
 
       return NextResponse.json({ success: true })
       } catch (error) {
