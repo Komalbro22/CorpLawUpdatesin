@@ -1,28 +1,53 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import { revalidateGlossaryMutation } from '@/lib/content-revalidation'
 import { glossarySchema } from '@/lib/admin-schemas'
-import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { slugify } from '@/lib/utils'
+import { verifyAdminOrKey, logApiAudit, getClientIp } from '@/lib/api-key-auth'
 
-export async function GET() {
+export const dynamic = 'force-dynamic'
+
+export async function GET(request: NextRequest) {
   try {
-    void cookies()
-    if (!await verifyAdminSession()) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const authCheck = await verifyAdminOrKey(request, 'glossary:read')
+    if (!authCheck.success) {
+      return authCheck.response
     }
 
-    const { data, error } = await supabaseAdmin
+    const { searchParams } = new URL(request.url)
+    const search = searchParams.get('search')
+    const category = searchParams.get('category')
+    const limit = searchParams.has('limit') ? parseInt(searchParams.get('limit') || '50', 10) : undefined
+    const offset = searchParams.has('offset') ? parseInt(searchParams.get('offset') || '0', 10) : undefined
+
+    let query = supabaseAdmin
       .from('glossary')
-      .select('id, term, slug, definition, category, keywords, synonyms, is_verified, related_terms, extended_note, faqs, created_at')
-      .order('term', { ascending: true })
+      .select('id, term, slug, definition, category, keywords, synonyms, is_verified, related_terms, extended_note, faqs, created_at', { count: 'exact' })
+
+    if (search) {
+      query = query.or(`term.ilike.%${search}%,definition.ilike.%${search}%`)
+    }
+    if (category) {
+      query = query.eq('category', category)
+    }
+
+    query = query.order('term', { ascending: true })
+
+    if (limit !== undefined && offset !== undefined) {
+      query = query.range(offset, offset + limit - 1)
+    }
+
+    const { data, count, error } = await query
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    return NextResponse.json({ terms: data ?? [] })
+    return NextResponse.json({
+      terms: data ?? [],
+      items: data ?? [],
+      total: count ?? (data?.length || 0),
+    })
   } catch (error) {
     console.error('[API Error]', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
@@ -31,11 +56,12 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    void cookies()
-    if (!await verifyAdminSession()) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const authCheck = await verifyAdminOrKey(request, 'glossary:write')
+    if (!authCheck.success) {
+      return authCheck.response
     }
 
+    const clientIp = getClientIp(request)
     const rawBody = await request.json()
     const parsed = glossarySchema.safeParse(rawBody)
     if (!parsed.success) {
@@ -98,19 +124,12 @@ export async function POST(request: NextRequest) {
       slug,
       definition: rawBody.definition || '',
       category: (rawBody.category || 'GENERAL').trim(),
+      keywords: rawBody.keywords || [],
+      synonyms: rawBody.synonyms || [],
+      is_verified: rawBody.is_verified || false,
+      related_terms: rawBody.related_terms || [],
       extended_note: finalExtendedNote,
-      is_verified: !!rawBody.is_verified,
-      keywords: Array.isArray(rawBody.keywords) ? rawBody.keywords : [],
-      synonyms: Array.isArray(rawBody.synonyms) ? rawBody.synonyms : [],
-      related_terms: Array.isArray(rawBody.related_terms) ? rawBody.related_terms : [],
-      faqs: Array.isArray(rawBody.faqs)
-        ? rawBody.faqs
-            .map((f: any) => ({
-              q: (f.q || f.question || '').trim(),
-              a: (f.a || f.answer || '').trim()
-            }))
-            .filter((f: any) => f.q && f.a)
-        : []
+      faqs: rawBody.faqs || [],
     }
 
     const { data, error } = await supabaseAdmin
@@ -119,13 +138,30 @@ export async function POST(request: NextRequest) {
       .select()
       .single()
 
-    if (error || !data) {
-      return NextResponse.json({ error: error?.message || 'Creation failed' }, { status: 500 })
+    if (error) {
+      console.error('[Glossary API] Insert Error:', error)
+      return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    revalidateGlossaryMutation(data.slug)
+    revalidateGlossaryMutation({
+      slug: data.slug,
+      category: data.category,
+    })
 
-    return NextResponse.json({ term: data })
+    if (authCheck.auth.type === 'api_key') {
+      await logApiAudit({
+        keyId: authCheck.auth.key.id,
+        keyName: authCheck.auth.key.name,
+        action: 'glossary:create',
+        entityType: 'glossary',
+        entityId: data.id,
+        ip: clientIp,
+        status: 'success',
+        details: { slug: data.slug, term: data.term },
+      })
+    }
+
+    return NextResponse.json({ term: data }, { status: 201 })
   } catch (error) {
     console.error('[API Error]', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

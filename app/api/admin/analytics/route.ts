@@ -1,18 +1,18 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 export const dynamic = 'force-dynamic'
-import { verifyAdminSession } from '@/lib/admin-auth'
+import { verifyAdminOrKey } from '@/lib/api-key-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
-
 import { BetaAnalyticsDataClient } from '@google-analytics/data'
 
-export async function GET() {
-  if (!await verifyAdminSession()) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+export async function GET(request: NextRequest) {
+  const authCheck = await verifyAdminOrKey(request, 'analytics:read')
+  if (!authCheck.success) {
+    return authCheck.response
   }
 
   let analyticsDataClient: BetaAnalyticsDataClient | null = null
   const propertyId = process.env.GA_PROPERTY_ID
-  
+
   try {
     if (process.env.GOOGLE_CLIENT_EMAIL && process.env.GOOGLE_PRIVATE_KEY) {
       analyticsDataClient = new BetaAnalyticsDataClient({
@@ -39,7 +39,7 @@ export async function GET() {
         dateRanges: [{ startDate: '2023-01-01', endDate: 'today' }],
         metrics: [{ name: 'screenPageViews' }, { name: 'activeUsers' }],
       })
-      
+
       if (overviewReport.rows && overviewReport.rows.length > 0) {
         gaTotalViews = parseInt(overviewReport.rows[0].metricValues?.[0]?.value || '0', 10)
         gaActiveUsers = parseInt(overviewReport.rows[0].metricValues?.[1]?.value || '0', 10)
@@ -92,20 +92,18 @@ export async function GET() {
     recentSubscribersResult,
     weekArticlesResult,
     preferredSourceClicksResult,
+    feedbackResult,
   ] = await Promise.all([
-    // All published articles
     supabaseAdmin
       .from('updates')
       .select('title, slug, views, category, published_at')
       .not('published_at', 'is', null),
 
-    // Total active subscribers
     supabaseAdmin
       .from('subscribers')
       .select('*', { count: 'exact', head: true })
       .eq('is_active', true),
 
-    // Recent 5 active subscribers
     supabaseAdmin
       .from('subscribers')
       .select('email, subscribed_at')
@@ -113,17 +111,20 @@ export async function GET() {
       .order('subscribed_at', { ascending: false })
       .limit(5),
 
-    // Articles published in last 7 days
     supabaseAdmin
       .from('updates')
       .select('*', { count: 'exact', head: true })
       .not('published_at', 'is', null)
       .gte('published_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()),
 
-    // Preferred Source Clicks (All time)
     supabaseAdmin
       .from('preferred_source_clicks')
       .select('id, location, created_at'),
+
+    supabaseAdmin
+      .from('reader_feedback')
+      .select('*', { count: 'exact', head: true })
+      .in('status', ['pending', 'unprocessed']),
   ])
 
   const publishedArticles = articlesResult.data || []
@@ -143,17 +144,14 @@ export async function GET() {
   let totalDbViews = 0
   const articlesWithMergedViews = publishedArticles.map(article => {
     totalDbViews += (article.views || 0)
-    // Use GA views if available, otherwise fallback to DB views
     const finalViews = gaArticleViews[article.slug] || article.views || 0
     return { ...article, views: finalViews }
   })
 
-  // Sort by final views descending and take top 5
   const topArticles = articlesWithMergedViews
     .sort((a, b) => b.views - a.views)
-    .slice(0, 5)
+    .slice(0, 10)
 
-  // Use GA total views if available, otherwise DB total views
   const finalTotalViews = gaTotalViews > 0 ? gaTotalViews : totalDbViews
 
   return NextResponse.json({
@@ -165,6 +163,7 @@ export async function GET() {
       activeUsers: gaActiveUsers,
       totalPreferredClicks,
       preferredClicksThisWeek,
+      pendingFeedback: feedbackResult.count || 0,
       source: gaTotalViews > 0 ? 'Google Analytics' : 'Database',
     },
     topArticles,

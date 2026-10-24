@@ -1,90 +1,112 @@
-import { NextResponse } from 'next/server'
-import { verifyAdminSession } from '@/lib/admin-auth'
+import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
+import { verifyAdminOrKey, logApiAudit, getClientIp } from '@/lib/api-key-auth'
 
-// UNSUBSCRIBE — marks as inactive
+export const dynamic = 'force-dynamic'
+
+// PATCH — status update (e.g. unsubscribe / reactivate)
 export async function PATCH(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const authCheck = await verifyAdminOrKey(request, 'subscribers:write')
+  if (!authCheck.success) {
+    return authCheck.response
+  }
 
-      try {
-        if (!await verifyAdminSession()) {
-        return NextResponse.json(
-          { error: 'Unauthorized' }, 
-          { status: 401 }
-        )
+  const clientIp = getClientIp(request)
+
+  try {
+    const { id } = await params
+    let isActive = false
+
+    try {
+      const body = await request.json()
+      if (typeof body?.is_active === 'boolean') {
+        isActive = body.is_active
       }
+    } catch {
+      // Default to inactive / unsubscribe
+    }
 
-      const { error } = await supabaseAdmin
-        .from('subscribers')
-        .update({ 
-          is_active: false,
-          unsubscribed_at: new Date().toISOString()
-        })
-        .eq('id', (await params).id)
+    const updatePayload: Record<string, any> = {
+      is_active: isActive,
+    }
+    if (!isActive) {
+      updatePayload.unsubscribed_at = new Date().toISOString()
+    } else {
+      updatePayload.unsubscribed_at = null
+    }
 
-      if (error) {
-        console.error('Unsubscribe error:', error)
-        return NextResponse.json(
-          { error: 'Failed to unsubscribe' }, 
-          { status: 500 }
-        )
-      }
+    const { data: updatedSub, error } = await supabaseAdmin
+      .from('subscribers')
+      .update(updatePayload)
+      .eq('id', id)
+      .select()
+      .single()
 
-      return NextResponse.json({ success: true })
-      } catch (error) {
-  const err = error as Error & { digest?: string };
-            if (err.digest === 'DYNAMIC_SERVER_USAGE' || err.message?.includes('Dynamic server usage')) {
-              throw error;
-            }
+    if (error) {
+      console.error('Subscriber status update error:', error)
+      return NextResponse.json({ error: 'Failed to update subscriber status' }, { status: 500 })
+    }
 
-        console.error('[API Error]', error);
-        return NextResponse.json(
-          { error: 'Internal server error' },
-          { status: 500 }
-        );
-      }
+    if (authCheck.auth.type === 'api_key') {
+      await logApiAudit({
+        keyId: authCheck.auth.key.id,
+        keyName: authCheck.auth.key.name,
+        action: isActive ? 'subscribers:activate' : 'subscribers:unsubscribe',
+        entityType: 'subscriber',
+        entityId: id,
+        ip: clientIp,
+        status: 'success',
+        details: { is_active: isActive },
+      })
+    }
+
+    return NextResponse.json({ success: true, subscriber: updatedSub })
+  } catch (error) {
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
 }
 
 // DELETE — permanently removes subscriber
 export async function DELETE(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const authCheck = await verifyAdminOrKey(request, 'subscribers:write')
+  if (!authCheck.success) {
+    return authCheck.response
+  }
 
-      try {
-        if (!await verifyAdminSession()) {
-        return NextResponse.json(
-          { error: 'Unauthorized' }, 
-          { status: 401 }
-        )
-      }
+  const clientIp = getClientIp(request)
 
-      const { error } = await supabaseAdmin
-        .from('subscribers')
-        .delete()
-        .eq('id', (await params).id)
+  try {
+    const { id } = await params
+    const { error } = await supabaseAdmin
+      .from('subscribers')
+      .delete()
+      .eq('id', id)
 
-      if (error) {
-        console.error('Delete error:', error)
-        return NextResponse.json(
-          { error: 'Failed to delete' }, 
-          { status: 500 }
-        )
-      }
+    if (error) {
+      console.error('Subscriber delete error:', error)
+      return NextResponse.json({ error: 'Failed to delete subscriber' }, { status: 500 })
+    }
 
-      return NextResponse.json({ success: true })
-      } catch (error) {
-  const err = error as Error & { digest?: string };
-            if (err.digest === 'DYNAMIC_SERVER_USAGE' || err.message?.includes('Dynamic server usage')) {
-              throw error;
-            }
+    if (authCheck.auth.type === 'api_key') {
+      await logApiAudit({
+        keyId: authCheck.auth.key.id,
+        keyName: authCheck.auth.key.name,
+        action: 'subscribers:delete',
+        entityType: 'subscriber',
+        entityId: id,
+        ip: clientIp,
+        status: 'success',
+      })
+    }
 
-        console.error('[API Error]', error);
-        return NextResponse.json(
-          { error: 'Internal server error' },
-          { status: 500 }
-        );
-      }
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
 }

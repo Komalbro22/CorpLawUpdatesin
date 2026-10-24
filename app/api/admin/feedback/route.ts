@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
+import { verifyAdminOrKey, logApiAudit, getClientIp } from '@/lib/api-key-auth'
+
+export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
-  if (!await verifyAdminSession()) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const authCheck = await verifyAdminOrKey(request, 'feedback:read')
+  if (!authCheck.success) {
+    return authCheck.response
   }
 
   try {
@@ -13,14 +16,16 @@ export async function GET(request: NextRequest) {
     const contextType = searchParams.get('type') || 'all'
     const sentiment = searchParams.get('sentiment') || 'all'
     const page = parseInt(searchParams.get('page') || '1', 10)
-    const pageSize = 20
+    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('limit') || '20', 10)))
+    const offset = searchParams.has('offset')
+      ? Math.max(0, parseInt(searchParams.get('offset') || '0', 10))
+      : (page - 1) * limit
     const exportCsv = searchParams.get('export') === 'csv'
 
-    // First check reader_feedback
+    // First check reader_feedback table
     const { data: testData, error: testError } = await supabaseAdmin.from('reader_feedback').select('id').limit(1)
 
     if (!testError) {
-      // reader_feedback table exists
       if (exportCsv) {
         const { data: allRows } = await supabaseAdmin
           .from('reader_feedback')
@@ -46,7 +51,12 @@ export async function GET(request: NextRequest) {
       let query = supabaseAdmin.from('reader_feedback').select('*', { count: 'exact' })
 
       if (status !== 'all') {
-        query = query.eq('status', status)
+        // Map status aliases if agent uses unprocessed/processed
+        if (status === 'unprocessed') {
+          query = query.in('status', ['pending', 'unprocessed'])
+        } else {
+          query = query.eq('status', status)
+        }
       }
       if (contextType !== 'all') {
         query = query.eq('context_type', contextType)
@@ -55,8 +65,8 @@ export async function GET(request: NextRequest) {
         query = query.eq('sentiment', sentiment)
       }
 
-      const from = (page - 1) * pageSize
-      const to = from + pageSize - 1
+      const from = offset
+      const to = from + limit - 1
 
       const { data, count, error } = await query
         .order('created_at', { ascending: false })
@@ -74,19 +84,22 @@ export async function GET(request: NextRequest) {
         supabaseAdmin.from('reader_feedback').select('*', { count: 'exact', head: true }),
         supabaseAdmin.from('reader_feedback').select('*', { count: 'exact', head: true }).eq('sentiment', 'positive'),
         supabaseAdmin.from('reader_feedback').select('*', { count: 'exact', head: true }).eq('sentiment', 'negative'),
-        supabaseAdmin.from('reader_feedback').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+        supabaseAdmin.from('reader_feedback').select('*', { count: 'exact', head: true }).in('status', ['pending', 'unprocessed']),
       ])
 
       return NextResponse.json({
         items: data || [],
+        feedback: data || [],
         total: count || 0,
         page,
-        pageSize,
+        limit,
+        offset,
         stats: {
           total: totalCount || 0,
           positive: posCount || 0,
           negative: negCount || 0,
           pending: pendCount || 0,
+          unprocessed: pendCount || 0,
         },
       })
     }
@@ -97,8 +110,8 @@ export async function GET(request: NextRequest) {
       .select('*', { count: 'exact' })
       .ilike('compliance_title', '[Feedback:%')
 
-    const from = (page - 1) * pageSize
-    const to = from + pageSize - 1
+    const from = offset
+    const to = from + limit - 1
 
     const { data: fbRows, count: fbCount, error: fbError } = await fallbackQuery
       .order('created_at', { ascending: false })
@@ -129,14 +142,17 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       items,
+      feedback: items,
       total: fbCount || items.length,
       page,
-      pageSize,
+      limit,
+      offset,
       stats: {
         total: fbCount || items.length,
         positive: items.filter(i => i.sentiment === 'positive').length,
         negative: items.filter(i => i.sentiment === 'negative').length,
         pending: items.filter(i => i.status === 'pending').length,
+        unprocessed: items.filter(i => i.status === 'pending').length,
       },
     })
   } catch (err: any) {
@@ -146,24 +162,44 @@ export async function GET(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
-  if (!await verifyAdminSession()) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const authCheck = await verifyAdminOrKey(request, 'feedback:write')
+  if (!authCheck.success) {
+    return authCheck.response
   }
 
+  const clientIp = getClientIp(request)
+
   try {
-    const { id, status } = await request.json()
+    const { id, status, note } = await request.json()
     if (!id || !status) {
-      return NextResponse.json({ error: 'Missing required parameters' }, { status: 400 })
+      return NextResponse.json({ error: 'Missing required parameters: id and status' }, { status: 400 })
+    }
+
+    const updatePayload: Record<string, any> = { status }
+    if (note !== undefined) {
+      updatePayload.internal_note = note
     }
 
     // Try reader_feedback first
     const { error: primaryError } = await supabaseAdmin
       .from('reader_feedback')
-      .update({ status })
+      .update(updatePayload)
       .eq('id', id)
 
     if (!primaryError) {
-      return NextResponse.json({ success: true })
+      if (authCheck.auth.type === 'api_key') {
+        await logApiAudit({
+          keyId: authCheck.auth.key.id,
+          keyName: authCheck.auth.key.name,
+          action: 'feedback:update',
+          entityType: 'feedback',
+          entityId: id,
+          ip: clientIp,
+          status: 'success',
+          details: { status, note },
+        })
+      }
+      return NextResponse.json({ success: true, id, status })
     }
 
     // Fallback: update compliance_suggestions
@@ -174,16 +210,32 @@ export async function PATCH(request: NextRequest) {
 
     if (fbError) throw fbError
 
-    return NextResponse.json({ success: true })
+    if (authCheck.auth.type === 'api_key') {
+      await logApiAudit({
+        keyId: authCheck.auth.key.id,
+        keyName: authCheck.auth.key.name,
+        action: 'feedback:update',
+        entityType: 'feedback',
+        entityId: id,
+        ip: clientIp,
+        status: 'success',
+        details: { status },
+      })
+    }
+
+    return NextResponse.json({ success: true, id, status })
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 })
   }
 }
 
 export async function DELETE(request: NextRequest) {
-  if (!await verifyAdminSession()) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const authCheck = await verifyAdminOrKey(request, 'feedback:write')
+  if (!authCheck.success) {
+    return authCheck.response
   }
+
+  const clientIp = getClientIp(request)
 
   try {
     const { searchParams } = new URL(request.url)
@@ -195,11 +247,35 @@ export async function DELETE(request: NextRequest) {
     // Try reader_feedback
     const { error: primaryError } = await supabaseAdmin.from('reader_feedback').delete().eq('id', id)
     if (!primaryError) {
+      if (authCheck.auth.type === 'api_key') {
+        await logApiAudit({
+          keyId: authCheck.auth.key.id,
+          keyName: authCheck.auth.key.name,
+          action: 'feedback:delete',
+          entityType: 'feedback',
+          entityId: id,
+          ip: clientIp,
+          status: 'success',
+        })
+      }
       return NextResponse.json({ success: true })
     }
 
     // Fallback: delete from compliance_suggestions
     await supabaseAdmin.from('compliance_suggestions').delete().eq('id', id)
+
+    if (authCheck.auth.type === 'api_key') {
+      await logApiAudit({
+        keyId: authCheck.auth.key.id,
+        keyName: authCheck.auth.key.name,
+        action: 'feedback:delete',
+        entityType: 'feedback',
+        entityId: id,
+        ip: clientIp,
+        status: 'success',
+      })
+    }
+
     return NextResponse.json({ success: true })
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 })

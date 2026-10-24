@@ -1,18 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import { revalidateGlossaryMutation } from '@/lib/content-revalidation'
 import { glossarySchema } from '@/lib/admin-schemas'
-import { verifyAdminSession, verifyAdminRole } from '@/lib/admin-auth'
+import { verifyAdminRole } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
+import { verifyAdminOrKey, logApiAudit, getClientIp } from '@/lib/api-key-auth'
+
+export const dynamic = 'force-dynamic'
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    void cookies()
-    if (!await verifyAdminSession()) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const authCheck = await verifyAdminOrKey(request, 'glossary:read')
+    if (!authCheck.success) {
+      return authCheck.response
     }
 
     const { id } = await params
@@ -38,11 +40,12 @@ async function handleGlossaryUpdate(
   params: Promise<{ id: string }>
 ) {
   try {
-    void cookies()
-    if (!await verifyAdminSession()) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const authCheck = await verifyAdminOrKey(request, 'glossary:write')
+    if (!authCheck.success) {
+      return authCheck.response
     }
 
+    const clientIp = getClientIp(request)
     const { id } = await params
     const rawBody = await request.json()
     const parsed = glossarySchema.safeParse(rawBody)
@@ -91,7 +94,6 @@ async function handleGlossaryUpdate(
     const isBodyDirty = isDirty('body') || isDirty('cleanContent')
 
     if (isDirty('extended_note')) {
-      // Direct raw override if extended_note was explicitly provided
       dbUpdates.extended_note = rawBody.extended_note
     } else if (anyMetaDirty || isBodyDirty) {
       const mergedMeta = { ...existingMeta }
@@ -137,64 +139,61 @@ async function handleGlossaryUpdate(
       }
 
       if (isDirty('hide_definition')) {
-        mergedMeta.hide_definition = !!rawBody.hide_definition
+        if (rawBody.hide_definition) {
+          mergedMeta.hide_definition = true
+        } else {
+          delete mergedMeta.hide_definition
+        }
       }
 
-      mergedMeta.updated_at = new Date().toISOString()
-
-      const finalBody = isBodyDirty
-        ? (rawBody.body !== undefined ? rawBody.body : rawBody.cleanContent)
-        : existingCleanBody
+      let targetBody = existingCleanBody
+      if (isDirty('body')) {
+        targetBody = rawBody.body || ''
+      } else if (isDirty('cleanContent')) {
+        targetBody = rawBody.cleanContent || ''
+      }
 
       const hasMeta = Object.keys(mergedMeta).length > 0
-      dbUpdates.extended_note = hasMeta
-        ? `<!-- METADATA\n${JSON.stringify(mergedMeta, null, 2)}\nMETADATA -->\n\n${(finalBody || '').trim()}`
-        : (finalBody || '')
-    } else {
-      // Stamp updated_at on existing metadata even if body was untouched
-      const mergedMeta = { ...existingMeta, updated_at: new Date().toISOString() }
-      dbUpdates.extended_note = `<!-- METADATA\n${JSON.stringify(mergedMeta, null, 2)}\nMETADATA -->\n\n${(existingCleanBody || '').trim()}`
+      const finalNote = hasMeta
+        ? `<!-- METADATA\n${JSON.stringify(mergedMeta, null, 2)}\nMETADATA -->\n\n${(targetBody || '').trim()}`
+        : (targetBody || '')
+
+      dbUpdates.extended_note = finalNote
     }
 
-    // 5. Handle standard database columns with strict partial-save
-    if (isDirty('term') && rawBody.term !== undefined) {
-      dbUpdates.term = String(rawBody.term).trim()
-    }
-    if (isDirty('slug') && rawBody.slug !== undefined) {
-      dbUpdates.slug = String(rawBody.slug).trim()
-    }
-    if (isDirty('category') && rawBody.category !== undefined) {
-      dbUpdates.category = String(rawBody.category).trim()
-    }
-    if (isDirty('definition') && rawBody.definition !== undefined) {
-      dbUpdates.definition = rawBody.definition
-    }
-    if (isDirty('is_verified') && rawBody.is_verified !== undefined) {
-      dbUpdates.is_verified = !!rawBody.is_verified
-    }
-    if (isDirty('keywords') && rawBody.keywords !== undefined) {
-      dbUpdates.keywords = Array.isArray(rawBody.keywords) ? rawBody.keywords : []
-    }
-    if (isDirty('synonyms') && rawBody.synonyms !== undefined) {
-      dbUpdates.synonyms = Array.isArray(rawBody.synonyms) ? rawBody.synonyms : []
-    }
-    if (isDirty('related_terms') && rawBody.related_terms !== undefined) {
-      dbUpdates.related_terms = Array.isArray(rawBody.related_terms) ? rawBody.related_terms : []
-    }
-    if (isDirty('faqs') && rawBody.faqs !== undefined) {
-      dbUpdates.faqs = Array.isArray(rawBody.faqs)
-        ? rawBody.faqs
-            .map((f: any) => ({
-              q: (f.q || f.question || '').trim(),
-              a: (f.a || f.answer || '').trim()
-            }))
-            .filter((f: any) => f.q && f.a)
-        : []
-    }
+    // 5. Update top-level fields only if dirty
+    if (isDirty('term')) dbUpdates.term = (rawBody.term || '').trim()
+    if (isDirty('slug')) {
+      const nextSlug = (rawBody.slug || '').trim()
+      if (nextSlug !== oldTerm.slug) {
+        // Validate slug uniqueness
+        const { data: collision } = await supabaseAdmin
+          .from('glossary')
+          .select('id')
+          .eq('slug', nextSlug)
+          .neq('id', id)
+          .maybeSingle()
 
-    // 6. No-op check: if nothing was modified, return oldTerm directly without write
+        if (collision) {
+          return NextResponse.json(
+            { error: { code: 'SLUG_CONFLICT', message: `A glossary term with slug "${nextSlug}" already exists.` } },
+            { status: 409 }
+          )
+        }
+        dbUpdates.slug = nextSlug
+      }
+    }
+    if (isDirty('definition')) dbUpdates.definition = rawBody.definition || ''
+    if (isDirty('category')) dbUpdates.category = (rawBody.category || 'GENERAL').trim()
+    if (isDirty('keywords')) dbUpdates.keywords = rawBody.keywords || []
+    if (isDirty('synonyms')) dbUpdates.synonyms = rawBody.synonyms || []
+    if (isDirty('is_verified')) dbUpdates.is_verified = Boolean(rawBody.is_verified)
+    if (isDirty('related_terms')) dbUpdates.related_terms = rawBody.related_terms || []
+    if (isDirty('faqs')) dbUpdates.faqs = rawBody.faqs || []
+
+    // 6. Check if anything actually changed
     if (Object.keys(dbUpdates).length === 0) {
-      return NextResponse.json({ term: oldTerm, message: 'No changes detected' })
+      return NextResponse.json({ term: oldTerm, message: 'No fields were modified' })
     }
 
     // 7. Execute update
@@ -209,8 +208,21 @@ async function handleGlossaryUpdate(
       return NextResponse.json({ error: updateError?.message || 'Update failed' }, { status: 500 })
     }
 
-    // 8. Revalidate ISR caches (scoped)
+    // 8. Revalidate ISR caches
     revalidateGlossaryMutation(updated.slug, oldTerm.slug)
+
+    if (authCheck.auth.type === 'api_key') {
+      await logApiAudit({
+        keyId: authCheck.auth.key.id,
+        keyName: authCheck.auth.key.name,
+        action: 'glossary:update',
+        entityType: 'glossary',
+        entityId: id,
+        ip: clientIp,
+        status: 'success',
+        details: { slug: updated.slug, modified_fields: Object.keys(dbUpdates) },
+      })
+    }
 
     return NextResponse.json({ term: updated })
   } catch (error) {
@@ -234,21 +246,57 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    void cookies()
-    if (!await verifyAdminRole(['admin'])) {
-      return NextResponse.json({ error: 'Forbidden: Editors are not permitted to delete glossary entries' }, { status: 403 })
+    const authCheck = await verifyAdminOrKey(request, 'glossary:delete')
+    if (!authCheck.success) {
+      return authCheck.response
+    }
+
+    const clientIp = getClientIp(request)
+
+    if (authCheck.auth.type === 'session') {
+      if (!(await verifyAdminRole(['admin']))) {
+        return NextResponse.json({ error: 'Forbidden: Editors are not permitted to delete glossary entries' }, { status: 403 })
+      }
     }
 
     const { id } = await params
-    const { data: term } = await supabaseAdmin
+    const { data: term, error: fetchError } = await supabaseAdmin
       .from('glossary')
-      .select('slug')
+      .select('id, slug, is_verified, term')
       .eq('id', id)
       .single()
+
+    if (fetchError || !term) {
+      return NextResponse.json({ error: 'Term not found' }, { status: 404 })
+    }
+
+    // SAFETY RULE 1.6: API keys can never delete a verified/published glossary term
+    if (authCheck.auth.type === 'api_key' && term.is_verified) {
+      await logApiAudit({
+        keyId: authCheck.auth.key.id,
+        keyName: authCheck.auth.key.name,
+        action: 'glossary:delete_rejected',
+        entityType: 'glossary',
+        entityId: id,
+        ip: clientIp,
+        status: 'failure',
+        details: { reason: 'Refused delete of verified/published glossary term' },
+      })
+
+      return NextResponse.json(
+        {
+          error: {
+            code: 'FORBIDDEN',
+            message: 'API keys cannot delete verified/published glossary terms.',
+          },
+        },
+        { status: 403 }
+      )
+    }
 
     const { error } = await supabaseAdmin
       .from('glossary')
@@ -259,9 +307,22 @@ export async function DELETE(
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    revalidateGlossaryMutation(term?.slug)
+    revalidateGlossaryMutation(term.slug)
 
-    return NextResponse.json({ success: true })
+    if (authCheck.auth.type === 'api_key') {
+      await logApiAudit({
+        keyId: authCheck.auth.key.id,
+        keyName: authCheck.auth.key.name,
+        action: 'glossary:delete',
+        entityType: 'glossary',
+        entityId: id,
+        ip: clientIp,
+        status: 'success',
+        details: { slug: term.slug },
+      })
+    }
+
+    return NextResponse.json({ success: true, message: 'Glossary term deleted' })
   } catch (error) {
     console.error('[API Error]', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

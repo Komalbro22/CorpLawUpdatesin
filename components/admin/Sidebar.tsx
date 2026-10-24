@@ -29,6 +29,8 @@ import {
     Briefcase,
     Building2,
     MessageSquareHeart,
+    Key,
+    Shield,
 } from 'lucide-react'
 
 interface SidebarLink {
@@ -90,7 +92,9 @@ const sections: SidebarSection[] = [
     {
         label: 'System',
         links: [
-            { href: '/admin/settings', icon: Settings, label: 'Settings' },
+            { href: '/admin/settings',          icon: Settings, label: 'Settings'  },
+            { href: '/admin/settings/api-keys', icon: Key,      label: 'API Keys'  },
+            { href: '/admin/audit-log',         icon: Shield,   label: 'Audit Log' },
         ],
     },
 ]

@@ -1,18 +1,19 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 export const dynamic = 'force-dynamic'
 
-import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
+import { verifyAdminOrKey } from '@/lib/api-key-auth'
 import { BetaAnalyticsDataClient } from '@google-analytics/data'
 
-export async function GET() {
-  if (!await verifyAdminSession()) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+export async function GET(request: NextRequest) {
+  const authCheck = await verifyAdminOrKey(request, 'analytics:read')
+  if (!authCheck.success) {
+    return authCheck.response
   }
 
   let analyticsDataClient: BetaAnalyticsDataClient | null = null
   const propertyId = process.env.GA_PROPERTY_ID
-  
+
   try {
     if (process.env.GOOGLE_CLIENT_EMAIL && process.env.GOOGLE_PRIVATE_KEY) {
       analyticsDataClient = new BetaAnalyticsDataClient({
@@ -28,7 +29,6 @@ export async function GET() {
   }
 
   // 1. Fetch Supabase Data
-  // Removed `status` from select as the column doesn't exist.
   const { data, error } = await supabaseAdmin
     .from('updates')
     .select('id, title, slug, category, views, created_at, published_at')
@@ -83,17 +83,39 @@ export async function GET() {
     }
   }
 
-  // 3. Merge Views and Sort
-  const mergedArticles = articles.map(article => {
+  // 3. Merge Views
+  const enrichedArticles = articles.map(article => {
     const finalViews = gaArticleViews[article.slug] || article.views || 0
-    return { 
-      ...article, 
-      views: finalViews, 
-      status: article.published_at ? 'published' : 'draft' 
+    return {
+      ...article,
+      views: finalViews,
+      status: article.published_at ? 'published' : 'draft',
     }
   })
 
-  mergedArticles.sort((a, b) => b.views - a.views)
+  // Support pagination and sort params
+  const { searchParams } = new URL(request.url)
+  const sort = searchParams.get('sort') || 'views_desc'
+  const limit = searchParams.has('limit') ? parseInt(searchParams.get('limit') || '50', 10) : undefined
+  const offset = searchParams.has('offset') ? parseInt(searchParams.get('offset') || '0', 10) : 0
 
-  return NextResponse.json({ articles: mergedArticles })
+  if (sort === 'views_asc') {
+    enrichedArticles.sort((a, b) => a.views - b.views)
+  } else if (sort === 'date_desc') {
+    enrichedArticles.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+  } else {
+    // Default views_desc
+    enrichedArticles.sort((a, b) => b.views - a.views)
+  }
+
+  const paginatedArticles = limit !== undefined
+    ? enrichedArticles.slice(offset, offset + limit)
+    : enrichedArticles
+
+  return NextResponse.json({
+    articles: paginatedArticles,
+    items: paginatedArticles,
+    total: enrichedArticles.length,
+    source: Object.keys(gaArticleViews).length > 0 ? 'Google Analytics' : 'Database',
+  })
 }

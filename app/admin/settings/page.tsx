@@ -1,11 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import type { LucideIcon } from 'lucide-react'
 import {
   BarChart2,
   ExternalLink,
   Globe,
+  Key,
   Landmark,
   Loader2,
   Megaphone,
@@ -266,6 +268,24 @@ export default function SettingsPage() {
         </p>
       </div>
 
+      <div className="p-4 rounded-xl border border-indigo-200 bg-indigo-50/70 flex items-center justify-between flex-wrap gap-4 shadow-sm">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-lg bg-indigo-100 text-indigo-700">
+            <Key className="w-5 h-5" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-indigo-950 text-sm">API Key Management</h3>
+            <p className="text-xs text-indigo-700">Manage scoped Bearer API keys for AI agents ("Muse") and automated publishing.</p>
+          </div>
+        </div>
+        <Link
+          href="/admin/settings/api-keys"
+          className="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition"
+        >
+          Manage API Keys →
+        </Link>
+      </div>
+
       {settingGroups.map((group) => {
         const GroupIcon = group.Icon
         return (
@@ -463,7 +483,7 @@ export default function SettingsPage() {
         <div className="px-6 py-5 space-y-5">
           <div className="text-sm text-slate-700 leading-relaxed space-y-1">
             <p>
-              Directly triggers Google’s <strong>Indexing API v3</strong> to request an immediate Googlebot visit, while simultaneously notifying Google’s <strong>PubSubHubbub (WebSub)</strong> hub for Google News / Discover feed updates.
+              Directly triggers Googleâ€™s <strong>Indexing API v3</strong> to request an immediate Googlebot visit, while simultaneously notifying Googleâ€™s <strong>PubSubHubbub (WebSub)</strong> hub for Google News / Discover feed updates.
             </p>
             <p className="text-xs text-slate-500 font-mono">
               Service Account: analytics-viewer@corplawupdates.iam.gserviceaccount.com (Quota: 200 URLs/day)
