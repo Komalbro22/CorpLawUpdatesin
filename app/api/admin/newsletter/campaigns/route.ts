@@ -4,6 +4,17 @@ import { verifyAdminOrKey, logApiAudit, getClientIp } from '@/lib/api-key-auth'
 
 export const dynamic = 'force-dynamic'
 
+function formatCampaign(c: any) {
+  if (!c) return c
+  const htmlContent = c.rendered_html || c.content || ''
+  return {
+    ...c,
+    html: htmlContent,
+    body: htmlContent,
+    status: (c.sent_count && c.sent_count > 0) ? 'sent' : 'draft',
+  }
+}
+
 /**
  * GET /api/admin/newsletter/campaigns
  * List newsletter campaigns with pagination and status
@@ -24,8 +35,10 @@ export async function GET(request: NextRequest) {
       .from('newsletter_campaigns')
       .select('*', { count: 'exact' })
 
-    if (status && status !== 'all') {
-      query = query.eq('status', status)
+    if (status === 'sent') {
+      query = query.gt('sent_count', 0)
+    } else if (status === 'draft') {
+      query = query.or('sent_count.is.null,sent_count.eq.0')
     }
 
     query = query.order('created_at', { ascending: false }).range(offset, offset + limit - 1)
@@ -36,9 +49,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: { code: 'DATABASE_ERROR', message: error.message } }, { status: 500 })
     }
 
+    const formattedCampaigns = (campaigns || []).map(formatCampaign)
+
     return NextResponse.json({
-      campaigns: campaigns || [],
-      items: campaigns || [],
+      campaigns: formattedCampaigns,
+      items: formattedCampaigns,
       total: count || 0,
       limit,
       offset,
@@ -65,7 +80,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json()
-    const { subject, html, scheduled_at, mode = 'custom' } = body
+    const { subject, html, content, rendered_html, preview_text, previewText } = body
 
     if (!subject || typeof subject !== 'string' || !subject.trim()) {
       return NextResponse.json(
@@ -74,26 +89,26 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    if (!html || typeof html !== 'string' || !html.trim()) {
+    const rawHtml = html || content || rendered_html || body.body
+    if (!rawHtml || typeof rawHtml !== 'string' || !rawHtml.trim()) {
       return NextResponse.json(
         { error: { code: 'VALIDATION_ERROR', message: 'HTML body is required for campaign.' } },
         { status: 400 }
       )
     }
 
+    const preview = (preview_text || previewText || null)
+
     const insertData: Record<string, any> = {
       subject: subject.trim(),
-      body: html.trim(),
-      mode,
-      status: scheduled_at ? 'scheduled' : 'draft',
+      preview_text: typeof preview === 'string' && preview.trim() ? preview.trim() : null,
+      content: rawHtml.trim(),
+      rendered_html: rawHtml.trim(),
+      content_type: 'html',
+      sent_by: authCheck.auth.type === 'api_key' ? `API Key: ${authCheck.auth.key.name}` : 'admin',
       total_recipients: 0,
       sent_count: 0,
       failed_count: 0,
-      created_at: new Date().toISOString(),
-    }
-
-    if (scheduled_at) {
-      insertData.scheduled_at = new Date(scheduled_at).toISOString()
     }
 
     const { data: campaign, error } = await supabaseAdmin
@@ -103,6 +118,7 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (error || !campaign) {
+      console.error('[Admin Newsletter POST] Insert failed:', error)
       return NextResponse.json(
         { error: { code: 'DATABASE_ERROR', message: error?.message || 'Failed to create campaign' } },
         { status: 500 }
@@ -122,7 +138,7 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    return NextResponse.json({ campaign }, { status: 201 })
+    return NextResponse.json({ campaign: formatCampaign(campaign) }, { status: 201 })
   } catch (err: any) {
     return NextResponse.json(
       { error: { code: 'INTERNAL_ERROR', message: err?.message || 'Failed to create campaign' } },

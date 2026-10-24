@@ -16,13 +16,20 @@ export function calculateReadingTime(content: string): number {
     return Math.max(1, Math.ceil(words / 200))
 }
 
-export function formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString('en-IN', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        timeZone: 'Asia/Kolkata',
-    })
+export function formatDate(dateString?: string | null): string {
+    if (!dateString) return ''
+    try {
+        const d = new Date(dateString)
+        if (isNaN(d.getTime())) return String(dateString)
+        return d.toLocaleDateString('en-IN', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            timeZone: 'Asia/Kolkata',
+        })
+    } catch {
+        return String(dateString || '')
+    }
 }
 
 export function generateUnsubscribeToken(email: string): string {
@@ -78,5 +85,3 @@ export {
     formatIndianWithDay,
     parseIndianDateToIso,
 } from './date-utils'
-
-

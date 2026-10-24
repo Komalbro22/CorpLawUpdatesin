@@ -83,12 +83,14 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  // 3. Merge Views
+  // 3. Keep database views as canonical across list, single, and overview
   const enrichedArticles = articles.map(article => {
-    const finalViews = gaArticleViews[article.slug] || article.views || 0
+    const canonicalViews = article.views || 0
     return {
       ...article,
-      views: finalViews,
+      views: canonicalViews,
+      all_time_views: canonicalViews,
+      ga_views: gaArticleViews[article.slug] ?? null,
       status: article.published_at ? 'published' : 'draft',
     }
   })
@@ -116,6 +118,6 @@ export async function GET(request: NextRequest) {
     articles: paginatedArticles,
     items: paginatedArticles,
     total: enrichedArticles.length,
-    source: Object.keys(gaArticleViews).length > 0 ? 'Google Analytics' : 'Database',
+    source: 'Database',
   })
 }

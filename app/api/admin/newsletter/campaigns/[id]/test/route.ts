@@ -61,12 +61,14 @@ export async function POST(
 
     const { email: fromEmail, name: fromName } = parseSender()
 
+    const rawHtml = campaign.rendered_html || campaign.content || campaign.body || ''
+
     const sendRes = await sendEmail({
       from: fromEmail,
       fromName,
       to: testEmail.trim(),
       subject: `[TEST] ${campaign.subject}`,
-      html: buildEmailHtml(campaign.body || '', testEmail.trim()),
+      html: buildEmailHtml(rawHtml, testEmail.trim()),
     })
 
     if (!sendRes.success) {

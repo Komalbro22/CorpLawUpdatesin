@@ -37,7 +37,11 @@ import ArticleContextTool from '@/components/ArticleContextTool'
 import ReaderFeedback from '@/components/ReaderFeedback'
 import AdsterraBanner from '@/components/AdsterraBanner'
 
-const stripHtml = (html: string) => html ? html.replace(/<[^>]*>/g, '').trim() : ''
+const stripHtml = (html: any) => {
+  if (!html) return ''
+  if (typeof html !== 'string') return String(html)
+  return html.replace(/<[^>]*>/g, '').trim()
+}
 
 export const revalidate = 86400 // 24 hours fallback; instant on-demand via revalidateArticleMutation
 
@@ -213,7 +217,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
             update.key_change = linkGlossaryTerms(update.key_change, glossaryTerms)
         }
         if (update.key_changes && Array.isArray(update.key_changes)) {
-            update.key_changes = update.key_changes.map((kc: string) => linkGlossaryTerms(kc, glossaryTerms))
+            update.key_changes = update.key_changes.map((kc: any) => typeof kc === 'string' ? linkGlossaryTerms(kc, glossaryTerms) : kc)
         }
     }
 
@@ -224,9 +228,9 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
         ? update.content.replace(/<[^>]*>/g, '').split(/\s+/).length
         : 0
 
-    const tagsList = update.tags
-        ? (typeof update.tags === 'string' ? update.tags.split(',') : update.tags)
-        : []
+    const tagsList = Array.isArray(update.tags)
+        ? update.tags.filter((t: any) => typeof t === 'string' && t.trim())
+        : (typeof update.tags === 'string' ? update.tags.split(',').map((t: string) => t.trim()).filter(Boolean) : [])
 
     const articleUrl = `https://www.corplawupdates.in/updates/${update.slug}`
     const imageUrl = update.featured_image_url || extractFirstImage(update.content || '')
@@ -825,39 +829,47 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
             </div>
 
             {/* 4. SOURCE ATTRIBUTION */}
-            <div className="print:hidden">
-                {(update.source_url || (update.sources && update.sources.length > 0)) && (
-                    <div className="mb-8 flex flex-col gap-2 rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-4">
-                        <span className="text-slate-600 dark:text-slate-300 font-semibold text-sm">Sources</span>
-                        <ul className="space-y-1">
-                            {update.source_name && update.source_url && (
-                                <li>
-                                    <a
-                                        href={update.source_url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-gold font-bold hover:text-amber-600 transition-colors underline break-all text-sm"
-                                    >
-                                        {update.source_name}
-                                    </a>
-                                </li>
-                            )}
-                            {update.sources && update.sources.map((src: any, i: number) => (
-                                <li key={i}>
-                                    <a
-                                        href={src.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-gold font-bold hover:text-amber-600 transition-colors underline break-all text-sm"
-                                    >
-                                        {src.name || src.url}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
+            {(() => {
+                const normalizedSources = Array.isArray(update.sources)
+                    ? update.sources.map((s: any) => typeof s === 'string' ? { name: s, url: s } : { name: s?.name || s?.url || '', url: s?.url || '' }).filter((s: any) => s.url)
+                    : []
+
+                if (!update.source_url && normalizedSources.length === 0) return null
+
+                return (
+                    <div className="print:hidden">
+                        <div className="mb-8 flex flex-col gap-2 rounded-lg border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-4">
+                            <span className="text-slate-600 dark:text-slate-300 font-semibold text-sm">Sources</span>
+                            <ul className="space-y-1">
+                                {update.source_name && update.source_url && (
+                                    <li>
+                                        <a
+                                            href={update.source_url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-gold font-bold hover:text-amber-600 transition-colors underline break-all text-sm"
+                                        >
+                                            {update.source_name}
+                                        </a>
+                                    </li>
+                                )}
+                                {normalizedSources.map((src: any, i: number) => (
+                                    <li key={i}>
+                                        <a
+                                            href={src.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-gold font-bold hover:text-amber-600 transition-colors underline break-all text-sm"
+                                        >
+                                            {src.name || src.url}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
-                )}
-            </div>
+                )
+            })()}
 
             {/* Reader Feedback */}
             <div className="print:hidden">
@@ -982,27 +994,35 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
             }} />
 
             {/* Key changes as ItemList for AI indexing */}
-            {(update.key_change || (update.key_changes && update.key_changes.length > 0)) && (
-              <JsonLd data={{
-                '@context': 'https://schema.org',
-                '@type': 'ItemList',
-                name: `Key Changes — ${update.title}`,
-                description: `Key regulatory changes from: ${update.title}`,
-                numberOfItems: (update.key_change ? 1 : 0) + (update.key_changes?.length || 0),
-                itemListElement: [
-                  ...(update.key_change ? [{
-                    '@type': 'ListItem',
-                    position: 1,
-                    name: stripHtml(update.key_change)
-                  }] : []),
-                  ...(update.key_changes?.map((kc: string, i: number) => ({
-                    '@type': 'ListItem',
-                    position: (update.key_change ? 2 : 1) + i,
-                    name: stripHtml(kc),
-                  })) || [])
-              ].filter(Boolean),
-              }} />
-            )}
+            {(() => {
+              const normalizedKeyChanges = Array.isArray(update.key_changes)
+                ? update.key_changes.map((k: any) => typeof k === 'string' ? k : JSON.stringify(k)).filter(Boolean)
+                : (typeof update.key_changes === 'string' && update.key_changes.trim() ? [update.key_changes.trim()] : [])
+
+              if (!update.key_change && normalizedKeyChanges.length === 0) return null
+
+              return (
+                <JsonLd data={{
+                  '@context': 'https://schema.org',
+                  '@type': 'ItemList',
+                  name: `Key Changes — ${update.title}`,
+                  description: `Key regulatory changes from: ${update.title}`,
+                  numberOfItems: (update.key_change ? 1 : 0) + normalizedKeyChanges.length,
+                  itemListElement: [
+                    ...(update.key_change ? [{
+                      '@type': 'ListItem',
+                      position: 1,
+                      name: stripHtml(update.key_change)
+                    }] : []),
+                    ...normalizedKeyChanges.map((kc: string, i: number) => ({
+                      '@type': 'ListItem',
+                      position: (update.key_change ? 2 : 1) + i,
+                      name: stripHtml(kc),
+                    }))
+                ].filter(Boolean),
+                }} />
+              )
+            })()}
             {/* 10. FAQ SCHEMA — for Google Search Console Rich Results */}
             {faqs.length > 0 && (
               <JsonLd data={{

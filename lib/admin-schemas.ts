@@ -22,7 +22,11 @@ export const articleSchema = z.object({
   sources: z.any().nullable().optional(),
   key_change: z.string().max(5000).nullable().optional(),
   key_changes: z.any().nullable().optional(),
-  tags: z.array(z.string().max(100)).nullable().optional(),
+  // Aliases supported for agent convenience
+  key_change_pill: z.string().max(5000).nullable().optional(),
+  tldr: z.any().nullable().optional(),
+  last_verified_date: z.string().nullable().optional(),
+  tags: z.any().nullable().optional(),
   views: z.number().optional(),
   seo_title: z.string().max(500).nullable().optional(),
   seo_description: z.string().max(2000).nullable().optional(),

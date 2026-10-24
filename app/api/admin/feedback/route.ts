@@ -4,6 +4,16 @@ import { verifyAdminOrKey, logApiAudit, getClientIp } from '@/lib/api-key-auth'
 
 export const dynamic = 'force-dynamic'
 
+function attachFeedbackNote(item: any) {
+  if (!item) return item
+  if (item.admin_note !== undefined && item.admin_note !== null) {
+    return { ...item, note: item.admin_note }
+  }
+  const noteTag = (item.tags || []).find((t: string) => typeof t === 'string' && t.startsWith('note:'))
+  const note = noteTag ? noteTag.slice(5) : null
+  return { ...item, note }
+}
+
 export async function GET(request: NextRequest) {
   const authCheck = await verifyAdminOrKey(request, 'feedback:read')
   if (!authCheck.success) {
@@ -58,9 +68,11 @@ export async function GET(request: NextRequest) {
           query = query.eq('status', status)
         }
       }
+
       if (contextType !== 'all') {
         query = query.eq('context_type', contextType)
       }
+
       if (sentiment !== 'all') {
         query = query.eq('sentiment', sentiment)
       }
@@ -87,9 +99,11 @@ export async function GET(request: NextRequest) {
         supabaseAdmin.from('reader_feedback').select('*', { count: 'exact', head: true }).in('status', ['pending', 'unprocessed']),
       ])
 
+      const formattedItems = (data || []).map(attachFeedbackNote)
+
       return NextResponse.json({
-        items: data || [],
-        feedback: data || [],
+        items: formattedItems,
+        feedback: formattedItems,
         total: count || 0,
         page,
         limit,
@@ -137,6 +151,7 @@ export async function GET(request: NextRequest) {
         user_email: r.user_email,
         status: r.status || 'pending',
         created_at: r.created_at,
+        note: r.admin_note || null,
       }
     })
 
@@ -175,18 +190,65 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: 'Missing required parameters: id and status' }, { status: 400 })
     }
 
-    const updatePayload: Record<string, any> = { status }
-    if (note !== undefined) {
-      updatePayload.internal_note = note
+    // 1. Try reader_feedback first
+    const { data: rfItem } = await supabaseAdmin
+      .from('reader_feedback')
+      .select('id, tags')
+      .eq('id', id)
+      .maybeSingle()
+
+    if (rfItem) {
+      const currentTags: string[] = Array.isArray(rfItem.tags) ? rfItem.tags : []
+      let updatedTags = currentTags
+      if (note !== undefined) {
+        updatedTags = currentTags.filter(t => typeof t !== 'string' || !t.startsWith('note:'))
+        if (note && typeof note === 'string' && note.trim()) {
+          updatedTags.push(`note:${note.trim()}`)
+        }
+      }
+
+      const { error: primaryError } = await supabaseAdmin
+        .from('reader_feedback')
+        .update({ status, tags: updatedTags })
+        .eq('id', id)
+
+      if (!primaryError) {
+        if (authCheck.auth.type === 'api_key') {
+          await logApiAudit({
+            keyId: authCheck.auth.key.id,
+            keyName: authCheck.auth.key.name,
+            action: 'feedback:update',
+            entityType: 'feedback',
+            entityId: id,
+            ip: clientIp,
+            status: 'success',
+            details: { status, note },
+          })
+        }
+        return NextResponse.json({ success: true, id, status, note: note || null })
+      }
     }
 
-    // Try reader_feedback first
-    const { error: primaryError } = await supabaseAdmin
-      .from('reader_feedback')
-      .update(updatePayload)
+    // 2. Fallback: update compliance_suggestions
+    const { data: csItem } = await supabaseAdmin
+      .from('compliance_suggestions')
+      .select('id')
       .eq('id', id)
+      .maybeSingle()
 
-    if (!primaryError) {
+    if (csItem) {
+      const updatePayload: Record<string, any> = { status }
+      if (note !== undefined) {
+        updatePayload.admin_note = typeof note === 'string' ? note.trim() : null
+      }
+
+      const { error: fbError } = await supabaseAdmin
+        .from('compliance_suggestions')
+        .update(updatePayload)
+        .eq('id', id)
+
+      if (fbError) throw fbError
+
       if (authCheck.auth.type === 'api_key') {
         await logApiAudit({
           keyId: authCheck.auth.key.id,
@@ -199,31 +261,11 @@ export async function PATCH(request: NextRequest) {
           details: { status, note },
         })
       }
-      return NextResponse.json({ success: true, id, status })
+
+      return NextResponse.json({ success: true, id, status, note: note || null })
     }
 
-    // Fallback: update compliance_suggestions
-    const { error: fbError } = await supabaseAdmin
-      .from('compliance_suggestions')
-      .update({ status })
-      .eq('id', id)
-
-    if (fbError) throw fbError
-
-    if (authCheck.auth.type === 'api_key') {
-      await logApiAudit({
-        keyId: authCheck.auth.key.id,
-        keyName: authCheck.auth.key.name,
-        action: 'feedback:update',
-        entityType: 'feedback',
-        entityId: id,
-        ip: clientIp,
-        status: 'success',
-        details: { status },
-      })
-    }
-
-    return NextResponse.json({ success: true, id, status })
+    return NextResponse.json({ error: 'Feedback item not found' }, { status: 404 })
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 })
   }

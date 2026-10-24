@@ -18,6 +18,18 @@ import {
 
 export const dynamic = 'force-dynamic'
 
+const ALLOWED_ARTICLE_FIELDS = new Set([
+  'title', 'slug', 'summary', 'content', 'category', 'is_sponsored', 'sponsor_name',
+  'contributor_name', 'hold_external_links', 'hide_from_listings', 'noindex',
+  'published_at', 'is_featured', 'effective_date', 'featured_image_url', 'impact_level',
+  'source_name', 'source_url', 'sources', 'key_change', 'key_changes', 'tags',
+  'views', 'seo_title', 'seo_description', 'quick_answer', 'regulation_ref',
+  'last_verified', 'last_amended', 'key_takeaways', 'has_steps', 'steps_json',
+  'reading_time',
+  // Aliases
+  'key_change_pill', 'tldr', 'last_verified_date'
+])
+
 export async function GET(request: NextRequest) {
   const authCheck = await verifyAdminOrKey(request, 'articles:read')
   if (!authCheck.success) {
@@ -116,9 +128,38 @@ export async function POST(request: NextRequest) {
 
   try {
     const rawBody = await request.json()
+
+    // 2. Reject unknown / unrecognized fields
+    const unrecognized = Object.keys(rawBody).filter(k => !ALLOWED_ARTICLE_FIELDS.has(k))
+    if (unrecognized.length > 0) {
+      return NextResponse.json({
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: `Unrecognized field(s): ${unrecognized.map(f => `"${f}"`).join(', ')}. Please refer to the API reference for supported article fields.`
+        }
+      }, { status: 400 })
+    }
+
+    // 3. Map aliases
+    if (rawBody.key_change_pill !== undefined && rawBody.key_change === undefined) {
+      rawBody.key_change = rawBody.key_change_pill
+    }
+    if (rawBody.tldr !== undefined && rawBody.key_changes === undefined) {
+      rawBody.key_changes = Array.isArray(rawBody.tldr) ? rawBody.tldr : (typeof rawBody.tldr === 'string' ? [rawBody.tldr] : rawBody.tldr)
+    }
+    if (rawBody.last_verified_date !== undefined && rawBody.last_verified === undefined) {
+      rawBody.last_verified = rawBody.last_verified_date
+    }
+
     const parsed = articleSchema.safeParse(rawBody)
     if (!parsed.success) {
-      return NextResponse.json({ error: 'Invalid data', details: parsed.error.format() }, { status: 400 })
+      return NextResponse.json({
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Invalid article data',
+          details: parsed.error.format(),
+        }
+      }, { status: 400 })
     }
     const body = parsed.data
     const {
@@ -132,7 +173,12 @@ export async function POST(request: NextRequest) {
     } = body
 
     if (!title || !summary) {
-      return NextResponse.json({ error: 'Missing required fields: title and summary' }, { status: 400 })
+      return NextResponse.json({
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Missing required fields: title and summary',
+        }
+      }, { status: 400 })
     }
 
     let finalSlug = slug || slugify(title)
@@ -154,22 +200,60 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Normalize tags
+    let finalTags: string[] = []
+    if (Array.isArray(tags)) {
+      finalTags = tags.map((t: any) => String(t).trim()).filter(Boolean)
+    } else if (typeof tags === 'string') {
+      finalTags = tags.split(',').map((t: string) => t.trim()).filter(Boolean)
+    }
+
+    // Normalize sources
+    let finalSources: any = null
+    if (Array.isArray(sources)) {
+      finalSources = sources.map((s: any) => {
+        if (typeof s === 'string') return { name: s, url: s }
+        return { name: s?.name || s?.url || '', url: s?.url || '' }
+      }).filter((s: any) => s.url)
+      if (finalSources.length === 0) finalSources = null
+    } else if (typeof sources === 'string' && sources.trim()) {
+      finalSources = [{ name: source_name || sources.trim(), url: sources.trim() }]
+    }
+
+    // Normalize key_changes
+    let finalKeyChanges: string[] | null = null
+    if (Array.isArray(key_changes)) {
+      finalKeyChanges = key_changes.map((k: any) => typeof k === 'string' ? k.trim() : JSON.stringify(k)).filter(Boolean)
+      if (finalKeyChanges.length === 0) finalKeyChanges = null
+    } else if (typeof key_changes === 'string' && key_changes.trim()) {
+      finalKeyChanges = [key_changes.trim()]
+    }
+
+    // Normalize key_takeaways
+    let finalKeyTakeaways: string[] | null = null
+    if (Array.isArray(key_takeaways)) {
+      finalKeyTakeaways = key_takeaways.map((k: any) => typeof k === 'string' ? k.trim() : JSON.stringify(k)).filter(Boolean)
+      if (finalKeyTakeaways.length === 0) finalKeyTakeaways = null
+    } else if (typeof key_takeaways === 'string' && key_takeaways.trim()) {
+      finalKeyTakeaways = [key_takeaways.trim()]
+    }
+
     const { data: createdArticle, error } = await supabaseAdmin
       .from('updates')
       .insert({
-        title,
+        title: title.trim(),
         slug: finalSlug,
-        summary,
+        summary: summary.trim(),
         content: content || '',
         category: category?.trim() || null,
-        tags: tags || [],
-        source_url,
-        source_name,
-        sources: sources || null,
+        tags: finalTags,
+        source_url: source_url || null,
+        source_name: source_name || null,
+        sources: finalSources,
         seo_title: seo_title || null,
         seo_description: seo_description || null,
         featured_image_url: featured_image_url || extractFirstImage(content || '') || null,
-        published_at,
+        published_at: published_at || null,
         is_featured: is_featured || false,
         is_sponsored: is_sponsored || false,
         sponsor_name: is_sponsored ? sponsor_name?.trim() || null : null,
@@ -178,14 +262,14 @@ export async function POST(request: NextRequest) {
         hide_from_listings: hide_from_listings || false,
         noindex: noindex || false,
         key_change: key_change || null,
-        key_changes: key_changes || null,
+        key_changes: finalKeyChanges,
         effective_date: effective_date || null,
         impact_level: impact_level || null,
         quick_answer: quick_answer || null,
         regulation_ref: regulation_ref || null,
         last_verified: last_verified || null,
         last_amended: last_amended || null,
-        key_takeaways: key_takeaways || null,
+        key_takeaways: finalKeyTakeaways,
         has_steps: has_steps || false,
         steps_json: steps_json || null,
         reading_time: calculateReadingTime(content || ''),
@@ -196,8 +280,11 @@ export async function POST(request: NextRequest) {
     if (error || !createdArticle) {
       console.error('[Admin Articles POST] Insert failed:', error)
       return NextResponse.json({
-        error: error?.message || 'Failed to create article in database',
-        details: error,
+        error: {
+          code: 'DATABASE_ERROR',
+          message: error?.message || 'Failed to create article in database',
+          details: error,
+        }
       }, { status: 400 })
     }
 

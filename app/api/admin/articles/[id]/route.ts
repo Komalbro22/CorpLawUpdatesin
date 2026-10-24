@@ -13,6 +13,18 @@ import { verifyAdminOrKey, logApiAudit, getClientIp } from '@/lib/api-key-auth'
 
 export const dynamic = 'force-dynamic'
 
+const ALLOWED_ARTICLE_FIELDS = new Set([
+  'title', 'slug', 'summary', 'content', 'category', 'is_sponsored', 'sponsor_name',
+  'contributor_name', 'hold_external_links', 'hide_from_listings', 'noindex',
+  'published_at', 'is_featured', 'effective_date', 'featured_image_url', 'impact_level',
+  'source_name', 'source_url', 'sources', 'key_change', 'key_changes', 'tags',
+  'views', 'seo_title', 'seo_description', 'quick_answer', 'regulation_ref',
+  'last_verified', 'last_amended', 'key_takeaways', 'has_steps', 'steps_json',
+  'reading_time',
+  // Aliases
+  'key_change_pill', 'tldr', 'last_verified_date'
+])
+
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const authCheck = await verifyAdminOrKey(request, 'articles:read')
   if (!authCheck.success) {
@@ -48,9 +60,38 @@ async function handleArticleUpdate(request: NextRequest, params: Promise<{ id: s
   try {
     const { id } = await params
     const rawBody = await request.json()
+
+    // 1. Reject unknown / unrecognized fields
+    const unrecognized = Object.keys(rawBody).filter(k => !ALLOWED_ARTICLE_FIELDS.has(k))
+    if (unrecognized.length > 0) {
+      return NextResponse.json({
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: `Unrecognized field(s): ${unrecognized.map(f => `"${f}"`).join(', ')}. Please refer to the API reference for supported article fields.`
+        }
+      }, { status: 400 })
+    }
+
+    // 2. Map aliases
+    if (rawBody.key_change_pill !== undefined && rawBody.key_change === undefined) {
+      rawBody.key_change = rawBody.key_change_pill
+    }
+    if (rawBody.tldr !== undefined && rawBody.key_changes === undefined) {
+      rawBody.key_changes = Array.isArray(rawBody.tldr) ? rawBody.tldr : (typeof rawBody.tldr === 'string' ? [rawBody.tldr] : rawBody.tldr)
+    }
+    if (rawBody.last_verified_date !== undefined && rawBody.last_verified === undefined) {
+      rawBody.last_verified = rawBody.last_verified_date
+    }
+
     const parsed = articleSchema.safeParse(rawBody)
     if (!parsed.success) {
-      return NextResponse.json({ error: 'Invalid data', details: parsed.error.format() }, { status: 400 })
+      return NextResponse.json({
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Invalid article data',
+          details: parsed.error.format()
+        }
+      }, { status: 400 })
     }
     const body = parsed.data
 
@@ -87,6 +128,22 @@ async function handleArticleUpdate(request: NextRequest, params: Promise<{ id: s
     }
 
     const updateData: Record<string, any> = { ...body }
+
+    // Strip alias keys from updateData so they aren't sent to SQL
+    delete updateData.key_change_pill
+    delete updateData.tldr
+    delete updateData.last_verified_date
+
+    if (body.key_change_pill !== undefined && body.key_change === undefined) {
+      updateData.key_change = body.key_change_pill
+    }
+    if (body.tldr !== undefined && body.key_changes === undefined) {
+      updateData.key_changes = Array.isArray(body.tldr) ? body.tldr : (typeof body.tldr === 'string' ? [body.tldr] : body.tldr)
+    }
+    if (body.last_verified_date !== undefined && body.last_verified === undefined) {
+      updateData.last_verified = body.last_verified_date
+    }
+
     if (body.category !== undefined) {
       updateData.category = body.category?.trim() || null
     }
@@ -107,6 +164,56 @@ async function handleArticleUpdate(request: NextRequest, params: Promise<{ id: s
       }
     }
 
+    // Normalize tags if present
+    if (body.tags !== undefined) {
+      if (Array.isArray(body.tags)) {
+        updateData.tags = body.tags.map((t: any) => String(t).trim()).filter(Boolean)
+      } else if (typeof body.tags === 'string') {
+        updateData.tags = body.tags.split(',').map((t: string) => t.trim()).filter(Boolean)
+      } else {
+        updateData.tags = []
+      }
+    }
+
+    // Normalize sources if present
+    if (body.sources !== undefined) {
+      if (Array.isArray(body.sources)) {
+        const sArr = body.sources.map((s: any) => {
+          if (typeof s === 'string') return { name: s, url: s }
+          return { name: s?.name || s?.url || '', url: s?.url || '' }
+        }).filter((s: any) => s.url)
+        updateData.sources = sArr.length > 0 ? sArr : null
+      } else if (typeof body.sources === 'string' && body.sources.trim()) {
+        updateData.sources = [{ name: body.source_name || body.sources.trim(), url: body.sources.trim() }]
+      } else {
+        updateData.sources = null
+      }
+    }
+
+    // Normalize key_changes if present
+    if (body.key_changes !== undefined) {
+      if (Array.isArray(body.key_changes)) {
+        const kcArr = body.key_changes.map((k: any) => typeof k === 'string' ? k.trim() : JSON.stringify(k)).filter(Boolean)
+        updateData.key_changes = kcArr.length > 0 ? kcArr : null
+      } else if (typeof body.key_changes === 'string' && body.key_changes.trim()) {
+        updateData.key_changes = [body.key_changes.trim()]
+      } else {
+        updateData.key_changes = null
+      }
+    }
+
+    // Normalize key_takeaways if present
+    if (body.key_takeaways !== undefined) {
+      if (Array.isArray(body.key_takeaways)) {
+        const ktArr = body.key_takeaways.map((k: any) => typeof k === 'string' ? k.trim() : JSON.stringify(k)).filter(Boolean)
+        updateData.key_takeaways = ktArr.length > 0 ? ktArr : null
+      } else if (typeof body.key_takeaways === 'string' && body.key_takeaways.trim()) {
+        updateData.key_takeaways = [body.key_takeaways.trim()]
+      } else {
+        updateData.key_takeaways = null
+      }
+    }
+
     updateData.updated_at = new Date().toISOString()
 
     const { data: updatedArticle, error: updateError } = await supabaseAdmin
@@ -119,8 +226,11 @@ async function handleArticleUpdate(request: NextRequest, params: Promise<{ id: s
     if (updateError || !updatedArticle) {
       console.error('[Admin Articles PUT/PATCH] Update failed:', updateError)
       return NextResponse.json({
-        error: updateError?.message || 'Failed to update article in database',
-        details: updateError,
+        error: {
+          code: 'DATABASE_ERROR',
+          message: updateError?.message || 'Failed to update article in database',
+          details: updateError,
+        }
       }, { status: 400 })
     }
 

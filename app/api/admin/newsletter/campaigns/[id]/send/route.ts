@@ -50,22 +50,15 @@ export async function POST(
 
     // 2. IDEMPOTENCY / DOUBLE SEND GUARD:
     // If the campaign has already been sent, refuse to send again!
-    if (campaign.status === 'sent' || campaign.sent_at) {
+    if ((campaign.sent_count && campaign.sent_count > 0)) {
       return NextResponse.json({
         success: true,
         already_sent: true,
         message: 'Campaign has already been sent. Re-send blocked to prevent duplicate emails.',
         sent_count: campaign.sent_count || 0,
         failed_count: campaign.failed_count || 0,
-        sent_at: campaign.sent_at,
       })
     }
-
-    // Mark status as 'sending' to lock concurrent duplicate calls
-    await supabaseAdmin
-      .from('newsletter_campaigns')
-      .update({ status: 'sending' })
-      .eq('id', id)
 
     // 3. Fetch all confirmed active subscribers (excluding unsubscribed)
     const allSubscribers: { email: string }[] = []
@@ -90,11 +83,6 @@ export async function POST(
     }
 
     if (allSubscribers.length === 0) {
-      await supabaseAdmin
-        .from('newsletter_campaigns')
-        .update({ status: 'draft' })
-        .eq('id', id)
-
       return NextResponse.json(
         { error: { code: 'NO_SUBSCRIBERS', message: 'No active confirmed subscribers found to send to.' } },
         { status: 400 }
@@ -103,10 +91,12 @@ export async function POST(
 
     const { email: fromEmail, name: fromName } = parseSender()
 
+    const rawHtml = campaign.rendered_html || campaign.content || campaign.body || ''
+
     const emailItems = allSubscribers.map(sub => ({
       to: sub.email,
       subject: campaign.subject,
-      html: buildEmailHtml(campaign.body || '', sub.email),
+      html: buildEmailHtml(rawHtml, sub.email),
     }))
 
     // 4. Dispatch batch emails
@@ -122,8 +112,6 @@ export async function POST(
     await supabaseAdmin
       .from('newsletter_campaigns')
       .update({
-        status: batchResult.sent > 0 ? 'sent' : 'failed',
-        sent_at: sentAt,
         total_recipients: allSubscribers.length,
         sent_count: batchResult.sent,
         failed_count: batchResult.failed,
