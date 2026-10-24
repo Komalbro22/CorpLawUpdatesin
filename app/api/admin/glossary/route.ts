@@ -4,6 +4,7 @@ import { glossarySchema } from '@/lib/admin-schemas'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { slugify } from '@/lib/utils'
 import { verifyAdminOrKey, logApiAudit, getClientIp } from '@/lib/api-key-auth'
+import { evaluateGlossaryIndexQuality } from '@/lib/content-quality'
 
 export const dynamic = 'force-dynamic'
 
@@ -114,10 +115,17 @@ export async function POST(request: NextRequest) {
       ? rawBody.body
       : (rawBody.cleanContent !== undefined ? rawBody.cleanContent : (rawBody.extended_note || ''))
 
-    const hasMeta = Object.keys(metaObj).length > 0
-    const finalExtendedNote = hasMeta
-      ? `<!-- METADATA\n${JSON.stringify(metaObj, null, 2)}\nMETADATA -->\n\n${(bodyContent || '').trim()}`
-      : (bodyContent || '')
+    // 800-Word Quality Gate for Glossary Search Engine & AdSense Integrity
+    const quality = evaluateGlossaryIndexQuality({
+      definition: rawBody.definition,
+      extended_note: bodyContent,
+      faqs: rawBody.faqs,
+    }, typeof rawBody.noindex === 'boolean' ? rawBody.noindex : undefined)
+
+    metaObj.noindex = quality.noindex
+    metaObj.word_count = quality.wordCount
+
+    const finalExtendedNote = `<!-- METADATA\n${JSON.stringify(metaObj, null, 2)}\nMETADATA -->\n\n${(bodyContent || '').trim()}`
 
     const insertPayload = {
       term,
@@ -143,10 +151,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    revalidateGlossaryMutation({
-      slug: data.slug,
-      category: data.category,
-    })
+    revalidateGlossaryMutation(data.slug)
 
     if (authCheck.auth.type === 'api_key') {
       await logApiAudit({

@@ -10,6 +10,7 @@ import { calculateReadingTime, extractFirstImage } from '@/lib/utils'
 import { articleSchema } from '@/lib/admin-schemas'
 import { revalidateArticleMutation } from '@/lib/content-revalidation'
 import { verifyAdminOrKey, logApiAudit, getClientIp } from '@/lib/api-key-auth'
+import { evaluateArticleIndexQuality } from '@/lib/content-quality'
 
 export const dynamic = 'force-dynamic'
 
@@ -161,6 +162,10 @@ async function handleArticleUpdate(request: NextRequest, params: Promise<{ id: s
       updateData.reading_time = calculateReadingTime(body.content || '')
       if (!body.featured_image_url && !oldArticle.featured_image_url) {
         updateData.featured_image_url = extractFirstImage(body.content || '') || null
+      }
+      if (body.noindex === undefined) {
+        const quality = evaluateArticleIndexQuality(body.content, oldArticle.noindex)
+        updateData.noindex = quality.noindex
       }
     }
 

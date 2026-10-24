@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { mcaForms } from '@/data/mca-forms'
+import { parseGlossaryMetadata, getGlossaryTotalWordCount, QUALITY_GATE_WORD_COUNT } from '@/lib/content-quality'
 
 export const revalidate = 86400 // 24 hours fallback; instant on-demand on content publish
 
@@ -49,7 +50,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch verified glossary terms for sitemap SEO indexing
   const { data: glossaryTerms } = await supabaseAdmin
     .from('glossary')
-    .select('slug, created_at')
+    .select('slug, created_at, definition, extended_note, faqs')
     .eq('is_verified', true)
     .order('term', { ascending: true })
 
@@ -214,7 +215,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   const glossaryPages: MetadataRoute.Sitemap = (glossaryTerms || [])
-    .filter(g => Boolean(g.slug))
+    .filter(g => {
+      if (!g.slug) return false
+      const parsed = parseGlossaryMetadata(g.extended_note)
+      if (parsed.noindex === true) return false
+      if (parsed.noindex === false) return true
+      const wordCount = getGlossaryTotalWordCount(g)
+      return wordCount >= QUALITY_GATE_WORD_COUNT
+    })
     .map(g => ({
       url: `${BASE_URL}/glossary/${g.slug}`,
       ...(g.created_at ? { lastModified: new Date(g.created_at) } : {}),

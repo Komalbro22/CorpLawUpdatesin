@@ -4,6 +4,7 @@ import { glossarySchema } from '@/lib/admin-schemas'
 import { verifyAdminRole } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { verifyAdminOrKey, logApiAudit, getClientIp } from '@/lib/api-key-auth'
+import { evaluateGlossaryIndexQuality } from '@/lib/content-quality'
 
 export const dynamic = 'force-dynamic'
 
@@ -89,7 +90,7 @@ async function handleGlossaryUpdate(
     const dbUpdates: Record<string, any> = {}
 
     // 4. Handle extended_note and structured metadata
-    const metaFields = ['seo_title', 'seo_description', 'tldr', 'full_form', 'key_numbers', 'hide_definition']
+    const metaFields = ['seo_title', 'seo_description', 'tldr', 'full_form', 'key_numbers', 'hide_definition', 'noindex']
     const anyMetaDirty = metaFields.some(f => isDirty(f))
     const isBodyDirty = isDirty('body') || isDirty('cleanContent')
 
@@ -146,6 +147,10 @@ async function handleGlossaryUpdate(
         }
       }
 
+      if (isDirty('noindex')) {
+        mergedMeta.noindex = !!rawBody.noindex
+      }
+
       let targetBody = existingCleanBody
       if (isDirty('body')) {
         targetBody = rawBody.body || ''
@@ -153,10 +158,17 @@ async function handleGlossaryUpdate(
         targetBody = rawBody.cleanContent || ''
       }
 
-      const hasMeta = Object.keys(mergedMeta).length > 0
-      const finalNote = hasMeta
-        ? `<!-- METADATA\n${JSON.stringify(mergedMeta, null, 2)}\nMETADATA -->\n\n${(targetBody || '').trim()}`
-        : (targetBody || '')
+      // Auto 800-Word Quality Gate
+      const quality = evaluateGlossaryIndexQuality({
+        definition: isDirty('definition') ? rawBody.definition : oldTerm.definition,
+        extended_note: targetBody,
+        faqs: isDirty('faqs') ? rawBody.faqs : oldTerm.faqs,
+      }, typeof mergedMeta.noindex === 'boolean' ? mergedMeta.noindex : undefined)
+
+      mergedMeta.noindex = quality.noindex
+      mergedMeta.word_count = quality.wordCount
+
+      const finalNote = `<!-- METADATA\n${JSON.stringify(mergedMeta, null, 2)}\nMETADATA -->\n\n${(targetBody || '').trim()}`
 
       dbUpdates.extended_note = finalNote
     }

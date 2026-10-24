@@ -117,6 +117,7 @@ Tests connection and returns identity.
 #### `POST /api/admin/articles`
 - **Required Scope**: `articles:write`
 - **Headers**: `Idempotency-Key: <unique-uuid>` (optional but recommended for safe retries)
+- **Quality Gate Note**: If `noindex` is not explicitly provided, articles under 800 words automatically default to `noindex: true`.
 - **Request Body**:
   ```json
   {
@@ -137,6 +138,51 @@ Tests connection and returns identity.
   }
   ```
 - **Response**: `201 Created` with created article record.
+
+#### `POST /api/admin/articles/bulk`
+- **Required Scope**: `articles:write`
+- **Batch Limit**: 1 to 50 articles per request (serverless timeout safeguard).
+- **Quality Gate**: Content < 800 words defaults to `noindex: true` unless explicitly set. Content >= 800 words defaults to `noindex: false` and triggers Google Indexing & IndexNow if published.
+- **Request Body**:
+  ```json
+  {
+    "articles": [
+      {
+        "title": "MCA Extends Due Date for Form MGT-7 and AOC-4",
+        "slug": "mca-extends-due-date-mgt7-aoc4-2026",
+        "summary": "Extension granted till 30 November 2026.",
+        "content": "<p>Detailed circular analysis...</p>",
+        "category": "MCA",
+        "tags": ["MCA", "MGT-7"],
+        "key_change_pill": "Extension Granted",
+        "tldr": ["Deadline moved to Nov 30"],
+        "last_verified_date": "2026-10-24"
+      }
+    ],
+    "on_conflict": "skip"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "success": true,
+    "total": 1,
+    "succeeded": 1,
+    "failed": 0,
+    "skipped": 0,
+    "results": [
+      {
+        "index": 0,
+        "title": "MCA Extends Due Date for Form MGT-7 and AOC-4",
+        "slug": "mca-extends-due-date-mgt7-aoc4-2026",
+        "status": "created",
+        "word_count": 890,
+        "noindex": false,
+        "is_indexed": false
+      }
+    ]
+  }
+  ```
 
 #### `PUT / PATCH /api/admin/articles/<id>`
 - **Required Scope**: `articles:write`
@@ -166,6 +212,7 @@ Tests connection and returns identity.
 
 #### `POST /api/admin/glossary`
 - **Required Scope**: `glossary:write`
+- **Quality Gate Note**: If `noindex` is not explicitly set to `false`, entries under 800 total words automatically receive `noindex: true`.
 - **Request Body**:
   ```json
   {
@@ -177,6 +224,48 @@ Tests connection and returns identity.
     "seo_title": "What is a Small Company? Definition & Thresholds",
     "tldr": ["Paid up capital <= 4 Cr", "Turnover <= 40 Cr"],
     "is_verified": false
+  }
+  ```
+
+#### `POST /api/admin/glossary/bulk`
+- **Required Scope**: `glossary:write`
+- **Batch Limit**: 1 to 100 glossary definitions per request (designed for batch uploads of 50-85+ terms).
+- **Quality Gate**: Total words (definition + extended_note + faqs) < 800 words defaults to `noindex: true` and exclusion from `sitemap.xml`. Entries >= 800 words default to `noindex: false` and are eligible for search indexing.
+- **Request Body**:
+  ```json
+  {
+    "terms": [
+      {
+        "term": "Charge Satisfaction",
+        "slug": "charge-satisfaction",
+        "definition": "Complete discharge of a registered debt or mortgage...",
+        "category": "MCA",
+        "extended_note": "## Statutory Framework: Section 82 of Companies Act, 2013\n\nFull analysis...",
+        "tldr": ["Form CHG-4 must be filed within 30 days"],
+        "is_verified": true
+      }
+    ],
+    "on_conflict": "skip"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "success": true,
+    "total": 1,
+    "succeeded": 1,
+    "failed": 0,
+    "skipped": 0,
+    "results": [
+      {
+        "index": 0,
+        "term": "Charge Satisfaction",
+        "slug": "charge-satisfaction",
+        "status": "created",
+        "word_count": 910,
+        "is_indexed": true
+      }
+    ]
   }
   ```
 
@@ -305,3 +394,26 @@ Tests connection and returns identity.
 #### `GET /api/admin/audit-log`
 - **Required Scope**: `audit:read`
 - **Query Params**: `?key=Muse&action=article:create&status=success&limit=50&offset=0`
+
+---
+
+## 4. The 800-Word Quality Gate & Indexing Protection
+
+To prevent Google AdSense **"Low-Value Content"** rejections and Google Search **"Thin Content"** algorithmic downgrades, CorpLawUpdates enforces an automated 800-Word Quality Gate:
+
+1. **Threshold**: 800 words of substantive corporate law content.
+   - For **Articles**: Calculated from `content` + `summary` (HTML tags stripped).
+   - For **Glossary Terms**: Calculated across `definition` + clean `extended_note` (metadata comments excluded) + `faqs` (questions and answers).
+2. **Automated Enforcement**:
+   - If an article or glossary entry contains **< 800 words**, the API automatically assigns `noindex: true`.
+   - The public webpage renders `<meta name="robots" content="noindex, follow">`.
+   - The URL is **excluded** from `sitemap.xml` so Search Console reports zero crawl errors.
+   - External submission to Google Indexing API and IndexNow is suppressed.
+   - Readers and internal cross-linkers can still read and link to the content.
+3. **Indexable Content (>= 800 words)**:
+   - Eligible for public indexing (`noindex: false`).
+   - Automatically dispatched to Google Indexing API and IndexNow upon publication.
+   - Included in `sitemap.xml`.
+4. **Explicit Override**:
+   - Authors can explicitly pass `"noindex": false` in the API payload if a specific short statutory update must be indexed regardless of word count.
+

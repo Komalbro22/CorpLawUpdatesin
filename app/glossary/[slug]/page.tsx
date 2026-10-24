@@ -15,6 +15,11 @@ import {
 import GlossaryActions from '@/components/GlossaryActions'
 import ReaderFeedback from '@/components/ReaderFeedback'
 import { GlossaryPdfData } from '@/lib/pdf/generateGlossaryPdf'
+import { 
+  parseGlossaryMetadata, 
+  getGlossaryTotalWordCount, 
+  QUALITY_GATE_WORD_COUNT 
+} from '@/lib/content-quality'
 
 export const revalidate = false // Fully static; instant on-demand via revalidateGlossaryMutation
 
@@ -147,7 +152,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const slug = resolvedParams.slug
   let { data: term } = await supabase
     .from('glossary')
-    .select('term, slug, definition, category, extended_note')
+    .select('term, slug, definition, category, extended_note, faqs')
     .eq('slug', slug)
     .single()
 
@@ -166,7 +171,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: 'Term Not Found | CorpLawUpdates' }
   }
 
-  const parsed = parseMetadata(term.extended_note || '')
+  const parsed = parseGlossaryMetadata(term.extended_note || '')
+  const totalWordCount = getGlossaryTotalWordCount(term)
+  const isIndexable = parsed.noindex === true
+    ? false
+    : (parsed.noindex === false ? true : totalWordCount >= QUALITY_GATE_WORD_COUNT)
+
   const cleanDescription = (term.definition || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
 
   const title = parsed.seoTitle.trim()
@@ -204,10 +214,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: [`https://www.corplawupdates.in/api/og?title=${encodeURIComponent(term.term)}&category=${encodeURIComponent(term.category || 'Glossary')}`],
     },
     robots: {
-      index: true,
+      index: isIndexable,
       follow: true,
       googleBot: {
-        index: true,
+        index: isIndexable,
         follow: true,
         'max-image-preview': 'large',
         'max-snippet': -1,

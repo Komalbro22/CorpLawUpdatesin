@@ -8,6 +8,7 @@ import { submitArticleToIndexNow } from '@/lib/indexnow'
 import { submitArticleToGoogleIndexing } from '@/lib/google-indexing'
 import { articleSchema } from '@/lib/admin-schemas'
 import { revalidateArticleMutation } from '@/lib/content-revalidation'
+import { evaluateArticleIndexQuality } from '@/lib/content-quality'
 import {
   verifyAdminOrKey,
   getIdempotentResponse,
@@ -238,6 +239,10 @@ export async function POST(request: NextRequest) {
       finalKeyTakeaways = [key_takeaways.trim()]
     }
 
+    // 800-Word Quality Gate for Articles
+    const quality = evaluateArticleIndexQuality(content, typeof noindex === 'boolean' ? noindex : undefined)
+    const finalNoindex = quality.noindex
+
     const { data: createdArticle, error } = await supabaseAdmin
       .from('updates')
       .insert({
@@ -260,7 +265,7 @@ export async function POST(request: NextRequest) {
         contributor_name: is_sponsored ? contributor_name?.trim() || null : null,
         hold_external_links: is_sponsored ? hold_external_links || false : false,
         hide_from_listings: hide_from_listings || false,
-        noindex: noindex || false,
+        noindex: finalNoindex,
         key_change: key_change || null,
         key_changes: finalKeyChanges,
         effective_date: effective_date || null,

@@ -58,6 +58,7 @@ export const glossarySchema = z.object({
   tldr: z.array(z.string().max(1000)).nullable().optional(),
   seo_title: z.string().max(500).nullable().optional(),
   seo_description: z.string().max(2000).nullable().optional(),
+  noindex: z.boolean().optional(),
   hide_definition: z.boolean().optional(),
   body: z.string().max(2000000).nullable().optional(),
   cleanContent: z.string().max(2000000).nullable().optional()
