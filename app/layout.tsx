@@ -123,13 +123,6 @@ export default async function RootLayout({
             `,
           }}
         />
-        {/* Ahrefs Web Analytics */}
-        <script
-          async
-          src="https://analytics.ahrefs.com/analytics.js"
-          data-key="/euoA9NQAbsgFUSEx0PkKQ"
-        />
-        <link rel="dns-prefetch" href="https://analytics.ahrefs.com" />
         <link rel="preconnect" href="https://i.ibb.co" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://i.ibb.co" />
         <link rel="preconnect" href="https://fcosrsznbxedischtbwe.supabase.co" crossOrigin="anonymous" />

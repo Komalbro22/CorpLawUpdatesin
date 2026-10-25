@@ -166,9 +166,9 @@ export default function PrivacyPolicyPage() {
                                     <td className="p-3">Traffic analytics and News integration</td>
                                 </tr>
                                 <tr>
-                                    <td className="p-3 font-bold">Ahrefs &amp; Clarity</td>
-                                    <td className="p-3">Aggregated web analytics, session UX metrics</td>
-                                    <td className="p-3">Site performance, crawl diagnostics, and usability analysis</td>
+                                    <td className="p-3 font-bold">Microsoft Clarity</td>
+                                    <td className="p-3">Aggregated session UX metrics, heatmaps</td>
+                                    <td className="p-3">Site usability analysis and UX diagnostics</td>
                                 </tr>
 
                             </tbody>
@@ -238,7 +238,7 @@ export default function PrivacyPolicyPage() {
                             </p>
                             <ul className="list-disc list-inside space-y-1.5 text-slate-600 dark:text-slate-400">
                                 <li><strong>Essential Cookies:</strong> Required for core site operations (navigation, security, authentication tokens, theme persistence). These cannot be disabled.</li>
-                                <li><strong>Analytics Cookies:</strong> Help us measure readership and optimize site speed (Google Analytics 4, Microsoft Clarity, Ahrefs Web Analytics, Vercel Analytics). You can accept or reject these.</li>
+                                <li><strong>Analytics Cookies:</strong> Help us measure readership and optimize site speed (Google Analytics 4, Microsoft Clarity, Vercel Analytics). You can accept or reject these.</li>
                                 <li><strong>Functional Cookies:</strong> Remember your user interface preferences and tool inputs. You can accept or reject these.</li>
                             </ul>
                             <p className="mt-3 text-sm italic">

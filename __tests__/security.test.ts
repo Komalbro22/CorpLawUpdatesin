@@ -428,7 +428,7 @@ describe('SEO-002: Knowledge Graph Persistent @id Identifiers', () => {
 // 11. CSP: Analytics allowlisting & Ad-network exclusion
 // ════════════════════════════════════════════════════════════════════════════
 describe('CSP: Analytics allowlisting and Ad-network exclusion', () => {
-  it('allows telemetry & analytics (Ahrefs, Clarity, GA4) in script-src directive', async () => {
+  it('allows telemetry & analytics (Clarity, GA4) in script-src directive', async () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const nextConfig = require('../next.config.js')
     const headers = await nextConfig.headers()
@@ -436,9 +436,9 @@ describe('CSP: Analytics allowlisting and Ad-network exclusion', () => {
     const csp = rootHeader.headers.find((h: any) => h.key === 'Content-Security-Policy')?.value
 
     expect(csp).toBeDefined()
-    expect(csp).toContain('https://analytics.ahrefs.com')
     expect(csp).toContain('https://*.clarity.ms')
     expect(csp).toContain('https://www.googletagmanager.com')
+    expect(csp).not.toContain('https://analytics.ahrefs.com')
   })
 
   it('excludes third-party ad networks (AdSense, Clickio) from CSP', async () => {
