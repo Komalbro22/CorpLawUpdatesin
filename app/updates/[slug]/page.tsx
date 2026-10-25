@@ -35,7 +35,6 @@ import { sanitizeHtml } from '@/lib/sanitize'
 import { mcaForms } from '@/data/mca-forms'
 import ArticleContextTool from '@/components/ArticleContextTool'
 import ReaderFeedback from '@/components/ReaderFeedback'
-import AdsterraBanner from '@/components/AdsterraBanner'
 
 const stripHtml = (html: any) => {
   if (!html) return ''
@@ -897,9 +896,6 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
             )}
 
             <div id="article-end" className="h-4" aria-hidden />
-
-            {/* Adsterra banner disabled by user */}
-            {/* {!update.is_sponsored && <AdsterraBanner />} */}
 
             {/* Google Preferred Source Callout Banner */}
             <div className="my-8 print:hidden">

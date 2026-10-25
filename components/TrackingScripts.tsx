@@ -49,9 +49,9 @@ export default function TrackingScripts() {
         try {
           const parsed = JSON.parse(savedConsent)
           consentState = {
-            ad_storage: parsed.advertising ? 'granted' : 'denied',
-            ad_user_data: parsed.advertising ? 'granted' : 'denied',
-            ad_personalization: parsed.advertising ? 'granted' : 'denied',
+            ad_storage: 'denied',
+            ad_user_data: 'denied',
+            ad_personalization: 'denied',
             analytics_storage: parsed.analytics ? 'granted' : 'denied',
             functionality_storage: parsed.functional ? 'granted' : 'denied',
           }

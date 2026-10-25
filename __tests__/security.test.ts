@@ -425,10 +425,10 @@ describe('SEO-002: Knowledge Graph Persistent @id Identifiers', () => {
 })
 
 // ════════════════════════════════════════════════════════════════════════════
-// 11. CSP: Google Ad Traffic Quality iframe allowlisting
+// 11. CSP: Analytics allowlisting & Ad-network exclusion
 // ════════════════════════════════════════════════════════════════════════════
-describe('CSP: Ad Traffic Quality iframe allowlisting', () => {
-  it('allows https://*.adtrafficquality.google in frame-src directive', async () => {
+describe('CSP: Analytics allowlisting and Ad-network exclusion', () => {
+  it('allows telemetry & analytics (Ahrefs, Clarity, GA4) in script-src directive', async () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const nextConfig = require('../next.config.js')
     const headers = await nextConfig.headers()
@@ -436,11 +436,12 @@ describe('CSP: Ad Traffic Quality iframe allowlisting', () => {
     const csp = rootHeader.headers.find((h: any) => h.key === 'Content-Security-Policy')?.value
 
     expect(csp).toBeDefined()
-    expect(csp).toContain('frame-src')
-    expect(csp).toMatch(/frame-src[^;]*https:\/\/\*\.adtrafficquality\.google/)
+    expect(csp).toContain('https://analytics.ahrefs.com')
+    expect(csp).toContain('https://*.clarity.ms')
+    expect(csp).toContain('https://www.googletagmanager.com')
   })
 
-  it('allows Clickio CMP and CDN domains in script-src, connect-src, and frame-src directives', async () => {
+  it('excludes third-party ad networks (AdSense, Clickio) from CSP', async () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const nextConfig = require('../next.config.js')
     const headers = await nextConfig.headers()
@@ -448,8 +449,9 @@ describe('CSP: Ad Traffic Quality iframe allowlisting', () => {
     const csp = rootHeader.headers.find((h: any) => h.key === 'Content-Security-Policy')?.value
 
     expect(csp).toBeDefined()
-    expect(csp).toContain('https://clickiocmp.com')
-    expect(csp).toContain('https://*.clickiocdn.com')
+    expect(csp).not.toContain('clickiocmp.com')
+    expect(csp).not.toContain('clickiocdn.com')
+    expect(csp).not.toContain('pagead2.googlesyndication.com')
   })
 })
 

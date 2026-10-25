@@ -88,10 +88,6 @@ export const metadata: Metadata = {
   verification: {
     google: process.env.NEXT_PUBLIC_GSC_VERIFICATION || '',
   },
-  other: {
-    'google-adsense-account': 'ca-pub-8404756575471756',
-    'monetag': '53e830deaec95301a49eb4b797c9cbc8',
-  },
 }
 
 export default async function RootLayout({
@@ -127,15 +123,6 @@ export default async function RootLayout({
             `,
           }}
         />
-        <meta name="google-adsense-account" content="ca-pub-8404756575471756" />
-        <meta name="monetag" content="53e830deaec95301a49eb4b797c9cbc8" />
-        {/* Google AdSense Script inside <head> */}
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8404756575471756"
-          crossOrigin="anonymous"
-        />
-        {/* Clickio Web Vitals Monitoring */}
         {/* Ahrefs Web Analytics */}
         <script
           async
@@ -143,10 +130,6 @@ export default async function RootLayout({
           data-key="/euoA9NQAbsgFUSEx0PkKQ"
         />
         <link rel="dns-prefetch" href="https://analytics.ahrefs.com" />
-        <script defer data-cfasync="false" src="https://s.clickiocdn.com/t/250831_wv.js" />
-        <link rel="dns-prefetch" href="https://clickiocdn.com" />
-        <link rel="preconnect" href="https://clickiocdn.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="preconnect" href="https://i.ibb.co" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://i.ibb.co" />
         <link rel="preconnect" href="https://fcosrsznbxedischtbwe.supabase.co" crossOrigin="anonymous" />
