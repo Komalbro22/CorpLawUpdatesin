@@ -186,6 +186,31 @@ export default function MGT7Workspace({ form }: MGT7WorkspaceProps) {
   const isMgt8Required = complianceResult.pcsCertification.mgt8Required
   const isSection446B = complianceResult.metadata.section446BEligible
 
+  // ── MCA General Circular No. 05/2026 Extension Logic (FY 2025-26 Only) ──
+  const isFY2025_26 = selectedFY === '2025-26'
+
+  // Normalized filing date string (YYYY-MM-DD)
+  const filingDateStr = useMemo(() => {
+    if (calcMode === 'days') {
+      const baseAgm = new Date(actualAgmDate)
+      const computedDue = new Date(baseAgm)
+      computedDue.setDate(computedDue.getDate() + 60)
+      const target = new Date(computedDue)
+      target.setDate(target.getDate() + Math.max(0, directDelayDays))
+      return target.toISOString().slice(0, 10)
+    }
+    return actualFilingDate
+  }, [calcMode, actualAgmDate, directDelayDays, actualFilingDate])
+
+  const isWithinExtendedWindow = isFY2025_26 && filingDateStr <= '2027-01-31'
+  const isPostExtendedWindow = isFY2025_26 && filingDateStr > '2027-01-31'
+
+  // Effective late fee & payable amounts
+  const effectiveLateFee = isWithinExtendedWindow ? 0 : lateFee
+  const effectiveTotalChallan = normalFee + effectiveLateFee
+  const effectiveDelayDays = isWithinExtendedWindow ? 0 : delayDays
+  const isDelayedEffective = effectiveDelayDays > 0
+
   // Preset handlers
   const handleSelectCapitalPreset = (val: number) => {
     setHasShareCapital(true)
@@ -197,11 +222,14 @@ export default function MGT7Workspace({ form }: MGT7WorkspaceProps) {
   // Copy breakdown for WhatsApp / Email
   const handleCopyBreakdown = () => {
     const compHeader = companyName ? `Company: ${companyName}\n` : ''
-    const delayText = isDelayed
-      ? `Delay: ${delayDays} day(s)\nLate Fee Rate: ₹100/day (Uncapped)\n`
+    const delayText = isWithinExtendedWindow
+      ? 'Status: Within extended window (GC 05/2026) — no additional fee (0 days delay)\n'
+      : isDelayedEffective
+      ? `Delay: ${effectiveDelayDays} day(s)\nLate Fee Rate: ₹100/day (Uncapped)\n`
       : 'Status: On-Time Filing (0 days delay)\n'
+    const extText = isFY2025_26 ? 'Extended Window: 31 January 2027 (GC 05/2026)\n' : ''
     const mgt8Text = isMgt8Required ? '\n⚠️ Mandatory PCS Certification in Form MGT-8 Required.' : ''
-    const sec92Text = isDelayed
+    const sec92Text = (!isWithinExtendedWindow && isDelayedEffective)
       ? `\nIndicative Sec 92(5) Adjudication Exposure:\n• Company: ${formatINR(complianceResult.statutoryPenaltyExposure.companyIndicativeMaximumExposure)}\n• Officers (${officerCount}): ${formatINR(complianceResult.statutoryPenaltyExposure.officersIndicativeMaximumExposure)}`
       : ''
 
@@ -210,12 +238,11 @@ ${compHeader}Form: ${formCode} (${complianceResult.metadata.formName})
 Financial Year: ${selectedFY}
 Nominal Capital: ${hasShareCapital ? formatINR(nominalCapital) : 'Without Share Capital'}
 Due Date: ${statutoryDueDate}
-${delayText}
-─────────────────────────────
+${extText}${delayText}─────────────────────────────
 • Normal Filing Fee: ${formatINR(normalFee)}
-• Additional Late Fee: ${formatINR(lateFee)}
+• Additional Late Fee: ${formatINR(effectiveLateFee)}
 ═════════════════════════════
-TOTAL MCA CHALLAN PAYABLE: ${formatINR(totalChallan)}
+TOTAL MCA CHALLAN PAYABLE: ${formatINR(effectiveTotalChallan)}
 ═════════════════════════════${mgt8Text}${sec92Text}
 
 Generated via CorpLawUpdates Fee Calculator:
@@ -229,7 +256,22 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
   const handleDownloadPdf = () => {
     setIsGeneratingPdf(true)
     try {
-      const doc = generateMgt7Pdf(complianceResult, companyName.trim() || undefined)
+      const pdfComplianceResult: Mgt7ComplianceCalculationResult = isWithinExtendedWindow
+        ? {
+            ...complianceResult,
+            metadata: {
+              ...complianceResult.metadata,
+              daysDelayed: 0,
+            },
+            mcaPortalPayable: {
+              ...complianceResult.mcaPortalPayable,
+              additionalFilingFee: 0,
+              totalPortalPayable: normalFee,
+              basisAdditionalFee: 'Within extended window (MCA General Circular No. 05/2026) — no additional fee applies.'
+            }
+          }
+        : complianceResult
+      const doc = generateMgt7Pdf(pdfComplianceResult, companyName.trim() || undefined)
       const cleanName = companyName ? companyName.trim().replace(/[^a-zA-Z0-9]/g, '_') : 'Company'
       doc.save(`CorpLawUpdates_${formCode}_Report_${cleanName}.pdf`)
       showToast('Official MGT-7/7A calculation memo downloaded as PDF!', 'success')
@@ -260,6 +302,11 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
               <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
                 Section 92 &amp; ₹100/day Uncapped Late Fee
               </span>
+              {isFY2025_26 && (
+                <span className="bg-emerald-600 text-white font-bold text-xs uppercase px-3 py-1 rounded-md tracking-wider flex items-center gap-1 shadow-xs">
+                  <span>📢</span> FY 2025-26 extended to 31 Jan 2027 (GC 05/2026)
+                </span>
+              )}
             </div>
             <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mt-1.5 flex items-center gap-2">
               <Scale className="w-6 h-6 text-blue-600 dark:text-blue-400" />
@@ -347,6 +394,16 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
               Switch to {formCode === 'MGT-7' ? 'MGT-7A' : 'MGT-7'}
               <ArrowRight className="w-3 h-3" />
             </button>
+          </div>
+        )}
+
+        {/* FY 2025-26 Extension Alert Callout */}
+        {isFY2025_26 && (
+          <div className="mb-6 p-4 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-2xl flex items-start gap-3 shadow-xs">
+            <span className="text-base select-none mt-0.5">📢</span>
+            <div className="text-xs sm:text-sm text-emerald-900 dark:text-emerald-200 leading-relaxed font-medium">
+              <strong>FY 2025-26 extension (MCA General Circular No. 05/2026):</strong> Annual returns in e-forms MGT-7 and MGT-7A for FY 2025-26 may be filed up to <strong>31 January 2027</strong> without payment of additional fees. Filings made after 31 January 2027 attract additional fees counted from the original statutory due date (60 days from AGM).
+            </div>
           </div>
         )}
 
@@ -502,6 +559,11 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                   onChange={(e) => setDirectDelayDays(Math.max(0, parseInt(e.target.value) || 0))}
                   className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl p-3 text-lg font-bold focus:ring-2 focus:ring-blue-500 transition-colors"
                 />
+                {isFY2025_26 && (
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                    For FY 2025-26: if the actual filing date is on or before 31 January 2027, enter 0 days (no additional fee applies even if statutory date has passed). If filing after 31 January 2027, count delay days from the original statutory due date (60 days from AGM, 29 Nov 2026 for a 30 Sep AGM), not from 31 January 2027.
+                  </p>
+                )}
                 
                 {/* Quick Delay Chips */}
                 <div>
@@ -746,7 +808,12 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
                     {formCode} CHALLAN COMPUTATION
                   </span>
-                  {!isDelayed ? (
+                  {isWithinExtendedWindow ? (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      WITHIN EXTENDED WINDOW (GC 05/2026)
+                    </span>
+                  ) : !isDelayedEffective ? (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
                       ON-TIME FILING
@@ -754,7 +821,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                   ) : (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs font-bold">
                       <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />
-                      DELAYED ({delayDays}d)
+                      DELAYED ({effectiveDelayDays}d)
                     </span>
                   )}
                 </div>
@@ -764,7 +831,7 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                   <span className="text-xs text-slate-400 block mb-1">Total MCA Portal e-Challan Payable</span>
                   <div className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight flex items-baseline gap-1">
                     <span className="text-2xl sm:text-3xl text-slate-400 font-medium">₹</span>
-                    {totalChallan.toLocaleString('en-IN')}
+                    {effectiveTotalChallan.toLocaleString('en-IN')}
                   </div>
                   <p className="text-xs text-slate-400 mt-1.5">
                     Governed by Table A &amp; Rule 12 Second Amendment (₹100/day)
@@ -792,30 +859,51 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                       Additional Late Fee:
                     </span>
                     <div className="text-right">
-                      <span className={`font-bold ${lateFee > 0 ? 'text-rose-400' : 'text-white'}`}>
-                        {formatINR(lateFee)}
+                      <span className={`font-bold ${effectiveLateFee > 0 ? 'text-rose-400' : 'text-white'}`}>
+                        {formatINR(effectiveLateFee)}
                       </span>
-                      {delayDays > 0 && (
+                      {effectiveDelayDays > 0 && (
                         <span className="block text-[11px] text-amber-300 font-medium">
-                          ({delayDays} days × ₹100/day)
+                          ({effectiveDelayDays} days × ₹100/day)
                         </span>
                       )}
                     </div>
                   </div>
 
-                  {/* Due Date & Delay Duration */}
-                  <div className="pt-2 border-t border-slate-700/80 flex justify-between items-center text-xs text-slate-400">
-                    <span>Statutory Due Date:</span>
-                    <span className="font-semibold text-slate-200">
-                      {statutoryDueDate}
-                    </span>
-                  </div>
+                  {isPostExtendedWindow && (
+                    <p className="text-[11px] text-amber-300/90 leading-tight bg-amber-950/40 p-2 rounded-lg border border-amber-800/50">
+                      ⚠️ Additional fee counted from the original statutory due date per GC 05/2026 para 4, not from 31 January 2027.
+                    </p>
+                  )}
 
-                  <div className="flex justify-between items-center text-xs text-slate-400">
-                    <span>Delay Duration:</span>
-                    <span className="font-semibold text-slate-200">
-                      {!isDelayed ? '0 days (Compliant)' : `${delayDays} days overdue`}
-                    </span>
+                  {/* Due Date & Delay Duration */}
+                  <div className="pt-2 border-t border-slate-700/80 space-y-2 text-xs text-slate-400">
+                    <div className="flex justify-between items-center">
+                      <span>Statutory Due Date:</span>
+                      <span className="font-semibold text-slate-200">
+                        {statutoryDueDate}
+                      </span>
+                    </div>
+
+                    {isFY2025_26 && (
+                      <div className="flex justify-between items-center text-emerald-400 font-medium">
+                        <span>Extended Window Ends:</span>
+                        <span className="font-semibold">
+                          31 January 2027 (GC 05/2026)
+                        </span>
+                      </div>
+                    )}
+
+                    <div className="flex justify-between items-center">
+                      <span>Delay Duration:</span>
+                      <span className="font-semibold text-slate-200">
+                        {isWithinExtendedWindow
+                          ? '0 days (Within extended window — no additional fee)'
+                          : !isDelayedEffective
+                          ? '0 days (Compliant)'
+                          : `${effectiveDelayDays} days overdue`}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
@@ -921,11 +1009,11 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
               Statutory Delay Tiers &amp; ₹100/Day Fee Progression
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              The currently calculated delay of <strong>{delayDays} days</strong> is tracked below against representative filing milestones.
+              The currently calculated delay of <strong>{effectiveDelayDays} days</strong> is tracked below against representative filing milestones.
             </p>
           </div>
           <span className="text-xs font-semibold px-2.5 py-1 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 rounded-lg border border-indigo-200 dark:border-indigo-800 self-start sm:self-auto">
-            Current Delay: {delayDays === 0 ? 'On-Time (₹0 Late Fee)' : `${delayDays} Days (${formatINR(lateFee)})`}
+            Current Delay: {effectiveDelayDays === 0 ? (isWithinExtendedWindow ? 'Within Extended Window (₹0 Late Fee)' : 'On-Time (₹0 Late Fee)') : `${effectiveDelayDays} Days (${formatINR(effectiveLateFee)})`}
           </span>
         </div>
 
@@ -1196,13 +1284,23 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
                   </tr>
                 </>
               )}
+              {isFY2025_26 && (
+                <tr className="border-b border-slate-200">
+                  <td className="p-2 font-bold bg-slate-50 border-r border-slate-200">Extended Window (GC 05/2026)</td>
+                  <td className="p-2 font-bold text-emerald-800">31 January 2027 (MCA General Circular No. 05/2026)</td>
+                </tr>
+              )}
               <tr>
                 <td className="p-2 font-bold bg-slate-50 border-r border-slate-200">Delay Assessment</td>
                 <td className="p-2 font-bold">
-                  {!isDelayed ? (
+                  {isWithinExtendedWindow ? (
+                    <span className="text-emerald-700">COMPLIANT — Within Extended Window (GC 05/2026) (0 Days Delay)</span>
+                  ) : !isDelayedEffective ? (
                     <span className="text-emerald-700">COMPLIANT — On-Time Filing (0 Days Delay)</span>
                   ) : (
-                    <span className="text-rose-700">DELAYED by {delayDays} day(s) (Attracts ₹100/day Uncapped Late Fee)</span>
+                    <span className="text-rose-700">
+                      DELAYED by {effectiveDelayDays} day(s) (Attracts ₹100/day Uncapped Late Fee from statutory due date per GC 05/2026 para 4)
+                    </span>
                   )}
                 </td>
               </tr>
@@ -1236,16 +1334,18 @@ https://www.corplawupdates.in/tools/fee-calculator/companies/${formCode.toLowerC
               <tr className="border-b border-slate-200">
                 <td className="p-2 font-semibold">Additional Filing Fee (Delay)</td>
                 <td className="p-2 text-slate-600">
-                  {!isDelayed
+                  {isWithinExtendedWindow
+                    ? 'Within extended window (MCA General Circular No. 05/2026) — ₹0 additional fee'
+                    : !isDelayedEffective
                     ? 'No delay — filed within 60-day statutory window'
-                    : `Companies (Registration Offices and Fees) Second Amendment Rules, 2018 (${delayDays} days × ₹100/day)`}
+                    : `Companies (Registration Offices and Fees) Second Amendment Rules, 2018 (${effectiveDelayDays} days × ₹100/day)`}
                 </td>
-                <td className="p-2 text-right font-bold">{formatINR(lateFee)}</td>
+                <td className="p-2 text-right font-bold">{formatINR(effectiveLateFee)}</td>
               </tr>
               <tr className="bg-slate-100 font-bold border-t-2 border-slate-300">
                 <td className="p-2 text-slate-950">TOTAL MCA21 CHALLAN PAYABLE</td>
                 <td className="p-2 text-slate-600 italic">Payable via Bharatkosh / MCA Gateway</td>
-                <td className="p-2 text-right text-sm text-slate-950">{formatINR(totalChallan)}</td>
+                <td className="p-2 text-right text-sm text-slate-950">{formatINR(effectiveTotalChallan)}</td>
               </tr>
             </tbody>
           </table>

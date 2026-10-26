@@ -754,6 +754,11 @@ export default async function FormSpecificPage({ params }: { params: Promise<{ s
               : `Estimate applicable statutory filing fees and late multipliers based on selected assumptions for ${form.formNumber} (${form.formName}) based on authorized capital and delay. Always verify final challan values on MCA21 portal before filing.`}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
+            {(form.slug === 'mgt-7' || form.slug === 'mgt-7a') && (
+              <div className="bg-emerald-500/20 border border-emerald-400/40 rounded-full px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm text-emerald-300 font-semibold flex items-center gap-1.5">
+                <span>📢</span> FY 2025-26 extended to 31 Jan 2027 (GC 05/2026)
+              </div>
+            )}
             <div className="bg-slate-800/50 border border-slate-700 rounded-full px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm text-slate-300">
               📅 <span className="font-semibold text-white ml-1">Due:</span> {form.dueDate}
             </div>

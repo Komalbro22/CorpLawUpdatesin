@@ -92,6 +92,7 @@ export default function UnifiedCalculator() {
   const isDir3Kyc = selectedForm.slug === 'dir-3-kyc'
   const isStk2 = selectedForm.slug === 'stk-2'
   const isDir3 = selectedForm.slug === 'dir-3'
+  const isExtendedForm = ['aoc-4', 'mgt-7', 'mgt-7a'].includes(selectedSlug) || selectedSlug.startsWith('aoc-4')
 
   // Live Calculation using shared logic
   const result = useMemo(() => {
@@ -266,6 +267,15 @@ export default function UnifiedCalculator() {
         </div>
       </div>
 
+      {isExtendedForm && (
+        <div className="mb-6 p-4 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 text-amber-900 dark:text-amber-200 text-xs sm:text-sm flex items-start gap-3 shadow-xs">
+          <span className="text-base select-none mt-0.5">📢</span>
+          <div className="leading-relaxed font-medium">
+            <strong>FY 2025-26 extension (MCA General Circular No. 05/2026):</strong> file AOC-4 by 31 December 2026 and MGT-7/MGT-7A by 31 January 2027 with no additional fee.
+          </div>
+        </div>
+      )}
+
       <form 
         className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6 mb-8"
       >
@@ -333,6 +343,9 @@ export default function UnifiedCalculator() {
             disabled={isSpice || isDir3 || isStk2}
             className="w-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white rounded-[4px] px-3 py-2.5 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-hidden transition-all shadow-xs disabled:bg-slate-50 dark:disabled:bg-slate-800/40 disabled:text-slate-400 dark:disabled:text-slate-500 tabular-nums"
           />
+          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
+            For FY 2025-26: if the actual filing date is on or before the extended date (AOC-4: 31 Dec 2026; MGT-7/MGT-7A: 31 Jan 2027), enter 0 days — no additional fee applies even if the statutory date has passed. If filing after the extended date, count delay days from the ORIGINAL statutory due date (AOC-4: 30 Oct 2026 for a 30 Sep AGM, 27 Sep 2026 for OPC; MGT-7/MGT-7A: 60 days from AGM, 29 Nov 2026 for a 30 Sep AGM), not from the extended date.
+          </p>
         </div>
 
         {/* Conditional Inputs */}
