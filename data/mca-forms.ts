@@ -82,6 +82,13 @@ export const mcaForms: MCAForm[] = [
     concessionApplies: false,
     filingGuides: [
       {
+        title: "MCA Extension of Annual Filing 2026 — General Circular No. 05/2026 Due Dates & Rules",
+        slug: "/updates/mca-extends-annual-filing-deadlines-fy-2025-26",
+        publishedDate: "2026-10-24",
+        summary: "Official MCA General Circular No. 05/2026 extending FY 2025-26 annual filing: AOC-4 till 31 Dec 2026 and MGT-7/7A till 31 Jan 2027 without additional late fees.",
+        isOfficial: true
+      },
+      {
         title: "Complete MGT-7 Annual Return Filing Guide for FY 2025-26 — Due Dates, MCA V3 & Small Co Limits",
         slug: "/updates/form-mgt-7-mgt-7a-annual-return-guide-2026",
         publishedDate: "2026-09-16",
@@ -144,6 +151,13 @@ export const mcaForms: MCAForm[] = [
     baseFeeSlab: 'standard_company_slab',
     concessionApplies: true,
     filingGuides: [
+      {
+        title: "MCA Extension of Annual Filing 2026 — General Circular No. 05/2026 Due Dates & Rules",
+        slug: "/updates/mca-extends-annual-filing-deadlines-fy-2025-26",
+        publishedDate: "2026-10-24",
+        summary: "Official MCA General Circular No. 05/2026 extending FY 2025-26 annual filing: AOC-4 till 31 Dec 2026 and MGT-7/7A till 31 Jan 2027 without additional late fees.",
+        isOfficial: true
+      },
       {
         title: "Complete MGT-7A Annual Return Filing Guide for Small Companies and OPCs (FY 2025-26)",
         slug: "/updates/form-mgt-7-mgt-7a-annual-return-guide-2026",
@@ -219,6 +233,13 @@ export const mcaForms: MCAForm[] = [
     baseFeeSlab: 'standard_company_slab',
     concessionApplies: false,
     filingGuides: [
+      {
+        title: "MCA Extension of Annual Filing 2026 — General Circular No. 05/2026 Due Dates & Rules",
+        slug: "/updates/mca-extends-annual-filing-deadlines-fy-2025-26",
+        publishedDate: "2026-10-24",
+        summary: "Official MCA General Circular No. 05/2026 extending FY 2025-26 annual filing: AOC-4 till 31 Dec 2026 and MGT-7/7A till 31 Jan 2027 without additional late fees.",
+        isOfficial: true
+      },
       {
         title: "Complete Form AOC-4 Filing Guide for FY 2025-26 — Due Dates, Attachments & MCA V3 Rules",
         slug: "/updates/aoc-4-filing-guide-fy-2024-25",

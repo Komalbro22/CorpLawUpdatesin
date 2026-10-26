@@ -268,8 +268,21 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                 while ((hMatch = headingRegex.exec(faqSection)) !== null) {
                     const q = cleanText(hMatch[1].replace(/<[^>]*>/g, ''))
                     const a = cleanText(hMatch[2].replace(/<[^>]*>/g, ''))
-                    if (q && a && q.length > 5 && a.length > 5 && (q.includes('?') || /^(what|when|from|where|how|why|is|will|can|does|do)/i.test(q))) {
+                    if (q && a && q.length > 5 && a.length > 5 && (q.includes('?') || /^(what|when|from|where|how|why|is|will|can|does|do|has)/i.test(q))) {
                         faqs.push({ question: q, answer: a })
+                    }
+                }
+
+                // 2b. Try extracting <p><strong>Question?</strong><br />Answer</p> under the FAQ section
+                if (faqs.length === 0) {
+                    const pRegex = /<p\b[^>]*>\s*<strong>([\s\S]*?)<\/strong>\s*(?:<br\s*\/?>)?\s*([\s\S]*?)<\/p>/gi
+                    let pMatch: RegExpExecArray | null
+                    while ((pMatch = pRegex.exec(faqSection)) !== null) {
+                        const q = cleanText(pMatch[1].replace(/<[^>]*>/g, ''))
+                        const a = cleanText(pMatch[2].replace(/<[^>]*>/g, ''))
+                        if (q && a && q.length > 5 && a.length > 5 && (q.includes('?') || /^(what|when|from|where|how|why|is|will|can|does|do|has)/i.test(q))) {
+                            faqs.push({ question: q, answer: a })
+                        }
                     }
                 }
             }
