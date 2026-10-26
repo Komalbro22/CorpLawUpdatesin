@@ -355,7 +355,14 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
     let contentPart2 = ''
     
     // Find if this article is mapped to any form's filingGuides
-    const relatedForm = mcaForms.find(f => f.filingGuides && f.filingGuides.some(g => g.slug.includes(update.slug)))
+    // Specific articles can be excluded from the auto-injected promo card per editorial request
+    const EXCLUDED_FROM_PROMO_CARD = [
+        'mca-extends-annual-filing-deadlines-fy-2025-26',
+    ]
+    const isPromoExcluded = EXCLUDED_FROM_PROMO_CARD.some(slug => update.slug?.includes(slug))
+    const relatedForm = !isPromoExcluded
+        ? mcaForms.find(f => f.filingGuides && f.filingGuides.some(g => g.slug.includes(update.slug)))
+        : undefined
 
     if (update.content) {
         let fullContent = update.content

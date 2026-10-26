@@ -151,4 +151,29 @@ describe('MCA General Circular No. 05/2026 Verification Test Suite', () => {
       expect(result.mcaPortalPayable.additionalFilingFee).toBe(4700)
     })
   })
+
+  describe('Case 8: Injected Promo Card Exclusion for MCA Extension Article', () => {
+    test('Excludes mca-extends-annual-filing-deadlines-fy-2025-26 from auto-injected promo card while preserving it for other articles', () => {
+      const EXCLUDED_FROM_PROMO_CARD = [
+        'mca-extends-annual-filing-deadlines-fy-2025-26',
+      ]
+
+      const getRelatedForm = (slug: string) => {
+        const isPromoExcluded = EXCLUDED_FROM_PROMO_CARD.some(s => slug.includes(s))
+        return !isPromoExcluded
+          ? mcaForms.find(f => f.filingGuides && f.filingGuides.some(g => g.slug.includes(slug)))
+          : undefined
+      }
+
+      // 1. MCA extension article must NOT render the promo card
+      const mcaExtensionRelated = getRelatedForm('mca-extends-annual-filing-deadlines-fy-2025-26')
+      expect(mcaExtensionRelated).toBeUndefined()
+
+      // 2. Other guides (e.g. MGT-7 guide) must remain unaffected and still find related form
+      const mgt7GuideRelated = getRelatedForm('form-mgt-7-mgt-7a-annual-return-guide-2026')
+      expect(mgt7GuideRelated).toBeDefined()
+      expect(mgt7GuideRelated?.slug).toBe('mgt-7')
+      expect(mgt7GuideRelated?.formNumber).toBe('MGT-7')
+    })
+  })
 })
