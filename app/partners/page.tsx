@@ -426,11 +426,16 @@ export default function PartnerInterestPage() {
                 <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-300 mb-4">
                   <li className="flex items-start gap-2">
                     <Check className="size-3.5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                    <span>Reader enquiries in your service area are matched to you after vetting.</span>
+                    <div>
+                      <span>Reader enquiries in your service area are matched to you after vetting.</span>
+                      <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                        Vetting means a relevance and category check only. CorpLawUpdates.in does not verify licences, memberships or credentials — readers must verify a professional&apos;s credentials themselves before engaging them, as stated in the disclaimer.
+                      </p>
+                    </div>
                   </li>
                   <li className="flex items-start gap-2">
                     <Check className="size-3.5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                    <span>Any fee — per lead or per completed case — is agreed in advance, in writing, before any enquiry is shared.</span>
+                    <span>Referral matching is offered on a flat placement / advertising fee, agreed in advance in writing, before any enquiry is shared.</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <Check className="size-3.5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
@@ -470,7 +475,7 @@ export default function PartnerInterestPage() {
               </div>
               <h3 className="font-heading text-base font-semibold text-white">Editorial review</h3>
               <p className="text-xs text-slate-300 leading-relaxed">
-                We review your request for relevance, professional quality, and category suitability.
+                We review your request for relevance, professional quality, and category suitability. Vetting means a relevance and category check only. CorpLawUpdates.in does not verify licences, memberships or credentials — readers must verify a professional&apos;s credentials themselves before engaging them, as stated in the disclaimer.
               </p>
             </div>
             <div className="space-y-2 relative">
@@ -506,7 +511,7 @@ export default function PartnerInterestPage() {
                 Pricing is on enquiry. Tell us which product you are interested in and what you want to promote, and we will quote after review.
               </p>
               <div className="p-3.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-300">
-                We do not promise a fixed number of leads or clients — you are paying for placement and exposure to our verified professional audience.
+                We do not promise a fixed number of leads or clients — you are paying for placement and exposure to our professional audience.
               </div>
             </div>
             <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
