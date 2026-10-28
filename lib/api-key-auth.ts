@@ -11,6 +11,7 @@ export type ApiKeyScope =
   | 'newsletter:read' | 'newsletter:write' | 'newsletter:send'
   | 'subscribers:read' | 'subscribers:write'
   | 'feedback:read' | 'feedback:write'
+  | 'partner-interests:read' | 'partner-interests:write'
   | 'analytics:read'
   | 'audit:read'
 
@@ -37,6 +38,9 @@ export const ALL_API_SCOPES: { scope: ApiKeyScope; label: string; group: string 
 
   { scope: 'feedback:read', label: 'Read Reader Feedback & Stats', group: 'Feedback' },
   { scope: 'feedback:write', label: 'Update Feedback Status & Notes', group: 'Feedback' },
+
+  { scope: 'partner-interests:read', label: 'Read Partner Interests & Stats', group: 'Partner Interests' },
+  { scope: 'partner-interests:write', label: 'Update Partner Status & Notes', group: 'Partner Interests' },
 
   { scope: 'analytics:read', label: 'Read Article & Site Analytics', group: 'Analytics' },
   { scope: 'audit:read', label: 'Read API Audit Log', group: 'Audit' },

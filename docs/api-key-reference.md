@@ -38,6 +38,8 @@ Every route strictly verifies that the API key holds the required permission sco
 | `subscribers:write` | Manage Subscribers | Add subscriber, update status (unsubscribe) |
 | `feedback:read` | Read Feedback | List reader feedback, stats, get single item |
 | `feedback:write` | Update Feedback | Update status (processed/resolved) & notes |
+| `partner-interests:read` | Read Partner Interests | List partner applications, get single lead, stats |
+| `partner-interests:write` | Update Partner Status & Notes | Transition status (pending/reviewed/contacted/onboarded) & notes only |
 | `analytics:read` | Read Analytics | Read-only article views & CMS totals |
 | `audit:read` | Read Audit Log | Read API write audit records |
 
@@ -47,6 +49,7 @@ Regardless of assigned scopes, API keys:
 2. **Can NEVER touch user accounts, roles, or passwords.**
 3. **Can NEVER modify site settings or rate limiting policies.**
 4. **Can NEVER create, view, or revoke API keys** (restricted to Super Admin session cookies).
+5. **Can NEVER delete partner interest submissions.** API keys attempting `DELETE /api/admin/partner-interests/<id>` receive `403 Forbidden`. Lead deletions are restricted to admin UI sessions only.
 
 ---
 
@@ -394,6 +397,95 @@ Tests connection and returns identity.
 #### `GET /api/admin/audit-log`
 - **Required Scope**: `audit:read`
 - **Query Params**: `?key=Muse&action=article:create&status=success&limit=50&offset=0`
+
+---
+
+### 9. Partner Interests
+
+#### `GET /api/admin/partner-interests`
+- **Required Scope**: `partner-interests:read`
+- **Query Params**:
+  - `status`: `all` | `pending` | `reviewed` | `contacted` | `onboarded` | `rejected` (default: `all`)
+  - `partnership_type`: Filter by interest (e.g. `Sponsored Article`, `Featured Partner Listing`, `Product or Service Promotion`, `Referral Partnership`)
+  - `service`: Filter by compliance service category
+  - `since`: ISO timestamp string (e.g. `2026-10-28T00:00:00.000Z`) to fetch leads created after a specific time
+  - `page`: Page number (default: 1)
+  - `limit`: Items per page (default: 25, hard cap: 100)
+  - `search`: Search query string across firm name, contact, qualification, notes
+- **Example Response**:
+  ```json
+  {
+    "items": [
+      {
+        "id": "520f344b-5bde-4da0-b3b4-031f3cc31617",
+        "firm_or_individual_name": "komal",
+        "qualification": "CS",
+        "experience_years": 5,
+        "website": "https://example.com",
+        "services": ["demo"],
+        "services_offered": ["demo"],
+        "partnership_types": ["Sponsored Article"],
+        "partnership_interests": ["Sponsored Article"],
+        "product_description": "demo tool",
+        "product_service_description": "demo tool",
+        "message": "Interested in partnering",
+        "contact_preference": "Email",
+        "preferred_contact_method": "Email",
+        "contact_value": "komal@example.com",
+        "contact_details": "komal@example.com",
+        "status": "pending",
+        "created_at": "2026-10-28T13:06:36.608Z",
+        "submission_date": "2026-10-28T13:06:36.608Z",
+        "additional_notes": "Demo note",
+        "note": "Demo note"
+      }
+    ],
+    "total": 1,
+    "page": 1,
+    "limit": 25,
+    "stats": {
+      "total": 1,
+      "pending": 1,
+      "reviewed": 0,
+      "contacted": 0,
+      "onboarded": 0
+    }
+  }
+  ```
+
+#### `GET /api/admin/partner-interests/<id>`
+- **Required Scope**: `partner-interests:read`
+- **Response**: Single partner interest item with all fields and aliases.
+
+#### `GET /api/admin/partner-interests/stats`
+- **Required Scope**: `partner-interests:read`
+- **Response**:
+  ```json
+  {
+    "total": 1,
+    "pending": 1,
+    "reviewed": 0,
+    "contacted": 0,
+    "onboarded": 0
+  }
+  ```
+
+#### `PATCH /api/admin/partner-interests/<id>`
+- **Required Scope**: `partner-interests:write`
+- **Allowed Fields Only**: `status`, `note` (unknown fields return `400 Bad Request` naming the unrecognized field)
+- **Allowed Statuses**: `pending`, `reviewed`, `contacted`, `onboarded`, `rejected`
+- **Audit Logging**: Every status transition is automatically logged in `api_audit_log` with the actor key name, timestamp, and old/new status.
+- **Request Body**:
+  ```json
+  {
+    "status": "reviewed",
+    "note": "Initial outreach initiated via email."
+  }
+  ```
+- **Response**: `200 OK` with updated partner interest record.
+
+#### `DELETE /api/admin/partner-interests/<id>`
+- **Safety Hard Limit**: API keys cannot delete partner interest submissions. Returns `403 Forbidden`. Deletions must be performed manually in the admin dashboard by a logged-in Super Admin.
 
 ---
 

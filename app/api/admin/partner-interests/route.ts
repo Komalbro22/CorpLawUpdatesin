@@ -1,10 +1,40 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyAdminSession } from '@/lib/admin-auth'
+import { verifyAdminOrKey } from '@/lib/api-key-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 
+export const dynamic = 'force-dynamic'
+
+export function formatPartnerInterest(item: any) {
+    if (!item) return null
+    return {
+        id: item.id,
+        firm_or_individual_name: item.firm_or_individual_name,
+        qualification: item.qualification,
+        experience_years: item.experience_years,
+        website: item.website,
+        services: item.services || [],
+        services_offered: item.services || [],
+        partnership_types: item.partnership_types || [],
+        partnership_interests: item.partnership_types || [],
+        product_description: item.product_description || null,
+        product_service_description: item.product_description || null,
+        message: item.message || null,
+        contact_preference: item.contact_preference || null,
+        preferred_contact_method: item.contact_preference || null,
+        contact_value: item.contact_value || null,
+        contact_details: item.contact_value || null,
+        status: item.status,
+        created_at: item.created_at,
+        submission_date: item.created_at,
+        additional_notes: item.additional_notes || null,
+        note: item.additional_notes || null,
+    }
+}
+
 export async function GET(request: NextRequest) {
-    if (!await verifyAdminSession()) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const authCheck = await verifyAdminOrKey(request, 'partner-interests:read')
+    if (!authCheck.success) {
+        return authCheck.response
     }
 
     try {
@@ -12,9 +42,11 @@ export async function GET(request: NextRequest) {
         const status = searchParams.get('status') || 'all'
         const service = searchParams.get('service') || 'all'
         const partnershipType = searchParams.get('partnership_type') || 'all'
+        const since = searchParams.get('since')
         const search = searchParams.get('search')
         const exportCsv = searchParams.get('export') === 'csv'
-        const page = parseInt(searchParams.get('page') || '1', 10)
+        const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10))
+        const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('limit') || '25', 10)))
 
         if (exportCsv) {
             const { data: allPartners } = await supabaseAdmin
@@ -76,15 +108,20 @@ export async function GET(request: NextRequest) {
         }
 
         if (partnershipType !== 'all') {
-            // Checks either array column or text mention in notes
             query = query.or(`partnership_types.cs.{${partnershipType}},additional_notes.ilike.%${partnershipType}%`)
+        }
+
+        if (since) {
+            const sinceDate = new Date(since)
+            if (!isNaN(sinceDate.getTime())) {
+                query = query.gte('created_at', sinceDate.toISOString())
+            }
         }
 
         if (search) {
             query = query.or(`firm_or_individual_name.ilike.%${search}%,contact_value.ilike.%${search}%,qualification.ilike.%${search}%,additional_notes.ilike.%${search}%`)
         }
 
-        const limit = 25
         const from = (page - 1) * limit
         const to = from + limit - 1
 
@@ -94,9 +131,14 @@ export async function GET(request: NextRequest) {
 
         if (error) throw error
 
+        const formattedItems = (partnerInterests || []).map(formatPartnerInterest)
+
         return NextResponse.json({
-            partnerInterests: partnerInterests || [],
+            partnerInterests: formattedItems,
+            items: formattedItems,
             total: count || 0,
+            page,
+            limit,
             stats,
         })
     } catch (err: unknown) {
