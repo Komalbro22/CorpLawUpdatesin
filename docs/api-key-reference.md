@@ -35,7 +35,7 @@ Every route strictly verifies that the API key holds the required permission sco
 | `newsletter:write` | Create & Test | Create campaign draft, send test email |
 | `newsletter:send` | Send Live Campaign | Dispatch batch email to all active subscribers |
 | `subscribers:read` | Read Subscribers | List subscribers, stats, CSV export |
-| `subscribers:write` | Manage Subscribers | Add subscriber, update status (unsubscribe) |
+| `subscribers:write` | Manage Subscribers | Add subscriber, reactivate subscriber (delete & unsubscribe forbidden via API) |
 | `feedback:read` | Read Feedback | List reader feedback, stats, get single item |
 | `feedback:write` | Update Feedback | Update status (processed/resolved) & notes |
 | `partner-interests:read` | Read Partner Interests | List partner applications, get single lead, stats |
@@ -50,6 +50,7 @@ Regardless of assigned scopes, API keys:
 3. **Can NEVER modify site settings or rate limiting policies.**
 4. **Can NEVER create, view, or revoke API keys** (restricted to Super Admin session cookies).
 5. **Can NEVER delete partner interest submissions.** API keys attempting `DELETE /api/admin/partner-interests/<id>` receive `403 Forbidden`. Lead deletions are restricted to admin UI sessions only.
+6. **Can NEVER delete or unsubscribe subscribers.** API keys attempting `DELETE /api/admin/subscribers/<id>` or `PATCH /api/admin/subscribers/<id>` with `is_active: false` (or omitting `is_active`) receive `403 Forbidden`. Subscriber deletions are restricted to Super Admin dashboard sessions only, and unsubscriptions are restricted to subscriber self-service (via signed email link) or dashboard admin sessions.
 
 ---
 
@@ -357,7 +358,11 @@ Tests connection and returns identity.
 
 #### `PATCH /api/admin/subscribers/<id>`
 - **Required Scope**: `subscribers:write`
-- **Request Body**: `{ "is_active": false }` (e.g. manual unsubscribe)
+- **Request Body**: `{ "is_active": true }` (reactivate subscriber only)
+- **Hard Limit**: API keys attempting `is_active: false` (or omitting `is_active`) receive `403 Forbidden`. Deactivations and unsubscriptions are restricted to subscriber self-service or dashboard admin sessions.
+
+#### `DELETE /api/admin/subscribers/<id>`
+- **Restricted**: API keys cannot call DELETE on subscribers (`403 Forbidden`). Deletions are restricted to Super Admin dashboard sessions only.
 
 ---
 
