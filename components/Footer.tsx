@@ -143,7 +143,7 @@ export default async function Footer() {
                             ))}
                             <li>
                                 <Link href="/partners" className="text-slate-300 hover:text-amber-400 focus:outline-hidden focus:underline transition-colors text-sm font-medium">
-                                    List Your Service
+                                    Partner With Us
                                 </Link>
                             </li>
                         </ul>

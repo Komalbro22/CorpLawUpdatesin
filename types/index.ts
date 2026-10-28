@@ -54,6 +54,12 @@ export interface SiteSetting {
 
 export type PartnerInterestStatus = 'pending' | 'reviewed' | 'contacted' | 'onboarded' | 'rejected'
 
+export type PartnershipType =
+  | 'Sponsored Article'
+  | 'Featured Partner Listing'
+  | 'Product or Service Promotion'
+  | 'Referral Partnership'
+
 export interface PartnerInterest {
     id: string
     firm_or_individual_name: string
@@ -61,6 +67,9 @@ export interface PartnerInterest {
     qualification: string | null
     experience_years: number | null
     website: string | null
+    partnership_types?: string[] | null
+    product_description?: string | null
+    message?: string | null
     contact_preference: string | null
     contact_value: string | null
     additional_notes: string | null

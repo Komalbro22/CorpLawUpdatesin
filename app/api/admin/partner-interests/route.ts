@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
         const { searchParams } = new URL(request.url)
         const status = searchParams.get('status') || 'all'
         const service = searchParams.get('service') || 'all'
+        const partnershipType = searchParams.get('partnership_type') || 'all'
         const search = searchParams.get('search')
         const exportCsv = searchParams.get('export') === 'csv'
         const page = parseInt(searchParams.get('page') || '1', 10)
@@ -21,13 +22,16 @@ export async function GET(request: NextRequest) {
                 .select('*')
                 .order('created_at', { ascending: false })
 
-            let csvString = 'id,firm_or_individual_name,qualification,experience_years,services,website,contact_preference,contact_value,status,created_at,additional_notes\n'
+            let csvString = 'id,firm_or_individual_name,qualification,experience_years,services,partnership_types,product_description,website,contact_preference,contact_value,status,created_at,message,additional_notes\n'
             if (allPartners) {
                 allPartners.forEach((item) => {
                     const servicesStr = `"${(item.services || []).join('; ')}"`
+                    const typesStr = `"${(item.partnership_types || []).join('; ')}"`
                     const nameEscaped = `"${(item.firm_or_individual_name || '').replace(/"/g, '""')}"`
+                    const productEscaped = `"${(item.product_description || '').replace(/"/g, '""')}"`
+                    const messageEscaped = `"${(item.message || '').replace(/"/g, '""')}"`
                     const notesEscaped = `"${(item.additional_notes || '').replace(/"/g, '""')}"`
-                    csvString += `${item.id},${nameEscaped},${item.qualification || ''},${item.experience_years || ''},${servicesStr},${item.website || ''},${item.contact_preference || ''},${item.contact_value || ''},${item.status || ''},${item.created_at || ''},${notesEscaped}\n`
+                    csvString += `${item.id},${nameEscaped},${item.qualification || ''},${item.experience_years || ''},${servicesStr},${typesStr},${productEscaped},${item.website || ''},${item.contact_preference || ''},${item.contact_value || ''},${item.status || ''},${item.created_at || ''},${messageEscaped},${notesEscaped}\n`
                 })
             }
 
@@ -71,8 +75,13 @@ export async function GET(request: NextRequest) {
             query = query.contains('services', [service])
         }
 
+        if (partnershipType !== 'all') {
+            // Checks either array column or text mention in notes
+            query = query.or(`partnership_types.cs.{${partnershipType}},additional_notes.ilike.%${partnershipType}%`)
+        }
+
         if (search) {
-            query = query.or(`firm_or_individual_name.ilike.%${search}%,contact_value.ilike.%${search}%,qualification.ilike.%${search}%`)
+            query = query.or(`firm_or_individual_name.ilike.%${search}%,contact_value.ilike.%${search}%,qualification.ilike.%${search}%,additional_notes.ilike.%${search}%`)
         }
 
         const limit = 25

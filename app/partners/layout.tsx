@@ -1,16 +1,16 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'List Your Service — Partner with CorpLawUpdates.in',
+  title: 'Partner With Us — CorpLawUpdates.in',
   description:
-    'Join CorpLawUpdates.in as a verified CS, CA, or Advocate. List your corporate law and compliance services to reach compliance professionals across India.',
+    'Partner with CorpLawUpdates.in. Reach Company Secretaries, Chartered Accountants, CMAs, and compliance leaders across India through sponsored articles, partner listings, and promotions.',
   alternates: {
     canonical: 'https://www.corplawupdates.in/partners',
   },
   openGraph: {
-    title: 'List Your Service — Partner with CorpLawUpdates.in',
+    title: 'Partner With Us — CorpLawUpdates.in',
     description:
-      'Join as a verified CS, CA, or Advocate and list your corporate law and compliance services on CorpLawUpdates.in.',
+      'Partner with CorpLawUpdates.in. Reach Company Secretaries, Chartered Accountants, CMAs, and compliance leaders across India.',
     url: 'https://www.corplawupdates.in/partners',
     type: 'website',
     siteName: 'CorpLawUpdates.in',
