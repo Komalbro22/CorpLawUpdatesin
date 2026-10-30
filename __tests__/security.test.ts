@@ -441,7 +441,7 @@ describe('CSP: Analytics allowlisting and Ad-network exclusion', () => {
     expect(csp).not.toContain('https://analytics.ahrefs.com')
   })
 
-  it('excludes third-party ad networks (AdSense, Clickio) from CSP', async () => {
+  it('allows Mediavine Journey and excludes unapproved ad networks from CSP', async () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const nextConfig = require('../next.config.js')
     const headers = await nextConfig.headers()
@@ -451,7 +451,8 @@ describe('CSP: Analytics allowlisting and Ad-network exclusion', () => {
     expect(csp).toBeDefined()
     expect(csp).not.toContain('clickiocmp.com')
     expect(csp).not.toContain('clickiocdn.com')
-    expect(csp).not.toContain('pagead2.googlesyndication.com')
+    expect(csp).toContain('journeymv.com')
+    expect(csp).toContain('scriptwrapper.com')
   })
 })
 
