@@ -125,6 +125,8 @@ export default async function RootLayout({
         />
         <link rel="preconnect" href="https://i.ibb.co" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://i.ibb.co" />
+        <link rel="preconnect" href="https://scripts.scriptwrapper.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://scripts.scriptwrapper.com" />
         <link rel="preconnect" href="https://fcosrsznbxedischtbwe.supabase.co" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://fcosrsznbxedischtbwe.supabase.co" />
         <link rel="llms" href="/llms.txt" />
@@ -169,6 +171,14 @@ export default async function RootLayout({
             },
           ],
         }} />
+        {/* Mediavine Journey Tag */}
+        <script
+          type="text/javascript"
+          async
+          data-noptimize="1"
+          data-cfasync="false"
+          src="//scripts.scriptwrapper.com/tags/bb9707b8-bfe3-4206-9309-6bc7e7923faf.js"
+        />
         </head>
       <body className="font-body bg-slate-50 dark:bg-slate-950 text-navy dark:text-slate-100 antialiased min-h-dvh flex flex-col selection:bg-amber-200/50 selection:text-navy break-words overflow-x-clip" suppressHydrationWarning>
         <ToastProvider>
