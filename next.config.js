@@ -192,6 +192,12 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // 301 Permanent redirect for Mediavine Journey ads.txt
+      {
+        source: '/ads.txt',
+        destination: 'https://adstxt.journeymv.com/sites/bb9707b8-bfe3-4206-9309-6bc7e7923faf/ads.txt',
+        permanent: true,
+      },
       // 301 Permanent redirects for duplicate drafted article slugs -> live "-2" articles (24 Oct 2026)
       {
         source: '/updates/rbi-operational-risk-second-amendment-directions-2026',
