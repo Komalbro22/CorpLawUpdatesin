@@ -135,7 +135,7 @@ export async function generateStaticParams() {
     .from('glossary')
     .select('slug')
     .eq('is_verified', true)
-    .limit(20)
+    .limit(10)
 
   const slugs = (terms || []).map((term) => ({
     slug: term.slug,

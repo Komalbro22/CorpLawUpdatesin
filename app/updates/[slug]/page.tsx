@@ -51,7 +51,7 @@ export async function generateStaticParams() {
     .not('published_at', 'is', null)
     .lte('published_at', new Date().toISOString())
     .order('published_at', { ascending: false })
-    .limit(20)
+    .limit(10)
   return (data || []).map((update) => ({ slug: update.slug }))
 }
 
