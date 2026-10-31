@@ -66,10 +66,14 @@ const WIKIPEDIA_URLS: Record<string, string> = {
 
 const CATEGORY_KEYWORDS: Record<string, string[]> = {
     mca: [
-        'mca circulars',
+        'mca updates',
+        'mca updates today',
         'mca updates today live',
+        'mca circulars',
+        'mca notification',
         'mca notifications India',
         'mca circulars and notifications',
+        'mca latest updates',
         'mca latest circulars 2026',
         'mca extension of annual filing 2026',
         'mca due date extension latest news',
@@ -905,11 +909,11 @@ export async function generateMetadata(
             : `Track latest RBI circulars, notifications and Master Directions for Commercial Banks and NBFCs with regulatory analysis and official PDF links.`
     } else if (cat === 'mca') {
         title = isPaginated
-            ? `Latest MCA Circulars, Notifications & Due Dates 2026 – Page ${pageNum}`
-            : `Latest MCA Circulars & Notifications Today (2026) – Due Dates, ROC News & Extensions`
+            ? `Latest MCA Updates, Circulars & Due Dates 2026 – Page ${pageNum}`
+            : `Latest MCA Updates, Circulars & Notifications Today (2026) – Due Dates & Extensions`
         description = isPaginated
-            ? `Page ${pageNum}: Latest MCA circulars, notifications, annual filing due date extensions (AOC-4, MGT-7) and ROC statutory orders from Ministry of Corporate Affairs.`
-            : `Track latest MCA circulars, notifications, annual filing due date extensions (AOC-4, MGT-7) and MCA21 V3 compliance with official PDF links and fee calculators.`
+            ? `Page ${pageNum}: Latest MCA updates, circulars, notifications, annual filing due date extensions (AOC-4, MGT-7) and ROC statutory orders from Ministry of Corporate Affairs.`
+            : `Track latest MCA updates, circulars, notifications today, annual filing due date extensions (AOC-4, MGT-7) and MCA21 V3 compliance with official PDF links and fee calculators.`
     }
 
     const url = isPaginated
@@ -1033,7 +1037,7 @@ export default async function CategoryPage({
     const itemListSchema = top5Updates.length > 0 ? {
         '@context': 'https://schema.org',
         '@type': 'ItemList',
-        'name': `Latest ${cat.toUpperCase()} Circulars & Notifications`,
+        'name': cat === 'mca' ? 'Latest MCA Updates, Circulars & Notifications' : `Latest ${cat.toUpperCase()} Circulars & Notifications`,
         'description': `Chronological list of the most recent ${cat.toUpperCase()} regulatory documents.`,
         'numberOfItems': top5Updates.length,
         'itemListElement': top5Updates.map((u: any, index: number) => ({
@@ -1048,7 +1052,7 @@ export default async function CategoryPage({
     const collectionPageSchema = {
         '@context': 'https://schema.org',
         '@type': 'CollectionPage',
-        'name': `Latest ${cat.toUpperCase()} Circulars, Notifications & Updates`,
+        'name': cat === 'mca' ? 'Latest MCA Updates, Circulars & Notifications (2026)' : `Latest ${cat.toUpperCase()} Circulars, Notifications & Updates`,
         'description': answerFirst.definition,
         'url': `https://www.corplawupdates.in/category/${cat}`,
         'dateModified': lastModified,
@@ -1162,7 +1166,7 @@ export default async function CategoryPage({
                             : cat === 'taxation'
                             ? 'Latest Taxation Updates, Circulars & Notifications (CBDT, CBIC & GST)'
                             : cat === 'mca'
-                            ? 'Latest MCA Circulars & Notifications (2026) – Annual Filing Due Dates & ROC Updates'
+                            ? 'Latest MCA Updates, Circulars & Notifications (2026) – Annual Filing Due Dates & ROC News'
                             : `Latest ${cat.toUpperCase()} Circulars, Notifications & Updates`}
                     </h1>
 
