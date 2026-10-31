@@ -45,8 +45,14 @@ const stripHtml = (html: any) => {
 export const revalidate = 86400 // 24 hours fallback; instant on-demand via revalidateArticleMutation
 
 export async function generateStaticParams() {
-    const { data } = await supabase.from('updates').select('slug')
-    return (data || []).map((update) => ({ slug: update.slug }))
+  const { data } = await supabase
+    .from('updates')
+    .select('slug')
+    .not('published_at', 'is', null)
+    .lte('published_at', new Date().toISOString())
+    .order('published_at', { ascending: false })
+    .limit(20)
+  return (data || []).map((update) => ({ slug: update.slug }))
 }
 
 export async function generateMetadata(
