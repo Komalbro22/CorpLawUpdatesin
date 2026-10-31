@@ -6,11 +6,13 @@ frontend:
         - npm ci --cache .npm --prefer-offline
     build:
       commands:
+        - env | grep -E '^(ADMIN_|SUPABASE|NEXT_PUBLIC_|RESEND_|UPSTASH_|KV_|GEMINI_|GOOGLE_|DATA_GOV_|CRON_|BREVO_|VAPID_)' > .env.production
         - npm run build
     postBuild:
       commands:
         - rm -rf .next/cache
         - find .next -name "*.map" -delete
+        - cp .env.production .next/
   artifacts:
     baseDirectory: .next
     files:
