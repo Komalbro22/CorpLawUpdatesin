@@ -71,6 +71,15 @@ const CATEGORY_KEYWORDS: Record<string, string[]> = {
         'mca notifications India',
         'mca circulars and notifications',
         'mca latest circulars 2026',
+        'mca extension of annual filing 2026',
+        'mca due date extension latest news',
+        'annual filing extension 2026',
+        'roc date extension 2026',
+        'mca notification extension',
+        'mca circular 05 2026',
+        'aoc 4 due date extension notification',
+        'has mca extended due date',
+        'mca latest notification 2026',
         'MCA21 compliance updates',
         'mca circular',
     ],
@@ -190,12 +199,28 @@ interface CategoryFAQ {
 const CATEGORY_REGULATORY_FAQS: Record<string, CategoryFAQ[]> = {
     mca: [
         {
-            question: 'Are MCA circulars legally binding under the Companies Act, 2013?',
-            answer: 'Yes. Circulars issued by the Ministry of Corporate Affairs clarify procedural requirements, statutory compliance timelines, and interpretations of the Companies Act, 2013 and LLP Act, 2008. They are legally binding on all registered companies, LLPs, and directors in India.',
+            question: 'Has MCA extended the due date for annual filing 2026 (Forms AOC-4 and MGT-7)?',
+            answer: 'Yes. Vide General Circular No. 05/2026, the Ministry of Corporate Affairs granted statutory relief for FY 2025-26 annual filings: Form AOC-4 (Financial Statements, CFS, and XBRL) can be filed up to 31 December 2026, and Form MGT-7/MGT-7A (Annual Return) can be filed up to 31 January 2027 without payment of additional late filing fees. Detailed circular analysis and ROC fee calculators are available on CorpLawUpdates.',
         },
         {
-            question: 'Where can compliance professionals verify official MCA notifications?',
-            answer: 'Official MCA circulars, notifications, and orders are published directly on the MCA21 portal (mca.gov.in) under the Notifications & Circulars repository. CorpLawUpdates tracks and summarizes them with direct links to official gazette copies.',
+            question: 'What are the additional late fees if MCA annual filing due dates are missed?',
+            answer: 'Under Section 403 read with the Companies (Registration Offices and Fees) Rules, 2014, delay in filing Form AOC-4 or Form MGT-7 beyond statutory or extended deadlines attracts an additional statutory fee of ₹100 per day of delay without an upper cap. Small companies and OPCs may claim relief under Section 446B where applicable.',
+        },
+        {
+            question: 'Where can compliance professionals verify official MCA notifications and download circular PDFs?',
+            answer: 'Official MCA circulars, notifications, and orders are published directly on the MCA21 portal (mca.gov.in) under the Notifications & Circulars repository. CorpLawUpdates tracks and summarizes them in real time with direct official PDF links and statutory guidance.',
+        },
+        {
+            question: 'What is the due date for DIR-3 KYC and what is the penalty for late filing?',
+            answer: 'The annual statutory due date for DIR-3 KYC (e-Form or Web) is 30 September of each financial year. Failure to complete KYC by the cutoff results in the Director Identification Number (DIN) being deactivated on the MCA V3 portal with the status "Deactivated due to non-filing of DIR-3 KYC". Reactivation requires filing DIR-3 KYC with a flat statutory late fee of ₹5,000.',
+        },
+        {
+            question: 'What is the statutory deadline for filing Form MSME-1 half-yearly return?',
+            answer: 'Form MSME-1 must be filed half-yearly: by 31 October for the half-year period April to September, and by 30 April for the period October to March, reporting outstanding dues to Micro and Small Enterprises exceeding 45 days along with reasons for delay under Section 405(4) of the Companies Act, 2013.',
+        },
+        {
+            question: 'Are MCA circulars legally binding under the Companies Act, 2013?',
+            answer: 'Yes. Circulars issued by the Ministry of Corporate Affairs clarify procedural requirements, statutory compliance timelines, and interpretations of the Companies Act, 2013 and LLP Act, 2008. They are legally binding on all registered companies, LLPs, and directors in India.',
         },
         {
             question: 'What is the difference between an MCA notification and a circular?',
@@ -414,10 +439,22 @@ interface RelatedResource {
 const CATEGORY_RELATED_RESOURCES: Record<string, RelatedResource[]> = {
     mca: [
         {
+            title: 'MCA Annual Filing Extension Analysis (Circular 05/2026)',
+            description: 'Comprehensive legal analysis of General Circular 05/2026 extending AOC-4 & MGT-7 deadlines without additional fee.',
+            href: '/updates/mca-extends-annual-filing-deadlines-fy-2025-26',
+            tag: 'Detailed Analysis',
+        },
+        {
             title: 'MCA Company Filing & Late Fee Calculator',
             description: 'Calculate official ROC filing fees and delayed additional late fee slabs under Companies Act, 2013.',
             href: '/tools/fee-calculator/companies',
             tag: 'Calculator',
+        },
+        {
+            title: 'Form AOC-4 Financial Statements Filing Guide',
+            description: 'Financial statement filing deadlines, XBRL requirements, and ROC late fees under Section 137.',
+            href: '/tools/fee-calculator/companies/aoc-4',
+            tag: 'Statutory Tool',
         },
         {
             title: 'LLP Form 8 & Form 11 Late Fee Calculator',
@@ -429,12 +466,6 @@ const CATEGORY_RELATED_RESOURCES: Record<string, RelatedResource[]> = {
             title: 'Form ADT-1 Filing & Appointment Guide',
             description: 'Auditor appointment rules, intimation timelines, and late fee slabs under Section 139.',
             href: '/tools/fee-calculator/companies/adt-1',
-            tag: 'Statutory Tool',
-        },
-        {
-            title: 'Form AOC-4 Financial Statements Filing Guide',
-            description: 'Financial statement filing deadlines, XBRL requirements, and ROC late fees under Section 137.',
-            href: '/tools/fee-calculator/companies/aoc-4',
             tag: 'Statutory Tool',
         },
     ],
@@ -666,12 +697,13 @@ const CATEGORY_RELATED_RESOURCES: Record<string, RelatedResource[]> = {
 const ANSWER_FIRST: Record<string, { definition: string; facts: string[] }> = {
     mca: {
         definition:
-            'MCA Circulars are official communications issued by the Ministry of Corporate Affairs under the Companies Act, 2013. They clarify procedural requirements, grant extensions, and amend compliance deadlines for registered companies and LLPs in India. This page tracks all latest MCA circulars, notifications, orders, consultation papers and clarifications.',
+            'MCA Circulars and Notifications are official statutory directives issued by the Ministry of Corporate Affairs under the Companies Act, 2013 and LLP Act, 2008. They notify regulatory amendments, annual filing due date extensions (such as General Circular No. 05/2026 for AOC-4 and MGT-7), MCA21 V3 portal advisories, and procedural reliefs. This real-time tracker monitors all latest MCA circulars, annual filing due date relief, official PDF gazette copies, and statutory ROC late fee calculations.',
         facts: [
-            'MCA issues circulars, notifications, orders, and consultation papers.',
-            'Key compliance forms include MCA V3 portal filings such as MGT-7, AOC-4, DIR-3 KYC.',
-            'MCA circulars are binding on all companies registered under Companies Act, 2013.',
-            'Violations may lead to penalty, adjudication, or director disqualification.',
+            'MCA issues circulars, notifications, orders, and consultation papers under Companies Act, 2013.',
+            'MCA General Circular No. 05/2026 grants filing extensions for FY 2025-26: Form AOC-4 till 31 Dec 2026 and Form MGT-7/7A till 31 Jan 2027 without additional late fees.',
+            'Key annual compliance filings include Form AOC-4 (Financial Statements), Form MGT-7 (Annual Return), DIR-3 KYC, and Form MSME-1.',
+            'Delay beyond statutory or extended cutoffs attracts an uncapped additional statutory late fee of ₹100 per day under Section 403.',
+            'MCA circulars are binding on all registered Indian companies, LLPs, and foreign corporate branches.',
         ],
     },
     sebi: {
@@ -864,13 +896,20 @@ export async function generateMetadata(
         description = isPaginated
             ? `Page ${pageNum}: Latest direct and indirect tax notifications, CBDT circulars, CBIC customs orders and GST compliance updates.`
             : `Latest direct and indirect tax notifications, CBDT circulars, CBIC customs duty orders and GST compliance updates for corporate professionals.`
-    } else     if (cat === 'rbi') {
+    } else if (cat === 'rbi') {
         title = isPaginated
             ? `Latest RBI Circulars for Banks & NBFCs Today (2026) – Page ${pageNum}`
             : `Latest RBI Circulars & Notifications Today (2026) – Directives for Banks & NBFCs`
         description = isPaginated
             ? `Page ${pageNum}: Latest RBI circulars, notifications, and Master Directions issued by the Reserve Bank of India for Banks and NBFCs.`
             : `Track latest RBI circulars, notifications and Master Directions for Commercial Banks and NBFCs with regulatory analysis and official PDF links.`
+    } else if (cat === 'mca') {
+        title = isPaginated
+            ? `Latest MCA Circulars, Notifications & Due Dates 2026 – Page ${pageNum}`
+            : `Latest MCA Circulars & Notifications Today (2026) – Due Dates, ROC News & Extensions`
+        description = isPaginated
+            ? `Page ${pageNum}: Latest MCA circulars, notifications, annual filing due date extensions (AOC-4, MGT-7) and ROC statutory orders from Ministry of Corporate Affairs.`
+            : `Track latest MCA circulars, notifications, annual filing due date extensions (AOC-4, MGT-7) and MCA21 V3 compliance with official PDF links and fee calculators.`
     }
 
     const url = isPaginated
@@ -1122,6 +1161,8 @@ export default async function CategoryPage({
                             ? 'Latest RBI Circulars & Notifications for Banks (2026)'
                             : cat === 'taxation'
                             ? 'Latest Taxation Updates, Circulars & Notifications (CBDT, CBIC & GST)'
+                            : cat === 'mca'
+                            ? 'Latest MCA Circulars & Notifications (2026) – Annual Filing Due Dates & ROC Updates'
                             : `Latest ${cat.toUpperCase()} Circulars, Notifications & Updates`}
                     </h1>
 
@@ -1148,8 +1189,336 @@ export default async function CategoryPage({
                             ))}
                         </div>
                     )}
+                    {cat === 'mca' && (
+                        <div className="flex flex-wrap items-center gap-2 pt-2">
+                            <span className="text-xs text-white/70 font-semibold">Key Focus:</span>
+                            {['Annual Filing 2026', 'Due Date Extensions', 'Form AOC-4 & MGT-7', 'General Circular 05/2026', 'MCA21 V3 Portal', 'DIR-3 KYC', 'ROC Circulars'].map((chip, idx) => (
+                                <span
+                                    key={idx}
+                                    className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-white/15 text-white/90 border border-white/10 backdrop-blur-xs"
+                                >
+                                    {chip}
+                                </span>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
+
+            {/* MCA-Specific High-Intent Filing & Due Date Status Tracker (FY 2025-26 / 2026) */}
+            {cat === 'mca' && (
+                <section id="due-dates" className="max-w-7xl mx-auto px-4 pt-8 pb-2">
+                    <div className="bg-linear-to-br from-slate-900 via-slate-950 to-blue-950 text-white rounded-2xl border border-blue-900/50 p-6 md:p-8 shadow-xl relative overflow-hidden">
+                        {/* Decorative glow */}
+                        <div className="absolute top-0 right-0 -mt-12 -mr-12 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+                        
+                        <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
+                            <div>
+                                <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 inline-flex items-center gap-2">
+                                    <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
+                                    Live Statutory Filing Tracker (FY 2025–26)
+                                </span>
+                                <h2 className="text-2xl sm:text-3xl font-bold text-white mt-2.5 font-heading">
+                                    MCA Annual Filing Due Dates & Extension Status (2026)
+                                </h2>
+                            </div>
+                            <Link
+                                href="/tools/fee-calculator/companies"
+                                className="inline-flex items-center gap-1.5 text-xs font-semibold bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 px-3.5 py-1.5 rounded-xl transition-colors"
+                            >
+                                <span>ROC Late Fee Calculator Workstation</span>
+                                <span aria-hidden="true">→</span>
+                            </Link>
+                        </div>
+
+                        <p className="text-xs sm:text-sm text-slate-300 max-w-3xl mb-6 leading-relaxed">
+                            Track statutory cutoffs, official relief under <strong>MCA General Circular No. 05/2026</strong>, detailed in-depth legal analyses, and calculate applicable delayed filing fees.
+                        </p>
+
+                        {/* Tracker Cards Grid */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                            {/* Card 1: Form AOC-4 */}
+                            <div className="bg-white/5 backdrop-blur-md rounded-xl p-5 border border-white/10 flex flex-col justify-between hover:border-emerald-500/40 transition-all">
+                                <div>
+                                    <div className="flex items-center justify-between gap-2 mb-2.5">
+                                        <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                                            Sec 137 · Financials
+                                        </span>
+                                        <span className="text-[11px] font-bold text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 rounded-full">
+                                            Extended (GC 05/2026)
+                                        </span>
+                                    </div>
+                                    <h3 className="text-base font-bold text-white mb-2">
+                                        Form AOC-4 / AOC-4 XBRL / CFS
+                                    </h3>
+                                    <div className="space-y-1.5 text-xs text-slate-300 mb-4 bg-slate-900/60 p-3 rounded-lg border border-slate-800">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-slate-400">Normal Due Date:</span>
+                                            <span className="font-medium text-slate-200">30 Oct 2026 (30d of AGM)</span>
+                                        </div>
+                                        <div className="flex justify-between items-center text-emerald-400 font-semibold">
+                                            <span>Extended Last Date:</span>
+                                            <span>31 December 2026</span>
+                                        </div>
+                                        <div className="flex justify-between items-center text-[11px] text-slate-400 pt-1 border-t border-slate-800">
+                                            <span>Additional Late Fee:</span>
+                                            <span className="text-emerald-300 font-medium">₹0 (Zero Late Fee)</span>
+                                        </div>
+                                    </div>
+                                    <p className="text-xs text-slate-300 mb-4 leading-relaxed">
+                                        General Circular No. 05/2026 permits filing of financial statements for FY 2025-26 up to 31 Dec 2026 without additional fees.
+                                    </p>
+                                </div>
+                                <div className="space-y-2 pt-3 border-t border-white/10 text-xs">
+                                    <Link
+                                        href="/updates/mca-extends-annual-filing-deadlines-fy-2025-26"
+                                        className="flex items-center justify-between text-amber-300 hover:text-amber-200 font-medium transition-colors"
+                                    >
+                                        <span>📘 Circular 05/2026 Detailed Analysis</span>
+                                        <span>→</span>
+                                    </Link>
+                                    <Link
+                                        href="/updates/aoc-4-filing-guide-fy-2024-25"
+                                        className="flex items-center justify-between text-slate-300 hover:text-white transition-colors"
+                                    >
+                                        <span>📋 Form AOC-4 Complete Guide</span>
+                                        <span>→</span>
+                                    </Link>
+                                    <Link
+                                        href="/tools/fee-calculator/companies/aoc-4"
+                                        className="flex items-center justify-between text-blue-300 hover:text-blue-200 font-medium transition-colors"
+                                    >
+                                        <span>🧮 Calculate AOC-4 Late Fees</span>
+                                        <span>→</span>
+                                    </Link>
+                                </div>
+                            </div>
+
+                            {/* Card 2: Form MGT-7 */}
+                            <div className="bg-white/5 backdrop-blur-md rounded-xl p-5 border border-white/10 flex flex-col justify-between hover:border-emerald-500/40 transition-all">
+                                <div>
+                                    <div className="flex items-center justify-between gap-2 mb-2.5">
+                                        <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                                            Sec 92 · Annual Return
+                                        </span>
+                                        <span className="text-[11px] font-bold text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 rounded-full">
+                                            Extended (GC 05/2026)
+                                        </span>
+                                    </div>
+                                    <h3 className="text-base font-bold text-white mb-2">
+                                        Form MGT-7 & MGT-7A (Small / OPC)
+                                    </h3>
+                                    <div className="space-y-1.5 text-xs text-slate-300 mb-4 bg-slate-900/60 p-3 rounded-lg border border-slate-800">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-slate-400">Normal Due Date:</span>
+                                            <span className="font-medium text-slate-200">29 Nov 2026 (60d of AGM)</span>
+                                        </div>
+                                        <div className="flex justify-between items-center text-emerald-400 font-semibold">
+                                            <span>Extended Last Date:</span>
+                                            <span>31 January 2027</span>
+                                        </div>
+                                        <div className="flex justify-between items-center text-[11px] text-slate-400 pt-1 border-t border-slate-800">
+                                            <span>Additional Late Fee:</span>
+                                            <span className="text-emerald-300 font-medium">₹0 (Zero Late Fee)</span>
+                                        </div>
+                                    </div>
+                                    <p className="text-xs text-slate-300 mb-4 leading-relaxed">
+                                        General Circular No. 05/2026 allows filing MGT-7 (and MGT-7A for Small Companies & OPCs) till 31 Jan 2027 with zero additional fees.
+                                    </p>
+                                </div>
+                                <div className="space-y-2 pt-3 border-t border-white/10 text-xs">
+                                    <Link
+                                        href="/updates/mca-extends-annual-filing-deadlines-fy-2025-26"
+                                        className="flex items-center justify-between text-amber-300 hover:text-amber-200 font-medium transition-colors"
+                                    >
+                                        <span>📘 Circular 05/2026 Detailed Analysis</span>
+                                        <span>→</span>
+                                    </Link>
+                                    <Link
+                                        href="/updates/form-mgt-7-mgt-7a-annual-return-guide-2026"
+                                        className="flex items-center justify-between text-slate-300 hover:text-white transition-colors"
+                                    >
+                                        <span>📋 MGT-7 & 7A Filing Guide</span>
+                                        <span>→</span>
+                                    </Link>
+                                    <Link
+                                        href="/tools/fee-calculator/companies/mgt-7"
+                                        className="flex items-center justify-between text-blue-300 hover:text-blue-200 font-medium transition-colors"
+                                    >
+                                        <span>🧮 Calculate MGT-7 Late Fees</span>
+                                        <span>→</span>
+                                    </Link>
+                                </div>
+                            </div>
+
+                            {/* Card 3: DIR-3 KYC */}
+                            <div className="bg-white/5 backdrop-blur-md rounded-xl p-5 border border-white/10 flex flex-col justify-between hover:border-amber-500/40 transition-all">
+                                <div>
+                                    <div className="flex items-center justify-between gap-2 mb-2.5">
+                                        <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                                            Rule 12A · Director KYC
+                                        </span>
+                                        <span className="text-[11px] font-bold text-amber-300 bg-amber-500/15 border border-amber-500/30 px-2 py-0.5 rounded-full">
+                                            Late Filing (₹5,000 Fee)
+                                        </span>
+                                    </div>
+                                    <h3 className="text-base font-bold text-white mb-2">
+                                        DIR-3 KYC & DIR-3 KYC WEB
+                                    </h3>
+                                    <div className="space-y-1.5 text-xs text-slate-300 mb-4 bg-slate-900/60 p-3 rounded-lg border border-slate-800">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-slate-400">Statutory Due Date:</span>
+                                            <span className="font-medium text-slate-200">30 September annually</span>
+                                        </div>
+                                        <div className="flex justify-between items-center text-amber-400 font-semibold">
+                                            <span>Current DIN Status:</span>
+                                            <span>Deactivated if unfiled</span>
+                                        </div>
+                                        <div className="flex justify-between items-center text-[11px] text-slate-400 pt-1 border-t border-slate-800">
+                                            <span>Reactivation Fee:</span>
+                                            <span className="text-amber-300 font-medium">₹5,000 Flat Penalty</span>
+                                        </div>
+                                    </div>
+                                    <p className="text-xs text-slate-300 mb-4 leading-relaxed">
+                                        Directors failing to complete annual KYC by 30 September face DIN deactivation. Reactivation on MCA V3 requires a mandatory ₹5,000 challan.
+                                    </p>
+                                </div>
+                                <div className="space-y-2 pt-3 border-t border-white/10 text-xs">
+                                    <Link
+                                        href="/tools/fee-calculator/companies/dir-3-kyc"
+                                        className="flex items-center justify-between text-blue-300 hover:text-blue-200 font-medium transition-colors"
+                                    >
+                                        <span>🧮 Compute DIR-3 KYC Reactivation Fee</span>
+                                        <span>→</span>
+                                    </Link>
+                                    <Link
+                                        href="/tools/fee-calculator/companies"
+                                        className="flex items-center justify-between text-slate-300 hover:text-white transition-colors"
+                                    >
+                                        <span>📋 Director Compliance Rules</span>
+                                        <span>→</span>
+                                    </Link>
+                                </div>
+                            </div>
+
+                            {/* Card 4: Form MSME-1 */}
+                            <div className="bg-white/5 backdrop-blur-md rounded-xl p-5 border border-white/10 flex flex-col justify-between hover:border-cyan-500/40 transition-all">
+                                <div>
+                                    <div className="flex items-center justify-between gap-2 mb-2.5">
+                                        <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                                            Sec 405 · Half-Yearly
+                                        </span>
+                                        <span className="text-[11px] font-bold text-cyan-300 bg-cyan-500/15 border border-cyan-500/30 px-2 py-0.5 rounded-full">
+                                            Active Due Date (31 Oct)
+                                        </span>
+                                    </div>
+                                    <h3 className="text-base font-bold text-white mb-2">
+                                        Form MSME-1 (Outstanding Dues)
+                                    </h3>
+                                    <div className="space-y-1.5 text-xs text-slate-300 mb-4 bg-slate-900/60 p-3 rounded-lg border border-slate-800">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-slate-400">Apr–Sep Half-Year:</span>
+                                            <span className="font-semibold text-cyan-300">31 October</span>
+                                        </div>
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-slate-400">Oct–Mar Half-Year:</span>
+                                            <span className="font-medium text-slate-200">30 April</span>
+                                        </div>
+                                        <div className="flex justify-between items-center text-[11px] text-slate-400 pt-1 border-t border-slate-800">
+                                            <span>Reporting Trigger:</span>
+                                            <span className="text-slate-300">Dues delayed &gt; 45 days</span>
+                                        </div>
+                                    </div>
+                                    <p className="text-xs text-slate-300 mb-4 leading-relaxed">
+                                        Mandatory return for companies with payments due to Micro and Small Enterprises exceeding 45 days. Attracts penal interest under Section 16 MSMED Act.
+                                    </p>
+                                </div>
+                                <div className="space-y-2 pt-3 border-t border-white/10 text-xs">
+                                    <Link
+                                        href="/updates/msme-form-1-half-yearly-return-filing-guide-due-dates-penalties-mca-v3-section-405"
+                                        className="flex items-center justify-between text-amber-300 hover:text-amber-200 font-medium transition-colors"
+                                    >
+                                        <span>📘 Form MSME-1 Detailed Filing Guide</span>
+                                        <span>→</span>
+                                    </Link>
+                                    <Link
+                                        href="/tools/fee-calculator/msme"
+                                        className="flex items-center justify-between text-blue-300 hover:text-blue-200 font-medium transition-colors"
+                                    >
+                                        <span>🧮 Compute MSME Delayed Interest</span>
+                                        <span>→</span>
+                                    </Link>
+                                </div>
+                            </div>
+
+                            {/* Card 5: LLP Form 11 & Form 8 */}
+                            <div className="bg-white/5 backdrop-blur-md rounded-xl p-5 border border-white/10 flex flex-col justify-between hover:border-purple-500/40 transition-all col-span-1 md:col-span-2 lg:col-span-2">
+                                <div>
+                                    <div className="flex items-center justify-between gap-2 mb-2.5">
+                                        <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                                            LLP Act 2008 · Sec 34 & 35
+                                        </span>
+                                        <span className="text-[11px] font-bold text-purple-300 bg-purple-500/15 border border-purple-500/30 px-2 py-0.5 rounded-full">
+                                            Form 8 Due 30 Oct / Form 11 Closed
+                                        </span>
+                                    </div>
+                                    <h3 className="text-base font-bold text-white mb-2">
+                                        LLP Annual Filings (Form 8 Solvency & Form 11 Annual Return)
+                                    </h3>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-300 mb-4 bg-slate-900/60 p-3 rounded-lg border border-slate-800">
+                                        <div>
+                                            <span className="text-slate-400 block text-[11px]">Form 8 (Account & Solvency):</span>
+                                            <span className="font-semibold text-purple-300">30 October</span>
+                                        </div>
+                                        <div>
+                                            <span className="text-slate-400 block text-[11px]">Form 11 (Annual Return):</span>
+                                            <span className="font-medium text-slate-200">30 May annually</span>
+                                        </div>
+                                        <div className="col-span-1 sm:col-span-2 pt-1 border-t border-slate-800 text-[11px] text-slate-400">
+                                            <span>Late Filing Penalty: </span>
+                                            <span className="text-amber-300 font-medium">₹100 per day additional fee without upper limit</span>
+                                        </div>
+                                    </div>
+                                    <p className="text-xs text-slate-300 mb-4 leading-relaxed">
+                                        LLPs must file Form 8 within 30 days of end of 6 months of financial year (30 October). Uncapped ₹100/day late fees accrue immediately upon expiry of the deadline.
+                                    </p>
+                                </div>
+                                <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-white/10 text-xs">
+                                    <Link
+                                        href="/tools/fee-calculator/llp"
+                                        className="flex items-center gap-1.5 text-blue-300 hover:text-blue-200 font-medium transition-colors"
+                                    >
+                                        <span>🧮 Open LLP Form 8 & 11 Late Fee Calculator</span>
+                                        <span>→</span>
+                                    </Link>
+                                    <Link
+                                        href="/tools/fee-calculator/companies"
+                                        className="flex items-center gap-1.5 text-slate-300 hover:text-white transition-colors"
+                                    >
+                                        <span>📋 ROC Statutory Fee Slabs</span>
+                                        <span>→</span>
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Bottom Workstation Callout */}
+                        <div className="p-4 rounded-xl bg-blue-900/30 border border-blue-700/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div className="text-xs text-slate-200">
+                                <span className="font-bold text-amber-300 mr-1.5">⚡ Need to compute additional late fees for other forms?</span>
+                                <span>Calculate exact MCA V3 fee slabs for Form ADT-1, INC-20A, PAS-3, DPT-3, and CHG-1 with small company concessions.</span>
+                            </div>
+                            <Link
+                                href="/tools/fee-calculator/companies"
+                                className="shrink-0 inline-flex items-center justify-center gap-1.5 text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg transition-colors"
+                            >
+                                <span>Open Company Fee Workstation</span>
+                                <span aria-hidden="true">→</span>
+                            </Link>
+                        </div>
+                    </div>
+                </section>
+            )}
 
             {/* Content Area */}
             <div className="max-w-7xl mx-auto py-10 px-4">
