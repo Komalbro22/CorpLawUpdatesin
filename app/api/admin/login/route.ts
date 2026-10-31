@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
         const password = body.password
 
         const adminPassword = process.env.ADMIN_PASSWORD
-        const editorPassword = process.env.EDITOR_PASSWORD
+        const editorPassword = process.env.EDITOR_PASSWORD || process.env.EDITOR_PASSWORD_CHEEMA
         if (!adminPassword) {
             return NextResponse.json({ error: 'Admin access is not configured' }, { status: 500 })
         }
