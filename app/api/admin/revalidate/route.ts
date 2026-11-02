@@ -24,8 +24,9 @@ export async function POST(request: NextRequest) {
     }
 
     // 1. Scoped Path revalidation
-    try { revalidatePath(targetPath, 'page') } catch {}
     try { revalidatePath(targetPath) } catch {}
+    try { revalidatePath(targetPath, 'page') } catch {}
+    try { revalidatePath(targetPath, 'layout') } catch {}
 
     // 2. Extract slug if it's an article or glossary
     if (targetPath.startsWith('/updates/')) {
@@ -42,6 +43,11 @@ export async function POST(request: NextRequest) {
         try { (revalidateTag as any)('glossary') } catch {}
         revalidateGlossaryMutation(slug)
       }
+    } else if (targetPath === '/' || targetPath === '/updates') {
+      try { (revalidateTag as any)('updates') } catch {}
+      try { (revalidateTag as any)('list:home') } catch {}
+      try { (revalidateTag as any)('list:updates') } catch {}
+      revalidateArticleMutation({ slug: '' })
     }
 
     return NextResponse.json({

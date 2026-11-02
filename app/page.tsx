@@ -24,7 +24,7 @@ import {
   Receipt,
 } from 'lucide-react'
 
-export const revalidate = 86400 // 24 hours fallback; instant on-demand via revalidateArticleMutation
+export const revalidate = 300 // 5 minutes fallback; instant on-demand via revalidateArticleMutation
 
 const currentYear = new Date().getFullYear()
 

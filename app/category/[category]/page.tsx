@@ -12,7 +12,7 @@ import EmptyState from '@/components/EmptyState'
 import JsonLd from '@/components/JsonLd'
 import { formatDate } from '@/lib/utils'
 
-export const revalidate = 86400 // 24 hours fallback; instant on-demand via revalidateArticleMutation
+export const revalidate = 300 // 5 minutes fallback; instant on-demand via revalidateArticleMutation
 
 const CATEGORIES = ['mca', 'sebi', 'rbi', 'nclt', 'ibc', 'fema', 'cci', 'labour', 'ifsca', 'taxation']
 

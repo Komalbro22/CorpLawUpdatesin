@@ -47,21 +47,29 @@ export function revalidateArticleMutation({
         }
     }
 
-    // 2. Invalidate exact page paths (scoped to 'page' only)
+    // 2. Invalidate exact page paths (both untyped and typed to cover Next.js ISR route keys)
     if (slug) {
+        try { revalidatePath(`/updates/${slug}`) } catch {}
         try { revalidatePath(`/updates/${slug}`, 'page') } catch {}
     }
     if (oldSlug && oldSlug !== slug) {
+        try { revalidatePath(`/updates/${oldSlug}`) } catch {}
         try { revalidatePath(`/updates/${oldSlug}`, 'page') } catch {}
     }
 
+    try { revalidatePath('/') } catch {}
     try { revalidatePath('/', 'page') } catch {}
+    try { revalidatePath('/', 'layout') } catch {}
+    try { revalidatePath('/updates') } catch {}
     try { revalidatePath('/updates', 'page') } catch {}
+    try { revalidatePath('/updates', 'layout') } catch {}
 
     if (cleanCategory) {
+        try { revalidatePath(`/category/${cleanCategory}`) } catch {}
         try { revalidatePath(`/category/${cleanCategory}`, 'page') } catch {}
     }
     if (cleanOldCategory && cleanOldCategory !== cleanCategory) {
+        try { revalidatePath(`/category/${cleanOldCategory}`) } catch {}
         try { revalidatePath(`/category/${cleanOldCategory}`, 'page') } catch {}
     }
 

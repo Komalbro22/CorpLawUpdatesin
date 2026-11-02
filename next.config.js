@@ -164,7 +164,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=300, s-maxage=86400, stale-while-revalidate=604800',
+            value: 'public, max-age=60, s-maxage=120, stale-while-revalidate=300',
           },
         ],
       },
@@ -173,7 +173,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=300, s-maxage=86400, stale-while-revalidate=604800',
+            value: 'public, max-age=60, s-maxage=120, stale-while-revalidate=300',
           },
         ],
       },
@@ -184,6 +184,16 @@ const nextConfig = {
           {
             key: 'Cache-Control',
             value: 'public, max-age=300, s-maxage=86400, stale-while-revalidate=604800',
+          },
+        ],
+      },
+      // Category listing pages (e.g. /category/mca)
+      {
+        source: '/category/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=60, s-maxage=120, stale-while-revalidate=300',
           },
         ],
       },
