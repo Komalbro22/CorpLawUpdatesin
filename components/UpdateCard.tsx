@@ -25,9 +25,16 @@ interface UpdateCardProps {
   showExcerpt?: boolean
   animationDelay?: number
   priority?: boolean
+  showLastVerified?: boolean
 }
 
-export default function UpdateCard({ update, showExcerpt = true, animationDelay = 0, priority = false }: UpdateCardProps) {
+export default function UpdateCard({
+  update,
+  showExcerpt = true,
+  animationDelay = 0,
+  priority = false,
+  showLastVerified = false,
+}: UpdateCardProps) {
   const imageUrl = update.featured_image_url || extractFirstImage(update.content || '')
 
   const [isNew, setIsNew] = useState(false)
@@ -114,13 +121,22 @@ export default function UpdateCard({ update, showExcerpt = true, animationDelay 
               </p>
             )}
             <span className="flex items-center gap-2 flex-wrap">
-              {update.published_at && (
-                <span suppressHydrationWarning className="font-medium text-slate-600 dark:text-slate-400 tabular-nums">{formatDate(update.published_at)}</span>
-              )}
-              {update.effective_date && (
-                <span suppressHydrationWarning className="text-[10px] bg-emerald-50 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-400 px-2 py-0.5 rounded-md font-bold whitespace-nowrap border border-emerald-200 dark:border-emerald-900/30 tabular-nums">
-                  Eff. {formatDate(update.effective_date)}
+              {showLastVerified ? (
+                <span suppressHydrationWarning className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded-md border border-amber-200/80 dark:border-amber-900/50 tabular-nums">
+                  <span className="size-1.5 rounded-full bg-amber-500" />
+                  Last verified: {formatDate(update.last_verified || update.published_at)}
                 </span>
+              ) : (
+                <>
+                  {update.published_at && (
+                    <span suppressHydrationWarning className="font-medium text-slate-600 dark:text-slate-400 tabular-nums">{formatDate(update.published_at)}</span>
+                  )}
+                  {update.effective_date && (
+                    <span suppressHydrationWarning className="text-[10px] bg-emerald-50 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-400 px-2 py-0.5 rounded-md font-bold whitespace-nowrap border border-emerald-200 dark:border-emerald-900/30 tabular-nums">
+                      Eff. {formatDate(update.effective_date)}
+                    </span>
+                  )}
+                </>
               )}
             </span>
           </span>

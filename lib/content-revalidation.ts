@@ -63,6 +63,9 @@ export function revalidateArticleMutation({
     try { revalidatePath('/updates') } catch {}
     try { revalidatePath('/updates', 'page') } catch {}
     try { revalidatePath('/updates', 'layout') } catch {}
+    try { revalidatePath('/guides') } catch {}
+    try { revalidatePath('/guides', 'page') } catch {}
+    try { revalidatePath('/guides', 'layout') } catch {}
 
     if (cleanCategory) {
         try { revalidatePath(`/category/${cleanCategory}`) } catch {}

@@ -423,24 +423,31 @@ export async function verifyAdminOrKey(
     }
   }
 
-  // 2. Check Authorization Bearer Header (AI Agent / Programmatic)
+  // 2. Check Authorization Bearer Header or x-api-key (AI Agent / Programmatic)
   const authHeader = request.headers.get('authorization')
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+  const xApiKeyHeader = request.headers.get('x-api-key')
+
+  let rawKey = ''
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    rawKey = authHeader.substring(7).trim()
+  } else if (xApiKeyHeader) {
+    rawKey = xApiKeyHeader.trim()
+  }
+
+  if (!rawKey) {
     return {
       success: false,
       response: NextResponse.json(
         {
           error: {
             code: 'UNAUTHORIZED',
-            message: 'Authentication required. Provide a valid admin session cookie or Authorization: Bearer <key> header.',
+            message: 'Authentication required. Provide a valid admin session cookie, Authorization: Bearer <key>, or x-api-key header.',
           },
         },
         { status: 401 }
       ),
     }
   }
-
-  const rawKey = authHeader.substring(7).trim()
   if (!rawKey) {
     return {
       success: false,

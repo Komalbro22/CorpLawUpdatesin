@@ -7,6 +7,7 @@ export interface Update extends Omit<Database['public']['Tables']['updates']['Ro
     key_changes: string[] | null
     sources: { name: string; url: string }[] | null
     impact_level: 'high' | 'medium' | 'low' | null
+    last_verified?: string | null
 }
 
 /** Subset of Update fields used on list/card views (no `content` body). */
@@ -29,7 +30,28 @@ export type UpdateListItem = Pick<
     | 'is_sponsored'
     | 'sponsor_name'
     | 'hide_from_listings'
-> & { content?: string | null }
+> & { content?: string | null; last_verified?: string | null }
+
+export interface GuideItem {
+    id: string
+    title: string
+    slug: string
+    summary: string | null
+    reading_time?: number | null
+    category: string | null
+    published_at: string | null
+    updated_at: string | null
+    effective_date?: string | null
+    featured_image_url: string | null
+    impact_level?: 'high' | 'medium' | 'low' | null
+    source_name?: string | null
+    views?: number | null
+    tags?: string[] | null
+    is_sponsored?: boolean
+    sponsor_name?: string | null
+    last_verified?: string | null
+    hide_from_listings?: boolean
+}
 
 export interface Subscriber {
     id: string

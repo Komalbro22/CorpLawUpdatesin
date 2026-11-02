@@ -370,6 +370,22 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
         ? mcaForms.find(f => f.filingGuides && f.filingGuides.some(g => g.slug.includes(update.slug)))
         : undefined
 
+    // Badge designation logic for Evergreen Guide and Explained articles
+    const isEvergreenGuide = tagsList.includes('Evergreen Guide')
+    const isExplained = tagsList.includes('Explained')
+    const hasGuideBadgeInBody = (update.content || '').includes('EVERGREEN GUIDE')
+    const hasExplainedBadgeInBody = (update.content || '').includes('EXPLAINED — Analysis') || (update.content || '').includes('🔍 EXPLAINED')
+
+    let autoBadgeType: 'guide' | 'explained' | null = null
+    if (isEvergreenGuide && !hasGuideBadgeInBody) {
+        autoBadgeType = 'guide'
+    } else if (isExplained && !hasExplainedBadgeInBody) {
+        autoBadgeType = 'explained'
+    }
+
+    let leadingFeaturedImage: string | null = null
+    let fallbackFeaturedImage: string | null = null
+
     if (update.content) {
         let fullContent = update.content
         
@@ -401,7 +417,17 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
         } else {
             contentPart1 = (extractedStyles ? extractedStyles + '\n' : '') + fullContent
         }
+
+        if (autoBadgeType && contentPart1) {
+            const match = contentPart1.match(/^\s*(<img\b[^>]*\/?>)\s*/i)
+            if (match) {
+                leadingFeaturedImage = match[1]
+                contentPart1 = contentPart1.slice(match[0].length)
+            }
+        }
     }
+
+    fallbackFeaturedImage = autoBadgeType && !leadingFeaturedImage && update.featured_image_url ? update.featured_image_url : null
 
     return (
         <div className="min-h-dvh bg-white dark:bg-slate-900">
@@ -770,6 +796,56 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                 {update.content && <TableOfContents content={update.content} />}
                 <ErrorBoundary>
                     <div className="article-content" suppressHydrationWarning>
+                        {leadingFeaturedImage && (
+                            <div className="mb-6 overflow-hidden rounded-2xl" dangerouslySetInnerHTML={{ __html: leadingFeaturedImage }} />
+                        )}
+                        {!leadingFeaturedImage && fallbackFeaturedImage && (
+                            <div className="mb-6 overflow-hidden rounded-2xl">
+                                <img
+                                    src={fallbackFeaturedImage}
+                                    alt={update.title}
+                                    className="w-full h-auto object-cover rounded-2xl border border-slate-200/80 dark:border-slate-800"
+                                />
+                            </div>
+                        )}
+
+                        {autoBadgeType === 'guide' && (
+                            <aside
+                                aria-label="Editorial Designation: Evergreen Guide"
+                                className="my-6 rounded-xl border border-amber-500/40 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent dark:from-amber-500/20 dark:via-amber-500/10 dark:to-transparent p-4 text-xs sm:text-sm text-slate-800 dark:text-slate-200 shadow-xs"
+                            >
+                                <div className="flex items-start gap-2.5">
+                                    <span className="text-lg shrink-0 leading-none" aria-hidden="true">📘</span>
+                                    <div className="leading-relaxed font-medium">
+                                        <strong className="font-heading font-bold text-navy dark:text-amber-400 tracking-wide uppercase">
+                                            EVERGREEN GUIDE
+                                        </strong>{' '}
+                                        — A complete step-by-step guide, not a news update. Checked against official sources. Last verified:{' '}
+                                        <span className="font-semibold text-slate-900 dark:text-white tabular-nums">
+                                            {formatDate(update.last_verified || update.updated_at || update.published_at)}
+                                        </span>.
+                                    </div>
+                                </div>
+                            </aside>
+                        )}
+
+                        {autoBadgeType === 'explained' && (
+                            <aside
+                                aria-label="Editorial Designation: Explained"
+                                className="my-6 rounded-xl border border-sky-500/40 bg-gradient-to-r from-sky-500/10 via-sky-500/5 to-transparent dark:from-sky-500/20 dark:via-sky-500/10 dark:to-transparent p-4 text-xs sm:text-sm text-slate-800 dark:text-slate-200 shadow-xs"
+                            >
+                                <div className="flex items-start gap-2.5">
+                                    <span className="text-lg shrink-0 leading-none" aria-hidden="true">🔍</span>
+                                    <div className="leading-relaxed font-medium">
+                                        <strong className="font-heading font-bold text-navy dark:text-sky-400 tracking-wide uppercase">
+                                            EXPLAINED
+                                        </strong>{' '}
+                                        — Analysis and observation on a widely discussed development. Facts are drawn from official records; views expressed are analysis, not legal advice.
+                                    </div>
+                                </div>
+                            </aside>
+                        )}
+
                         <MarkdownRenderer content={contentPart1} enableGazetteDownloadPrompt sponsoredLinks={!!update.is_sponsored} holdExternalLinks={!!update.hold_external_links} />
                         
                         {relatedForm && (

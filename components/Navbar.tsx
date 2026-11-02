@@ -40,6 +40,7 @@ import {
     Wrench,
     X,
     Bookmark,
+    BookOpen,
     Search,
     Receipt,
 } from 'lucide-react'
@@ -47,6 +48,7 @@ import {
 const links = [
     { href: '/', label: 'Home' },
     { href: '/updates', label: 'Updates' },
+    { href: '/guides', label: 'Guides', icon: BookOpen },
     { href: '/documents', label: 'Documents', icon: FileText },
     { href: '/tools', label: 'Tools', icon: Wrench },
     { href: '/bookmarks', label: 'Bookmarks', icon: Bookmark, hideIconOnDesktop: true },

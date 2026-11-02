@@ -169,7 +169,7 @@ const nextConfig = {
         ],
       },
       {
-        source: '/(updates|glossary|tools|about|calendar|documents|category|rbi|author|newsletter)',
+        source: '/(updates|guides|glossary|tools|about|calendar|documents|category|rbi|author|newsletter)',
         headers: [
           {
             key: 'Cache-Control',
