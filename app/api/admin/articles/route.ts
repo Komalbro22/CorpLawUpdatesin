@@ -27,8 +27,9 @@ const ALLOWED_ARTICLE_FIELDS = new Set([
   'views', 'seo_title', 'seo_description', 'quick_answer', 'regulation_ref',
   'last_verified', 'last_amended', 'key_takeaways', 'has_steps', 'steps_json',
   'reading_time',
-  // Aliases
-  'key_change_pill', 'tldr', 'last_verified_date'
+  // Aliases & editorial helpers
+  'key_change_pill', 'tldr', 'last_verified_date',
+  'editorial_format', 'article_type', 'format', 'is_guide', 'is_explained'
 ])
 
 export async function GET(request: NextRequest) {
@@ -95,8 +96,17 @@ export async function GET(request: NextRequest) {
 
     const articlesWithCounts = articles?.map(a => {
       const wordCount = a.content ? a.content.replace(/<[^>]*>/g, '').split(/\s+/).length : 0
+      const isGuide = Array.isArray(a.tags) && a.tags.includes('Evergreen Guide')
+      const isExplained = Array.isArray(a.tags) && a.tags.includes('Explained')
+      const editorial_format = isGuide ? 'guide' : isExplained ? 'explained' : 'standard'
       const { content, ...rest } = a
-      return { ...rest, word_count: wordCount }
+      return {
+        ...rest,
+        word_count: wordCount,
+        editorial_format,
+        is_guide: isGuide,
+        is_explained: isExplained,
+      }
     })
 
     return NextResponse.json({
@@ -209,6 +219,32 @@ export async function POST(request: NextRequest) {
       finalTags = tags.split(',').map((t: string) => t.trim()).filter(Boolean)
     }
 
+    // Resolve editorial format helper (guide / explained / standard)
+    const rawFormat = (
+      rawBody.editorial_format ||
+      rawBody.article_type ||
+      rawBody.format ||
+      (rawBody.is_guide === true ? 'guide' : rawBody.is_explained === true ? 'explained' : (rawBody.is_guide === false && rawBody.is_explained === false) ? 'standard' : undefined)
+    )
+
+    let finalLastVerified = last_verified || null
+
+    if (rawFormat) {
+      const norm = String(rawFormat).toLowerCase().trim()
+      if (norm === 'guide') {
+        finalTags = finalTags.filter(t => t !== 'Evergreen Guide' && t !== 'Explained')
+        finalTags.push('Evergreen Guide')
+        if (!finalLastVerified) {
+          finalLastVerified = new Date().toISOString().split('T')[0]
+        }
+      } else if (norm === 'explained') {
+        finalTags = finalTags.filter(t => t !== 'Evergreen Guide' && t !== 'Explained')
+        finalTags.push('Explained')
+      } else if (norm === 'standard') {
+        finalTags = finalTags.filter(t => t !== 'Evergreen Guide' && t !== 'Explained')
+      }
+    }
+
     // Normalize sources
     let finalSources: any = null
     if (Array.isArray(sources)) {
@@ -272,7 +308,7 @@ export async function POST(request: NextRequest) {
         impact_level: impact_level || null,
         quick_answer: quick_answer || null,
         regulation_ref: regulation_ref || null,
-        last_verified: last_verified || null,
+        last_verified: finalLastVerified,
         last_amended: last_amended || null,
         key_takeaways: finalKeyTakeaways,
         has_steps: has_steps || false,
@@ -307,6 +343,16 @@ export async function POST(request: NextRequest) {
       category: category?.trim() || createdArticle?.category,
     })
 
+    const isGuide = Array.isArray(createdArticle.tags) && createdArticle.tags.includes('Evergreen Guide')
+    const isExplained = Array.isArray(createdArticle.tags) && createdArticle.tags.includes('Explained')
+    const editorial_format = isGuide ? 'guide' : isExplained ? 'explained' : 'standard'
+    const enrichedResponse = {
+      ...createdArticle,
+      editorial_format,
+      is_guide: isGuide,
+      is_explained: isExplained,
+    }
+
     // Audit log if key auth
     if (authCheck.auth.type === 'api_key') {
       await logApiAudit({
@@ -323,10 +369,10 @@ export async function POST(request: NextRequest) {
 
     // Store in idempotency cache if header present
     if (idempotencyKey) {
-      await storeIdempotentResponse(idempotencyKey, '/api/admin/articles', 201, createdArticle)
+      await storeIdempotentResponse(idempotencyKey, '/api/admin/articles', 201, enrichedResponse)
     }
 
-    return NextResponse.json(createdArticle, { status: 201 })
+    return NextResponse.json(enrichedResponse, { status: 201 })
   } catch (err: unknown) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }

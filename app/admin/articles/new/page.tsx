@@ -15,6 +15,7 @@ import SeoScorePanel from '@/components/admin/SeoScorePanel'
 import { optimizeImageClientSide } from '@/lib/image-optimizer'
 import LinkChecker from '@/components/admin/LinkChecker'
 import SponsoredSettings from '@/components/admin/SponsoredSettings'
+import EditorialFormatSelector from '@/components/admin/EditorialFormatSelector'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 
@@ -503,6 +504,14 @@ export default function NewArticle() {
                             onNoindexChange={setNoindex}
                         />
                     </div>
+
+                    {/* Editorial Type / Format (Standard Update, Evergreen Guide, Explained) */}
+                    <EditorialFormatSelector
+                        tags={tags}
+                        onTagsChange={setTags}
+                        lastVerified={lastVerified}
+                        onLastVerifiedChange={setLastVerified}
+                    />
 
                     {/* Summary */}
                     <div className="border border-slate-200/80  rounded-xl p-5 bg-white bg-white shadow-card ring-1 ring-slate-900/2">

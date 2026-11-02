@@ -22,8 +22,9 @@ const ALLOWED_ARTICLE_FIELDS = new Set([
   'views', 'seo_title', 'seo_description', 'quick_answer', 'regulation_ref',
   'last_verified', 'last_amended', 'key_takeaways', 'has_steps', 'steps_json',
   'reading_time',
-  // Aliases
-  'key_change_pill', 'tldr', 'last_verified_date'
+  // Aliases & editorial helpers
+  'key_change_pill', 'tldr', 'last_verified_date',
+  'editorial_format', 'article_type', 'format', 'is_guide', 'is_explained'
 ])
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -44,7 +45,16 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: 'Article not found' }, { status: 404 })
     }
 
-    return NextResponse.json(article)
+    const isGuide = Array.isArray(article.tags) && article.tags.includes('Evergreen Guide')
+    const isExplained = Array.isArray(article.tags) && article.tags.includes('Explained')
+    const editorial_format = isGuide ? 'guide' : isExplained ? 'explained' : 'standard'
+
+    return NextResponse.json({
+      ...article,
+      editorial_format,
+      is_guide: isGuide,
+      is_explained: isExplained,
+    })
   } catch (err: unknown) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
@@ -130,10 +140,15 @@ async function handleArticleUpdate(request: NextRequest, params: Promise<{ id: s
 
     const updateData: Record<string, any> = { ...body }
 
-    // Strip alias keys from updateData so they aren't sent to SQL
+    // Strip alias & helper keys from updateData so they aren't sent to SQL
     delete updateData.key_change_pill
     delete updateData.tldr
     delete updateData.last_verified_date
+    delete updateData.editorial_format
+    delete updateData.article_type
+    delete updateData.format
+    delete updateData.is_guide
+    delete updateData.is_explained
 
     if (body.key_change_pill !== undefined && body.key_change === undefined) {
       updateData.key_change = body.key_change_pill
@@ -178,6 +193,38 @@ async function handleArticleUpdate(request: NextRequest, params: Promise<{ id: s
       } else {
         updateData.tags = []
       }
+    }
+
+    // Resolve editorial format helper (guide / explained / standard)
+    const rawFormat = (
+      rawBody.editorial_format ??
+      rawBody.article_type ??
+      rawBody.format ??
+      (rawBody.is_guide === true ? 'guide' : rawBody.is_explained === true ? 'explained' : (rawBody.is_guide === false && rawBody.is_explained === false) ? 'standard' : undefined)
+    )
+
+    if (rawFormat !== undefined) {
+      const norm = String(rawFormat).toLowerCase().trim()
+      let tagsList: string[] = []
+      if (updateData.tags !== undefined) {
+        tagsList = Array.isArray(updateData.tags) ? [...updateData.tags] : []
+      } else {
+        tagsList = Array.isArray(oldArticle.tags) ? [...oldArticle.tags] : []
+      }
+
+      if (norm === 'guide') {
+        tagsList = tagsList.filter(t => t !== 'Evergreen Guide' && t !== 'Explained')
+        tagsList.push('Evergreen Guide')
+        if (!updateData.last_verified && !oldArticle.last_verified) {
+          updateData.last_verified = new Date().toISOString().split('T')[0]
+        }
+      } else if (norm === 'explained') {
+        tagsList = tagsList.filter(t => t !== 'Evergreen Guide' && t !== 'Explained')
+        tagsList.push('Explained')
+      } else if (norm === 'standard') {
+        tagsList = tagsList.filter(t => t !== 'Evergreen Guide' && t !== 'Explained')
+      }
+      updateData.tags = tagsList
     }
 
     // Normalize sources if present
@@ -269,7 +316,16 @@ async function handleArticleUpdate(request: NextRequest, params: Promise<{ id: s
       })
     }
 
-    return NextResponse.json(updatedArticle)
+    const isGuide = Array.isArray(updatedArticle.tags) && updatedArticle.tags.includes('Evergreen Guide')
+    const isExplained = Array.isArray(updatedArticle.tags) && updatedArticle.tags.includes('Explained')
+    const editorial_format = isGuide ? 'guide' : isExplained ? 'explained' : 'standard'
+
+    return NextResponse.json({
+      ...updatedArticle,
+      editorial_format,
+      is_guide: isGuide,
+      is_explained: isExplained,
+    })
   } catch (err: unknown) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }

@@ -27,6 +27,12 @@ export const articleSchema = z.object({
   tldr: z.any().nullable().optional(),
   last_verified_date: z.string().nullable().optional(),
   tags: z.any().nullable().optional(),
+  // Editorial format helpers for AI agent and admin panel
+  editorial_format: z.string().max(50).nullable().optional(),
+  article_type: z.string().max(50).nullable().optional(),
+  format: z.string().max(50).nullable().optional(),
+  is_guide: z.boolean().optional(),
+  is_explained: z.boolean().optional(),
   views: z.number().optional(),
   seo_title: z.string().max(500).nullable().optional(),
   seo_description: z.string().max(2000).nullable().optional(),

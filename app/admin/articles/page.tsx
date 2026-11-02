@@ -378,6 +378,16 @@ export default function AdminArticles() {
                                                         {article.title}
                                                     </Link>
                                                     {article.is_sponsored && <span className="shrink-0 rounded-sm bg-violet-100 px-1.5 py-0.5 text-[9px] font-bold uppercase text-violet-800">Sponsored</span>}
+                                                    {Array.isArray(article.tags) && article.tags.includes('Evergreen Guide') && (
+                                                        <span className="shrink-0 rounded-sm bg-amber-100 border border-amber-300 px-1.5 py-0.5 text-[9px] font-bold uppercase text-amber-900" title="Evergreen Guide">
+                                                            📘 Guide
+                                                        </span>
+                                                    )}
+                                                    {Array.isArray(article.tags) && article.tags.includes('Explained') && (
+                                                        <span className="shrink-0 rounded-sm bg-sky-100 border border-sky-300 px-1.5 py-0.5 text-[9px] font-bold uppercase text-sky-900" title="Explained Piece">
+                                                            🔍 Explained
+                                                        </span>
+                                                    )}
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4">
