@@ -659,7 +659,7 @@
 
   /* Adaptive inline text */
   .dynamic-text-adaptive {
-    color: #1e293b;
+    color: #1a2a5e;
   }
   .dark .dynamic-text-adaptive {
     color: #e2e8f0 !important;
@@ -1726,6 +1726,73 @@
   }
 
   /* Explicit styling for table headers with dark backgrounds or white text */
+  .article-content table tr[style*="background" i] th,
+  .article-content table thead[style*="background" i] th {
+    background-color: transparent !important;
+  }
+
+  .article-content table tr[style*="#1a2a5e" i] th,
+  .article-content table tr[style*="#0b2c4a" i] th,
+  .article-content table tr[style*="#0f172a" i] th,
+  .article-content table tr[style*="#0f2342" i] th,
+  .article-content table tr[style*="#1e3a5f" i] th,
+  .article-content table tr[style*="#1a3560" i] th,
+  .article-content table thead[style*="#1a2a5e" i] th,
+  .article-content table thead[style*="#0b2c4a" i] th,
+  .article-content table thead[style*="#0f172a" i] th,
+  .article-content table thead[style*="#0f2342" i] th,
+  .article-content table th[style*="#1a2a5e" i],
+  .article-content table th[style*="#0b2c4a" i],
+  .article-content table th[style*="#0f172a" i],
+  .article-content table th[style*="#0f2342" i] {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+  }
+
+  .article-content table tr[style*="#1a2a5e" i] th *,
+  .article-content table tr[style*="#0b2c4a" i] th *,
+  .article-content table tr[style*="#0f172a" i] th *,
+  .article-content table tr[style*="#0f2342" i] th *,
+  .article-content table thead[style*="#1a2a5e" i] th *,
+  .article-content table thead[style*="#0b2c4a" i] th *,
+  .article-content table thead[style*="#0f172a" i] th *,
+  .article-content table thead[style*="#0f2342" i] th *,
+  .article-content table th[style*="#1a2a5e" i] *,
+  .article-content table th[style*="#0b2c4a" i] *,
+  .article-content table th[style*="#0f172a" i] *,
+  .article-content table th[style*="#0f2342" i] * {
+    color: #ffffff !important;
+  }
+
+  /* Dark mode table header overrides: maintain navy background and white text */
+  .dark .article-content table tr[style*="#1a2a5e" i],
+  .dark .article-content table thead[style*="#1a2a5e" i],
+  .dark .article-content table th[style*="#1a2a5e" i] {
+    background-color: #1a2a5e !important;
+    color: #ffffff !important;
+  }
+
+  .dark .article-content table tr[style*="#0b2c4a" i],
+  .dark .article-content table thead[style*="#0b2c4a" i],
+  .dark .article-content table th[style*="#0b2c4a" i] {
+    background-color: #0b2c4a !important;
+    color: #ffffff !important;
+  }
+
+  .dark .article-content table tr[style*="#1a2a5e" i] th,
+  .dark .article-content table tr[style*="#0b2c4a" i] th,
+  .dark .article-content table thead[style*="#1a2a5e" i] th,
+  .dark .article-content table thead[style*="#0b2c4a" i] th {
+    background-color: transparent !important;
+    color: #ffffff !important;
+  }
+
+  .article-content h2[style*="border-bottom" i],
+  .article-content h3[style*="border-bottom" i] {
+    margin-top: 2rem !important;
+    margin-bottom: 1rem !important;
+  }
+
   .article-content table th.text-white,
   .article-content table th[style*='color:#fff'],
   .article-content table th[style*='color: #fff'],

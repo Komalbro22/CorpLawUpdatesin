@@ -93,4 +93,20 @@ describe('HTML Sanitization (lib/sanitize.ts)', () => {
     expect(clean).toContain('MGT-7')
     expect(clean).toContain('31st August 2026')
   })
+
+  it('preserves rich inline table backgrounds and heading underlines (SEBI InvIT OFS format)', () => {
+    const sebiHtml = `
+      <h2 style="color:#1a2a5e;border-bottom:2px solid #c9a227;padding-bottom:6px;">Old vs new</h2>
+      <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:15px;">
+        <tr style="background:#1a2a5e;color:#fff;"><th style="padding:10px;text-align:left;">Category</th><th style="padding:10px;text-align:left;">Before 2 November 2026</th></tr>
+        <tr style="border-bottom:1px solid #ddd;background:#f7f7f7;"><td style="padding:10px;">Illiquid private listed InvITs</td><td style="padding:10px;">8 weeks</td></tr>
+      </table>
+    `.trim()
+    const clean = sanitizeHtml(sebiHtml)
+    expect(clean).toContain('border-bottom:2px solid #c9a227')
+    expect(clean).toContain('background:#1a2a5e')
+    expect(clean).toContain('color:#fff')
+    expect(clean).toContain('background:#f7f7f7')
+    expect(clean).toContain('padding:10px')
+  })
 })

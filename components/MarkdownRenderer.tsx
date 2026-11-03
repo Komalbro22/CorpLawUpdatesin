@@ -5,7 +5,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useEffect, useRef, useState } from 'react'
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkBreaks from 'remark-breaks'
@@ -395,6 +395,51 @@ function processInlineStyles(styleObj: any, className: string = '', isContainer:
     };
 }
 
+interface TableStyleContextType {
+    hasBg?: boolean;
+    isDarkBg?: boolean;
+    hasWhiteText?: boolean;
+}
+
+const TableStyleContext = createContext<TableStyleContextType>({});
+
+function isDarkTableBg(bgStr?: string): boolean {
+    if (!bgStr) return false;
+    const b = bgStr.toLowerCase().replace(/\s+/g, '');
+    return (
+        b.includes('#1a2a5e') ||
+        b.includes('#0b2c4a') ||
+        b.includes('#0b2c4d') ||
+        b.includes('#0a1628') ||
+        b.includes('#0f2447') ||
+        b.includes('#0f4c81') ||
+        b.includes('#1a3560') ||
+        b.includes('#1e3a8a') ||
+        b.includes('#0f172a') || 
+        b.includes('#0f2342') ||
+        b.includes('#0b1121') ||
+        b.includes('#1e293b') ||
+        b.includes('#1e3a5f') ||
+        b.includes('#111827') ||
+        b.includes('#1f2937') ||
+        b.includes('#2d2d52') ||
+        b.includes('#070c18') ||
+        b.includes('#000000') ||
+        b === 'black' ||
+        b.includes('rgb(26,42,94)') ||
+        b.includes('rgb(11,44,74)') ||
+        b.includes('rgb(15,23,42)') ||
+        b.includes('rgb(15,35,66)') ||
+        b.includes('rgb(30,41,59)')
+    );
+}
+
+function isWhiteTableColor(colorStr?: string): boolean {
+    if (!colorStr) return false;
+    const c = colorStr.toLowerCase().replace(/\s+/g, '');
+    return c.includes('#fff') || c === 'white' || c.includes('rgb(255,255,255)');
+}
+
 export default function MarkdownRenderer({
     content,
     enableGazetteDownloadPrompt = false,
@@ -424,7 +469,13 @@ export default function MarkdownRenderer({
             'div[style*="background:#0a1628"], ' +
             'div[style*="background:#1e3a5f"], ' +
             'div[style*="background:#0b1121"], ' +
-            'div[style*="background:#0B1121"]'
+            'div[style*="background:#0B1121"], ' +
+            'tr[style*="background:#1a2a5e"], ' +
+            'tr[style*="background:#0b2c4a"], ' +
+            'tr[style*="background:#0f172a"], ' +
+            'tr[style*="background:#0f2342"], ' +
+            'thead[style*="background:#1a2a5e"], ' +
+            'thead[style*="background:#0b2c4a"]'
         )
 
         darkDivs.forEach(div => {
@@ -448,6 +499,12 @@ export default function MarkdownRenderer({
                 if (!s.style.color) {
                     s.style.color = '#F59E0B'
                 }
+            })
+
+            // Fix table header cells inside dark rows/heads
+            div.querySelectorAll<HTMLElement>('th').forEach(th => {
+                th.style.backgroundColor = 'transparent'
+                th.style.color = '#ffffff'
             })
         })
 
@@ -513,6 +570,12 @@ export default function MarkdownRenderer({
           [&_[style*='background:#0b1121']_div]:text-slate-100!
           [&_[style*='background:#0b1121']_strong]:text-amber-400!
           [&_[style*='background:#0b1121']_li]:text-slate-100!
+          [&_[style*='background:#1a2a5e']_p]:text-slate-100!
+          [&_[style*='background:#1a2a5e']_h3]:text-amber-400!
+          [&_[style*='background:#1a2a5e']_strong]:text-amber-400!
+          [&_[style*='background:#0b2c4a']_p]:text-slate-100!
+          [&_[style*='background:#0b2c4a']_h3]:text-amber-400!
+          [&_[style*='background:#0b2c4a']_strong]:text-amber-400!
           prose-headings:font-heading prose-a:no-underline prose-a:hover:underline prose-code:bg-slate-100 dark:prose-code:bg-slate-800 dark:prose-code:text-slate-200 prose-code:px-1 prose-code:rounded-sm prose-img:max-w-full prose-img:h-auto prose-img:rounded-lg prose-img:mx-auto prose-img:block
         `}>
             <ReactMarkdown
@@ -719,10 +782,18 @@ export default function MarkdownRenderer({
                     thead: ({ node, style, className, children, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className, false, true);
+                        const bg = (styleObj.background || styleObj.backgroundColor || processedStyle.background || processedStyle.backgroundColor || '').toString();
+                        const color = (styleObj.color || processedStyle.color || '').toString();
+                        const hasBg = Boolean(bg && bg.trim() !== 'transparent');
+                        const isDark = isDarkTableBg(bg);
+                        const isWhite = isWhiteTableColor(color);
+
                         return (
-                            <thead suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
-                                {children}
-                            </thead>
+                            <TableStyleContext.Provider value={{ hasBg, isDarkBg: isDark, hasWhiteText: isWhite }}>
+                                <thead suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
+                                    {children}
+                                </thead>
+                            </TableStyleContext.Provider>
                         );
                     },
                     tbody: ({ node, style, className, children, ...props }: any) => {
@@ -737,40 +808,53 @@ export default function MarkdownRenderer({
                     tr: ({ node, style, className, children, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className, false, true);
+                        const parentCtx = useContext(TableStyleContext);
+
+                        const bg = (styleObj.background || styleObj.backgroundColor || processedStyle.background || processedStyle.backgroundColor || '').toString();
+                        const color = (styleObj.color || processedStyle.color || '').toString();
+                        
+                        const rowHasBg = Boolean(bg && bg.trim() !== 'transparent');
+                        const isDark = isDarkTableBg(bg) || (!rowHasBg && parentCtx.isDarkBg);
+                        const isWhite = isWhiteTableColor(color) || (!color && parentCtx.hasWhiteText);
+                        const hasBg = rowHasBg || parentCtx.hasBg;
+
                         return (
-                            <tr suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
-                                {children}
-                            </tr>
+                            <TableStyleContext.Provider value={{ hasBg, isDarkBg: isDark, hasWhiteText: isWhite }}>
+                                <tr suppressHydrationWarning style={processedStyle} className={processedClassName} {...props}>
+                                    {children}
+                                </tr>
+                            </TableStyleContext.Provider>
                         );
                     },
                     th: ({ node, style, className, children, ...props }: any) => {
                         const styleObj = parseStyle(style, node);
                         const { processedStyle, processedClassName } = processInlineStyles(styleObj, className, false, true);
-                        const hasCustomBg = !!(styleObj.background || styleObj.backgroundColor || processedStyle.background || processedStyle.backgroundColor);
-                        const bgLower = (styleObj.background || styleObj.backgroundColor || '').toString().toLowerCase().replace(/\s+/g, '');
-                        const isDarkBg = 
-                            bgLower.includes('#0f172a') || 
-                            bgLower.includes('#0f2342') ||
-                            bgLower.includes('#0b1121') ||
-                            bgLower.includes('#1e293b') ||
-                            bgLower.includes('#1e3a5f') ||
-                            bgLower.includes('#070c18') ||
-                            bgLower.includes('#000000') ||
-                            bgLower === 'black' ||
-                            bgLower.includes('rgb(15,23,42)') ||
-                            bgLower.includes('rgb(15,35,66)') ||
-                            bgLower.includes('rgb(30,41,59)');
-                        const hasWhiteText = styleObj.color && (
-                            styleObj.color.toLowerCase().includes('#fff') || 
-                            styleObj.color.toLowerCase() === 'white' ||
-                            styleObj.color.toLowerCase().includes('rgb(255,255,255)')
-                        );
+                        const ctx = useContext(TableStyleContext);
+
+                        const selfBg = (styleObj.background || styleObj.backgroundColor || processedStyle.background || processedStyle.backgroundColor || '').toString();
+                        const hasCustomBg = !!(selfBg && selfBg.trim() !== 'transparent');
+                        const isDarkBg = isDarkTableBg(selfBg) || (!hasCustomBg && ctx.isDarkBg);
+                        
+                        const selfColor = (styleObj.color || processedStyle.color || '').toString();
+                        const hasWhiteText = isWhiteTableColor(selfColor) || (!selfColor && ctx.hasWhiteText);
 
                         if (isDarkBg || hasWhiteText) {
                             processedStyle.color = '#ffffff';
                         }
 
-                        const defaultBg = hasCustomBg ? '' : 'bg-slate-50 dark:bg-slate-800/80';
+                        // Header background resolution:
+                        // 1. If TH itself has an inline background, preserve it (no extra class).
+                        // 2. If parent TR or THEAD has a background, make TH transparent so row background shows through cleanly!
+                        // 3. Otherwise (unadorned default table), apply default subtle slate header background.
+                        let defaultBg = '';
+                        if (hasCustomBg) {
+                            defaultBg = '';
+                        } else if (ctx.hasBg) {
+                            defaultBg = 'bg-transparent';
+                        } else {
+                            defaultBg = 'bg-slate-50 dark:bg-slate-800/80';
+                        }
+
                         const defaultText = (isDarkBg || hasWhiteText) ? 'text-white' : 'text-navy dark:text-slate-200';
 
                         return (
