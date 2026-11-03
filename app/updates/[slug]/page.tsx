@@ -26,6 +26,8 @@ import GooglePreferredSourceButton from '@/components/GooglePreferredSourceButto
 import ReadingProgress from '@/components/ReadingProgress'
 import MobileReadingBar from '@/components/MobileReadingBar'
 import FontSizeToggle from '@/components/FontSizeToggle'
+import WhatsAppFloatingButton from '@/components/WhatsAppFloatingButton'
+import WhatsAppArticleEndBox from '@/components/WhatsAppArticleEndBox'
 
 import ArticleImage from '@/components/ArticleImage'
 
@@ -929,6 +931,9 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                 </div>
             </div>
 
+            {/* End-of-article WhatsApp Channel Box */}
+            <WhatsAppArticleEndBox />
+
             {/* 4. SOURCE ATTRIBUTION */}
             {(() => {
                 const normalizedSources = Array.isArray(update.sources)
@@ -1152,6 +1157,8 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                 }))
               }} />
             )}
+            {/* Floating WhatsApp Channel Button (Appears on scroll >= 400px, dismissible for 30 days, mobile ad-safe) */}
+            <WhatsAppFloatingButton />
         </article>
       </div>
     )

@@ -7,6 +7,7 @@ import { useParams, useRouter, notFound } from 'next/navigation'
 import { useToast } from '@/components/Toast'
 import { checkMissingClauses, checkLeaseClauses, getImportanceIcon, getImportanceLabel, formatTemplateSource, type ClauseCheck } from '@/lib/document-clause-checker'
 import { markdownToHtml } from '@/lib/markdown'
+import { sanitizeHtml } from '@/lib/sanitize'
 import ReaderFeedback from '@/components/ReaderFeedback'
 
 const FuzzyClarifier = dynamic(
@@ -2951,9 +2952,7 @@ export default function DocumentGeneratorClient({
                       }}
                       suppressHydrationWarning
                       dangerouslySetInnerHTML={{
-                        __html: typeof window !== 'undefined' 
-                          ? DOMPurify.sanitize(markdownToHtml(getCleanedContent(generatedContent)))
-                          : markdownToHtml(getCleanedContent(generatedContent))
+                        __html: sanitizeHtml(markdownToHtml(getCleanedContent(generatedContent)))
                       }}
                     />
                   </div>

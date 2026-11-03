@@ -95,6 +95,7 @@ function processInlineStyles(styleObj: any, className: string = '', isContainer:
         
         const isYellowAmberBg = 
             bgLower.includes('#f7f3e8') || 
+            bgLower.includes('rgb(247,243,232)') || 
             bgLower.includes('#fdf8e7') || 
             bgLower.includes('#fef9e7') || 
             bgLower.includes('#fef9ee') || 
@@ -252,6 +253,7 @@ function processInlineStyles(styleObj: any, className: string = '', isContainer:
                 }
                 delete processedStyle.background;
                 delete processedStyle.backgroundColor;
+                delete processedStyle.border;
                 delete processedStyle.borderColor;
             } else if (isBlueBg) {
                 if (processedStyle.borderLeft || styleObj.borderLeft) {
@@ -261,6 +263,7 @@ function processInlineStyles(styleObj: any, className: string = '', isContainer:
                 }
                 delete processedStyle.background;
                 delete processedStyle.backgroundColor;
+                delete processedStyle.border;
                 delete processedStyle.borderColor;
             } else if (isGreenBg) {
                 classes.push('dynamic-card-green');
@@ -286,6 +289,7 @@ function processInlineStyles(styleObj: any, className: string = '', isContainer:
                 }
                 delete processedStyle.background;
                 delete processedStyle.backgroundColor;
+                delete processedStyle.border;
                 delete processedStyle.borderColor;
             } else if (isDarkBg) {
                 classes.push('dynamic-card-dark');

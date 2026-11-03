@@ -111,8 +111,13 @@ export default async function RootLayout({
                 window.__clu_err_hooked = true;
                 function isIgnored(msg, url, line) {
                   var m = (msg || '').toLowerCase();
-                  return (m.indexOf('script error') !== -1 && (!url || line === 0)) ||
-                         (m.indexOf('clarity') !== -1 && m.indexOf('stack') !== -1);
+                  var u = (url || '').toLowerCase();
+                  var isScriptError = (m.indexOf('script error') !== -1 && (!url || line === 0));
+                  var isStackOverflow = m.indexOf('call stack size exceeded') !== -1 ||
+                                        m.indexOf('too much recursion') !== -1 ||
+                                        (m.indexOf('stack') !== -1 && m.indexOf('maximum') !== -1);
+                  var isThirdPartyClarity = u.indexOf('clarity.ms') !== -1 || m.indexOf('clarity') !== -1;
+                  return isScriptError || isStackOverflow || isThirdPartyClarity;
                 }
                 window.addEventListener('error', function(e) {
                   if (isIgnored(e.message, e.filename, e.lineno)) {
@@ -125,7 +130,7 @@ export default async function RootLayout({
                 var inHandler = false;
                 window.onerror = function(msg, url, line, col, err) {
                   if (isIgnored(msg, url, line)) return true;
-                  if (inHandler) return false;
+                  if (inHandler) return true;
                   if (typeof prev === 'function' && prev !== window.onerror) {
                     try {
                       inHandler = true;
@@ -136,6 +141,7 @@ export default async function RootLayout({
                       inHandler = false;
                     }
                   }
+                  return false;
                 };
               })();
             `,

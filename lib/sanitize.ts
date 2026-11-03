@@ -36,118 +36,89 @@ const ALLOWED_ATTR = [
 ]
 
 // Server & Client html sanitizer preserving custom inline CSS styles, fonts, SVGs & charts
+// Uses sanitizeHtmlLib uniformly on both SSR and Client to guarantee 100% hydration matching (prevents React Error #418)
+const SANITIZE_OPTIONS: sanitizeHtmlLib.IOptions = {
+  allowedTags: ALLOWED_TAGS,
+  allowedAttributes: {
+    '*': ALLOWED_ATTR,
+    'a': ['href', 'target', 'rel', 'title', 'class', 'style', 'id'],
+    'img': ['src', 'alt', 'title', 'width', 'height', 'class', 'style', 'id', 'loading'],
+    'table': ['style', 'class', 'id', 'width', 'height', 'border', 'cellpadding', 'cellspacing'],
+    'td': ['style', 'class', 'id', 'width', 'height', 'border', 'colspan', 'rowspan', 'align', 'valign'],
+    'th': ['style', 'class', 'id', 'width', 'height', 'border', 'colspan', 'rowspan', 'align', 'valign'],
+  },
+  allowedStyles: {
+    '*': {
+      'color': [/^\s*[\s\S]+$/],
+      'background': [/^\s*[\s\S]+$/],
+      'background-color': [/^\s*[\s\S]+$/],
+      'background-image': [/^\s*[\s\S]+$/],
+      'border': [/^\s*[\s\S]+$/],
+      'border-left': [/^\s*[\s\S]+$/],
+      'border-right': [/^\s*[\s\S]+$/],
+      'border-top': [/^\s*[\s\S]+$/],
+      'border-bottom': [/^\s*[\s\S]+$/],
+      'border-color': [/^\s*[\s\S]+$/],
+      'border-radius': [/^\s*[\s\S]+$/],
+      'border-style': [/^\s*[\s\S]+$/],
+      'border-width': [/^\s*[\s\S]+$/],
+      'font-size': [/^\s*[\s\S]+$/],
+      'font-weight': [/^\s*[\s\S]+$/],
+      'font-family': [/^\s*[\s\S]+$/],
+      'font-style': [/^\s*[\s\S]+$/],
+      'line-height': [/^\s*[\s\S]+$/],
+      'margin': [/^\s*[\s\S]+$/],
+      'margin-top': [/^\s*[\s\S]+$/],
+      'margin-bottom': [/^\s*[\s\S]+$/],
+      'margin-left': [/^\s*[\s\S]+$/],
+      'margin-right': [/^\s*[\s\S]+$/],
+      'padding': [/^\s*[\s\S]+$/],
+      'padding-top': [/^\s*[\s\S]+$/],
+      'padding-bottom': [/^\s*[\s\S]+$/],
+      'padding-left': [/^\s*[\s\S]+$/],
+      'padding-right': [/^\s*[\s\S]+$/],
+      'display': [/^\s*[\s\S]+$/],
+      'text-align': [/^\s*[\s\S]+$/],
+      'text-decoration': [/^\s*[\s\S]+$/],
+      'text-transform': [/^\s*[\s\S]+$/],
+      'width': [/^\s*[\s\S]+$/],
+      'max-width': [/^\s*[\s\S]+$/],
+      'min-width': [/^\s*[\s\S]+$/],
+      'height': [/^\s*[\s\S]+$/],
+      'max-height': [/^\s*[\s\S]+$/],
+      'min-height': [/^\s*[\s\S]+$/],
+      'box-shadow': [/^\s*[\s\S]+$/],
+      'flex': [/^\s*[\s\S]+$/],
+      'flex-direction': [/^\s*[\s\S]+$/],
+      'align-items': [/^\s*[\s\S]+$/],
+      'justify-content': [/^\s*[\s\S]+$/],
+      'grid': [/^\s*[\s\S]+$/],
+      'gap': [/^\s*[\s\S]+$/],
+      'vertical-align': [/^\s*[\s\S]+$/],
+      'overflow': [/^\s*[\s\S]+$/],
+      'position': [/^\s*[\s\S]+$/],
+      'opacity': [/^\s*[\s\S]+$/],
+    }
+  },
+  allowedSchemes: ['http', 'https', 'mailto', 'data'],
+  disallowedTagsMode: 'discard',
+  nonTextTags: ['script', 'textarea', 'option'], // Allow <style> text content
+  allowVulnerableTags: true,
+  transformTags: {
+    'a': (tagName, attribs) => {
+      if (attribs.href) attribs.href = attribs.href.trim();
+      return { tagName, attribs };
+    },
+    'img': (tagName, attribs) => {
+      if (attribs.src) attribs.src = attribs.src.trim();
+      return { tagName, attribs };
+    }
+  }
+}
+
 export function sanitizeHtml(html: string): string {
   if (!html) return ''
-
-  if (typeof window === 'undefined') {
-    // Server-side: use sanitize-html with full inline style support
-    return sanitizeHtmlLib(html, {
-      allowedTags: ALLOWED_TAGS,
-      allowedAttributes: {
-        '*': ALLOWED_ATTR,
-        'a': ['href', 'target', 'rel', 'title', 'class', 'style', 'id'],
-        'img': ['src', 'alt', 'title', 'width', 'height', 'class', 'style', 'id', 'loading'],
-        'table': ['style', 'class', 'id', 'width', 'height', 'border', 'cellpadding', 'cellspacing'],
-        'td': ['style', 'class', 'id', 'width', 'height', 'border', 'colspan', 'rowspan', 'align', 'valign'],
-        'th': ['style', 'class', 'id', 'width', 'height', 'border', 'colspan', 'rowspan', 'align', 'valign'],
-      },
-      allowedStyles: {
-        '*': {
-          'color': [/^\s*[\s\S]+$/],
-          'background': [/^\s*[\s\S]+$/],
-          'background-color': [/^\s*[\s\S]+$/],
-          'background-image': [/^\s*[\s\S]+$/],
-          'border': [/^\s*[\s\S]+$/],
-          'border-left': [/^\s*[\s\S]+$/],
-          'border-right': [/^\s*[\s\S]+$/],
-          'border-top': [/^\s*[\s\S]+$/],
-          'border-bottom': [/^\s*[\s\S]+$/],
-          'border-color': [/^\s*[\s\S]+$/],
-          'border-radius': [/^\s*[\s\S]+$/],
-          'border-style': [/^\s*[\s\S]+$/],
-          'border-width': [/^\s*[\s\S]+$/],
-          'font-size': [/^\s*[\s\S]+$/],
-          'font-weight': [/^\s*[\s\S]+$/],
-          'font-family': [/^\s*[\s\S]+$/],
-          'font-style': [/^\s*[\s\S]+$/],
-          'line-height': [/^\s*[\s\S]+$/],
-          'margin': [/^\s*[\s\S]+$/],
-          'margin-top': [/^\s*[\s\S]+$/],
-          'margin-bottom': [/^\s*[\s\S]+$/],
-          'margin-left': [/^\s*[\s\S]+$/],
-          'margin-right': [/^\s*[\s\S]+$/],
-          'padding': [/^\s*[\s\S]+$/],
-          'padding-top': [/^\s*[\s\S]+$/],
-          'padding-bottom': [/^\s*[\s\S]+$/],
-          'padding-left': [/^\s*[\s\S]+$/],
-          'padding-right': [/^\s*[\s\S]+$/],
-          'display': [/^\s*[\s\S]+$/],
-          'text-align': [/^\s*[\s\S]+$/],
-          'text-decoration': [/^\s*[\s\S]+$/],
-          'text-transform': [/^\s*[\s\S]+$/],
-          'width': [/^\s*[\s\S]+$/],
-          'max-width': [/^\s*[\s\S]+$/],
-          'min-width': [/^\s*[\s\S]+$/],
-          'height': [/^\s*[\s\S]+$/],
-          'max-height': [/^\s*[\s\S]+$/],
-          'min-height': [/^\s*[\s\S]+$/],
-          'box-shadow': [/^\s*[\s\S]+$/],
-          'flex': [/^\s*[\s\S]+$/],
-          'flex-direction': [/^\s*[\s\S]+$/],
-          'align-items': [/^\s*[\s\S]+$/],
-          'justify-content': [/^\s*[\s\S]+$/],
-          'grid': [/^\s*[\s\S]+$/],
-          'gap': [/^\s*[\s\S]+$/],
-          'vertical-align': [/^\s*[\s\S]+$/],
-          'overflow': [/^\s*[\s\S]+$/],
-          'position': [/^\s*[\s\S]+$/],
-          'opacity': [/^\s*[\s\S]+$/],
-        }
-      },
-      allowedSchemes: ['http', 'https', 'mailto', 'data'],
-      disallowedTagsMode: 'discard',
-      nonTextTags: ['script', 'textarea', 'option'], // Allow <style> text content
-      allowVulnerableTags: true,
-      transformTags: {
-        'a': (tagName, attribs) => {
-          if (attribs.href) attribs.href = attribs.href.trim();
-          return { tagName, attribs };
-        },
-        'img': (tagName, attribs) => {
-          if (attribs.src) attribs.src = attribs.src.trim();
-          return { tagName, attribs };
-        }
-      }
-    })
-  }
-
-  // Client-side: use DOMPurify with full SVG & style support
-  return DOMPurify.sanitize(html, {
-    USE_PROFILES: { html: true, svg: true, svgFilters: true },
-    ALLOWED_TAGS,
-    ALLOWED_ATTR,
-    ADD_TAGS: [
-      'style', 'iframe', 'svg', 'path', 'g', 'rect', 'circle', 'ellipse', 'polyline',
-      'polygon', 'line', 'text', 'tspan', 'use', 'defs', 'marker',
-      'linearGradient', 'radialGradient', 'stop', 'filter', 'feDropShadow', 'fedropshadow',
-      'feGaussianBlur', 'fegaussianblur', 'feOffset', 'feoffset', 'feBlend', 'feblend',
-      'clipPath', 'mask', 'foreignObject'
-    ],
-    ADD_ATTR: [
-      'style', 'class', 'id', 'target', 'rel', 'open', 'loading',
-      'viewBox', 'viewbox', 'fill', 'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-dasharray',
-      'd', 'cx', 'cy', 'r', 'rx', 'ry', 'x', 'y', 'x1', 'y1', 'x2', 'y2', 'points',
-      'transform', 'xmlns', 'aria-hidden', 'aria-label', 'role',
-      'font-size', 'font-weight', 'font-family', 'text-anchor', 'letter-spacing',
-      'stop-color', 'stop-opacity', 'offset', 'opacity',
-      'marker-end', 'marker-start', 'marker-mid',
-      'markerWidth', 'markerHeight', 'markerwidth', 'markerheight', 'refX', 'refY', 'refx', 'refy', 'orient',
-      'stdDeviation', 'stddeviation', 'dx', 'dy', 'flood-color', 'flood-opacity'
-    ],
-    ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|data):|[^a-z]|[a-z+.-]+(?:[^a-z+.:-]|$))/i,
-    FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover'],
-    FORCE_BODY: true,
-  })
+  return sanitizeHtmlLib(html, SANITIZE_OPTIONS)
 }
 
 export function stripHtml(html: string): string {
