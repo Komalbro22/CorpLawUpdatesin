@@ -221,7 +221,7 @@ export function getArticleAuthorSchema(category?: string | null) {
           'https://www.linkedin.com/company/corplawupdates/',
           'https://whatsapp.com/channel/0029VbCfcUEEgGfGLWOTvV1A',
           'https://t.me/corplawupdate',
-          'https://www.instagram.com/corplawupdates.in/',
+          'https://www.instagram.com/corplawupdate',
         ],
       },
     },

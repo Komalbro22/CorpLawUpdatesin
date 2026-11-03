@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { verifyAdminSession } from '@/lib/admin-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { invalidateCache } from '@/lib/redis-cache'
 
 const ALLOWED_SETTING_KEYS = new Set([
   'whatsapp_channel',
+  'telegram_channel',
   'linkedin_url',
   'twitter_url',
   'instagram_url',
@@ -88,11 +90,14 @@ export async function POST(request: Request) {
 
       const { error } = await supabaseAdmin
         .from('site_settings')
-        .update({
-          value: value || '',
-          updated_at: new Date().toISOString()
-        })
-        .eq('key', key)
+        .upsert(
+          {
+            key,
+            value: value || '',
+            updated_at: new Date().toISOString()
+          },
+          { onConflict: 'key' }
+        )
 
       if (error) {
         return NextResponse.json(
@@ -106,6 +111,14 @@ export async function POST(request: Request) {
       const SETTING_KEY_PREFIX = 'settings:key:'
       await invalidateCache(ALL_SETTINGS_CACHE_KEY)
       await invalidateCache(`${SETTING_KEY_PREFIX}${key}`)
+
+            // Invalidate Next.js page & layout caches
+      try {
+        revalidatePath('/', 'layout')
+        revalidatePath('/', 'page')
+        revalidatePath('/about', 'page')
+        revalidatePath('/contact', 'page')
+      } catch {}
 
       return NextResponse.json({ success: true, key, value })
       } catch (error) {

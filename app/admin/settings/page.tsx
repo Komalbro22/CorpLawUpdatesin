@@ -85,6 +85,108 @@ const textareaKeys = [
   'site_tagline',
 ]
 
+const DEFAULT_SETTING_METADATA: Record<string, { label: string; description: string; defaultVal?: string }> = {
+  whatsapp_channel: {
+    label: 'WhatsApp Channel',
+    description: 'Official WhatsApp community channel URL for regulatory alerts',
+    defaultVal: 'https://whatsapp.com/channel/0029VbCfcUEEgGfGLWOTvV1A',
+  },
+  telegram_channel: {
+    label: 'Telegram Channel',
+    description: 'Official Telegram channel URL for fast compliance updates',
+    defaultVal: 'https://t.me/corplawupdate',
+  },
+  linkedin_url: {
+    label: 'LinkedIn Profile/Company URL',
+    description: 'Official LinkedIn company or profile URL',
+    defaultVal: 'https://www.linkedin.com/company/corplawupdates/',
+  },
+  twitter_url: {
+    label: 'X (Twitter) URL',
+    description: 'Official X/Twitter account profile URL',
+    defaultVal: 'https://x.com/CorpLawUpdates',
+  },
+  instagram_url: {
+    label: 'Instagram URL',
+    description: 'Official Instagram account profile link (e.g. https://www.instagram.com/corplawupdate)',
+    defaultVal: 'https://www.instagram.com/corplawupdate',
+  },
+  site_tagline: {
+    label: 'Site Tagline',
+    description: 'Primary platform tagline displayed across site and metadata',
+  },
+  contact_email: {
+    label: 'Contact Email',
+    description: 'Primary editorial desk email for public enquiries',
+    defaultVal: 'mail@corplawupdates.in',
+  },
+  newsletter_footer: {
+    label: 'Newsletter Footer Note',
+    description: 'Custom message included at the bottom of automated newsletter campaigns',
+  },
+  announcement_bar: {
+    label: 'Announcement Banner Message',
+    description: 'Notification banner shown to visitors at the top of the site',
+  },
+  announcement_bar_url: {
+    label: 'Announcement Banner Destination Link',
+    description: 'Optional URL opened when a visitor clicks the announcement banner',
+  },
+  current_repo_rate: {
+    label: 'Current Repo Rate (%)',
+    description: 'Latest RBI repo rate (e.g. 6.50%)',
+    defaultVal: '6.50',
+  },
+  current_repo_rate_date: {
+    label: 'Repo Rate Effective Date',
+    description: 'Date the current repo rate became effective',
+  },
+  next_mpc_date: {
+    label: 'Next MPC Meeting Date',
+    description: 'Next scheduled RBI Monetary Policy Committee decision date',
+  },
+  mpc_stance: {
+    label: 'MPC Policy Stance',
+    description: 'Current monetary policy stance (e.g. Neutral, Withdrawal of Accommodation)',
+    defaultVal: 'Neutral',
+  },
+  sdf_rate: {
+    label: 'Standing Deposit Facility (SDF) Rate (%)',
+    description: 'Current RBI SDF rate (typically Repo - 25 bps)',
+    defaultVal: '6.25',
+  },
+  msf_rate: {
+    label: 'Marginal Standing Facility (MSF) Rate (%)',
+    description: 'Current RBI MSF rate (typically Repo + 25 bps)',
+    defaultVal: '6.75',
+  },
+  google_analytics_id: {
+    label: 'Google Analytics 4 Measurement ID',
+    description: 'GA4 tag (e.g. G-XXXXXXXXXX)',
+  },
+  microsoft_clarity_id: {
+    label: 'Microsoft Clarity Project ID',
+    description: 'Microsoft Clarity project code for heatmaps and recordings',
+  },
+  google_search_console: {
+    label: 'Google Search Console Verification Token',
+    description: 'HTML meta tag verification string for Search Console ownership',
+  },
+  max_requests_per_ip_daily: {
+    label: 'Max AI Requests Per IP (Daily)',
+    description: 'Rate limit threshold for anonymous AI legal drafting tool usage',
+  },
+  max_tokens_per_ip_daily: {
+    label: 'Max AI Tokens Per IP (Daily)',
+    description: 'Maximum daily LLM token allocation per visitor IP',
+  },
+  whitelisted_ips: {
+    label: 'Whitelisted IP Addresses',
+    description: 'Comma-separated IPs exempt from AI tool rate limits',
+  },
+}
+
+
 export default function SettingsPage() {
   const { showToast } = useToast()
   const [settings, setSettings] = useState<Record<string, Setting>>({})
@@ -298,8 +400,13 @@ export default function SettingsPage() {
           </div>
           <div className="divide-y divide-slate-200/50">
             {group.keys.map((key) => {
-              const setting = settings[key]
-              if (!setting) return null
+              const meta = DEFAULT_SETTING_METADATA[key] || { label: key, description: '' }
+              const setting = settings[key] || {
+                key,
+                label: meta.label,
+                description: meta.description,
+                value: '',
+              }
               const isUrl = urlKeys.includes(key)
               const isTextarea = textareaKeys.includes(key)
 
