@@ -94,6 +94,22 @@ function processInlineStyles(styleObj: any, className: string = '', isContainer:
         const bgLower = bgVal.toLowerCase().replace(/\s+/g, '');
         
         const isYellowAmberBg = 
+            bgLower.includes('#f7f3e8') || 
+            bgLower.includes('#fdf8e7') || 
+            bgLower.includes('#fef9e7') || 
+            bgLower.includes('#fef9ee') || 
+            bgLower.includes('#fdf6e3') || 
+            bgLower.includes('#f5f1e6') || 
+            bgLower.includes('#f3ede3') || 
+            bgLower.includes('#f9f7f3') || 
+            bgLower.includes('#f8f4ee') || 
+            bgLower.includes('#faf6ed') || 
+            bgLower.includes('#f5efe6') || 
+            bgLower.includes('#fffdf0') || 
+            bgLower.includes('#fff9db') || 
+            bgLower.includes('#fff8e1') || 
+            bgLower.includes('#fffaed') || 
+            bgLower.includes('#faf0be') || 
             bgLower.includes('#fff7ed') || 
             bgLower.includes('#fffbeb') || 
             bgLower.includes('#fef3c7') ||
@@ -112,6 +128,11 @@ function processInlineStyles(styleObj: any, className: string = '', isContainer:
             bgLower.includes('rgb(254,215,170)');
 
         const isBlueBg =
+            bgLower.includes('#eef3f8') ||
+            bgLower.includes('#eef2fa') ||
+            bgLower.includes('#eef1fa') ||
+            bgLower.includes('#f0f4fa') ||
+            bgLower.includes('#f0f7ff') ||
             bgLower.includes('#eff6ff') || 
             bgLower.includes('#f0f4ff') ||
             bgLower.includes('#f0f5ff') ||
@@ -170,11 +191,23 @@ function processInlineStyles(styleObj: any, className: string = '', isContainer:
             bgLower.includes('rgb(250,248,255)');
 
         const isDarkBg = 
+            bgLower.includes('#0b2c4a') || 
+            bgLower.includes('#0b2c4d') || 
+            bgLower.includes('#1a2a5e') || 
+            bgLower.includes('#0a1628') || 
+            bgLower.includes('#0f2447') || 
+            bgLower.includes('#0f4c81') || 
+            bgLower.includes('#1a3560') || 
+            bgLower.includes('#1e3a8a') || 
+            bgLower.includes('#1a1a1a') || 
             bgLower.includes('#0f172a') || 
             bgLower.includes('#0f2342') ||
             bgLower.includes('#0b1121') ||
             bgLower.includes('#1e293b') ||
             bgLower.includes('#1e3a5f') ||
+            bgLower.includes('#111827') ||
+            bgLower.includes('#1f2937') ||
+            bgLower.includes('#2d2d52') ||
             bgLower.includes('#070c18') ||
             bgLower.includes('#000000') ||
             bgLower === 'black' ||
@@ -195,6 +228,11 @@ function processInlineStyles(styleObj: any, className: string = '', isContainer:
             bgLower.includes('#e8edf4') ||
             bgLower.includes('#eef1f6') ||
             bgLower.includes('#f7f7f7') ||
+            bgLower.includes('#fafafa') ||
+            bgLower.includes('#fafbfc') ||
+            bgLower.includes('#f9f9f9') ||
+            bgLower.includes('#fcfcfc') ||
+            bgLower.includes('#f5f5f5') ||
             bgLower.includes('#f7f8fa') ||
             bgLower.includes('#f7f9fc') ||
             bgLower.includes('#f8f4ee') ||
@@ -207,13 +245,23 @@ function processInlineStyles(styleObj: any, className: string = '', isContainer:
 
         if (!isProgressBarOrComponent && !isTableElement) {
             if (isYellowAmberBg) {
-                classes.push('dynamic-card-amber');
+                if (processedStyle.borderLeft || styleObj.borderLeft) {
+                    classes.push('dynamic-card-amber');
+                } else {
+                    classes.push('dynamic-box-amber');
+                }
                 delete processedStyle.background;
                 delete processedStyle.backgroundColor;
+                delete processedStyle.borderColor;
             } else if (isBlueBg) {
-                classes.push('dynamic-card-blue');
+                if (processedStyle.borderLeft || styleObj.borderLeft) {
+                    classes.push('dynamic-card-blue');
+                } else {
+                    classes.push('dynamic-box-blue');
+                }
                 delete processedStyle.background;
                 delete processedStyle.backgroundColor;
+                delete processedStyle.borderColor;
             } else if (isGreenBg) {
                 classes.push('dynamic-card-green');
                 delete processedStyle.background;
@@ -243,7 +291,7 @@ function processInlineStyles(styleObj: any, className: string = '', isContainer:
                 classes.push('dynamic-card-dark');
                 if (processedStyle.color && typeof processedStyle.color === 'string') {
                     const c = processedStyle.color.toLowerCase().replace(/\s+/g, '');
-                    if (c === '#0f172a' || c === '#1a1a2e' || c === '#1e3a5f' || c === '#000' || c === '#000000') {
+                    if (c === '#0b2c4a' || c === '#1a2a5e' || c === '#0f172a' || c === '#1a1a2e' || c === '#1e3a5f' || c === '#000' || c === '#000000') {
                         delete processedStyle.color;
                     }
                 }
@@ -255,15 +303,26 @@ function processInlineStyles(styleObj: any, className: string = '', isContainer:
     if (colorVal && typeof colorVal === 'string') {
         const cLower = colorVal.toLowerCase().replace(/\s+/g, '');
         if (
+            cLower === '#0b2c4a' ||
+            cLower === '#1a2a5e' ||
+            cLower === '#0f2342' ||
+            cLower === '#1a3560' ||
             cLower === '#1a1a2e' ||
             cLower === '#1e3a5f' ||
             cLower === '#0f172a' ||
             cLower === '#111827' ||
             cLower === '#1e293b' ||
+            cLower === '#1f2937' ||
+            cLower === '#374151' ||
+            cLower === '#2d2d2d' ||
+            cLower === '#3d3d3d' ||
+            cLower === '#2c3e50' ||
+            cLower === '#5d4037' ||
             cLower === '#000' ||
             cLower === '#000000' ||
+            cLower === '#222' ||
             cLower === '#333' ||
-            cLower === '#222'
+            cLower === '#444'
         ) {
             classes.push('dynamic-text-adaptive');
             delete processedStyle.color;
@@ -272,7 +331,8 @@ function processInlineStyles(styleObj: any, className: string = '', isContainer:
             cLower === '#334155' ||
             cLower === '#64748b' ||
             cLower === '#555' ||
-            cLower === '#666'
+            cLower === '#666' ||
+            cLower === '#666666'
         ) {
             classes.push('text-slate-600 dark:text-slate-300!');
             delete processedStyle.color;
@@ -354,6 +414,10 @@ export default function MarkdownRenderer({
             'div[style*="background:#0f172a"], ' +
             'div[style*="background:#0F2342"], ' +
             'div[style*="background:#0f2342"], ' +
+            'div[style*="background:#0B2C4A"], ' +
+            'div[style*="background:#0b2c4a"], ' +
+            'div[style*="background:#1a2a5e"], ' +
+            'div[style*="background:#0a1628"], ' +
             'div[style*="background:#1e3a5f"], ' +
             'div[style*="background:#0b1121"], ' +
             'div[style*="background:#0B1121"]'

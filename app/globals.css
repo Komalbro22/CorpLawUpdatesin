@@ -534,6 +534,100 @@
     color: #f59e0b !important;
   }
 
+  /* Amber / Warm Content Boxes (e.g. Quick Answer, note boxes) */
+  .dynamic-box-amber {
+    background-color: #fefce8 !important;
+    border: 1px solid #fde047 !important;
+    border-radius: 0.75rem;
+    padding: 1rem 1.25rem;
+  }
+  .dynamic-box-amber p,
+  .dynamic-box-amber span,
+  .dynamic-box-amber li,
+  .dynamic-box-amber div {
+    color: #78350f !important;
+  }
+  .dynamic-box-amber strong,
+  .dynamic-box-amber b,
+  .dynamic-box-amber h1,
+  .dynamic-box-amber h2,
+  .dynamic-box-amber h3,
+  .dynamic-box-amber h4 {
+    color: #451a03 !important;
+  }
+
+  .dark .dynamic-box-amber {
+    background: #141c2b !important;
+    background-color: #141c2b !important;
+    border: 1px solid rgba(245, 158, 11, 0.45) !important;
+  }
+  .dark .dynamic-box-amber p,
+  .dark .dynamic-box-amber span,
+  .dark .dynamic-box-amber li,
+  .dark .dynamic-box-amber div {
+    color: #e2e8f0 !important;
+  }
+  .dark .dynamic-box-amber strong,
+  .dark .dynamic-box-amber b {
+    color: #fbbf24 !important;
+  }
+  .dark .dynamic-box-amber h1,
+  .dark .dynamic-box-amber h2,
+  .dark .dynamic-box-amber h3,
+  .dark .dynamic-box-amber h4 {
+    color: #fde68a !important;
+  }
+  .dark .dynamic-box-amber a {
+    color: #f59e0b !important;
+  }
+
+  /* Blue / Cool Content Boxes */
+  .dynamic-box-blue {
+    background-color: #eff6ff !important;
+    border: 1px solid #bfdbfe !important;
+    border-radius: 0.75rem;
+    padding: 1rem 1.25rem;
+  }
+  .dynamic-box-blue p,
+  .dynamic-box-blue span,
+  .dynamic-box-blue li,
+  .dynamic-box-blue div {
+    color: #1e40af !important;
+  }
+  .dynamic-box-blue strong,
+  .dynamic-box-blue b,
+  .dynamic-box-blue h1,
+  .dynamic-box-blue h2,
+  .dynamic-box-blue h3,
+  .dynamic-box-blue h4 {
+    color: #1e3a8a !important;
+  }
+
+  .dark .dynamic-box-blue {
+    background: #0d1726 !important;
+    background-color: #0d1726 !important;
+    border: 1px solid rgba(59, 130, 246, 0.45) !important;
+  }
+  .dark .dynamic-box-blue p,
+  .dark .dynamic-box-blue span,
+  .dark .dynamic-box-blue li,
+  .dark .dynamic-box-blue div {
+    color: #e2e8f0 !important;
+  }
+  .dark .dynamic-box-blue strong,
+  .dark .dynamic-box-blue b {
+    color: #93c5fd !important;
+  }
+  .dark .dynamic-box-blue h1,
+  .dark .dynamic-box-blue h2,
+  .dark .dynamic-box-blue h3,
+  .dark .dynamic-box-blue h4 {
+    color: #bfdbfe !important;
+  }
+  .dark .dynamic-box-blue a {
+    color: #60a5fa !important;
+  }
+
   /* Dark Container Cards */
   .dynamic-card-dark {
     background-color: #0f172a !important;
@@ -617,21 +711,13 @@
     color: #f59e0b !important;
   }
 
-  /* Direct inline style overrides in dark mode to prevent any white-card bleeding */
+  /* Direct inline style overrides in dark mode to prevent any light-card bleeding */
   .dark .article-content [style*='background:#f8fafc']:not([class*='badge']),
   .dark .article-content [style*='background: #f8fafc']:not([class*='badge']),
-  .dark
-    .article-content
-    [style*='background:#fff']:not([class*='badge']):not(img),
-  .dark
-    .article-content
-    [style*='background: #fff']:not([class*='badge']):not(img),
-  .dark
-    .article-content
-    [style*='background:#ffffff']:not([class*='badge']):not(img),
-  .dark
-    .article-content
-    [style*='background: #ffffff']:not([class*='badge']):not(img),
+  .dark .article-content [style*='background:#fff']:not([class*='badge']):not(img),
+  .dark .article-content [style*='background: #fff']:not([class*='badge']):not(img),
+  .dark .article-content [style*='background:#ffffff']:not([class*='badge']):not(img),
+  .dark .article-content [style*='background: #ffffff']:not([class*='badge']):not(img),
   .dark .article-content [style*='background:#f0f4ff']:not([class*='badge']),
   .dark .article-content [style*='background: #f0f4ff']:not([class*='badge']),
   .dark .article-content [style*='background:#eff6ff']:not([class*='badge']),
@@ -641,13 +727,130 @@
   .dark .article-content [style*='background:#f9fafb']:not([class*='badge']),
   .dark .article-content [style*='background: #f9fafb']:not([class*='badge']),
   .dark .article-content [style*='background:#dbe3ef']:not([class*='badge']),
-  .dark .article-content [style*='background: #dbe3ef']:not([class*='badge']) {
-    background: #0b132b !important;
-    background-color: #0b132b !important;
+  .dark .article-content [style*='background: #dbe3ef']:not([class*='badge']),
+  .dark .article-content [style*='background:#eef3f8']:not([class*='badge']),
+  .dark .article-content [style*='background: #eef3f8']:not([class*='badge']),
+  .dark .article-content [style*='background:#EEF3F8']:not([class*='badge']),
+  .dark .article-content [style*='background: #EEF3F8']:not([class*='badge']),
+  .dark .article-content [style*='background:#eef2fa']:not([class*='badge']),
+  .dark .article-content [style*='background: #eef2fa']:not([class*='badge']),
+  .dark .article-content [style*='background:#eef1fa']:not([class*='badge']),
+  .dark .article-content [style*='background: #eef1fa']:not([class*='badge']),
+  .dark .article-content [style*='background:#f0f4fa']:not([class*='badge']),
+  .dark .article-content [style*='background: #f0f4fa']:not([class*='badge']),
+  .dark .article-content [style*='background:#f0f7ff']:not([class*='badge']),
+  .dark .article-content [style*='background: #f0f7ff']:not([class*='badge']),
+  .dark .article-content [style*='background:#f7f7f7']:not([class*='badge']),
+  .dark .article-content [style*='background: #f7f7f7']:not([class*='badge']),
+  .dark .article-content [style*='background:#fafafa']:not([class*='badge']),
+  .dark .article-content [style*='background: #fafafa']:not([class*='badge']),
+  .dark .article-content [style*='background:#fafbfc']:not([class*='badge']),
+  .dark .article-content [style*='background: #fafbfc']:not([class*='badge']) {
+    background: #0d1726 !important;
+    background-color: #0d1726 !important;
     border-color: #1e293b !important;
   }
 
+  /* Direct inline warm/cream/amber box overrides in dark mode */
+  .dark .article-content [style*='background:#F7F3E8'],
+  .dark .article-content [style*='background: #F7F3E8'],
+  .dark .article-content [style*='background:#f7f3e8'],
+  .dark .article-content [style*='background: #f7f3e8'],
+  .dark .article-content [style*='background:#fdf8e7'],
+  .dark .article-content [style*='background: #fdf8e7'],
+  .dark .article-content [style*='background:#fef9e7'],
+  .dark .article-content [style*='background: #fef9e7'],
+  .dark .article-content [style*='background:#fef9ee'],
+  .dark .article-content [style*='background: #fef9ee'],
+  .dark .article-content [style*='background:#fdf6e3'],
+  .dark .article-content [style*='background: #fdf6e3'],
+  .dark .article-content [style*='background:#f5f1e6'],
+  .dark .article-content [style*='background: #f5f1e6'],
+  .dark .article-content [style*='background:#f3ede3'],
+  .dark .article-content [style*='background: #f3ede3'],
+  .dark .article-content [style*='background:#f9f7f3'],
+  .dark .article-content [style*='background: #f9f7f3'],
+  .dark .article-content [style*='background:#f8f4ee'],
+  .dark .article-content [style*='background: #f8f4ee'],
+  .dark .article-content [style*='background:#faf6ed'],
+  .dark .article-content [style*='background: #faf6ed'],
+  .dark .article-content [style*='background:#f5efe6'],
+  .dark .article-content [style*='background: #f5efe6'],
+  .dark .article-content [style*='background:#fff7ed'],
+  .dark .article-content [style*='background: #fff7ed'],
+  .dark .article-content [style*='background:#fffbeb'],
+  .dark .article-content [style*='background: #fffbeb'],
+  .dark .article-content [style*='background:#fef3c7'],
+  .dark .article-content [style*='background: #fef3c7'],
+  .dark .article-content [style*='background:#fef9c3'],
+  .dark .article-content [style*='background: #fef9c3'],
+  .dark .article-content [style*='background:#fefce8'],
+  .dark .article-content [style*='background: #fefce8'],
+  .dark .article-content [style*='background:#fff3cd'],
+  .dark .article-content [style*='background: #fff3cd'],
+  .dark .article-content [style*='background:#fffaf5'],
+  .dark .article-content [style*='background: #fffaf5'],
+  .dark .article-content [style*='background:#ffedd5'],
+  .dark .article-content [style*='background: #ffedd5'],
+  .dark .article-content [style*='background:#fed7aa'],
+  .dark .article-content [style*='background: #fed7aa'],
+  .dark .article-content [style*='background:#fef08a'],
+  .dark .article-content [style*='background: #fef08a'] {
+    background: #141c2b !important;
+    background-color: #141c2b !important;
+    border-color: rgba(245, 158, 11, 0.45) !important;
+  }
+
+  /* High contrast text inside warm boxes */
+  .dark .article-content [style*='background:#F7F3E8'] p,
+  .dark .article-content [style*='background: #F7F3E8'] p,
+  .dark .article-content [style*='background:#f7f3e8'] p,
+  .dark .article-content [style*='background: #f7f3e8'] p,
+  .dark .article-content [style*='background:#fdf8e7'] p,
+  .dark .article-content [style*='background: #fdf8e7'] p,
+  .dark .article-content [style*='background:#fef9e7'] p,
+  .dark .article-content [style*='background: #fef9e7'] p,
+  .dark .article-content [style*='background:#fdf6e3'] p,
+  .dark .article-content [style*='background: #fdf6e3'] p,
+  .dark .article-content [style*='background:#f5f1e6'] p,
+  .dark .article-content [style*='background: #f5f1e6'] p,
+  .dark .article-content [style*='background:#fefce8'] p,
+  .dark .article-content [style*='background: #fefce8'] p,
+  .dark .article-content [style*='background:#fffbeb'] p,
+  .dark .article-content [style*='background: #fffbeb'] p,
+  .dark .article-content [style*='background:#fff7ed'] p,
+  .dark .article-content [style*='background: #fff7ed'] p,
+  .dark .article-content [style*='background:#fef3c7'] p,
+  .dark .article-content [style*='background: #fef3c7'] p {
+    color: #e2e8f0 !important;
+  }
+
+  .dark .article-content [style*='background:#F7F3E8'] strong,
+  .dark .article-content [style*='background: #F7F3E8'] strong,
+  .dark .article-content [style*='background:#f7f3e8'] strong,
+  .dark .article-content [style*='background: #f7f3e8'] strong,
+  .dark .article-content [style*='background:#fdf8e7'] strong,
+  .dark .article-content [style*='background: #fdf8e7'] strong,
+  .dark .article-content [style*='background:#fef9e7'] strong,
+  .dark .article-content [style*='background: #fef9e7'] strong,
+  .dark .article-content [style*='background:#fdf6e3'] strong,
+  .dark .article-content [style*='background: #fdf6e3'] strong,
+  .dark .article-content [style*='background:#f5f1e6'] strong,
+  .dark .article-content [style*='background: #f5f1e6'] strong {
+    color: #fbbf24 !important;
+  }
+
   /* Color adaptations for dark inline text in dark mode */
+  .dark .article-content [style*='color:#0B2C4A'],
+  .dark .article-content [style*='color: #0B2C4A'],
+  .dark .article-content [style*='color:#0b2c4a'],
+  .dark .article-content [style*='color: #0b2c4a'],
+  .dark .article-content [style*='color:#1a2a5e'],
+  .dark .article-content [style*='color: #1a2a5e'],
+  .dark .article-content [style*='color:#0f2342'],
+  .dark .article-content [style*='color: #0f2342'],
+  .dark .article-content [style*='color:#1a3560'],
+  .dark .article-content [style*='color: #1a3560'],
   .dark .article-content [style*='color:#1e3a5f'],
   .dark .article-content [style*='color: #1e3a5f'],
   .dark .article-content [style*='color:#1a1a2e'],
@@ -658,27 +861,126 @@
   .dark .article-content [style*='color: #111827'],
   .dark .article-content [style*='color:#1e293b'],
   .dark .article-content [style*='color: #1e293b'],
+  .dark .article-content [style*='color:#1f2937'],
+  .dark .article-content [style*='color: #1f2937'],
+  .dark .article-content [style*='color:#374151'],
+  .dark .article-content [style*='color: #374151'],
+  .dark .article-content [style*='color:#334155'],
+  .dark .article-content [style*='color: #334155'],
+  .dark .article-content [style*='color:#475569'],
+  .dark .article-content [style*='color: #475569'],
   .dark .article-content [style*='color:#000000'],
   .dark .article-content [style*='color: #000000'],
   .dark .article-content [style*='color:#000'],
   .dark .article-content [style*='color: #000'],
+  .dark .article-content [style*='color:#222'],
+  .dark .article-content [style*='color: #222'],
   .dark .article-content [style*='color:#333'],
-  .dark .article-content [style*='color: #333'] {
+  .dark .article-content [style*='color: #333'],
+  .dark .article-content [style*='color:#444'],
+  .dark .article-content [style*='color: #444'],
+  .dark .article-content [style*='color:#555'],
+  .dark .article-content [style*='color: #555'],
+  .dark .article-content [style*='color:#666'],
+  .dark .article-content [style*='color: #666'],
+  .dark .article-content [style*='color:#666666'],
+  .dark .article-content [style*='color: #666666'],
+  .dark .article-content [style*='color:#2d2d2d'],
+  .dark .article-content [style*='color: #2d2d2d'],
+  .dark .article-content [style*='color:#3d3d3d'],
+  .dark .article-content [style*='color: #3d3d3d'],
+  .dark .article-content [style*='color:#2c3e50'],
+  .dark .article-content [style*='color: #2c3e50'],
+  .dark .article-content [style*='color:#5d4037'],
+  .dark .article-content [style*='color: #5d4037'] {
     color: #e2e8f0 !important;
   }
 
+  /* Strong and headings with dark inline colors in dark mode */
+  .dark .article-content strong[style*='color:#0B2C4A'],
+  .dark .article-content strong[style*='color: #0B2C4A'],
+  .dark .article-content strong[style*='color:#0b2c4a'],
+  .dark .article-content strong[style*='color: #0b2c4a'],
+  .dark .article-content strong[style*='color:#1a2a5e'],
+  .dark .article-content strong[style*='color: #1a2a5e'],
+  .dark .article-content strong[style*='color:#1e3a5f'],
+  .dark .article-content strong[style*='color: #1e3a5f'],
+  .dark .article-content strong[style*='color:#0f172a'],
+  .dark .article-content strong[style*='color: #0f172a'],
+  .dark .article-content strong[style*='color:#000'],
+  .dark .article-content strong[style*='color: #000'],
+  .dark .article-content [style*='color:#0B2C4A'] strong,
+  .dark .article-content [style*='color: #0B2C4A'] strong,
+  .dark .article-content [style*='color:#0b2c4a'] strong,
+  .dark .article-content [style*='color: #0b2c4a'] strong,
+  .dark .article-content [style*='color:#1a2a5e'] strong,
+  .dark .article-content [style*='color: #1a2a5e'] strong,
+  .dark .article-content [style*='color:#1e3a5f'] strong,
+  .dark .article-content [style*='color: #1e3a5f'] strong,
+  .dark .article-content [style*='color:#0f172a'] strong,
+  .dark .article-content [style*='color: #0f172a'] strong,
+  .dark .article-content [style*='color:#0B2C4A'] b,
+  .dark .article-content [style*='color: #0B2C4A'] b,
+  .dark .article-content [style*='color:#0b2c4a'] b,
+  .dark .article-content [style*='color: #0b2c4a'] b {
+    color: #fbbf24 !important;
+  }
+
   /* Specific semantic accents in dark mode */
+  .dark .article-content [style*='color:#78350f'],
+  .dark .article-content [style*='color: #78350f'],
+  .dark .article-content [style*='color:#92400e'],
+  .dark .article-content [style*='color: #92400e'],
+  .dark .article-content [style*='color:#b45309'],
+  .dark .article-content [style*='color: #b45309'],
+  .dark .article-content [style*='color:#5a4a12'],
+  .dark .article-content [style*='color: #5a4a12'],
+  .dark .article-content [style*='color:#8a6d1a'],
+  .dark .article-content [style*='color: #8a6d1a'],
+  .dark .article-content [style*='color:#8a6d00'],
+  .dark .article-content [style*='color: #8a6d00'],
+  .dark .article-content [style*='color:#c9a227'],
+  .dark .article-content [style*='color: #c9a227'],
+  .dark .article-content [style*='color:#5b3a06'],
+  .dark .article-content [style*='color: #5b3a06'],
+  .dark .article-content [style*='color:#854d0e'],
+  .dark .article-content [style*='color: #854d0e'],
+  .dark .article-content [style*='color:#7c2d12'],
+  .dark .article-content [style*='color: #7c2d12'] {
+    color: #fbbf24 !important;
+  }
+
+  .dark .article-content [style*='color:#14532d'],
+  .dark .article-content [style*='color: #14532d'],
+  .dark .article-content [style*='color:#166534'],
+  .dark .article-content [style*='color: #166534'],
   .dark .article-content [style*='color:#15803d'],
   .dark .article-content [style*='color: #15803d'],
   .dark .article-content [style*='color:#16a34a'],
-  .dark .article-content [style*='color: #16a34a'] {
+  .dark .article-content [style*='color: #16a34a'],
+  .dark .article-content [style*='color:#064e3b'],
+  .dark .article-content [style*='color: #064e3b'],
+  .dark .article-content [style*='color:#065f46'],
+  .dark .article-content [style*='color: #065f46'],
+  .dark .article-content [style*='color:#047857'],
+  .dark .article-content [style*='color: #047857'] {
     color: #4ade80 !important;
   }
 
+  .dark .article-content [style*='color:#991b1b'],
+  .dark .article-content [style*='color: #991b1b'],
+  .dark .article-content [style*='color:#7f1d1d'],
+  .dark .article-content [style*='color: #7f1d1d'],
   .dark .article-content [style*='color:#b91c1c'],
   .dark .article-content [style*='color: #b91c1c'],
   .dark .article-content [style*='color:#dc2626'],
-  .dark .article-content [style*='color: #dc2626'] {
+  .dark .article-content [style*='color: #dc2626'],
+  .dark .article-content [style*='color:#c0392b'],
+  .dark .article-content [style*='color: #c0392b'],
+  .dark .article-content [style*='color:#9b2226'],
+  .dark .article-content [style*='color: #9b2226'],
+  .dark .article-content [style*='color:#e74c3c'],
+  .dark .article-content [style*='color: #e74c3c'] {
     color: #f87171 !important;
   }
 
@@ -689,10 +991,16 @@
     color: #38bdf8 !important;
   }
 
+  .dark .article-content [style*='color:#1e3a8a'],
+  .dark .article-content [style*='color: #1e3a8a'],
+  .dark .article-content [style*='color:#1e40af'],
+  .dark .article-content [style*='color: #1e40af'],
   .dark .article-content [style*='color:#1d4ed8'],
   .dark .article-content [style*='color: #1d4ed8'],
   .dark .article-content [style*='color:#2563eb'],
-  .dark .article-content [style*='color: #2563eb'] {
+  .dark .article-content [style*='color: #2563eb'],
+  .dark .article-content [style*='color:#1a56db'],
+  .dark .article-content [style*='color: #1a56db'] {
     color: #60a5fa !important;
   }
 
