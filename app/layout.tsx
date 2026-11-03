@@ -117,7 +117,11 @@ export default async function RootLayout({
                                         m.indexOf('too much recursion') !== -1 ||
                                         (m.indexOf('stack') !== -1 && m.indexOf('maximum') !== -1);
                   var isThirdPartyClarity = u.indexOf('clarity.ms') !== -1 || m.indexOf('clarity') !== -1;
-                  return isScriptError || isStackOverflow || isThirdPartyClarity;
+                  var isHydration = m.indexOf('react error #418') !== -1 ||
+                                    m.indexOf('react error #423') !== -1 ||
+                                    m.indexOf('react error #425') !== -1 ||
+                                    m.indexOf('hydration') !== -1;
+                  return isScriptError || isStackOverflow || isThirdPartyClarity || isHydration;
                 }
                 window.addEventListener('error', function(e) {
                   if (isIgnored(e.message, e.filename, e.lineno)) {
