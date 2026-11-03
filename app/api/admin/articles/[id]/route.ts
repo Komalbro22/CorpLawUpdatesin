@@ -286,13 +286,17 @@ async function handleArticleUpdate(request: NextRequest, params: Promise<{ id: s
       }, { status: 400 })
     }
 
-    if (body.published_at && updatedArticle?.slug && !updatedArticle.noindex) {
-      submitArticleToIndexNow(updatedArticle.slug).catch(
-        err => console.error('IndexNow error:', err)
-      )
-      submitArticleToGoogleIndexing(updatedArticle.slug).catch(
-        err => console.error('Google Indexing error:', err)
-      )
+    const isCurrentlyPublished = Boolean(updatedArticle?.published_at)
+    if (isCurrentlyPublished && updatedArticle?.slug && !updatedArticle.noindex) {
+      const oldSlug = (oldArticle?.slug && oldArticle.slug !== updatedArticle.slug) ? oldArticle.slug : undefined
+      try {
+        await Promise.allSettled([
+          submitArticleToIndexNow(updatedArticle.slug, oldSlug),
+          submitArticleToGoogleIndexing(updatedArticle.slug),
+        ])
+      } catch (indexErr) {
+        console.error('[Article Update] Indexing error:', indexErr)
+      }
     }
 
     revalidateArticleMutation({

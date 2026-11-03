@@ -47,12 +47,14 @@ export async function POST(
     }
 
     if (updatedArticle?.slug && !updatedArticle.noindex) {
-      submitArticleToIndexNow(updatedArticle.slug).catch(err =>
-        console.error('IndexNow publish error:', err)
-      )
-      submitArticleToGoogleIndexing(updatedArticle.slug).catch(err =>
-        console.error('Google Indexing publish error:', err)
-      )
+      try {
+        await Promise.allSettled([
+          submitArticleToIndexNow(updatedArticle.slug),
+          submitArticleToGoogleIndexing(updatedArticle.slug),
+        ])
+      } catch (indexErr) {
+        console.error('[Article Publish] Indexing error:', indexErr)
+      }
     }
 
     revalidateArticleMutation({

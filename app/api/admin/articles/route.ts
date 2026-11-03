@@ -330,12 +330,14 @@ export async function POST(request: NextRequest) {
     }
 
     if (createdArticle?.slug && createdArticle?.published_at && !createdArticle.noindex) {
-      submitArticleToIndexNow(createdArticle.slug).catch(
-        err => console.error('IndexNow submit failed:', err)
-      )
-      submitArticleToGoogleIndexing(createdArticle.slug).catch(
-        err => console.error('Google Indexing submit failed:', err)
-      )
+      try {
+        await Promise.allSettled([
+          submitArticleToIndexNow(createdArticle.slug),
+          submitArticleToGoogleIndexing(createdArticle.slug),
+        ])
+      } catch (indexErr) {
+        console.error('[Article Create] Indexing error:', indexErr)
+      }
     }
 
     revalidateArticleMutation({

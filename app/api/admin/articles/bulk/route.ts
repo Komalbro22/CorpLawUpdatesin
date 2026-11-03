@@ -442,14 +442,15 @@ export async function POST(request: NextRequest) {
       })
 
       if (indexableUrlsToPing.length > 0) {
-        submitToIndexNow(indexableUrlsToPing).catch(err =>
-          console.error('[Articles Bulk] IndexNow submit failed:', err)
-        )
-        // Submit up to 10 URLs to Google Indexing API
         const googleBatch = indexableUrlsToPing.slice(0, 10)
-        submitUrlsToGoogleIndexing(googleBatch).catch(err =>
-          console.error('[Articles Bulk] Google Indexing submit failed:', err)
-        )
+        try {
+          await Promise.allSettled([
+            submitToIndexNow(indexableUrlsToPing),
+            submitUrlsToGoogleIndexing(googleBatch),
+          ])
+        } catch (indexErr) {
+          console.error('[Articles Bulk] Indexing error:', indexErr)
+        }
       }
     }
 
