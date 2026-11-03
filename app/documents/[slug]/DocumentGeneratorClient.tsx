@@ -2949,10 +2949,11 @@ export default function DocumentGeneratorClient({
                         paddingLeft: `${customMarginSide}px`,
                         paddingRight: `${customMarginSide}px`,
                       }}
+                      suppressHydrationWarning
                       dangerouslySetInnerHTML={{
                         __html: typeof window !== 'undefined' 
                           ? DOMPurify.sanitize(markdownToHtml(getCleanedContent(generatedContent)))
-                          : getCleanedContent(generatedContent)
+                          : markdownToHtml(getCleanedContent(generatedContent))
                       }}
                     />
                   </div>

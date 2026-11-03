@@ -32,6 +32,21 @@ export function TableSection({
   onRowClick,
 }: TableSectionProps) {
   const displayHeaders = onReport ? ['Done', ...headers, ''] : ['Done', ...headers]
+  const [doneMap, setDoneMap] = React.useState<Record<string, boolean>>({})
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+    const updateDone = () => {
+      try {
+        const stored = JSON.parse(localStorage.getItem('compliance_done') || '{}')
+        setDoneMap(stored)
+      } catch {}
+    }
+    updateDone()
+    window.addEventListener('compliance_done_updated', updateDone)
+    return () => window.removeEventListener('compliance_done_updated', updateDone)
+  }, [])
 
   return (
     <section>
@@ -81,7 +96,7 @@ export function TableSection({
                 } catch(e) {}
               }
               
-              const isDone = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('compliance_done') || '{}')[entryId] : false;
+              const isDone = mounted && Boolean(entryId && doneMap[entryId]);
               if (isDone) {
                  rowBg = 'bg-slate-100 dark:bg-slate-800 opacity-60';
                  urgencyBorder = 'border-l-4 border-slate-300 dark:border-slate-700';
@@ -91,6 +106,7 @@ export function TableSection({
                   key={entryId || i}
                   id={rowIds?.[i]}
                   data-entry-id={entryId}
+                  suppressHydrationWarning
                   className={`${rowBg} ${urgencyBorder} ${onRowClick ? 'cursor-pointer hover:bg-amber-50/60 dark:hover:bg-slate-700/50 transition-colors' : ''}`}
                   onClick={onRowClick && entryId ? () => onRowClick(entryId) : undefined}
                 >
@@ -99,6 +115,7 @@ export function TableSection({
                       type="checkbox" 
                       className="size-4 cursor-pointer"
                       checked={isDone}
+                      suppressHydrationWarning
                       onClick={(e) => {
                          e.stopPropagation();
                          if (typeof window !== 'undefined') {

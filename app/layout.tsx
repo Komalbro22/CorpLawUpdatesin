@@ -16,7 +16,7 @@ import TrackingScripts from '@/components/TrackingScripts'
 import ConsentGatedAnalytics from '@/components/ConsentGatedAnalytics'
 import ClientAuxiliary from '@/components/ClientAuxiliary'
 
-import ThemeScript from '@/components/ThemeScript'
+import { themeScript } from '@/lib/theme-script'
 import { fontVariables } from '@/lib/fonts'
 import './globals.css'
 
@@ -98,26 +98,44 @@ export default async function RootLayout({
   return (
     <html lang="en" data-scroll-behavior="smooth" className={fontVariables} suppressHydrationWarning>
       <head suppressHydrationWarning>
-        <ThemeScript />
+        <script
+          id="theme-script"
+          dangerouslySetInnerHTML={{ __html: themeScript }}
+          suppressHydrationWarning
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function(){
-                function isCrossScriptError(msg, url, line) {
+                if (window.__clu_err_hooked) return;
+                window.__clu_err_hooked = true;
+                function isIgnored(msg, url, line) {
                   var m = (msg || '').toLowerCase();
-                  return (m.indexOf('script error') !== -1) && (!url || line === 0);
+                  return (m.indexOf('script error') !== -1 && (!url || line === 0)) ||
+                         (m.indexOf('clarity') !== -1 && m.indexOf('stack') !== -1);
                 }
                 window.addEventListener('error', function(e) {
-                  if (isCrossScriptError(e.message, e.filename, e.lineno)) {
+                  if (isIgnored(e.message, e.filename, e.lineno)) {
                     if (e.stopImmediatePropagation) e.stopImmediatePropagation();
                     e.preventDefault();
                     return true;
                   }
                 }, true);
                 var prev = window.onerror;
-                window.onerror = function(msg, url, line) {
-                  if (isCrossScriptError(msg, url, line)) return true;
-                  if (prev) return prev.apply(this, arguments);
+                var inHandler = false;
+                window.onerror = function(msg, url, line, col, err) {
+                  if (isIgnored(msg, url, line)) return true;
+                  if (inHandler) return false;
+                  if (typeof prev === 'function' && prev !== window.onerror) {
+                    try {
+                      inHandler = true;
+                      return prev.apply(this, arguments);
+                    } catch (e) {
+                      return true;
+                    } finally {
+                      inHandler = false;
+                    }
+                  }
                 };
               })();
             `,
