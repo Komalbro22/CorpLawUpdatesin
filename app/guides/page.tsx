@@ -8,8 +8,8 @@ import { BookOpen, ChevronRight } from 'lucide-react'
 
 export const revalidate = 300 // 5 minutes fallback; instant on-demand via revalidateArticleMutation
 
-const PAGE_TITLE = 'Compliance Guides — Step-by-Step Filing Guides | CorpLawUpdates'
-const PAGE_DESCRIPTION = 'Complete step-by-step corporate law filing and compliance guides for MCA, SEBI, IBC, and Taxation. Verified against official notifications and rules.'
+const PAGE_TITLE = 'Compliance Guides & Filing Kits'
+const PAGE_DESCRIPTION = 'Step-by-step corporate law filing and compliance guides for MCA, SEBI, IBC, and Taxation. Verified against official notifications, rules, and circulars.'
 const CANONICAL_URL = 'https://www.corplawupdates.in/guides'
 
 export const metadata: Metadata = {
@@ -118,6 +118,7 @@ export default async function GuidesPage() {
         </div>
 
         {/* Guides Client Interface */}
+        <h2 className="sr-only">Available Compliance Guides</h2>
         <GuidesClient initialGuides={guides as any} />
       </main>
     </div>

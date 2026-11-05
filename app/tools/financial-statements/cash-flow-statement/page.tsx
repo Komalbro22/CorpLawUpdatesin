@@ -18,9 +18,9 @@ const canonicalUrl = 'https://www.corplawupdates.in/tools/financial-statements/c
 const ogImageUrl = 'https://www.corplawupdates.in/api/og?title=Cash+Flow+Statement+Builder+(Indirect+Method)&category=Tools'
 
 export const metadata: Metadata = {
-  title: 'Cash Flow Statement Format Excel | Indirect Method',
+  title: 'Cash Flow Statement — Format & Tool',
   description:
-    'Free Cash Flow Statement builder using the indirect method (AS-3 & Ind AS 7). Convert P&L and Balance Sheet movements into operating, investing, and financing cash flows with Section 2(40) exemption guidance.',
+    'Free Cash Flow Statement builder using indirect method (AS-3 & Ind AS 7). Convert P&L and balance sheet items into operating, investing, and financing flows.',
   alternates: {
     canonical: canonicalUrl
   },

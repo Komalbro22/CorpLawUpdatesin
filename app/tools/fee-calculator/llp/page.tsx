@@ -8,10 +8,10 @@ import ReaderFeedback from '@/components/ReaderFeedback'
 
 export const metadata: Metadata = {
   title: {
-    absolute: 'LLP Fee Calculator — Form 8, Form 11, Form 3 Late Fees & FiLLiP Incorporation (FY 2026-27)',
+    absolute: 'LLP Fee Calculator — Form 8 & 11 | CorpLawUpdates.in',
   },
   description:
-    'Calculate MCA LLP statutory filing fees, Form 8 & 11 late multipliers, Form 3 agreement fee, Form 24 strike-off, and Form FiLLiP incorporation costs on MCA V3.',
+    'Calculate MCA LLP statutory filing fees, Form 8 & 11 late multipliers, Form 3 agreement fee, and Form FiLLiP incorporation costs on MCA V3.',
   keywords: [
     'LLP fee calculator',
     'LLP late fee calculator',

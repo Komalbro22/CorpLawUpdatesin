@@ -32,7 +32,7 @@ export const revalidate = false
 const pageUrl = 'https://www.corplawupdates.in/documents/director-appointment-letter'
 
 export const metadata: Metadata = {
-  title: 'Director Appointment Letter Format (India) — Free Word Download',
+  title: 'Director Appointment Letter (India)',
   description:
     'Free director appointment letter format for private limited companies in India. Companies Act, 2013 compliant — DIR-2, DIN, filing checklist included.',
   alternates: {

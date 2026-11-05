@@ -38,8 +38,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const msfRate = settings.msf_rate || '5.75%'
 
   return {
-    title: `Current RBI Repo Rate in India: ${rate} (Effective Date: 7 Oct 2026) | Loan Reset, SDF, MSF & Next MPC`,
-    description: `The new RBI repo rate of ${rate} is effective immediately from 7 October 2026 (commercial bank loan resets from 8 October 2026). Check SDF (${sdfRate}), MSF (${msfRate}), Bank Rate, home loan EMI calculator, and next December MPC dates (${nextMpc}).`,
+    title: { absolute: `Current RBI Repo Rate: ${rate} | CorpLawUpdates.in` },
+    description: `Current RBI repo rate (${rate}), SDF (${sdfRate}), MSF (${msfRate}), and Bank Rate in 2026. Calculate loan EMI adjustments and track next MPC meeting dates (${nextMpc}).`,
     keywords: [
       'new repo rate effective date',
       'rbi repo rate effective date',
@@ -81,15 +81,15 @@ export async function generateMetadata(): Promise<Metadata> {
     ],
     alternates: { canonical: 'https://www.corplawupdates.in/rbi/repo-rate' },
     openGraph: {
-      title: `Current RBI Repo Rate in India: ${rate} (Effective Date: 7 Oct 2026) — Live Status`,
-      description: `Official RBI benchmark repo rate stands at ${rate} in October 2026 with a Calibrated Tightening stance (+25 bps hike). Effective immediately from 7 October 2026 (bank loan resets from 8 October 2026). View SDF (${sdfRate}), MSF (${msfRate}), next December MPC meeting schedule (${nextMpc}), and calculate loan EMI impact.`,
+      title: `Current RBI Repo Rate: ${rate} | CorpLawUpdates.in`,
+      description: `Current RBI repo rate (${rate}), SDF (${sdfRate}), MSF (${msfRate}), and Bank Rate in 2026. Calculate loan EMI adjustments and track next MPC meeting dates (${nextMpc}).`,
       url: 'https://www.corplawupdates.in/rbi/repo-rate',
       type: 'article',
     },
     twitter: {
       card: 'summary_large_image',
-      title: `Current RBI Repo Rate: ${rate} (Effective Date: 7 Oct 2026)`,
-      description: `Official RBI repo rate stands at ${rate}, effective immediately from 7 October 2026. Complete breakdown of SDF (${sdfRate}), MSF (${msfRate}), Bank Rate, bank loan reset timelines, next December MPC meeting schedule, and interactive EMI calculator.`,
+      title: `Current RBI Repo Rate: ${rate} | CorpLawUpdates.in`,
+      description: `Current RBI repo rate (${rate}), SDF (${sdfRate}), MSF (${msfRate}), and Bank Rate in 2026. Calculate loan EMI adjustments and track next MPC meeting dates (${nextMpc}).`,
     }
   }
 }

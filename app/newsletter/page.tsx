@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 export const revalidate = false
 
 export const metadata: Metadata = {
-  title: 'Subscribe — Free Corporate Law Newsletter India',
+  title: 'Corporate Law Newsletter',
   description: 'Subscribe to India\'s free corporate law newsletter. Weekly MCA, SEBI, RBI updates delivered to your inbox. No spam. Unsubscribe anytime.',
   alternates: {
     canonical: 'https://www.corplawupdates.in/newsletter',

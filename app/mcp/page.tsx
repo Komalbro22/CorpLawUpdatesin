@@ -22,9 +22,9 @@ import {
 import JsonLd from '@/components/JsonLd';
 
 export const metadata: Metadata = {
-  title: 'WebMCP AI Agent Hub — Connect AI Agents to Indian Corporate Law Intelligence',
+  title: 'WebMCP AI Agent Hub',
   description:
-    'Official WebMCP (Web Model Context Protocol) documentation for CorpLawUpdates.in. Connect Chrome AI agents, Claude Code, Cursor, and LLMs to 11+ live corporate law tools, statutory fee calculators, compliance calendars, and legal document templates.',
+    'Connect AI agents to Indian corporate law intelligence. WebMCP protocols for statutory fee calculators, compliance calendars, and legal document templates.',
   keywords: [
     'WebMCP',
     'Web Model Context Protocol',

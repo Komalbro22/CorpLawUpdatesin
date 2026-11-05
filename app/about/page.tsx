@@ -5,7 +5,7 @@ import { getSiteStats } from '@/lib/site-stats'
 export const revalidate = 86400
 
 export const metadata: Metadata = {
-  title: 'About Us – CorpLawUpdates.in',
+  title: 'About Us',
   description: 'Learn about CorpLawUpdates.in — India\'s free corporate law intelligence platform providing MCA, SEBI, RBI, CCI, Labour Law updates for professionals.',
   alternates: {
     canonical: 'https://www.corplawupdates.in/about',

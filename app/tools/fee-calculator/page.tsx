@@ -279,9 +279,9 @@ export default function FeeCalculatorHub() {
                           {calc.badge}
                         </span>
                       </div>
-                      <h3 className="text-white font-bold text-lg sm:text-xl leading-snug break-words">
+                      <h2 className="text-white font-bold text-lg sm:text-xl leading-snug break-words">
                         {calc.label}
-                      </h3>
+                      </h2>
                       <p className="text-white/70 text-xs mt-1 font-medium tracking-wide">
                         {calc.stats}
                       </p>
@@ -316,9 +316,9 @@ export default function FeeCalculatorHub() {
                           {calc.badge}
                         </span>
                       </div>
-                      <h3 className="text-white font-bold text-xl leading-snug">
+                      <h2 className="text-white font-bold text-xl leading-snug">
                         {calc.label}
-                      </h3>
+                      </h2>
                       <p className="text-white/60 text-xs mt-1 font-medium tracking-wide">
                         {calc.stats}
                       </p>

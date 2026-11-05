@@ -169,7 +169,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   if (!term) {
-    return { title: 'Term Not Found | CorpLawUpdates' }
+    return { title: 'Term Not Found' }
   }
 
   const parsed = parseGlossaryMetadata(term.extended_note || '')
@@ -180,16 +180,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const cleanDescription = (term.definition || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
 
-  const title = parsed.seoTitle.trim()
-    ? parsed.seoTitle.trim()
-    : `${term.term} — Meaning, Definition | CorpLawUpdates Legal Glossary`
+  const rawTitle = parsed.seoTitle.trim() || `${term.term} — Meaning & Definition`
+  const titleMeta = rawTitle.length <= 38
+    ? rawTitle
+    : { absolute: rawTitle.length <= 60 ? rawTitle : `${rawTitle.slice(0, 57)}...` }
 
-  const description = parsed.seoDescription.trim()
-    ? parsed.seoDescription.trim()
-    : `${term.term} meaning under Indian corporate law: ${cleanDescription.slice(0, 160)}. Learn key legal provisions, statutory authorities, and compliance checklists.`
+  const fallbackDesc = `${term.term} meaning under Indian corporate law: ${cleanDescription.slice(0, 90)}. Key statutory provisions and compliance checklist.`
+  const description = parsed.seoDescription.trim() || (fallbackDesc.length <= 155 ? fallbackDesc : `${fallbackDesc.slice(0, 152)}...`)
 
   return {
-    title,
+    title: titleMeta,
     description,
     alternates: {
       canonical: `https://www.corplawupdates.in/glossary/${term.slug}`,

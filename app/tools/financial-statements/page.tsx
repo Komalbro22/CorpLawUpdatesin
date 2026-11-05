@@ -23,9 +23,9 @@ const canonicalUrl = 'https://www.corplawupdates.in/tools/financial-statements'
 const ogImageUrl = 'https://www.corplawupdates.in/api/og?title=Financial+Statements+Builder+%26+Schedule+III+Formats&category=Tools'
 
 export const metadata: Metadata = {
-  title: 'Financial Statements Builder & Schedule III Formats | Free Tools',
+  title: 'Financial Statements Builder Tool',
   description:
-    'Free Schedule III Financial Statements Builder for Indian companies. Prepare Balance Sheets, Profit & Loss Statements, and Indirect Cash Flows (Division I AS & Division II Ind AS) with Excel, PDF, and Word downloads.',
+    'Free Schedule III Financial Statements Builder for Indian companies. Prepare Balance Sheets, P&L Statements, and Cash Flows with Excel, PDF, and Word downloads.',
   alternates: {
     canonical: canonicalUrl
   },

@@ -9,14 +9,14 @@ export const revalidate = false // Fully static; instant on-demand via revalidat
 
 export const metadata: Metadata = {
   title: {
-    absolute: 'Legal Glossary — Indian Corporate Law Terms | CorpLawUpdates.in',
+    absolute: 'Legal Glossary — Corporate Law Terms | CorpLawUpdates.in',
   },
-  description: 'Plain-language definitions of 180+ Indian corporate law terms covering IBC, CIRP, SEBI, MCA, RBI, and FEMA — simplified for professionals, CA, CMA, and law students.',
+  description: 'Plain-language definitions of 180+ Indian corporate law terms covering IBC, CIRP, SEBI, MCA, RBI, and FEMA — simplified for CS, CA, and legal professionals.',
   alternates: {
     canonical: 'https://www.corplawupdates.in/glossary',
   },
   openGraph: {
-    title: 'Legal Glossary — Indian Corporate Law Terms | CorpLawUpdates.in',
+    title: 'Legal Glossary — Corporate Law Terms | CorpLawUpdates.in',
     description: 'Definitions of IBC, SEBI, MCA, RBI, FEMA terms for professionals.',
     url: 'https://www.corplawupdates.in/glossary',
     type: 'website',

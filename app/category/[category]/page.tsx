@@ -886,34 +886,34 @@ export async function generateMetadata(
     const dynamicSuffix = latestUpdate ? ` Latest: ${latestUpdate.title}.` : ''
 
     let title = isPaginated
-        ? `Latest ${categoryName} Circulars, Notifications & Updates (Page ${pageNum}) – India`
-        : `Latest ${categoryName} Circulars, Notifications & Updates Today – India`
+        ? `Latest ${categoryName} Updates (Page ${pageNum})`
+        : `Latest ${categoryName} Updates & Circulars`
 
     let description = isPaginated
-        ? `Page ${pageNum}: Latest ${categoryName} circulars, notifications and regulatory updates issued by ${CATEGORY_FULL_NAMES[cat] || categoryName}.`
-        : `Latest ${categoryName} circulars, notifications and statutory compliance updates issued by ${CATEGORY_FULL_NAMES[cat] || categoryName} for corporate professionals.`
+        ? `Page ${pageNum}: Latest ${categoryName} circulars and notifications issued by ${CATEGORY_FULL_NAMES[cat] || categoryName}.`
+        : `Track latest ${categoryName} circulars, statutory notifications, and compliance updates issued by ${CATEGORY_FULL_NAMES[cat] || categoryName}.`
 
     if (cat === 'taxation') {
         title = isPaginated
-            ? `Latest Taxation Updates (CBDT, CBIC & GST) 2026 – Page ${pageNum}`
-            : `Latest Taxation Updates (CBDT, CBIC & GST) Today – India`
+            ? `Taxation Updates (Page ${pageNum})`
+            : `Latest Tax Updates & Circulars`
         description = isPaginated
-            ? `Page ${pageNum}: Latest direct and indirect tax notifications, CBDT circulars, CBIC customs orders and GST compliance updates.`
-            : `Latest direct and indirect tax notifications, CBDT circulars, CBIC customs duty orders and GST compliance updates for corporate professionals.`
+            ? `Page ${pageNum}: Latest CBDT circulars, CBIC customs notifications, and GST compliance updates.`
+            : `Track latest CBDT income tax circulars, CBIC customs notifications, and GST compliance updates for corporate professionals.`
     } else if (cat === 'rbi') {
         title = isPaginated
-            ? `Latest RBI Circulars for Banks & NBFCs Today (2026) – Page ${pageNum}`
-            : `Latest RBI Circulars & Notifications Today (2026) – Directives for Banks & NBFCs`
+            ? `RBI Circulars for Banks (Page ${pageNum})`
+            : `Latest RBI Circulars & Directions`
         description = isPaginated
-            ? `Page ${pageNum}: Latest RBI circulars, notifications, and Master Directions issued by the Reserve Bank of India for Banks and NBFCs.`
-            : `Track latest RBI circulars, notifications and Master Directions for Commercial Banks and NBFCs with regulatory analysis and official PDF links.`
+            ? `Page ${pageNum}: Latest RBI circulars, notifications, and Master Directions for Banks and NBFCs.`
+            : `Track latest RBI circulars, notifications, and Master Directions for Commercial Banks and NBFCs with official PDF links.`
     } else if (cat === 'mca') {
         title = isPaginated
-            ? `Latest MCA Updates, Circulars & Due Dates 2026 – Page ${pageNum}`
-            : `Latest MCA Updates, Circulars & Notifications Today (2026) – Due Dates & Extensions`
+            ? `MCA Updates & Due Dates (Page ${pageNum})`
+            : `Latest MCA Updates & Circulars`
         description = isPaginated
-            ? `Page ${pageNum}: Latest MCA updates, circulars, notifications, annual filing due date extensions (AOC-4, MGT-7) and ROC statutory orders from Ministry of Corporate Affairs.`
-            : `Track latest MCA updates, circulars, notifications today, annual filing due date extensions (AOC-4, MGT-7) and MCA21 V3 compliance with official PDF links and fee calculators.`
+            ? `Page ${pageNum}: Latest MCA circulars, annual filing due dates, and ROC statutory orders.`
+            : `Track latest MCA circulars, annual filing due date extensions (AOC-4, MGT-7), and MCA21 V3 compliance with official PDF links.`
     }
 
     const url = isPaginated

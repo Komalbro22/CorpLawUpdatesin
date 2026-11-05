@@ -9,7 +9,7 @@ import { calculateMsmeInterest } from '@/lib/penaltyCalculator'
 
 export const metadata: Metadata = {
   title: {
-    absolute: 'MSME Interest Calculator — Section 16 Delayed Payment 3x Bank Rate (2026)',
+    absolute: 'MSME Interest Calculator — Sec 16 | CorpLawUpdates.in',
   },
   description: 'Calculate statutory compound interest with monthly rests on delayed payments to Micro and Small Enterprises under Section 16 of the MSMED Act.',
   keywords: [

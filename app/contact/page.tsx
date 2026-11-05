@@ -131,6 +131,9 @@ export default function ContactPage() {
 
                     {/* ── LEFT COLUMN ── */}
                     <div className="space-y-4">
+                        <h2 className="text-xl font-bold text-navy dark:text-white mb-2">
+                            Contact Channels
+                        </h2>
 
                         {contactCards.map((card) => {
                             const CardIcon = card.Icon

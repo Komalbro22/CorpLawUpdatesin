@@ -28,7 +28,7 @@ export const revalidate = false
 const pageUrl = 'https://www.corplawupdates.in/documents/bank-guarantee'
 
 export const metadata: Metadata = {
-  title: 'Bank Guarantee Format India (Word) — Free BG Draft Generator',
+  title: 'Bank Guarantee Format India (Word)',
   description:
     'Free bank guarantee format for India — financial, performance & advance payment BG drafts in Word/PDF. Stamp duty, invocation rules explained.',
   alternates: {

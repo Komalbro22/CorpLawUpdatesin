@@ -9,10 +9,10 @@ import { Scale, ShieldAlert, Sparkles, BookOpen, Clock, FileCheck } from 'lucide
 
 export const metadata: Metadata = {
   title: {
-    absolute: 'IBBI Fee Calculator — Delayed Filing Fees (Reg 47B & 40B) & Liquidation (2026)',
+    absolute: 'IBBI Fee Calculator — Liquidation | CorpLawUpdates.in',
   },
   description:
-    'Calculate statutory delayed filing fees under Regulation 47B (Liquidation Forms LIQ-1 to LIQ-4) and Regulation 40B (CIRP Forms) at ₹500/month + 18% GST per Circular No. IBBI/LIQ/107/2026, plus Liquidator realization fee slabs.',
+    'Calculate statutory delayed filing fees under IBBI Regulation 47B and Regulation 40B at ₹500/month + 18% GST, plus Liquidator realization fee slabs.',
   keywords: [
     'IBBI fee calculator',
     'IBBI late fee calculator',
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     canonical: 'https://www.corplawupdates.in/tools/fee-calculator/ibbi',
   },
   openGraph: {
-    title: 'IBBI Fee Calculator — Delayed Filing Fees & Liquidation | CorpLawUpdates',
+    title: 'IBBI Fee Calculator — Liquidation | CorpLawUpdates.in',
     description:
       'Calculate statutory delayed filing fees for Liquidation Forms (Reg 47B) & CIRP Forms (Reg 40B) at ₹500/month + 18% GST, plus Liquidator realization fee slabs.',
     url: 'https://www.corplawupdates.in/tools/fee-calculator/ibbi',
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'IBBI Fee Calculator — Delayed Filing Fees & Liquidation | CorpLawUpdates',
+    title: 'IBBI Fee Calculator — Liquidation | CorpLawUpdates.in',
     description:
       'Calculate statutory delayed filing fees under Regulation 47B & 40B at ₹500/month + 18% GST, updated for Circular No. IBBI/LIQ/107/2026.',
   },

@@ -25,9 +25,9 @@ import {
 import PoaClient from './PoaClient'
 
 export const metadata: Metadata = {
-  title: 'Power of Attorney Format (India) — Free Word Download',
+  title: 'Power of Attorney Format (India)',
   description:
-    'Free General Power of Attorney (GPA) and Special Power of Attorney (SPA) format for India in Word/PDF. Stamp paper guide, registration rules, NRI process. No sign-up.',
+    'Free General Power of Attorney (GPA) and Special Power of Attorney (SPA) formats for India in Word/PDF. Stamp paper guide, registration rules, NRI process.',
   keywords: [
     'power of attorney format india',
     'general power of attorney format word',

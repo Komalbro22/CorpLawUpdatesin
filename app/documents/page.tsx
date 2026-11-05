@@ -7,8 +7,8 @@ import { formatTemplateSource } from '@/lib/document-clause-checker'
 import { MVP_DOCUMENTS_META } from '@/lib/doc-generator/ai-engine'
 
 export const metadata: Metadata = {
-  title: 'Free Legal Document Generator India — Board Resolutions, Agreements | CorpLawUpdates.in',
-  description: 'Generate AI-assisted corporate document drafts based on statutory frameworks and secretarial standards. Board resolutions, MOA, director appointments, agreements — structured for professional review.',
+  title: 'Legal Document Generator India',
+  description: 'Generate statutory corporate documents, board resolutions, MOA drafts, and commercial agreements tailored to Indian corporate law and secretarial standards.',
   keywords: ['legal document generator', 'free board resolution generator', 'draft lease agreement india', 'online rent agreement format', 'mca compliance documents'],
   alternates: {
     canonical: 'https://www.corplawupdates.in/documents',

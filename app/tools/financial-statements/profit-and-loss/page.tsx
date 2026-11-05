@@ -18,9 +18,9 @@ const canonicalUrl = 'https://www.corplawupdates.in/tools/financial-statements/p
 const ogImageUrl = 'https://www.corplawupdates.in/api/og?title=Schedule+III+Profit+and+Loss+Statement+Builder&category=Tools'
 
 export const metadata: Metadata = {
-  title: 'Profit and Loss Statement Format Excel & PDF | Schedule III',
+  title: 'Profit & Loss Statement — Format',
   description:
-    'Free Schedule III Statement of Profit and Loss builder and format downloads (Excel, PDF, Word). Prepare statutory Division I Part II statements with revenue/expense groupings, tax provisions, and retained earnings roll-forwards.',
+    'Free Schedule III Statement of Profit and Loss builder in Excel, PDF, and Word. Prepare statutory Division I statements with tax provisions and roll-forwards.',
   alternates: {
     canonical: canonicalUrl
   },

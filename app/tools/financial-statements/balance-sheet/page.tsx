@@ -18,9 +18,9 @@ const canonicalUrl = 'https://www.corplawupdates.in/tools/financial-statements/b
 const ogImageUrl = 'https://www.corplawupdates.in/api/og?title=Schedule+III+Balance+Sheet+Builder+%26+Format+Download&category=Tools'
 
 export const metadata: Metadata = {
-  title: 'Balance Sheet Format PDF & Excel Download | Schedule III',
+  title: 'Balance Sheet Format — Schedule III',
   description:
-    'Free Schedule III Balance Sheet builder and format downloads (PDF, Excel, Word). Prepare statutory Division I statements from your trial balance with 2021 amendments, ageing schedules, and ratios.',
+    'Free Schedule III Balance Sheet builder and format downloads in PDF, Excel, and Word. Prepare statutory Division I statements with ageing schedules and ratios.',
   alternates: {
     canonical: canonicalUrl
   },

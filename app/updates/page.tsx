@@ -21,8 +21,8 @@ export async function generateMetadata(
   { searchParams }: { searchParams: Promise<{ search?: string, category?: string }> }
 ): Promise<Metadata> {
   const sParams = await searchParams
-  const title = `Latest Corporate Law Updates India (${CURRENT_YEAR}) – MCA, SEBI, RBI Circulars & Notifications`
-  const description = `Track real-time corporate law updates in India for ${CURRENT_YEAR}. Daily circulars, notifications & regulatory compliance briefs from MCA, SEBI, RBI, NCLT, IBC, CCI, Labour Law and FEMA for CS, CA & legal professionals.`
+  const title = `Latest Regulatory Updates ${CURRENT_YEAR}`
+  const description = `Track real-time corporate law updates in India for ${CURRENT_YEAR}. Daily circulars, notifications & regulatory amendments from MCA, SEBI, RBI, IBC & Tax bodies.`
   return {
     title,
     description,

@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const company = await getOrFetchCompany(cin)
 
   if (!company) {
-    return { title: 'Company Not Found | CorpLawUpdates.in' }
+    return { title: 'Company Not Found' }
   }
 
   const title = `${company.company_name} (CIN: ${company.cin}) — Compliance Status & Details | CorpLawUpdates`

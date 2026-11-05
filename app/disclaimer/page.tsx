@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-    title: 'Disclaimer | CorpLawUpdates.in',
+    title: 'Disclaimer',
     description: 'Legal disclaimer for CorpLawUpdates.in — Informational platform for Indian corporate law updates and compliance tools.',
     alternates: {
         canonical: 'https://www.corplawupdates.in/disclaimer',

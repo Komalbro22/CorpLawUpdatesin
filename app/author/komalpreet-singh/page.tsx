@@ -24,9 +24,9 @@ import {
 export const revalidate = 86400 // 24 hours
 
 export const metadata: Metadata = {
-  title: 'Komalpreet Singh – Founder & Independent Author | CorpLawUpdates.in',
+  title: 'Komalpreet Singh – Founder & Author',
   description:
-    'Author profile & research dossier for Komalpreet Singh, Founder and Independent Author at CorpLawUpdates.in. Specializing in MCA, SEBI, RBI, FEMA, and IBC corporate jurisprudence.',
+    'Author profile and research dossier for Komalpreet Singh, Founder at CorpLawUpdates.in, specializing in MCA, SEBI, RBI, FEMA, and IBC corporate jurisprudence.',
   alternates: {
     canonical: 'https://www.corplawupdates.in/author/komalpreet-singh',
   },
@@ -330,9 +330,9 @@ export default async function AuthorProfilePage() {
             <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-5 rounded-2xl flex gap-4">
               <Building2 className="size-6 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
               <div>
-                <h4 className="font-bold text-slate-900 dark:text-white text-base mb-1">
+                <h3 className="font-bold text-slate-900 dark:text-white text-base mb-1">
                   Ministry of Corporate Affairs (MCA) &amp; RoC
-                </h4>
+                </h3>
                 <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                   Companies Act 2013 governance, MCA21 V3 e-forms (AOC-4, MGT-7, DIR-3 KYC, PAS-3, SH-7), Section 446B
                   small company relief, and adjudication order trends.
@@ -343,9 +343,9 @@ export default async function AuthorProfilePage() {
             <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-5 rounded-2xl flex gap-4">
               <TrendingUp className="size-6 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
               <div>
-                <h4 className="font-bold text-slate-900 dark:text-white text-base mb-1">
+                <h3 className="font-bold text-slate-900 dark:text-white text-base mb-1">
                   SEBI &amp; Capital Market Regulations
-                </h4>
+                </h3>
                 <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                   SEBI (Listing Obligations and Disclosure Requirements) 2015, Prohibition of Insider Trading (PIT),
                   takeover regulations, and stock exchange compliance circulars.
@@ -356,9 +356,9 @@ export default async function AuthorProfilePage() {
             <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-5 rounded-2xl flex gap-4">
               <Landmark className="size-6 text-violet-600 dark:text-violet-400 shrink-0 mt-0.5" />
               <div>
-                <h4 className="font-bold text-slate-900 dark:text-white text-base mb-1">
+                <h3 className="font-bold text-slate-900 dark:text-white text-base mb-1">
                   Reserve Bank of India (RBI)
-                </h4>
+                </h3>
                 <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                   Master Directions for NBFCs, prudential frameworks, digital lending norms, payment aggregators, and
                   Monetary Policy Committee (MPC) repo rate decisions.
@@ -369,9 +369,9 @@ export default async function AuthorProfilePage() {
             <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 p-5 rounded-2xl flex gap-4">
               <Globe2 className="size-6 text-teal-600 dark:text-teal-400 shrink-0 mt-0.5" />
               <div>
-                <h4 className="font-bold text-slate-900 dark:text-white text-base mb-1">
+                <h3 className="font-bold text-slate-900 dark:text-white text-base mb-1">
                   FEMA, FDI &amp; Cross-Border
-                </h4>
+                </h3>
                 <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                   Foreign Direct Investment (FDI) reporting (FIRMS / FC-GPR), Overseas Direct Investment (ODI) rules,
                   External Commercial Borrowings (ECB), and DGFT trade policies.

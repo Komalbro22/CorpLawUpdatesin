@@ -20,9 +20,9 @@ import { supabase } from '@/lib/supabase'
 export const revalidate = 43200
 
 export const metadata: Metadata = {
-  title: 'Browse Regulatory Updates by Authority | MCA, SEBI, RBI, Taxation & More',
+  title: 'Corporate Law Updates by Regulator',
   description:
-    'Browse corporate law updates by regulator — MCA, SEBI, RBI, Taxation (CBDT & GST), IFSCA (GIFT City), NCLT, IBC, FEMA, CCI and Labour Law. Daily circulars, master directions and compliance briefs for CS, CA and legal teams.',
+    'Browse Indian corporate law updates by regulator: MCA, SEBI, RBI, GST, CBDT, NCLT, IBC, FEMA and Labour Law. Real-time circulars for CS and CA professionals.',
   alternates: {
     canonical: 'https://www.corplawupdates.in/category',
   },

@@ -8,7 +8,7 @@ import UnifiedCalculator from './UnifiedCalculator'
 
 export const metadata: Metadata = {
   title: {
-    absolute: 'MCA Fee Calculator (V3) & ROC Late Fee Penalty Calculator',
+    absolute: 'MCA Fee Calculator & Late Fees | CorpLawUpdates.in',
   },
   description: 'Calculate MCA21 V3 normal filing fees, Table B delay multipliers, ₹100/day annual return late fees, and stamp duty for all MCA company e-forms.',
   keywords: [
@@ -34,8 +34,8 @@ export const metadata: Metadata = {
     canonical: 'https://www.corplawupdates.in/tools/fee-calculator/companies',
   },
   openGraph: {
-    title: 'MCA Fee Calculator (V3) & ROC Late Fee Engine | CorpLawUpdates',
-    description: 'Estimate applicable statutory filing fees and late multipliers based on selected assumptions, Table B late multipliers, ₹100/day uncapped penalties for AOC-4 & MGT-7, and state stamp duty. Always verify final challan values on MCA21 portal before filing.',
+    title: 'MCA Fee Calculator & Late Fees | CorpLawUpdates.in',
+    description: 'Calculate MCA21 V3 normal filing fees, Table B delay multipliers, and ₹100/day ROC late penalties for company e-forms with state stamp duty.',
     url: 'https://www.corplawupdates.in/tools/fee-calculator/companies',
     siteName: 'CorpLawUpdates',
     locale: 'en_IN',
@@ -43,8 +43,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'MCA Fee Calculator (V3) & ROC Late Fee Engine | CorpLawUpdates',
-    description: 'Estimate applicable statutory filing fees and late multipliers based on selected assumptions, Table B late multipliers, ₹100/day uncapped penalties for AOC-4 & MGT-7, and state stamp duty. Always verify final challan values on MCA21 portal before filing.',
+    title: 'MCA Fee Calculator & Late Fees | CorpLawUpdates.in',
+    description: 'Calculate MCA21 V3 normal filing fees, Table B delay multipliers, and ₹100/day ROC late penalties for company e-forms with state stamp duty.',
   }
 }
 

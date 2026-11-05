@@ -23,9 +23,9 @@ import {
 import LeaseClient from './LeaseClient'
 
 export const metadata: Metadata = {
-  title: 'Rent Agreement Format India (Word) — Free Lease Deed Generator',
+  title: 'Rent Agreement Format India (Word)',
   description:
-    'Free rent & lease agreement format for India in Word/PDF. 11-month and registered lease drafts, stamp duty calculator guide, police verification checklist. No sign-up.',
+    'Free rent and lease agreement formats for India in Word/PDF. 11-month and registered lease drafts, stamp duty calculator guide, and police verification steps.',
   keywords: [
     'rent agreement format india',
     'lease agreement format india',

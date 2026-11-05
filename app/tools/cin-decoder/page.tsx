@@ -11,14 +11,14 @@ const ogImageUrl = 'https://www.corplawupdates.in/api/og?title=Free+Corporate+Id
 
 export const metadata: Metadata = {
   title: {
-    absolute: 'Free Corporate Identification Number (CIN) Decoder | CorpLaw',
+    absolute: 'Free CIN Decoder Tool | CorpLawUpdates.in',
   },
   description: 'Instantly decode 21-digit Indian CIN numbers. Lookup industry NIC codes, RoC state jurisdiction, incorporation year, and ownership classification.',
   alternates: {
     canonical: 'https://www.corplawupdates.in/tools/cin-decoder',
   },
   openGraph: {
-    title: 'Free Corporate Identification Number (CIN) Decoder | CorpLawUpdates',
+    title: 'Free CIN Decoder Tool | CorpLawUpdates.in',
     description: 'Decode 21-digit MCA CIN numbers into 6 dimensions: industry NIC codes, RoC jurisdiction, registration year, and ownership classification.',
     url: 'https://www.corplawupdates.in/tools/cin-decoder',
     type: 'website',
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Free Corporate Identification Number (CIN) Decoder | CorpLawUpdates',
+    title: 'Free CIN Decoder Tool | CorpLawUpdates.in',
     description: 'Decode 21-digit MCA CIN numbers into 6 dimensions: industry NIC codes, RoC jurisdiction, registration year, and ownership classification.',
     images: [ogImageUrl],
   },

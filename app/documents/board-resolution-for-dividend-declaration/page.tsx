@@ -5,8 +5,8 @@ import DividendResolutionClient from './DividendResolutionClient'
 import JsonLd from '@/components/JsonLd'
 
 const pageUrl = 'https://www.corplawupdates.in/documents/board-resolution-for-dividend-declaration'
-const title = 'Board Resolution for Dividend Declaration: Free Word & PDF Format'
-const description = 'Draft a board resolution for final or interim dividend declaration in India. Free editable Word and PDF downloads, specimen wording, Companies Act Section 123 guide and payment checklist.'
+const title = { absolute: 'Board Resolution for Dividend Declaration | Free Format' }
+const description = 'Draft board resolutions for interim or final dividend declaration under Companies Act Section 123. Free editable Word & PDF templates with payment rules.'
 
 export const revalidate = false
 export const metadata: Metadata = {

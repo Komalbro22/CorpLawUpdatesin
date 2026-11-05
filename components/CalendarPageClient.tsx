@@ -491,9 +491,9 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
         {/* COMMUNITY NOTICE */}
         <div className="bg-linear-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 text-center">
           <div className="text-3xl mb-2">👥</div>
-          <h3 className="font-bold text-green-800 text-lg mb-1">
+          <h2 className="font-bold text-green-800 text-lg mb-1">
             Help us keep this calendar accurate
-          </h3>
+          </h2>
           <p className="text-green-700 text-sm max-w-xl mx-auto mb-4">
             This calendar is maintained by our community of Company Secretaries, CAs, and corporate
             professionals. Spotted an error or a missing compliance? Use the button below to report
@@ -509,9 +509,9 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
 
         {/* USEFUL LINKS */}
         <section className="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-6 border border-slate-200/60 dark:border-slate-800">
-          <h3 className="text-xl font-heading font-bold text-navy dark:text-white mb-4">
+          <h2 className="text-xl font-heading font-bold text-navy dark:text-white mb-4">
             Official Portals for Verification
-          </h3>
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
               { name: 'MCA21 Portal', url: 'https://www.mca.gov.in',   desc: 'All company filings and circulars' },
@@ -534,9 +534,9 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
 
         {/* NEWSLETTER */}
         <section className="bg-navy rounded-2xl p-8 text-center">
-          <h3 className="text-2xl font-heading font-bold text-white mb-2">
+          <h2 className="text-2xl font-heading font-bold text-white mb-2">
             Never Miss a Compliance Deadline
-          </h3>
+          </h2>
           <p className="text-slate-300 mb-6 max-w-lg mx-auto">
             Get weekly regulatory updates and deadline reminders from MCA, SEBI and RBI. Free forever.
           </p>

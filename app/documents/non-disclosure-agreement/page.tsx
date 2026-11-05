@@ -32,7 +32,7 @@ export const revalidate = false
 const pageUrl = 'https://www.corplawupdates.in/documents/non-disclosure-agreement'
 
 export const metadata: Metadata = {
-  title: 'Free NDA Format India (Word) — Non-Disclosure Agreement Generator',
+  title: 'Free NDA Format India (Word/PDF)',
   description:
     'Generate a free Non-Disclosure Agreement (NDA) for India in Word/PDF. Mutual & one-way formats, stamp paper guide, clauses explained. No sign-up.',
   alternates: {

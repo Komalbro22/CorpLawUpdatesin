@@ -164,10 +164,10 @@ export default function MSMEFeeCalc({ initialBankRate = '5.75' }: { initialBankR
         {/* Step 1: Supplier Eligibility Assessment */}
         <div className="bg-slate-50 dark:bg-slate-800/40 p-5 rounded-2xl border border-slate-200 dark:border-slate-700/60">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-bold text-navy dark:text-white uppercase tracking-wider flex items-center gap-2">
+            <h2 className="text-sm font-bold text-navy dark:text-white uppercase tracking-wider flex items-center gap-2">
               <span className="w-5 h-5 rounded-full bg-navy text-white text-xs flex items-center justify-center font-bold">1</span>
               Supplier Eligibility Assessment
-            </h3>
+            </h2>
             {/* Status Badge */}
             <span className={`text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${
               eligibility.statusBadge === 'green'
@@ -241,10 +241,10 @@ export default function MSMEFeeCalc({ initialBankRate = '5.75' }: { initialBankR
 
         {/* Step 2: Delivery & Dispute Resolution */}
         <div className="bg-slate-50 dark:bg-slate-800/40 p-5 rounded-2xl border border-slate-200 dark:border-slate-700/60">
-          <h3 className="text-sm font-bold text-navy dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+          <h2 className="text-sm font-bold text-navy dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2">
             <span className="w-5 h-5 rounded-full bg-navy text-white text-xs flex items-center justify-center font-bold">2</span>
             Invoice Amount & Delivery / Acceptance
-          </h3>
+          </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1.5 md:col-span-2">
@@ -306,10 +306,10 @@ export default function MSMEFeeCalc({ initialBankRate = '5.75' }: { initialBankR
 
         {/* Step 3: Payment Agreement & Statutory 45-Day Cap */}
         <div className="bg-slate-50 dark:bg-slate-800/40 p-5 rounded-2xl border border-slate-200 dark:border-slate-700/60">
-          <h3 className="text-sm font-bold text-navy dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+          <h2 className="text-sm font-bold text-navy dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2">
             <span className="w-5 h-5 rounded-full bg-navy text-white text-xs flex items-center justify-center font-bold">3</span>
             Payment Agreement Terms & Statutory 45-Day Cap
-          </h3>
+          </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1.5 flex flex-col justify-end">
@@ -345,10 +345,10 @@ export default function MSMEFeeCalc({ initialBankRate = '5.75' }: { initialBankR
 
         {/* Step 4: Settlement Date & Rate Mode */}
         <div className="bg-slate-50 dark:bg-slate-800/40 p-5 rounded-2xl border border-slate-200 dark:border-slate-700/60">
-          <h3 className="text-sm font-bold text-navy dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+          <h2 className="text-sm font-bold text-navy dark:text-white uppercase tracking-wider mb-4 flex items-center gap-2">
             <span className="w-5 h-5 rounded-full bg-navy text-white text-xs flex items-center justify-center font-bold">4</span>
             Settlement Date & RBI Bank Rate Selection
-          </h3>
+          </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1.5">
@@ -425,7 +425,7 @@ export default function MSMEFeeCalc({ initialBankRate = '5.75' }: { initialBankR
         <div className="mt-8 p-6 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700">
           <div className="flex flex-wrap justify-between items-center gap-3 mb-6">
             <div className="flex items-center gap-3">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 font-heading m-0">Statutory Calculation Summary</h3>
+              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 font-heading m-0">Statutory Calculation Summary</h2>
               {result.methodologyStatus === 'VERIFIED_SECTION_16_MONTHLY_REST_METHOD' && (
                 <span className="px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                   ✓ VERIFIED SECTION 16 MONTHLY REST METHOD
@@ -531,9 +531,9 @@ export default function MSMEFeeCalc({ initialBankRate = '5.75' }: { initialBankR
           {result.schedule && result.schedule.length > 0 && (
             <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
               <div className="flex justify-between items-center mb-3">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 font-heading">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 font-heading">
                   Monthly Compounding Schedule ({result.schedule.length} Rests)
-                </h4>
+                </h3>
                 {result.schedule.length > 12 && (
                   <button
                     onClick={() => setShowFullSchedule(!showFullSchedule)}
