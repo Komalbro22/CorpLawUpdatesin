@@ -180,16 +180,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const cleanDescription = (term.definition || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
 
-  const rawTitle = parsed.seoTitle.trim() || `${term.term} — Meaning & Definition`
-  const titleMeta = rawTitle.length <= 38
-    ? rawTitle
-    : { absolute: rawTitle.length <= 60 ? rawTitle : `${rawTitle.slice(0, 57)}...` }
-
-  const fallbackDesc = `${term.term} meaning under Indian corporate law: ${cleanDescription.slice(0, 90)}. Key statutory provisions and compliance checklist.`
-  const description = parsed.seoDescription.trim() || (fallbackDesc.length <= 155 ? fallbackDesc : `${fallbackDesc.slice(0, 152)}...`)
+  const title = parsed.seoTitle.trim() || `${term.term} — Meaning & Legal Definition`
+  const rawDesc = parsed.seoDescription.trim() || `${term.term} meaning under Indian corporate law: ${cleanDescription.slice(0, 160)}. Learn key legal provisions, statutory authorities, and compliance checklists.`
+  const description = rawDesc.length <= 250 ? rawDesc : `${rawDesc.slice(0, 247)}...`
 
   return {
-    title: titleMeta,
+    title,
     description,
     alternates: {
       canonical: `https://www.corplawupdates.in/glossary/${term.slug}`,

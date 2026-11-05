@@ -76,14 +76,9 @@ export async function generateMetadata(
 
   const canonicalUrl = `https://www.corplawupdates.in/updates/${update.slug}`
 
-  // Keep title tag within 50-60 characters to prevent truncation in SERPs
-  const cleanTitle = (update.seo_title || update.title || '').replace(/\s+/g, ' ').trim()
-  const titleMeta = cleanTitle.length <= 39
-    ? cleanTitle // root layout template appends " | CorpLawUpdates.in" (20 chars) -> <= 59 chars
-    : { absolute: cleanTitle.length <= 60 ? cleanTitle : `${cleanTitle.slice(0, 57)}...` }
-
-  const descRaw = stripHtml(update.seo_description || update.summary || '').replace(/\s+/g, ' ').trim()
-  const seoDesc = descRaw.length <= 155 ? descRaw : `${descRaw.slice(0, 152)}...`
+  const titleStr = (update.seo_title || update.title || '').replace(/\s+/g, ' ').trim()
+  const descStr = stripHtml(update.seo_description || update.summary || '').replace(/\s+/g, ' ').trim()
+  const seoDesc = (d: string): string => d.length <= 250 ? d : d.slice(0, 247) + '...'
 
   let extractedImageUrl = update.featured_image_url || null;
   if (!extractedImageUrl && update.content) {
@@ -98,8 +93,8 @@ export async function generateMetadata(
     : `https://www.corplawupdates.in/api/og?title=${encodeURIComponent(update.title)}&category=${encodeURIComponent(update.category || '')}`
 
   return {
-    title: titleMeta,
-    description: seoDesc,
+    title: titleStr,
+    description: seoDesc(descStr),
     keywords: [
       update.category,
       ...(update.tags || []),
