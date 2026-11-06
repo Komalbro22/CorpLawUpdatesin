@@ -797,7 +797,7 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
             <div className="mb-12">
                 {update.content && <TableOfContents content={update.content} />}
                 <ErrorBoundary>
-                    <div className="article-content" suppressHydrationWarning>
+                    <div className="article-content entry-content post-content" suppressHydrationWarning>
                         {leadingFeaturedImage && (
                             <div className="mb-6 overflow-hidden rounded-2xl" dangerouslySetInnerHTML={{ __html: leadingFeaturedImage }} />
                         )}

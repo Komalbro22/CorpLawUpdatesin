@@ -578,6 +578,7 @@ export default function MarkdownRenderer({
           [&_[style*='background:#0b2c4a']_strong]:text-amber-400!
           prose-headings:font-heading prose-a:no-underline prose-a:hover:underline prose-code:bg-slate-100 dark:prose-code:bg-slate-800 dark:prose-code:text-slate-200 prose-code:px-1 prose-code:rounded-sm prose-img:max-w-full prose-img:h-auto prose-img:rounded-lg prose-img:mx-auto prose-img:block
         `}>
+          <div className="dynamic-text-adaptive entry-content post-content w-full">
             <ReactMarkdown
                 remarkPlugins={[remarkGfm, remarkBreaks]}
                 rehypePlugins={[rehypeRaw]}
@@ -1010,6 +1011,7 @@ export default function MarkdownRenderer({
             >
                 {sanitizedContent}
             </ReactMarkdown>
+          </div>
         </div>
         {enableGazetteDownloadPrompt && gazettePromptOpen && (
             <LazyDownloadSubscribePrompt
