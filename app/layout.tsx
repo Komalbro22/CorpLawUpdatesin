@@ -203,6 +203,7 @@ export default async function RootLayout({
         <MediavineScript />
         </head>
       <body className="font-body bg-slate-50 dark:bg-slate-950 text-navy dark:text-slate-100 antialiased min-h-dvh flex flex-col selection:bg-amber-200/50 selection:text-navy break-words overflow-x-clip" suppressHydrationWarning>
+        <div id="ad-management-config-settings" data-blocklist-auto-insert-sticky="1" data-blocklist-chicory="1" data-blocklist-zergnet="1" data-blocklist-interstitial-mobile="1" data-blocklist-interstitial-desktop="1" data-blocklist-universal-player-desktop="1" data-blocklist-universal-player-mobile="1" data-blocklist-gumgum-skins="1"></div>
         <ToastProvider>
           <HideOnAdmin>
             <TrackingScripts />
