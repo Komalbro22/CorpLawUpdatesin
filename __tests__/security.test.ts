@@ -453,6 +453,10 @@ describe('CSP: Analytics allowlisting and Ad-network exclusion', () => {
     expect(csp).not.toContain('clickiocdn.com')
     expect(csp).toContain('journeymv.com')
     expect(csp).toContain('scriptwrapper.com')
+    expect(csp).toContain('https://*.consentmanager.net')
+    expect(csp).toContain('https://*.grow.me')
+    expect(csp).toContain('https://*.rapidedge.io')
+    expect(csp).toContain('https://www.gstatic.com')
   })
 })
 
