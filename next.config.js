@@ -276,6 +276,27 @@ const nextConfig = {
         destination: 'https://adstxt.journeymv.com/sites/bb9707b8-bfe3-4206-9309-6bc7e7923faf/ads.txt',
         permanent: true,
       },
+      // 301/308 Permanent redirects for base64 encoded / truncated link: /updates/bWNhLWV4dG* -> /updates/mca-extends-annual-filing-deadlines-fy-2025-26 (7 Nov 2026)
+      {
+        source: '/updates/bWNhLWV4dG',
+        destination: '/updates/mca-extends-annual-filing-deadlines-fy-2025-26',
+        permanent: true,
+      },
+      {
+        source: '/updates/bWNhLWV4dG/',
+        destination: '/updates/mca-extends-annual-filing-deadlines-fy-2025-26',
+        permanent: true,
+      },
+      {
+        source: '/updates/bWNhLWV4dGVuZHMtYW5udWFsLWZpbGluZy1kZWFkbGluZXMtZnktMjAyNS0yNg',
+        destination: '/updates/mca-extends-annual-filing-deadlines-fy-2025-26',
+        permanent: true,
+      },
+      {
+        source: '/updates/bWNhLWV4dGVuZHMtYW5udWFsLWZpbGluZy1kZWFkbGluZXMtZnktMjAyNS0yNg/',
+        destination: '/updates/mca-extends-annual-filing-deadlines-fy-2025-26',
+        permanent: true,
+      },
       // 301 Permanent redirects for duplicate drafted article slugs -> live "-2" articles (24 Oct 2026)
       {
         source: '/updates/rbi-operational-risk-second-amendment-directions-2026',

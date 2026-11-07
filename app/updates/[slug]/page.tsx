@@ -1,7 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
+import { resolveBase64SlugRedirect } from '@/lib/slug-recovery'
 import JsonLd from '@/components/JsonLd'
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd'
 import type { Metadata } from 'next'
@@ -71,6 +72,10 @@ export async function generateMetadata(
     .single()
 
   if (!update) {
+    const redirectUrl = await resolveBase64SlugRedirect(decodedSlug)
+    if (redirectUrl) {
+      permanentRedirect(redirectUrl)
+    }
     notFound()
   }
 
@@ -159,7 +164,13 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
         .lte('published_at', new Date().toISOString())
         .single()
 
-    if (!update) notFound()
+    if (!update) {
+      const redirectUrl = await resolveBase64SlugRedirect(decodeURIComponent((await params).slug))
+      if (redirectUrl) {
+        permanentRedirect(redirectUrl)
+      }
+      notFound()
+    }
 
     // These fields are now included in UPDATE_DETAIL_COLUMNS — no second query needed
     const geoData = update;
