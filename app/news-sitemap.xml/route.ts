@@ -1,7 +1,7 @@
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { NextResponse } from 'next/server'
 
-export const revalidate = 3600 // 1 hour edge cache; instant on-demand on article publish
+export const revalidate = 300 // 5 minutes fallback; instant on-demand on article publish
 
 export async function GET() {
   const BASE_URL = 'https://www.corplawupdates.in'
@@ -70,7 +70,7 @@ export async function GET() {
   return new NextResponse(xml, {
     headers: {
       'Content-Type': 'application/xml',
-      'Cache-Control': 'public, max-age=300, s-maxage=1800, stale-while-revalidate=3600',
+      'Cache-Control': 'public, max-age=60, s-maxage=300, stale-while-revalidate=600',
     },
   })
 }

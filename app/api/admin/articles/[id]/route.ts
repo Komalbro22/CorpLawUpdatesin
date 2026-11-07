@@ -9,6 +9,7 @@ import { submitArticleToGoogleIndexing } from '@/lib/google-indexing'
 import { calculateReadingTime, extractFirstImage } from '@/lib/utils'
 import { articleSchema } from '@/lib/admin-schemas'
 import { revalidateArticleMutation } from '@/lib/content-revalidation'
+import { warmUpPublishedArticle } from '@/lib/cache-warmup'
 import { verifyAdminOrKey, logApiAudit, getClientIp } from '@/lib/api-key-auth'
 import { evaluateArticleIndexQuality } from '@/lib/content-quality'
 
@@ -305,6 +306,14 @@ async function handleArticleUpdate(request: NextRequest, params: Promise<{ id: s
       oldSlug: oldArticle.slug,
       oldCategory: oldArticle.category,
     })
+
+    if (isCurrentlyPublished && updatedArticle?.slug) {
+      try {
+        await warmUpPublishedArticle(updatedArticle.slug)
+      } catch (warmupErr) {
+        console.error('[Article Update] Cache warmup error:', warmupErr)
+      }
+    }
 
     // Audit log if key auth
     if (authCheck.auth.type === 'api_key') {

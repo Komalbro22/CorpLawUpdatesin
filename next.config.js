@@ -158,13 +158,13 @@ const nextConfig = {
           },
         ],
       },
-      // Public root listings & static tools: edge-cache for 24 hours with stale-while-revalidate
+      // Public root listings & HTML documents: short shared edge-cache (60-300s) with stale-while-revalidate
       {
         source: '/',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=60, s-maxage=120, stale-while-revalidate=300',
+            value: 'public, max-age=60, s-maxage=120, stale-while-revalidate=600',
           },
         ],
       },
@@ -173,7 +173,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=60, s-maxage=120, stale-while-revalidate=300',
+            value: 'public, max-age=60, s-maxage=120, stale-while-revalidate=600',
           },
         ],
       },
@@ -187,13 +187,82 @@ const nextConfig = {
           },
         ],
       },
+      // Sitemaps: short shared-cache (300s) ensuring newly published articles appear quickly
+      {
+        source: '/sitemap.xml',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=60, s-maxage=300, stale-while-revalidate=600',
+          },
+        ],
+      },
+      {
+        source: '/news-sitemap.xml',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=60, s-maxage=300, stale-while-revalidate=600',
+          },
+        ],
+      },
+      // Article pages and dynamic updates: edge-cache capped at 60s so 404s and newly published articles never linger
+      {
+        source: '/updates/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=60, s-maxage=60, stale-while-revalidate=600',
+          },
+        ],
+      },
+      // Detailed guide pages
+      {
+        source: '/guides/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=60, s-maxage=120, stale-while-revalidate=600',
+          },
+        ],
+      },
+      // Detailed document templates
+      {
+        source: '/documents/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=60, s-maxage=120, stale-while-revalidate=600',
+          },
+        ],
+      },
+      // Detailed glossary terms
+      {
+        source: '/glossary/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=60, s-maxage=120, stale-while-revalidate=600',
+          },
+        ],
+      },
+      // Author profile pages
+      {
+        source: '/author/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=60, s-maxage=120, stale-while-revalidate=600',
+          },
+        ],
+      },
       // Category listing pages (e.g. /category/mca)
       {
         source: '/category/:path*',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=60, s-maxage=120, stale-while-revalidate=300',
+            value: 'public, max-age=60, s-maxage=120, stale-while-revalidate=600',
           },
         ],
       },

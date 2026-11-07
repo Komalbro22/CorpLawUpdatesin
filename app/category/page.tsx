@@ -17,7 +17,7 @@ import JsonLd from '@/components/JsonLd'
 import HubExploreLinks from '@/components/HubExploreLinks'
 import { supabase } from '@/lib/supabase'
 
-export const revalidate = 43200
+export const revalidate = 300 // 5 minutes fallback
 
 export const metadata: Metadata = {
   title: 'Corporate Law Updates by Regulator',

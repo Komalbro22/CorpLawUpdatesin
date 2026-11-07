@@ -3,6 +3,7 @@ import { supabaseAdmin } from '@/lib/supabase-server'
 import { submitArticleToIndexNow } from '@/lib/indexnow'
 import { submitArticleToGoogleIndexing } from '@/lib/google-indexing'
 import { revalidateArticleMutation } from '@/lib/content-revalidation'
+import { warmUpPublishedArticle } from '@/lib/cache-warmup'
 import {
   verifyAdminOrKey,
   getIdempotentResponse,
@@ -61,6 +62,14 @@ export async function POST(
       slug: updatedArticle?.slug,
       category: updatedArticle?.category,
     })
+
+    if (updatedArticle?.slug) {
+      try {
+        await warmUpPublishedArticle(updatedArticle.slug)
+      } catch (warmupErr) {
+        console.error('[Article Publish] Cache warmup error:', warmupErr)
+      }
+    }
 
     if (authCheck.auth.type === 'api_key') {
       await logApiAudit({

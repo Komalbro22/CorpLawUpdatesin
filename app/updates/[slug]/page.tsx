@@ -44,7 +44,7 @@ const stripHtml = (html: any) => {
   return html.replace(/<[^>]*>/g, '').trim()
 }
 
-export const revalidate = 86400 // 24 hours fallback; instant on-demand via revalidateArticleMutation
+export const revalidate = 60 // 60 seconds fallback (prevents 24h cached 404s); instant on-demand via revalidateArticleMutation
 
 export async function generateStaticParams() {
   const { data } = await supabase

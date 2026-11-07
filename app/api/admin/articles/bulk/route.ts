@@ -5,6 +5,7 @@ import { submitToIndexNow } from '@/lib/indexnow'
 import { submitUrlsToGoogleIndexing } from '@/lib/google-indexing'
 import { articleSchema } from '@/lib/admin-schemas'
 import { revalidateArticleMutation } from '@/lib/content-revalidation'
+import { warmUpUrls } from '@/lib/cache-warmup'
 import {
   verifyAdminOrKey,
   getIdempotentResponse,
@@ -440,6 +441,26 @@ export async function POST(request: NextRequest) {
         slug: results.find(r => r.status === 'created' || r.status === 'updated')?.slug || '',
         category: Array.from(affectedCategories)[0] || undefined,
       })
+
+      const publishedSlugs = results
+        .filter(r => (r.status === 'created' || r.status === 'updated') && r.slug)
+        .map(r => r.slug!)
+
+      if (publishedSlugs.length > 0) {
+        try {
+          const warmBase = (process.env.NEXT_PUBLIC_SITE_URL || BASE_URL || 'https://www.corplawupdates.in').replace(/\/+$/, '')
+          const urlsToWarm = [
+            ...publishedSlugs.slice(0, 10).map(s => `${warmBase}/updates/${s}`),
+            `${warmBase}/`,
+            `${warmBase}/updates`,
+            `${warmBase}/sitemap.xml`,
+            `${warmBase}/news-sitemap.xml`,
+          ]
+          await warmUpUrls(urlsToWarm)
+        } catch (warmupErr) {
+          console.error('[Articles Bulk] Cache warmup error:', warmupErr)
+        }
+      }
 
       if (indexableUrlsToPing.length > 0) {
         const googleBatch = indexableUrlsToPing.slice(0, 10)

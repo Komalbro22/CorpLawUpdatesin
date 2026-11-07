@@ -8,6 +8,7 @@ import { submitArticleToIndexNow } from '@/lib/indexnow'
 import { submitArticleToGoogleIndexing } from '@/lib/google-indexing'
 import { articleSchema } from '@/lib/admin-schemas'
 import { revalidateArticleMutation } from '@/lib/content-revalidation'
+import { warmUpPublishedArticle } from '@/lib/cache-warmup'
 import { evaluateArticleIndexQuality } from '@/lib/content-quality'
 import {
   verifyAdminOrKey,
@@ -344,6 +345,14 @@ export async function POST(request: NextRequest) {
       slug: createdArticle?.slug,
       category: category?.trim() || createdArticle?.category,
     })
+
+    if (createdArticle?.slug && createdArticle?.published_at) {
+      try {
+        await warmUpPublishedArticle(createdArticle.slug)
+      } catch (warmupErr) {
+        console.error('[Article Create] Cache warmup error:', warmupErr)
+      }
+    }
 
     const isGuide = Array.isArray(createdArticle.tags) && createdArticle.tags.includes('Evergreen Guide')
     const isExplained = Array.isArray(createdArticle.tags) && createdArticle.tags.includes('Explained')

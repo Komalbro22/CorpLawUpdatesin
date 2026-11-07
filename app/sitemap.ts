@@ -3,7 +3,7 @@ import { supabaseAdmin } from '@/lib/supabase-server'
 import { mcaForms } from '@/data/mca-forms'
 import { parseGlossaryMetadata, getGlossaryTotalWordCount, QUALITY_GATE_WORD_COUNT } from '@/lib/content-quality'
 
-export const revalidate = 86400 // 24 hours fallback; instant on-demand on content publish
+export const revalidate = 300 // 5 minutes fallback; instant on-demand on content publish
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const BASE_URL = 'https://www.corplawupdates.in'

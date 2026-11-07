@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { supabase } from '@/lib/supabase'
 import { getSiteStats } from '@/lib/site-stats'
 
-export const revalidate = 86400
+export const revalidate = 300
 
 export const metadata: Metadata = {
   title: 'About Us',

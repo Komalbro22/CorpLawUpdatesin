@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminOrKey } from '@/lib/api-key-auth'
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { revalidateArticleMutation, revalidateGlossaryMutation } from '@/lib/content-revalidation'
+import { warmUpPublishedArticle, warmUpUrls } from '@/lib/cache-warmup'
+import { BASE_URL } from '@/lib/utils'
 
 export const dynamic = 'force-dynamic'
 
@@ -35,6 +37,11 @@ export async function POST(request: NextRequest) {
         try { (revalidateTag as any)(`article:${slug}`) } catch {}
         try { (revalidateTag as any)('updates') } catch {}
         revalidateArticleMutation({ slug })
+        try {
+          await warmUpPublishedArticle(slug)
+        } catch (warmupErr) {
+          console.error('[Revalidate] Cache warmup error:', warmupErr)
+        }
       }
     } else if (targetPath.startsWith('/glossary/')) {
       const slug = targetPath.replace(/^\/glossary\//, '').split('?')[0].split('#')[0]
@@ -48,6 +55,12 @@ export async function POST(request: NextRequest) {
       try { (revalidateTag as any)('list:home') } catch {}
       try { (revalidateTag as any)('list:updates') } catch {}
       revalidateArticleMutation({ slug: '' })
+      try {
+        const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || BASE_URL || 'https://www.corplawupdates.in').replace(/\/+$/, '')
+        await warmUpUrls([`${baseUrl}/`, `${baseUrl}/updates`, `${baseUrl}/sitemap.xml`])
+      } catch (warmupErr) {
+        console.error('[Revalidate] Cache warmup error:', warmupErr)
+      }
     }
 
     return NextResponse.json({
