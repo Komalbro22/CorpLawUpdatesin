@@ -47,6 +47,25 @@ export interface DirectorAppointmentFormData {
 }
 
 export const DEFAULT_SAMPLE_DIRECTOR_APPOINTMENT_DATA: DirectorAppointmentFormData = {
+  companyName: '',
+  companyCin: '',
+  companyAddress: '',
+  companyEmail: '',
+  directorName: '',
+  directorDin: '',
+  directorAddress: '',
+  directorPan: '',
+  designation: 'Additional Director',
+  effectiveDate: '',
+  term: '',
+  remuneration: '',
+  boardCommittees: '',
+  signatoryName: '',
+  signatoryDesignation: 'Director',
+  meetingDate: '',
+}
+
+export const DEMO_SAMPLE_DIRECTOR_APPOINTMENT_DATA: DirectorAppointmentFormData = {
   companyName: 'ZENITH AGROTECH PRIVATE LIMITED',
   companyCin: 'U01100MH2020PTC345678',
   companyAddress: '401, Nariman Bhavan, 227 Backbay Reclamation, Nariman Point, Mumbai - 400021, Maharashtra, India',
@@ -65,10 +84,31 @@ export const DEFAULT_SAMPLE_DIRECTOR_APPOINTMENT_DATA: DirectorAppointmentFormDa
   meetingDate: '14th October 2026',
 }
 
+function normalizeAppointmentData(raw: DirectorAppointmentFormData): DirectorAppointmentFormData {
+  return {
+    ...raw,
+    companyName: raw.companyName?.trim() || '[COMPANY NAME]',
+    companyCin: raw.companyCin?.trim() || '[CIN]',
+    companyAddress: raw.companyAddress?.trim() || '[Registered Office Address]',
+    companyEmail: raw.companyEmail?.trim() || '[compliance@company.in]',
+    directorName: raw.directorName?.trim() || '[Name of Appointee]',
+    directorDin: raw.directorDin?.trim() || '[DIN]',
+    directorAddress: raw.directorAddress?.trim() || '[Residential Address]',
+    effectiveDate: raw.effectiveDate?.trim() || '[Date of Appointment]',
+    meetingDate: raw.meetingDate?.trim() || raw.effectiveDate?.trim() || '[Date of Board Meeting]',
+    term: raw.term?.trim() || 'up to the date of the next Annual General Meeting',
+    remuneration: raw.remuneration?.trim() || 'As determined by the Board and within statutory limits',
+    boardCommittees: raw.boardCommittees?.trim() || 'General Board Oversight Committees as constituted by the Board',
+    signatoryName: raw.signatoryName?.trim() || '[Authorized Signatory Name]',
+    signatoryDesignation: raw.signatoryDesignation?.trim() || 'Director',
+  }
+}
+
 /**
  * Generates plain markdown for live preview in the browser
  */
-export function generateDirectorAppointmentMarkdown(data: DirectorAppointmentFormData): string {
+export function generateDirectorAppointmentMarkdown(raw: DirectorAppointmentFormData): string {
+  const data = normalizeAppointmentData(raw)
   const isAdditional = data.designation === 'Additional Director'
   const isIndependent = data.designation === 'Independent Director'
 
@@ -196,7 +236,8 @@ ___________________________________________
 /**
  * Builds Word (.docx) document
  */
-export async function buildDirectorAppointmentDocx(data: DirectorAppointmentFormData = DEFAULT_SAMPLE_DIRECTOR_APPOINTMENT_DATA): Promise<Buffer> {
+export async function buildDirectorAppointmentDocx(raw: DirectorAppointmentFormData = DEFAULT_SAMPLE_DIRECTOR_APPOINTMENT_DATA): Promise<Buffer> {
+  const data = normalizeAppointmentData(raw)
   const FONT = 'Times New Roman'
   const isAdditional = data.designation === 'Additional Director'
   const isIndependent = data.designation === 'Independent Director'
@@ -402,7 +443,8 @@ export async function buildDirectorAppointmentDocx(data: DirectorAppointmentForm
 /**
  * Builds PDF document
  */
-export async function buildDirectorAppointmentPdf(data: DirectorAppointmentFormData = DEFAULT_SAMPLE_DIRECTOR_APPOINTMENT_DATA): Promise<Uint8Array> {
+export async function buildDirectorAppointmentPdf(raw: DirectorAppointmentFormData = DEFAULT_SAMPLE_DIRECTOR_APPOINTMENT_DATA): Promise<Uint8Array> {
+  const data = normalizeAppointmentData(raw)
   const pdfDoc = await PDFDocument.create()
   const fontBold = await pdfDoc.embedFont(StandardFonts.TimesRomanBold)
   const fontRegular = await pdfDoc.embedFont(StandardFonts.TimesRoman)

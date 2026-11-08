@@ -273,7 +273,7 @@ export default async function DirectorAppointmentSetPage() {
 
                     <div className="flex items-center gap-2">
                       <a
-                        href={`/api/documents/sets/director-appointment/download?doc=${doc.spoke_slug}&format=docx`}
+                        href={`/api/documents/sets/director-appointment/download?doc=${doc.spoke_slug.includes('checklist') || doc.step_number === 1 ? 'checklist-director-appointment' : doc.spoke_slug.replace(/#.*$/, '')}&format=docx`}
                         className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-medium hover:bg-muted transition-colors text-foreground"
                         title="Download Word format"
                       >
@@ -281,7 +281,7 @@ export default async function DirectorAppointmentSetPage() {
                         .docx
                       </a>
                       <a
-                        href={`/api/documents/sets/director-appointment/download?doc=${doc.spoke_slug}&format=pdf`}
+                        href={`/api/documents/sets/director-appointment/download?doc=${doc.spoke_slug.includes('checklist') || doc.step_number === 1 ? 'checklist-director-appointment' : doc.spoke_slug.replace(/#.*$/, '')}&format=pdf`}
                         className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-border text-xs font-medium hover:bg-muted transition-colors text-foreground"
                         title="Download PDF rendition"
                       >

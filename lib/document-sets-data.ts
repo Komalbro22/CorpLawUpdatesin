@@ -252,22 +252,56 @@ export async function getDocumentSet(slug: string): Promise<FullDocumentSet | nu
  */
 export async function getSpokeDocument(spokeSlug: string) {
   try {
-    const query = supabaseAdmin
-      .from('document_set_documents')
-      .select('*')
-      .eq('spoke_slug', spokeSlug)
-      .maybeSingle()
+    const raw = spokeSlug ? spokeSlug.trim() : ''
+    const clean = raw.split('#')[0].trim()
 
-    const res = await withTimeout(query as any, 3000, { data: null, error: { message: 'timeout' } })
-    const { data: doc, error } = res as any
+    const isChecklist =
+      clean === 'director-appointment-set' ||
+      clean === 'checklist' ||
+      clean === 'checklist-director-appointment' ||
+      clean === 'director-appointment-checklist' ||
+      raw.includes('checklist')
 
-    let typedDoc: DocumentSetDocument
-    if (error || !doc) {
-      const found = runtimeDocuments.find(d => d.spoke_slug === spokeSlug)
+    let typedDoc: DocumentSetDocument | null = null
+
+    if (supabaseAdmin) {
+      try {
+        const query = supabaseAdmin
+          .from('document_set_documents')
+          .select('*')
+
+        if (isChecklist) {
+          if (typeof (query as any).or === 'function') {
+            query.or('spoke_slug.eq.checklist-director-appointment,spoke_slug.eq.director-appointment-set#checklist,spoke_slug.eq.checklist,step_number.eq.1')
+          } else {
+            query.eq('step_number', 1)
+          }
+        } else {
+          query.eq('spoke_slug', clean)
+        }
+
+        const res = await withTimeout(
+          (typeof (query as any).maybeSingle === 'function' ? query.maybeSingle() : (query as any).single()) as any,
+          3000,
+          { data: null, error: { message: 'timeout' } }
+        )
+        const { data: doc } = res as any
+        if (doc) {
+          typedDoc = doc as DocumentSetDocument
+        }
+      } catch (dbErr) {
+        // Fallback to runtimeDocuments below
+      }
+    }
+
+    if (!typedDoc) {
+      const found = runtimeDocuments.find(d =>
+        d.spoke_slug === clean ||
+        d.spoke_slug === raw ||
+        (isChecklist && (d.spoke_slug.includes('checklist') || d.step_number === 1))
+      )
       if (!found) return null
       typedDoc = found
-    } else {
-      typedDoc = doc as DocumentSetDocument
     }
 
     let set: DocumentSet = runtimeSet
@@ -309,7 +343,20 @@ export async function getSpokeDocument(spokeSlug: string) {
       nextStep
     }
   } catch (err) {
-    const found = runtimeDocuments.find(d => d.spoke_slug === spokeSlug)
+    const raw = spokeSlug ? spokeSlug.trim() : ''
+    const clean = raw.split('#')[0].trim()
+    const isChecklist =
+      clean === 'director-appointment-set' ||
+      clean === 'checklist' ||
+      clean === 'checklist-director-appointment' ||
+      clean === 'director-appointment-checklist' ||
+      raw.includes('checklist')
+
+    const found = runtimeDocuments.find(d =>
+      d.spoke_slug === clean ||
+      d.spoke_slug === raw ||
+      (isChecklist && (d.spoke_slug.includes('checklist') || d.step_number === 1))
+    )
     if (!found) return null
     return {
       document: found,

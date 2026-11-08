@@ -60,22 +60,33 @@ export async function GET(req: NextRequest) {
 
     // 3. Individual Document Download (Word or PDF)
     if (docSlug) {
-      const spoke = await getSpokeDocument(docSlug)
+      // Normalize slug in case a browser or link passes a fragment, alias, or parent set slug
+      const rawSlug = docSlug.trim()
+      const cleanParamSlug = rawSlug.split('#')[0].trim()
+      const effectiveSlug = (cleanParamSlug === 'director-appointment-set' || cleanParamSlug === '')
+        ? 'checklist-director-appointment'
+        : cleanParamSlug
+
+      const spoke = await getSpokeDocument(effectiveSlug)
       if (!spoke || !spoke.document) {
         return NextResponse.json({ error: `Document '${docSlug}' not found` }, { status: 404 })
       }
 
       const doc = spoke.document
 
+      // Generate clean filename
+      const cleanSlug = doc.spoke_slug.includes('checklist') || doc.step_number === 1
+        ? 'checklist-director-appointment'
+        : doc.spoke_slug.replace(/#.*$/, '').replace(/[^a-z0-9_-]/gi, '')
+
       if (format === 'pdf') {
         const buffer = await compileDocumentSetPdf(doc)
         recordDocumentSetUsage({
           setSlug: fullSet.slug,
-          documentSlug: docSlug,
+          documentSlug: effectiveSlug,
           eventType: 'download_pdf',
         }).catch(() => {})
 
-        const cleanSlug = doc.spoke_slug.replace(/[^a-z0-9_-]/gi, '')
         const filename = `${cleanSlug}-${doc.version}.pdf`
         return new NextResponse(new Uint8Array(buffer), {
           headers: {
@@ -88,11 +99,10 @@ export async function GET(req: NextRequest) {
         const buffer = await compileDocumentSetDocx(doc)
         recordDocumentSetUsage({
           setSlug: fullSet.slug,
-          documentSlug: docSlug,
+          documentSlug: effectiveSlug,
           eventType: 'download_docx',
         }).catch(() => {})
 
-        const cleanSlug = doc.spoke_slug.replace(/[^a-z0-9_-]/gi, '')
         const filename = `${cleanSlug}-${doc.version}.docx`
         return new NextResponse(new Uint8Array(buffer), {
           headers: {

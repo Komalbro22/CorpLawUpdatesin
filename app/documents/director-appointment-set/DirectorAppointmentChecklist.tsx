@@ -107,7 +107,7 @@ export default function DirectorAppointmentChecklist({ steps, setSlug }: Checkli
       <div className="space-y-3 mt-6">
         {steps.map(step => {
           const isDone = isMounted && !!completedSteps[step.step_number]
-          const isSpoke = step.spoke_slug && !step.spoke_slug.includes('#')
+          const isSpoke = step.spoke_slug && !step.spoke_slug.includes('#') && step.spoke_slug !== 'dir-12-guide'
 
           return (
             <div

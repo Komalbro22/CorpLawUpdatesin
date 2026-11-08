@@ -492,7 +492,7 @@ export const DOCUMENT_SET_STEPS_SEED = [
 export const DOCUMENT_SET_DOCUMENTS_SEED = [
   {
     title: 'Checklist — Appointment of a Director',
-    spoke_slug: 'director-appointment-set#checklist',
+    spoke_slug: 'checklist-director-appointment',
     governing_section: 'Companies Act, 2013 & Rules',
     step_number: 1,
     version: 'v1.0',
@@ -520,7 +520,37 @@ Step 7: Collect Form MBP-1 at first board meeting attended & enter Register of D
 Step 8: Regularisation: general meeting notice with Section 102 explanatory statement at least 21 clear days before meeting (Sections 101, 102; SS-2)
 Step 9: Hold general meeting & pass Ordinary Resolution regularising director (Section 152)
 Step 10: File second Form DIR-12 on MCA V3 within 30 days of general meeting (Section 170(2), Rule 18)
-Step 11: Finalise Board & General Meeting minutes within 30 days & update statutory registers (Sections 118, 170)`
+Step 11: Finalise Board & General Meeting minutes (draft circulated to all directors in 15 days; entered in Minutes Book within 30 days) & update statutory registers (Sections 118, 170)
+
+Fees (Form DIR-12)
+Normal fee by authorised capital:
+• Up to Rs 1,00,000: Rs 200
+• Rs 1,00,001 to Rs 5,00,000: Rs 300
+• Rs 5,00,001 to Rs 25,00,000: Rs 400
+• Rs 25,00,001 to Rs 1,00,00,000: Rs 500
+• Rs 1,00,00,001 and above: Rs 600
+
+If filed late, additional fee is a multiple of the normal fee (Section 403 / Rule 12 Table B):
+• Up to 30 days delay: 2x normal fee
+• 31 to 60 days delay: 4x normal fee
+• 61 to 90 days delay: 6x normal fee
+• 91 to 180 days delay: 10x normal fee
+• Beyond 180 days delay: 12x normal fee
+Note: DIR-12 is NOT one of the Rs 100-per-day forms — that rate applies only to AOC-4 and MGT-7/7A.
+
+Common mistakes this set protects against
+1. Forgetting the SECOND DIR-12 after regularisation — the first one only records the additional-director appointment.
+2. Skipping MBP-1 — it is due at the first board meeting the new director attends, not 'sometime in the year'.
+3. Letting the term lapse: if the general meeting does not regularise him in time, the Additional Director vacates office automatically.
+4. Filing MGT-14 for the board resolution in a private company — private companies are exempt for Section 179(3) board resolutions (MCA Notification GSR 464(E), 2015), and no MGT-14 is needed for the ordinary resolution either.
+5. Using an old DIR-2/DIR-8 format — these are prescribed forms; use Documents 03 and 04 of this set.
+
+Variants (not in this pack — take advice before using)
+• Direct appointment at a general meeting without the additional-director step: skip Steps 2 and 5; the Board proposes, shareholders appoint under Section 152, then file DIR-12 within 30 days.
+• Managing Director / Whole-time Director / KMP: additionally needs Section 196 and Schedule V approvals and Form MR-1 within 60 days.
+• Independent Director: additional declarations and conditions under Section 149 and Schedule IV apply.
+
+This checklist and the documents in this set are drafts based on the Companies Act, 2013, the Companies (Appointment and Qualification of Directors) Rules, 2014 and Secretarial Standards SS-1 and SS-2 (revised editions effective 1 April 2024). They are a starting point for a private limited company — get them reviewed by your company secretary before use.`
   },
   {
     title: 'Board Meeting Notice and Agenda',
@@ -805,7 +835,9 @@ Appointment of Additional Director: The Chairperson informed the Board that [Nam
 
 PART B - EXTRACT OF THE MINUTES OF THE [ANNUAL GENERAL MEETING / EXTRAORDINARY GENERAL MEETING] OF [COMPANY NAME] HELD ON [Date] AT [Venue]
 
-Appointment of Director: The Chairperson placed before the meeting the proposal to appoint [Name of appointee], the Additional Director whose term expired at the meeting, as a Director of the Company. The explanatory statement under Section 102 had been circulated with the notice. The resolution set out in Document 07 of this set was proposed, seconded and passed as an Ordinary Resolution by the members present [unanimously / by majority]. The Company Secretary / Director was directed to file Form DIR-12 within 30 days of the meeting.`
+Appointment of Director: The Chairperson placed before the meeting the proposal to appoint [Name of appointee], the Additional Director whose term expired at the meeting, as a Director of the Company. The explanatory statement under Section 102 had been circulated with the notice. The resolution set out in Document 07 of this set was proposed, seconded and passed as an Ordinary Resolution by the members present [unanimously / by majority]. The Company Secretary / Director was directed to file Form DIR-12 within 30 days of the meeting.
+
+Note: Board minutes must be entered in the Minutes Book within 30 days of the meeting (draft circulated to all directors within 15 days) and general-meeting minutes within 30 days — Section 118 of the Companies Act, 2013 and Secretarial Standards SS-1 and SS-2.`
   },
   {
     title: 'Register of Directors and KMP — Specimen Entry',

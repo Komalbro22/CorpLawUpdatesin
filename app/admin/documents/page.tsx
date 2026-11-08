@@ -654,7 +654,7 @@ export default function AdminDocumentsDashboard() {
                               Replace File
                             </button>
                             <a
-                              href={`/api/documents/sets/director-appointment/download?doc=${d.spoke_slug}&format=docx`}
+                              href={`/api/documents/sets/director-appointment/download?doc=${d.spoke_slug.includes('checklist') || d.step_number === 1 ? 'checklist-director-appointment' : d.spoke_slug.replace(/#.*$/, '')}&format=docx`}
                               className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-muted hover:bg-muted/80 text-foreground font-semibold"
                             >
                               <Download className="w-3 h-3" />

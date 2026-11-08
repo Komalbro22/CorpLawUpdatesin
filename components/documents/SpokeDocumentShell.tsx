@@ -232,7 +232,9 @@ export default function SpokeDocumentShell({
           {prevStep ? (
             <Link
               href={
-                prevStep.spoke_slug && !prevStep.spoke_slug.includes('#')
+                prevStep.spoke_slug === 'dir-12-guide'
+                  ? '/updates/form-dir-12-director-kmp-appointment-filing-guide-companies-act-2013'
+                  : prevStep.spoke_slug && !prevStep.spoke_slug.includes('#')
                   ? `/documents/${prevStep.spoke_slug}`
                   : `/documents/director-appointment-set#step-${prevStep.step_number}`
               }
@@ -248,7 +250,9 @@ export default function SpokeDocumentShell({
           {nextStep ? (
             <Link
               href={
-                nextStep.spoke_slug && !nextStep.spoke_slug.includes('#')
+                nextStep.spoke_slug === 'dir-12-guide'
+                  ? '/updates/form-dir-12-director-kmp-appointment-filing-guide-companies-act-2013'
+                  : nextStep.spoke_slug && !nextStep.spoke_slug.includes('#')
                   ? `/documents/${nextStep.spoke_slug}`
                   : `/documents/director-appointment-set#step-${nextStep.step_number}`
               }

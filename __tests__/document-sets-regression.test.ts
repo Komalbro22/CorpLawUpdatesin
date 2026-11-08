@@ -6,24 +6,28 @@ jest.mock('next/cache', () => ({
 
 jest.mock('@/lib/supabase-server', () => ({
   supabaseAdmin: {
-    from: jest.fn(() => ({
+    from: jest.fn((table: string) => ({
       select: jest.fn().mockReturnThis(),
       order: jest.fn().mockReturnThis(),
       eq: jest.fn().mockReturnThis(),
-      single: jest.fn().mockImplementation(() =>
-        Promise.resolve({
-          data: {
-            id: 'tpl-test-1',
-            slug: 'board-resolution-director-appointment',
-            name: 'Board Resolution for Appointment of Additional Director',
-            category: 'board_resolution',
-            template_content: 'RESOLVED THAT [NAME] be appointed...',
-            fields: [],
-            is_active: true,
-          },
-          error: null,
-        })
-      ),
+      maybeSingle: jest.fn().mockImplementation(() => Promise.resolve({ data: null, error: null })),
+      single: jest.fn().mockImplementation(() => {
+        if (table === 'document_templates') {
+          return Promise.resolve({
+            data: {
+              id: 'tpl-test-1',
+              slug: 'board-resolution-director-appointment',
+              name: 'Board Resolution for Appointment of Additional Director',
+              category: 'board_resolution',
+              template_content: 'RESOLVED THAT [NAME] be appointed...',
+              fields: [],
+              is_active: true,
+            },
+            error: null,
+          })
+        }
+        return Promise.resolve({ data: null, error: null })
+      }),
     })),
   },
 }))
@@ -58,5 +62,20 @@ describe('Document Sets & Templates Regression Test Suite (Review Item 7)', () =
     expect(spoke?.document.title).toBe('Board Meeting Notice and Agenda')
     expect(spoke?.document.step_number).toBe(3)
     expect(spoke?.currentStep?.step_number).toBe(3)
+  })
+
+  test('Checklist resolves cleanly through aliases (director-appointment-set, checklist, fragment)', async () => {
+    const spokeFromAlias1 = await getSpokeDocument('director-appointment-set')
+    expect(spokeFromAlias1).not.toBeNull()
+    expect(spokeFromAlias1?.document.title).toContain('Checklist')
+    expect(spokeFromAlias1?.document.step_number).toBe(1)
+
+    const spokeFromAlias2 = await getSpokeDocument('checklist-director-appointment')
+    expect(spokeFromAlias2).not.toBeNull()
+    expect(spokeFromAlias2?.document.title).toContain('Checklist')
+
+    const spokeFromAlias3 = await getSpokeDocument('director-appointment-set#checklist')
+    expect(spokeFromAlias3).not.toBeNull()
+    expect(spokeFromAlias3?.document.title).toContain('Checklist')
   })
 })

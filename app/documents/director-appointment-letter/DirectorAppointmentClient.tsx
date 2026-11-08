@@ -17,6 +17,7 @@ import {
 import {
   DirectorAppointmentFormData,
   DEFAULT_SAMPLE_DIRECTOR_APPOINTMENT_DATA,
+  DEMO_SAMPLE_DIRECTOR_APPOINTMENT_DATA,
   DirectorDesignation,
   generateDirectorAppointmentMarkdown,
 } from '@/lib/doc-generator/director-appointment-generator'
@@ -271,10 +272,19 @@ export default function DirectorAppointmentClient() {
           <div className="space-y-5">
             {/* 1. Company Details */}
             <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4 dark:border-slate-800 dark:bg-slate-800/40 space-y-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
-                <Building2 className="w-3.5 h-3.5 text-blue-600" />
-                Issuing Company Details
-              </h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                  <Building2 className="w-3.5 h-3.5 text-blue-600" />
+                  Issuing Company Details
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setFormData(DEMO_SAMPLE_DIRECTOR_APPOINTMENT_DATA)}
+                  className="text-[10px] text-blue-600 dark:text-blue-400 hover:underline font-semibold"
+                >
+                  Load Example
+                </button>
+              </div>
 
               <div>
                 <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
@@ -284,6 +294,7 @@ export default function DirectorAppointmentClient() {
                   type="text"
                   value={formData.companyName}
                   onChange={e => updateField('companyName', e.target.value)}
+                  placeholder="e.g. Acme Technologies Private Limited"
                   className="w-full rounded-lg border border-slate-300 bg-white p-2 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
               </div>
@@ -297,7 +308,7 @@ export default function DirectorAppointmentClient() {
                     type="text"
                     value={formData.companyCin}
                     onChange={e => updateField('companyCin', e.target.value)}
-                    placeholder="U01100MH2020PTC345678"
+                    placeholder="e.g. U01100MH2020PTC345678"
                     className="w-full rounded-lg border border-slate-300 bg-white p-2 text-xs font-mono dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                   />
                 </div>
@@ -323,6 +334,7 @@ export default function DirectorAppointmentClient() {
                   rows={2}
                   value={formData.companyAddress}
                   onChange={e => updateField('companyAddress', e.target.value)}
+                  placeholder="e.g. 401, Nariman Point, Mumbai - 400021, Maharashtra"
                   className="w-full rounded-lg border border-slate-300 bg-white p-2 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
               </div>
@@ -343,6 +355,7 @@ export default function DirectorAppointmentClient() {
                   type="text"
                   value={formData.directorName}
                   onChange={e => updateField('directorName', e.target.value)}
+                  placeholder="e.g. CA Sneha Ramesh Kulkarni"
                   className="w-full rounded-lg border border-slate-300 bg-white p-2 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
               </div>
@@ -356,7 +369,7 @@ export default function DirectorAppointmentClient() {
                     type="text"
                     value={formData.directorDin}
                     onChange={e => updateField('directorDin', e.target.value)}
-                    placeholder="8-digit DIN"
+                    placeholder="e.g. 08945612"
                     className="w-full rounded-lg border border-slate-300 bg-white p-2 text-xs font-mono dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                   />
                 </div>
@@ -382,6 +395,7 @@ export default function DirectorAppointmentClient() {
                   rows={2}
                   value={formData.directorAddress}
                   onChange={e => updateField('directorAddress', e.target.value)}
+                  placeholder="e.g. B-702, Sea Green Apartments, Worli, Mumbai - 400030"
                   className="w-full rounded-lg border border-slate-300 bg-white p-2 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
               </div>
@@ -420,6 +434,7 @@ export default function DirectorAppointmentClient() {
                     type="text"
                     value={formData.effectiveDate}
                     onChange={e => updateField('effectiveDate', e.target.value)}
+                    placeholder="e.g. 15th October 2026"
                     className="w-full rounded-lg border border-slate-300 bg-white p-2 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                   />
                 </div>
@@ -433,6 +448,7 @@ export default function DirectorAppointmentClient() {
                   type="text"
                   value={formData.term}
                   onChange={e => updateField('term', e.target.value)}
+                  placeholder="e.g. Up to next AGM under Section 161(1)"
                   className="w-full rounded-lg border border-slate-300 bg-white p-2 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
               </div>
@@ -445,6 +461,7 @@ export default function DirectorAppointmentClient() {
                   rows={2}
                   value={formData.remuneration}
                   onChange={e => updateField('remuneration', e.target.value)}
+                  placeholder="e.g. Sitting fees as approved by Board within Section 197 limits"
                   className="w-full rounded-lg border border-slate-300 bg-white p-2 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
               </div>
@@ -471,6 +488,7 @@ export default function DirectorAppointmentClient() {
                     type="text"
                     value={formData.signatoryName}
                     onChange={e => updateField('signatoryName', e.target.value)}
+                    placeholder="e.g. Rajendra Prasad Verma"
                     className="w-full rounded-lg border border-slate-300 bg-white p-2 text-xs dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                   />
                 </div>

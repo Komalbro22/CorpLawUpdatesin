@@ -270,6 +270,17 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // 308 Permanent redirect for DIR-12 filing guide from Document Set spokes
+      {
+        source: '/documents/dir-12-guide',
+        destination: '/updates/form-dir-12-director-kmp-appointment-filing-guide-companies-act-2013',
+        permanent: true,
+      },
+      {
+        source: '/documents/dir-12-guide/',
+        destination: '/updates/form-dir-12-director-kmp-appointment-filing-guide-companies-act-2013',
+        permanent: true,
+      },
       // 301 Permanent redirect for Mediavine Journey ads.txt
       {
         source: '/ads.txt',
