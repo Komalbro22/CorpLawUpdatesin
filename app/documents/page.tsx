@@ -171,12 +171,20 @@ export default async function DocumentsPage() {
           {/* AI Intent Search */}
           <div className="flex flex-col items-center gap-4">
             <DocumentIntentSearch />
-            <Link 
-              href="/documents/saved" 
-              className="inline-flex items-center gap-2 text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors bg-white/5 px-4 py-2 rounded-full border border-white/10 hover:border-amber-400/50"
-            >
-              📄 View Saved Documents
-            </Link>
+            <div className="flex items-center gap-3 flex-wrap justify-center">
+              <Link 
+                href="/documents/saved" 
+                className="inline-flex items-center gap-2 text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors bg-white/5 px-4 py-2 rounded-full border border-white/10 hover:border-amber-400/50"
+              >
+                📄 View Saved Documents
+              </Link>
+              <Link 
+                href="/documents/director-appointment-set" 
+                className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-blue-100 transition-colors bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-full border border-blue-400/50 shadow-sm"
+              >
+                📦 Director Appointment Set (11-Step Pack) →
+              </Link>
+            </div>
           </div>
 
         </div>
@@ -197,6 +205,29 @@ export default async function DocumentsPage() {
 
       {/* Main Content Area */}
       <div className="max-w-6xl mx-auto px-4 py-12 space-y-12">
+
+        {/* Document Sets Hero Section */}
+        <section className="rounded-2xl border-2 border-blue-500/30 bg-gradient-to-r from-blue-900/10 via-slate-900/5 to-transparent p-6 sm:p-8">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/15 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider mb-2">
+                📦 NEW FEATURE — EVENT-BASED DOCUMENT SETS
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground">
+                Director Appointment Document Set (Private Company)
+              </h2>
+              <p className="mt-2 text-sm sm:text-base text-muted-foreground max-w-2xl leading-relaxed">
+                Everything required to appoint an Additional Director (Sec 161(1)) and regularise at AGM (Sec 152) in exact filing order: Board notices, DIR-2, DIR-8, Board resolution, MBP-1, AGM notices, ordinary resolution, minutes extracts, and full 11-step interactive checklist.
+              </p>
+            </div>
+            <Link
+              href="/documents/director-appointment-set"
+              className="inline-flex shrink-0 items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-sm transition-colors"
+            >
+              Explore Document Set & Downloads →
+            </Link>
+          </div>
+        </section>
 
         <section aria-labelledby="dividend-generator-heading" className="rounded-2xl border border-amber-200 bg-amber-50/70 p-5 dark:border-amber-900/50 dark:bg-amber-950/20 sm:flex sm:items-center sm:justify-between sm:p-7">
           <div>

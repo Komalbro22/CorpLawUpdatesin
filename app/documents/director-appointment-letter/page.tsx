@@ -190,6 +190,39 @@ export default function DirectorAppointmentPage() {
 
       {/* Main Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        {/* Step 6 of 11 Banner linking to Hub */}
+        <div className="mb-8 p-4 rounded-xl bg-blue-50/90 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <span className="px-2.5 py-1 rounded-md font-bold bg-blue-600 text-white text-xs">
+              STEP 6 OF 11
+            </span>
+            <div>
+              <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 block">
+                Part of the <Link href="/documents/director-appointment-set" className="text-blue-600 dark:text-blue-400 underline font-bold">Director Appointment Document Set</Link>
+              </span>
+              <span className="text-[11px] text-muted-foreground">
+                Issue upon Board appointment (Sec 161(1)) • Tabled before General Meeting regularisation
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <a
+              href="/api/documents/sets/director-appointment/download?doc=director-appointment-letter&format=docx"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-colors"
+            >
+              <FileText className="w-3.5 h-3.5" />
+              Download Word (.docx)
+            </a>
+            <a
+              href="/api/documents/sets/director-appointment/download?doc=director-appointment-letter&format=pdf"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border hover:bg-muted text-foreground text-xs font-semibold transition-colors"
+            >
+              <Download className="w-3.5 h-3.5 text-rose-500" />
+              Download PDF
+            </a>
+          </div>
+        </div>
         {/* Direct Answer Box for AI Overviews / Google Search */}
         <section className="bg-linear-to-br from-emerald-50/80 via-teal-50/50 to-white dark:from-slate-900 dark:via-slate-900/80 dark:to-slate-950 p-6 md:p-8 rounded-2xl border border-emerald-100 dark:border-emerald-950/80 mb-10 shadow-2xs">
           <div className="flex items-center gap-2 mb-2 text-emerald-800 dark:text-emerald-400 font-bold text-xs uppercase tracking-wider">
@@ -500,9 +533,25 @@ export default function DirectorAppointmentPage() {
         </section>
 
         {/* Legal Disclaimer */}
-        <div className="rounded-xl border border-slate-200 bg-slate-100/60 p-4 text-xs text-slate-500 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-400 leading-relaxed">
-          <strong>Disclaimer:</strong> This free Director Appointment Letter generator and compliance guide are provided for educational and secretarial informational purposes only. Appointing directors involves statutory filings under the Companies Act, 2013 with strict penal consequences for non-compliance. Always verify with a practising Company Secretary (CS) or corporate lawyer for transaction-specific advice.
-        </div>
+        <footer className="pt-8 pb-12 border-t border-border text-xs text-muted-foreground space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <strong>Version:</strong> v1.0 • <strong>Law as at:</strong> 7 November 2026 • <strong>Review:</strong> <span className="font-medium text-amber-600 dark:text-amber-400">Under professional review</span>
+            </div>
+            <div>
+              <Link
+                href="/feedback?type=document_set&title=Director%20Appointment%20Letter&url=/documents/director-appointment-letter"
+                className="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 font-medium hover:underline"
+              >
+                Report an error
+                <ExternalLink className="w-3 h-3" />
+              </Link>
+            </div>
+          </div>
+          <p className="text-[11px] text-muted-foreground/80 leading-relaxed">
+            <strong>Statutory Disclaimer:</strong> These are draft templates and secretarial generators for reference only. Corporate actions and appointments involve legal obligations under the Companies Act, 2013. Always verify with a qualified Company Secretary before use or filing with the Ministry of Corporate Affairs.
+          </p>
+        </footer>
       </div>
 
       <JsonLd id="director-appointment-faq-schema" data={jsonLd} />

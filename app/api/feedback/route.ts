@@ -4,7 +4,7 @@ import { supabaseAdmin } from '@/lib/supabase-server'
 import { ratelimit } from '@/lib/ratelimit'
 
 const feedbackSchema = z.object({
-  context_type: z.enum(['article', 'calculator', 'document', 'glossary']),
+  context_type: z.enum(['article', 'calculator', 'document', 'glossary', 'document_set']),
   context_title: z.string().min(1).max(300),
   context_url: z.string().min(1).max(500),
   sentiment: z.enum(['positive', 'negative']),

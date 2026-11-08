@@ -1,10 +1,12 @@
 interface JsonLdProps {
-  data: Record<string, unknown>
+  data?: Record<string, unknown>
+  schema?: Record<string, unknown>
   id?: string
 }
 
-export default function JsonLd({ data, id }: JsonLdProps) {
-  const jsonString = JSON.stringify(data).replace(/</g, '\\u003c')
+export default function JsonLd({ data, schema, id }: JsonLdProps) {
+  const payload = data || schema || {}
+  const jsonString = JSON.stringify(payload).replace(/</g, '\\u003c')
   return (
     <script
       id={id}

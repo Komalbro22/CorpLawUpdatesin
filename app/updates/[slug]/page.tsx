@@ -859,6 +859,33 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                             </aside>
                         )}
 
+                        {update.slug?.includes('dir-12') && (
+                            <aside
+                                aria-label="Document Set Cross-Reference"
+                                className="my-6 rounded-xl border-2 border-blue-500/30 bg-blue-50/70 dark:bg-blue-950/20 p-5 text-sm text-slate-800 dark:text-slate-200 shadow-sm"
+                            >
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                    <div>
+                                        <span className="text-xs font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 block mb-1">
+                                            Complete Secretarial Document Pack
+                                        </span>
+                                        <h4 className="font-bold text-base text-foreground">
+                                            Need the underlying board resolutions, DIR-2, DIR-8 & MBP-1 forms?
+                                        </h4>
+                                        <p className="text-xs text-muted-foreground mt-1">
+                                            Get the verified 11-step Director Appointment Document Set with Bookman Old Style Word & PDF downloads.
+                                        </p>
+                                    </div>
+                                    <Link
+                                        href="/documents/director-appointment-set"
+                                        className="inline-flex shrink-0 items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition-colors"
+                                    >
+                                        View Director Appointment Set →
+                                    </Link>
+                                </div>
+                            </aside>
+                        )}
+
                         <MarkdownRenderer content={contentPart1} enableGazetteDownloadPrompt sponsoredLinks={!!update.is_sponsored} holdExternalLinks={!!update.hold_external_links} />
                         
                         {relatedForm && (

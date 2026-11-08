@@ -124,6 +124,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/glossary`, ...(glossaryDate ? { lastModified: glossaryDate } : {}) },
     { url: `${BASE_URL}/documents`, ...(latestDocDate ? { lastModified: latestDocDate } : {}) },
     { url: `${BASE_URL}/documents/board-resolution-for-dividend-declaration`, ...(dividendDeclarationDate ? { lastModified: dividendDeclarationDate } : {}) },
+    { url: `${BASE_URL}/documents/director-appointment-set`, lastModified: new Date('2026-11-07') },
+    { url: `${BASE_URL}/documents/dir-2-consent-format`, lastModified: new Date('2026-11-07') },
+    { url: `${BASE_URL}/documents/dir-8-format`, lastModified: new Date('2026-11-07') },
+    { url: `${BASE_URL}/documents/mbp-1-format`, lastModified: new Date('2026-11-07') },
+    { url: `${BASE_URL}/documents/director-appointment-letter`, lastModified: new Date('2026-11-07') },
+    { url: `${BASE_URL}/documents/board-resolution-director-appointment`, lastModified: new Date('2026-11-07') },
 
     { url: `${BASE_URL}/tools`, ...(latestArticleDate ? { lastModified: latestArticleDate } : {}) },
     { url: `${BASE_URL}/tools/financial-statements` },

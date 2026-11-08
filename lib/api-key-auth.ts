@@ -14,6 +14,7 @@ export type ApiKeyScope =
   | 'partner-interests:read' | 'partner-interests:write'
   | 'analytics:read'
   | 'audit:read'
+  | 'document-sets:read' | 'document-sets:write' | 'document-sets:usage'
 
 export const ALL_API_SCOPES: { scope: ApiKeyScope; label: string; group: string }[] = [
   { scope: 'articles:read', label: 'Read Articles', group: 'Articles' },
@@ -44,6 +45,10 @@ export const ALL_API_SCOPES: { scope: ApiKeyScope; label: string; group: string 
 
   { scope: 'analytics:read', label: 'Read Article & Site Analytics', group: 'Analytics' },
   { scope: 'audit:read', label: 'Read API Audit Log', group: 'Audit' },
+
+  { scope: 'document-sets:read', label: 'Read Document Sets & Legal Schedule', group: 'Document Sets' },
+  { scope: 'document-sets:write', label: 'Create & Edit Document Sets, Steps & Legal Schedule', group: 'Document Sets' },
+  { scope: 'document-sets:usage', label: 'Read Document Sets Usage Analytics & CSV', group: 'Document Sets' },
 ]
 
 export interface ApiKeyRecord {
