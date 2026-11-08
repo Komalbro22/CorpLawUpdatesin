@@ -130,6 +130,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/documents/mbp-1-format`, lastModified: new Date('2026-11-07') },
     { url: `${BASE_URL}/documents/director-appointment-letter`, lastModified: new Date('2026-11-07') },
     { url: `${BASE_URL}/documents/board-resolution-director-appointment`, lastModified: new Date('2026-11-07') },
+    { url: `${BASE_URL}/documents/board-meeting-notice-director-appointment`, lastModified: new Date('2026-11-07') },
+    { url: `${BASE_URL}/documents/general-meeting-notice-director-regularisation`, lastModified: new Date('2026-11-07') },
+    { url: `${BASE_URL}/documents/ordinary-resolution-director-regularisation`, lastModified: new Date('2026-11-07') },
+    { url: `${BASE_URL}/documents/minutes-extracts-director-appointment`, lastModified: new Date('2026-11-07') },
+    { url: `${BASE_URL}/documents/register-of-directors-specimen-entry`, lastModified: new Date('2026-11-07') },
 
     { url: `${BASE_URL}/tools`, ...(latestArticleDate ? { lastModified: latestArticleDate } : {}) },
     { url: `${BASE_URL}/tools/financial-statements` },

@@ -33,6 +33,7 @@ jest.mock('@/lib/supabase-documents', () => ({
 }))
 
 import { getCachedDocumentTemplate } from '@/lib/document-template-cache'
+import { getSpokeDocument } from '@/lib/document-sets-data'
 
 describe('Document Sets & Templates Regression Test Suite (Review Item 7)', () => {
   test('Board Resolution template resolves and retains existing structure', async () => {
@@ -49,5 +50,13 @@ describe('Document Sets & Templates Regression Test Suite (Review Item 7)', () =
 
     const letterOfCreditTpl = await getCachedDocumentTemplate('letter-of-credit')
     expect(letterOfCreditTpl).toBeDefined()
+  })
+
+  test('Spoke document board-meeting-notice-director-appointment resolves cleanly', async () => {
+    const spoke = await getSpokeDocument('board-meeting-notice-director-appointment')
+    expect(spoke).not.toBeNull()
+    expect(spoke?.document.title).toBe('Board Meeting Notice and Agenda')
+    expect(spoke?.document.step_number).toBe(3)
+    expect(spoke?.currentStep?.step_number).toBe(3)
   })
 })
