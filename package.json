@@ -1,6 +1,6 @@
 {
   "name": "corplawupdates",
-  "version": "2.66.3",
+  "version": "2.67.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -31,6 +31,7 @@
     "next": "^16.4.4",
     "nodemailer": "^10.0.16",
     "pdf-lib": "^1.17.1",
+    "posthog-js": "^1.447.4",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "react-intersection-observer": "^11.0.1",
