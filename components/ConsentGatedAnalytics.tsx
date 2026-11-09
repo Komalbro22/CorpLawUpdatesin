@@ -37,8 +37,13 @@ function PostHogPageView(): null {
 
 export default function ConsentGatedAnalytics() {
   useEffect(() => {
-    const key = process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN || process.env.NEXT_PUBLIC_POSTHOG_KEY
-    const host = process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com'
+    const key =
+      process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN ||
+      process.env.NEXT_PUBLIC_POSTHOG_KEY ||
+      'phc_kfDn2RmaryNTAJGQeg297HsYWhJNkoP3pguJVvrW3kvZ'
+    const host =
+      process.env.NEXT_PUBLIC_POSTHOG_HOST ||
+      'https://us.i.posthog.com'
 
     if (key && typeof window !== 'undefined') {
       posthog.init(key, {

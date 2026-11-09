@@ -5,6 +5,11 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  env: {
+    NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN: process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN || 'phc_kfDn2RmaryNTAJGQeg297HsYWhJNkoP3pguJVvrW3kvZ',
+    NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY || 'phc_kfDn2RmaryNTAJGQeg297HsYWhJNkoP3pguJVvrW3kvZ',
+    NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com',
+  },
   experimental: {
     optimizePackageImports: ['lucide-react', 'recharts'],
   },
