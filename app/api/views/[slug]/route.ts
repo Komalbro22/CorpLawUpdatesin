@@ -25,13 +25,14 @@ export async function GET(
 ) {
   try {
     const { slug } = await params
-    if (!redis) {
-      return NextResponse.json({ success: true, batchViews: 0 })
-    }
-    const batchViews = await redis.get<number>(`view_batch:${slug}`)
-    return NextResponse.json({ success: true, batchViews: batchViews || 0 })
+    const { data: article } = await supabaseAdmin
+      .from('updates')
+      .select('views')
+      .eq('slug', slug)
+      .single()
+    return NextResponse.json({ success: true, views: article?.views || 0, batchViews: 0 })
   } catch (error) {
-    return NextResponse.json({ success: false, batchViews: 0 })
+    return NextResponse.json({ success: false, views: 0, batchViews: 0 })
   }
 }
 
@@ -71,43 +72,48 @@ export async function POST(
       }
     }
 
+    // 4. Update Redis popular sorted set if configured (for fast cache lookups)
     if (redis) {
-      // Increment the batch count in Redis
-      await redis.incr(`view_batch:${slug}`)
-      
-      // Also increment a sorted set for popular articles
-      await redis.zincrby('popular_articles', 1, slug)
-    } else {
-      // Increment view count using Postgres function to avoid race conditions
-      const { error } = await supabaseAdmin.rpc('increment_views', {
-        article_slug: slug,
-      })
+      try {
+        await redis.zincrby('popular_articles', 1, slug)
+      } catch (redisErr) {
+        console.warn(`[Views] Failed to update Redis popular_articles for ${slug}:`, redisErr)
+      }
+    }
 
-      if (error) {
-        // Fallback: manual increment
-        const { data: article } = await supabaseAdmin
+    // 5. Increment view count directly in Supabase using atomic RPC
+    // Single source of truth: ensures real-time accuracy across Homepage Popular section,
+    // Admin Article Stats, and Analytics Overview without relying on external cron sync jobs.
+    const { error: rpcError } = await supabaseAdmin.rpc('increment_views', {
+      article_slug: slug,
+      increment_by: 1,
+    })
+
+    if (rpcError) {
+      console.warn(`[Views] RPC increment_views failed for ${slug}, attempting fallback:`, rpcError.message)
+      // Fallback: direct update
+      const { data: targetArticle } = await supabaseAdmin
+        .from('updates')
+        .select('id, views')
+        .eq('slug', slug)
+        .single()
+
+      if (targetArticle) {
+        await supabaseAdmin
           .from('updates')
-          .select('id, views')
-          .eq('slug', slug)
-          .single()
-
-        if (article) {
-          await supabaseAdmin
-            .from('updates')
-            .update({ views: (article.views || 0) + 1 })
-            .eq('id', article.id)
-        }
+          .update({ views: (targetArticle.views || 0) + 1 })
+          .eq('id', targetArticle.id)
       }
     }
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    const err = error as Error & { digest?: string };
+    const err = error as Error & { digest?: string }
     if (err.digest === 'DYNAMIC_SERVER_USAGE' || err.message?.includes('Dynamic server usage')) {
-      throw error;
+      throw error
     }
 
-    console.error(`Failed to record view for ${(await params).slug}:`, error);
+    console.error(`Failed to record view for ${(await params).slug}:`, error)
     return NextResponse.json({ success: false })
   }
 }
