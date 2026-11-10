@@ -9,6 +9,7 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/$1',
     // Mock Next.js server-only modules unavailable in Jest node env
     '^next/headers$': '<rootDir>/__tests__/__mocks__/next-headers.ts',
+    '^next/font/google$': '<rootDir>/__tests__/__mocks__/next-font-google.ts',
     // Mock heavy server-only third-party packages
     '^resend$': '<rootDir>/__tests__/__mocks__/resend.ts',
   },

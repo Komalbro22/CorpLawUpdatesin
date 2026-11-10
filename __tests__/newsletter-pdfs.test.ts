@@ -428,4 +428,53 @@ describe('Newsletter Briefing Reading Page & PDF Suite (7 Acceptance Criteria)',
       expect(sanitized).toContain('<td>Circular update details</td>')
     })
   })
+
+  // ─────────────────────────────────────────────────────────────
+  // Reader Features & BroadSheet Polish Suite
+  // ─────────────────────────────────────────────────────────────
+  describe('BroadSheet Polish, Reader Features & Scoped CSS', () => {
+    it('extractBriefingSummary correctly extracts lead headline, deck, and update count', () => {
+      const { extractBriefingSummary } = require('@/lib/newsletter-pdfs')
+      const sampleHtml = `
+        <div class="topbar"></div>
+        <div class="cell"><div class="big">29</div><div class="sub">Updates Analyzed</div></div>
+        <div class="main">
+          <div class="left">
+            <div class="kick">Taxation · Lead Story</div>
+            <div class="headline">GST registration tightens its checks — and widens its net — from 1 November</div>
+            <div class="deck">Three linked GSTN changes took effect together: a rebuilt registration form, OTP proof for sensitive amendments.</div>
+          </div>
+        </div>
+      `
+      const summary = extractBriefingSummary(sampleHtml)
+      expect(summary.leadHeadline).toBe('GST registration tightens its checks — and widens its net — from 1 November')
+      expect(summary.deck).toContain('Three linked GSTN changes took effect together')
+      expect(summary.updateCount).toBe('29 Updates')
+    })
+
+    it('verifies globals.css contains mobile safety net, theme lock, and print stylesheet', () => {
+      const fs = require('fs')
+      const path = require('path')
+      const css = fs.readFileSync(path.join(process.cwd(), 'app/globals.css'), 'utf-8')
+
+      // 1. Mobile safety net
+      expect(css).toContain('@media (max-width: 640px)')
+      expect(css).toContain('.briefing-sheet .strip')
+      expect(css).toContain('.briefing-sheet .main')
+      expect(css).toContain('.briefing-sheet .cols')
+      expect(css).toContain('.briefing-sheet .stories')
+      expect(css).toContain('flex-direction: column !important')
+
+      // 2. Theme lock
+      expect(css).toContain('.briefing-sheet.dark-override-exempt')
+      expect(css).toContain('background-color: #ffffff !important')
+      expect(css).toContain('color-scheme: light !important')
+
+      // 3. Print stylesheet
+      expect(css).toContain('@media print')
+      expect(css).toContain('.briefing-sheet-card')
+      expect(css).toContain('.sticky-top-bar')
+      expect(css).toContain('display: none !important')
+    })
+  })
 })

@@ -120,11 +120,20 @@ export function enrichNewsletterUrls(record: NewsletterPdfRecord): NewsletterPdf
   }
 }
 
+const htmlCache = new Map<string, { content: string; timestamp: number }>()
+const HTML_CACHE_TTL_MS = 5 * 60 * 1000 // 5 minutes
+
 /**
  * Fetch raw HTML text from Supabase storage for a stored briefing.
  */
 export async function fetchBriefingHtml(htmlPath: string): Promise<string | null> {
   if (!htmlPath) return null
+  const now = Date.now()
+  const cached = htmlCache.get(htmlPath)
+  if (cached && now - cached.timestamp < HTML_CACHE_TTL_MS) {
+    return cached.content
+  }
+
   try {
     // 1. Download from Primary Supabase storage
     const { data, error } = await supabaseAdmin.storage
@@ -132,7 +141,9 @@ export async function fetchBriefingHtml(htmlPath: string): Promise<string | null
       .download(htmlPath)
 
     if (!error && data) {
-      return await data.text()
+      const text = await data.text()
+      htmlCache.set(htmlPath, { content: text, timestamp: now })
+      return text
     }
 
     // 2. Fallback to Secondary Supabase storage if available
@@ -141,7 +152,9 @@ export async function fetchBriefingHtml(htmlPath: string): Promise<string | null
         .from(STORAGE_BUCKET)
         .download(htmlPath)
       if (!sec.error && sec.data) {
-        return await sec.data.text()
+        const text = await sec.data.text()
+        htmlCache.set(htmlPath, { content: text, timestamp: now })
+        return text
       }
     }
 
@@ -149,6 +162,65 @@ export async function fetchBriefingHtml(htmlPath: string): Promise<string | null
   } catch (err) {
     console.warn(`[NewsletterPDF] Failed to download briefing HTML '${htmlPath}':`, err)
     return null
+  }
+}
+
+/**
+ * Extract summary intelligence from stored broadsheet HTML for cards & social metadata.
+ */
+export function extractBriefingSummary(html?: string | null): {
+  leadHeadline: string | null
+  deck: string | null
+  updateCount: string | null
+} {
+  if (!html || typeof html !== 'string') {
+    return { leadHeadline: null, deck: null, updateCount: null }
+  }
+
+  // 1. Extract Lead Headline (inside .headline or h1)
+  const headlineMatch = html.match(/class=["'][^"']*\bheadline\b[^"']*["'][^>]*>([\s\S]*?)<\//i)
+  const rawHeadline = headlineMatch ? headlineMatch[1].replace(/<[^>]+>/g, '').trim() : null
+
+  // 2. Extract Deck / Sub-headline
+  const deckMatch = html.match(/class=["'][^"']*\bdeck\b[^"']*["'][^>]*>([\s\S]*?)<\//i)
+  const rawDeck = deckMatch ? deckMatch[1].replace(/<[^>]+>/g, '').trim() : null
+
+  // 3. Extract update count (strip HTML tags first to match text across nested elements)
+  const plainText = html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ')
+  const countMatch = plainText.match(/(\d+)\s+(?:statutory|regulatory|total|updates|orders|circulars)/i)
+  const rawCount = countMatch ? countMatch[0].trim() : null
+
+  return {
+    leadHeadline: rawHeadline,
+    deck: rawDeck,
+    updateCount: rawCount,
+  }
+}
+
+/**
+ * Get adjacent (Previous and Next) editions for chronological reading navigation.
+ */
+export async function getAdjacentNewsletters(currentSlug: string): Promise<{
+  prev: NewsletterPdfRecord | null
+  next: NewsletterPdfRecord | null
+}> {
+  try {
+    const { data: all } = await listNewsletterPdfs()
+    if (!all || all.length === 0) return { prev: null, next: null }
+
+    const cleanSlug = sanitizeNewsletterSlug(currentSlug)
+    const idx = all.findIndex(item => item.slug === cleanSlug)
+    if (idx === -1) return { prev: null, next: null }
+
+    // List is ordered newest first (week_end DESC)
+    // Next (newer edition) is idx - 1
+    // Previous (older edition) is idx + 1
+    const next = idx > 0 ? all[idx - 1] : null
+    const prev = idx < all.length - 1 ? all[idx + 1] : null
+
+    return { prev, next }
+  } catch {
+    return { prev: null, next: null }
   }
 }
 

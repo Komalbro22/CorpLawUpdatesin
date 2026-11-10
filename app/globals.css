@@ -3592,3 +3592,252 @@ a.text-gold, .text-gold a {
   transition: all 0.2s ease;
   white-space: nowrap;
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   NEWSLETTER BRIEFING BROADSHEET — SCOPED RESPONSIVE, THEME & PRINT STYLES
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* 1. Theme Lock: Force light broadsheet paper appearance regardless of dark/light toggle */
+.briefing-sheet,
+.briefing-sheet.dark-override-exempt,
+.dark .briefing-sheet,
+.dark .briefing-sheet.dark-override-exempt {
+  background-color: #ffffff !important;
+  color: #1a1a1a !important;
+  color-scheme: light !important;
+}
+
+/* Prevent global dark mode rules from inverting broadsheet text */
+.dark .briefing-sheet p,
+.dark .briefing-sheet td,
+.dark .briefing-sheet th,
+.dark .briefing-sheet li {
+  color: #1a1a1a !important;
+}
+
+.dark .briefing-sheet h1,
+.dark .briefing-sheet h2,
+.dark .briefing-sheet h3,
+.dark .briefing-sheet h4,
+.dark .briefing-sheet h5,
+.dark .briefing-sheet h6 {
+  color: #0f2a52 !important;
+}
+
+/* 2. Scoped Typography */
+.briefing-sheet {
+  font-family: var(--font-noto-serif), 'Noto Serif', var(--font-playfair), 'Playfair Display', Georgia, serif;
+}
+
+.briefing-sheet h1,
+.briefing-sheet h2,
+.briefing-sheet h3,
+.briefing-sheet .masthead,
+.briefing-sheet .headline,
+.briefing-sheet .name,
+.briefing-sheet .topbar .brand .name {
+  font-family: var(--font-playfair), 'Playfair Display', var(--font-noto-serif), 'Noto Serif', Georgia, serif !important;
+}
+
+.briefing-sheet .kicker,
+.briefing-sheet .tag,
+.briefing-sheet .edition,
+.briefing-sheet .lab,
+.briefing-sheet .sub,
+.briefing-sheet .db-head,
+.briefing-sheet .src,
+.briefing-sheet .why {
+  font-family: var(--font-inter), 'Inter', var(--font-source-sans), 'Source Sans 3', sans-serif !important;
+}
+
+/* Universal safety against horizontal scroll */
+.briefing-sheet * {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  word-break: break-word !important;
+}
+
+.briefing-sheet {
+  overflow-x: hidden !important;
+}
+
+/* 3. Mobile Responsive Safety Net (<= 640px) */
+@media (max-width: 640px) {
+  .briefing-sheet {
+    padding: 14px 10px !important;
+  }
+
+  /* Flex containers wrap */
+  .briefing-sheet .topbar {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .briefing-sheet .topbar .edition {
+    text-align: left !important;
+  }
+
+  .briefing-sheet .kicker {
+    flex-wrap: wrap !important;
+    white-space: normal !important;
+    gap: 6px !important;
+    font-size: 8.5px !important;
+  }
+
+  /* 5-cell data strip: wraps into 2-3 per row instead of 5 crammed */
+  .briefing-sheet .strip {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    border-bottom: 2px solid #0f2a52 !important;
+  }
+
+  .briefing-sheet .strip .cell {
+    flex: 1 1 calc(50% - 6px) !important;
+    min-width: 120px !important;
+    border-left: none !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    padding: 8px 6px !important;
+  }
+
+  /* Main story + side rail stack vertically in source order */
+  .briefing-sheet .main {
+    display: flex !important;
+    flex-direction: column !important;
+    margin-top: 14px !important;
+  }
+
+  .briefing-sheet .main .left {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+    padding-right: 0 !important;
+  }
+
+  .briefing-sheet .main .rail {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+    border-left: none !important;
+    border-top: 2px solid #0f2a52 !important;
+    padding-left: 0 !important;
+    padding-top: 16px !important;
+    margin-top: 20px !important;
+  }
+
+  /* Multi-column story blocks stack */
+  .briefing-sheet .cols {
+    display: flex !important;
+    flex-direction: column !important;
+    margin-top: 10px !important;
+  }
+
+  .briefing-sheet .cols .c {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-right: 0 !important;
+    margin-bottom: 12px !important;
+    text-align: left !important;
+  }
+
+  /* Data boxes stack */
+  .briefing-sheet .db-cells {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .briefing-sheet .db-cells .db-cell {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-right: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Paired story columns stack */
+  .briefing-sheet .stories {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+
+  .briefing-sheet .stories .story {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-right: none !important;
+    border-bottom: 1px solid #cbd5e1 !important;
+    padding-bottom: 16px !important;
+  }
+
+  .briefing-sheet .stories .story:last-child {
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* Guides stack */
+  .briefing-sheet .guides {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .briefing-sheet .guides .g {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-right: 0 !important;
+  }
+
+  /* Tables scroll horizontally without page clipping */
+  .briefing-sheet table {
+    display: block !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+  }
+}
+
+/* 4. Print Stylesheet: Print ONLY the white briefing sheet */
+@media print {
+  header,
+  nav,
+  footer,
+  #navbar,
+  .sticky-top-bar,
+  .site-header,
+  .site-footer,
+  .save-share-card,
+  .subscribe-block,
+  .prev-next-nav,
+  .no-print,
+  button,
+  .back-to-top {
+    display: none !important;
+  }
+
+  body,
+  main,
+  .reading-page-container {
+    background: #ffffff !important;
+    color: #000000 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .briefing-sheet-card {
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  .briefing-sheet {
+    box-shadow: none !important;
+    border: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
