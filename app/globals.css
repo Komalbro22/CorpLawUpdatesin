@@ -3661,10 +3661,28 @@ a.text-gold, .text-gold a {
   overflow-x: hidden !important;
 }
 
+/* Sticky top bar for reading page */
+.sticky-top-bar {
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: 64px !important;
+  z-index: 40 !important;
+}
+
 /* 3. Mobile Responsive Safety Net (<= 640px) */
 @media (max-width: 640px) {
   .briefing-sheet {
     padding: 14px 10px !important;
+  }
+
+  /* Masthead wrap on phone — prevent right edge clipping */
+  .briefing-sheet .masthead h1,
+  .briefing-sheet h1.masthead,
+  .masthead h1 {
+    white-space: normal !important;
+    font-size: 30px !important;
+    line-height: 1.15 !important;
+    text-align: center !important;
   }
 
   /* Flex containers wrap */
@@ -3786,6 +3804,49 @@ a.text-gold, .text-gold a {
     width: 100% !important;
     max-width: 100% !important;
     padding-right: 0 !important;
+  }
+
+  /* Editorial (navy "take") panel stacks */
+  .briefing-sheet .take,
+  .take {
+    flex-direction: column !important;
+  }
+
+  .briefing-sheet .take .t-head,
+  .take .t-head {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4) !important;
+    padding: 0 0 10px 0 !important;
+  }
+
+  .briefing-sheet .take .t-body,
+  .take .t-body {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 12px 0 0 0 !important;
+  }
+
+  /* Sheet footer stacks */
+  .briefing-sheet .footer,
+  .footer {
+    flex-direction: column !important;
+  }
+
+  .briefing-sheet .footer .disc,
+  .footer .disc {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-right: 0 !important;
+  }
+
+  .briefing-sheet .footer .firm,
+  .footer .firm {
+    width: 100% !important;
+    max-width: 100% !important;
+    text-align: left !important;
+    margin-top: 10px !important;
   }
 
   /* Tables scroll horizontally without page clipping */

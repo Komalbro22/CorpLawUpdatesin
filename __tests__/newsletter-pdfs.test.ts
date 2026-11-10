@@ -463,6 +463,14 @@ describe('Newsletter Briefing Reading Page & PDF Suite (7 Acceptance Criteria)',
       expect(css).toContain('.briefing-sheet .main')
       expect(css).toContain('.briefing-sheet .cols')
       expect(css).toContain('.briefing-sheet .stories')
+      expect(css).toContain('.masthead h1')
+      expect(css).toContain('white-space: normal !important')
+      expect(css).toContain('.take')
+      expect(css).toContain('.t-head')
+      expect(css).toContain('.t-body')
+      expect(css).toContain('.footer')
+      expect(css).toContain('.disc')
+      expect(css).toContain('.firm')
       expect(css).toContain('flex-direction: column !important')
 
       // 2. Theme lock
@@ -470,7 +478,12 @@ describe('Newsletter Briefing Reading Page & PDF Suite (7 Acceptance Criteria)',
       expect(css).toContain('background-color: #ffffff !important')
       expect(css).toContain('color-scheme: light !important')
 
-      // 3. Print stylesheet
+      // 3. Sticky top bar positioning
+      expect(css).toContain('.sticky-top-bar')
+      expect(css).toContain('top: 64px !important')
+      expect(css).toContain('z-index: 40 !important')
+
+      // 4. Print stylesheet
       expect(css).toContain('@media print')
       expect(css).toContain('.briefing-sheet-card')
       expect(css).toContain('.sticky-top-bar')

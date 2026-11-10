@@ -138,14 +138,12 @@ export default async function NewslettersArchivePage({
               const yearEditions = editionsWithSummaries.filter(e => e.year === year)
               return (
                 <div key={year} className="space-y-6">
-                  {years.length > 1 && (
-                    <div className="flex items-center gap-3">
-                      <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 font-heading">
-                        {year} Archive
-                      </h3>
-                      <span className="h-px flex-1 bg-slate-200 dark:border-slate-800" />
-                    </div>
-                  )}
+                  <div className="flex items-center gap-3">
+                    <h2 className="text-lg font-bold text-slate-800 dark:text-slate-200 font-heading">
+                      {year} Editions
+                    </h2>
+                    <span className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
+                  </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {yearEditions.map((edition) => (

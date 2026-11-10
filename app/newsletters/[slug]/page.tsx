@@ -92,7 +92,7 @@ export default async function NewsletterReadingPage({ params }: PageProps) {
   return (
     <div className={`min-h-screen bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased reading-page-container ${newsletterFontVariables}`}>
       {/* ─── Slim Sticky Mini-Bar ─── */}
-      <header className="sticky top-0 z-30 bg-[#0f2a52] text-white border-b border-[#c9a227]/30 shadow-md sticky-top-bar no-print">
+      <header className="sticky top-16 z-40 bg-[#0f2a52] text-white border-b border-[#c9a227]/30 shadow-md sticky-top-bar no-print">
         <div className="max-w-[840px] mx-auto px-3 sm:px-6 h-13 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2.5 min-w-0">
             <Link

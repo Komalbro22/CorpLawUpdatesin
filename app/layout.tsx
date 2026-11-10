@@ -220,7 +220,7 @@ export default async function RootLayout({
               <Navbar />
             </header>
           </HideOnAdmin>
-          <main id="main-content" tabIndex={-1} className="grow outline-hidden overflow-x-hidden">
+          <main id="main-content" tabIndex={-1} className="grow outline-hidden overflow-x-clip">
             {children}
           </main>
           <HideOnAdmin><Footer /></HideOnAdmin>
