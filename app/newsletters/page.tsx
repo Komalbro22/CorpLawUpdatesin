@@ -137,25 +137,34 @@ export default async function NewslettersArchivePage({
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-3">
+                <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
                   <span className="text-xs text-slate-500 dark:text-slate-400">
                     {edition.download_count > 0 ? (
                       <span className="tabular-nums font-medium">{edition.download_count.toLocaleString('en-IN')} downloads</span>
                     ) : (
-                      <span>Official PDF</span>
+                      <span>Official Edition</span>
                     )}
                   </span>
 
-                  <a
-                    href={`/newsletters/${edition.slug}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 bg-navy hover:bg-slate-800 text-amber-300 dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-navy text-xs font-bold px-4 py-2 rounded-lg transition-colors shadow-xs"
-                    aria-label={`Download weekly briefing PDF for ${edition.week_label}`}
-                  >
-                    <Download className="size-3.5" aria-hidden="true" />
-                    Download PDF
-                  </a>
+                  <div className="flex items-center gap-2">
+                    <Link
+                      href={`/newsletters/${edition.slug}`}
+                      className="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100 text-xs font-semibold px-3 py-2 rounded-lg transition-colors border border-slate-200 dark:border-slate-700"
+                      aria-label={`Read weekly briefing online for ${edition.week_label}`}
+                    >
+                      <FileText className="size-3.5 text-amber-500" aria-hidden="true" />
+                      Read
+                    </Link>
+
+                    <a
+                      href={`/newsletters/${edition.slug}/download`}
+                      className="inline-flex items-center gap-1.5 bg-navy hover:bg-slate-800 text-amber-300 dark:bg-amber-500 dark:hover:bg-amber-400 dark:text-navy text-xs font-bold px-3.5 py-2 rounded-lg transition-colors shadow-xs"
+                      aria-label={`Download weekly briefing PDF for ${edition.week_label}`}
+                    >
+                      <Download className="size-3.5" aria-hidden="true" />
+                      Download PDF
+                    </a>
+                  </div>
                 </div>
               </article>
             ))}

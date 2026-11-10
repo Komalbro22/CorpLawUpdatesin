@@ -4,10 +4,10 @@ import { getNewsletterPdfBySlug, incrementNewsletterDownloadCount } from '@/lib/
 export const dynamic = 'force-dynamic'
 
 /**
- * GET /newsletters/[slug]
- * Branded download/view route for weekly briefing PDFs.
+ * GET /newsletters/[slug]/download
+ * Branded download route for weekly briefing PDFs.
  * 302-redirects to the public Supabase storage URL with a cache-busting timestamp.
- * Automatically opens the PDF directly inside the reader's browser viewer.
+ * Increments download_count on each request.
  */
 export async function GET(
   request: NextRequest,
@@ -22,7 +22,6 @@ export async function GET(
     const { data: record, error } = await getNewsletterPdfBySlug(slug)
 
     if (error || !record || !record.direct_storage_url) {
-      // If direct slug not found, redirect to archive page with error notice
       return NextResponse.redirect(new URL('/newsletters?not_found=1', request.url), 302)
     }
 
@@ -30,8 +29,6 @@ export async function GET(
     incrementNewsletterDownloadCount(record.id).catch(() => {})
 
     // 302 Redirect directly to the storage asset URL.
-    // The storage URL serves Content-Type: application/pdf so browser renders it inline.
-    // We set Cache-Control: no-cache on the 302 itself to ensure replaced files are never stale.
     return NextResponse.redirect(record.direct_storage_url, {
       status: 302,
       headers: {

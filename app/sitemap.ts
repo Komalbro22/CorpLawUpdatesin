@@ -150,6 +150,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/tools/roc-tracker` },
     { url: `${BASE_URL}/rbi/repo-rate` },
     { url: `${BASE_URL}/newsletter` },
+    { url: `${BASE_URL}/newsletters` },
     { url: `${BASE_URL}/partners` },
     { url: `${BASE_URL}/editorial-policy` },
     { url: `${BASE_URL}/author/komalpreet-singh`, ...(latestArticleDate ? { lastModified: latestArticleDate } : {}) },
@@ -240,5 +241,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ...(g.created_at ? { lastModified: new Date(g.created_at) } : {}),
     }))
 
-  return [...staticPages, ...categoryPages, ...articlePages, ...documentPages, ...companyFormPages, ...glossaryPages]
+  // Fetch published newsletter editions for reading page indexing
+  let newsletterPages: MetadataRoute.Sitemap = []
+  if (supabaseAdmin) {
+    try {
+      const { data: newsletterRecords } = await supabaseAdmin
+        .from('newsletter_pdfs')
+        .select('slug, updated_at, created_at')
+        .order('week_end', { ascending: false })
+
+      if (newsletterRecords && newsletterRecords.length > 0) {
+        newsletterPages = newsletterRecords.map(item => ({
+          url: `${BASE_URL}/newsletters/${item.slug}`,
+          lastModified: new Date(item.updated_at || item.created_at || Date.now()),
+        }))
+      }
+    } catch {
+      // Non-blocking fallback for build step
+    }
+  }
+
+  return [...staticPages, ...categoryPages, ...articlePages, ...documentPages, ...companyFormPages, ...glossaryPages, ...newsletterPages]
 }

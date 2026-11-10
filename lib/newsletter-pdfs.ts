@@ -1,5 +1,6 @@
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { supabaseDocumentsAdmin } from '@/lib/supabase-documents-server'
+import sanitizeHtmlLib from 'sanitize-html'
 
 export interface NewsletterPdfRecord {
   id: string
@@ -8,6 +9,7 @@ export interface NewsletterPdfRecord {
   week_start: string
   week_end: string
   file_path: string
+  html_path?: string | null
   file_size_bytes: number
   uploaded_by: string
   download_count: number
@@ -15,6 +17,8 @@ export interface NewsletterPdfRecord {
   updated_at: string
   public_url?: string
   direct_storage_url?: string
+  reading_url?: string
+  has_html?: boolean
 }
 
 const STORAGE_BUCKET = 'newsletter-pdfs'
@@ -26,6 +30,7 @@ const SITE_BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://www.corplawupd
 export function sanitizeNewsletterSlug(input: string, fallbackWeekEnd?: string): string {
   const base = input
     .replace(/\.pdf$/i, '')
+    .replace(/\.html?$/i, '')
     .toLowerCase()
     .trim()
     .replace(/[^a-z0-9-]/g, '-')
@@ -48,10 +53,55 @@ export function formatFileSize(bytes: number): string {
 }
 
 /**
- * Generate public URLs for a newsletter PDF record.
+ * Defensively sanitize Muse / Admin generated newsletter briefing HTML fragments.
+ * Retains broadsheet design tokens: tables, headings, divs, spans, inline styles & links.
+ * Strips all script tags, iframes, forms, inputs, event handlers, and javascript: URIs.
+ */
+const BRIEFING_ALLOWED_TAGS = [
+  'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td',
+  'div', 'span', 'p', 'br', 'hr',
+  'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+  'a', 'img', 'b', 'i', 'strong', 'em', 'u', 's', 'strike',
+  'ul', 'ol', 'li', 'blockquote', 'section', 'article', 'header', 'footer',
+  'small', 'sub', 'sup', 'center'
+]
+
+const BRIEFING_ALLOWED_ATTR = [
+  'style', 'class', 'id', 'width', 'height', 'align', 'valign',
+  'border', 'cellpadding', 'cellspacing', 'colspan', 'rowspan',
+  'bgcolor', 'color', 'dir'
+]
+
+export function sanitizeBriefingHtml(html: string): string {
+  if (!html || typeof html !== 'string') return ''
+
+  return sanitizeHtmlLib(html, {
+    allowedTags: BRIEFING_ALLOWED_TAGS,
+    allowedAttributes: {
+      '*': BRIEFING_ALLOWED_ATTR,
+      'a': ['href', 'target', 'rel', 'title', 'class', 'style', 'id'],
+      'img': ['src', 'alt', 'title', 'width', 'height', 'class', 'style', 'id', 'loading'],
+      'table': ['style', 'class', 'id', 'width', 'height', 'border', 'cellpadding', 'cellspacing', 'bgcolor', 'align'],
+      'td': ['style', 'class', 'id', 'width', 'height', 'border', 'colspan', 'rowspan', 'align', 'valign', 'bgcolor'],
+      'th': ['style', 'class', 'id', 'width', 'height', 'border', 'colspan', 'rowspan', 'align', 'valign', 'bgcolor'],
+    },
+    allowedSchemes: ['http', 'https', 'mailto', 'tel'],
+    allowedSchemesByTag: {
+      'a': ['http', 'https', 'mailto', 'tel'],
+    },
+    disallowedTagsModes: 'discard',
+  })
+}
+
+/**
+ * Generate canonical public URLs for a newsletter PDF record.
+ *  - reading_url: /newsletters/<slug> (reads online)
+ *  - public_url: /newsletters/<slug>/download (302 redirects to PDF)
+ *  - direct_storage_url: direct CDN URL with timestamp cache-buster
  */
 export function enrichNewsletterUrls(record: NewsletterPdfRecord): NewsletterPdfRecord {
-  const brandedUrl = `${SITE_BASE_URL}/newsletters/${record.slug}`
+  const readingUrl = `${SITE_BASE_URL}/newsletters/${record.slug}`
+  const downloadUrl = `${SITE_BASE_URL}/newsletters/${record.slug}/download`
   
   // Storage public URL from primary Supabase with timestamp query for instant cache-busting
   const { data } = supabaseAdmin.storage
@@ -63,8 +113,42 @@ export function enrichNewsletterUrls(record: NewsletterPdfRecord): NewsletterPdf
 
   return {
     ...record,
-    public_url: brandedUrl,
+    reading_url: readingUrl,
+    public_url: downloadUrl,
     direct_storage_url: directStorageUrl,
+    has_html: !!record.html_path,
+  }
+}
+
+/**
+ * Fetch raw HTML text from Supabase storage for a stored briefing.
+ */
+export async function fetchBriefingHtml(htmlPath: string): Promise<string | null> {
+  if (!htmlPath) return null
+  try {
+    // 1. Download from Primary Supabase storage
+    const { data, error } = await supabaseAdmin.storage
+      .from(STORAGE_BUCKET)
+      .download(htmlPath)
+
+    if (!error && data) {
+      return await data.text()
+    }
+
+    // 2. Fallback to Secondary Supabase storage if available
+    if (supabaseDocumentsAdmin) {
+      const sec = await supabaseDocumentsAdmin.storage
+        .from(STORAGE_BUCKET)
+        .download(htmlPath)
+      if (!sec.error && sec.data) {
+        return await sec.data.text()
+      }
+    }
+
+    return null
+  } catch (err) {
+    console.warn(`[NewsletterPDF] Failed to download briefing HTML '${htmlPath}':`, err)
+    return null
   }
 }
 
@@ -108,7 +192,7 @@ export async function listNewsletterPdfs(): Promise<{ data: NewsletterPdfRecord[
  */
 export async function getNewsletterPdfBySlug(slug: string): Promise<{ data: NewsletterPdfRecord | null; error: string | null }> {
   try {
-    const cleanSlug = slug.replace(/\.pdf$/i, '').trim()
+    const cleanSlug = slug.replace(/\.pdf$/i, '').replace(/\.html?$/i, '').trim()
 
     // 1. Check primary DB
     let { data, error } = await supabaseAdmin
@@ -163,11 +247,12 @@ export async function getNewsletterPdfById(id: string): Promise<{ data: Newslett
 }
 
 /**
- * Upload a new weekly newsletter PDF to Supabase storage and create the database record.
+ * Upload a new weekly newsletter PDF and optional HTML reading version to Supabase storage.
  * Dual-syncs to both Primary Supabase and Secondary Supabase.
  */
 export async function uploadNewsletterPdf(params: {
   fileBuffer: Buffer
+  htmlBuffer?: Buffer
   fileName?: string
   slug?: string
   week_label: string
@@ -176,13 +261,23 @@ export async function uploadNewsletterPdf(params: {
   uploaded_by?: string
 }): Promise<{ data: NewsletterPdfRecord | null; error: string | null }> {
   try {
-    const { fileBuffer, fileName: rawFileName, slug: rawSlug, week_label, week_start, week_end, uploaded_by = 'admin' } = params
+    const {
+      fileBuffer,
+      htmlBuffer,
+      fileName: rawFileName,
+      slug: rawSlug,
+      week_label,
+      week_start,
+      week_end,
+      uploaded_by = 'admin',
+    } = params
 
     // 1. Sanitize slug and fileName
     const slug = sanitizeNewsletterSlug(rawSlug || rawFileName || `weekly-briefing-${week_end}`, week_end)
     const filePath = `${slug}.pdf`
+    const htmlPath = htmlBuffer ? `${slug}.html` : null
 
-    // 2. Upload to Primary Supabase Storage
+    // 2. Upload PDF to Primary Supabase Storage
     const { error: uploadError } = await supabaseAdmin.storage
       .from(STORAGE_BUCKET)
       .upload(filePath, fileBuffer, {
@@ -195,7 +290,22 @@ export async function uploadNewsletterPdf(params: {
       return { data: null, error: `Primary storage upload failed: ${uploadError.message}` }
     }
 
-    // 3. Mirror upload to Secondary Supabase Storage if configured
+    // 3. Upload HTML to Primary Supabase Storage if provided
+    if (htmlBuffer && htmlPath) {
+      const { error: htmlUploadErr } = await supabaseAdmin.storage
+        .from(STORAGE_BUCKET)
+        .upload(htmlPath, htmlBuffer, {
+          contentType: 'text/html; charset=utf-8',
+          upsert: true,
+          cacheControl: '31536000',
+        })
+
+      if (htmlUploadErr) {
+        console.warn('[NewsletterPDF] Primary HTML upload warning:', htmlUploadErr.message)
+      }
+    }
+
+    // 4. Mirror uploads to Secondary Supabase Storage if configured
     if (supabaseDocumentsAdmin) {
       try {
         await supabaseDocumentsAdmin.storage
@@ -205,13 +315,23 @@ export async function uploadNewsletterPdf(params: {
             upsert: true,
             cacheControl: '31536000',
           })
+
+        if (htmlBuffer && htmlPath) {
+          await supabaseDocumentsAdmin.storage
+            .from(STORAGE_BUCKET)
+            .upload(htmlPath, htmlBuffer, {
+              contentType: 'text/html; charset=utf-8',
+              upsert: true,
+              cacheControl: '31536000',
+            })
+        }
       } catch (s2Err: any) {
         console.warn('[NewsletterPDF] Secondary S2 storage mirror warning:', s2Err?.message)
       }
     }
 
-    // 4. Insert record into Primary DB
-    const insertPayload = {
+    // 5. Insert record into Primary DB
+    const insertPayload: Record<string, any> = {
       slug,
       week_label,
       week_start,
@@ -223,17 +343,37 @@ export async function uploadNewsletterPdf(params: {
       updated_at: new Date().toISOString(),
     }
 
-    const { data: inserted, error: dbError } = await supabaseAdmin
+    if (htmlPath) {
+      insertPayload.html_path = htmlPath
+    }
+
+    let { data: inserted, error: dbError } = await supabaseAdmin
       .from('newsletter_pdfs')
       .upsert(insertPayload, { onConflict: 'slug' })
       .select()
       .single()
 
-    if (dbError) {
-      return { data: null, error: `Database insert failed: ${dbError.message}` }
+    if (dbError && (dbError.message.includes('html_path') || dbError.message.includes('column'))) {
+      console.warn('[NewsletterPDF] DB column html_path missing, falling back without column in table:', dbError.message)
+      const fallbackPayload = { ...insertPayload }
+      delete fallbackPayload.html_path
+      const retry = await supabaseAdmin
+        .from('newsletter_pdfs')
+        .upsert(fallbackPayload, { onConflict: 'slug' })
+        .select()
+        .single()
+      inserted = retry.data
+      dbError = retry.error
+      if (inserted && htmlPath) {
+        inserted.html_path = htmlPath
+      }
     }
 
-    // 5. Mirror record to Secondary DB if configured
+    if (dbError || !inserted) {
+      return { data: null, error: `Database insert failed: ${dbError?.message}` }
+    }
+
+    // 6. Mirror record to Secondary DB if configured
     if (supabaseDocumentsAdmin) {
       try {
         await supabaseDocumentsAdmin
@@ -251,13 +391,14 @@ export async function uploadNewsletterPdf(params: {
 }
 
 /**
- * Replace the file and/or metadata of an existing newsletter PDF entry.
+ * Replace the PDF/HTML files and/or metadata of an existing newsletter PDF entry.
  * Dual-syncs to both Primary and Secondary Supabase instances.
  */
 export async function replaceNewsletterPdf(
   id: string,
   params: {
     fileBuffer?: Buffer
+    htmlBuffer?: Buffer
     fileName?: string
     slug?: string
     week_label?: string
@@ -274,13 +415,14 @@ export async function replaceNewsletterPdf(
     const currentRecord = existing.data
     const newSlug = params.slug ? sanitizeNewsletterSlug(params.slug) : currentRecord.slug
     const newFilePath = `${newSlug}.pdf`
+    let newHtmlPath = currentRecord.html_path || (params.htmlBuffer ? `${newSlug}.html` : null)
 
-    // If new file buffer is provided, upload/overwrite in storage
+    // A. If new PDF file buffer is provided, upload/overwrite in storage
     let newFileSize = currentRecord.file_size_bytes
     if (params.fileBuffer) {
       newFileSize = params.fileBuffer.length
 
-      // Upload to Primary
+      // Upload PDF to Primary
       const { error: upErr } = await supabaseAdmin.storage
         .from(STORAGE_BUCKET)
         .upload(newFilePath, params.fileBuffer, {
@@ -317,6 +459,39 @@ export async function replaceNewsletterPdf(
       }
     }
 
+    // B. If new HTML buffer is provided, upload/overwrite in storage
+    if (params.htmlBuffer) {
+      newHtmlPath = `${newSlug}.html`
+
+      // Upload HTML to Primary
+      const { error: htmlUpErr } = await supabaseAdmin.storage
+        .from(STORAGE_BUCKET)
+        .upload(newHtmlPath, params.htmlBuffer, {
+          contentType: 'text/html; charset=utf-8',
+          upsert: true,
+          cacheControl: '31536000',
+        })
+
+      if (htmlUpErr) {
+        return { data: null, error: `Primary HTML storage upload failed: ${htmlUpErr.message}` }
+      }
+
+      // Mirror HTML to Secondary
+      if (supabaseDocumentsAdmin) {
+        try {
+          await supabaseDocumentsAdmin.storage
+            .from(STORAGE_BUCKET)
+            .upload(newHtmlPath, params.htmlBuffer, {
+              contentType: 'text/html; charset=utf-8',
+              upsert: true,
+              cacheControl: '31536000',
+            })
+        } catch (s2HtmlErr: any) {
+          console.warn('[NewsletterPDF] Secondary S2 HTML replace mirror warning:', s2HtmlErr?.message)
+        }
+      }
+    }
+
     const updatePayload: Record<string, any> = {
       slug: newSlug,
       file_path: newFilePath,
@@ -324,20 +499,38 @@ export async function replaceNewsletterPdf(
       updated_at: new Date().toISOString(),
     }
 
+    if (newHtmlPath) updatePayload.html_path = newHtmlPath
     if (params.week_label) updatePayload.week_label = params.week_label
     if (params.week_start) updatePayload.week_start = params.week_start
     if (params.week_end) updatePayload.week_end = params.week_end
 
     // Update Primary DB
-    const { data: updated, error: updateErr } = await supabaseAdmin
+    let { data: updated, error: updateErr } = await supabaseAdmin
       .from('newsletter_pdfs')
       .update(updatePayload)
       .eq('id', id)
       .select()
       .single()
 
-    if (updateErr) {
-      return { data: null, error: `Database update failed: ${updateErr.message}` }
+    if (updateErr && (updateErr.message.includes('html_path') || updateErr.message.includes('column'))) {
+      console.warn('[NewsletterPDF] DB column html_path missing, falling back without column in table update:', updateErr.message)
+      const fallbackPayload = { ...updatePayload }
+      delete fallbackPayload.html_path
+      const retry = await supabaseAdmin
+        .from('newsletter_pdfs')
+        .update(fallbackPayload)
+        .eq('id', id)
+        .select()
+        .single()
+      updated = retry.data
+      updateErr = retry.error
+      if (updated && newHtmlPath) {
+        updated.html_path = newHtmlPath
+      }
+    }
+
+    if (updateErr || !updated) {
+      return { data: null, error: `Database update failed: ${updateErr?.message}` }
     }
 
     // Mirror to Secondary DB
@@ -359,7 +552,7 @@ export async function replaceNewsletterPdf(
 }
 
 /**
- * Delete a newsletter PDF entry and its storage asset.
+ * Delete a newsletter PDF entry, its PDF file, and its HTML reading asset.
  * Dual-syncs deletion across Primary and Secondary Supabase instances.
  */
 export async function deleteNewsletterPdf(id: string): Promise<{ success: boolean; error: string | null }> {
@@ -370,14 +563,18 @@ export async function deleteNewsletterPdf(id: string): Promise<{ success: boolea
     }
 
     const record = existing.data
+    const filesToDelete = [record.file_path]
+    if (record.html_path) {
+      filesToDelete.push(record.html_path)
+    }
 
-    // 1. Delete file from Primary Storage
-    await supabaseAdmin.storage.from(STORAGE_BUCKET).remove([record.file_path])
+    // 1. Delete files from Primary Storage
+    await supabaseAdmin.storage.from(STORAGE_BUCKET).remove(filesToDelete)
 
-    // 2. Delete file from Secondary Storage if configured
+    // 2. Delete files from Secondary Storage if configured
     if (supabaseDocumentsAdmin) {
       try {
-        await supabaseDocumentsAdmin.storage.from(STORAGE_BUCKET).remove([record.file_path])
+        await supabaseDocumentsAdmin.storage.from(STORAGE_BUCKET).remove(filesToDelete)
       } catch (s2Err) {
         // Non-blocking
       }

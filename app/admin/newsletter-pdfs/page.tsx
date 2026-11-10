@@ -31,12 +31,15 @@ interface NewsletterPdf {
   week_start: string
   week_end: string
   file_path: string
+  html_path?: string | null
+  has_html?: boolean
   file_size_bytes: number
   uploaded_by: string
   download_count: number
   created_at: string
   updated_at: string
   public_url?: string
+  reading_url?: string
   direct_storage_url?: string
 }
 
@@ -59,6 +62,7 @@ export default function AdminNewsletterPdfsPage() {
   // Upload modal state
   const [showUploadModal, setShowUploadModal] = useState(false)
   const [uploadFile, setUploadFile] = useState<File | null>(null)
+  const [uploadHtmlFile, setUploadHtmlFile] = useState<File | null>(null)
   const [uploadWeekLabel, setUploadWeekLabel] = useState('')
   const [uploadWeekStart, setUploadWeekStart] = useState('')
   const [uploadWeekEnd, setUploadWeekEnd] = useState('')
@@ -68,6 +72,7 @@ export default function AdminNewsletterPdfsPage() {
   // Replace modal state
   const [replaceTarget, setReplaceTarget] = useState<NewsletterPdf | null>(null)
   const [replaceFile, setReplaceFile] = useState<File | null>(null)
+  const [replaceHtmlFile, setReplaceHtmlFile] = useState<File | null>(null)
   const [submittingReplace, setSubmittingReplace] = useState(false)
 
   // Edit details modal state
@@ -162,6 +167,9 @@ export default function AdminNewsletterPdfsPage() {
     try {
       const fd = new FormData()
       fd.append('file', uploadFile)
+      if (uploadHtmlFile) {
+        fd.append('html', uploadHtmlFile)
+      }
       fd.append('week_label', uploadWeekLabel.trim())
       fd.append('week_start', uploadWeekStart)
       fd.append('week_end', uploadWeekEnd)
@@ -176,9 +184,10 @@ export default function AdminNewsletterPdfsPage() {
       const json = await res.json()
 
       if (res.ok && json.success) {
-        showToast('Weekly briefing PDF uploaded successfully!', 'success')
+        showToast('Weekly briefing PDF & reading version uploaded successfully!', 'success')
         setShowUploadModal(false)
         setUploadFile(null)
+        setUploadHtmlFile(null)
         setUploadWeekLabel('')
         setUploadWeekStart('')
         setUploadWeekEnd('')
@@ -197,15 +206,16 @@ export default function AdminNewsletterPdfsPage() {
   // Handle Replace Submit
   const handleReplaceSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!replaceTarget || !replaceFile) {
-      showToast('Please select a replacement PDF file', 'error')
+    if (!replaceTarget || (!replaceFile && !replaceHtmlFile)) {
+      showToast('Please select a PDF file or HTML reading version to update', 'error')
       return
     }
 
     setSubmittingReplace(true)
     try {
       const fd = new FormData()
-      fd.append('file', replaceFile)
+      if (replaceFile) fd.append('file', replaceFile)
+      if (replaceHtmlFile) fd.append('html', replaceHtmlFile)
 
       const res = await fetch(`/api/admin/newsletter-pdfs/${replaceTarget.id}`, {
         method: 'PATCH',
@@ -214,9 +224,10 @@ export default function AdminNewsletterPdfsPage() {
       const json = await res.json()
 
       if (res.ok && json.success) {
-        showToast('PDF file replaced. Public link retained with updated cache.', 'success')
+        showToast('Newsletter files updated. Cache-busted URLs updated.', 'success')
         setReplaceTarget(null)
         setReplaceFile(null)
+        setReplaceHtmlFile(null)
         fetchNewsletters()
       } else {
         showToast(json.error?.message || 'Replacement failed', 'error')
@@ -428,8 +439,17 @@ export default function AdminNewsletterPdfsPage() {
                     >
                       <td className="px-4 py-3 text-slate-400 font-mono">{index + 1}</td>
                       <td className="px-4 py-3">
-                        <div className="font-semibold text-slate-900 dark:text-white text-sm">
-                          {item.week_label}
+                        <div className="font-semibold text-slate-900 dark:text-white text-sm flex flex-wrap items-center gap-2">
+                          <span>{item.week_label}</span>
+                          {item.has_html || item.html_path ? (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+                              <CheckCircle2 className="size-3" /> Reading Page
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
+                              PDF Only
+                            </span>
+                          )}
                         </div>
                         <div className="text-[11px] text-slate-500 dark:text-slate-400 font-mono mt-0.5">
                           /newsletters/{item.slug}
@@ -465,15 +485,26 @@ export default function AdminNewsletterPdfsPage() {
                             )}
                           </button>
 
-                          {/* Preview PDF */}
+                          {/* Preview Reading Page */}
                           <a
                             href={`/newsletters/${item.slug}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="p-1.5 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
-                            title="Open in browser viewer"
+                            title="Open online reading page"
                           >
-                            <ExternalLink className="size-4" aria-hidden="true" />
+                            <Eye className="size-4 text-blue-500" aria-hidden="true" />
+                          </a>
+
+                          {/* Direct PDF Link */}
+                          <a
+                            href={`/newsletters/${item.slug}/download`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-1.5 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                            title="Open direct PDF download"
+                          >
+                            <Download className="size-4 text-amber-500" aria-hidden="true" />
                           </a>
 
                           {/* Replace File */}
@@ -555,6 +586,23 @@ export default function AdminNewsletterPdfsPage() {
                 {uploadFile && (
                   <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-1">
                     Selected: {uploadFile.name} ({formatBytes(uploadFile.size)})
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  Optional HTML Reading Version (Max 2 MB)
+                </label>
+                <input
+                  type="file"
+                  accept="text/html,.html,.htm"
+                  onChange={e => setUploadHtmlFile(e.target.files?.[0] || null)}
+                  className="w-full text-xs text-slate-600 dark:text-slate-300 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-200 dark:file:bg-slate-700 file:text-slate-800 dark:file:text-slate-200 hover:file:bg-slate-300 cursor-pointer border border-slate-200 dark:border-slate-700 rounded-lg p-1.5 bg-slate-50 dark:bg-slate-800"
+                />
+                {uploadHtmlFile && (
+                  <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-1">
+                    Selected HTML: {uploadHtmlFile.name} ({formatBytes(uploadHtmlFile.size)})
                   </p>
                 )}
               </div>
@@ -651,10 +699,14 @@ export default function AdminNewsletterPdfsPage() {
             <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800 mb-4">
               <h2 className="font-heading text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <RefreshCw className="size-4 text-amber-500" aria-hidden="true" />
-                Replace PDF File
+                Update Newsletter Files (PDF & HTML)
               </h2>
               <button
-                onClick={() => setReplaceTarget(null)}
+                onClick={() => {
+                  setReplaceTarget(null)
+                  setReplaceFile(null)
+                  setReplaceHtmlFile(null)
+                }}
                 className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1 rounded-lg"
               >
                 <X className="size-5" />
@@ -667,47 +719,75 @@ export default function AdminNewsletterPdfsPage() {
                   Target Edition: {replaceTarget.week_label}
                 </p>
                 <p className="text-[11px] text-slate-500 font-mono mt-0.5">
-                  URL: /newsletters/{replaceTarget.slug}
+                  Reading Page: /newsletters/{replaceTarget.slug}
+                </p>
+                <p className="text-[11px] text-slate-500 font-mono">
+                  Direct Download: /newsletters/{replaceTarget.slug}/download
                 </p>
               </div>
 
               <div className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
-                Uploading a replacement will overwrite the existing asset in Supabase storage while keeping the exact same public URL. Readers will receive the latest version immediately with timestamp cache-busting.
+                Upload a new PDF to overwrite the storage document, and/or upload an HTML reading version. Changes take effect immediately with timestamp cache-busting.
               </div>
 
               <div>
                 <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  Choose New PDF File (Max 10 MB) *
+                  Replace PDF File (Max 10 MB)
                 </label>
                 <input
                   type="file"
                   accept="application/pdf,.pdf"
-                  required
                   onChange={e => setReplaceFile(e.target.files?.[0] || null)}
                   className="w-full text-xs text-slate-600 dark:text-slate-300 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-500 file:text-navy hover:file:bg-amber-400 cursor-pointer border border-slate-200 dark:border-slate-700 rounded-lg p-1.5 bg-slate-50 dark:bg-slate-800"
                 />
+                {replaceFile && (
+                  <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-1">
+                    Selected PDF: {replaceFile.name} ({formatBytes(replaceFile.size)})
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  Add / Replace HTML Reading Version (Max 2 MB)
+                </label>
+                <input
+                  type="file"
+                  accept="text/html,.html,.htm"
+                  onChange={e => setReplaceHtmlFile(e.target.files?.[0] || null)}
+                  className="w-full text-xs text-slate-600 dark:text-slate-300 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-200 dark:file:bg-slate-700 file:text-slate-800 dark:file:text-slate-200 hover:file:bg-slate-300 cursor-pointer border border-slate-200 dark:border-slate-700 rounded-lg p-1.5 bg-slate-50 dark:bg-slate-800"
+                />
+                {replaceHtmlFile && (
+                  <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-1">
+                    Selected HTML: {replaceHtmlFile.name} ({formatBytes(replaceHtmlFile.size)})
+                  </p>
+                )}
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-200 dark:border-slate-800">
                 <button
                   type="button"
-                  onClick={() => setReplaceTarget(null)}
+                  onClick={() => {
+                    setReplaceTarget(null)
+                    setReplaceFile(null)
+                    setReplaceHtmlFile(null)
+                  }}
                   className="px-4 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  disabled={submittingReplace || !replaceFile}
+                  disabled={submittingReplace || (!replaceFile && !replaceHtmlFile)}
                   className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-navy font-bold shadow-xs transition-all disabled:opacity-60 cursor-pointer"
                 >
                   {submittingReplace ? (
                     <>
                       <Loader2 className="size-4 animate-spin" />
-                      Replacing...
+                      Updating...
                     </>
                   ) : (
-                    'Replace File'
+                    'Update Files'
                   )}
                 </button>
               </div>
