@@ -8,6 +8,7 @@ import {
     Calendar,
     ChevronLeft,
     ChevronRight,
+    FileDown,
     FileText,
     Landmark,
     LayoutDashboard,
@@ -65,6 +66,7 @@ const sections: SidebarSection[] = [
             { href: '/admin/notifications',       icon: Bell,               label: 'Push Broadcast'   },
             { href: '/admin/newsletter',           icon: Mail,      label: 'Newsletter'       },
             { href: '/admin/newsletter/history',   icon: ScrollText, label: 'Email History'  },
+            { href: '/admin/newsletter-pdfs',      icon: FileDown,   label: 'Newsletter PDFs' },
         ],
     },
     {

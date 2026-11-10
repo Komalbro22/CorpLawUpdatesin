@@ -23,6 +23,7 @@ function segmentsForPath(pathname: string): BreadcrumbSegment[] {
     if (pathname === '/admin/newsletter') return [base, { label: 'Newsletter' }]
     if (pathname === '/admin/newsletter/history') return [base, { label: 'Newsletter', href: '/admin/newsletter' }, { label: 'Email History' }]
     if (pathname.startsWith('/admin/newsletter/history/')) return [base, { label: 'Newsletter', href: '/admin/newsletter' }, { label: 'History', href: '/admin/newsletter/history' }, { label: 'Campaign' }]
+    if (pathname === '/admin/newsletter-pdfs') return [base, { label: 'Newsletter', href: '/admin/newsletter' }, { label: 'Newsletter PDFs' }]
     if (pathname === '/admin/analytics') return [base, { label: 'Analytics' }]
     if (pathname === '/admin/analytics/articles') return [base, { label: 'Analytics', href: '/admin/analytics' }, { label: 'Article Stats' }]
     if (pathname === '/admin/analytics/tools') return [base, { label: 'Analytics', href: '/admin/analytics' }, { label: 'Tool Usage' }]

@@ -186,6 +186,11 @@ export default async function Footer() {
                                 SUBSCRIBE FREE
                                 <ArrowRight className="size-3.5" aria-hidden="true" />
                             </Link>
+                            <div className="mt-3 text-center">
+                                <Link href="/newsletters" className="text-[11px] text-slate-300 hover:text-amber-400 transition-colors inline-flex items-center gap-1 font-medium">
+                                    Weekly Briefing Archive (PDF) →
+                                </Link>
+                            </div>
                          </div>
                     </div>
                 </div>

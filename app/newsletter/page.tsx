@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import NewsletterWidget from '@/components/NewsletterWidget'
 import type { Metadata } from 'next'
 
@@ -26,6 +27,15 @@ export default function NewsletterPage() {
                 <p className="text-xl text-slate-300 max-w-2xl mx-auto">
                     Get the most important regulatory changes delivered to your inbox every week.
                 </p>
+                <div className="mt-6 pt-6 border-t border-white/10 flex flex-wrap items-center justify-center gap-4 text-sm text-slate-300">
+                    <span>Looking for past PDF briefings?</span>
+                    <Link
+                        href="/newsletters"
+                        className="inline-flex items-center gap-1.5 text-amber-300 hover:text-amber-200 underline font-semibold transition-colors"
+                    >
+                        Browse Weekly Briefing PDF Archive →
+                    </Link>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
