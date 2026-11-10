@@ -478,10 +478,9 @@ describe('Newsletter Briefing Reading Page & PDF Suite (7 Acceptance Criteria)',
       expect(css).toContain('background-color: #ffffff !important')
       expect(css).toContain('color-scheme: light !important')
 
-      // 3. Sticky top bar positioning
+      // 3. Top bar positioning (static, non-sticky like before)
       expect(css).toContain('.sticky-top-bar')
-      expect(css).toContain('top: 64px !important')
-      expect(css).toContain('z-index: 40 !important')
+      expect(css).toContain('position: static !important')
 
       // 4. Print stylesheet
       expect(css).toContain('@media print')
