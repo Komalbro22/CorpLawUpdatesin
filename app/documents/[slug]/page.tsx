@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation'
 import { supabaseDocuments } from '@/lib/supabase-documents'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { getCachedDocumentTemplate } from '@/lib/document-template-cache'
+import { getDocumentSeoGuide } from '@/lib/documents-seo-guides'
+import DocumentSeoGuideSection from '@/components/DocumentSeoGuideSection'
 import DocumentGeneratorClient from './DocumentGeneratorClient'
 
 export const revalidate = false // Fully static; instant on-demand via revalidateDocumentMutation
@@ -42,11 +44,22 @@ export default async function DocumentSlugPage({ params }: PageProps) {
     notFound()
   }
 
+  const guide = getDocumentSeoGuide(slug)
+
   return (
     <main>
       <DocumentGeneratorClient
         slugOverride={slug}
         initialTemplate={template}
+        hasSeoGuide={Boolean(guide)}
+        heroTitle={guide?.h1}
+        heroBadge={guide?.heroBadge}
+        heroIntro={guide?.introSummary}
+      />
+      <DocumentSeoGuideSection
+        guide={guide}
+        templateName={template.name}
+        slug={slug}
       />
     </main>
   )

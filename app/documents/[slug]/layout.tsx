@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getCachedDocumentTemplate } from '@/lib/document-template-cache'
+import { getDocumentSeoGuide } from '@/lib/documents-seo-guides'
 import JsonLd from '@/components/JsonLd'
 
 interface LayoutProps {
@@ -22,17 +23,22 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
     notFound()
   }
 
+  const guide = getDocumentSeoGuide(slug)
+
   // Optimize title/description for SEO based on document type (Next.js applies %s | CorpLawUpdates.in)
   let title = `${template.name} Format (Free Generator)`
   let description = `${template.description} Create and customize an editable draft for professional review. Check the stated legal references and suitability for your circumstances before use.`
   let keywords = [template.name, `${template.name} format`, `${template.name} india`, 'generator', 'drafting', 'legal template', 'pdf download']
-  
+
   if (template.tags && Array.isArray(template.tags)) {
     keywords = [...keywords, ...template.tags]
   }
 
-  // Special overrides for highly searched templates (clean titles under 60 chars)
-  if (slug === 'lease-agreement') {
+  if (guide) {
+    title = guide.seoTitle
+    description = guide.metaDescription
+    keywords = [...guide.keywords, ...keywords]
+  } else if (slug === 'lease-agreement') {
     title = 'Rent Agreement & Lease Deed Generator'
     description = 'Generate a legally compliant Lease Agreement or Rent Deed under the Transfer of Property Act 1882. Add security deposit, lock-in, escalation, and TDS clauses. Draft in minutes.'
     keywords = [...keywords, 'rent agreement generator', 'commercial lease india', '11 month rent agreement']
@@ -50,12 +56,14 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
     keywords = [...keywords, 'shifting of registered office from one state to another', 'state to state registered office shifting', 'section 13 special resolution', 'explanatory statement section 102']
   }
 
+  const uniqueKeywords = Array.from(new Set(keywords))
+
   const ogImageUrl = `https://www.corplawupdates.in/api/og?title=${encodeURIComponent(template.name)}&type=Document Generator`
 
   return {
     title,
     description,
-    keywords,
+    keywords: uniqueKeywords,
     alternates: {
       canonical: `https://www.corplawupdates.in/documents/${slug}`,
     },
@@ -102,48 +110,103 @@ export default async function DocumentLayout({
     notFound()
   }
 
-  const docName = template.name
+  const guide = getDocumentSeoGuide(slug)
+  const docName = guide?.h1 || template.name
+  const docUrl = `https://www.corplawupdates.in/documents/${slug}`
+  const docDescription =
+    guide?.metaDescription ||
+    template?.description ||
+    `Free ${template.name} format and generator for Indian legal compliance.`
+
+  const graph: Record<string, unknown>[] = [
+    {
+      '@type': 'WebSite',
+      '@id': 'https://www.corplawupdates.in/#website',
+      url: 'https://www.corplawupdates.in',
+      name: 'CorpLawUpdates.in',
+    },
+    {
+      '@type': 'Organization',
+      '@id': 'https://www.corplawupdates.in/#organization',
+      name: 'CorpLawUpdates.in',
+      url: 'https://www.corplawupdates.in',
+    },
+    {
+      '@type': 'WebPage',
+      '@id': `${docUrl}#webpage`,
+      url: docUrl,
+      name: guide?.seoTitle || `${template.name} Format (Free Generator)`,
+      description: docDescription,
+      inLanguage: 'en-IN',
+      isPartOf: { '@id': 'https://www.corplawupdates.in/#website' },
+      mainEntity: { '@id': `${docUrl}#document` },
+    },
+    {
+      '@type': 'SoftwareApplication',
+      '@id': `${docUrl}#generator`,
+      name: `${template.name} Generator`,
+      url: docUrl,
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'All',
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'INR',
+      },
+      publisher: { '@id': 'https://www.corplawupdates.in/#organization' },
+    },
+    {
+      '@type': 'DigitalDocument',
+      '@id': `${docUrl}#document`,
+      name: docName,
+      description: docDescription,
+      url: docUrl,
+      inLanguage: 'en-IN',
+      publisher: { '@id': 'https://www.corplawupdates.in/#organization' },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: 'https://www.corplawupdates.in',
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Documents',
+          item: 'https://www.corplawupdates.in/documents',
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: template.name,
+          item: docUrl,
+        },
+      ],
+    },
+  ]
+
+  if (guide && guide.faqs.length > 0) {
+    graph.push({
+      '@type': 'FAQPage',
+      '@id': `${docUrl}#faq`,
+      mainEntity: guide.faqs.map((faq) => ({
+        '@type': 'Question',
+        name: faq.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: faq.answer,
+        },
+      })),
+    })
+  }
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'DigitalDocument',
-        '@id': `https://www.corplawupdates.in/documents/${slug}#document`,
-        name: docName,
-        description: template?.description || `Free ${docName} format and generator for Indian legal compliance.`,
-        url: `https://www.corplawupdates.in/documents/${slug}`,
-        inLanguage: 'en-IN',
-        publisher: {
-          '@type': 'Organization',
-          name: 'CorpLawUpdates.in',
-          url: 'https://www.corplawupdates.in',
-        },
-      },
-      {
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          {
-            '@type': 'ListItem',
-            position: 1,
-            name: 'Home',
-            item: 'https://www.corplawupdates.in',
-          },
-          {
-            '@type': 'ListItem',
-            position: 2,
-            name: 'Documents',
-            item: 'https://www.corplawupdates.in/documents',
-          },
-          {
-            '@type': 'ListItem',
-            position: 3,
-            name: docName,
-            item: `https://www.corplawupdates.in/documents/${slug}`,
-          },
-        ],
-      },
-    ],
+    '@graph': graph,
   }
 
   return (

@@ -179,15 +179,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const dedicatedSlugs = new Set([
     'board-resolution-dividend',
     'board-resolution-for-dividend-declaration',
+    'director-appointment-letter',
+    'board-resolution-director-appointment',
   ])
 
   // Exclude unbuilt dead slugs returning 404/incomplete until fully developed to protect crawl budget
   const unbuiltSlugs = new Set([
-    'consultancy-agreement',
     'joint-venture-agreement',
-    'simple-mortgage-deed',
-    'english-mortgage-deed',
-    'mortgage-conditional-sale',
     'letter-of-credit',
   ])
 
@@ -212,7 +210,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Ensure all 5 core dedicated generator pages are always present in the sitemap
   dedicatedDocSlugs.forEach(slug => {
-    if (!docDatesMap.has(slug)) {
+    if (!dedicatedSlugs.has(slug) && !docDatesMap.has(slug)) {
       docDatesMap.set(slug, new Date('2026-10-14T22:00:00+05:30'))
     }
   })

@@ -492,16 +492,28 @@ const AI_SUGGESTIONS: Record<string, {
   ],
 
   'simple-mortgage-deed': [
-    { label: '+ Add Penal Interest Clause', prompt: 'Add a penal interest clause of 2% per month for delayed payments', category: 'add' }
+    { label: '+ Add Penal Interest Clause', prompt: 'Add a penal interest clause of 2% per month for delayed payments', category: 'add' },
+    { label: '+ Add Sub-Registrar Registration clause', prompt: 'Add an explicit covenant requiring execution on appropriate state stamp paper and compulsory registration under Section 59 of the Transfer of Property Act, 1882 and Section 17 of the Registration Act, 1908', category: 'add' },
+    { label: '+ Add Insurance covenant', prompt: 'Add a covenant requiring the Mortgagor to keep the mortgaged immovable property comprehensively insured against fire and natural perils at the Mortgagor cost', category: 'add' },
+    { label: '🔤 Make more formal', prompt: 'Enhance the recitals and personal covenant language in formal Indian conveyancing style under Section 58(b) of the Transfer of Property Act, 1882', category: 'improve' }
   ],
   'mortgage-conditional-sale': [
-    { label: '⇄ Extend Repayment Period', prompt: 'Extend the maximum repayment period by 2 years', category: 'modify' }
+    { label: '⇄ Extend Repayment Period', prompt: 'Extend the maximum repayment period by 2 years', category: 'modify' },
+    { label: '+ Add Proviso under Section 58(c)', prompt: 'Strengthen the express condition embodying the mortgage stipulation inside the same document as strictly required by the proviso to Section 58(c) of the Transfer of Property Act, 1882', category: 'add' },
+    { label: '+ Add Reconveyance timeline', prompt: 'Specify a strict 15-day timeline for execution of a registered deed of reconveyance upon full repayment of principal and interest', category: 'add' },
+    { label: '+ Add Encumbrance warranty', prompt: 'Add a clear warranty by the Mortgagor that the scheduled property is free from prior mortgages, attachments, or litigation', category: 'add' }
   ],
   'english-mortgage-deed': [
-    { label: '+ Add Right to Lease Clause', prompt: 'Allow the mortgagor to lease the property with prior written consent', category: 'add' }
+    { label: '+ Add Right to Lease Clause', prompt: 'Allow the mortgagor to lease the property with prior written consent', category: 'add' },
+    { label: '+ Add Section 69 Power of Sale note', prompt: 'Clarify statutory restrictions and conditions applicable to power of sale under Section 69 of the Transfer of Property Act, 1882', category: 'add' },
+    { label: '+ Add Re-transfer upon repayment', prompt: 'Add a detailed obligation requiring the Mortgagee to re-transfer the mortgaged property free from encumbrance at the Mortgagor cost upon full repayment', category: 'add' },
+    { label: '🔤 Make more formal', prompt: 'Refine recitals and Schedule of Property formatting in formal Indian conveyancing style', category: 'improve' }
   ],
   'usufructuary-mortgage-deed': [
-    { label: '+ Specify Repair Limits', prompt: 'Limit the mortgagee\'s repair and maintenance expenses to Rs. 50,000 per year', category: 'add' }
+    { label: '+ Specify Repair Limits', prompt: 'Limit the mortgagee\'s repair and maintenance expenses to Rs. 50,000 per year', category: 'add' },
+    { label: '+ Add Rents & Profits accounting clause', prompt: 'Add a clause requiring the Mortgagee to maintain annual accounts of rents and profits appropriated toward interest and principal under Section 58(d) of the Transfer of Property Act, 1882', category: 'add' },
+    { label: '+ Add Statutory Tax payment clause', prompt: 'Clarify whether property tax, municipal cess, and land revenue during possession shall be paid by the Mortgagee out of usufruct or reimbursed by the Mortgagor', category: 'add' },
+    { label: '↕ Convert to Principal + Interest appropriation', prompt: 'Specify that net rents and profits shall be appropriated first toward accrued interest and balance toward principal until full satisfaction', category: 'modify' }
   ],
   'equitable-mortgage-deed': [
     { label: '+ Add Joint Liability Clause', prompt: 'Make all co-owners jointly and severally liable for the loan', category: 'add' }
@@ -675,6 +687,49 @@ const AI_SUGGESTIONS: Record<string, {
     { label: '+ Add reference to SEBI circular', prompt: 'Add a reference to the specific SEBI circular governing the maximum compensation limit from the Investor Protection Fund', category: 'add' },
   ],
 
+  'board-resolution-alteration-moa': [
+    { label: '+ Add EGM / Postal Ballot authorization', prompt: 'Add authorization to convene an Extraordinary General Meeting (EGM) or conduct Postal Ballot (if applicable) under Section 100 and Section 110 of the Companies Act, 2013 to obtain members Special Resolution under Section 13', category: 'add' },
+    { label: '+ Add Form MGT-14 filing clause', prompt: 'Add explicit authorization to file Form MGT-14 along with certified true copy of the Special Resolution, Section 102 Explanatory Statement, and Altered MOA with the Registrar of Companies within 30 days under Section 117', category: 'add' },
+    { label: '− Remove witness block', prompt: 'Remove the optional witness signature placeholders and keep clean certified true copy execution by Director/Company Secretary', category: 'remove' },
+    { label: '🔤 Make more formal', prompt: 'Make the recitals and certified true copy wording strictly conform to ICSI Secretarial Standard-1 (SS-1) and Section 13 of the Companies Act, 2013', category: 'improve' },
+  ],
+  'board-resolution-appoint-company-secretary': [
+    { label: '+ Add Form DIR-12 & MGT-14 filing clause', prompt: 'Add authorization to file e-Form DIR-12 within 30 days (and Form MGT-14 within 30 days for Public Companies under Section 117(3)(c) read with Section 179(3)) on the MCA V3 portal', category: 'add' },
+    { label: '+ Add Form MR-1 note (if applicable)', prompt: 'Clarify whether Form MR-1 applies or note that Company Secretary appointment as KMP u/s 203 is reported via Form DIR-12 and Section 170 Register of Directors and KMP', category: 'add' },
+    { label: '+ Add ICSI Membership & consent note', prompt: 'Add recital confirming receipt of written consent, valid ICSI Certificate of Practice / Associate or Fellow Membership number, and non-disqualification declaration', category: 'add' },
+    { label: '+ Add Register u/s 170 update', prompt: 'Add direction to update the Register of Directors and Key Managerial Personnel maintained under Section 170 of the Companies Act, 2013', category: 'add' },
+  ],
+  'board-resolution-employee-loan': [
+    { label: '+ Add Section 185 compliance confirmation', prompt: 'Add an explicit recital confirming that the recipient employee is not a Director, KMP covered under Section 185 restrictions, or relative/partner barred under Section 185 unless exempted as a Company policy loan extended uniformly to all employees', category: 'add' },
+    { label: '+ Add payroll EMI recovery clause', prompt: 'Add a clear clause authorizing monthly recovery of principal and interest instalments directly through monthly salary payroll and full balance adjustment against full and final settlement upon resignation or termination', category: 'add' },
+    { label: '+ Add promissory note / indemnity condition', prompt: 'Add a condition requiring execution of a Loan Agreement and Demand Promissory Note by the employee before disbursement', category: 'add' },
+    { label: '↕ Convert to interest-free welfare loan', prompt: 'Modify the resolution to specify an interest-free employee welfare loan subject to Income Tax perquisite valuation rules under Rule 3(7)(i) of Income-tax Rules, 1962', category: 'modify' },
+  ],
+  'board-resolution-increase-authorized-capital': [
+    { label: '+ Add AOA empowerment verification clause', prompt: 'Add a recital confirming Article empowerment under Section 61(1)(a) of the Companies Act, 2013 (or proposing simultaneous Special Resolution u/s 14 for AOA amendment if Articles do not authorise capital increase)', category: 'add' },
+    { label: '+ Add Form SH-7 30-day filing clause', prompt: 'Add explicit direction to file Form SH-7 on the MCA V3 portal within 30 days of passing the Ordinary Resolution in General Meeting along with altered MOA/AOA and prescribed fee/stamp duty', category: 'add' },
+    { label: '+ Add EGM Notice & Explanatory Statement', prompt: 'Authorize issuance of Notice of Extraordinary General Meeting along with Explanatory Statement under Section 102 of the Companies Act, 2013', category: 'add' },
+    { label: '− Remove seal clause', prompt: 'Remove optional common seal requirement while preserving Director/CS certification', category: 'remove' },
+  ],
+  'board-resolution-name-change': [
+    { label: '+ Add RUN Name Reservation validity note', prompt: 'Add recital noting RUN (Reserve Unique Name) reservation under Rule 8 and Rule 8A of Companies (Incorporation) Rules, 2014 valid for 60 days from approval date for existing company name change', category: 'add' },
+    { label: '+ Add MGT-14 & INC-24 sequential filings', prompt: 'Specify filing of Form MGT-14 within 30 days of Special Resolution under Section 13(2) followed by Form INC-24 for Central Government approval and issuance of Fresh Certificate of Incorporation in Form INC-25', category: 'add' },
+    { label: '+ Add post-approval GST/PAN/Stationery clause', prompt: 'Add direction that upon receipt of Fresh Certificate of Incorporation in Form INC-25, Company officers shall update PAN, TAN, GST, bank accounts, and former-name painting under Section 12(3) proviso for 2 years', category: 'add' },
+    { label: '🔤 Make more formal', prompt: 'Refine recitals and resolutions strictly in ICSI SS-1 and Section 4 & Section 13 Companies Act, 2013 format', category: 'improve' },
+  ],
+  'board-resolution-related-party-transaction': [
+    { label: '+ Add interested director abstention note', prompt: 'Explicitly record under Section 184(2) and Rule 15(2) of Companies (Meetings of Board and its Powers) Rules, 2014 that interested directors disclosed their concern/interest and did not participate in discussion or voting', category: 'add' },
+    { label: '+ Add Audit Committee omnibus approval note', prompt: 'Add recital recording prior Audit Committee approval obtained under Section 177(4)(iv) (or Regulation 23 of SEBI LODR where listed) and confirmation of ordinary course of business and arm length basis', category: 'add' },
+    { label: '+ Add Form AOC-2 & Register MBP-4 clause', prompt: 'Add direction to enter prescribed particulars in Register of Contracts in Form MBP-4 under Section 189 and disclose the transaction in Form AOC-2 of the Board Report', category: 'add' },
+    { label: '↕ Convert for Material RPT shareholder threshold', prompt: 'Add clause stating that if cumulative transactions exceed Rule 15(3) thresholds, prior Ordinary Resolution of shareholders (with related parties abstaining under Section 188(1) second proviso) shall be obtained before execution', category: 'modify' },
+  ],
+  'consultancy-agreement': [
+    { label: '+ Add Work-for-Hire IP Ownership clause', prompt: 'Add comprehensive Intellectual Property clause assigning all deliverables, inventions, code, reports, and work product exclusively to the Client worldwide under Section 17 of the Copyright Act, 1957 upon creation/payment', category: 'add' },
+    { label: '+ Add TDS u/s 194J & GST invoicing clause', prompt: 'Add tax clause stating Consultancy Fees are subject to TDS under Section 194J of Income-tax Act, 1961 and GST shall be charged separately against valid GST tax invoice with SAC code', category: 'add' },
+    { label: '+ Add Independent Contractor relationship clause', prompt: 'Strengthen Principal-to-Principal independent contractor clause clarifying no employer-employee relationship, PF, ESI, gratuity, or agency authority arises', category: 'add' },
+    { label: '+ Add Data Protection & NDA covenant', prompt: 'Add confidentiality and data protection covenant compliant with the Digital Personal Data Protection Act, 2023 surviving termination by 3 years', category: 'add' },
+  ],
+
   // Default suggestions for any unspecified template
   '_default': [
     { label: '+ Add confidentiality clause', prompt: 'Add a comprehensive confidentiality clause covering all business information, trade secrets and client data', category: 'add' },
@@ -693,11 +748,19 @@ const AI_SUGGESTIONS: Record<string, {
 export interface DocumentGeneratorClientProps {
   slugOverride?: string
   initialTemplate?: Template | null
+  hasSeoGuide?: boolean
+  heroTitle?: string
+  heroBadge?: string
+  heroIntro?: string
 }
 
 export default function DocumentGeneratorClient({
   slugOverride,
   initialTemplate,
+  hasSeoGuide = false,
+  heroTitle,
+  heroBadge,
+  heroIntro,
 }: DocumentGeneratorClientProps = {}) {
   const params = useParams()
   const routeSlug = typeof params?.slug === 'string' ? params.slug : ''
@@ -786,6 +849,9 @@ export default function DocumentGeneratorClient({
   const [generationError, setGenerationError] = useState<string | null>(null)
   const [generationWarning, setGenerationWarning] = useState<string | null>(null)
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(null)
+  const [activeMobileTab, setActiveMobileTab] = useState<'form' | 'preview'>('form')
+  const [manualEditMode, setManualEditMode] = useState(false)
+  const [manualDraftText, setManualDraftText] = useState('')
 
   // Letterhead states
   const [showLetterheadModal, setShowLetterheadModal] = useState(false)
@@ -1195,7 +1261,10 @@ export default function DocumentGeneratorClient({
       const data = await res.json()
       if (res.ok && data.content) {
         setGeneratedContent(data.content)
+        setManualEditMode(false)
+        setManualDraftText('')
         setDocumentId(data.document_id)
+        setActiveMobileTab('preview')
         
         // Save permanently to local storage
         try {
@@ -1695,64 +1764,57 @@ export default function DocumentGeneratorClient({
     notFound()
   }
 
-  const inputClass = `w-full border border-slate-300 
-    rounded-xl px-3 py-2.5 text-sm text-navy
+  function handlePrint() {
+    if (!generatedContent || !template) return
+    const w = window.open('', '_blank', 'width=850,height=900')
+    if (!w) {
+      showToast('Please allow pop-ups to open print view', 'error')
+      return
+    }
+    const safeTitle = String(template.name || 'Document')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+    const safeHtml = sanitizeHtml(markdownToHtml(getCleanedContent(generatedContent)))
+    w.document.open()
+    w.document.write(`<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>${safeTitle} — Print Preview</title>
+  <style>
+    @page { size: A4; margin: 20mm; }
+    body { font-family: Georgia, 'Times New Roman', serif; color: #0f172a; line-height: 1.65; font-size: 11pt; max-width: 190mm; margin: 0 auto; padding: 24px; }
+    h1, h2, h3 { color: #0b1f3a; margin-top: 1.1em; margin-bottom: 0.4em; }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+    th, td { border: 1px solid #94a3b8; padding: 6px 8px; text-align: left; vertical-align: top; }
+    th { background: #f1f5f9; font-weight: 700; }
+    @media print { body { padding: 0; } }
+  </style>
+</head>
+<body>
+  ${safeHtml}
+  <script>
+    window.addEventListener('load', function() { setTimeout(function() { window.focus(); window.print(); }, 250); });
+  </script>
+</body>
+</html>`)
+    w.document.close()
+  }
+
+  const inputClass = `w-full border border-slate-300 dark:border-slate-700 
+    rounded-xl px-3 py-2.5 text-sm text-navy dark:text-slate-100
     focus:outline-hidden focus:ring-2 
     focus:ring-amber-400 focus:border-transparent
-    bg-white`
+    bg-white placeholder:text-slate-400 dark:placeholder:text-slate-500`
 
   return (
     <div id="generator" className="min-h-dvh bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@graph": [
-              {
-                "@type": "SoftwareApplication",
-                "name": `${template.name} Generator`,
-                "applicationCategory": "BusinessApplication",
-                "operatingSystem": "Any",
-                "offers": {
-                  "@type": "Offer",
-                  "price": "0",
-                  "priceCurrency": "INR"
-                }
-              },
-              {
-                "@type": "BreadcrumbList",
-                "itemListElement": [
-                  {
-                    "@type": "ListItem",
-                    "position": 1,
-                    "name": "Home",
-                    "item": "https://www.corplawupdates.in"
-                  },
-                  {
-                    "@type": "ListItem",
-                    "position": 2,
-                    "name": "Documents",
-                    "item": "https://www.corplawupdates.in/documents"
-                  },
-                  {
-                    "@type": "ListItem",
-                    "position": 3,
-                    "name": template.name,
-                    "item": `https://www.corplawupdates.in/documents/${template.slug}`
-                  }
-                ]
-              }
-            ]
-          })
-        }}
-      />
-      
       {/* Page header */}
       <div className="bg-navy py-8 px-4">
         <div className="max-w-7xl mx-auto">
-          <nav className="text-xs text-slate-400 mb-3">
-            <a href="/documents" className="hover:text-amber-400">
+          <nav aria-label="Breadcrumb" className="text-xs text-slate-400 mb-3">
+            <a href="/documents" className="hover:text-amber-400 transition-colors">
               Documents
             </a>
             {' → '}
@@ -1760,13 +1822,18 @@ export default function DocumentGeneratorClient({
               {template.name}
             </span>
           </nav>
-          <h1 className="text-2xl md:text-3xl font-bold text-white font-heading">
-            {template.name}
+          {heroBadge && (
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-400/15 border border-amber-400/30 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-amber-300 mb-3">
+              {heroBadge}
+            </div>
+          )}
+          <h1 className="text-2xl md:text-3xl font-bold text-white font-heading leading-tight">
+            {heroTitle || template.name}
           </h1>
-          <p className="text-slate-400 text-sm mt-1">
-            {template.description}
+          <p className="text-slate-300 text-sm md:text-base mt-2 max-w-4xl leading-relaxed">
+            {heroIntro || template.description}
           </p>
-          <div className="flex gap-3 mt-3 flex-wrap">
+          <div className="flex gap-3 mt-4 flex-wrap">
             <span className="text-xs bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full font-medium">
               📚 {formatTemplateSource(template.slug, template.source, template.category)}
             </span>
@@ -1786,8 +1853,8 @@ export default function DocumentGeneratorClient({
       </div>
 
       {/* Main layout */}
-      <div className="max-w-7xl mx-auto px-4 pt-8">
-        <div className="prose prose-slate max-w-none mb-8">
+      <div className="max-w-7xl mx-auto px-4 pt-6">
+        <div className="prose prose-slate max-w-none mb-6">
           <p className="text-slate-600 leading-relaxed text-sm md:text-base">
             Use our {template.name} generator to create an editable draft structured around <strong>{template.regulation_reference}</strong>. Suitability depends on your facts and applicable law; have the draft reviewed by a qualified professional before signing or filing.
           </p>
@@ -1795,7 +1862,7 @@ export default function DocumentGeneratorClient({
       </div>
 
       {/* Step Indicator */}
-      <div className="max-w-7xl mx-auto px-4 mb-8">
+      <div className="max-w-7xl mx-auto px-4 mb-6">
         <div className="flex items-center justify-between md:justify-start md:gap-8 overflow-x-auto pb-2 scrollbar-hide">
           <div className={`flex items-center gap-2 whitespace-nowrap ${!generatedContent ? 'text-amber-500 font-bold' : 'text-slate-400 font-medium'}`}>
             <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${!generatedContent ? 'bg-amber-100 text-amber-600' : 'bg-slate-200 text-slate-500'}`}>1</span>
@@ -1809,15 +1876,39 @@ export default function DocumentGeneratorClient({
           <div className="h-px bg-slate-300 w-8 md:w-16 hidden md:block"></div>
           <div className={`flex items-center gap-2 whitespace-nowrap ${downloading ? 'text-amber-500 font-bold' : 'text-slate-400 font-medium'}`}>
             <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${downloading ? 'bg-amber-100 text-amber-600' : 'bg-slate-200 text-slate-500'}`}>3</span>
-            Download PDF
+            Download Word / PDF
           </div>
+        </div>
+      </div>
+
+      {/* Mobile View Switcher (Form / Preview) */}
+      <div className="lg:hidden max-w-7xl mx-auto px-4 mb-4">
+        <div role="tablist" aria-label="Document workspace view" className="grid grid-cols-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white p-1 shadow-xs">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeMobileTab === 'form'}
+            onClick={() => setActiveMobileTab('form')}
+            className={`py-2 px-3 rounded-lg text-xs font-bold transition-colors ${activeMobileTab === 'form' ? 'bg-navy text-white shadow-xs' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+          >
+            📝 Edit Details
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeMobileTab === 'preview'}
+            onClick={() => setActiveMobileTab('preview')}
+            className={`py-2 px-3 rounded-lg text-xs font-bold transition-colors ${activeMobileTab === 'preview' ? 'bg-navy text-white shadow-xs' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+          >
+            📄 Preview &amp; Export {generatedContent ? '✓' : ''}
+          </button>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto min-w-0 px-4 pb-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
 
         {/* LEFT — Form */}
-        <div className="min-w-0 space-y-6">
+        <div className={`min-w-0 space-y-6 ${activeMobileTab === 'preview' ? 'hidden lg:block' : 'block'}`}>
           
           {/* AI Prompter - Conversational Draft Mode */}
           <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
@@ -2652,7 +2743,7 @@ export default function DocumentGeneratorClient({
             <div className="p-5 space-y-4">
               {template.fields.map((field: Field) => (
                 <div key={field.id} id={`field-${field.id}`}>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                  <label htmlFor={`doc-input-${field.id}`} className="block text-xs font-semibold text-slate-700 mb-1.5">
                     {field.label}
                     {field.required && (
                       <span className="text-red-500 ml-1">
@@ -2663,6 +2754,7 @@ export default function DocumentGeneratorClient({
 
                   {field.type === 'textarea' ? (
                     <textarea
+                      id={`doc-input-${field.id}`}
                       rows={3}
                       value={formData[field.id] || ''}
                       onChange={e => {
@@ -2675,6 +2767,7 @@ export default function DocumentGeneratorClient({
                   ) : field.type === 'select' ? (
                     <>
                       <select
+                        id={`doc-input-${field.id}`}
                         value={formData[`${field.id}__mode`] === 'custom' ? '__custom__' : (formData[field.id] || '')}
                         onChange={e => {
                           if (e.target.value === '__custom__') {
@@ -2709,6 +2802,7 @@ export default function DocumentGeneratorClient({
 
                   ) : (
                     <input
+                      id={`doc-input-${field.id}`}
                       type={field.type}
                       value={formData[field.id] || ''}
                       onChange={e => {
@@ -2810,34 +2904,45 @@ export default function DocumentGeneratorClient({
         </div>
 
         {/* RIGHT — Preview + AI Editor */}
-        <div className="min-w-0 space-y-6">
+        <div className={`min-w-0 space-y-6 ${activeMobileTab === 'form' ? 'hidden lg:block' : 'block'}`}>
           
           {generatedContent ? (
             <>
               {/* Document preview */}
               <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-                <div className="bg-slate-50 border-b border-slate-200 px-5 py-3 flex items-center justify-between">
+                <div className="bg-slate-50 border-b border-slate-200 px-5 py-3 flex flex-wrap items-center justify-between gap-2">
                   <h3 className="font-bold text-navy text-sm">
                     📄 Generated Document
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     <button
+                      type="button"
                       onClick={handleGenerate}
                       disabled={generating || downloading}
-                      className="text-xs bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-semibold hover:bg-slate-300 disabled:opacity-60"
+                      className="text-xs bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-semibold hover:bg-slate-300 disabled:opacity-60 cursor-pointer"
                     >
                       🔄 Regenerate
                     </button>
                     <button
+                      type="button"
                       onClick={() => {
                         navigator.clipboard.writeText(generatedContent)
                         showToast('Copied to clipboard!', 'success')
                       }}
-                      className="text-xs bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-semibold hover:bg-slate-300 disabled:opacity-60"
+                      className="text-xs bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-semibold hover:bg-slate-300 disabled:opacity-60 cursor-pointer"
                     >
                       📋 Copy Text
                     </button>
                     <button
+                      type="button"
+                      onClick={handlePrint}
+                      disabled={!generatedContent}
+                      className="text-xs bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-semibold hover:bg-slate-300 disabled:opacity-60 cursor-pointer"
+                    >
+                      🖨️ Print
+                    </button>
+                    <button
+                      type="button"
                       onClick={() => {
                         setGatewayFormat('docx')
                         setIsGatewayOpen(true)
@@ -2848,6 +2953,7 @@ export default function DocumentGeneratorClient({
                       ⬇️ Word
                     </button>
                     <button
+                      type="button"
                       onClick={() => {
                         setGatewayFormat('pdf')
                         setIsGatewayOpen(true)
@@ -2869,10 +2975,10 @@ export default function DocumentGeneratorClient({
                 </div>
 
                 {/* Document text preview in A4 page style */}
-                <div className="p-4 bg-slate-100 border-t border-slate-200 overflow-x-auto flex justify-center select-none">
+                <div className="p-4 bg-slate-100 border-t border-slate-200 overflow-x-auto flex justify-start sm:justify-center select-none">
                   <div 
                     id="a4-preview-page"
-                    className="bg-white shadow-md relative font-serif select-text transition-all duration-300"
+                    className="dark-override-exempt bg-white text-slate-900 shadow-md relative font-serif select-text transition-all duration-300 shrink-0"
                     style={{
                       width: '620px',
                       height: '877px', // Fixed A4 aspect ratio (620 x 877)
@@ -2941,7 +3047,7 @@ export default function DocumentGeneratorClient({
                     )}
 
                     <div 
-                      className="absolute overflow-y-auto select-text font-serif text-[11px] text-navy leading-relaxed py-4 z-10 prose prose-sm max-w-none"
+                      className="absolute overflow-y-auto select-text font-serif text-[11px] text-slate-900 leading-relaxed py-4 z-10 prose prose-sm max-w-none [&_table]:w-full [&_table]:border-collapse [&_table]:my-2 [&_th]:border [&_th]:border-slate-300 [&_th]:bg-slate-50 [&_th]:px-2 [&_th]:py-1 [&_th]:text-left [&_td]:border [&_td]:border-slate-300 [&_td]:px-2 [&_td]:py-1"
                       style={{
                         top: `${customMarginTop}px`,
                         bottom: `${customMarginBottom}px`,
@@ -3044,17 +3150,101 @@ export default function DocumentGeneratorClient({
                 </div>
               )}
 
-              {/* AI Chat Editor */}
+              {/* Clause & AI Document Editor */}
               <div id="ai-editor" className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-                <div className="bg-slate-50 border-b border-slate-200 px-5 py-3">
-                  <h3 className="font-bold text-navy text-sm">
-                    🤖 AI Document Editor
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    Tell AI what to change, add or remove
-                  </p>
+                <div className="bg-slate-50 border-b border-slate-200 px-5 py-3 flex flex-wrap items-center justify-between gap-2">
+                  <div>
+                    <h3 className="font-bold text-navy text-sm">
+                      {manualEditMode ? '✏️ Direct Clause Editor' : '🤖 AI Document Editor'}
+                    </h3>
+                    <p className="text-xs text-slate-500 mt-0.5">
+                      {manualEditMode
+                        ? 'Edit any clause, party detail, or schedule directly in the generated draft'
+                        : 'Tell AI what to change, add or remove — or switch to direct editing'}
+                    </p>
+                  </div>
+                  <div className="flex rounded-lg border border-slate-200 bg-white p-0.5 text-xs font-semibold">
+                    <button
+                      type="button"
+                      onClick={() => setManualEditMode(false)}
+                      className={`px-2.5 py-1 rounded-md transition-colors cursor-pointer ${!manualEditMode ? 'bg-navy text-white' : 'text-slate-600 hover:bg-slate-100'}`}
+                    >
+                      🤖 AI Edit
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setManualDraftText(generatedContent)
+                        setManualEditMode(true)
+                      }}
+                      className={`px-2.5 py-1 rounded-md transition-colors cursor-pointer ${manualEditMode ? 'bg-navy text-white' : 'text-slate-600 hover:bg-slate-100'}`}
+                    >
+                      ✏️ Manual Edit
+                    </button>
+                  </div>
                 </div>
 
+                {manualEditMode ? (
+                  <div className="p-4 space-y-3">
+                    <label
+                      htmlFor="manual-clause-editor-input"
+                      className="block text-xs font-semibold text-slate-600"
+                    >
+                      Edit generated draft clauses directly (Markdown or HTML preserved cleanly on export):
+                    </label>
+                    <textarea
+                      id="manual-clause-editor-input"
+                      rows={12}
+                      value={manualDraftText}
+                      onChange={(e) => setManualDraftText(e.target.value)}
+                      className={`${inputClass} font-mono text-xs leading-relaxed`}
+                    />
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setManualEditMode(false)}
+                        className="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-100 cursor-pointer"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (!manualDraftText.trim()) return
+                          setGeneratedContent(manualDraftText)
+                          setManualEditMode(false)
+                          setChatHistory((p) => [
+                            ...p,
+                            { role: 'user', text: 'Manual clause edit applied' },
+                            { role: 'ai', text: '✓ Direct clause edits applied to preview & exports.' },
+                          ])
+                          if (template) {
+                            const updatedMissing =
+                              template.slug === 'lease-agreement'
+                                ? checkLeaseClauses(manualDraftText)
+                                : checkMissingClauses(manualDraftText, template.category)
+                            setMissingClauses(updatedMissing)
+                            setShowClauseChecker(updatedMissing.length > 0)
+                            import('@/lib/saved-documents')
+                              .then(({ saveDocumentLocally }) => {
+                                saveDocumentLocally({
+                                  title: template.name || 'Generated Document',
+                                  slug: template.slug || slug,
+                                  content: manualDraftText,
+                                })
+                              })
+                              .catch(() => {})
+                          }
+                          showToast('Clause edit applied to document!', 'success')
+                        }}
+                        className="px-4 py-1.5 rounded-lg bg-navy text-white text-xs font-bold hover:bg-navy/90 cursor-pointer"
+                      >
+                        ✓ Apply Clause Changes
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                <>
                 {/* Chat history */}
                 {chatHistory.length > 0 && (
                   <div className="p-4 space-y-2 max-h-40 overflow-y-auto border-b border-slate-100">
@@ -3216,6 +3406,8 @@ export default function DocumentGeneratorClient({
                     )
                   })()}
                 </div>
+                </>
+                )}
               </div>
 
 
@@ -3666,26 +3858,28 @@ export default function DocumentGeneratorClient({
         />
       </div>
 
-      {/* SEO FAQs */}
-      <div className="bg-white border-t border-slate-200 py-12 px-4 mt-12">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-navy mb-8">Frequently Asked Questions</h2>
-          <div className="space-y-6">
-            <div>
-              <h3 className="font-semibold text-lg text-slate-800">Is this {template.name} generator free?</h3>
-              <p className="text-slate-600 mt-2">Yes, our legal document generator is completely free for professionals and businesses. We believe in open access to reliable compliance formats.</p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-lg text-slate-800">Is the generated document legally valid in India?</h3>
-              <p className="text-slate-600 mt-2">The generated {template.name} is an editable working draft built around the stated reference. Its suitability and legal effect depend on the transaction, applicable law and correct execution, so have the final draft reviewed by a qualified professional before use.</p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-lg text-slate-800">Can I download the {template.name} as a PDF?</h3>
-              <p className="text-slate-600 mt-2">Absolutely! Once you've customized the clauses and filled in your specific details, you can download a clean, formatted PDF version instantly.</p>
+      {/* Fallback generic SEO FAQs for templates without dedicated DocumentSeoGuide */}
+      {!hasSeoGuide && (
+        <div className="bg-white border-t border-slate-200 py-12 px-4 mt-12">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl font-bold text-navy mb-8">Frequently Asked Questions</h2>
+            <div className="space-y-6">
+              <div>
+                <h3 className="font-semibold text-lg text-slate-800">Is this {template.name} generator free?</h3>
+                <p className="text-slate-600 mt-2">Yes, our legal document generator is completely free for professionals and businesses. We believe in open access to reliable compliance formats.</p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg text-slate-800">Is the generated document legally valid in India?</h3>
+                <p className="text-slate-600 mt-2">The generated {template.name} is an editable working draft built around the stated reference. Its suitability and legal effect depend on the transaction, applicable law and correct execution, so have the final draft reviewed by a qualified professional before use.</p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-lg text-slate-800">Can I download the {template.name} as a PDF?</h3>
+                <p className="text-slate-600 mt-2">Absolutely! Once you've customized the clauses and filled in your specific details, you can download a clean, formatted PDF version instantly.</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Legal Basis Sidebar Card */}
       <LegalBasisCard

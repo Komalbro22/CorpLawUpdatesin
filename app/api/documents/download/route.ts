@@ -5,6 +5,123 @@ import HTMLtoDOCX from 'html-to-docx'
 import { markdownToHtml } from '@/lib/markdown'
 import { sanitizeForWinAnsi } from '@/lib/pdf-sanitizer'
 
+function decodeHtmlEntities(input: string): string {
+  return input
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;|&apos;|&rsquo;|&lsquo;/gi, "'")
+    .replace(/&rdquo;|&ldquo;/gi, '"')
+    .replace(/&ndash;|&mdash;/gi, '-')
+    .replace(/&#8377;|&rupee;/gi, 'Rs. ')
+}
+
+function inlineHtmlToMarkdown(html: string): string {
+  return decodeHtmlEntities(
+    html
+      .replace(/<\s*br\s*\/?>/gi, '\n')
+      .replace(/<\s*(strong|b)(?:\s+[^>]*)?>([\s\S]*?)<\/\s*\1\s*>/gi, (_m, _tag, inner) => {
+        const cleanInner = inner.replace(/<[^>]+>/g, '').replace(/\*\*/g, '').trim()
+        return cleanInner ? ` **${cleanInner}** ` : ' '
+      })
+      .replace(/<[^>]+>/g, '')
+  )
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n[ \t]+/g, '\n')
+    .replace(/[ \t]{2,}/g, ' ')
+    .trim()
+}
+
+function htmlToMarkdownForPdf(input: string): string {
+  if (!/<\/?(?:div|p|h[1-6]|ol|ul|li|table|thead|tbody|tr|th|td|br|strong|b)\b[^>]*>/i.test(input)) {
+    return decodeHtmlEntities(input)
+  }
+
+  let text = input.replace(/\r\n/g, '\n')
+
+  // Convert HTML tables (both data tables and signature tables) cleanly
+  text = text.replace(/<table\b[^>]*>([\s\S]*?)<\/table>/gi, (_tableMatch, tableInner) => {
+    const rows: string[][] = []
+    const rowMatches = tableInner.match(/<tr\b[^>]*>[\s\S]*?<\/tr>/gi) || []
+    for (const rowHtml of rowMatches) {
+      const cells: string[] = []
+      const cellMatches = rowHtml.match(/<t[hd]\b[^>]*>[\s\S]*?<\/t[hd]>/gi) || []
+      for (const cellHtml of cellMatches) {
+        const cleaned = inlineHtmlToMarkdown(
+          cellHtml.replace(/<\/(?:p|div)>/gi, '\n')
+        )
+        cells.push(cleaned)
+      }
+      if (cells.length > 0) rows.push(cells)
+    }
+
+    if (rows.length === 0) return '\n\n'
+
+    const isDataTable =
+      /<thead\b/i.test(tableInner) ||
+      rows.some(r => r.length >= 3)
+
+    if (isDataTable) {
+      const formattedRows = rows
+        .map(cells => {
+          const nonEmptyCount = cells.filter(c => c.trim() !== '').length
+          if (nonEmptyCount === 0) return ''
+          return cells.map(c => (c.replace(/\n+/g, ' / ').trim() || '--')).join(' | ')
+        })
+        .filter(Boolean)
+      return `\n\n${formattedRows.join('\n\n')}\n\n`
+    }
+
+    // Two-column layout / signature table: render each column cleanly stacked
+    const columnOutputs: string[] = []
+    const maxCols = Math.max(...rows.map(r => r.length))
+    for (let c = 0; c < maxCols; c++) {
+      const colLines = rows
+        .map(r => (r[c] || '').trim())
+        .filter(Boolean)
+      if (colLines.length > 0) {
+        columnOutputs.push(colLines.join('\n'))
+      }
+    }
+    return `\n\n${columnOutputs.join('\n\n')}\n\n`
+  })
+
+  // Convert ordered lists
+  text = text.replace(/<ol\b[^>]*>([\s\S]*?)<\/ol>/gi, (_m, inner) => {
+    let idx = 1
+    const items = inner.replace(/<li\b[^>]*>([\s\S]*?)<\/li>/gi, (_liM: string, liBody: string) => {
+      const body = inlineHtmlToMarkdown(liBody.replace(/<\/(?:p|div)>/gi, '\n')).replace(/\n+/g, ' ')
+      return body ? `\n\n${idx++}. ${body}\n\n` : ''
+    })
+    return `\n\n${items.replace(/<[^>]+>/g, '')}\n\n`
+  })
+
+  // Convert unordered lists
+  text = text.replace(/<ul\b[^>]*>([\s\S]*?)<\/ul>/gi, (_m, inner) => {
+    const items = inner.replace(/<li\b[^>]*>([\s\S]*?)<\/li>/gi, (_liM: string, liBody: string) => {
+      const body = inlineHtmlToMarkdown(liBody.replace(/<\/(?:p|div)>/gi, '\n')).replace(/\n+/g, ' ')
+      return body ? `\n\n- ${body}\n\n` : ''
+    })
+    return `\n\n${items.replace(/<[^>]+>/g, '')}\n\n`
+  })
+
+  // Convert headings
+  text = text.replace(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi, (_m, inner) => `\n\n# ${inlineHtmlToMarkdown(inner).replace(/\*\*/g, '')}\n\n`)
+  text = text.replace(/<h[23]\b[^>]*>([\s\S]*?)<\/h[23]>/gi, (_m, inner) => `\n\n## ${inlineHtmlToMarkdown(inner).replace(/\*\*/g, '')}\n\n`)
+  text = text.replace(/<h[4-6]\b[^>]*>([\s\S]*?)<\/h[4-6]>/gi, (_m, inner) => `\n\n### ${inlineHtmlToMarkdown(inner).replace(/\*\*/g, '')}\n\n`)
+
+  // Convert paragraphs, breaks, and remaining tags
+  text = text.replace(/<p\b[^>]*>([\s\S]*?)<\/p>/gi, (_m, inner) => `\n\n${inlineHtmlToMarkdown(inner)}\n\n`)
+  text = text.replace(/<div\b[^>]*>/gi, '\n\n').replace(/<\/div>/gi, '\n\n')
+  text = inlineHtmlToMarkdown(text)
+
+  return text
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
+}
+
 // ─── Markdown Blocks & Text Runs Parser ──────────────────────────────────────
 interface TextRunItem {
   text: string
@@ -13,7 +130,7 @@ interface TextRunItem {
 
 interface Block {
   type: 'heading1' | 'heading2' | 'heading3' | 'list_item' | 'paragraph'
-  runs: TextRunItem[]
+  lines: TextRunItem[][]
 }
 
 function parseTextRuns(text: string): TextRunItem[] {
@@ -59,11 +176,15 @@ function parseBlocks(markdown: string): Block[] {
       }
     }
 
-    const cleanContent = content.replace(/\r?\n/g, ' ')
-    blocks.push({
-      type,
-      runs: parseTextRuns(cleanContent)
-    })
+    const lines = content
+      .split(/\r?\n/)
+      .map(line => line.trim())
+      .filter(Boolean)
+      .map(line => parseTextRuns(line))
+
+    if (lines.length > 0) {
+      blocks.push({ type, lines })
+    }
   }
 
   return blocks
@@ -87,7 +208,21 @@ function wrapRuns(
     const wordsAndSpaces = run.text.split(/(\s+)/)
     for (const ws of wordsAndSpaces) {
       if (ws === '') continue
-      tokens.push({ text: ws, isBold: run.isBold })
+      const font = run.isBold ? fontBold : fontNormal
+      if (ws.trim() !== '' && font.widthOfTextAtSize(ws, fontSize) > printableW) {
+        let chunk = ''
+        for (const ch of ws) {
+          if (font.widthOfTextAtSize(chunk + ch, fontSize) > printableW && chunk) {
+            tokens.push({ text: chunk, isBold: run.isBold })
+            chunk = ch
+          } else {
+            chunk += ch
+          }
+        }
+        if (chunk) tokens.push({ text: chunk, isBold: run.isBold })
+      } else {
+        tokens.push({ text: ws, isBold: run.isBold })
+      }
     }
   }
 
@@ -276,8 +411,9 @@ export async function POST(request: Request) {
       let currentPage = await addPage()
       let yPos = pageH - marginT
 
-      // Parse document markdown into blocks (sanitized for WinAnsi PDF encoding)
-      const sanitizedContent = sanitizeForWinAnsi(content)
+      // Parse document HTML or markdown into blocks (sanitized for WinAnsi PDF encoding)
+      const normalizedPdfText = htmlToMarkdownForPdf(content)
+      const sanitizedContent = sanitizeForWinAnsi(normalizedPdfText)
       const blocks = parseBlocks(sanitizedContent)
 
       for (const block of blocks) {
@@ -319,7 +455,9 @@ export async function POST(request: Request) {
         }
 
         const blockPrintableW = printableW - indent
-        const wrappedLines = wrapRuns(block.runs, blockPrintableW, timesRoman, timesBold, fontSize)
+        const wrappedLines = block.lines.flatMap(lineRuns =>
+          wrapRuns(lineRuns, blockPrintableW, timesRoman, timesBold, fontSize)
+        )
 
         for (let lineIdx = 0; lineIdx < wrappedLines.length; lineIdx++) {
           const line = wrappedLines[lineIdx]
@@ -420,7 +558,10 @@ export async function POST(request: Request) {
         }
       }
 
-      const htmlContent = markdownToHtml(content);
+      // html-to-docx / xmlbuilder2 throws Invalid XML name "@w" on percentage CSS widths inside table/cell styles
+      const htmlContent = markdownToHtml(content)
+        .replace(/\b(?:width|min-width|max-width)\s*:\s*[^;"']+%[^;"']*;?/gi, '')
+        .replace(/\s+width\s*=\s*["'][^"']*%["']/gi, '');
 
       const docxOptions = {
         margins: {
