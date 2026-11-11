@@ -1,13 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyAdminSession } from '@/lib/admin-auth'
+import { verifyAdminOrKey } from '@/lib/api-key-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
+import { fetchCampaignStats } from '@/lib/newsletter-campaigns'
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-    if (!await verifyAdminSession()) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const authCheck = await verifyAdminOrKey(request, 'newsletter:read')
+    if (!authCheck.success) {
+        return authCheck.response
     }
 
     const { id } = await params
@@ -29,14 +28,18 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
         if (campaignError) throw campaignError
 
-        // Fetch Recipients
+        // Fetch Recipients with explicit lean columns
         let query = supabaseAdmin
             .from('newsletter_recipients')
-            .select('*', { count: 'exact' })
+            .select('id, campaign_id, email, status, sent_at, delivered_at, opened_at, clicked_at, clicked_url, error_message', { count: 'exact' })
             .eq('campaign_id', id)
             .order('email', { ascending: true })
             
-        if (status !== 'all') {
+        if (status === 'delivered') {
+            query = query.in('status', ['delivered', 'opened', 'clicked'])
+        } else if (status === 'opened') {
+            query = query.in('status', ['opened', 'clicked'])
+        } else if (status !== 'all') {
             query = query.eq('status', status)
         }
         if (search) {
@@ -47,31 +50,20 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
         if (recipientsError) throw recipientsError
 
-        // Aggregate stats for this campaign specifically
-        // Count occurrences of each status
-        const { data: allStatuses, error: statusError } = await supabaseAdmin
-            .from('newsletter_recipients')
-            .select('status')
-            .eq('campaign_id', id)
-
-        if (statusError) throw statusError
+        const stats = await fetchCampaignStats(id, {
+            sent_count: campaign.sent_count,
+            failed_count: campaign.failed_count,
+        })
 
         const statusCounts = {
-            delivered: 0,
-            failed: 0,
-            bounced: 0,
-            opened: 0,
-            clicked: 0,
-            pending: 0
+            sent: stats.sent,
+            delivered: stats.delivered ?? 0,
+            failed: stats.failed ?? 0,
+            bounced: stats.bounced ?? 0,
+            opened: stats.opened ?? 0,
+            clicked: stats.clicked ?? 0,
+            pending: stats.pending ?? 0,
         }
-
-        allStatuses.forEach(r => {
-            if (r.status === 'sent') {
-                statusCounts.delivered++
-            } else if (statusCounts[r.status as keyof typeof statusCounts] !== undefined) {
-                statusCounts[r.status as keyof typeof statusCounts]++
-            }
-        })
 
         // Calculate active subscribers and unsent count for this campaign
         let activeSubscribersCount = 0
@@ -95,12 +87,16 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
             activeSubscribersCount = campaign.total_recipients || 0
         }
 
-        const totalAttempted = allStatuses.length
+        const totalAttempted = stats.tracked_in_brevo_only ? stats.sent : stats.recipient_rows_count
         const totalTarget = Math.max(campaign.total_recipients || 0, activeSubscribersCount)
         const unsentCount = Math.max(0, totalTarget - totalAttempted)
 
         return NextResponse.json({
-            campaign,
+            campaign: {
+                ...campaign,
+                stats,
+            },
+            stats,
             recipients,
             total: count || 0,
             statusCounts,

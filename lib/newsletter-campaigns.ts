@@ -4,6 +4,197 @@ import { generateUnsubscribeToken, BASE_URL } from '@/lib/utils'
 
 const SENT_STATUSES = new Set(['sent', 'delivered', 'opened', 'clicked'])
 
+export interface CampaignStats {
+  sent: number
+  delivered: number | null
+  opened: number | null
+  clicked: number | null
+  bounced: number | null
+  failed: number | null
+  pending: number | null
+  open_rate: number | null
+  click_rate: number | null
+  recipient_rows_count: number
+  tracked_in_brevo_only: boolean
+  tracking_source: 'recipients' | 'brevo_only' | 'none'
+  tracking_note: string | null
+}
+
+export interface RecipientStatRow {
+  id?: string | null
+  email?: string | null
+  status?: string | null
+  sent_at?: string | null
+  delivered_at?: string | null
+  opened_at?: string | null
+  clicked_at?: string | null
+}
+
+const RANK_BY_STATUS: Record<string, number> = {
+  failed: -2,
+  bounced: -1,
+  pending: 0,
+  sent: 1,
+  delivered: 2,
+  opened: 3,
+  clicked: 4,
+}
+
+/**
+ * Computes cumulative per-campaign delivery, unique-open, and unique-click stats
+ * from newsletter_recipients rows. Pre-F1 sends with 0 recipient rows and sent_count > 0
+ * preserve stored sent_count and mark metrics as tracked in Brevo only without fabricating rates.
+ */
+export function computeCampaignStats(
+  recipients: RecipientStatRow[] | null | undefined,
+  campaignMeta?: { sent_count?: number | null; failed_count?: number | null }
+): CampaignStats {
+  const rows = recipients || []
+  const storedSentCount = Number(campaignMeta?.sent_count || 0)
+  const storedFailedCount = campaignMeta?.failed_count != null ? Number(campaignMeta.failed_count) : null
+
+  if (rows.length === 0) {
+    if (storedSentCount > 0) {
+      return {
+        sent: storedSentCount,
+        delivered: null,
+        opened: null,
+        clicked: null,
+        bounced: null,
+        failed: storedFailedCount,
+        pending: null,
+        open_rate: null,
+        click_rate: null,
+        recipient_rows_count: 0,
+        tracked_in_brevo_only: true,
+        tracking_source: 'brevo_only',
+        tracking_note: 'tracked in Brevo only',
+      }
+    }
+
+    return {
+      sent: 0,
+      delivered: 0,
+      opened: 0,
+      clicked: 0,
+      bounced: 0,
+      failed: storedFailedCount || 0,
+      pending: 0,
+      open_rate: 0,
+      click_rate: 0,
+      recipient_rows_count: 0,
+      tracked_in_brevo_only: false,
+      tracking_source: 'none',
+      tracking_note: null,
+    }
+  }
+
+  // Deduplicate by lowercase email using highest reached funnel state for unique recipient counts
+  const uniqueByEmail = new Map<string, RecipientStatRow>()
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i]
+    const key =
+      typeof row.email === 'string' && row.email.trim()
+        ? row.email.trim().toLowerCase()
+        : row.id || `row-${i}`
+
+    const existing = uniqueByEmail.get(key)
+    if (!existing) {
+      uniqueByEmail.set(key, { ...row })
+      continue
+    }
+
+    const existingRank = RANK_BY_STATUS[existing.status || 'pending'] ?? 0
+    const nextRank = RANK_BY_STATUS[row.status || 'pending'] ?? 0
+    uniqueByEmail.set(key, {
+      ...existing,
+      status: nextRank >= existingRank ? row.status : existing.status,
+      sent_at: existing.sent_at || row.sent_at,
+      delivered_at: existing.delivered_at || row.delivered_at,
+      opened_at: existing.opened_at || row.opened_at,
+      clicked_at: existing.clicked_at || row.clicked_at,
+    })
+  }
+
+  let sent = 0
+  let delivered = 0
+  let opened = 0
+  let clicked = 0
+  let bounced = 0
+  let failed = 0
+  let pending = 0
+
+  for (const row of uniqueByEmail.values()) {
+    const hasClicked = row.status === 'clicked' || Boolean(row.clicked_at)
+    const hasOpened = hasClicked || row.status === 'opened' || Boolean(row.opened_at)
+    const hasDelivered = hasOpened || row.status === 'delivered' || Boolean(row.delivered_at)
+    const isBounced = !hasDelivered && row.status === 'bounced'
+    const isFailed = !hasDelivered && !isBounced && row.status === 'failed'
+    const isSent = hasDelivered || isBounced || row.status === 'sent' || Boolean(row.sent_at)
+
+    if (hasClicked) clicked++
+    if (hasOpened) opened++
+    if (hasDelivered) delivered++
+    if (isBounced) bounced++
+    if (isFailed) failed++
+    if (isSent) sent++
+    if (!isSent && !isFailed) pending++
+  }
+
+  const openRate = delivered > 0 ? Number(((opened / delivered) * 100).toFixed(1)) : 0
+  const clickRate = delivered > 0 ? Number(((clicked / delivered) * 100).toFixed(1)) : 0
+
+  return {
+    sent,
+    delivered,
+    opened,
+    clicked,
+    bounced,
+    failed,
+    pending,
+    open_rate: openRate,
+    click_rate: clickRate,
+    recipient_rows_count: rows.length,
+    tracked_in_brevo_only: false,
+    tracking_source: 'recipients',
+    tracking_note: null,
+  }
+}
+
+/**
+ * Fetches lean recipient tracking columns (paginated beyond 1,000 rows) and computes CampaignStats.
+ */
+export async function fetchCampaignStats(
+  campaignId: string,
+  campaignMeta?: { sent_count?: number | null; failed_count?: number | null }
+): Promise<CampaignStats> {
+  const rows: RecipientStatRow[] = []
+  const pageSize = 1000
+  let offset = 0
+
+  while (true) {
+    const { data, error } = await supabaseAdmin
+      .from('newsletter_recipients')
+      .select('id, email, status, sent_at, delivered_at, opened_at, clicked_at')
+      .eq('campaign_id', campaignId)
+      .range(offset, offset + pageSize - 1)
+
+    if (error) {
+      throw error
+    }
+
+    const batch = (data || []) as RecipientStatRow[]
+    rows.push(...batch)
+
+    if (batch.length < pageSize) {
+      break
+    }
+    offset += pageSize
+  }
+
+  return computeCampaignStats(rows, campaignMeta)
+}
+
 function injectOrAppendUnsubscribeFooter(rawHtml: string, recipientEmail: string): string {
   const token = generateUnsubscribeToken(recipientEmail)
   const unsubUrl = `${BASE_URL}/api/unsubscribe?email=${encodeURIComponent(recipientEmail)}&token=${token}`

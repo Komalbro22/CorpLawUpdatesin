@@ -71,7 +71,7 @@ export default function CampaignDetails() {
     }
 
     const handleSendRemaining = async () => {
-        const remaining = data?.unsentCount || (data?.campaign?.total_recipients - (data?.statusCounts?.delivered + data?.statusCounts?.opened + data?.statusCounts?.clicked)) || 0
+        const remaining = data?.unsentCount ?? Math.max(0, (data?.campaign?.total_recipients || 0) - (data?.stats?.sent ?? 0))
         if (!confirm(`Send this campaign to the remaining ${remaining} subscriber(s)?`)) return
         setSendingRemaining(true)
         try {
@@ -102,24 +102,30 @@ export default function CampaignDetails() {
         return <div className="text-rose-500 text-center py-10">Error loading campaign details</div>
     }
 
-    const { campaign, recipients, total, statusCounts, unsentCount } = data
+    const { campaign, recipients, total, statusCounts, unsentCount, stats } = data
     const totalPages = Math.ceil(total / limit)
-    const effectiveUnsent = unsentCount !== undefined ? unsentCount : Math.max(0, (campaign.total_recipients || 0) - (statusCounts.delivered + statusCounts.opened + statusCounts.clicked + statusCounts.failed + statusCounts.bounced))
+    const effectiveUnsent = unsentCount !== undefined
+        ? unsentCount
+        : Math.max(0, (campaign.total_recipients || 0) - ((stats?.sent ?? statusCounts.sent ?? 0) + (stats?.failed ?? statusCounts.failed ?? 0)))
+
+    const isBrevoOnly = Boolean(stats?.tracked_in_brevo_only)
 
     const statusBadge = (status: string) => {
         switch(status) {
+            case 'sent':
+                return <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-500/10 text-slate-700 border border-slate-500/20">Sent</span>
             case 'delivered': 
-                return <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Delivered</span>
+                return <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-700 border border-emerald-500/20">Delivered</span>
             case 'opened': 
-                return <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">Opened</span>
+                return <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-500/10 text-blue-700 border border-blue-500/20">Opened</span>
             case 'clicked': 
-                return <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20">Clicked</span>
+                return <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-500/10 text-purple-700 border border-purple-500/20">Clicked</span>
             case 'failed': 
-                return <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-500/10 text-rose-600 border border-rose-500/20">Failed</span>
+                return <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-500/10 text-rose-700 border border-rose-500/20">Failed</span>
             case 'bounced': 
-                return <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">Bounced</span>
+                return <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/10 text-amber-700 border border-amber-500/20">Bounced</span>
             default: 
-                return <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-350 border border-slate-700">{status}</span>
+                return <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-300">{status}</span>
         }
     }
 
@@ -177,7 +183,7 @@ export default function CampaignDetails() {
                                 {effectiveUnsent} active subscriber{effectiveUnsent > 1 ? 's have' : ' has'} not received this campaign yet
                             </div>
                             <p className="text-xs text-slate-600 mt-0.5">
-                                Only {statusCounts.delivered + statusCounts.opened + statusCounts.clicked} out of {campaign.total_recipients || 0} recipients were sent during previous execution. Click below to deliver to the remaining {effectiveUnsent} subscribers.
+                                Only {stats?.sent ?? statusCounts.sent ?? 0} out of {campaign.total_recipients || 0} recipients were sent during previous execution. Click below to deliver to the remaining {effectiveUnsent} subscribers.
                             </p>
                         </div>
                     </div>
@@ -196,22 +202,73 @@ export default function CampaignDetails() {
                 {/* Main Content Area */}
                 <div className="lg:col-span-2 space-y-6">
                     {/* Analytics Summary */}
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    {isBrevoOnly && (
+                        <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-xs text-amber-900">
+                            <span className="font-semibold">Pre-F1 send:</span> Recipient-level events were not stored in the database for this campaign. Opens and clicks are{' '}
+                            <span className="font-semibold">tracked in Brevo only</span>.
+                        </div>
+                    )}
+                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
                         <div className="admin-card p-4 text-center">
-                            <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Total Recipients</div>
-                            <div className="text-2xl font-bold text-slate-900 mt-1">{campaign.total_recipients || 0}</div>
+                            <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Sent</div>
+                            <div className="text-2xl font-bold text-slate-900 mt-1">{stats ? stats.sent : (campaign.sent_count || 0)}</div>
                         </div>
                         <div className="bg-emerald-500/5 p-4 rounded-xl border border-emerald-500/20 text-center">
-                            <div className="text-xs font-semibold text-emerald-400 uppercase tracking-wider mb-1">Delivered</div>
-                            <div className="text-2xl font-bold text-emerald-300 mt-1">{statusCounts.delivered + statusCounts.opened + statusCounts.clicked}</div>
+                            <div className="text-xs font-semibold text-emerald-700 uppercase tracking-wider mb-1">Delivered</div>
+                            {isBrevoOnly ? (
+                                <div className="text-xs font-semibold text-slate-500 mt-2">Tracked in Brevo only</div>
+                            ) : (
+                                <div className="text-2xl font-bold text-emerald-700 mt-1">{stats?.delivered ?? statusCounts.delivered}</div>
+                            )}
                         </div>
                         <div className="bg-blue-500/5 p-4 rounded-xl border border-blue-500/20 text-center">
-                            <div className="text-xs font-semibold text-blue-400 uppercase tracking-wider mb-1">Opened</div>
-                            <div className="text-2xl font-bold text-blue-300 mt-1">{statusCounts.opened + statusCounts.clicked}</div>
+                            <div className="text-xs font-semibold text-blue-700 uppercase tracking-wider mb-1">Opened</div>
+                            {isBrevoOnly ? (
+                                <div className="text-xs font-semibold text-slate-500 mt-2">Tracked in Brevo only</div>
+                            ) : (
+                                <div className="text-2xl font-bold text-blue-700 mt-1">{stats?.opened ?? statusCounts.opened}</div>
+                            )}
+                        </div>
+                        <div className="bg-purple-500/5 p-4 rounded-xl border border-purple-500/20 text-center">
+                            <div className="text-xs font-semibold text-purple-700 uppercase tracking-wider mb-1">Clicked</div>
+                            {isBrevoOnly ? (
+                                <div className="text-xs font-semibold text-slate-500 mt-2">Tracked in Brevo only</div>
+                            ) : (
+                                <div className="text-2xl font-bold text-purple-700 mt-1">{stats?.clicked ?? statusCounts.clicked}</div>
+                            )}
                         </div>
                         <div className="bg-rose-500/5 p-4 rounded-xl border border-rose-500/20 text-center">
-                            <div className="text-xs font-semibold text-rose-600 uppercase tracking-wider mb-1">Failed/Bounced</div>
-                            <div className="text-2xl font-bold text-rose-300 mt-1">{statusCounts.failed + statusCounts.bounced}</div>
+                            <div className="text-xs font-semibold text-rose-700 uppercase tracking-wider mb-1">Bounced</div>
+                            {isBrevoOnly ? (
+                                <div className="text-xs font-semibold text-slate-500 mt-2">Tracked in Brevo only</div>
+                            ) : (
+                                <>
+                                    <div className="text-2xl font-bold text-rose-700 mt-1">{stats?.bounced ?? statusCounts.bounced}</div>
+                                    {(stats?.failed ?? statusCounts.failed ?? 0) > 0 && (
+                                        <div className="text-[11px] text-rose-600 mt-0.5">+ {stats?.failed ?? statusCounts.failed} failed</div>
+                                    )}
+                                </>
+                            )}
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div className="admin-card p-4 flex items-center justify-between">
+                            <div>
+                                <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Open Rate</div>
+                                <div className="text-xs text-slate-400 mt-0.5">Unique recipients / delivered</div>
+                            </div>
+                            <div className={isBrevoOnly ? 'text-xs font-semibold text-slate-500' : 'text-xl font-bold text-blue-700'}>
+                                {isBrevoOnly ? 'Tracked in Brevo only' : `${stats?.open_rate ?? 0}%`}
+                            </div>
+                        </div>
+                        <div className="admin-card p-4 flex items-center justify-between">
+                            <div>
+                                <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Click Rate</div>
+                                <div className="text-xs text-slate-400 mt-0.5">Unique recipients / delivered</div>
+                            </div>
+                            <div className={isBrevoOnly ? 'text-xs font-semibold text-slate-500' : 'text-xl font-bold text-purple-700'}>
+                                {isBrevoOnly ? 'Tracked in Brevo only' : `${stats?.click_rate ?? 0}%`}
+                            </div>
                         </div>
                     </div>
 
@@ -235,12 +292,13 @@ export default function CampaignDetails() {
                                     onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
                                     className="px-3 py-2 bg-slate-50 border border-white/60 rounded-lg text-sm focus:outline-hidden text-slate-900"
                                 >
-                                    <option className="bg-slate-100 text-white" value="all">All Status</option>
-                                    <option className="bg-slate-100 text-white" value="delivered">Delivered</option>
-                                    <option className="bg-slate-100 text-white" value="opened">Opened</option>
-                                    <option className="bg-slate-100 text-white" value="clicked">Clicked</option>
-                                    <option className="bg-slate-100 text-white" value="failed">Failed</option>
-                                    <option className="bg-slate-100 text-white" value="bounced">Bounced</option>
+                                    <option className="bg-white text-slate-900" value="all">All Status</option>
+                                    <option className="bg-white text-slate-900" value="sent">Sent</option>
+                                    <option className="bg-white text-slate-900" value="delivered">Delivered</option>
+                                    <option className="bg-white text-slate-900" value="opened">Opened</option>
+                                    <option className="bg-white text-slate-900" value="clicked">Clicked</option>
+                                    <option className="bg-white text-slate-900" value="failed">Failed</option>
+                                    <option className="bg-white text-slate-900" value="bounced">Bounced</option>
                                 </select>
                             </div>
                         </div>
@@ -256,8 +314,9 @@ export default function CampaignDetails() {
                                     <tr className="bg-slate-50/60 border-b border-white/60 text-sm text-slate-500">
                                         <th className="p-4 font-medium">Email</th>
                                         <th className="p-4 font-medium">Status</th>
-                                        <th className="p-4 font-medium">Sent Time</th>
-                                        <th className="p-4 font-medium">Error</th>
+                                        <th className="p-4 font-medium">Sent / Delivered</th>
+                                        <th className="p-4 font-medium">Opened / Clicked</th>
+                                        <th className="p-4 font-medium">Clicked Link / Error</th>
                                     </tr>
                                 </thead>
                                 <tbody className="text-sm divide-y divide-slate-200/50">
@@ -266,13 +325,41 @@ export default function CampaignDetails() {
                                             <tr key={r.id} className="hover:bg-slate-100/50">
                                                 <td className="p-4 font-medium text-slate-800">{r.email}</td>
                                                 <td className="p-4">{statusBadge(r.status)}</td>
-                                                <td className="p-4 text-slate-500">{r.sent_at ? new Date(r.sent_at).toLocaleString() : '-'}</td>
-                                                <td className="p-4 text-xs text-rose-450 max-w-[200px] truncate" title={r.error_message || ''}>{r.error_message || '-'}</td>
+                                                <td className="p-4 text-xs text-slate-500 space-y-0.5">
+                                                    <div>Sent: {r.sent_at ? new Date(r.sent_at).toLocaleString() : '-'}</div>
+                                                    {r.delivered_at && (
+                                                        <div className="text-emerald-700">Delivered: {new Date(r.delivered_at).toLocaleString()}</div>
+                                                    )}
+                                                </td>
+                                                <td className="p-4 text-xs text-slate-500 space-y-0.5">
+                                                    <div>Opened: {r.opened_at ? new Date(r.opened_at).toLocaleString() : '-'}</div>
+                                                    <div>Clicked: {r.clicked_at ? new Date(r.clicked_at).toLocaleString() : '-'}</div>
+                                                </td>
+                                                <td className="p-4 text-xs max-w-[220px] truncate" title={r.clicked_url || r.error_message || ''}>
+                                                    {r.clicked_url ? (
+                                                        <a
+                                                            href={r.clicked_url}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-purple-700 hover:underline font-medium"
+                                                        >
+                                                            {r.clicked_url}
+                                                        </a>
+                                                    ) : r.error_message ? (
+                                                        <span className="text-rose-600">{r.error_message}</span>
+                                                    ) : (
+                                                        <span className="text-slate-400">-</span>
+                                                    )}
+                                                </td>
                                             </tr>
                                         ))
                                     ) : (
                                         <tr>
-                                            <td colSpan={4} className="p-8 text-center text-slate-500 bg-slate-100/10">No recipients match your filters.</td>
+                                            <td colSpan={5} className="p-8 text-center text-slate-500 bg-slate-100/10">
+                                                {isBrevoOnly
+                                                    ? 'Opens and clicks for this pre-F1 send are tracked in Brevo only.'
+                                                    : 'No recipients match your filters.'}
+                                            </td>
                                         </tr>
                                     )}
                                 </tbody>

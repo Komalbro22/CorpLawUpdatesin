@@ -54,9 +54,12 @@ function makeQueryBuilder(table: TableName) {
   let updatePatch: Record<string, any> = {}
   const filters: Array<(row: Record<string, any>) => boolean> = []
   let rangeSlice: [number, number] | null = null
+  let orderBy: { col: string; ascending: boolean } | null = null
+  let limitCount: number | null = null
+  let wantHead = false
   let wantSingle: 'single' | 'maybeSingle' | null = null
 
-  function execute(): { data: any; error: null | { message: string } } {
+  function execute(): { data: any; count?: number; error: null | { message: string } } {
     const rows = db[table]
 
     if (mode === 'insert') {
@@ -72,7 +75,21 @@ function makeQueryBuilder(table: TableName) {
       return { data: inserted, error: null }
     }
 
-    const matched = rows.filter(r => filters.every(fn => fn(r)))
+    let matched = rows.filter(r => filters.every(fn => fn(r)))
+
+    if (orderBy) {
+      const { col, ascending } = orderBy
+      matched = [...matched].sort((a, b) => {
+        const av = a[col] ?? null
+        const bv = b[col] ?? null
+        if (av === bv) return 0
+        if (av === null) return 1
+        if (bv === null) return -1
+        return ascending
+          ? String(av).localeCompare(String(bv))
+          : String(bv).localeCompare(String(av))
+      })
+    }
 
     if (mode === 'update') {
       for (const r of matched) {
@@ -88,19 +105,28 @@ function makeQueryBuilder(table: TableName) {
       return { data: matched.map(m => ({ ...m })), error: null }
     }
 
+    const totalCount = matched.length
+
     if (wantSingle === 'single') {
-      if (matched.length === 0) return { data: null, error: { message: 'Not found' } }
-      return { data: { ...matched[0] }, error: null }
+      if (matched.length === 0) return { data: null, count: 0, error: { message: 'Not found' } }
+      return { data: { ...matched[0] }, count: 1, error: null }
     }
     if (wantSingle === 'maybeSingle') {
-      return { data: matched[0] ? { ...matched[0] } : null, error: null }
+      return { data: matched[0] ? { ...matched[0] } : null, count: matched.length, error: null }
     }
-    const sliced = rangeSlice ? matched.slice(rangeSlice[0], rangeSlice[1] + 1) : matched
-    return { data: sliced.map(m => ({ ...m })), error: null }
+    if (wantHead) {
+      return { data: null, count: totalCount, error: null }
+    }
+    let sliced = rangeSlice ? matched.slice(rangeSlice[0], rangeSlice[1] + 1) : matched
+    if (limitCount !== null) {
+      sliced = sliced.slice(0, limitCount)
+    }
+    return { data: sliced.map(m => ({ ...m })), count: totalCount, error: null }
   }
 
   const builder: any = {
-    select() {
+    select(_cols?: string, opts?: { count?: string; head?: boolean }) {
+      wantHead = Boolean(opts?.head)
       return builder
     },
     insert(payload: Record<string, any> | Array<Record<string, any>>) {
@@ -121,8 +147,20 @@ function makeQueryBuilder(table: TableName) {
       filters.push(r => vals.includes(r[col]))
       return builder
     },
+    is(col: string, val: any) {
+      filters.push(r => (r[col] ?? null) === val)
+      return builder
+    },
     ilike(col: string, pattern: string) {
       filters.push(r => typeof r[col] === 'string' && sqlIlikeMatch(r[col], pattern))
+      return builder
+    },
+    order(col: string, opts?: { ascending?: boolean }) {
+      orderBy = { col, ascending: opts?.ascending ?? true }
+      return builder
+    },
+    limit(n: number) {
+      limitCount = n
       return builder
     },
     range(from: number, to: number) {
@@ -195,9 +233,12 @@ jest.mock('@/lib/email-provider', () => {
 })
 
 import { POST as sendCampaignPost } from '@/app/api/admin/newsletter/campaigns/[id]/send/route'
+import { GET as campaignDetailGet } from '@/app/api/admin/newsletter/campaigns/[id]/route'
+import { GET as historyDetailGet } from '@/app/api/admin/newsletter/history/[id]/route'
 import { POST as retryCampaignPost } from '@/app/api/admin/newsletter/campaigns/[id]/retry/route'
 import { GET as unsubscribeGet, POST as unsubscribePost } from '@/app/api/unsubscribe/route'
 import { POST as brevoWebhookPost } from '@/app/api/webhooks/brevo/route'
+import { verifyAdminOrKey } from '@/lib/api-key-auth'
 import { extractBriefingMetadata } from '@/lib/newsletter-pdfs'
 import { revalidateNewsletterMutation } from '@/lib/content-revalidation'
 
@@ -553,6 +594,278 @@ describe('Newsletter Code Fixes F1–F9 Verification Suite', () => {
       expect(db.subscribers.find(s => s.id === 's-spam')?.is_active).toBe(false)
       expect(db.newsletter_recipients[0].status).toBe('bounced')
       expect(db.newsletter_webhook_events).toHaveLength(3)
+    })
+  })
+
+  describe('F11 — Brevo open/click/delivered tracking, monotonic state & admin stats API', () => {
+    it('advances sent -> delivered -> opened -> clicked monotonically and never downgrades on late events', async () => {
+      process.env.BREVO_WEBHOOK_SECRET = 'expected-secret'
+      db.newsletter_recipients.push({
+        id: 'rec-track-1',
+        campaign_id: 'camp-track-1',
+        email: 'Komal.Reader@Example.com',
+        resend_email_id: '<202611111200.111@smtp-relay.mailin.fr>',
+        status: 'sent',
+        sent_at: '2026-11-11T06:00:00.000Z',
+        delivered_at: null,
+        opened_at: null,
+        clicked_at: null,
+        clicked_url: null,
+      })
+
+      // 1. Delivered event (case-insensitive email & message-id without angle brackets)
+      const resDelivered = await brevoWebhookPost(
+        new NextRequest('http://localhost/api/webhooks/brevo', {
+          method: 'POST',
+          headers: { Authorization: 'Bearer expected-secret', 'content-type': 'application/json' },
+          body: JSON.stringify({
+            event: 'delivered',
+            email: 'komal.reader@example.com',
+            'message-id': '202611111200.111@smtp-relay.mailin.fr',
+            ts_event: 1794380460,
+          }),
+        })
+      )
+      expect(resDelivered.status).toBe(200)
+      expect(db.newsletter_recipients[0].status).toBe('delivered')
+      expect(db.newsletter_recipients[0].delivered_at).toBeTruthy()
+
+      // 2. First opened event
+      const resOpened1 = await brevoWebhookPost(
+        new NextRequest('http://localhost/api/webhooks/brevo', {
+          method: 'POST',
+          headers: { Authorization: 'Bearer expected-secret', 'content-type': 'application/json' },
+          body: JSON.stringify({
+            event: 'opened',
+            email: 'komal.reader@example.com',
+            'message-id': '<202611111200.111@smtp-relay.mailin.fr>',
+            date: '2026-11-11T07:05:00.000Z',
+          }),
+        })
+      )
+      expect(resOpened1.status).toBe(200)
+      expect(db.newsletter_recipients[0].status).toBe('opened')
+      expect(db.newsletter_recipients[0].opened_at).toBe('2026-11-11T07:05:00.000Z')
+
+      // 3. Late delivered must NOT downgrade opened
+      const resLateDelivered = await brevoWebhookPost(
+        new NextRequest('http://localhost/api/webhooks/brevo', {
+          method: 'POST',
+          headers: { Authorization: 'Bearer expected-secret', 'content-type': 'application/json' },
+          body: JSON.stringify({
+            event: 'delivered',
+            email: 'komal.reader@example.com',
+            'message-id': '<202611111200.111@smtp-relay.mailin.fr>',
+            date: '2026-11-11T07:06:00.000Z',
+          }),
+        })
+      )
+      expect(resLateDelivered.status).toBe(200)
+      expect(db.newsletter_recipients[0].status).toBe('opened')
+
+      // 4. Click event records clicked_url & clicked_at
+      const resClick = await brevoWebhookPost(
+        new NextRequest('http://localhost/api/webhooks/brevo', {
+          method: 'POST',
+          headers: { Authorization: 'Bearer expected-secret', 'content-type': 'application/json' },
+          body: JSON.stringify({
+            event: 'click',
+            email: 'KOMAL.READER@example.com',
+            'message-id': '<202611111200.111@smtp-relay.mailin.fr>',
+            link: 'https://www.corplawupdates.in/updates/sebi-lodr-amendment',
+            date: '2026-11-11T07:10:00.000Z',
+          }),
+        })
+      )
+      expect(resClick.status).toBe(200)
+      expect(db.newsletter_recipients[0].status).toBe('clicked')
+      expect(db.newsletter_recipients[0].clicked_at).toBe('2026-11-11T07:10:00.000Z')
+      expect(db.newsletter_recipients[0].clicked_url).toBe('https://www.corplawupdates.in/updates/sebi-lodr-amendment')
+
+      // 5. Late opened must NOT downgrade clicked or overwrite first opened_at
+      await brevoWebhookPost(
+        new NextRequest('http://localhost/api/webhooks/brevo', {
+          method: 'POST',
+          headers: { Authorization: 'Bearer expected-secret', 'content-type': 'application/json' },
+          body: JSON.stringify({
+            event: 'opened',
+            email: 'komal.reader@example.com',
+            'message-id': '<202611111200.111@smtp-relay.mailin.fr>',
+            date: '2026-11-11T08:00:00.000Z',
+          }),
+        })
+      )
+      expect(db.newsletter_recipients[0].status).toBe('clicked')
+      expect(db.newsletter_recipients[0].opened_at).toBe('2026-11-11T07:05:00.000Z')
+      expect(db.newsletter_webhook_events).toHaveLength(5)
+    })
+
+    it('falls back to most recent sent row when message-id is absent, and logs unmatched events with HTTP 200', async () => {
+      process.env.BREVO_WEBHOOK_SECRET = 'expected-secret'
+      db.newsletter_recipients.push(
+        {
+          id: 'rec-old',
+          campaign_id: 'camp-old',
+          email: 'reader@example.com',
+          resend_email_id: null,
+          status: 'sent',
+          sent_at: '2026-10-12T06:00:00.000Z',
+          delivered_at: null,
+          opened_at: null,
+          clicked_at: null,
+          clicked_url: null,
+        },
+        {
+          id: 'rec-new',
+          campaign_id: 'camp-new',
+          email: 'reader@example.com',
+          resend_email_id: null,
+          status: 'sent',
+          sent_at: '2026-11-11T06:00:00.000Z',
+          delivered_at: null,
+          opened_at: null,
+          clicked_at: null,
+          clicked_url: null,
+        }
+      )
+
+      const matchedFallback = await brevoWebhookPost(
+        new NextRequest('http://localhost/api/webhooks/brevo', {
+          method: 'POST',
+          headers: { Authorization: 'Bearer expected-secret', 'content-type': 'application/json' },
+          body: JSON.stringify({
+            event: 'opened',
+            email: 'READER@example.com',
+            'message-id': '<unmatched-relay-id@smtp-relay.mailin.fr>',
+          }),
+        })
+      )
+      expect(matchedFallback.status).toBe(200)
+      expect(db.newsletter_recipients.find(r => r.id === 'rec-new')?.status).toBe('opened')
+      expect(db.newsletter_recipients.find(r => r.id === 'rec-old')?.status).toBe('sent')
+
+      const unmatchedRes = await brevoWebhookPost(
+        new NextRequest('http://localhost/api/webhooks/brevo', {
+          method: 'POST',
+          headers: { Authorization: 'Bearer expected-secret', 'content-type': 'application/json' },
+          body: JSON.stringify({
+            event: 'click',
+            email: 'pre-f1-user@example.com',
+            link: 'https://www.corplawupdates.in/updates/old',
+          }),
+        })
+      )
+      const unmatchedJson = await unmatchedRes.json()
+      expect(unmatchedRes.status).toBe(200)
+      expect(unmatchedJson.events[0].action_taken).toBe('logged_unmatched_recipient')
+      expect(db.newsletter_webhook_events).toHaveLength(2)
+    })
+
+    it('exposes cumulative campaign stats via API key on campaigns/[id] and history/[id] and flags pre-F1 sends cleanly', async () => {
+      const mockVerify = verifyAdminOrKey as jest.Mock
+      mockVerify.mockResolvedValue({
+        success: true,
+        auth: { type: 'api_key', key: { id: 'key-muse', name: 'muse ai', scopes: ['newsletter:read'] } },
+      })
+
+      db.newsletter_campaigns.push(
+        {
+          id: 'camp-stats-live',
+          subject: 'Tracked Test Campaign',
+          content: '<p>Test</p>',
+          sent_count: 4,
+          failed_count: 0,
+          total_recipients: 4,
+          status: 'sent',
+        },
+        {
+          id: '8588e2cf-22cc-4e83-8726-275c6a547feb',
+          subject: 'Pre-F1 Campaign',
+          content: '<p>Legacy</p>',
+          sent_count: 152,
+          failed_count: 0,
+          total_recipients: 152,
+          status: 'sent',
+        }
+      )
+
+      db.newsletter_recipients.push(
+        { id: 'r1', campaign_id: 'camp-stats-live', email: 'a@x.com', status: 'clicked', sent_at: '2026-11-11T06:00:00Z', delivered_at: '2026-11-11T06:00:10Z', opened_at: '2026-11-11T06:01:00Z', clicked_at: '2026-11-11T06:02:00Z', clicked_url: 'https://www.corplawupdates.in/u1' },
+        { id: 'r2', campaign_id: 'camp-stats-live', email: 'b@x.com', status: 'opened', sent_at: '2026-11-11T06:00:00Z', delivered_at: '2026-11-11T06:00:10Z', opened_at: '2026-11-11T06:03:00Z' },
+        { id: 'r3', campaign_id: 'camp-stats-live', email: 'c@x.com', status: 'delivered', sent_at: '2026-11-11T06:00:00Z', delivered_at: '2026-11-11T06:00:10Z' },
+        { id: 'r4', campaign_id: 'camp-stats-live', email: 'd@x.com', status: 'bounced', sent_at: '2026-11-11T06:00:00Z' }
+      )
+
+      const campRes = await campaignDetailGet(
+        new NextRequest('http://localhost/api/admin/newsletter/campaigns/camp-stats-live', {
+          headers: { Authorization: 'Bearer clu_test' },
+        }),
+        { params: Promise.resolve({ id: 'camp-stats-live' }) }
+      )
+      const campJson = await campRes.json()
+      expect(campRes.status).toBe(200)
+      expect(mockVerify).toHaveBeenCalledWith(expect.any(NextRequest), 'newsletter:read')
+      expect(campJson.stats).toEqual({
+        sent: 4,
+        delivered: 3,
+        opened: 2,
+        clicked: 1,
+        bounced: 1,
+        failed: 0,
+        pending: 0,
+        open_rate: 66.7,
+        click_rate: 33.3,
+        recipient_rows_count: 4,
+        tracked_in_brevo_only: false,
+        tracking_source: 'recipients',
+        tracking_note: null,
+      })
+
+      const histRes = await historyDetailGet(
+        new NextRequest('http://localhost/api/admin/newsletter/history/camp-stats-live', {
+          headers: { Authorization: 'Bearer clu_test' },
+        }),
+        { params: Promise.resolve({ id: 'camp-stats-live' }) }
+      )
+      const histJson = await histRes.json()
+      expect(histRes.status).toBe(200)
+      expect(histJson.stats).toEqual(campJson.stats)
+
+      const preF1Res = await campaignDetailGet(
+        new NextRequest('http://localhost/api/admin/newsletter/campaigns/8588e2cf-22cc-4e83-8726-275c6a547feb', {
+          headers: { Authorization: 'Bearer clu_test' },
+        }),
+        { params: Promise.resolve({ id: '8588e2cf-22cc-4e83-8726-275c6a547feb' }) }
+      )
+      const preF1Json = await preF1Res.json()
+      expect(preF1Res.status).toBe(200)
+      expect(preF1Json.stats).toEqual({
+        sent: 152,
+        delivered: null,
+        opened: null,
+        clicked: null,
+        bounced: null,
+        failed: 0,
+        pending: null,
+        open_rate: null,
+        click_rate: null,
+        recipient_rows_count: 0,
+        tracked_in_brevo_only: true,
+        tracking_source: 'brevo_only',
+        tracking_note: 'tracked in Brevo only',
+      })
+
+      // Also verify failed API key auth returns 401 on history/[id]
+      const { NextResponse } = await import('next/server')
+      mockVerify.mockResolvedValueOnce({
+        success: false,
+        response: NextResponse.json({ error: { code: 'UNAUTHORIZED' } }, { status: 401 }),
+      })
+      const unauthHistRes = await historyDetailGet(
+        new NextRequest('http://localhost/api/admin/newsletter/history/camp-stats-live'),
+        { params: Promise.resolve({ id: 'camp-stats-live' }) }
+      )
+      expect(unauthHistRes.status).toBe(401)
     })
   })
 })

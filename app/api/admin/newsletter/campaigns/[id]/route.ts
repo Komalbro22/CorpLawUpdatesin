@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { verifyAdminOrKey, logApiAudit, getClientIp } from '@/lib/api-key-auth'
+import { fetchCampaignStats } from '@/lib/newsletter-campaigns'
 
 export const dynamic = 'force-dynamic'
 
@@ -42,17 +43,19 @@ export async function GET(
       return NextResponse.json({ error: { code: 'NOT_FOUND', message: 'Campaign not found' } }, { status: 404 })
     }
 
-    // Fetch recipient stats if available
-    const { count: recipientCount } = await supabaseAdmin
-      .from('newsletter_recipients')
-      .select('*', { count: 'exact', head: true })
-      .eq('campaign_id', id)
+    // Fetch recipient delivery, open, and click statistics
+    const stats = await fetchCampaignStats(id, {
+      sent_count: campaign.sent_count,
+      failed_count: campaign.failed_count,
+    })
 
     return NextResponse.json({
       campaign: {
         ...formatCampaign(campaign),
-        recipients_count: recipientCount || campaign.total_recipients || 0,
+        recipients_count: stats.recipient_rows_count || campaign.total_recipients || 0,
+        stats,
       },
+      stats,
     })
   } catch (err: any) {
     return NextResponse.json(
