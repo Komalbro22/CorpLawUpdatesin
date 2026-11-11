@@ -2,14 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { generateUnsubscribeToken, safeCompare } from '@/lib/utils'
 import { supabaseAdmin } from '@/lib/supabase-server'
 
-export async function GET(request: NextRequest) {
-
-      try {
-        const { searchParams } = new URL(request.url)
-        const email = searchParams.get('email')
-        const token = searchParams.get('token')
-
-        const errorHtml = (msg: string) => `
+function buildErrorHtml(msg: string): string {
+    return `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -27,32 +21,10 @@ export async function GET(request: NextRequest) {
     </body>
     </html>
   `
+}
 
-        if (!email || !token) {
-            return new NextResponse(errorHtml('Invalid unsubscribe link'), {
-                status: 400,
-                headers: { 'Content-Type': 'text/html' }
-            })
-        }
-
-        const expectedToken = generateUnsubscribeToken(email)
-        if (!safeCompare(token, expectedToken)) {
-            return new NextResponse(errorHtml('Invalid or expired unsubscribe link'), {
-                status: 400,
-                headers: { 'Content-Type': 'text/html' }
-            })
-        }
-
-        const { error: updateError } = await supabaseAdmin
-            .from('subscribers')
-            .update({ is_active: false, unsubscribed_at: new Date().toISOString() })
-            .eq('email', email)
-
-        if (updateError) {
-            throw updateError
-        }
-
-        const successHtml = `
+function buildSuccessHtml(): string {
+    return `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -72,21 +44,130 @@ export async function GET(request: NextRequest) {
     </body>
     </html>
   `
+}
 
-        return new NextResponse(successHtml, {
-            status: 200,
-            headers: { 'Content-Type': 'text/html' }
-        })
-      } catch (error) {
-  const err = error as Error & { digest?: string };
-            if (err.digest === 'DYNAMIC_SERVER_USAGE' || err.message?.includes('Dynamic server usage')) {
-              throw error;
+async function extractUnsubscribeParams(request: NextRequest): Promise<{ email: string | null; token: string | null }> {
+    const { searchParams } = new URL(request.url)
+    let email = searchParams.get('email')
+    let token = searchParams.get('token')
+
+    if (request.method === 'POST' && (!email || !token)) {
+        const contentType = request.headers.get('content-type') || ''
+        try {
+            if (contentType.includes('application/json')) {
+                const body = await request.json().catch(() => null)
+                if (body && typeof body === 'object') {
+                    email = email || (typeof body.email === 'string' ? body.email : null)
+                    token = token || (typeof body.token === 'string' ? body.token : null)
+                }
+            } else {
+                const rawBody = await request.text().catch(() => '')
+                if (rawBody) {
+                    const formParams = new URLSearchParams(rawBody)
+                    email = email || formParams.get('email')
+                    token = token || formParams.get('token')
+                }
             }
+        } catch {
+            // Fall back to query parameters only
+        }
+    }
 
-        console.error('[API Error]', error);
+    return {
+        email: email ? email.trim() : null,
+        token: token ? token.trim() : null,
+    }
+}
+
+/**
+ * Shared case-insensitive unsubscribe handler used by both GET and RFC 8058 POST.
+ */
+async function processUnsubscribe(request: NextRequest): Promise<NextResponse> {
+    try {
+        const { email, token } = await extractUnsubscribeParams(request)
+        const wantsJson = request.headers.get('accept')?.includes('application/json')
+
+        if (!email || !token) {
+            if (wantsJson) {
+                return NextResponse.json({ error: 'Invalid unsubscribe link' }, { status: 400 })
+            }
+            return new NextResponse(buildErrorHtml('Invalid unsubscribe link'), {
+                status: 400,
+                headers: { 'Content-Type': 'text/html' },
+            })
+        }
+
+        const expectedToken = generateUnsubscribeToken(email)
+        if (!safeCompare(token, expectedToken)) {
+            if (wantsJson) {
+                return NextResponse.json({ error: 'Invalid or expired unsubscribe link' }, { status: 400 })
+            }
+            return new NextResponse(buildErrorHtml('Invalid or expired unsubscribe link'), {
+                status: 400,
+                headers: { 'Content-Type': 'text/html' },
+            })
+        }
+
+        // Escape LIKE special characters so '_' or '%' in email addresses match literally, case-insensitively
+        const escapedPattern = email.replace(/[\\%_]/g, '\\$&')
+        const { data: candidates, error: lookupError } = await supabaseAdmin
+            .from('subscribers')
+            .select('id, email')
+            .ilike('email', escapedPattern)
+
+        if (lookupError) {
+            throw lookupError
+        }
+
+        const normalizedTarget = email.toLowerCase()
+        const matchingIds = (candidates || [])
+            .filter(row => typeof row.email === 'string' && row.email.trim().toLowerCase() === normalizedTarget)
+            .map(row => row.id)
+
+        if (matchingIds.length > 0) {
+            const { error: updateError } = await supabaseAdmin
+                .from('subscribers')
+                .update({ is_active: false, unsubscribed_at: new Date().toISOString() })
+                .in('id', matchingIds)
+
+            if (updateError) {
+                throw updateError
+            }
+        }
+
+        if (wantsJson) {
+            return NextResponse.json({
+                success: true,
+                unsubscribed: true,
+                matchedCount: matchingIds.length,
+            })
+        }
+
+        return new NextResponse(buildSuccessHtml(), {
+            status: 200,
+            headers: { 'Content-Type': 'text/html' },
+        })
+    } catch (error) {
+        const err = error as Error & { digest?: string }
+        if (err.digest === 'DYNAMIC_SERVER_USAGE' || err.message?.includes('Dynamic server usage')) {
+            throw error
+        }
+
+        console.error('[API Error]', error)
         return NextResponse.json(
-          { error: 'Internal server error' },
-          { status: 500 }
-        );
-      }
+            { error: 'Internal server error' },
+            { status: 500 }
+        )
+    }
+}
+
+export async function GET(request: NextRequest) {
+    return processUnsubscribe(request)
+}
+
+/**
+ * RFC 8058 One-Click Unsubscribe POST handler (List-Unsubscribe=One-Click)
+ */
+export async function POST(request: NextRequest) {
+    return processUnsubscribe(request)
 }

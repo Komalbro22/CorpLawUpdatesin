@@ -59,14 +59,25 @@ export async function POST(
       return NextResponse.json({ error: { code: 'NOT_FOUND', message: 'Campaign not found' } }, { status: 404 })
     }
 
+    // Mark unsent drafts used for /test as permanent test drafts so /send will refuse them (403)
+    if (!campaign.is_test && (campaign.sent_count || 0) === 0) {
+      await supabaseAdmin
+        .from('newsletter_campaigns')
+        .update({ is_test: true })
+        .eq('id', id)
+        .eq('sent_count', 0)
+    }
+
     const { email: fromEmail, name: fromName } = parseSender()
 
     const rawHtml = campaign.rendered_html || campaign.content || campaign.body || ''
+    const replyTo = (process.env.NEWSLETTER_REPLY_TO || process.env.ADMIN_EMAIL || 'mail@corplawupdates.in').trim()
 
     const sendRes = await sendEmail({
       from: fromEmail,
       fromName,
       to: testEmail.trim(),
+      replyTo,
       subject: `[TEST] ${campaign.subject}`,
       html: buildEmailHtml(rawHtml, testEmail.trim()),
     })

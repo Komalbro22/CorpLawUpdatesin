@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminOrKey, logApiAudit, getClientIp } from '@/lib/api-key-auth'
 import { getNewsletterPdfById, replaceNewsletterPdf, deleteNewsletterPdf } from '@/lib/newsletter-pdfs'
+import { revalidateNewsletterMutation } from '@/lib/content-revalidation'
 
 export const dynamic = 'force-dynamic'
 
@@ -139,6 +140,9 @@ export async function PATCH(
       )
     }
 
+    const previousRecord = await getNewsletterPdfById(id)
+    const previousSlug = previousRecord.data?.slug
+
     const result = await replaceNewsletterPdf(id, {
       fileBuffer,
       htmlBuffer,
@@ -177,6 +181,8 @@ export async function PATCH(
       })
     }
 
+    revalidateNewsletterMutation({ slug: result.data.slug, oldSlug: previousSlug })
+
     return NextResponse.json({
       success: true,
       message: fileBuffer || htmlBuffer ? 'Newsletter files updated successfully.' : 'Newsletter metadata updated successfully.',
@@ -208,6 +214,7 @@ export async function DELETE(
 
   const { id } = await params
   const clientIp = getClientIp(request)
+  const existingRecord = await getNewsletterPdfById(id)
 
   const result = await deleteNewsletterPdf(id)
 
@@ -230,6 +237,8 @@ export async function DELETE(
       details: { action: 'deleted' },
     })
   }
+
+  revalidateNewsletterMutation({ slug: existingRecord.data?.slug })
 
   return NextResponse.json({
     success: true,

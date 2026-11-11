@@ -197,6 +197,170 @@ export function extractBriefingSummary(html?: string | null): {
   }
 }
 
+export interface BriefingMetadata {
+  leadHeadline: string | null
+  deck: string | null
+  updateCount: string | null
+  leadCategory: string
+  leadCategoryLabel: string
+  regulators: string[]
+  publishedIso: string
+  title: string
+  description: string
+  ogImageUrl: string
+}
+
+const REGULATOR_MATCHERS: Array<{ slug: string; label: string; patterns: RegExp[] }> = [
+  { slug: 'taxation', label: 'Taxation', patterns: [/\btaxation\b/i, /\bgstn?\b/i, /\bcbdt\b/i, /\bcbic\b/i, /\bcustoms\b/i, /\bincome tax\b/i] },
+  { slug: 'mca', label: 'MCA', patterns: [/\bmca\b/i, /\broc\b/i, /\bcompanies act\b/i] },
+  { slug: 'sebi', label: 'SEBI', patterns: [/\bsebi\b/i] },
+  { slug: 'rbi', label: 'RBI', patterns: [/\brbi\b/i] },
+  { slug: 'ifsca', label: 'IFSCA', patterns: [/\bifsca\b/i] },
+  { slug: 'fema', label: 'FEMA', patterns: [/\bfema\b/i] },
+  { slug: 'ibc', label: 'IBC', patterns: [/\bibc\b/i, /\bibbi\b/i] },
+  { slug: 'nclt', label: 'NCLT', patterns: [/\bnclt\b/i, /\bnclat\b/i] },
+  { slug: 'cci', label: 'CCI', patterns: [/\bcci\b/i] },
+  { slug: 'labour', label: 'Labour', patterns: [/\blabour\b/i, /\bepfo\b/i, /\besic\b/i, /\bosh\b/i] },
+]
+
+function matchRegulator(text: string): { slug: string; label: string } | null {
+  for (const item of REGULATOR_MATCHERS) {
+    if (item.patterns.some(re => re.test(text))) {
+      return { slug: item.slug, label: item.label }
+    }
+  }
+  return null
+}
+
+/**
+ * Compute the edition's Monday broadcast date in ISO 8601 IST (+05:30).
+ * Prefers a Monday YYYY-MM-DD date in the slug, otherwise derives the Monday immediately following week_end.
+ */
+export function getNewsletterMondayIso(record: {
+  slug: string
+  week_end?: string | null
+  created_at?: string | null
+}): string {
+  const slugDateMatch = record.slug.match(/(\d{4}-\d{2}-\d{2})$/)
+  if (slugDateMatch) {
+    const dt = new Date(`${slugDateMatch[1]}T00:00:00Z`)
+    if (!Number.isNaN(dt.getTime()) && dt.getUTCDay() === 1) {
+      return `${slugDateMatch[1]}T05:00:00+05:30`
+    }
+  }
+
+  if (record.week_end && /^\d{4}-\d{2}-\d{2}$/.test(record.week_end)) {
+    const dt = new Date(`${record.week_end}T00:00:00Z`)
+    if (!Number.isNaN(dt.getTime())) {
+      const day = dt.getUTCDay()
+      const daysUntilMonday = day === 1 ? 0 : (8 - day) % 7
+      dt.setUTCDate(dt.getUTCDate() + daysUntilMonday)
+      return `${dt.toISOString().slice(0, 10)}T05:00:00+05:30`
+    }
+  }
+
+  return record.created_at || new Date().toISOString()
+}
+
+/**
+ * Extract structured SEO metadata (lead category, regulators covered, dynamic description,
+ * OG image URL, and edition Monday publish timestamp) from a stored broadsheet HTML edition.
+ */
+export function extractBriefingMetadata(
+  rawHtml: string | null | undefined,
+  record: { slug: string; week_label: string; week_end?: string | null; created_at?: string | null }
+): BriefingMetadata {
+  const summary = extractBriefingSummary(rawHtml)
+  const cleanHtml = (rawHtml || '')
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
+
+  let leadMatch: { slug: string; label: string } | null = null
+
+  // 1. Inspect the kicker immediately preceding "Lead Story" or <h2 class="headline">
+  const leadKickerMatch = cleanHtml.match(/>([^<>]{2,100}?\bLead\s*Story[^<>]{0,40})</i)
+  if (leadKickerMatch) {
+    leadMatch = matchRegulator(leadKickerMatch[1])
+  }
+
+  if (!leadMatch) {
+    const headlineIdx = cleanHtml.search(/<h2\b[^>]*class=["'][^"']*headline[^"']*["']/i)
+    if (headlineIdx > 0) {
+      const contextBefore = cleanHtml
+        .slice(Math.max(0, headlineIdx - 350), headlineIdx)
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+      leadMatch = matchRegulator(contextBefore)
+    }
+  }
+
+  if (!leadMatch && summary.leadHeadline) {
+    leadMatch = matchRegulator(summary.leadHeadline)
+  }
+
+  const foundRegulators: string[] = []
+  const addRegulator = (label: string) => {
+    if (!foundRegulators.includes(label)) {
+      foundRegulators.push(label)
+    }
+  }
+
+  if (leadMatch) {
+    addRegulator(leadMatch.label)
+  }
+
+  // 2. Collect all regulators from uppercase kickers & middle-dot regulator strips
+  const kickerTexts = Array.from(cleanHtml.matchAll(/text-transform:\s*uppercase[^>]*>([^<]{2,140})</gi)).map(m => m[1])
+  const strippedBody = cleanHtml.replace(/<[^>]+>/g, ' ')
+
+  for (const snippet of kickerTexts) {
+    for (const reg of REGULATOR_MATCHERS) {
+      if (reg.patterns.some(re => re.test(snippet))) {
+        addRegulator(reg.label)
+      }
+    }
+  }
+
+  for (const reg of REGULATOR_MATCHERS) {
+    // Only scan full text for crisp acronyms / explicit regulator words so generic words don't over-match
+    if (new RegExp(`\\b${reg.label}\\b`, 'i').test(strippedBody)) {
+      addRegulator(reg.label)
+    }
+  }
+
+  if (!leadMatch && foundRegulators.length > 0) {
+    const first = REGULATOR_MATCHERS.find(r => r.label === foundRegulators[0])
+    if (first) leadMatch = { slug: first.slug, label: first.label }
+  }
+
+  const finalLead = leadMatch || { slug: 'mca', label: 'MCA' }
+  const regulators = foundRegulators.length > 0 ? foundRegulators : ['MCA', 'SEBI', 'RBI', 'IBC']
+  const regulatorsDisplay = regulators.slice(0, 6).join(', ')
+
+  const title = `CorpLawUpdates Weekly Briefing: ${record.week_label}`
+  const countSuffix = summary.updateCount ? ` (${summary.updateCount})` : ''
+  const description = summary.leadHeadline
+    ? `${summary.leadHeadline}. Official weekly briefing for ${record.week_label} covering ${regulatorsDisplay}${countSuffix}.`
+    : `Read the official weekly corporate law briefing for ${record.week_label} covering ${regulatorsDisplay}${countSuffix} statutory developments.`
+
+  const ogImageUrl = `https://www.corplawupdates.in/api/og?title=${encodeURIComponent(`Weekly Briefing: ${record.week_label}`)}&category=${encodeURIComponent(finalLead.slug.toUpperCase())}`
+  const publishedIso = getNewsletterMondayIso(record)
+
+  return {
+    leadHeadline: summary.leadHeadline,
+    deck: summary.deck,
+    updateCount: summary.updateCount,
+    leadCategory: finalLead.slug,
+    leadCategoryLabel: finalLead.label,
+    regulators,
+    publishedIso,
+    title,
+    description,
+    ogImageUrl,
+  }
+}
+
 /**
  * Get adjacent (Previous and Next) editions for chronological reading navigation.
  */

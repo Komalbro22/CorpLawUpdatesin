@@ -3,10 +3,12 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { Download, ArrowLeft, ArrowRight, Calendar, ShieldCheck, FileText, ChevronLeft, ChevronRight, Mail, Sparkles } from 'lucide-react'
-import { getNewsletterPdfBySlug, fetchBriefingHtml, sanitizeBriefingHtml, extractBriefingSummary, getAdjacentNewsletters } from '@/lib/newsletter-pdfs'
+import { getNewsletterPdfBySlug, fetchBriefingHtml, sanitizeBriefingHtml, extractBriefingSummary, extractBriefingMetadata, getAdjacentNewsletters } from '@/lib/newsletter-pdfs'
 import { newsletterFontVariables } from '@/lib/fonts'
 import NewsletterShareBar from '@/components/NewsletterShareBar'
 import NewsletterWidget from '@/components/NewsletterWidget'
+import JsonLd from '@/components/JsonLd'
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd'
 
 export const revalidate = 300 // ISR cache 5 minutes
 
@@ -24,35 +26,27 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
   }
 
-  // Probe storage for HTML to extract lead headline for social description
-  let leadHeadline: string | null = null
+  // Probe storage for HTML to derive edition-specific description and lead OG category
   const htmlStoragePath = record.html_path || `${record.slug}.html`
   const rawHtml = await fetchBriefingHtml(htmlStoragePath)
-  if (rawHtml) {
-    const summary = extractBriefingSummary(rawHtml)
-    leadHeadline = summary.leadHeadline
-  }
-
-  const title = `CorpLawUpdates Weekly Briefing: ${record.week_label}`
-  const description = leadHeadline
-    ? `${leadHeadline}. Official weekly corporate law briefing for ${record.week_label} covering MCA, SEBI, RBI, and IBC statutory developments.`
-    : `Read the weekly corporate law intelligence briefing for ${record.week_label}. Authoritative statutory coverage across MCA circulars, SEBI regulations, RBI directions, and IBC notifications.`
+  const meta = extractBriefingMetadata(rawHtml, record)
   const canonicalUrl = `https://www.corplawupdates.in/newsletters/${record.slug}`
 
   return {
-    title,
-    description,
+    title: meta.title,
+    description: meta.description,
     alternates: {
       canonical: canonicalUrl,
     },
     openGraph: {
-      title,
-      description,
+      title: meta.title,
+      description: meta.description,
       url: canonicalUrl,
       type: 'article',
+      publishedTime: meta.publishedIso,
       images: [
         {
-          url: `https://www.corplawupdates.in/api/og?title=${encodeURIComponent(`Weekly Briefing: ${record.week_label}`)}&category=MCA`,
+          url: meta.ogImageUrl,
           width: 1200,
           height: 630,
         },
@@ -60,9 +54,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     twitter: {
       card: 'summary_large_image',
-      title,
-      description,
-      images: [`https://www.corplawupdates.in/api/og?title=${encodeURIComponent(`Weekly Briefing: ${record.week_label}`)}&category=MCA`],
+      title: meta.title,
+      description: meta.description,
+      images: [meta.ogImageUrl],
     },
   }
 }
@@ -83,14 +77,53 @@ export default async function NewsletterReadingPage({ params }: PageProps) {
   const sanitizedHtml = rawHtml ? sanitizeBriefingHtml(rawHtml) : ''
   const hasContent = !!sanitizedHtml && sanitizedHtml.trim().length > 0
   const summary = extractBriefingSummary(rawHtml)
+  const meta = extractBriefingMetadata(rawHtml, record)
   const downloadHref = `/newsletters/${record.slug}/download`
   const canonicalUrl = `https://www.corplawupdates.in/newsletters/${record.slug}`
+
+  const newsArticleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'NewsArticle',
+    headline: meta.title,
+    description: meta.description,
+    datePublished: meta.publishedIso,
+    dateModified: record.updated_at || meta.publishedIso,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': canonicalUrl,
+    },
+    image: [meta.ogImageUrl],
+    author: {
+      '@type': 'Organization',
+      name: 'CorpLawUpdates Editorial Desk',
+      url: 'https://www.corplawupdates.in',
+    },
+    publisher: {
+      '@type': 'Organization',
+      '@id': 'https://www.corplawupdates.in/#organization',
+      name: 'CorpLawUpdates',
+      url: 'https://www.corplawupdates.in',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://www.corplawupdates.in/icon-512.png',
+      },
+    },
+    articleSection: meta.regulators,
+  }
 
   // 2. Fetch Adjacent Editions for Prev/Next Navigation
   const { prev: prevEdition, next: nextEdition } = await getAdjacentNewsletters(record.slug)
 
   return (
     <div className={`min-h-screen bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased reading-page-container ${newsletterFontVariables}`}>
+      <JsonLd id="newsletter-article-jsonld" data={newsArticleJsonLd} />
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Home', url: 'https://www.corplawupdates.in' },
+          { name: 'Newsletters', url: 'https://www.corplawupdates.in/newsletters' },
+          { name: `Weekly Briefing: ${record.week_label}`, url: canonicalUrl },
+        ]}
+      />
       {/* ─── Top Header Bar (Static, scrolls with page like before) ─── */}
       <header className="bg-[#0f2a52] text-white border-b border-[#c9a227]/30 shadow-md no-print">
         <div className="max-w-[840px] mx-auto px-3 sm:px-6 h-13 flex items-center justify-between gap-3">
@@ -212,7 +245,7 @@ export default async function NewsletterReadingPage({ params }: PageProps) {
               <div className="text-center max-w-xl mx-auto mb-6">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-[11px] font-semibold uppercase tracking-wider mb-3">
                   <Sparkles className="size-3 text-amber-400" />
-                  Every Monday 8:00 AM IST
+                  Every Monday 5:00 AM IST
                 </div>
                 <h3 className="font-serif text-xl sm:text-2xl font-bold tracking-tight mb-2">
                   Get this briefing in your inbox every Monday — free

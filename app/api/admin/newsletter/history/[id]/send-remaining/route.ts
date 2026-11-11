@@ -26,6 +26,13 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
             return NextResponse.json({ error: 'Campaign not found' }, { status: 404 })
         }
 
+        if (campaign.is_test === true) {
+            return NextResponse.json(
+                { error: { code: 'FORBIDDEN_TEST_CAMPAIGN', message: 'Test campaigns cannot be broadcast to subscribers.' } },
+                { status: 403 }
+            )
+        }
+
         // 2. Fetch all active subscribers
         let subscribers: any[] = []
         try {

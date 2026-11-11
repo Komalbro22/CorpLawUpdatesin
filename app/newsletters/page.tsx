@@ -68,7 +68,7 @@ export default async function NewslettersArchivePage({
             Weekly Corporate Law Intelligence Archive
           </h1>
           <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed text-pretty">
-            Every Monday at 8:00 AM IST, CorpLawUpdates publishes an authoritative weekly briefing. Read each broadsheet edition online or download the verified PDF.
+            Every Monday at 5:00 AM IST, CorpLawUpdates publishes an authoritative weekly briefing. Read each broadsheet edition online or download the verified PDF.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminOrKey, logApiAudit, getClientIp } from '@/lib/api-key-auth'
 import { listNewsletterPdfs, uploadNewsletterPdf } from '@/lib/newsletter-pdfs'
+import { revalidateNewsletterMutation } from '@/lib/content-revalidation'
 
 export const dynamic = 'force-dynamic'
 
@@ -178,6 +179,8 @@ export async function POST(request: NextRequest) {
         },
       })
     }
+
+    revalidateNewsletterMutation({ slug: result.data.slug })
 
     return NextResponse.json(
       {

@@ -22,6 +22,7 @@ export interface BatchEmailItem {
     to: string
     subject: string
     html: string
+    text?: string
 }
 
 export interface BatchEmailOptions {
@@ -79,6 +80,105 @@ export function parseSender(from?: string, fromName?: string): EmailSenderInfo {
 }
 
 /**
+ * Default Reply-To mailbox for outbound CorpLawUpdates dispatches.
+ */
+export function getDefaultReplyTo(): string {
+    return (process.env.NEWSLETTER_REPLY_TO || process.env.ADMIN_EMAIL || 'mail@corplawupdates.in').trim()
+}
+
+/**
+ * Converts HTML email content into a readable text/plain MIME alternative
+ * preserving link targets as URLs.
+ */
+export function htmlToPlainText(html: string): string {
+    if (!html) return ''
+
+    let text = html
+        .replace(/<!--[\s\S]*?-->/g, '')
+        .replace(/<head\b[^>]*>[\s\S]*?<\/head>/gi, '')
+        .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '')
+        .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
+        .replace(/<a\b[^>]*href=(["'])([\s\S]*?)\1[^>]*>((?:(?!<\/a>)[\s\S])*)<\/a>/gi, (_m, _q, rawHref, rawInner) => {
+            const href = rawHref.replace(/\s+/g, '').trim()
+            const label = rawInner.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+            if (!href || href.startsWith('#') || href.toLowerCase().startsWith('javascript:')) {
+                return label
+            }
+            const cleanHref = href.replace(/^mailto:/i, '')
+            if (!label || label.toLowerCase() === cleanHref.toLowerCase() || label.toLowerCase() === href.toLowerCase()) {
+                return cleanHref
+            }
+            return `${label} (${href})`
+        })
+        .replace(/<hr\b[^>]*>/gi, '\n---\n')
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<li\b[^>]*>/gi, '\n- ')
+        .replace(/<\/(?:p|div|h[1-6]|li|tr|blockquote|section|article|header|footer|table)>/gi, '\n\n')
+        .replace(/<\/(?:td|th)>/gi, ' | ')
+        .replace(/<[^>]+>/g, '')
+
+    const namedEntities: Record<string, string> = {
+        '&nbsp;': ' ',
+        '&amp;': '&',
+        '&lt;': '<',
+        '&gt;': '>',
+        '&quot;': '"',
+        '&#39;': "'",
+        '&apos;': "'",
+        '&ndash;': '–',
+        '&mdash;': '—',
+        '&middot;': '·',
+        '&bull;': '•',
+        '&hellip;': '...',
+        '&rsqb;': ']',
+        '&lsqb;': '[',
+        '&copy;': '©',
+    }
+
+    text = text
+        .replace(/&(nbsp|amp|lt|gt|quot|apos|ndash|mdash|middot|bull|hellip|rsqb|lsqb|copy|#39);/gi, (ent) => namedEntities[ent.toLowerCase()] ?? ent)
+        .replace(/&#(\d+);/g, (_m, dec) => {
+            const cp = Number(dec)
+            return Number.isFinite(cp) && cp > 0 ? String.fromCodePoint(cp) : ''
+        })
+        .replace(/&#x([0-9a-fA-F]+);/g, (_m, hex) => {
+            const cp = parseInt(hex, 16)
+            return Number.isFinite(cp) && cp > 0 ? String.fromCodePoint(cp) : ''
+        })
+
+    return text
+        .replace(/[ \t]*\|[ \t]*(?=\n|$)/g, '')
+        .replace(/[ \t]+/g, ' ')
+        .replace(/ *\n */g, '\n')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim()
+}
+
+/**
+ * Builds canonical Nodemailer message options with Reply-To and text/plain alternative.
+ */
+export function buildSmtpMailOptions(params: {
+    senderName: string
+    senderEmail: string
+    to: string
+    subject: string
+    html: string
+    text?: string
+    replyTo?: string
+}) {
+    const resolvedText = params.text?.trim() || htmlToPlainText(params.html)
+    const resolvedReplyTo = params.replyTo?.trim() || getDefaultReplyTo()
+    return {
+        from: `"${params.senderName}" <${params.senderEmail}>`,
+        to: params.to.trim(),
+        subject: params.subject,
+        html: params.html,
+        text: resolvedText,
+        replyTo: resolvedReplyTo,
+    }
+}
+
+/**
  * Identifies the prioritized active email delivery provider.
  * 1. Brevo REST API (if BREVO_API_KEY is an API v3 key starting with xkeysib-)
  * 2. Brevo SMTP (if BREVO_SMTP_KEY is an SMTP key starting with xsmtpsib- or BREVO_SMTP_LOGIN is set)
@@ -126,6 +226,8 @@ async function sendViaBrevoApi(options: SingleEmailOptions): Promise<SendResult>
     }
 
     const { email: senderEmail, name: senderName } = parseSender(options.from, options.fromName)
+    const resolvedReplyTo = options.replyTo?.trim() || getDefaultReplyTo()
+    const resolvedText = options.text?.trim() || htmlToPlainText(options.html)
 
     try {
         const payload: any = {
@@ -133,11 +235,8 @@ async function sendViaBrevoApi(options: SingleEmailOptions): Promise<SendResult>
             to: [{ email: options.to.trim() }],
             subject: options.subject,
             htmlContent: options.html,
-            ...(options.text ? { textContent: options.text } : {}),
-        }
-
-        if (options.replyTo) {
-            payload.replyTo = { email: options.replyTo.trim() }
+            textContent: resolvedText,
+            replyTo: { email: resolvedReplyTo },
         }
 
         const response = await fetch('https://api.brevo.com/v3/smtp/email', {
@@ -216,19 +315,24 @@ async function sendBatchViaBrevoApi(options: BatchEmailOptions): Promise<BatchSe
         const chunk = emails.slice(i, i + CHUNK_SIZE)
         const baseHtml = chunk[0]?.html || '<p>CorpLawUpdates Regulatory Intelligence</p>'
         const baseSubject = chunk[0]?.subject || 'CorpLawUpdates Intelligence'
+        const baseText = chunk[0]?.text?.trim() || htmlToPlainText(baseHtml)
+        const resolvedReplyTo = options.replyTo?.trim() || getDefaultReplyTo()
         const payload: any = {
             sender: { name: senderName, email: senderEmail },
             subject: baseSubject,
             htmlContent: baseHtml,
-            messageVersions: chunk.map(item => ({
-                to: [{ email: item.to.trim() }],
-                subject: item.subject || baseSubject,
-                htmlContent: item.html || baseHtml,
-            })),
-        }
-
-        if (options.replyTo) {
-            payload.replyTo = { email: options.replyTo.trim() }
+            textContent: baseText,
+            replyTo: { email: resolvedReplyTo },
+            messageVersions: chunk.map(item => {
+                const itemHtml = item.html || baseHtml
+                const itemText = item.text?.trim() || htmlToPlainText(itemHtml)
+                return {
+                    to: [{ email: item.to.trim() }],
+                    subject: item.subject || baseSubject,
+                    htmlContent: itemHtml,
+                    textContent: itemText,
+                }
+            }),
         }
 
         try {
@@ -365,14 +469,15 @@ async function sendViaBrevoSmtp(options: SingleEmailOptions): Promise<SendResult
 
     try {
         const transporter = getBrevoSmtpTransporter()
-        const info = await transporter.sendMail({
-            from: `"${senderName}" <${senderEmail}>`,
-            to: options.to.trim(),
+        const info = await transporter.sendMail(buildSmtpMailOptions({
+            senderName,
+            senderEmail,
+            to: options.to,
             subject: options.subject,
             html: options.html,
-            ...(options.text ? { text: options.text } : {}),
-            replyTo: options.replyTo?.trim(),
-        })
+            text: options.text,
+            replyTo: options.replyTo,
+        }))
 
         return {
             success: true,
@@ -420,13 +525,15 @@ async function sendBatchViaBrevoSmtp(options: BatchEmailOptions): Promise<BatchS
         const chunk = emails.slice(i, i + CONCURRENCY)
         const chunkPromises = chunk.map(async (item) => {
             try {
-                const info = await transporter.sendMail({
-                    from: `"${senderName}" <${senderEmail}>`,
-                    to: item.to.trim(),
+                const info = await transporter.sendMail(buildSmtpMailOptions({
+                    senderName,
+                    senderEmail,
+                    to: item.to,
                     subject: item.subject,
                     html: item.html,
-                    replyTo: options.replyTo?.trim(),
-                })
+                    text: item.text,
+                    replyTo: options.replyTo,
+                }))
                 return {
                     email: item.to,
                     success: true,
@@ -479,6 +586,8 @@ async function sendViaResend(options: SingleEmailOptions): Promise<SendResult> {
 
     const { email: senderEmail, name: senderName } = parseSender(options.from, options.fromName)
     const resend = new Resend(apiKey)
+    const resolvedReplyTo = options.replyTo?.trim() || getDefaultReplyTo()
+    const resolvedText = options.text?.trim() || htmlToPlainText(options.html)
 
     try {
         const result = await resend.emails.send({
@@ -486,8 +595,8 @@ async function sendViaResend(options: SingleEmailOptions): Promise<SendResult> {
             to: options.to,
             subject: options.subject,
             html: options.html,
-            ...(options.text ? { text: options.text } : {}),
-            replyTo: options.replyTo,
+            text: resolvedText,
+            replyTo: resolvedReplyTo,
         })
 
         if (result.error) {
@@ -528,6 +637,7 @@ async function sendBatchViaResend(options: BatchEmailOptions): Promise<BatchSend
     }
 
     const resend = new Resend(apiKey)
+    const resolvedReplyTo = options.replyTo?.trim() || getDefaultReplyTo()
     const CHUNK_SIZE = 100
     let totalSent = 0
     let totalFailed = 0
@@ -540,6 +650,8 @@ async function sendBatchViaResend(options: BatchEmailOptions): Promise<BatchSend
             to: item.to,
             subject: item.subject,
             html: item.html,
+            text: item.text?.trim() || htmlToPlainText(item.html),
+            replyTo: resolvedReplyTo,
         }))
 
         try {
@@ -552,9 +664,10 @@ async function sendBatchViaResend(options: BatchEmailOptions): Promise<BatchSend
                         to: item.to,
                         subject: item.subject,
                         html: item.html,
+                        text: item.text,
                         from: senderEmail,
                         fromName: senderName,
-                        replyTo: options.replyTo,
+                        replyTo: resolvedReplyTo,
                     })
 
                     if (single.success) {

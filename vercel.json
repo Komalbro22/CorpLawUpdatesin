@@ -1,10 +1,6 @@
 {
   "crons": [
     {
-      "path": "/api/newsletter/send-scheduled",
-      "schedule": "0 0 * * *"
-    },
-    {
       "path": "/api/cron/update-rbi-rates",
       "schedule": "0 4 * * *"
     },

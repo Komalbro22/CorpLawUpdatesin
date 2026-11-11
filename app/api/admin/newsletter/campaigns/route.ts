@@ -11,7 +11,8 @@ function formatCampaign(c: any) {
     ...c,
     html: htmlContent,
     body: htmlContent,
-    status: (c.sent_count && c.sent_count > 0) ? 'sent' : 'draft',
+    is_test: Boolean(c.is_test),
+    status: c.status || ((c.sent_count && c.sent_count > 0) ? 'sent' : 'draft'),
   }
 }
 
@@ -80,7 +81,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json()
-    const { subject, html, content, rendered_html, preview_text, previewText } = body
+    const { subject, html, content, rendered_html, preview_text, previewText, is_test } = body
 
     if (!subject || typeof subject !== 'string' || !subject.trim()) {
       return NextResponse.json(
@@ -105,6 +106,8 @@ export async function POST(request: NextRequest) {
       content: rawHtml.trim(),
       rendered_html: rawHtml.trim(),
       content_type: 'html',
+      is_test: Boolean(is_test),
+      status: 'draft',
       sent_by: authCheck.auth.type === 'api_key' ? `API Key: ${authCheck.auth.key.name}` : 'admin',
       total_recipients: 0,
       sent_count: 0,

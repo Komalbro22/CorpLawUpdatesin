@@ -66,7 +66,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         }
 
         allStatuses.forEach(r => {
-            if (statusCounts[r.status as keyof typeof statusCounts] !== undefined) {
+            if (r.status === 'sent') {
+                statusCounts.delivered++
+            } else if (statusCounts[r.status as keyof typeof statusCounts] !== undefined) {
                 statusCounts[r.status as keyof typeof statusCounts]++
             }
         })

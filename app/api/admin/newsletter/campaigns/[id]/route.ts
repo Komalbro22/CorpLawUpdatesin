@@ -11,7 +11,8 @@ function formatCampaign(c: any) {
     ...c,
     html: htmlContent,
     body: htmlContent,
-    status: (c.sent_count && c.sent_count > 0) ? 'sent' : 'draft',
+    is_test: Boolean(c.is_test),
+    status: c.status || ((c.sent_count && c.sent_count > 0) ? 'sent' : 'draft'),
   }
 }
 

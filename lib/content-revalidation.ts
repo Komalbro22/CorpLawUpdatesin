@@ -129,3 +129,20 @@ export function revalidateComplianceMutation() {
     try { revalidatePath('/calendar', 'page') } catch {}
     try { revalidatePath('/sitemap.xml') } catch {}
 }
+
+/**
+ * Scoped revalidation for newsletter PDF and reading page mutations.
+ */
+export function revalidateNewsletterMutation(params?: { slug?: string | null; oldSlug?: string | null }) {
+    try { revalidatePath('/newsletters') } catch {}
+    try { revalidatePath('/newsletters', 'page') } catch {}
+    if (params?.slug) {
+        try { revalidatePath(`/newsletters/${params.slug}`) } catch {}
+        try { revalidatePath(`/newsletters/${params.slug}`, 'page') } catch {}
+    }
+    if (params?.oldSlug && params.oldSlug !== params?.slug) {
+        try { revalidatePath(`/newsletters/${params.oldSlug}`) } catch {}
+        try { revalidatePath(`/newsletters/${params.oldSlug}`, 'page') } catch {}
+    }
+    try { revalidatePath('/sitemap.xml') } catch {}
+}
