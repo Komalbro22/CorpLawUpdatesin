@@ -1,7 +1,6 @@
 import { supabase } from '@/lib/supabase'
 import { NextResponse } from 'next/server'
-
-const GEMINI_API_KEY = process.env.GOOGLE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || ''
+import { getGeminiApiKeys, parseGeminiJson, requestGeminiGenerateContent } from '@/lib/gemini'
 
 export async function POST(request: Request) {
   try {
@@ -14,7 +13,7 @@ export async function POST(request: Request) {
       )
     }
 
-    if (!GEMINI_API_KEY) {
+    if (getGeminiApiKeys().length === 0) {
       return NextResponse.json(
         { error: 'Missing Gemini API configuration' },
         { status: 500 }
@@ -58,33 +57,26 @@ Analyze the user's intent and respond with ONLY a JSON object (no markdown, no e
 If no template matches well, set matched_slug to null.
 If urgent deadline or compliance issue, add warning.`
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+    let rawText = '{}'
+    try {
+      const aiResult = await requestGeminiGenerateContent({
         contents: [{ parts: [{ text: promptText }] }],
         generationConfig: {
           responseMimeType: "application/json"
-        }
+        },
+        label: 'intent/route.ts',
       })
-    })
-
-    if (!response.ok) {
-      const errorText = await response.text()
+      rawText = aiResult.text || '{}'
+    } catch (geminiErr: any) {
       return NextResponse.json(
-        { error: `Gemini intent call failed: ${errorText}` },
-        { status: 500 }
+        { error: `Gemini intent call failed: ${geminiErr?.message || 'Unknown error'}` },
+        { status: geminiErr?.status || 500 }
       )
     }
 
-    const data = await response.json()
-    const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}'
-
     let intent
     try {
-      intent = JSON.parse(rawText.trim())
+      intent = parseGeminiJson(rawText)
     } catch {
       intent = {
         matched_slug: null,

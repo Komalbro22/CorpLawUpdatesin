@@ -4,13 +4,7 @@ import { supabaseDocumentsAdmin } from '@/lib/supabase-documents-server';
 const docDb = supabaseDocumentsAdmin || supabaseAdmin;
 import { NextResponse } from 'next/server';
 import { executeRule, extractVariablesFromPrompt } from '@/lib/rule-engine';
-
-const GEMINI_KEYS = [
-  process.env.GOOGLE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || '',
-  process.env.GOOGLE_GEMINI_API_KEY_2 || '',
-  process.env.GOOGLE_GEMINI_API_KEY_3 || '',
-  process.env.GOOGLE_GEMINI_API_KEY_4 || '',
-].map(k => k.trim()).filter(Boolean);
+import { getGeminiApiKeys, requestGeminiGenerateContent, GeminiApiError } from '@/lib/gemini';
 
 export async function POST(request: Request) {
   try {
@@ -31,7 +25,7 @@ export async function POST(request: Request) {
       );
     }
 
-    if (GEMINI_KEYS.length === 0) {
+    if (getGeminiApiKeys().length === 0) {
       return NextResponse.json(
         { error: 'Missing Gemini API configuration for document editing' },
         { status: 500 }
@@ -206,60 +200,33 @@ Edit instruction: ${edit_instruction}
 
 Apply this change and return the complete updated document text only.`;
 
-    // Attempt Gemini API call with key rotation (same pattern as generate/route.ts)
+    // Call Gemini API with automatic key rotation & fallback Flash models
     let editedContent: string | null = null;
-    let lastErrorText = '';
+    let aiError: unknown = null;
 
-    for (let i = 0; i < GEMINI_KEYS.length; i++) {
-      const apiKey = GEMINI_KEYS[i];
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-
-      try {
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ 
-              role: 'user', 
-              parts: [{ text: `System Guidance: ${systemPrompt}\n\n${promptText}` }] 
-            }]
-          })
-        });
-
-        if (!response.ok) {
-          const errorJson = await response.json().catch(() => ({}));
-          lastErrorText = JSON.stringify(errorJson);
-          const isQuotaError =
-            response.status === 429 ||
-            response.status === 403 ||
-            lastErrorText.toLowerCase().includes('quota') ||
-            lastErrorText.toLowerCase().includes('limit');
-
-          if (isQuotaError && i < GEMINI_KEYS.length - 1) {
-            console.log(`[edit/route.ts] Quota error on key ${i}, rotating to key ${i + 1}...`);
-            continue;
-          }
-          // Non-quota error or last key — break
-          break;
-        }
-
-        const data = await response.json();
-        const candidate = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (candidate) {
-          editedContent = candidate;
-          break;
-        }
-      } catch (fetchErr: any) {
-        lastErrorText = fetchErr.message || 'Network error';
-        console.error(`[edit/route.ts] Gemini fetch error on key ${i}:`, lastErrorText);
-        if (i < GEMINI_KEYS.length - 1) continue;
-      }
+    try {
+      const aiResult = await requestGeminiGenerateContent({
+        contents: [{
+          role: 'user',
+          parts: [{ text: `System Guidance: ${systemPrompt}\n\n${promptText}` }],
+        }],
+        label: 'edit/route.ts',
+      });
+      editedContent = aiResult.text;
+    } catch (err) {
+      aiError = err;
+      console.error('[edit/route.ts] All Gemini keys and fallback models failed:', err);
     }
 
     if (!editedContent) {
+      const isQuota = aiError instanceof GeminiApiError && aiError.allQuotaExceeded;
       return NextResponse.json(
-        { error: 'AI editing is currently unavailable — daily quota exceeded on all API keys. Please try again tomorrow or use the manual editor to make changes.' },
-        { status: 429 }
+        {
+          error: isQuota
+            ? 'AI editing is currently unavailable — daily quota exceeded on all API keys. Please try again tomorrow or use the manual editor to make changes.'
+            : 'AI editing is temporarily unavailable. Please try again shortly or use the manual editor to make changes.',
+        },
+        { status: isQuota ? 429 : 503 }
       );
     }
 

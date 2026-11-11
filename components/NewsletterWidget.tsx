@@ -201,7 +201,7 @@ export default function NewsletterWidget() {
 
                     <div>
                         <label htmlFor="newsletter-widget-email" className="sr-only">
-                            Corporate email address
+                            Your email address
                         </label>
                         <input
                             name="email"
@@ -210,7 +210,7 @@ export default function NewsletterWidget() {
                             toolparamdescription="Valid email address to subscribe (e.g. name@example.com)"
                             value={email}
                             onChange={e => setEmail(e.target.value)}
-                            placeholder="you@company.com or ca.firm@gmail.com"
+                            placeholder="you@company.com or you@gmail.com"
                             aria-invalid={Boolean(error)}
                             aria-describedby={error ? "newsletter-email-error" : undefined}
                             className="w-full px-4 py-3 border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/80 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900 dark:text-white text-sm transition-all placeholder:text-slate-400"

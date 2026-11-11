@@ -1,5 +1,6 @@
 // lib/doc-generator/ai-engine.ts
 import { AIDocumentModel, DocumentGenerationPayload, MVPDocumentMeta } from './types';
+import { parseGeminiJson, requestGeminiGenerateContent } from '@/lib/gemini';
 
 export const MVP_DOCUMENTS_META: MVPDocumentMeta[] = [
   {
@@ -29,86 +30,27 @@ export const MVP_DOCUMENTS_META: MVPDocumentMeta[] = [
 ];
 
 /**
- * Helper to execute Gemini AI requests with key rotation.
- */
-async function runWithKeyRotation<T>(fn: (apiKey: string) => Promise<T>): Promise<T> {
-  const keys = [
-    process.env.GOOGLE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || '',
-    process.env.GOOGLE_GEMINI_API_KEY_2 || '',
-    process.env.GOOGLE_GEMINI_API_KEY_3 || '',
-    process.env.GOOGLE_GEMINI_API_KEY_4 || '',
-  ]
-    .map(k => k.trim())
-    .filter(Boolean);
-
-  if (keys.length === 0) {
-    throw new Error(
-      'No Gemini API keys found in environment variables (GOOGLE_GEMINI_API_KEY, GOOGLE_GEMINI_API_KEY_2, etc.).'
-    );
-  }
-
-  let lastError: any = null;
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i];
-    try {
-      return await fn(key);
-    } catch (err: any) {
-      console.warn(`[AI Document Generator] Request failed with key index ${i}. Error:`, err.message || err);
-      lastError = err;
-      const isQuotaError =
-        err.message?.includes('429') ||
-        err.message?.includes('403') ||
-        err.message?.includes('quota') ||
-        err.message?.includes('limit');
-      if (isQuotaError && i < keys.length - 1) {
-        console.log(`[AI Document Generator] Quota hit on key ${i}. Rotating to key ${i + 1}...`);
-        continue;
-      }
-      throw err;
-    }
-  }
-  throw lastError || new Error('All Gemini API keys failed.');
-}
-
-/**
  * Core AI generation engine that processes user inputs into a structured AIDocumentModel AST.
  */
 export async function generateAIDocumentModel(payload: DocumentGenerationPayload): Promise<AIDocumentModel> {
-  return runWithKeyRotation(async (apiKey) => {
-    const promptText = buildPromptText(payload);
+  const promptText = buildPromptText(payload);
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: promptText }] }],
-        generationConfig: {
-          responseMimeType: 'application/json',
-        },
-      }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(
-        `AI Document Generation failed (status ${response.status}): ${response.statusText} ${JSON.stringify(errorData)}`
-      );
-    }
-
-    const data = await response.json();
-    const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
-
-    try {
-      const parsed: AIDocumentModel = JSON.parse(rawText.trim());
-      parsed.generatedAt = parsed.generatedAt || new Date().toISOString();
-      return parsed;
-    } catch (parseErr) {
-      console.error('Failed to parse AI JSON response:', rawText);
-      throw new Error('AI returned an invalid document structure. Please try again.');
-    }
+  const { text } = await requestGeminiGenerateContent({
+    contents: [{ parts: [{ text: promptText }] }],
+    generationConfig: {
+      responseMimeType: 'application/json',
+    },
+    label: 'AI Document Generator',
   });
+
+  try {
+    const parsed: AIDocumentModel = parseGeminiJson(text || '{}');
+    parsed.generatedAt = parsed.generatedAt || new Date().toISOString();
+    return parsed;
+  } catch (parseErr) {
+    console.error('Failed to parse AI JSON response:', text);
+    throw new Error('AI returned an invalid document structure. Please try again.');
+  }
 }
 
 function buildPromptText(payload: DocumentGenerationPayload): string {

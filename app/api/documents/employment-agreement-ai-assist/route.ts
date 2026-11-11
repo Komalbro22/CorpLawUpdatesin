@@ -5,43 +5,9 @@ import {
   STATE_STAMP_SCHEDULE,
 } from '@/lib/doc-generator/employment-agreement-generator'
 
+import { parseGeminiJson, requestGeminiGenerateContent } from '@/lib/gemini'
+
 export const dynamic = 'force-dynamic'
-
-async function runWithKeyRotation<T>(fn: (apiKey: string) => Promise<T>): Promise<T> {
-  const keys = [
-    process.env.GOOGLE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || '',
-    process.env.GOOGLE_GEMINI_API_KEY_2 || '',
-    process.env.GOOGLE_GEMINI_API_KEY_3 || '',
-    process.env.GOOGLE_GEMINI_API_KEY_4 || '',
-  ]
-    .map(k => k.trim())
-    .filter(Boolean)
-
-  if (keys.length === 0) {
-    throw new Error('No Gemini API keys configured in environment variables.')
-  }
-
-  let lastError: any = null
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i]
-    try {
-      return await fn(key)
-    } catch (err: any) {
-      console.warn(`[Employment AI Assist] Request failed with key index ${i}:`, err.message || err)
-      lastError = err
-      const isQuotaError =
-        err.message?.includes('429') ||
-        err.message?.includes('403') ||
-        err.message?.includes('quota') ||
-        err.message?.includes('limit')
-      if (isQuotaError && i < keys.length - 1) {
-        continue
-      }
-      throw err
-    }
-  }
-  throw lastError || new Error('All Gemini API keys exhausted.')
-}
 
 interface EmploymentAiRequest {
   action?: 'chat_assist' | 'extract_and_fill' | 'explain_clause' | 'audit_agreement'
@@ -152,40 +118,19 @@ Return ONLY a valid JSON object matching this schema:
 
 No markdown fence wrappers around the JSON. Return only the raw JSON object.`
 
-    const result = await runWithKeyRotation(async apiKey => {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`
-
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [{ text: systemPrompt }],
-            },
-          ],
-          generationConfig: {
-            responseMimeType: 'application/json',
-          },
-        }),
-      })
-
-      if (!response.ok) {
-        const errText = await response.text().catch(() => '')
-        throw new Error(`Gemini API returned status ${response.status}: ${errText}`)
-      }
-
-      const jsonResponse = await response.json()
-      const rawText = jsonResponse?.candidates?.[0]?.content?.parts?.[0]?.text
-      if (!rawText) throw new Error('Empty AI response received.')
-
-      try {
-        return JSON.parse(rawText)
-      } catch {
-        const cleaned = rawText.replace(/```json/g, '').replace(/```/g, '').trim()
-        return JSON.parse(cleaned)
-      }
+    const aiResponse = await requestGeminiGenerateContent({
+      contents: [
+        {
+          parts: [{ text: systemPrompt }],
+        },
+      ],
+      generationConfig: {
+        responseMimeType: 'application/json',
+      },
+      label: 'Employment AI Assist',
     })
+
+    const result = parseGeminiJson(aiResponse.text)
 
     return NextResponse.json({ success: true, data: result }, { status: 200 })
   } catch (err: any) {

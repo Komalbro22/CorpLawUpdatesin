@@ -1,13 +1,7 @@
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { NextResponse } from 'next/server'
 import { extractGeoFromHeaders } from '@/lib/geo-ip'
-
-const GEMINI_KEYS = [
-  process.env.GOOGLE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || '',
-  process.env.GOOGLE_GEMINI_API_KEY_2 || '',
-  process.env.GOOGLE_GEMINI_API_KEY_3 || '',
-  process.env.GOOGLE_GEMINI_API_KEY_4 || '',
-].map(k => k.trim()).filter(Boolean)
+import { getGeminiApiKeys, requestGeminiGenerateContent } from '@/lib/gemini'
 
 function cleanGeneratedLegalContent(content: string): string {
   let text = content
@@ -262,7 +256,7 @@ export async function POST(request: Request) {
     let generationType: 'ai' | 'standard' | 'fallback' = 'standard'
 
     if (use_ai && template.ai_system_prompt) {
-      if (GEMINI_KEYS.length === 0) {
+      if (getGeminiApiKeys().length === 0) {
         return NextResponse.json(
           { error: 'Missing Gemini API configuration for AI generation' },
           { status: 500 }
@@ -301,61 +295,30 @@ ${customInstructions ? `5. CUSTOM INSTRUCTIONS DRAFTING RULE:
 ` : ''}6. Maintain exact legal formatting — output only the final document text, nothing else.
 `
 
-      // Attempt Gemini API call with key rotation
+      // Attempt Gemini API call with automatic key rotation and fallback Flash models
       let generationSuccess = false
-      for (let i = 0; i < GEMINI_KEYS.length; i++) {
-        const apiKey = GEMINI_KEYS[i]
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`
+      try {
+        const aiResult = await requestGeminiGenerateContent({
+          contents: [{
+            role: 'user',
+            parts: [{ text: `System Instructions: ${template.ai_system_prompt}\n\n${promptText}` }],
+          }],
+          label: 'generate/route.ts',
+        })
+        documentContent = aiResult.text || ''
 
-        try {
-          const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [{ 
-                role: 'user', 
-                parts: [{ text: `System Instructions: ${template.ai_system_prompt}\n\n${promptText}` }] 
-              }]
-            })
-          })
+        if (documentContent) {
+          generationSuccess = true
+          generationType = 'ai'
 
-          if (!response.ok) {
-            const errorJson = await response.json().catch(() => ({}))
-            console.warn(`Gemini generation failed with key index ${i}. Status:`, response.status, errorJson)
-            
-            const isQuotaError = 
-              response.status === 429 || 
-              response.status === 403 || 
-              JSON.stringify(errorJson).toLowerCase().includes('quota') ||
-              JSON.stringify(errorJson).toLowerCase().includes('limit')
-              
-            if (isQuotaError && i < GEMINI_KEYS.length - 1) {
-              console.log(`Rotating to next Gemini key index ${i + 1}...`)
-              continue
-            }
-            break
-          }
-
-          const data = await response.json()
-          documentContent = data.candidates?.[0]?.content?.parts?.[0]?.text || ''
-          
-          if (documentContent) {
-            generationSuccess = true
-            generationType = 'ai'
-            
-            if (data.usageMetadata) {
-              promptTokens = data.usageMetadata.promptTokenCount || 0
-              completionTokens = data.usageMetadata.candidatesTokenCount || 0
-              totalTokens = data.usageMetadata.totalTokenCount || 0
-            }
-            break
-          }
-        } catch (err) {
-          console.error(`Gemini call failed on key index ${i}:`, err)
-          if (i < GEMINI_KEYS.length - 1) {
-            continue
+          if (aiResult.usageMetadata) {
+            promptTokens = aiResult.usageMetadata.promptTokenCount || 0
+            completionTokens = aiResult.usageMetadata.candidatesTokenCount || 0
+            totalTokens = aiResult.usageMetadata.totalTokenCount || 0
           }
         }
+      } catch (err) {
+        console.error('Gemini generation failed across all keys and fallback models:', err)
       }
 
       if (!generationSuccess) {

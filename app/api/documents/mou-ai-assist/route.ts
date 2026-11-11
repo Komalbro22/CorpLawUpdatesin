@@ -1,43 +1,9 @@
 import { NextResponse } from 'next/server'
 import { MouType } from '@/lib/doc-generator/mou-generator'
 
+import { parseGeminiJson, requestGeminiGenerateContent } from '@/lib/gemini'
+
 export const dynamic = 'force-dynamic'
-
-async function runWithKeyRotation<T>(fn: (apiKey: string) => Promise<T>): Promise<T> {
-  const keys = [
-    process.env.GOOGLE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || '',
-    process.env.GOOGLE_GEMINI_API_KEY_2 || '',
-    process.env.GOOGLE_GEMINI_API_KEY_3 || '',
-    process.env.GOOGLE_GEMINI_API_KEY_4 || '',
-  ]
-    .map(k => k.trim())
-    .filter(Boolean)
-
-  if (keys.length === 0) {
-    throw new Error('No Gemini API keys configured in environment variables.')
-  }
-
-  let lastError: any = null
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i]
-    try {
-      return await fn(key)
-    } catch (err: any) {
-      console.warn(`[MoU AI Assist] Request failed with key index ${i}:`, err.message || err)
-      lastError = err
-      const isQuotaError =
-        err.message?.includes('429') ||
-        err.message?.includes('403') ||
-        err.message?.includes('quota') ||
-        err.message?.includes('limit')
-      if (isQuotaError && i < keys.length - 1) {
-        continue
-      }
-      throw err
-    }
-  }
-  throw lastError || new Error('All Gemini API keys exhausted.')
-}
 
 export async function POST(request: Request) {
   try {
@@ -81,46 +47,25 @@ Rules:
 2. Keep clauses realistic, balanced, and commercially practical.
 3. Return ONLY valid JSON, with no markdown code fences or conversational text.`
 
-    const result = await runWithKeyRotation(async apiKey => {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`
-
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [
+    const aiResponse = await requestGeminiGenerateContent({
+      contents: [
+        {
+          parts: [
             {
-              parts: [
-                {
-                  text: `${systemPrompt}\n\nUser Description of Collaboration Purpose:\n"${purposePrompt.trim()}"\n\nExisting Draft Context (if any):\n${JSON.stringify(
-                    currentData || {}
-                  )}`,
-                },
-              ],
+              text: `${systemPrompt}\n\nUser Description of Collaboration Purpose:\n"${purposePrompt.trim()}"\n\nExisting Draft Context (if any):\n${JSON.stringify(
+                currentData || {}
+              )}`,
             },
           ],
-          generationConfig: {
-            responseMimeType: 'application/json',
-          },
-        }),
-      })
-
-      if (!response.ok) {
-        const errText = await response.text().catch(() => '')
-        throw new Error(`Gemini API returned status ${response.status}: ${errText}`)
-      }
-
-      const jsonResponse = await response.json()
-      const rawText = jsonResponse?.candidates?.[0]?.content?.parts?.[0]?.text
-      if (!rawText) throw new Error('Empty AI response received.')
-
-      try {
-        return JSON.parse(rawText)
-      } catch (parseErr) {
-        const cleaned = rawText.replace(/```json/g, '').replace(/```/g, '').trim()
-        return JSON.parse(cleaned)
-      }
+        },
+      ],
+      generationConfig: {
+        responseMimeType: 'application/json',
+      },
+      label: 'MoU AI Assist',
     })
+
+    const result = parseGeminiJson(aiResponse.text)
 
     return NextResponse.json({ success: true, data: result }, { status: 200 })
   } catch (err: any) {

@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { parseGeminiJson, requestGeminiGenerateContent } from '@/lib/gemini'
 
 export const dynamic = 'force-dynamic'
 
@@ -8,42 +9,6 @@ export type PurposeAssistMode =
   | 'registered_office_rationale'
   | 'partnership_business_objects'
   | 'generic_purpose'
-
-async function runWithKeyRotation<T>(fn: (apiKey: string) => Promise<T>): Promise<T> {
-  const keys = [
-    process.env.GOOGLE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || '',
-    process.env.GOOGLE_GEMINI_API_KEY_2 || '',
-    process.env.GOOGLE_GEMINI_API_KEY_3 || '',
-    process.env.GOOGLE_GEMINI_API_KEY_4 || '',
-  ]
-    .map(k => k.trim())
-    .filter(Boolean)
-
-  if (keys.length === 0) {
-    throw new Error('No Gemini API keys configured in environment variables.')
-  }
-
-  let lastError: any = null
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i]
-    try {
-      return await fn(key)
-    } catch (err: any) {
-      console.warn(`[Legal Purpose Assist] Request failed with key index ${i}:`, err.message || err)
-      lastError = err
-      const isQuotaError =
-        err.message?.includes('429') ||
-        err.message?.includes('403') ||
-        err.message?.includes('quota') ||
-        err.message?.includes('limit')
-      if (isQuotaError && i < keys.length - 1) {
-        continue
-      }
-      throw err
-    }
-  }
-  throw lastError || new Error('All Gemini API keys exhausted.')
-}
 
 export async function POST(request: Request) {
   try {
@@ -128,46 +93,25 @@ Return a JSON object with this exact schema:
 }`
     }
 
-    const result = await runWithKeyRotation(async apiKey => {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`
-
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [
+    const aiResponse = await requestGeminiGenerateContent({
+      contents: [
+        {
+          parts: [
             {
-              parts: [
-                {
-                  text: `${systemPrompt}\n\nUser Input:\n"${rawText.trim()}"\n\nContext:\n${JSON.stringify(
-                    context || {}
-                  )}`,
-                },
-              ],
+              text: `${systemPrompt}\n\nUser Input:\n"${rawText.trim()}"\n\nContext:\n${JSON.stringify(
+                context || {}
+              )}`,
             },
           ],
-          generationConfig: {
-            responseMimeType: 'application/json',
-          },
-        }),
-      })
-
-      if (!response.ok) {
-        const errText = await response.text().catch(() => '')
-        throw new Error(`Gemini API returned status ${response.status}: ${errText}`)
-      }
-
-      const jsonResponse = await response.json()
-      const rawOutput = jsonResponse?.candidates?.[0]?.content?.parts?.[0]?.text
-      if (!rawOutput) throw new Error('Empty AI response received from Gemini.')
-
-      try {
-        return JSON.parse(rawOutput)
-      } catch (parseErr) {
-        const cleaned = rawOutput.replace(/```json/g, '').replace(/```/g, '').trim()
-        return JSON.parse(cleaned)
-      }
+        },
+      ],
+      generationConfig: {
+        responseMimeType: 'application/json',
+      },
+      label: 'Legal Purpose Assist',
     })
+
+    const result = parseGeminiJson(aiResponse.text)
 
     return NextResponse.json({ success: true, data: result }, { status: 200 })
   } catch (err: any) {

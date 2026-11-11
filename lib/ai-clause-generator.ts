@@ -1,6 +1,8 @@
 // lib/ai-clause-generator.ts
 // Server-side AI Clause Generator using Gemini API with key rotation and prompt-injection guards
 
+import { parseGeminiJson, requestGeminiGenerateContent } from '@/lib/gemini'
+
 export interface AiClauseRequest {
   documentType: string
   userInstruction: string
@@ -29,34 +31,6 @@ function sanitizeInstruction(input: string, maxLength = 500): string {
     throw new Error('Instruction contains disallowed command keywords. Please describe only the commercial terms of the clause.')
   }
   return trimmed
-}
-
-async function runWithKeyRotation<T>(fn: (apiKey: string) => Promise<T>): Promise<T> {
-  const keys = [
-    process.env.GOOGLE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || '',
-    process.env.GOOGLE_GEMINI_API_KEY_2 || '',
-    process.env.GOOGLE_GEMINI_API_KEY_3 || '',
-    process.env.GOOGLE_GEMINI_API_KEY_4 || '',
-  ]
-    .map(k => k.trim())
-    .filter(Boolean)
-
-  if (keys.length === 0) {
-    throw new Error('Gemini API is temporarily unavailable.')
-  }
-
-  let lastError: any = null
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i]
-    try {
-      return await fn(key)
-    } catch (err: any) {
-      console.warn(`[AI Clause Generator] Request failed on key ${i}. Error:`, err.message || err)
-      lastError = err
-    }
-  }
-
-  throw lastError || new Error('All API rotation keys failed.')
 }
 
 export async function generateLegalClause(req: AiClauseRequest): Promise<AiClauseResult> {
@@ -95,61 +69,47 @@ ${cleanInstruction}
 
 Draft the clause adhering strictly to the JSON schema.`
 
-  return await runWithKeyRotation(async apiKey => {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`
-
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [
-          {
-            role: 'user',
-            parts: [{ text: `${systemPrompt}\n\n${userPrompt}` }],
-          },
-        ],
-        generationConfig: {
-          responseMimeType: 'application/json',
-          temperature: 0.2,
-        },
-      }),
-    })
-
-    if (!response.ok) {
-      const errBody = await response.text().catch(() => '')
-      throw new Error(`Gemini API returned status ${response.status}: ${errBody.slice(0, 200)}`)
-    }
-
-    const data = await response.json()
-    const rawJson = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}'
-    const parsed = JSON.parse(rawJson)
-
-    // Log quality metrics server-side without recording personal form data
-    console.log(
-      `[AI Clause] Generated clause for docType="${docType}", instructionLength=${cleanInstruction.length}, hasWarning=${Boolean(
-        parsed.riskWarning
-      )} at ${new Date().toISOString()}`
-    )
-
-    if (parsed.refusalReason) {
-      return {
-        success: false,
-        title: '',
-        clauseText: '',
-        plainExplanation: '',
-        riskWarning: null,
-        safeAlternative: null,
-        refusalReason: parsed.refusalReason,
-      }
-    }
-
-    return {
-      success: true,
-      title: parsed.title || 'Custom Clause',
-      clauseText: parsed.clauseText || '',
-      plainExplanation: parsed.plainExplanation || '',
-      riskWarning: parsed.riskWarning || null,
-      safeAlternative: parsed.safeAlternative || null,
-    }
+  const { text } = await requestGeminiGenerateContent({
+    contents: [
+      {
+        role: 'user',
+        parts: [{ text: `${systemPrompt}\n\n${userPrompt}` }],
+      },
+    ],
+    generationConfig: {
+      responseMimeType: 'application/json',
+      temperature: 0.2,
+    },
+    label: 'AI Clause Generator',
   })
+
+  const parsed = parseGeminiJson(text || '{}')
+
+  // Log quality metrics server-side without recording personal form data
+  console.log(
+    `[AI Clause] Generated clause for docType="${docType}", instructionLength=${cleanInstruction.length}, hasWarning=${Boolean(
+      parsed.riskWarning
+    )} at ${new Date().toISOString()}`
+  )
+
+  if (parsed.refusalReason) {
+    return {
+      success: false,
+      title: '',
+      clauseText: '',
+      plainExplanation: '',
+      riskWarning: null,
+      safeAlternative: null,
+      refusalReason: parsed.refusalReason,
+    }
+  }
+
+  return {
+    success: true,
+    title: parsed.title || 'Custom Clause',
+    clauseText: parsed.clauseText || '',
+    plainExplanation: parsed.plainExplanation || '',
+    riskWarning: parsed.riskWarning || null,
+    safeAlternative: parsed.safeAlternative || null,
+  }
 }
