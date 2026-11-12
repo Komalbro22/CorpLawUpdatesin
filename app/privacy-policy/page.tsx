@@ -179,21 +179,35 @@ export default function PrivacyPolicyPage() {
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
 
                 <section>
-                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">5. No Third-Party Advertising &amp; Ad-Free Platform</h2>
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">5. Advertising &amp; Third-Party Ad Networks (Google AdSense)</h2>
                     <p className="text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">
-                        CorpLawUpdates.in operates as an ad-free intelligence platform for corporate law professionals, company secretaries, legal practitioners, and compliance teams. We do not display third-party advertisements, do not run programmatic ad networks (such as Google AdSense, Clickio, or banner partners), and do not monetize reader visits through ad impressions or behavioral ad tracking.
+                        CorpLawUpdates.in remains free to access for corporate law professionals, company secretaries, legal practitioners, and compliance teams. To help support platform infrastructure and free legal tools, we use Google AdSense for contextual and display advertising.
                     </p>
                     <div className="space-y-4 text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
                         <div>
-                            <h3 className="font-bold text-navy dark:text-slate-200 mb-1.5 text-xs uppercase tracking-wide">A. No Advertising Cookies or Cross-Site Ad Trackers</h3>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-1.5 text-xs uppercase tracking-wide">A. Google AdSense &amp; Advertising Cookies</h3>
                             <p>
-                                Because CorpLawUpdates.in does not partner with or run third-party advertising networks, no advertising cookies, web beacons, or tracking pixels are placed on your browser for commercial advertising or retargeting purposes.
+                                Third-party vendors, including Google, use cookies or device identifiers to serve ads based on a user&apos;s prior visits to CorpLawUpdates.in or other websites. Google&apos;s use of advertising cookies enables it and its partners to serve ads to users based on their visit to this site and/or other sites on the Internet.
                             </p>
                         </div>
                         <div>
-                            <h3 className="font-bold text-navy dark:text-slate-200 mb-1.5 text-xs uppercase tracking-wide">B. Editorial Integrity &amp; Independence</h3>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-1.5 text-xs uppercase tracking-wide">B. Managing Personalized Advertising Preferences</h3>
                             <p>
-                                All statutory regulatory summaries, compliance calendars, and legal calculators are curated objectively by our research team without advertiser involvement or sponsored ad placements.
+                                You can opt out of personalized advertising at any time by visiting{' '}
+                                <a href="https://myadcenter.google.com/" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 hover:underline font-medium">
+                                    Google Ad Settings
+                                </a>
+                                {' '}or{' '}
+                                <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 hover:underline font-medium">
+                                    www.aboutads.info
+                                </a>
+                                , as well as through our cookie preferences control in the footer.
+                            </p>
+                        </div>
+                        <div>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-1.5 text-xs uppercase tracking-wide">C. Editorial Integrity &amp; Independence</h3>
+                            <p>
+                                All statutory regulatory summaries, compliance calendars, and legal calculators are curated objectively by our editorial team without advertiser influence over regulatory analysis or legal content.
                             </p>
                         </div>
                     </div>
@@ -238,18 +252,19 @@ export default function PrivacyPolicyPage() {
                             </p>
                             <ul className="list-disc list-inside space-y-1.5 text-slate-600 dark:text-slate-400">
                                 <li><strong>Essential Cookies:</strong> Required for core site operations (navigation, security, authentication tokens, theme persistence). These cannot be disabled.</li>
-                                <li><strong>Analytics Cookies:</strong> Help us measure readership and optimize site speed (Google Analytics 4, Microsoft Clarity, Vercel Analytics). You can accept or reject these.</li>
+                                <li><strong>Analytics Cookies:</strong> Help us measure readership and optimize site speed (Google Analytics 4, Microsoft Clarity, PostHog). You can accept or reject these.</li>
                                 <li><strong>Functional Cookies:</strong> Remember your user interface preferences and tool inputs. You can accept or reject these.</li>
+                                <li><strong>Advertising Cookies:</strong> Used by Google AdSense and authorized partners to serve ads, cap frequency, and prevent fraud. You can manage advertising consent in our cookie banner or Google Ad Settings.</li>
                             </ul>
                             <p className="mt-3 text-sm italic">
-                                We do not use third-party advertising cookies or cross-site commercial trackers. Your consent choices are stored locally on your device and can be changed at any time using the cookie preferences link in our footer.
+                                Your consent choices are stored locally on your device and can be changed at any time using the cookie preferences link in our footer.
                             </p>
                         </div>
 
                         <div>
                             <h3 className="font-bold text-navy dark:text-slate-200 mb-2 text-sm uppercase tracking-wide">B. Google Consent Mode v2</h3>
                             <p className="leading-relaxed text-sm">
-                                We have implemented Google Consent Mode v2 with advertising storage (<code className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded-sm text-xs">ad_storage</code>, <code className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded-sm text-xs">ad_user_data</code>, and <code className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded-sm text-xs">ad_personalization</code>) strictly denied by default. Analytics telemetry complies with your explicit preferences.
+                                We implement Google Consent Mode v2 with advertising storage (<code className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded-sm text-xs">ad_storage</code>, <code className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded-sm text-xs">ad_user_data</code>, and <code className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded-sm text-xs">ad_personalization</code>) set to denied by default for EEA, UK, and Swiss visitors until explicit consent is provided. All analytics and advertising telemetry honors your saved preferences.
                             </p>
                         </div>
 

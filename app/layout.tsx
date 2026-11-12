@@ -16,6 +16,7 @@ import TrackingScripts from '@/components/TrackingScripts'
 import ConsentGatedAnalytics from '@/components/ConsentGatedAnalytics'
 import ClientAuxiliary from '@/components/ClientAuxiliary'
 import MediavineScript from '@/components/MediavineScript'
+import AdSenseScript from '@/components/AdSenseScript'
 
 import { themeScript } from '@/lib/theme-script'
 import { fontVariables } from '@/lib/fonts'
@@ -88,6 +89,9 @@ export const metadata: Metadata = {
   },
   verification: {
     google: process.env.NEXT_PUBLIC_GSC_VERIFICATION || '',
+  },
+  other: {
+    'google-adsense-account': 'ca-pub-8404756575471756',
   },
 }
 
@@ -201,6 +205,7 @@ export default async function RootLayout({
           ],
         }} />
         <MediavineScript />
+        <AdSenseScript />
         </head>
       <body className="font-body bg-slate-50 dark:bg-slate-950 text-navy dark:text-slate-100 antialiased min-h-dvh flex flex-col selection:bg-amber-200/50 selection:text-navy break-words overflow-x-clip" suppressHydrationWarning>
         <div id="ad-management-config-settings" data-blocklist-leaderboard="1" data-blocklist-sidebar-atf="1" data-blocklist-sidebar-btf="1" data-blocklist-adhesion-mobile="1" data-blocklist-adhesion-tablet="1" data-blocklist-adhesion-desktop="1" data-blocklist-recipe="1" data-blocklist-auto-insert-sticky="1" data-blocklist-chicory="1" data-blocklist-zergnet="1" data-blocklist-interstitial-mobile="1" data-blocklist-interstitial-desktop="1" data-blocklist-universal-player-desktop="1" data-blocklist-universal-player-mobile="1" data-blocklist-gumgum-skins="1" ></div>

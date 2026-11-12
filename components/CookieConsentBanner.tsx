@@ -15,12 +15,14 @@ interface ConsentState {
   necessary: boolean
   analytics: boolean
   functional: boolean
+  advertising: boolean
 }
 
 const DEFAULT_CONSENT: ConsentState = {
   necessary: true,
   analytics: false,
   functional: false,
+  advertising: false,
 }
 
 export default function CookieConsentBanner() {
@@ -37,7 +39,7 @@ export default function CookieConsentBanner() {
         return () => clearTimeout(timer)
       } else {
         // Load existing consent
-        setConsent(JSON.parse(savedConsent))
+        setConsent({ ...DEFAULT_CONSENT, ...JSON.parse(savedConsent) })
       }
     } catch {
       // localStorage disabled or private browsing restriction
@@ -48,19 +50,19 @@ export default function CookieConsentBanner() {
     setConsent(prev => ({ ...prev, [key]: value }))
   }
 
-  const handleSave = () => {
+  const saveConsent = (nextConsent: ConsentState) => {
     try {
-      localStorage.setItem('clu_cookie_consent_v2', JSON.stringify(consent))
+      localStorage.setItem('clu_cookie_consent_v2', JSON.stringify(nextConsent))
       localStorage.setItem('clu_cookie_consent_date_v2', new Date().toISOString())
-      
-      // Update Google Consent Mode (ad storage permanently denied as site has no ads)
+
       if (typeof window !== 'undefined' && window.gtag) {
+        const adState = nextConsent.advertising ? 'granted' : 'denied'
         window.gtag('consent', 'update', {
-          ad_storage: 'denied',
-          ad_user_data: 'denied',
-          ad_personalization: 'denied',
-          analytics_storage: consent.analytics ? 'granted' : 'denied',
-          functionality_storage: consent.functional ? 'granted' : 'denied',
+          ad_storage: adState,
+          ad_user_data: adState,
+          ad_personalization: adState,
+          analytics_storage: nextConsent.analytics ? 'granted' : 'denied',
+          functionality_storage: nextConsent.functional ? 'granted' : 'denied',
         })
       }
     } catch {
@@ -69,18 +71,24 @@ export default function CookieConsentBanner() {
     setVisible(false)
   }
 
+  const handleSave = () => {
+    saveConsent(consent)
+  }
+
   const handleAcceptAll = () => {
-    setConsent({
+    const nextConsent: ConsentState = {
       necessary: true,
       analytics: true,
       functional: true,
-    })
-    handleSave()
+      advertising: true,
+    }
+    setConsent(nextConsent)
+    saveConsent(nextConsent)
   }
 
   const handleRejectAll = () => {
     setConsent(DEFAULT_CONSENT)
-    handleSave()
+    saveConsent(DEFAULT_CONSENT)
   }
 
   if (!visible) return null
@@ -195,6 +203,29 @@ export default function CookieConsentBanner() {
                   <span
                     className={`inline-block h-3.5 w-3.5 sm:h-4 sm:w-4 transform rounded-full bg-white transition-transform ${
                       consent.functional ? 'translate-x-4 sm:translate-x-6' : 'translate-x-0.5 sm:translate-x-1'
+                    }`}
+                  />
+                </button>
+              </div>
+
+              {/* Advertising */}
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex-1 min-w-0">
+                  <label className="font-semibold text-white text-xs sm:text-sm">Advertising</label>
+                  <p className="text-[10px] sm:text-xs text-slate-400">AdSense relevance</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => updateConsent('advertising', !consent.advertising)}
+                  className={`relative inline-flex h-5 w-9 sm:h-6 sm:w-11 items-center rounded-full transition-colors shrink-0 ${
+                    consent.advertising ? 'bg-amber-500' : 'bg-slate-600'
+                  }`}
+                  role="switch"
+                  aria-checked={consent.advertising}
+                >
+                  <span
+                    className={`inline-block h-3.5 w-3.5 sm:h-4 sm:w-4 transform rounded-full bg-white transition-transform ${
+                      consent.advertising ? 'translate-x-4 sm:translate-x-6' : 'translate-x-0.5 sm:translate-x-1'
                     }`}
                   />
                 </button>

@@ -35,32 +35,51 @@ export default function TrackingScripts() {
       }
       window.gtag = gtag
 
-      // Check for existing consent
-      const savedConsent = localStorage.getItem('clu_cookie_consent_v2')
-      let consentState = {
+      // Initialize Google Consent Mode v2: strict opt-in defaults for EEA/UK/CH visitors
+      const EEA_REGIONS = [
+        'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR',
+        'DE', 'GR', 'HU', 'IS', 'IE', 'IT', 'LV', 'LI', 'LT', 'LU',
+        'MT', 'NL', 'NO', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE',
+        'GB', 'CH',
+      ]
+
+      gtag('consent', 'default', {
         ad_storage: 'denied',
         ad_user_data: 'denied',
         ad_personalization: 'denied',
         analytics_storage: 'denied',
         functionality_storage: 'denied',
-      }
+        region: EEA_REGIONS,
+      })
 
+      gtag('consent', 'default', {
+        ad_storage: 'granted',
+        ad_user_data: 'granted',
+        ad_personalization: 'granted',
+        analytics_storage: 'denied',
+        functionality_storage: 'denied',
+      })
+
+      // Apply existing saved consent preferences if present
+      const savedConsent = localStorage.getItem('clu_cookie_consent_v2')
       if (savedConsent) {
         try {
           const parsed = JSON.parse(savedConsent)
-          consentState = {
-            ad_storage: 'denied',
-            ad_user_data: 'denied',
-            ad_personalization: 'denied',
+          const consentUpdate: Record<string, string> = {
             analytics_storage: parsed.analytics ? 'granted' : 'denied',
             functionality_storage: parsed.functional ? 'granted' : 'denied',
           }
+          if (typeof parsed.advertising === 'boolean') {
+            const adState = parsed.advertising ? 'granted' : 'denied'
+            consentUpdate.ad_storage = adState
+            consentUpdate.ad_user_data = adState
+            consentUpdate.ad_personalization = adState
+          }
+          gtag('consent', 'update', consentUpdate)
         } catch {
           // Invalid consent, keep defaults
         }
       }
-
-      gtag('consent', 'default', consentState)
     }
 
     // Fetch tracker IDs dynamically at runtime
