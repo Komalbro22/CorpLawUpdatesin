@@ -162,10 +162,9 @@ export default async function NewsletterReadingPage({ params }: PageProps) {
             {/* ─── White Broadsheet Card (Theme Locked & Ad Protected) ─── */}
             <article className="briefing-sheet-card bg-white dark-override-exempt border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl overflow-hidden">
               <div
-                className="briefing-sheet dark-override-exempt no-ads mediavine-no-ads data-no-ads select-text p-3.5 sm:p-6 lg:p-8"
+                className="briefing-sheet dark-override-exempt no-ads data-no-ads select-text p-3.5 sm:p-6 lg:p-8"
                 data-no-ads="true"
                 data-ad-exclude="true"
-                data-grow-disable="true"
                 dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
               />
             </article>
