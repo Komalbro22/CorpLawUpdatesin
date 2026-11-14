@@ -126,9 +126,9 @@ export default function UpdatesClient({
 
 
     return (
-        <div className="flex flex-col md:flex-row gap-8 md:gap-10">
-            <aside className="w-full md:w-72 shrink-0">
-                <div className="sticky top-24 bg-white dark:bg-slate-900 p-5 md:p-6 rounded-xl shadow-card border border-slate-200/80 dark:border-slate-800 ring-1 ring-slate-900/3 dark:ring-white/3">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-10">
+            <aside className="w-full lg:w-72 shrink-0">
+                <div className="sticky top-24 bg-white dark:bg-slate-900 p-5 lg:p-6 rounded-xl shadow-card border border-slate-200/80 dark:border-slate-800 ring-1 ring-slate-900/3 dark:ring-white/3">
                     <div className="mb-6">
                         <label htmlFor="search" className="block text-sm font-semibold text-navy dark:text-slate-200 mb-2">
                             Search
@@ -159,7 +159,7 @@ export default function UpdatesClient({
                             />
                         </form>
                         <div className="flex flex-wrap gap-2 mb-2">
-                            <span className="text-xs text-slate-500 dark:text-slate-400 self-center font-semibold uppercase tracking-wide w-full md:w-auto mb-1 md:mb-0">
+                            <span className="text-xs text-slate-500 dark:text-slate-400 self-center font-semibold uppercase tracking-wide w-full lg:w-auto mb-1 lg:mb-0">
                                 Quick filters
                             </span>
                             {[
@@ -188,16 +188,16 @@ export default function UpdatesClient({
                     </div>
                     <div>
                         <h2 className="block text-sm font-semibold text-navy dark:text-slate-200 mb-3">Categories</h2>
-                        <ul className="flex flex-row md:flex-col gap-1.5 overflow-x-auto pb-2 md:pb-0">
+                        <ul className="flex flex-row lg:flex-col gap-1.5 overflow-x-auto pb-2 lg:pb-0">
                             {CATEGORIES.map(cat => {
                                 const count = cat === 'All' ? totalPublishedCount : counts[cat] || 0
                                 const isActive = activeCategory === cat
                                 return (
-                                    <li key={cat} className="md:w-full">
+                                    <li key={cat} className="lg:w-full">
                                         <button
                                             type="button"
                                             onClick={() => handleCategoryClick(cat)}
-                                            className={`text-left whitespace-nowrap md:whitespace-normal px-3 py-3 min-h-[44px] rounded-lg text-sm w-full flex justify-between items-center gap-2 transition-colors duration-150 ${
+                                            className={`text-left whitespace-nowrap lg:whitespace-normal px-3 py-3 min-h-[44px] rounded-lg text-sm w-full flex justify-between items-center gap-2 transition-colors duration-150 ${
                                                 isActive
                                                     ? 'bg-navy/5 dark:bg-slate-800 text-navy dark:text-slate-200 font-semibold ring-1 ring-gold/40 shadow-xs'
                                                     : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-navy dark:hover:text-white'
@@ -223,7 +223,7 @@ export default function UpdatesClient({
             </aside>
 
             <div className="grow min-w-0">
-                <div className="mb-6 flex flex-wrap items-baseline gap-2 text-slate-600 dark:text-slate-400 text-sm md:text-base">
+                <div className="mb-6 flex flex-wrap items-baseline gap-2 text-slate-600 dark:text-slate-400 text-sm sm:text-base">
                     <span>
                         Showing{' '}
                         <span suppressHydrationWarning className="font-semibold text-navy dark:text-white tabular-nums">{totalFilteredCount}</span>
@@ -238,7 +238,7 @@ export default function UpdatesClient({
 
                 {paginatedUpdates.length > 0 ? (
                     <>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-8 content-fade-in">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-8 content-fade-in">
                             {paginatedUpdates.map((update, i) => (
                                 <UpdateCard
                                     key={update.id}

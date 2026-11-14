@@ -18,7 +18,7 @@ const GlobalSearch = dynamic(() => import('./GlobalSearch'), {
             <svg className="size-3.5 text-slate-400" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            <span className="hidden md:block text-slate-600 dark:text-slate-300 font-medium">Search...</span>
+            <span className="hidden lg:block text-slate-600 dark:text-slate-300 font-medium">Search...</span>
         </button>
     )
 })
@@ -132,12 +132,12 @@ export default function Navbar() {
 
     return (
         <nav className={`sticky top-0 z-50 w-full transition-[background-color,box-shadow,border-color] duration-200 ease-in-out ${navBg}`}>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
 
                     {/* Logo */}
-                    <Link href="/" className="shrink-0 flex items-center gap-2.5 sm:gap-3 group focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-md p-1">
-                        <span className="block w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden shadow-xs ring-1 ring-amber-500/20 group-hover:ring-amber-500/50 transition-all shrink-0 bg-slate-900">
+                    <Link href="/" className="shrink-0 flex items-center gap-2 sm:gap-3 group focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-md p-1">
+                        <span className="block w-8 h-8 sm:w-10 sm:h-10 rounded-xl overflow-hidden shadow-xs ring-1 ring-amber-500/20 group-hover:ring-amber-500/50 transition-all shrink-0 bg-slate-900">
                             <Image
                                 src="/icon-192.png"
                                 alt="CorpLawUpdates Logo"
@@ -148,7 +148,7 @@ export default function Navbar() {
                             />
                         </span>
                         <span className="flex flex-col justify-center">
-                            <span className="font-heading text-xl font-bold navbar-logo-text leading-tight transition-colors duration-200 text-navy dark:text-white">
+                            <span className="font-heading text-lg sm:text-xl font-bold navbar-logo-text leading-tight transition-colors duration-200 text-navy dark:text-white">
                                 CorpLawUpdates<span className="text-amber-700 dark:text-gold group-hover:text-amber-600 transition-colors">.in</span>
                             </span>
                             <span className="hidden sm:block text-[10px] font-semibold tracking-[0.18em] uppercase mt-0.5 transition-colors duration-200 text-slate-500 dark:text-slate-400">
@@ -158,7 +158,7 @@ export default function Navbar() {
                     </Link>
 
                     {/* Desktop Nav */}
-                    <div className="hidden md:flex md:items-center md:gap-1">
+                    <div className="hidden lg:flex lg:items-center lg:gap-1">
                         {links.map((link) => (
                             <Link
                                 key={link.href}
@@ -215,7 +215,7 @@ export default function Navbar() {
                                     id="category-dropdown-menu"
                                     role="menu"
                                     aria-label="Category navigation"
-                                    className="absolute top-full right-0 md:left-0 mt-2 w-72 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-200/90 dark:border-slate-800/90 p-2 z-50 animate-fade-in"
+                                    className="absolute top-full right-0 lg:left-0 mt-2 w-72 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-200/90 dark:border-slate-800/90 p-2 z-50 animate-fade-in"
                                 >
                                     <div className="px-3 py-1.5 border-b border-slate-100 dark:border-slate-800 mb-1">
                                         <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
@@ -254,7 +254,7 @@ export default function Navbar() {
                     </div>
 
                     {/* Mobile header controls */}
-                    <div className="flex items-center gap-2 md:hidden">
+                    <div className="flex items-center gap-1.5 sm:gap-2 lg:hidden">
                         <button
                             type="button"
                             onClick={() => {
@@ -263,13 +263,13 @@ export default function Navbar() {
                                 }
                             }}
                             aria-label="Open search"
-                            className="flex size-10 items-center justify-center rounded-xl border border-slate-200/90 dark:border-slate-800/90 bg-slate-100/90 dark:bg-slate-800/90 text-slate-700 dark:text-slate-200 shadow-xs hover:bg-slate-200 dark:hover:bg-slate-700 focus:outline-hidden focus:ring-2 focus:ring-amber-400 transition-all"
+                            className="flex size-9 sm:size-10 items-center justify-center rounded-xl border border-slate-200/90 dark:border-slate-800/90 bg-slate-100/90 dark:bg-slate-800/90 text-slate-700 dark:text-slate-200 shadow-xs hover:bg-slate-200 dark:hover:bg-slate-700 focus:outline-hidden focus:ring-2 focus:ring-amber-400 transition-all"
                         >
                             <Search className="size-4.5" aria-hidden="true" />
                         </button>
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="flex size-10 items-center justify-center rounded-xl border border-slate-200/90 dark:border-slate-800/90 bg-slate-100/90 dark:bg-slate-800/90 text-slate-800 dark:text-white shadow-xs hover:bg-slate-200 dark:hover:bg-slate-700 focus:outline-hidden focus:ring-2 focus:ring-amber-400 transition-all"
+                            className="flex size-9 sm:size-10 items-center justify-center rounded-xl border border-slate-200/90 dark:border-slate-800/90 bg-slate-100/90 dark:bg-slate-800/90 text-slate-800 dark:text-white shadow-xs hover:bg-slate-200 dark:hover:bg-slate-700 focus:outline-hidden focus:ring-2 focus:ring-amber-400 transition-all"
                             aria-expanded={isOpen}
                             aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
                         >
@@ -285,7 +285,7 @@ export default function Navbar() {
 
             {/* Mobile Nav Drawer */}
             {isOpen && (
-                <div className="md:hidden border-t border-slate-200/80 dark:border-slate-800/80 max-h-[85dvh] overflow-y-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl animate-fade-in">
+                <div className="lg:hidden border-t border-slate-200/80 dark:border-slate-800/80 max-h-[85dvh] overflow-y-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl animate-fade-in">
                     <div className="p-4 space-y-3">
                         {/* Mobile Quick Utility Strip */}
                         <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-100/80 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60">

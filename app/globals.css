@@ -1533,8 +1533,24 @@
     will-change: transform, opacity;
   }
   @media (prefers-reduced-motion: reduce) {
-    .badge-pulse {
-      animation: none;
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    .badge-pulse,
+    .content-fade-in,
+    .animate-fade-up,
+    .animate-fade-in,
+    .animate-orb-1,
+    .animate-orb-2,
+    .skeleton-shimmer {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
     }
   }
 
