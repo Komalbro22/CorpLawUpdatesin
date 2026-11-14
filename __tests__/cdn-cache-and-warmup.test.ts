@@ -85,7 +85,7 @@ describe('CDN Cache & 404 Prevention Suite', () => {
       expect(globalRule).toBeDefined()
       const csp = globalRule?.headers.find(h => h.key === 'Content-Security-Policy')
       expect(csp).toBeDefined()
-      expect(csp?.value).not.toContain('scripts.scriptwrapper.com')
+      expect(csp?.value).toContain('scripts.scriptwrapper.com')
       expect(csp?.value).toContain('https://*.googlesyndication.com')
       expect(csp?.value).toContain('https:')
     })

@@ -441,7 +441,7 @@ describe('CSP: Analytics allowlisting and Ad-network exclusion', () => {
     expect(csp).not.toContain('https://analytics.ahrefs.com')
   })
 
-  it('allows Google AdSense while excluding Journey/Mediavine and unapproved ad networks from CSP', async () => {
+  it('allows Mediavine Journey and partner networks while excluding unapproved ad networks from CSP', async () => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const nextConfig = require('../next.config.js')
     const headers = await nextConfig.headers()
@@ -451,11 +451,11 @@ describe('CSP: Analytics allowlisting and Ad-network exclusion', () => {
     expect(csp).toBeDefined()
     expect(csp).not.toContain('clickiocmp.com')
     expect(csp).not.toContain('clickiocdn.com')
-    expect(csp).not.toContain('journeymv.com')
-    expect(csp).not.toContain('scriptwrapper.com')
-    expect(csp).not.toContain('consentmanager.net')
-    expect(csp).not.toContain('grow.me')
-    expect(csp).not.toContain('rapidedge.io')
+    expect(csp).toContain('journeymv.com')
+    expect(csp).toContain('scriptwrapper.com')
+    expect(csp).toContain('https://*.consentmanager.net')
+    expect(csp).toContain('https://*.grow.me')
+    expect(csp).toContain('https://*.rapidedge.io')
     expect(csp).toContain('https://*.googlesyndication.com')
     expect(csp).toContain('https://*.doubleclick.net')
     expect(csp).toContain('https://*.adtrafficquality.google')

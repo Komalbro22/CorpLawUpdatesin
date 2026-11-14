@@ -212,7 +212,7 @@ export default function CookieConsentBanner() {
               <div className="flex items-center justify-between gap-2">
                 <div className="flex-1 min-w-0">
                   <label className="font-semibold text-white text-xs sm:text-sm">Advertising</label>
-                  <p className="text-[10px] sm:text-xs text-slate-400">AdSense relevance</p>
+                  <p className="text-[10px] sm:text-xs text-slate-400">Media relevance &amp; frequency</p>
                 </div>
                 <button
                   type="button"

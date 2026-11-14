@@ -44,7 +44,7 @@ const nextConfig = {
   async headers() {
     const isDev = process.env.NODE_ENV !== 'production'
     const scriptSrcEval = isDev ? " 'unsafe-eval'" : ""
-    const cspHeader = `default-src 'self'; script-src 'self' 'unsafe-inline'${scriptSrcEval} https: https://us.i.posthog.com https://us-assets.i.posthog.com https://static.cloudflareinsights.com https://www.googletagmanager.com https://va.vercel-scripts.com https://*.clarity.ms https://news.google.com https://*.google.com https://*.doubleclick.net https://*.googlesyndication.com https://*.adtrafficquality.google https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://*.googlesyndication.com https://*.googleapis.com; img-src 'self' blob: data: https:; font-src 'self' data: https://fonts.gstatic.com https://*.gstatic.com; connect-src 'self' blob: data: https: https://us.i.posthog.com https://us-assets.i.posthog.com wss://*.supabase.co https://*.google.com https://*.doubleclick.net https://*.googlesyndication.com https://*.adtrafficquality.google; frame-src 'self' https://news.google.com https://*.google.com https://*.doubleclick.net https://*.googlesyndication.com https://*.adtrafficquality.google https://googleads.g.doubleclick.net https://tpc.googlesyndication.com; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests;`
+    const cspHeader = `default-src 'self'; script-src 'self' 'unsafe-inline'${scriptSrcEval} https: https://us.i.posthog.com https://us-assets.i.posthog.com https://static.cloudflareinsights.com https://www.googletagmanager.com https://va.vercel-scripts.com https://*.clarity.ms https://news.google.com https://*.google.com https://scripts.scriptwrapper.com https://*.scriptwrapper.com https://*.mediavine.com https://*.journeymv.com https://*.doubleclick.net https://*.googlesyndication.com https://*.adtrafficquality.google https://mv-publisher-experiments.s3.us-east-1.amazonaws.com https://*.pubmatic.com https://*.rubiconproject.com https://*.adnxs.com https://*.criteo.com https://*.criteo.net https://*.amazon-adsystem.com https://*.openx.net https://*.casalemedia.com https://*.smartadserver.com https://*.triplelift.com https://*.confiant-integrations.net https://*.consentmanager.net https://*.grow.me https://*.rapidedge.io https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://*.mediavine.com https://*.journeymv.com https://*.googlesyndication.com https://*.googleapis.com; img-src 'self' blob: data: https:; font-src 'self' data: https://*.mediavine.com https://*.journeymv.com https://fonts.gstatic.com https://*.gstatic.com; connect-src 'self' blob: data: https: https://us.i.posthog.com https://us-assets.i.posthog.com wss://*.supabase.co https://*.google.com https://*.scriptwrapper.com https://*.mediavine.com https://*.journeymv.com https://*.doubleclick.net https://*.googlesyndication.com https://*.adtrafficquality.google https://mv-publisher-experiments.s3.us-east-1.amazonaws.com; frame-src 'self' https://news.google.com https://*.google.com https://*.mediavine.com https://*.scriptwrapper.com https://*.journeymv.com https://*.doubleclick.net https://*.googlesyndication.com https://*.adtrafficquality.google https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.pubmatic.com https://*.rubiconproject.com https://*.adnxs.com https://*.criteo.com https://*.amazon-adsystem.com https://*.openx.net https://*.casalemedia.com; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; upgrade-insecure-requests;`
 
     return [
       {
@@ -284,6 +284,12 @@ const nextConfig = {
       {
         source: '/documents/dir-12-guide/',
         destination: '/updates/form-dir-12-director-kmp-appointment-filing-guide-companies-act-2013',
+        permanent: true,
+      },
+      // 301 Permanent redirect for Mediavine Journey ads.txt
+      {
+        source: '/ads.txt',
+        destination: 'https://adstxt.journeymv.com/sites/bb9707b8-bfe3-4206-9309-6bc7e7923faf/ads.txt',
         permanent: true,
       },
       // 301/308 Permanent redirects for base64 encoded / truncated link: /updates/bWNhLWV4dG* -> /updates/mca-extends-annual-filing-deadlines-fy-2025-26 (7 Nov 2026)
