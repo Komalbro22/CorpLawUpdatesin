@@ -27,6 +27,42 @@ describe('UI Audit Fixes: Tablet Breakpoints & Reduced Motion', () => {
     })
   })
 
+  describe('Navigation Information Architecture: Separate Tools & Regulators', () => {
+    it('separates Tools and Regulators into structured menus', () => {
+      expect(navbarContent).toContain('Regulators')
+      expect(navbarContent).toContain('Tools')
+    })
+
+    it('includes all 10 live regulatory categories without dropping CCI, NCLT, or Labour', () => {
+      const requiredCategories = [
+        '/category/mca',
+        '/category/sebi',
+        '/category/rbi',
+        '/category/fema',
+        '/category/ifsca',
+        '/category/nclt',
+        '/category/ibc',
+        '/category/cci',
+        '/category/labour',
+        '/category/taxation',
+      ]
+      for (const catHref of requiredCategories) {
+        expect(navbarContent).toContain(catHref)
+      }
+    })
+
+    it('uses accurate facts: repo rate 5.50% and 500+ subscribers', () => {
+      expect(navbarContent).toContain('5.50%')
+      expect(navbarContent).not.toContain('6.50%')
+      expect(navbarContent).toContain('500+')
+      expect(navbarContent).not.toContain('10,000+')
+    })
+
+    it('caps mobile/tablet drawer width to sm:max-w-md off-canvas sheet', () => {
+      expect(navbarContent).toContain('w-full sm:max-w-md')
+    })
+  })
+
   describe('Finding 1: Updates directory tablet responsiveness', () => {
     it('maintains single-column feed and top filter chips until lg: (1024px)', () => {
       // Flex direction switches at lg: instead of md:

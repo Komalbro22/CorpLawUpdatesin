@@ -7,6 +7,28 @@ import { usePathname } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import DarkModeToggle from './DarkModeToggle'
 import NotificationBell from './NotificationBell'
+import {
+    Building2,
+    Calendar,
+    ChevronDown,
+    FileText,
+    Gavel,
+    Globe2,
+    Landmark,
+    Menu,
+    Scale,
+    ShieldCheck,
+    TrendingUp,
+    Users,
+    Wrench,
+    X,
+    Bookmark,
+    BookOpen,
+    Search,
+    Receipt,
+    Newspaper,
+    ArrowRight,
+} from 'lucide-react'
 
 const GlobalSearch = dynamic(() => import('./GlobalSearch'), {
     ssr: false,
@@ -23,48 +45,48 @@ const GlobalSearch = dynamic(() => import('./GlobalSearch'), {
     )
 })
 
-import {
-    Building2,
-    Calendar,
-    ChevronDown,
-    FileText,
-    Gavel,
-    Globe2,
-    Landmark,
-    Menu,
-    Scale,
-    ShieldCheck,
-    TrendingUp,
-    Users,
-    Coins,
-    Wrench,
-    X,
-    Bookmark,
-    BookOpen,
-    Search,
-    Receipt,
-} from 'lucide-react'
+/* ─── 10 Regulatory Categories (All Active Areas) ─── */
+const regulatorGroups = {
+    corporate: [
+        { href: '/category/mca', label: 'MCA & Companies Act', sub: 'ROC circulars, LLP Act & rules', Icon: Building2, color: 'text-blue-600 dark:text-blue-400', bg: 'hover:bg-blue-50/70 dark:hover:bg-blue-950/30' },
+        { href: '/category/sebi', label: 'SEBI Regulations', sub: 'LODR, ICDR, takeovers & circulars', Icon: TrendingUp, color: 'text-emerald-600 dark:text-emerald-400', bg: 'hover:bg-emerald-50/70 dark:hover:bg-emerald-950/30' },
+        { href: '/category/rbi', label: 'RBI Directives', sub: 'Master directions & monetary policy', Icon: Landmark, color: 'text-violet-600 dark:text-violet-400', bg: 'hover:bg-violet-50/70 dark:hover:bg-violet-950/30' },
+        { href: '/category/fema', label: 'FEMA & Foreign Trade', sub: 'FDI, ODI, ECB & cross-border', Icon: Globe2, color: 'text-teal-600 dark:text-teal-400', bg: 'hover:bg-teal-50/70 dark:hover:bg-teal-950/30' },
+        { href: '/category/ifsca', label: 'IFSCA & GIFT City', sub: 'FMEs, bullion & IFSC compliance', Icon: Landmark, color: 'text-cyan-600 dark:text-cyan-400', bg: 'hover:bg-cyan-50/70 dark:hover:bg-cyan-950/30' },
+    ],
+    tribunals: [
+        { href: '/category/nclt', label: 'NCLT Orders', sub: 'Company petitions & appeals', Icon: Scale, color: 'text-orange-600 dark:text-orange-400', bg: 'hover:bg-orange-50/70 dark:hover:bg-orange-950/30' },
+        { href: '/category/ibc', label: 'IBC Insolvency', sub: 'CIRP, liquidation & IBBI rules', Icon: Gavel, color: 'text-red-600 dark:text-red-400', bg: 'hover:bg-red-50/70 dark:hover:bg-red-950/30' },
+        { href: '/category/cci', label: 'CCI Orders', sub: 'Antitrust & merger combinations', Icon: ShieldCheck, color: 'text-indigo-600 dark:text-indigo-400', bg: 'hover:bg-indigo-50/70 dark:hover:bg-indigo-950/30' },
+        { href: '/category/labour', label: 'Labour Law Updates', sub: '4 Labour Codes, EPFO & ESIC', Icon: Users, color: 'text-amber-600 dark:text-amber-400', bg: 'hover:bg-amber-50/70 dark:hover:bg-amber-950/30' },
+        { href: '/category/taxation', label: 'Taxation Updates', sub: 'CBDT income tax & CBIC GST/customs', Icon: Receipt, color: 'text-rose-600 dark:text-rose-400', bg: 'hover:bg-rose-50/70 dark:hover:bg-rose-950/30' },
+    ],
+}
 
-const links = [
-    { href: '/', label: 'Home' },
-    { href: '/updates', label: 'Updates' },
-    { href: '/guides', label: 'Guides', icon: BookOpen },
-    { href: '/documents', label: 'Documents', icon: FileText },
-    { href: '/tools', label: 'Tools', icon: Wrench },
-    { href: '/bookmarks', label: 'Bookmarks', icon: Bookmark, hideIconOnDesktop: true },
-    { href: '/about', label: 'About' },
-    { href: '/newsletter', label: 'Newsletter' },
-]
+/* ─── Compliance Tools & Trackers ─── */
+const toolGroups = {
+    calculators: [
+        { href: '/tools/fee-calculator', label: 'MCA Fee Calculators', sub: 'AOC-4, MGT-7, PAS-3, SH-7 & more', Icon: Wrench, color: 'text-amber-600 dark:text-amber-400', bg: 'hover:bg-amber-50/70 dark:hover:bg-amber-950/30' },
+        { href: '/tools/cin-decoder', label: 'CIN Decoder & Data', sub: 'Verify ROC master data & state', Icon: Building2, color: 'text-blue-600 dark:text-blue-400', bg: 'hover:bg-blue-50/70 dark:hover:bg-blue-950/30' },
+        { href: '/glossary', label: 'Corporate Legal Glossary', sub: 'A–Z statutory definitions & terms', Icon: BookOpen, color: 'text-emerald-600 dark:text-emerald-400', bg: 'hover:bg-emerald-50/70 dark:hover:bg-emerald-950/30' },
+    ],
+    trackers: [
+        { href: '/calendar', label: 'Compliance Calendar', sub: 'Track statutory filing deadlines', Icon: Calendar, color: 'text-cyan-600 dark:text-cyan-400', bg: 'hover:bg-cyan-50/70 dark:hover:bg-cyan-950/30' },
+        { href: '/rbi/repo-rate', label: 'RBI Repo Rate Tracker', sub: 'Current: 5.50% benchmark rate', Icon: TrendingUp, color: 'text-violet-600 dark:text-violet-400', bg: 'hover:bg-violet-50/70 dark:hover:bg-violet-950/30' },
+        { href: '/company-search', label: 'Company Search', sub: 'Entity master data & search', Icon: Search, color: 'text-indigo-600 dark:text-indigo-400', bg: 'hover:bg-indigo-50/70 dark:hover:bg-indigo-950/30' },
+    ],
+}
 
-const GlossaryIcon = ({ className }: { className?: string }) => (
-    <span className={`${className} text-base flex items-center justify-center`} aria-hidden>📖</span>
-)
+const allRegulators = [...regulatorGroups.corporate, ...regulatorGroups.tribunals]
+const allTools = [...toolGroups.calculators, ...toolGroups.trackers]
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false)
-    const [categoriesOpen, setCategoriesOpen] = useState(false)
+    const [regulatorsOpen, setRegulatorsOpen] = useState(false)
+    const [toolsOpen, setToolsOpen] = useState(false)
     const [scrolled, setScrolled] = useState(false)
-    const categoriesRef = useRef<HTMLDivElement>(null)
+    const regulatorsRef = useRef<HTMLDivElement>(null)
+    const toolsRef = useRef<HTMLDivElement>(null)
     const pathname = usePathname()
 
     /* Scroll-compact effect */
@@ -74,18 +96,22 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', onScroll)
     }, [])
 
-    /* Close dropdown on outside click */
+    /* Close dropdowns on outside click */
     useEffect(() => {
         function handleClickOutside(e: MouseEvent) {
-            if (categoriesRef.current && !categoriesRef.current.contains(e.target as Node)) {
-                setCategoriesOpen(false)
+            const target = e.target as Node
+            if (regulatorsRef.current && !regulatorsRef.current.contains(target)) {
+                setRegulatorsOpen(false)
+            }
+            if (toolsRef.current && !toolsRef.current.contains(target)) {
+                setToolsOpen(false)
             }
         }
         document.addEventListener('mousedown', handleClickOutside)
         return () => document.removeEventListener('mousedown', handleClickOutside)
     }, [])
 
-    /* Prevent background scrolling when mobile menu is open */
+    /* Prevent background scrolling when mobile drawer is open */
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden'
@@ -100,7 +126,11 @@ export default function Navbar() {
     /* Close on Escape key */
     useEffect(() => {
         function handleEscape(e: KeyboardEvent) {
-            if (e.key === 'Escape') { setCategoriesOpen(false); setIsOpen(false) }
+            if (e.key === 'Escape') {
+                setRegulatorsOpen(false)
+                setToolsOpen(false)
+                setIsOpen(false)
+            }
         }
         document.addEventListener('keydown', handleEscape)
         return () => document.removeEventListener('keydown', handleEscape)
@@ -111,20 +141,8 @@ export default function Navbar() {
         return pathname === path || pathname.startsWith(path + '/')
     }
 
-    const categoryItems = [
-        { href: '/tools/cin-decoder', label: 'CIN Decoder',    Icon: Building2, color: 'text-amber-600',  bg: 'hover:bg-amber-50'   },
-        { href: '/glossary',       label: 'Legal Glossary',     Icon: GlossaryIcon, color: 'text-amber-600',  bg: 'hover:bg-amber-50'   },
-        { href: '/category/mca',   label: 'MCA & Companies Act',Icon: Building2, color: 'text-blue-600',    bg: 'hover:bg-blue-50'    },
-        { href: '/category/sebi',  label: 'SEBI Regulations',   Icon: TrendingUp, color: 'text-emerald-600', bg: 'hover:bg-emerald-50' },
-        { href: '/category/rbi',   label: 'RBI Directives',     Icon: Landmark,  color: 'text-violet-600',  bg: 'hover:bg-violet-50'  },
-        { href: '/category/taxation', label: 'Taxation (CBDT/GST)', Icon: Receipt, color: 'text-rose-600', bg: 'hover:bg-rose-50' },
-        { href: '/category/ibc',   label: 'IBC Insolvency',     Icon: Gavel,     color: 'text-red-600',     bg: 'hover:bg-red-50'     },
-        { href: '/category/fema',  label: 'FEMA & Foreign Trade',Icon: Globe2,   color: 'text-teal-600',    bg: 'hover:bg-teal-50'    },
-        { href: '/rbi/repo-rate',  label: 'Current Repo Rate',  Icon: Landmark,  color: 'text-indigo-600',   bg: 'hover:bg-indigo-50'   },
-        { href: '/calendar',       label: 'Compliance Calendar',Icon: Calendar,  color: 'text-cyan-600',     bg: 'hover:bg-cyan-50'     },
-    ] as const
-
-    const isCategoryActive = categoryItems.some(item => isActive(item.href))
+    const isRegulatorsActive = allRegulators.some(item => isActive(item.href))
+    const isToolsActive = allTools.some(item => isActive(item.href)) || isActive('/tools')
 
     const navBg = scrolled
         ? 'bg-white/95 dark:bg-slate-900/95 shadow-nav backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800/80'
@@ -135,8 +153,12 @@ export default function Navbar() {
             <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
 
-                    {/* Logo */}
-                    <Link href="/" className="shrink-0 flex items-center gap-2 sm:gap-3 group focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-md p-1">
+                    {/* Logo (Serves as primary Home link) */}
+                    <Link
+                        href="/"
+                        className="shrink-0 flex items-center gap-2 sm:gap-3 group focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-md p-1"
+                        aria-label="CorpLawUpdates.in Home"
+                    >
                         <span className="block w-8 h-8 sm:w-10 sm:h-10 rounded-xl overflow-hidden shadow-xs ring-1 ring-amber-500/20 group-hover:ring-amber-500/50 transition-all shrink-0 bg-slate-900">
                             <Image
                                 src="/icon-192.png"
@@ -157,103 +179,286 @@ export default function Navbar() {
                         </span>
                     </Link>
 
-                    {/* Desktop Nav */}
+                    {/* ─── Desktop Nav (≥ 1024px) ─── */}
                     <div className="hidden lg:flex lg:items-center lg:gap-1">
-                        {links.map((link) => (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                className={`relative inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
-                                    isActive(link.href)
-                                        ? 'text-amber-700 dark:text-amber-400 font-semibold'
-                                        : 'text-slate-700 dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800'
-                                }`}
-                            >
-                                {'icon' in link && link.icon && !(link as any).hideIconOnDesktop && (
-                                    <link.icon className="w-4 h-4 shrink-0 opacity-80" aria-hidden />
-                                )}
-                                {link.label}
-                                {/* Animated underline for active */}
-                                {isActive(link.href) && (
-                                    <span className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-amber-600 dark:bg-amber-400" />
-                                )}
-                            </Link>
-                        ))}
+                        {/* Updates */}
+                        <Link
+                            href="/updates"
+                            className={`relative inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
+                                isActive('/updates')
+                                    ? 'text-amber-700 dark:text-amber-400 font-semibold'
+                                    : 'text-slate-700 dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800'
+                            }`}
+                        >
+                            <Newspaper className="size-4 shrink-0 opacity-80" aria-hidden="true" />
+                            Updates
+                            {isActive('/updates') && (
+                                <span className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-amber-600 dark:bg-amber-400" />
+                            )}
+                        </Link>
 
-                        {/* Categories dropdown */}
-                        <div ref={categoriesRef} className="relative">
+                        {/* Documents */}
+                        <Link
+                            href="/documents"
+                            className={`relative inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
+                                isActive('/documents')
+                                    ? 'text-amber-700 dark:text-amber-400 font-semibold'
+                                    : 'text-slate-700 dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800'
+                            }`}
+                        >
+                            <FileText className="size-4 shrink-0 opacity-80" aria-hidden="true" />
+                            Documents
+                            {isActive('/documents') && (
+                                <span className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-amber-600 dark:bg-amber-400" />
+                            )}
+                        </Link>
+
+                        {/* Tools ▾ Dropdown */}
+                        <div ref={toolsRef} className="relative">
                             <button
-                                onClick={() => setCategoriesOpen(prev => !prev)}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter' || e.key === ' ') {
-                                        e.preventDefault()
-                                        setCategoriesOpen(prev => !prev)
-                                    }
+                                onClick={() => {
+                                    setToolsOpen(prev => !prev)
+                                    setRegulatorsOpen(false)
                                 }}
-                                aria-expanded={categoriesOpen}
-                                aria-controls={categoriesOpen ? "category-dropdown-menu" : undefined}
+                                aria-expanded={toolsOpen}
                                 aria-haspopup="true"
-                                aria-label="Browse regulatory categories"
+                                aria-label="Open compliance tools menu"
                                 className={`relative flex items-center gap-1 text-sm font-medium transition-all duration-200 focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-md px-3 py-2 ${
-                                    isCategoryActive
+                                    isToolsActive
                                         ? 'text-amber-700 dark:text-amber-400 font-semibold'
                                         : 'text-slate-700 dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800'
                                 }`}
                             >
-                                Categories
+                                <Wrench className="size-4 shrink-0 opacity-80" aria-hidden="true" />
+                                Tools
                                 <ChevronDown
-                                    className={`w-3.5 h-3.5 transition-transform duration-200 ${categoriesOpen ? 'rotate-180' : ''}`}
-                                    aria-hidden
+                                    className={`w-3.5 h-3.5 transition-transform duration-200 ${toolsOpen ? 'rotate-180' : ''}`}
+                                    aria-hidden="true"
                                 />
-                                {isCategoryActive && (
+                                {isToolsActive && (
                                     <span className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-amber-600 dark:bg-amber-400" />
                                 )}
                             </button>
 
-                            {categoriesOpen && (
+                            {toolsOpen && (
                                 <div
-                                    id="category-dropdown-menu"
                                     role="menu"
-                                    aria-label="Category navigation"
-                                    className="absolute top-full right-0 lg:left-0 mt-2 w-72 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-200/90 dark:border-slate-800/90 p-2 z-50 animate-fade-in"
+                                    aria-label="Compliance tools"
+                                    className="absolute top-full left-0 mt-2 w-[520px] bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-200/90 dark:border-slate-800/90 p-4 z-50 animate-fade-in"
                                 >
-                                    <div className="px-3 py-1.5 border-b border-slate-100 dark:border-slate-800 mb-1">
-                                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-                                            Regulators & Quick Tools
-                                        </span>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <div className="px-2 pb-2 mb-1 border-b border-slate-100 dark:border-slate-800">
+                                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                                                    Calculators &amp; Decoders
+                                                </span>
+                                            </div>
+                                            <div className="space-y-1">
+                                                {toolGroups.calculators.map(({ href, label, sub, Icon, color, bg }) => (
+                                                    <Link
+                                                        key={href}
+                                                        href={href}
+                                                        role="menuitem"
+                                                        onClick={() => setToolsOpen(false)}
+                                                        className={`flex items-start gap-2.5 p-2 rounded-xl transition-all duration-150 ${bg}`}
+                                                    >
+                                                        <div className="p-1.5 rounded-lg bg-slate-100/80 dark:bg-slate-800/80 shrink-0 mt-0.5">
+                                                            <Icon className={`size-4 ${color}`} aria-hidden="true" />
+                                                        </div>
+                                                        <div className="flex flex-col">
+                                                            <span className="text-xs font-semibold text-navy dark:text-slate-100">{label}</span>
+                                                            <span className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight">{sub}</span>
+                                                        </div>
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div className="px-2 pb-2 mb-1 border-b border-slate-100 dark:border-slate-800">
+                                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                                                    Market &amp; Regulatory Trackers
+                                                </span>
+                                            </div>
+                                            <div className="space-y-1">
+                                                {toolGroups.trackers.map(({ href, label, sub, Icon, color, bg }) => (
+                                                    <Link
+                                                        key={href}
+                                                        href={href}
+                                                        role="menuitem"
+                                                        onClick={() => setToolsOpen(false)}
+                                                        className={`flex items-start gap-2.5 p-2 rounded-xl transition-all duration-150 ${bg}`}
+                                                    >
+                                                        <div className="p-1.5 rounded-lg bg-slate-100/80 dark:bg-slate-800/80 shrink-0 mt-0.5">
+                                                            <Icon className={`size-4 ${color}`} aria-hidden="true" />
+                                                        </div>
+                                                        <div className="flex flex-col">
+                                                            <span className="text-xs font-semibold text-navy dark:text-slate-100">{label}</span>
+                                                            <span className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight">{sub}</span>
+                                                        </div>
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="grid grid-cols-1 gap-0.5">
-                                        {categoryItems.map(({ href, label, Icon, color, bg }) => (
-                                            <Link
-                                                key={href}
-                                                href={href}
-                                                role="menuitem"
-                                                onClick={() => setCategoriesOpen(false)}
-                                                className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 focus:outline-hidden focus:bg-amber-50/80 dark:focus:bg-slate-800/80 ${color} ${bg} dark:hover:bg-slate-800/60`}
-                                            >
-                                                <div className="flex items-center gap-2.5">
-                                                    <div className="p-1.5 rounded-lg bg-slate-100/80 dark:bg-slate-800/80 shrink-0">
-                                                        <Icon className="size-4" aria-hidden="true" />
-                                                    </div>
-                                                    <span>{label}</span>
-                                                </div>
-                                                <span className="text-slate-300 dark:text-slate-600 text-xs" aria-hidden="true">→</span>
-                                            </Link>
-                                        ))}
+
+                                    <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between px-2 text-xs">
+                                        <span className="text-slate-500 dark:text-slate-400">All tools are free for compliance professionals</span>
+                                        <Link
+                                            href="/tools"
+                                            onClick={() => setToolsOpen(false)}
+                                            className="font-semibold text-amber-700 dark:text-amber-400 hover:underline inline-flex items-center gap-1"
+                                        >
+                                            Explore all tools <ArrowRight className="size-3" aria-hidden="true" />
+                                        </Link>
                                     </div>
                                 </div>
                             )}
                         </div>
 
-                        {/* Search shortcut & notifications */}
-                        <div className="ml-2 flex items-center gap-2">
+                        {/* Regulators ▾ Dropdown */}
+                        <div ref={regulatorsRef} className="relative">
+                            <button
+                                onClick={() => {
+                                    setRegulatorsOpen(prev => !prev)
+                                    setToolsOpen(false)
+                                }}
+                                aria-expanded={regulatorsOpen}
+                                aria-haspopup="true"
+                                aria-label="Browse regulatory categories"
+                                className={`relative flex items-center gap-1 text-sm font-medium transition-all duration-200 focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 rounded-md px-3 py-2 ${
+                                    isRegulatorsActive
+                                        ? 'text-amber-700 dark:text-amber-400 font-semibold'
+                                        : 'text-slate-700 dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800'
+                                }`}
+                            >
+                                <Building2 className="size-4 shrink-0 opacity-80" aria-hidden="true" />
+                                Regulators
+                                <ChevronDown
+                                    className={`w-3.5 h-3.5 transition-transform duration-200 ${regulatorsOpen ? 'rotate-180' : ''}`}
+                                    aria-hidden="true"
+                                />
+                                {isRegulatorsActive && (
+                                    <span className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-amber-600 dark:bg-amber-400" />
+                                )}
+                            </button>
+
+                            {regulatorsOpen && (
+                                <div
+                                    role="menu"
+                                    aria-label="Regulatory bodies"
+                                    className="absolute top-full left-0 mt-2 w-[580px] bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-200/90 dark:border-slate-800/90 p-4 z-50 animate-fade-in"
+                                >
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <div className="px-2 pb-2 mb-1 border-b border-slate-100 dark:border-slate-800">
+                                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                                                    Corporate, Capital &amp; Monetary
+                                                </span>
+                                            </div>
+                                            <div className="space-y-0.5">
+                                                {regulatorGroups.corporate.map(({ href, label, sub, Icon, color, bg }) => (
+                                                    <Link
+                                                        key={href}
+                                                        href={href}
+                                                        role="menuitem"
+                                                        onClick={() => setRegulatorsOpen(false)}
+                                                        className={`flex items-start gap-2.5 p-2 rounded-xl transition-all duration-150 ${bg}`}
+                                                    >
+                                                        <div className="p-1.5 rounded-lg bg-slate-100/80 dark:bg-slate-800/80 shrink-0 mt-0.5">
+                                                            <Icon className={`size-4 ${color}`} aria-hidden="true" />
+                                                        </div>
+                                                        <div className="flex flex-col">
+                                                            <span className="text-xs font-semibold text-navy dark:text-slate-100">{label}</span>
+                                                            <span className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight">{sub}</span>
+                                                        </div>
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div className="px-2 pb-2 mb-1 border-b border-slate-100 dark:border-slate-800">
+                                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                                                    Tribunals, Trade &amp; Taxation
+                                                </span>
+                                            </div>
+                                            <div className="space-y-0.5">
+                                                {regulatorGroups.tribunals.map(({ href, label, sub, Icon, color, bg }) => (
+                                                    <Link
+                                                        key={href}
+                                                        href={href}
+                                                        role="menuitem"
+                                                        onClick={() => setRegulatorsOpen(false)}
+                                                        className={`flex items-start gap-2.5 p-2 rounded-xl transition-all duration-150 ${bg}`}
+                                                    >
+                                                        <div className="p-1.5 rounded-lg bg-slate-100/80 dark:bg-slate-800/80 shrink-0 mt-0.5">
+                                                            <Icon className={`size-4 ${color}`} aria-hidden="true" />
+                                                        </div>
+                                                        <div className="flex flex-col">
+                                                            <span className="text-xs font-semibold text-navy dark:text-slate-100">{label}</span>
+                                                            <span className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight">{sub}</span>
+                                                        </div>
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between px-2 text-xs">
+                                        <span className="text-slate-500 dark:text-slate-400">Primary-source official circulars updated daily</span>
+                                        <Link
+                                            href="/category"
+                                            onClick={() => setRegulatorsOpen(false)}
+                                            className="font-semibold text-amber-700 dark:text-amber-400 hover:underline inline-flex items-center gap-1"
+                                        >
+                                            View all 10 categories <ArrowRight className="size-3" aria-hidden="true" />
+                                        </Link>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Guides */}
+                        <Link
+                            href="/guides"
+                            className={`relative inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 focus:outline-hidden focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 ${
+                                isActive('/guides')
+                                    ? 'text-amber-700 dark:text-amber-400 font-semibold'
+                                    : 'text-slate-700 dark:text-slate-300 hover:text-navy dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800'
+                            }`}
+                        >
+                            <BookOpen className="size-4 shrink-0 opacity-80" aria-hidden="true" />
+                            Guides
+                            {isActive('/guides') && (
+                                <span className="absolute bottom-0 left-2 right-2 h-0.5 rounded-full bg-amber-600 dark:bg-amber-400" />
+                            )}
+                        </Link>
+
+                        {/* Right Utility Bar */}
+                        <div className="ml-3 flex items-center gap-2">
                             <GlobalSearch />
+                            <Link
+                                href="/bookmarks"
+                                className="flex size-9 items-center justify-center rounded-xl border border-slate-200/90 dark:border-slate-800/90 bg-slate-100/90 dark:bg-slate-800/90 text-slate-700 dark:text-slate-200 shadow-xs hover:bg-slate-200 dark:hover:bg-slate-700 focus:outline-hidden focus:ring-2 focus:ring-amber-400 transition-all"
+                                title="Saved Bookmarks"
+                                aria-label="Saved Bookmarks"
+                            >
+                                <Bookmark className="size-4 opacity-80" aria-hidden="true" />
+                            </Link>
                             <NotificationBell />
                             <DarkModeToggle />
+                            <Link
+                                href="/newsletter"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 shadow-xs transition-all focus:outline-hidden focus:ring-2 focus:ring-amber-400 ml-1"
+                            >
+                                <span>Get Briefing</span>
+                                <ArrowRight className="size-3" aria-hidden="true" />
+                            </Link>
                         </div>
                     </div>
 
-                    {/* Mobile header controls */}
+                    {/* ─── Mobile / Tablet Header Controls (< 1024px) ─── */}
                     <div className="flex items-center gap-1.5 sm:gap-2 lg:hidden">
                         <button
                             type="button"
@@ -283,61 +488,264 @@ export default function Navbar() {
                 </div>
             </div>
 
-            {/* Mobile Nav Drawer */}
+            {/* ─── Off-Canvas Drawer (Mobile & Tablet < 1024px) ─── */}
             {isOpen && (
-                <div className="lg:hidden border-t border-slate-200/80 dark:border-slate-800/80 max-h-[85dvh] overflow-y-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl animate-fade-in">
-                    <div className="p-4 space-y-3">
-                        {/* Mobile Quick Utility Strip */}
-                        <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-100/80 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60">
-                            <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">
-                                Alerts &amp; Theme
-                            </span>
-                            <div className="flex items-center gap-2">
-                                <NotificationBell />
-                                <DarkModeToggle />
+                <>
+                    {/* Backdrop Overlay */}
+                    <div
+                        className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 lg:hidden transition-opacity"
+                        onClick={() => setIsOpen(false)}
+                        aria-hidden="true"
+                    />
+
+                    {/* Slide-out Sheet (Capped at max-w-md on tablet) */}
+                    <aside
+                        className="fixed top-0 right-0 bottom-0 w-full sm:max-w-md bg-white dark:bg-slate-900 shadow-2xl z-50 flex flex-col overflow-hidden lg:hidden border-l border-slate-200 dark:border-slate-800 animate-fade-in"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Navigation menu"
+                    >
+                        {/* Drawer Header */}
+                        <div className="flex items-center justify-between p-4 border-b border-slate-200/80 dark:border-slate-800/80">
+                            <Link
+                                href="/"
+                                onClick={() => setIsOpen(false)}
+                                className="flex items-center gap-2"
+                            >
+                                <span className="block w-7 h-7 rounded-lg overflow-hidden shrink-0 bg-slate-900">
+                                    <Image src="/icon-192.png" alt="Logo" width={28} height={28} className="w-full h-full object-cover" />
+                                </span>
+                                <span className="font-heading text-base font-bold text-navy dark:text-white">
+                                    CorpLawUpdates<span className="text-amber-700 dark:text-gold">.in</span>
+                                </span>
+                            </Link>
+                            <button
+                                onClick={() => setIsOpen(false)}
+                                className="flex size-8 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 text-slate-500 hover:text-navy dark:hover:text-white"
+                                aria-label="Close menu"
+                            >
+                                <X className="size-4.5" aria-hidden="true" />
+                            </button>
+                        </div>
+
+                        {/* Drawer Scrollable Content */}
+                        <div className="flex-1 overflow-y-auto p-4 space-y-5">
+                            {/* Quick Search Button */}
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setIsOpen(false)
+                                    if (typeof window !== 'undefined') {
+                                        window.dispatchEvent(new CustomEvent('cluin-open-search'))
+                                    }
+                                }}
+                                className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 text-xs font-medium hover:border-amber-400/50 transition-colors"
+                            >
+                                <span className="flex items-center gap-2">
+                                    <Search className="size-4 text-slate-400" />
+                                    <span>Search circulars, forms, acts...</span>
+                                </span>
+                                <kbd className="px-1.5 py-0.5 rounded-sm bg-slate-200/70 dark:bg-slate-700/70 text-[10px]">Ctrl+K</kbd>
+                            </button>
+
+                            {/* 1. Core Workspaces (2x2 Card Grid) */}
+                            <div>
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block mb-2 px-1">
+                                    Core Workspaces
+                                </span>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <Link
+                                        href="/updates"
+                                        onClick={() => setIsOpen(false)}
+                                        className={`flex flex-col p-3 rounded-xl border transition-all ${
+                                            isActive('/updates')
+                                                ? 'bg-amber-500/10 border-amber-500/40 text-amber-700 dark:text-amber-400'
+                                                : 'bg-slate-50/70 dark:bg-slate-800/50 border-slate-200/80 dark:border-slate-800 hover:bg-amber-50 dark:hover:bg-slate-800'
+                                        }`}
+                                    >
+                                        <div className="p-1.5 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 w-fit mb-2">
+                                            <Newspaper className="size-4" />
+                                        </div>
+                                        <span className="text-xs font-bold text-navy dark:text-white">Updates</span>
+                                        <span className="text-[10px] text-slate-500 dark:text-slate-400">Daily circular feed</span>
+                                    </Link>
+
+                                    <Link
+                                        href="/documents"
+                                        onClick={() => setIsOpen(false)}
+                                        className={`flex flex-col p-3 rounded-xl border transition-all ${
+                                            isActive('/documents')
+                                                ? 'bg-amber-500/10 border-amber-500/40 text-amber-700 dark:text-amber-400'
+                                                : 'bg-slate-50/70 dark:bg-slate-800/50 border-slate-200/80 dark:border-slate-800 hover:bg-amber-50 dark:hover:bg-slate-800'
+                                        }`}
+                                    >
+                                        <div className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 w-fit mb-2">
+                                            <FileText className="size-4" />
+                                        </div>
+                                        <span className="text-xs font-bold text-navy dark:text-white">Documents</span>
+                                        <span className="text-[10px] text-slate-500 dark:text-slate-400">Statutory drafting</span>
+                                    </Link>
+
+                                    <Link
+                                        href="/tools"
+                                        onClick={() => setIsOpen(false)}
+                                        className={`flex flex-col p-3 rounded-xl border transition-all ${
+                                            isActive('/tools')
+                                                ? 'bg-amber-500/10 border-amber-500/40 text-amber-700 dark:text-amber-400'
+                                                : 'bg-slate-50/70 dark:bg-slate-800/50 border-slate-200/80 dark:border-slate-800 hover:bg-amber-50 dark:hover:bg-slate-800'
+                                        }`}
+                                    >
+                                        <div className="p-1.5 rounded-lg bg-violet-500/10 text-violet-600 dark:text-violet-400 w-fit mb-2">
+                                            <Wrench className="size-4" />
+                                        </div>
+                                        <span className="text-xs font-bold text-navy dark:text-white">Tools</span>
+                                        <span className="text-[10px] text-slate-500 dark:text-slate-400">Fee calcs &amp; CIN</span>
+                                    </Link>
+
+                                    <Link
+                                        href="/guides"
+                                        onClick={() => setIsOpen(false)}
+                                        className={`flex flex-col p-3 rounded-xl border transition-all ${
+                                            isActive('/guides')
+                                                ? 'bg-amber-500/10 border-amber-500/40 text-amber-700 dark:text-amber-400'
+                                                : 'bg-slate-50/70 dark:bg-slate-800/50 border-slate-200/80 dark:border-slate-800 hover:bg-amber-50 dark:hover:bg-slate-800'
+                                        }`}
+                                    >
+                                        <div className="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 w-fit mb-2">
+                                            <BookOpen className="size-4" />
+                                        </div>
+                                        <span className="text-xs font-bold text-navy dark:text-white">Guides</span>
+                                        <span className="text-[10px] text-slate-500 dark:text-slate-400">Compliance SOPs</span>
+                                    </Link>
+                                </div>
+                            </div>
+
+                            {/* 2. All 10 Regulators Fast-Access */}
+                            <div>
+                                <div className="flex items-center justify-between mb-2 px-1">
+                                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                                        All 10 Regulatory Areas
+                                    </span>
+                                    <Link
+                                        href="/category"
+                                        onClick={() => setIsOpen(false)}
+                                        className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 hover:underline"
+                                    >
+                                        View All →
+                                    </Link>
+                                </div>
+                                <div className="grid grid-cols-2 gap-1.5">
+                                    {allRegulators.map(({ href, label, Icon, color }) => (
+                                        <Link
+                                            key={href}
+                                            href={href}
+                                            onClick={() => setIsOpen(false)}
+                                            className="flex items-center gap-2 p-2 rounded-xl bg-slate-50/80 dark:bg-slate-800/60 hover:bg-amber-50 dark:hover:bg-slate-800 text-xs font-medium text-slate-700 dark:text-slate-200 transition-colors"
+                                        >
+                                            <Icon className={`size-3.5 shrink-0 ${color}`} aria-hidden="true" />
+                                            <span className="truncate">{label}</span>
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* 3. Statutory Trackers & Shortcuts */}
+                            <div>
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block mb-2 px-1">
+                                    Trackers &amp; Utilities
+                                </span>
+                                <div className="space-y-1">
+                                    <Link
+                                        href="/calendar"
+                                        onClick={() => setIsOpen(false)}
+                                        className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-200 transition-colors"
+                                    >
+                                        <span className="flex items-center gap-2.5">
+                                            <Calendar className="size-4 text-cyan-600 dark:text-cyan-400" />
+                                            <span>Compliance Calendar</span>
+                                        </span>
+                                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-cyan-100 dark:bg-cyan-950/60 text-cyan-800 dark:text-cyan-300">Deadlines</span>
+                                    </Link>
+
+                                    <Link
+                                        href="/rbi/repo-rate"
+                                        onClick={() => setIsOpen(false)}
+                                        className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-200 transition-colors"
+                                    >
+                                        <span className="flex items-center gap-2.5">
+                                            <TrendingUp className="size-4 text-violet-600 dark:text-violet-400" />
+                                            <span>RBI Repo Rate Tracker</span>
+                                        </span>
+                                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-violet-100 dark:bg-violet-950/60 text-violet-800 dark:text-violet-300 tabular-nums">5.50%</span>
+                                    </Link>
+
+                                    <Link
+                                        href="/glossary"
+                                        onClick={() => setIsOpen(false)}
+                                        className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-200 transition-colors"
+                                    >
+                                        <span className="flex items-center gap-2.5">
+                                            <BookOpen className="size-4 text-emerald-600 dark:text-emerald-400" />
+                                            <span>Corporate Legal Glossary</span>
+                                        </span>
+                                        <span className="text-[10px] text-slate-400">A–Z</span>
+                                    </Link>
+
+                                    <Link
+                                        href="/bookmarks"
+                                        onClick={() => setIsOpen(false)}
+                                        className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-200 transition-colors"
+                                    >
+                                        <span className="flex items-center gap-2.5">
+                                            <Bookmark className="size-4 text-amber-600 dark:text-amber-400" />
+                                            <span>Saved Bookmarks</span>
+                                        </span>
+                                        <span className="text-slate-400 text-xs">→</span>
+                                    </Link>
+
+                                    <Link
+                                        href="/about"
+                                        onClick={() => setIsOpen(false)}
+                                        className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-200 transition-colors"
+                                    >
+                                        <span className="flex items-center gap-2.5">
+                                            <Building2 className="size-4 text-slate-500 dark:text-slate-400" />
+                                            <span>About CorpLawUpdates</span>
+                                        </span>
+                                        <span className="text-slate-400 text-xs">→</span>
+                                    </Link>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-3 pt-1">
-                            Navigation
-                        </div>
-                        {links.map((link) => (
+                        {/* Drawer Bottom Dock */}
+                        <div className="border-t border-slate-200 dark:border-slate-800 p-4 space-y-3 bg-slate-50/80 dark:bg-slate-950/80 shrink-0">
+                            {/* Newsletter CTA */}
                             <Link
-                                key={link.href}
-                                href={link.href}
-                                className={`flex items-center gap-3 px-3.5 py-3 min-h-[44px] text-sm font-medium rounded-xl transition-all ${
-                                    isActive(link.href)
-                                        ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 font-semibold border-l-4 border-amber-500'
-                                        : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100/70 dark:hover:bg-slate-800/70'
-                                }`}
+                                href="/newsletter"
                                 onClick={() => setIsOpen(false)}
+                                className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-amber-500/15 to-amber-600/10 dark:from-amber-500/20 dark:to-amber-500/10 border border-amber-500/30 text-amber-900 dark:text-amber-200 group transition-all"
                             >
-                                {'icon' in link && link.icon && (
-                                    <link.icon className="size-4 shrink-0 opacity-80" aria-hidden="true" />
-                                )}
-                                {link.label}
+                                <div className="flex flex-col">
+                                    <span className="text-xs font-bold text-navy dark:text-white">Free Weekly Briefing</span>
+                                    <span className="text-[11px] text-slate-600 dark:text-slate-400">Join 500+ legal &amp; corporate professionals</span>
+                                </div>
+                                <ArrowRight className="size-4 text-amber-600 dark:text-amber-400 group-hover:translate-x-0.5 transition-transform" />
                             </Link>
-                        ))}
-                        <div className="pt-4 border-t border-slate-100 dark:border-slate-800 mt-2">
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 px-3 py-1">
-                                Regulator Direct Access
-                            </span>
-                            <div className="mt-2 grid grid-cols-2 gap-1.5">
-                                {categoryItems.map(({ href, label, Icon, color }) => (
-                                    <Link
-                                        key={href}
-                                        href={href}
-                                        className={`flex items-center gap-2 p-2.5 text-xs font-semibold rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-amber-50 dark:hover:bg-slate-800 ${color}`}
-                                        onClick={() => setIsOpen(false)}
-                                    >
-                                        <Icon className="w-3.5 h-3.5 shrink-0 opacity-80" aria-hidden />
-                                        <span>{label}</span>
-                                    </Link>
-                                ))}
+
+                            {/* Utility Strip */}
+                            <div className="flex items-center justify-between pt-1">
+                                <span className="text-xs font-medium text-slate-600 dark:text-slate-400">
+                                    Theme &amp; Notifications
+                                </span>
+                                <div className="flex items-center gap-2">
+                                    <NotificationBell />
+                                    <DarkModeToggle />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </aside>
+                </>
             )}
         </nav>
     )
