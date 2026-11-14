@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation'
 
-export const ADSENSE_CLIENT_ID = 'ca-pub-8806384636897940'
+export const ADSENSE_CLIENT_ID = 'ca-pub-8404756575471756'
 
 export default function AdSenseScript() {
   const pathname = usePathname()

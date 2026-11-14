@@ -5,6 +5,7 @@ ownerdomain=corplawupdates.in
 journeymv.com, bb9707b8-bfe3-4206-9309-6bc7e7923faf, DIRECT, 1363c924529b3998
 
 # Google AdSense Publisher Account
+google.com, pub-8404756575471756, DIRECT, f08c47fec0942fa0
 google.com, pub-8806384636897940, DIRECT, f08c47fec0942fa0
 
 google.com, pub-1601477034266482, DIRECT, f08c47fec0942fa0

@@ -488,239 +488,203 @@ export default function Navbar() {
                 </div>
             </div>
 
-            {/* ─── Off-Canvas Drawer (Mobile & Tablet < 1024px) ─── */}
+            {/* ─── Mobile / Tablet Navigation Menu (< 1024px) ─── */}
             {isOpen && (
-                <>
-                    {/* Backdrop Overlay */}
-                    <div
-                        className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 lg:hidden transition-opacity"
-                        onClick={() => setIsOpen(false)}
-                        aria-hidden="true"
-                    />
+                <div
+                    className="lg:hidden border-t border-slate-200/80 dark:border-slate-800/80 max-h-[85dvh] overflow-y-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl animate-fade-in"
+                    role="region"
+                    aria-label="Navigation menu"
+                >
+                    <div className="w-full sm:max-w-md mx-auto p-4 space-y-5">
+                        {/* Quick Search Button */}
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setIsOpen(false)
+                                if (typeof window !== 'undefined') {
+                                    window.dispatchEvent(new CustomEvent('cluin-open-search'))
+                                }
+                            }}
+                            className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 text-xs font-medium hover:border-amber-400/50 transition-colors"
+                        >
+                            <span className="flex items-center gap-2">
+                                <Search className="size-4 text-slate-400" />
+                                <span>Search circulars, forms, acts...</span>
+                            </span>
+                            <kbd className="px-1.5 py-0.5 rounded-sm bg-slate-200/70 dark:bg-slate-700/70 text-[10px]">Ctrl+K</kbd>
+                        </button>
 
-                    {/* Slide-out Sheet (Capped at max-w-md on tablet) */}
-                    <aside
-                        className="fixed top-0 right-0 bottom-0 w-full sm:max-w-md bg-white dark:bg-slate-900 shadow-2xl z-50 flex flex-col overflow-hidden lg:hidden border-l border-slate-200 dark:border-slate-800 animate-fade-in"
-                        role="dialog"
-                        aria-modal="true"
-                        aria-label="Navigation menu"
-                    >
-                        {/* Drawer Header */}
-                        <div className="flex items-center justify-between p-4 border-b border-slate-200/80 dark:border-slate-800/80">
-                            <Link
-                                href="/"
-                                onClick={() => setIsOpen(false)}
-                                className="flex items-center gap-2"
-                            >
-                                <span className="block w-7 h-7 rounded-lg overflow-hidden shrink-0 bg-slate-900">
-                                    <Image src="/icon-192.png" alt="Logo" width={28} height={28} className="w-full h-full object-cover" />
-                                </span>
-                                <span className="font-heading text-base font-bold text-navy dark:text-white">
-                                    CorpLawUpdates<span className="text-amber-700 dark:text-gold">.in</span>
-                                </span>
-                            </Link>
-                            <button
-                                onClick={() => setIsOpen(false)}
-                                className="flex size-8 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800 text-slate-500 hover:text-navy dark:hover:text-white"
-                                aria-label="Close menu"
-                            >
-                                <X className="size-4.5" aria-hidden="true" />
-                            </button>
+                        {/* 1. Core Workspaces (2x2 Card Grid) */}
+                        <div>
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block mb-2 px-1">
+                                Core Workspaces
+                            </span>
+                            <div className="grid grid-cols-2 gap-2">
+                                <Link
+                                    href="/updates"
+                                    onClick={() => setIsOpen(false)}
+                                    className={`flex flex-col p-3 rounded-xl border transition-all ${
+                                        isActive('/updates')
+                                            ? 'bg-amber-500/10 border-amber-500/40 text-amber-700 dark:text-amber-400'
+                                            : 'bg-slate-50/70 dark:bg-slate-800/50 border-slate-200/80 dark:border-slate-800 hover:bg-amber-50 dark:hover:bg-slate-800'
+                                    }`}
+                                >
+                                    <div className="p-1.5 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 w-fit mb-2">
+                                        <Newspaper className="size-4" />
+                                    </div>
+                                    <span className="text-xs font-bold text-navy dark:text-white">Updates</span>
+                                    <span className="text-[10px] text-slate-500 dark:text-slate-400">Daily circular feed</span>
+                                </Link>
+
+                                <Link
+                                    href="/documents"
+                                    onClick={() => setIsOpen(false)}
+                                    className={`flex flex-col p-3 rounded-xl border transition-all ${
+                                        isActive('/documents')
+                                            ? 'bg-amber-500/10 border-amber-500/40 text-amber-700 dark:text-amber-400'
+                                            : 'bg-slate-50/70 dark:bg-slate-800/50 border-slate-200/80 dark:border-slate-800 hover:bg-amber-50 dark:hover:bg-slate-800'
+                                    }`}
+                                >
+                                    <div className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 w-fit mb-2">
+                                        <FileText className="size-4" />
+                                    </div>
+                                    <span className="text-xs font-bold text-navy dark:text-white">Documents</span>
+                                    <span className="text-[10px] text-slate-500 dark:text-slate-400">Statutory drafting</span>
+                                </Link>
+
+                                <Link
+                                    href="/tools"
+                                    onClick={() => setIsOpen(false)}
+                                    className={`flex flex-col p-3 rounded-xl border transition-all ${
+                                        isActive('/tools')
+                                            ? 'bg-amber-500/10 border-amber-500/40 text-amber-700 dark:text-amber-400'
+                                            : 'bg-slate-50/70 dark:bg-slate-800/50 border-slate-200/80 dark:border-slate-800 hover:bg-amber-50 dark:hover:bg-slate-800'
+                                    }`}
+                                >
+                                    <div className="p-1.5 rounded-lg bg-violet-500/10 text-violet-600 dark:text-violet-400 w-fit mb-2">
+                                        <Wrench className="size-4" />
+                                    </div>
+                                    <span className="text-xs font-bold text-navy dark:text-white">Tools</span>
+                                    <span className="text-[10px] text-slate-500 dark:text-slate-400">Fee calcs &amp; CIN</span>
+                                </Link>
+
+                                <Link
+                                    href="/guides"
+                                    onClick={() => setIsOpen(false)}
+                                    className={`flex flex-col p-3 rounded-xl border transition-all ${
+                                        isActive('/guides')
+                                            ? 'bg-amber-500/10 border-amber-500/40 text-amber-700 dark:text-amber-400'
+                                            : 'bg-slate-50/70 dark:bg-slate-800/50 border-slate-200/80 dark:border-slate-800 hover:bg-amber-50 dark:hover:bg-slate-800'
+                                    }`}
+                                >
+                                    <div className="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 w-fit mb-2">
+                                        <BookOpen className="size-4" />
+                                    </div>
+                                    <span className="text-xs font-bold text-navy dark:text-white">Guides</span>
+                                    <span className="text-[10px] text-slate-500 dark:text-slate-400">Compliance SOPs</span>
+                                </Link>
+                            </div>
                         </div>
 
-                        {/* Drawer Scrollable Content */}
-                        <div className="flex-1 overflow-y-auto p-4 space-y-5">
-                            {/* Quick Search Button */}
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setIsOpen(false)
-                                    if (typeof window !== 'undefined') {
-                                        window.dispatchEvent(new CustomEvent('cluin-open-search'))
-                                    }
-                                }}
-                                className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 text-xs font-medium hover:border-amber-400/50 transition-colors"
-                            >
-                                <span className="flex items-center gap-2">
-                                    <Search className="size-4 text-slate-400" />
-                                    <span>Search circulars, forms, acts...</span>
+                        {/* 2. All 10 Regulators Fast-Access */}
+                        <div>
+                            <div className="flex items-center justify-between mb-2 px-1">
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                                    All 10 Regulatory Areas
                                 </span>
-                                <kbd className="px-1.5 py-0.5 rounded-sm bg-slate-200/70 dark:bg-slate-700/70 text-[10px]">Ctrl+K</kbd>
-                            </button>
-
-                            {/* 1. Core Workspaces (2x2 Card Grid) */}
-                            <div>
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block mb-2 px-1">
-                                    Core Workspaces
-                                </span>
-                                <div className="grid grid-cols-2 gap-2">
-                                    <Link
-                                        href="/updates"
-                                        onClick={() => setIsOpen(false)}
-                                        className={`flex flex-col p-3 rounded-xl border transition-all ${
-                                            isActive('/updates')
-                                                ? 'bg-amber-500/10 border-amber-500/40 text-amber-700 dark:text-amber-400'
-                                                : 'bg-slate-50/70 dark:bg-slate-800/50 border-slate-200/80 dark:border-slate-800 hover:bg-amber-50 dark:hover:bg-slate-800'
-                                        }`}
-                                    >
-                                        <div className="p-1.5 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 w-fit mb-2">
-                                            <Newspaper className="size-4" />
-                                        </div>
-                                        <span className="text-xs font-bold text-navy dark:text-white">Updates</span>
-                                        <span className="text-[10px] text-slate-500 dark:text-slate-400">Daily circular feed</span>
-                                    </Link>
-
-                                    <Link
-                                        href="/documents"
-                                        onClick={() => setIsOpen(false)}
-                                        className={`flex flex-col p-3 rounded-xl border transition-all ${
-                                            isActive('/documents')
-                                                ? 'bg-amber-500/10 border-amber-500/40 text-amber-700 dark:text-amber-400'
-                                                : 'bg-slate-50/70 dark:bg-slate-800/50 border-slate-200/80 dark:border-slate-800 hover:bg-amber-50 dark:hover:bg-slate-800'
-                                        }`}
-                                    >
-                                        <div className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 w-fit mb-2">
-                                            <FileText className="size-4" />
-                                        </div>
-                                        <span className="text-xs font-bold text-navy dark:text-white">Documents</span>
-                                        <span className="text-[10px] text-slate-500 dark:text-slate-400">Statutory drafting</span>
-                                    </Link>
-
-                                    <Link
-                                        href="/tools"
-                                        onClick={() => setIsOpen(false)}
-                                        className={`flex flex-col p-3 rounded-xl border transition-all ${
-                                            isActive('/tools')
-                                                ? 'bg-amber-500/10 border-amber-500/40 text-amber-700 dark:text-amber-400'
-                                                : 'bg-slate-50/70 dark:bg-slate-800/50 border-slate-200/80 dark:border-slate-800 hover:bg-amber-50 dark:hover:bg-slate-800'
-                                        }`}
-                                    >
-                                        <div className="p-1.5 rounded-lg bg-violet-500/10 text-violet-600 dark:text-violet-400 w-fit mb-2">
-                                            <Wrench className="size-4" />
-                                        </div>
-                                        <span className="text-xs font-bold text-navy dark:text-white">Tools</span>
-                                        <span className="text-[10px] text-slate-500 dark:text-slate-400">Fee calcs &amp; CIN</span>
-                                    </Link>
-
-                                    <Link
-                                        href="/guides"
-                                        onClick={() => setIsOpen(false)}
-                                        className={`flex flex-col p-3 rounded-xl border transition-all ${
-                                            isActive('/guides')
-                                                ? 'bg-amber-500/10 border-amber-500/40 text-amber-700 dark:text-amber-400'
-                                                : 'bg-slate-50/70 dark:bg-slate-800/50 border-slate-200/80 dark:border-slate-800 hover:bg-amber-50 dark:hover:bg-slate-800'
-                                        }`}
-                                    >
-                                        <div className="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 w-fit mb-2">
-                                            <BookOpen className="size-4" />
-                                        </div>
-                                        <span className="text-xs font-bold text-navy dark:text-white">Guides</span>
-                                        <span className="text-[10px] text-slate-500 dark:text-slate-400">Compliance SOPs</span>
-                                    </Link>
-                                </div>
+                                <Link
+                                    href="/category"
+                                    onClick={() => setIsOpen(false)}
+                                    className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 hover:underline"
+                                >
+                                    View All →
+                                </Link>
                             </div>
+                            <div className="grid grid-cols-2 gap-1.5">
+                                {allRegulators.map(({ href, label, Icon, color }) => (
+                                    <Link
+                                        key={href}
+                                        href={href}
+                                        onClick={() => setIsOpen(false)}
+                                        className="flex items-center gap-2 p-2 rounded-xl bg-slate-50/80 dark:bg-slate-800/60 hover:bg-amber-50 dark:hover:bg-slate-800 text-xs font-medium text-slate-700 dark:text-slate-200 transition-colors"
+                                    >
+                                        <Icon className={`size-3.5 shrink-0 ${color}`} aria-hidden="true" />
+                                        <span className="truncate">{label}</span>
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
 
-                            {/* 2. All 10 Regulators Fast-Access */}
-                            <div>
-                                <div className="flex items-center justify-between mb-2 px-1">
-                                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-                                        All 10 Regulatory Areas
+                        {/* 3. Statutory Trackers & Shortcuts */}
+                        <div>
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block mb-2 px-1">
+                                Trackers &amp; Utilities
+                            </span>
+                            <div className="space-y-1">
+                                <Link
+                                    href="/calendar"
+                                    onClick={() => setIsOpen(false)}
+                                    className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-200 transition-colors"
+                                >
+                                    <span className="flex items-center gap-2.5">
+                                        <Calendar className="size-4 text-cyan-600 dark:text-cyan-400" />
+                                        <span>Compliance Calendar</span>
                                     </span>
-                                    <Link
-                                        href="/category"
-                                        onClick={() => setIsOpen(false)}
-                                        className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 hover:underline"
-                                    >
-                                        View All →
-                                    </Link>
-                                </div>
-                                <div className="grid grid-cols-2 gap-1.5">
-                                    {allRegulators.map(({ href, label, Icon, color }) => (
-                                        <Link
-                                            key={href}
-                                            href={href}
-                                            onClick={() => setIsOpen(false)}
-                                            className="flex items-center gap-2 p-2 rounded-xl bg-slate-50/80 dark:bg-slate-800/60 hover:bg-amber-50 dark:hover:bg-slate-800 text-xs font-medium text-slate-700 dark:text-slate-200 transition-colors"
-                                        >
-                                            <Icon className={`size-3.5 shrink-0 ${color}`} aria-hidden="true" />
-                                            <span className="truncate">{label}</span>
-                                        </Link>
-                                    ))}
-                                </div>
-                            </div>
+                                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-cyan-100 dark:bg-cyan-950/60 text-cyan-800 dark:text-cyan-300">Deadlines</span>
+                                </Link>
 
-                            {/* 3. Statutory Trackers & Shortcuts */}
-                            <div>
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block mb-2 px-1">
-                                    Trackers &amp; Utilities
-                                </span>
-                                <div className="space-y-1">
-                                    <Link
-                                        href="/calendar"
-                                        onClick={() => setIsOpen(false)}
-                                        className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-200 transition-colors"
-                                    >
-                                        <span className="flex items-center gap-2.5">
-                                            <Calendar className="size-4 text-cyan-600 dark:text-cyan-400" />
-                                            <span>Compliance Calendar</span>
-                                        </span>
-                                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-cyan-100 dark:bg-cyan-950/60 text-cyan-800 dark:text-cyan-300">Deadlines</span>
-                                    </Link>
+                                <Link
+                                    href="/rbi/repo-rate"
+                                    onClick={() => setIsOpen(false)}
+                                    className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-200 transition-colors"
+                                >
+                                    <span className="flex items-center gap-2.5">
+                                        <TrendingUp className="size-4 text-violet-600 dark:text-violet-400" />
+                                        <span>RBI Repo Rate Tracker</span>
+                                    </span>
+                                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-violet-100 dark:bg-violet-950/60 text-violet-800 dark:text-violet-300 tabular-nums">5.50%</span>
+                                </Link>
 
-                                    <Link
-                                        href="/rbi/repo-rate"
-                                        onClick={() => setIsOpen(false)}
-                                        className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-200 transition-colors"
-                                    >
-                                        <span className="flex items-center gap-2.5">
-                                            <TrendingUp className="size-4 text-violet-600 dark:text-violet-400" />
-                                            <span>RBI Repo Rate Tracker</span>
-                                        </span>
-                                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-violet-100 dark:bg-violet-950/60 text-violet-800 dark:text-violet-300 tabular-nums">5.50%</span>
-                                    </Link>
+                                <Link
+                                    href="/glossary"
+                                    onClick={() => setIsOpen(false)}
+                                    className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-200 transition-colors"
+                                >
+                                    <span className="flex items-center gap-2.5">
+                                        <BookOpen className="size-4 text-emerald-600 dark:text-emerald-400" />
+                                        <span>Corporate Legal Glossary</span>
+                                    </span>
+                                    <span className="text-[10px] text-slate-400">A–Z</span>
+                                </Link>
 
-                                    <Link
-                                        href="/glossary"
-                                        onClick={() => setIsOpen(false)}
-                                        className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-200 transition-colors"
-                                    >
-                                        <span className="flex items-center gap-2.5">
-                                            <BookOpen className="size-4 text-emerald-600 dark:text-emerald-400" />
-                                            <span>Corporate Legal Glossary</span>
-                                        </span>
-                                        <span className="text-[10px] text-slate-400">A–Z</span>
-                                    </Link>
+                                <Link
+                                    href="/bookmarks"
+                                    onClick={() => setIsOpen(false)}
+                                    className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-200 transition-colors"
+                                >
+                                    <span className="flex items-center gap-2.5">
+                                        <Bookmark className="size-4 text-amber-600 dark:text-amber-400" />
+                                        <span>Saved Bookmarks</span>
+                                    </span>
+                                    <span className="text-slate-400 text-xs">→</span>
+                                </Link>
 
-                                    <Link
-                                        href="/bookmarks"
-                                        onClick={() => setIsOpen(false)}
-                                        className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-200 transition-colors"
-                                    >
-                                        <span className="flex items-center gap-2.5">
-                                            <Bookmark className="size-4 text-amber-600 dark:text-amber-400" />
-                                            <span>Saved Bookmarks</span>
-                                        </span>
-                                        <span className="text-slate-400 text-xs">→</span>
-                                    </Link>
-
-                                    <Link
-                                        href="/about"
-                                        onClick={() => setIsOpen(false)}
-                                        className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-200 transition-colors"
-                                    >
-                                        <span className="flex items-center gap-2.5">
-                                            <Building2 className="size-4 text-slate-500 dark:text-slate-400" />
-                                            <span>About CorpLawUpdates</span>
-                                        </span>
-                                        <span className="text-slate-400 text-xs">→</span>
-                                    </Link>
-                                </div>
+                                <Link
+                                    href="/about"
+                                    onClick={() => setIsOpen(false)}
+                                    className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 text-xs font-medium text-slate-700 dark:text-slate-200 transition-colors"
+                                >
+                                    <span className="flex items-center gap-2.5">
+                                        <Building2 className="size-4 text-slate-500 dark:text-slate-400" />
+                                        <span>About CorpLawUpdates</span>
+                                    </span>
+                                    <span className="text-slate-400 text-xs">→</span>
+                                </Link>
                             </div>
                         </div>
 
-                        {/* Drawer Bottom Dock */}
-                        <div className="border-t border-slate-200 dark:border-slate-800 p-4 space-y-3 bg-slate-50/80 dark:bg-slate-950/80 shrink-0">
-                            {/* Newsletter CTA */}
+                        {/* 4. Bottom Dock: Free Weekly Briefing + Theme & Notifications */}
+                        <div className="border-t border-slate-200 dark:border-slate-800 pt-4 space-y-3">
                             <Link
                                 href="/newsletter"
                                 onClick={() => setIsOpen(false)}
@@ -733,7 +697,6 @@ export default function Navbar() {
                                 <ArrowRight className="size-4 text-amber-600 dark:text-amber-400 group-hover:translate-x-0.5 transition-transform" />
                             </Link>
 
-                            {/* Utility Strip */}
                             <div className="flex items-center justify-between pt-1">
                                 <span className="text-xs font-medium text-slate-600 dark:text-slate-400">
                                     Theme &amp; Notifications
@@ -744,8 +707,8 @@ export default function Navbar() {
                                 </div>
                             </div>
                         </div>
-                    </aside>
-                </>
+                    </div>
+                </div>
             )}
         </nav>
     )

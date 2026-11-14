@@ -11,7 +11,7 @@ jest.mock('next/navigation', () => ({
 const MediavineScript = require('@/components/MediavineScript').default
 const AdSenseScript = require('@/components/AdSenseScript').default
 
-describe('Dual Google AdSense (ca-pub-8806384636897940) & Mediavine Journey Integration', () => {
+describe('Dual Google AdSense (ca-pub-8404756575471756) & Mediavine Journey Integration', () => {
   it('excludes /admin routes and renders scripts on public routes', () => {
     for (const adminPath of ['/admin', '/admin/login', '/admin/dashboard', '/admin/settings']) {
       currentPath = adminPath
@@ -26,18 +26,18 @@ describe('Dual Google AdSense (ca-pub-8806384636897940) & Mediavine Journey Inte
       expect(adsenseEl).not.toBeNull()
       const children = adsenseEl.props.children
       const scriptEl = children.find((c: any) => c?.type === 'script')
-      expect(scriptEl?.props.src).toContain('client=ca-pub-8806384636897940')
+      expect(scriptEl?.props.src).toContain('client=ca-pub-8404756575471756')
     }
   })
 
-  it('wires both AdSense (ca-pub-8806384636897940) and Mediavine Journey with UX blocklist div in app/layout.tsx', () => {
+  it('wires both AdSense (ca-pub-8404756575471756) and Mediavine Journey with UX blocklist div in app/layout.tsx', () => {
     const layoutContent = fs.readFileSync(path.join(process.cwd(), 'app/layout.tsx'), 'utf8')
 
     expect(layoutContent).toContain("import MediavineScript from '@/components/MediavineScript'")
     expect(layoutContent).toContain("import AdSenseScript from '@/components/AdSenseScript'")
     expect(layoutContent).toContain('<MediavineScript />')
     expect(layoutContent).toContain('<AdSenseScript />')
-    expect(layoutContent).toContain("'google-adsense-account': 'ca-pub-8806384636897940'")
+    expect(layoutContent).toContain("'google-adsense-account': 'ca-pub-8404756575471756'")
     expect(layoutContent).toContain('id="ad-management-config-settings"')
   })
 
@@ -52,7 +52,7 @@ describe('Dual Google AdSense (ca-pub-8806384636897940) & Mediavine Journey Inte
 
   it('serves direct unified ads.txt containing both Google AdSense and Mediavine Journey', async () => {
     const adsTxtPublic = fs.readFileSync(path.join(process.cwd(), 'public/ads.txt'), 'utf8')
-    expect(adsTxtPublic).toContain('google.com, pub-8806384636897940, DIRECT, f08c47fec0942fa0')
+    expect(adsTxtPublic).toContain('google.com, pub-8404756575471756, DIRECT, f08c47fec0942fa0')
     expect(adsTxtPublic).toContain('journeymv.com, bb9707b8-bfe3-4206-9309-6bc7e7923faf, DIRECT, 1363c924529b3998')
 
     const { GET } = await import('@/app/ads.txt/route')
@@ -60,7 +60,7 @@ describe('Dual Google AdSense (ca-pub-8806384636897940) & Mediavine Journey Inte
     expect(res.status).toBe(200)
     expect(res.headers.get('content-type')).toContain('text/plain')
     const text = await res.text()
-    expect(text).toContain('google.com, pub-8806384636897940, DIRECT, f08c47fec0942fa0')
+    expect(text).toContain('google.com, pub-8404756575471756, DIRECT, f08c47fec0942fa0')
     expect(text).toContain('journeymv.com, bb9707b8-bfe3-4206-9309-6bc7e7923faf, DIRECT, 1363c924529b3998')
   })
 })
