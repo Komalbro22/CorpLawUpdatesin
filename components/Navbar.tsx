@@ -28,6 +28,7 @@ import {
     Receipt,
     Newspaper,
     ArrowRight,
+    Mail,
 } from 'lucide-react'
 
 const GlobalSearch = dynamic(() => import('./GlobalSearch'), {
@@ -451,9 +452,10 @@ export default function Navbar() {
                             <Link
                                 href="/newsletter"
                                 className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 shadow-xs transition-all focus:outline-hidden focus:ring-2 focus:ring-amber-400 ml-1"
+                                title="Subscribe to Free Weekly Newsletter"
                             >
-                                <span>Get Briefing</span>
-                                <ArrowRight className="size-3" aria-hidden="true" />
+                                <Mail className="size-3.5" aria-hidden="true" />
+                                <span>Free Newsletter</span>
                             </Link>
                         </div>
                     </div>
@@ -683,7 +685,7 @@ export default function Navbar() {
                             </div>
                         </div>
 
-                        {/* 4. Bottom Dock: Free Weekly Briefing + Theme & Notifications */}
+                        {/* 4. Bottom Dock: Free Weekly Newsletter + Theme & Notifications */}
                         <div className="border-t border-slate-200 dark:border-slate-800 pt-4 space-y-3">
                             <Link
                                 href="/newsletter"
@@ -691,7 +693,10 @@ export default function Navbar() {
                                 className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-amber-500/15 to-amber-600/10 dark:from-amber-500/20 dark:to-amber-500/10 border border-amber-500/30 text-amber-900 dark:text-amber-200 group transition-all"
                             >
                                 <div className="flex flex-col">
-                                    <span className="text-xs font-bold text-navy dark:text-white">Free Weekly Briefing</span>
+                                    <span className="text-xs font-bold text-navy dark:text-white flex items-center gap-1.5">
+                                        <Mail className="size-3.5 text-amber-600 dark:text-amber-400" />
+                                        Free Weekly Newsletter
+                                    </span>
                                     <span className="text-[11px] text-slate-600 dark:text-slate-400">Join 500+ legal &amp; corporate professionals</span>
                                 </div>
                                 <ArrowRight className="size-4 text-amber-600 dark:text-amber-400 group-hover:translate-x-0.5 transition-transform" />
