@@ -286,12 +286,6 @@ const nextConfig = {
         destination: '/updates/form-dir-12-director-kmp-appointment-filing-guide-companies-act-2013',
         permanent: true,
       },
-      // 301 Permanent redirect for Mediavine Journey ads.txt
-      {
-        source: '/ads.txt',
-        destination: 'https://adstxt.journeymv.com/sites/bb9707b8-bfe3-4206-9309-6bc7e7923faf/ads.txt',
-        permanent: true,
-      },
       // 301/308 Permanent redirects for base64 encoded / truncated link: /updates/bWNhLWV4dG* -> /updates/mca-extends-annual-filing-deadlines-fy-2025-26 (7 Nov 2026)
       {
         source: '/updates/bWNhLWV4dG',

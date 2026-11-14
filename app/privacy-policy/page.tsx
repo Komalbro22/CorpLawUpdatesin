@@ -179,25 +179,29 @@ export default function PrivacyPolicyPage() {
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
 
                 <section>
-                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">5. Advertising &amp; Third-Party Ad Networks (Mediavine Journey)</h2>
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">5. Advertising &amp; Third-Party Ad Networks (Mediavine Journey &amp; Google AdSense)</h2>
                     <p className="text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">
-                        CorpLawUpdates.in remains free to access for corporate law professionals, company secretaries, legal practitioners, and compliance teams. To help support platform infrastructure and free legal tools, we partner with Journey by Mediavine and authorized programmatic ad partners for contextual and display advertising.
+                        CorpLawUpdates.in remains free to access for corporate law professionals, company secretaries, legal practitioners, and compliance teams. To help support platform infrastructure and free legal tools, we partner with Journey by Mediavine and Google AdSense for contextual and display advertising.
                     </p>
                     <div className="space-y-4 text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
                         <div>
-                            <h3 className="font-bold text-navy dark:text-slate-200 mb-1.5 text-xs uppercase tracking-wide">A. Mediavine Journey &amp; Advertising Cookies</h3>
+                            <h3 className="font-bold text-navy dark:text-slate-200 mb-1.5 text-xs uppercase tracking-wide">A. Advertising Cookies &amp; Partners</h3>
                             <p>
-                                Journey by Mediavine and its certified programmatic demand partners use cookies or device identifiers to serve non-intrusive contextual ads, prevent ad fraud, and cap ad repetition based on reader visits to CorpLawUpdates.in and other websites.
+                                Journey by Mediavine, Google AdSense, and certified programmatic demand partners use cookies or device identifiers to serve non-intrusive contextual ads, prevent ad fraud, and cap ad repetition based on reader visits to CorpLawUpdates.in and other websites.
                             </p>
                         </div>
                         <div>
                             <h3 className="font-bold text-navy dark:text-slate-200 mb-1.5 text-xs uppercase tracking-wide">B. Managing Personalized Advertising Preferences</h3>
                             <p>
-                                You can learn more about Mediavine&apos;s data collection and opt out of personalized advertising at any time by visiting the{' '}
+                                You can learn more and opt out of personalized advertising at any time by visiting{' '}
+                                <a href="https://myadcenter.google.com/" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 hover:underline font-medium">
+                                    Google Ad Settings
+                                </a>
+                                , the{' '}
                                 <a href="https://www.mediavine.com/privacy-policy/" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 hover:underline font-medium">
                                     Mediavine Privacy Policy
                                 </a>
-                                {' '}or{' '}
+                                , or{' '}
                                 <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 hover:underline font-medium">
                                     www.aboutads.info
                                 </a>
@@ -254,7 +258,7 @@ export default function PrivacyPolicyPage() {
                                 <li><strong>Essential Cookies:</strong> Required for core site operations (navigation, security, authentication tokens, theme persistence). These cannot be disabled.</li>
                                 <li><strong>Analytics Cookies:</strong> Help us measure readership and optimize site speed (Google Analytics 4, Microsoft Clarity, PostHog). You can accept or reject these.</li>
                                 <li><strong>Functional Cookies:</strong> Remember your user interface preferences and tool inputs. You can accept or reject these.</li>
-                                <li><strong>Advertising Cookies:</strong> Used by Journey by Mediavine and authorized partners to serve ads, cap frequency, and prevent fraud. You can manage advertising consent in our cookie banner.</li>
+                                <li><strong>Advertising Cookies:</strong> Used by Google AdSense, Journey by Mediavine, and authorized partners to serve ads, cap frequency, and prevent fraud. You can manage advertising consent in our cookie banner or Google Ad Settings.</li>
                             </ul>
                             <p className="mt-3 text-sm italic">
                                 Your consent choices are stored locally on your device and can be changed at any time using the cookie preferences link in our footer.
