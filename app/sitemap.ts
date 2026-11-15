@@ -14,6 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     updated_at: string | null
     category: string | null
     noindex: boolean
+    active_banner_id?: string | null
   }
 
   // Fetch published articles (paginated to handle > 1000 items)
@@ -24,7 +25,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   while (true) {
     const { data, error } = await supabaseAdmin
       .from('updates')
-      .select('slug, published_at, updated_at, category, noindex')
+      .select('slug, published_at, updated_at, category, noindex, active_banner_id')
       .not('published_at', 'is', null)
       .order('published_at', { ascending: false })
       .range(articlePage * pageSize, (articlePage + 1) * pageSize - 1)
@@ -166,11 +167,32 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...(date ? { lastModified: date } : {}),
   }))
 
+  // Fetch active banner URLs for articles that have active_banner_id
+  const bannerMap = new Map<string, string>()
+  const activeBannerIds = (articles || []).map(a => a.active_banner_id).filter(Boolean) as string[]
+  if (activeBannerIds.length > 0 && supabaseAdmin) {
+    try {
+      const { data: bannerRows } = await supabaseAdmin
+        .from('banner_assets')
+        .select('id, formats')
+        .in('id', activeBannerIds)
+      ;(bannerRows || []).forEach(b => {
+        if (b.formats?.og_png) {
+          bannerMap.set(b.id, b.formats.og_png)
+        }
+      })
+    } catch {
+      // Non-blocking
+    }
+  }
+
   const articlePages: MetadataRoute.Sitemap = (articles || []).map(article => {
     const rawDate = article.updated_at || article.published_at
+    const bannerUrl = article.active_banner_id ? bannerMap.get(article.active_banner_id) : undefined
     return {
       url: `${BASE_URL}/updates/${article.slug}`,
       ...(rawDate ? { lastModified: new Date(rawDate) } : {}),
+      ...(bannerUrl ? { images: [bannerUrl] } : {}),
     }
   })
 

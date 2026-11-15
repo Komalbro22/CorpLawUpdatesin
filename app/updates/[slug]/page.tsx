@@ -65,7 +65,7 @@ export async function generateMetadata(
   
   const { data: update } = await supabase
     .from('updates')
-    .select('title, summary, category, published_at, updated_at, tags, slug, seo_title, seo_description, content, featured_image_url, noindex, is_sponsored, contributor_name')
+    .select('title, summary, category, published_at, updated_at, tags, slug, seo_title, seo_description, content, featured_image_url, noindex, is_sponsored, contributor_name, active_banner_id')
     .ilike('slug', decodedSlug)
     .not('published_at', 'is', null)
     .lte('published_at', new Date().toISOString())
@@ -96,6 +96,20 @@ export async function generateMetadata(
   const imageUrl = extractedImageUrl 
     ? (extractedImageUrl.startsWith('http') ? extractedImageUrl : `https://www.corplawupdates.in${extractedImageUrl}`)
     : `https://www.corplawupdates.in/api/og?title=${encodeURIComponent(update.title)}&category=${encodeURIComponent(update.category || '')}`
+
+  let activeBanner: any = null
+  if ((update as any).active_banner_id) {
+    const { data: b } = await supabase
+      .from('banner_assets')
+      .select('formats, alt')
+      .eq('id', (update as any).active_banner_id)
+      .eq('status', 'active')
+      .maybeSingle()
+    if (b) activeBanner = b
+  }
+
+  const ogImageUrl = activeBanner ? activeBanner.formats.og_png : imageUrl
+  const ogAlt = activeBanner ? activeBanner.alt : update.title
 
   return {
     title: titleStr,
@@ -132,13 +146,21 @@ export async function generateMetadata(
       modifiedTime: update.updated_at || update.published_at || undefined,
       section: update.category || undefined,
       tags: update.tags || [],
-      images: [{ url: imageUrl, width: 1200, height: 630, alt: update.title }],
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: ogAlt,
+          type: activeBanner ? 'image/png' : undefined,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title: update.title,
       description: update.summary,
-      images: [imageUrl],
+      images: [ogImageUrl],
     },
   }
 }
@@ -174,6 +196,17 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
 
     // These fields are now included in UPDATE_DETAIL_COLUMNS — no second query needed
     const geoData = update;
+
+    let activeBanner: any = null
+    if ((update as any).active_banner_id) {
+      const { data: b } = await supabase
+        .from('banner_assets')
+        .select('formats, alt')
+        .eq('id', (update as any).active_banner_id)
+        .eq('status', 'active')
+        .maybeSingle()
+      if (b) activeBanner = b
+    }
 
     const { data: relatedRes } = update.category
       ? await supabase
@@ -809,17 +842,33 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                 {update.content && <TableOfContents content={update.content} />}
                 <ErrorBoundary>
                     <div className="article-content entry-content post-content" suppressHydrationWarning>
-                        {leadingFeaturedImage && (
-                            <div className="mb-6 overflow-hidden rounded-2xl" dangerouslySetInnerHTML={{ __html: leadingFeaturedImage }} />
-                        )}
-                        {!leadingFeaturedImage && fallbackFeaturedImage && (
-                            <div className="mb-6 overflow-hidden rounded-2xl">
+                        {activeBanner ? (
+                            <div className="mb-6 overflow-hidden rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
                                 <img
-                                    src={fallbackFeaturedImage}
-                                    alt={update.title}
-                                    className="w-full h-auto object-cover rounded-2xl border border-slate-200/80 dark:border-slate-800"
+                                    src={activeBanner.formats.hero_webp || activeBanner.formats.og_png}
+                                    alt={activeBanner.alt || update.title}
+                                    width={1200}
+                                    height={630}
+                                    fetchPriority="high"
+                                    decoding="async"
+                                    className="w-full h-auto object-cover rounded-2xl"
                                 />
                             </div>
+                        ) : (
+                            <>
+                                {leadingFeaturedImage && (
+                                    <div className="mb-6 overflow-hidden rounded-2xl" dangerouslySetInnerHTML={{ __html: leadingFeaturedImage }} />
+                                )}
+                                {!leadingFeaturedImage && fallbackFeaturedImage && (
+                                    <div className="mb-6 overflow-hidden rounded-2xl">
+                                        <img
+                                            src={fallbackFeaturedImage}
+                                            alt={update.title}
+                                            className="w-full h-auto object-cover rounded-2xl border border-slate-200/80 dark:border-slate-800"
+                                        />
+                                    </div>
+                                )}
+                            </>
                         )}
 
                         {autoBadgeType === 'guide' && (
@@ -1120,7 +1169,17 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
               ].join(', '),
               inLanguage: 'en-IN',
               isAccessibleForFree: true,
-              ...(imageUrl ? { 
+              ...(activeBanner ? {
+                image: [
+                  {
+                    '@type': 'ImageObject',
+                    url: activeBanner.formats.og_png,
+                    width: 1200,
+                    height: 630,
+                    caption: activeBanner.alt,
+                  }
+                ]
+              } : imageUrl ? { 
                 image: [
                   { 
                     '@type': 'ImageObject', 

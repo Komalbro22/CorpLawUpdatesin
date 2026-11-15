@@ -12,8 +12,11 @@ module.exports = {
     '^next/font/google$': '<rootDir>/__tests__/__mocks__/next-font-google.ts',
     // Mock heavy server-only third-party packages
     '^resend$': '<rootDir>/__tests__/__mocks__/resend.ts',
+    // Satori-html and ultrahtml resolution in Jest
+    '^ultrahtml$': '<rootDir>/node_modules/ultrahtml/dist/index.js',
+    '^ultrahtml/(.*)$': '<rootDir>/node_modules/ultrahtml/dist/$1.js',
   },
-  transformIgnorePatterns: ['node_modules/(?!(svix|htmlparser2|dom-serializer|entities|domhandler|domutils|domelementtype)/)'],
+  transformIgnorePatterns: ['node_modules/(?!(svix|htmlparser2|dom-serializer|entities|domhandler|domutils|domelementtype|satori-html|ultrahtml)/)'],
   transform: {
     '^.+\\.(tsx?|mjs|jsx?)$': ['ts-jest', {
       tsconfig: {

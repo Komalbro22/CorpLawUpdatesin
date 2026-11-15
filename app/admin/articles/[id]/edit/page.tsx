@@ -17,6 +17,7 @@ import { optimizeImageClientSide } from '@/lib/image-optimizer'
 import LinkChecker from '@/components/admin/LinkChecker'
 import SponsoredSettings from '@/components/admin/SponsoredSettings'
 import EditorialFormatSelector from '@/components/admin/EditorialFormatSelector'
+import BannerEditorTab from '@/components/admin/BannerEditorTab'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 
@@ -73,7 +74,8 @@ export default function EditArticle() {
     const [pageLoading, setPageLoading] = useState(true)
     const [error, setError] = useState('')
     const [success, setSuccess] = useState(false)
-    const [activeTab, setActiveTab] = useState<'write' | 'preview'>('write')
+    const [activeTab, setActiveTab] = useState<'write' | 'banner' | 'preview'>('write')
+    const [activeBannerId, setActiveBannerId] = useState<string | null>(null)
     const [uploadingImage, setUploadingImage] = useState(false)
 
     const [showCleanConfirm, setShowCleanConfirm] = useState(false)
@@ -100,6 +102,7 @@ export default function EditArticle() {
                 }
                 const data = await res.json()
                 setTitle(data.title || '')
+                setActiveBannerId(data.active_banner_id || null)
                 setSlug(data.slug || '')
                 setSlugEdited(true)
                 setSummary(data.summary || '')
@@ -450,24 +453,56 @@ export default function EditArticle() {
                     Edit article
                 </h1>
 
-                {/* Mobile Tabs */}
-                <div className="flex lg:hidden bg-slate-200 rounded-lg p-1">
+                {/* Editor Tabs */}
+                <div className="flex bg-slate-200/80 rounded-xl p-1 gap-1">
                     <button
+                        type="button"
                         onClick={() => setActiveTab('write')}
-                        className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${activeTab === 'write' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600'}`}
+                        className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all ${
+                            activeTab === 'write'
+                                ? 'bg-white text-slate-900 shadow-xs'
+                                : 'text-slate-600 hover:text-slate-900'
+                        }`}
                     >
-                        Edit
+                        Edit Article
                     </button>
                     <button
+                        type="button"
+                        onClick={() => setActiveTab('banner')}
+                        className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 ${
+                            activeTab === 'banner'
+                                ? 'bg-amber-500 text-slate-950 shadow-xs'
+                                : 'text-slate-700 hover:text-amber-800'
+                        }`}
+                    >
+                        🎨 Banner Studio
+                    </button>
+                    <button
+                        type="button"
                         onClick={() => setActiveTab('preview')}
-                        className={`px-4 py-1.5 text-sm font-medium rounded-md transition-colors ${activeTab === 'preview' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600'}`}
+                        className={`lg:hidden px-4 py-1.5 text-xs font-bold rounded-lg transition-all ${
+                            activeTab === 'preview'
+                                ? 'bg-white text-slate-900 shadow-xs'
+                                : 'text-slate-600 hover:text-slate-900'
+                        }`}
                     >
                         Preview
                     </button>
                 </div>
             </div>
 
-            <div className="flex flex-col lg:flex-row gap-8">
+            {activeTab === 'banner' ? (
+                <BannerEditorTab
+                    articleId={id}
+                    articleSlug={slug}
+                    articleTitle={title}
+                    articleSummary={summary}
+                    articleCategory={category}
+                    initialActiveBannerId={activeBannerId}
+                    showToast={showToast}
+                />
+            ) : (
+                <div className="flex flex-col lg:flex-row gap-8">
                 {/* LEFT COLUMN - FORM */}
                 <div className={`w-full lg:w-[60%] space-y-6 ${activeTab === 'preview' ? 'hidden lg:block' : 'block'}`}>
                     {/* Title */}
@@ -1140,6 +1175,7 @@ export default function EditArticle() {
                     </div>
                 </div>
             </div>
+            )}
 
             {/* STICKY BOTTOM ACTION BAR */}
             <div className="fixed bottom-0 left-0 lg:left-[240px] right-0 bg-white  border-t border-slate-200  px-6 py-4 flex flex-col sm:flex-row justify-between items-center z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] gap-4 sm:gap-0">

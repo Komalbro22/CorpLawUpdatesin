@@ -1,6 +1,6 @@
 {
   "name": "corplawupdates",
-  "version": "2.72.9",
+  "version": "2.73.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -13,6 +13,7 @@
   "dependencies": {
     "@google-analytics/data": "^7.2.1",
     "@microsoft/clarity": "^1.0.2",
+    "@resvg/resvg-js": "^2.6.2",
     "@supabase/supabase-js": "^2.117.3",
     "@uiw/react-md-editor": "^4.1.2",
     "@upstash/ratelimit": "^2.2.0",
@@ -42,6 +43,8 @@
     "remark-gfm": "^4.0.1",
     "resend": "^6.32.1",
     "sanitize-html": "^2.18.0",
+    "satori": "^0.63.2",
+    "satori-html": "^0.3.2",
     "svix": "^2.8.0",
     "uuid": "^14.0.2",
     "web-push": "^3.6.7",
@@ -58,6 +61,7 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@types/sanitize-html": "^2.16.2",
+    "@types/sharp": "^0.31.1",
     "@types/web-push": "^3.6.4",
     "@typescript/native": "npm:typescript@^7.0.2",
     "eslint": "^10.12.0",
