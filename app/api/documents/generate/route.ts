@@ -207,7 +207,7 @@ export async function POST(request: Request) {
 
     // Client IP Parsing
     const forwarded = request.headers.get('x-forwarded-for')
-    const ip = forwarded ? forwarded.split(',')[0].trim() : request.headers.get('x-real-ip') ?? '127.0.0.1'
+    const ip = forwarded ? forwarded.split(',')[0].trim() : request.headers.get('x-real-ip') ?? 'unresolved-client-ip'
 
     // Load rate limit settings
     const { data: settingsData } = await supabaseAdmin

@@ -264,6 +264,31 @@ function wrapRuns(
   return wrappedLines
 }
 
+function isSafeExternalUrl(rawUrl: string): boolean {
+  try {
+    const parsed = new URL(rawUrl)
+    if (parsed.protocol !== 'https:') return false
+    const hostname = parsed.hostname.toLowerCase()
+    if (
+      hostname === 'localhost' ||
+      hostname.endsWith('.localhost') ||
+      hostname === '127.0.0.1' ||
+      hostname === '::1' ||
+      hostname === '169.254.169.254' ||
+      /^10\./.test(hostname) ||
+      /^192\.168\./.test(hostname) ||
+      /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(hostname) ||
+      /^fc00:/i.test(hostname) ||
+      /^fe80:/i.test(hostname)
+    ) {
+      return false
+    }
+    return true
+  } catch {
+    return false
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const { 
@@ -286,7 +311,7 @@ export async function POST(request: Request) {
     let letterheadPdfDoc: PDFDocument | null = null
     const isLetterheadPdf = letterhead_url && letterhead_url.toLowerCase().endsWith('.pdf')
 
-    if (letterhead_url) {
+    if (letterhead_url && isSafeExternalUrl(letterhead_url)) {
       try {
         const imgRes = await fetch(letterhead_url)
         if (imgRes.ok) {

@@ -1256,6 +1256,8 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
             )}
             {/* Floating WhatsApp Channel Button (Appears on scroll >= 400px, dismissible for 30 days, mobile ad-safe) */}
             <WhatsAppFloatingButton />
+            {/* Mobile Reading Navigation Bar (TOC drawer, font adjuster, progress) */}
+            <MobileReadingBar title={update.title} />
         </article>
       </div>
     )

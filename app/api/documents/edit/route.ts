@@ -57,10 +57,7 @@ export async function POST(request: Request) {
       }
 
       if (!classification) {
-        const host = request.headers.get('host') || 'localhost:3000';
-        const protocol = host.includes('localhost') || host.includes('127.0.0.1') ? 'http' : 'https';
-        const origin = request.headers.get('origin') || `${protocol}://${host}`;
-
+                const origin = process.env.NEXT_PUBLIC_APP_URL || 'https://www.corplawupdates.in';
         const classifyResponse = await fetch(`${origin}/api/rule-engine/classify`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

@@ -133,7 +133,7 @@ export default function TableOfContents({ content, inline = false, hideMobile = 
     <nav
       ref={sidebarNavRef}
       aria-label="Table of contents"
-      className={`hidden min-[1480px]:block fixed right-6 top-24 w-64 max-h-[calc(100vh-7rem)] overflow-y-auto pr-1 print:hidden z-30 transition-opacity duration-300 scrollbar-thin ${atFooter ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+      className={`hidden min-[1280px]:block fixed right-6 top-24 w-64 max-h-[calc(100vh-7rem)] overflow-y-auto pr-1 print:hidden z-30 transition-opacity duration-300 scrollbar-thin ${atFooter ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
     >
       <div className="p-2">
         <p className="text-[12px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-widest mb-3 flex items-center gap-1.5 font-sans">
@@ -170,7 +170,7 @@ export default function TableOfContents({ content, inline = false, hideMobile = 
 
   /* Mobile collapsible contents */
   const MobilePanel = (
-    <div className="min-[1480px]:hidden my-6 print:hidden">
+    <div className="min-[1280px]:hidden my-6 print:hidden">
       <button
         onClick={() => setMobileOpen(prev => !prev)}
         aria-expanded={mobileOpen}
