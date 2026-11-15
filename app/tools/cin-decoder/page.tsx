@@ -48,6 +48,7 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
   const resolvedParams = await searchParams
   const inputCin = (resolvedParams?.cin || 'L21091MH1945PLC004520').trim().toUpperCase()
   const breakdown = decodeCIN(inputCin)
+  const isLlpin = /^[A-Z]{3}-?\d{4}$/i.test(inputCin)
 
   const sampleCins = [
     { label: 'Tata Motors (Public Listed)', cin: 'L21091MH1945PLC004520' },
@@ -291,6 +292,25 @@ export default async function CinDecoderToolPage({ searchParams }: Props) {
                 <div className="font-bold text-base text-navy dark:text-white mb-1">RoC Serial Number</div>
                 <div className="text-xs text-slate-500 dark:text-slate-400">Unique 6-digit registration serial code.</div>
               </div>
+            </div>
+          </div>
+        ) : isLlpin ? (
+          <div className="p-8 text-center bg-white dark:bg-slate-900 rounded-3xl border border-amber-300 dark:border-amber-700/60 text-slate-800 dark:text-slate-100 shadow-sm">
+            <Building2 className="size-8 mx-auto mb-2 text-amber-500" aria-hidden="true" />
+            <h3 className="text-lg font-bold text-navy dark:text-amber-400">LLPIN (Limited Liability Partnership) Detected</h3>
+            <p className="text-xs mt-2 text-slate-600 dark:text-slate-300 max-w-xl mx-auto leading-relaxed">
+              The identifier <span className="font-mono font-bold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/50 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-800">{inputCin}</span> follows the LLPIN format (3 letters + 4 digits) assigned under the Limited Liability Partnership Act, 2008.
+            </p>
+            <p className="text-xs mt-1 text-slate-500 dark:text-slate-400 max-w-xl mx-auto">
+              This CIN Decoder is designed for 21-digit Corporate Identification Numbers issued to Companies under the Companies Act, 2013. Unlike Companies, LLPs do not encode state RoC, incorporation year, or NIC industrial codes in their identifier string.
+            </p>
+            <div className="mt-4">
+              <Link
+                href="/tools"
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-navy hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition-all shadow-xs"
+              >
+                Explore Other MCA Compliance Tools
+              </Link>
             </div>
           </div>
         ) : (

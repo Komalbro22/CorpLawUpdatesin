@@ -276,6 +276,17 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // 301 Permanent redirect for privacy policy alias
+      {
+        source: '/privacy',
+        destination: '/privacy-policy',
+        permanent: true,
+      },
+      {
+        source: '/privacy/',
+        destination: '/privacy-policy',
+        permanent: true,
+      },
       // 308 Permanent redirect for DIR-12 filing guide from Document Set spokes
       {
         source: '/documents/dir-12-guide',

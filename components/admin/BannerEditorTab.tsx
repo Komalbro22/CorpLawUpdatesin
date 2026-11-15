@@ -206,18 +206,22 @@ export default function BannerEditorTab({
     }
 
     const computedAlt =
-      alt.trim() ||
-      `${regulator} circular on ${headline}. ${sub || ''}`.slice(0, 135).trim()
+      (
+        alt.trim() ||
+        `${regulator} circular on ${headline}. ${sub || ''}`
+      )
+        .slice(0, 135)
+        .trim()
 
     return {
       v: 1,
       regulator,
       headline,
-      sub: sub || undefined,
+      sub: sub ? sub.slice(0, 100) : undefined,
       action: action || undefined,
       dateLabel,
       impact,
-      alt: computedAlt.length < 20 ? `${computedAlt} - Official Compliance Update` : computedAlt,
+      alt: computedAlt.length < 20 ? `${computedAlt} - Official Compliance Update`.slice(0, 135) : computedAlt,
       visual,
     }
   }, [
@@ -325,7 +329,7 @@ export default function BannerEditorTab({
     } else {
       suggestion = `${regulator} official compliance banner for ${headline}`
     }
-    setAlt(suggestion.slice(0, 240))
+    setAlt(suggestion.slice(0, 135))
     showToast('Auto-suggested Alt text created!', 'info')
   }
 
@@ -480,6 +484,64 @@ export default function BannerEditorTab({
           </button>
         </div>
       </div>
+
+      {/* Active Live Banner Card */}
+      {activeBanner && (
+        <div className="bg-gradient-to-r from-emerald-50/90 via-teal-50/60 to-slate-50/50 border-2 border-emerald-300 rounded-2xl p-5 shadow-sm space-y-3">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-36 sm:w-48 aspect-[1200/630] rounded-xl overflow-hidden shadow-md border border-emerald-200 shrink-0 bg-slate-900">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={activeBanner.formats.og_png}
+                  alt={activeBanner.alt}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wide bg-emerald-200 text-emerald-900 border border-emerald-300 flex items-center gap-1">
+                    <CheckCircle2 className="size-3" /> Live Active Banner
+                  </span>
+                  <span className="text-[11px] text-slate-500">
+                    Source: <strong className="text-slate-800 uppercase">{activeBanner.source}</strong> ({activeBanner.created_by})
+                  </span>
+                </div>
+                <h3 className="font-heading font-bold text-base text-slate-900 leading-tight">
+                  {activeBanner.spec?.headline || activeBanner.alt}
+                </h3>
+                {activeBanner.spec?.sub && (
+                  <p className="text-xs text-slate-600 line-clamp-1 mt-0.5">
+                    {activeBanner.spec.sub}
+                  </p>
+                )}
+                <p className="text-[11px] text-slate-400 mt-1">
+                  Currently serving live on article hero, OpenGraph cards, Twitter cards, and Google News sitemaps.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 self-end md:self-center shrink-0">
+              <button
+                type="button"
+                onClick={() => copyToClipboard(activeBanner.formats.og_png)}
+                className="px-3 py-2 text-xs font-semibold rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer"
+              >
+                <Copy className="size-3.5" />
+                Copy CDN Link
+              </button>
+              <button
+                type="button"
+                onClick={handleRevertToLegacy}
+                className="px-3 py-2 text-xs font-semibold rounded-xl border border-slate-300 bg-white hover:bg-rose-50 hover:border-rose-300 hover:text-rose-700 text-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer"
+              >
+                <RotateCcw className="size-3.5" />
+                Revert to Legacy
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Prominent Candidate Banner Ready For Review */}
       {(() => {
@@ -650,15 +712,15 @@ export default function BannerEditorTab({
                     <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Sub-Headline</label>
                     <span
                       className={`text-xs font-mono font-semibold ${
-                        sub.length > 110 ? 'text-amber-600' : 'text-slate-400'
+                        sub.length > 90 ? 'text-amber-600' : 'text-slate-400'
                       }`}
                     >
-                      {sub.length} / 140
+                      {sub.length} / 100
                     </span>
                   </div>
                   <input
                     type="text"
-                    maxLength={140}
+                    maxLength={100}
                     value={sub}
                     onChange={(e) => setSub(e.target.value)}
                     placeholder="Brief 1-line clarification..."
@@ -1066,9 +1128,18 @@ export default function BannerEditorTab({
               {/* Alt Text with Auto-Suggest */}
               <div className="pt-2 border-t border-slate-100">
                 <div className="flex justify-between items-center mb-1">
-                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                    Accessibility &amp; SEO Alt Text <span className="text-red-500">*</span>
-                  </label>
+                  <div className="flex items-center gap-2">
+                    <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      Accessibility &amp; SEO Alt Text <span className="text-red-500">*</span>
+                    </label>
+                    <span
+                      className={`text-xs font-mono font-semibold ${
+                        alt.length > 130 ? 'text-amber-600' : 'text-slate-400'
+                      }`}
+                    >
+                      {alt.length} / 140
+                    </span>
+                  </div>
                   <button
                     type="button"
                     onClick={handleAutoSuggestAlt}
@@ -1079,14 +1150,14 @@ export default function BannerEditorTab({
                 </div>
                 <input
                   type="text"
-                  maxLength={250}
+                  maxLength={140}
                   value={alt}
                   onChange={(e) => setAlt(e.target.value)}
                   placeholder="Detailed visual description for screen readers and Google Image indexer..."
                   className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-400 focus:outline-hidden"
                 />
                 <span className="text-[11px] text-slate-400 mt-1 block">
-                  Must describe the specific dates, percentages, or numbers shown on the banner.
+                  Must describe the specific dates, percentages, or numbers shown on the banner (max 140 chars).
                 </span>
               </div>
             </div>
@@ -1228,6 +1299,30 @@ export default function BannerEditorTab({
                   <RefreshCw className="size-6 animate-spin mx-auto mb-2 text-amber-400" />
                   Generating pixel-perfect banner...
                 </div>
+              ) : activeBanner ? (
+                <div className="relative w-full h-full">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={activeBanner.formats.og_png}
+                    alt={activeBanner.alt}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-2.5 right-2.5 bg-emerald-950/80 text-emerald-300 border border-emerald-500/50 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 backdrop-blur-xs">
+                    <CheckCircle2 className="size-3" /> Live Active Banner
+                  </div>
+                </div>
+              ) : banners.find((b) => b.status === 'candidate') ? (
+                <div className="relative w-full h-full">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={banners.find((b) => b.status === 'candidate')!.formats.og_png}
+                    alt={banners.find((b) => b.status === 'candidate')!.alt}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-2.5 right-2.5 bg-amber-950/80 text-amber-300 border border-amber-500/50 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 backdrop-blur-xs">
+                    Candidate Banner
+                  </div>
+                </div>
               ) : (
                 <div className="text-center text-slate-400 text-xs p-4">
                   Adjust spec fields to generate live banner
@@ -1256,103 +1351,123 @@ export default function BannerEditorTab({
             )}
 
             {/* 300px Thumbnail Test */}
-            <div className="pt-3 border-t border-slate-100">
-              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-2">
-                300px Legibility Check (Mobile Feed / Google Discover Card)
-              </span>
-              <div className="w-[300px] aspect-[1200/630] rounded-lg overflow-hidden border border-slate-300 shadow-xs">
-                {previewPng && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={previewPng} alt="300px check" className="w-full h-full object-cover" />
-                )}
-              </div>
-            </div>
+            {(() => {
+              const cardImg =
+                previewPng ||
+                activeBanner?.formats.og_png ||
+                banners.find((b) => b.status === 'candidate')?.formats.og_png
+
+              return (
+                <div className="pt-3 border-t border-slate-100">
+                  <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-2">
+                    300px Legibility Check (Mobile Feed / Google Discover Card)
+                  </span>
+                  <div className="w-[300px] aspect-[1200/630] rounded-lg overflow-hidden border border-slate-300 shadow-xs bg-slate-900 flex items-center justify-center">
+                    {cardImg ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={cardImg} alt="300px check" className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-[10px] text-slate-500 font-mono">No banner image yet</span>
+                    )}
+                  </div>
+                </div>
+              )
+            })()}
           </div>
 
           {/* Social Media Card Mocks */}
-          <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs space-y-3">
-            <div className="flex justify-between items-center mb-1">
-              <span className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                <Share2 className="size-3.5 text-slate-500" /> Social Card Mocks
-              </span>
-              <div className="flex gap-1 text-[11px]">
-                {(['discover', 'whatsapp', 'linkedin', 'x'] as const).map((tab) => (
-                  <button
-                    key={tab}
-                    type="button"
-                    onClick={() => setSocialTab(tab)}
-                    className={`px-2 py-0.5 rounded-md font-bold uppercase transition-all ${
-                      socialTab === tab
-                        ? 'bg-slate-900 text-white'
-                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                    }`}
-                  >
-                    {tab}
-                  </button>
-                ))}
-              </div>
-            </div>
+          {(() => {
+            const cardImg =
+              previewPng ||
+              activeBanner?.formats.og_png ||
+              banners.find((b) => b.status === 'candidate')?.formats.og_png
 
-            {/* Mock Render Box */}
-            <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs">
-              {socialTab === 'discover' && (
-                <div className="bg-white rounded-xl shadow-xs border border-slate-200 overflow-hidden max-w-sm mx-auto">
-                  {previewPng && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={previewPng} alt="Google Discover mock" className="w-full aspect-[16/9] object-cover" />
-                  )}
-                  <div className="p-3">
-                    <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">CorpLawUpdates.in</span>
-                    <h4 className="font-heading font-bold text-sm text-slate-900 leading-tight mt-1">{articleTitle}</h4>
-                    <p className="text-[11px] text-slate-500 line-clamp-2 mt-1">{articleSummary}</p>
+            return (
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs space-y-3">
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                    <Share2 className="size-3.5 text-slate-500" /> Social Card Mocks
+                  </span>
+                  <div className="flex gap-1 text-[11px]">
+                    {(['discover', 'whatsapp', 'linkedin', 'x'] as const).map((tab) => (
+                      <button
+                        key={tab}
+                        type="button"
+                        onClick={() => setSocialTab(tab)}
+                        className={`px-2 py-0.5 rounded-md font-bold uppercase transition-all ${
+                          socialTab === tab
+                            ? 'bg-slate-900 text-white'
+                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        }`}
+                      >
+                        {tab}
+                      </button>
+                    ))}
                   </div>
                 </div>
-              )}
 
-              {socialTab === 'whatsapp' && (
-                <div className="bg-[#E7F3E8] p-2.5 rounded-xl border border-[#D0E7D2] max-w-sm mx-auto">
-                  <div className="bg-white rounded-lg overflow-hidden border border-slate-200">
-                    {previewPng && (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={previewPng} alt="WhatsApp mock" className="w-full aspect-[1200/630] object-cover" />
-                    )}
-                    <div className="p-2">
-                      <span className="text-[10px] text-slate-400">corplawupdates.in</span>
-                      <h4 className="font-bold text-xs text-slate-900 line-clamp-1">{articleTitle}</h4>
-                      <p className="text-[10px] text-slate-500 line-clamp-2">{articleSummary}</p>
+                {/* Mock Render Box */}
+                <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs">
+                  {socialTab === 'discover' && (
+                    <div className="bg-white rounded-xl shadow-xs border border-slate-200 overflow-hidden max-w-sm mx-auto">
+                      {cardImg && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={cardImg} alt="Google Discover mock" className="w-full aspect-[16/9] object-cover" />
+                      )}
+                      <div className="p-3">
+                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">CorpLawUpdates.in</span>
+                        <h4 className="font-heading font-bold text-sm text-slate-900 leading-tight mt-1">{articleTitle}</h4>
+                        <p className="text-[11px] text-slate-500 line-clamp-2 mt-1">{articleSummary}</p>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              )}
-
-              {socialTab === 'linkedin' && (
-                <div className="bg-white rounded-lg border border-slate-300 overflow-hidden max-w-sm mx-auto">
-                  {previewPng && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={previewPng} alt="LinkedIn mock" className="w-full aspect-[1200/630] object-cover" />
                   )}
-                  <div className="p-2.5 bg-slate-50 border-t border-slate-200">
-                    <span className="text-[10px] text-slate-400 uppercase">corplawupdates.in</span>
-                    <h4 className="font-bold text-xs text-slate-900 line-clamp-2 mt-0.5">{articleTitle}</h4>
-                  </div>
-                </div>
-              )}
 
-              {socialTab === 'x' && (
-                <div className="bg-black text-white rounded-2xl border border-slate-800 overflow-hidden max-w-sm mx-auto">
-                  {previewPng && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={previewPng} alt="X Card mock" className="w-full aspect-[1200/630] object-cover" />
+                  {socialTab === 'whatsapp' && (
+                    <div className="bg-[#E7F3E8] p-2.5 rounded-xl border border-[#D0E7D2] max-w-sm mx-auto">
+                      <div className="bg-white rounded-lg overflow-hidden border border-slate-200">
+                        {cardImg && (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={cardImg} alt="WhatsApp mock" className="w-full aspect-[1200/630] object-cover" />
+                        )}
+                        <div className="p-2">
+                          <span className="text-[10px] text-slate-400">corplawupdates.in</span>
+                          <h4 className="font-bold text-xs text-slate-900 line-clamp-1">{articleTitle}</h4>
+                          <p className="text-[10px] text-slate-500 line-clamp-2">{articleSummary}</p>
+                        </div>
+                      </div>
+                    </div>
                   )}
-                  <div className="p-3">
-                    <span className="text-[10px] text-slate-400">corplawupdates.in</span>
-                    <h4 className="font-bold text-xs line-clamp-1 mt-0.5">{articleTitle}</h4>
-                    <p className="text-[10px] text-slate-400 line-clamp-1">{articleSummary}</p>
-                  </div>
+
+                  {socialTab === 'linkedin' && (
+                    <div className="bg-white rounded-lg border border-slate-300 overflow-hidden max-w-sm mx-auto">
+                      {cardImg && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={cardImg} alt="LinkedIn mock" className="w-full aspect-[1200/630] object-cover" />
+                      )}
+                      <div className="p-2.5 bg-slate-50 border-t border-slate-200">
+                        <span className="text-[10px] text-slate-400 uppercase">corplawupdates.in</span>
+                        <h4 className="font-bold text-xs text-slate-900 line-clamp-2 mt-0.5">{articleTitle}</h4>
+                      </div>
+                    </div>
+                  )}
+
+                  {socialTab === 'x' && (
+                    <div className="bg-black text-white rounded-2xl border border-slate-800 overflow-hidden max-w-sm mx-auto">
+                      {cardImg && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={cardImg} alt="X Card mock" className="w-full aspect-[1200/630] object-cover" />
+                      )}
+                      <div className="p-3">
+                        <span className="text-[10px] text-slate-400">corplawupdates.in</span>
+                        <h4 className="font-bold text-xs line-clamp-1 mt-0.5">{articleTitle}</h4>
+                        <p className="text-[10px] text-slate-400 line-clamp-1">{articleSummary}</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          </div>
+              </div>
+            )
+          })()}
         </div>
       </div>
 
