@@ -520,21 +520,6 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
 
             {/* 2. ARTICLE HEADER */}
             <header className="mb-8">
-                {/* Active Hero Banner (Code/API-rendered banner) */}
-                {activeBanner && (
-                    <div className="mb-6 overflow-hidden rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
-                        <img
-                            src={activeBanner.formats?.hero_webp || activeBanner.formats?.og_png}
-                            alt={activeBanner.alt || update.title}
-                            width={1200}
-                            height={630}
-                            fetchPriority="high"
-                            decoding="async"
-                            className="w-full h-auto object-cover rounded-2xl"
-                        />
-                    </div>
-                )}
-
                 {/* Signature Gazette Ledger Rail Accent */}
                 <GazetteLedgerRail
                     category={update.category || 'UPDATE'}
@@ -862,9 +847,19 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                 {update.content && <TableOfContents content={update.content} />}
                 <ErrorBoundary>
                     <div className="article-content entry-content post-content" suppressHydrationWarning>
-                        {/* Active API banners render at the top of <header> as the hero.
-                            For legacy articles without an active banner, render leading or fallback image here. */}
-                        {!activeBanner && (
+                        {activeBanner ? (
+                            <div className="mb-6 overflow-hidden rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
+                                <img
+                                    src={activeBanner.formats?.hero_webp || activeBanner.formats?.og_png}
+                                    alt={activeBanner.alt || update.title}
+                                    width={1200}
+                                    height={630}
+                                    fetchPriority="high"
+                                    decoding="async"
+                                    className="w-full h-auto object-cover rounded-2xl"
+                                />
+                            </div>
+                        ) : (
                             <>
                                 {leadingFeaturedImage && (
                                     <div className="mb-6 overflow-hidden rounded-2xl" dangerouslySetInnerHTML={{ __html: leadingFeaturedImage }} />
