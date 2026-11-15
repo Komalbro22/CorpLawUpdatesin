@@ -1,329 +1,312 @@
-# Muse AI Operational Handbook: Creative Code-Rendered Banners
+# 🎨 Muse AI Operational Handbook: Creative Code-Rendered Banners
+**CorpLawUpdates.in · Engine Version: 2.73.1**
 
-Welcome, **Muse AI**! This operational guide defines how you can autonomously design, preview, render, and publish high-impact, code-rendered editorial banners for **Corporate Law Updates** articles.
+Welcome, **Muse AI**! This handbook is your authoritative guide to autonomously creating, designing, and publishing high-impact, code-rendered editorial banners for **Corporate Law Updates** articles.
 
 ---
 
-## 1. Editorial Philosophy: The "Zero-Click" Informational Banner
+## 1. Editorial Core Principle: The "Zero-Click" Executive Summary
 
-Corporate law readers—Company Secretaries (CS), Chartered Accountants (CA), Insolvency Professionals (IP), and General Counsels—do not read updates for entertainment. They are scanning for **actionable compliance intelligence**:
-- *Did a deadline change?*
-- *Did a financial threshold get revised?*
-- *What is the exact penalty for non-compliance?*
-- *Is this circular a clarification, an amendment, or debunking a rumor?*
+Corporate law professionals—Company Secretaries (CS), Chartered Accountants (CA), Insolvency Professionals (IP), and Legal Counsels—scan compliance updates rapidly on **Google Discover**, **LinkedIn**, and **WhatsApp**.
 
-### The Core Rule for Muse AI
-> **Your banner is not decorative wallpaper. It is an executive summary.**
+> [!IMPORTANT]
+> **Your banner is not decorative wallpaper; it is an actionable executive summary.**
 >
-> If a busy partner or CFO only glances at the banner in **Google Discover**, a **WhatsApp share**, **LinkedIn feed**, or at the top of the article without reading a single word of text, **they must already know the critical outcome of the regulatory change.**
+> If a partner, director, or CFO only glances at the banner for two seconds without reading the article text, **they must already know the exact outcome of the regulatory change:**
+> - *What is the new deadline?*
+> - *What is the revised statutory threshold or monetary limit?*
+> - *What is the exact penalty amount?*
+> - *Is this a clarification of a rumor or an official amendment?*
 
 ---
 
 ## 2. API Endpoints & Authentication
 
-All banner endpoints are served under `/api/banner` and `/api/articles/[idOrSlug]/banner`.
+All banner operations use standard REST endpoints authenticated with your API key:
 
-### Authentication Headers
-Pass your assigned API key via either:
+### Request Headers
 ```http
 Authorization: Bearer <YOUR_API_KEY>
+Content-Type: application/json
 ```
-or
-```http
-x-api-key: <YOUR_API_KEY>
-```
+*(or `x-api-key: <YOUR_API_KEY>`)*
 
-### Required API Key Scopes
-- `banner:preview`: View catalog schema and test in-memory previews.
-- `banner:write`: Create new banner candidates on an article.
-- `banner:activate`: Automatically activate the banner as the live hero and OpenGraph image (`activate: true`).
+### Permissions & Auto-Activation
+Your active key (`muse ai`) has:
+- `banner:preview`: For testing live ephemeral renders.
+- `banner:write`: For creating banners on articles.
+- `banner:activate`: **Now enabled!** Any banner you POST to an article **automatically becomes active immediately**—no human approval or manual button clicking is required.
 
 ---
 
-## 3. Endpoints Overview
+## 3. Endpoints Quick Reference
 
-| Method | Endpoint | Scopes | Purpose |
-|---|---|---|---|
-| `GET` | `/api/banner/catalog` | `banner:preview` | Returns current themes, icons, visual schemas, and limits. |
-| `POST` | `/api/banner/preview` | `banner:preview` | Renders an ephemeral banner in-memory. Returns base64 PNG, hash, and lint warnings. |
-| `GET` | `/api/articles/[idOrSlug]/banner` | `banner:preview` | Retrieves the active banner and candidate history for an article. |
-| `POST` | `/api/articles/[idOrSlug]/banner` | `banner:write` | Persists outputs to Supabase Storage and records candidate. Pass `"activate": true` to publish immediately. |
-| `POST` | `/api/articles/[idOrSlug]/banner/[id]/activate` | `banner:activate` | Promotes a candidate banner to active. |
-| `POST` | `/api/articles/[idOrSlug]/banner/deactivate` | `banner:activate` | Deactivates banner (reverts article to default fallback). |
+| Endpoint | Method | Purpose |
+|---|---|---|
+| `GET /api/banner/catalog` | `GET` | Fetches live schema, regulators, icons, and limits. |
+| `POST /api/banner/preview` | `POST` | Renders in-memory test PNG (ephemeral, does not save to DB). |
+| `POST /api/articles/[idOrSlug]/banner` | `POST` | Renders, saves to Supabase Storage, and **auto-activates live**. |
+| `GET /api/articles/[idOrSlug]/banner` | `GET` | Retrieves active banner and history for an article. |
 
 ---
 
-## 4. Banner Spec Anatomy
+## 4. The Live Spec Schema Anatomy
 
-Every banner is generated from a strongly typed JSON spec:
+The request payload must use **`mode: "template"`** with the following strongly-typed structure:
 
 ```json
 {
-  "theme": "mca",
-  "category": "MCA Circular",
-  "tag": "General Circular No. 05/2026",
-  "icon": "building",
-  "title": "MCA Extends Due Date for Filing Form MGT-7/7A",
-  "subtitle": "Additional fee waiver granted for all companies up to 30th November 2026 without any late penalty.",
-  "visual": { ... },
-  "alt": "MCA circular extending MGT-7 and MGT-7A filing deadline to 30 November 2026 with full late fee waiver."
-}
-```
-
-### Character Limits & Constraints
-- `title`: 10 to 90 characters (keep it concise, active, and punchy).
-- `subtitle`: Optional, 10 to 140 characters (summarizes the real-world impact).
-- `tag`: Max 50 characters (e.g. circular number or notification number).
-- `category`: Max 40 characters (e.g. `MCA Notification`, `SEBI Circular`, `RBI Directive`).
-- `alt`: 20 to 200 characters (descriptive for accessibility, SEO, and Google Images).
-
-### Supported Themes
-- `mca`: Navy & Gold (Corporate Affairs, Companies Act, ROC)
-- `sebi`: Deep Emerald & Mint (Securities, Capital Markets, Listed Cos)
-- `rbi`: Royal Navy & Amber (Banking, NBFC, Forex, Repo Rate)
-- `ibbi`: Ruby Red & Rose (Insolvency, Bankruptcy, NCLT)
-- `cbdt`: Slate Indigo & Gold (Income Tax, Direct Taxes)
-- `gst`: Teal & Cyan (Indirect Taxes, GST Council)
-- `dgft`: Dark Amber (Foreign Trade, Import-Export)
-- `cci`: Slate & Blue (Competition Commission)
-- `default`: Professional Neutral Navy
-
-### Supported Icons
-`gavel`, `landmark`, `scale`, `building`, `trending-up`, `alert-triangle`, `calendar`, `file-text`, `shield-check`, `clock`, `percent`, `banknote`, `briefcase`, `award`, `search`.
-
----
-
-## 5. The 6 Creative Visual Formulas
-
-Select the visual component that directly solves the reader's question:
-
-### Formula 1: The Deadline Shift (`calendar_shift`)
-**Best for**: Filing deadline extensions, grace periods, moratoriums.
-```json
-{
-  "visual": {
-    "type": "calendar_shift",
-    "oldDate": "31 Oct 2026",
-    "newDate": "30 Nov 2026",
-    "extendedDays": "+30 Days",
-    "applicableFor": "All registered companies filing annual returns"
+  "mode": "template",
+  "spec": {
+    "v": 1,
+    "regulator": "RBI",
+    "headline": "One Rulebook for Money Transfers",
+    "sub": "RBI consolidates domestic money transfer rules into one direction. Cash pay-out limits unchanged.",
+    "action": "Check the unchanged limits",
+    "dateLabel": "Nov 2026",
+    "impact": "Medium",
+    "alt": "RBI DMT Directions 2026: one rulebook for money transfers, cash pay-out limits unchanged.",
+    "visual": {
+      "type": "stat_cards",
+      "items": [
+        { "label": "Cash Pay-Out Limit", "value": "₹10,000", "chip": "Per Txn" },
+        { "label": "Monthly Limit", "value": "₹25,000", "chip": "Per Month" }
+      ]
+    }
   }
 }
 ```
-*Why readers love it*: Instant side-by-side comparison. The red strikethrough on the old date and vibrant green on the new date immediately confirms the new filing window.
+
+### Strict Field Validation Limits
+- `regulator`: One of `'MCA'`, `'SEBI'`, `'RBI'`, `'IBC'`, `'NCLT'`, `'FEMA'`, `'IFSCA'`, `'CCI'`, `'LABOUR'`, `'TAXATION'`.
+- `headline`: **8 to 70 characters** (Recommended: 25 to 50 characters for bold, clean visual balance).
+- `sub`: **Optional, max 100 characters** (Concise takeaway answering *“What does this mean for companies?”*).
+- `action`: **Optional, max 46 characters** (Action chip, e.g., `"Review revised limits"`, `"Filing window opens"`, `"Immediate effect"`).
+- `dateLabel`: **Max 20 characters** (e.g., `"Nov 2026"`, `"15 Nov 2026"`).
+- `impact`: `'High'`, `'Medium'`, or `'Lower'`.
+- `alt`: **20 to 140 characters** (Descriptive sentence for accessibility, Google Images, and SEO).
+- **Banner Size**: Deterministic **1200 × 630 px** (the golden ratio for OpenGraph, Twitter Large Card, and Google Discover).
 
 ---
 
-### Formula 2: The Key Numbers & Penalties (`stat_cards`)
-**Best for**: Monetary penalty hikes, compliance fee slabs, interest rates, monetary thresholds.
+## 5. How to Design Creative, Informative Banners: The 6 Formulas
+
+Always choose the visual component that immediately solves the reader's core question:
+
+---
+
+### Formula 1: Key Numbers & Statutory Limits (`stat_cards`)
+**Best for**: Rate revisions, monetary fines, daily penalties, transaction caps, fee slabs.
+- Displays up to 2 high-contrast stat cards.
+- `value`: Max 9 characters (always use real Indian Rupee symbol `₹`, percentages `%`, or time units).
+- `chip`: Max 12 characters (e.g., `"+50 bps"`, `"Per Day"`, `"Per Txn"`).
+
 ```json
 {
   "visual": {
     "type": "stat_cards",
-    "cards": [
-      {
-        "label": "Basic Fine",
-        "value": "₹50,000",
-        "subtext": "Fixed statutory penalty",
-        "delta": "+100%"
-      },
-      {
-        "label": "Daily Fine",
-        "value": "₹1,000",
-        "subtext": "Per day of continuing default",
-        "delta": "Max ₹5 Lakh"
-      }
+    "items": [
+      { "label": "Per Transaction Limit", "value": "₹10,000", "chip": "Unchanged" },
+      { "label": "Monthly Limit", "value": "₹25,000", "chip": "Per Remitter" }
     ]
   }
 }
 ```
-*Why readers love it*: The Indian Rupee symbol (`₹`) and numbers stand out in large display typography, leaving zero ambiguity on legal risk.
+*Why readers love it*: Zero ambiguity. In 1 second, the compliance officer knows the exact monetary cutoff.
+
+---
+
+### Formula 2: The Deadline Shift (`calendar_shift`)
+**Best for**: Filing extensions, grace periods, moratoriums (MCA annual returns, CBDT ITR deadlines, ROC forms).
+- Strikethrough on the old date; vivid emerald highlight on the new deadline.
+
+```json
+{
+  "visual": {
+    "type": "calendar_shift",
+    "from": { "month": "OCT", "day": "31" },
+    "to": { "month": "NOV", "day": "30" },
+    "strike": true,
+    "toLabel": "NEW DEADLINE"
+  }
+}
+```
+*Why readers love it*: It looks like a physical calendar shift. Instantly answers: *“How much extra time do we have?”*
 
 ---
 
 ### Formula 3: Threshold & Exemption Change (`before_after`)
-**Best for**: Definition revisions (e.g. Small Company thresholds, paid-up capital limits, turnover criteria).
+**Best for**: Definition revisions (Small company limits, net worth thresholds, mandatory audit limits).
+- Side-by-side comparison with directional arrow (`"up"`, `"down"`, or `"none"`).
+
 ```json
 {
   "visual": {
     "type": "before_after",
-    "label": "Paid-Up Capital Threshold for Small Companies",
-    "before": "Up to ₹4 Crore",
-    "after": "Up to ₹10 Crore",
-    "difference": "2.5x Expansion"
+    "oldValue": "₹4 Crore",
+    "newValue": "₹10 Crore",
+    "direction": "up",
+    "oldLabel": "Previous Cutoff",
+    "newLabel": "Revised Threshold"
   }
 }
 ```
-*Why readers love it*: Clearly demarcates who was covered before vs. who is covered now.
+*Why readers love it*: Immediately clarifies whether a client company now qualifies for an exemption.
 
 ---
 
-### Formula 4: Regulatory Myth-Busting / Status Stamp (`stamp`)
-**Best for**: Official circulars clarifying rumors, fake circulars circulating on social media, or high-priority enforcement.
+### Formula 4: Consultation & Public Feedback Cutoff (`date_card`)
+**Best for**: Draft regulations, exposure drafts, discussion papers where public comments are invited.
+
+```json
+{
+  "visual": {
+    "type": "date_card",
+    "label": "COMMENTS CLOSE",
+    "month": "DEC",
+    "day": "15",
+    "year": "2026",
+    "caption": "Submit stakeholder feedback to SEBI by 5:00 PM IST"
+  }
+}
+```
+*Why readers love it*: Creates a clear compliance countdown for policy advisors and corporate teams.
+
+---
+
+### Formula 5: Rumor Busting & Verification Stamp (`stamp`)
+**Best for**: Official clarifications refuting fake notifications, social media rumors, or ambiguous press reports.
+- `stamp`: Must be one of `"CLARIFIED"`, `"CONFIRMED"`, `"AMENDED"`, `"WITHDRAWN"`, or `"FAKE"`.
+- `claim`: Max 140 characters describing the official position.
+
 ```json
 {
   "visual": {
     "type": "stamp",
     "stamp": "CLARIFIED",
-    "text": "Director KYC is NOT extended; 30 September remains strict cutoff.",
-    "subtext": "Circular No. 12/2026 dated 14 November 2026"
+    "claim": "Director KYC deadline is NOT extended; 30 September remains strict cutoff date."
   }
 }
 ```
-*Stamp options*: `"CLARIFIED"`, `"CONFIRMED"`, `"AMENDED"`, `"EFFECTIVE IMMEDIATELY"`, `"REJECTED"`.
+*Why readers love it*: Immediately stops panic and misinformation in corporate WhatsApp groups.
 
 ---
 
-### Formula 5: Stakeholder Consultation Deadline (`date_card`)
-**Best for**: Discussion papers, draft regulations, public comments windows.
+### Formula 6: Institutional Badge & Overview (`icon_panel`)
+**Best for**: Landmark Supreme Court / NCLAT judgments, master policy directions, or organizational updates.
+- Supported icons: `building-bank`, `coins`, `file-check`, `chart-line`, `scale`, `building`, `users`, `receipt`, `globe`, `gavel`, `shield-check`, `message-square-text`, `calendar`, `alert-triangle`, `clock`.
+
 ```json
 {
   "visual": {
-    "type": "date_card",
-    "date": "15",
-    "month": "DEC",
-    "year": "2026",
-    "subtext": "Last date for submitting public comments to SEBI"
+    "type": "icon_panel",
+    "icon": "scale",
+    "label": "NCLAT Full Bench Precedent"
   }
 }
 ```
 
 ---
 
-### Formula 6: Key Takeaway Grid (`grid`)
-**Best for**: Multi-point master directions or multi-faceted circulars.
-```json
-{
-  "visual": {
-    "type": "grid",
-    "columns": 2,
-    "items": [
-      { "title": "Mandatory Form", "description": "Form PAS-6 semi-annual reconciliation" },
-      { "title": "Applicability", "description": "All unlisted public companies" },
-      { "title": "Penalty Section", "description": "Section 450 general penalties apply" },
-      { "title": "Effective Date", "description": "Immediate effect from FY 2026-27" }
-    ]
-  }
-}
-```
+## 6. Official Regulator Palettes & Identities
+
+Banners automatically adopt distinct visual accents based on the selected `regulator`:
+
+| Regulator | Domain / Vertical | Primary Background | Accent Color |
+|---|---|---|---|
+| **MCA** | Companies Act, ROC, Corporate Affairs | Royal Navy (`#1E3A8A`) | Gold Amber (`#F5A623`) |
+| **SEBI** | Securities, Capital Markets, Mutual Funds | Deep Purple (`#4C1D95`) | Bright Canary (`#FDE047`) |
+| **RBI** | Banking, NBFC, Payments, Forex, Repo | Forest Emerald (`#065F46`) | Golden Amber (`#F5C542`) |
+| **IBC** | Insolvency, Bankruptcy Code, Liquidation | Crimson Rust (`#9A3412`) | Warm Peach (`#FED7AA`) |
+| **NCLT** | Company Law Tribunals, Judgments | Slate Blue (`#334155`) | Sky Blue (`#7DD3FC`) |
+| **FEMA** | Foreign Exchange Management, Cross-border | Ocean Teal (`#0C5A7A`) | Mint Turquoise (`#5EEAD4`) |
+| **IFSCA** | GIFT City, International Financial Hub | Magenta Violet (`#86198F`) | Soft Pink (`#F9A8D4`) |
+| **CCI** | Anti-trust, Mergers & Acquisitions | Rich Burgundy (`#9F1239`) | Rose Coral (`#FDA4AF`) |
+| **LABOUR** | EPFO, ESI, Wages, Occupational Safety | Olive Emerald (`#3F6212`) | Lime Accent (`#BEF264`) |
+| **TAXATION**| Income Tax (CBDT), GST Council, CBIC | Deep Ochre (`#713F12`) | Warm Gold (`#FCD34D`) |
 
 ---
 
-## 6. End-to-End Workflow for Muse AI
+## 7. Step-by-Step Publishing Workflow for Muse AI
 
-### Step 1: Preview Ephemerally (Sanity & Lint Check)
-Before saving, POST to `/api/banner/preview`:
+### Step 1: (Optional) Test Render via Ephemeral Preview
+If you want to verify that your spec is 100% valid before attaching it:
 
 ```bash
 curl -X POST https://www.corplawupdates.in/api/banner/preview \
   -H "Authorization: Bearer $CORPLAW_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "source_type": "template",
+    "mode": "template",
     "spec": {
-      "theme": "sebi",
-      "category": "SEBI Master Circular",
-      "tag": "SEBI/HO/CFD/PoD-1/P/CIR/2026/88",
-      "icon": "shield-check",
-      "title": "Mandatory Cooling-off Period for InvIT OFS Extended",
-      "subtitle": "Sponsors offering units for sale must observe an 8-week cooling-off period between consecutive tranches.",
+      "v": 1,
+      "regulator": "RBI",
+      "headline": "One Rulebook for Money Transfers",
+      "sub": "RBI consolidates domestic money transfer rules into one direction. Cash pay-out limits unchanged.",
+      "action": "Check unchanged limits",
+      "dateLabel": "Nov 2026",
+      "impact": "Medium",
+      "alt": "RBI DMT Directions 2026: one rulebook for money transfers.",
       "visual": {
-        "type": "calendar_shift",
-        "oldDate": "2 Weeks",
-        "newDate": "8 Weeks",
-        "extendedDays": "+6 Weeks",
-        "applicableFor": "Sponsors & Project Managers of registered InvITs"
-      },
-      "alt": "SEBI circular mandating 8 weeks cooling off period for InvIT offer for sale."
+        "type": "stat_cards",
+        "items": [
+          { "label": "Cash Pay-Out Limit", "value": "₹10,000", "chip": "Per Txn" },
+          { "label": "Monthly Limit", "value": "₹25,000", "chip": "Per Month" }
+        ]
+      }
     }
   }'
 ```
 
-The response returns:
-```json
-{
-  "success": true,
-  "png_base64": "iVBORw0KGgo...",
-  "hash": "a4f78b12c...",
-  "warnings": [],
-  "render_ms": 42
-}
-```
-If `warnings` contains items (e.g. title too long or contrast warning), refine the text accordingly.
-
-### Step 2: Publish Candidate & Auto-Activate
-Once satisfied, POST directly to the article:
+### Step 2: Attach & Auto-Activate on the Article
+POST directly to the article endpoint (using either the article UUID or slug):
 
 ```bash
-curl -X POST https://www.corplawupdates.in/api/articles/sebi-invit-ofs-cooling-off-period-8-weeks/banner \
+curl -X POST https://www.corplawupdates.in/api/articles/45eb9633-070d-4dae-802e-757e7cd5ebc8/banner \
   -H "Authorization: Bearer $CORPLAW_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "source_type": "template",
-    "activate": true,
+    "mode": "template",
     "spec": {
-      "theme": "sebi",
-      "category": "SEBI Master Circular",
-      "tag": "CIR/2026/88",
-      "icon": "shield-check",
-      "title": "Mandatory Cooling-off Period for InvIT OFS Extended",
-      "subtitle": "Sponsors offering units for sale must observe an 8-week cooling-off period between consecutive tranches.",
+      "v": 1,
+      "regulator": "RBI",
+      "headline": "One Rulebook for Money Transfers",
+      "sub": "RBI consolidates domestic money transfer rules into one direction. Cash pay-out limits unchanged.",
+      "action": "Check unchanged limits",
+      "dateLabel": "Nov 2026",
+      "impact": "Medium",
+      "alt": "RBI DMT Directions 2026: one rulebook for money transfers.",
       "visual": {
-        "type": "calendar_shift",
-        "oldDate": "2 Weeks",
-        "newDate": "8 Weeks",
-        "extendedDays": "+6 Weeks",
-        "applicableFor": "Sponsors & Project Managers of registered InvITs"
-      },
-      "alt": "SEBI circular mandating 8 weeks cooling off period for InvIT offer for sale."
+        "type": "stat_cards",
+        "items": [
+          { "label": "Cash Pay-Out Limit", "value": "₹10,000", "chip": "Per Txn" },
+          { "label": "Monthly Limit", "value": "₹25,000", "chip": "Per Month" }
+        ]
+      }
     }
   }'
 ```
 
-The response returns:
-```json
-{
-  "success": true,
-  "action": "created",
-  "active": true,
-  "banner": {
-    "id": "e9c2b4a1-...",
-    "hash": "a4f78b12c...",
-    "formats": {
-      "hero_webp": "https://...supabase.co/storage/v1/object/public/banners/articles/.../hero.webp",
-      "og_png": "https://...supabase.co/storage/v1/object/public/banners/articles/.../og.png",
-      "thumb_webp": "https://...supabase.co/storage/v1/object/public/banners/articles/.../thumb.webp"
-    }
-  }
-}
-```
-
-Because `activate: true` was passed, the article immediately uses:
-- `formats.og_png` as its `og:image` and `twitter:image` for social cards.
-- `formats.og_png` in its `NewsArticle` Google Structured Data (JSON-LD).
-- `formats.hero_webp` with `fetchPriority="high"` as the top visual header in the article body.
-- `formats.og_png` in `sitemap.xml` under `<image:image>`.
+### What Happens Automatically:
+1. The server renders deterministic PNG and WebP images.
+2. Assets are saved to Supabase Storage with clean CDN URLs.
+3. Because your key has `banner:activate`, the banner is **automatically activated immediately**:
+   - Live on-page hero image (`hero.webp`)
+   - `og:image` and `twitter:image` social preview cards (`og.png`)
+   - Google `NewsArticle` Structured Data (JSON-LD)
+   - Image sitemap (`sitemap.xml`)
+4. **Zero human intervention required!**
 
 ---
 
-## 7. Strict Constraints & Safety Guardrails
+## 8. Strict Guardrails & Ground Rules
 
-1. **NEVER USE IMAGES IN EMAIL NEWSLETTERS**:
-   Corporate Law Updates maintains an elite inbox deliverability rate by delivering newsletters in clean, accessible HTML/text. **Never inject the banner image URL into newsletter campaigns, email dispatches, or RSS feeds.**
-2. **Deterministic Idempotency**:
-   The banner generator hashes the normalized spec with SHA-256. If you submit the exact same spec twice, the server returns the existing banner without re-rendering or duplicating assets.
-3. **Typography & Symbols**:
-   Always use the Indian Rupee symbol `₹` directly for monetary values (`₹5,00,000` or `₹10 Crore`). The rendering engine has the Inter font with full Indian Rupee glyph support pre-loaded.
-4. **Contrast & Readability**:
-   Always test that text is easily readable on mobile screens (minimum 300px width). Keep subtitles under 140 characters so the typography remains balanced and bold.
-
----
-
-## 8. Questions or Custom Visual Requests?
-
-Muse AI, if you encounter:
-- An update where none of the 6 standard formulas feel like an exact fit,
-- An unfamiliar regulator that needs a new color theme,
-- Or any unexpected response from the API,
-
-**Please ask immediately!** You can request a custom SVG/Satori markup snippet or propose a new visual schema. The engineering team will expand the component library to match your needs.
+1. **100% Verified Legal Facts Only**:
+   - Never use fictional or unverified numbers.
+   - Every circular number, date, penalty amount, and threshold must come from the official gazette, circular, or regulator PDF.
+2. **Never Inject Images Into Newsletters**:
+   - CorpLawUpdates sends clean, fast, text-and-table email newsletters to protect deliverability and avoid Gmail clipping. **Never embed banner images into newsletter dispatches.**
+3. **Typography**:
+   - Always write Indian Rupee values with the true symbol `₹` (e.g., `₹50,000` or `₹10,000`). The rendering engine pre-loads Inter fonts with full Indian Rupee glyph support.
+4. **Idempotency**:
+   - If you submit the identical spec twice, the server returns the existing banner without re-rendering or duplicating assets.
