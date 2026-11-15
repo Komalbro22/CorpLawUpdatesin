@@ -131,13 +131,15 @@ export async function POST(
   }
 
   const input = parseResult.data
-  const shouldActivate = Boolean(body.activate)
 
   const canActivate =
     authCheck.auth.type === 'session' ||
     (authCheck.auth.type === 'api_key' &&
       (authCheck.auth.key.scopes.includes('banner:activate') ||
         process.env.BANNER_AGENT_AUTO_ACTIVATE === 'true'))
+
+  // Default to auto-activating whenever caller has permission, unless explicitly set to false
+  const shouldActivate = canActivate ? body.activate !== false : Boolean(body.activate)
 
   if (shouldActivate && !canActivate) {
     return NextResponse.json(
