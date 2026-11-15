@@ -185,7 +185,10 @@ export async function POST(
 
         await supabaseAdmin
           .from('updates')
-          .update({ active_banner_id: existingBanner.id })
+          .update({
+            active_banner_id: existingBanner.id,
+            featured_image_url: existingBanner.formats?.hero_webp || existingBanner.formats?.og_png || null,
+          })
           .eq('id', article.id)
 
         existingBanner.status = 'active'
@@ -244,7 +247,10 @@ export async function POST(
     if (initialStatus === 'active') {
       await supabaseAdmin
         .from('updates')
-        .update({ active_banner_id: newBanner.id })
+        .update({
+          active_banner_id: newBanner.id,
+          featured_image_url: urls.hero_webp || urls.og_png || null,
+        })
         .eq('id', article.id)
     }
 

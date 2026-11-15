@@ -178,15 +178,15 @@ export default function PrivacyPolicyPage() {
                 <div className="border-t border-slate-100 dark:border-slate-800 my-8"></div>
 
                 <section>
-                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">5. Advertising &amp; Third-Party Ad Networks (Journey by Mediavine)</h2>
+                    <h2 className="text-xl font-bold text-navy dark:text-slate-100 mb-3 mt-8">5. Advertising &amp; Third-Party Ad Networks (Mediavine Journey &amp; Google AdSense)</h2>
                     <p className="text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">
-                        CorpLawUpdates.in remains free to access for corporate law professionals, company secretaries, legal practitioners, and compliance teams. To support our free platform infrastructure and statutory tools, we partner exclusively with Journey by Mediavine for contextual and programmatic display advertising.
+                        CorpLawUpdates.in remains free to access for corporate law professionals, company secretaries, legal practitioners, and compliance teams. To support our free platform infrastructure and statutory tools, we partner with Mediavine Journey and Google AdSense for contextual and programmatic display advertising.
                     </p>
                     <div className="space-y-4 text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
                         <div>
                             <h3 className="font-bold text-navy dark:text-slate-200 mb-1.5 text-xs uppercase tracking-wide">A. Advertising Cookies &amp; Programmatic Partners</h3>
                             <p>
-                                Journey by Mediavine and its certified programmatic demand partners use cookies or device identifiers to serve contextual advertisements, prevent ad fraud, and cap ad repetition based on visits to this and other websites.
+                                Mediavine Journey, Google AdSense, and their certified programmatic demand partners use cookies or device identifiers to serve contextual advertisements, prevent ad fraud, and cap ad repetition based on visits to this and other websites.
                             </p>
                         </div>
                         <div>
@@ -195,6 +195,10 @@ export default function PrivacyPolicyPage() {
                                 You can learn more about Mediavine's data handling or opt out of personalized advertising by visiting the{' '}
                                 <a href="https://www.mediavine.com/privacy-policy/" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 hover:underline font-medium">
                                     Mediavine Privacy Policy
+                                </a>
+                                , managing Google advertising settings via{' '}
+                                <a href="https://myadcenter.google.com/" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 hover:underline font-medium">
+                                    Google My Ad Center
                                 </a>
                                 , the{' '}
                                 <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" className="text-amber-600 dark:text-amber-400 hover:underline font-medium">

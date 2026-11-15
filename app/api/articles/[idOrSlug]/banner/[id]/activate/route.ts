@@ -72,10 +72,13 @@ export async function POST(
     )
   }
 
-  // Update updates.active_banner_id
+  // Update updates.active_banner_id and featured_image_url
   await supabaseAdmin
     .from('updates')
-    .update({ active_banner_id: banner.id })
+    .update({
+      active_banner_id: banner.id,
+      featured_image_url: banner.formats?.hero_webp || banner.formats?.og_png || null,
+    })
     .eq('id', article.id)
 
   const clientIp = getClientIp(request)

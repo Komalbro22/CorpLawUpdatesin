@@ -35,7 +35,11 @@ export default function UpdateCard({
   priority = false,
   showLastVerified = false,
 }: UpdateCardProps) {
-  const imageUrl = update.featured_image_url || extractFirstImage(update.content || '')
+  const imageUrl =
+    (update as any).active_banner?.formats?.hero_webp ||
+    (update as any).active_banner?.formats?.og_png ||
+    update.featured_image_url ||
+    extractFirstImage(update.content || '')
 
   const [isNew, setIsNew] = useState(false)
 

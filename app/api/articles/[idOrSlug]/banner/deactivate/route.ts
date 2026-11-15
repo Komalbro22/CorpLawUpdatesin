@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic'
 
 async function resolveArticle(idOrSlug: string) {
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(idOrSlug)
-  let query = supabaseAdmin.from('updates').select('id, slug, title, active_banner_id')
+  let query = supabaseAdmin.from('updates').select('id, slug, title, active_banner_id, featured_image_url')
   if (isUuid) {
     query = query.eq('id', idOrSlug)
   } else {
@@ -42,10 +42,13 @@ export async function POST(
     .eq('article_id', article.id)
     .eq('status', 'active')
 
-  // Set updates.active_banner_id to null
+  // Set updates.active_banner_id to null and clear featured_image_url if set to a banner asset
   await supabaseAdmin
     .from('updates')
-    .update({ active_banner_id: null })
+    .update({
+      active_banner_id: null,
+      featured_image_url: null,
+    })
     .eq('id', article.id)
 
   const clientIp = getClientIp(request)

@@ -464,16 +464,21 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
             contentPart1 = (extractedStyles ? extractedStyles + '\n' : '') + fullContent
         }
 
-        if (autoBadgeType && contentPart1) {
+        if (contentPart1) {
             const match = contentPart1.match(/^\s*(<img\b[^>]*\/?>)\s*/i)
             if (match) {
-                leadingFeaturedImage = match[1]
-                contentPart1 = contentPart1.slice(match[0].length)
+                if (activeBanner) {
+                    // Suppress duplicate leading image in body when active banner is rendered as top hero
+                    contentPart1 = contentPart1.slice(match[0].length)
+                } else if (autoBadgeType) {
+                    leadingFeaturedImage = match[1]
+                    contentPart1 = contentPart1.slice(match[0].length)
+                }
             }
         }
     }
 
-    fallbackFeaturedImage = autoBadgeType && !leadingFeaturedImage && update.featured_image_url ? update.featured_image_url : null
+    fallbackFeaturedImage = !activeBanner && autoBadgeType && !leadingFeaturedImage && update.featured_image_url ? update.featured_image_url : null
 
     return (
         <div className="min-h-dvh bg-white dark:bg-slate-900">
@@ -515,6 +520,21 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
 
             {/* 2. ARTICLE HEADER */}
             <header className="mb-8">
+                {/* Active Hero Banner (Code/API-rendered banner) */}
+                {activeBanner && (
+                    <div className="mb-6 overflow-hidden rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                        <img
+                            src={activeBanner.formats?.hero_webp || activeBanner.formats?.og_png}
+                            alt={activeBanner.alt || update.title}
+                            width={1200}
+                            height={630}
+                            fetchPriority="high"
+                            decoding="async"
+                            className="w-full h-auto object-cover rounded-2xl"
+                        />
+                    </div>
+                )}
+
                 {/* Signature Gazette Ledger Rail Accent */}
                 <GazetteLedgerRail
                     category={update.category || 'UPDATE'}
@@ -842,19 +862,9 @@ export default async function SingleUpdatePage({ params }: { params: Promise<{ s
                 {update.content && <TableOfContents content={update.content} />}
                 <ErrorBoundary>
                     <div className="article-content entry-content post-content" suppressHydrationWarning>
-                        {activeBanner ? (
-                            <div className="mb-6 overflow-hidden rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs">
-                                <img
-                                    src={activeBanner.formats.hero_webp || activeBanner.formats.og_png}
-                                    alt={activeBanner.alt || update.title}
-                                    width={1200}
-                                    height={630}
-                                    fetchPriority="high"
-                                    decoding="async"
-                                    className="w-full h-auto object-cover rounded-2xl"
-                                />
-                            </div>
-                        ) : (
+                        {/* Active API banners render at the top of <header> as the hero.
+                            For legacy articles without an active banner, render leading or fallback image here. */}
+                        {!activeBanner && (
                             <>
                                 {leadingFeaturedImage && (
                                     <div className="mb-6 overflow-hidden rounded-2xl" dangerouslySetInnerHTML={{ __html: leadingFeaturedImage }} />

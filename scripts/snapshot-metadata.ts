@@ -11,6 +11,7 @@
 import fs from 'fs'
 import path from 'path'
 
+// Ensure .env.local is parsed before Supabase is loaded
 if (fs.existsSync('.env.local')) {
   const envContent = fs.readFileSync('.env.local', 'utf8')
   envContent.split(/\r?\n/).forEach((line) => {
@@ -21,7 +22,14 @@ if (fs.existsSync('.env.local')) {
   })
 }
 
-import { supabaseAdmin } from '../lib/supabase-server'
+let supabaseAdminClient: any = null
+async function getAdminClient() {
+  if (!supabaseAdminClient) {
+    const mod = await import('../lib/supabase-server')
+    supabaseAdminClient = mod.supabaseAdmin
+  }
+  return supabaseAdminClient
+}
 
 interface ArticleSnapshot {
   slug: string
@@ -36,6 +44,7 @@ interface ArticleSnapshot {
 const SNAPSHOT_FILE = path.join(__dirname, '..', '.metadata-snapshot-baseline.json')
 
 export async function captureMetadataSnapshot(): Promise<ArticleSnapshot[]> {
+  const supabaseAdmin = await getAdminClient()
   const { data: articles, error } = await supabaseAdmin
     .from('updates')
     .select('id, title, slug, content, summary, category, featured_image_url, active_banner_id')
