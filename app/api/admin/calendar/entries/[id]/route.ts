@@ -10,6 +10,7 @@ import {
   CANONICAL_ENTRY_FIELDS,
   ACCEPTED_FIELD_ALIASES,
 } from '@/lib/compliance-calendar'
+import { validateRecurrenceRule } from '@/lib/compliance-series-rules'
 import { revalidateComplianceMutation } from '@/lib/content-revalidation'
 
 export const dynamic = 'force-dynamic'
@@ -194,7 +195,21 @@ export async function PATCH(
 
     // Recurrence rule
     if (canonical.recurrence_rule !== undefined) {
-      updates.recurrence_rule = canonical.recurrence_rule
+      if (canonical.recurrence_rule === null) {
+        updates.recurrence_rule = null
+      } else {
+        const ruleValidation = validateRecurrenceRule(canonical.recurrence_rule)
+        if (!ruleValidation.valid) {
+          return NextResponse.json(
+            {
+              error: 'INVALID_RECURRENCE_RULE',
+              message: ruleValidation.error,
+            },
+            { status: 400 }
+          )
+        }
+        updates.recurrence_rule = ruleValidation.normalizedRule
+      }
     }
 
     // Display order

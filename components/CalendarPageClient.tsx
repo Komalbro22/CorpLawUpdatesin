@@ -43,6 +43,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
   const [view, setView] = useState<'table' | 'calendar'>('table')
   const [searchQuery, setSearchQuery] = useState('')
   const [periodFilter, setPeriodFilter] = useState<'all' | '7days' | 'current_month' | 'next_month' | '30days' | 'event_driven'>('all')
+  const [selectedMonth, setSelectedMonth] = useState<string>('all')
   const [doneVersion, setDoneVersion] = useState(0)
   const [doneCount, setDoneCount] = useState(0)
   const searchParams = useSearchParams()
@@ -63,10 +64,15 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
     return () => window.removeEventListener('compliance_done_updated', updateStats)
   }, [entries])
 
-  // Handle deep-linking (?highlight=<id> or ?form=<slug>)
+  // Handle deep-linking (?highlight=<id>, ?form=<slug>, ?month=<YYYY-MM>)
   useEffect(() => {
     const highlightId = searchParams?.get('highlight')
     const formSlug = searchParams?.get('form')
+    const monthParam = searchParams?.get('month')
+
+    if (monthParam && /^\d{4}-\d{2}$/.test(monthParam)) {
+      setSelectedMonth(monthParam)
+    }
     
     let targetEntry: ComplianceEntry | undefined
     if (highlightId) {
@@ -147,7 +153,21 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
     setModalOpen(true)
   }
 
-  // Filter entries based on search & period filter
+  // §2.3 Month Jump handler with shareable URL state
+  function handleMonthJump(m: string) {
+    setSelectedMonth(m)
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href)
+      if (m && m !== 'all') {
+        url.searchParams.set('month', m)
+      } else {
+        url.searchParams.delete('month')
+      }
+      window.history.replaceState({}, '', url.toString())
+    }
+  }
+
+  // Filter entries based on search, month jump & period filter
   const filteredEntries = useMemo(() => {
     let result = entries
 
@@ -160,6 +180,18 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
         e.applicable_to?.toLowerCase().includes(q) ||
         e.regulation_reference?.toLowerCase().includes(q)
       )
+    }
+
+    // §2.3 Month Jump filter
+    if (selectedMonth && selectedMonth !== 'all') {
+      const [yStr, mStr] = selectedMonth.split('-')
+      const targetYear = parseInt(yStr, 10)
+      const targetMonth = parseInt(mStr, 10) - 1 // 0-indexed
+      result = result.filter(e => {
+        const d = parseEntryDate(e.due_date)
+        if (!d) return false
+        return d.getFullYear() === targetYear && d.getMonth() === targetMonth
+      })
     }
 
     if (periodFilter === 'all') return result
@@ -214,7 +246,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
     }
 
     return result
-  }, [entries, searchQuery, periodFilter, doneVersion])
+  }, [entries, searchQuery, periodFilter, selectedMonth, doneVersion])
 
   function handleExportIcs() {
     const now = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
@@ -423,30 +455,67 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
             ======================================================== */}
         <div className="space-y-3">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-            {/* View Mode Switcher */}
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => setView('table')}
-                className={`min-h-[44px] px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
-                  view === 'table'
-                    ? 'bg-amber-400 text-navy shadow-md'
-                    : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
-                }`}
-              >
-                📋 List View
-              </button>
-              <button
-                type="button"
-                onClick={() => setView('calendar')}
-                className={`min-h-[44px] px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
-                  view === 'calendar'
-                    ? 'bg-amber-400 text-navy shadow-md'
-                    : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
-                }`}
-              >
-                📅 Calendar Grid View
-              </button>
+            {/* View Mode Switcher & Month Jump Selector (§2.3) */}
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setView('table')}
+                  className={`min-h-[44px] px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+                    view === 'table'
+                      ? 'bg-amber-400 text-navy shadow-md'
+                      : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+                  }`}
+                >
+                  📋 List View
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setView('calendar')}
+                  className={`min-h-[44px] px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+                    view === 'calendar'
+                      ? 'bg-amber-400 text-navy shadow-md'
+                      : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+                  }`}
+                >
+                  📅 Calendar Grid View
+                </button>
+              </div>
+
+              {/* Month Jump Selector Dropdown (§2.3) */}
+              <div className="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-1 min-h-[44px] shadow-2xs">
+                <label htmlFor="month-jump-select" className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1 whitespace-nowrap cursor-pointer">
+                  <span>🗓️</span>
+                  <span className="hidden sm:inline">Jump to Month:</span>
+                </label>
+                <select
+                  id="month-jump-select"
+                  value={selectedMonth}
+                  onChange={e => handleMonthJump(e.target.value)}
+                  className="bg-transparent text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer py-1"
+                >
+                  <option value="all">All Months (FY Horizon)</option>
+                  <option value="2026-11">Nov 2026 (Current)</option>
+                  <option value="2026-12">Dec 2026</option>
+                  <option value="2027-01">Jan 2027</option>
+                  <option value="2027-02">Feb 2027</option>
+                  <option value="2027-03">Mar 2027</option>
+                  <option value="2027-04">Apr 2027</option>
+                  <option value="2027-05">May 2027</option>
+                  <option value="2027-06">Jun 2027</option>
+                  <option value="2027-07">Jul 2027 (Horizon)</option>
+                </select>
+                {selectedMonth !== 'all' && (
+                  <button
+                    type="button"
+                    onClick={() => handleMonthJump('all')}
+                    title="Clear month filter"
+                    className="text-xs text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 px-1 cursor-pointer"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
             </div>
 
             {/* Search Input */}

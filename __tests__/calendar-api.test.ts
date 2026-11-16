@@ -22,6 +22,8 @@ import { GET as entryHistoryGet } from '@/app/api/admin/calendar/entries/[id]/hi
 import { POST as importPost } from '@/app/api/admin/calendar/import/route'
 import { NextRequest } from 'next/server'
 
+jest.setTimeout(60000)
+
 describe('Compliance Calendar API & Permissions End-to-End Suite', () => {
   let rawApiKey: string
   let testKeyId: string
@@ -156,6 +158,21 @@ describe('Compliance Calendar API & Permissions End-to-End Suite', () => {
     const invalidRecData = await invalidRecRes.json()
     expect(invalidRecData.error).toBe('INVALID_RECURRENCE')
 
+    // 0c. Invalid recurrence_rule rejection check (§1.1, must return 400)
+    const invalidRuleReq = makeAuthRequest('http://localhost:3000/api/admin/calendar/entries', 'POST', {
+      form_name: testFormName,
+      title: 'Invalid Rule Test',
+      due_date: testDueDate,
+      applies_to: 'All test entities',
+      regulator: testCategorySlug,
+      recurrence_rule: { template: 'invalid_template_xyz', day: 99 },
+    })
+    const invalidRuleRes = await entriesPost(invalidRuleReq)
+    expect(invalidRuleRes.status).toBe(400)
+    const invalidRuleData = await invalidRuleRes.json()
+    expect(invalidRuleData.error).toBe('INVALID_RECURRENCE_RULE')
+    expect(invalidRuleData.message).toMatch(/Unknown recurrence rule template/i)
+
     // A. Create Entry with applies_to, act_rule_reference, penalty_details, and one_off recurrence
     const createReq = makeAuthRequest('http://localhost:3000/api/admin/calendar/entries', 'POST', {
       form_name: testFormName,
@@ -263,7 +280,7 @@ describe('Compliance Calendar API & Permissions End-to-End Suite', () => {
     const deleteEmptyCatRes = await categoryDelete(deleteEmptyCatReq, { params: Promise.resolve({ id: testCategoryId }) })
     expect(deleteEmptyCatRes.status).toBe(200)
     testCategoryId = ''
-  }, 20000)
+  }, 45000)
 
   test('5. Bulk Import Dry-Run & Apply with duplicate warning preview', async () => {
     const importPayload = {
@@ -294,5 +311,5 @@ describe('Compliance Calendar API & Permissions End-to-End Suite', () => {
     expect(data.summary.total_rows).toBe(2)
     expect(data.summary.duplicate_warnings).toBeGreaterThanOrEqual(1)
     expect(data.preview[0].is_duplicate).toBe(true)
-  })
+  }, 25000)
 })

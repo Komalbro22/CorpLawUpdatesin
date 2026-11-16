@@ -27,6 +27,8 @@ export interface ComplianceEntry {
   is_deleted?: boolean
   category_id?: string | null
   category_slug?: string | null
+  parent_entry_id?: string | null
+  recurrence_rule?: any
 }
 
 export const REGULATOR_COLORS: Record<string, string> = {

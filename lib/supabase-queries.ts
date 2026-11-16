@@ -21,7 +21,7 @@ export const GLOSSARY_LINK_COLUMNS = 'term, slug' as const
 
 /** Compliance calendar public pages. */
 export const COMPLIANCE_ENTRY_COLUMNS =
-  'id, regulator, form_name, compliance_title, due_date, applicable_to, penalty, regulation_reference, is_active, is_verified, created_by, contributor_name, contributor_profession, correction_count, frequency, display_order, updated_at, description, official_link, official_source_url, last_verified_at, original_date, is_extended, extension_ref, extension_note, is_deleted, category_id, category_slug' as const
+  'id, regulator, form_name, compliance_title, due_date, applicable_to, penalty, regulation_reference, is_active, is_verified, created_by, contributor_name, contributor_profession, correction_count, frequency, display_order, updated_at, description, official_link, official_source_url, last_verified_at, original_date, is_extended, extension_ref, extension_note, is_deleted, category_id, category_slug, parent_entry_id, recurrence_rule' as const
 
 /** RBI repo rate history table. */
 export const REPO_RATE_HISTORY_COLUMNS =

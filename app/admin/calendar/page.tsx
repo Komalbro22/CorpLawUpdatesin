@@ -28,6 +28,11 @@ import {
   FileText
 } from 'lucide-react'
 import { useToast } from '@/components/Toast'
+import {
+  validateRecurrenceRule,
+  computePreviewInstances,
+  type RecurrenceRule,
+} from '@/lib/compliance-series-rules'
 
 interface Category {
   id: string
@@ -58,6 +63,8 @@ interface CalendarEntry {
   penalty?: string | null
   recurrence: string
   frequency?: string
+  recurrence_rule?: any
+  parent_entry_id?: string | null
   source_url?: string | null
   official_source_url?: string | null
   official_link?: string | null
@@ -143,6 +150,115 @@ export default function AdminComplianceCalendarPage() {
     is_live: true,
   })
   const [savingEntry, setSavingEntry] = useState(false)
+
+  // Recurrence rule editor state (§1.3)
+  const [ruleTemplate, setRuleTemplate] = useState<string>('none')
+  const [ruleDay, setRuleDay] = useState<number>(20)
+  const [ruleDays, setRuleDays] = useState<number>(30)
+  const [ruleMonth, setRuleMonth] = useState<number>(9)
+  const [rulePeriodType, setRulePeriodType] = useState<'month' | 'quarter' | 'half_year'>('quarter')
+  const [ruleQuarterMap, setRuleQuarterMap] = useState<Record<string, [number, number]>>({
+    '1': [7, 31],
+    '2': [10, 31],
+    '3': [1, 31],
+    '4': [5, 31],
+  })
+  const [ruleH1, setRuleH1] = useState<[number, number]>([10, 30])
+  const [ruleH2, setRuleH2] = useState<[number, number]>([4, 30])
+  const [ruleTriennialStartYear, setRuleTriennialStartYear] = useState<number>(2028)
+  const [ruleEventAnchor, setRuleEventAnchor] = useState<string>('Board Meeting')
+  const [ruleSkipMonths, setRuleSkipMonths] = useState<string>('')
+  const [rulePreviewAnchor, setRulePreviewAnchor] = useState<string>(new Date().toISOString().slice(0, 10))
+  const [ruleError, setRuleError] = useState<string | null>(null)
+  const [rulePreview, setRulePreview] = useState<Array<{ due_date: string; period_label: string }>>([])
+
+  function buildRecurrenceRule(): any | null {
+    if (ruleTemplate === 'none') return null
+    switch (ruleTemplate) {
+      case 'day_of_month_next': {
+        const obj: any = { template: 'day_of_month_next', day: Number(ruleDay) }
+        if (ruleSkipMonths.trim()) {
+          obj.skip_months = ruleSkipMonths.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n))
+        }
+        return obj
+      }
+      case 'month_end_plus_days':
+        return { template: 'month_end_plus_days', days: Number(ruleDays) }
+      case 'period_end_plus_days':
+        return { template: 'period_end_plus_days', days: Number(ruleDays), period_type: rulePeriodType }
+      case 'day_after_period_end':
+        return { template: 'day_after_period_end', day: Number(ruleDay), period_type: rulePeriodType === 'half_year' ? 'quarter' : rulePeriodType }
+      case 'quarter_map':
+        return { template: 'quarter_map', map: ruleQuarterMap }
+      case 'fixed_annual':
+        return { template: 'fixed_annual', month: Number(ruleMonth), day: Number(ruleDay) }
+      case 'half_year_fixed':
+        return { template: 'half_year_fixed', h1: ruleH1, h2: ruleH2 }
+      case 'triennial_fixed':
+        return { template: 'triennial_fixed', start_year: Number(ruleTriennialStartYear), month: Number(ruleMonth), day: Number(ruleDay) }
+      case 'instalment_map':
+        return {
+          template: 'instalment_map',
+          map: [
+            { month: 6, day: 15, label: '1st instalment (15%)', pct: 15 },
+            { month: 9, day: 15, label: '2nd instalment (45%)', pct: 45 },
+            { month: 12, day: 15, label: '3rd instalment (75%)', pct: 75 },
+            { month: 3, day: 15, label: '4th instalment (100%)', pct: 100 },
+          ]
+        }
+      case 'event_offset':
+        return { template: 'event_offset', event: ruleEventAnchor.trim(), days: Number(ruleDays), counting: 'calendar_days' }
+      default:
+        return null
+    }
+  }
+
+  // Update preview instances whenever rule parameters change
+  useEffect(() => {
+    if (!showEntryModal || ruleTemplate === 'none') {
+      setRuleError(null)
+      setRulePreview([])
+      return
+    }
+
+    try {
+      const rule = buildRecurrenceRule()
+      if (!rule) {
+        setRulePreview([])
+        setRuleError(null)
+        return
+      }
+
+      const val = validateRecurrenceRule(rule)
+      if (!val.valid) {
+        setRuleError(val.error || 'Invalid rule configuration')
+        setRulePreview([])
+        return
+      }
+
+      setRuleError(null)
+      const anchor = rulePreviewAnchor ? new Date(rulePreviewAnchor) : new Date()
+      const prev = computePreviewInstances(val.normalizedRule, isNaN(anchor.getTime()) ? new Date() : anchor, 3)
+      setRulePreview(prev)
+    } catch (err: any) {
+      setRuleError(err.message || 'Error computing preview')
+      setRulePreview([])
+    }
+  }, [
+    showEntryModal,
+    ruleTemplate,
+    ruleDay,
+    ruleDays,
+    ruleMonth,
+    rulePeriodType,
+    ruleQuarterMap,
+    ruleH1,
+    ruleH2,
+    ruleTriennialStartYear,
+    ruleEventAnchor,
+    ruleSkipMonths,
+    rulePreviewAnchor
+  ])
 
   // Categories Modal
   const [showCategoryModal, setShowCategoryModal] = useState(false)
@@ -260,6 +376,25 @@ export default function AdminComplianceCalendarPage() {
   function handleOpenCreateEntry() {
     setEditingEntry(null)
     setDuplicateWarning(null)
+    setRuleTemplate('none')
+    setRuleError(null)
+    setRulePreview([])
+    setRuleDay(20)
+    setRuleDays(30)
+    setRuleMonth(9)
+    setRulePeriodType('quarter')
+    setRuleQuarterMap({
+      '1': [7, 31],
+      '2': [10, 31],
+      '3': [1, 31],
+      '4': [5, 31],
+    })
+    setRuleH1([10, 30])
+    setRuleH2([4, 30])
+    setRuleTriennialStartYear(2028)
+    setRuleEventAnchor('Board Meeting')
+    setRuleSkipMonths('')
+    setRulePreviewAnchor(new Date().toISOString().slice(0, 10))
     setEntryForm({
       form_name: '',
       title: '',
@@ -284,6 +419,49 @@ export default function AdminComplianceCalendarPage() {
   function handleOpenEditEntry(entry: CalendarEntry) {
     setEditingEntry(entry)
     setDuplicateWarning(null)
+    setRuleError(null)
+    setRulePreview([])
+    setRulePreviewAnchor(new Date().toISOString().slice(0, 10))
+
+    // Parse and populate recurrence rule if present
+    let ruleObj = entry.recurrence_rule
+    if (typeof ruleObj === 'string') {
+      try { ruleObj = JSON.parse(ruleObj) } catch { ruleObj = null }
+    }
+
+    if (ruleObj && typeof ruleObj === 'object' && ruleObj.template) {
+      setRuleTemplate(ruleObj.template)
+      if (ruleObj.template === 'day_of_month_next') {
+        setRuleDay(ruleObj.day ?? 20)
+        setRuleSkipMonths(Array.isArray(ruleObj.skip_months) ? ruleObj.skip_months.join(',') : '')
+      } else if (ruleObj.template === 'month_end_plus_days') {
+        setRuleDays(ruleObj.days ?? 30)
+      } else if (ruleObj.template === 'period_end_plus_days') {
+        setRuleDays(ruleObj.days ?? 21)
+        setRulePeriodType(ruleObj.period_type || 'quarter')
+      } else if (ruleObj.template === 'day_after_period_end') {
+        setRuleDay(ruleObj.day ?? 15)
+        setRulePeriodType(ruleObj.period_type || 'quarter')
+      } else if (ruleObj.template === 'quarter_map' && ruleObj.map) {
+        setRuleQuarterMap(ruleObj.map)
+      } else if (ruleObj.template === 'fixed_annual') {
+        setRuleMonth(ruleObj.month ?? 9)
+        setRuleDay(ruleObj.day ?? 30)
+      } else if (ruleObj.template === 'half_year_fixed') {
+        if (ruleObj.h1) setRuleH1(ruleObj.h1)
+        if (ruleObj.h2) setRuleH2(ruleObj.h2)
+      } else if (ruleObj.template === 'triennial_fixed') {
+        setRuleTriennialStartYear(ruleObj.start_year ?? 2028)
+        setRuleMonth(ruleObj.month ?? 6)
+        setRuleDay(ruleObj.day ?? 30)
+      } else if (ruleObj.template === 'event_offset') {
+        setRuleEventAnchor(ruleObj.event || 'AGM')
+        setRuleDays(ruleObj.days ?? 30)
+      }
+    } else {
+      setRuleTemplate('none')
+    }
+
     setEntryForm({
       form_name: entry.form_name || '',
       title: entry.compliance_title || entry.title || '',
@@ -312,6 +490,19 @@ export default function AdminComplianceCalendarPage() {
       return
     }
 
+    // Validate recurrence rule if active (§1.3 live validation check)
+    let recurrenceRulePayload: any = null
+    if (ruleTemplate !== 'none') {
+      const rule = buildRecurrenceRule()
+      const val = validateRecurrenceRule(rule)
+      if (!val.valid) {
+        setRuleError(val.error || 'Invalid rule configuration')
+        showToast(val.error || 'Invalid recurrence rule configuration', 'error')
+        return
+      }
+      recurrenceRulePayload = val.normalizedRule
+    }
+
     setSavingEntry(true)
     try {
       const url = editingEntry ? `/api/admin/calendar/entries/${editingEntry.id}` : '/api/admin/calendar/entries'
@@ -328,6 +519,7 @@ export default function AdminComplianceCalendarPage() {
         statutory_ref: entryForm.statutory_ref.trim() || null,
         penalty_text: entryForm.penalty_text.trim() || null,
         recurrence: entryForm.recurrence,
+        recurrence_rule: recurrenceRulePayload,
         source_url: entryForm.source_url.trim() || null,
         is_extended: entryForm.is_extended,
         original_date: entryForm.original_date.trim() || null,
@@ -350,7 +542,11 @@ export default function AdminComplianceCalendarPage() {
         fetchEntries()
         fetchCategories()
       } else {
-        showToast(data.error?.message || data.error || data.message || 'Failed to save deadline', 'error')
+        const errorMsg = data.error?.message || data.error || data.message || 'Failed to save deadline'
+        if (data.error?.code === 'INVALID_RECURRENCE_RULE' || errorMsg.toLowerCase().includes('recurrence')) {
+          setRuleError(errorMsg)
+        }
+        showToast(errorMsg, 'error')
       }
     } catch (err: any) {
       showToast(err.message || 'Error saving deadline', 'error')
@@ -827,6 +1023,16 @@ export default function AdminComplianceCalendarPage() {
                           <span className="font-bold text-slate-900 dark:text-white font-mono bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-sm">
                             {entry.form_name}
                           </span>
+                          {entry.recurrence_rule && (
+                            <span className="text-[10px] font-bold bg-purple-500/15 text-purple-700 dark:text-purple-300 px-1.5 py-0.5 rounded-md border border-purple-500/30">
+                              🔁 Root ({entry.recurrence_rule.template || 'rule'})
+                            </span>
+                          )}
+                          {entry.parent_entry_id && (
+                            <span className="text-[10px] font-medium bg-blue-500/10 text-blue-600 dark:text-blue-400 px-1.5 py-0.5 rounded-md border border-blue-500/20">
+                              🔗 Instance
+                            </span>
+                          )}
                           {entry.is_extended && (
                             <span className="text-[10px] font-bold bg-amber-500/20 text-amber-700 dark:text-amber-400 px-1.5 py-0.2 rounded-full border border-amber-500/30">
                               Extended
@@ -1085,6 +1291,418 @@ export default function AdminComplianceCalendarPage() {
                     <option value="triennial">Triennial (Every 3 Years)</option>
                   </select>
                 </div>
+              </div>
+
+              {/* ========================================================
+                  DUE DATE LOGIC (SERIES RECURRENCE RULE & 3-INSTANCE PREVIEW)
+                  §1.3 Admin Entry-Form Logic Picker
+                  ======================================================== */}
+              <div className="bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 rounded-xl p-3.5 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                      <span>⚙️</span>
+                      <span>Due Date Logic (Series Recurrence Rule)</span>
+                    </h3>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                      Declarative recurrence rule for this series. Muse AI weekly cron uses this to generate verified subsequent instances.
+                    </p>
+                  </div>
+                  {ruleTemplate !== 'none' && (
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-500/30">
+                      Rule Active
+                    </span>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    Recurrence Template
+                  </label>
+                  <select
+                    value={ruleTemplate}
+                    onChange={e => setRuleTemplate(e.target.value)}
+                    className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-medium focus:ring-2 focus:ring-amber-500"
+                  >
+                    <option value="none">None (Manual / Single Instance / Non-recurring / Child Instance)</option>
+                    <option value="day_of_month_next">day_of_month_next — Day N of next month (e.g. GSTR-3B 20th, GSTR-1 11th, EPF 15th)</option>
+                    <option value="month_end_plus_days">month_end_plus_days — Days after month end (e.g. Form 141 +30d)</option>
+                    <option value="period_end_plus_days">period_end_plus_days — Days after quarter/period end (e.g. Reg 31 +21d, Reg 13(3) +30d)</option>
+                    <option value="day_after_period_end">day_after_period_end — Day N in month after period end (e.g. PMT-06 Day 25)</option>
+                    <option value="quarter_map">quarter_map — Explicit dates for Q1, Q2, Q3, Q4 (e.g. TDS Quarterly, FLA)</option>
+                    <option value="fixed_annual">fixed_annual — Same date every year (e.g. MGT-7, Form 11 LLP, ITR)</option>
+                    <option value="half_year_fixed">half_year_fixed — Fixed dates for H1 and H2 (e.g. MSME-1)</option>
+                    <option value="triennial_fixed">triennial_fixed — Every 3 years on fixed date (e.g. DIR-3 KYC)</option>
+                    <option value="instalment_map">instalment_map — Advance tax instalment schedule (15 Jun, 15 Sep, 15 Dec, 15 Mar)</option>
+                    <option value="event_offset">event_offset — Event-driven offset documentation (e.g. INC-22 15d, DIR-12 30d)</option>
+                  </select>
+                </div>
+
+                {/* Dynamic Parameter Inputs */}
+                {ruleTemplate === 'day_of_month_next' && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 text-xs">
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                        Day of Next Month (1-31)
+                      </label>
+                      <input
+                        type="number"
+                        min={1}
+                        max={31}
+                        value={ruleDay}
+                        onChange={e => setRuleDay(parseInt(e.target.value, 10) || 1)}
+                        className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                        Skip Months (comma-separated, optional)
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="e.g. 3,6,9,12 for QRMP"
+                        value={ruleSkipMonths}
+                        onChange={e => setRuleSkipMonths(e.target.value)}
+                        className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {ruleTemplate === 'month_end_plus_days' && (
+                  <div className="pt-1 text-xs">
+                    <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                      Days After Month End
+                    </label>
+                    <input
+                      type="number"
+                      min={1}
+                      max={120}
+                      value={ruleDays}
+                      onChange={e => setRuleDays(parseInt(e.target.value, 10) || 1)}
+                      className="w-full max-w-xs px-2.5 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs"
+                    />
+                  </div>
+                )}
+
+                {ruleTemplate === 'period_end_plus_days' && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 text-xs">
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                        Days After Period End
+                      </label>
+                      <input
+                        type="number"
+                        min={1}
+                        max={180}
+                        value={ruleDays}
+                        onChange={e => setRuleDays(parseInt(e.target.value, 10) || 1)}
+                        className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                        Period Type
+                      </label>
+                      <select
+                        value={rulePeriodType}
+                        onChange={e => setRulePeriodType(e.target.value as any)}
+                        className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs"
+                      >
+                        <option value="quarter">Quarter (Q1..Q4)</option>
+                        <option value="month">Month</option>
+                        <option value="half_year">Half-Year (H1/H2)</option>
+                      </select>
+                    </div>
+                  </div>
+                )}
+
+                {ruleTemplate === 'day_after_period_end' && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 text-xs">
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                        Day of Subsequent Month (1-31)
+                      </label>
+                      <input
+                        type="number"
+                        min={1}
+                        max={31}
+                        value={ruleDay}
+                        onChange={e => setRuleDay(parseInt(e.target.value, 10) || 1)}
+                        className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                        Period Type
+                      </label>
+                      <select
+                        value={rulePeriodType}
+                        onChange={e => setRulePeriodType(e.target.value as any)}
+                        className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs"
+                      >
+                        <option value="quarter">Quarter</option>
+                        <option value="month">Month</option>
+                      </select>
+                    </div>
+                  </div>
+                )}
+
+                {ruleTemplate === 'quarter_map' && (
+                  <div className="pt-1 space-y-2 text-xs">
+                    <p className="text-[11px] text-slate-500 font-medium">Due date per quarter [Month (1-12), Day (1-31)]:</p>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      {(['1', '2', '3', '4'] as const).map(q => (
+                        <div key={q} className="bg-white dark:bg-slate-900 p-2 rounded-lg border border-slate-200 dark:border-slate-700">
+                          <span className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Q{q}</span>
+                          <div className="flex items-center gap-1">
+                            <input
+                              type="number"
+                              min={1}
+                              max={12}
+                              title="Month"
+                              value={ruleQuarterMap[q]?.[0] ?? 1}
+                              onChange={e => {
+                                const m = parseInt(e.target.value, 10) || 1
+                                setRuleQuarterMap({ ...ruleQuarterMap, [q]: [m, ruleQuarterMap[q]?.[1] ?? 1] })
+                              }}
+                              className="w-1/2 px-1.5 py-1 text-xs border rounded"
+                            />
+                            <span className="text-slate-400">/</span>
+                            <input
+                              type="number"
+                              min={1}
+                              max={31}
+                              title="Day"
+                              value={ruleQuarterMap[q]?.[1] ?? 1}
+                              onChange={e => {
+                                const d = parseInt(e.target.value, 10) || 1
+                                setRuleQuarterMap({ ...ruleQuarterMap, [q]: [ruleQuarterMap[q]?.[0] ?? 1, d] })
+                              }}
+                              className="w-1/2 px-1.5 py-1 text-xs border rounded"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {ruleTemplate === 'fixed_annual' && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 text-xs">
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                        Month (1-12)
+                      </label>
+                      <input
+                        type="number"
+                        min={1}
+                        max={12}
+                        value={ruleMonth}
+                        onChange={e => setRuleMonth(parseInt(e.target.value, 10) || 1)}
+                        className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                        Day (1-31)
+                      </label>
+                      <input
+                        type="number"
+                        min={1}
+                        max={31}
+                        value={ruleDay}
+                        onChange={e => setRuleDay(parseInt(e.target.value, 10) || 1)}
+                        className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {ruleTemplate === 'half_year_fixed' && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 text-xs">
+                    <div className="bg-white dark:bg-slate-900 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700">
+                      <span className="font-bold text-slate-700 dark:text-slate-300 block mb-1">H1 (April - Sept)</span>
+                      <div className="flex items-center gap-1.5">
+                        <label className="text-[10px] text-slate-400">Month:</label>
+                        <input
+                          type="number"
+                          min={1}
+                          max={12}
+                          value={ruleH1[0]}
+                          onChange={e => setRuleH1([parseInt(e.target.value, 10) || 1, ruleH1[1]])}
+                          className="w-16 px-1.5 py-1 text-xs border rounded"
+                        />
+                        <label className="text-[10px] text-slate-400">Day:</label>
+                        <input
+                          type="number"
+                          min={1}
+                          max={31}
+                          value={ruleH1[1]}
+                          onChange={e => setRuleH1([ruleH1[0], parseInt(e.target.value, 10) || 1])}
+                          className="w-16 px-1.5 py-1 text-xs border rounded"
+                        />
+                      </div>
+                    </div>
+                    <div className="bg-white dark:bg-slate-900 p-2.5 rounded-lg border border-slate-200 dark:border-slate-700">
+                      <span className="font-bold text-slate-700 dark:text-slate-300 block mb-1">H2 (Oct - March)</span>
+                      <div className="flex items-center gap-1.5">
+                        <label className="text-[10px] text-slate-400">Month:</label>
+                        <input
+                          type="number"
+                          min={1}
+                          max={12}
+                          value={ruleH2[0]}
+                          onChange={e => setRuleH2([parseInt(e.target.value, 10) || 1, ruleH2[1]])}
+                          className="w-16 px-1.5 py-1 text-xs border rounded"
+                        />
+                        <label className="text-[10px] text-slate-400">Day:</label>
+                        <input
+                          type="number"
+                          min={1}
+                          max={31}
+                          value={ruleH2[1]}
+                          onChange={e => setRuleH2([ruleH2[0], parseInt(e.target.value, 10) || 1])}
+                          className="w-16 px-1.5 py-1 text-xs border rounded"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {ruleTemplate === 'triennial_fixed' && (
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-xs">
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                        Start / Next Due Year
+                      </label>
+                      <input
+                        type="number"
+                        min={2026}
+                        max={2035}
+                        value={ruleTriennialStartYear}
+                        onChange={e => setRuleTriennialStartYear(parseInt(e.target.value, 10) || 2028)}
+                        className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                        Month (1-12)
+                      </label>
+                      <input
+                        type="number"
+                        min={1}
+                        max={12}
+                        value={ruleMonth}
+                        onChange={e => setRuleMonth(parseInt(e.target.value, 10) || 1)}
+                        className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                        Day (1-31)
+                      </label>
+                      <input
+                        type="number"
+                        min={1}
+                        max={31}
+                        value={ruleDay}
+                        onChange={e => setRuleDay(parseInt(e.target.value, 10) || 1)}
+                        className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {ruleTemplate === 'instalment_map' && (
+                  <div className="p-2.5 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-300">
+                    <span className="font-semibold block mb-1">Advance Tax Standard Schedule:</span>
+                    <ul className="list-disc list-inside space-y-0.5 text-[11px] text-slate-500">
+                      <li>1st Instalment (15%): 15 June</li>
+                      <li>2nd Instalment (45%): 15 September</li>
+                      <li>3rd Instalment (75%): 15 December</li>
+                      <li>4th Instalment (100%): 15 March</li>
+                    </ul>
+                  </div>
+                )}
+
+                {ruleTemplate === 'event_offset' && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 text-xs">
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                        Anchor Event
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="e.g. AGM, Board Meeting, Incorporation"
+                        value={ruleEventAnchor}
+                        onChange={e => setRuleEventAnchor(e.target.value)}
+                        className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                        Offset Days
+                      </label>
+                      <input
+                        type="number"
+                        min={1}
+                        max={180}
+                        value={ruleDays}
+                        onChange={e => setRuleDays(parseInt(e.target.value, 10) || 1)}
+                        className="w-full px-2.5 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Inline Error Alert */}
+                {ruleError && (
+                  <div className="p-2.5 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-center gap-1.5">
+                    <AlertCircle size={14} className="shrink-0" />
+                    <span>{ruleError}</span>
+                  </div>
+                )}
+
+                {/* Live 3-Instance Preview Block (§1.3) */}
+                {ruleTemplate !== 'none' && !ruleError && (
+                  <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-3 space-y-2">
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="font-semibold text-slate-700 dark:text-slate-300">
+                        Live 3-Instance Preview:
+                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-slate-500">Base Date:</span>
+                        <input
+                          type="date"
+                          value={rulePreviewAnchor}
+                          onChange={e => setRulePreviewAnchor(e.target.value)}
+                          className="px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700 text-[11px] bg-slate-50 dark:bg-slate-800"
+                        />
+                      </div>
+                    </div>
+
+                    {rulePreview.length > 0 ? (
+                      <ul className="space-y-1 text-xs">
+                        {rulePreview.map((inst, idx) => (
+                          <li key={idx} className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                            <span className="w-4 h-4 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-400 font-bold text-[10px] flex items-center justify-center shrink-0">
+                              {idx + 1}
+                            </span>
+                            <span className="font-semibold font-mono text-slate-900 dark:text-white">
+                              {inst.due_date}
+                            </span>
+                            <span className="text-slate-400 text-[11px]">
+                              ({inst.period_label})
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-xs text-slate-400 italic">No preview available for this configuration.</p>
+                    )}
+                  </div>
+                )}
               </div>
 
               <div>

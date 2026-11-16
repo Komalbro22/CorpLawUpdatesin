@@ -10,6 +10,7 @@ import {
   CANONICAL_ENTRY_FIELDS,
   ACCEPTED_FIELD_ALIASES,
 } from '@/lib/compliance-calendar'
+import { validateRecurrenceRule } from '@/lib/compliance-series-rules'
 import { revalidateComplianceMutation } from '@/lib/content-revalidation'
 
 export const dynamic = 'force-dynamic'
@@ -272,7 +273,20 @@ export async function POST(request: NextRequest) {
     const isExtended = Boolean(canonical.is_extended || originalDate)
     const extensionRef = canonical.extension_ref ? String(canonical.extension_ref).trim() : null
     const extensionNote = canonical.extension_note ? String(canonical.extension_note).trim() : null
-    const recurrenceRule = canonical.recurrence_rule || null
+    let recurrenceRule = canonical.recurrence_rule || null
+    if (recurrenceRule) {
+      const ruleValidation = validateRecurrenceRule(recurrenceRule)
+      if (!ruleValidation.valid) {
+        return NextResponse.json(
+          {
+            error: 'INVALID_RECURRENCE_RULE',
+            message: ruleValidation.error,
+          },
+          { status: 400 }
+        )
+      }
+      recurrenceRule = ruleValidation.normalizedRule
+    }
     const displayOrder = typeof canonical.display_order === 'number' ? canonical.display_order : 100
     const isLive = canonical.is_live !== false
 
