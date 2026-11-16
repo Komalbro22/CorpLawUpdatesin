@@ -188,3 +188,187 @@ export async function checkDuplicateCalendarEntry(
 
   return { isDuplicate: false }
 }
+
+export const ALLOWED_RECURRENCES = [
+  'one-off',
+  'monthly',
+  'quarterly',
+  'half-yearly',
+  'annual',
+] as const
+
+export type RecurrenceType = (typeof ALLOWED_RECURRENCES)[number]
+
+/**
+ * Normalizes user-supplied recurrence strings to canonical values.
+ * Returns { valid: true, recurrence } or { valid: false, raw }.
+ */
+export function normalizeRecurrence(val: any): { valid: true; recurrence: RecurrenceType } | { valid: false; raw: string } {
+  if (val === undefined || val === null || val === '') {
+    return { valid: true, recurrence: 'monthly' }
+  }
+  const s = String(val).trim().toLowerCase().replace(/[\s_]+/g, '-')
+
+  if (s === 'one-off' || s === 'oneoff' || s === 'one-time' || s === 'onetime' || s === 'once' || s === 'event-based') {
+    return { valid: true, recurrence: 'one-off' }
+  }
+  if (s === 'monthly' || s === 'month') {
+    return { valid: true, recurrence: 'monthly' }
+  }
+  if (s === 'quarterly' || s === 'quarter') {
+    return { valid: true, recurrence: 'quarterly' }
+  }
+  if (s === 'half-yearly' || s === 'halfyearly' || s === 'semi-annual' || s === 'semiannual' || s === 'half-year') {
+    return { valid: true, recurrence: 'half-yearly' }
+  }
+  if (s === 'annual' || s === 'annually' || s === 'yearly' || s === 'year' || s === 'every-2-years' || s === 'every-3-years' || s === 'every-5-years') {
+    return { valid: true, recurrence: 'annual' }
+  }
+
+  return { valid: false, raw: String(val) }
+}
+
+/**
+ * Canonical fields accepted by calendar entry APIs.
+ */
+export const CANONICAL_ENTRY_FIELDS = [
+  'title',
+  'form_name',
+  'category',
+  'due_date',
+  'applies_to',
+  'description',
+  'statutory_ref',
+  'penalty_text',
+  'recurrence',
+  'source_url',
+  'last_verified_at',
+  'original_date',
+  'is_extended',
+  'extension_ref',
+  'extension_note',
+  'display_order',
+  'is_live',
+  'recurrence_rule',
+  'parent_entry_id',
+  'ignore_duplicate',
+  'force',
+] as const
+
+/**
+ * Mapping of legacy or alternative aliases to canonical field names.
+ */
+export const ACCEPTED_FIELD_ALIASES: Record<string, string> = {
+  compliance_title: 'title',
+  regulator: 'category',
+  category_slug: 'category',
+  category_id: 'category',
+  date: 'due_date',
+  applicable_to: 'applies_to',
+  act_rule_reference: 'statutory_ref',
+  regulation_reference: 'statutory_ref',
+  penalty_details: 'penalty_text',
+  penalty: 'penalty_text',
+  frequency: 'recurrence',
+  official_source_url: 'source_url',
+  official_link: 'source_url',
+  last_verified: 'last_verified_at',
+  is_active: 'is_live',
+}
+
+/**
+ * Validate input fields against canonical fields + accepted aliases.
+ * Rejects unknown fields with HTTP 400.
+ */
+export function validateEntryFields(
+  body: Record<string, any>,
+  options: { isPatch?: boolean } = {}
+): {
+  valid: boolean
+  unknownFields: string[]
+  canonical: Record<string, any>
+} {
+  const allowedKeys = new Set<string>([
+    ...CANONICAL_ENTRY_FIELDS,
+    ...Object.keys(ACCEPTED_FIELD_ALIASES),
+    ...(options.isPatch ? ['reason', 'deletion_reason'] : []),
+  ])
+
+  const unknownFields = Object.keys(body || {}).filter(k => !allowedKeys.has(k))
+  if (unknownFields.length > 0) {
+    return { valid: false, unknownFields, canonical: {} }
+  }
+
+  const canonical: Record<string, any> = {}
+
+  // Resolve values
+  if (body.title !== undefined || body.compliance_title !== undefined) {
+    canonical.title = String(body.title ?? body.compliance_title).trim()
+  }
+  if (body.form_name !== undefined) {
+    canonical.form_name = String(body.form_name).trim()
+  }
+  if (body.due_date !== undefined || body.date !== undefined) {
+    canonical.due_date = String(body.due_date ?? body.date).trim()
+  }
+  if (body.applies_to !== undefined || body.applicable_to !== undefined) {
+    canonical.applies_to = String(body.applies_to ?? body.applicable_to).trim()
+  }
+  if (body.category !== undefined || body.regulator !== undefined || body.category_slug !== undefined || body.category_id !== undefined) {
+    canonical.category = String(body.category ?? body.regulator ?? body.category_slug ?? body.category_id).trim().toLowerCase()
+    if (body.category_id !== undefined) canonical.category_id = body.category_id
+  }
+  if (body.description !== undefined) {
+    canonical.description = body.description ? String(body.description).trim() : null
+  }
+  if (body.statutory_ref !== undefined || body.act_rule_reference !== undefined || body.regulation_reference !== undefined) {
+    const val = body.statutory_ref ?? body.act_rule_reference ?? body.regulation_reference
+    canonical.statutory_ref = val ? String(val).trim() : null
+  }
+  if (body.penalty_text !== undefined || body.penalty_details !== undefined || body.penalty !== undefined) {
+    const val = body.penalty_text ?? body.penalty_details ?? body.penalty
+    canonical.penalty_text = val ? String(val).trim() : null
+  }
+  if (body.recurrence !== undefined || body.frequency !== undefined) {
+    canonical.recurrence = body.recurrence ?? body.frequency
+  }
+  if (body.source_url !== undefined || body.official_source_url !== undefined || body.official_link !== undefined) {
+    const val = body.source_url ?? body.official_source_url ?? body.official_link
+    canonical.source_url = val ? String(val).trim() : null
+  }
+  if (body.last_verified_at !== undefined || body.last_verified !== undefined) {
+    canonical.last_verified_at = body.last_verified_at ?? body.last_verified
+  }
+  if (body.original_date !== undefined) {
+    canonical.original_date = body.original_date ? String(body.original_date).trim() : null
+  }
+  if (body.is_extended !== undefined) {
+    canonical.is_extended = Boolean(body.is_extended)
+  }
+  if (body.extension_ref !== undefined) {
+    canonical.extension_ref = body.extension_ref ? String(body.extension_ref).trim() : null
+  }
+  if (body.extension_note !== undefined) {
+    canonical.extension_note = body.extension_note ? String(body.extension_note).trim() : null
+  }
+  if (body.display_order !== undefined) {
+    canonical.display_order = Number(body.display_order)
+  }
+  if (body.is_live !== undefined || body.is_active !== undefined) {
+    canonical.is_live = Boolean(body.is_live ?? body.is_active)
+  }
+  if (body.recurrence_rule !== undefined) {
+    canonical.recurrence_rule = body.recurrence_rule
+  }
+  if (body.parent_entry_id !== undefined) {
+    canonical.parent_entry_id = body.parent_entry_id
+  }
+  if (body.ignore_duplicate !== undefined || body.force !== undefined) {
+    canonical.ignore_duplicate = Boolean(body.ignore_duplicate ?? body.force)
+  }
+  if (options.isPatch && (body.reason !== undefined || body.deletion_reason !== undefined)) {
+    canonical.reason = body.reason ?? body.deletion_reason
+  }
+
+  return { valid: true, unknownFields: [], canonical }
+}

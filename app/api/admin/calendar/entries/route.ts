@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminOrKey, logApiAudit, getClientIp } from '@/lib/api-key-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
-import { normalizeCalendarEntry, checkDuplicateCalendarEntry } from '@/lib/compliance-calendar'
+import {
+  normalizeCalendarEntry,
+  checkDuplicateCalendarEntry,
+  normalizeRecurrence,
+  validateEntryFields,
+  ALLOWED_RECURRENCES,
+  CANONICAL_ENTRY_FIELDS,
+  ACCEPTED_FIELD_ALIASES,
+} from '@/lib/compliance-calendar'
 import { revalidateComplianceMutation } from '@/lib/content-revalidation'
 
 export const dynamic = 'force-dynamic'
@@ -146,27 +154,59 @@ export async function POST(request: NextRequest) {
   const keyId = authCheck.auth.type === 'api_key' ? authCheck.auth.key.id : null
 
   try {
-    const body = await request.json()
+    const rawBody = await request.json()
+
+    // 1. Unknown fields validation
+    const validation = validateEntryFields(rawBody, { isPatch: false })
+    if (!validation.valid) {
+      return NextResponse.json(
+        {
+          error: 'UNKNOWN_FIELDS',
+          message: `Payload contains unrecognized field(s): ${validation.unknownFields.join(', ')}. Please use documented canonical fields.`,
+          unknown_fields: validation.unknownFields,
+          allowed_fields: CANONICAL_ENTRY_FIELDS,
+          accepted_aliases: ACCEPTED_FIELD_ALIASES,
+        },
+        { status: 400 }
+      )
+    }
+
+    const { canonical } = validation
 
     // Required fields
-    const formName = (body.form_name || '').trim()
-    const title = (body.title || body.compliance_title || '').trim()
-    const dueDate = (body.due_date || body.date || '').trim()
-    const appliesTo = (body.applies_to || body.applicable_to || '').trim()
-    const requestedCategory = (body.regulator || body.category_slug || body.category || 'other').trim().toLowerCase()
+    const formName = (canonical.form_name || '').trim()
+    const title = (canonical.title || '').trim()
+    const dueDate = (canonical.due_date || '').trim()
+    const appliesTo = (canonical.applies_to || '').trim()
+    const requestedCategory = (canonical.category || 'other').trim().toLowerCase()
 
     if (!formName || !title || !dueDate || !appliesTo) {
       return NextResponse.json(
         {
           error: 'MISSING_REQUIRED_FIELDS',
           message: 'form_name, title, due_date, and applies_to are required fields.',
+          received: { form_name: formName, title, due_date: dueDate, applies_to: appliesTo },
         },
         { status: 400 }
       )
     }
 
-    // 1. Duplicate Guard Check
-    const ignoreDuplicate = Boolean(body.ignore_duplicate || body.force)
+    // 2. Recurrence validation (canonical: 'one-off' | 'monthly' | 'quarterly' | 'half-yearly' | 'annual')
+    const recurrenceRes = normalizeRecurrence(canonical.recurrence)
+    if (!recurrenceRes.valid) {
+      return NextResponse.json(
+        {
+          error: 'INVALID_RECURRENCE',
+          message: `Invalid recurrence '${recurrenceRes.raw}'. Allowed values are: ${ALLOWED_RECURRENCES.join(', ')} (aliases: one_off, one-time, yearly, half_yearly).`,
+          allowed_values: ALLOWED_RECURRENCES,
+        },
+        { status: 400 }
+      )
+    }
+    const recurrence = recurrenceRes.recurrence
+
+    // 3. Duplicate Guard Check
+    const ignoreDuplicate = Boolean(canonical.ignore_duplicate)
     if (!ignoreDuplicate) {
       const duplicateCheck = await checkDuplicateCalendarEntry(formName, dueDate)
       if (duplicateCheck.isDuplicate) {
@@ -182,8 +222,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 2. Resolve Category & Regulator
-    let categoryId = body.category_id || null
+    // 4. Resolve Category & Regulator
+    let categoryId = canonical.category_id || null
     let categorySlug = requestedCategory
     let categoryName = requestedCategory
 
@@ -223,19 +263,18 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const description = (body.description || '').trim() || null
-    const statutoryRef = (body.statutory_ref || body.regulation_reference || '').trim() || null
-    const penaltyText = (body.penalty_text || body.penalty || '').trim() || null
-    const recurrence = (body.recurrence || body.frequency || 'monthly').trim().toLowerCase()
-    const sourceUrl = (body.source_url || body.official_source_url || body.official_link || '').trim() || null
-    const lastVerifiedAt = body.last_verified_at || body.last_verified || new Date().toISOString()
-    const originalDate = (body.original_date || '').trim() || null
-    const isExtended = Boolean(body.is_extended || originalDate)
-    const extensionRef = (body.extension_ref || '').trim() || null
-    const extensionNote = (body.extension_note || '').trim() || null
-    const recurrenceRule = body.recurrence_rule || null
-    const displayOrder = typeof body.display_order === 'number' ? body.display_order : 100
-    const isLive = body.is_live !== false && body.is_active !== false
+    const description = canonical.description ? String(canonical.description).trim() : null
+    const statutoryRef = canonical.statutory_ref ? String(canonical.statutory_ref).trim() : null
+    const penaltyText = canonical.penalty_text ? String(canonical.penalty_text).trim() : null
+    const sourceUrl = canonical.source_url ? String(canonical.source_url).trim() : null
+    const lastVerifiedAt = canonical.last_verified_at || new Date().toISOString()
+    const originalDate = canonical.original_date ? String(canonical.original_date).trim() : null
+    const isExtended = Boolean(canonical.is_extended || originalDate)
+    const extensionRef = canonical.extension_ref ? String(canonical.extension_ref).trim() : null
+    const extensionNote = canonical.extension_note ? String(canonical.extension_note).trim() : null
+    const recurrenceRule = canonical.recurrence_rule || null
+    const displayOrder = typeof canonical.display_order === 'number' ? canonical.display_order : 100
+    const isLive = canonical.is_live !== false
 
     const insertPayload = {
       form_name: formName,

@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminOrKey, logApiAudit, getClientIp } from '@/lib/api-key-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
-import { normalizeCalendarEntry, computeFieldDiff } from '@/lib/compliance-calendar'
+import {
+  normalizeCalendarEntry,
+  computeFieldDiff,
+  normalizeRecurrence,
+  validateEntryFields,
+  ALLOWED_RECURRENCES,
+  CANONICAL_ENTRY_FIELDS,
+  ACCEPTED_FIELD_ALIASES,
+} from '@/lib/compliance-calendar'
 import { revalidateComplianceMutation } from '@/lib/content-revalidation'
 
 export const dynamic = 'force-dynamic'
@@ -85,96 +93,118 @@ export async function PATCH(
       return NextResponse.json({ error: 'Entry not found' }, { status: 404 })
     }
 
-    const body = await request.json()
+    const rawBody = await request.json()
+
+    // 1. Unknown fields validation
+    const validation = validateEntryFields(rawBody, { isPatch: true })
+    if (!validation.valid) {
+      return NextResponse.json(
+        {
+          error: 'UNKNOWN_FIELDS',
+          message: `Payload contains unrecognized field(s): ${validation.unknownFields.join(', ')}. Please use documented canonical fields.`,
+          unknown_fields: validation.unknownFields,
+          allowed_fields: CANONICAL_ENTRY_FIELDS,
+          accepted_aliases: ACCEPTED_FIELD_ALIASES,
+        },
+        { status: 400 }
+      )
+    }
+
+    const { canonical } = validation
     const updates: Record<string, any> = {
       updated_at: new Date().toISOString(),
     }
 
     // Title / compliance_title
-    if (body.title !== undefined || body.compliance_title !== undefined) {
-      const val = String(body.title ?? body.compliance_title).trim()
-      updates.compliance_title = val
+    if (canonical.title !== undefined) {
+      updates.compliance_title = canonical.title
     }
 
     // Form name
-    if (body.form_name !== undefined) {
-      updates.form_name = String(body.form_name).trim()
+    if (canonical.form_name !== undefined) {
+      updates.form_name = canonical.form_name
     }
 
     // Due date
-    if (body.due_date !== undefined || body.date !== undefined) {
-      updates.due_date = String(body.due_date ?? body.date).trim()
+    if (canonical.due_date !== undefined) {
+      updates.due_date = canonical.due_date
     }
 
     // Applies to
-    if (body.applies_to !== undefined || body.applicable_to !== undefined) {
-      updates.applicable_to = String(body.applies_to ?? body.applicable_to).trim()
+    if (canonical.applies_to !== undefined) {
+      updates.applicable_to = canonical.applies_to
     }
 
     // Description
-    if (body.description !== undefined) {
-      updates.description = body.description ? String(body.description).trim() : null
+    if (canonical.description !== undefined) {
+      updates.description = canonical.description
     }
 
     // Statutory ref
-    if (body.statutory_ref !== undefined || body.regulation_reference !== undefined) {
-      const val = body.statutory_ref ?? body.regulation_reference
-      updates.regulation_reference = val ? String(val).trim() : null
+    if (canonical.statutory_ref !== undefined) {
+      updates.regulation_reference = canonical.statutory_ref
     }
 
     // Penalty text
-    if (body.penalty_text !== undefined || body.penalty !== undefined) {
-      const val = body.penalty_text ?? body.penalty
-      updates.penalty = val ? String(val).trim() : null
+    if (canonical.penalty_text !== undefined) {
+      updates.penalty = canonical.penalty_text
     }
 
     // Recurrence / Frequency
-    if (body.recurrence !== undefined || body.frequency !== undefined) {
-      const val = String(body.recurrence ?? body.frequency).trim().toLowerCase()
-      updates.recurrence = val
-      updates.frequency = val
+    if (canonical.recurrence !== undefined) {
+      const recCheck = normalizeRecurrence(canonical.recurrence)
+      if (!recCheck.valid) {
+        return NextResponse.json(
+          {
+            error: 'INVALID_RECURRENCE',
+            message: `Invalid recurrence '${recCheck.raw}'. Allowed values are: ${ALLOWED_RECURRENCES.join(', ')} (aliases: one_off, one-time, yearly, half_yearly).`,
+            allowed_values: ALLOWED_RECURRENCES,
+          },
+          { status: 400 }
+        )
+      }
+      updates.recurrence = recCheck.recurrence
+      updates.frequency = recCheck.recurrence
     }
 
     // Source URL
-    if (body.source_url !== undefined || body.official_source_url !== undefined || body.official_link !== undefined) {
-      const val = body.source_url ?? body.official_source_url ?? body.official_link
-      updates.official_source_url = val ? String(val).trim() : null
-      updates.official_link = val ? String(val).trim() : null
+    if (canonical.source_url !== undefined) {
+      updates.official_source_url = canonical.source_url
+      updates.official_link = canonical.source_url
     }
 
     // Last verified date
-    if (body.last_verified_at !== undefined || body.last_verified !== undefined) {
-      const val = body.last_verified_at ?? body.last_verified
-      updates.last_verified_at = val ? new Date(val).toISOString() : new Date().toISOString()
+    if (canonical.last_verified_at !== undefined) {
+      updates.last_verified_at = canonical.last_verified_at ? new Date(canonical.last_verified_at).toISOString() : new Date().toISOString()
     }
 
     // Extension fields
-    if (body.original_date !== undefined) {
-      updates.original_date = body.original_date ? String(body.original_date).trim() : null
+    if (canonical.original_date !== undefined) {
+      updates.original_date = canonical.original_date
     }
-    if (body.is_extended !== undefined) {
-      updates.is_extended = Boolean(body.is_extended)
+    if (canonical.is_extended !== undefined) {
+      updates.is_extended = Boolean(canonical.is_extended)
     }
-    if (body.extension_ref !== undefined) {
-      updates.extension_ref = body.extension_ref ? String(body.extension_ref).trim() : null
+    if (canonical.extension_ref !== undefined) {
+      updates.extension_ref = canonical.extension_ref
     }
-    if (body.extension_note !== undefined) {
-      updates.extension_note = body.extension_note ? String(body.extension_note).trim() : null
+    if (canonical.extension_note !== undefined) {
+      updates.extension_note = canonical.extension_note
     }
 
     // Recurrence rule
-    if (body.recurrence_rule !== undefined) {
-      updates.recurrence_rule = body.recurrence_rule
+    if (canonical.recurrence_rule !== undefined) {
+      updates.recurrence_rule = canonical.recurrence_rule
     }
 
     // Display order
-    if (body.display_order !== undefined) {
-      updates.display_order = Number(body.display_order)
+    if (canonical.display_order !== undefined) {
+      updates.display_order = Number(canonical.display_order)
     }
 
     // Status: is_live / is_active
-    if (body.is_live !== undefined || body.is_active !== undefined) {
-      const live = Boolean(body.is_live ?? body.is_active)
+    if (canonical.is_live !== undefined) {
+      const live = Boolean(canonical.is_live)
       updates.is_active = live
       updates.is_live = live
       if (live) {
@@ -182,8 +212,8 @@ export async function PATCH(
       }
     }
 
-    // Move category if category_id or regulator/category_slug specified
-    const targetCategory = body.category_id || body.regulator || body.category_slug || body.category
+    // Move category if category_id or category specified
+    const targetCategory = canonical.category_id || canonical.category
     if (targetCategory) {
       const { data: cat } = await supabaseAdmin
         .from('compliance_categories')

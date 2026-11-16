@@ -1077,11 +1077,11 @@ export default function AdminComplianceCalendarPage() {
                     onChange={e => setEntryForm({ ...entryForm, recurrence: e.target.value })}
                     className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none"
                   >
+                    <option value="one-off">One-Off / Event Based</option>
                     <option value="monthly">Monthly</option>
                     <option value="quarterly">Quarterly</option>
-                    <option value="half_yearly">Half-Yearly</option>
+                    <option value="half-yearly">Half-Yearly</option>
                     <option value="annual">Annual</option>
-                    <option value="one_off">One-Off / Event Based</option>
                   </select>
                 </div>
               </div>

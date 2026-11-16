@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAdminOrKey, logApiAudit, getClientIp } from '@/lib/api-key-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
-import { checkDuplicateCalendarEntry } from '@/lib/compliance-calendar'
+import { checkDuplicateCalendarEntry, normalizeRecurrence } from '@/lib/compliance-calendar'
 import { revalidateComplianceMutation } from '@/lib/content-revalidation'
 
 export const dynamic = 'force-dynamic'
@@ -19,8 +19,10 @@ interface ImportItem {
   regulator?: string
   description?: string
   statutory_ref?: string
+  act_rule_reference?: string
   regulation_reference?: string
   penalty_text?: string
+  penalty_details?: string
   penalty?: string
   recurrence?: string
   frequency?: string
@@ -162,9 +164,10 @@ export async function POST(request: NextRequest) {
       if (isDuplicate) duplicateCount++
 
       const description = (item.description || '').trim() || null
-      const statutoryRef = (item.statutory_ref || item.regulation_reference || '').trim() || null
-      const penaltyText = (item.penalty_text || item.penalty || '').trim() || null
-      const recurrence = (item.recurrence || item.frequency || 'monthly').trim().toLowerCase()
+      const statutoryRef = (item.statutory_ref || item.act_rule_reference || item.regulation_reference || '').trim() || null
+      const penaltyText = (item.penalty_text || item.penalty_details || item.penalty || '').trim() || null
+      const recCheck = normalizeRecurrence(item.recurrence || item.frequency)
+      const recurrence = recCheck.valid ? recCheck.recurrence : 'monthly'
       const sourceUrl = (item.source_url || item.official_source_url || item.official_link || '').trim() || null
       const lastVerifiedAt = item.last_verified_at || new Date().toISOString()
       const originalDate = (item.original_date || '').trim() || null

@@ -127,17 +127,47 @@ describe('Compliance Calendar API & Permissions End-to-End Suite', () => {
     const testFormName = `TEST-FORM-${Date.now()}`
     const testDueDate = '30 Nov 2026'
 
-    // A. Create Entry
+    // 0. Unknown fields rejection check (Must return 400, not drop)
+    const unknownFieldReq = makeAuthRequest('http://localhost:3000/api/admin/calendar/entries', 'POST', {
+      form_name: testFormName,
+      title: 'Unknown Field Test',
+      due_date: testDueDate,
+      applies_to: 'All test entities',
+      regulator: testCategorySlug,
+      unrecognized_foo_bar: 'bad_value',
+    })
+    const unknownFieldRes = await entriesPost(unknownFieldReq)
+    expect(unknownFieldRes.status).toBe(400)
+    const unknownFieldData = await unknownFieldRes.json()
+    expect(unknownFieldData.error).toBe('UNKNOWN_FIELDS')
+    expect(unknownFieldData.unknown_fields).toContain('unrecognized_foo_bar')
+
+    // 0b. Invalid recurrence rejection check (Must return 400, not 500)
+    const invalidRecReq = makeAuthRequest('http://localhost:3000/api/admin/calendar/entries', 'POST', {
+      form_name: testFormName,
+      title: 'Invalid Recurrence Test',
+      due_date: testDueDate,
+      applies_to: 'All test entities',
+      regulator: testCategorySlug,
+      recurrence: 'invalid_frequency_xyz',
+    })
+    const invalidRecRes = await entriesPost(invalidRecReq)
+    expect(invalidRecRes.status).toBe(400)
+    const invalidRecData = await invalidRecRes.json()
+    expect(invalidRecData.error).toBe('INVALID_RECURRENCE')
+
+    // A. Create Entry with applies_to, act_rule_reference, penalty_details, and one_off recurrence
     const createReq = makeAuthRequest('http://localhost:3000/api/admin/calendar/entries', 'POST', {
       form_name: testFormName,
       title: 'Muse Verification Test Deadline',
       due_date: testDueDate,
-      applicable_to: 'All test entities',
+      applies_to: 'All test entities',
       regulator: testCategorySlug,
       description: 'Temporary deadline created by automated verification suite',
-      statutory_ref: 'Section 999 Verification Act',
-      penalty_text: '₹100 per day',
+      act_rule_reference: 'Section 450 Companies Act',
+      penalty_details: '₹100 per day',
       source_url: 'https://www.corplawupdates.in/calendar',
+      recurrence: 'one_off',
       is_live: true,
     })
     const createRes = await entriesPost(createReq)
@@ -145,6 +175,11 @@ describe('Compliance Calendar API & Permissions End-to-End Suite', () => {
     const createData = await createRes.json()
     expect(createData.success).toBe(true)
     expect(createData.entry.form_name).toBe(testFormName)
+    expect(createData.entry.applies_to).toBe('All test entities')
+    expect(createData.entry.statutory_ref).toBe('Section 450 Companies Act')
+    expect(createData.entry.penalty_text).toBe('₹100 per day')
+    expect(createData.entry.recurrence).toBe('one-off')
+    expect(createData.entry.frequency).toBe('one-off')
     testEntryId = createData.entry.id
 
     // B. Duplicate Guard Check: same form and date should return 409
@@ -152,7 +187,7 @@ describe('Compliance Calendar API & Permissions End-to-End Suite', () => {
       form_name: testFormName,
       title: 'Duplicate Attempt',
       due_date: testDueDate,
-      applicable_to: 'All test entities',
+      applies_to: 'All test entities',
       regulator: testCategorySlug,
     })
     const dupRes = await entriesPost(dupReq)
@@ -167,10 +202,11 @@ describe('Compliance Calendar API & Permissions End-to-End Suite', () => {
     const deleteCatData = await deleteCatRes.json()
     expect(deleteCatData.error).toBe('CATEGORY_NOT_EMPTY')
 
-    // D. Update Entry: move to 'mca' category and add statutory extension
+    // D. Update Entry: move to 'mca' category, change recurrence to 'yearly' (normalizes to annual), and add statutory extension
     const patchReq = makeAuthRequest(`http://localhost:3000/api/admin/calendar/entries/${testEntryId}`, 'PATCH', {
       title: 'Muse Verification Test Deadline (Extended)',
       regulator: 'mca',
+      recurrence: 'yearly',
       is_extended: true,
       original_date: '30 Nov 2026',
       due_date: '15 Dec 2026',
@@ -181,6 +217,8 @@ describe('Compliance Calendar API & Permissions End-to-End Suite', () => {
     expect(patchRes.status).toBe(200)
     const patchData = await patchRes.json()
     expect(patchData.entry.title).toBe('Muse Verification Test Deadline (Extended)')
+    expect(patchData.entry.recurrence).toBe('annual')
+    expect(patchData.entry.frequency).toBe('annual')
     expect(patchData.entry.is_extended).toBe(true)
     expect(patchData.entry.due_date).toBe('15 Dec 2026')
     expect(patchData.diff.due_date.old).toBe('30 Nov 2026')
