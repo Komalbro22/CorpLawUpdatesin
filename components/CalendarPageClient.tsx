@@ -1,9 +1,8 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import React from 'react'
 import dynamic from 'next/dynamic'
 import NewsletterWidget from '@/components/NewsletterWidget'
 import JsonLd from '@/components/JsonLd'
@@ -11,8 +10,8 @@ import EmptyState from '@/components/EmptyState'
 
 import { ComplianceEntry } from './calendar/types'
 import ComplianceCalendarView from './calendar/ComplianceCalendarView'
-import { TableSection } from './calendar/ComplianceListView'
-import { EntryBadges, googleCalendarUrl, icsDownloadUrl } from './calendar/ComplianceHelpers'
+import { TableSection, parseEntryDate } from './calendar/ComplianceListView'
+import EventDrivenCompliancesDrawer from './calendar/EventDrivenCompliancesDrawer'
 import ComplianceDetailModal from './calendar/ComplianceDetailModal'
 
 export type { ComplianceEntry }
@@ -26,6 +25,16 @@ interface CalendarPageClientProps {
   entries: ComplianceEntry[]
 }
 
+const ALL_CATEGORY_PILLS = [
+  { regulator: 'income_tax', label: 'Income Tax', href: '#incometax', color: 'bg-orange-50 dark:bg-orange-950/30 border-orange-200 dark:border-orange-800/40 text-orange-700 dark:text-orange-400', icon: '📊' },
+  { regulator: 'gst',        label: 'GST',        href: '#gst',       color: 'bg-cyan-50 dark:bg-cyan-950/30 border-cyan-200 dark:border-cyan-800/40 text-cyan-700 dark:text-cyan-400',       icon: '🧾' },
+  { regulator: 'mca',        label: 'ROC / MCA',  href: '#mca',       color: 'bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800/40 text-blue-700 dark:text-blue-400',       icon: '🏛️' },
+  { regulator: 'sebi',       label: 'SEBI LODR',  href: '#sebi',      color: 'bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-800/40 text-green-700 dark:text-green-400',    icon: '📈' },
+  { regulator: 'labor_law',  label: 'Labor Laws', href: '#labor',     color: 'bg-indigo-50 dark:bg-indigo-950/30 border-indigo-200 dark:border-indigo-800/40 text-indigo-700 dark:text-indigo-400', icon: '👷' },
+  { regulator: 'fema',       label: 'FEMA',       href: '#fema',      color: 'bg-teal-50 dark:bg-teal-950/30 border-teal-200 dark:border-teal-800/40 text-teal-700 dark:text-teal-400',       icon: '🌐' },
+  { regulator: 'rbi',        label: 'RBI',        href: '#rbi',       color: 'bg-purple-50 dark:bg-purple-950/30 border-purple-200 dark:border-purple-800/40 text-purple-700 dark:text-purple-400', icon: '🏦' },
+]
+
 export default function CalendarPageClient({ entries }: CalendarPageClientProps) {
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedEntryId, setSelectedEntryId] = useState<string | undefined>()
@@ -33,36 +42,98 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
   const [selectedEntry, setSelectedEntry] = useState<ComplianceEntry | null>(null)
   const [view, setView] = useState<'table' | 'calendar'>('table')
   const [searchQuery, setSearchQuery] = useState('')
-  const [filterMode, setFilterMode] = useState<'all' | 'this_week'>('all')
+  const [periodFilter, setPeriodFilter] = useState<'all' | '7days' | 'current_month' | 'next_month' | '30days' | 'event_driven'>('all')
   const [doneVersion, setDoneVersion] = useState(0)
+  const [doneCount, setDoneCount] = useState(0)
   const searchParams = useSearchParams()
 
+  // Track completed count from localStorage
   useEffect(() => {
-    const handleUpdate = () => setDoneVersion(v => v + 1);
-    window.addEventListener('compliance_done_updated', handleUpdate);
-    return () => window.removeEventListener('compliance_done_updated', handleUpdate);
-  }, []);
+    const updateStats = () => {
+      try {
+        const stored = JSON.parse(localStorage.getItem('compliance_done') || '{}')
+        const activeIds = new Set(entries.map(e => e.id))
+        const completed = Object.keys(stored).filter(k => stored[k] && activeIds.has(k)).length
+        setDoneCount(completed)
+        setDoneVersion(v => v + 1)
+      } catch {}
+    }
+    updateStats()
+    window.addEventListener('compliance_done_updated', updateStats)
+    return () => window.removeEventListener('compliance_done_updated', updateStats)
+  }, [entries])
 
+  // Handle deep-linking (?highlight=<id> or ?form=<slug>)
   useEffect(() => {
     const highlightId = searchParams?.get('highlight')
+    const formSlug = searchParams?.get('form')
+    
+    let targetEntry: ComplianceEntry | undefined
     if (highlightId) {
-      const entry = entries.find(e => e.id === highlightId)
-      if (entry) {
-        setSelectedEntry(entry)
-        
-        setTimeout(() => {
-          const row = document.querySelector(`[data-entry-id="${highlightId}"]`) as HTMLElement | null
-          if (row) {
-            row.scrollIntoView({ behavior: 'smooth', block: 'center' })
-            row.classList.add('bg-amber-200/80', 'transition-all', 'duration-500', 'ring-2', 'ring-amber-400')
-            setTimeout(() => {
-              row.classList.remove('bg-amber-200/80', 'ring-2', 'ring-amber-400')
-            }, 2500)
-          }
-        }, 300)
-      }
+      targetEntry = entries.find(e => e.id === highlightId)
+    } else if (formSlug) {
+      const normalized = formSlug.toLowerCase().replace(/[^a-z0-9]/g, '')
+      targetEntry = entries.find(e => (e.form_name || '').toLowerCase().replace(/[^a-z0-9]/g, '') === normalized)
+    }
+
+    if (targetEntry) {
+      setSelectedEntry(targetEntry)
+      setTimeout(() => {
+        const row = document.querySelector(`[data-entry-id="${targetEntry?.id}"]`) as HTMLElement | null
+        if (row) {
+          row.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          row.classList.add('ring-4', 'ring-amber-400', 'bg-amber-100/80')
+          setTimeout(() => {
+            row.classList.remove('ring-4', 'ring-amber-400', 'bg-amber-100/80')
+          }, 3000)
+        }
+      }, 400)
     }
   }, [searchParams, entries])
+
+  // Compute dynamic verification date from live rows
+  const dynamicVerificationDate = useMemo(() => {
+    const timestamps = entries
+      .map(e => e.last_verified_at || e.updated_at)
+      .filter(Boolean) as string[]
+    
+    if (timestamps.length === 0) return '16 November 2026'
+    const latest = timestamps.sort().reverse()[0]
+    try {
+      const d = new Date(latest)
+      if (!isNaN(d.getTime())) {
+        return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+      }
+    } catch {}
+    return '16 November 2026'
+  }, [entries])
+
+  // Dynamic populated categories (filter out empty categories like RBI)
+  const populatedCategories = useMemo(() => {
+    return ALL_CATEGORY_PILLS.filter(cat => entries.some(e => e.regulator === cat.regulator))
+  }, [entries])
+
+  function handleRowClick(id: string) {
+    const entry = entries.find(e => e.id === id)
+    if (entry) {
+      setSelectedEntry(entry)
+      if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href)
+        url.searchParams.set('highlight', entry.id)
+        window.history.replaceState({}, '', url.toString())
+      }
+    }
+  }
+
+  function handleCloseModal() {
+    setSelectedEntry(null)
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href)
+      url.searchParams.delete('highlight')
+      url.searchParams.delete('form')
+      window.history.replaceState({}, '', url.toString())
+    }
+  }
 
   function openReportError(entryId: string, entryName: string) {
     setSelectedEntryId(entryId)
@@ -76,48 +147,80 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
     setModalOpen(true)
   }
 
-  function handleRowClick(id: string) {
-    const entry = entries.find(e => e.id === id)
-    if (entry) setSelectedEntry(entry)
-  }
-
+  // Filter entries based on search & period filter
   const filteredEntries = useMemo(() => {
-    let result = entries;
+    let result = entries
+
     if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      result = result.filter(e => 
-        e.form_name?.toLowerCase().includes(q) || 
+      const q = searchQuery.toLowerCase().trim()
+      result = result.filter(e =>
+        e.form_name?.toLowerCase().includes(q) ||
         e.compliance_title?.toLowerCase().includes(q) ||
-        e.regulator?.toLowerCase().includes(q)
-      );
+        e.regulator?.toLowerCase().includes(q) ||
+        e.applicable_to?.toLowerCase().includes(q) ||
+        e.regulation_reference?.toLowerCase().includes(q)
+      )
     }
-    if (filterMode === 'this_week') {
-      result = result.filter(e => {
-        try {
-          const d = new Date(e.due_date);
-          if (isNaN(d.getTime())) {
-             const p = new Date(e.due_date.replace(/(\d+)\s+(\w+)\s+(\d+)/, '$2 $1, $3'));
-             if (isNaN(p.getTime())) return false;
-             const diff = p.getTime() - new Date().getTime();
-             const days = diff / (1000 * 3600 * 24);
-             return days >= 0 && days <= 7;
-          }
-          const diff = d.getTime() - new Date().getTime();
-          const days = diff / (1000 * 3600 * 24);
-          return days >= 0 && days <= 7;
-        } catch(err) { return false; }
-      });
+
+    if (periodFilter === 'all') return result
+
+    const now = new Date()
+    now.setHours(0, 0, 0, 0)
+    const currentYear = now.getFullYear()
+    const currentMonth = now.getMonth()
+
+    if (periodFilter === '7days') {
+      return result.filter(e => {
+        const d = parseEntryDate(e.due_date)
+        if (!d) return false
+        d.setHours(0, 0, 0, 0)
+        const diffDays = Math.round((d.getTime() - now.getTime()) / (1000 * 3600 * 24))
+        return diffDays >= 0 && diffDays <= 7
+      })
     }
-    return result;
-  }, [entries, searchQuery, filterMode, doneVersion]);
+
+    if (periodFilter === '30days') {
+      return result.filter(e => {
+        const d = parseEntryDate(e.due_date)
+        if (!d) return false
+        d.setHours(0, 0, 0, 0)
+        const diffDays = Math.round((d.getTime() - now.getTime()) / (1000 * 3600 * 24))
+        return diffDays >= 0 && diffDays <= 30
+      })
+    }
+
+    if (periodFilter === 'current_month') {
+      return result.filter(e => {
+        const d = parseEntryDate(e.due_date)
+        if (!d) return false
+        return d.getMonth() === currentMonth && d.getFullYear() === currentYear
+      })
+    }
+
+    if (periodFilter === 'next_month') {
+      const nextMonthYear = currentMonth === 11 ? currentYear + 1 : currentYear
+      const nextMonth = (currentMonth + 1) % 12
+      return result.filter(e => {
+        const d = parseEntryDate(e.due_date)
+        if (!d) return false
+        return d.getMonth() === nextMonth && d.getFullYear() === nextMonthYear
+      })
+    }
+
+    if (periodFilter === 'event_driven') {
+      return result.filter(e => {
+        return e.frequency === 'one_off' || parseEntryDate(e.due_date) === null
+      })
+    }
+
+    return result
+  }, [entries, searchQuery, periodFilter, doneVersion])
 
   function handleExportIcs() {
     const now = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
-    const months: Record<string, string> = {
-      'Jan': '01', 'Feb': '02', 'Mar': '03',
-      'Apr': '04', 'May': '05', 'Jun': '06',
-      'Jul': '07', 'Aug': '08', 'Sep': '09',
-      'Oct': '10', 'Nov': '11', 'Dec': '12',
+    const monthsMap: Record<string, string> = {
+      'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04', 'May': '05', 'Jun': '06',
+      'Jul': '07', 'Aug': '08', 'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12',
     }
 
     const events = filteredEntries.map(entry => {
@@ -125,20 +228,20 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
       try {
         const match = entry.due_date.match(/(\d{1,2})\s+([A-Za-z]{3})\s+(\d{4})/)
         if (match) {
-          date = `${match[3]}${months[match[2]] || '01'}${match[1].padStart(2, '0')}`
+          date = `${match[3]}${monthsMap[match[2]] || '01'}${match[1].padStart(2, '0')}`
         }
-      } catch(e) {}
+      } catch (e) {}
 
-      let endDate = date;
+      let endDate = date
       try {
-         const year = parseInt(date.substring(0,4));
-         const month = parseInt(date.substring(4,6)) - 1;
-         const day = parseInt(date.substring(6,8));
-         const nextDay = new Date(year, month, day + 1);
-         const m = (nextDay.getMonth() + 1).toString().padStart(2, '0');
-         const d = nextDay.getDate().toString().padStart(2, '0');
-         endDate = `${nextDay.getFullYear()}${m}${d}`;
-      } catch(e) {}
+        const year = parseInt(date.substring(0, 4))
+        const month = parseInt(date.substring(4, 6)) - 1
+        const day = parseInt(date.substring(6, 8))
+        const nextDay = new Date(year, month, day + 1)
+        const m = (nextDay.getMonth() + 1).toString().padStart(2, '0')
+        const d = nextDay.getDate().toString().padStart(2, '0')
+        endDate = `${nextDay.getFullYear()}${m}${d}`
+      } catch (e) {}
 
       const uid = `${entry.id}@corplawupdates.in`
       const title = `${entry.form_name} — ${entry.compliance_title}`
@@ -147,7 +250,7 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
         `Applicable to: ${entry.applicable_to}`,
         entry.penalty ? `Penalty: ${entry.penalty}` : '',
         entry.regulation_reference ? `Law: ${entry.regulation_reference}` : '',
-        `Source: https://www.corplawupdates.in/calendar`,
+        `Source: https://www.corplawupdates.in/calendar?highlight=${entry.id}`,
       ].filter(Boolean).join('\\n')
 
       return [
@@ -158,8 +261,8 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
         `DTEND;VALUE=DATE:${endDate}`,
         `SUMMARY:📋 ${title}`,
         `DESCRIPTION:${desc}`,
-        `URL:https://www.corplawupdates.in/calendar`,
-        'END:VEVENT'
+        `URL:https://www.corplawupdates.in/calendar?highlight=${entry.id}`,
+        'END:VEVENT',
       ].join('\r\n')
     })
 
@@ -170,174 +273,91 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
       'CALSCALE:GREGORIAN',
       'METHOD:PUBLISH',
       ...events,
-      'END:VCALENDAR'
+      'END:VCALENDAR',
     ].join('\r\n')
 
     const blob = new Blob([ical], { type: 'text/calendar;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = 'compliance-calendar.ics'
+    a.download = 'compliance-calendar-2026.ics'
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
     URL.revokeObjectURL(url)
   }
 
-  const grouped = filteredEntries.reduce<Record<string, ComplianceEntry[]>>((acc, entry) => {
-    const key = entry.regulator || 'other'
-    if (!acc[key]) acc[key] = []
-    acc[key]!.push(entry)
-    return acc
-  }, {})
+  // Group filtered entries by regulator
+  const grouped = useMemo(() => {
+    return filteredEntries.reduce<Record<string, ComplianceEntry[]>>((acc, entry) => {
+      const key = entry.regulator || 'other'
+      if (!acc[key]) acc[key] = []
+      acc[key]!.push(entry)
+      return acc
+    }, {})
+  }, [filteredEntries])
 
-  const mcaEntries  = grouped['mca']        || []
-  const sebiEntries = grouped['sebi']       || []
-  const femaEntries = grouped['fema']       || []
-  const rbiEntries  = grouped['rbi']        || []
-  const taxEntries  = grouped['income_tax'] || []
-  const gstEntries  = grouped['gst']        || []
+  const taxEntries = grouped['income_tax'] || []
+  const gstEntries = grouped['gst'] || []
+  const mcaEntries = grouped['mca'] || []
+  const sebiEntries = grouped['sebi'] || []
   const laborEntries = grouped['labor_law'] || []
+  const femaEntries = grouped['fema'] || []
+  const rbiEntries = grouped['rbi'] || []
 
-  function makeFormCell(entry: ComplianceEntry) {
-    return (
-      <span className="inline-flex flex-wrap items-center gap-1.5">
-        {entry.form_name}
-        <EntryBadges entry={entry} />
-        <span className="inline-flex border border-slate-200 dark:border-slate-700 rounded-sm overflow-hidden shadow-xs">
-          <a
-            href={googleCalendarUrl(entry)}
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Add to Google Calendar"
-            aria-label={`Add ${entry.form_name || 'deadline'} to Google Calendar`}
-            onClick={(e) => e.stopPropagation()}
-            className="text-blue-500 hover:text-blue-700 text-xs px-2 py-0.5 bg-white hover:bg-blue-50 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors border-r border-slate-200 dark:border-slate-700 flex items-center justify-center"
-          >
-            📅
-          </a>
-          <a
-            href={icsDownloadUrl(entry)}
-            download={`${(entry.form_name || 'compliance').replace(/\\s+/g, '-').toLowerCase()}-deadline.ics`}
-            title="Download .ics File"
-            aria-label={`Download .ics file for ${entry.form_name || 'deadline'}`}
-            onClick={(e) => e.stopPropagation()}
-            className="text-slate-500 hover:text-slate-700 text-xs px-2 py-0.5 bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors flex items-center justify-center"
-          >
-            ⬇️
-          </a>
-        </span>
-      </span>
-    )
-  }
-
-  function makeDateCell(entry: ComplianceEntry) {
-    if (entry.is_extended) {
-      return (
-        <div>
-          {entry.original_date && (
-            <span className="line-through text-slate-400 mr-1.5 text-xs block sm:inline">
-              {entry.original_date}
-            </span>
-          )}
-          <span className="font-semibold text-emerald-700 dark:text-emerald-400">
-            {entry.due_date}
-          </span>
-          {entry.extension_note ? (
-            <span className="block text-[11px] text-amber-700 dark:text-amber-400 font-medium mt-0.5">
-              {entry.extension_note}
-            </span>
-          ) : entry.extension_ref ? (
-            <span className="block text-[11px] text-amber-700 dark:text-amber-400 font-medium mt-0.5">
-              Extended ({entry.extension_ref})
-            </span>
-          ) : null}
-        </div>
-      )
-    }
-    return <span>{entry.due_date}</span>
-  }
-
-  const mcaRows   = mcaEntries.map(e => [makeFormCell(e), e.compliance_title, makeDateCell(e), e.applicable_to || '—', e.penalty || '—'])
-  const mcaIds    = mcaEntries.map(e => e.id)
-  const mcaNames  = mcaEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
-  const mcaDates  = mcaEntries.map(e => e.due_date)
-  const mcaRowIds = mcaEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
-
-  const sebiRows  = sebiEntries.map(e => [makeFormCell(e), e.compliance_title, e.regulation_reference || '—', makeDateCell(e), e.applicable_to || '—'])
-  const sebiIds   = sebiEntries.map(e => e.id)
-  const sebiNames = sebiEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
-  const sebiDates = sebiEntries.map(e => e.due_date)
-  const sebiRowIds = sebiEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
-
-  const femaRows  = femaEntries.map(e => [makeFormCell(e), e.compliance_title, makeDateCell(e), e.applicable_to || '—'])
-  const femaIds   = femaEntries.map(e => e.id)
-  const femaNames = femaEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
-  const femaDates = femaEntries.map(e => e.due_date)
-  const femaRowIds = femaEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
-
-  const rbiRows   = rbiEntries.map(e => [makeFormCell(e), e.compliance_title, makeDateCell(e), e.applicable_to || '—'])
-  const rbiIds    = rbiEntries.map(e => e.id)
-  const rbiNames  = rbiEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
-  const rbiDates  = rbiEntries.map(e => e.due_date)
-  const rbiRowIds = rbiEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
-
-  const taxRows   = taxEntries.map(e => [makeFormCell(e), e.compliance_title, makeDateCell(e), e.applicable_to || '—', e.penalty || '—'])
-  const taxIds    = taxEntries.map(e => e.id)
-  const taxNames  = taxEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
-  const taxDates  = taxEntries.map(e => e.due_date)
-  const taxRowIds = taxEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
-
-  const gstRows   = gstEntries.map(e => [makeFormCell(e), e.compliance_title, makeDateCell(e), e.applicable_to || '—', e.penalty || '—'])
-  const gstIds    = gstEntries.map(e => e.id)
-  const gstNames  = gstEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
-  const gstDates  = gstEntries.map(e => e.due_date)
-  const gstRowIds = gstEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
-
-  const laborRows   = laborEntries.map(e => [makeFormCell(e), e.compliance_title, makeDateCell(e), e.applicable_to || '—', e.penalty || '—'])
-  const laborIds    = laborEntries.map(e => e.id)
-  const laborNames  = laborEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
-  const laborDates  = laborEntries.map(e => e.due_date)
-  const laborRowIds = laborEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
+  const progressPercentage = entries.length > 0 ? Math.round((doneCount / entries.length) * 100) : 0
 
   return (
     <div>
-      {/* HERO */}
-      <div className="bg-navy py-12 px-4 text-center">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-heading font-bold text-white mb-2 sm:mb-3 break-words">
-          Compliance Calendar 2026
-        </h1>
-        <p className="text-slate-300 max-w-2xl mx-auto text-lg">
-          Key compliance deadlines under Companies Act, SEBI LODR, FEMA and RBI regulations
-        </p>
-        <div className="flex items-center justify-center gap-4 mt-6 flex-wrap">
-          <span className="text-sm text-amber-400 font-medium">📅 Updated for FY 2026-27</span>
-          <span className="text-slate-500">·</span>
-          <button
-            onClick={openSuggestNew}
-            className="text-sm text-amber-300 underline underline-offset-2 hover:text-amber-100 transition-colors"
-          >
-            ➕ Suggest a compliance
-          </button>
+      {/* ========================================================
+          HERO SECTION
+          ======================================================== */}
+      <div className="bg-navy py-10 sm:py-14 px-4 text-center relative overflow-hidden">
+        <div className="max-w-4xl mx-auto space-y-3">
+          <div className="inline-flex items-center gap-2 bg-amber-400/10 border border-amber-400/30 text-amber-300 px-3.5 py-1 rounded-full text-xs font-semibold tracking-wide">
+            <span>🇮🇳</span>
+            <span>All India Corporate & Tax Compliance Calendar</span>
+          </div>
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-heading font-extrabold text-white tracking-tight leading-tight">
+            Compliance Calendar 2026-27
+          </h1>
+          <p className="text-slate-300 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed">
+            Statutory deadlines under Companies Act 2013, GST, Income Tax, SEBI LODR, Labor Laws, and FEMA regulations with verified penalties and circulars.
+          </p>
+          <div className="flex items-center justify-center gap-3 pt-2 flex-wrap text-xs sm:text-sm">
+            <span className="text-amber-400 font-medium">📅 Updated for FY 2026-27</span>
+            <span className="text-slate-500">·</span>
+            <span className="text-slate-300 font-medium">{entries.length} Live Compliances</span>
+            <span className="text-slate-500">·</span>
+            <button
+              onClick={openSuggestNew}
+              className="text-amber-300 underline underline-offset-4 hover:text-amber-100 transition-colors font-semibold"
+            >
+              ➕ Suggest a compliance
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-3.5 sm:px-4 py-6 sm:py-10 space-y-6 sm:space-y-10 overflow-x-hidden">
+      <div className="max-w-6xl mx-auto px-3.5 sm:px-6 py-6 sm:py-10 space-y-6 sm:space-y-10">
 
-        {/* EXPORT COMPLIANCE CALENDAR */}
-        <div className="flex flex-wrap items-center gap-3 p-4 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800/40 rounded-xl">
-          <div className="flex-1">
-            <p className="font-semibold text-blue-900 dark:text-blue-200 text-sm">
-              📅 Export Compliance Calendar
+        {/* ========================================================
+            CALENDAR EXPORT & SYNC BAR
+            ======================================================== */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-5 bg-linear-to-r from-blue-50 to-indigo-50/60 dark:from-blue-950/40 dark:to-slate-900 border border-blue-200 dark:border-blue-900/50 rounded-2xl shadow-xs">
+          <div className="space-y-0.5">
+            <p className="font-bold text-blue-950 dark:text-blue-100 text-sm sm:text-base flex items-center gap-2">
+              <span>📅</span>
+              <span>Export Corporate Deadlines</span>
             </p>
-            <p className="text-blue-700 dark:text-blue-300 text-xs mt-0.5">
-              Subscribe to get deadline reminders in Google Calendar, Outlook or Apple Calendar
+            <p className="text-blue-800 dark:text-blue-300 text-xs sm:text-sm">
+              Subscribe or download .ics to sync all {entries.length} deadlines into Google Calendar, Apple Calendar, or Microsoft Outlook.
             </p>
           </div>
-          <div className="flex gap-2 flex-wrap">
-            <button 
+          <div className="flex gap-2.5 flex-wrap shrink-0">
+            <button
               onClick={handleExportIcs}
-              className="flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors"
+              className="flex-1 sm:flex-none inline-flex items-center justify-center min-h-[44px] gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold shadow-xs transition-colors"
             >
               ⬇️ Download .ics
             </button>
@@ -345,294 +365,407 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
               href="https://calendar.google.com/calendar/r?cid=https://www.corplawupdates.in/api/calendar/export"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-50 dark:hover:bg-slate-800 transition-colors"
+              className="flex-1 sm:flex-none inline-flex items-center justify-center min-h-[44px] gap-1.5 bg-white dark:bg-slate-900 border border-blue-300 dark:border-blue-700 text-blue-800 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-slate-800 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold shadow-xs transition-colors"
             >
               + Subscribe in Google Calendar
             </a>
           </div>
         </div>
 
-        {/* VIEW TOGGLE & SEARCH */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => setView('table')}
-              className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${
-                view === 'table'
-                  ? 'bg-amber-400 text-navy shadow-md'
-                  : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
-              }`}
-            >
-              📋 List View
-            </button>
-            <button
-              type="button"
-              onClick={() => setView('calendar')}
-              className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${
-                view === 'calendar'
-                  ? 'bg-amber-400 text-navy shadow-md'
-                  : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
-              }`}
-            >
-              📅 Calendar View
-            </button>
+        {/* ========================================================
+            COMPLIANCE PROGRESS TRACKER (Aggregated from localStorage)
+            ======================================================== */}
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-5 shadow-xs space-y-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h2 className="text-sm sm:text-base font-bold text-navy dark:text-white flex items-center gap-2">
+                <span>🎯</span>
+                <span>My Filing Tracker</span>
+                <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                  {doneCount} of {entries.length} done
+                </span>
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Check off filings as completed. Progress is stored safely in your browser (no login required).
+              </p>
+            </div>
+            <div className="text-right flex items-center gap-3">
+              <span className="text-xl sm:text-2xl font-black font-heading text-navy dark:text-amber-400">
+                {progressPercentage}%
+              </span>
+              {doneCount > 0 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (window.confirm('Reset all checked compliance items?')) {
+                      localStorage.removeItem('compliance_done')
+                      window.dispatchEvent(new Event('compliance_done_updated'))
+                    }
+                  }}
+                  className="text-xs text-slate-400 hover:text-red-500 underline transition-colors"
+                >
+                  Reset
+                </button>
+              )}
+            </div>
           </div>
-          
-          <form 
-            onSubmit={(e) => e.preventDefault()}
-            className="flex flex-wrap sm:flex-nowrap items-center gap-3 w-full sm:w-auto"
-          >
-            <input 
-              type="text"
-              name="search_query"
-              placeholder="Search forms or compliance..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="flex-1 sm:w-64 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-amber-400 outline-hidden"
+          {/* Animated Progress Bar */}
+          <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5 overflow-hidden">
+            <div
+              className="bg-amber-400 h-full rounded-full transition-all duration-500 ease-out"
+              style={{ width: `${progressPercentage}%` }}
             />
-            <button
-              type="button"
-              onClick={() => setFilterMode(m => m === 'all' ? 'this_week' : 'all')}
-              className={`px-4 py-2 rounded-lg text-sm font-semibold whitespace-nowrap transition-colors ${
-                filterMode === 'this_week'
-                  ? 'bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-700/50'
-                  : 'border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
-              }`}
-            >
-              🔥 Due This Week
-            </button>
-          </form>
+          </div>
         </div>
 
-        {entries.length === 0 ? (
-          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
+        {/* ========================================================
+            VIEW TOGGLE, SEARCH & PERIOD SELECTOR
+            ======================================================== */}
+        <div className="space-y-3">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+            {/* View Mode Switcher */}
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setView('table')}
+                className={`min-h-[44px] px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+                  view === 'table'
+                    ? 'bg-amber-400 text-navy shadow-md'
+                    : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+                }`}
+              >
+                📋 List View
+              </button>
+              <button
+                type="button"
+                onClick={() => setView('calendar')}
+                className={`min-h-[44px] px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+                  view === 'calendar'
+                    ? 'bg-amber-400 text-navy shadow-md'
+                    : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+                }`}
+              >
+                📅 Calendar Grid View
+              </button>
+            </div>
+
+            {/* Search Input */}
+            <div className="flex-1 max-w-md">
+              <div className="relative">
+                <input
+                  type="text"
+                  name="search_query"
+                  placeholder="Search forms, titles, sections or penalties..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full min-h-[44px] border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white rounded-xl pl-10 pr-4 py-2 text-xs sm:text-sm focus:ring-2 focus:ring-amber-400 outline-hidden"
+                />
+                <span className="absolute left-3.5 top-3 text-slate-400 text-sm">🔍</span>
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600 text-xs p-1"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Period Filter Selector Pills */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+            <span className="text-slate-400 font-semibold text-xs whitespace-nowrap pl-1 pr-1 hidden sm:inline">
+              Filter:
+            </span>
+            {[
+              { id: 'all', label: 'All Deadlines' },
+              { id: '7days', label: '🔥 Due in 7 Days' },
+              { id: '30days', label: '⏳ Next 30 Days' },
+              { id: 'current_month', label: '📅 Current Month' },
+              { id: 'next_month', label: '🗓️ Next Month' },
+              { id: 'event_driven', label: '⚡ Event Filings' },
+            ].map(p => (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => setPeriodFilter(p.id as typeof periodFilter)}
+                className={`min-h-[40px] px-3.5 py-1.5 rounded-lg font-semibold whitespace-nowrap transition-colors ${
+                  periodFilter === p.id
+                    ? 'bg-navy text-amber-300 dark:bg-amber-400 dark:text-navy font-bold shadow-2xs'
+                    : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800'
+                }`}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* ========================================================
+            DYNAMIC CATEGORY PILLS (Populated categories only — no dead links)
+            ======================================================== */}
+        <div className="space-y-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 sm:gap-3">
+            {populatedCategories.map((item) => (
+              <Link
+                key={item.regulator}
+                href={item.href}
+                className={`flex flex-col items-center justify-center gap-1.5 p-3 rounded-xl border font-semibold text-xs text-center hover:shadow-md transition-all ${item.color}`}
+              >
+                <span className="text-xl sm:text-2xl" aria-hidden="true">{item.icon}</span>
+                <span>{item.label}</span>
+                <span className="text-[10px] font-normal opacity-80">
+                  {entries.filter(e => e.regulator === item.regulator).length} filings
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* ========================================================
+            DISCLAIMER & DYNAMIC VERIFICATION TIMESTAMP
+            ======================================================== */}
+        <div className="space-y-2">
+          <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/40 rounded-xl p-4 flex gap-3 items-start">
+            <span className="text-xl shrink-0" aria-hidden="true">⚠️</span>
+            <p className="text-amber-800 dark:text-amber-300 text-xs sm:text-sm leading-relaxed">
+              <strong>Statutory Disclaimer:</strong> All compliance dates are indicative and subject to regulatory extensions,
+              general circulars, and amendments issued by MCA, CBIC (GST), CBDT (Income Tax), SEBI, EPFO, or RBI.
+              Always verify on the official government portal before acting on any deadline. This does not constitute formal legal advice.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs text-slate-500 dark:text-slate-400 px-1 gap-1">
+            <span>Official statutory sources: MCA21, GSTN, Income Tax e-Filing, SEBI, EPFO, RBI FIRMS.</span>
+            <span className="font-semibold text-navy dark:text-slate-300">
+              Last verified: {dynamicVerificationDate}
+            </span>
+          </div>
+        </div>
+
+        {/* ========================================================
+            MAIN COMPLIANCE DISPLAY: LIST VIEW OR CALENDAR VIEW
+            ======================================================== */}
+        {filteredEntries.length === 0 ? (
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 shadow-xs">
             <EmptyState
               icon="📅"
-              title="No compliance deadlines found"
-              description="No compliance entries match your filter. Try a different regulator or clear the filter."
-              actionLabel="View All Deadlines"
+              title="No compliance deadlines match your filter"
+              description="Try selecting 'All Deadlines', adjusting your search query, or checking another regulator."
+              actionLabel="Reset All Filters"
               actionHref="/calendar"
             />
           </div>
         ) : view === 'table' ? (
-          <>
-            {/* DISCLAIMER */}
-            <div className="space-y-2">
-              <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/40 rounded-xl p-4 flex gap-3 items-start">
-                <span className="text-xl shrink-0" aria-hidden="true">⚠️</span>
-                <p className="text-amber-800 dark:text-amber-300 text-sm leading-relaxed">
-                  <strong>Disclaimer:</strong> All dates are indicative and subject to regulatory extensions,
-                  amendments or circulars issued by MCA, SEBI, GSTN, EPFO or RBI from time to time. Always verify with
-                  official government portals before acting on any deadline. This is not legal advice.
-                </p>
-              </div>
-              <p className="text-xs text-slate-400 dark:text-slate-500 text-right">
-                Last verified: May 2026 | Source: MCA, SEBI, GSTN, EPFO, RBI official portals
-              </p>
-            </div>
-
-            {/* QUICK LINKS */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-3">
-              {[
-                { label: 'Income Tax', href: '#incometax', color: 'bg-orange-50 dark:bg-orange-950/30 border-orange-200 dark:border-orange-800/40 text-orange-700 dark:text-orange-400', icon: '📊' },
-                { label: 'GST',        href: '#gst',       color: 'bg-cyan-50 dark:bg-cyan-950/30 border-cyan-200 dark:border-cyan-800/40 text-cyan-700 dark:text-cyan-400',       icon: '🧾' },
-                { label: 'ROC / MCA',  href: '#mca',       color: 'bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800/40 text-blue-700 dark:text-blue-400',       icon: '🏛️' },
-                { label: 'SEBI LODR',  href: '#sebi',      color: 'bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-800/40 text-green-700 dark:text-green-400',    icon: '📈' },
-                { label: 'Labor Laws', href: '#labor',     color: 'bg-indigo-50 dark:bg-indigo-950/30 border-indigo-200 dark:border-indigo-800/40 text-indigo-700 dark:text-indigo-400', icon: '👷' },
-                { label: 'RBI',        href: '#rbi',       color: 'bg-purple-50 dark:bg-purple-950/30 border-purple-200 dark:border-purple-800/40 text-purple-700 dark:text-purple-400', icon: '🏦' },
-                { label: 'FEMA',       href: '#fema',      color: 'bg-teal-50 dark:bg-teal-950/30 border-teal-200 dark:border-teal-800/40 text-teal-700 dark:text-teal-400',       icon: '🌐' },
-              ].map((item) => (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className={`flex flex-col items-center justify-center gap-1.5 sm:gap-2 p-2.5 sm:p-4 rounded-xl border font-medium text-xs sm:text-sm text-center hover:shadow-md transition-shadow ${item.color}`}
-                >
-                  <span className="text-xl sm:text-2xl" aria-hidden="true">{item.icon}</span>
-                  {item.label}
-                </Link>
-              ))}
-            </div>
-
+          <div className="space-y-10">
+            {/* Income Tax Section */}
             {taxEntries.length > 0 && (
-              <div id="incometax">
-                <TableSection title="📊 Income Tax Compliance" color="bg-orange-600" dot="bg-orange-500"
-                  headers={['Form', 'Compliance', 'Due Date', 'Applicable To', 'Penalty']}
-                  rows={taxRows} entryIds={taxIds} entryNames={taxNames} rowDates={taxDates} rowIds={taxRowIds}
-                  onReport={openReportError} onRowClick={handleRowClick} />
+              <div id="incometax" className="scroll-mt-20">
+                <TableSection
+                  title="📊 Income Tax Compliance"
+                  color="bg-orange-600"
+                  dot="bg-orange-500"
+                  entries={taxEntries}
+                  onReport={openReportError}
+                  onRowClick={handleRowClick}
+                />
               </div>
             )}
+
+            {/* GST Section */}
             {gstEntries.length > 0 && (
-              <div id="gst">
-                <TableSection title="🧾 GST (Goods & Services Tax) Compliance" color="bg-cyan-600" dot="bg-cyan-500"
-                  headers={['Form', 'Compliance', 'Due Date', 'Applicable To', 'Penalty']}
-                  rows={gstRows} entryIds={gstIds} entryNames={gstNames} rowDates={gstDates} rowIds={gstRowIds}
-                  onReport={openReportError} onRowClick={handleRowClick} />
+              <div id="gst" className="scroll-mt-20">
+                <TableSection
+                  title="🧾 GST (Goods & Services Tax) Compliance"
+                  color="bg-cyan-600"
+                  dot="bg-cyan-500"
+                  entries={gstEntries}
+                  onReport={openReportError}
+                  onRowClick={handleRowClick}
+                />
               </div>
             )}
+
+            {/* MCA Section */}
             {mcaEntries.length > 0 && (
-              <div id="mca">
-                <TableSection title="🏛️ MCA — Companies Act & LLP Compliance" color="bg-navy" dot="bg-blue-500"
-                  headers={['Form', 'Compliance', 'Due Date', 'Applicable To', 'Penalty']}
-                  rows={mcaRows} entryIds={mcaIds} entryNames={mcaNames} rowDates={mcaDates} rowIds={mcaRowIds}
-                  onReport={openReportError} onRowClick={handleRowClick} />
+              <div id="mca" className="scroll-mt-20">
+                <TableSection
+                  title="🏛️ MCA — Companies Act & LLP Compliance"
+                  color="bg-navy"
+                  dot="bg-blue-500"
+                  entries={mcaEntries}
+                  onReport={openReportError}
+                  onRowClick={handleRowClick}
+                />
               </div>
             )}
+
+            {/* SEBI Section */}
             {sebiEntries.length > 0 && (
-              <div id="sebi">
-                <TableSection title="📈 SEBI — Listed Company Compliance" color="bg-green-700" dot="bg-green-500"
-                  headers={['Form', 'Compliance', 'Regulation', 'Due Date', 'Applicable To']}
-                  rows={sebiRows} entryIds={sebiIds} entryNames={sebiNames} rowDates={sebiDates} rowIds={sebiRowIds}
-                  onReport={openReportError} onRowClick={handleRowClick} />
+              <div id="sebi" className="scroll-mt-20">
+                <TableSection
+                  title="📈 SEBI — Listed Company Compliance (LODR)"
+                  color="bg-green-700"
+                  dot="bg-green-500"
+                  entries={sebiEntries}
+                  onReport={openReportError}
+                  onRowClick={handleRowClick}
+                />
               </div>
             )}
+
+            {/* Labor Law Section */}
             {laborEntries.length > 0 && (
-              <div id="labor">
-                <TableSection title="👷 Labor Laws (EPF, ESIC, PT) Compliance" color="bg-indigo-600" dot="bg-indigo-500"
-                  headers={['Form', 'Compliance', 'Due Date', 'Applicable To', 'Penalty']}
-                  rows={laborRows} entryIds={laborIds} entryNames={laborNames} rowDates={laborDates} rowIds={laborRowIds}
-                  onReport={openReportError} onRowClick={handleRowClick} />
+              <div id="labor" className="scroll-mt-20">
+                <TableSection
+                  title="👷 Labor Laws (EPF, ESIC, PT) Compliance"
+                  color="bg-indigo-600"
+                  dot="bg-indigo-500"
+                  entries={laborEntries}
+                  onReport={openReportError}
+                  onRowClick={handleRowClick}
+                />
               </div>
             )}
-            {rbiEntries.length > 0 && (
-              <div id="rbi">
-                <TableSection title="🏦 RBI Compliance" color="bg-purple-800" dot="bg-purple-500"
-                  headers={['Form', 'Compliance', 'Due Date', 'Applicable To']}
-                  rows={rbiRows} entryIds={rbiIds} entryNames={rbiNames} rowDates={rbiDates} rowIds={rbiRowIds}
-                  onReport={openReportError} onRowClick={handleRowClick} />
-              </div>
-            )}
+
+            {/* FEMA Section */}
             {femaEntries.length > 0 && (
-              <div id="fema">
-                <TableSection title="🌐 FEMA Compliance" color="bg-teal-700" dot="bg-teal-500"
-                  headers={['Form', 'Compliance', 'Due Date', 'Applicable To']}
-                  rows={femaRows} entryIds={femaIds} entryNames={femaNames} rowDates={femaDates} rowIds={femaRowIds}
-                  onReport={openReportError} onRowClick={handleRowClick} />
+              <div id="fema" className="scroll-mt-20">
+                <TableSection
+                  title="🌐 FEMA Compliance"
+                  color="bg-teal-700"
+                  dot="bg-teal-500"
+                  entries={femaEntries}
+                  onReport={openReportError}
+                  onRowClick={handleRowClick}
+                />
               </div>
             )}
-          </>
+
+            {/* RBI Section (if populated in future) */}
+            {rbiEntries.length > 0 && (
+              <div id="rbi" className="scroll-mt-20">
+                <TableSection
+                  title="🏦 RBI Compliance"
+                  color="bg-purple-800"
+                  dot="bg-purple-500"
+                  entries={rbiEntries}
+                  onReport={openReportError}
+                  onRowClick={handleRowClick}
+                />
+              </div>
+            )}
+          </div>
         ) : (
           <ComplianceCalendarView entries={filteredEntries} onEntryClick={setSelectedEntry} />
         )}
 
-        {/* COMMUNITY NOTICE */}
-        <div className="bg-linear-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 text-center">
+        {/* ========================================================
+            EVENT-TRIGGERED & CONDITION-LINKED DRAWER
+            ======================================================== */}
+        <EventDrivenCompliancesDrawer
+          entries={entries}
+          onRowClick={handleRowClick}
+        />
+
+        {/* ========================================================
+            COMMUNITY REPORT & CONTRIBUTION
+            ======================================================== */}
+        <div className="bg-linear-to-r from-emerald-50 to-teal-50 dark:from-slate-900 dark:to-slate-900 border border-emerald-200 dark:border-emerald-900/40 rounded-2xl p-6 text-center shadow-xs">
           <div className="text-3xl mb-2">👥</div>
-          <h2 className="font-bold text-green-800 text-lg mb-1">
-            Help us keep this calendar accurate
+          <h2 className="font-bold text-emerald-900 dark:text-emerald-300 text-lg mb-1">
+            Crowdsourced Corporate Compliance Accuracy
           </h2>
-          <p className="text-green-700 text-sm max-w-xl mx-auto mb-4">
-            This calendar is maintained by our community of Company Secretaries, CAs, and corporate
-            professionals. Spotted an error or a missing compliance? Use the button below to report
-            it — approved corrections will credit you as a contributor.
+          <p className="text-emerald-800 dark:text-emerald-400 text-xs sm:text-sm max-w-xl mx-auto mb-4 leading-relaxed">
+            Maintained collaboratively with Company Secretaries, Chartered Accountants, and legal compliance officers. Spotted a recent circular or missing extension? Submit a suggested update to earn contributor recognition.
           </p>
           <button
             onClick={openSuggestNew}
-            className="bg-green-700 hover:bg-green-800 text-white px-6 py-2.5 rounded-lg text-sm font-semibold transition-colors"
+            className="min-h-[44px] bg-emerald-700 hover:bg-emerald-800 text-white px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold shadow-xs transition-colors"
           >
             ➕ Suggest New Compliance Entry
           </button>
         </div>
 
-        {/* USEFUL LINKS */}
+        {/* ========================================================
+            OFFICIAL PORTALS DIRECTORY
+            ======================================================== */}
         <section className="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-6 border border-slate-200/60 dark:border-slate-800">
-          <h2 className="text-xl font-heading font-bold text-navy dark:text-white mb-4">
-            Official Portals for Verification
+          <h2 className="text-lg sm:text-xl font-heading font-bold text-navy dark:text-white mb-4">
+            Official Portals for Filing & Verification
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
             {[
-              { name: 'MCA21 Portal', url: 'https://www.mca.gov.in',   desc: 'All company filings and circulars' },
-              { name: 'SEBI Portal',  url: 'https://www.sebi.gov.in',  desc: 'Listed company regulations' },
-              { name: 'RBI / FIRMS',  url: 'https://firms.rbi.org.in', desc: 'FEMA filings and reporting' },
+              { name: 'MCA21 V3 Portal', url: 'https://www.mca.gov.in',   desc: 'Company & LLP filings, Master Data, and statutory forms' },
+              { name: 'GST Common Portal', url: 'https://www.gst.gov.in', desc: 'GSTR-1, GSTR-3B, CMP-08, and ITC reconciliations' },
+              { name: 'Income Tax e-Filing', url: 'https://www.incometax.gov.in', desc: 'ITR corporate returns, Tax Audit 3CD, and TDS statements' },
+              { name: 'SEBI Portal / SCORES', url: 'https://siportal.sebi.gov.in', desc: 'LODR compliance reporting and stock exchange disclosures' },
+              { name: 'EPFO Unified Portal', url: 'https://unifiedportal-mem.epfindia.gov.in', desc: 'EPF ECR monthly contribution returns and challans' },
+              { name: 'RBI / FIRMS Portal', url: 'https://firms.rbi.org.in', desc: 'FLA returns, FDI reporting (FC-GPR), and ECB filings' },
             ].map((link) => (
               <a
                 key={link.name}
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex flex-col p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-amber-400 dark:hover:border-amber-500 hover:shadow-md transition-all"
+                className="flex flex-col p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-amber-400 dark:hover:border-amber-500 hover:shadow-md transition-all group"
               >
-                <span className="font-semibold text-navy dark:text-white text-sm">{link.name} ↗</span>
-                <span className="text-xs text-slate-500 dark:text-slate-400 mt-1">{link.desc}</span>
+                <span className="font-bold text-navy dark:text-white text-sm group-hover:text-amber-600 transition-colors">
+                  {link.name} ↗
+                </span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-snug">
+                  {link.desc}
+                </span>
               </a>
             ))}
           </div>
         </section>
 
-        {/* NEWSLETTER */}
-        <section className="bg-navy rounded-2xl p-8 text-center">
-          <h2 className="text-2xl font-heading font-bold text-white mb-2">
-            Never Miss a Compliance Deadline
+        {/* ========================================================
+            NEWSLETTER SIGNUP
+            ======================================================== */}
+        <section className="bg-navy rounded-2xl p-6 sm:p-8 text-center text-white shadow-md">
+          <h2 className="text-xl sm:text-2xl font-heading font-bold mb-2">
+            Never Miss an MCA, GST, or Tax Due Date
           </h2>
-          <p className="text-slate-300 mb-6 max-w-lg mx-auto">
-            Get weekly regulatory updates and deadline reminders from MCA, SEBI and RBI. Free forever.
+          <p className="text-slate-300 mb-6 max-w-lg mx-auto text-xs sm:text-sm">
+            Receive our weekly Monday briefing with statutory deadline reminders, regulatory notifications, and penalty alerts.
           </p>
           <div className="max-w-md mx-auto">
             <NewsletterWidget />
           </div>
         </section>
 
+        {/* ========================================================
+            DATASET SCHEMA
+            ======================================================== */}
         <JsonLd data={{
           '@context': 'https://schema.org',
           '@type': 'Dataset',
-          name: 'India Corporate Law Compliance Calendar 2026',
-          description: 'Complete compliance deadline calendar for FY 2026-27 covering MCA, SEBI, RBI, FEMA and Income Tax filings.',
+          name: 'India Corporate Law Compliance Calendar 2026-27',
+          description: 'Verified statutory compliance calendar for Indian companies tracking MCA, GST, Income Tax, SEBI, Labor Laws, and FEMA filing due dates with penalty provisions.',
           url: 'https://www.corplawupdates.in/calendar',
           license: 'https://creativecommons.org/licenses/by/4.0/',
           isAccessibleForFree: true,
-          keywords: ['compliance calendar 2026', 'MCA filing deadlines', 'SEBI compliance dates', 'RBI FEMA deadlines', 'income tax due dates India'],
+          keywords: ['compliance calendar 2026', 'MCA filing deadlines', 'SEBI compliance dates', 'RBI FEMA deadlines', 'income tax due dates India', 'GST due dates 2026'],
           creator: { '@type': 'Organization', name: 'CorpLawUpdates.in', url: 'https://www.corplawupdates.in' },
-          temporalCoverage: '2026',
+          temporalCoverage: '2026/2027',
           spatialCoverage: { '@type': 'Place', name: 'India' },
           inLanguage: 'en-IN',
-          dateModified: entries[0]?.updated_at ? new Date(entries[0].updated_at).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
-        }} />
-
-        <JsonLd data={{
-          '@context': 'https://schema.org',
-          '@type': 'ItemList',
-          name: 'Compliance Deadlines 2026',
-          numberOfItems: entries.length,
-          itemListElement: entries.map((e, i) => ({
-            '@type': 'ListItem',
-            position: i + 1,
-            name: `${e.form_name} - ${e.compliance_title}`,
-            description: `Due date: ${e.due_date}. Applicable to: ${e.applicable_to}`,
-            url: `https://www.corplawupdates.in/calendar#${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`
-          }))
-        }} />
-
-        <JsonLd data={{
-          '@context': 'https://schema.org',
-          '@type': 'FAQPage',
-          mainEntity: entries.slice(0, 15).map(e => {
-            let answerText = `The due date for ${e.compliance_title} (${e.form_name}) in 2026 is ${e.due_date}.`
-            if (e.regulation_reference) answerText += ` This compliance is required under ${e.regulation_reference}.`
-            if (e.applicable_to) answerText += ` It is applicable to ${e.applicable_to}.`
-            if (e.penalty) answerText += ` Failure to comply may result in a penalty of ${e.penalty}.`
-            
-            return {
-              '@type': 'Question',
-              name: `What is the due date for ${e.form_name} in 2026?`,
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: answerText
-              }
-            }
-          }),
+          dateModified: entries[0]?.updated_at ? new Date(entries[0].updated_at).toISOString().split('T')[0] : '2026-11-16',
         }} />
 
       </div>
 
-      {/* FLOATING SUGGEST BUTTON */}
+      {/* Floating Suggest Button */}
       <button
         onClick={openSuggestNew}
-        className="fixed bottom-6 right-6 z-40 bg-amber-400 hover:bg-amber-500 text-navy font-bold px-5 py-3 rounded-full shadow-lg text-sm flex items-center gap-2 transition-all hover:scale-105"
+        className="fixed bottom-6 right-6 z-40 bg-amber-400 hover:bg-amber-500 text-navy font-bold px-5 py-3 rounded-full shadow-lg text-xs sm:text-sm flex items-center gap-2 transition-all hover:scale-105"
       >
-        ➕ Suggest a Compliance
+        ➕ Suggest Compliance
       </button>
 
-      {/* MODAL */}
+      {/* Suggest / Report Modal */}
       {modalOpen && (
         <ComplianceSuggestModal
           entryId={selectedEntryId}
@@ -642,11 +775,11 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
         />
       )}
 
-      {/* DETAIL PANEL */}
+      {/* Detail Modal with Official Deep Links, GCal, .ics & Share */}
       {selectedEntry && (
         <ComplianceDetailModal
           selectedEntry={selectedEntry}
-          onClose={() => setSelectedEntry(null)}
+          onClose={handleCloseModal}
           onReportError={openReportError}
         />
       )}

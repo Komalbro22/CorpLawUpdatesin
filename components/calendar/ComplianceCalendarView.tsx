@@ -102,9 +102,11 @@ export default function ComplianceCalendarView({
         </div>
       </div>
       <div className="flex flex-wrap gap-2">
-        {Object.entries(REGULATOR_COLORS).map(([reg, cls]) => (
-          <span key={reg} className={`text-xs px-2 py-1 rounded-sm border font-semibold ${cls}`}>{reg.toUpperCase()}</span>
-        ))}
+        {Object.entries(REGULATOR_COLORS)
+          .filter(([reg]) => entries.some(e => e.regulator === reg))
+          .map(([reg, cls]) => (
+            <span key={reg} className={`text-xs px-2 py-1 rounded-sm border font-semibold ${cls}`}>{reg.toUpperCase()}</span>
+          ))}
       </div>
     </div>
   )
