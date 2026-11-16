@@ -16,6 +16,7 @@ export type ApiKeyScope =
   | 'audit:read'
   | 'document-sets:read' | 'document-sets:write' | 'document-sets:usage'
   | 'banner:preview' | 'banner:write' | 'banner:activate'
+  | 'calendar:read' | 'calendar:write'
 
 export const ALL_API_SCOPES: { scope: ApiKeyScope; label: string; group: string }[] = [
   { scope: 'articles:read', label: 'Read Articles', group: 'Articles' },
@@ -54,6 +55,9 @@ export const ALL_API_SCOPES: { scope: ApiKeyScope; label: string; group: string 
   { scope: 'banner:preview', label: 'Preview Banners & Read Catalog', group: 'Banners' },
   { scope: 'banner:write', label: 'Create & Attach Candidate Banners', group: 'Banners' },
   { scope: 'banner:activate', label: 'Activate Live Article Banners', group: 'Banners' },
+
+  { scope: 'calendar:read', label: 'Read Calendar Entries & Categories', group: 'Calendar' },
+  { scope: 'calendar:write', label: 'Create, Edit & Delete Calendar Entries & Categories', group: 'Calendar' },
 ]
 
 export interface ApiKeyRecord {

@@ -4,6 +4,11 @@ import { ComplianceEntry } from './types'
 export function EntryBadges({ entry }: { entry: ComplianceEntry }) {
   return (
     <>
+      {entry.is_extended && (
+        <span className="text-[11px] font-bold bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded-full ml-1">
+          Extended {entry.extension_ref ? `(${entry.extension_ref})` : ''}
+        </span>
+      )}
       {entry.created_by?.startsWith('community:') && (
         <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full ml-1">
           👥 Community

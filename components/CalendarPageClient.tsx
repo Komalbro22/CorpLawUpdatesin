@@ -231,43 +231,70 @@ export default function CalendarPageClient({ entries }: CalendarPageClientProps)
     )
   }
 
-  const mcaRows   = mcaEntries.map(e => [makeFormCell(e), e.compliance_title, e.due_date, e.applicable_to || '—', e.penalty || '—'])
+  function makeDateCell(entry: ComplianceEntry) {
+    if (entry.is_extended) {
+      return (
+        <div>
+          {entry.original_date && (
+            <span className="line-through text-slate-400 mr-1.5 text-xs block sm:inline">
+              {entry.original_date}
+            </span>
+          )}
+          <span className="font-semibold text-emerald-700 dark:text-emerald-400">
+            {entry.due_date}
+          </span>
+          {entry.extension_note ? (
+            <span className="block text-[11px] text-amber-700 dark:text-amber-400 font-medium mt-0.5">
+              {entry.extension_note}
+            </span>
+          ) : entry.extension_ref ? (
+            <span className="block text-[11px] text-amber-700 dark:text-amber-400 font-medium mt-0.5">
+              Extended ({entry.extension_ref})
+            </span>
+          ) : null}
+        </div>
+      )
+    }
+    return <span>{entry.due_date}</span>
+  }
+
+  const mcaRows   = mcaEntries.map(e => [makeFormCell(e), e.compliance_title, makeDateCell(e), e.applicable_to || '—', e.penalty || '—'])
   const mcaIds    = mcaEntries.map(e => e.id)
   const mcaNames  = mcaEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
   const mcaDates  = mcaEntries.map(e => e.due_date)
   const mcaRowIds = mcaEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
 
-  const sebiRows  = sebiEntries.map(e => [makeFormCell(e), e.compliance_title, e.regulation_reference || '—', e.due_date, e.applicable_to || '—'])
+  const sebiRows  = sebiEntries.map(e => [makeFormCell(e), e.compliance_title, e.regulation_reference || '—', makeDateCell(e), e.applicable_to || '—'])
   const sebiIds   = sebiEntries.map(e => e.id)
   const sebiNames = sebiEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
   const sebiDates = sebiEntries.map(e => e.due_date)
   const sebiRowIds = sebiEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
 
-  const femaRows  = femaEntries.map(e => [makeFormCell(e), e.compliance_title, e.due_date, e.applicable_to || '—'])
+  const femaRows  = femaEntries.map(e => [makeFormCell(e), e.compliance_title, makeDateCell(e), e.applicable_to || '—'])
   const femaIds   = femaEntries.map(e => e.id)
   const femaNames = femaEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
   const femaDates = femaEntries.map(e => e.due_date)
   const femaRowIds = femaEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
 
-  const rbiRows   = rbiEntries.map(e => [makeFormCell(e), e.compliance_title, e.due_date, e.applicable_to || '—'])
+  const rbiRows   = rbiEntries.map(e => [makeFormCell(e), e.compliance_title, makeDateCell(e), e.applicable_to || '—'])
   const rbiIds    = rbiEntries.map(e => e.id)
   const rbiNames  = rbiEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
   const rbiDates  = rbiEntries.map(e => e.due_date)
   const rbiRowIds = rbiEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
 
-  const taxRows   = taxEntries.map(e => [makeFormCell(e), e.compliance_title, e.due_date, e.applicable_to || '—', e.penalty || '—'])
+  const taxRows   = taxEntries.map(e => [makeFormCell(e), e.compliance_title, makeDateCell(e), e.applicable_to || '—', e.penalty || '—'])
   const taxIds    = taxEntries.map(e => e.id)
   const taxNames  = taxEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
   const taxDates  = taxEntries.map(e => e.due_date)
   const taxRowIds = taxEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
 
-  const gstRows   = gstEntries.map(e => [makeFormCell(e), e.compliance_title, e.due_date, e.applicable_to || '—', e.penalty || '—'])
+  const gstRows   = gstEntries.map(e => [makeFormCell(e), e.compliance_title, makeDateCell(e), e.applicable_to || '—', e.penalty || '—'])
   const gstIds    = gstEntries.map(e => e.id)
   const gstNames  = gstEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
   const gstDates  = gstEntries.map(e => e.due_date)
   const gstRowIds = gstEntries.map(e => `${e.regulator}-${(e.form_name || e.id.slice(0,8)).toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)
 
-  const laborRows   = laborEntries.map(e => [makeFormCell(e), e.compliance_title, e.due_date, e.applicable_to || '—', e.penalty || '—'])
+  const laborRows   = laborEntries.map(e => [makeFormCell(e), e.compliance_title, makeDateCell(e), e.applicable_to || '—', e.penalty || '—'])
   const laborIds    = laborEntries.map(e => e.id)
   const laborNames  = laborEntries.map(e => `${e.form_name} — ${e.compliance_title}`)
   const laborDates  = laborEntries.map(e => e.due_date)

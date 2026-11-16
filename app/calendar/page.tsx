@@ -79,6 +79,7 @@ export default async function CalendarPage() {
     .from('compliance_entries')
     .select(COMPLIANCE_ENTRY_COLUMNS)
     .eq('is_active', true)
+    .eq('is_deleted', false)
     .order('regulator')
     .order('display_order')
 

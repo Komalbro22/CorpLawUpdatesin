@@ -16,6 +16,17 @@ export interface ComplianceEntry {
   frequency: string
   display_order: number
   updated_at?: string
+  description?: string | null
+  official_link?: string | null
+  official_source_url?: string | null
+  last_verified_at?: string | null
+  original_date?: string | null
+  is_extended?: boolean
+  extension_ref?: string | null
+  extension_note?: string | null
+  is_deleted?: boolean
+  category_id?: string | null
+  category_slug?: string | null
 }
 
 export const REGULATOR_COLORS: Record<string, string> = {

@@ -40,12 +40,27 @@ export default function ComplianceDetailModal({
         </div>
 
         <h2 className="text-xl font-bold text-navy dark:text-white mb-1">{selectedEntry.form_name}</h2>
-        <p className="text-slate-600 dark:text-slate-300 text-sm mb-4">{selectedEntry.compliance_title}</p>
+        <p className="text-slate-600 dark:text-slate-300 text-sm mb-2">{selectedEntry.compliance_title}</p>
+        {selectedEntry.description && (
+          <p className="text-xs text-slate-500 dark:text-slate-400 mb-4 italic">{selectedEntry.description}</p>
+        )}
 
         <div className="grid grid-cols-2 gap-3 text-sm mb-4">
           <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-3 border border-slate-100 dark:border-slate-700/50">
             <div className="text-xs text-slate-400 dark:text-slate-400 mb-1">Due Date</div>
-            <div className="font-bold text-navy dark:text-amber-400">{selectedEntry.due_date}</div>
+            <div className="font-bold text-navy dark:text-amber-400">
+              {selectedEntry.due_date}
+              {selectedEntry.is_extended && selectedEntry.original_date && (
+                <span className="block text-[11px] font-normal line-through text-slate-400">
+                  Original: {selectedEntry.original_date}
+                </span>
+              )}
+            </div>
+            {selectedEntry.is_extended && (selectedEntry.extension_note || selectedEntry.extension_ref) && (
+              <div className="text-[11px] text-amber-700 dark:text-amber-400 font-semibold mt-1">
+                {selectedEntry.extension_note || `Extended: ${selectedEntry.extension_ref}`}
+              </div>
+            )}
           </div>
           <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-3 border border-slate-100 dark:border-slate-700/50">
             <div className="text-xs text-slate-400 dark:text-slate-400 mb-1">Frequency</div>
@@ -67,6 +82,19 @@ export default function ComplianceDetailModal({
             <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-3 col-span-2 border border-slate-100 dark:border-slate-700/50">
               <div className="text-xs text-slate-400 dark:text-slate-400 mb-1">Regulation Reference</div>
               <div className="text-slate-700">{selectedEntry.regulation_reference}</div>
+            </div>
+          )}
+          {(selectedEntry.official_source_url || selectedEntry.official_link) && (
+            <div className="bg-slate-50 dark:bg-slate-800 rounded-xl p-3 col-span-2 border border-slate-100 dark:border-slate-700/50">
+              <div className="text-xs text-slate-400 dark:text-slate-400 mb-1">Official Statutory Source</div>
+              <a
+                href={selectedEntry.official_source_url || selectedEntry.official_link || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline break-all inline-flex items-center gap-1"
+              >
+                🔗 {selectedEntry.official_source_url || selectedEntry.official_link}
+              </a>
             </div>
           )}
         </div>

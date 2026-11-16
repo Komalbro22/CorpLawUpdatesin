@@ -198,6 +198,12 @@ export default function AdminCompliancePage() {
         </div>
         <div className="flex flex-wrap gap-3">
           <Link
+            href="/admin/calendar"
+            className="inline-flex items-center gap-1.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold px-4 py-2.5 rounded-lg text-sm shadow-xs transition-colors"
+          >
+            <span>Open Calendar Studio &rarr;</span>
+          </Link>
+          <Link
             href="/admin/compliance/suggestions"
             className="relative inline-flex items-center gap-2 border border-white/60 text-slate-700 px-4 py-2.5 rounded-lg text-sm font-semibold hover:bg-slate-100 transition-colors bg-slate-100 shadow-xs"
           >

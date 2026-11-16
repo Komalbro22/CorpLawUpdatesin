@@ -84,7 +84,7 @@ const sections: SidebarSection[] = [
             { href: '/admin/company-data',           icon: Building2, label: 'Company Data'        },
             { href: '/admin/repo-rate',              icon: Landmark,  label: 'Repo Rate'           },
             { href: '/admin/rates',                  icon: Settings,  label: 'Tool Rates & Waiver' },
-            { href: '/admin/compliance',             icon: Calendar,  label: 'Compliance Calendar' },
+            { href: '/admin/calendar',               icon: Calendar,  label: 'Compliance Calendar' },
             { href: '/admin/compliance/suggestions', icon: Lightbulb, label: 'Suggestions'         },
             { href: '/admin/rule-engine',            icon: Cpu,       label: 'Rule Engine'         },
             { href: '/admin/rule-learning',          icon: Brain,     label: 'Rule Learning Queue' },
