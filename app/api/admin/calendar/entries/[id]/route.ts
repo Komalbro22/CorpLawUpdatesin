@@ -297,10 +297,14 @@ export async function DELETE(
     }
 
     // Try reading deletion reason from request body or query param
-    let deletionReason = request.nextUrl.searchParams.get('reason') || ''
+    let deletionReason = request.nextUrl.searchParams.get('deletion_reason') || request.nextUrl.searchParams.get('reason') || ''
     try {
       const body = await request.json().catch(() => ({}))
-      if (body?.reason) deletionReason = body.reason
+      if (body?.deletion_reason) {
+        deletionReason = String(body.deletion_reason).trim()
+      } else if (body?.reason) {
+        deletionReason = String(body.reason).trim()
+      }
     } catch {
       // Non-blocking
     }

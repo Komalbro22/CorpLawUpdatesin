@@ -1082,6 +1082,7 @@ export default function AdminComplianceCalendarPage() {
                     <option value="quarterly">Quarterly</option>
                     <option value="half-yearly">Half-Yearly</option>
                     <option value="annual">Annual</option>
+                    <option value="triennial">Triennial (Every 3 Years)</option>
                   </select>
                 </div>
               </div>

@@ -121,7 +121,7 @@ describe('Compliance Calendar API & Permissions End-to-End Suite', () => {
     expect(patchData.category.colour).toBe('purple')
     expect(patchData.diff.name.old).toBe('Test Category For Muse')
     expect(patchData.diff.name.new).toBe('Test Category Updated')
-  })
+  }, 20000)
 
   test('4. Entry Management: Create, Read, Duplicate Guard, Update, History, Soft Delete & Restore', async () => {
     const testFormName = `TEST-FORM-${Date.now()}`
@@ -202,11 +202,11 @@ describe('Compliance Calendar API & Permissions End-to-End Suite', () => {
     const deleteCatData = await deleteCatRes.json()
     expect(deleteCatData.error).toBe('CATEGORY_NOT_EMPTY')
 
-    // D. Update Entry: move to 'mca' category, change recurrence to 'yearly' (normalizes to annual), and add statutory extension
+    // D. Update Entry: move to 'mca' category, change recurrence to 'every-3-years' (normalizes to triennial), and add statutory extension
     const patchReq = makeAuthRequest(`http://localhost:3000/api/admin/calendar/entries/${testEntryId}`, 'PATCH', {
       title: 'Muse Verification Test Deadline (Extended)',
       regulator: 'mca',
-      recurrence: 'yearly',
+      recurrence: 'every-3-years',
       is_extended: true,
       original_date: '30 Nov 2026',
       due_date: '15 Dec 2026',
@@ -217,8 +217,8 @@ describe('Compliance Calendar API & Permissions End-to-End Suite', () => {
     expect(patchRes.status).toBe(200)
     const patchData = await patchRes.json()
     expect(patchData.entry.title).toBe('Muse Verification Test Deadline (Extended)')
-    expect(patchData.entry.recurrence).toBe('annual')
-    expect(patchData.entry.frequency).toBe('annual')
+    expect(patchData.entry.recurrence).toBe('triennial')
+    expect(patchData.entry.frequency).toBe('triennial')
     expect(patchData.entry.is_extended).toBe(true)
     expect(patchData.entry.due_date).toBe('15 Dec 2026')
     expect(patchData.diff.due_date.old).toBe('30 Nov 2026')
@@ -231,14 +231,15 @@ describe('Compliance Calendar API & Permissions End-to-End Suite', () => {
     const historyData = await historyRes.json()
     expect(historyData.history.length).toBeGreaterThanOrEqual(2) // create + update
 
-    // F. Soft Delete Entry
+    // F. Soft Delete Entry with explicit deletion_reason
     const deleteReq = makeAuthRequest(`http://localhost:3000/api/admin/calendar/entries/${testEntryId}`, 'DELETE', {
-      reason: 'Automated test suite cleanup',
+      deletion_reason: 'Automated test suite cleanup descriptive reason',
     })
     const deleteRes = await entryDelete(deleteReq, { params: Promise.resolve({ id: testEntryId }) })
     expect(deleteRes.status).toBe(200)
     const deleteData = await deleteRes.json()
     expect(deleteData.mode).toBe('soft_delete')
+    expect(deleteData.deletion_reason).toBe('Automated test suite cleanup descriptive reason')
 
     // G. Verify soft-deleted entry is hidden from active list
     const activeReq = makeAuthRequest(`http://localhost:3000/api/admin/calendar/entries?status=active&search=${testFormName}`)

@@ -195,6 +195,7 @@ export const ALLOWED_RECURRENCES = [
   'quarterly',
   'half-yearly',
   'annual',
+  'triennial',
 ] as const
 
 export type RecurrenceType = (typeof ALLOWED_RECURRENCES)[number]
@@ -221,7 +222,10 @@ export function normalizeRecurrence(val: any): { valid: true; recurrence: Recurr
   if (s === 'half-yearly' || s === 'halfyearly' || s === 'semi-annual' || s === 'semiannual' || s === 'half-year') {
     return { valid: true, recurrence: 'half-yearly' }
   }
-  if (s === 'annual' || s === 'annually' || s === 'yearly' || s === 'year' || s === 'every-2-years' || s === 'every-3-years' || s === 'every-5-years') {
+  if (s === 'triennial' || s === 'triennially' || s === 'every-3-years' || s === 'every_3_years' || s === '3-years' || s === '3-yearly' || s === '3yearly') {
+    return { valid: true, recurrence: 'triennial' }
+  }
+  if (s === 'annual' || s === 'annually' || s === 'yearly' || s === 'year' || s === 'every-2-years' || s === 'every-5-years') {
     return { valid: true, recurrence: 'annual' }
   }
 

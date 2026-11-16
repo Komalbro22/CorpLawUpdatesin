@@ -216,7 +216,7 @@ const CATEGORY_REGULATORY_FAQS: Record<string, CategoryFAQ[]> = {
         },
         {
             question: 'What is the due date for DIR-3 KYC and what is the penalty for late filing?',
-            answer: 'The annual statutory due date for DIR-3 KYC (e-Form or Web) is 30 September of each financial year. Failure to complete KYC by the cutoff results in the Director Identification Number (DIN) being deactivated on the MCA V3 portal with the status "Deactivated due to non-filing of DIR-3 KYC". Reactivation requires filing DIR-3 KYC with a flat statutory late fee of ₹5,000.',
+            answer: 'DIR-3 KYC is now filed once every three financial years, not annually. Under Rule 12A of the Companies (Appointment and Qualification of Directors) Rules, 2014, as substituted by G.S.R. 943(E) dated 31 December 2025 (in force from 31 March 2026), every DIN holder files a KYC intimation in the single Form DIR-3 KYC Web by 30 June of the year following every third consecutive financial year. Directors who completed KYC through FY 2025-26 are next due by 30 June 2028; the old annual 30 September deadline no longer applies. A change in mobile number, e-mail address or residential address must still be reported on DIR-3 KYC Web within 30 days of the change. Failure to file by the due date results in the DIN being deactivated on the MCA V3 portal with the status "Deactivated due to non-filing of DIR-3 KYC"; reactivation requires filing DIR-3 KYC Web with a ₹5,000 fee.',
         },
         {
             question: 'What is the statutory deadline for filing Form MSME-1 half-yearly return?',
@@ -706,7 +706,7 @@ const ANSWER_FIRST: Record<string, { definition: string; facts: string[] }> = {
             'MCA issues circulars, notifications, orders, and consultation papers under Companies Act, 2013.',
             'MCA General Circular No. 05/2026 grants filing extensions for FY 2025-26: Form AOC-4 till 31 Dec 2026 and Form MGT-7/7A till 31 Jan 2027 without additional late fees.',
             'Key annual compliance filings include Form AOC-4 (Financial Statements), Form MGT-7 (Annual Return), DIR-3 KYC, and Form MSME-1.',
-            'Delay beyond statutory or extended cutoffs attracts an uncapped additional statutory late fee of ₹100 per day under Section 403.',
+            'Delay in annual returns (MGT-7/MGT-7A) and financial statements (AOC-4) attracts an additional late fee of ₹100 per day under Section 403, while other forms follow Table B fee multipliers under the Companies (Registration Offices and Fees) Rules, 2014.',
             'MCA circulars are binding on all registered Indian companies, LLPs, and foreign corporate branches.',
         ],
     },
