@@ -2,12 +2,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyAdminSession } from '@/lib/admin-auth'
+import { verifyAdminOrKey } from '@/lib/api-key-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 
 export async function GET(request: NextRequest) {
-    if (!await verifyAdminSession()) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const authCheck = await verifyAdminOrKey(request, 'newsletter:read')
+    if (!authCheck.success) {
+        return authCheck.response
     }
 
     const { searchParams } = new URL(request.url)
@@ -89,8 +90,9 @@ export async function GET(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-    if (!await verifyAdminSession()) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const authCheck = await verifyAdminOrKey(request, 'newsletter:write')
+    if (!authCheck.success) {
+        return authCheck.response
     }
 
     const { searchParams } = new URL(request.url)

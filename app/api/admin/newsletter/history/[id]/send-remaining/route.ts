@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyAdminSession } from '@/lib/admin-auth'
+import { verifyAdminOrKey } from '@/lib/api-key-auth'
 import { supabaseAdmin } from '@/lib/supabase-server'
 import { sendBatchEmails, getActiveEmailProvider, parseSender } from '@/lib/email-provider'
 import { generateUnsubscribeToken, BASE_URL } from '@/lib/utils'
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-    if (!await verifyAdminSession()) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const authCheck = await verifyAdminOrKey(request, 'newsletter:send')
+    if (!authCheck.success) {
+        return authCheck.response
     }
 
     const { id } = await params

@@ -306,7 +306,7 @@ async function sendBatchViaBrevoApi(options: BatchEmailOptions): Promise<BatchSe
         }
     }
 
-    const CHUNK_SIZE = 100
+    const CHUNK_SIZE = 50
     let totalSent = 0
     let totalFailed = 0
     const results: Array<{ email: string; success: boolean; messageId?: string; error?: string }> = []
@@ -638,7 +638,7 @@ async function sendBatchViaResend(options: BatchEmailOptions): Promise<BatchSend
 
     const resend = new Resend(apiKey)
     const resolvedReplyTo = options.replyTo?.trim() || getDefaultReplyTo()
-    const CHUNK_SIZE = 100
+    const CHUNK_SIZE = 50
     let totalSent = 0
     let totalFailed = 0
     const results: Array<{ email: string; success: boolean; messageId?: string; error?: string }> = []

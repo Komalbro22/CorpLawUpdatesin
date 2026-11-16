@@ -165,50 +165,75 @@ export async function POST(
       html: buildEmailHtml(rawHtml, sub.email),
     }))
 
-    // 5. Dispatch batch emails
-    let batchResult
-    try {
-      batchResult = await sendBatchEmails({
-        emails: emailItems,
-        from: fromEmail,
-        fromName,
-        replyTo,
-      })
-    } catch (sendErr: any) {
-      await supabaseAdmin
-        .from('newsletter_campaigns')
-        .update({ status: 'failed' })
-        .eq('id', id)
-        .eq('status', 'sending')
-      throw sendErr
-    }
-
+    // 5. Dispatch batch emails with progressive chunk persistence
+    const BATCH_CHUNK_SIZE = 50
+    let totalSent = 0
+    let totalFailed = 0
+    let lastProvider = 'none'
     const sentAt = new Date().toISOString()
 
-    // 6. Write per-recipient delivery rows to newsletter_recipients
-    const recipientRows = batchResult.results.map(r => ({
-      campaign_id: id,
-      email: r.email,
-      status: r.success ? 'sent' : 'failed',
-      resend_email_id: r.messageId || null,
-      sent_at: r.success ? sentAt : null,
-      error_message: r.success ? null : (r.error || 'Delivery failed'),
-    }))
-
-    for (let i = 0; i < recipientRows.length; i += 500) {
-      const chunk = recipientRows.slice(i, i + 500)
-      const { error: recInsertErr } = await supabaseAdmin
-        .from('newsletter_recipients')
-        .insert(chunk)
-      if (recInsertErr) {
-        console.error('[Admin Newsletter Send] Recipient log insert error:', recInsertErr.message)
+    for (let i = 0; i < emailItems.length; i += BATCH_CHUNK_SIZE) {
+      const slice = emailItems.slice(i, i + BATCH_CHUNK_SIZE)
+      let sliceResult: any
+      try {
+        sliceResult = await sendBatchEmails({
+          emails: slice,
+          from: fromEmail,
+          fromName,
+          replyTo,
+        })
+      } catch (sendErr: any) {
+        console.error(`[Admin Newsletter Send] Chunk ${i}-${i + slice.length} failed:`, sendErr)
+        sliceResult = {
+          success: false,
+          sent: 0,
+          failed: slice.length,
+          total: slice.length,
+          results: slice.map(e => ({ email: e.to, success: false, error: sendErr?.message || 'Send error' })),
+          provider: 'error',
+        }
       }
+
+      totalSent += sliceResult.sent || 0
+      totalFailed += sliceResult.failed || 0
+      lastProvider = sliceResult.provider || lastProvider
+
+      // Immediately write recipient rows for this chunk
+      const recipientRows = (sliceResult.results || []).map((r: any) => ({
+        campaign_id: id,
+        email: r.email,
+        status: r.success ? 'sent' : 'failed',
+        resend_email_id: r.messageId || null,
+        sent_at: r.success ? sentAt : null,
+        error_message: r.success ? null : (r.error || 'Delivery failed'),
+      }))
+
+      if (recipientRows.length > 0) {
+        const { error: recInsertErr } = await supabaseAdmin
+          .from('newsletter_recipients')
+          .insert(recipientRows)
+        if (recInsertErr) {
+          console.error('[Admin Newsletter Send] Recipient log insert error:', recInsertErr.message)
+        }
+      }
+
+      // Immediately update campaign running progress
+      await supabaseAdmin
+        .from('newsletter_campaigns')
+        .update({
+          total_recipients: allSubscribers.length,
+          sent_count: totalSent,
+          failed_count: totalFailed,
+          status: 'sending',
+          ...(totalSent > 0 ? { sent_at: sentAt } : {}),
+        })
+        .eq('id', id)
     }
 
     const finalStatus =
-      batchResult.sent > 0 && batchResult.failed === 0
+      totalSent > 0 && totalFailed === 0
         ? 'sent'
-        : batchResult.sent > 0
+        : totalSent > 0
           ? 'partially_sent'
           : 'failed'
 
@@ -217,10 +242,10 @@ export async function POST(
       .from('newsletter_campaigns')
       .update({
         total_recipients: allSubscribers.length,
-        sent_count: batchResult.sent,
-        failed_count: batchResult.failed,
+        sent_count: totalSent,
+        failed_count: totalFailed,
         status: finalStatus,
-        ...(batchResult.sent > 0 ? { sent_at: sentAt } : {}),
+        ...(totalSent > 0 ? { sent_at: sentAt } : {}),
       })
       .eq('id', id)
 
@@ -233,24 +258,24 @@ export async function POST(
         entityType: 'newsletter',
         entityId: id,
         ip: clientIp,
-        status: batchResult.sent > 0 ? 'success' : 'failure',
+        status: totalSent > 0 ? 'success' : 'failure',
         details: {
           subject: campaign.subject,
           total_recipients: allSubscribers.length,
-          sent: batchResult.sent,
-          failed: batchResult.failed,
-          provider: batchResult.provider,
+          sent: totalSent,
+          failed: totalFailed,
+          provider: lastProvider,
           sent_at: sentAt,
         },
       })
     }
 
     return NextResponse.json({
-      success: batchResult.sent > 0,
-      sent_count: batchResult.sent,
-      failed_count: batchResult.failed,
+      success: totalSent > 0,
+      sent_count: totalSent,
+      failed_count: totalFailed,
       total_recipients: allSubscribers.length,
-      provider: batchResult.provider,
+      provider: lastProvider,
       sent_at: sentAt,
     })
   } catch (err: any) {
